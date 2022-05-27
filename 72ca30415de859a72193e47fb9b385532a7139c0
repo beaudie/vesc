@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05e94052_f5e3c90c",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T00:16:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63d085b1_4af049aa",
+      "range": {
+        "startLine": 186,
+        "startChar": 33,
+        "endLine": 186,
+        "endChar": 36
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0c867f2_5ed39b16",
@@ -119,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c13bf8_46d46617",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T00:16:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a83895a_bfc3d41e",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 5
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c3875a8_ffbc92cf",
@@ -180,6 +228,30 @@
       "side": 1,
       "message": "Doesn\u0027t the `SamplerSerial` also fully identify the immutable sampler? Can you have two immutable samplers with the same serial?",
       "parentUuid": "b84a69af_0061afe9",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc4b753_4b6d7a99",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-05-27T00:16:07Z",
+      "side": 1,
+      "message": "IIUC, no. A change in texture state (say, going from full range yuv to narrow range without an intervening draw) will not be covered",
+      "parentUuid": "5362b1a6_5559aadd",
       "range": {
         "startLine": 107,
         "startChar": 55,
