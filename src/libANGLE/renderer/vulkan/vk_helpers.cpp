@@ -3398,12 +3398,14 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     Serial lastCompletedSerial = context->getRenderer()->getLastCompletedQueueSerial();
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
     {
-        if (!mDescriptorPools[poolIndex]->isReferenced() &&
-            !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(lastCompletedSerial))
+        RefCountedDescriptorPoolHelper *currentPool = mDescriptorPools[poolIndex];
+
+        if (!currentPool->isReferenced() &&
+            !currentPool->get().isCurrentlyInUse(lastCompletedSerial))
         {
             mCurrentPoolIndex = poolIndex;
             found             = true;
-            mDescriptorPools[poolIndex]->get().resetCache();
+            currentPool->get().resetCache();
             break;
         }
     }
