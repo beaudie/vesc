@@ -56,6 +56,30 @@
       },
       "revId": "c53725d18cf7cbd314a75d7a65f466295725631a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a456f708_11375d55",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-05-27T17:52:29Z",
+      "side": 1,
+      "message": "I thought about it but I want to make sure it\u0027s a more explicit choice instead of something that could be easily missed and defaults to a poor implementation.",
+      "parentUuid": "20acad8e_c7c2c2ab",
+      "range": {
+        "startLine": 611,
+        "startChar": 0,
+        "endLine": 615,
+        "endChar": 78
+      },
+      "revId": "c53725d18cf7cbd314a75d7a65f466295725631a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
