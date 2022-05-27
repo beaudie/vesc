@@ -260,6 +260,30 @@
       },
       "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43f874b9_ae770d47",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-27T15:25:20Z",
+      "side": 1,
+      "message": "What GLES commands would implement the \"going from full range yuv to narrow range\"? Trying to understand to best guide the solution.",
+      "parentUuid": "2fc4b753_4b6d7a99",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 74
+      },
+      "revId": "72ca30415de859a72193e47fb9b385532a7139c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
