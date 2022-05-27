@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b39937b_d589b3ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-27T20:56:19Z",
+      "side": 1,
+      "message": "Thanks for this test Chris. Could you revise it per Shabi\u0027s comments (getting rid fo the unnecessary barrier) before we lgtm it? Also, it\u0027s not clear to me whether a driver upgrade on the Linux/Intel bot would address the failure there. I recall an email conversation but it\u0027s not reflected on the associated bug.\n",
+      "revId": "61a41e87c19c8c50881e5a4229d1f7e6624573c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
