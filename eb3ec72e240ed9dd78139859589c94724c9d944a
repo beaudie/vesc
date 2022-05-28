@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c8297dcf_bffe976e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-28T00:31:11Z",
+      "side": 1,
+      "message": "Thanks Ian, I changed the comment as you suggested.",
+      "parentUuid": "79161778_8b4ea45c",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 25
+      },
+      "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5608065e_b0004e96",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
