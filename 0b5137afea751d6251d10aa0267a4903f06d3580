@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe00438_3b509927",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5085,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-28T22:37:27Z",
+      "side": 1,
+      "message": "I believe we also need GL_FRAMEBUFFER_BARRIER_BIT, since we need the write to the texture via framebuffer to complete before the barrier.",
+      "parentUuid": "6c74b298_9227356e",
+      "range": {
+        "startLine": 5085,
+        "startChar": 20,
+        "endLine": 5085,
+        "endChar": 39
+      },
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3752d6b9_062441a1",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d5a91e8_c0f3c60c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-28T22:37:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f582efc9_17a23364",
+      "range": {
+        "startLine": 5086,
+        "startChar": 0,
+        "endLine": 5088,
+        "endChar": 84
+      },
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8948ef71_079d1a83",
@@ -119,6 +167,24 @@
       "side": 1,
       "message": "Ack. I\u0027ll take this out before trying to land",
       "parentUuid": "8948ef71_079d1a83",
+      "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff809d45_d0c3c737",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5096,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-28T22:37:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86f0ac21_b3a3d8c6",
       "revId": "0b5137afea751d6251d10aa0267a4903f06d3580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

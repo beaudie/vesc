@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f97fd92_071b4054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 31
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-28T22:37:27Z",
+      "side": 1,
+      "message": "The only solid workaround I\u0027ve been able to find is to use texelFetch instead of imageLoad.\n\nI assume I need to manage test expectations on the failing bot, but otherwise this test should be ready to land.",
+      "revId": "b8287a91d4796a95c8c00e5433b681eda1eb362a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
