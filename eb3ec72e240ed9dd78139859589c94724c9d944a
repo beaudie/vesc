@@ -79,6 +79,30 @@
       },
       "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ecb29c_e419fb00",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-05-28T00:29:02Z",
+      "side": 1,
+      "message": "This still applies with the first Red quad draw:\ndepth load op \u003d None\nstencil load op \u003d Load\n\nBut there is indeed a typo in the comment(\"property\"). Let me change it.",
+      "parentUuid": "ae4cfd70_127b2bfd",
+      "range": {
+        "startLine": 356,
+        "startChar": 53,
+        "endLine": 357,
+        "endChar": 37
+      },
+      "revId": "eb3ec72e240ed9dd78139859589c94724c9d944a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
