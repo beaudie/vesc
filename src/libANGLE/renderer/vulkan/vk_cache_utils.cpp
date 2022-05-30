@@ -2927,6 +2927,11 @@ void GraphicsPipelineDesc::setRenderPassSampleCount(GLint samples)
     mRenderPassDesc.setSamples(samples);
 }
 
+void GraphicsPipelineDesc::setRenderPassFramebufferFetchMode(bool hasFramebufferFetch)
+{
+    mRenderPassDesc.setFramebufferFetchMode(hasFramebufferFetch);
+}
+
 void GraphicsPipelineDesc::setRenderPassColorAttachmentFormat(size_t colorIndexGL,
                                                               angle::FormatID formatID)
 {
