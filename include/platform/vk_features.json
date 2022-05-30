@@ -798,12 +798,12 @@
             "issue": "http://anglebug.com/5901"
         },
         {
-            "name": "create_pipeline_during_link",
-            "category": "Features",
+            "name": "disable_pipeline_cache_warm_up",
+            "category": "Workarounds",
             "description": [
-                "Create pipeline with default state during glLinkProgram"
+                "Disable warm up of the Vulkan pipeline cache due to driver bugs"
             ],
-            "issue": "http://anglebug.com/7046"
+            "issue": "http://anglebug.com/5881"
         },
         {
             "name": "prefer_device_local_memory_host_visible",
