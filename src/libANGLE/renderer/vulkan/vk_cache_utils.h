@@ -625,6 +625,7 @@ class GraphicsPipelineDesc final
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);
     void setRenderPassSampleCount(GLint samples);
+    void setRenderPassFramebufferFetchMode(bool hasFramebufferFetch);
     void setRenderPassColorAttachmentFormat(size_t colorIndexGL, angle::FormatID formatID);
 
     // Blend states
@@ -1766,6 +1767,8 @@ class SynchronizingPipelineCache
     angle::Result createComputePipeline(ContextVk *contextVk,
                                         const VkComputePipelineCreateInfo &createInfo,
                                         vk::Pipeline *pipelineOut);
+
+    void merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache);
 
   private:
     void getLock(std::unique_lock<std::mutex> *lockOut);
