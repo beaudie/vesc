@@ -3634,6 +3634,18 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCache **pipelineCache)
     return getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync);
 }
 
+angle::Result RendererVk::mergeIntoPipelineCache(const vk::PipelineCache &pipelineCache)
+{
+    vk::PipelineCache *globalCache = nullptr;
+    ANGLE_TRY(getPipelineCache(&globalCache));
+
+    std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
+
+    globalCache->merge(mDevice, 1, pipelineCache.ptr());
+
+    return angle::Result::Continue;
+}
+
 const gl::Caps &RendererVk::getNativeCaps() const
 {
     ensureCapsInitialized();

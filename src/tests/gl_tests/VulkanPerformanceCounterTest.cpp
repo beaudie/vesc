@@ -36,7 +36,8 @@ class VulkanPerformanceCounterTest : public ANGLETest
     VulkanPerformanceCounterTest()
         : mLoadOpNoneSupport(ANGLEFeature::Unknown),
           mStoreOpNoneSupport(ANGLEFeature::Unknown),
-          mPreferDrawOverClearAttachments(ANGLEFeature::Unknown)
+          mPreferDrawOverClearAttachments(ANGLEFeature::Unknown),
+          mSupportsPipelineCreationFeedback(ANGLEFeature::Unknown)
     {
         // Depth/Stencil required for SwapShouldInvalidate*.
         // Also RGBA8 is required to avoid the clear for emulated alpha.
@@ -103,12 +104,18 @@ class VulkanPerformanceCounterTest : public ANGLETest
             {
                 mPreferDrawOverClearAttachments = isSupported;
             }
+            else if (strcmp(featureName,
+                            GetFeatureName(Feature::SupportsPipelineCreationFeedback)) == 0)
+            {
+                mSupportsPipelineCreationFeedback = isSupported;
+            }
         }
 
         // Make sure feature renames are caught
         ASSERT_NE(mLoadOpNoneSupport, ANGLEFeature::Unknown);
         ASSERT_NE(mStoreOpNoneSupport, ANGLEFeature::Unknown);
         ASSERT_NE(mPreferDrawOverClearAttachments, ANGLEFeature::Unknown);
+        ASSERT_NE(mSupportsPipelineCreationFeedback, ANGLEFeature::Unknown);
 
         // Impossible to have LOAD_OP_NONE but not STORE_OP_NONE
         ASSERT_FALSE(mLoadOpNoneSupport == ANGLEFeature::Supported &&
@@ -405,6 +412,9 @@ class VulkanPerformanceCounterTest : public ANGLETest
     void maskedFramebufferFetchDraw(const GLColor &clearColor, GLBuffer &buffer);
     void maskedFramebufferFetchDrawVerify(const GLColor &expectedColor, GLBuffer &buffer);
 
+    void saveAndReloadBinary(GLProgram *original, GLProgram *reloaded);
+    void testPipelineCacheIsWarm(GLProgram *program, GLColor color);
+
     angle::VulkanPerfCounters getPerfCounters()
     {
         if (mIndexMap.empty())
@@ -421,6 +431,7 @@ class VulkanPerformanceCounterTest : public ANGLETest
     ANGLEFeature mLoadOpNoneSupport;
     ANGLEFeature mStoreOpNoneSupport;
     ANGLEFeature mPreferDrawOverClearAttachments;
+    ANGLEFeature mSupportsPipelineCreationFeedback;
 };
 
 class VulkanPerformanceCounterTest_ES31 : public VulkanPerformanceCounterTest
@@ -5543,6 +5554,100 @@ void main() {
 
     GLuint actualCacheMisses = getPerfCounters().shaderResourcesDescriptorSetCacheMisses;
     EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
+}
+
+void VulkanPerformanceCounterTest::saveAndReloadBinary(GLProgram *original, GLProgram *reloaded)
+{
+    GLint programLength = 0;
+    GLint writtenLength = 0;
+    GLenum binaryFormat = 0;
+
+    // Get the binary out of the program and delete it.
+    glGetProgramiv(*original, GL_PROGRAM_BINARY_LENGTH_OES, &programLength);
+    EXPECT_GL_NO_ERROR();
+
+    std::vector<uint8_t> binary(programLength);
+    glGetProgramBinaryOES(*original, programLength, &writtenLength, &binaryFormat, binary.data());
+    EXPECT_GL_NO_ERROR();
+
+    original->reset();
+
+    // Reload the binary into another program
+    reloaded->makeEmpty();
+    glProgramBinaryOES(*reloaded, binaryFormat, binary.data(), writtenLength);
+    EXPECT_GL_NO_ERROR();
+
+    GLint linkStatus;
+    glGetProgramiv(*reloaded, GL_LINK_STATUS, &linkStatus);
+    EXPECT_NE(linkStatus, 0);
+}
+
+void VulkanPerformanceCounterTest::testPipelineCacheIsWarm(GLProgram *program, GLColor color)
+{
+    glUseProgram(*program);
+    GLint colorUniformLocation =
+        glGetUniformLocation(*program, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(-1, colorUniformLocation);
+    ASSERT_GL_NO_ERROR();
+
+    GLuint expectedCacheHits   = getPerfCounters().pipelineCreationCacheHits + 1;
+    GLuint expectedCacheMisses = getPerfCounters().pipelineCreationCacheMisses;
+
+    glUniform4fv(colorUniformLocation, 1, color.toNormalizedVector().data());
+    drawQuad(*program, essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_EQ(getPerfCounters().pipelineCreationCacheHits, expectedCacheHits);
+    EXPECT_EQ(getPerfCounters().pipelineCreationCacheMisses, expectedCacheMisses);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+}
+
+// Verifies that the pipeline cache is warmed up at link time with reasonable defaults.
+TEST_P(VulkanPerformanceCounterTest, PipelineCacheIsWarmedUpAtLinkTime)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    initANGLEFeatures();
+
+    // Test is only valid when pipeline creation feedback is available
+    ANGLE_SKIP_TEST_IF(mSupportsPipelineCreationFeedback != ANGLEFeature::Supported);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::UniformColor());
+
+    testPipelineCacheIsWarm(&program, GLColor::red);
+}
+
+// Verifies that the pipeline cache is reloaded correctly through glProgramBinary.
+TEST_P(VulkanPerformanceCounterTest, PipelineCacheIsRestoredWithProgramBinary)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    initANGLEFeatures();
+
+    // Test is only valid when pipeline creation feedback is available
+    ANGLE_SKIP_TEST_IF(mSupportsPipelineCreationFeedback != ANGLEFeature::Supported);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::UniformColor());
+    GLProgram reloadedProgram;
+    saveAndReloadBinary(&program, &reloadedProgram);
+
+    testPipelineCacheIsWarm(&reloadedProgram, GLColor::green);
+}
+
+// Verifies that the pipeline cache is reloaded correctly through glProgramBinary twice.
+TEST_P(VulkanPerformanceCounterTest, PipelineCacheIsRestoredWithProgramBinaryTwice)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+    initANGLEFeatures();
+
+    // Test is only valid when pipeline creation feedback is available
+    ANGLE_SKIP_TEST_IF(mSupportsPipelineCreationFeedback != ANGLEFeature::Supported);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::UniformColor());
+    GLProgram reloadedProgram;
+    GLProgram twiceReloadedProgram;
+    saveAndReloadBinary(&program, &reloadedProgram);
+    saveAndReloadBinary(&reloadedProgram, &twiceReloadedProgram);
+
+    testPipelineCacheIsWarm(&twiceReloadedProgram, GLColor::blue);
 }
 
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER());
