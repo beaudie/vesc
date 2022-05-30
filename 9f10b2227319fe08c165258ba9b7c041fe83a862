@@ -39,6 +39,30 @@
       },
       "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47dbc409_6ca482f4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-30T17:37:45Z",
+      "side": 1,
+      "message": "\u003e I guess technically we could add a second feature that explicitly disables this extension, though that is probably going too far.\n\nSupport for the extension is already a feature, so that\u0027s just redundant 😊",
+      "parentUuid": "6ab51607_a80ee9c2",
+      "range": {
+        "startLine": 3215,
+        "startChar": 0,
+        "endLine": 3215,
+        "endChar": 29
+      },
+      "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
