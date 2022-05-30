@@ -34,6 +34,24 @@
       "parentUuid": "320e052e_e99f606e",
       "revId": "3dc6d83ff89ad36f23e09c9f9758a7330c924b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97abe3b6_a8ccb258",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T15:14:56Z",
+      "side": 1,
+      "message": "OK Mark. I\u0027ve added you to the ACL for try jobs. FYI the site to access the ACLs is https://chrome-infra-auth.appspot.com/\n\nMark check again in a few minutes and you should be able to access CQ+1.",
+      "parentUuid": "1cbd6b27_56b0ea85",
+      "revId": "3dc6d83ff89ad36f23e09c9f9758a7330c924b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
