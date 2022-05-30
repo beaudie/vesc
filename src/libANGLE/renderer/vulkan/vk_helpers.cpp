@@ -9936,6 +9936,7 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
 }
 
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
+                                                      SynchronizingPipelineCache *pipelineCache,
                                                       const PipelineLayout &pipelineLayout,
                                                       PipelineHelper **pipelineOut)
 {
@@ -9944,8 +9945,6 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
         *pipelineOut = &mComputePipeline;
         return angle::Result::Continue;
     }
-
-    RendererVk *renderer = context->getRenderer();
 
     VkPipelineShaderStageCreateInfo shaderStage = {};
     VkComputePipelineCreateInfo createInfo      = {};
@@ -9974,16 +9973,15 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
     feedbackInfo.pipelineStageCreationFeedbackCount = 1;
     feedbackInfo.pPipelineStageCreationFeedbacks    = &perStageFeedback;
 
-    const bool supportsFeedback = renderer->getFeatures().supportsPipelineCreationFeedback.enabled;
+    const bool supportsFeedback =
+        context->getRenderer()->getFeatures().supportsPipelineCreationFeedback.enabled;
     if (supportsFeedback)
     {
         createInfo.pNext = &feedbackInfo;
     }
 
-    PipelineCache *pipelineCache = nullptr;
-    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
-    ANGLE_VK_TRY(context, mComputePipeline.getPipeline().initCompute(context->getDevice(),
-                                                                     createInfo, *pipelineCache));
+    ANGLE_TRY(
+        pipelineCache->createComputePipeline(context, createInfo, &mComputePipeline.getPipeline()));
 
     if (supportsFeedback)
     {
