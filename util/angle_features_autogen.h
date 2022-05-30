@@ -227,6 +227,7 @@ enum class Feature
     SupportsMultisampledRenderToSingleSampled,
     SupportsMultiview,
     SupportsNegativeViewport,
+    SupportsPipelineCreationCacheControl,
     SupportsPipelineCreationFeedback,
     SupportsPipelineStatisticsQuery,
     SupportsProtectedMemory,
