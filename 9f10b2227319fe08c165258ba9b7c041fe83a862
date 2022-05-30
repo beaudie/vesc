@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "913f5ec7_98378041",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T13:47:25Z",
+      "side": 1,
+      "message": "LGTM, one nit.",
+      "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ab51607_a80ee9c2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T13:47:25Z",
+      "side": 1,
+      "message": "nit: http://anglebug.com/7370\n\nplease mention that this bug is specifically referring to ARM. There\u0027s already a bug associated with this feature in the header.\n\nI guess technically we could add a second feature that explicitly disables this extension, though that is probably going too far.",
+      "range": {
+        "startLine": 3215,
+        "startChar": 0,
+        "endLine": 3215,
+        "endChar": 29
+      },
+      "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
