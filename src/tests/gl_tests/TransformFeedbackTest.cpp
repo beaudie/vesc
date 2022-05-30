@@ -3674,6 +3674,438 @@ void main() {
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+<<<<<<< HEAD   (d27d9d [M96-LTS] Vulkan: Update mCurrentElementArrayBuffersync base)
+=======
+// Test that transform feedback query works when render pass is started while transform feedback is
+// paused.
+TEST_P(TransformFeedbackTest, TransformFeedbackQueryPausedDrawThenResume)
+{
+    constexpr char kVS[] = R"(
+attribute vec4 pos;
+varying vec4 v;
+
+void main()
+{
+    v = vec4(0.25, 0.5, 0.75, 1.0);
+    gl_Position = pos;
+})";
+
+    constexpr char kFS[] = R"(
+precision mediump float;
+varying vec4 v;
+void main()
+{
+    gl_FragColor = v;
+})";
+
+    const std::vector<std::string> tfVaryings = {"v"};
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program, kVS, kFS, tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+
+    const GLfloat vertices[] = {
+        -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f,
+    };
+    GLint positionLocation = glGetAttribLocation(program, "pos");
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+    glEnableVertexAttribArray(positionLocation);
+
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClearDepthf(0.1f);
+    glClearStencil(0x5A);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    // Test the following:
+    //
+    // - Start xfb and query
+    // - Draw
+    // - Pause query
+    // - break the render pass
+    //
+    // - Draw without xfb, starts a new render pass
+    // - Without breaking the render pass, resume xfb
+    // - Draw with xfb
+    // - End query and xfb
+    //
+    // The test ensures that the query is made active on resume.
+
+    glUseProgram(program);
+    glBeginTransformFeedback(GL_POINTS);
+    EXPECT_GL_NO_ERROR();
+
+    GLQuery xfbQuery;
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, xfbQuery);
+    EXPECT_GL_NO_ERROR();
+
+    // Draw with xfb.
+    glDrawArrays(GL_POINTS, 0, 3);
+
+    glPauseTransformFeedback();
+
+    // Issue a copy to make sure the render pass is broken.
+    GLTexture copyTex;
+    glBindTexture(GL_TEXTURE_2D, copyTex);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 1, 1, 0);
+
+    // Start a render pass without xfb.
+    glUseProgram(drawRed);
+    glDrawArrays(GL_POINTS, 0, 3);
+
+    // Resume xfb and issue another draw call.
+    glUseProgram(program);
+    glResumeTransformFeedback();
+    glDrawArrays(GL_POINTS, 0, 3);
+
+    // End the query and verify results.
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+    glEndTransformFeedback();
+
+    GLuint primitivesWritten = 0;
+    glGetQueryObjectuiv(xfbQuery, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+
+    EXPECT_EQ(primitivesWritten, 6u);
+
+    void *mappedBuffer = glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0,
+                                          sizeof(float) * 4 * 3 * 2, GL_MAP_READ_BIT);
+    ASSERT_NE(nullptr, mappedBuffer);
+
+    float *mappedFloats = static_cast<float *>(mappedBuffer);
+    for (unsigned int cnt = 0; cnt < 6; ++cnt)
+    {
+        EXPECT_NEAR(mappedFloats[4 * cnt + 0], 0.25f, 0.01f) << cnt;
+        EXPECT_NEAR(mappedFloats[4 * cnt + 1], 0.5f, 0.01f) << cnt;
+        EXPECT_NEAR(mappedFloats[4 * cnt + 2], 0.75f, 0.01f) << cnt;
+        EXPECT_NEAR(mappedFloats[4 * cnt + 3], 1.0f, 0.01f) << cnt;
+    }
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+TEST_P(TransformFeedbackTest, TransformFeedbackPausedDrawThenResume)
+{
+    constexpr char kVS[] = R"(#version 300 es
+layout(location = 0) in float a;
+out float b;
+
+void main (void)
+{
+  b = a * 2.0;
+}
+)";
+
+    constexpr char kFS[] = R"(#version 300 es
+void main (void)
+{
+}
+)";
+
+    const std::vector<std::string> tfVaryings = {"b"};
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program, kVS, kFS, tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(program);
+
+    GLBuffer xfbBuf;
+    GLTransformFeedback tf;
+    GLQuery query;
+
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, tf);
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfbBuf);
+
+    constexpr size_t maxResults = 10;
+    std::vector<float> clearData(10, 100.0);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, maxResults * 4, clearData.data(), GL_DYNAMIC_READ);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, xfbBuf);
+
+    GLBuffer srcBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, srcBuffer);
+    constexpr float srcData[] = {
+        11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(srcData), srcData, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 1, GL_FLOAT, false, 4, nullptr);
+
+    // this is just so inside angle less state is updated so we can compare
+    // the next 2 draw calls easier.
+    glDrawArrays(GL_TRIANGLES, 0, 1);
+
+    glBeginQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, query);
+    glBeginTransformFeedback(GL_TRIANGLES);
+    glDrawArrays(GL_TRIANGLES, 0, 7);  // 2 triangles
+    glDrawArrays(GL_TRIANGLES, 7, 4);  // 1 triangle
+    glEndTransformFeedback();
+    glEndQuery(GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+    GLuint primitivesWritten = 0u;
+    glGetQueryObjectuiv(query, GL_QUERY_RESULT_EXT, &primitivesWritten);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(primitivesWritten, 3u);
+
+    void *resultBuffer =
+        glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, maxResults * 4, GL_MAP_READ_BIT);
+    const float *actual        = reinterpret_cast<const float *>(resultBuffer);
+    constexpr float expected[] = {
+        22,  24, 26, 28, 30, 32,  // from first draw, 2 triangles
+        36,  38, 40,              // from second draw, 1 triangle
+        100,                      // initial value
+    };
+
+    for (size_t i = 0; i < ArraySize(expected); ++i)
+    {
+        EXPECT_EQ(actual[i], expected[i]) << "i:" << i;
+    }
+
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+    EXPECT_GL_NO_ERROR();
+}
+
+// Tests that we don't produce undefined behaviour when deleting a current XFB buffer.
+TEST_P(TransformFeedbackTest, DeleteTransformFeedbackBuffer)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    GLBuffer buf;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buf);
+    std::vector<uint8_t> bufData(100000, 0);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, bufData.size(), bufData.data(), GL_DYNAMIC_COPY);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buf);
+    glBeginTransformFeedback(GL_POINTS);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    buf.reset();
+    glDrawArrays(GL_POINTS, 0, 1);
+}
+
+// Same as the above, with a paused transform feedback.
+TEST_P(TransformFeedbackTest, DeletePausedTransformFeedbackBuffer)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    GLBuffer buffer;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buffer);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, 3, nullptr, GL_STATIC_DRAW);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buffer);
+
+    glBeginTransformFeedback(GL_POINTS);
+    glPauseTransformFeedback();
+    buffer.reset();
+    glDrawArrays(GL_POINTS, 0, 1);
+}
+
+// Test that using a transform feedback program with a base instance draw call works.
+TEST_P(TransformFeedbackTest, BaseInstance)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_base_vertex_base_instance"));
+
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in float in_value;\n"
+        "out float out_value;\n"
+        "void main() {\n"
+        "  out_value = in_value * 2.0;\n"
+        "}";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "out mediump vec4 color;\n"
+        "void main() {\n"
+        "  color = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "}";
+
+    std::vector<std::string> tfVaryings;
+    tfVaryings.push_back("out_value");
+
+    mProgram = CompileProgramWithTransformFeedback(kVS, kFS, tfVaryings, GL_INTERLEAVED_ATTRIBS);
+    ASSERT_NE(0u, mProgram);
+
+    glUseProgram(mProgram);
+
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedback);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
+
+    std::vector<float> attribData;
+    for (unsigned int cnt = 0; cnt < 10; ++cnt)
+    {
+        attribData.push_back(static_cast<float>(cnt));
+    }
+
+    GLint attribLocation = glGetAttribLocation(mProgram, "in_value");
+    ASSERT_NE(-1, attribLocation);
+
+    glVertexAttribPointer(attribLocation, 1, GL_FLOAT, GL_FALSE, 4, &attribData[0]);
+    glEnableVertexAttribArray(attribLocation);
+
+    glBeginTransformFeedback(GL_POINTS);
+    glDrawArraysInstancedBaseInstanceANGLE(GL_POINTS, 0, 10, 1, 1);
+    glEndTransformFeedback();
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(0);
+
+    void *mappedBuffer =
+        glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(float) * 10, GL_MAP_READ_BIT);
+    ASSERT_NE(nullptr, mappedBuffer);
+
+    float *mappedFloats = static_cast<float *>(mappedBuffer);
+    for (unsigned int cnt = 0; cnt < 10; ++cnt)
+    {
+        EXPECT_EQ(attribData[cnt] * 2, mappedFloats[cnt]);
+    }
+    glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+    EXPECT_GL_NO_ERROR();
+}
+
+// Tests that deleting a buffer then resuming transform feedback produces an error.
+TEST_P(TransformFeedbackTest, ResumingTransformFeedbackAfterDeletebuffer)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    std::vector<uint8_t> bufData(100, 0);
+
+    GLBuffer buf;
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, buf);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, bufData.size(), bufData.data(), GL_DYNAMIC_COPY);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buf);
+    glBeginTransformFeedback(GL_POINTS);
+    glPauseTransformFeedback();
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+    buf.reset();
+    ASSERT_GL_NO_ERROR();
+
+    // Should produce an error because of a missing buffer binding.
+    glResumeTransformFeedback();
+    ASSERT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Validates that drawing after deleting a buffer in a paused XFB.
+TEST_P(TransformFeedbackTest, DrawAfterDeletingPausedBuffer)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    std::vector<uint8_t> data(100, 0);
+
+    std::array<Vector3, 6> quadVerts = GetQuadVertices();
+
+    GLint loc = glGetAttribLocation(testProgram, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, loc);
+
+    GLBuffer posBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuf);
+    glBufferData(GL_ARRAY_BUFFER, quadVerts.size() * sizeof(quadVerts[0]), quadVerts.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(loc);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLBuffer buf;
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buf);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, data.size() * sizeof(data[0]), data.data(),
+                 GL_STATIC_DRAW);
+    glBeginTransformFeedback(GL_POINTS);
+    glPauseTransformFeedback();
+    glDrawArrays(GL_POINTS, 0, 1);
+    buf.reset();
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Validates deleting an active transform feedback object works as expected.
+TEST_P(TransformFeedbackTest, DeletingTransformFeedback)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    std::vector<uint8_t> data(100, 0);
+
+    std::array<Vector3, 6> quadVerts = GetQuadVertices();
+
+    GLint loc = glGetAttribLocation(testProgram, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, loc);
+
+    GLBuffer posBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuf);
+    glBufferData(GL_ARRAY_BUFFER, quadVerts.size() * sizeof(quadVerts[0]), quadVerts.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(loc);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLTransformFeedback tf;
+    (void)tf.get();
+
+    GLBuffer buf;
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buf);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, data.size() * sizeof(data[0]), data.data(),
+                 GL_STREAM_READ);
+    glBeginTransformFeedback(GL_POINTS);
+    glPauseTransformFeedback();
+    buf.reset();
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, tf);
+    glDrawArrays(GL_POINTS, 0, 1);
+    tf.reset();
+    glFinish();
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+// Validates that drawing after deleting a buffer and binding and unbinding transform feedback
+// object.
+TEST_P(TransformFeedbackTest, BindAndUnbindTransformFeedback)
+{
+    ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(testProgram, essl1_shaders::vs::Simple(),
+                                        essl1_shaders::fs::Green(), {"gl_Position"},
+                                        GL_INTERLEAVED_ATTRIBS);
+    glUseProgram(testProgram);
+
+    std::vector<uint8_t> data(100, 0);
+
+    std::array<Vector3, 6> quadVerts = GetQuadVertices();
+
+    GLint loc = glGetAttribLocation(testProgram, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, loc);
+
+    GLBuffer posBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, posBuf);
+    glBufferData(GL_ARRAY_BUFFER, quadVerts.size() * sizeof(quadVerts[0]), quadVerts.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(loc);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    GLTransformFeedback tf;
+    (void)tf.get();
+
+    GLBuffer buf;
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, buf);
+    glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, data.size() * sizeof(data[0]), data.data(),
+                 GL_STREAM_READ);
+    glBeginTransformFeedback(GL_POINTS);
+    glPauseTransformFeedback();
+    buf.reset();
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, tf);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+    glFinish();
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
+>>>>>>> CHANGE (d96cee Fix to invalidate cache when binding Transform Feedback.)
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TransformFeedbackTest);
 ANGLE_INSTANTIATE_TEST_ES3(TransformFeedbackTest);
 
