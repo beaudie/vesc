@@ -113,7 +113,7 @@ void VulkanPipelineCachePerfTest::step()
     {
         for (const auto &hit : mCacheHits)
         {
-            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, dbm, ssm,
+            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, nullptr, rp, pl, am, ctm, dbm, ssm,
                                      defaultSpecConsts, hit, &desc, &result);
         }
     }
@@ -122,8 +122,8 @@ void VulkanPipelineCachePerfTest::step()
          ++missCount, ++mMissIndex)
     {
         const auto &miss = mCacheMisses[mMissIndex];
-        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, ctm, dbm, ssm, defaultSpecConsts,
-                                 miss, &desc, &result);
+        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, nullptr, rp, pl, am, ctm, dbm, ssm,
+                                 defaultSpecConsts, miss, &desc, &result);
     }
 
     vsAndSerial.get().get().setHandle(VK_NULL_HANDLE);

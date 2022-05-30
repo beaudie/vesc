@@ -1889,6 +1889,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mBlendOperationAdvancedFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT;
 
+    mPipelineCreationCacheControlFeatures = {};
+    mPipelineCreationCacheControlFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT;
+
     mExtendedDynamicStateFeatures = {};
     mExtendedDynamicStateFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT;
@@ -2038,6 +2042,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mBlendOperationAdvancedFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mPipelineCreationCacheControlFeatures);
+    }
+
     if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(&deviceFeatures, &mExtendedDynamicStateFeatures);
@@ -2081,6 +2090,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mHostQueryResetFeatures.pNext                    = nullptr;
     mDepthClipControlFeatures.pNext                  = nullptr;
     mBlendOperationAdvancedFeatures.pNext            = nullptr;
+    mPipelineCreationCacheControlFeatures.pNext      = nullptr;
     mExtendedDynamicStateFeatures.pNext              = nullptr;
     mExtendedDynamicState2Features.pNext             = nullptr;
     mFragmentShadingRateFeatures.pNext               = nullptr;
@@ -2521,6 +2531,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mHostQueryResetFeatures);
+    }
+
+    if (getFeatures().supportsPipelineCreationCacheControl.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mPipelineCreationCacheControlFeatures);
     }
 
     if (getFeatures().supportsPipelineCreationFeedback.enabled)
@@ -3102,6 +3118,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         ExtensionFound(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME, deviceExtensionNames) ||
             mPhysicalDeviceProperties.apiVersion >= VK_API_VERSION_1_3);
 
+    // Incomplete implementation on SwiftShader: http://issuetracker.google.com/234439593
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsPipelineCreationCacheControl,
+        mPipelineCreationCacheControlFeatures.pipelineCreationCacheControl && !isSwiftShader);
+
     // Note: Protected Swapchains is not determined until we have a VkSurface to query.
     // So here vendors should indicate support so that protected_content extension
     // is enabled.
@@ -3572,6 +3593,11 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display,
     pipelineCacheCreateInfo.initialDataSize = *success ? initialData.size() : 0;
     pipelineCacheCreateInfo.pInitialData    = *success ? initialData.data() : nullptr;
 
+    if (display->getRenderer()->getFeatures().supportsPipelineCreationCacheControl.enabled)
+    {
+        pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
+    }
+
     ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
 
     return angle::Result::Continue;
@@ -3599,7 +3625,7 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCache **pipelineCache)
     if (success)
     {
         // Merge the newly created pipeline cache into the existing one.
-        mPipelineCache.merge(mDevice, mPipelineCache.getHandle(), 1, pCache.ptr());
+        mPipelineCache.merge(mDevice, 1, pCache.ptr());
     }
     mPipelineCacheInitialized = true;
     pCache.destroy(mDevice);
