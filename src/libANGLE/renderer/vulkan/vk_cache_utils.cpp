@@ -1894,7 +1894,8 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
     ContextVk *contextVk,
-    const PipelineCache &pipelineCacheVk,
+    const PipelineCache &pipelineCache,
+    std::mutex *pipelineCacheMutex,
     const RenderPass &compatibleRenderPass,
     const PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
@@ -2388,8 +2389,18 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         createInfo.pNext = &feedbackInfo;
     }
 
-    ANGLE_VK_TRY(contextVk,
-                 pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCacheVk));
+    {
+        std::unique_lock<std::mutex> lock;
+
+        if (pipelineCacheMutex != nullptr)
+        {
+            std::unique_lock<std::mutex> lockWithMutex(*pipelineCacheMutex);
+            lock = std::move(lockWithMutex);
+        }
+
+        ANGLE_VK_TRY(contextVk,
+                     pipelineOut->initGraphics(contextVk->getDevice(), createInfo, pipelineCache));
+    }
 
     if (supportsFeedback)
     {
@@ -4646,7 +4657,8 @@ void GraphicsPipelineCache::reset()
 
 angle::Result GraphicsPipelineCache::insertPipeline(
     ContextVk *contextVk,
-    const vk::PipelineCache &pipelineCacheVk,
+    const vk::PipelineCache &pipelineCache,
+    std::mutex *pipelineCacheMutex,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
@@ -4663,10 +4675,10 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     // This "if" is left here for the benefit of VulkanPipelineCachePerfTest.
     if (contextVk != nullptr)
     {
-        ANGLE_TRY(desc.initializePipeline(contextVk, pipelineCacheVk, compatibleRenderPass,
-                                          pipelineLayout, activeAttribLocationsMask,
-                                          programAttribsTypeMask, missingOutputsMask, shaders,
-                                          specConsts, &newPipeline));
+        ANGLE_TRY(desc.initializePipeline(contextVk, pipelineCache, pipelineCacheMutex,
+                                          compatibleRenderPass, pipelineLayout,
+                                          activeAttribLocationsMask, programAttribsTypeMask,
+                                          missingOutputsMask, shaders, specConsts, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.
