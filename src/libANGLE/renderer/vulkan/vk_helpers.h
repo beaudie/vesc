@@ -2879,6 +2879,7 @@ class ShaderProgramHelper : angle::NonCopyable
         ContextVk *contextVk,
         RenderPassCache *renderPassCache,
         const PipelineCache &pipelineCache,
+        std::mutex *pipelineCacheMutex,
         const PipelineLayout &pipelineLayout,
         const GraphicsPipelineDesc &pipelineDesc,
         const gl::AttributesMask &activeAttribLocationsMask,
@@ -2893,12 +2894,14 @@ class ShaderProgramHelper : angle::NonCopyable
             contextVk, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
 
         return mGraphicsPipelines.getPipeline(
-            contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
+            contextVk, pipelineCache, pipelineCacheMutex, *compatibleRenderPass, pipelineLayout,
             activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask, mShaders,
             mSpecializationConstants, pipelineDesc, descPtrOut, pipelineOut);
     }
 
     angle::Result getComputePipeline(ContextVk *contextVk,
+                                     const PipelineCache &pipelineCache,
+                                     std::mutex *pipelineCacheMutex,
                                      const PipelineLayout &pipelineLayout,
                                      PipelineHelper **pipelineOut);
 
