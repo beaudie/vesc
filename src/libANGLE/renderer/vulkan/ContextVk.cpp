@@ -622,7 +622,7 @@ void DumpPipelineCacheGraph(const std::ostringstream &graph)
     std::ostream &out = std::cout;
 
     out << "digraph {\n"
-        << " node [shape=point]\n";
+        << " node [shape=box]\n";
     out << graph.str();
     out << "}\n";
 }
