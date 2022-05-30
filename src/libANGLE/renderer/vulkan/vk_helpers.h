@@ -1288,6 +1288,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     angle::Result nextSubpass(ContextVk *contextVk, RenderPassCommandBuffer **commandBufferOut);
 
     void updateStartedRenderPassWithDepthMode(bool readOnlyDepthStencilMode);
+    void updateStartedRenderPassWithFramebufferFetchEnabled(const Framebuffer &framebuffer);
 
     void beginTransformFeedback(size_t validBufferCount,
                                 const VkBuffer *counterBuffers,

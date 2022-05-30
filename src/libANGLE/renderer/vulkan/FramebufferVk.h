@@ -165,7 +165,10 @@ class FramebufferVk : public FramebufferImpl
     void updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
                                            vk::RenderPassCommandBufferHelper *renderPass);
 
-    void onSwitchProgramFramebufferFetch(ContextVk *contextVk, bool programUsesFramebufferFetch);
+    angle::Result onSwitchProgramFramebufferFetch(
+        ContextVk *contextVk,
+        bool programUsesFramebufferFetch,
+        vk::RenderPassCommandBufferHelper *renderPassCommands);
     bool hasFramebufferFetch() const { return mCurrentFramebufferDesc.hasFramebufferFetch(); }
 
     void removeColorResolveAttachment(uint32_t colorIndexGL);

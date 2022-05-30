@@ -1806,6 +1806,13 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthMode(
     }
 }
 
+void RenderPassCommandBufferHelper::updateStartedRenderPassWithFramebufferFetchEnabled(
+    const Framebuffer &framebuffer)
+{
+    mRenderPassDesc.setFramebufferFetchMode(true);
+    mFramebuffer.setHandle(framebuffer.getHandle());
+}
+
 void RenderPassCommandBufferHelper::finalizeColorImageLayout(
     Context *context,
     ImageHelper *image,

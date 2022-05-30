@@ -2949,8 +2949,10 @@ void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
     renderPass->updateStartedRenderPassWithDepthMode(readOnlyDepthStencilMode);
 }
 
-void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk,
-                                                    bool programUsesFramebufferFetch)
+angle::Result FramebufferVk::onSwitchProgramFramebufferFetch(
+    ContextVk *contextVk,
+    bool programUsesFramebufferFetch,
+    vk::RenderPassCommandBufferHelper *renderPassCommands)
 {
     if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
     {
@@ -2960,7 +2962,17 @@ void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk,
 
         mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
         contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
+
+        if (renderPassCommands && renderPassCommands->started())
+        {
+            vk::Framebuffer *newFramebuffer = nullptr;
+            ANGLE_TRY(getFramebuffer(contextVk, &newFramebuffer, nullptr,
+                                     SwapchainResolveMode::Disabled));
+            renderPassCommands->updateStartedRenderPassWithFramebufferFetchEnabled(*newFramebuffer);
+        }
     }
+
+    return angle::Result::Continue;
 }
 
 // FramebufferCache implementation.

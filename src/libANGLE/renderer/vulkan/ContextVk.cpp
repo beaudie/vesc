@@ -4642,8 +4642,8 @@ angle::Result ContextVk::checkAndUpdateFramebufferFetchStatus(
     if (drawFramebufferVk->getRenderPassDesc().getFramebufferFetchMode() !=
         executable->usesFramebufferFetch())
     {
-        drawFramebufferVk->onSwitchProgramFramebufferFetch(this,
-                                                           executable->usesFramebufferFetch());
+        ANGLE_TRY(drawFramebufferVk->onSwitchProgramFramebufferFetch(
+            this, executable->usesFramebufferFetch(), mRenderPassCommands));
         if (executable->usesFramebufferFetch())
         {
             mRenderer->onFramebufferFetchUsed();
@@ -4683,8 +4683,8 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         if (getDrawFramebuffer()->getRenderPassDesc().getFramebufferFetchMode() !=
             executable->usesFramebufferFetch())
         {
-            ANGLE_TRY(
-                flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
+            // ANGLE_TRY(
+            //     flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
 
             ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(executable));
         }
