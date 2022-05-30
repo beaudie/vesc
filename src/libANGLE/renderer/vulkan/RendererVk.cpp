@@ -3632,6 +3632,16 @@ angle::Result RendererVk::getPipelineCache(PipelineCacheAccess *pipelineCacheOut
     return angle::Result::Continue;
 }
 
+angle::Result RendererVk::mergeIntoPipelineCache(const vk::PipelineCache &pipelineCache)
+{
+    PipelineCacheAccess globalCache;
+    ANGLE_TRY(getPipelineCache(&globalCache));
+
+    globalCache.merge(this, pipelineCache);
+
+    return angle::Result::Continue;
+}
+
 const gl::Caps &RendererVk::getNativeCaps() const
 {
     ensureCapsInitialized();
