@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59a91b46_a6062107",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-30T14:47:24Z",
+      "side": 1,
+      "message": "ANGLE_SKIP_TEST_IF(!GetParam().isEnabled(Feature::LimitMaxColorTargetBitsForTesting));",
+      "revId": "7d71d76e27d9ff55cc078851eaa342ef653dc098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8003424_3c9dd0af",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-30T14:47:24Z",
+      "side": 1,
+      "message": "Use `ANGLE_INSTANTIATE_TEST` directly, and don\u0027t specify the other platforms so they don\u0027t all unnecessarily have to run and skip the test.",
+      "range": {
+        "startLine": 4257,
+        "startChar": 0,
+        "endLine": 4257,
+        "endChar": 30
+      },
+      "revId": "7d71d76e27d9ff55cc078851eaa342ef653dc098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
