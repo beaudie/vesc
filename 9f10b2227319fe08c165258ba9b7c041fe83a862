@@ -63,6 +63,30 @@
       },
       "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c391e845_0a3f845c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T17:44:07Z",
+      "side": 1,
+      "message": "Well, we don\u0027t have a way to track multiple bugs. So one bug enables the feature, and one bug disables it. You get what I\u0027m saying I\u0027m sure.",
+      "parentUuid": "47dbc409_6ca482f4",
+      "range": {
+        "startLine": 3215,
+        "startChar": 0,
+        "endLine": 3215,
+        "endChar": 29
+      },
+      "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
