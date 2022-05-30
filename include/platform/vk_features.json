@@ -798,14 +798,6 @@
             "issue": "http://anglebug.com/5901"
         },
         {
-            "name": "create_pipeline_during_link",
-            "category": "Features",
-            "description": [
-                "Create pipeline with default state during glLinkProgram"
-            ],
-            "issue": "http://anglebug.com/7046"
-        },
-        {
             "name": "prefer_device_local_memory_host_visible",
             "category": "Features",
             "description": [
