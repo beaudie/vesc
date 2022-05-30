@@ -54,7 +54,6 @@ enum class Feature
     CompressVertexData,
     CopyIOSurfaceToNonIOSurfaceForReadOptimization,
     CopyTextureToBufferForReadOptimization,
-    CreatePipelineDuringLink,
     DecodeEncodeSRGBForGenerateMipmap,
     DeferFlushUntilEndRenderPass,
     DepthClamping,
