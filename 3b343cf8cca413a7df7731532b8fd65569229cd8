@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb6e6e12_d1260684",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-30T15:53:12Z",
+      "side": 1,
+      "message": "It should be quite trivial to follow up with a switch to bitset to eliminate the loops, so I don\u0027t see any harm in keeping this change as-is.\n\nI do like the bitset though, the outer `if` is an easy case for the branch predictor, and the bitset test itself is branchless.",
+      "parentUuid": "757fa7b8_4433cf92",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93890dbe_dedf715e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
