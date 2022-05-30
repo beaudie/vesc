@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a04200a_ceed664f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-30T15:54:50Z",
+      "side": 1,
+      "message": "!",
+      "revId": "3fa977b6fcec2c20698ed00fbe7a45a9a53d45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
