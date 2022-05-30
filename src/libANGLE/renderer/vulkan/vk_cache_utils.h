@@ -624,6 +624,7 @@ class GraphicsPipelineDesc final
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);
     void setRenderPassSampleCount(GLint samples);
+    void setRenderPassFramebufferFetchMode(bool hasFramebufferFetch);
     void setRenderPassColorAttachmentFormat(size_t colorIndexGL, angle::FormatID formatID);
 
     // Blend states
