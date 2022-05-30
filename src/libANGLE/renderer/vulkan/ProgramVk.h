@@ -140,7 +140,9 @@ class ProgramVk : public ProgramImpl
     void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
     void linkResources(const gl::ProgramLinkedResources &resources);
 
-    angle::Result createGraphicsPipelineWithDefaultState(const gl::Context *context);
+    angle::Result createGraphicsPipelineWithDefaultState(const gl::Context *context,
+                                                         const vk::PipelineCache &pipelineCache,
+                                                         std::mutex *pipelineCacheMutex);
 
     // We keep the SPIR-V code to use for draw call pipeline creation.
     GlslangProgramInterfaceInfo mGlslangProgramInterfaceInfo;

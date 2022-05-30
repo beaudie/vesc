@@ -737,14 +737,14 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
 
 angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                                        gl::PrimitiveMode mode,
+                                                       const vk::PipelineCache &pipelineCache,
+                                                       std::mutex *pipelineCacheMutex,
                                                        const vk::GraphicsPipelineDesc &desc,
                                                        const gl::ProgramExecutable &glExecutable,
                                                        const vk::GraphicsPipelineDesc **descPtrOut,
                                                        vk::PipelineHelper **pipelineOut)
 {
-    const gl::State &glState         = contextVk->getState();
-    RendererVk *renderer             = contextVk->getRenderer();
-    vk::PipelineCache *pipelineCache = nullptr;
+    const gl::State &glState = contextVk->getState();
 
     ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex));
 
@@ -789,25 +789,26 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     gl::DrawBufferMask framebufferMask      = glState.getDrawFramebuffer()->getDrawBufferMask();
     gl::DrawBufferMask missingOutputsMask   = ~shaderOutMask & framebufferMask;
 
-    ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     return shaderProgram->getGraphicsPipeline(
-        contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), desc,
-        activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask, descPtrOut,
-        pipelineOut);
+        contextVk, &contextVk->getRenderPassCache(), pipelineCache, pipelineCacheMutex,
+        getPipelineLayout(), desc, activeAttribLocations, glExecutable.getAttributesTypeMask(),
+        missingOutputsMask, descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
+                                                      const vk::PipelineCache &pipelineCache,
+                                                      std::mutex *pipelineCacheMutex,
+                                                      const gl::ProgramExecutable &glExecutable,
                                                       vk::PipelineHelper **pipelineOut)
 {
-    const gl::State &glState                  = contextVk->getState();
-    const gl::ProgramExecutable *glExecutable = glState.getProgramExecutable();
-    ASSERT(glExecutable && glExecutable->hasLinkedShaderStage(gl::ShaderType::Compute));
+    ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Compute));
 
     ANGLE_TRY(initComputeProgram(contextVk, &mComputeProgramInfo, mVariableInfoMap));
 
     vk::ShaderProgramHelper *shaderProgram = mComputeProgramInfo.getShaderProgram();
     ASSERT(shaderProgram);
-    return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
+    return shaderProgram->getComputePipeline(contextVk, pipelineCache, pipelineCacheMutex,
+                                             getPipelineLayout(), pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::createPipelineLayout(
