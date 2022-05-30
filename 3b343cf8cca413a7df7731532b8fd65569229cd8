@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d91428a_d2133691",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T14:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f4deec9_d15a5e85",
+      "range": {
+        "startLine": 800,
+        "startChar": 37,
+        "endLine": 800,
+        "endChar": 56
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e0c279c_15687c2a",
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "757fa7b8_4433cf92",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T14:09:07Z",
+      "side": 1,
+      "message": "So I did of course consider a more optimized approach. I was finding in my testing that such an optimization would likely be hard to measure because the design as it stands now is almost as fast-as-could-be. Every one of these sets in our perf testing is a set of one element.\n\nI\u0027d suggest we don\u0027t take any action here and only reconsider if we can find a counter-example",
+      "parentUuid": "1e0c279c_15687c2a",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93890dbe_dedf715e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -60,6 +108,30 @@
       "writtenOn": "2022-05-27T21:19:45Z",
       "side": 1,
       "message": "I think you can call releaseID() as soon as commandBufferHelper gets processed, instead of recycled. i.e, at OutsideRenderPassCommandBufferHelper::reset() you can call releaseID(). \n\nOtherwise, for synchronous submission, command buffers never gets recycled until context destroy, which means you will be using same commandID for entire context life time. I am wondering that might causing bots failure?",
+      "range": {
+        "startLine": 2546,
+        "startChar": 38,
+        "endLine": 2546,
+        "endChar": 47
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bbc3fc9_0e55cc7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2546,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-30T14:09:07Z",
+      "side": 1,
+      "message": "The bot failures seem to be a collection of different unrelated issues. The worst problem is running out of capacity with SwiftShader testers. There may be a flakiness bug with one of the golden image tests where Intel sometimes renders very slightly non-determistically.\n\nI don\u0027t think there\u0027s a bug here. Actually I don\u0027t quite understand what your concern is. If you\u0027re still worried, can you can ping me offline and help me understand?",
+      "parentUuid": "93890dbe_dedf715e",
       "range": {
         "startLine": 2546,
         "startChar": 38,
