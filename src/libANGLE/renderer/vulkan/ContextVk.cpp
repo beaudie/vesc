@@ -275,10 +275,11 @@ SurfaceRotation DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
 }
 
 // Should not generate a copy with modern C++.
-EventName GetTraceEventName(const char *title, uint32_t counter)
+EventName GetTraceEventName(const char *title, uint64_t counter)
 {
     EventName buf;
-    snprintf(buf.data(), kMaxGpuEventNameLen - 1, "%s %u", title, counter);
+    snprintf(buf.data(), kMaxGpuEventNameLen - 1, "%s %llu", title,
+             static_cast<unsigned long long>(counter));
     return buf;
 }
 
