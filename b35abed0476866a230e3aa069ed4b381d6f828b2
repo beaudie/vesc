@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8abc225_726680ef",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T15:31:55Z",
+      "side": 1,
+      "message": "OK - thanks for explaining. As a solution, can you use 64-bit values in the PerfCounters? Feel free to update all counter values to 64-bit. Note the AMD perf mon extension we use supports 64-bit counters.",
+      "parentUuid": "ab159526_eed5afcb",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1513,
+        "endChar": 0
+      },
+      "revId": "b35abed0476866a230e3aa069ed4b381d6f828b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0b693ed_eb0cf84f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
