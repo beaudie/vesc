@@ -22,6 +22,30 @@
       },
       "revId": "aaf2e1b2e400971caf4c8344ab81656725189128",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d3c19e2_cab7933f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T17:46:32Z",
+      "side": 1,
+      "message": "This counter can be useful for data gathering / performance analysis. It seems unlikely there are many scenarios where this could have any measurable performance impact. An argument against a define is that conditional defines increase code complexity. Can you clarify what your concern is?",
+      "parentUuid": "a6e4190e_0bdb9a5a",
+      "range": {
+        "startLine": 1178,
+        "startChar": 13,
+        "endLine": 1178,
+        "endChar": 29
+      },
+      "revId": "aaf2e1b2e400971caf4c8344ab81656725189128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
