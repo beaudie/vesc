@@ -124,13 +124,6 @@ bool Is90DegreeRotation(VkSurfaceTransformFlagsKHR transform)
     return ((transform & k90DegreeRotationVariants) != 0);
 }
 
-bool NeedsInputAttachmentUsage(const angle::FeaturesVk &features)
-{
-    return features.supportsShaderFramebufferFetch.enabled ||
-           features.supportsShaderFramebufferFetchNonCoherent.enabled ||
-           features.emulateAdvancedBlendEquations.enabled;
-}
-
 angle::Result InitImageHelper(DisplayVk *displayVk,
                               EGLint width,
                               EGLint height,
@@ -147,7 +140,7 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
 
     RendererVk *rendererVk = displayVk->getRenderer();
     // If shaders may be fetching from this, we need this image to be an input
-    if (NeedsInputAttachmentUsage(rendererVk->getFeatures()))
+    if (vk::FeaturesRequireInputAttachments(rendererVk->getFeatures()))
     {
         usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
@@ -757,7 +750,6 @@ SwapchainImage::SwapchainImage(SwapchainImage &&other)
     : image(std::move(other.image)),
       imageViews(std::move(other.imageViews)),
       framebuffer(std::move(other.framebuffer)),
-      fetchFramebuffer(std::move(other.fetchFramebuffer)),
       framebufferResolveMS(std::move(other.framebufferResolveMS)),
       presentHistory(std::move(other.presentHistory))
 {}
@@ -1325,7 +1317,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     VkImageUsageFlags imageUsageFlags = kSurfaceVkColorImageUsageFlags;
 
     // If shaders may be fetching from this, we need this image to be an input
-    if (NeedsInputAttachmentUsage(renderer->getFeatures()))
+    if (vk::FeaturesRequireInputAttachments(renderer->getFeatures()))
     {
         imageUsageFlags |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     }
@@ -1398,7 +1390,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     if (samples > 1)
     {
-        const VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
+        VkImageUsageFlags usage = kSurfaceVkColorImageUsageFlags;
+        if (vk::FeaturesRequireInputAttachments(renderer->getFeatures()))
+        {
+            usage |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+        }
 
         // Create a multisampled image that will be rendered to, and then resolved to a swapchain
         // image.  The actual VkImage is created with rotated coordinates to make it easier to do
@@ -1559,10 +1555,6 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
         swapchainImage.image.destroy(renderer);
 
         contextVk->addGarbage(&swapchainImage.framebuffer);
-        if (swapchainImage.fetchFramebuffer.valid())
-        {
-            contextVk->addGarbage(&swapchainImage.fetchFramebuffer);
-        }
         if (swapchainImage.framebufferResolveMS.valid())
         {
             contextVk->addGarbage(&swapchainImage.framebufferResolveMS);
@@ -1597,10 +1589,6 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
         swapchainImage.image.destroy(renderer);
         swapchainImage.imageViews.destroy(device);
         swapchainImage.framebuffer.destroy(device);
-        if (swapchainImage.fetchFramebuffer.valid())
-        {
-            swapchainImage.fetchFramebuffer.destroy(device);
-        }
         if (swapchainImage.framebufferResolveMS.valid())
         {
             swapchainImage.framebufferResolveMS.destroy(device);
@@ -1720,9 +1708,7 @@ vk::Framebuffer &WindowSurfaceVk::chooseFramebuffer(const SwapchainResolveMode s
 
     // Choose which framebuffer to use based on fetch, so it will have a matching renderpass
     ASSERT(swapchainResolveMode == SwapchainResolveMode::Disabled);
-    return mFramebufferFetchMode == FramebufferFetchMode::Enabled
-               ? mSwapchainImages[mCurrentSwapchainImageIndex].fetchFramebuffer
-               : mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
+    return mSwapchainImages[mCurrentSwapchainImageIndex].framebuffer;
 }
 
 angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
@@ -2270,16 +2256,12 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
 
 angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     ContextVk *contextVk,
-    FramebufferFetchMode fetchMode,
     const vk::RenderPass &compatibleRenderPass,
     const SwapchainResolveMode swapchainResolveMode,
     vk::Framebuffer **framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
     ASSERT(!mNeedToAcquireNextSwapchainImage);
-
-    // Track the new fetch mode
-    mFramebufferFetchMode = fetchMode;
 
     vk::Framebuffer &currentFramebuffer = chooseFramebuffer(swapchainResolveMode);
     if (currentFramebuffer.valid())
@@ -2349,16 +2331,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
 
             imageViews[0] = imageView->getHandle();
 
-            if (fetchMode == FramebufferFetchMode::Enabled)
-            {
-                ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(contextVk->getDevice(),
-                                                                             framebufferInfo));
-            }
-            else
-            {
-                ANGLE_VK_TRY(contextVk, swapchainImage.framebuffer.init(contextVk->getDevice(),
-                                                                        framebufferInfo));
-            }
+            ANGLE_VK_TRY(contextVk,
+                         swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
         }
     }
 
