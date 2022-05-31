@@ -87,6 +87,30 @@
       },
       "revId": "e6c8786f4c8fb900ad40d7e3224ae1c5680dfde0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dccc2fc_2f6fb282",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-05-31T16:47:43Z",
+      "side": 1,
+      "message": "In the next change there will be multiple caches. One in the renderer (used at draw time), one in each program executable. The one in program executable is warmed up (and returned for program binary) and merged into the renderer\u0027s. This merge is not internally synchronized with the cache look up per Vulkan.\n\nWhen creating pipelines in the program\u0027s cache, there\u0027s no need for a mutex. When creating pipelines in the renderer\u0027s cache, we need the mutex to synchronize with program\u0027s cache merging into the renderer\u0027s.\n\nWhen VK_EXT_graphics_pipeline_library is implemented, more of the pipeline creation will use the program\u0027s cache, which means there would be more opportunity to avoid the mutex.",
+      "parentUuid": "b8ecd53c_b8fefc60",
+      "range": {
+        "startLine": 1822,
+        "startChar": 53,
+        "endLine": 1822,
+        "endChar": 62
+      },
+      "revId": "e6c8786f4c8fb900ad40d7e3224ae1c5680dfde0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
