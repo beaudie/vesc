@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6efd5bf_b73ef832",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-05-31T23:04:10Z",
+      "side": 1,
+      "message": "I think I still might not have permissions to submit. I don\u0027t see an option in the toolbar to submit, and clicking the 3 dots -\u003e \"Submit\", I get: \"Could not perform action: submit not permitted\"",
+      "revId": "7ddf7419dacddd6d0acffa01636ce3c171a4c9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
