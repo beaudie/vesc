@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7f3478f_fd77f6a4",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-31T21:21:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4de34ce_7391243a",
+      "revId": "281b050c473956c3a52c46a647fd6fae1f64bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bc1d4ab_9162c301",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-05-31T17:51:22Z",
       "side": 1,
       "message": "number -\u003e number of",
+      "revId": "281b050c473956c3a52c46a647fd6fae1f64bbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcc5c274_0619911b",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-05-31T21:21:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bc1d4ab_9162c301",
       "revId": "281b050c473956c3a52c46a647fd6fae1f64bbfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
