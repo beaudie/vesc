@@ -16,6 +16,29 @@
       "message": "Jamie: PTAL. Thanks!",
       "revId": "c74d86ea8a9835ff754a79a495f37eff408470c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79abfc6d_94106f62",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T16:25:27Z",
+      "side": 1,
+      "message": "nit: you can use CamelCase for enum names, the all caps style is pretty much our old style we haven\u0027t gone back and changed.",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 14
+      },
+      "revId": "c74d86ea8a9835ff754a79a495f37eff408470c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
