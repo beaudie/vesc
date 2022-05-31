@@ -129,7 +129,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
         ImageLayout::ColorAttachment,
         ImageMemoryBarrierData{
             "ColorAttachment",
-            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            VK_IMAGE_LAYOUT_GENERAL,
             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
             // Transition to: all reads and writes must happen after barrier.
@@ -10110,5 +10110,11 @@ PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode)
     return static_cast<PresentMode>(vkPresentMode);
 }
 
+bool FeaturesRequireInputAttachments(const angle::FeaturesVk &features)
+{
+    return features.supportsShaderFramebufferFetch.enabled ||
+           features.supportsShaderFramebufferFetchNonCoherent.enabled ||
+           features.emulateAdvancedBlendEquations.enabled;
+}
 }  // namespace vk
 }  // namespace rx
