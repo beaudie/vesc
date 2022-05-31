@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d72b3f3_fd5380bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T15:13:11Z",
+      "side": 1,
+      "message": "Looks good, see my comment below as to one alternative way to do this.",
+      "revId": "e6c8786f4c8fb900ad40d7e3224ae1c5680dfde0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "888aabf5_79f8dac8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T15:13:11Z",
+      "side": 1,
+      "message": "I don\u0027t think you have to pass it around, you should always be able to retrieve it from ContextVk.\n\nI wonder if you could make a small RAII type where you could acquire a locked reference to the PipelineCache. e.g. a class that wraps a lock and a reference to the Vk object, and you get one of these from the RendererVk. Instead of exposing access to the mutex itself. And that way we\u0027d ensure every access is safe.",
+      "range": {
+        "startLine": 1822,
+        "startChar": 53,
+        "endLine": 1822,
+        "endChar": 62
+      },
+      "revId": "e6c8786f4c8fb900ad40d7e3224ae1c5680dfde0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
