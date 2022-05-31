@@ -124,6 +124,8 @@ def PrepareTestSuite(suite_name):
     _AdbShell('p=com.android.angle.test;'
               'for q in %s;do pm grant "$p" "$q";done;' % ' '.join(permissions))
 
+    _AdbShell('appops set com.android.angle.test MANAGE_EXTERNAL_STORAGE allow || true')
+
     if suite_name == 'angle_perftests':
         _AddRestrictedTracesJson()
 
@@ -290,7 +292,7 @@ def RunSmokeTest():
     logging.info('Smoke test passed')
 
 
-def RunTests(test_suite, args, stdoutfile=None, output_dir=None, log_output=True):
+def RunTests(args, stdoutfile=None, output_dir=None, log_output=True):
     args = args[:]
     test_output_path = _RemoveFlag(args, '--isolated-script-test-output')
     perf_output_path = _RemoveFlag(args, '--isolated-script-test-perf-output')
