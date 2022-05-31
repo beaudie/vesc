@@ -129,7 +129,7 @@ void SetupDefaultPipelineState(const ContextVk *contextVk,
     graphicsPipelineDescOut->setRenderPassSampleCount(1);
     graphicsPipelineDescOut->setRenderPassFramebufferFetchMode(glExecutable.usesFramebufferFetch());
 
-    const std::vector<sh::ShaderVariable> &outputVariables = glExecutable.getOutputVariables();
+    const std::vector<sh::ShaderVariable> &outputVariables   = glExecutable.getOutputVariables();
     const std::vector<gl::VariableLocation> &outputLocations = glExecutable.getOutputLocations();
 
     for (const gl::VariableLocation &outputLocation : outputLocations)
@@ -149,7 +149,7 @@ void SetupDefaultPipelineState(const ContextVk *contextVk,
                 location = outputVar.location;
             }
 
-            GLenum type = gl::VariableComponentType(outputVar.type);
+            GLenum type            = gl::VariableComponentType(outputVar.type);
             angle::FormatID format = angle::FormatID::R8G8B8A8_UNORM;
             if (type == GL_INT)
             {
