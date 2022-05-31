@@ -143,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "016018ca_04e592c0",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T17:40:17Z",
+      "side": 1,
+      "message": "Thanks Charlie. I don\u0027t have any immediate plans to improve this further. If anyone finds any data or a trace where a bit set would make a measurable impact please open a bug with the report and I\u0027ll be quite happy to optimize this further!",
+      "parentUuid": "14da72eb_d064ac70",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93890dbe_dedf715e",
