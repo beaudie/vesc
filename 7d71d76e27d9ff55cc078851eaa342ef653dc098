@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c159ea9_8cd5cfe1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-31T17:51:22Z",
+      "side": 1,
+      "message": "Agree with Gregg - customers have specifically asked Apple expose WebGL 2.0 on some of this older hardware. Gregg\u0027s solution here looks good to me.",
+      "parentUuid": "213199ec_f06c3f9d",
+      "range": {
+        "startLine": 13,
+        "startChar": 53,
+        "endLine": 14,
+        "endChar": 43
+      },
+      "revId": "7d71d76e27d9ff55cc078851eaa342ef653dc098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59a91b46_a6062107",
