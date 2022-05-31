@@ -86,10 +86,9 @@ class MemoryReport final : angle::NonCopyable
 // Information used to accurately skip known synchronization issues in ANGLE.
 struct SkippedSyncvalMessage
 {
-    const char *messageId;
-    const char *messageContents1;
-    const char *messageContents2                      = "";
-    bool isDueToNonConformantCoherentFramebufferFetch = false;
+    const char *messageId        = "";
+    const char *messageContents1 = "";
+    const char *messageContents2 = "";
 };
 }  // namespace vk
 
@@ -371,9 +370,6 @@ class RendererVk : angle::NonCopyable
     {
         return mSkippedSyncvalMessages;
     }
-
-    void onFramebufferFetchUsed();
-    bool isFramebufferFetchUsed() const { return mIsFramebufferFetchUsed; }
 
     uint64_t getMaxFenceWaitTimeNs() const;
 
@@ -757,10 +753,6 @@ class RendererVk : angle::NonCopyable
     // Syncval skipped messages.  The exact contents of the list depends on the availability of
     // certain extensions.
     std::vector<vk::SkippedSyncvalMessage> mSkippedSyncvalMessages;
-
-    // Whether framebuffer fetch has been used, for the purposes of more accurate syncval error
-    // filtering.
-    bool mIsFramebufferFetchUsed;
 
     // How close to VkPhysicalDeviceLimits::maxMemoryAllocationCount we allow ourselves to get
     static constexpr double kPercentMaxMemoryAllocationCount = 0.3;

@@ -1486,7 +1486,6 @@ enum class RenderPassClosureReason
     // Closures that ANGLE could have avoided, but doesn't for simplicity or optimization of more
     // common cases.
     XfbPause,
-    FramebufferFetchEmulation,
     ColorBufferInvalidate,
     GenerateMipmapOnCPU,
     CopyTextureOnCPU,

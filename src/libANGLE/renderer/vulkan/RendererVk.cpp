@@ -386,7 +386,7 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC-HAZARD-READ_AFTER_WRITE",
         "type: VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC",
     },
-    // Coherent framebuffer fetch is enabled on some platforms that are known apriori to have the
+    // Coherent framebuffer fetch is enabled on some platforms that are known a priori to have the
     // needed behavior, even though this is not specified in the Vulkan spec.  These generate
     // syncval errors that are benign on those platforms.
     // http://anglebug.com/6870
@@ -396,14 +396,12 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "vkCmdBeginRenderPass: Hazard READ_AFTER_WRITE in subpass 0 for attachment ",
      "aspect color during load with loadOp VK_ATTACHMENT_LOAD_OP_LOAD. Access info (usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ, prior_usage: "
-     "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass",
-     true},
+     "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass"},
     {"SYNC-HAZARD-WRITE_AFTER_WRITE",
      "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass 0 for attachment ",
      "image layout transition (old_layout: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, new_layout: "
      "VK_IMAGE_LAYOUT_GENERAL). Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
-     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers:",
-     true},
+     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers:"},
     // http://anglebug.com/7070
     {
         "SYNC-HAZARD-READ_AFTER_WRITE",
@@ -440,7 +438,7 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "READ"
      "|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_FRAGMENT_SHADER_UNIFORM_READ, "
      "command: vkCmdPipelineBarrier, seq_no: 4,",
-     "", false},
+     ""},
     // On SwiftShader, http://anglebug.com/7031
     {"SYNC-HAZARD-READ_AFTER_WRITE",
      "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
@@ -450,8 +448,13 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_"
      "FRAGMENT_SHADER_UNIFORM_READ, "
      "command: vkCmdPipelineBarrier, seq_no: 3,",
-     "", false},
-
+     ""},
+    // ClearTestES3.ClearAndReadPixels3DTexture http://anglebug.com/7377
+    {"SYNC-HAZARD-WRITE_AFTER_WRITE",
+     "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass 0 for attachment 0 aspect color "
+     "during load with loadOp VK_ATTACHMENT_LOAD_OP_CLEAR. Access info (usage: "
+     "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, prior_usage: "
+     "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
@@ -595,8 +598,6 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
     }
 
     // Then check with syncval messages:
-    const bool isFramebufferFetchUsed = renderer->isFramebufferFetchUsed();
-
     for (const vk::SkippedSyncvalMessage &msg : renderer->getSkippedSyncvalMessages())
     {
         if (strstr(messageId, msg.messageId) == nullptr ||
@@ -606,14 +607,7 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
             continue;
         }
 
-        // If the error is due to exposing coherent framebuffer fetch, but framebuffer fetch has not
-        // been used by the application, report it.
-        if (msg.isDueToNonConformantCoherentFramebufferFetch && !isFramebufferFetchUsed)
-        {
-            return DebugMessageReport::Print;
-        }
-
-        // Otherwise ignore the message
+        // Ignore the message
         return DebugMessageReport::Ignore;
     }
 
@@ -4002,11 +3996,6 @@ void RendererVk::onNewValidationMessage(const std::string &message)
 {
     mLastValidationMessage = message;
     ++mValidationMessageCount;
-}
-
-void RendererVk::onFramebufferFetchUsed()
-{
-    mIsFramebufferFetchUsed = true;
 }
 
 std::string RendererVk::getAndClearLastValidationMessage(uint32_t *countSinceLastClear)

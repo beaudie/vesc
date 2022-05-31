@@ -10110,5 +10110,11 @@ PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode)
     return static_cast<PresentMode>(vkPresentMode);
 }
 
+bool FeaturesRequireInputAttachments(const angle::FeaturesVk &features)
+{
+    return features.supportsShaderFramebufferFetch.enabled ||
+           features.supportsShaderFramebufferFetchNonCoherent.enabled ||
+           features.emulateAdvancedBlendEquations.enabled;
+}
 }  // namespace vk
 }  // namespace rx
