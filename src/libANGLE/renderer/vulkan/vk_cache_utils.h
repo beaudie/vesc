@@ -203,12 +203,6 @@ class alignas(4) RenderPassDesc final
     void setViewCount(GLsizei viewCount) { mViewCount = static_cast<uint8_t>(viewCount); }
     uint8_t viewCount() const { return mViewCount; }
 
-    void setFramebufferFetchMode(bool hasFramebufferFetch)
-    {
-        mHasFramebufferFetch = hasFramebufferFetch;
-    }
-    bool getFramebufferFetchMode() const { return mHasFramebufferFetch; }
-
     void updateRenderToTexture(bool isRenderToTexture) { mIsRenderToTexture = isRenderToTexture; }
     bool isRenderToTexture() const { return mIsRenderToTexture; }
 
@@ -228,9 +222,6 @@ class alignas(4) RenderPassDesc final
     // sRGB
     uint8_t mSrgbWriteControl : 1;
 
-    // Framebuffer fetch
-    uint8_t mHasFramebufferFetch : 1;
-
     // Multisampled render to texture
     uint8_t mIsRenderToTexture : 1;
     uint8_t mResolveDepthStencil : 1;
@@ -238,7 +229,7 @@ class alignas(4) RenderPassDesc final
     uint8_t mUnresolveStencil : 1;
 
     // Available space for expansion.
-    uint8_t mPadding1 : 2;
+    uint8_t mPadding1 : 3;
     uint8_t mPadding2;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
@@ -1398,8 +1389,6 @@ class FramebufferDesc
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
-    void updateFramebufferFetchMode(bool hasFramebufferFetch);
-    bool hasFramebufferFetch() const { return mHasFramebufferFetch; }
 
     bool isMultiview() const { return mIsMultiview; }
 
@@ -1411,8 +1400,7 @@ class FramebufferDesc
 
     // Note: this is an exclusive index. If there is one index it will be "1".
     // Maximum value is 18
-    uint16_t mMaxIndex : 5;
-    uint16_t mHasFramebufferFetch : 1;
+    uint16_t mMaxIndex : 6;
     static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_LAYERS < (1 << 9) - 1,
                   "Not enough bits for mLayerCount");
 
