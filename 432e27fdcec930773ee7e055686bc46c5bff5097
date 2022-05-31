@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4988acf_57458f7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T17:00:46Z",
+      "side": 0,
+      "message": "Can the definition of this removed? Looks like it is no longer been used after this CL.",
+      "range": {
+        "startLine": 1089,
+        "startChar": 21,
+        "endLine": 1089,
+        "endChar": 33
+      },
+      "revId": "432e27fdcec930773ee7e055686bc46c5bff5097",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

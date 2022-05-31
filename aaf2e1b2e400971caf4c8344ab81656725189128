@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6e4190e_0bdb9a5a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T17:00:46Z",
+      "side": 1,
+      "message": "This is only been used by overlay. Could we delete it or wrap with compiler flag?",
+      "range": {
+        "startLine": 1178,
+        "startChar": 13,
+        "endLine": 1178,
+        "endChar": 29
+      },
+      "revId": "aaf2e1b2e400971caf4c8344ab81656725189128",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
