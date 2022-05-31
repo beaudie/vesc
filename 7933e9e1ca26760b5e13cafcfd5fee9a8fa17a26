@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bee092fa_8873c815",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-31T16:48:56Z",
+      "side": 1,
+      "message": "Can `incr` be a value other than -1 and 1? If not, we could have an assert to reflect that.",
+      "range": {
+        "startLine": 728,
+        "startChar": 63,
+        "endLine": 728,
+        "endChar": 67
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "365e903f_e8812d8d",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-05-31T16:48:56Z",
+      "side": 1,
+      "message": "Should we use {} here?",
+      "range": {
+        "startLine": 747,
+        "startChar": 44,
+        "endLine": 747,
+        "endChar": 45
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
