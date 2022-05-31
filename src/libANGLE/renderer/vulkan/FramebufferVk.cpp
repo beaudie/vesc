@@ -2038,22 +2038,6 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         }
     }
 
-    // In case bound program uses shader framebuffer fetch and bound attachments are changed without
-    // program change, we update framebuffer fetch mode in Renderpass here.
-    bool programUsesFramebufferFetch        = false;
-    const gl::State &glState                = contextVk->getState();
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
-    if (executable)
-    {
-        programUsesFramebufferFetch = executable->usesFramebufferFetch();
-    }
-
-    if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
-    {
-        mCurrentFramebufferDesc.updateFramebufferFetchMode(programUsesFramebufferFetch);
-        mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
-    }
-
     if (contextVk->getFeatures().enableMultisampledRenderToTexture.enabled)
     {
         // Update descriptions regarding multisampled-render-to-texture use.
@@ -2108,11 +2092,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
     {
-        return mBackbuffer->getCurrentFramebuffer(
-            contextVk,
-            mRenderPassDesc.getFramebufferFetchMode() ? FramebufferFetchMode::Enabled
-                                                      : FramebufferFetchMode::Disabled,
-            *compatibleRenderPass, swapchainResolveMode, framebufferOut);
+        return mBackbuffer->getCurrentFramebuffer(contextVk, *compatibleRenderPass,
+                                                  swapchainResolveMode, framebufferOut);
     }
 
     // Gather VkImageViews over all FBO attachments, also size of attached region.
@@ -2947,20 +2928,6 @@ void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
     ASSERT(readOnlyDepthStencilMode || !mReadOnlyDepthFeedbackLoopMode);
 
     renderPass->updateStartedRenderPassWithDepthMode(readOnlyDepthStencilMode);
-}
-
-void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk,
-                                                    bool programUsesFramebufferFetch)
-{
-    if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
-    {
-        // Make sure framebuffer is recreated.
-        mFramebuffer = nullptr;
-        mCurrentFramebufferDesc.updateFramebufferFetchMode(programUsesFramebufferFetch);
-
-        mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
-        contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
-    }
 }
 
 // FramebufferCache implementation.
