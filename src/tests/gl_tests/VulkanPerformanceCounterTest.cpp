@@ -5545,6 +5545,42 @@ void main() {
     EXPECT_EQ(expectedCacheMisses, actualCacheMisses);
 }
 
+// Test modifying texture size and render to it does not cause VkFramebuffer cache explode
+TEST_P(VulkanPerformanceCounterTest, ResizeFBOAttachedTextureInLoop)
+{
+    ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    int32_t framebufferCacheSizeBefore = getPerfCounters().framebufferCacheSize;
+    GLTexture texture;
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    for (GLint texWidth = 1; texWidth <= 10; texWidth++)
+    {
+        for (GLint texHeight = 1; texHeight <= 10; texHeight++)
+        {
+            // Allocate texture
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, nullptr);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+            ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+            // Draw to FBO backed by the texture
+            glUseProgram(blueProgram);
+            drawQuad(blueProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+            ASSERT_GL_NO_ERROR();
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+        }
+    }
+    int32_t framebufferCacheSizeAfter    = getPerfCounters().framebufferCacheSize;
+    int32_t framebufferCacheSizeIncrease = framebufferCacheSizeAfter - framebufferCacheSizeBefore;
+    printf("\tframebufferCacheCountIncrease:%u\n", framebufferCacheSizeIncrease);
+    // We should not cache obsolete VkImages. Only current VkImage should be cached.
+    EXPECT_EQ(framebufferCacheSizeIncrease, 1);
+}
+
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER());
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_ES31, ES31_VULKAN(), ES31_VULKAN_SWIFTSHADER());
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest_MSAA, ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER());
