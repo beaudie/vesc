@@ -56,6 +56,8 @@
 7291 VULKAN : BlitFramebufferTest.Blit3D/* = SKIP
 7291 VULKAN : BlitFramebufferTest.Blit3DTo2DArray/* = SKIP
 7291 VULKAN : BlitFramebufferTest.Blit2DArrayTo3D/* = SKIP
+234769934 VULKAN : VulkanPerformanceCounterTest.ResizeFBOAttachedTextureInLoop/* = SKIP
+234602034 VULKAN : VulkanPerformanceCounterTest.SetTextureSwizzleWithSameValueOnFBOAttachedTextureInLoop/* = SKIP
 
 // Windows
 3786 WIN NVIDIA D3D11 : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP

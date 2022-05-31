@@ -1628,6 +1628,7 @@ class CacheStats final : angle::NonCopyable
     ANGLE_INLINE void hit() { mHitCount++; }
     ANGLE_INLINE void miss() { mMissCount++; }
     ANGLE_INLINE void incrementSize() { mSize++; }
+    ANGLE_INLINE void decrementSize(uint32_t size) { mSize -= size; }
     ANGLE_INLINE void missAndIncrementSize()
     {
         mMissCount++;

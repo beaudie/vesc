@@ -2990,6 +2990,7 @@ void FramebufferCache::insert(const vk::FramebufferDesc &desc,
                               vk::FramebufferHelper &&framebufferHelper)
 {
     mPayload.emplace(desc, std::move(framebufferHelper));
+    mCacheStats.incrementSize();
 }
 
 void FramebufferCache::clear(ContextVk *contextVk)
