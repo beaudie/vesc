@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3d6bc8_29ec964f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T15:07:42Z",
+      "side": 1,
+      "message": "I don\u0027t follow why these are separate from the perf counters. Can you elaborate?",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1513,
+        "endChar": 0
+      },
+      "revId": "b35abed0476866a230e3aa069ed4b381d6f828b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b693ed_eb0cf84f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9938,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-05-31T15:07:42Z",
+      "side": 1,
+      "message": "vk::Context has the perf counters, please use that.",
+      "range": {
+        "startLine": 9938,
+        "startChar": 54,
+        "endLine": 9938,
+        "endChar": 64
+      },
+      "revId": "b35abed0476866a230e3aa069ed4b381d6f828b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
