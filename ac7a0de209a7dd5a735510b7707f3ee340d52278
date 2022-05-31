@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b298e0c_7239cf10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 33
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-31T19:08:57Z",
+      "side": 1,
+      "message": "Could you add another line here:\n\nBug: angleproject:7355\n\nbecause of the new expectations which reference it?\n\nActually, this looks like it doesn\u0027t use the volatile qualifier, so maybe just replacing 7343 with 7355 is most appropriate.",
+      "revId": "ac7a0de209a7dd5a735510b7707f3ee340d52278",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "22dbbb89_6e23b588",
@@ -32,6 +49,23 @@
       "side": 1,
       "message": "My pleasure. Ken or Stephen should +2 before we can land the change.",
       "parentUuid": "22dbbb89_6e23b588",
+      "revId": "ac7a0de209a7dd5a735510b7707f3ee340d52278",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0afb3b_07fda228",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-05-31T19:08:57Z",
+      "side": 1,
+      "message": "Thanks Yuly for pointing out the other bug.\n\nlgtm+2, but Chris, please see comments about what bug should be referenced in the commit message before submitting. Thanks.\n",
       "revId": "ac7a0de209a7dd5a735510b7707f3ee340d52278",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
