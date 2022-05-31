@@ -285,7 +285,6 @@ EventName GetTraceEventName(const char *title, uint32_t counter)
 vk::ResourceAccess GetColorAccess(const gl::State &state,
                                   const gl::FramebufferState &framebufferState,
                                   const gl::DrawBufferMask &emulatedAlphaMask,
-                                  bool hasFramebufferFetch,
                                   size_t colorIndexGL)
 {
     // No access if draw buffer is disabled altogether
@@ -310,6 +309,7 @@ vk::ResourceAccess GetColorAccess(const gl::State &state,
 
     if (isOutputMasked)
     {
+        bool hasFramebufferFetch = state.getProgramExecutable()->usesFramebufferFetch();
         return hasFramebufferFetch ? vk::ResourceAccess::ReadOnly : vk::ResourceAccess::Unused;
     }
 
@@ -1967,9 +1967,9 @@ angle::Result ContextVk::handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dir
     {
         if (framebufferState.getEnabledDrawBuffers().test(colorIndexGL))
         {
-            vk::ResourceAccess colorAccess = GetColorAccess(
-                mState, framebufferState, drawFramebufferVk->getEmulatedAlphaAttachmentMask(),
-                drawFramebufferVk->hasFramebufferFetch(), colorIndexGL);
+            vk::ResourceAccess colorAccess =
+                GetColorAccess(mState, framebufferState,
+                               drawFramebufferVk->getEmulatedAlphaAttachmentMask(), colorIndexGL);
             mRenderPassCommands->onColorAccess(colorIndexVk, colorAccess);
         }
         ++colorIndexVk;
@@ -4626,35 +4626,6 @@ void ContextVk::updateDither()
     }
 }
 
-angle::Result ContextVk::checkAndUpdateFramebufferFetchStatus(
-    const gl::ProgramExecutable *executable)
-{
-    if (!executable)
-    {
-        return angle::Result::Continue;
-    }
-
-    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-    ASSERT(drawFramebufferVk);
-
-    if (drawFramebufferVk->getRenderPassDesc().getFramebufferFetchMode() !=
-        executable->usesFramebufferFetch())
-    {
-        drawFramebufferVk->onSwitchProgramFramebufferFetch(this,
-                                                           executable->usesFramebufferFetch());
-        if (executable->usesFramebufferFetch())
-        {
-            mRenderer->onFramebufferFetchUsed();
-
-            // When framebuffer fetch is enabled, attachments can be read from even if output is
-            // masked, so update their access.
-            onColorAccessChange();
-        }
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
@@ -4677,15 +4648,6 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         mIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
         mCurrentGraphicsPipeline = nullptr;
         mGraphicsPipelineTransition.reset();
-
-        if (getDrawFramebuffer()->getRenderPassDesc().getFramebufferFetchMode() !=
-            executable->usesFramebufferFetch())
-        {
-            ANGLE_TRY(
-                flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
-
-            ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(executable));
-        }
     }
 
     return angle::Result::Continue;
@@ -4977,9 +4939,6 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
                 onDrawFramebufferRenderPassDescChange(drawFramebufferVk, nullptr);
-
-                // We may need to update the framebuffer's use of fetch to match the in-use program
-                ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(glState.getProgramExecutable()));
 
                 break;
             }

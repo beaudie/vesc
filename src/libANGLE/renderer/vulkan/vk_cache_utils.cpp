@@ -1007,7 +1007,6 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR, nullptr, VK_ATTACHMENT_UNUSED,
         VK_IMAGE_LAYOUT_UNDEFINED, 0};
 
-    const bool needInputAttachments = desc.getFramebufferFetchMode();
     const bool isRenderToTextureThroughExtension =
         desc.isRenderToTexture() &&
         contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled;
@@ -1061,10 +1060,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
-        colorRef.layout     = needInputAttachments
-                                  ? VK_IMAGE_LAYOUT_GENERAL
-                                  : ConvertImageLayoutToVkImageLayout(
-                                        static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+        colorRef.layout     = VK_IMAGE_LAYOUT_GENERAL;
         colorAttachmentRefs.push_back(colorRef);
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
@@ -1213,12 +1209,10 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     subpassDesc.push_back({});
     VkSubpassDescription *applicationSubpass = &subpassDesc.back();
 
-    applicationSubpass->flags             = 0;
-    applicationSubpass->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    applicationSubpass->inputAttachmentCount =
-        needInputAttachments ? static_cast<uint32_t>(colorAttachmentRefs.size()) : 0;
-    applicationSubpass->pInputAttachments =
-        needInputAttachments ? colorAttachmentRefs.data() : nullptr;
+    applicationSubpass->flags                = 0;
+    applicationSubpass->pipelineBindPoint    = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    applicationSubpass->inputAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
+    applicationSubpass->pInputAttachments    = colorAttachmentRefs.data();
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
@@ -3190,14 +3184,12 @@ void FramebufferDesc::updateDepthStencilResolve(ImageOrBufferViewSubresourceSeri
 size_t FramebufferDesc::hash() const
 {
     return angle::ComputeGenericHash(&mSerials, sizeof(mSerials[0]) * mMaxIndex) ^
-           mHasFramebufferFetch << 26 ^ mIsRenderToTexture << 25 ^ mLayerCount << 16 ^
-           mUnresolveAttachmentMask;
+           mIsRenderToTexture << 25 ^ mLayerCount << 16 ^ mUnresolveAttachmentMask;
 }
 
 void FramebufferDesc::reset()
 {
     mMaxIndex                = 0;
-    mHasFramebufferFetch     = false;
     mLayerCount              = 0;
     mSrgbWriteControlMode    = 0;
     mUnresolveAttachmentMask = 0;
@@ -3209,7 +3201,6 @@ bool FramebufferDesc::operator==(const FramebufferDesc &other) const
 {
     if (mMaxIndex != other.mMaxIndex || mLayerCount != other.mLayerCount ||
         mUnresolveAttachmentMask != other.mUnresolveAttachmentMask ||
-        mHasFramebufferFetch != other.mHasFramebufferFetch ||
         mSrgbWriteControlMode != other.mSrgbWriteControlMode ||
         mIsRenderToTexture != other.mIsRenderToTexture)
     {
@@ -3241,11 +3232,6 @@ FramebufferNonResolveAttachmentMask FramebufferDesc::getUnresolveAttachmentMask(
 void FramebufferDesc::updateLayerCount(uint32_t layerCount)
 {
     SetBitField(mLayerCount, layerCount);
-}
-
-void FramebufferDesc::updateFramebufferFetchMode(bool hasFramebufferFetch)
-{
-    SetBitField(mHasFramebufferFetch, hasFramebufferFetch);
 }
 
 void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
