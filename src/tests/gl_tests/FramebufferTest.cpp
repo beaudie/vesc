@@ -1120,6 +1120,52 @@ TEST_P(FramebufferTest_ES3, ResizeTextureSmallToLarge)
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::green);
 }
 
+// Test modifying texture size and render to it does not cause VkFramebuffer cache explode
+TEST_P(FramebufferTest_ES3, ResizeTextureInLoop)
+{
+    ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    uint64_t processMemoryUsageKBBefore = 0;
+    {
+        GLTexture texture;
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        GLint loopCount = 0;
+        for (GLint texWidth = 1; texWidth <= 10; texWidth++)
+        {
+            for (GLint texHeight = 1; texHeight <= 10; texHeight++)
+            {
+                // Allocate texture
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA,
+                             GL_UNSIGNED_BYTE, nullptr);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture,
+                                       0);
+                ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+                // Draw to FBO backed by the texture
+                glUseProgram(blueProgram);
+                drawQuad(blueProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+                ASSERT_GL_NO_ERROR();
+                EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+                ++loopCount;
+                if (loopCount == 1)
+                {
+                    // Take memory usage after first FBO creation. Some driver has fixed memory
+                    // overhead with FBOs.
+                    processMemoryUsageKBBefore = GetProcessMemoryUsageKB();
+                }
+            }
+        }
+    }
+    uint64_t processMemoryUsageKBAfter = GetProcessMemoryUsageKB();
+    uint64_t processMemoryIncreaseKB   = processMemoryUsageKBAfter - processMemoryUsageKBBefore;
+    printf("\tprocessMemoryIncreaseKB:%llu\n", (unsigned long long)processMemoryIncreaseKB);
+    ASSERT_TRUE(processMemoryIncreaseKB < 1024);
+}
+
 // Test that fewer outputs than framebuffer attachments doesn't crash.  This causes a Vulkan
 // validation warning, but should not be fatal.
 TEST_P(FramebufferTest_ES3, FewerShaderOutputsThanAttachments)
