@@ -435,7 +435,7 @@ void ANGLEPerfTest::processResults()
     for (const auto &iter : mPerfCounterInfo)
     {
         const std::string &counterName = iter.second.name;
-        std::vector<GLuint> samples    = iter.second.samples;
+        std::vector<GLuint64> samples  = iter.second.samples;
 
         // Median
         {
@@ -1009,8 +1009,8 @@ void ANGLERenderTest::updatePerfCounters()
 
     for (auto &iter : mPerfCounterInfo)
     {
-        uint32_t counter             = iter.first;
-        std::vector<GLuint> &samples = iter.second.samples;
+        uint32_t counter               = iter.first;
+        std::vector<GLuint64> &samples = iter.second.samples;
         samples.push_back(perfData[counter].value);
     }
 }
