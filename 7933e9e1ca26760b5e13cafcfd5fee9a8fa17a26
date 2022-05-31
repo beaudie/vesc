@@ -45,6 +45,30 @@
       },
       "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e7cebf3_ae0f2f2b",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T17:16:08Z",
+      "side": 1,
+      "message": "That is existing code, but I will add {} in next update.",
+      "parentUuid": "365e903f_e8812d8d",
+      "range": {
+        "startLine": 747,
+        "startChar": 44,
+        "endLine": 747,
+        "endChar": 45
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
