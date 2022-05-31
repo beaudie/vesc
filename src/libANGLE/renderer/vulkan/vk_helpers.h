@@ -3142,6 +3142,7 @@ enum class PresentMode
 VkPresentModeKHR ConvertPresentModeToVkPresentMode(PresentMode presentMode);
 PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode);
 
+bool FeaturesRequireInputAttachments(const angle::FeaturesVk &features);
 }  // namespace vk
 }  // namespace rx
 
