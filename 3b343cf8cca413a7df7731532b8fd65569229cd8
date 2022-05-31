@@ -119,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14da72eb_d064ac70",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T16:48:59Z",
+      "side": 1,
+      "message": "I am okay with it to checkin as it is and further improve it in future.",
+      "parentUuid": "fb6e6e12_d1260684",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 96
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93890dbe_dedf715e",
@@ -156,6 +180,30 @@
       "side": 1,
       "message": "The bot failures seem to be a collection of different unrelated issues. The worst problem is running out of capacity with SwiftShader testers. There may be a flakiness bug with one of the golden image tests where Intel sometimes renders very slightly non-determistically.\n\nI don\u0027t think there\u0027s a bug here. Actually I don\u0027t quite understand what your concern is. If you\u0027re still worried, can you can ping me offline and help me understand?",
       "parentUuid": "93890dbe_dedf715e",
+      "range": {
+        "startLine": 2546,
+        "startChar": 38,
+        "endLine": 2546,
+        "endChar": 47
+      },
+      "revId": "3b343cf8cca413a7df7731532b8fd65569229cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4de4c78_9d9b8e82",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2546,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T16:48:59Z",
+      "side": 1,
+      "message": "Yea, I think this should work, since releaseResourceUseList() time the commandBuffers are removed from the use set.",
+      "parentUuid": "8bbc3fc9_0e55cc7d",
       "range": {
         "startLine": 2546,
         "startChar": 38,
