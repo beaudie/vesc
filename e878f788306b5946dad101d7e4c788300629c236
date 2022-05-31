@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5997d50_c8f9f83b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-05-31T18:13:24Z",
+      "side": 1,
+      "message": "LGTM. But since I have not used this graph before, so really do not have strong opinion with it. Will leave it to other folks that actually using it to comment.",
+      "revId": "e878f788306b5946dad101d7e4c788300629c236",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
