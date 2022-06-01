@@ -1863,6 +1863,15 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     // For any updated attachments we'll update their Serials below
     ASSERT(dirtyBits.any());
+
+    if (dirtyBits[gl::Framebuffer::DIRTY_BIT_ATTACHMENT_STORAGE_RELEASED])
+    {
+        // Invalidate the cache. If we have performance critical code hitting this path we
+        // can add related data (such as width/height) to the cache
+        mFramebufferCache.clear(contextVk);
+        mFramebuffer = nullptr;
+    }
+
     for (size_t dirtyBit : dirtyBits)
     {
         switch (dirtyBit)
@@ -1896,6 +1905,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 break;
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_LAYERS:
                 shouldUpdateLayerCount = true;
+                break;
+            case gl::Framebuffer::DIRTY_BIT_ATTACHMENT_STORAGE_RELEASED:
                 break;
             default:
             {
