@@ -216,6 +216,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23d388b2_b57a887d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-06-01T20:55:46Z",
+      "side": 1,
+      "message": "\u003e As a user, you are bound to the OpenGL limits. GLES (and I presume WebGL) provide a minimum requirement of 4 attachments. Why would you as a user _require_ 8 attachments on hardware that has trouble supporting it?\n\nThis happens all over WebGL/OpenGL. There are 1000s of sites that require more than the minimum number of max uniform vectors (16), more than the minimum number of max attributes (8), more than the minimum max texture size (64). Three.js and Unity regularly pass all of these limits\n\n\u003e Not sure what you are referring to about MAX_TEXTURE_SIZE.\n\nBased on your feedback it sounds like the code should be changed to\n\n    if (mFeatures.supports16kTextures.enabled)\n    { \n       mNativeCaps.max2DTextureSize \u003d 16384;\n    }\n    else if (mFeatures.supports8kTextures.enabled)\n    { \n       mNativeCaps.max2DTextureSize \u003d 8192;\n    }\n    else if (mFeatures.supports4kTextures.enabled)\n    { \n       mNativeCaps.max2DTextureSize \u003d 4096;\n    }\n    else if (mFeatures.supports2kTextures.enabled)\n    { \n       mNativeCaps.max2DTextureSize \u003d 2048;\n    }\n    ...\n\nThen you can test and set all of these limits. Since the code is not structured like that I\u0027m curious why this particular limit should be treated differently.",
+      "parentUuid": "8fd670a5_1ada1a9d",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "641c8237_5773b87f",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 6
