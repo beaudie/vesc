@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5383285a_b58660da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-01T22:49:43Z",
+      "side": 1,
+      "message": "Done. Thanks for the suggestions Jamie!\n\nI also added a check to avoid copying the .gz file if it\u0027s already on the device with the same hash. Unlike catapult, this is provably reliable ~:}",
+      "parentUuid": "68142c5b_35912be6",
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ce0da96_7b1c3ed2",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "678cf3d0_609a9af9",
+        "filename": "src/tests/py_utils/run_angle_android_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-01T22:49:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ce0da96_7b1c3ed2",
+      "range": {
+        "startLine": 24,
+        "startChar": 11,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91000e17_174da304",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-06-01T14:49:19Z",
       "side": 1,
       "message": "nit: please remove this default, there\u0027s no real reason it should be angle_perftests. make this a explicit positional argument is my suggestion by removing the \"--\".",
+      "range": {
+        "startLine": 25,
+        "startChar": 76,
+        "endLine": 25,
+        "endChar": 91
+      },
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5cc8190_fc20f93c",
+        "filename": "src/tests/py_utils/run_angle_android_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-01T22:49:43Z",
+      "side": 1,
+      "message": "Removed default but kept the \"--\" so it\u0027s --suite\u003dangle_perftests. Otherwise it\u0027s easy to run into confusion due to how we\u0027re using spaces instead of equals in other places e.g. \"--steps-per-trial 1000\". If a positional arg is accidentally omitted then ArgumentParser picks up \"1000\" as the positional arg causing everything to go sideways.",
+      "parentUuid": "91000e17_174da304",
       "range": {
         "startLine": 25,
         "startChar": 76,
