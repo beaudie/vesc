@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a7bb435_f029545a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T19:58:39Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understood this. This change is overwriting `mDescriptorPoolBindings` on every use, so effectively the binding reset() is moved from the end of the UtilsVk call to the beginning of the next UtilsVk call. Only difference I see is that a new binding is taken before the old binding is reset. Is that where this benefit is coming from?\n\nAlso this is claiming there\u0027s a bug, how can it be reproduced? Maybe a test like `loop(1000) do_something_that_invokes_utilsVk();`?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 54
+      },
+      "revId": "856dda6e015e72ed0a20a8c4219fa8857a0dc06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "107713ca_c3f5df87",
