@@ -354,6 +354,19 @@ TIntermTyped *DriverUniform::getClipDistancesEnabled() const
     return enabledMask;
 }
 
+TIntermTyped *DriverUniform::getLineRasterEmulation() const
+{
+    TIntermTyped *miscRef = createDriverUniformRef(kMisc);
+    TIntermTyped *lineRasterEmulation =
+        new TIntermBinary(EOpInitialize, miscRef, CreateBoolNode(false));
+
+    TIntermSequence args = {
+        lineRasterEmulation,
+    };
+    return TIntermAggregate::CreateConstructor(*StaticType::GetBasic<EbtBool, EbpUndefined>(),
+                                               &args);
+}
+
 //
 // Class DriverUniformExtended
 //
