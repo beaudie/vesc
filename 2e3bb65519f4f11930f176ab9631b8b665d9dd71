@@ -232,6 +232,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "451c2363_8b3154ef",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T22:27:27Z",
+      "side": 1,
+      "message": "\u003e Based on your feedback it sounds like the code should be changed to\n\nI have no familiarity with this. The _spec compliant_ way would be to derive the GL limit from the metal limit (assuming there is one), and not expose support where the metal limit is below GL\u0027s minimum requirement.\n\nStepping outside the spec compliance is valid, because, yes, sometimes it\u0027s useful. But you\u0027d ideally want to:\n\n1. Know when you are side stepping the spec\n2. Be able to control it to be able to test code paths for such limited hardware without having access to them\n\nIf you use ANGLE features, you get the above. If you don\u0027t use features, you don\u0027t get the above. I have no further comment about this, the choice is yours.\n\n(about max texture size, the minimum required spec is 2048, so use of features really depends on what logic you have for those conditions. If it\u0027s something like `family_blah \u0026\u0026 isIntel \u0026\u0026 etc`, then yes a feature makes sense because it\u0027s sort of workaround-y. If it\u0027s something like `metal_limit.max_texture_size \u003d\u003d 4k`, no that doesn\u0027t really need a feature)",
+      "parentUuid": "23d388b2_b57a887d",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "641c8237_5773b87f",
