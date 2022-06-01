@@ -50,6 +50,24 @@
       "message": "You should be able to assert that the format is neither depth nor stencil (not just combined depth/stencil).\n\nYou should be able to use:\n\n```\nASSERT(getAspectFlags() \u003d\u003d VK_IMAGE_ASPECT_COLOR_BIT);\n```",
       "revId": "cbef2f86f902c71a1f86e5a37d51e8c2ff8b025a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecfb3d12_f74ad755",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8318,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-01T17:20:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d7a67ab_633c1fed",
+      "revId": "cbef2f86f902c71a1f86e5a37d51e8c2ff8b025a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
