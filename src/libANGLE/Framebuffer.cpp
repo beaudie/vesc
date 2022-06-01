@@ -2094,6 +2094,7 @@ void Framebuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subject
         // This can be triggered by freeing TextureStorage in D3D back-end.
         if (message == angle::SubjectMessage::StorageReleased)
         {
+            mDirtyBits.set(DIRTY_BIT_ATTACHMENT_STORAGE_RELEASED);
             mDirtyBits.set(index);
             invalidateCompletenessCache();
             return;

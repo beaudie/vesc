@@ -3097,7 +3097,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
-    onStateChange(angle::SubjectMessage::SubjectChanged);
+    onStateChange(angle::SubjectMessage::StorageReleased);
     mRedefinedLevels.reset();
 }
 
