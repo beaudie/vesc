@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c8e5921_2bf2be6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T22:38:54Z",
+      "side": 1,
+      "message": "Geoff: would you be willing to +2 this small upstreaming? Trying to reduce diffs seen while rolling ANGLE into WebKit. Thanks.\n\n(Note this isn\u0027t the code in WebKit verbatim - I alphabetized things, and will resolve these conflicts during the next ANGLE-\u003eWebKit roll.)",
+      "revId": "d098f9338db70ac8b207b1a645cd86c4a8fd21d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
