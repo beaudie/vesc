@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9e47918b_8db5c579",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T19:54:15Z",
+      "side": 1,
+      "message": "As a user, you are bound to the OpenGL limits. GLES (and I presume WebGL) provide a minimum requirement of 4 attachments. Why would you as a user _require_ 8 attachments on hardware that has trouble supporting it?\n\nAnd about features, I was pointing out this thing we have that gives us benefits (in the very least, by giving you information in chrome://gpu), and will ease your debugging when a user generates a bug report. If a part of ANGLE is not using it, it\u0027s too bad for that part. Not sure what you are referring to about `MAX_TEXTURE_SIZE`.\n\nIn the end, I have no real interest in `metal/`, you are free to proceed as you wish.",
+      "parentUuid": "d84ff62e_359f0608",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "641c8237_5773b87f",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 6
