@@ -412,7 +412,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationVS(TCompiler *compiler,
     emulationBlock->appendStatement(clampedDecl);
     emulationBlock->appendStatement(varyingAssign);
     TIntermIfElse *ifEmulation =
-        new TIntermIfElse(specConst->getLineRasterEmulation(), emulationBlock, nullptr);
+        new TIntermIfElse(driverUniforms->getLineRasterEmulation(), emulationBlock, nullptr);
 
     // Ensure the statements run at the end of the main() function.
     return RunAtTheEndOfShader(compiler, root, ifEmulation, symbolTable);
@@ -843,7 +843,7 @@ ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
     emulationSequence->insert(emulationSequence->begin(), nodes.begin(), nodes.end());
 
     TIntermIfElse *ifEmulation =
-        new TIntermIfElse(specConst->getLineRasterEmulation(), emulationBlock, nullptr);
+        new TIntermIfElse(driverUniforms->getLineRasterEmulation(), emulationBlock, nullptr);
 
     // Ensure the line raster code runs at the beginning of main().
     TIntermFunctionDefinition *main = FindMain(root);

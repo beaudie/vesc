@@ -67,6 +67,9 @@ class DriverUniform
     TIntermTyped *getNumSamples() const;
     TIntermTyped *getClipDistancesEnabled() const;
 
+    // Line rasterizaton emulation
+    TIntermTyped *getLineRasterEmulation() const;
+
     virtual TIntermTyped *getViewport() const { return nullptr; }
     virtual TIntermTyped *getXfbBufferOffsets() const { return nullptr; }
     virtual TIntermTyped *getXfbVerticesPerInstance() const { return nullptr; }

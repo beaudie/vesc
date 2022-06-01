@@ -84,6 +84,7 @@ struct GraphicsDriverUniforms
     // - Advanced blend equation
     // - Sample count
     // - Enabled clip planes
+    // - Line raster emulation
     uint32_t misc;
 };
 static_assert(sizeof(GraphicsDriverUniforms) % (sizeof(uint32_t) * 4) == 0,
@@ -1274,9 +1275,18 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    DirtyBits dirtyBitMask)
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
+    ASSERT(mode != gl::PrimitiveMode::InvalidEnum);
     if (mode != mCurrentDrawMode)
     {
+        // Driver uniform should be updated when the mode changes from or to line mode.
+        if (getFeatures().basicGLLineRasterization.enabled &&
+            (gl::IsLineMode(mode) || gl::IsLineMode(mCurrentDrawMode)))
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
+        }
+
         invalidateCurrentGraphicsPipeline();
+
         mCurrentDrawMode = mode;
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
     }
@@ -6160,6 +6170,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
 
     const uint32_t swapXY               = IsRotatedAspectRatio(mCurrentRotationDrawFramebuffer);
     const uint32_t enabledClipDistances = mState.getEnabledClipDistances().bits();
+    const uint32_t lineRasterEmulation =
+        getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mCurrentDrawMode);
 
     static_assert(angle::BitMask<uint32_t>(gl::IMPLEMENTATION_MAX_CLIP_DISTANCES) <=
                       sh::vk::kDriverUniformsMiscEnabledClipPlanesMask,
@@ -6169,11 +6181,13 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     ASSERT((advancedBlendEquation & ~sh::vk::kDriverUniformsMiscAdvancedBlendEquationMask) == 0);
     ASSERT((numSamples & ~sh::vk::kDriverUniformsMiscSampleCountMask) == 0);
     ASSERT((enabledClipDistances & ~sh::vk::kDriverUniformsMiscEnabledClipPlanesMask) == 0);
+    ASSERT((lineRasterEmulation & ~sh::vk::kDriverUniformsMiscLineRasterEmulationMask) == 0);
 
     const uint32_t misc =
         swapXY | advancedBlendEquation << sh::vk::kDriverUniformsMiscAdvancedBlendEquationOffset |
         numSamples << sh::vk::kDriverUniformsMiscSampleCountOffset |
-        enabledClipDistances << sh::vk::kDriverUniformsMiscEnabledClipPlanesOffset;
+        enabledClipDistances << sh::vk::kDriverUniformsMiscEnabledClipPlanesOffset |
+        lineRasterEmulation << sh::vk::kDriverUniformsMiscLineRasterEmulationOffset;
 
     // Copy and flush to the device.
     *driverUniforms = {
