@@ -287,6 +287,7 @@ class StateManager11 final : angle::NonCopyable
                                          const d3d11::SamplerState &samplerState);
     void setSimpleScissorRect(const gl::Rectangle &glRect);
     void setScissorRectD3D(const D3D11_RECT &d3dRect);
+    void syncCurUAVs();
 
     void setIndexBuffer(ID3D11Buffer *buffer, DXGI_FORMAT indexFormat, unsigned int offset);
 
@@ -567,7 +568,9 @@ class StateManager11 final : angle::NonCopyable
     using RTVCache = ViewCache<ID3D11RenderTargetView, D3D11_RENDER_TARGET_VIEW_DESC>;
     gl::ShaderMap<SRVCache> mCurShaderSRVs;
     UAVCache mCurComputeUAVs;
+    UAVCache mCurUAVs;
     RTVCache mCurRTVs;
+    bool mCurUAVsDirty = false;
 
     SRVCache *getSRVCache(gl::ShaderType shaderType);
 
