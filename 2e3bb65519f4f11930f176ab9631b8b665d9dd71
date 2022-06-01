@@ -142,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ad9b71_d42c200d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T03:01:32Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t mean to add a feature for the limit, but add a feature that takes the value of `supportsEitherGPUFamily(2, 1)`. That would be something like `supportsGPUFamilyBlahBlah`. Point being that then you can dynamically or for testing pretend that family blah blah is not supported.\n\nAnyway, didn\u0027t you say there\u0027s a max-bits limit for this? Why not set the limit to `std::max(4, bit_limit / 128)`? You don\u0027t have to check the GPU family then.",
+      "parentUuid": "9e9c4534_cdf4f2d1",
+      "revId": "2e3bb65519f4f11930f176ab9631b8b665d9dd71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "641c8237_5773b87f",
