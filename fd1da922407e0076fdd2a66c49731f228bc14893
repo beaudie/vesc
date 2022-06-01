@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a079de2_13962a42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:53:27Z",
+      "side": 1,
+      "message": "Ping me offline if you want to discuss the style of this object.",
+      "revId": "fd1da922407e0076fdd2a66c49731f228bc14893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7e9ce28_54129ebe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:53:27Z",
+      "side": 1,
+      "message": "nit: Synchronizing is a long word, how about LockedPipelineCache or PipelineCacheAccess?",
+      "range": {
+        "startLine": 1807,
+        "startChar": 4,
+        "endLine": 1807,
+        "endChar": 31
+      },
+      "revId": "fd1da922407e0076fdd2a66c49731f228bc14893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9295dc_cff623a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:53:27Z",
+      "side": 1,
+      "message": "can you not use std::unique_lock instead of a mutex pointer? Can you not create this object in the constructor and pass it around using references / move operators?",
+      "range": {
+        "startLine": 1774,
+        "startChar": 2,
+        "endLine": 1774,
+        "endChar": 23
+      },
+      "revId": "fd1da922407e0076fdd2a66c49731f228bc14893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
