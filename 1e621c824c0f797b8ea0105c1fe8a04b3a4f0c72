@@ -294,6 +294,30 @@
       },
       "revId": "1e621c824c0f797b8ea0105c1fe8a04b3a4f0c72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc4f99b_2956d846",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2722,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-01T19:33:39Z",
+      "side": 1,
+      "message": "(sorry, GL_RED after the swap)",
+      "parentUuid": "89bcdce4_a7b4d7f3",
+      "range": {
+        "startLine": 2722,
+        "startChar": 8,
+        "endLine": 2722,
+        "endChar": 68
+      },
+      "revId": "1e621c824c0f797b8ea0105c1fe8a04b3a4f0c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
