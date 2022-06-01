@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 277
+#define ANGLE_SH_VERSION 278
 
 enum ShShaderSpec
 {
@@ -875,7 +875,8 @@ extern const char kDriverUniformsVarName[];
 // - 5 bits for advanced blend equation
 // - 6 bits for sample count
 // - 8 bits for enabled clip planes
-// - 12 bits unused
+// - 1 bit for line raster emulation
+// - 11 bits unused
 constexpr uint32_t kDriverUniformsMiscSwapXYMask                  = 0x1;
 constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationOffset = 1;
 constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationMask   = 0x1F;
@@ -883,6 +884,8 @@ constexpr uint32_t kDriverUniformsMiscSampleCountOffset           = 6;
 constexpr uint32_t kDriverUniformsMiscSampleCountMask             = 0x3F;
 constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesOffset     = 12;
 constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesMask       = 0xFF;
+constexpr uint32_t kDriverUniformsMiscLineRasterEmulationOffset   = 20;
+constexpr uint32_t kDriverUniformsMiscLineRasterEmulationMask     = 0x1;
 
 // Interface block array name used for atomic counter emulation
 extern const char kAtomicCountersBlockName[];
