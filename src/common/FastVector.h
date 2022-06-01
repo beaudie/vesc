@@ -570,6 +570,11 @@ class FlatUnorderedSet final
 
     bool operator==(const FlatUnorderedSet<T, N> &other) const { return mData == other.mData; }
 
+    typename FastVector<T, N>::iterator begin() { return mData.begin(); }
+    typename FastVector<T, N>::iterator end() { return mData.end(); }
+    typename FastVector<T, N>::const_iterator begin() const { return mData.begin(); }
+    typename FastVector<T, N>::const_iterator end() const { return mData.end(); }
+
   private:
     FastVector<T, N> mData;
 };

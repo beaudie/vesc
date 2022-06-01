@@ -33,6 +33,7 @@ namespace gl
 class Buffer;
 
 constexpr uint32_t kElementArrayBufferIndex = MAX_VERTEX_ATTRIBS;
+static_assert(kElementArrayBufferIndex == MAX_VERTEX_ATTRIB_BINDINGS);
 
 class VertexArrayState final : angle::NonCopyable
 {
@@ -110,10 +111,10 @@ class VertexArrayState final : angle::NonCopyable
     AttributesMask mCachedInvalidMappedArrayBuffer;
 };
 
-class VertexArrayBufferContentsObservers final : angle::NonCopyable
+class VertexArrayBufferObservers final : angle::NonCopyable
 {
   public:
-    VertexArrayBufferContentsObservers(VertexArray *vertexArray);
+    VertexArrayBufferObservers(VertexArray *vertexArray);
     void enableForBuffer(Buffer *buffer, uint32_t bufferIndex);
     void disableForBuffer(Buffer *buffer, uint32_t bufferIndex);
 
@@ -280,6 +281,7 @@ class VertexArray final : public angle::ObserverInterface,
     // Observer implementation
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
     void onBufferContentsChange(uint32_t bufferIndex);
+    void onBufferStorageChanged(uint32_t bufferIndex);
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
 
@@ -414,7 +416,8 @@ class VertexArray final : public angle::ObserverInterface,
 
     mutable IndexRangeCache mIndexRangeCache;
     bool mBufferAccessValidationEnabled;
-    VertexArrayBufferContentsObservers mContentsObservers;
+    VertexArrayBufferObservers mContentsObservers;
+    angle::BitSet<MAX_VERTEX_ATTRIB_BINDINGS + 1> mBuffersWithStorageChanged;
 };
 
 }  // namespace gl
