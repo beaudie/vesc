@@ -107,6 +107,10 @@ extern const angle::PackedEnumMap<PrimitiveMode, bool> gLineModes;
 
 ANGLE_INLINE bool IsLineMode(PrimitiveMode primitiveMode)
 {
+    if (primitiveMode == PrimitiveMode::InvalidEnum)
+    {
+        return false;
+    }
     return priv::gLineModes[primitiveMode];
 }
 
