@@ -821,8 +821,9 @@ void StateManager11::setUnorderedAccessViewInternal(gl::ShaderType shaderType,
                                                     UINT resourceSlot,
                                                     const UAVType *uav)
 {
-    ASSERT(static_cast<size_t>(resourceSlot) < mCurComputeUAVs.size());
-    const ViewRecord<D3D11_UNORDERED_ACCESS_VIEW_DESC> &record = mCurComputeUAVs[resourceSlot];
+    auto &curUAVs = shaderType == gl::ShaderType::Compute ? mCurComputeUAVs : mCurUAVs;
+    ASSERT(static_cast<size_t>(resourceSlot) < curUAVs.size());
+    const ViewRecord<D3D11_UNORDERED_ACCESS_VIEW_DESC> &record = curUAVs[resourceSlot];
 
     if (record.view != reinterpret_cast<uintptr_t>(uav))
     {
@@ -845,21 +846,18 @@ void StateManager11::setUnorderedAccessViewInternal(gl::ShaderType shaderType,
             case gl::ShaderType::Vertex:
             case gl::ShaderType::Fragment:
             {
-                UINT baseUAVRegister = static_cast<UINT>(mProgramD3D->getPixelShaderKey().size());
-                deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(
-                    D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr,
-                    baseUAVRegister + resourceSlot, 1, &uavPtr, nullptr);
+                mCurUAVs.update(resourceSlot, uavPtr);
+                mCurUAVsDirty = true;
                 break;
             }
             case gl::ShaderType::Compute:
                 deviceContext->CSSetUnorderedAccessViews(resourceSlot, 1, &uavPtr, nullptr);
+                mCurComputeUAVs.update(resourceSlot, uavPtr);
                 break;
             default:
                 UNIMPLEMENTED();
                 break;
         }
-
-        mCurComputeUAVs.update(resourceSlot, uavPtr);
     }
 }
 
@@ -1867,21 +1865,21 @@ void StateManager11::unsetConflictingUAVs(gl::PipelineType pipeline,
                                           uintptr_t resource,
                                           const gl::ImageIndex *index)
 {
-    ASSERT(shaderType == gl::ShaderType::Compute);
+    auto &curUAVs = shaderType == gl::ShaderType::Compute ? mCurComputeUAVs : mCurUAVs;
     bool foundOne = false;
 
     ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
-    size_t count = std::min(mCurComputeUAVs.size(), mCurComputeUAVs.highestUsed());
+    size_t count                       = std::min(curUAVs.size(), curUAVs.highestUsed());
     for (size_t resourceIndex = 0; resourceIndex < count; ++resourceIndex)
     {
-        auto &record = mCurComputeUAVs[resourceIndex];
+        auto &record = curUAVs[resourceIndex];
 
         if (record.view && record.resource == resource &&
             (!index || ImageIndexConflictsWithUAV(*index, record.desc)))
         {
             deviceContext->CSSetUnorderedAccessViews(static_cast<UINT>(resourceIndex), 1,
                                                      &mNullUAVs[0], nullptr);
-            mCurComputeUAVs.update(resourceIndex, nullptr);
+            curUAVs.update(resourceIndex, nullptr);
             foundOne = true;
         }
     }
@@ -1961,6 +1959,7 @@ angle::Result StateManager11::ensureInitialized(const gl::Context *context)
         mCurShaderSamplerStates[shaderType].resize(maxShaderTextureImageUnits);
     }
     mCurRTVs.initialize(caps.maxColorAttachments);
+    mCurUAVs.initialize(caps.maxImageUnits);
     mCurComputeUAVs.initialize(caps.maxImageUnits);
 
     // Initialize cached NULL SRV block
@@ -2651,6 +2650,24 @@ void StateManager11::setScissorRectD3D(const D3D11_RECT &d3dRect)
     mInternalDirtyBits.set(DIRTY_BIT_SCISSOR_STATE);
 }
 
+void StateManager11::syncCurUAVs()
+{
+    if (mCurUAVsDirty)
+    {
+        ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+        UINT baseUAVRegister = static_cast<UINT>(mProgramD3D->getPixelShaderKey().size());
+        std::vector<ID3D11UnorderedAccessView *> curUAVs(mCurUAVs.highestUsed());
+        for (size_t i = 0; i < mCurUAVs.highestUsed(); i++)
+        {
+            curUAVs[i] = reinterpret_cast<ID3D11UnorderedAccessView *>(mCurUAVs[i].view);
+        }
+        deviceContext->OMSetRenderTargetsAndUnorderedAccessViews(
+            D3D11_KEEP_RENDER_TARGETS_AND_DEPTH_STENCIL, nullptr, nullptr, baseUAVRegister,
+            static_cast<UINT>(curUAVs.size()), curUAVs.data(), nullptr);
+        mCurUAVsDirty = false;
+    }
+}
+
 angle::Result StateManager11::syncTextures(const gl::Context *context)
 {
     ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Vertex));
@@ -2660,6 +2677,7 @@ angle::Result StateManager11::syncTextures(const gl::Context *context)
     {
         ANGLE_TRY(applyTexturesForSRVs(context, gl::ShaderType::Geometry));
     }
+    syncCurUAVs();
 
     return angle::Result::Continue;
 }
@@ -3890,6 +3908,7 @@ angle::Result StateManager11::syncShaderStorageBuffers(const gl::Context *contex
             ANGLE_TRY(syncShaderStorageBuffersForShader(context, shaderType));
         }
     }
+    syncCurUAVs();
 
     return angle::Result::Continue;
 }
