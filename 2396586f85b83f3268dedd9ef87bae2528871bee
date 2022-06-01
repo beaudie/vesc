@@ -16,6 +16,23 @@
       "message": "Still lgtm - let\u0027s get this in!\n",
       "revId": "2396586f85b83f3268dedd9ef87bae2528871bee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85bd71be_f78a8c76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T00:01:02Z",
+      "side": 1,
+      "message": "Shabi would you be willing to +2 this? Not sure if Kimmo has review privileges.",
+      "revId": "2396586f85b83f3268dedd9ef87bae2528871bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
