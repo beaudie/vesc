@@ -16,6 +16,23 @@
       "message": "My initial guess at resolving this. ",
       "revId": "fca46bc4c1563b566c62eeee758dd3708ab3e1f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d3f1ea_43d607a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T23:40:16Z",
+      "side": 1,
+      "message": "lgtm\n\nIs there an expectation that this will resolve this compilation failure? What version of the MSL spec introduced the uint type alias for uint32_t?\n\nThanks.\n",
+      "revId": "fca46bc4c1563b566c62eeee758dd3708ab3e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
