@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68142c5b_35912be6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:49:19Z",
+      "side": 1,
+      "message": "Thanks Roman. Contrary to my initial advice, maybe we should place this in just src/tests to make this sit beside run_perf_test and also be more visible/accessible.",
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ce0da96_7b1c3ed2",
+        "filename": "src/tests/py_utils/run_angle_android_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:49:19Z",
+      "side": 1,
+      "message": "nit: add a third argument for --gest_filter for compatibility, and might as well add a fourth for --isolated-script-test-filter",
+      "range": {
+        "startLine": 24,
+        "startChar": 11,
+        "endLine": 24,
+        "endChar": 23
+      },
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91000e17_174da304",
+        "filename": "src/tests/py_utils/run_angle_android_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-01T14:49:19Z",
+      "side": 1,
+      "message": "nit: please remove this default, there\u0027s no real reason it should be angle_perftests. make this a explicit positional argument is my suggestion by removing the \"--\".",
+      "range": {
+        "startLine": 25,
+        "startChar": 76,
+        "endLine": 25,
+        "endChar": 91
+      },
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
