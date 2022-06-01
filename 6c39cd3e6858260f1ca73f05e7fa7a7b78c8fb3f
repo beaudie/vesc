@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00110500_713d64c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T02:48:11Z",
+      "side": 1,
+      "message": "Oh that was not the plan. We just needed to make it a uniform instead of a spec const.\n\nInteresting how no bot is failing tests. Maybe we are at a point where we can rely on the extension?",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "6c39cd3e6858260f1ca73f05e7fa7a7b78c8fb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "784a0697_824dfc28",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T02:48:11Z",
+      "side": 1,
+      "message": "TODO: increment",
+      "range": {
+        "startLine": 57,
+        "startChar": 23,
+        "endLine": 57,
+        "endChar": 25
+      },
+      "revId": "6c39cd3e6858260f1ca73f05e7fa7a7b78c8fb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
