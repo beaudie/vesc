@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1911b5b0_9c184500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-01T09:32:48Z",
+      "side": 1,
+      "message": "Tested and can confirm that this fixes angleproject:7307.",
+      "revId": "7565b2d98f6fb0e27d8998ba0f8bcebf012cee24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
