@@ -140,7 +140,7 @@ void VertexArray::onDestroy(const Context *context)
         if (buffer)
         {
             // Note: the non-contents observer is unbound in the ObserverBinding destructor.
-            buffer->removeContentsObserver(this, bindingIndex);
+            buffer->removeVertexArrayObserver(this, bindingIndex);
         }
         binding.setBuffer(context, nullptr);
     }
@@ -150,7 +150,7 @@ void VertexArray::onDestroy(const Context *context)
         {
             mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
         }
-        mState.mElementArrayBuffer->removeContentsObserver(this, kElementArrayBufferIndex);
+        mState.mElementArrayBuffer->removeVertexArrayObserver(this, kElementArrayBufferIndex);
     }
     mState.mElementArrayBuffer.bind(context, nullptr);
     mVertexArray->destroy(context);
@@ -188,7 +188,7 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
                 if (bufferBinding.get())
                     bufferBinding->onNonTFBindingChanged(-1);
             }
-            bufferBinding->removeContentsObserver(this, bindingIndex);
+            bufferBinding->removeVertexArrayObserver(this, bindingIndex);
             binding.setBuffer(context, nullptr);
             mArrayBufferObserverBindings[bindingIndex].reset();
 
@@ -215,7 +215,7 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
     {
         if (isBound && mState.mElementArrayBuffer.get())
             mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
-        mState.mElementArrayBuffer->removeContentsObserver(this, kElementArrayBufferIndex);
+        mState.mElementArrayBuffer->removeVertexArrayObserver(this, kElementArrayBufferIndex);
         mState.mElementArrayBuffer.bind(context, nullptr);
         mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
         anyBufferDetached = true;
@@ -356,7 +356,7 @@ bool VertexArray::bindVertexBufferImpl(const Context *context,
     {
         oldBuffer->onNonTFBindingChanged(-1);
         oldBuffer->removeObserver(observer);
-        oldBuffer->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
+        oldBuffer->removeVertexArrayObserver(this, static_cast<uint32_t>(bindingIndex));
         oldBuffer->release(context);
     }
 
@@ -371,6 +371,7 @@ bool VertexArray::bindVertexBufferImpl(const Context *context,
         boundBuffer->addRef();
         boundBuffer->onNonTFBindingChanged(1);
         boundBuffer->addObserver(observer);
+        boundBuffer->addStorageObserver(this, static_cast<uint32_t>(bindingIndex));
         if (context->isWebGL())
         {
             mCachedTransformFeedbackConflictedBindingsMask.set(
@@ -639,6 +640,19 @@ angle::Result VertexArray::syncState(const Context *context)
         ASSERT(mDirtyAttribBits[0].none());
         ASSERT(mDirtyBindingBits[0].none());
         mState.mLastSyncedEnabledAttributesMask = mState.mEnabledAttributesMask;
+
+        if (mBuffersWithStorageChanged.any())
+        {
+            for (size_t bufferBinding : mBuffersWithStorageChanged)
+            {
+                Buffer *buffer = (bufferBinding == kElementArrayBufferIndex)
+                                     ? mState.mElementArrayBuffer.get()
+                                     : mState.mVertexBindings[bufferBinding].getBuffer().get();
+                ASSERT(buffer);
+                buffer->addStorageObserver(this, static_cast<uint32_t>(bufferBinding));
+            }
+            mBuffersWithStorageChanged.reset();
+        }
     }
     return angle::Result::Continue;
 }
@@ -798,16 +812,22 @@ void VertexArray::onBufferContentsChange(uint32_t bufferIndex)
     setDependentDirtyBit(true, bufferIndex);
 }
 
-VertexArrayBufferContentsObservers::VertexArrayBufferContentsObservers(VertexArray *vertexArray)
+void VertexArray::onBufferStorageChanged(uint32_t bufferIndex)
+{
+    setDependentDirtyBit(false, bufferIndex);
+    mBuffersWithStorageChanged.set(bufferIndex);
+}
+
+VertexArrayBufferObservers::VertexArrayBufferObservers(VertexArray *vertexArray)
     : mVertexArray(vertexArray)
 {}
 
-void VertexArrayBufferContentsObservers::enableForBuffer(Buffer *buffer, uint32_t bufferIndex)
+void VertexArrayBufferObservers::enableForBuffer(Buffer *buffer, uint32_t bufferIndex)
 {
     buffer->addContentsObserver(mVertexArray, bufferIndex);
 }
 
-void VertexArrayBufferContentsObservers::disableForBuffer(Buffer *buffer, uint32_t bufferIndex)
+void VertexArrayBufferObservers::disableForBuffer(Buffer *buffer, uint32_t bufferIndex)
 {
     buffer->removeContentsObserver(mVertexArray, bufferIndex);
 }

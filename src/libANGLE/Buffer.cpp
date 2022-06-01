@@ -141,7 +141,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         mState.mSize = 0;
 
         // Notify when storage changes.
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onStorageChange();
 
         return angle::Result::Stop;
     }
@@ -161,7 +161,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     }
     else
     {
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onStorageChange();
     }
 
     return angle::Result::Continue;
@@ -194,7 +194,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
         mState.mSize = 0;
 
         // Notify when storage changes.
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onStorageChange();
 
         return angle::Result::Stop;
     }
@@ -207,7 +207,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
     mState.mExternal             = GL_TRUE;
 
     // Notify when storage changes.
-    onStateChange(angle::SubjectMessage::SubjectChanged);
+    onStorageChange();
 
     return angle::Result::Continue;
 }
@@ -402,7 +402,7 @@ size_t Buffer::getContentsObserverIndex(VertexArray *vertexArray, uint32_t buffe
 {
     for (size_t observerIndex = 0; observerIndex < mContentsObservers.size(); ++observerIndex)
     {
-        const ContentsObserver &observer = mContentsObservers[observerIndex];
+        const VAOBufferObserver &observer = mContentsObservers[observerIndex];
         if (observer.vertexArray == vertexArray && observer.bufferIndex == bufferIndex)
         {
             return observerIndex;
@@ -434,11 +434,38 @@ void Buffer::removeContentsObserver(VertexArray *vertexArray, uint32_t bufferInd
     }
 }
 
+void Buffer::addStorageObserver(VertexArray *vertexArray, uint32_t bufferIndex)
+{
+    mStorageObservers.insert({vertexArray, bufferIndex});
+}
+
+void Buffer::addVertexArrayObserver(VertexArray *vertexArray, uint32_t bufferIndex)
+{
+    addContentsObserver(vertexArray, bufferIndex);
+    mStorageObservers.insert({vertexArray, bufferIndex});
+}
+
+void Buffer::removeVertexArrayObserver(VertexArray *vertexArray, uint32_t bufferIndex)
+{
+    removeContentsObserver(vertexArray, bufferIndex);
+    mStorageObservers.remove({vertexArray, bufferIndex});
+}
+
 void Buffer::onContentsChange()
 {
-    for (const ContentsObserver &observer : mContentsObservers)
+    for (const VAOBufferObserver &observer : mContentsObservers)
     {
         observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
     }
+}
+
+void Buffer::onStorageChange()
+{
+    onStateChange(angle::SubjectMessage::SubjectChanged);
+    for (VAOBufferObserver &observer : mStorageObservers)
+    {
+        observer.vertexArray->onBufferStorageChanged(observer.bufferIndex);
+    }
+    mStorageObservers.clear();
 }
 }  // namespace gl
