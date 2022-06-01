@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17d74e12_b41062e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T17:24:58Z",
+      "side": 1,
+      "message": "Thanks for the clean up! Just another detail I missed before.",
+      "revId": "e25ce0064526e2dfd968a1ddc6b0d451635f1dd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418b98da_6a25dd97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T17:24:58Z",
+      "side": 1,
+      "message": "nit: You can drop the arrayness of this. Only [0] is used.",
+      "range": {
+        "startLine": 8335,
+        "startChar": 22,
+        "endLine": 8335,
+        "endChar": 32
+      },
+      "revId": "e25ce0064526e2dfd968a1ddc6b0d451635f1dd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
