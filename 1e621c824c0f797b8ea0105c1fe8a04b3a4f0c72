@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc2fa2e_5b3fc556",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-06-01T19:26:33Z",
+      "side": 1,
+      "message": "Oops, edit-o. Fixed.",
+      "parentUuid": "857dc9e0_da22745c",
+      "range": {
+        "startLine": 251,
+        "startChar": 8,
+        "endLine": 251,
+        "endChar": 42
+      },
+      "revId": "1e621c824c0f797b8ea0105c1fe8a04b3a4f0c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "050d5917_9fa91cdf",
@@ -95,6 +119,30 @@
       "side": 1,
       "message": "I\u0027m actually thinking that stencil sampling should never fall back to regular sampling. I\u0027ll see if that cleans this up a bit.",
       "parentUuid": "050d5917_9fa91cdf",
+      "range": {
+        "startLine": 333,
+        "startChar": 0,
+        "endLine": 338,
+        "endChar": 67
+      },
+      "revId": "1e621c824c0f797b8ea0105c1fe8a04b3a4f0c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18f37b9f_3f164880",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-06-01T19:26:33Z",
+      "side": 1,
+      "message": "OK, I\u0027ve changed the stencilSRVFormat for all non-depth/stencil formats to DXGI_FORMAT_UNKNOWN, so it would be a bad idea to fall back. I\u0027ve restored the old fallback logic for blit/sample, and removed the fallback logic for stencil.",
+      "parentUuid": "7718f3f1_9d13c397",
       "range": {
         "startLine": 333,
         "startChar": 0,
@@ -166,6 +214,30 @@
       "side": 1,
       "message": "(See PS3: https://chromium-review.googlesource.com/c/angle/angle/+/3679485/3)",
       "parentUuid": "bfd052ae_2e45c09a",
+      "range": {
+        "startLine": 2722,
+        "startChar": 8,
+        "endLine": 2722,
+        "endChar": 68
+      },
+      "revId": "1e621c824c0f797b8ea0105c1fe8a04b3a4f0c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4516b0_bada833f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2722,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-06-01T19:26:33Z",
+      "side": 1,
+      "message": "OK, I think this works now. I added map to ensure the resulting components are mapped to the correct values (0 for red and blue, 1 for alpha). Added a test.",
+      "parentUuid": "42128735_69a8d46a",
       "range": {
         "startLine": 2722,
         "startChar": 8,
