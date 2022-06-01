@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "171b64ca_17e44c69",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-01T18:02:51Z",
+      "side": 1,
+      "message": "Thanks! Updated the CL so we would change it into a uniform. The option of relying on the extension could be open for the future.",
+      "parentUuid": "00110500_713d64c5",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 52
+      },
+      "revId": "6c39cd3e6858260f1ca73f05e7fa7a7b78c8fb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "784a0697_824dfc28",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-01T02:48:11Z",
       "side": 1,
       "message": "TODO: increment",
+      "range": {
+        "startLine": 57,
+        "startChar": 23,
+        "endLine": 57,
+        "endChar": 25
+      },
+      "revId": "6c39cd3e6858260f1ca73f05e7fa7a7b78c8fb3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82eb4890_3df372ee",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-01T18:02:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "784a0697_824dfc28",
       "range": {
         "startLine": 57,
         "startChar": 23,
