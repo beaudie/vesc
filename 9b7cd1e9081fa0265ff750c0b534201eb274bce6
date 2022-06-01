@@ -33,6 +33,24 @@
       "message": "Geoff, do we have to roll this into Chromium\u0027s M103 branch as well, or will autoroller take care of it?",
       "revId": "9b7cd1e9081fa0265ff750c0b534201eb274bce6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25bf33ec_08dbd8c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T02:42:20Z",
+      "side": 1,
+      "message": "No autorolling is necessary. As soon as this gets merged to `chromium/5060`, the next 5060 build of Chromium will include it.\n\nFYI, CQ+2 doesn\u0027t work on branches, you\u0027d have to manually \"Submit\" the change after approval from the vertical ... menu.",
+      "parentUuid": "5542df2a_fd6a35fe",
+      "revId": "9b7cd1e9081fa0265ff750c0b534201eb274bce6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
