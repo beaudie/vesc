@@ -22,6 +22,29 @@
       },
       "revId": "264b54b1965339e22e126ef7d2a4becf8dd351eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a711332_9e65705e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-01T05:05:13Z",
+      "side": 1,
+      "message": "This doesn\u0027t work. You are iterating on localDirtyBits, modifications won\u0027t be visible.\n\nYou need to use `resetLaterBit` on the iterator itself. See how `ContextVk::syncState` iterates on the dirty bits and uses `setLaterBit`.",
+      "range": {
+        "startLine": 570,
+        "startChar": 27,
+        "endLine": 570,
+        "endChar": 32
+      },
+      "revId": "264b54b1965339e22e126ef7d2a4becf8dd351eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
