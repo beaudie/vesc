@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "683de758_6139d0e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-01T21:17:32Z",
+      "side": 1,
+      "message": "Overall looks goo to me. The mutex lock stuff is still a bit itchy to me as well. I am wondering why not just wrap `std::mutex mPipelineCacheMutex` and `vk::PipelineCache mPipelineCache` into a new class (which is PipelineCacheAcess in this patch) and let PipelineCacheAcess owns mPipelineCacheMutex and never need to expose it to outside API? This means for ProgramExecutable pipelineCache it will also take lock, but that lock is different from global cache\u0027s lock and will never have lock contention and is going to be as cheap as your if check as well. But it will be much better encapsulation. \n\nAnyway, just throw out my point here, and I am not going to block the CL just because of the lock thing.\n",
+      "revId": "e63e25cf7470d6a8fa9fd49ed4c9dba50cd8d06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
