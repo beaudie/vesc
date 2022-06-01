@@ -70,13 +70,13 @@ class BufferState final : angle::NonCopyable
 };
 
 // Some Vertex Array Objects track buffer data updates.
-struct ContentsObserver
+struct VAOBufferObserver
 {
     VertexArray *vertexArray = nullptr;
     uint32_t bufferIndex     = 0;
 };
 
-ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver &rhs)
+ANGLE_INLINE bool operator==(const VAOBufferObserver &lhs, const VAOBufferObserver &rhs)
 {
     return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex;
 }
@@ -186,6 +186,10 @@ class Buffer final : public RefCountObject<BufferID>,
     // angle::ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    void addStorageObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+    void addVertexArrayObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+    void removeVertexArrayObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
 
@@ -203,13 +207,15 @@ class Buffer final : public RefCountObject<BufferID>,
                                          GLbitfield flags);
 
     void onContentsChange();
+    void onStorageChange();
     size_t getContentsObserverIndex(VertexArray *vertexArray, uint32_t bufferIndex) const;
 
     BufferState mState;
     rx::BufferImpl *mImpl;
     angle::ObserverBinding mImplObserver;
 
-    angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
+    angle::FastVector<VAOBufferObserver, angle::kMaxFixedObservers> mContentsObservers;
+    angle::FlatUnorderedSet<VAOBufferObserver, angle::kMaxFixedObservers> mStorageObservers;
     mutable IndexRangeCache mIndexRangeCache;
 };
 
