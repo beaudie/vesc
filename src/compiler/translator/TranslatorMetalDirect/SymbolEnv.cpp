@@ -575,7 +575,7 @@ Name sh::GetTextureTypeName(TBasicType samplerType)
                 name = "metal::" baseName "<int>";   \
                 break;                               \
             case TBasicType::EbtUInt:                \
-                name = "metal::" baseName "<uint>";  \
+                name = "metal::" baseName "<uint32_t>";  \
                 break;                               \
             default:                                 \
                 UNREACHABLE();                       \
