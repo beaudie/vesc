@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28214e98_8428a9d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T22:45:47Z",
+      "side": 1,
+      "message": "lgtm+2\n\nIn case you make any of the edits below, I\u0027ll resolve merge conflicts during the next ANGLE-\u003eWebKit roll.\n",
+      "revId": "923b3df047f24fb8d0d404b2546e1153bb6201e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df4bd81_13edace5",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1765,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T22:45:47Z",
+      "side": 1,
+      "message": "For Chromium style I wonder if we should prefer preincrement.",
+      "revId": "923b3df047f24fb8d0d404b2546e1153bb6201e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d51ca7b_9a6be4ea",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-01T22:45:47Z",
+      "side": 1,
+      "message": "Suggest: anyone -\u003e any one",
+      "revId": "923b3df047f24fb8d0d404b2546e1153bb6201e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
