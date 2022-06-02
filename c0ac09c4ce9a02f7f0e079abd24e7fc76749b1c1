@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5defbf60_92514efc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-02T01:56:47Z",
+      "side": 1,
+      "message": "(Or is it more desirable to land with a repro for 7343 and a test suppression?)",
+      "revId": "c0ac09c4ce9a02f7f0e079abd24e7fc76749b1c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
