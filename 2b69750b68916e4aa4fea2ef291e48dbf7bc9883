@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d22f671_a9856ee3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-02T18:57:05Z",
+      "side": 1,
+      "message": "Even though we set attachment\u0027s layout as GENERAL, we still set initial/final layout as COLOR_ATTACHMENT_OPTIMAL, right? My unerstanding is that in order for partner to optimize in vulakn driverm we still need to set initial/finalLayout as COLOR_ATTACHMENT_OPTIMAL",
+      "range": {
+        "startLine": 11,
+        "startChar": 56,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "2b69750b68916e4aa4fea2ef291e48dbf7bc9883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05b50cd4_5ec05be6",
