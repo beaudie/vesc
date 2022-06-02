@@ -51,6 +51,40 @@
       "parentUuid": "05247ffc_26838484",
       "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fde84943_03aae7c0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-02T20:29:43Z",
+      "side": 1,
+      "message": "missing enumcount and invalidenum?",
+      "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a74f51b_244bab50",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1788,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-02T20:29:43Z",
+      "side": 1,
+      "message": "missing enumcount and invalidenum?",
+      "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
