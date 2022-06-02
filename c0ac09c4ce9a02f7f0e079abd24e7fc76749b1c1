@@ -16,6 +16,24 @@
       "message": "(Or is it more desirable to land with a repro for 7343 and a test suppression?)",
       "revId": "c0ac09c4ce9a02f7f0e079abd24e7fc76749b1c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "478449f6_e30e7d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-02T15:24:20Z",
+      "side": 1,
+      "message": "Nevermind. I might be getting this one mixed up with other CLs I\u0027ve been poking at because even with binding the images to different units the other bots pass.\n\nI\u0027ve marked anglebug:7343 as a duplicate of anglebug:3032 and wrapped up this test for landing.",
+      "parentUuid": "5defbf60_92514efc",
+      "revId": "c0ac09c4ce9a02f7f0e079abd24e7fc76749b1c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
