@@ -16,6 +16,23 @@
       "message": "Here\u0027s a fairly unknown trick for verifying changes in deps: You can send a chromium-side try job that uses the pending, not-yet committed change by following these steps:\n\n1. Make a CL that changes a dep (like this one)\n2. On the CL\u0027s main review page (https://chromium-review.googlesource.com/c/angle/angle/+/3651154 in this case), click DOWNLOAD. This gives you a string like \"refs/changes/54/3651154/2\"\n3. Copy that (difficult because the gerrit UI tries to be helpful in an annoying way) and paste it in DEPS in a chromium-side CL like so: https://chromium-review.googlesource.com/c/chromium/src/+/2066106/3/DEPS (this an old CL of mine, so it\u0027s a slightly different refs/ string)\n4. Send Chromium Cl to CQ. It\u0027s going to pull the pending deps cl for the try job.\n\n(I realize this CL here has landed and you don\u0027t need it for this, but it\u0027s a useful technique for the future, so I figured I\u0027d mention it.)",
       "revId": "0b808c746bea851ad019ef8d7fd7aa34ce2b2f62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a5e12b0_e8ac84f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1535487
+      },
+      "writtenOn": "2022-06-02T22:08:07Z",
+      "side": 1,
+      "message": "I tried to run the v8 tryjobs with the trick that thakis@ told me in https://crrev.com/c/3688289, but it doesn\u0027t seem to work as it looks like v8 only references subprojects in Chrome, not the whole repository. Unfortunately, this means that the only good way to see if v8 remains broken is to submit this change and try to roll deps in v8.",
+      "revId": "0b808c746bea851ad019ef8d7fd7aa34ce2b2f62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
