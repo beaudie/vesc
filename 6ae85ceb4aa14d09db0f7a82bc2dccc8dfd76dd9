@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5a3594c4_9297804a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-06-02T21:19:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f1e3669_fd48d0b3",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "6ae85ceb4aa14d09db0f7a82bc2dccc8dfd76dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "526d8f42_ce526b21",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-02T21:00:16Z",
       "side": 1,
       "message": "nit - this is the only instance of usage, can inline the call?",
+      "range": {
+        "startLine": 369,
+        "startChar": 59,
+        "endLine": 369,
+        "endChar": 65
+      },
+      "revId": "6ae85ceb4aa14d09db0f7a82bc2dccc8dfd76dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cd287d0_a57a4f51",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-06-02T21:19:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ef62495_5b70709b",
       "range": {
         "startLine": 369,
         "startChar": 59,
