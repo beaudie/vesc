@@ -33,6 +33,24 @@
       "message": "LGTM - any example svg?",
       "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0276099_2e81e961",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T18:42:24Z",
+      "side": 1,
+      "message": "Just the same as previous one, but with colored boxes. With Swiftshader, one box is always red (first cache miss) and all the other boxes (inside the same cluster), if any, are green.",
+      "parentUuid": "05247ffc_26838484",
+      "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
