@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "536e96f8_aa3963cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T04:47:44Z",
+      "side": 1,
+      "message": "LGTM. Failure is likely due to IsLineMode not handling InvalidEnum.",
+      "revId": "cf060f6a17c17381368578401455aac1eb024490",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
