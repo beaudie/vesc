@@ -7,8 +7,10 @@
 //   Various tests for EXT_disjoint_timer_query functionality and validation
 //
 
+#include "libANGLE/Display.h"
 #include "test_utils/ANGLETest.h"
 #include "util/EGLWindow.h"
+#include "util/OSWindow.h"
 #include "util/random_utils.h"
 #include "util/test_utils.h"
 
@@ -482,6 +484,181 @@ TEST_P(TimerQueriesTest, Timestamp)
     EXPECT_LT(result1, result2);
 }
 
+using TimestampQueriesTestParams = std::tuple<angle::PlatformParameters, bool>;
+
+std::string PrintToStringParamName(const ::testing::TestParamInfo<TimestampQueriesTestParams> &info)
+{
+    ::std::stringstream ss;
+    ss << std::get<0>(info.param);
+    if (std::get<1>(info.param))
+    {
+        ss << "__NoStoreAndResolve";
+    }
+    return ss.str();
+}
+
+void getQueryResult(GLuint queryObjectName, GLuint64 *result)
+{
+    GLuint queryResult = GL_FALSE;
+    while (queryResult != GL_TRUE)
+    {
+        glGetQueryObjectuiv(queryObjectName, GL_QUERY_RESULT_AVAILABLE, &queryResult);
+        ASSERT_GL_NO_ERROR();
+        angle::Sleep(50);
+    }
+    glGetQueryObjectui64vEXT(queryObjectName, GL_QUERY_RESULT_EXT, result);
+}
+
+#define TIMESTAMP_QUERY_SIZE 2
+
+class TimestampQueriesTest : public ANGLETestWithParam<TimestampQueriesTestParams>
+{
+  protected:
+    TimestampQueriesTest() : mQueryObjectNameArray() {}
+
+    void testSetUp() override
+    {
+        const angle::PlatformParameters platform = ::testing::get<0>(GetParam());
+
+        std::vector<const char *> enabledFeatures;
+        std::vector<const char *> disabledFeatures;
+        if (::testing::get<1>(GetParam()))
+        {
+            enabledFeatures.push_back("enable_timestamp_queries");
+        }
+        else
+        {
+            disabledFeatures.push_back("enable_timestamp_queries");
+        }
+        enabledFeatures.push_back(nullptr);
+        disabledFeatures.push_back(nullptr);
+
+        // Get display.
+        EGLAttrib dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE,
+                                 platform.getRenderer(),
+                                 EGL_FEATURE_OVERRIDES_ENABLED_ANGLE,
+                                 reinterpret_cast<EGLAttrib>(enabledFeatures.data()),
+                                 EGL_FEATURE_OVERRIDES_DISABLED_ANGLE,
+                                 reinterpret_cast<EGLAttrib>(disabledFeatures.data()),
+                                 EGL_NONE};
+
+        mDisplay = eglGetPlatformDisplay(EGL_PLATFORM_ANGLE_ANGLE,
+                                         reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+        ASSERT_TRUE(mDisplay != EGL_NO_DISPLAY);
+
+        ASSERT_TRUE(eglInitialize(mDisplay, nullptr, nullptr) == EGL_TRUE);
+
+        // Find a config that uses RGBA8.
+        constexpr EGLint configAttributes[] = {EGL_RED_SIZE,     8,
+                                               EGL_GREEN_SIZE,   8,
+                                               EGL_BLUE_SIZE,    8,
+                                               EGL_ALPHA_SIZE,   8,
+                                               EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+                                               EGL_NONE};
+        EGLint configCount                  = 0;
+        EGLConfig config;
+        EGLint ret = eglChooseConfig(mDisplay, configAttributes, &config, 1, &configCount);
+        ASSERT_TRUE(ret == EGL_TRUE);
+
+        // Create a window, context and surface if multisampling is possible.
+        mOSWindow = OSWindow::New();
+        mOSWindow->initialize("TimestampQueriesTest", kWindowWidth, kWindowHeight);
+        setWindowVisible(mOSWindow, true);
+
+        EGLint contextAttributes[] = {
+            EGL_CONTEXT_MAJOR_VERSION_KHR,
+            platform.majorVersion,
+            EGL_CONTEXT_MINOR_VERSION_KHR,
+            platform.minorVersion,
+            EGL_NONE,
+        };
+
+        mContext = eglCreateContext(mDisplay, config, EGL_NO_CONTEXT, contextAttributes);
+        ASSERT_TRUE(mContext != EGL_NO_CONTEXT);
+
+        mSurface = eglCreateWindowSurface(mDisplay, config, mOSWindow->getNativeWindow(), nullptr);
+        ASSERT_EGL_SUCCESS();
+
+        eglMakeCurrent(mDisplay, mSurface, mSurface, mContext);
+        ASSERT_EGL_SUCCESS();
+        createQuery();
+    }
+
+    void testTearDown() override
+    {
+        if (mSurface)
+        {
+            eglSwapBuffers(mDisplay, mSurface);
+        }
+        glDeleteQueries(TIMESTAMP_QUERY_SIZE, mQueryObjectNameArray);
+
+        eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+        if (mSurface)
+        {
+            eglDestroySurface(mDisplay, mSurface);
+            ASSERT_EGL_SUCCESS();
+        }
+
+        if (mContext != EGL_NO_CONTEXT)
+        {
+            eglDestroyContext(mDisplay, mContext);
+            ASSERT_EGL_SUCCESS();
+        }
+
+        if (mOSWindow)
+        {
+            OSWindow::Delete(&mOSWindow);
+        }
+
+        eglTerminate(mDisplay);
+    }
+
+    void createQuery()
+    {
+        glGenQueries(TIMESTAMP_QUERY_SIZE, mQueryObjectNameArray);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    static constexpr int kWindowWidth  = 16;
+    static constexpr int kWindowHeight = 8;
+
+    OSWindow *mOSWindow = nullptr;
+    EGLDisplay mDisplay = EGL_NO_DISPLAY;
+    EGLContext mContext = EGL_NO_CONTEXT;
+    EGLSurface mSurface = EGL_NO_SURFACE;
+    GLuint mQueryObjectNameArray[TIMESTAMP_QUERY_SIZE];
+};
+
+TEST_P(TimestampQueriesTest, TimestampBasic)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_disjoint_timer_query"));
+    ANGLE_SKIP_TEST_IF(!IsD3D11());
+
+    GLint queryTimestampBits = 0;
+    glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimestampBits);
+    ASSERT_GL_NO_ERROR();
+    std::cout << "Timestamp counter bits: " << queryTimestampBits << std::endl;
+
+    glQueryCounterEXT(mQueryObjectNameArray[0], GL_TIMESTAMP_EXT);
+    ASSERT_GL_NO_ERROR();
+    angle::Sleep(100);
+
+    glQueryCounterEXT(mQueryObjectNameArray[1], GL_TIMESTAMP_EXT);
+    ASSERT_GL_NO_ERROR();
+
+    GLuint64 result1 = 0;
+    getQueryResult(mQueryObjectNameArray[0], &result1);
+
+    GLuint64 result2 = 0;
+    getQueryResult(mQueryObjectNameArray[1], &result2);
+    std::cout << "Timestamps: " << result1 << " " << result2 << std::endl;
+    if (queryTimestampBits != 0)
+    {
+        ASSERT_TRUE(result1 != 0 && result2 > result1);
+    }
+}
+
 class TimerQueriesTestES3 : public TimerQueriesTest
 {};
 
@@ -515,7 +692,30 @@ TEST_P(TimerQueriesTestES3, TimestampGetInteger64)
     EXPECT_LT(result1, result2);
 }
 
+std::string TimestampQueriesTestPrint(
+    const ::testing::TestParamInfo<TimestampQueriesTestParams> &paramsInfo)
+{
+    const TimestampQueriesTestParams &params = paramsInfo.param;
+    std::ostringstream out;
+
+    out << std::get<0>(params);
+
+    if (std::get<1>(params))
+    {
+        out << "__cached";
+    }
+
+    return out.str();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(TimerQueriesTest);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TimestampQueriesTest);
+
+ANGLE_INSTANTIATE_TEST_COMBINE_1(TimestampQueriesTest,
+                                 TimestampQueriesTestPrint,
+                                 testing::Bool(),
+                                 WithNoFixture(ES3_D3D11()));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TimerQueriesTestES3);
 ANGLE_INSTANTIATE_TEST_ES3(TimerQueriesTestES3);

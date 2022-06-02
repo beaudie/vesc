@@ -103,6 +103,7 @@ enum class Feature
     EnablePrecisionQualifiers,
     EnablePreRotateSurfaces,
     EnableProgramBinaryForCapture,
+    EnableTimestampQueries,
     ExpandIntegerPowExpressions,
     ExplicitlyEnablePerSampleShading,
     ExposeNonConformantExtensionsAndVersions,
