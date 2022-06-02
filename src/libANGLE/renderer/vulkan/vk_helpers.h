@@ -2875,6 +2875,7 @@ class ShaderProgramHelper : angle::NonCopyable
         RenderPassCache *renderPassCache,
         const PipelineCache &pipelineCache,
         const PipelineLayout &pipelineLayout,
+        PipelineSource source,
         const GraphicsPipelineDesc &pipelineDesc,
         const gl::AttributesMask &activeAttribLocationsMask,
         const gl::ComponentTypeMask &programAttribsTypeMask,
@@ -2890,18 +2891,18 @@ class ShaderProgramHelper : angle::NonCopyable
         return mGraphicsPipelines.getPipeline(
             contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
             activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask, mShaders,
-            mSpecializationConstants, pipelineDesc, descPtrOut, pipelineOut);
+            mSpecializationConstants, source, pipelineDesc, descPtrOut, pipelineOut);
     }
 
     angle::Result getComputePipeline(Context *context,
                                      const PipelineLayout &pipelineLayout,
+                                     PipelineSource source,
                                      PipelineHelper **pipelineOut);
 
   private:
     ShaderAndSerialMap mShaders;
     GraphicsPipelineCache mGraphicsPipelines;
 
-    // We should probably use PipelineHelper here so we can remove PipelineAndSerial.
     PipelineHelper mComputePipeline;
 
     // Specialization constants, currently only used by the graphics queue.
