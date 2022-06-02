@@ -16,6 +16,23 @@
       "message": "Now with color!",
       "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05247ffc_26838484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:47:52Z",
+      "side": 1,
+      "message": "LGTM - any example svg?",
+      "revId": "66d71330ef3f4a64ecf627a0e09c31793f213958",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
