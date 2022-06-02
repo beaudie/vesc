@@ -16,6 +16,23 @@
       "message": "win-trace looks like it\u0027s getting confused by glGetFramebufferParameteriv:\n\n../../../src/tests/capture_replay_tests/traces6/PixelLocalStorageTest_RGB_ES3_1_Vulkan_SwiftShader_context4_001.cpp(1289,69): error: invalid digit \u0027C\u0027 in octal constant\n    glGetFramebufferParameteriv(GL_DRAW_FRAMEBUFFER, 0x9310, 0000000CA932F530);\n    \nDo we need to update an API definition somewhere?",
       "revId": "570d97d171dc1e3b08326a20bcab4db5b31576fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0b10f8f_c59e3e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-02T20:55:59Z",
+      "side": 1,
+      "message": "Jamie, could you help remind us how to update the trace tests for newly added tests?\n\nNot sure if this is in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/doc/CaptureAndReplay.md .\n\nThanks in advance.\n",
+      "revId": "570d97d171dc1e3b08326a20bcab4db5b31576fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
