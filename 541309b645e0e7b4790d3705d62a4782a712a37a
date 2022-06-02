@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "276a5e46_efe0b341",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-02T01:17:17Z",
+      "side": 1,
+      "message": "Binding both aliases to the same image unit makes the other bots happy.\n\nDoes this still violate the aliasing rules for UAVs? (I\u0027m guessing yes)",
+      "revId": "541309b645e0e7b4790d3705d62a4782a712a37a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
