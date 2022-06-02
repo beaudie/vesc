@@ -34,6 +34,24 @@
       "parentUuid": "5dd089fb_8b575d98",
       "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3f51f5b_967d2683",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T17:42:08Z",
+      "side": 0,
+      "message": "If it\u0027s cheap, yes I think it\u0027d be worth it. The message being suppressed is too broad.\n\nI realize the data race, but perhaps it\u0027s _practically_ fine? Maybe just slap std::atomic on it if you\u0027re too worried. Setting it in `ContextVk::invalidateProgramExecutableHelper` should be fine IMO, just need to set the bit when a new program is encountered.",
+      "parentUuid": "9ede81db_8c51afc1",
+      "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
