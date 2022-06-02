@@ -16,6 +16,24 @@
       "message": "Is there anything more to do to support this other than simply doing\n\n```\nif (executable-\u003eusesFramebufferFetch())\n    mRenderer-\u003eonFramebufferFetchUsed();\n```\n\nin `ContextVk::invalidateProgramExecutableHelper`? Basically what this flag was doing was to keep this syncval error if framebuffer fetch is never used by the test / app.",
       "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ede81db_8c51afc1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T15:41:50Z",
+      "side": 0,
+      "message": "We could keep the syncval error in some cases with a bit more work. Can you clarify if you think it\u0027s worth the extra complexity and maintenance? Note that just calling mRenderer-\u003eonXXX is technically a data race, and it\u0027s not clear where best we should be doing this.",
+      "parentUuid": "5dd089fb_8b575d98",
+      "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

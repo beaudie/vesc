@@ -16,6 +16,24 @@
       "message": "I suggest keeping this as it was, so on platforms that input attachments are not required, we could continue to use the optimal layout. We don\u0027t yet know if this is harmless everywhere.",
       "revId": "eb8c684e621bb2bfa95d2bedf0a51e2d14f35948",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36540e97_a8d48ca8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T15:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10af85ad_c06fe928",
+      "revId": "eb8c684e621bb2bfa95d2bedf0a51e2d14f35948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
