@@ -128,6 +128,30 @@
       },
       "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a16d0c1b_b0d745fc",
+        "filename": "src/tests/py_utils/run_angle_android_test.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T15:31:55Z",
+      "side": 1,
+      "message": "Are you sure about argument parser? I just tested with my script locally and ArgumentParser was not confused by missing positional args combined with flagged args. Are you thinking of an older version of python?",
+      "parentUuid": "b5cc8190_fc20f93c",
+      "range": {
+        "startLine": 25,
+        "startChar": 76,
+        "endLine": 25,
+        "endChar": 91
+      },
+      "revId": "cf70e5cfd3b54e62e1629a9f3f157cbb8b69b849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
