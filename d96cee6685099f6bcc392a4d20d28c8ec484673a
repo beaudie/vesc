@@ -70,6 +70,24 @@
       "parentUuid": "a3f51f5b_967d2683",
       "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78e83354_eec3d82b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T18:39:39Z",
+      "side": 0,
+      "message": "\u003e the fact we can\u0027t really act on any of these sync hazards\n\nWe most definitely can and should. I occasionally work on removing some.\n\nAnyway, seemed trivial to support it. I won\u0027t block the change either way.",
+      "parentUuid": "74922534_1f775a53",
+      "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
