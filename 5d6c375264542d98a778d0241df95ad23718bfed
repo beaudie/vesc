@@ -33,6 +33,24 @@
       "message": "Any regression test ?",
       "revId": "5d6c375264542d98a778d0241df95ad23718bfed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abce67a0_9e4a734a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-02T16:44:54Z",
+      "side": 1,
+      "message": "We would have to trigger a VK device loss to reproduce so I don\u0027t think a reliable test is possible.",
+      "parentUuid": "529da779_02d6c52c",
+      "revId": "5d6c375264542d98a778d0241df95ad23718bfed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
