@@ -22,6 +22,30 @@
       },
       "revId": "3572d6fe15e18f09c2d8b6958e7d3b6712a1f7d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5dcb2f_201abfe2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T17:59:05Z",
+      "side": 1,
+      "message": "Right, copy-paste leftover. Done.\n\n(I probably also avoided it because msvc is terrible at copy ellision)",
+      "parentUuid": "17aa1cd5_8167650a",
+      "range": {
+        "startLine": 4602,
+        "startChar": 0,
+        "endLine": 4611,
+        "endChar": 0
+      },
+      "revId": "3572d6fe15e18f09c2d8b6958e7d3b6712a1f7d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
