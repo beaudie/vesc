@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f1e3669_fd48d0b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-02T21:03:14Z",
+      "side": 1,
+      "message": "provides a feature to control quality when sampling YUV images",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 48
+      },
+      "revId": "6ae85ceb4aa14d09db0f7a82bc2dccc8dfd76dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "526d8f42_ce526b21",
