@@ -9900,6 +9900,7 @@ void ShaderProgramHelper::setSpecializationConstant(sh::vk::SpecializationConsta
 
 angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
                                                       const PipelineLayout &pipelineLayout,
+                                                      PipelineSource source,
                                                       PipelineHelper **pipelineOut)
 {
     if (mComputePipeline.valid())
@@ -9950,6 +9951,12 @@ angle::Result ShaderProgramHelper::getComputePipeline(Context *context,
 
     if (supportsFeedback)
     {
+        const bool cacheHit =
+            (feedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT) !=
+            0;
+
+        mComputePipeline.setCacheLookUpFeedback(cacheHit ? CacheLookUpFeedback::Hit
+                                                         : CacheLookUpFeedback::Miss);
         ApplyPipelineCreationFeedback(context, feedback);
     }
 

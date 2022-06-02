@@ -737,6 +737,7 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
 
 angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
                                                        gl::PrimitiveMode mode,
+                                                       PipelineSource source,
                                                        const vk::GraphicsPipelineDesc &desc,
                                                        const gl::ProgramExecutable &glExecutable,
                                                        const vk::GraphicsPipelineDesc **descPtrOut,
@@ -791,12 +792,13 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
 
     ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
     return shaderProgram->getGraphicsPipeline(
-        contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), desc,
-        activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask, descPtrOut,
-        pipelineOut);
+        contextVk, &contextVk->getRenderPassCache(), *pipelineCache, getPipelineLayout(), source,
+        desc, activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask,
+        descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
+                                                      PipelineSource source,
                                                       vk::PipelineHelper **pipelineOut)
 {
     const gl::State &glState                  = contextVk->getState();
@@ -807,7 +809,7 @@ angle::Result ProgramExecutableVk::getComputePipeline(ContextVk *contextVk,
 
     vk::ShaderProgramHelper *shaderProgram = mComputeProgramInfo.getShaderProgram();
     ASSERT(shaderProgram);
-    return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), pipelineOut);
+    return shaderProgram->getComputePipeline(contextVk, getPipelineLayout(), source, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::createPipelineLayout(

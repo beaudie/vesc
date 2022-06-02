@@ -136,12 +136,15 @@ class ProgramExecutableVk
 
     angle::Result getGraphicsPipeline(ContextVk *contextVk,
                                       gl::PrimitiveMode mode,
+                                      PipelineSource source,
                                       const vk::GraphicsPipelineDesc &desc,
                                       const gl::ProgramExecutable &glExecutable,
                                       const vk::GraphicsPipelineDesc **descPtrOut,
                                       vk::PipelineHelper **pipelineOut);
 
-    angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineHelper **pipelineOut);
+    angle::Result getComputePipeline(ContextVk *contextVk,
+                                     PipelineSource source,
+                                     vk::PipelineHelper **pipelineOut);
 
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
     angle::Result createPipelineLayout(ContextVk *contextVk,
