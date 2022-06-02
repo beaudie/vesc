@@ -50,6 +50,23 @@
       "message": "https://ci.chromium.org/ui/p/chromium/builders/try/win-angle-chromium-x64-try/10550/overview was a flaky test timeout. Trying again.\n",
       "revId": "d098f9338db70ac8b207b1a645cd86c4a8fd21d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab8404f_6ca036f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-02T01:11:54Z",
+      "side": 1,
+      "message": "The machines are oversubscribed. Will wait until later to retry CQ.\n",
+      "revId": "d098f9338db70ac8b207b1a645cd86c4a8fd21d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
