@@ -3,6 +3,92 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a605e9f5_c528ce79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:31:40Z",
+      "side": 1,
+      "message": "nit: can you break this up into a few paragraphs to make it a bit easier to parse?\n\nAlso can you please mention that Asphalt 9 might have a slight CPU regression? In my testing I was seeing a 5% increase in frame time when CPU bound.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 0
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d06fb325_46805f05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:31:40Z",
+      "side": 1,
+      "message": "I tried to take an alternative approach to the solution here and wasn\u0027t able to find an improvement in A9. I\u0027ll keep thinking if there is a solution which keeps full performance for A9 (and any app that uses VAOs extensively, which this regresses) as well as improves black desert.\n\nIn the meantime the remaining work here is some micro-optimization we can do to narrow the A9 regression as much as possible before landing.",
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2894863b_cf7aa34f",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:31:40Z",
+      "side": 1,
+      "message": "nit: what can we do to optimize and inline this loop and this entire function inn the header? Maybe split the mBufferAccessValidation / WebGL logic into helpers so that this function is smaller to inline.",
+      "range": {
+        "startLine": 660,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 0
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a1328f1_be16fceb",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:31:40Z",
+      "side": 1,
+      "message": "same comments here.",
+      "range": {
+        "startLine": 713,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 1
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bee092fa_8873c815",
         "filename": "src/libANGLE/VertexArray.cpp",
         "patchSetId": 4
@@ -90,6 +176,29 @@
         "startChar": 44,
         "endLine": 747,
         "endChar": 45
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac2f4b8_5ee19c6d",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:31:40Z",
+      "side": 1,
+      "message": "nit: please use the \"bind\" terminology instead of MakeCurrent, which has special meaning for Contexts.",
+      "range": {
+        "startLine": 367,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 49
       },
       "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
