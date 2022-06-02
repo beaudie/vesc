@@ -618,12 +618,17 @@ VkDependencyFlags GetLocalDependencyFlags(ContextVk *contextVk)
     return dependencyFlags;
 }
 
-void DumpPipelineCacheGraph(const std::ostringstream &graph)
+void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &graph)
 {
     std::ostream &out = std::cout;
 
     out << "digraph {\n"
-        << " node [shape=box]\n";
+        << " node [shape=box";
+    if (contextVk->getFeatures().supportsPipelineCreationFeedback.enabled)
+    {
+        out << ",color=green";
+    }
+    out << "]\n";
     out << graph.str();
     out << "}\n";
 }
@@ -991,7 +996,7 @@ ContextVk::~ContextVk()
 {
     if (!mPipelineCacheGraph.str().empty())
     {
-        DumpPipelineCacheGraph(mPipelineCacheGraph);
+        DumpPipelineCacheGraph(this, mPipelineCacheGraph);
     }
 }
 
@@ -1814,8 +1819,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
-        ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                                                    glExecutable, &descPtr,
+        ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode, PipelineSource::Draw,
+                                                    *mGraphicsPipelineDesc, glExecutable, &descPtr,
                                                     &mCurrentGraphicsPipeline));
         mGraphicsPipelineTransition.reset();
     }
@@ -1828,9 +1833,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
             vk::PipelineHelper *oldPipeline = mCurrentGraphicsPipeline;
             const vk::GraphicsPipelineDesc *descPtr;
 
-            ANGLE_TRY(executableVk->getGraphicsPipeline(this, mCurrentDrawMode,
-                                                        *mGraphicsPipelineDesc, glExecutable,
-                                                        &descPtr, &mCurrentGraphicsPipeline));
+            ANGLE_TRY(executableVk->getGraphicsPipeline(
+                this, mCurrentDrawMode, PipelineSource::Draw, *mGraphicsPipelineDesc, glExecutable,
+                &descPtr, &mCurrentGraphicsPipeline));
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
@@ -2018,7 +2023,8 @@ angle::Result ContextVk::handleDirtyComputePipelineDesc()
     {
         ProgramExecutableVk *executableVk = getExecutable();
         ASSERT(executableVk);
-        ANGLE_TRY(executableVk->getComputePipeline(this, &mCurrentComputePipeline));
+        ANGLE_TRY(
+            executableVk->getComputePipeline(this, PipelineSource::Draw, &mCurrentComputePipeline));
     }
 
     ASSERT(mComputeDirtyBits.test(DIRTY_BIT_PIPELINE_BINDING));
