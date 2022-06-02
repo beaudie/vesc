@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17aa1cd5_8167650a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4611,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:04:05Z",
+      "side": 1,
+      "message": "nit: you can return the unique_lock by value here, because of c++ rules about elison (IIRC) it won\u0027t make a copy",
+      "range": {
+        "startLine": 4602,
+        "startChar": 0,
+        "endLine": 4611,
+        "endChar": 0
+      },
+      "revId": "3572d6fe15e18f09c2d8b6958e7d3b6712a1f7d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

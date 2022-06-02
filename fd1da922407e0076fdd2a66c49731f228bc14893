@@ -86,6 +86,30 @@
       },
       "revId": "fd1da922407e0076fdd2a66c49731f228bc14893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7c66439_2fffe8ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:04:05Z",
+      "side": 1,
+      "message": "Offline - the issue is a cache hit would still take a lock here. We really want cache hits to not lock unnecessarily.",
+      "parentUuid": "1b9295dc_cff623a5",
+      "range": {
+        "startLine": 1774,
+        "startChar": 2,
+        "endLine": 1774,
+        "endChar": 23
+      },
+      "revId": "fd1da922407e0076fdd2a66c49731f228bc14893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
