@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e984e181_c922f76b",
+        "filename": "src/compiler/translator/tree_util/DriverUniform.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T02:56:46Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "16db60af_05ce842f",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 361,
+        "endChar": 73
+      },
+      "revId": "0c275735217ab5da647c2176e6c12c50cbe3c8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92ff1910_07429e9d",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-01T18:10:28Z",
       "side": 1,
       "message": "Should be 5",
+      "range": {
+        "startLine": 57,
+        "startChar": 23,
+        "endLine": 57,
+        "endChar": 24
+      },
+      "revId": "0c275735217ab5da647c2176e6c12c50cbe3c8e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a2c501_b11bd202",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T02:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92ff1910_07429e9d",
       "range": {
         "startLine": 57,
         "startChar": 23,
