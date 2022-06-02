@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d3df5e_b48e1e24",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T04:26:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceece64f_032cccc4",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c00bdd8_42e490c0",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-06-02T03:19:14Z",
       "side": 1,
       "message": "Please remove this as well",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bce8b96_4090d528",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T04:26:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c00bdd8_42e490c0",
       "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16a1708_0f468a7e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T04:26:09Z",
+      "side": 1,
+      "message": "I see, thanks. Updated.",
+      "parentUuid": "e34c549e_5a8d96dc",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f30789a3_70ffa3ad",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d072247_77b913fb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T04:26:09Z",
+      "side": 1,
+      "message": "Fixed",
+      "parentUuid": "f30789a3_70ffa3ad",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af65337f_9344d538",
@@ -99,6 +171,24 @@
       "writtenOn": "2022-06-02T03:19:14Z",
       "side": 1,
       "message": "This will make every draw call a line draw call! This should be `\u0026\u0026 gl::IsLineMode(mCurrentDrawMode)`",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d38b35d5_2f7fc17a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6174,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-02T04:26:09Z",
+      "side": 1,
+      "message": "Thanks! Updated.",
+      "parentUuid": "af65337f_9344d538",
       "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
