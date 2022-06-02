@@ -16,6 +16,91 @@
       "message": "Thanks!",
       "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceece64f_032cccc4",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 1,
+      "message": "Please remove this spec const id as well (and shift the other ids down)",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c00bdd8_42e490c0",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 1,
+      "message": "Please remove this as well",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e34c549e_5a8d96dc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 1,
+      "message": "Please move this under the if, so it\u0027s not calculated for the good drivers.\n\nAlso, need to check for all line modes, not just line list (there is also line strip and line loop). There is `gl::IsLineMode()` for that.",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f30789a3_70ffa3ad",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 1,
+      "message": "Pipeline always needs to be invalidated, because the topology has changed nevertheless.",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af65337f_9344d538",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6174,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 1,
+      "message": "This will make every draw call a line draw call! This should be `\u0026\u0026 gl::IsLineMode(mCurrentDrawMode)`",
+      "revId": "404ff2746cbac23263bf8bd0371f6dd23b220e31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adcc1b64_b5732d2a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-02T03:19:14Z",
+      "side": 0,
+      "message": "Can remove this function now",
+      "range": {
+        "startLine": 751,
+        "startChar": 61,
+        "endLine": 751,
+        "endChar": 88
+      },
+      "revId": "b03f278925c6754bdb7a37feae315214b4cc604b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
