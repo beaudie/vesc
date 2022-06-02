@@ -52,6 +52,24 @@
       "parentUuid": "9ede81db_8c51afc1",
       "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74922534_1f775a53",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-02T17:45:27Z",
+      "side": 0,
+      "message": "Given the complexity of the data race and the fact we can\u0027t really act on any of these sync hazards, there seems to be more advantages to keeping this conditional warning off to keep our code simple. I don\u0027t see that producing the warning would necessarily lead to us fixing our code as we tend to just disable sync hazards anyway. YMMV",
+      "parentUuid": "a3f51f5b_967d2683",
+      "revId": "d96cee6685099f6bcc392a4d20d28c8ec484673a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
