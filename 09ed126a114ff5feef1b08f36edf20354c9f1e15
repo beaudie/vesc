@@ -69,6 +69,24 @@
       "parentUuid": "b64def91_1f3a0ce3",
       "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32395591_3a9c4667",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-06-03T03:08:36Z",
+      "side": 1,
+      "message": "(To clarify, image load/store in fragment and vertex shaders is new. Image load/store in compute has been around a while, but isn\u0027t shipping in anything yet either.)",
+      "parentUuid": "d3b7c1c5_165aafea",
+      "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
