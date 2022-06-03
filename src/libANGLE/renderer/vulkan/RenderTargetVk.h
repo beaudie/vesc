@@ -135,6 +135,17 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
         return mTransience == RenderTargetTransience::EntirelyTransient;
     }
 
+    void addFramebufferDescReference(ContextVk *contextVk,
+                                     vk::RefCountedFramebufferDescHelper *framebufferDescHelper)
+    {
+        mFramebufferCacheHelper.addFramebufferDescReference(contextVk, framebufferDescHelper);
+    }
+    void releaseFramebufferDescReference(ContextVk *contextVk)
+    {
+        mFramebufferCacheHelper.releaseFramebufferDescReferences(contextVk);
+    }
+    void destroy() { mFramebufferCacheHelper.destroy(); }
+
   private:
     angle::Result getImageViewImpl(vk::Context *context,
                                    const vk::ImageHelper &image,
@@ -209,6 +220,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // resolve attachment, it is not used.  The only purpose of |mResolveImage| is to store deferred
     // clears.
     RenderTargetTransience mTransience;
+
+    // Track references to the cached Framebuffer object that created out of this object
+    vk::FramebufferCacheHelper mFramebufferCacheHelper;
 };
 
 // A vector of rendertargets

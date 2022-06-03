@@ -9176,6 +9176,11 @@ angle::Result FramebufferHelper::init(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void FramebufferHelper::destroy(RendererVk *rendererVk)
+{
+    mFramebuffer.destroy(rendererVk->getDevice());
+}
+
 void FramebufferHelper::release(ContextVk *contextVk)
 {
     contextVk->addGarbage(&mFramebuffer);
