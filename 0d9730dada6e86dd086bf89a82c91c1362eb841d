@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a84728_2eb41547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-03T06:00:51Z",
+      "side": 1,
+      "message": "Still lgtm.\n\nSince auto-submit was requested, manually triggering CQ.\n",
+      "revId": "0d9730dada6e86dd086bf89a82c91c1362eb841d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
