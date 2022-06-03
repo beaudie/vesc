@@ -4017,6 +4017,12 @@ void Context::initCaps()
         mSupportedExtensions.compressedETC1RGB8TextureOES = false;
     }
 
+    // Hide emulated ASTC extension from WebGL contexts.
+    if (mWebGLContext && getLimitations().emulatedAstc)
+    {
+        mSupportedExtensions.textureCompressionAstcLdrKHR = false;
+    }
+
     // If we're capturing application calls for replay, apply some feature limits to increase
     // portability of the trace.
     if (getShareGroup()->getFrameCaptureShared()->enabled() ||
