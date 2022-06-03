@@ -23,7 +23,10 @@ RenderTargetVk::RenderTargetVk()
     reset();
 }
 
-RenderTargetVk::~RenderTargetVk() {}
+RenderTargetVk::~RenderTargetVk()
+{
+    ASSERT(mFramebufferDescs.empty());
+}
 
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
@@ -66,6 +69,15 @@ void RenderTargetVk::reset()
     mLevelIndexGL      = gl::LevelIndex(0);
     mLayerIndex        = 0;
     mLayerCount        = 0;
+}
+
+void RenderTargetVk::destroy(ContextVk *contextVk)
+{
+    for (const vk::FramebufferDesc &desc : mFramebufferDescs)
+    {
+        contextVk->getShareGroupVk()->getFramebufferCache().erase(contextVk, desc);
+    }
+    mFramebufferDescs.clear();
 }
 
 vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(

@@ -1397,6 +1397,8 @@ constexpr size_t kFramebufferDescColorResolveIndexOffset =
 // Enable struct padding warnings for the code below since it is used in caches.
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
 
+class FramebufferHelper;
+
 class FramebufferDesc
 {
   public:
@@ -1726,6 +1728,30 @@ class HasCacheStats : angle::NonCopyable
 };
 
 using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
+
+// FramebufferVk Cache
+class FramebufferCache final : angle::NonCopyable
+{
+  public:
+    FramebufferCache() = default;
+    ~FramebufferCache() { ASSERT(mPayload.empty()); }
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(ContextVk *contextVk,
+             const vk::FramebufferDesc &desc,
+             vk::FramebufferHelper **framebufferOut);
+    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+    void erase(ContextVk *contextVk, const vk::FramebufferDesc &desc);
+    void clear(ContextVk *contextVk);
+
+    size_t getSize() const { return mPayload.size(); }
+    bool empty() const { return mPayload.empty(); }
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+    CacheStats mCacheStats;
+};
 
 // TODO(jmadill): Add cache trimming/eviction.
 class RenderPassCache final : angle::NonCopyable

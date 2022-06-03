@@ -340,11 +340,19 @@ FramebufferVk::~FramebufferVk() = default;
 
 void FramebufferVk::destroy(const gl::Context *context)
 {
-    ContextVk *contextVk   = vk::GetImpl(context);
-    RendererVk *rendererVk = contextVk->getRenderer();
+    resetCache(context);
+}
 
-    mFramebufferCache.clear(contextVk);
-    mFramebufferCache.destroy(rendererVk);
+void FramebufferVk::resetCache(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    for (const vk::FramebufferDesc &desc : mFramebufferDescs)
+    {
+        contextVk->getShareGroupVk()->getFramebufferCache().erase(contextVk, desc);
+    }
+    mFramebufferDescs.clear();
+
     mFramebuffer = nullptr;
 }
 
@@ -1888,8 +1896,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
                 // Invalidate the cache. If we have performance critical code hitting this path we
                 // can add related data (such as width/height) to the cache
-                mFramebufferCache.clear(contextVk);
-                mFramebuffer = nullptr;
+                resetCache(context);
                 break;
             case gl::Framebuffer::DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE:
                 shouldUpdateSrgbWriteControlMode = true;
@@ -2096,7 +2103,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     }
     // No current FB, so now check for previously cached Framebuffer
     vk::FramebufferHelper *framebufferHelper = nullptr;
-    if (mFramebufferCache.get(contextVk, mCurrentFramebufferDesc, &framebufferHelper))
+    if (contextVk->getShareGroupVk()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
+                                                                &framebufferHelper))
     {
         *framebufferOut = &framebufferHelper->getFramebuffer();
         return angle::Result::Continue;
@@ -2201,8 +2209,21 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    mFramebufferCache.insert(mCurrentFramebufferDesc, std::move(newFramebuffer));
-    bool result = mFramebufferCache.get(contextVk, mCurrentFramebufferDesc, &mFramebuffer);
+    contextVk->getShareGroupVk()->getFramebufferCache().insert(mCurrentFramebufferDesc,
+                                                               std::move(newFramebuffer));
+
+    mFramebufferDescs.emplace_back(mCurrentFramebufferDesc);
+    for (size_t colorIndexGL : mState.getColorAttachmentsMask())
+    {
+        colorRenderTargets[colorIndexGL]->onFramebufferCreate(mCurrentFramebufferDesc);
+    }
+    if (getDepthStencilRenderTarget())
+    {
+        getDepthStencilRenderTarget()->onFramebufferCreate(mCurrentFramebufferDesc);
+    }
+
+    bool result = contextVk->getShareGroupVk()->getFramebufferCache().get(
+        contextVk, mCurrentFramebufferDesc, &mFramebuffer);
     ASSERT(result);
 
     *framebufferOut = &mFramebuffer->getFramebuffer();
@@ -2961,44 +2982,5 @@ void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk,
         mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
         contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
     }
-}
-
-// FramebufferCache implementation.
-void FramebufferCache::destroy(RendererVk *rendererVk)
-{
-    rendererVk->accumulateCacheStats(VulkanCacheType::Framebuffer, mCacheStats);
-    mPayload.clear();
-}
-
-bool FramebufferCache::get(ContextVk *contextVk,
-                           const vk::FramebufferDesc &desc,
-                           vk::FramebufferHelper **framebufferHelperOut)
-{
-    auto iter = mPayload.find(desc);
-    if (iter != mPayload.end())
-    {
-        *framebufferHelperOut = &iter->second;
-        mCacheStats.hit();
-        return true;
-    }
-
-    mCacheStats.miss();
-    return false;
-}
-
-void FramebufferCache::insert(const vk::FramebufferDesc &desc,
-                              vk::FramebufferHelper &&framebufferHelper)
-{
-    mPayload.emplace(desc, std::move(framebufferHelper));
-}
-
-void FramebufferCache::clear(ContextVk *contextVk)
-{
-    for (auto &entry : mPayload)
-    {
-        vk::FramebufferHelper &tmpFB = entry.second;
-        tmpFB.release(contextVk);
-    }
-    mPayload.clear();
 }
 }  // namespace rx

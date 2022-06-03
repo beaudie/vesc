@@ -5289,6 +5289,56 @@ void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *
 }
 }  // namespace vk
 
+// FramebufferCache implementation.
+void FramebufferCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(VulkanCacheType::Framebuffer, mCacheStats);
+    mPayload.clear();
+}
+
+bool FramebufferCache::get(ContextVk *contextVk,
+                           const vk::FramebufferDesc &desc,
+                           vk::FramebufferHelper **framebufferHelperOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *framebufferHelperOut = &iter->second;
+        mCacheStats.hit();
+        return true;
+    }
+
+    mCacheStats.miss();
+    return false;
+}
+
+void FramebufferCache::insert(const vk::FramebufferDesc &desc,
+                              vk::FramebufferHelper &&framebufferHelper)
+{
+    mPayload.emplace(desc, std::move(framebufferHelper));
+}
+
+void FramebufferCache::erase(ContextVk *contextVk, const vk::FramebufferDesc &desc)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        vk::FramebufferHelper &tmpFB = iter->second;
+        tmpFB.release(contextVk);
+        mPayload.erase(desc);
+    }
+}
+
+void FramebufferCache::clear(ContextVk *contextVk)
+{
+    for (auto &entry : mPayload)
+    {
+        vk::FramebufferHelper &tmpFB = entry.second;
+        tmpFB.release(contextVk);
+    }
+    mPayload.clear();
+}
+
 // RenderPassCache implementation.
 RenderPassCache::RenderPassCache() = default;
 
