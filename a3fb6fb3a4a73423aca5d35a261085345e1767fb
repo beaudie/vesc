@@ -33,6 +33,23 @@
       "message": "+2 with the test suppressions added.",
       "revId": "a3fb6fb3a4a73423aca5d35a261085345e1767fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c89588f_3b8512bd",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5121,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-06-03T16:09:04Z",
+      "side": 1,
+      "message": "Nit: r-char shaders should not indented at the top level. (I think that\u0027s the convention, although there seem to be some exceptions in this file.)",
+      "revId": "a3fb6fb3a4a73423aca5d35a261085345e1767fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
