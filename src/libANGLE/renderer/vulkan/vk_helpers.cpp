@@ -9218,11 +9218,8 @@ bool ImageHelper::hasEmulatedImageChannels() const
     const angle::Format &angleFmt   = getIntendedFormat();
     const angle::Format &textureFmt = getActualFormat();
 
-    // The red channel is never emulated.
-    ASSERT((angleFmt.redBits != 0 || angleFmt.luminanceBits != 0 || angleFmt.alphaBits != 0) ==
-           (textureFmt.redBits != 0));
-
     return (angleFmt.alphaBits == 0 && textureFmt.alphaBits > 0) ||
+           (angleFmt.redBits == 0 && textureFmt.redBits > 0) ||
            (angleFmt.blueBits == 0 && textureFmt.blueBits > 0) ||
            (angleFmt.greenBits == 0 && textureFmt.greenBits > 0) ||
            (angleFmt.depthBits == 0 && textureFmt.depthBits > 0) ||
