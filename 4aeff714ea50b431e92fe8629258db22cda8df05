@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e570493_20ed328f",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-03T17:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "570cb859_0b6efb51",
+      "revId": "4aeff714ea50b431e92fe8629258db22cda8df05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0396a688_bfbedb56",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-06-03T17:11:16Z",
       "side": 1,
       "message": "Undo this change, please",
+      "range": {
+        "startLine": 1904,
+        "startChar": 0,
+        "endLine": 1905,
+        "endChar": 91
+      },
+      "revId": "4aeff714ea50b431e92fe8629258db22cda8df05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f25c646_be90fd94",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-03T17:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0396a688_bfbedb56",
       "range": {
         "startLine": 1904,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "81de297c_69101f35",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 2134,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-03T17:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d235240_49eefe1d",
+      "range": {
+        "startLine": 2134,
+        "startChar": 0,
+        "endLine": 2134,
+        "endChar": 97
+      },
+      "revId": "4aeff714ea50b431e92fe8629258db22cda8df05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c103c266_6b7bf2c1",
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b137c7a9_21632091",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-03T17:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c103c266_6b7bf2c1",
+      "range": {
+        "startLine": 2352,
+        "startChar": 1,
+        "endLine": 2352,
+        "endChar": 18
+      },
+      "revId": "4aeff714ea50b431e92fe8629258db22cda8df05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7e12af86_53919665",
@@ -117,6 +207,30 @@
       "writtenOn": "2022-06-03T17:11:16Z",
       "side": 1,
       "message": "Please incorporate Jamie\u0027s feedback from the original CL",
+      "range": {
+        "startLine": 214,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 0
+      },
+      "revId": "4aeff714ea50b431e92fe8629258db22cda8df05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e7bfc79_3bce2e2e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-03T17:48:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e12af86_53919665",
       "range": {
         "startLine": 214,
         "startChar": 0,
