@@ -419,7 +419,11 @@ angle::Result GetPresentModes(DisplayVk *displayVk,
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
 
-SurfaceVk::~SurfaceVk() = default;
+SurfaceVk::~SurfaceVk()
+{
+    mColorRenderTarget.releaseFramebufferDescReference(nullptr);
+    mDepthStencilRenderTarget.releaseFramebufferDescReference(nullptr);
+}
 
 angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
@@ -1532,6 +1536,9 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
 void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
+
+    mColorRenderTarget.releaseFramebufferDescReference(contextVk);
+    mDepthStencilRenderTarget.releaseFramebufferDescReference(contextVk);
 
     if (mDepthStencilImage.valid())
     {

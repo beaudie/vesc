@@ -1397,6 +1397,8 @@ constexpr size_t kFramebufferDescColorResolveIndexOffset =
 // Enable struct padding warnings for the code below since it is used in caches.
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
 
+class FramebufferHelper;
+
 class FramebufferDesc
 {
   public:
@@ -1478,6 +1480,47 @@ static_assert(kFramebufferDescSize == 148, "Size check failed");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
+// The wrapper object to the pointer of FramebufferDesc so that we can use it with RefCounted
+// template
+class FramebufferDescPtr final : public vk::WrappedObject<FramebufferDescPtr, vk::FramebufferDesc *>
+{
+  public:
+    FramebufferDescPtr(const FramebufferDesc &desc) { mHandle = new FramebufferDesc(desc); }
+    void destroy() { SafeDelete(mHandle); }
+};
+
+class RefCountedFramebufferDescHelper : public RefCounted<FramebufferDescPtr>
+{
+  public:
+    RefCountedFramebufferDescHelper(const FramebufferDesc &desc)
+        : RefCounted<FramebufferDescPtr>(desc)
+    {}
+    // Destroy descriptor and the cache associated with it
+    void destroyCache(ContextVk *contextVk);
+};
+
+// Helper class manages the lifetime of FramebufferCache so that the cache entry can be destroyed
+// when one of attachments becomes invalid.
+class FramebufferCacheHelper
+{
+  public:
+    FramebufferCacheHelper() = default;
+    ~FramebufferCacheHelper() { ASSERT(empty()); }
+    // Store the pointer to the cache key and retains it
+    void addFramebufferDescReference(ContextVk *contextVk,
+                                     RefCountedFramebufferDescHelper *framebufferDescHelper);
+    // Iterate over the descriptor array and destroy the descriptor and cache.
+    void destroy(ContextVk *contextVk);
+    bool empty() { return mFramebufferDescHelpers.empty(); }
+    RefCountedFramebufferDescHelper *back() const { return mFramebufferDescHelpers.back(); }
+
+  private:
+    // Tracks an array of cache keys with refcounting. Note this owns one refcount of
+    // RefCountedFramebufferDescHelper object and when the last refcount goes away, we are
+    // responsible to destroy RefCountedFramebufferDescHelper object.
+    std::vector<RefCountedFramebufferDescHelper *> mFramebufferDescHelpers;
+};
 
 // The SamplerHelper allows a Sampler to be coupled with a serial.
 // Must be included before we declare SamplerCache.
@@ -1726,6 +1769,27 @@ class HasCacheStats : angle::NonCopyable
 };
 
 using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
+
+// FramebufferVk Cache
+class FramebufferCache final : angle::NonCopyable
+{
+  public:
+    FramebufferCache() = default;
+    ~FramebufferCache() { ASSERT(mPayload.empty()); }
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(ContextVk *contextVk, const vk::FramebufferDesc &desc, vk::Framebuffer &framebuffer);
+    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+    void erase(ContextVk *contextVk, const vk::FramebufferDesc &desc);
+
+    size_t getSize() const { return mPayload.size(); }
+    bool empty() const { return mPayload.empty(); }
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+    CacheStats mCacheStats;
+};
 
 // TODO(jmadill): Add cache trimming/eviction.
 class RenderPassCache final : angle::NonCopyable
