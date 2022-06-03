@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c60ac29_fbcb94f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-03T23:57:18Z",
+      "side": 1,
+      "message": "geoff, im curious if you considered the approach to offload ANI calls to a worker thread like prototyped in this change i uploaded -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3216648",
+      "revId": "f60d07b796f431cbd1a627426e2f435c29c2d099",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
