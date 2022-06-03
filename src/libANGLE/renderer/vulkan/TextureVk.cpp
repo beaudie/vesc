@@ -3145,11 +3145,20 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
     {
         for (RenderTargetVector &renderTargetLevels : renderTargets)
         {
+            for (RenderTargetVk &renderTargetVk : renderTargetLevels)
+            {
+                renderTargetVk.releaseSharedFramebufferCacheKey(contextVk);
+            }
             // Clear the layers tracked for each level
             renderTargetLevels.clear();
         }
         // Then clear the levels
         renderTargets.clear();
+    }
+
+    for (auto &renderTargetPair : mMultiLayerRenderTargets)
+    {
+        renderTargetPair.second->releaseSharedFramebufferCacheKey(contextVk);
     }
     mMultiLayerRenderTargets.clear();
 }
@@ -3441,6 +3450,21 @@ angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
     {
         RendererVk *renderer = contextVk->getRenderer();
         mImage->collectViewGarbage(renderer, &imageView);
+
+        for (auto &renderTargets : mSingleLayerRenderTargets)
+        {
+            for (RenderTargetVector &renderTargetLevels : renderTargets)
+            {
+                for (RenderTargetVk &renderTargetVk : renderTargetLevels)
+                {
+                    renderTargetVk.releaseSharedFramebufferCacheKey(contextVk);
+                }
+            }
+        }
+        for (auto &renderTargetPair : mMultiLayerRenderTargets)
+        {
+            renderTargetPair.second->releaseSharedFramebufferCacheKey(contextVk);
+        }
     }
 
     ANGLE_TRY(initImageViews(contextVk, getImageViewLevelCount()));
