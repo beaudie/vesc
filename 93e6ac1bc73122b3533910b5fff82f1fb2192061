@@ -70,6 +70,24 @@
       "parentUuid": "10ecff85_b58c69ac",
       "revId": "93e6ac1bc73122b3533910b5fff82f1fb2192061",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb2cf2de_52f98444",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T16:10:02Z",
+      "side": 1,
+      "message": "You can revert from your internal branch if you want to avoid future merge trouble. There is communication with samsung mobile and I got confirmation from them that this patch is not required for the buffer suballocation and wont help perf as well. If any of you find any real benefit, please let me know and we can reinstate the change.",
+      "parentUuid": "cfd86f0a_f36c4570",
+      "revId": "93e6ac1bc73122b3533910b5fff82f1fb2192061",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
