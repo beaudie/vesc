@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ff1be47_3dbaed27",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-03T18:17:50Z",
+      "side": 1,
+      "message": "nit: Please remove this line",
+      "revId": "88faaabe175b942017326827cb39ac620d83c2b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
