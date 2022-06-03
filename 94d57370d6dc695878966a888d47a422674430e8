@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d85010a2_a79c1ae9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-03T16:32:25Z",
+      "side": 1,
+      "message": "Nice!  Thanks for adding these tests!!!",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4e14b9_d0704d8c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-03T16:32:25Z",
+      "side": 1,
+      "message": "Should this change the size stored in mCacheStats, or do we really need \"mCacheStats.incrementSize()\" below?",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fb9ae0c_424d8de8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-03T16:32:25Z",
+      "side": 1,
+      "message": "Do we really need \"mCacheStats.incrementSize()\", given that getCacheSize() returns mPayload.size()?\n\nEither that, or we need to adjust mCacheStats\u0027s size above and below (when doing mPayload.clear())",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83f3ca8_5d3e41ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3003,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-03T16:32:25Z",
+      "side": 1,
+      "message": "Should this change the size stored in mCacheStats, or do we really need \"mCacheStats.incrementSize()\" above?",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03ee63a0_83d88c4f",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-03T16:32:25Z",
+      "side": 1,
+      "message": "How come we skip these new tests?\n\nAnswer: This CL adds the new tests, and other CLs fix the bugs that these tests demonstrate.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 112
+      },
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
