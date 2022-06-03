@@ -118,7 +118,7 @@ class Subject : NonCopyable
         ASSERT(!IsInContainer(mObservers, observer));
         mObservers.push_back(observer);
     }
-
+    size_t getObserversCount() const { return mObservers.size(); }
     ANGLE_INLINE void removeObserver(ObserverBindingBase *observer)
     {
         ASSERT(IsInContainer(mObservers, observer));
