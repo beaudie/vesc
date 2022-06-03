@@ -18,7 +18,6 @@ namespace vma
                       static_cast<uint32_t>(VMA_VIRTUAL_BLOCK_CREATE_##x##_ALGORITHM_BIT), \
                   "VMA enum mismatch")
 VALIDATE_BLOCK_CREATE_FLAG_BITS(LINEAR);
-VALIDATE_BLOCK_CREATE_FLAG_BITS(BUDDY);
 
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
@@ -81,17 +80,12 @@ void DestroyAllocator(VmaAllocator allocator)
 
 VkResult CreatePool(VmaAllocator allocator,
                     uint32_t memoryTypeIndex,
-                    bool buddyAlgorithm,
                     VkDeviceSize blockSize,
                     VmaPool *pPool)
 {
     VmaPoolCreateInfo poolCreateInfo = {};
     poolCreateInfo.memoryTypeIndex   = memoryTypeIndex;
     poolCreateInfo.flags             = VMA_POOL_CREATE_IGNORE_BUFFER_IMAGE_GRANULARITY_BIT;
-    if (buddyAlgorithm)
-    {
-        poolCreateInfo.flags |= VMA_POOL_CREATE_BUDDY_ALGORITHM_BIT;
-    }
     poolCreateInfo.blockSize     = blockSize;
     poolCreateInfo.maxBlockCount = -1;  // unlimited
     return vmaCreatePool(allocator, &poolCreateInfo, pPool);
@@ -208,18 +202,19 @@ void DestroyVirtualBlock(VmaVirtualBlock virtualBlock)
 VkResult VirtualAllocate(VmaVirtualBlock virtualBlock,
                          VkDeviceSize size,
                          VkDeviceSize alignment,
-                         VkDeviceSize *pOffset)
+                         VmaVirtualAllocation* pAllocation,
+                         VkDeviceSize* pOffset)
 {
     VmaVirtualAllocationCreateInfo createInfo = {};
     createInfo.size                           = size;
     createInfo.alignment                      = alignment;
     createInfo.flags                          = 0;
-    return vmaVirtualAllocate(virtualBlock, &createInfo, pOffset);
+    return vmaVirtualAllocate(virtualBlock, &createInfo, pAllocation, pOffset);
 }
 
-void VirtualFree(VmaVirtualBlock virtualBlock, VkDeviceSize offset)
+void VirtualFree(VmaVirtualBlock virtualBlock, VmaVirtualAllocation allocation)
 {
-    vmaVirtualFree(virtualBlock, offset);
+    vmaVirtualFree(virtualBlock, allocation);
 }
 
 VkBool32 IsVirtualBlockEmpty(VmaVirtualBlock virtualBlock)
@@ -228,12 +223,12 @@ VkBool32 IsVirtualBlockEmpty(VmaVirtualBlock virtualBlock)
 }
 
 void GetVirtualAllocationInfo(VmaVirtualBlock virtualBlock,
-                              VkDeviceSize offset,
+                              VmaVirtualAllocation allocation,
                               VkDeviceSize *sizeOut,
                               void **pUserDataOut)
 {
     VmaVirtualAllocationInfo virtualAllocInfo = {};
-    vmaGetVirtualAllocationInfo(virtualBlock, offset, &virtualAllocInfo);
+    vmaGetVirtualAllocationInfo(virtualBlock, allocation, &virtualAllocInfo);
     *sizeOut      = virtualAllocInfo.size;
     *pUserDataOut = virtualAllocInfo.pUserData;
 }
@@ -244,15 +239,15 @@ void ClearVirtualBlock(VmaVirtualBlock virtualBlock)
 }
 
 void SetVirtualAllocationUserData(VmaVirtualBlock virtualBlock,
-                                  VkDeviceSize offset,
+                                  VmaVirtualAllocation allocation,
                                   void *pUserData)
 {
-    vmaSetVirtualAllocationUserData(virtualBlock, offset, pUserData);
+    vmaSetVirtualAllocationUserData(virtualBlock, allocation, pUserData);
 }
 
 void CalculateVirtualBlockStats(VmaVirtualBlock virtualBlock, StatInfo *pStatInfo)
 {
-    vmaCalculateVirtualBlockStats(virtualBlock, reinterpret_cast<VmaStatInfo *>(pStatInfo));
+    vmaCalculateVirtualBlockStatistics(virtualBlock, reinterpret_cast<VmaDetailedStatistics *>(pStatInfo));
 }
 
 void BuildVirtualBlockStatsString(VmaVirtualBlock virtualBlock,

@@ -1765,10 +1765,10 @@ void BufferBlock::unmap(const VkDevice device)
     mMappedMemory = nullptr;
 }
 
-void BufferBlock::free(VkDeviceSize offset)
+void BufferBlock::free(VmaVirtualAllocation allocation)
 {
     std::lock_guard<ConditionalMutex> lock(mVirtualBlockMutex);
-    mVirtualBlock.free(offset);
+    mVirtualBlock.free(allocation);
 }
 
 int32_t BufferBlock::getAndIncrementEmptyCounter()
