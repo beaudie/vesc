@@ -39,6 +39,30 @@
       },
       "revId": "06622e12e0b44b260c59118f265ef124d806c668",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "216a9653_324e9320",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-06-03T16:00:51Z",
+      "side": 1,
+      "message": "The \u003d\u003d is the same as the test on line 855. I could fix them all, but I\u0027d like to keep this small for possible merge.\n\nI\u0027m pretty sure hasImages() can only be true in 4.1 mode, since D3D9 doesn\u0027t support image load/store (otherwise, the variables that hasImages() is referencing would be initialized). The function string is just a comment that gets replaced by the real functions over in DynamicImage2DHLSL.cpp, but only if there are any image2D uniforms in the shader, which there wouldn\u0027t be in D3D9. So in the current code, a spurious comment might be emitted in D3D9 mode which wouldn\u0027t be replaced. With the fix, the comment won\u0027t be emitted and the replacement won\u0027t be done.",
+      "parentUuid": "419bc559_cf23b741",
+      "range": {
+        "startLine": 866,
+        "startChar": 28,
+        "endLine": 866,
+        "endChar": 30
+      },
+      "revId": "06622e12e0b44b260c59118f265ef124d806c668",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
