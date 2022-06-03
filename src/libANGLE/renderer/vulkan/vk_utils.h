@@ -598,7 +598,7 @@ class RefCounted : angle::NonCopyable
     // A debug function to validate that the reference count is as expected used for assertions.
     bool isRefCountAsExpected(uint32_t expectedRefCount) { return mRefCount == expectedRefCount; }
 
-  private:
+  protected:
     uint32_t mRefCount;
     T mObject;
 };

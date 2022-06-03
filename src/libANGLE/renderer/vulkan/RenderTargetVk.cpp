@@ -23,7 +23,10 @@ RenderTargetVk::RenderTargetVk()
     reset();
 }
 
-RenderTargetVk::~RenderTargetVk() {}
+RenderTargetVk::~RenderTargetVk()
+{
+    ASSERT(mFramebufferCacheManager.empty());
+}
 
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
