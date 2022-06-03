@@ -4072,6 +4072,70 @@ void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
     SetBitField(mIsRenderToTexture, isRenderToTexture);
 }
 
+// FramebufferDescHelper implementation
+void RefCountedFramebufferDescHelper::destroyCache(ContextVk *contextVk)
+{
+    if (mObject.valid())
+    {
+        // If the call came from Surface class, we may not have access to contextVk. The cache
+        // should still get destroyed from FramebufferVk, so no leak is expected.
+        if (contextVk)
+        {
+            // Immediate destroy the cached object when first releaseRef call is made
+            contextVk->getShareGroupVk()->getFramebufferCache().erase(contextVk,
+                                                                      *mObject.getHandle());
+        }
+
+        // Destroy the desc object
+        mObject.destroy();
+    }
+}
+
+// FramebufferCacheHelper implementation
+void FramebufferCacheHelper::addFramebufferDescReference(
+    ContextVk *contextVk,
+    RefCountedFramebufferDescHelper *framebufferDescHelper)
+{
+    framebufferDescHelper->addRef();
+
+    // If there is invalid key in the array, use it instead of keep expanding the array
+    for (auto &descHelper : mFramebufferDescHelpers)
+    {
+        if (!descHelper->get().valid())
+        {
+            descHelper->releaseRef();
+            if (!descHelper->isReferenced())
+            {
+                SafeDelete(descHelper);
+            }
+            descHelper = framebufferDescHelper;
+            return;
+        }
+    }
+
+    mFramebufferDescHelpers.push_back(framebufferDescHelper);
+}
+
+void FramebufferCacheHelper::destroy(ContextVk *contextVk)
+{
+    for (auto &descHelper : mFramebufferDescHelpers)
+    {
+        if (contextVk && descHelper->get().valid())
+        {
+            descHelper->destroyCache(contextVk);
+        }
+
+        // If this is the last reference, we should destroy the RefCountedFramebufferDescHelper
+        // object
+        descHelper->releaseRef();
+        if (!descHelper->isReferenced())
+        {
+            SafeDelete(descHelper);
+        }
+    }
+    mFramebufferDescHelpers.clear();
+}
+
 // YcbcrConversionDesc implementation
 YcbcrConversionDesc::YcbcrConversionDesc()
 {
@@ -5283,6 +5347,56 @@ void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *
     mDesc.updateDescriptorSet(updateBuilder, mHandles.data(), descriptorSet);
 }
 }  // namespace vk
+
+// FramebufferCache implementation.
+void FramebufferCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(VulkanCacheType::Framebuffer, mCacheStats);
+    mPayload.clear();
+}
+
+bool FramebufferCache::get(ContextVk *contextVk,
+                           const vk::FramebufferDesc &desc,
+                           vk::Framebuffer &framebuffer)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        framebuffer.setHandle(iter->second.getFramebuffer().getHandle());
+        mCacheStats.hit();
+        return true;
+    }
+
+    mCacheStats.miss();
+    return false;
+}
+
+void FramebufferCache::insert(const vk::FramebufferDesc &desc,
+                              vk::FramebufferHelper &&framebufferHelper)
+{
+    mPayload.emplace(desc, std::move(framebufferHelper));
+}
+
+void FramebufferCache::erase(ContextVk *contextVk, const vk::FramebufferDesc &desc)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        vk::FramebufferHelper &tmpFB = iter->second;
+        tmpFB.release(contextVk);
+        mPayload.erase(desc);
+    }
+}
+
+void FramebufferCache::clear(ContextVk *contextVk)
+{
+    for (auto &entry : mPayload)
+    {
+        vk::FramebufferHelper &tmpFB = entry.second;
+        tmpFB.release(contextVk);
+    }
+    mPayload.clear();
+}
 
 // RenderPassCache implementation.
 RenderPassCache::RenderPassCache() = default;
