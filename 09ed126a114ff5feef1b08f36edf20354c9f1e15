@@ -51,6 +51,24 @@
       "parentUuid": "c613cac9_a05593a6",
       "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3b7c1c5_165aafea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-06-03T03:05:54Z",
+      "side": 1,
+      "message": "Just to follow up, I definitely think implementing the PLS extension in the ANGLE/D3D11 backend (where a single RW binding should work) would be easier than teasing GLES into doing it.\n\nAlso note that image load/store in ANGLE/D3D11 is very new (I just landed it a few weeks ago) and may have other issues.",
+      "parentUuid": "b64def91_1f3a0ce3",
+      "revId": "09ed126a114ff5feef1b08f36edf20354c9f1e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
