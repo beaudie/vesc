@@ -449,7 +449,11 @@ angle_source_set("angle_image_util_headers") {
 angle_static_library("angle_image_util") {
   sources = libangle_image_util_sources
   public_configs += [ ":angle_image_util_config" ]
-  public_deps = [ ":angle_image_util_headers" ]
+  public_deps = [
+    ":angle_image_util_headers",
+    "//third_party/astc-encoder:astcenc",
+  ]
+  include_dirs = [ "//third_party/astc-encoder/src/Source/" ]
 }
 
 config("angle_gl_visibility_config") {
