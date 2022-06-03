@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c444d7a7_d1b047dc",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-03T18:43:07Z",
+      "side": 1,
+      "message": "Ah, thanks, I understand now.\n\nI can\u0027t think of a way to do what you want entirely in ANGLE\u0027s shader preprocessor. As you suggested, using a regex to expand out the substring PIXEL_LOCAL_DECL(unit, format, name) to something like PIXEL_LOCAL_DECL_IMPL(unit, format, name_R, name_W) and then changing kLocalStorageGLSLDefines to define PIXEL_LOCAL_DECL_IMPL seems the most straightforward way.",
+      "parentUuid": "68e43046_c29de5a1",
+      "revId": "570d97d171dc1e3b08326a20bcab4db5b31576fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2deec3c_4f9aa16d",
