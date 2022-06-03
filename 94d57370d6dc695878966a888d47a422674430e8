@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41dd4fa8_78eaaffc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T17:19:48Z",
+      "side": 1,
+      "message": "Using mPayload directly.",
+      "parentUuid": "4d4e14b9_d0704d8c",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fb9ae0c_424d8de8",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68920bb4_5a593bef",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T17:19:48Z",
+      "side": 1,
+      "message": "You are right, I dont need it as well. Removed.",
+      "parentUuid": "4fb9ae0c_424d8de8",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e83f3ca8_5d3e41ea",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-06-03T16:32:25Z",
       "side": 1,
       "message": "Should this change the size stored in mCacheStats, or do we really need \"mCacheStats.incrementSize()\" above?",
+      "revId": "94d57370d6dc695878966a888d47a422674430e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1ba1db_111f912b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3003,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T17:19:48Z",
+      "side": 1,
+      "message": "Same as above",
+      "parentUuid": "e83f3ca8_5d3e41ea",
       "revId": "94d57370d6dc695878966a888d47a422674430e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
