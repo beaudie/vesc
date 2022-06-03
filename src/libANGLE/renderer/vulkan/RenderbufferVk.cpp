@@ -297,6 +297,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     }
     else
     {
+        mRenderTarget.releaseSharedFramebufferCacheKey(contextVk);
         mImage->collectViewGarbage(renderer, &mImageViews);
         mImage->collectViewGarbage(renderer, &mMultisampledImageViews);
     }
