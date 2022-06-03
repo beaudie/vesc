@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59e4822_067ad3a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T22:09:25Z",
+      "side": 1,
+      "message": "With new revision that tracks each binding and un-observe only if there are more than 20 observers, there is no measurable CPU time difference with asphalt_9 and other app traces as well.",
+      "parentUuid": "a605e9f5_c528ce79",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 0
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d06fb325_46805f05",
@@ -100,6 +124,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "baf8d6be_8ed07d49",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T22:09:25Z",
+      "side": 1,
+      "message": "With new revision there is no measurable difference any more.",
+      "parentUuid": "2894863b_cf7aa34f",
+      "range": {
+        "startLine": 660,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 0
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a1328f1_be16fceb",
@@ -123,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d78cff0_5ac89d9d",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T22:09:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a1328f1_be16fceb",
+      "range": {
+        "startLine": 713,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 1
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bee092fa_8873c815",
@@ -136,6 +208,30 @@
       "writtenOn": "2022-05-31T16:48:56Z",
       "side": 1,
       "message": "Can `incr` be a value other than -1 and 1? If not, we could have an assert to reflect that.",
+      "range": {
+        "startLine": 728,
+        "startChar": 63,
+        "endLine": 728,
+        "endChar": 67
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6952e4ab_e889813a",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T22:09:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bee092fa_8873c815",
       "range": {
         "startLine": 728,
         "startChar": 63,
@@ -230,6 +326,30 @@
       "writtenOn": "2022-06-02T17:31:40Z",
       "side": 1,
       "message": "nit: please use the \"bind\" terminology instead of MakeCurrent, which has special meaning for Contexts.",
+      "range": {
+        "startLine": 367,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 49
+      },
+      "revId": "7933e9e1ca26760b5e13cafcfd5fee9a8fa17a26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af82ac6b_c55dba30",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-03T22:09:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ac2f4b8_5ee19c6d",
       "range": {
         "startLine": 367,
         "startChar": 0,
