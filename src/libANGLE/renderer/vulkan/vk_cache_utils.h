@@ -1397,6 +1397,8 @@ constexpr size_t kFramebufferDescColorResolveIndexOffset =
 // Enable struct padding warnings for the code below since it is used in caches.
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
 
+class FramebufferHelper;
+
 class FramebufferDesc
 {
   public:
@@ -1478,6 +1480,70 @@ static_assert(kFramebufferDescSize == 148, "Size check failed");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
+// Helper class that used to manage lifetime of FramebufferDesc with
+// reference counting. Note that the reference count is tracking the lifetime of this object, not
+// FramebufferDesc. FramebufferDesc is destroyed when the first releaseRef call is made. This
+// RefCountedFramebufferDescHelper object should be destroyed (by FramebufferCacheHelper class)
+// when the last refcount goes away.
+class RefCountedFramebufferDescHelper final : angle::NonCopyable
+{
+  public:
+    RefCountedFramebufferDescHelper() : mRefCount(0) {}
+    RefCountedFramebufferDescHelper(const vk::FramebufferDesc &desc) : mRefCount(0)
+    {
+        // Make a copy of desc
+        mFramebufferDesc = new FramebufferDesc(desc);
+    }
+    ~RefCountedFramebufferDescHelper()
+    {
+        // We must have already destroyed mFramebufferDesc.
+        ASSERT(mRefCount == 0);
+        ASSERT(mFramebufferDesc == nullptr);
+    }
+
+    // Add a reference to this RefCountedFramebufferDescHelper object
+    void addRef()
+    {
+        ASSERT(mFramebufferDesc != nullptr);
+        mRefCount++;
+    }
+    // Release a reference to this RefCountedFramebufferDescHelper object. The mFramebufferDesc and
+    // associated framebuffer cache are immediately destroyed when first releaseRef call is made.
+    void releaseRef(ContextVk *contextVk);
+
+    // Return true if this is the last reference. Caller (usually FramebufferCacheHelper class)
+    // should destroy this RefCountedFramebufferDescHelper object.
+    bool isLastReference() { return mRefCount == 0; }
+
+  private:
+    // Reference count to this object
+    uint32_t mRefCount;
+    // cache key for frame buffer
+    FramebufferDesc *mFramebufferDesc;
+};
+
+// Helper class manages the lifetime of FramebufferCache so that the cache entry can be destroyed
+// when one of attachments becomes invalid.
+class FramebufferCacheHelper
+{
+  public:
+    // Store the pointer to the cache key and retains it
+    void addFramebufferDescReference(RefCountedFramebufferDescHelper *framebufferDescHelper)
+    {
+        framebufferDescHelper->addRef();
+        mFramebufferDescHelpers.push_back(framebufferDescHelper);
+    }
+    // Destroy the cache and descriptor and removes one refcount to the helper object
+    void destroy(ContextVk *contextVk);
+    bool empty() { return mFramebufferDescHelpers.empty(); }
+
+  private:
+    // Tracks an array of cache keys with refcounting. Note this owns one refcount of
+    // RefCountedFramebufferDescHelper object and when the last refcount goes away, we are
+    // responsible to destroy RefCountedFramebufferDescHelper object.
+    std::vector<RefCountedFramebufferDescHelper *> mFramebufferDescHelpers;
+};
 
 // The SamplerHelper allows a Sampler to be coupled with a serial.
 // Must be included before we declare SamplerCache.
@@ -1726,6 +1792,28 @@ class HasCacheStats : angle::NonCopyable
 };
 
 using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
+
+// FramebufferVk Cache
+class FramebufferCache final : angle::NonCopyable
+{
+  public:
+    FramebufferCache() = default;
+    ~FramebufferCache() { ASSERT(mPayload.empty()); }
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(ContextVk *contextVk, const vk::FramebufferDesc &desc, vk::Framebuffer &framebuffer);
+    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+    void erase(ContextVk *contextVk, const vk::FramebufferDesc &desc);
+    void clear(ContextVk *contextVk);
+
+    size_t getSize() const { return mPayload.size(); }
+    bool empty() const { return mPayload.empty(); }
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+    CacheStats mCacheStats;
+};
 
 // TODO(jmadill): Add cache trimming/eviction.
 class RenderPassCache final : angle::NonCopyable

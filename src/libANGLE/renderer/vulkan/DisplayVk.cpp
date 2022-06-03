@@ -460,6 +460,7 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].destroy(
         renderer, VulkanCacheType::ShaderResourcesDescriptors);
 
+    ASSERT(mFramebufferCache.empty());
     ASSERT(mResourceUseLists.empty());
 }
 
