@@ -28,6 +28,7 @@ class RenderPassDesc;
 
 class ContextVk;
 class TextureVk;
+class FramebufferCacheRef;
 
 enum class RenderTargetTransience
 {
@@ -135,6 +136,12 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
         return mTransience == RenderTargetTransience::EntirelyTransient;
     }
 
+    void addFramebufferCacheRef(const vk::FramebufferCacheRef &cacheRef)
+    {
+        mFramebufferCacheRef.emplace_back(cacheRef);
+    }
+    void destroy(ContextVk *contextVk);
+
   private:
     angle::Result getImageViewImpl(vk::Context *context,
                                    const vk::ImageHelper &image,
@@ -209,6 +216,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // resolve attachment, it is not used.  The only purpose of |mResolveImage| is to store deferred
     // clears.
     RenderTargetTransience mTransience;
+
+    // Track references to the cached Framebuffer object that created out of this object
+    std::vector<vk::FramebufferCacheRef> mFramebufferCacheRef;
 };
 
 // A vector of rendertargets

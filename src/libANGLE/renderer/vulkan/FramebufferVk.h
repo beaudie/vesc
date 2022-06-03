@@ -26,28 +26,6 @@ class RendererVk;
 class RenderTargetVk;
 class WindowSurfaceVk;
 
-// FramebufferVk Cache
-class FramebufferCache final : angle::NonCopyable
-{
-  public:
-    FramebufferCache() = default;
-    ~FramebufferCache() { ASSERT(mPayload.empty()); }
-
-    void destroy(RendererVk *rendererVk);
-
-    bool get(ContextVk *contextVk,
-             const vk::FramebufferDesc &desc,
-             vk::FramebufferHelper **framebufferOut);
-    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
-    void clear(ContextVk *contextVk);
-
-    size_t getSize() const { return mPayload.size(); }
-
-  private:
-    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
-    CacheStats mCacheStats;
-};
-
 class FramebufferVk : public FramebufferImpl
 {
   public:
@@ -172,8 +150,6 @@ class FramebufferVk : public FramebufferImpl
 
     void removeColorResolveAttachment(uint32_t colorIndexGL);
 
-    size_t getCacheSize() const { return mFramebufferCache.getSize(); }
-
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,
@@ -248,6 +224,11 @@ class FramebufferVk : public FramebufferImpl
 
     void updateLayerCount();
 
+    void insertCache(ContextVk *contextVk,
+                     vk::FramebufferDesc desc,
+                     vk::FramebufferHelper &&newFramebuffer);
+    void resetCache(const gl::Context *context);
+
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
@@ -265,7 +246,9 @@ class FramebufferVk : public FramebufferImpl
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
 
     vk::FramebufferDesc mCurrentFramebufferDesc;
-    FramebufferCache mFramebufferCache;
+
+    // Track references to the cached Framebuffer object that created out of this object
+    std::vector<vk::FramebufferCacheRef> mFramebufferCacheRef;
 
     vk::ClearValuesArray mDeferredClears;
 

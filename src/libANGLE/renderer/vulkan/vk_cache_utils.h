@@ -1397,6 +1397,8 @@ constexpr size_t kFramebufferDescColorResolveIndexOffset =
 // Enable struct padding warnings for the code below since it is used in caches.
 ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
 
+class FramebufferHelper;
+
 class FramebufferDesc
 {
   public:
@@ -1476,8 +1478,55 @@ class FramebufferDesc
 constexpr size_t kFramebufferDescSize = sizeof(FramebufferDesc);
 static_assert(kFramebufferDescSize == 148, "Size check failed");
 
+using FramebufferDescPtr = FramebufferDesc *;
+
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
+// The wrapper object to the pointer of FramebufferDesc
+class FramebufferDescWrapper final
+    : public vk::WrappedObject<FramebufferDescWrapper, vk::FramebufferDescPtr>
+{
+  public:
+    FramebufferDescWrapper() = default;
+    void init(const vk::FramebufferDesc &desc);
+    void destroy(ContextVk *contextVk);
+};
+
+// Reference counted object. Note that the reference count is tracking the life time of this object,
+// not FramebufferDescWrapper. FramebufferDescWrapper is destroyed when first releaseRef call is
+// made.
+class RefCountedFramebufferDesc final : angle::NonCopyable
+{
+  public:
+    RefCountedFramebufferDesc();
+    RefCountedFramebufferDesc(const vk::FramebufferDesc &desc);
+    ~RefCountedFramebufferDesc();
+
+    void addRef();
+    void releaseRef(ContextVk *contextVk);
+    bool isLastReference() { return mRefCount == 0; }
+
+  private:
+    uint32_t mRefCount;
+    FramebufferDescWrapper mFramebufferDesc;
+};
+
+// Wrapper object that represents one reference to RefCountedFramebufferAndDesc object
+class FramebufferCacheRef
+{
+  public:
+    FramebufferCacheRef();
+    FramebufferCacheRef(const vk::FramebufferDesc &desc);
+    FramebufferCacheRef(const FramebufferCacheRef &other);
+    FramebufferCacheRef(FramebufferCacheRef &&other);
+    ~FramebufferCacheRef();
+
+    void destroy(ContextVk *contextVk);
+
+  private:
+    RefCountedFramebufferDesc *mRefCountedFramebufferDesc;
+};
 
 // The SamplerHelper allows a Sampler to be coupled with a serial.
 // Must be included before we declare SamplerCache.
@@ -1726,6 +1775,30 @@ class HasCacheStats : angle::NonCopyable
 };
 
 using VulkanCacheStats = angle::PackedEnumMap<VulkanCacheType, CacheStats>;
+
+// FramebufferVk Cache
+class FramebufferCache final : angle::NonCopyable
+{
+  public:
+    FramebufferCache() = default;
+    ~FramebufferCache() { ASSERT(mPayload.empty()); }
+
+    void destroy(RendererVk *rendererVk);
+
+    bool get(ContextVk *contextVk,
+             const vk::FramebufferDesc &desc,
+             vk::FramebufferHelper **framebufferOut);
+    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+    void erase(ContextVk *contextVk, const vk::FramebufferDesc &desc);
+    void clear(ContextVk *contextVk);
+
+    size_t getSize() const { return mPayload.size(); }
+    bool empty() const { return mPayload.empty(); }
+
+  private:
+    angle::HashMap<vk::FramebufferDesc, vk::FramebufferHelper> mPayload;
+    CacheStats mCacheStats;
+};
 
 // TODO(jmadill): Add cache trimming/eviction.
 class RenderPassCache final : angle::NonCopyable

@@ -4077,6 +4077,96 @@ void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
     SetBitField(mIsRenderToTexture, isRenderToTexture);
 }
 
+// FramebufferDescWrapper implementation
+void FramebufferDescWrapper::init(const vk::FramebufferDesc &desc)
+{
+    // Make a copy of desc and owns it.
+    mHandle = new vk::FramebufferDesc(desc);
+}
+
+void FramebufferDescWrapper::destroy(ContextVk *contextVk)
+{
+    if (valid())
+    {
+        // Destroy and remove it from the cache
+        contextVk->getShareGroupVk()->getFramebufferCache().erase(contextVk, *mHandle);
+        // Delete the desc object
+        SafeDelete(mHandle);
+    }
+}
+
+// RefCountedFramebufferDesc implementation
+RefCountedFramebufferDesc::RefCountedFramebufferDesc() : mRefCount(1) {}
+
+RefCountedFramebufferDesc::RefCountedFramebufferDesc(const vk::FramebufferDesc &desc) : mRefCount(1)
+{
+    mFramebufferDesc.init(desc);
+}
+
+RefCountedFramebufferDesc::~RefCountedFramebufferDesc()
+{
+    ASSERT(mRefCount == 0);
+    ASSERT(!mFramebufferDesc.valid());
+}
+
+void RefCountedFramebufferDesc::addRef()
+{
+    ASSERT(mFramebufferDesc.valid());
+    mRefCount++;
+}
+
+void RefCountedFramebufferDesc::releaseRef(ContextVk *contextVk)
+{
+    mRefCount--;
+    // Immediate destroy the cached object when first release call is made
+    mFramebufferDesc.destroy(contextVk);
+    ASSERT(!mFramebufferDesc.valid());
+}
+
+// FramebufferCacheRef implementation
+FramebufferCacheRef::FramebufferCacheRef() : mRefCountedFramebufferDesc(nullptr) {}
+
+FramebufferCacheRef::FramebufferCacheRef(const vk::FramebufferDesc &desc)
+{
+    // Construct a new RefCountedFramebufferDesc object
+    mRefCountedFramebufferDesc = new RefCountedFramebufferDesc(desc);
+}
+
+FramebufferCacheRef::FramebufferCacheRef(const FramebufferCacheRef &other)
+{
+    // Copy constructor will add a reference to the in coming mRefCountedFramebufferDesc
+    mRefCountedFramebufferDesc = other.mRefCountedFramebufferDesc;
+    mRefCountedFramebufferDesc->addRef();
+}
+
+FramebufferCacheRef::FramebufferCacheRef(FramebufferCacheRef &&other)
+{
+    // Move constructor will move the reference from other object
+    mRefCountedFramebufferDesc       = other.mRefCountedFramebufferDesc;
+    other.mRefCountedFramebufferDesc = nullptr;
+}
+
+FramebufferCacheRef::~FramebufferCacheRef()
+{
+    ASSERT(mRefCountedFramebufferDesc == nullptr);
+}
+
+void FramebufferCacheRef::destroy(ContextVk *contextVk)
+{
+    ASSERT(mRefCountedFramebufferDesc != nullptr);
+
+    // This should release one reference of mRefCountedFramebufferAndDesc and delete the storage if
+    // this is the last reference.
+    mRefCountedFramebufferDesc->releaseRef(contextVk);
+    if (mRefCountedFramebufferDesc->isLastReference())
+    {
+        // Destroy if this is last reference
+        SafeDelete(mRefCountedFramebufferDesc);
+    }
+
+    mRefCountedFramebufferDesc = nullptr;
+}
+
 // YcbcrConversionDesc implementation
 YcbcrConversionDesc::YcbcrConversionDesc()
 {
@@ -5288,6 +5378,56 @@ void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *
     mDesc.updateDescriptorSet(updateBuilder, mHandles.data(), descriptorSet);
 }
 }  // namespace vk
+
+// FramebufferCache implementation.
+void FramebufferCache::destroy(RendererVk *rendererVk)
+{
+    rendererVk->accumulateCacheStats(VulkanCacheType::Framebuffer, mCacheStats);
+    mPayload.clear();
+}
+
+bool FramebufferCache::get(ContextVk *contextVk,
+                           const vk::FramebufferDesc &desc,
+                           vk::FramebufferHelper **framebufferHelperOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *framebufferHelperOut = &iter->second;
+        mCacheStats.hit();
+        return true;
+    }
+
+    mCacheStats.miss();
+    return false;
+}
+
+void FramebufferCache::insert(const vk::FramebufferDesc &desc,
+                              vk::FramebufferHelper &&framebufferHelper)
+{
+    mPayload.emplace(desc, std::move(framebufferHelper));
+}
+
+void FramebufferCache::erase(ContextVk *contextVk, const vk::FramebufferDesc &desc)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        vk::FramebufferHelper &tmpFB = iter->second;
+        tmpFB.release(contextVk);
+        mPayload.erase(desc);
+    }
+}
+
+void FramebufferCache::clear(ContextVk *contextVk)
+{
+    for (auto &entry : mPayload)
+    {
+        vk::FramebufferHelper &tmpFB = entry.second;
+        tmpFB.release(contextVk);
+    }
+    mPayload.clear();
+}
 
 // RenderPassCache implementation.
 RenderPassCache::RenderPassCache() = default;
