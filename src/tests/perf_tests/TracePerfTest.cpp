@@ -1221,6 +1221,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
             skipTest("http://anglebug.com/7173 Fails on Intel HD 630 Mobile");
         }
 
+        if (IsNVIDIA())
+        {
+            skipTest("http://anglebug.com/7125 Renders incorrectly on NVIDIA");
+        }
+
         addExtensionPrerequisite("GL_EXT_geometry_shader");
         addExtensionPrerequisite("GL_EXT_primitive_bounding_box");
         addExtensionPrerequisite("GL_EXT_tessellation_shader");
