@@ -24,6 +24,12 @@
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 
+// TODO: Remove the following temporary INFO macro and use
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 namespace vk
@@ -7834,23 +7840,31 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             // The updates were holding gl::LevelIndex values so that they would not need
             // modification when the base level of the texture changes.  Now that the update is
             // about to take effect, we need to change miplevel to LevelIndex.
+            INFO("%s(): GOT TO HERE 3", __FUNCTION__);
             if (IsClear(update.updateSource))
             {
+                INFO("%s(): GOT TO HERE 3a", __FUNCTION__);
                 update.data.clear.levelIndex = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Buffer)
             {
+                INFO("%s(): GOT TO HERE 3b: update.data.buffer.formatID = %d, mActualFormatID = %d",
+                     __FUNCTION__, update.data.buffer.formatID, mActualFormatID);
                 if (update.data.buffer.formatID != mActualFormatID)
                 {
+                    INFO("%s(): GOT TO HERE 3ba.1", __FUNCTION__);
                     // TODD: http://anglebug.com/6368, we should handle this in higher level code.
                     // If we have incompatible updates, skip but keep it.
                     updatesToKeep.emplace_back(std::move(update));
+                    INFO("%s(): GOT TO HERE 3ba.2", __FUNCTION__);
                     continue;
                 }
+                INFO("%s(): GOT TO HERE 3bb", __FUNCTION__);
                 update.data.buffer.copyRegion.imageSubresource.mipLevel = updateMipLevelVk.get();
             }
             else if (update.updateSource == UpdateSource::Image)
             {
+                INFO("%s(): GOT TO HERE 3c", __FUNCTION__);
                 if (update.data.image.formatID != mActualFormatID)
                 {
                     // If we have incompatible updates, skip but keep it.

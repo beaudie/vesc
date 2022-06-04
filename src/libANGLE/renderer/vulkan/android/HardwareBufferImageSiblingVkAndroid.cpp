@@ -16,6 +16,12 @@
 #include "libANGLE/renderer/vulkan/android/AHBFunctions.h"
 #include "libANGLE/renderer/vulkan/android/DisplayVkAndroid.h"
 
+// TODO: Remove the following temporary INFO macro and use
+#include <android/log.h>
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 namespace rx
 {
 
@@ -133,7 +139,9 @@ gl::TextureType AhbDescUsageToTextureType(const AHardwareBuffer_Desc &ahbDescrip
 }
 }  // namespace
 
-HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClientBuffer buffer)
+HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(
+    EGLClientBuffer buffer,
+    const egl::AttributeMap &attribs)
     : mBuffer(buffer),
       mFormat(GL_NONE),
       mRenderable(false),
@@ -142,7 +150,8 @@ HardwareBufferImageSiblingVkAndroid::HardwareBufferImageSiblingVkAndroid(EGLClie
       mLevelCount(0),
       mUsage(0),
       mSamples(0),
-      mImage(nullptr)
+      mImage(nullptr),
+      mAttribs(attribs)
 {}
 
 HardwareBufferImageSiblingVkAndroid::~HardwareBufferImageSiblingVkAndroid() {}
@@ -236,8 +245,32 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     int pixelFormat = 0;
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
                                                      &mSize.depth, &pixelFormat, &mUsage);
+    // For ImageTestES3.RGBXAHBUploadDataColorspace/ES3_Vulkan, pixelFormat = 2
+    INFO("%s(): GOT TO HERE 2.1: pixelFormat = %d = 0x%x", __FUNCTION__, pixelFormat, pixelFormat);
     GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
-    mFormat               = gl::Format(internalFormat);
+    // For ImageTestES3.RGBXAHBUploadDataColorspace/ES3_Vulkan, internalFormat = 0x8051
+    // (i.e. GL_RGB8)
+    INFO("%s(): GOT TO HERE 2.2: internalFormat = 0x%x", __FUNCTION__, internalFormat);
+    // This work-around was suggested by natsu@, though ianelliott@ got different results
+    if (mAttribs.contains(EGL_GL_COLORSPACE) &&
+        mAttribs.get(EGL_GL_COLORSPACE) == EGL_GL_COLORSPACE_SRGB)
+    {
+        if (internalFormat == GL_RGB8)
+        {
+            // For ImageTestES3.RGBXAHBUploadDataColorspace/ES3_Vulkan, internalFormat = 0x8c43
+            // (i.e. GL_SRGB8_ALPHA8).  This seems like what natsu@ desired when it started as
+            // GL_RGBA8.  This causes the test to fail worse than normal (doesn't get the linear
+            // values), and then to crash on Pixel 4XL.  Note: all ImageTestES3.RGBXAHB* tests fail
+            // on Pixel6
+            internalFormat = GL_SRGB8_ALPHA8;
+        }
+        else if (internalFormat == GL_RGBA8)
+        {
+            internalFormat = GL_SRGB8_ALPHA8;
+        }
+    }
+    INFO("%s(): GOT TO HERE 2.3: internalFormat = 0x%x", __FUNCTION__, internalFormat);
+    mFormat = gl::Format(internalFormat);
 
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);

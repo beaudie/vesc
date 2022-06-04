@@ -13,6 +13,11 @@
 #include <android/native_window.h>
 #include <vulkan/vulkan.h>
 
+// TODO: Remove the following temporary INFO macro and use
+#include <unistd.h>
+#undef INFO
+#define INFO(...) __android_log_print(ANDROID_LOG_INFO, "ANGLE", __VA_ARGS__)
+
 #include "common/angle_version_info.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
@@ -150,13 +155,16 @@ egl::Error DisplayVkAndroid::validateImageClientBuffer(const gl::Context *contex
                                                        EGLClientBuffer clientBuffer,
                                                        const egl::AttributeMap &attribs) const
 {
+    INFO("%s(): GOT TO HERE 1", __FUNCTION__);
     switch (target)
     {
         case EGL_NATIVE_BUFFER_ANDROID:
+            INFO("%s(): GOT TO HERE 1a", __FUNCTION__);
             return HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(
                 mRenderer, clientBuffer, attribs);
 
         default:
+            INFO("%s(): GOT TO HERE 1b", __FUNCTION__);
             return DisplayVk::validateImageClientBuffer(context, target, clientBuffer, attribs);
     }
 }
@@ -170,7 +178,12 @@ ExternalImageSiblingImpl *DisplayVkAndroid::createExternalImageSibling(
     switch (target)
     {
         case EGL_NATIVE_BUFFER_ANDROID:
+#ifdef OLD_CODE
             return new HardwareBufferImageSiblingVkAndroid(buffer);
+#else   // OLD_CODE
+        // This is part of a work-around suggested by natsu@
+            return new HardwareBufferImageSiblingVkAndroid(buffer, attribs);
+#endif  // OLD_CODE
 
         default:
             return DisplayVk::createExternalImageSibling(context, target, buffer, attribs);
