@@ -16,6 +16,23 @@
       "message": "This disables some workarounds we had added for Qualcomm on Turnip. I\u0027ll leave this here for you to test. Let me know if any of these workarounds needs to continue to be enabled.",
       "revId": "a0b6f727dc873bc860ab8bae2fa7f26164c632a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec706ad_ab7fe574",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-04T04:22:08Z",
+      "side": 1,
+      "message": "Folks working on Turnip might prefer this to condition on having substr `Turnip`, as they are running Arch Linux on Chromebook with ANGLE on native Turnip driver without venus.",
+      "revId": "a0b6f727dc873bc860ab8bae2fa7f26164c632a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
