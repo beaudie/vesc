@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9ea2ca4_34442613",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-04T00:09:40Z",
+      "side": 1,
+      "message": "This CL is totally WIP!\n\nI\u0027m trying to spin up on the practicalities of AHB and ANGLE.  I tried to replicate the work-around that Jason discussed in the bug.  I tried on Pixel 4XL (on which the existing tests pass; they all fail on Pixel 6).  There\u0027s a lot of complications involved, that I don\u0027t pretend to understand (thus making Jason and Yiwei reviewers).",
+      "revId": "f3168b49683f1535c0d809014cdd7572308e7f76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
