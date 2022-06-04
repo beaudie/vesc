@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b86a05e_fc200d89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-04T02:19:18Z",
+      "side": 1,
+      "message": "This disables some workarounds we had added for Qualcomm on Turnip. I\u0027ll leave this here for you to test. Let me know if any of these workarounds needs to continue to be enabled.",
+      "revId": "a0b6f727dc873bc860ab8bae2fa7f26164c632a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
