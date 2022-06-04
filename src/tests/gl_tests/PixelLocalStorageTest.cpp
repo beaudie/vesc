@@ -484,12 +484,12 @@ struct ReadPixelsArgs<uint32_t>
 #define ASSERT_FRAMEBUFFER_PIXELS(T, r, g, b, a) \
     ASSERT_FRAMEBUFFER_PIXEL_RECT(T, 0, 0, W, H, r, g, b, a)
 
-class PixelLocalTexture
+class PLSTestTexture
 {
   public:
-    PixelLocalTexture(GLenum internalformat) { reset(internalformat); }
-    PixelLocalTexture(GLenum internalformat, int w, int h) { reset(internalformat, w, h); }
-    PixelLocalTexture(PixelLocalTexture &&that) : mID(std::exchange(that.mID, 0)) {}
+    PLSTestTexture(GLenum internalformat) { reset(internalformat); }
+    PLSTestTexture(GLenum internalformat, int w, int h) { reset(internalformat, w, h); }
+    PLSTestTexture(PLSTestTexture &&that) : mID(std::exchange(that.mID, 0)) {}
     void reset(GLenum internalformat) { reset(internalformat, W, H); }
     void reset(GLenum internalformat, int w, int h)
     {
@@ -505,7 +505,7 @@ class PixelLocalTexture
         }
         mID = id;
     }
-    ~PixelLocalTexture()
+    ~PLSTestTexture()
     {
         if (mID)
         {
@@ -515,9 +515,9 @@ class PixelLocalTexture
     operator GLuint() const { return mID; }
 
   private:
-    PixelLocalTexture &operator=(const PixelLocalTexture &) = delete;
-    PixelLocalTexture(const PixelLocalTexture &)            = delete;
-    GLuint mID                                              = 0;
+    PLSTestTexture &operator=(const PLSTestTexture &) = delete;
+    PLSTestTexture(const PLSTestTexture &)            = delete;
+    GLuint mID                                        = 0;
 };
 
 class PixelLocalStorageTest : public ANGLETest
@@ -561,6 +561,11 @@ class PixelLocalStorageTest : public ANGLETest
         }
 
         return true;
+    }
+
+    bool supportsPixelLocalStorageCoherent()
+    {
+        return false;  // ES 3.1 shader images can't be coherent.
     }
 
     // anglebug.com/7398: imageLoad() eventually starts failing. A workaround is to delete and
@@ -672,20 +677,43 @@ class PixelLocalStorageTest : public ANGLETest
         float4 aux2;
     };
 
-    void drawBoxes(PixelLocalStoragePrototype &pls, std::vector<Box> boxes)
+    enum class UseBarriers : bool
     {
-        for (const auto &box : boxes)
+        No = false,
+        IfNotCoherent
+    };
+
+    void drawBoxes(PixelLocalStoragePrototype &pls,
+                   std::vector<Box> boxes,
+                   UseBarriers useBarriers = UseBarriers::IfNotCoherent)
+    {
+        if (!supportsPixelLocalStorageCoherent() && useBarriers == UseBarriers::IfNotCoherent)
+        {
+            for (const auto &box : boxes)
+            {
+                glVertexAttribPointer(mLTRBLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.ltrb.data());
+                glVertexAttribPointer(mRGBALocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.color.data());
+                glVertexAttribPointer(mAux1Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.aux1.data());
+                glVertexAttribPointer(mAux2Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.aux2.data());
+                glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 1);
+                glPixelLocalStorageBarrierANGLE();
+            }
+        }
+        else
         {
             glVertexAttribPointer(mLTRBLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.ltrb.data());
+                                  boxes[0].ltrb.data());
             glVertexAttribPointer(mRGBALocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.color.data());
+                                  boxes[0].color.data());
             glVertexAttribPointer(mAux1Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.aux1.data());
+                                  boxes[0].aux1.data());
             glVertexAttribPointer(mAux2Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.aux2.data());
-            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 1);
-            glPixelLocalStorageBarrierANGLE();
+                                  boxes[0].aux2.data());
+            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, boxes.size());
         }
     }
 
@@ -729,9 +757,9 @@ TEST_P(PixelLocalStorageTest, AllFormats)
             pixelLocalStore(plane3, uvec4(aux2) + pixelLocalLoad(plane3));
         })");
 
-        PixelLocalTexture tex1(GL_RGBA8);
-        PixelLocalTexture tex2(GL_RGBA8I);
-        PixelLocalTexture tex3(GL_RGBA8UI);
+        PLSTestTexture tex1(GL_RGBA8);
+        PLSTestTexture tex2(GL_RGBA8I);
+        PLSTestTexture tex3(GL_RGBA8UI);
 
         GLFramebuffer fbo;
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -775,8 +803,8 @@ TEST_P(PixelLocalStorageTest, AllFormats)
             pixelLocalStore(plane2, uvec4(aux1) + pixelLocalLoad(plane2));
         })");
 
-        PixelLocalTexture tex1(GL_R32F);
-        PixelLocalTexture tex2(GL_R32UI);
+        PLSTestTexture tex1(GL_R32F);
+        PLSTestTexture tex2(GL_R32UI);
 
         GLFramebuffer fbo;
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -818,9 +846,9 @@ TEST_P(PixelLocalStorageTest, AllFormats)
             pixelLocalStore(plane3, uvec4(aux2) + pixelLocalLoad(plane3));
         })");
 
-        PixelLocalTexture tex1(GL_RGBA16F);
-        PixelLocalTexture tex2(GL_RGBA16I);
-        PixelLocalTexture tex3(GL_RGBA16UI);
+        PLSTestTexture tex1(GL_RGBA16F);
+        PLSTestTexture tex2(GL_RGBA16I);
+        PLSTestTexture tex3(GL_RGBA16UI);
 
         GLFramebuffer fbo;
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -864,8 +892,8 @@ TEST_P(PixelLocalStorageTest, AllFormats)
             pixelLocalStore(plane2, uvec4(aux1) + pixelLocalLoad(plane2));
         })");
 
-        PixelLocalTexture tex1(GL_RGBA32F);
-        PixelLocalTexture tex2(GL_RGBA32UI);
+        PLSTestTexture tex1(GL_RGBA32F);
+        PLSTestTexture tex2(GL_RGBA32UI);
 
         GLFramebuffer fbo;
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -906,9 +934,9 @@ TEST_P(PixelLocalStorageTest, ClearValue)
     glScissor(0, 0, 1, 1);
     glClearColor(.1f, .2f, .3f, .4f);
 
-    PixelLocalTexture texf(GL_RGBA8);
-    PixelLocalTexture texi(GL_RGBA16I);
-    PixelLocalTexture texui(GL_RGBA16UI);
+    PLSTestTexture texf(GL_RGBA8);
+    PLSTestTexture texi(GL_RGBA16I);
+    PLSTestTexture texui(GL_RGBA16UI);
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -1032,7 +1060,7 @@ TEST_P(PixelLocalStorageTest, LoadOps)
 
     // Create pls textures and clear them to red.
     glClearColor(1, 0, 0, 1);
-    std::vector<PixelLocalTexture> texs;
+    std::vector<PLSTestTexture> texs;
     for (int i = 0; i < MAX_LOCAL_STORAGE_PLANES; ++i)
     {
         texs.emplace_back(GL_RGBA8);
@@ -1148,7 +1176,7 @@ TEST_P(PixelLocalStorageTest, FragmentReject)
 
     PixelLocalStoragePrototype pls;
 
-    PixelLocalTexture tex(GL_RGBA8);
+    PLSTestTexture tex(GL_RGBA8);
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -1326,6 +1354,124 @@ TEST_P(PixelLocalStorageTest, FragmentReject)
 #undef CHECK_TEX
 #undef DRAW_H
 #undef DRAW_W
+}
+
+// Check that results are only nondeterministic within predictable constraints, and that no data is
+// random or leaked from other contexts when we forget to insert a barrier.
+TEST_P(PixelLocalStorageTest, ForgetBarrier)
+{
+    ANGLE_SKIP_TEST_IF(!supportsPixelLocalStorage());
+
+    PixelLocalStoragePrototype pls;
+
+    useProgram(R"(
+    PIXEL_LOCAL_DECL_UI(framebuffer, binding=0, r32ui);
+    void main() {
+        uvec4 dst = pixelLocalLoad(framebuffer);
+        pixelLocalStore(framebuffer, uvec4(color) + dst * 2u);
+    })");
+
+    // Draw r=100, one pixel at a time, in random order.
+    constexpr static int NUM_PIXELS = H * W;
+    std::vector<Box> boxesA_100;
+    int pixelIdx = 0;
+    for (int i = 0; i < NUM_PIXELS; ++i)
+    {
+        int iy  = pixelIdx / W;
+        float y = iy;
+        int ix  = pixelIdx % W;
+        float x = ix;
+        pixelIdx =
+            (pixelIdx + 69484171) % NUM_PIXELS;  // Prime numbers guarantee we hit every pixel once.
+        boxesA_100.push_back(Box{{x, y, x + 1, y + 1}, {100, 0, 0, 0}});
+    }
+
+    // Draw r=7, one pixel at a time, in random order.
+    std::vector<Box> boxesB_7;
+    for (int i = 0; i < NUM_PIXELS; ++i)
+    {
+        int iy  = pixelIdx / W;
+        float y = iy;
+        int ix  = pixelIdx % W;
+        float x = ix;
+        pixelIdx =
+            (pixelIdx + 97422697) % NUM_PIXELS;  // Prime numbers guarantee we hit every pixel once.
+        boxesB_7.push_back(Box{{x, y, x + 1, y + 1}, {7, 0, 0, 0}});
+    }
+
+    PLSTestTexture tex(GL_R32UI);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_R32UI);
+    glFramebufferPixelLocalClearValueuivANGLE(0, MakeArray<uint32_t>({1, 0, 0, 0}));
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+    // First make sure it works properly with a barrier.
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, boxesA_100, UseBarriers::No);
+    glPixelLocalStorageBarrierANGLE();
+    drawBoxes(pls, boxesB_7, UseBarriers::No);
+    glEndPixelLocalStorageANGLE();
+
+    attachTextureToScratchFBO(tex);
+    ASSERT_FRAMEBUFFER_PIXELS(uint32_t, 211, 0, 0, 1);
+
+    ASSERT_GL_NO_ERROR();
+
+    if (IsVulkan())
+    {
+        // Vulkan generates rightful "SYNC-HAZARD-READ_AFTER_WRITE" validation errors when we omit
+        // the barrier.
+        return;
+    }
+
+    // Now forget to insert the barrier and ensure our nondeterminism still falls within predictable
+    // constraints.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    if (hasANGLEBug7398())  // anglebug.com/7398
+    {
+        tex.reset(GL_R32UI);
+        glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_R32UI);
+    }
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, boxesA_100, UseBarriers::No);
+    // OOPS! We forgot to insert a barrier!
+    drawBoxes(pls, boxesB_7, UseBarriers::No);
+    glEndPixelLocalStorageANGLE();
+
+    uint32_t pixels[H * W * 4];
+    attachTextureToScratchFBO(tex);
+    glReadPixels(0, 0, W, H, GL_RGBA_INTEGER, GL_UNSIGNED_INT, pixels);
+    for (int r = 0; r < NUM_PIXELS * 4; r += 4)
+    {
+        // When two fragments, A and B, touch a pixel, there are 6 possible orderings of operations:
+        //
+        //   * Read A, Write A, Read B, Write B
+        //   * Read B, Write B, Read A, Write A
+        //   * Read A, Read B, Write A, Write B
+        //   * Read A, Read B, Write B, Write A
+        //   * Read B, Read A, Write B, Write A
+        //   * Read B, Read A, Write A, Write B
+        //
+        // Which (assumimg the read and/or write operations themselves are atomic), is equivalent to
+        // 1 of 4 potential effects:
+        bool isAcceptableValue = pixels[r] == 211 ||  // A, then B  (  7 + (100 + 1 * 2) * 2 == 211)
+                                 pixels[r] == 118 ||  // B, then A  (100 + (  7 + 1 * 2) * 2 == 118)
+                                 pixels[r] == 102 ||  // A only     (100 +             1 * 2 == 102)
+                                 pixels[r] == 9;
+        if (!isAcceptableValue)
+        {
+            printf(__FILE__ "(%i): UNACCEPTABLE value at pixel location [%i, %i]\n", __LINE__,
+                   (r / 4) % W, (r / 4) / W);
+            printf("              Got: %u\n", pixels[r]);
+            printf("  Expected one of: { 211, 118, 102, 9 }\n");
+        }
+        ASSERT_TRUE(isAcceptableValue);
+    }
+
+    ASSERT_GL_NO_ERROR();
 }
 
 ANGLE_INSTANTIATE_TEST_ES31(PixelLocalStorageTest);
