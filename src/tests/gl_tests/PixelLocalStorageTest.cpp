@@ -530,6 +530,11 @@ class PixelLocalStorageTest : public ANGLETest
         return true;
     }
 
+    bool supportsCoherentPixelLocalStorage()
+    {
+        return false;  // ES 3.1 shader images can't be coherent.
+    }
+
     void useProgram(std::string fsMain)
     {
         // Replace: PIXEL_LOCAL_DECL(name, ...) -> PIXEL_LOCAL_DECL_IMPL(name_R, name_W, ...)
@@ -632,20 +637,43 @@ class PixelLocalStorageTest : public ANGLETest
         float4 aux2;
     };
 
-    void drawBoxes(PixelLocalStoragePrototype &pls, std::vector<Box> boxes)
+    enum class UseBarriers : bool
     {
-        for (const auto &box : boxes)
+        No = false,
+        IfNoncoherent
+    };
+
+    void drawBoxes(PixelLocalStoragePrototype &pls,
+                   std::vector<Box> boxes,
+                   UseBarriers useBarriers = UseBarriers::IfNoncoherent)
+    {
+        if (!supportsCoherentPixelLocalStorage() && useBarriers == UseBarriers::IfNoncoherent)
+        {
+            for (const auto &box : boxes)
+            {
+                glVertexAttribPointer(mLTRBLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.ltrb.data());
+                glVertexAttribPointer(mRGBALocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.color.data());
+                glVertexAttribPointer(mAux1Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.aux1.data());
+                glVertexAttribPointer(mAux2Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
+                                      box.aux2.data());
+                glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 1);
+                glPixelLocalStorageBarrierANGLE();
+            }
+        }
+        else
         {
             glVertexAttribPointer(mLTRBLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.ltrb.data());
+                                  boxes[0].ltrb.data());
             glVertexAttribPointer(mRGBALocation, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.color.data());
+                                  boxes[0].color.data());
             glVertexAttribPointer(mAux1Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.aux1.data());
+                                  boxes[0].aux1.data());
             glVertexAttribPointer(mAux2Location, 4, GL_FLOAT, GL_FALSE, sizeof(Box),
-                                  box.aux2.data());
-            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 1);
-            glPixelLocalStorageBarrierANGLE();
+                                  boxes[0].aux2.data());
+            glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, boxes.size());
         }
     }
 
@@ -1072,6 +1100,121 @@ TEST_P(PixelLocalStorageTest, LoadOps)
     glClear(GL_COLOR_BUFFER_BIT);
     ExpectFramebufferPixels<uint8_t>(0, 0, 20, H, {255, 0, 0, 255});
     ExpectFramebufferPixels<uint8_t>(20, 0, W, H, {0, 0, 0, 0});
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Check that results are only nondeterministic within predictable constraints, and that no data is
+// random or leaked from other contexts when we forget to insert a barrier.
+TEST_P(PixelLocalStorageTest, ForgetBarrier)
+{
+    ANGLE_SKIP_TEST_IF(!supportsPixelLocalStorage());
+
+    PixelLocalStoragePrototype pls;
+
+    useProgram(R"(
+    PIXEL_LOCAL_DECL_UI(framebuffer, binding=0, r32ui);
+    void main() {
+        uvec4 dst = pixelLocalLoad(framebuffer);
+        pixelLocalStore(framebuffer, uvec4(color) + dst * 2u);
+    })");
+
+    // Draw r=100, one pixel at a time, in random order.
+    constexpr static int NUM_PIXELS = H * W;
+    std::vector<Box> boxesA_100;
+    int pixelIdx = 0;
+    for (int i = 0; i < NUM_PIXELS; ++i)
+    {
+        int iy  = pixelIdx / W;
+        float y = iy;
+        int ix  = pixelIdx % W;
+        float x = ix;
+        pixelIdx =
+            (pixelIdx + 69484171) % NUM_PIXELS;  // Prime numbers guarantee we hit every pixel once.
+        boxesA_100.push_back(Box{{x, y, x + 1, y + 1}, {100, 0, 0, 0}});
+    }
+
+    // Draw r=1, one pixel at a time, in random order.
+    std::vector<Box> boxesB_7;
+    for (int i = 0; i < NUM_PIXELS; ++i)
+    {
+        int iy  = pixelIdx / W;
+        float y = iy;
+        int ix  = pixelIdx % W;
+        float x = ix;
+        pixelIdx =
+            (pixelIdx + 97422697) % NUM_PIXELS;  // Prime numbers guarantee we hit every pixel once.
+        boxesB_7.push_back(Box{{x, y, x + 1, y + 1}, {7, 0, 0, 0}});
+    }
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, W, H);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_R32UI);
+    glFramebufferPixelLocalClearValueuivANGLE(0, MakeArray<uint32_t>({1, 0, 0, 0}));
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+    // First make sure it works properly with a barrier.
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, boxesA_100, UseBarriers::No);
+    glPixelLocalStorageBarrierANGLE();
+    drawBoxes(pls, boxesB_7, UseBarriers::No);
+    glEndPixelLocalStorageANGLE();
+
+    attachTextureToScratchFBO(tex);
+    ExpectFramebufferPixels<uint32_t>({211, 0, 0, 1});
+
+    ASSERT_GL_NO_ERROR();
+
+    if (IsVulkan())
+    {
+        // Vulkan generates rightful "SYNC-HAZARD-READ_AFTER_WRITE" validation errors when we omit
+        // the barrier.
+        return;
+    }
+
+    // Now forget to insert the barrier and ensure our nondeterminism still falls within predictable
+    // constraints.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, boxesA_100, UseBarriers::No);
+    // OOPS! We forgot to insert a barrier!
+    drawBoxes(pls, boxesB_7, UseBarriers::No);
+    glEndPixelLocalStorageANGLE();
+
+    uint32_t pixels[H * W * 4];
+    attachTextureToScratchFBO(tex);
+    glReadPixels(0, 0, W, H, GL_RGBA_INTEGER, GL_UNSIGNED_INT, pixels);
+    bool success = true;
+    for (int r = 0; r < NUM_PIXELS * 4; r += 4)
+    {
+        // When two fragments, A and B, touch a pixel, there are 6 possible orderings of operations:
+        //
+        //   * Read A, Write A, Read B, Write B
+        //   * Read B, Write B, Read A, Write A
+        //   * Read A, Read B, Write A, Write B
+        //   * Read A, Read B, Write B, Write A
+        //   * Read B, Read A, Write B, Write A
+        //   * Read B, Read A, Write A, Write B
+        //
+        // Which (assumimg the read and/or write operations themselves are atomic), is equivalent to
+        // 1 of 4 potential effects:
+        bool isAcceptableValue = pixels[r] == 211 ||  // A, then B  (  7 + (100 + 1 * 2) * 2 == 211)
+                                 pixels[r] == 118 ||  // B, then A  (100 + (  7 + 1 * 2) * 2 == 118)
+                                 pixels[r] == 102 ||  // A only     (100 +             1 * 2 == 102)
+                                 pixels[r] == 9;      // B only     (  7 +             1 * 2 ==   9)
+        // ASSERT_TRUE(isAcceptableValue);
+        if (!isAcceptableValue)
+        {
+            printf("@@@@@ UNACCEPTABLE VALUE @[%i %i]: %u\n", (r / 4) % W, (r / 4) / W, pixels[r]);
+            success = false;
+        }
+    }
+    ASSERT_TRUE(success);
 
     ASSERT_GL_NO_ERROR();
 }
