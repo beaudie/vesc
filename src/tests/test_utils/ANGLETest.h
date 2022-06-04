@@ -160,22 +160,19 @@ struct GLColor
     static const GLColor magenta;
 };
 
-struct GLColor16UI
+template <typename T>
+struct GLColorT
 {
-    constexpr GLColor16UI() : GLColor16UI(0, 0, 0, 0) {}
-    constexpr GLColor16UI(GLushort r, GLushort g, GLushort b, GLushort a) : R(r), G(g), B(b), A(a)
-    {}
+    constexpr GLColorT() : GLColorT(0, 0, 0, 0) {}
+    constexpr GLColorT(T r, T g, T b, T a) : R(r), G(g), B(b), A(a) {}
 
-    GLushort R, G, B, A;
+    T R, G, B, A;
 };
 
-struct GLColor32F
-{
-    constexpr GLColor32F() : GLColor32F(0.0f, 0.0f, 0.0f, 0.0f) {}
-    constexpr GLColor32F(GLfloat r, GLfloat g, GLfloat b, GLfloat a) : R(r), G(g), B(b), A(a) {}
-
-    GLfloat R, G, B, A;
-};
+using GLColor16UI = GLColorT<uint16_t>;
+using GLColor32F  = GLColorT<float>;
+using GLColor32I  = GLColorT<int32_t>;
+using GLColor32UI = GLColorT<uint32_t>;
 
 static constexpr GLColor32F kFloatBlack = {0.0f, 0.0f, 0.0f, 1.0f};
 static constexpr GLColor32F kFloatRed   = {1.0f, 0.0f, 0.0f, 1.0f};
@@ -217,7 +214,12 @@ GLColor32F MakeGLColor32F(TR r, TG g, TB b, TA a)
                       static_cast<GLfloat>(a));
 }
 
-bool operator==(const GLColor32F &a, const GLColor32F &b);
+template <typename T>
+bool operator==(const GLColorT<T> &a, const GLColorT<T> &b)
+{
+    return a.R == b.R && a.G == b.G && a.B == b.B && a.A == b.A;
+}
+
 std::ostream &operator<<(std::ostream &ostream, const GLColor32F &color);
 GLColor32F ReadColor32F(GLint x, GLint y);
 
@@ -227,6 +229,34 @@ constexpr std::array<GLenum, 6> kCubeFaces = {
      GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}};
 
 void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driver);
+
+template <typename U>
+struct ReadPixelsArgs
+{};
+template <>
+struct ReadPixelsArgs<GLColor>
+{
+    constexpr static GLenum format = GL_RGBA;
+    constexpr static GLenum type   = GL_UNSIGNED_BYTE;
+};
+template <>
+struct ReadPixelsArgs<GLColor32F>
+{
+    constexpr static GLenum format = GL_RGBA;
+    constexpr static GLenum type   = GL_FLOAT;
+};
+template <>
+struct ReadPixelsArgs<GLColor32I>
+{
+    constexpr static GLenum format = GL_RGBA_INTEGER;
+    constexpr static GLenum type   = GL_INT;
+};
+template <>
+struct ReadPixelsArgs<GLColor32UI>
+{
+    constexpr static GLenum format = GL_RGBA_INTEGER;
+    constexpr static GLenum type   = GL_UNSIGNED_INT;
+};
 
 }  // namespace angle
 
@@ -250,14 +280,27 @@ void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driver);
 
 #define EXPECT_PIXEL_COLOR32F_EQ(x, y, angleColor) EXPECT_EQ(angleColor, angle::ReadColor32F(x, y))
 
-#define EXPECT_PIXEL_RECT_EQ(x, y, width, height, color)                                           \
-    do                                                                                             \
-    {                                                                                              \
-        std::vector<GLColor> actualColors((width) * (height));                                     \
-        glReadPixels((x), (y), (width), (height), GL_RGBA, GL_UNSIGNED_BYTE, actualColors.data()); \
-        std::vector<GLColor> expectedColors((width) * (height), color);                            \
-        EXPECT_EQ(expectedColors, actualColors);                                                   \
+#define EXPECT_PIXEL_RECT_T_EQ(T, x, y, width, height, color)                \
+    do                                                                       \
+    {                                                                        \
+        std::vector<T> actualColors((width) * (height));                     \
+        glReadPixels((x), (y), (width), (height), ReadPixelsArgs<T>::format, \
+                     ReadPixelsArgs<T>::type, actualColors.data());          \
+        std::vector<T> expectedColors((width) * (height), color);            \
+        EXPECT_EQ(expectedColors, actualColors);                             \
     } while (0)
+
+#define EXPECT_PIXEL_RECT_EQ(x, y, width, height, color) \
+    EXPECT_PIXEL_RECT_T_EQ(GLColor, x, y, width, height, color)
+
+#define EXPECT_PIXEL_RECT32F_EQ(x, y, width, height, color) \
+    EXPECT_PIXEL_RECT_T_EQ(GLColor32F, x, y, width, height, color)
+
+#define EXPECT_PIXEL_RECT32I_EQ(x, y, width, height, color) \
+    EXPECT_PIXEL_RECT_T_EQ(GLColor32I, x, y, width, height, color)
+
+#define EXPECT_PIXEL_RECT32UI_EQ(x, y, width, height, color) \
+    EXPECT_PIXEL_RECT_T_EQ(GLColor32UI, x, y, width, height, color)
 
 #define EXPECT_PIXEL_NEAR_HELPER(x, y, r, g, b, a, abs_error, ctype, format, type) \
     do                                                                             \
