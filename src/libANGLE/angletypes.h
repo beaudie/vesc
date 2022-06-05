@@ -203,6 +203,8 @@ struct Box
     // Whether the Box has offset 0 and the same extents as argument.
     bool coversSameExtent(const Extents &size) const;
 
+    bool contains(const Box &other) const;
+
     int x;
     int y;
     int z;

@@ -172,6 +172,7 @@ enum class Feature
     PreferSubmitAtFBOBoundary,
     PromotePackedFormatsTo8BitPerChannel,
     ProvokingVertex,
+    PruneSupersededStagedUpdates,
     QueryCounterBitsGeneratesErrors,
     ReadPixelsUsingImplementationColorReadFormatForNorm16,
     ReapplyUBOBindingsAfterUsingBinaryProgram,

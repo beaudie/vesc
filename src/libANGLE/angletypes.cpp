@@ -862,6 +862,12 @@ bool Box::coversSameExtent(const Extents &size) const
            depth == size.depth;
 }
 
+bool Box::contains(const Box &other) const
+{
+    return x <= other.x && y <= other.y && z <= other.z && width >= other.width &&
+           height >= other.height && depth >= other.depth;
+}
+
 bool operator==(const Offset &a, const Offset &b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z;

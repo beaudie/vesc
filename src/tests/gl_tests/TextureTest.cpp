@@ -10664,6 +10664,42 @@ TEST_P(ExtraSamplerCubeShadowUseTest, Basic)
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 }
 
+class Texture2DSupersededUpdatesTest : public Texture2DTest
+{};
+
+// Test that repeated calls to glTexSubImage2D with superseding updates works
+TEST_P(Texture2DSupersededUpdatesTest, ManySupersedingTextureUpdates)
+{
+    constexpr uint32_t kTexWidth  = 3840;
+    constexpr uint32_t kTexHeight = 2160;
+    constexpr uint32_t kBpp       = 4;
+    std::vector<GLubyte> data(kTexWidth * kTexHeight * kBpp, 0);
+
+    // Create the texture
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTexWidth, kTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 nullptr);
+    EXPECT_GL_ERROR(GL_NO_ERROR);
+
+    // Make a large number of superseding updates
+    for (uint32_t width = kTexWidth / 2, height = kTexHeight / 2;
+         width < kTexWidth && height < kTexHeight; width++, height++)
+    {
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
+                        data.data());
+    }
+
+    setUpProgram();
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 #define ES2_EMULATE_COPY_TEX_IMAGE()                                      \
@@ -10781,5 +10817,10 @@ ANGLE_INSTANTIATE_TEST_ES3(TextureChangeStorageUploadTest);
 ANGLE_INSTANTIATE_TEST_ES3(ExtraSamplerCubeShadowUseTest);
 
 ANGLE_INSTANTIATE_TEST_ES31(Texture2DTestES31);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(Texture2DSupersededUpdatesTest);
+ANGLE_INSTANTIATE_TEST(Texture2DSupersededUpdatesTest,
+                       ES2_VULKAN().enable(Feature::PruneSupersededStagedUpdates),
+                       ES3_VULKAN().enable(Feature::PruneSupersededStagedUpdates));
 
 }  // anonymous namespace

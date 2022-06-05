@@ -4865,6 +4865,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
+      mTotalStagedBufferUpdateSize(other.mTotalStagedBufferUpdateSize),
       mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue)),
       mContentDefined(std::move(other.mContentDefined)),
       mStencilContentDefined(std::move(other.mStencilContentDefined)),
@@ -4898,6 +4899,7 @@ void ImageHelper::resetCachedProperties()
     mFirstAllocatedLevel         = gl::LevelIndex(0);
     mLayerCount                  = 0;
     mLevelCount                  = 0;
+    mTotalStagedBufferUpdateSize = 0;
     mYcbcrConversionDesc.reset();
     mCurrentSingleClearValue.reset();
     mRenderPassUsageFlags.reset();
@@ -5284,6 +5286,7 @@ void ImageHelper::releaseStagedUpdates(RendererVk *renderer)
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
 
     mSubresourceUpdates.clear();
+    mTotalStagedBufferUpdateSize = 0;
     mCurrentSingleClearValue.reset();
 }
 
@@ -6819,6 +6822,10 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         copy.imageSubresource.aspectMask = aspectFlags;
         appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(stagingBuffer.get(), currentBuffer,
                                                                  copy, storageFormat.id));
+        if (contextVk->getFeatures().pruneSupersededStagedUpdates.enabled)
+        {
+            removeSupersededStagedUpdates(contextVk, updateLevelGL);
+        }
     }
 
     stagingBuffer.release();
@@ -7972,6 +7979,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // If no updates left, release the staging buffers to save memory.
     if (mSubresourceUpdates.empty())
     {
+        mTotalStagedBufferUpdateSize = 0;
         onStateChange(angle::SubjectMessage::InitializationComplete);
     }
 
@@ -9074,6 +9082,94 @@ const std::vector<ImageHelper::SubresourceUpdate> *ImageHelper::getLevelUpdates(
                : nullptr;
 }
 
+void ImageHelper::removeSupersededStagedUpdates(ContextVk *contextVk, const gl::LevelIndex level)
+{
+    constexpr VkDeviceSize kSubresourceUpdateSizeBeforePruning = 16 * 1024 * 1024;  // 16 MB
+    constexpr int kUpdateCountThreshold                        = 1024;
+    std::vector<ImageHelper::SubresourceUpdate> *levelUpdates  = getLevelUpdates(level);
+    int updateCount = static_cast<int>(levelUpdates->size());
+
+    // If we are below pruning threshold there is nothing to do
+    if (updateCount < kUpdateCountThreshold &&
+        mTotalStagedBufferUpdateSize < kSubresourceUpdateSizeBeforePruning)
+    {
+        return;
+    }
+
+    RendererVk *rendererVk                                 = contextVk->getRenderer();
+    using SupersededWindowMarkers                          = std::pair<size_t, size_t>;
+    std::vector<SupersededWindowMarkers> supersededUpdates = {};
+    gl::Box boundingBox(gl::kOffsetZero, gl::Extents());
+    VkDeviceSize supersededUpdateSize = 0;
+    size_t supersededUpdateBeginIndex = updateCount - 1;
+    size_t supersededUpdateEndIndex   = updateCount - 1;
+    for (int index = updateCount - 1; index >= 0; --index)
+    {
+        auto update                      = levelUpdates->begin() + index;
+        bool resetSupersededUpdateWindow = index == 0;
+
+        // Only consider updates from UpdateSource::Buffer
+        if (update->updateSource == UpdateSource::Buffer)
+        {
+            // Check if current update region supersedes the accumulated update region
+            const gl::Box currentUpdateBox = gl::Box(update->data.buffer.copyRegion.imageOffset,
+                                                     update->data.buffer.copyRegion.imageExtent);
+
+            if (boundingBox.contains(currentUpdateBox))
+            {
+                // Mark update as superseded
+                supersededUpdateBeginIndex = index;
+                // Update pruning size
+                supersededUpdateSize += update->data.buffer.bufferHelper->getSize();
+            }
+            else
+            {
+                // Reset window
+                resetSupersededUpdateWindow = true;
+                // Reset bounding box to current update's box
+                boundingBox = currentUpdateBox;
+            }
+        }
+        else
+        {
+            // Reset window
+            resetSupersededUpdateWindow = true;
+        }
+
+        if (resetSupersededUpdateWindow)
+        {
+            // Record previous superseded update window if it has 1 or more elements
+            if (supersededUpdateBeginIndex != supersededUpdateEndIndex)
+            {
+                supersededUpdates.emplace_back(
+                    SupersededWindowMarkers(supersededUpdateBeginIndex, supersededUpdateEndIndex));
+            }
+
+            // Reset indices
+            supersededUpdateBeginIndex = index;
+            supersededUpdateEndIndex   = index;
+        }
+    }
+
+    for (const SupersededWindowMarkers &beginEndPair : supersededUpdates)
+    {
+        ASSERT(levelUpdates->begin() + beginEndPair.second != levelUpdates->end());
+        for (auto update = levelUpdates->begin() + beginEndPair.first;
+             update != levelUpdates->begin() + beginEndPair.second; update++)
+        {
+            // Release the update
+            update->release(rendererVk);
+        }
+
+        // Erase update from mSubresourceUpdates
+        levelUpdates->erase(levelUpdates->begin() + beginEndPair.first,
+                            levelUpdates->begin() + beginEndPair.second);
+    }
+
+    // Update mTotalStagedBufferUpdateSize
+    mTotalStagedBufferUpdateSize -= supersededUpdateSize;
+}
+
 void ImageHelper::appendSubresourceUpdate(gl::LevelIndex level, SubresourceUpdate &&update)
 {
     if (mSubresourceUpdates.size() <= static_cast<size_t>(level.get()))
@@ -9081,6 +9177,9 @@ void ImageHelper::appendSubresourceUpdate(gl::LevelIndex level, SubresourceUpdat
         mSubresourceUpdates.resize(level.get() + 1);
     }
 
+    mTotalStagedBufferUpdateSize += update.updateSource == UpdateSource::Buffer
+                                        ? update.data.buffer.bufferHelper->getSize()
+                                        : 0;
     mSubresourceUpdates[level.get()].emplace_back(std::move(update));
     onStateChange(angle::SubjectMessage::SubjectChanged);
 }
@@ -9092,6 +9191,9 @@ void ImageHelper::prependSubresourceUpdate(gl::LevelIndex level, SubresourceUpda
         mSubresourceUpdates.resize(level.get() + 1);
     }
 
+    mTotalStagedBufferUpdateSize += update.updateSource == UpdateSource::Buffer
+                                        ? update.data.buffer.bufferHelper->getSize()
+                                        : 0;
     mSubresourceUpdates[level.get()].insert(mSubresourceUpdates[level.get()].begin(),
                                             std::move(update));
     onStateChange(angle::SubjectMessage::SubjectChanged);

@@ -645,6 +645,10 @@ struct FeaturesVk : FeatureSetBase
         "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion",
         &members,
     };
+
+    FeatureInfo pruneSupersededStagedUpdates = {
+        "pruneSupersededStagedUpdates", FeatureCategory::VulkanFeatures,
+        "Prune superseded staged updates in a texture", &members, "https://anglebug.com/7389"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

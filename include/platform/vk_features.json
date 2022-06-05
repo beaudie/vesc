@@ -868,6 +868,14 @@
             "description": [
                 "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion"
             ]
+        },
+        {
+            "name": "prune_superseded_staged_updates",
+            "category": "Features",
+            "description": [
+                "Prune superseded staged updates in a texture"
+            ],
+            "issue": "https://anglebug.com/7389"
         }
     ]
 }
