@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb078c9_1f8fdffc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2022-06-05T01:35:37Z",
+      "side": 1,
+      "message": "There is no \"Turnip\" in deviceName for the latest generations of Adreno.  Can we check VkDriverId instead?\n\nThe driver ids are VK_DRIVER_ID_QUALCOMM_PROPRIETARY (8) and VK_DRIVER_ID_MESA_TURNIP (18).",
+      "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
