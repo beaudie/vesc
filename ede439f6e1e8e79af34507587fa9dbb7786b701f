@@ -34,6 +34,24 @@
       "parentUuid": "ceb078c9_1f8fdffc",
       "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5894268_d9849f5c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2022-06-05T06:13:49Z",
+      "side": 1,
+      "message": "Not sure how others feel, but it sounds fine to me for the driver to always prepend \"Turnip\" to the device name.",
+      "parentUuid": "bba6d449_188e6ccb",
+      "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
