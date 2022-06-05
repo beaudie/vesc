@@ -33,6 +33,24 @@
       "message": "Folks working on Turnip might prefer this to condition on having substr `Turnip`, as they are running Arch Linux on Chromebook with ANGLE on native Turnip driver without venus.",
       "revId": "a0b6f727dc873bc860ab8bae2fa7f26164c632a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d07ffd79_94cce91f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3061,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-05T01:19:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aec706ad_ab7fe574",
+      "revId": "a0b6f727dc873bc860ab8bae2fa7f26164c632a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
