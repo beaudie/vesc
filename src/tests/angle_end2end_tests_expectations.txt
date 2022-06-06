@@ -538,7 +538,6 @@
 2445 D3D11 : GLSLTest_ES3.ComplexCrossExpression/* = SKIP
 
 // Direct MSL compilation bug.
-6540 METAL : GLSLTest_ES3.ComplexCrossExpression/* = SKIP
 7145 METAL : GLSLTest.AliasingFunctionOutParamAndGlobal/* = SKIP
 7309 METAL : StateChangeTestES3.PrimitiveMode/* = SKIP
 
