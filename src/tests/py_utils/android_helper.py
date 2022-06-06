@@ -101,7 +101,7 @@ def _AddRestrictedTracesJson():
         with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT) as tar:
             for f in glob.glob('../../src/tests/restricted_traces/*/*.json', recursive=True):
                 add(tar, f)
-            add(tar, '../../src/tests/restricted_traces/restricted_traces.json')
+            add(tar, 'gen/angle/restricted_traces.txt')
         _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
 
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
