@@ -39,6 +39,30 @@
       },
       "revId": "e18f2212ad30258bdad6a4366477c7fdc87a0bad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d12c5a7_e48e1003",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-06T19:25:38Z",
+      "side": 1,
+      "message": "There\u0027s another CL using 278. I usually do this so one CL or the other conflicts on rebase, so two CLs don\u0027t go in with the same version!",
+      "parentUuid": "b26542a3_794967dc",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "e18f2212ad30258bdad6a4366477c7fdc87a0bad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
