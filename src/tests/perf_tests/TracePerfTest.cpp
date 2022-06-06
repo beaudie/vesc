@@ -2076,11 +2076,16 @@ void RegisterTraceTests()
         tracesJsonStream << rootTracePath << GetPathSeparator() << "restricted_traces.json";
         std::string tracesJsonPath = tracesJsonStream.str();
 
-        if (!LoadTraceNamesFromJSON(tracesJsonPath, &traces))
+        constexpr size_t kMaxFileLength = 5000;
+        std::vector<char> fileContents(kMaxFileLength, 0);
+        if (!angle::ReadEntireFileToString(ANGLE_TRACE_LIST_FILE, fileContents.data(),
+                                           kMaxFileLength))
         {
-            ERR() << "Unable to load traces from JSON file: " << tracesJsonPath;
+            ERR() << "Unable to load traces from file: " << ANGLE_TRACE_LIST_FILE;
             return;
         }
+
+        angle::SplitStringAlongWhitespace(fileContents.data(), &traces);
     }
 
     std::vector<TraceInfo> traceInfos;
