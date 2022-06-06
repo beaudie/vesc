@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d072330_4f1ca119",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-06T17:31:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb1d3611_48a1b943",
+      "range": {
+        "startLine": 690,
+        "startChar": 4,
+        "endLine": 690,
+        "endChar": 29
+      },
+      "revId": "c42961e0f88ca198808ba60010a186e74202521d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4779b48f_b6ba3a53",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-06T16:36:40Z",
       "side": 1,
       "message": "nit: isn\u0027t this only necessary if there are dirty bits? maybe early exit the function if there are no dirty dirty bits.",
+      "range": {
+        "startLine": 692,
+        "startChar": 4,
+        "endLine": 692,
+        "endChar": 58
+      },
+      "revId": "c42961e0f88ca198808ba60010a186e74202521d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c532aa3d_3a997aec",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-06T17:31:06Z",
+      "side": 1,
+      "message": "Good point. Fixed.",
+      "parentUuid": "4779b48f_b6ba3a53",
       "range": {
         "startLine": 692,
         "startChar": 4,
