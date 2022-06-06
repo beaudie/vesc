@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fb62919_c1d12622",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "in the comment, can you include some results from key a application or applications. e.g. how much this saves in what test scene.",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 17
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "38f89423_751ebb7c",
@@ -14,6 +37,121 @@
       "writtenOn": "2022-06-06T04:14:42Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad4e2262_225c3d46",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6827,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "small nit: either call both feature and method prune, or both remove",
+      "range": {
+        "startLine": 6827,
+        "startChar": 12,
+        "endLine": 6827,
+        "endChar": 41
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ffce02_2af13912",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "nit: suggest you use FixedVector where possible to avoid allocations",
+      "range": {
+        "startLine": 9101,
+        "startChar": 9,
+        "endLine": 9101,
+        "endChar": 15
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4e6d3d7_eaa433b5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "nit: can you document a couple sentences on how the pruning algorithm works?",
+      "range": {
+        "startLine": 9106,
+        "startChar": 4,
+        "endLine": 9106,
+        "endChar": 58
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efaa3a16_0a15f19e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "nit: explicit",
+      "range": {
+        "startLine": 9108,
+        "startChar": 8,
+        "endLine": 9108,
+        "endChar": 12
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8f0c7a9_d7073462",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:45:35Z",
+      "side": 1,
+      "message": "nit: explicit",
+      "range": {
+        "startLine": 9157,
+        "startChar": 13,
+        "endLine": 9157,
+        "endChar": 18
+      },
       "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
