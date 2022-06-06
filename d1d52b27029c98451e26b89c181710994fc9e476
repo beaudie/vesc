@@ -16,6 +16,24 @@
       "message": "Rather than this approach, we can do a scan of the folder to identify what traces are present.",
       "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a27d6fa6_d5878069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-06T18:16:46Z",
+      "side": 1,
+      "message": "Could you elaborate on the advantages of what you\u0027re suggesting? Do you mean to differentiate between missing file and bad contents or something else?",
+      "parentUuid": "3e1daa1d_db98ac3a",
+      "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
