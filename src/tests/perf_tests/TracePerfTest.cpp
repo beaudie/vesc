@@ -2094,8 +2094,9 @@ void RegisterTraceTests()
         TraceInfo traceInfo = {};
         if (!LoadTraceInfoFromJSON(trace, traceJsonPath, &traceInfo))
         {
-            ERR() << "Unable to load traced data from JSON file: " << traceJsonPath;
-            return;
+            WARN() << "Unable to load traced data from JSON file: " << traceJsonPath;
+            // Don't add to traceInfos so the test(s) won't get registered but keep going.
+            continue;
         }
 
         traceInfos.push_back(traceInfo);
