@@ -34,6 +34,24 @@
       "parentUuid": "3e1daa1d_db98ac3a",
       "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c55dba57_c6f5ffdc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T18:23:30Z",
+      "side": 1,
+      "message": "Yeah. If you know the root folder of the traces, you can scan the subfolders for *.json to identify what traces are present on the device. Then restricted_traces.json wouldn\u0027t be necessary on the device at all.\n\nThe extra bit of work you\u0027d need is to prune deleted traces when you\u0027re starting the run. Which seems like something that would be good to do anyway, although we don\u0027t delete traces very often.",
+      "parentUuid": "a27d6fa6_d5878069",
+      "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
