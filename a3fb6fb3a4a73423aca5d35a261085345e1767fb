@@ -50,6 +50,24 @@
       "message": "Nit: r-char shaders should not indented at the top level. (I think that\u0027s the convention, although there seem to be some exceptions in this file.)",
       "revId": "a3fb6fb3a4a73423aca5d35a261085345e1767fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5063c03f_9c161c72",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5121,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-06T23:33:59Z",
+      "side": 1,
+      "message": "Done.\n\nAlso fixed the other one I made.",
+      "parentUuid": "7c89588f_3b8512bd",
+      "revId": "a3fb6fb3a4a73423aca5d35a261085345e1767fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
