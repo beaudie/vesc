@@ -27,11 +27,15 @@
 
 #include "frame_capture_test_utils.h"
 
+// To aid in compilation
+#if !defined(ANGLE_TRACE_LIST_FILE)
+#    define ANGLE_TRACE_LIST_FILE "placeholder.txt"
+#endif  // !defined(ANGLE_TRACE_LIST_FILE)
+
 namespace
 {
 EGLWindow *gEGLWindow       = nullptr;
 constexpr char kResultTag[] = "*RESULT";
-constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
 
 EGLImage KHRONOS_APIENTRY EGLCreateImage(EGLDisplay display,
                                          EGLContext context,
@@ -258,15 +262,14 @@ class CaptureReplayTests
 
         // Set CWD to executable directory.
         std::string exeDir = angle::GetExecutableDirectory();
+        angle::SetCWD(exeDir.c_str());
 
+        // Load trace names.
         std::vector<std::string> traces;
 
-        std::stringstream tracePathStream;
-        tracePathStream << exeDir << angle::GetPathSeparator() << kTracePath;
-
-        if (!angle::LoadTraceNamesFromJSON(tracePathStream.str(), &traces))
+        if (!angle::LoadTraceNamesFromFile(ANGLE_TRACE_LIST_FILE, &traces))
         {
-            std::cout << "Unable to load trace names from " << kTracePath << "\n";
+            std::cout << "Unable to load trace names from " << ANGLE_TRACE_LIST_FILE << "\n";
             return 1;
         }
 
