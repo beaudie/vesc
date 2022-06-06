@@ -16,6 +16,24 @@
       "message": "Hey Shabi,\n\nCould you give this CL a try using this way to run the test - looks like it might just work?\n\n% (cd out/Android; ../../src/tests/run_angle_android_test.py angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_wordscapes --steps-per-trial 3000 --trials 1)",
       "revId": "a0a3f22054e5baf3c98d22e578bf688fb333f532",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c15a66ce_e7bd2067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-06T18:12:52Z",
+      "side": 1,
+      "message": "yeah I think this should allow to run out/Android/angle_perftests instead of the script above: https://crrev.com/c/3690734\n\n(the difference being that my script doesn\u0027t attempt to do any cleanup and remove \"stale\" files and catapult does that so we end up with missing {trace_name}.json files)",
+      "parentUuid": "a2aed4cc_c735f9b0",
+      "revId": "a0a3f22054e5baf3c98d22e578bf688fb333f532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
