@@ -16,6 +16,29 @@
       "message": "PTAL.\n\nThe change is good for review, but there\u0027s another change I intend to land before this. As it is, this is increasing test time and causing timeouts. On ASAN, I noticed shards taking 8 minutes now taking 15. In particular, I intend to make depth correction be controlled by a driver uniform, and avoid doubling warm up pipelines because of that little thing.\n\nThe impact of that on the code in this change is minimal so, please review this in the meantime.",
       "revId": "4eef07571fe01f68df4ecd8054a88a7a29b9fa5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81dea0a7_6d7fd9bd",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 35
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T12:40:19Z",
+      "side": 1,
+      "message": "small nit: it\u0027s nice to have features that are positive - e.g. enableThis instead of disableThat. it makes the mental conception of disabling a disable feature not a thing.",
+      "range": {
+        "startLine": 602,
+        "startChar": 16,
+        "endLine": 602,
+        "endChar": 43
+      },
+      "revId": "4eef07571fe01f68df4ecd8054a88a7a29b9fa5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
