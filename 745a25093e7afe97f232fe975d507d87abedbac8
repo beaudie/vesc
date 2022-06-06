@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317560c8_5ea5c854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-06-06T20:55:36Z",
+      "side": 1,
+      "message": "Turns out this, approach is problematic for SSBOs deleted while still bound. Casting the uintptr_t back to a pointer and passing it to D3D is a bad idea, since the UAV might be dead.\n\nAbandoning in favour of another approach.",
+      "revId": "745a25093e7afe97f232fe975d507d87abedbac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
