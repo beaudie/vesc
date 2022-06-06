@@ -111,6 +111,30 @@
       },
       "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfc4306a_e8cdba44",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-06T22:39:24Z",
+      "side": 1,
+      "message": "I have added a new feature as suggested by Shabi in vk_features.json, to disable the mixed use of load_op_none on depth and stencil.",
+      "parentUuid": "b2014d7c_23e2092f",
+      "range": {
+        "startLine": 3215,
+        "startChar": 0,
+        "endLine": 3215,
+        "endChar": 29
+      },
+      "revId": "9f10b2227319fe08c165258ba9b7c041fe83a862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
