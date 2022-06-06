@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfcb5e2e_d09ef215",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6769,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-06T23:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1673d8a4_0ac50f0f",
+      "revId": "419e9d718cccda1f9b6628723de1a6411a121521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8567c4f_0642ce2b",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-06T23:29:33Z",
       "side": 1,
       "message": "Same as above. Let\u0027s call drawElementsInstancedBaseVertexBaseInstance() here.",
+      "revId": "419e9d718cccda1f9b6628723de1a6411a121521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29a356f1_df265b38",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6815,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-06T23:54:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8567c4f_0642ce2b",
       "revId": "419e9d718cccda1f9b6628723de1a6411a121521",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
