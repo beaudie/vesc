@@ -52,6 +52,24 @@
       "parentUuid": "a27d6fa6_d5878069",
       "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1bd619d_b36f9324",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T19:03:48Z",
+      "side": 1,
+      "message": "OK, Roman pointed out that wouldn\u0027t necessarily be the best solution.\n\nConverting the GN argument in the linked CL into a build-time subset of restricted traces would solve all the issues. It\u0027s pretty similar to what Shabi did in his CL, with the added step of getting the override list all the way to the device.\n\nHappy to take a crack at this if it can wait or to advise on how to implement this solution, though I\u0027d prefer if someone else could do it b/c it might take me a while to get to.",
+      "parentUuid": "c55dba57_c6f5ffdc",
+      "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
