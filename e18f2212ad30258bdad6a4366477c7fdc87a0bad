@@ -16,6 +16,29 @@
       "message": "Minor diffs in some shader output affecting GOLD, presumably precision-related.",
       "revId": "e18f2212ad30258bdad6a4366477c7fdc87a0bad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b26542a3_794967dc",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-06T19:05:49Z",
+      "side": 1,
+      "message": "very minor nit: skip 8?",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "e18f2212ad30258bdad6a4366477c7fdc87a0bad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
