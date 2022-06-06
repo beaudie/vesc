@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2aed4cc_c735f9b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-06T17:03:39Z",
+      "side": 1,
+      "message": "Hey Shabi,\n\nCould you give this CL a try using this way to run the test - looks like it might just work?\n\n% (cd out/Android; ../../src/tests/run_angle_android_test.py angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_wordscapes --steps-per-trial 3000 --trials 1)",
+      "revId": "a0a3f22054e5baf3c98d22e578bf688fb333f532",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
