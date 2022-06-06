@@ -52,6 +52,24 @@
       "parentUuid": "bba6d449_188e6ccb",
       "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbd36d97_06032b21",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-06T01:25:08Z",
+      "side": 1,
+      "message": "If we can distinguish by driver id, that\u0027s fine with me. How about we use driver id where available, and check for Venus when not?",
+      "parentUuid": "e5894268_d9849f5c",
+      "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
