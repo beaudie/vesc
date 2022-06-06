@@ -630,6 +630,7 @@ class TimestampQueriesTest : public ANGLETestWithParam<TimestampQueriesTestParam
     GLuint mQueryObjectNameArray[TIMESTAMP_QUERY_SIZE];
 };
 
+// Tests getting timestamps via glGetQueryObjectui64vEXT
 TEST_P(TimestampQueriesTest, TimestampBasic)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_disjoint_timer_query"));
