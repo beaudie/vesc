@@ -22,6 +22,30 @@
       },
       "revId": "b186991a54d570ad267b885c96257600a8aed372",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9945848a_259b8b4f",
+        "filename": "src/libANGLE/Context_gl_4_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T18:47:25Z",
+      "side": 0,
+      "message": "It\u0027s probably deleted here because it\u0027s specified elsewhere (like `Context_gles_ext_autogen.h`). The implementation for desktop GL should still be stubbed.",
+      "parentUuid": "e0ea45d2_c3863cd5",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 42
+      },
+      "revId": "b186991a54d570ad267b885c96257600a8aed372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
