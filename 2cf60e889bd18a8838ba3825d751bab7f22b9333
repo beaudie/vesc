@@ -16,6 +16,24 @@
       "message": "Currently produces:\n\n```\n% ... --render-test-output-dir\u003d/tmp/aaa\n\n% cat /tmp/aaa/angle_perftests_metrics.json\n{\n    \"version\": 1,\n    \"git_hash\": \"git_hash???\",\n    \"key\": {\n        \"config\": \"debug???\",\n        \"config\": \"linux_64???\"\n    },\n    \"results\": [\n        {\n            \"key\": {\n                \"suite\": \"TracePerf\",\n                \"fixme_tag\": \"measurement\u003dTracePerf_native.cpu_time,test\u003dwords_with_friends_2,units\u003dmsBestFitFormat_smallerIsBetter\"\n            },\n            \"measurements\": {\n                \"stat\": [\n                    9.160629999999998,\n                    8.582399999999998\n                ]\n            }\n        },\n        ...\n```\n\nWhat we want to get:\n\n```\n% gsutil cat gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json                   \n{\n  \"version\": 1,\n  \"git_hash\": \"4df8ca04fa735e962ba04390d6f53a2cd88c9a91\",\n  \"key\": {\n      \"config\": \"debug\",\n      \"arch\": \"linux_64\"\n  },\n  \"results\": [\n      {\n          \"key\": {\n              \"suite\": \"TracePerfTest\",\n              \"test\": \"words_with_friends_2\",\n              \"renderer\": \"native\",\n              \"metric\": \"wall_time\",\n              \"units\": \"ms\"\n          },\n          \"measurements\": {\n              \"stat\": [\n                  {\n                      \"value\": \"mean\",\n                      \"measurement\": 3.62417210491\n                  }\n              ]\n          }\n      }\n  ]\n}\n```",
       "revId": "2cf60e889bd18a8838ba3825d751bab7f22b9333",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7edec0d3_79733f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-07T22:02:43Z",
+      "side": 1,
+      "message": "We don\u0027t need to produce this format as the output here as we can do post-processing in python, so here we could just dump it in some way that\u0027s easy to parse in python.",
+      "parentUuid": "e8636f37_cf191f84",
+      "revId": "2cf60e889bd18a8838ba3825d751bab7f22b9333",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
