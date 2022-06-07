@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ea45d2_c3863cd5",
+        "filename": "src/libANGLE/Context_gl_4_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-07T18:43:24Z",
+      "side": 0,
+      "message": "Since this is being removed from here, let\u0027s move the stub implementation from `Context_gl.cpp` to `Context.cpp`?",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 42
+      },
+      "revId": "b186991a54d570ad267b885c96257600a8aed372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
