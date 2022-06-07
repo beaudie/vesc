@@ -99,7 +99,6 @@ enum class Feature
     EmulateTinyStencilTextures,
     EmulateTransformFeedback,
     EnableCaptureLimits,
-    EnableCompressingPipelineCacheInThreadPool,
     EnableMultisampledRenderToTexture,
     EnablePrecisionQualifiers,
     EnablePreRotateSurfaces,
