@@ -4270,9 +4270,7 @@ void Context::updateCaps()
     {
         mSingleThreadPool = angle::WorkerThreadPool::Create(false);
     }
-    mMultiThreadPool = angle::WorkerThreadPool::Create(
-        mState.mExtensions.parallelShaderCompileKHR ||
-        getFrontendFeatures().enableCompressingPipelineCacheInThreadPool.enabled);
+    mMultiThreadPool = angle::WorkerThreadPool::Create(mState.mExtensions.parallelShaderCompileKHR);
 
     // Reinitialize some dirty bits that depend on extensions.
     if (mState.isRobustResourceInitEnabled())
