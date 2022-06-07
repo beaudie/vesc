@@ -119,6 +119,7 @@ enum class Feature
     ForceDepthAttachmentInitOnClear,
     ForceFallbackFormat,
     ForceFragmentShaderPrecisionHighpToMediump,
+    ForceGlErrorChecking,
     ForceInitShaderVariables,
     ForceMaxUniformBufferSize16KB,
     ForceNearestFiltering,
