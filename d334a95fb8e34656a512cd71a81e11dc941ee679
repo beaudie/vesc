@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d920b91_1ebdf48c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-07T19:38:56Z",
+      "side": 1,
+      "message": "Generally find explicit arguments passed around advantageous to be more clear on what\u0027s needed for the function. This was just a refactor done in passing?",
+      "revId": "d334a95fb8e34656a512cd71a81e11dc941ee679",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
