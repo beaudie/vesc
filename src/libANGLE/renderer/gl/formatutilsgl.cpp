@@ -465,6 +465,40 @@ static bool IsLUMAFormat(GLenum format)
     return (format == GL_LUMINANCE || format == GL_ALPHA || format == GL_LUMINANCE_ALPHA);
 }
 
+static bool NeedsLUMAEmulation(const FunctionsGL *functions, const GLenum format, const GLenum type)
+{
+    if (!IsLUMAFormat(format))
+    {
+        return false;
+    }
+
+    if (functions->standard == STANDARD_GL_DESKTOP)
+    {
+        if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
+        {
+            return true;
+        }
+    }
+    else if (functions->isAtLeastGLES(gl::Version(3, 0)))
+    {
+        // The legacy luminance/alpha formats from OES_texture_float are emulated with R/RG
+        // textures.
+        bool hasTexStorage = functions->hasGLESExtension("GL_EXT_texture_storage");
+        if (type == GL_FLOAT &&
+            (!functions->hasGLESExtension("GL_OES_texture_float") || !hasTexStorage))
+        {
+            return true;
+        }
+        else if ((type == GL_HALF_FLOAT_OES || type == GL_HALF_FLOAT) &&
+                 (!functions->hasGLESExtension("GL_OES_texture_half_float") || !hasTexStorage))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static GLenum EmulateLUMAFormat(const GLenum format)
 {
     // This is needed separately from EmulateLUMA because some format/type combinations that come in
@@ -532,12 +566,9 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             result = GL_RGBA8;
         }
 
-        if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
+        if (NeedsLUMAEmulation(functions, internalFormat.format, internalFormat.type))
         {
-            if (IsLUMAFormat(internalFormat.format))
-            {
-                result = EmulateLUMA(internalFormat).sizedInternalFormat;
-            }
+            result = EmulateLUMA(internalFormat).sizedInternalFormat;
         }
 
         if (internalFormat.sizedInternalFormat == GL_RGB10_UNORM_ANGLEX)
@@ -548,25 +579,17 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
     }
     else if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
-        if (internalFormat.componentType == GL_FLOAT)
+        if (NeedsLUMAEmulation(functions, internalFormat.format, internalFormat.type))
+        {
+            result = EmulateLUMA(internalFormat).sizedInternalFormat;
+        }
+        else if (internalFormat.componentType == GL_FLOAT)
         {
             if (!internalFormat.isLUMA())
             {
                 // Use sized internal formats for floating point textures.  Extensions such as
                 // EXT_color_buffer_float require the sized formats to be renderable.
                 result = internalFormat.sizedInternalFormat;
-            }
-            else if ((internalFormat.type == GL_FLOAT &&
-                      !functions->hasGLESExtension("GL_OES_texture_float")) ||
-                     (internalFormat.type == GL_HALF_FLOAT_OES &&
-                      !functions->hasGLESExtension("GL_OES_texture_half_float")))
-            {
-                // The legacy luminance/alpha formats from OES_texture_float are emulated with R/RG
-                // textures.
-                if (IsLUMAFormat(internalFormat.format))
-                {
-                    result = EmulateLUMA(internalFormat).sizedInternalFormat;
-                }
             }
         }
         else if (internalFormat.format == GL_RED_EXT || internalFormat.format == GL_RG_EXT)
@@ -639,16 +662,6 @@ static GLenum GetNativeFormat(const FunctionsGL *functions,
         {
             result = GL_RGBA;
         }
-
-        if ((functions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
-        {
-            // Work around deprecated luminance alpha formats in the OpenGL core profile by backing
-            // them with R or RG textures.
-            if (IsLUMAFormat(format))
-            {
-                result = EmulateLUMAFormat(format);
-            }
-        }
     }
     else if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
@@ -667,18 +680,11 @@ static GLenum GetNativeFormat(const FunctionsGL *functions,
                 result = GL_RGBA;
             }
         }
+    }
 
-        if ((type == GL_FLOAT && !functions->hasGLESExtension("GL_OES_texture_float")) ||
-            (type == GL_HALF_FLOAT_OES &&
-             !functions->hasGLESExtension("GL_OES_texture_half_float")))
-        {
-            // On ES 3.0 systems that don't have GL_OES_texture_float or OES_texture_half_float, the
-            // LUMINANCE/ALPHA formats from those extensions must be emulated with R/RG textures.
-            if (IsLUMAFormat(format))
-            {
-                result = EmulateLUMAFormat(format);
-            }
-        }
+    if (NeedsLUMAEmulation(functions, format, type))
+    {
+        result = EmulateLUMAFormat(format);
     }
 
     // Emulate RGB10 with RGB10_A2.
