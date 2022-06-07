@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bdac7fc_b5671f68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T19:45:32Z",
+      "side": 1,
+      "message": "I double checked particularly with subway_princess_runner which enables dither (and that\u0027s largish shader code that can be greatly simplified with spec consts. No difference in perf on Pixel 6 and SwiftShader.",
+      "revId": "4fafc2088a370e0fde65f1162a5c4f8932b14788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
