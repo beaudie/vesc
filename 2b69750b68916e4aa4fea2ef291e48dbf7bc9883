@@ -80,6 +80,23 @@
       "message": "LGTM",
       "revId": "2b69750b68916e4aa4fea2ef291e48dbf7bc9883",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d74918f_4eaef41b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-07T16:03:49Z",
+      "side": 1,
+      "message": "One idea of limiting the negative perf impact is that you could turn the per renderpass useInputAttachment into a per context toggle. It starts with false, and will set to true as soon as we hit one renderpass that uses framebuffer fetch, and will stay as true once set to true. That way most of apps that does not use input attachment will have zero impact. We can focus on a few app traces that actually uses framebuffer fetch and measure perf data.\n\nFor ARM, given that use of general layout `lose the ability of our transaction elimination.` before they implement the vulkan driver optimization, we should also get data on these traces to see the magnitude of impact. Hopefully its very minor. But if quite big difference, we could see what we can do. Remove +2 for now until perf data is gathered. \n",
+      "revId": "2b69750b68916e4aa4fea2ef291e48dbf7bc9883",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
