@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10cb5aea_1089cd5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-07T16:14:00Z",
+      "side": 1,
+      "message": "Turns out I didn\u0027t need this, but kinda nice to have anyway. PTAL",
+      "revId": "58bc0edaedd6a0bd840298ef99dcac8672972b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
