@@ -349,7 +349,7 @@ void WriteResultsFile(bool interrupted,
         jsResult.AddMember("times", times, allocator);
 
         char testName[500];
-        id.sprintfName(testName);
+        id.sprintfName(testName, sizeof(testName));
         js::Value jsName;
         jsName.SetString(testName, allocator);
 
@@ -1008,9 +1008,9 @@ TestIdentifier::~TestIdentifier() = default;
 
 TestIdentifier &TestIdentifier::operator=(const TestIdentifier &other) = default;
 
-void TestIdentifier::sprintfName(char *outBuffer) const
+void TestIdentifier::sprintfName(char *outBuffer, size_t maxLen) const
 {
-    sprintf(outBuffer, "%s.%s", testSuiteName.c_str(), testName.c_str());
+    sprintf(outBuffer, maxLen, "%s.%s", testSuiteName.c_str(), testName.c_str());
 }
 
 // static
