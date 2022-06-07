@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df2e94f2_242e3576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-07T21:41:50Z",
+      "side": 1,
+      "message": "This was done upstream, so I could run the codegen.  I think this is doing what we want.  I see that the \"vk_caps_utils.cpp\" code is honoring the feature flag.  Then, when a Context is created, it knows whether the app enabled the extension (which it shouldn\u0027t have), and mSkipValidation is properly set.  You two understand this code much better than I though.",
+      "revId": "b77e818dd9de482350b5ae143ab91ee9871560e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
