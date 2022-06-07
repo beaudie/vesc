@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a1d21d_56a6aa8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-07T19:19:32Z",
+      "side": 1,
+      "message": "LGTM though I suspect we have to land some other CLs first.",
+      "revId": "a3df687f81d7827b5e76567bf8875df630d37eeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
