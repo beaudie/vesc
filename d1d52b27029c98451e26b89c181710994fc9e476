@@ -70,6 +70,24 @@
       "parentUuid": "c55dba57_c6f5ffdc",
       "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc6f162c_013787db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-07T12:53:28Z",
+      "side": 1,
+      "message": "Hey Jamie, I updated this CL to fail the specific test when the corresponding trace json file is missing. I think what you\u0027re suggesting above is a slightly different dimension - I believe this CL now improves correctness and reduces confusion, regardless if we implement Shabi\u0027s or your approach.",
+      "parentUuid": "c1bd619d_b36f9324",
+      "revId": "d1d52b27029c98451e26b89c181710994fc9e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
