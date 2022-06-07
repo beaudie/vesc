@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab2d62c2_bd43f2e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-07T23:57:36Z",
+      "side": 1,
+      "message": "This version should do what Geoff and I spoke about.  It uses a front-end feature to disable the EGL extension, that will prevent the GL extension from ever being exposed.  Thanks Geoff!\n\nI\u0027m going to create an Android CL from this Patchset",
+      "revId": "cbf278fba7589049535567eeada6bb55f7ca4be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
