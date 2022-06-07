@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f75ad19_5eb7c610",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2022-06-07T02:40:45Z",
+      "side": 1,
+      "message": "+jmadill for trace_fixture.cpp\n+jonahr for test_utils_posix.cpp\n\nPlease let me know if you have any concerns with these changes. Xcode 14 deprecated sprintf(), so I\u0027m trying to get iOS (and macOS) to compile again.\n\n(In addition to these, there are a handful of sprintf() calls in angle dependencies, including spirv-tools and ceval. I\u0027m assuming those will need to be patched upstream and rolled into angle.)\n\nThanks!",
+      "revId": "f7bcf88a039dcb8b8b7a60905aefccf6b98e16fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
