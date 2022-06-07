@@ -236,8 +236,7 @@ bool WriteJsonFile(const std::string &outputFile, js::Document *doc)
 // https://chromium.googlesource.com/chromium/src.git/+/main/docs/testing/json_test_results_format.md
 void WriteResultsFile(bool interrupted,
                       const TestResults &testResults,
-                      const std::string &outputFile,
-                      const char *testSuiteName)
+                      const std::string &outputFile)
 {
     time_t ltime;
     time(&ltime);
@@ -380,9 +379,7 @@ void WriteResultsFile(bool interrupted,
     }
 }
 
-void WriteHistogramJson(const HistogramWriter &histogramWriter,
-                        const std::string &outputFile,
-                        const char *testSuiteName)
+void WriteHistogramJson(const HistogramWriter &histogramWriter, const std::string &outputFile)
 {
     js::Document doc;
     doc.SetArray();
@@ -395,6 +392,61 @@ void WriteHistogramJson(const HistogramWriter &histogramWriter,
     {
         printf("Error writing histogram json file.\n");
     }
+}
+
+void WriteMetricsJson(const std::string &outputFile,
+                      std::map<std::string, std::vector<double>> &metricResults)
+{
+    js::Document doc;
+    doc.SetObject();
+
+    js::Document::AllocatorType &allocator = doc.GetAllocator();
+
+    doc.AddMember("version", 1, allocator);
+    doc.AddMember("git_hash", "git_hash???", allocator);
+
+    js::Value key;
+    key.SetObject();
+    key.AddMember("config", "debug???", allocator);
+    key.AddMember("config", "linux_64???", allocator);
+
+    doc.AddMember("key", key, allocator);
+
+    js::Value resultsArray;
+    resultsArray.SetArray();
+
+    for (const auto &x : metricResults)
+    {
+        js::Value result;
+        result.SetObject();
+
+        js::Value resultKey;
+        resultKey.SetObject();
+        resultKey.AddMember("suite", "TracePerf", allocator);
+        resultKey.AddMember("fixme_tag", x.first, allocator);
+        result.AddMember("key", resultKey, allocator);
+
+        js::Value measurements;
+        measurements.SetObject();
+        js::Value statArray;
+        statArray.SetArray();
+
+        std::cout << "qwe " << x.first << ":";
+        for (auto n : x.second)
+        {
+            std::cout << " " << n;
+            statArray.PushBack(n, allocator);
+        }
+        std::cout << std::endl;
+
+        measurements.AddMember("stat", statArray, allocator);
+        result.AddMember("measurements", measurements, allocator);
+        resultsArray.PushBack(result, allocator);
+    }
+
+    doc.AddMember("results", resultsArray, allocator);
+
+    WriteJsonFile(outputFile, &doc);
 }
 
 void UpdateCurrentTestResult(const testing::TestResult &resultIn, TestResults *resultsOut)
@@ -1913,6 +1965,8 @@ void TestSuite::addHistogramSample(const std::string &measurement,
                                    const std::string &units)
 {
     mHistogramWriter.addSample(measurement, story, value, units);
+    mMetricResults["measurement=" + measurement + ",test=" + story + ",units=" + units].push_back(
+        value);
 }
 
 bool TestSuite::hasTestArtifactsDirectory() const
@@ -2042,12 +2096,20 @@ void TestSuite::writeOutputFiles(bool interrupted)
 {
     if (!mResultsFile.empty())
     {
-        WriteResultsFile(interrupted, mTestResults, mResultsFile, mTestSuiteName.c_str());
+        WriteResultsFile(interrupted, mTestResults, mResultsFile);
     }
 
     if (!mHistogramJsonFile.empty())
     {
-        WriteHistogramJson(mHistogramWriter, mHistogramJsonFile, mTestSuiteName.c_str());
+        WriteHistogramJson(mHistogramWriter, mHistogramJsonFile);
+    }
+
+    if (!mTestArtifactDirectory.empty())
+    {
+        std::stringstream pathStream;
+        pathStream << mTestArtifactDirectory << GetPathSeparator() << mTestSuiteName
+                   << "_metrics.json";
+        WriteMetricsJson(pathStream.str(), mMetricResults);
     }
 }
 

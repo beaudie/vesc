@@ -207,6 +207,7 @@ class TestSuite
     HistogramWriter mHistogramWriter;
     std::string mTestArtifactDirectory;
     GPUTestExpectationsParser mTestExpectationsParser;
+    std::map<std::string, std::vector<double>> mMetricResults;
 
     class TestEventListener;
 };
