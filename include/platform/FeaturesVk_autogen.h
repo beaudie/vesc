@@ -645,6 +645,11 @@ struct FeaturesVk : FeatureSetBase
         "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion",
         &members,
     };
+
+    FeatureInfo forceGlErrorChecking = {
+        "forceGlErrorChecking", FeatureCategory::VulkanFeatures,
+        "Force GL error checking (i.e. prevent applications from disabling error checking",
+        &members, "https://issuetracker.google.com/220069903"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

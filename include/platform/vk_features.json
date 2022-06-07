@@ -868,6 +868,14 @@
             "description": [
                 "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion"
             ]
+        },
+        {
+            "name": "force_gl_error_checking",
+            "category": "Features",
+            "description": [
+                "Force GL error checking (i.e. prevent applications from disabling error checking"
+            ],
+            "issue": "https://issuetracker.google.com/220069903"
         }
     ]
 }

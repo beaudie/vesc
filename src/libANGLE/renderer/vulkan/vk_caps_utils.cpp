@@ -1126,6 +1126,12 @@ void RendererVk::ensureCapsInitialized() const
 
     // GL_QCOM_shading_rate
     mNativeExtensions.shadingRateQCOM = mFeatures.supportsFragmentShadingRate.enabled;
+
+    // GL_KHR_no_error
+    mNativeExtensions.noErrorKHR = !mFeatures.forceGlErrorChecking.enabled;
+
+    // GL_ANGLE_robust_client_memory
+    mNativeExtensions.robustClientMemoryANGLE = mFeatures.forceGlErrorChecking.enabled;
 }
 
 namespace vk

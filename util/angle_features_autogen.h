@@ -119,6 +119,7 @@ enum class Feature
     ForceDriverUniformOverSpecConst,
     ForceFallbackFormat,
     ForceFragmentShaderPrecisionHighpToMediump,
+    ForceGlErrorChecking,
     ForceInitShaderVariables,
     ForceMaxUniformBufferSize16KB,
     ForceNearestFiltering,

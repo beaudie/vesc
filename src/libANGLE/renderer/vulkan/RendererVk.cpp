@@ -3558,6 +3558,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Only enable it on integrations without EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID passthrough.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceContinuousRefreshOnSharedPresent, false);
 
+    // Hopefully-temporary work-around for a crash on SwiftShader.  An Android process is turning
+    // off GL error checking, and then asking ANGLE to write past the end of a buffer.
+    // https://issuetracker.google.com/issues/220069903
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceGlErrorChecking, (IsAndroid() && isSwiftShader));
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid
