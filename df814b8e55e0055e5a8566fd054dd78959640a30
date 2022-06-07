@@ -16,6 +16,24 @@
       "message": "I thought the discussion settles down to remove the support? ",
       "revId": "df814b8e55e0055e5a8566fd054dd78959640a30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f059d0_b3130b7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-07T03:42:54Z",
+      "side": 1,
+      "message": "Yes, CL updated to remove the support.",
+      "parentUuid": "56a0be51_87498ba3",
+      "revId": "df814b8e55e0055e5a8566fd054dd78959640a30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
