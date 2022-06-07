@@ -29,6 +29,11 @@
 #include "util/angle_features_autogen.h"
 #include "util/test_utils.h"
 
+#if (DE_OS == DE_OS_WIN32)
+#    include "tcuWGLContextFactory.hpp"
+#    include "tcuWin32EGLNativeDisplayFactory.hpp"
+#endif  // (DE_OS == DE_OS_WIN32)
+
 static_assert(EGL_DONT_CARE == -1, "Unexpected value for EGL_DONT_CARE");
 
 namespace tcu
@@ -93,6 +98,9 @@ ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotat
                                                           d3d9Attribs, &mEvents);
         m_nativeDisplayFactoryRegistry.registerFactory(d3d9Factory);
     }
+
+    m_nativeDisplayFactoryRegistry.registerFactory(
+        new win32::EGLNativeDisplayFactory(GetModuleHandle(nullptr)));
 #endif  // (DE_OS == DE_OS_WIN32)
 
 #if defined(ANGLE_USE_GBM) || (DE_OS == DE_OS_ANDROID) || (DE_OS == DE_OS_WIN32)
@@ -150,6 +158,10 @@ ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotat
                                                           nullAttribs, &mEvents);
         m_nativeDisplayFactoryRegistry.registerFactory(nullFactory);
     }
+
+#if (DE_OS == DE_OS_WIN32)
+    m_contextFactoryRegistry.registerFactory(new wgl::ContextFactory(GetModuleHandle(nullptr)));
+#endif
 
     m_contextFactoryRegistry.registerFactory(
         new eglu::GLContextFactory(m_nativeDisplayFactoryRegistry));

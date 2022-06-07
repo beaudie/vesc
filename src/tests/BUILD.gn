@@ -1321,6 +1321,18 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     if (is_android) {
       libs = [ "log" ]
     }
+    if (is_win) {
+      sources += [
+        "$deqp_path/framework/platform/win32/tcuWGL.cpp",
+        "$deqp_path/framework/platform/win32/tcuWGL.hpp",
+        "$deqp_path/framework/platform/win32/tcuWGLContextFactory.cpp",
+        "$deqp_path/framework/platform/win32/tcuWGLContextFactory.hpp",
+        "$deqp_path/framework/platform/win32/tcuWin32EGLNativeDisplayFactory.cpp",
+        "$deqp_path/framework/platform/win32/tcuWin32EGLNativeDisplayFactory.hpp",
+        "$deqp_path/framework/platform/win32/tcuWin32Window.cpp",
+        "$deqp_path/framework/platform/win32/tcuWin32Window.hpp",
+      ]
+    }
   }
 
   set_defaults("angle_deqp_gtest") {

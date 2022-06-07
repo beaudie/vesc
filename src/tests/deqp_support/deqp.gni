@@ -8,7 +8,10 @@ deqp_path = "../../third_party/VK-GL-CTS/src"
 deqp_include_dirs = [
   "$deqp_path/executor",
   "$deqp_path/execserver",
+  "$deqp_path/framework/platform/lnx",
+  "$deqp_path/framework/platform/lnx/X11",
   "$deqp_path/framework/platform/null",
+  "$deqp_path/framework/platform/win32",
   "$deqp_path/framework/xexml",
   "$deqp_path/modules/gles2",
   "$deqp_path/modules/gles2/functional",
