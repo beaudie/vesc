@@ -34,6 +34,24 @@
       "parentUuid": "f58db618_3026ead3",
       "revId": "e756619bde6504d9be933ff887cd97d602746c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54de36d_cc7eab27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-07T23:02:23Z",
+      "side": 1,
+      "message": "Changed back after the latest uploads. You can apply the change again through Gerrit before submission :)",
+      "parentUuid": "67612ff5_f21747e6",
+      "revId": "e756619bde6504d9be933ff887cd97d602746c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
