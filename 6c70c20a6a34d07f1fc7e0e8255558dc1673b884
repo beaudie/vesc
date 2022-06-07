@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc1291b6_937b441f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T02:13:49Z",
+      "side": 1,
+      "message": "nit: `Workaround`",
+      "range": {
+        "startLine": 445,
+        "startChar": 25,
+        "endLine": 445,
+        "endChar": 33
+      },
+      "revId": "6c70c20a6a34d07f1fc7e0e8255558dc1673b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ab3a83_47ce983f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T02:13:49Z",
+      "side": 1,
+      "message": "These descriptions end up in Chrome://GPU, and we tend not to point fingers (besides, the conditions often change over time). Suggest this wording:\n\n\u003e Disallow use of LOAD_OP_NONE for only one of the depth or stencil aspects of a depth/stencil attachment",
+      "range": {
+        "startLine": 447,
+        "startChar": 17,
+        "endLine": 447,
+        "endChar": 90
+      },
+      "revId": "6c70c20a6a34d07f1fc7e0e8255558dc1673b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be55f656_1b9af2fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T02:13:49Z",
+      "side": 1,
+      "message": "Please explicitly use LoadOpLoad.",
+      "range": {
+        "startLine": 2046,
+        "startChar": 26,
+        "endLine": 2046,
+        "endChar": 69
+      },
+      "revId": "6c70c20a6a34d07f1fc7e0e8255558dc1673b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69201076_0ccc4f44",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2050,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T02:13:49Z",
+      "side": 1,
+      "message": "Ditto",
+      "range": {
+        "startLine": 2050,
+        "startChar": 28,
+        "endLine": 2050,
+        "endChar": 78
+      },
+      "revId": "6c70c20a6a34d07f1fc7e0e8255558dc1673b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4548497e_d4397d6a",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T02:13:49Z",
+      "side": 1,
+      "message": "Please add `ES3_Vulkan().Enable(DisallowMixedDepthStencilLoadOpNoneAndLoad)` to the list of configs that run this test suite.",
+      "range": {
+        "startLine": 359,
+        "startChar": 7,
+        "endLine": 359,
+        "endChar": 26
+      },
+      "revId": "6c70c20a6a34d07f1fc7e0e8255558dc1673b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
