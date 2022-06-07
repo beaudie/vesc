@@ -110,6 +110,8 @@ constexpr APIInfo kEGLDisplayAPIs[] = {
     {"angle-null", GPUTestConfig::kAPIUnknown},
     {"angle-swiftshader", GPUTestConfig::kAPISwiftShader},
     {"angle-vulkan", GPUTestConfig::kAPIVulkan},
+    {"win32", GPUTestConfig::kAPIUnknown},
+    {"window", GPUTestConfig::kAPIUnknown},
 };
 
 constexpr char kdEQPEGLString[]     = "--deqp-egl-display-type=";
@@ -142,8 +144,8 @@ constexpr bool kEnableRenderDocCapture = false;
 
 const APIInfo *gInitAPI = nullptr;
 dEQPOptions gOptions    = {
-    kDefaultPreRotation,      // preRotation
-    kEnableRenderDocCapture,  // enableRenderDocCapture
+       kDefaultPreRotation,      // preRotation
+       kEnableRenderDocCapture,  // enableRenderDocCapture
 };
 
 constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
@@ -616,7 +618,10 @@ void dEQPTest<TestModuleIndex>::TearDownTestCase()
 #define ANGLE_INSTANTIATE_DEQP_TEST_CASE(API, N)                              \
     class dEQP : public dEQPTest<N>                                           \
     {};                                                                       \
-    TEST_P(dEQP, API) { runTest(); }                                          \
+    TEST_P(dEQP, API)                                                         \
+    {                                                                         \
+        runTest();                                                            \
+    }                                                                         \
                                                                               \
     INSTANTIATE_TEST_SUITE_P(, dEQP, dEQP::GetTestingRange(),                 \
                              [](const testing::TestParamInfo<size_t> &info) { \
@@ -689,20 +694,22 @@ void HandleDisplayType(const char *displayTypeString)
         exit(1);
     }
 
-    if (strncmp(displayTypeString, "angle-", strlen("angle-")) != 0)
-    {
-        argStream << "angle-";
-    }
-
     argStream << displayTypeString;
     std::string arg = argStream.str();
+    gInitAPI        = FindAPIInfo(arg);
 
-    gInitAPI = FindAPIInfo(arg);
-
-    if (!gInitAPI)
+    if (!gInitAPI && strncmp(displayTypeString, "angle-", strlen("angle-")) != 0)
     {
-        std::cout << "Unknown ANGLE back-end API: " << displayTypeString << std::endl;
-        exit(1);
+        std::stringstream argStream2;
+        argStream2 << "angle-" << displayTypeString;
+        std::string arg2 = argStream2.str();
+        gInitAPI         = FindAPIInfo(arg2);
+
+        if (!gInitAPI)
+        {
+            std::cout << "Unknown API: " << displayTypeString << std::endl;
+            exit(1);
+        }
     }
 }
 
