@@ -46,6 +46,30 @@
       },
       "revId": "b186991a54d570ad267b885c96257600a8aed372",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e256a6b_3311380c",
+        "filename": "src/libANGLE/Context_gl_4_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-07T19:26:15Z",
+      "side": 0,
+      "message": "True. It has been moved to `Context_gles_ext_autogen.h`, next to `drawArraysInstancedBaseInstance()` and `drawElementsInstancedBaseVertexBaseInstance()`. However, the definitions for the other two functions are in `Context.cpp`, while `drawElementsInstancedBaseInstance()` is in `Context_gl.cpp`.",
+      "parentUuid": "9945848a_259b8b4f",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 42
+      },
+      "revId": "b186991a54d570ad267b885c96257600a8aed372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
