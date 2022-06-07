@@ -70,6 +70,24 @@
       "parentUuid": "e5894268_d9849f5c",
       "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab5f02c9_479e1708",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3060,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T16:47:23Z",
+      "side": 1,
+      "message": "Modified the condition, PTAL",
+      "parentUuid": "bbd36d97_06032b21",
+      "revId": "ede439f6e1e8e79af34507587fa9dbb7786b701f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
