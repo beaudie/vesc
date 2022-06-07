@@ -105,8 +105,6 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::EmulateTinyStencilTextures, "emulateTinyStencilTextures"},
     {Feature::EmulateTransformFeedback, "emulateTransformFeedback"},
     {Feature::EnableCaptureLimits, "enableCaptureLimits"},
-    {Feature::EnableCompressingPipelineCacheInThreadPool,
-     "enableCompressingPipelineCacheInThreadPool"},
     {Feature::EnableMultisampledRenderToTexture, "enableMultisampledRenderToTexture"},
     {Feature::EnablePrecisionQualifiers, "enablePrecisionQualifiers"},
     {Feature::EnablePreRotateSurfaces, "enablePreRotateSurfaces"},
