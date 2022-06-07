@@ -32,9 +32,10 @@ void LoadBinaryData(const char *fileName)
     {
         delete[] gBinaryData;
     }
-    char pathBuffer[1000] = {};
+    const size_t PATH_BUFFER_SIZE     = 1000;
+    char pathBuffer[PATH_BUFFER_SIZE] = {};
 
-    sprintf(pathBuffer, "%s/%s", gBinaryDataDir.c_str(), fileName);
+    snprintf(pathBuffer, PATH_BUFFER_SIZE, "%s/%s", gBinaryDataDir.c_str(), fileName);
     FILE *fp = fopen(pathBuffer, "rb");
     if (fp == 0)
     {
