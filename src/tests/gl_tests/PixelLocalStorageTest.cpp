@@ -484,15 +484,40 @@ struct ReadPixelsArgs<uint32_t>
 #define ASSERT_FRAMEBUFFER_PIXELS(T, r, g, b, a) \
     ASSERT_FRAMEBUFFER_PIXEL_RECT(T, 0, 0, W, H, r, g, b, a)
 
-class PixelLocalTexture : public GLTexture
+class PixelLocalTexture
 {
   public:
-    PixelLocalTexture(GLenum internalformat) : PixelLocalTexture(internalformat, W, H) {}
-    PixelLocalTexture(GLenum internalformat, int w, int h)
+    PixelLocalTexture(GLenum internalformat) { reset(internalformat); }
+    PixelLocalTexture(GLenum internalformat, int w, int h) { reset(internalformat, w, h); }
+    PixelLocalTexture(PixelLocalTexture &&that) : mID(std::exchange(that.mID, 0)) {}
+    void reset(GLenum internalformat) { reset(internalformat, W, H); }
+    void reset(GLenum internalformat, int w, int h)
     {
-        glBindTexture(GL_TEXTURE_2D, *this);
+        GLuint id;
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
         glTexStorage2D(GL_TEXTURE_2D, 1, internalformat, w, h);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        if (mID)
+        {
+            glDeleteTextures(1, &mID);
+        }
+        mID = id;
     }
+    ~PixelLocalTexture()
+    {
+        if (mID)
+        {
+            glDeleteTextures(1, &mID);
+        }
+    }
+    operator GLuint() const { return mID; }
+
+  private:
+    PixelLocalTexture &operator=(const PixelLocalTexture &) = delete;
+    PixelLocalTexture(const PixelLocalTexture &)            = delete;
+    GLuint mID                                              = 0;
 };
 
 class PixelLocalStorageTest : public ANGLETest
@@ -500,8 +525,12 @@ class PixelLocalStorageTest : public ANGLETest
   protected:
     PixelLocalStorageTest()
     {
-        setWindowWidth(1);
-        setWindowHeight(1);
+        setWindowWidth(W);
+        setWindowHeight(H);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
     }
 
     ~PixelLocalStorageTest()
@@ -533,6 +562,11 @@ class PixelLocalStorageTest : public ANGLETest
 
         return true;
     }
+
+    // anglebug.com/7398: imageLoad() eventually starts failing. A workaround is to delete and
+    // recreate the texture every once in a while. Hopefully this goes away once we start using
+    // proper readwrite desktop GL shader images and INTEL_fragment_shader_ordering.
+    bool hasANGLEBug7398() { return IsWindows() && IsIntel(); }
 
     void useProgram(std::string fsMain)
     {
@@ -624,6 +658,7 @@ class PixelLocalStorageTest : public ANGLETest
     struct Box
     {
         using float4 = std::array<float, 4>;
+        Box(float4 inltrb) : ltrb(inltrb), color{}, aux1{}, aux2{} {}
         Box(float4 inltrb, float4 incolor) : ltrb(inltrb), color(incolor), aux1{}, aux2{} {}
         Box(float4 inltrb, float4 incolor, float4 inaux1)
             : ltrb(inltrb), color(incolor), aux1(inaux1), aux2{}
@@ -1090,6 +1125,207 @@ TEST_P(PixelLocalStorageTest, LoadOps)
     ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 20, 0, W, H, 0, 0, 0, 0);
 
     ASSERT_GL_NO_ERROR();
+}
+
+// Check that GL utilities for rejecting fragments also prevent stores to pls.
+//
+//   * conditionally store to pls (technically not a built-in fragment reject utility)
+//   * discard
+//   * stencil test
+//   * depth test
+//   * glScissor
+//   * glViewport
+//
+// Some utilities are not legal in ANGLE_shader_pixel_local_storage:
+//
+//   * gl_SampleMask is disallowed by the spec
+//   * return from main() is disallowed by the spec
+//   * discard, after potential calls to pixelLocalStore(), is disallowed by the spec
+//
+TEST_P(PixelLocalStorageTest, FragmentReject)
+{
+    ANGLE_SKIP_TEST_IF(!supportsPixelLocalStorage());
+
+    PixelLocalStoragePrototype pls;
+
+    PixelLocalTexture tex(GL_RGBA8);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_RGBA8);
+    glFramebufferPixelLocalClearValuefvANGLE(0, MakeArray<float>({0, 0, 0, 1}));
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+#define DRAW_W 64
+#define DRAW_H 64
+    static std::string glslDefs =
+        "#define DRAW_W 64\n"
+        "#define DRAW_H 64\n";
+
+    GLProgram blitProgram;
+    blitProgram.makeRaster(
+        R"(#version 310 es
+        precision highp float;
+        out vec2 texcoord;
+        void main()
+        {
+            texcoord.x = (gl_VertexID & 1) == 0 ? 0.0 : 1.0;
+            texcoord.y = (gl_VertexID & 2) == 0 ? 0.0 : 1.0;
+            gl_Position = vec4(texcoord * 2.0 - 1.0, 0, 1);
+        })",
+
+        R"(#version 310 es
+        precision highp float;
+        layout(binding=0) uniform highp sampler2D tex;
+        in vec2 texcoord;
+        out vec4 fragcolor;
+        void main()
+        {
+            fragcolor = texture(tex, texcoord);
+        })");
+    ASSERT_TRUE(blitProgram.valid());
+
+#define CHECK_TEX()                                                                   \
+    do                                                                                \
+    {                                                                                 \
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);                                         \
+        glClearColor(1, 1, 1, 0);                                                     \
+        glClear(GL_COLOR_BUFFER_BIT);                                                 \
+        ASSERT_FRAMEBUFFER_PIXELS(uint8_t, 255, 255, 255, 0);                         \
+                                                                                      \
+        glUseProgram(blitProgram);                                                    \
+        glBindTexture(GL_TEXTURE_2D, tex);                                            \
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);                                        \
+        ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 0, DRAW_W, DRAW_H, 0, 255, 0, 255); \
+        ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, DRAW_W, 0, W, DRAW_H, 0, 0, 0, 255);   \
+        ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, DRAW_H, W, H, 0, 0, 0, 255);        \
+                                                                                      \
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);                                       \
+        glUseProgram(mProgram);                                                       \
+    } while (0)
+
+    // Conditional store.
+    useProgram(glslDefs + R"(
+    PIXEL_LOCAL_DECL(pls, binding=0, rgba8);
+    void main()
+    {
+        vec4 dst = pixelLocalLoad(pls);
+        if (all(lessThan(gl_FragCoord.xy, vec2(DRAW_W, DRAW_H))))
+        {
+            pixelLocalStore(pls, vec4(0, 1, 0, 0) + dst);
+        }
+    })");
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+    CHECK_TEX();
+
+    // Discard should cancel future stores to pls.
+    // Discard is illegal after writes to pls because that has different behavior with shader images
+    // vs framebuffer fetch.
+    useProgram(glslDefs + R"(
+    PIXEL_LOCAL_DECL(pls, binding=0, rgba8);
+    void main()
+    {
+        vec4 dst = pixelLocalLoad(pls);
+        if (any(greaterThan(gl_FragCoord.xy, vec2(DRAW_W, DRAW_H))))
+        {
+            discard;
+        }
+        pixelLocalStore(pls, vec4(0, 1, 0, 0) + dst);
+    })");
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+    CHECK_TEX();
+
+    if (hasANGLEBug7398())  // anglebug.com/7398
+    {
+        tex.reset(GL_RGBA8);
+        glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_RGBA8);
+    }
+
+    // Scissor.
+    useProgram(glslDefs + R"(
+    PIXEL_LOCAL_DECL(pls, binding=0, rgba8);
+    void main()
+    {
+        vec4 dst = pixelLocalLoad(pls);
+        pixelLocalStore(pls, vec4(0, 1, 0, 0) + dst);
+    })");
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, DRAW_W, DRAW_H);
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+    glDisable(GL_SCISSOR_TEST);
+    CHECK_TEX();
+
+    // Viewport.
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    glViewport(0, 0, DRAW_W, DRAW_H);
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+    glViewport(0, 0, W, H);
+    CHECK_TEX();
+
+    // Stencil.
+    GLuint depthStencil;
+    glGenRenderbuffers(1, &depthStencil);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthStencil);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, W, H);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              depthStencil);
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+    // glStencilFunc(GL_NEVER, ...) should not update pls.
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NEVER, 1, ~0u);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    drawBoxes(pls, {{{0, 0, DRAW_W, DRAW_H}}});
+    glEndPixelLocalStorageANGLE();
+    glDisable(GL_STENCIL_TEST);
+    attachTextureToScratchFBO(tex);
+    ASSERT_FRAMEBUFFER_PIXELS(uint8_t, 0, 0, 0, 255);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    if (hasANGLEBug7398())  // anglebug.com/7398
+    {
+        tex.reset(GL_RGBA8);
+        glFramebufferPixelLocalStorageANGLE(0, tex, 0, 0, W, H, GL_RGBA8);
+    }
+
+    // Stencil should be preserved. Only pixels that pass the stencil test should update pls.
+    glEnable(GL_STENCIL_TEST);
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    glStencilFunc(GL_NOTEQUAL, 0, ~0u);
+    glStencilOp(GL_ZERO, GL_ZERO, GL_ZERO);
+    drawBoxes(pls, {{FULLSCREEN}});
+    glDisable(GL_STENCIL_TEST);
+    glEndPixelLocalStorageANGLE();
+    CHECK_TEX();
+
+    // Depth.
+    glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_REPLACE}));
+    glClearDepthf(0.f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, DRAW_W, DRAW_H);
+    glClearDepthf(1.f);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
+    glDepthFunc(GL_LESS);
+    drawBoxes(pls, {{FULLSCREEN}});
+    glEndPixelLocalStorageANGLE();
+    glDisable(GL_DEPTH_TEST);
+    CHECK_TEX();
+
+#undef CHECK_TEX
+#undef DRAW_H
+#undef DRAW_W
 }
 
 ANGLE_INSTANTIATE_TEST_ES31(PixelLocalStorageTest);
