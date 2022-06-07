@@ -32,40 +32,6 @@
 #include "platform/PlatformMethods.h"
 #include "tcuANGLENativeDisplayFactory.h"
 
-namespace tcu
-{
-
-class ANGLEPlatform : public tcu::Platform, private glu::Platform, private eglu::Platform
-{
-  public:
-    ANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotation);
-    ~ANGLEPlatform();
-
-    bool processEvents() override;
-
-    const glu::Platform &getGLPlatform() const override
-    {
-        return static_cast<const glu::Platform &>(*this);
-    }
-    const eglu::Platform &getEGLPlatform() const override
-    {
-        return static_cast<const eglu::Platform &>(*this);
-    }
-
-  private:
-    // Note: -1 represents EGL_DONT_CARE, but we don't have the EGL headers here.
-    std::vector<eglw::EGLAttrib> initAttribs(eglw::EGLAttrib type,
-                                             eglw::EGLAttrib deviceType   = -1,
-                                             eglw::EGLAttrib majorVersion = -1,
-                                             eglw::EGLAttrib minorVersion = -1);
-
-    EventState mEvents;
-    angle::PlatformMethods mPlatformMethods;
-    std::vector<const char *> mEnableFeatureOverrides;
-};
-
-}  // namespace tcu
-
 tcu::Platform *CreateANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotation);
 
 #endif  // TCU_ANGLE_PLATFORM_H_
