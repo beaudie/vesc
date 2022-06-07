@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "574b094f_f1162a28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T17:17:45Z",
+      "side": 1,
+      "message": "Thanks, LGTM",
+      "revId": "e251cf08a0147234579917726eb17d50fc19635f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ec4c36d_7f41d899",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-07T17:17:45Z",
+      "side": 1,
+      "message": "nit: s/Store/Op/",
+      "range": {
+        "startLine": 2042,
+        "startChar": 36,
+        "endLine": 2042,
+        "endChar": 41
+      },
+      "revId": "e251cf08a0147234579917726eb17d50fc19635f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
