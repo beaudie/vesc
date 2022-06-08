@@ -1538,7 +1538,8 @@ TEST_P(PixelLocalStorageTest, CoherentStoreLoad)
     void main()
     {
         pixelLocalStore(fibonacci, uvec4(1, 0, 0, 0));  // fib(1, 0, 0, 0)
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i)
+        {
             uvec4 fib0 = pixelLocalLoad(fibonacci);
             uvec4 fib1;
             fib1.w = fib0.x + fib0.y;
@@ -1717,6 +1718,109 @@ TEST_P(PixelLocalStorageTest, MaxCapacity)
         attachTextureToScratchFBO(renderTexs[i]);
         ASSERT_FRAMEBUFFER_PIXELS(uint32_t, 0u + i, 1u + i, 2u + i, 3u + i);
     }
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Check that the pls is preserved when a shader does not call pixelLocalStore(). (Whether that's
+// because a conditional branch failed or because the shader didn't write to it at all.) It's
+// conceivable that an implementation may need to be careful to preserve the pls contents in this
+// scenario.
+TEST_P(PixelLocalStorageTest, LoadOnly)
+{
+    ANGLE_SKIP_TEST_IF(!supportsPixelLocalStorage());
+
+    PixelLocalStoragePrototype pls;
+
+    PLSTestTexture tex(GL_RGBA8);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferPixelLocalStorageANGLE(0, 0, 0, 0, W, H, GL_RGBA16F);  // Memoryless.
+    glFramebufferPixelLocalStorageANGLE(1, tex, 0, 0, W, H, GL_RGBA8);
+    glViewport(0, 0, W, H);
+    glDrawBuffers(0, nullptr);
+
+    glFramebufferPixelLocalClearValuefvANGLE(0, MakeArray<float>({1, 0, 0, 0}));
+    glFramebufferPixelLocalClearValuefvANGLE(1, MakeArray<float>({0, 1, 0, 0}));
+    glBeginPixelLocalStorageANGLE(2, GLenumArray({GL_REPLACE, GL_REPLACE}));
+
+    // Pass 1: draw to memoryless conditionally.
+    useProgram(R"(
+    PIXEL_LOCAL_DECL(memoryless, binding=0, rgba16f);
+    void main()
+    {
+        if (gl_FragCoord.x < 64.0)
+        {
+            pixelLocalStore(memoryless, vec4(1, 0, 1, 0));
+        }
+    })");
+    drawBoxes(pls, {{FULLSCREEN}});
+
+    // Pass 2: draw to tex conditionally.
+    useProgram(R"(
+    PIXEL_LOCAL_DECL(tex, binding=1, rgba8);
+    void main()
+    {
+        if (gl_FragCoord.y < 64.0)
+        {
+            pixelLocalStore(tex, vec4(0, 1, 0, 1));
+        }
+    })");
+    drawBoxes(pls, {{FULLSCREEN}});
+
+    // Pass 3: combine memoryless and tex.
+    useProgram(R"(
+    PIXEL_LOCAL_DECL(memoryless, binding=0, rgba16f);
+    PIXEL_LOCAL_DECL(tex, binding=1, rgba8);
+    void main()
+    {
+        pixelLocalStore(tex, pixelLocalLoad(tex) + pixelLocalLoad(memoryless));
+    })");
+    drawBoxes(pls, {{FULLSCREEN}});
+
+    glEndPixelLocalStorageANGLE();
+
+    attachTextureToScratchFBO(tex);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 0, 64, 64, 255, 255, 255, 255);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 0, W, 64, 255, 255, 0, 255);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 64, 64, H, 255, 255, 255, 0);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 64, W, H, 255, 255, 0, 0);
+
+    ASSERT_GL_NO_ERROR();
+
+    // Now treat "tex" as entirely readonly for an entire local storage render pass.
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    PLSTestTexture rttex(GL_RGBA8);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, rttex, 0);
+    glDrawBuffers(1, GLenumArray({GL_COLOR_ATTACHMENT0}));
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glBeginPixelLocalStorageANGLE(2, GLenumArray({GL_DISABLED_ANGLE, GL_KEEP}));
+
+    useProgram(R"(
+    PIXEL_LOCAL_DECL(tex, binding=1, rgba8);
+    out vec4 fragcolor;
+    void main()
+    {
+        fragcolor = 1.0 - pixelLocalLoad(tex);
+    })");
+    drawBoxes(pls, {{FULLSCREEN}});
+
+    glEndPixelLocalStorageANGLE();
+
+    // Ensure "tex" was properly read in the shader.
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 0, 64, 64, 0, 0, 0, 0);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 0, W, 64, 0, 0, 255, 0);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 64, 64, H, 0, 0, 0, 255);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 64, W, H, 0, 0, 255, 255);
+
+    // Ensure "tex" was preserved after the shader.
+    attachTextureToScratchFBO(tex);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 0, 64, 64, 255, 255, 255, 255);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 0, W, 64, 255, 255, 0, 255);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 0, 64, 64, H, 255, 255, 255, 0);
+    ASSERT_FRAMEBUFFER_PIXEL_RECT(uint8_t, 64, 64, W, H, 255, 255, 0, 0);
 
     ASSERT_GL_NO_ERROR();
 }
