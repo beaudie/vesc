@@ -594,6 +594,53 @@ angle::Result ContextGL::drawElementsInstancedBaseVertex(const gl::Context *cont
     return angle::Result::Continue;
 }
 
+angle::Result ContextGL::drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                           gl::PrimitiveMode mode,
+                                                           GLsizei count,
+                                                           gl::DrawElementsType type,
+                                                           const void *indices,
+                                                           GLsizei instances,
+                                                           GLuint baseInstance)
+{
+    GLsizei adjustedInstanceCount = instances;
+    const gl::Program *program    = context->getState().getProgram();
+    if (program->usesMultiview())
+    {
+        adjustedInstanceCount *= program->getNumViews();
+    }
+    const void *drawIndexPointer = nullptr;
+
+    ANGLE_TRY(setDrawElementsState(context, count, type, indices, adjustedInstanceCount,
+                                   &drawIndexPointer));
+
+    const FunctionsGL *functions = getFunctions();
+
+    if (functions->drawElementsInstancedBaseInstance)
+    {
+        // GL 4.2+ or GL_EXT_base_instance
+        ANGLE_GL_TRY(context, functions->drawElementsInstancedBaseInstance(
+                                  ToGLenum(mode), count, ToGLenum(type), drawIndexPointer,
+                                  adjustedInstanceCount, baseInstance));
+    }
+    else
+    {
+        // GL 3.3+ or GLES 3.2+
+        // TODO(http://anglebug.com/3910): same as above
+
+        gl::AttributesMask attribToResetMask =
+            updateAttributesForBaseInstance(program, baseInstance);
+
+        ANGLE_GL_TRY(context, getFunctions()->drawElementsInstanced(
+                                  ToGLenum(mode), count, ToGLenum(type), drawIndexPointer,
+                                  adjustedInstanceCount));
+
+        resetUpdatedAttributes(attribToResetMask);
+    }
+
+    mRenderer->markWorkSubmitted();
+    return angle::Result::Continue;
+}
+
 angle::Result ContextGL::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                                      gl::PrimitiveMode mode,
                                                                      GLsizei count,
