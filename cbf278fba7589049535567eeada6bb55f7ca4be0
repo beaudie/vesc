@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a1942c4_1fd55e84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-08T03:17:53Z",
+      "side": 1,
+      "message": "I tend to agree.  However, there\u0027s a tight Android deadline.  Thus, I\u0027m inclined to keep the Android CL as-is, just so we can land it Wednesday.\n\nAfter that, let\u0027s talk more.  I\u0027m pondering what to do on the Android master branch, so that the root cause can be found sooner (e.g. revert the CL there--Android branches are different than Chromium DEPS), or perhaps we should modify this CL and land it, so that it can flow down to master.  Not sure yet.",
+      "parentUuid": "a61a8356_780c1189",
+      "revId": "cbf278fba7589049535567eeada6bb55f7ca4be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65394b11_c79e8c87",
         "filename": "include/platform/frontend_features.json",
         "patchSetId": 3
