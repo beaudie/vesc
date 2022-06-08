@@ -5220,6 +5220,33 @@ TEST_P(ImageTest, DeletedImageWithSameSizeAndFormat)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test calling glEGLImageTargetTexture2DOES repeatedly with same arguments will not leak
+// DescriptorSets
+TEST_P(ImageTest, Source2DAndRepeatedlyRespecifyTarget2DWithSameParameter)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    // Create the Image
+    GLTexture source;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs,
+                                  static_cast<void *>(&kLinearColor), source, &image);
+
+    // Create the target
+    GLTexture target;
+    for (int loop = 0; loop < 1000; loop++)
+    {
+        createEGLImageTargetTexture2D(image, target);
+
+        // Expect that the target texture has the same color as the source texture
+        verifyResults2D(target, kLinearColor);
+    }
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), image);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ImageTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ImageTestES3);
