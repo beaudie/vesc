@@ -289,3 +289,9 @@
 6678 UBSAN : KHR-GLES31.core.internalformat.texture2d.r*half_float* = SKIP
 6678 UBSAN : KHR-GLES31.core.shader_bitfield_operation.bitfield* = SKIP
 6729 UBSAN : KHR-GLES31.core.compute_shader.shared-max = SKIP
+
+2849 VULKAN AMD : KHR-GLES31.core.blend_equation_advanced.blend_all.GL_HSL_HUE_KHR_all_qualifier = FAIL
+2849 VULKAN AMD : KHR-GLES31.core.blend_equation_advanced.blend_all.GL_HSL_SATURATION_KHR_all_qualifier = FAIL
+2849 VULKAN AMD : KHR-GLES31.core.blend_equation_advanced.blend_specific.GL_HSL_HUE_KHR = FAIL
+2849 VULKAN AMD : KHR-GLES31.core.blend_equation_advanced.blend_specific.GL_HSL_SATURATION_KHR = FAIL
+2849 VULKAN AMD : KHR-GLES31.core.compute_shader.max = FAIL

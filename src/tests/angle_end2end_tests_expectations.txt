@@ -639,3 +639,13 @@
 // Windows GLES also has an issue with this test.
 3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
 7398 WIN OpenGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
+
+2849 VULKAN AMD : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/** = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.BlitFramebufferTest/* = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.RenderbufferBlitFramebufferTest/* = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.RenderbufferUnresolveColorAndDepthThenTwoColors/* = SKIP
+2849 VULKAN AMD : ProgramPipelineTest31.SampleTextureAThenTextureB/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.DrawElementsIndexOutOfRangeWithStaticDraw/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.DynamicBuffer/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.InterleavedAttributes/* = SKIP
+2849 VULKAN AMD : RobustResourceInitTest.OutOfBoundsIndexBuffers/* = SKIP
