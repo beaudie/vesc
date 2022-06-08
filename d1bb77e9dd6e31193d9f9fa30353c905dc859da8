@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98cc9017_7ab1225d",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-08T15:59:19Z",
+      "side": 1,
+      "message": "nit: Please add a comment + static_assert that these should be after the other ones.\n\nThere will be a runtime ASSERT in resetLaterBits, but much easier if that\u0027s caught at compile time.",
+      "revId": "d1bb77e9dd6e31193d9f9fa30353c905dc859da8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
