@@ -203,7 +203,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     std::mutex &getTraceEventMutex() { return mTraceEventMutex; }
 
   protected:
-    const RenderTestParams &mTestParams;
+    const RenderTestParams mTestParams;
 
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
     void setRobustResourceInit(bool enabled);
