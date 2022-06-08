@@ -1018,7 +1018,9 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     TestSuite *mTestSuite;
 };
 
-TestSuite::TestSuite(int *argc, char **argv)
+TestSuite::TestSuite(int *argc, char **argv) : TestSuite(argc, argv, []() {}) {}
+
+TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTestsCallback)
     : mShardCount(-1),
       mShardIndex(-1),
       mBotMode(false),
@@ -1112,6 +1114,8 @@ TestSuite::TestSuite(int *argc, char **argv)
         InitCrashHandler(&mCrashCallback);
     }
 
+    registerTestsCallback();
+
     std::string envShardIndex = angle::GetEnvironmentVar("GTEST_SHARD_INDEX");
     if (!envShardIndex.empty())
     {
@@ -1134,10 +1138,11 @@ TestSuite::TestSuite(int *argc, char **argv)
         }
     }
 
-    // The test harness reads the active GPU from SystemInfo and uses that for test expectations.
-    // However, some ANGLE backends don't have a concept of an "active" GPU, and instead use power
-    // preference to select GPU. We can use the environment variable ANGLE_PREFERRED_DEVICE to
-    // ensure ANGLE's selected GPU matches the GPU expected for this test suite.
+    // The test harness reads the active GPU from SystemInfo and uses that for test
+    // expectations. However, some ANGLE backends don't have a concept of an "active" GPU, and
+    // instead use power preference to select GPU. We can use the environment variable
+    // ANGLE_PREFERRED_DEVICE to ensure ANGLE's selected GPU matches the GPU expected for this
+    // test suite.
     const GPUTestConfig testConfig      = GPUTestConfig();
     const char kPreferredDeviceEnvVar[] = "ANGLE_PREFERRED_DEVICE";
     if (GetEnvironmentVar(kPreferredDeviceEnvVar).empty())
@@ -1667,10 +1672,11 @@ int TestSuite::run()
         ListTests(mTestResults.results);
 
 #if defined(ANGLE_PLATFORM_ANDROID)
-        // Because of quirks with the Chromium-provided Android test runner, we need to use a few
-        // tricks to get the test list output. We add placeholder output for a single test to trick
-        // the test runner into thinking it ran the tests successfully. We also add an end marker
-        // for the tests list so we can parse the list from the more spammy Android stdout log.
+        // Because of quirks with the Chromium-provided Android test runner, we need to use a
+        // few tricks to get the test list output. We add placeholder output for a single test
+        // to trick the test runner into thinking it ran the tests successfully. We also add an
+        // end marker for the tests list so we can parse the list from the more spammy Android
+        // stdout log.
         static constexpr char kPlaceholderTestTest[] = R"(
 [==========] Running 1 test from 1 test suite.
 [----------] Global test environment set-up.
