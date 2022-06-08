@@ -70,6 +70,30 @@
       },
       "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e95bf06d_8ca90dd4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-08T22:35:31Z",
+      "side": 1,
+      "message": "It really depends on the application. Some apps only render to the swapchain. And for some apps rotation is common (like the browser).\n\nThat said, I disabled spec consts for rotation on ARM and IMG, so there\u0027s no double-compile here for us at least. Mohan\u0027s team is the one realistically affected, so if you don\u0027t mind I\u0027ll leave it to them to decide whether its worth it.\n\nFYI, one partner (you know which) said their GL driver compiles \"a couple of variations\" at link time and they _never_ compile at draw time, so we probably need to compile even more things here as we discover them.",
+      "parentUuid": "5e746112_ba55b41d",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 748,
+        "endChar": 0
+      },
+      "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
