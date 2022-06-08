@@ -544,8 +544,14 @@ bool ValidateDrawArraysInstancedBaseInstanceEXT(const Context *context,
                                                 GLsizei instanceCount,
                                                 GLuint baseInstance)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (!context->getExtensions().baseInstanceEXT)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateDrawArraysInstancedBaseInstanceANGLE(context, entryPoint, mode, first, count,
+                                                        instanceCount, baseInstance);
 }
 
 bool ValidateDrawElementsInstancedBaseInstanceEXT(const Context *context,
@@ -557,8 +563,16 @@ bool ValidateDrawElementsInstancedBaseInstanceEXT(const Context *context,
                                                   GLsizei instancecount,
                                                   GLuint baseinstance)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (!context->getExtensions().baseInstanceEXT)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    PrimitiveMode primitiveMode       = FromGLenum<PrimitiveMode>(mode);
+    DrawElementsType drawElementsType = FromGLenum<DrawElementsType>(type);
+    return ValidateDrawElementsInstancedBase(context, entryPoint, primitiveMode, count,
+                                             drawElementsType, indices, instancecount);
 }
 
 bool ValidateDrawElementsInstancedBaseVertexBaseInstanceEXT(const Context *context,
@@ -571,8 +585,15 @@ bool ValidateDrawElementsInstancedBaseVertexBaseInstanceEXT(const Context *conte
                                                             GLint basevertex,
                                                             GLuint baseinstance)
 {
-    UNIMPLEMENTED();
-    return false;
+    if (!context->getExtensions().baseInstanceEXT)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return ValidateDrawElementsInstancedBaseVertexBaseInstanceANGLE(
+        context, entryPoint, mode, count, typePacked, indices, instancecount, basevertex,
+        baseinstance);
 }
 
 bool ValidateDrawElementsBaseVertexOES(const Context *context,
