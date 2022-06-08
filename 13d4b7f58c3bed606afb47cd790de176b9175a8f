@@ -70,6 +70,30 @@
       },
       "revId": "13d4b7f58c3bed606afb47cd790de176b9175a8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ef87949_b653708f",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-08T16:58:24Z",
+      "side": 1,
+      "message": "Okay, got a chance to think through this again and was able to migrate to the map layout.  The output from my `animal_crossing` test is the same.  LMKWYT.",
+      "parentUuid": "d224ad3a_05d7f44d",
+      "range": {
+        "startLine": 404,
+        "startChar": 0,
+        "endLine": 405,
+        "endChar": 50
+      },
+      "revId": "13d4b7f58c3bed606afb47cd790de176b9175a8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
