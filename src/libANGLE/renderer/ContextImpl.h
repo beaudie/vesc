@@ -83,6 +83,13 @@ class ContextImpl : public GLImplFactory
                                                           const void *indices,
                                                           GLsizei instances,
                                                           GLint baseVertex)                = 0;
+    virtual angle::Result drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                            gl::PrimitiveMode mode,
+                                                            GLsizei count,
+                                                            gl::DrawElementsType type,
+                                                            const void *indices,
+                                                            GLsizei instances,
+                                                            GLuint baseInstance)           = 0;
     virtual angle::Result drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                                       gl::PrimitiveMode mode,
                                                                       GLsizei count,

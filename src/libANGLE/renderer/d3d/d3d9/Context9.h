@@ -115,6 +115,13 @@ class Context9 : public ContextD3D
                                                   const void *indices,
                                                   GLsizei instances,
                                                   GLint baseVertex) override;
+    angle::Result drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                    gl::PrimitiveMode mode,
+                                                    GLsizei count,
+                                                    gl::DrawElementsType type,
+                                                    const void *indices,
+                                                    GLsizei instances,
+                                                    GLuint baseInstance) override;
     angle::Result drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                               gl::PrimitiveMode mode,
                                                               GLsizei count,
