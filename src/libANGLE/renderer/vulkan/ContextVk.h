@@ -156,6 +156,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                   const void *indices,
                                                   GLsizei instanceCount,
                                                   GLint baseVertex) override;
+    angle::Result drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                    gl::PrimitiveMode mode,
+                                                    GLsizei count,
+                                                    gl::DrawElementsType type,
+                                                    const void *indices,
+                                                    GLsizei instances,
+                                                    GLuint baseInstance) override;
     angle::Result drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                               gl::PrimitiveMode mode,
                                                               GLsizei count,
