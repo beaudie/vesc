@@ -6769,14 +6769,32 @@ void Context::drawArraysInstancedBaseInstanceANGLE(PrimitiveMode mode,
     drawArraysInstancedBaseInstance(mode, first, count, instanceCount, baseInstance);
 }
 
-void Context::drawElementsInstancedBaseInstance(GLenum mode,
+void Context::drawElementsInstancedBaseInstance(PrimitiveMode mode,
                                                 GLsizei count,
-                                                GLenum type,
+                                                DrawElementsType type,
                                                 const void *indices,
-                                                GLsizei instancecount,
-                                                GLuint baseinstance)
+                                                GLsizei instanceCount,
+                                                GLuint baseInstance)
 {
-    UNIMPLEMENTED();
+    if (noopDrawInstanced(mode, count, instanceCount))
+    {
+        ANGLE_CONTEXT_TRY(mImplementation->handleNoopDrawEvent());
+        return;
+    }
+
+    ANGLE_CONTEXT_TRY(prepareForDraw(mode));
+    Program *programObject = mState.getLinkedProgram(this);
+
+    const bool hasBaseInstance = programObject && programObject->hasBaseInstanceUniform();
+    if (hasBaseInstance)
+    {
+        programObject->setBaseInstanceUniform(baseInstance);
+    }
+
+    rx::ResetBaseVertexBaseInstance resetUniforms(programObject, false, hasBaseInstance);
+
+    ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstancedBaseInstance(
+        this, mode, count, type, indices, instanceCount, baseInstance));
 }
 
 void Context::drawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,

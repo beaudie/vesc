@@ -230,6 +230,18 @@ angle::Result Context9::drawElementsInstancedBaseVertex(const gl::Context *conte
     return angle::Result::Continue;
 }
 
+angle::Result Context9::drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          GLsizei count,
+                                                          gl::DrawElementsType type,
+                                                          const void *indices,
+                                                          GLsizei instances,
+                                                          GLuint baseInstance)
+{
+    ANGLE_HR_UNREACHABLE(this);
+    return angle::Result::Continue;
+}
+
 angle::Result Context9::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                                     gl::PrimitiveMode mode,
                                                                     GLsizei count,
