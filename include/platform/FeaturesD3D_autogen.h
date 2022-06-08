@@ -164,6 +164,13 @@ struct FeaturesD3D : FeatureSetBase
         "Allow ES3 on 10.0 devices",
         &members,
     };
+
+    FeatureInfo enableTimestampQueries = {
+        "enableTimestampQueries",
+        FeatureCategory::D3DWorkarounds,
+        "Enable timestamp on GL_EXT_disjoint_timer_query extension",
+        &members,
+    };
 };
 
 inline FeaturesD3D::FeaturesD3D()  = default;
