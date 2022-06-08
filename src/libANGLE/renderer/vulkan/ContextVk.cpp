@@ -1973,6 +1973,9 @@ angle::Result ContextVk::handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dir
     FramebufferVk *drawFramebufferVk             = getDrawFramebuffer();
     const gl::FramebufferState &framebufferState = drawFramebufferVk->getState();
 
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
     // Update color attachment accesses
     vk::PackedAttachmentIndex colorIndexVk(0);
     for (size_t colorIndexGL : framebufferState.getColorAttachmentsMask())
@@ -1981,7 +1984,7 @@ angle::Result ContextVk::handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dir
         {
             vk::ResourceAccess colorAccess = GetColorAccess(
                 mState, framebufferState, drawFramebufferVk->getEmulatedAlphaAttachmentMask(),
-                drawFramebufferVk->hasFramebufferFetch(), colorIndexGL);
+                executable->usesFramebufferFetch(), colorIndexGL);
             mRenderPassCommands->onColorAccess(colorIndexVk, colorAccess);
         }
         ++colorIndexVk;
@@ -3056,9 +3059,9 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 
 angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Serial *submitSerialOut)
 {
-    getShareGroupVk()->acquireResourceUseList(
+    getShareGroup()->acquireResourceUseList(
         std::move(mOutsideRenderPassCommands->releaseResourceUseList()));
-    getShareGroupVk()->acquireResourceUseList(
+    getShareGroup()->acquireResourceUseList(
         std::move(mRenderPassCommands->releaseResourceUseList()));
 
     ANGLE_TRY(submitCommands(signalSemaphore, submitSerialOut));
@@ -3072,7 +3075,7 @@ angle::Result ContextVk::submitFrame(const vk::Semaphore *signalSemaphore, Seria
 angle::Result ContextVk::submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::submitFrameOutsideCommandBufferOnly");
-    getShareGroupVk()->acquireResourceUseList(
+    getShareGroup()->acquireResourceUseList(
         std::move(mOutsideRenderPassCommands->releaseResourceUseList()));
 
     return submitCommands(nullptr, submitSerialOut);
@@ -3102,7 +3105,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
                                      std::move(mWaitSemaphoreStageMasks), signalSemaphore,
                                      std::move(mCurrentGarbage), &mCommandPools, submitSerialOut));
 
-    getShareGroupVk()->releaseResourceUseLists(*submitSerialOut);
+    getShareGroup()->releaseResourceUseLists(*submitSerialOut);
     // Now that we have processed resourceUseList, some of pending garbage may no longer pending
     // and should be moved to garbage list.
     mRenderer->cleanupPendingSubmissionGarbage();
@@ -4665,35 +4668,6 @@ void ContextVk::updateDither()
     }
 }
 
-angle::Result ContextVk::checkAndUpdateFramebufferFetchStatus(
-    const gl::ProgramExecutable *executable)
-{
-    if (!executable)
-    {
-        return angle::Result::Continue;
-    }
-
-    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-    ASSERT(drawFramebufferVk);
-
-    if (drawFramebufferVk->getRenderPassDesc().getFramebufferFetchMode() !=
-        executable->usesFramebufferFetch())
-    {
-        drawFramebufferVk->onSwitchProgramFramebufferFetch(this,
-                                                           executable->usesFramebufferFetch());
-        if (executable->usesFramebufferFetch())
-        {
-            mRenderer->onFramebufferFetchUsed();
-
-            // When framebuffer fetch is enabled, attachments can be read from even if output is
-            // masked, so update their access.
-            onColorAccessChange();
-        }
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
@@ -4717,13 +4691,11 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         mCurrentGraphicsPipeline = nullptr;
         mGraphicsPipelineTransition.reset();
 
-        if (getDrawFramebuffer()->getRenderPassDesc().getFramebufferFetchMode() !=
-            executable->usesFramebufferFetch())
+        if (executable->usesFramebufferFetch())
         {
-            ANGLE_TRY(
-                flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
-
-            ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(executable));
+            // When framebuffer fetch is enabled, attachments can be read from even if output is
+            // masked, so update their access.
+            onColorAccessChange();
         }
     }
 
@@ -5017,8 +4989,11 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
                 onDrawFramebufferRenderPassDescChange(drawFramebufferVk, nullptr);
 
-                // We may need to update the framebuffer's use of fetch to match the in-use program
-                ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(glState.getProgramExecutable()));
+                // If in framebuffer fetch mode, we should switch any new framebuffer to this mode.
+                if (getShareGroup()->isFramebufferFetchUsed())
+                {
+                    drawFramebufferVk->switchToFramebufferFetchMode(this);
+                }
 
                 break;
             }
@@ -7035,7 +7010,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
 
     flushDescriptorSetUpdates();
 
-    getShareGroupVk()->acquireResourceUseList(
+    getShareGroup()->acquireResourceUseList(
         std::move(mRenderPassCommands->releaseResourceUseList()));
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
@@ -7249,7 +7224,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     flushDescriptorSetUpdates();
 
-    getShareGroupVk()->acquireResourceUseList(
+    getShareGroup()->acquireResourceUseList(
         std::move(mOutsideRenderPassCommands->releaseResourceUseList()));
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
@@ -7770,6 +7745,31 @@ angle::Result ContextVk::bindCachedDescriptorPool(
     return descriptorPool.bindCachedDescriptorPool(
         this, descriptorSetLayoutDesc, descriptorCountMultiplier,
         &mShareGroupVk->getDescriptorSetLayoutCache(), poolPointerOut);
+}
+
+angle::Result ContextVk::switchToFramebufferFetchMode()
+{
+    // In the off chance that a render pass is already open, close it.
+    if (mRenderPassCommands->started())
+    {
+        ANGLE_TRY(
+            flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferFetchEmulation));
+    }
+
+    // If there's a draw buffer bound, switch it to framebuffer fetch mode.  Every other framebuffer
+    // will switch when bound.
+    if (mState.getDrawFramebuffer() != nullptr)
+    {
+        getDrawFramebuffer()->switchToFramebufferFetchMode(this);
+    }
+
+    // Clear the render pass cache; all render passes will be incompatible from now on with the old
+    // ones.
+    mRenderPassCache.clear(this);
+
+    mRenderer->onFramebufferFetchUsed();
+
+    return angle::Result::Continue;
 }
 
 // UpdateDescriptorSetsBuilder implementation.
