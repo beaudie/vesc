@@ -639,3 +639,6 @@
 // Windows GLES also has an issue with this test.
 3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
 7398 WIN OpenGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
+
+// Timeout with SwiftShader due to large workloads
+7389 SWIFTSHADER : Texture2DTest.ManySupersedingTextureUpdates/* = SKIP
