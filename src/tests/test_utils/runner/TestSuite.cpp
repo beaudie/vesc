@@ -74,7 +74,7 @@ constexpr int kSlowTestTimeoutScale  = 3;
 constexpr int kDefaultBatchSize      = 256;
 constexpr double kIdleMessageTimeout = 15.0;
 constexpr int kDefaultMaxProcesses   = 16;
-constexpr int kDefaultMaxFailures    = 100;
+constexpr int kDefaultMaxFailures    = 1000;
 
 const char *ParseFlagValue(const char *flag, const char *argument)
 {
@@ -1862,11 +1862,8 @@ int TestSuite::printFailuresAndReturnCount() const
         }
         else if (result.type != TestResultType::Pass)
         {
-            const FileLine &fileLine = mTestFileLines.find(id)->second;
-
             std::stringstream failureMessage;
-            failureMessage << id << " (" << fileLine.file << ":" << fileLine.line << ") ("
-                           << ResultTypeToString(result.type) << ")";
+            failureMessage << id << " = " << ResultTypeToString(result.type);
             failures.emplace_back(failureMessage.str());
         }
     }
