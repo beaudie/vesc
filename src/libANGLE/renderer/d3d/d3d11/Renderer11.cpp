@@ -1358,6 +1358,39 @@ angle::Result Renderer11::flush(Context11 *context11)
     return angle::Result::Continue;
 }
 
+angle::Result Renderer11::initializeDisjointQuery(Context11 *context11)
+{
+    if (!mDisjointQuery.valid())
+    {
+        D3D11_QUERY_DESC queryDesc;
+        queryDesc.Query     = gl_d3d11::ConvertQueryType(gl::QueryType::Timestamp);
+        queryDesc.MiscFlags = 0;
+
+        ANGLE_TRY(allocateResource(context11, queryDesc, &mDisjointQuery));
+        mDeviceContext->Begin(mDisjointQuery.get());
+        ASSERT(mDisjointQuery.valid());
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result Renderer11::getDisjointQueryStatus(Context11 *context11,
+                                                 D3D11_QUERY_DATA_TIMESTAMP_DISJOINT *timeStats)
+{
+    if (mDisjointQuery.valid())
+    {
+        mDeviceContext->End(mDisjointQuery.get());
+        HRESULT result = mDeviceContext->GetData(mDisjointQuery.get(), timeStats,
+                                                 sizeof(D3D11_QUERY_DATA_TIMESTAMP_DISJOINT), 0);
+        ANGLE_TRY_HR(context11, result, "Failed to get the data of an internal query");
+        std::stringstream timestampTraceStr;
+        timestampTraceStr << "GPU Tick Frequency: " << timeStats->Frequency;
+        ANGLE_TRACE_EVENT1("gpu.angle", "Renderer11::getDisjointQueryStatus", "timestamp",
+                           timestampTraceStr.str());
+        mDisjointQuery.reset();
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result Renderer11::finish(Context11 *context11)
 {
     if (!mSyncQuery.valid())

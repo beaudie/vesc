@@ -79,7 +79,6 @@ class Renderer11 : public RendererD3D
   public:
     explicit Renderer11(egl::Display *display);
     ~Renderer11() override;
-
     egl::Error initialize() override;
     bool resetDevice() override;
 
@@ -304,6 +303,10 @@ class Renderer11 : public RendererD3D
     ID3D11DeviceContext *getDeviceContext() { return mDeviceContext; }
     ID3D11DeviceContext1 *getDeviceContext1IfSupported() { return mDeviceContext1; }
     IDXGIFactory *getDxgiFactory() { return mDxgiFactory; }
+
+    angle::Result initializeDisjointQuery(Context11 *context11);
+    angle::Result getDisjointQueryStatus(Context11 *context11,
+                                         D3D11_QUERY_DATA_TIMESTAMP_DISJOINT *timeStats);
 
     angle::Result getBlendState(const gl::Context *context,
                                 const d3d11::BlendStateKey &key,
@@ -594,6 +597,7 @@ class Renderer11 : public RendererD3D
 
     // Sync query
     d3d11::Query mSyncQuery;
+    d3d11::Query mDisjointQuery;
 
     // Created objects state tracking
     std::set<const Buffer11 *> mAliveBuffers;
