@@ -2232,6 +2232,10 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
             *params = mState.mClipControlDepth;
             break;
 
+        case GL_QUERY_COUNTER_BITS_EXT:
+            *params = mState.mCaps.queryCounterBitsTimestamp;
+            break;
+
         default:
             ANGLE_CONTEXT_TRY(mState.getIntegerv(this, pname, params));
             break;
