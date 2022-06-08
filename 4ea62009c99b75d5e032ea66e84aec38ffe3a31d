@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848404f6_b1ce3db2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-06-08T08:39:00Z",
+      "side": 0,
+      "message": "[1]",
+      "revId": "4ea62009c99b75d5e032ea66e84aec38ffe3a31d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

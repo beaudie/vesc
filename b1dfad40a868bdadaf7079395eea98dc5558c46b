@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3055a19_fe354f83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-06-08T08:39:00Z",
+      "side": 1,
+      "message": "+Jamie/Geoff\nBefore we go deeper, I believe anglers ever tried this path or had some investigation. I\u0027d like to hear Jamie/Geoff\u0027s opinions (please see my below comment) that whether we are in the right way to support timestamps on d3d11 since there is clear annotation that d3d11 doesn\u0027t support timestamps in code. \n",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75cd3100_89d9c90e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-06-08T08:39:00Z",
+      "side": 1,
+      "message": "According to https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ne-d3d11-d3d11_query, This kind of query (D3D11_QUERY_TIMESTAMP) is only useful if two timestamp queries are done in the middle of a D3D11_QUERY_TIMESTAMP_DISJOINT query. However, you are putting only one timestamp in the middle of a D3D11_QUERY_TIMESTAMP_DISJOINT query. So can two timestamps be compared?\n\nAlso see annotation in [1]. \u0027D3D11 doesn\u0027t support GL timestamp queries as D3D timestamps are not guaranteed to have any sort of continuity outside of a disjoint timestamp query block\u0027. So maybe we should firstly figure out whether we can use it like you did.",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
