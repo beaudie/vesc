@@ -894,6 +894,20 @@ angle::Result ContextMtl::drawElementsInstancedBaseVertex(const gl::Context *con
     return drawElementsImpl(context, mode, count, type, indices, instanceCount, baseVertex, 0);
 }
 
+angle::Result ContextMtl::drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                            gl::PrimitiveMode mode,
+                                                            GLsizei count,
+                                                            gl::DrawElementsType type,
+                                                            const void *indices,
+                                                            GLsizei instances,
+                                                            GLuint baseInstance)
+{
+    // Instanced draw calls with zero instances are skipped in the frontend.
+    // The drawElementsImpl function would treat them as non-instanced.
+    ASSERT(instances > 0);
+    return drawElementsImpl(context, mode, count, type, indices, instances, 0, baseInstance);
+}
+
 angle::Result ContextMtl::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                                       gl::PrimitiveMode mode,
                                                                       GLsizei count,
