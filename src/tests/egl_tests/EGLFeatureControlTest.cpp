@@ -145,6 +145,7 @@ void EGLFeatureControlTest::testOverrideFeatures(FeatureNameModifier modifyName)
         // Safe to toggle on Vulkan
         angle::GetFeatureName(angle::Feature::SupportsNegativeViewport),
         // Safe to toggle on D3D
+        angle::GetFeatureName(angle::Feature::EnableTimestampQueries),
         angle::GetFeatureName(angle::Feature::ZeroMaxLodWorkaround),
         angle::GetFeatureName(angle::Feature::ExpandIntegerPowExpressions),
         angle::GetFeatureName(angle::Feature::RewriteUnaryMinusOperator),
