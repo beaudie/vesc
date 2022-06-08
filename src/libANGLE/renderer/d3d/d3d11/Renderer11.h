@@ -79,7 +79,10 @@ class Renderer11 : public RendererD3D
   public:
     explicit Renderer11(egl::Display *display);
     ~Renderer11() override;
-
+    angle::Result getDisjointStatus(Context11 *context11,
+                                    D3D11_QUERY_DATA_TIMESTAMP_DISJOINT *timeStats);
+    angle::Result beginTimestamp(Context11 *context11);
+    bool isTimestamp();
     egl::Error initialize() override;
     bool resetDevice() override;
 
@@ -594,6 +597,7 @@ class Renderer11 : public RendererD3D
 
     // Sync query
     d3d11::Query mSyncQuery;
+    d3d11::Query mDisjointQuery;
 
     // Created objects state tracking
     std::set<const Buffer11 *> mAliveBuffers;
