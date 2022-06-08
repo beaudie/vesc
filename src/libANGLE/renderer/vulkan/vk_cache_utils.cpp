@@ -4062,9 +4062,9 @@ void FramebufferDesc::updateLayerCount(uint32_t layerCount)
     SetBitField(mLayerCount, layerCount);
 }
 
-void FramebufferDesc::updateFramebufferFetchMode(bool hasFramebufferFetch)
+void FramebufferDesc::setFramebufferFetchMode()
 {
-    SetBitField(mHasFramebufferFetch, hasFramebufferFetch);
+    SetBitField(mHasFramebufferFetch, true);
 }
 
 void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
@@ -4453,6 +4453,11 @@ RenderPassHelper &RenderPassHelper::operator=(RenderPassHelper &&other)
 void RenderPassHelper::destroy(VkDevice device)
 {
     mRenderPass.destroy(device);
+}
+
+void RenderPassHelper::release(ContextVk *contextVk)
+{
+    contextVk->addGarbage(&mRenderPass);
 }
 
 const RenderPass &RenderPassHelper::getRenderPass() const
@@ -5306,6 +5311,18 @@ void RenderPassCache::destroy(RendererVk *rendererVk)
         for (auto &innerIt : outerIt.second)
         {
             innerIt.second.destroy(device);
+        }
+    }
+    mPayload.clear();
+}
+
+void RenderPassCache::clear(ContextVk *contextVk)
+{
+    for (auto &outerIt : mPayload)
+    {
+        for (auto &innerIt : outerIt.second)
+        {
+            innerIt.second.release(contextVk);
         }
     }
     mPayload.clear();
