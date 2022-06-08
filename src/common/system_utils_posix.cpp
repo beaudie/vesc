@@ -237,7 +237,11 @@ void CloseSystemLibrary(void *libraryHandle)
 {
     if (libraryHandle)
     {
-        dlclose(libraryHandle);
+        // Workaround for http://crbug.com/1275223
+        if (!IsTSan())
+        {
+            dlclose(libraryHandle);
+        }
     }
 }
 
