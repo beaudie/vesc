@@ -46,6 +46,30 @@
       },
       "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3778bfa_2176e6a1",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-08T14:39:04Z",
+      "side": 1,
+      "message": "Thanks Cody. What I meant was:\n\n* Currently we call LoadTraceInfoFromJSON(trace_json_file) during initialization for each test (before test actually starts running)\n\n* Instead, we could load trace names during initialization (these come from restricted_traces.json, not trace_json_file) as this should be sufficient to create tests. Then, when the specific test is running we could call LoadTraceInfoFromJSON. This would parse that json multiple times for each configuration in which we\u0027re running the trace but I think that\u0027s very minor. This way we wouldn\u0027t have to track whether traceInfo is \"initialized\" or not - we would simply create it when it\u0027s needed instead of doing it in advance.",
+      "parentUuid": "34d3189f_bb8aaee5",
+      "range": {
+        "startLine": 2102,
+        "startChar": 32,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
