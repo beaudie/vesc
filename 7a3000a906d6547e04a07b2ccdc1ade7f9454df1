@@ -16,6 +16,24 @@
       "message": "This should be good until someone outside of cros runs venus on qcom proprietary driver.  Hopefully driverId becomes available on android before then :P",
       "revId": "7a3000a906d6547e04a07b2ccdc1ade7f9454df1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51c03775_78e0d85d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-08T13:45:08Z",
+      "side": 1,
+      "message": "Let\u0027s deal with that issue when that happens 😄",
+      "parentUuid": "12ff186c_95bff04e",
+      "revId": "7a3000a906d6547e04a07b2ccdc1ade7f9454df1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
