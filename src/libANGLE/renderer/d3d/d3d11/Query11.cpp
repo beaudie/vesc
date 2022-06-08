@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Context11.h"
 #include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
+#include "libANGLE/trace.h"
 
 namespace
 {
@@ -59,7 +60,8 @@ Query11::QueryState::~QueryState() {}
 Query11::Query11(Renderer11 *renderer, gl::QueryType type)
     : QueryImpl(type), mResult(0), mResultSum(0), mRenderer(renderer)
 {
-    mActiveQuery = std::unique_ptr<QueryState>(new QueryState());
+    mActiveQuery            = std::unique_ptr<QueryState>(new QueryState());
+    mEnableTimestampQueries = mRenderer->getFeatures().enableTimestampQueries.enabled;
 }
 
 Query11::~Query11()
@@ -79,13 +81,31 @@ angle::Result Query11::end(const gl::Context *context)
     return pause(GetImplAs<Context11>(context));
 }
 
-angle::Result Query11::queryCounter(const gl::Context *context)
+angle::Result Query11::queryCounter(const gl::Context *glContext)
 {
-    // This doesn't do anything for D3D11 as we don't support timestamps
     ASSERT(getType() == gl::QueryType::Timestamp);
-    mResultSum = 0;
-    mPendingQueries.push_back(std::unique_ptr<QueryState>(new QueryState()));
-    return angle::Result::Continue;
+    if (!mEnableTimestampQueries)
+    {
+        mResultSum = 0;
+        mPendingQueries.push_back(std::unique_ptr<QueryState>(new QueryState()));
+        return angle::Result::Continue;
+    }
+
+    Context11 *context11 = GetImplAs<Context11>(glContext);
+
+    D3D11_QUERY_DESC queryDesc;
+    queryDesc.MiscFlags = 0;
+    queryDesc.Query     = D3D11_QUERY_TIMESTAMP;
+
+    ANGLE_TRY(mRenderer->allocateResource(context11, queryDesc, &mActiveQuery->beginTimestamp));
+
+    ID3D11DeviceContext *context = mRenderer->getDeviceContext();
+    ANGLE_TRY(mRenderer->initializeDisjointQuery(context11));
+    context->End(mActiveQuery->beginTimestamp.get());
+
+    mPendingQueries.push_back(std::move(mActiveQuery));
+    mActiveQuery = std::unique_ptr<QueryState>(new QueryState());
+    return flush(context11, false);
 }
 
 template <typename T>
@@ -309,12 +329,43 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
 
             case gl::QueryType::Timestamp:
             {
-                // D3D11 doesn't support GL timestamp queries as D3D timestamps are not guaranteed
-                // to have any sort of continuity outside of a disjoint timestamp query block, which
-                // GL depends on
-                ASSERT(!queryState->query.valid());
-                mResult              = 0;
-                queryState->finished = true;
+                if (!mEnableTimestampQueries)
+                {
+                    mResult              = 0;
+                    queryState->finished = true;
+                }
+                else
+                {
+                    ASSERT(queryState->beginTimestamp.valid());
+                    D3D11_QUERY_DATA_TIMESTAMP_DISJOINT timeStats = {};
+
+                    ANGLE_TRY(mRenderer->getDisjointQueryStatus(context11, &timeStats));
+                    UINT64 timestamp     = 0;
+                    HRESULT timestampRes = context->GetData(queryState->beginTimestamp.get(),
+                                                            &timestamp, sizeof(UINT64), 0);
+                    ANGLE_TRY_HR(context11, timestampRes,
+                                 "Failed to get the data of an internal query");
+
+                    if (timestampRes == S_OK)
+                    {
+                        queryState->finished = true;
+
+                        if (timeStats.Disjoint)
+                        {
+                            mRenderer->setGPUDisjoint();
+                        }
+
+                        static_assert(sizeof(UINT64) == sizeof(unsigned long long),
+                                      "D3D UINT64 isn't 64 bits");
+
+                        mResult = timestamp;
+                        std::stringstream timestampTraceStr;
+                        timestampTraceStr << "GPU Timestamp: " << mResult;
+                        std::cout << timestampTraceStr.str() << std::endl;
+                        ANGLE_TRACE_EVENT1("gpu.angle", "Query11::testQuery", "timestamp",
+                                           timestampTraceStr.str());
+                    }
+                }
             }
             break;
 
