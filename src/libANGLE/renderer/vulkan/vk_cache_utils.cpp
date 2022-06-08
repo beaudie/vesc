@@ -4062,9 +4062,9 @@ void FramebufferDesc::updateLayerCount(uint32_t layerCount)
     SetBitField(mLayerCount, layerCount);
 }
 
-void FramebufferDesc::updateFramebufferFetchMode(bool hasFramebufferFetch)
+void FramebufferDesc::setFramebufferFetchMode()
 {
-    SetBitField(mHasFramebufferFetch, hasFramebufferFetch);
+    SetBitField(mHasFramebufferFetch, true);
 }
 
 void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
@@ -5292,7 +5292,7 @@ RenderPassCache::~RenderPassCache()
     ASSERT(mPayload.empty());
 }
 
-void RenderPassCache::destroy(RendererVk *rendererVk)
+void RenderPassCache::clear(RendererVk *rendererVk)
 {
     rendererVk->accumulateCacheStats(VulkanCacheType::CompatibleRenderPass,
                                      mCompatibleRenderPassCacheStats);
@@ -5309,6 +5309,11 @@ void RenderPassCache::destroy(RendererVk *rendererVk)
         }
     }
     mPayload.clear();
+}
+
+void RenderPassCache::destroy(RendererVk *rendererVk)
+{
+    clear(rendererVk);
 }
 
 angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,

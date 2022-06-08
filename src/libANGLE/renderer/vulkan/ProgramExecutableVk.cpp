@@ -943,6 +943,11 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     mDynamicUniformDescriptorOffsets.clear();
     mDynamicUniformDescriptorOffsets.resize(glExecutable.getLinkedShaderStageCount(), 0);
 
+    if (glExecutable.usesFramebufferFetch())
+    {
+        ANGLE_TRY(contextVk->getShareGroup()->onFramebufferFetchUsed());
+    }
+
     return angle::Result::Continue;
 }
 

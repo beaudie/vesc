@@ -253,7 +253,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                 GLsizei stride);
 
     // ShareGroup
-    ShareGroupVk *getShareGroupVk() { return mShareGroupVk; }
+    ShareGroupVk *getShareGroup() { return mShareGroupVk; }
     PipelineLayoutCache &getPipelineLayoutCache()
     {
         return mShareGroupVk->getPipelineLayoutCache();
@@ -741,15 +741,20 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return angle::Result::Continue;
     }
 
-    const angle::PerfMonitorCounterGroups &getPerfMonitorCounters() override;
-
-    void resetPerFramePerfCounters();
-
     angle::Result bindCachedDescriptorPool(
         DescriptorSetIndex descriptorSetIndex,
         const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
         uint32_t descriptorCountMultiplier,
         vk::DescriptorPoolPointer *poolPointerOut);
+
+    // Permanently put the context in framebuffer fetch mode.  This is done on first encounter of
+    // framebuffer fetch, and makes the context use framebuffer-fetch-enabled render passes from
+    // here on.
+    angle::Result switchToFramebufferFetchMode();
+
+    const angle::PerfMonitorCounterGroups &getPerfMonitorCounters() override;
+
+    void resetPerFramePerfCounters();
 
     // Accumulate cache stats for a specific cache
     void accumulateCacheStats(VulkanCacheType cache, const CacheStats &stats)
@@ -1050,7 +1055,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     angle::Result invalidateProgramExecutableHelper(const gl::Context *context);
-    angle::Result checkAndUpdateFramebufferFetchStatus(const gl::ProgramExecutable *executable);
 
     void invalidateCurrentDefaultUniforms();
     angle::Result invalidateCurrentTextures(const gl::Context *context, gl::Command command);
