@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd0ec7f_1f0856f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-08T15:34:24Z",
+      "side": 1,
+      "message": "Note that many of the same tests still fail on current HW/Drivers.",
+      "revId": "31321cb7380de9ca710a1005d5d397e0d2c1acd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
