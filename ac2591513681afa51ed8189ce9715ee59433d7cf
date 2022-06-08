@@ -46,6 +46,30 @@
       },
       "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e746112_ba55b41d",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-08T21:24:12Z",
+      "side": 1,
+      "message": "Could you try with app trace to see how much more memory it uses and how long the first frame it takes before/after the CL. My worry is that we are wasting extra time/memory here for nothing because the program is used only for FBO (it only uses one rotation).\n\nOr, maybe you could gather some statistics to see the percentages of programs are running with rotation and pick one has the most statistics. My guess is most program is for FBO, so no rotation is applied, and we could just bet on that.",
+      "parentUuid": "d6a1ee64_5f8a26d9",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 748,
+        "endChar": 0
+      },
+      "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
