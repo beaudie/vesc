@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f57c826e_1d773c9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2022-06-08T09:16:44Z",
+      "side": 1,
+      "message": "Hello SeongHwan Park and Jamie, I\u0027m cherry-picking this CL to the current LTS branch and after applying it I started to get the following test issues:\n\n$ ./out/Debug/angle_end2end_tests --gtest_filter\u003d\"TransformFeedbackTest.*\" --bot-mode\n...\n...\nWriting test results to output.json\nTests completed in 10.746045 seconds\n4 tests failed:\n    TransformFeedbackTest.BindAndUnbindTransformFeedback/ES3_OpenGL (../../src/tests/gl_tests/TransformFeedbackTest.cpp:3679) (FAIL)\n    TransformFeedbackTest.BindAndUnbindTransformFeedback/ES3_Vulkan (../../src/tests/gl_tests/TransformFeedbackTest.cpp:3679) (CRASH)\n    TransformFeedbackTest.BindAndUnbindTransformFeedback/ES3_Vulkan_AsyncQueue (../../src/tests/gl_tests/TransformFeedbackTest.cpp:3679) (CRASH)\n    TransformFeedbackTest.BindAndUnbindTransformFeedback/ES3_Vulkan_SwiftShader (../../src/tests/gl_tests/TransformFeedbackTest.cpp:3679) (FAIL)\n\nAre you aware of other CL that I might be missing that would prevent those issues?",
+      "revId": "a6f453d90c1606764f74ebf3b6d8c14072d602da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
