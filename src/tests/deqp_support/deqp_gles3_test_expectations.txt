@@ -774,3 +774,21 @@
 6678 UBSAN : dEQP-GLES3.functional.fragment_ops.interaction.basic_shader.* = SKIP
 6678 UBSAN : dEQP-GLES3.functional.fragment_out.* = SKIP
 6678 UBSAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.* = SKIP
+
+2849 VULKAN AMD : dEQP-GLES3.functional.clipping.line.wide_line* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.clipping.point.wide_point* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.fragment_out.array.int.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.fragment_out.array.uint.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.fragment_out.basic.int.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.fragment_out.basic.uint.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.fragment_out.random.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.polygon_offset.fixed16_render_with_units = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.shaders.texture_functions.textureprojlod.isampler3d_vertex = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.shaders.texture_functions.textureprojlod.usampler3d_vertex = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.array_element.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.point_size.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.random.* = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.random_full_array_capture.interleaved.lines.10 = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.random_full_array_capture.interleaved.lines.6 = FAIL
+2849 VULKAN AMD : dEQP-GLES3.functional.transform_feedback.random_full_array_capture.separate.triangles.6 = FAIL

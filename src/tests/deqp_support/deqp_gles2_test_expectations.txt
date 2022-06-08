@@ -317,3 +317,11 @@
 6678 UBSAN : dEQP-GLES2.functional.shaders.random.* = SKIP
 6678 UBSAN : dEQP-GLES2.functional.fragment_ops.interaction.basic_shader.* = SKIP
 6678 UBSAN : dEQP-GLES2.functional.shaders.texture_functions.vertex.texture2dprojlod_vec3 = SKIP
+
+// Vulkan AMD drivers don't support wide points/lines.
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.point.wide_point_clip = FAIL
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.point.wide_point_clip_viewport_center = FAIL
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.point.wide_point_clip_viewport_corner = FAIL
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.line.wide_line_clip = FAIL
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.line.wide_line_clip_viewport_center = FAIL
+2463 VULKAN AMD : dEQP-GLES2.functional.clipping.line.wide_line_clip_viewport_corner = FAIL

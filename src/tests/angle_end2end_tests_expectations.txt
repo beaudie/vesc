@@ -646,7 +646,7 @@
 // On D3D: UAVs don't allow aliasing.
 // On OpenGL, there's also an issue with this test.
 3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
-7398 OpenGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
+7398 OPENGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
 
 // imageLoad after imageStore with barrier is not coherent on Pixel 4 GLES.
 7388 ANDROID GLES : PixelLocalStorageTest.*/ES3_1_OpenGLES = SKIP
@@ -654,8 +654,19 @@
 // Flaky hangs on Linux SwANGLE
 7431 LINUX SWIFTSHADER : MultithreadingTestES3.ThreadB*BeforeThreadASyncFinish/ES3_Vulkan_SwiftShader = SKIP
 
+2849 VULKAN AMD : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/** = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.BlitFramebufferTest/* = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.RenderbufferBlitFramebufferTest/* = SKIP
+2849 VULKAN AMD : MultisampledRenderToTextureES3Test.RenderbufferUnresolveColorAndDepthThenTwoColors/* = SKIP
+2849 VULKAN AMD : ProgramPipelineTest31.SampleTextureAThenTextureB/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.DrawElementsIndexOutOfRangeWithStaticDraw/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.DynamicBuffer/* = SKIP
+2849 VULKAN AMD : RobustBufferAccessBehaviorTest.InterleavedAttributes/* = SKIP
+2849 VULKAN AMD : RobustResourceInitTest.OutOfBoundsIndexBuffers/* = SKIP
+
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 6251 : MultithreadingTest* = TIMEOUT
+
 // Please do not add expectations below this line,
 // so that TIMEOUT expectations above don't override more precise SKIP expectations
