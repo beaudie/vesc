@@ -127,6 +127,7 @@ class TestSuite
 {
   public:
     TestSuite(int *argc, char **argv);
+    TestSuite(int *argc, char **argv, std::function<void()> registerTestsCallback);
     ~TestSuite();
 
     int run();
