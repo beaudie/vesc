@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b54b278_33274284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-08T20:42:28Z",
+      "side": 1,
+      "message": "PTAL. Example flaky failure with better name: https://ci.chromium.org/ui/p/angle/builders/try/linux-tsan-test/3854/overview\n\nThink I fixed the Android failure in the latest patch set.",
+      "revId": "4a3ddb06dd5e8277aeee5a1d18e25bd8c2f999ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
