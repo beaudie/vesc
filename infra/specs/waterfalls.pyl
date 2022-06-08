@@ -60,6 +60,8 @@
           'linux_amd_rx_5500_xt',
         ],
         'test_suites': {
+          'gtest_tests': 'gpu_angle_linux_amd_gtests',
+          'isolated_scripts': 'common_isolated_scripts',
         },
       },
       'linux-intel': {
