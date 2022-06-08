@@ -649,3 +649,6 @@
 
 // imageLoad after imageStore with barrier is not coherent on Pixel 4 GLES.
 7388 ANDROID GLES : PixelLocalStorageTest.*/ES3_1_OpenGLES = SKIP
+
+// Timeout with SwiftShader due to large workloads
+7389 SWIFTSHADER : Texture2DTest.ManySupersedingTextureUpdates/* = SKIP
