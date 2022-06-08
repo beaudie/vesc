@@ -59,6 +59,9 @@ class ShareGroupVk : public ShareGroupImpl
     void addContext(ContextVk *contextVk);
     void removeContext(ContextVk *contextVk);
 
+    angle::Result onFramebufferFetchUsed();
+    bool isFramebufferFetchUsed() const { return mIsFramebufferFetchUsed; }
+
   private:
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
     PipelineLayoutCache mPipelineLayoutCache;
@@ -89,6 +92,13 @@ class ShareGroupVk : public ShareGroupImpl
     // If true, it is expected that a BufferBlock may still in used by textures that outlived
     // ShareGroup. The non-empty BufferBlock will be put into RendererVk's orphan list instead.
     bool mOrphanNonEmptyBufferBlock;
+
+    // Whether framebuffer fetch has been used.  If any program in the share group uses framebuffer
+    // fetch, rendering switches to assuming framebuffer fetch could happen in any render pass.
+    // This incurs a potential cost due to usage of the GENERAL layout instead of
+    // COLOR_ATTACHMENT_OPTIMAL, but has definite benefits of avoiding render pass breaks when
+    // a framebuffer fetch program is used mid render pass.
+    bool mIsFramebufferFetchUsed;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context
