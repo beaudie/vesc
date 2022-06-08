@@ -195,6 +195,17 @@ angle::Result ContextNULL::drawElementsInstancedBaseVertex(const gl::Context *co
     return angle::Result::Continue;
 }
 
+angle::Result ContextNULL::drawElementsInstancedBaseInstance(const gl::Context *context,
+                                                             gl::PrimitiveMode mode,
+                                                             GLsizei count,
+                                                             gl::DrawElementsType type,
+                                                             const void *indices,
+                                                             GLsizei instances,
+                                                             GLuint baseInstance)
+{
+    return angle::Result::Continue;
+}
+
 angle::Result ContextNULL::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
                                                                        gl::PrimitiveMode mode,
                                                                        GLsizei count,
