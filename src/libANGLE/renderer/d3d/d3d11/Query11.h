@@ -64,6 +64,7 @@ class Query11 : public QueryImpl
 
     std::unique_ptr<QueryState> mActiveQuery;
     std::deque<std::unique_ptr<QueryState>> mPendingQueries;
+    bool mEnableTimestampQueries;
 };
 
 }  // namespace rx
