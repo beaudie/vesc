@@ -33,6 +33,29 @@
       "message": "According to https://docs.microsoft.com/en-us/windows/win32/api/d3d11/ne-d3d11-d3d11_query, This kind of query (D3D11_QUERY_TIMESTAMP) is only useful if two timestamp queries are done in the middle of a D3D11_QUERY_TIMESTAMP_DISJOINT query. However, you are putting only one timestamp in the middle of a D3D11_QUERY_TIMESTAMP_DISJOINT query. So can two timestamps be compared?\n\nAlso see annotation in [1]. \u0027D3D11 doesn\u0027t support GL timestamp queries as D3D timestamps are not guaranteed to have any sort of continuity outside of a disjoint timestamp query block\u0027. So maybe we should firstly figure out whether we can use it like you did.",
       "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0efe5eba_7be42cf3",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-08T13:43:18Z",
+      "side": 1,
+      "message": "You don\u0027t need to create your own display and do any of this. Just create the test suite like `TimerQueriesTest` using the test fixture. Then instantiate it with something like this:\n\n```\nANGLE_INSTANTIATE_TEST_ES3_AND(TimerQueriesTest, ES3_D3D11().disable(Feature::EnableTimestampQueries));\n```\n\nThat will test with both ES3_D3D11 with default settings for timestamp queries, as well as ES3_D3D11 with this feature disabled.",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 520,
+        "endChar": 9
+      },
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
