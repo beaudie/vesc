@@ -163,3 +163,5 @@
 7357 : FramebufferTest_ES3.FramebufferConditionalFeedbackLoop/* = SKIP_FOR_CAPTURE
 
 7373 : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/* = SKIP_FOR_CAPTURE
+
+7389 : Texture2DTest.ManySupersedingTextureUpdates/* = SKIP_FOR_CAPTURE
