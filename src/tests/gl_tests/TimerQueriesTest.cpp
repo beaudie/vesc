@@ -482,6 +482,60 @@ TEST_P(TimerQueriesTest, Timestamp)
     EXPECT_LT(result1, result2);
 }
 
+void getQueryResult(GLuint queryObjectName, GLuint64 *result)
+{
+    GLuint queryResult = GL_FALSE;
+    while (queryResult != GL_TRUE)
+    {
+        glGetQueryObjectuivEXT(queryObjectName, GL_QUERY_RESULT_AVAILABLE, &queryResult);
+        ASSERT_GL_NO_ERROR();
+        angle::Sleep(50);
+    }
+    glGetQueryObjectui64vEXT(queryObjectName, GL_QUERY_RESULT_EXT, result);
+}
+
+class TimerstampQueriesTest : public TimerQueriesTest
+{};
+
+// Tests getting timestamps via glGetQueryObjectui64vEXT
+TEST_P(TimerstampQueriesTest, TimestampBasic)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_disjoint_timer_query"));
+    ANGLE_SKIP_TEST_IF(!IsD3D11() || !IsWindows());
+    const unsigned int TIMESTAMP_QUERY_SIZE = 2;
+    {
+        GLuint queryObjectNameArray[TIMESTAMP_QUERY_SIZE] = {0};
+
+        glGenQueriesEXT(TIMESTAMP_QUERY_SIZE, queryObjectNameArray);
+        ASSERT_GL_NO_ERROR();
+
+        GLint queryTimestampBits = 0;
+        glGetQueryivEXT(GL_TIMESTAMP_EXT, GL_QUERY_COUNTER_BITS_EXT, &queryTimestampBits);
+        ASSERT_GL_NO_ERROR();
+        std::cout << "Timestamp counter bits: " << queryTimestampBits << std::endl;
+
+        glQueryCounterEXT(queryObjectNameArray[0], GL_TIMESTAMP_EXT);
+        ASSERT_GL_NO_ERROR();
+        angle::Sleep(10);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        glQueryCounterEXT(queryObjectNameArray[1], GL_TIMESTAMP_EXT);
+        ASSERT_GL_NO_ERROR();
+
+        GLuint64 result1 = 0;
+        getQueryResult(queryObjectNameArray[0], &result1);
+
+        GLuint64 result2 = 0;
+        getQueryResult(queryObjectNameArray[1], &result2);
+        std::cout << "Timestamps: " << result1 << " " << result2 << std::endl;
+        if (queryTimestampBits != 0)
+        {
+            ASSERT_TRUE(result1 != 0 && result2 > result1);
+        }
+        glDeleteQueriesEXT(TIMESTAMP_QUERY_SIZE, queryObjectNameArray);
+    }
+}
+
 class TimerQueriesTestES3 : public TimerQueriesTest
 {};
 
@@ -514,6 +568,12 @@ TEST_P(TimerQueriesTestES3, TimestampGetInteger64)
     EXPECT_LT(0l, result2);
     EXPECT_LT(result1, result2);
 }
+
+ANGLE_INSTANTIATE_TEST_ES2_AND(TimerstampQueriesTest,
+                               ES3_D3D11().disable(Feature::EnableTimestampQueries),
+                               ES3_D3D11().enable(Feature::EnableTimestampQueries));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TimestampQueriesTest);
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(TimerQueriesTest);
 
