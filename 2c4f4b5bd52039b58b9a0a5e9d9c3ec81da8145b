@@ -50,6 +50,24 @@
       "message": "Thanks, pre-LGTM for whenever and however it works in the end.",
       "revId": "2c4f4b5bd52039b58b9a0a5e9d9c3ec81da8145b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98624fe7_d694c4d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-09T17:49:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d9b80ca_8f75cc70",
+      "revId": "2c4f4b5bd52039b58b9a0a5e9d9c3ec81da8145b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
