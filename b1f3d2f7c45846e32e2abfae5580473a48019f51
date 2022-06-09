@@ -33,6 +33,24 @@
       "message": "What if it\u0027s the same image, but different level or layer?",
       "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8249a21f_022290dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T17:59:18Z",
+      "side": 1,
+      "message": "I don\u0027t think it is allowed to differ. the level is either 1 for mutable, or get level from eglImage object if it is immutable.",
+      "parentUuid": "dbaa084d_91d93fff",
+      "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
