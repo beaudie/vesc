@@ -39,6 +39,30 @@
       },
       "revId": "0f36f8a1624b2dcfaece65c638d50421396df541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cb8d53_4e301496",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-09T03:44:35Z",
+      "side": 1,
+      "message": "The Reset calls are constructed during MEC, for every default uniform.\nThe dirty location set is populated during the run, whenever a new value is sent down, then consumed during Reset.\nYou could probably change up the indexing so we only index a single map with the programID, but the map would need to contain a struct containing the dirty set and all the reset calls.  I don\u0027t think it would be worth it, but let me know if you feel strongly about it and can do a follow up.",
+      "parentUuid": "71014d99_09dece35",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 297,
+        "endChar": 0
+      },
+      "revId": "0f36f8a1624b2dcfaece65c638d50421396df541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
