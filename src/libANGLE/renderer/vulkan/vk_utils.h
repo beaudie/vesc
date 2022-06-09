@@ -317,6 +317,7 @@ class ObjectAndSerial final : angle::NonCopyable
     ObjT &get() { return mObject; }
 
     bool valid() const { return mObject.valid(); }
+    operator bool() const { return valid(); }
 
     void destroy(VkDevice device)
     {
@@ -563,7 +564,7 @@ class RefCounted : angle::NonCopyable
   public:
     RefCounted() : mRefCount(0) {}
     explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
-    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
+    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject); }
 
     RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
     {

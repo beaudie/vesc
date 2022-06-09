@@ -1491,6 +1491,7 @@ class SamplerHelper final : angle::NonCopyable
     SamplerHelper &operator=(SamplerHelper &&rhs);
 
     bool valid() const { return mSampler.valid(); }
+    operator bool() const { return valid(); }
     const Sampler &get() const { return mSampler; }
     Sampler &get() { return mSampler; }
     SamplerSerial getSamplerSerial() const { return mSamplerSerial; }

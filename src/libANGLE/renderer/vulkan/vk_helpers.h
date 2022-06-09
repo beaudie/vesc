@@ -149,7 +149,8 @@ class DescriptorPoolHelper final : public Resource
     DescriptorPoolHelper();
     ~DescriptorPoolHelper() override;
 
-    bool valid() { return mDescriptorPool.valid(); }
+    bool valid() const { return mDescriptorPool.valid(); }
+    operator bool() const { return valid(); }
 
     bool hasCapacity(uint32_t descriptorSetCount) const;
     angle::Result init(Context *context,
@@ -208,6 +209,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     void release(ContextVk *contextVk, VulkanCacheType cacheType);
 
     bool valid() const { return !mDescriptorPools.empty(); }
+    operator bool() const { return valid(); }
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
@@ -491,6 +493,7 @@ class QueryHelper final : public Resource
     void deinit();
 
     bool valid() const { return mDynamicQueryPool != nullptr; }
+    operator bool() const { return valid(); }
 
     // Begin/end queries.  These functions break the render pass.
     angle::Result beginQuery(ContextVk *contextVk);
@@ -795,6 +798,7 @@ class BufferHelper : public ReadWriteResource
         return mSuballocation.getBlockSerial();
     }
     bool valid() const { return mSuballocation.valid(); }
+    operator bool() const { return valid(); }
     const Buffer &getBuffer() const { return mSuballocation.getBuffer(); }
     VkDeviceSize getOffset() const { return mSuballocation.getOffset(); }
     VkDeviceSize getSize() const { return mSuballocation.getSize(); }
@@ -923,6 +927,7 @@ class BufferPool : angle::NonCopyable
     void pruneEmptyBuffers(RendererVk *renderer);
 
     bool valid() const { return mSize != 0; }
+    operator bool() const { return valid(); }
 
     void addStats(std::ostringstream *out) const;
     size_t getBufferCount() const { return mBufferBlocks.size() + mEmptyBufferBlocks.size(); }
@@ -1756,6 +1761,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
+    operator bool() const { return valid(); }
 
     VkImageAspectFlags getAspectFlags() const;
     // True if image contains both depth & stencil aspects
@@ -2835,7 +2841,8 @@ class FramebufferHelper : public Resource
     angle::Result init(ContextVk *contextVk, const VkFramebufferCreateInfo &createInfo);
     void release(ContextVk *contextVk);
 
-    bool valid() { return mFramebuffer.valid(); }
+    bool valid() const { return mFramebuffer.valid(); }
+    operator bool() const { return valid(); }
 
     const Framebuffer &getFramebuffer() const
     {
