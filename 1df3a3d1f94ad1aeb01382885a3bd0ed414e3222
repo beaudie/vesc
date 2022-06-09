@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97dbe4aa_27d06d8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-09T14:14:45Z",
+      "side": 1,
+      "message": "lgtm, defer to shabi\u0027s review",
+      "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
