@@ -10,6 +10,7 @@
 6746 TSAN : *_AsyncCommandQueue* = SKIP
 6804 TSAN : MultithreadingTest.MultiContextDrawWithSwapBuffers/* = SKIP
 7159 TSAN : InstancingTestES3.LargeDivisor/* = SKIP
+7327 TSAN : BindUniformLocationTest.Basic/* = SKIP
 
 // Generic
 // Fails in the flush thread when calling eglMakeCurrent.
