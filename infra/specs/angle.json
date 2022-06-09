@@ -2788,7 +2788,8 @@
           "--use-angle=swiftshader",
           "--bot-mode",
           "--batch-timeout=600",
-          "--xvfb"
+          "--xvfb",
+          "--flaky-retries=2"
         ],
         "merge": {
           "args": [],
@@ -2970,7 +2971,8 @@
           "angle_end2end_tests",
           "--bot-mode",
           "--gtest_filter=*Vulkan_SwiftShader*",
-          "--xvfb"
+          "--xvfb",
+          "--flaky-retries=2"
         ],
         "merge": {
           "args": [],
