@@ -22,6 +22,30 @@
       },
       "revId": "736fef7a9b879be78f0a51339c0bf1867d0947ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f13dcf75_b70f01ea",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:16:13Z",
+      "side": 1,
+      "message": "Yet!\n\nI\u0027m more careful with this now, because we have (had) a lot of tests suppressed on just `Linux` (every backend) because long ago that equated `OpenGL`. If Nvidia can open source their driver, you never know when Microsoft opens up d3d!",
+      "parentUuid": "2813b99b_89e85740",
+      "range": {
+        "startLine": 29,
+        "startChar": 5,
+        "endLine": 29,
+        "endChar": 9
+      },
+      "revId": "736fef7a9b879be78f0a51339c0bf1867d0947ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
