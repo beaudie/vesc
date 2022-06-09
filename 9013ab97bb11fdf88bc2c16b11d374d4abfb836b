@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "80eb1c6c_b04e5916",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3fb62919_c1d12622",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 17
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "38f89423_751ebb7c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77221e11_4a03b495",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6827,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad4e2262_225c3d46",
+      "range": {
+        "startLine": 6827,
+        "startChar": 12,
+        "endLine": 6827,
+        "endChar": 41
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5ffce02_2af13912",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-06-06T12:45:35Z",
       "side": 1,
       "message": "nit: suggest you use FixedVector where possible to avoid allocations",
+      "range": {
+        "startLine": 9101,
+        "startChar": 9,
+        "endLine": 9101,
+        "endChar": 15
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a94200f_19d139a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9101,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "The number of staged update is technically unbounded so went with `FastVector` instead",
+      "parentUuid": "a5ffce02_2af13912",
       "range": {
         "startLine": 9101,
         "startChar": 9,
@@ -110,6 +182,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f759ac29_5e285d3a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9106,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4e6d3d7_eaa433b5",
+      "range": {
+        "startLine": 9106,
+        "startChar": 4,
+        "endLine": 9106,
+        "endChar": 58
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efaa3a16_0a15f19e",
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6157a7a7_9939031f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9108,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efaa3a16_0a15f19e",
+      "range": {
+        "startLine": 9108,
+        "startChar": 8,
+        "endLine": 9108,
+        "endChar": 12
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8f0c7a9_d7073462",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-06-06T12:45:35Z",
       "side": 1,
       "message": "nit: explicit",
+      "range": {
+        "startLine": 9157,
+        "startChar": 13,
+        "endLine": 9157,
+        "endChar": 18
+      },
+      "revId": "9013ab97bb11fdf88bc2c16b11d374d4abfb836b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66a09276_eb017840",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9157,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-09T01:03:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8f0c7a9_d7073462",
       "range": {
         "startLine": 9157,
         "startChar": 13,
