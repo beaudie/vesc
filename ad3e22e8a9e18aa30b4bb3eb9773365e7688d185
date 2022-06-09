@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a44a37c3_b6aee1fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T01:57:46Z",
+      "side": 1,
+      "message": "Mostly clean up suggestions, but there\u0027s a bug to add a test for",
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93fbc3a9_730edefc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T01:57:46Z",
+      "side": 1,
+      "message": "nit: promptly if those attachments change.",
+      "range": {
+        "startLine": 360,
+        "startChar": 35,
+        "endLine": 360,
+        "endChar": 36
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05087860_35322cc4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T01:57:46Z",
+      "side": 1,
+      "message": "`back()` is not always the one that was just added. `addFramebufferDescReference` may place the helper in an already-invalid slot.\n\nMy suggestion is to have `addFramebufferDescReference` return the `RefCountedFramebufferDescHelper *` and pass that around.\n\nIt\u0027ll be a little tricky, but please add a regression test for this.",
+      "range": {
+        "startLine": 370,
+        "startChar": 23,
+        "endLine": 370,
+        "endChar": 53
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e03c4efd_b9d4ed62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T01:57:46Z",
+      "side": 1,
+      "message": "This is basically `std::unique_ptr`. Is all this just because `RefCounted` has `mObject.valid()` in an `ASSERT`?\n\nWould be nicer IMO if `WrappedObject` implemented `operator bool() { return valid(); }` so RefCounted would `ASSERT` based on that, then you could use `RefCounted` with more types.",
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8619d7f0_d87fa66b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T01:57:46Z",
+      "side": 1,
+      "message": "Instead of this class and the inheritance, I suggest keeping the `RefCounted` directly, and call a `contextVk` function to remove the entry from the cache.\n\nIdeally the two classes here and above would be reduced to:\n\n```\nusing RefCountedFramebufferDesc \u003d RefCounted\u003cstd::unique_ptr\u003cvk::FramebufferDesc\u003e\u003e;\n```",
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
