@@ -16,6 +16,58 @@
       "message": "Shahbaz, may I ask your review to this?",
       "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2a0430_9319161d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T14:19:40Z",
+      "side": 1,
+      "message": "Yes, sorry I missed this.",
+      "parentUuid": "a839feb8_839d63c8",
+      "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "377b1dd2_b9dc498c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T14:19:40Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this?",
+      "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d643d44_798f55f4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T14:19:40Z",
+      "side": 1,
+      "message": "This change is reinventing the wheel here. We have a mechanism for handling resize already in place, which also accounts for window systems that don\u0027t return OUT_OF_DATE.\n\nSee how the `perFrameWindowSizeQuery` feature is used. If you enable that for wayland, the swapchain is automatically recreated when necessary if a size change is detected (in `WindowSurfaceVk::checkForOutOfDateSwapchain`).\n\nCould you please give that a shot?",
+      "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
