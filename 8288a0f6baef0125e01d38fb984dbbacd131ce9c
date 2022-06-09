@@ -16,6 +16,41 @@
       "message": "Not sure if changing the order of the bits would have undesirable side effects. LGTM if it passes bos.",
       "revId": "8288a0f6baef0125e01d38fb984dbbacd131ce9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1286d129_275834fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T16:21:21Z",
+      "side": 1,
+      "message": "Since all it does is calling syncState in all three types of dirty bits, the order should not matter. Bots are all green.",
+      "parentUuid": "fc68babc_70edecbd",
+      "revId": "8288a0f6baef0125e01d38fb984dbbacd131ce9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "755ecb75_42c30009",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T16:21:21Z",
+      "side": 1,
+      "message": "Thanks folks for review.",
+      "revId": "8288a0f6baef0125e01d38fb984dbbacd131ce9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
