@@ -67,6 +67,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2bf49d3_6d9bc6c2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-09T17:46:21Z",
+      "side": 1,
+      "message": "nit: \"any attachment\" (don\u0027t need the \"of\")",
+      "range": {
+        "startLine": 364,
+        "startChar": 73,
+        "endLine": 364,
+        "endChar": 90
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "05087860_35322cc4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 11
@@ -107,6 +130,29 @@
         "startChar": 23,
         "endLine": 370,
         "endChar": 53
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "614a7d83_9a00d320",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-09T17:46:21Z",
+      "side": 1,
+      "message": "Thanks for adding comments like this!",
+      "range": {
+        "startLine": 248,
+        "startChar": 0,
+        "endLine": 249,
+        "endChar": 96
       },
       "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
