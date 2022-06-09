@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "07e49993_e0eb453d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T17:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93fbc3a9_730edefc",
+      "range": {
+        "startLine": 360,
+        "startChar": 35,
+        "endLine": 360,
+        "endChar": 36
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05087860_35322cc4",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-06-09T01:57:46Z",
       "side": 1,
       "message": "`back()` is not always the one that was just added. `addFramebufferDescReference` may place the helper in an already-invalid slot.\n\nMy suggestion is to have `addFramebufferDescReference` return the `RefCountedFramebufferDescHelper *` and pass that around.\n\nIt\u0027ll be a little tricky, but please add a regression test for this.",
+      "range": {
+        "startLine": 370,
+        "startChar": 23,
+        "endLine": 370,
+        "endChar": 53
+      },
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "102c2061_07b0352a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T17:36:35Z",
+      "side": 1,
+      "message": "My bad. I added the other optimization later which messed up with back call. Fixed now by passing in the object directly. The reason no bots complain is because it does not cause any rendering or crash bug, it may cause cache gets deleted too early or too late.",
+      "parentUuid": "05087860_35322cc4",
       "range": {
         "startLine": 370,
         "startChar": 23,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ad1a312_e6c897df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1486,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T17:36:35Z",
+      "side": 1,
+      "message": "I was trying not to touch existing class as much as I can here to avoid unnecessary controversy. I am going to fire a separate CL for this bool operator thing and can get rid of this FramebufferDescPtr class along with that CL.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3696526",
+      "parentUuid": "e03c4efd_b9d4ed62",
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8619d7f0_d87fa66b",
@@ -94,6 +160,24 @@
       "writtenOn": "2022-06-09T01:57:46Z",
       "side": 1,
       "message": "Instead of this class and the inheritance, I suggest keeping the `RefCounted` directly, and call a `contextVk` function to remove the entry from the cache.\n\nIdeally the two classes here and above would be reduced to:\n\n```\nusing RefCountedFramebufferDesc \u003d RefCounted\u003cstd::unique_ptr\u003cvk::FramebufferDesc\u003e\u003e;\n```",
+      "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc700c4d_afeb1b2f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T17:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8619d7f0_d87fa66b",
       "revId": "ad3e22e8a9e18aa30b4bb3eb9773365e7688d185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
