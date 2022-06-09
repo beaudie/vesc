@@ -16,6 +16,23 @@
       "message": "With this change, mobile_legends\u0027s depth and stencil store op changes to DONT_CARE and NONE instead of STORE.\n\nDidn\u0027t observe a particular perf difference on Pixel 6 though, the frame time is too small.",
       "revId": "e910e515252522863bdf407b12918c01cba3afa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "820fc4e5_e84ee8b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T22:31:24Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "e910e515252522863bdf407b12918c01cba3afa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
