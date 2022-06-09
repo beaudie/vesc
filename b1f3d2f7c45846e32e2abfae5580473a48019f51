@@ -87,6 +87,24 @@
       "parentUuid": "c8bd1fb3_8fbb1f25",
       "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "269703d4_506f442a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-09T22:41:17Z",
+      "side": 1,
+      "message": "Thanks Charlie!",
+      "parentUuid": "7dd443c0_ee92d057",
+      "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
