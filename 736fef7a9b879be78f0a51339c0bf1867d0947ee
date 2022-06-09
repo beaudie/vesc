@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2813b99b_89e85740",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-09T14:47:04Z",
+      "side": 1,
+      "message": "I\u0027m OK with this, but note that this is redundant becase we don\u0027t have non-WIN D3D11.",
+      "range": {
+        "startLine": 29,
+        "startChar": 5,
+        "endLine": 29,
+        "endChar": 9
+      },
+      "revId": "736fef7a9b879be78f0a51339c0bf1867d0947ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
