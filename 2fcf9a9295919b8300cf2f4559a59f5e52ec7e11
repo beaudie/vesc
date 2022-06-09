@@ -46,6 +46,30 @@
       },
       "revId": "2fcf9a9295919b8300cf2f4559a59f5e52ec7e11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80aeb90b_754d3a92",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:51:48Z",
+      "side": 0,
+      "message": "Ack. That was added in https://chromium-review.googlesource.com/c/angle/angle/+/3583143 as a regression test for a fix. Would be nice to have it in a separate test (That can then be skipped on EGL\u003c1.5),",
+      "parentUuid": "d5fc0d9d_e9f7d414",
+      "range": {
+        "startLine": 82,
+        "startChar": 64,
+        "endLine": 82,
+        "endChar": 78
+      },
+      "revId": "2fcf9a9295919b8300cf2f4559a59f5e52ec7e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
