@@ -22,6 +22,30 @@
       },
       "revId": "2fcf9a9295919b8300cf2f4559a59f5e52ec7e11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5fc0d9d_e9f7d414",
+        "filename": "src/tests/egl_tests/EGLPrintEGLinfoTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-09T20:38:06Z",
+      "side": 0,
+      "message": "That\u0027s what the line below this one does. This is a duplicate.",
+      "parentUuid": "0cb66e15_b607dbfe",
+      "range": {
+        "startLine": 82,
+        "startChar": 64,
+        "endLine": 82,
+        "endChar": 78
+      },
+      "revId": "2fcf9a9295919b8300cf2f4559a59f5e52ec7e11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
