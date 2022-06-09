@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa9fa504_fd5af9e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323141
+      },
+      "writtenOn": "2022-06-09T03:02:58Z",
+      "side": 1,
+      "message": "I have tested locally that this can build with the latest commits in VMA if you define ANGLE_VMA_VERSION",
+      "revId": "fab3a07d8bf3c55de3451eeebf72f670993b3b45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
