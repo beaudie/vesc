@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46cddc6b_c6e4282d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6946,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-09T21:36:40Z",
+      "side": 1,
+      "message": "Another fix based on testing apps.  I was accidentally making a copy here.\n```\n-    // Pull up or create the list of uniform locations dirty for this program\n-    DefaultUniformLocationsSet locations \u003d mDefaultUniformsToReset[programID];\n-\n-    // Insert the location that is dirty\n-    locations.insert(location);\n+    // Pull up or create the list of uniform locations for this program, and mark one dirty\n+    mDefaultUniformsToReset[programID].insert(location);\n```",
+      "range": {
+        "startLine": 6945,
+        "startChar": 4,
+        "endLine": 6946,
+        "endChar": 56
+      },
+      "revId": "21746ca4cd442fd7977bde3336700b9632e60fa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
