@@ -753,7 +753,7 @@
       },
     },
 
-    'swangle_deqp_egl_slow_tests': {
+    'swangle_deqp_egl_slow_flaky_tests': {
       'angle_deqp_egl_tests': {
         'args': [
           'angle_deqp_egl_tests',
@@ -763,6 +763,8 @@
         ],
         'linux_args': [
           '--xvfb',
+          # TSAN flakes: crbug.com/1275223
+          '--flaky-retries=2',
         ],
         'use_isolated_scripts_api': True,
       },
@@ -990,6 +992,22 @@
       },
     },
 
+    'swangle_end2end_flaky_tests': {
+      'angle_end2end_tests': {
+        'args': [
+          'angle_end2end_tests',
+          '--bot-mode',
+          '--gtest_filter=*Vulkan_SwiftShader*',
+        ],
+        'linux_args': [
+          '--xvfb',
+          # TSAN flakes: crbug.com/1275223
+          '--flaky-retries=2',
+        ],
+        'use_isolated_scripts_api': True,
+      },
+    },
+
     'swangle_end2end_slow_tests': {
       'angle_end2end_tests': {
         'args': [
@@ -1163,13 +1181,13 @@
     ],
 
     'swangle_slow_gtests': [
-      'swangle_deqp_egl_slow_tests',
+      'swangle_deqp_egl_slow_flaky_tests',
       'swangle_deqp_gles2_slow_tests',
       'swangle_deqp_gles3_slow_tests',
       'swangle_deqp_khr_gles2_tests',
       'swangle_deqp_khr_gles31_tests',
       'swangle_deqp_khr_gles3_tests',
-      'swangle_end2end_tests',
+      'swangle_end2end_flaky_tests',
       'swangle_white_box_tests',
     ],
 
