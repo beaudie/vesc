@@ -10,6 +10,7 @@
 #include "frame_capture_test_utils.h"
 
 #include "common/string_utils.h"
+#include "util/test_utils.h"
 
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
@@ -33,38 +34,15 @@ bool LoadJSONFromFile(const std::string &fileName, rapidjson::Document *doc)
 }
 }  // namespace
 
-bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut)
+bool LoadTraceNamesFromFile(const std::string traceFilePath, std::vector<std::string> *namesOut)
 {
-    rapidjson::Document doc;
-    if (!LoadJSONFromFile(jsonFilePath, &doc))
+    std::string fileContents;
+    if (!angle::ReadEntireFileToString(traceFilePath.c_str(), &fileContents))
     {
         return false;
     }
 
-    if (!doc.IsObject() || !doc.HasMember("traces") || !doc["traces"].IsArray())
-    {
-        return false;
-    }
-
-    // Read trace json into a list of trace names.
-    std::vector<std::string> traces;
-
-    rapidjson::Document::Array traceArray = doc["traces"].GetArray();
-    for (rapidjson::SizeType arrayIndex = 0; arrayIndex < traceArray.Size(); ++arrayIndex)
-    {
-        const rapidjson::Document::ValueType &arrayElement = traceArray[arrayIndex];
-
-        if (!arrayElement.IsString())
-        {
-            return false;
-        }
-
-        std::vector<std::string> traceAndVersion;
-        angle::SplitStringAlongWhitespace(arrayElement.GetString(), &traceAndVersion);
-        traces.push_back(traceAndVersion[0]);
-    }
-
-    *namesOut = std::move(traces);
+    angle::SplitStringAlongWhitespace(fileContents.data(), namesOut);
     return true;
 }
 

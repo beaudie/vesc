@@ -581,10 +581,9 @@ class TestBatch():
         self.tests.append(test)
 
     def CreateTestNamesFile(self, composite_file_id, tests):
-        data = {'traces': [test.GetLabel() for test in tests]}
-        names_path = os.path.join(self.trace_folder_path, 'test_names_%d.json' % composite_file_id)
+        names_path = os.path.join(self.trace_folder_path, 'test_names_%d.txt' % composite_file_id)
         with open(names_path, 'w') as f:
-            f.write(json.dumps(data))
+            f.write('\n'.join([test.GetLabel() for test in tests]))
 
     def __str__(self):
         repr_str = "TestBatch:\n"

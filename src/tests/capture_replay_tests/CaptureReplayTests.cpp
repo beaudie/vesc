@@ -31,7 +31,6 @@ namespace
 {
 EGLWindow *gEGLWindow       = nullptr;
 constexpr char kResultTag[] = "*RESULT";
-constexpr char kTracePath[] = ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
 
 EGLImage KHRONOS_APIENTRY EGLCreateImage(EGLDisplay display,
                                          EGLContext context,
@@ -255,18 +254,19 @@ class CaptureReplayTests
     int run()
     {
         std::string startingDirectory = angle::GetCWD().value();
+        std::string exeDir            = angle::GetExecutableDirectory();
 
-        // Set CWD to executable directory.
-        std::string exeDir = angle::GetExecutableDirectory();
-
+        // Load trace names.
         std::vector<std::string> traces;
 
-        std::stringstream tracePathStream;
-        tracePathStream << exeDir << angle::GetPathSeparator() << kTracePath;
+        std::stringstream testNamesPathStream;
+        testNamesPathStream << exeDir << angle::GetPathSeparator()
+                            << ANGLE_CAPTURE_REPLAY_TEST_NAMES_PATH;
+        std::string testNamesPath = testNamesPathStream.str();
 
-        if (!angle::LoadTraceNamesFromJSON(tracePathStream.str(), &traces))
+        if (!angle::LoadTraceNamesFromFile(testNamesPath, &traces))
         {
-            std::cout << "Unable to load trace names from " << kTracePath << "\n";
+            std::cout << "Unable to load trace names from " << testNamesPath << "\n";
             return 1;
         }
 

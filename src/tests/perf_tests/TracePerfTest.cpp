@@ -2058,18 +2058,19 @@ void RegisterTraceTests()
         return;
     }
 
-    // Load JSON data.
-    std::vector<std::string> traces;
+    // Load trace names.
+    char traceListPath[kMaxPath] = {};
+    if (!FindTestDataPath("angle_trace_list.txt", traceListPath, kMaxPath))
     {
-        std::stringstream tracesJsonStream;
-        tracesJsonStream << rootTracePath << GetPathSeparator() << "restricted_traces.json";
-        std::string tracesJsonPath = tracesJsonStream.str();
+        ERR() << "Unable to locate trace list file.";
+        return;
+    }
 
-        if (!LoadTraceNamesFromJSON(tracesJsonPath, &traces))
-        {
-            ERR() << "Unable to load traces from JSON file: " << tracesJsonPath;
-            return;
-        }
+    std::vector<std::string> traces;
+    if (!angle::LoadTraceNamesFromFile(traceListPath, &traces))
+    {
+        ERR() << "Unable to load traces from angle_trace_list.txt";
+        return;
     }
 
     std::vector<TraceInfo> traceInfos;

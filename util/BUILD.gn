@@ -178,6 +178,7 @@ if (angle_has_frame_capture) {
       "capture/frame_capture_test_utils.h",
     ]
     deps = [
+      ":angle_test_utils",
       "$angle_root:angle_common",
       "$angle_root:angle_compression",
       "$angle_root/third_party/rapidjson",

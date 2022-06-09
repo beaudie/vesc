@@ -19,6 +19,9 @@ declare_args() {
 
   # Enables OpenCL support, off by default.
   angle_enable_cl = false
+
+  # Subset of ANGLE traces to build and test
+  angle_restricted_traces = []
 }
 
 if (angle_has_build) {
@@ -585,17 +588,14 @@ set_defaults("angle_trace_library") {
 }
 
 template("angle_trace_library") {
-  _trace_json = read_file(invoker.json_path, "json")
-  _trace_targets = []
+  _trace_list = read_file(invoker.trace_file, "list lines")
 
   if (invoker.short_names) {
     _trace_counter = 1
   }
 
-  foreach(_trace_and_version, _trace_json.traces) {
-    _trace_and_version_arr = []
-    _trace_and_version_arr = string_split(_trace_and_version)
-    _trace = _trace_and_version_arr[0]
+  _trace_targets = []
+  foreach(_trace, _trace_list) {
     if (defined(invoker.trace_dir)) {
       _trace_dir = invoker.trace_dir
     } else {
@@ -629,7 +629,7 @@ template("angle_trace_library") {
 
   angle_shared_library(target_name) {
     testonly = true
-    data = [ invoker.json_path ]
+    data = [ invoker.trace_file ]
     data_deps = _trace_targets
     deps = [ "$angle_root:angle_common" ]
     public_deps = [ "$angle_root/util:angle_trace_loader" ]

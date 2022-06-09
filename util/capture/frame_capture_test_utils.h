@@ -161,7 +161,7 @@ struct TraceInfo
     bool isRobustResourceInitEnabled;
 };
 
-bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut);
+bool LoadTraceNamesFromFile(const std::string traceFilePath, std::vector<std::string> *namesOut);
 bool LoadTraceInfoFromJSON(const std::string &traceName,
                            const std::string &traceJsonPath,
                            TraceInfo *traceInfoOut);
