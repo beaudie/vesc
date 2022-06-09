@@ -51,6 +51,23 @@
       "message": "Provided feedback on the issue itself. In summary: \"tests good, but -1 to implementing in front-end\".",
       "revId": "898e416cdca403c5282ab769eed67d86f2a82756",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e631f90c_fa26defa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-09T21:48:22Z",
+      "side": 1,
+      "message": "Thanks Geoff and Shabi for your reviews. CQ\u0027ing this as a first step, and we\u0027ll figure out where the implementation should go in subsequent CLs.",
+      "revId": "898e416cdca403c5282ab769eed67d86f2a82756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
