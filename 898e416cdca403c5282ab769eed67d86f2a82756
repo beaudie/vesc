@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4a8ac87_778b175e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-09T16:35:22Z",
+      "side": 1,
+      "message": "This LGTM. Adding Shabi to CC as well.\n\nThanks for including the prototype at the test level so we can see an implementation.\n\nI\u0027m still a bit undecided on how this will live within ANGLE. We don\u0027t typically implement a feature like this in the frontend layer because it involves modifying GL state that is directly queryable by the user and often backends can make their own API specific optimizations.",
+      "revId": "898e416cdca403c5282ab769eed67d86f2a82756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
