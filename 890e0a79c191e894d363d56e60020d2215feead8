@@ -1,0 +1,180 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "509f128a_5a5a809e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Thanks, this would improve the optimize-before-flush case too, so it\u0027s great that it wouldn\u0027t be limited to a specific application pattern.\n\nThe loop itself could be simplified IMO if you went back to calling `erase` once though.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "609c47db_2ca41061",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "nit: you can keep index 0 be either color or depth for a slight simplification. The texture can never have both color and depth.",
+      "range": {
+        "startLine": 8206,
+        "startChar": 33,
+        "endLine": 8206,
+        "endChar": 49
+      },
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c44deafb_4ba1bfc9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "nit: please use `update.getDestSubresource(mLayerCount, \u0026layerIndex, \u0026layerCount);` for simplicity.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a3124e5_aae28fb1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Update box is not updated here, so this update will always be superseded by any subsequent update!\n\n`ImageTestES3.RGBXAHBImportThenUpload` was supposed to catch that, but it might just be passing by luck.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f947c315_675eb9cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "I believe I understand why you are resetting this. However, I have a suggestion to do even better; Use `ExtendRectangle` to extend the new box with the current box, before assigning it back to the current box. This makes the new box potentially bigger and cover more area (but only if that area was previously covered too, so it\u0027s safe)\n\nOn the issue, I suggested the opposite (extend the current box with the new box (instead of the new box with the current box)), and both are gambles. If your use case benefits from this reset, that\u0027s fine with me.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e04058_a4556890",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "`resetSupersededUpdateWindow` seems redundant here, just move this up inside `else`",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c3dc66_a357b07b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8306,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Once the first range is removed, the indices specified by the second range are no longer valid.  Could you please add a test for this? (see my suggestion on the test file).\n\n---\n\nIf you continue using a lambda together with `erase` and `rbegin`, you don\u0027t need to store the ranges and do this post processing at all.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c42ce007_812b3f40",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Have you verified the optimization works with this test? If all but one update is dropped, shouldn\u0027t the workload not be large anymore?",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d346f6d4_1d7fcada",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Could you use a different color for the uploads? At least between the one that supersedes the rest, and the other ones.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca900072_d94aab4e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2027,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Testing this optimization is a little tricky. One option would be to make the tests whitebox, put the limits in the header, and tailor the test to those limits. Then you could test various corner cases of this optimization, like:\n\n- One big upload followed by many small identical uploads that pass the threshold. The small uploads would be reduced to one, but the big one should stay\n- Some small random uploads followed by one big upload followed by many small identical uploads that pass the threshold\n- Random uploads to the brink of threshold, then one big upload\n\nThings like that.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

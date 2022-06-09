@@ -33,6 +33,40 @@
       "message": "lgtm, defer to shabi\u0027s review",
       "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40204aec_ea490be1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7979,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "Can you ASSERT this instead? Shouldn\u0027t this accounting be adjusted as updates are removed? `pruneSupersededUpdatesForLevel` already does this, so it looks like only the loop above that flushes the update needs to do it as well.",
+      "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93d576b4_3e8c4475",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T17:57:07Z",
+      "side": 1,
+      "message": "This is likely to have someone complain about OOM on smaller devices.\n\nWhy not use a smaller size, and then wrap the for loop in another for loop that repeats the uploads many times?",
+      "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
