@@ -16,6 +16,24 @@
       "message": "operator bool can lead to some unintuitive implicit casts and it\u0027s intentionally left out.",
       "revId": "04ff202a701462392956b60822cf38704a607298",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01553af3_1cdd7f60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T18:02:45Z",
+      "side": 1,
+      "message": "This comes out from Shabi\u0027s request of the other CL. I am okay with either way.",
+      "parentUuid": "c2392959_c011552f",
+      "revId": "04ff202a701462392956b60822cf38704a607298",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
