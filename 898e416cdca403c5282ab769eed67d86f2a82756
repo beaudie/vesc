@@ -34,6 +34,23 @@
       "parentUuid": "d4a8ac87_778b175e",
       "revId": "898e416cdca403c5282ab769eed67d86f2a82756",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d1b234_040d3612",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:03:58Z",
+      "side": 1,
+      "message": "Provided feedback on the issue itself. In summary: \"tests good, but -1 to implementing in front-end\".",
+      "revId": "898e416cdca403c5282ab769eed67d86f2a82756",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
