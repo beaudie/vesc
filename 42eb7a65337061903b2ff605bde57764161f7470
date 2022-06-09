@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2cb9153_85e80f96",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-09T21:31:36Z",
+      "side": 1,
+      "message": "Should we enable the baseInstanceEXT with the same condition as the baseVertexBaseInstanceANGLE?",
+      "parentUuid": "6335d9a9_5ee2d447",
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0097c22_ec502caa",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 3
