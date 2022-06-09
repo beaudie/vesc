@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29f9293e_0d6bdfa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-09T09:06:03Z",
+      "side": 1,
+      "message": "Sibling Chromium\u0027s CL https://chromium-review.googlesource.com/c/chromium/src/+/3695277",
+      "revId": "477fd2b732b5f6a02db8a44fa6c4a22578db5abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
