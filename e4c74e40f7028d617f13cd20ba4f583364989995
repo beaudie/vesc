@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "263f218b_7642cd60",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5486,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-09T19:03:56Z",
+      "side": 1,
+      "message": "Note: One small change here from patch #4.  This was failing a bunch of 3.1 capture_replay_tests that use program pipelines.\n```\n- programID \u003d context-\u003egetState().getProgram()-\u003eid().value;\n+ programID \u003d context-\u003egetActiveLinkedProgram()-\u003eid().value;\n```\n\nIf the currently bound program is from a pipeline object, you can\u0027t directly look up the `id()` or ANGLE will assert due to `mLinkingState`:\n```\nShaderProgramID Program::id() const\n{\n    ASSERT(!mLinkingState);\n    return mHandle;\n}\n```\nBy searching through ANGLE, `getActiveLinkedProgram` seems like a newer way to do it and works for all program types.\n\nHere\u0027s the example I debugged from `ProgramPipelineTest31.FragmentStageUniformTest`:\n\n```\n    bindProgramPipeline(vertString, fragString);\n    GLint location \u003d glGetUniformLocation(mFragProg, \"redColorIn\");\n    // Note this uses glActiveShaderProgram instead of glUseProgram\n    glActiveShaderProgram(mPipeline, mFragProg);\n    // This call triggers `trackDefaultUniformUpdate`\n    glUniform1f(location, 1.0);\n```",
+      "range": {
+        "startLine": 5486,
+        "startChar": 0,
+        "endLine": 5486,
+        "endChar": 66
+      },
+      "revId": "e4c74e40f7028d617f13cd20ba4f583364989995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
