@@ -69,6 +69,24 @@
       "parentUuid": "8249a21f_022290dc",
       "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dd443c0_ee92d057",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-09T21:35:10Z",
+      "side": 1,
+      "message": "Thanks Ian for the pointer. You are right. I added a test for this as well and it indeed show the bug. This has now been fixed with check of target/level as well.",
+      "parentUuid": "c8bd1fb3_8fbb1f25",
+      "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
