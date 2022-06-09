@@ -51,6 +51,24 @@
       "parentUuid": "dbaa084d_91d93fff",
       "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8bd1fb3_8fbb1f25",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1397,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-09T19:32:48Z",
+      "side": 1,
+      "message": "From looking at the specs of the extension (https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_image_base.txt).  eglCreateImageKHR creates an EGLImage, which is \"presumably a 2D array of image data\".  Question 5 is enlightening:\n\n    5.  Should this specification allow multiple EGLImages to be created\n        from the same EGLImage source resource?\n\n        RESOLVED:  No.  The resource \u003cbuffer\u003e specified to\n        eglCreateImageKHR may include multiple sub-objects; examples are\n        mipmapped images and cubemaps in the OpenGL-ES API.  However, the\n        EGLImage source is defined as the specific sub-object that is defined\n        by: \u003cctx\u003e, \u003ctarget\u003e, \u003cbuffer\u003e, and \u003cattrib_list\u003e.  This sub-object must\n        not be an EGLImage sibling (either EGLImage source or EGLImage target)\n        when eglCreateImageKHR is called; however, other sub-objects in\n        \u003cbuffer\u003e may be EGLImage siblings.  This allows applications to share\n        individual cubemap faces, or individual mipmap levels of detail across\n        all of the supported APIs.\n\nThus, it seems that we need to know the \"\u003cctx\u003e, \u003ctarget\u003e, \u003cbuffer\u003e, and \u003cattrib_list\u003e\".",
+      "parentUuid": "8249a21f_022290dc",
+      "revId": "b1f3d2f7c45846e32e2abfae5580473a48019f51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
