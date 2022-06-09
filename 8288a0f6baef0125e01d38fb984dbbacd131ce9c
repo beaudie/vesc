@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc68babc_70edecbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-09T14:00:30Z",
+      "side": 1,
+      "message": "Not sure if changing the order of the bits would have undesirable side effects. LGTM if it passes bos.",
+      "revId": "8288a0f6baef0125e01d38fb984dbbacd131ce9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
