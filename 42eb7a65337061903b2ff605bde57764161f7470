@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a6b6cf2_e1accf0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:49:10Z",
+      "side": 1,
+      "message": "Drive by!\n\nPlease add a few tests as well! They could be copy-paste of tests already present for the ANGLE ext.",
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6335d9a9_5ee2d447",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:49:10Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this check for `EXT_base_instance` instead? The core version check should also be adjusted to when/if that extension was promoted to core.",
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0097c22_ec502caa",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-09T20:49:10Z",
+      "side": 1,
+      "message": "Instead of calling `ValidateDrawArraysInstancedBaseInstanceANGLE`, you should split that function to do its extension check then call a new function named `ValidateDrawArraysInstancedBaseInstanceImpl` (which contains the rest of the validation), then call `ValidateDrawArraysInstancedBaseInstanceImpl` here too.\n\nWhile in this particular case not a real problem, technically the backend could expose EXT_base_instance but not the ANGLE ext, and the validation would fail because `ValidateDrawArraysInstancedBaseInstanceANGLE` expects the ANGLE extension to be present.",
+      "range": {
+        "startLine": 553,
+        "startChar": 11,
+        "endLine": 553,
+        "endChar": 55
+      },
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
