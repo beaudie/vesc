@@ -34,6 +34,24 @@
       "parentUuid": "c233893f_86cccdbd",
       "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90298cce_c6b2690f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-10T23:57:38Z",
+      "side": 1,
+      "message": "Yes, thank you Stephen!\n\nSo if I understand correctly, the (sub 11.3) D3D implementation of PLS should use readwrite UAVs with a \"_TYPELESS\" format.\n\nPLS supports the lowest common denominator of formats from all its backends, which is pretty limited. I don\u0027t think this D3D constraint will restrict us any further: https://docs.google.com/document/d/17HTZQyxM3sd--c3cJbNXZv5cZTO_J1ENzkzrXwvTvQ0/edit#bookmark\u003did.vsaobv6mlror",
+      "parentUuid": "7f4d0d97_4371f4fe",
+      "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
