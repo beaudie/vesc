@@ -16,6 +16,23 @@
       "message": "Maybe we should call ValidateDrawElementsInstancedBaseVertexBaseInstance() here instead?",
       "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "346f3ae5_a40557b1",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-10T21:28:04Z",
+      "side": 1,
+      "message": "Please add a //TODO here mentioning that we will add another test to check glDrawElementsInstancedBaseInstance() can work properly.",
+      "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
