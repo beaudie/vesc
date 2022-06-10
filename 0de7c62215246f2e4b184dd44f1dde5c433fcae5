@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90febfec_8df3d6fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-10T13:55:05Z",
+      "side": 1,
+      "message": "First off, cool that you got this working.\n\nThe bad news: there\u0027s some code patterns here that don\u0027t fit with the Vulkan back-end and the current design sacrifices maintainability. e.g.: using a WrappedObject on top of a custom pointer class, inheriting from RefCounted, and possibly how you keep the reference counts. Charlie - can you add a perf counter test that exercises the performance improvement you\u0027re shooting for? From that I can better guide you.",
+      "revId": "0de7c62215246f2e4b184dd44f1dde5c433fcae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
