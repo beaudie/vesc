@@ -22,6 +22,30 @@
       },
       "revId": "4e37ec8c021e5739e720d2847ac814f8eef296a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e27a26a_d4dc9ec5",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-10T12:31:51Z",
+      "side": 0,
+      "message": "Right, one option would be adding a flag to skip smoke test (or to run smoke test and default to false) or maybe other alternatives.\n\nMaybe you had something else in mind that explains why this code should be deleted rather than adjusted?",
+      "parentUuid": "18d09b05_b47d6ac2",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 41
+      },
+      "revId": "4e37ec8c021e5739e720d2847ac814f8eef296a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
