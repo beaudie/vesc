@@ -153,6 +153,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ac3f37f_03dcc2d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8250,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T22:37:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd2964cf_6046a037",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f947c315_675eb9cf",
@@ -276,6 +294,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8fd8e06_77e5a47f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8306,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T22:37:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c99ef778_34e6f43e",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c42ce007_812b3f40",
@@ -307,6 +343,24 @@
       "side": 1,
       "message": "\u003e Have you verified the optimization works with this test?\n\n1. yes, when i skip the optimization test crashes with OOM errors\n2. the test passes locally with swiftshader but for some reason SwS on the CI bot doesnt\n\n\u003e If all but one update is dropped, shouldn\u0027t the workload not be large anymore?\n\ni suspect the issue might be with mem allocatioins, each update is at least 8MB and grows to as large as 50MB",
       "parentUuid": "c42ce007_812b3f40",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "820c6427_a245c957",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T22:37:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0981daf6_92d1b2fd",
       "revId": "890e0a79c191e894d363d56e60020d2215feead8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
