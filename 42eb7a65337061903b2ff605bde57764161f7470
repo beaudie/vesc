@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd2cbc1d_0c9a0f2c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-10T17:37:16Z",
+      "side": 1,
+      "message": "In this case, wouldn\u0027t `baseInstance` check for three different extensions (`GL_OES_draw_elements_base_vertex`, `GL_EXT_draw_elements_base_vertex`, and `GL_EXT_base_instance`) while `baseVertex+baseInstance` only checks for two?\n\nThen, it would be impossible for a driver might expose `baseInstance`, but not `baseVertex+baseInstance`.",
+      "parentUuid": "1f8b01a9_a59a756e",
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0097c22_ec502caa",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 3
