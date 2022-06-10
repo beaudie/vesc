@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fed19b38_5bad3c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:20:04Z",
+      "side": 1,
+      "message": "lgtm with a few small changes.\n",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "403a8e23_1aaf0cc3",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:20:04Z",
+      "side": 1,
+      "message": "ANGLE\u0027s test harnesses already have EXPECT_PIXEL_RECT_EQ - please use that and don\u0027t add a duplicate.",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3bd3001_352df5a4",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:20:04Z",
+      "side": 1,
+      "message": "Similar point here about reusing existing test helpers.",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "910215d3_93255569",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:20:04Z",
+      "side": 1,
+      "message": "What does \"inltrb\" stand for? Could you please expand this acronym more or comment it?",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac23e44f_ff36013f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:20:04Z",
+      "side": 1,
+      "message": "Here and below, it seems to me these will need a bit of tolerance to handle different GPUs\u0027 behavior. It looks like while there\u0027s an EXPECT_PIXEL_RECT_EQ, there\u0027s no EXPECT_PIXEL_RECT_NEAR, despite the existence of EXPECT_PIXEL_NEAR_HELPER. Would you please consider adding EXPECT_PIXEL_RECT_NEAR and using it, along with a small tolerance?",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
