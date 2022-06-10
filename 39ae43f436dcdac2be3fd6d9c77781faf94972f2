@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94f5a6db_cae2fa12",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-10T09:34:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "377b1dd2_b9dc498c",
+      "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d643d44_798f55f4",
@@ -66,6 +84,24 @@
       "writtenOn": "2022-06-09T14:19:40Z",
       "side": 1,
       "message": "This change is reinventing the wheel here. We have a mechanism for handling resize already in place, which also accounts for window systems that don\u0027t return OUT_OF_DATE.\n\nSee how the `perFrameWindowSizeQuery` feature is used. If you enable that for wayland, the swapchain is automatically recreated when necessary if a size change is detected (in `WindowSurfaceVk::checkForOutOfDateSwapchain`).\n\nCould you please give that a shot?",
+      "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6abfd697_d6b3e4f4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-10T09:34:24Z",
+      "side": 1,
+      "message": "Ah, that\u0027s useful!",
+      "parentUuid": "9d643d44_798f55f4",
       "revId": "39ae43f436dcdac2be3fd6d9c77781faf94972f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
