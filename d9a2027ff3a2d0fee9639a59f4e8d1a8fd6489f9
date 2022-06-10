@@ -16,6 +16,24 @@
       "message": "Just to add some more discoveries:\n\nIn ANGLE/D3D11, readonly Images are created as SRVs. Writeonly Images are created as UAVs. However, this doesn\u0027t help for this use case because SRVs and UAVs are not allowed to reference the same underlying Resource either.\n\nThere are further restrictions on writeable UAVs in D3D11:\n\n---\n\nHowever, simultaneous reading and writing to a UAV within a single Draw* or Dispatch* operation is only supported if the UAV’s Type is R32_UINT/_SINT/_FLOAT. In particular, the ld_uav_typed IL instruction for reading from a typed UAV is limited to R32_UINT/_SINT/_FLOAT formats. E.g. a UAV with a type such as R8G8B8A8_UNORM_SRGB cannot be read from (but it can be written).\n\nD3D has a partial workaround for this inability to simultaneously read+write from Typed UAVs. The purpose is to make tasks such as editing an image in-place simpler, given the circumstances.\n\nD3D allows Texture1D/2D/3D resources created with any of the following small set of 32-bit per element formats to have UAVs created from them with R32_UINT/_SINT/_FLOAT as the type:\n\nDXGI_FORMAT_R10G10B10A2_TYPELESS\nDXGI_FORMAT_R8G8B8A8_TYPELESS\nDXGI_FORMAT_B8G8R8A8_TYPELESS\nDXGI_FORMAT_B8G8R8X8_TYPELESS\nDXGI_FORMAT_R16G16_TYPELESS\nDXGI_FORMAT_R32_TYPELESS\n\n(from https://microsoft.github.io/DirectX-Specs/d3d/archive/D3D11_3_FunctionalSpec.htm#UAVs)\n\n---\n\nI\u0027m not sure if we can ensure that all textures created for image load/store are one of the typeless formats. If we can, then a workaround similar to that suggested in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3032#c2 might work: create all Image load/store image bindings as RWTexture2D pointing at the same UAV.",
       "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f4d0d97_4371f4fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-10T23:40:51Z",
+      "side": 1,
+      "message": "Thanks for this input Stephen. Please copy it to either anglebug.com/7398 or anglebug.com/3032 (whichever is more appropriate) so it\u0027s archived more persistently.",
+      "parentUuid": "c233893f_86cccdbd",
+      "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
