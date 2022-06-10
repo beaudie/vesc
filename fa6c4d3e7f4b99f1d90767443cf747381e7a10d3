@@ -16,6 +16,29 @@
       "message": "PTAL shabi while i work on enhancing testing",
       "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e91d3a86_90ee164c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8296,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:40:43Z",
+      "side": 1,
+      "message": "reading man page again and it might be better for me to do -\n\n SubresourceUpdatesIterator supersededUpdate \u003d (update + 1).base();\nand then increment `update` later",
+      "range": {
+        "startLine": 8296,
+        "startChar": 12,
+        "endLine": 8296,
+        "endChar": 72
+      },
+      "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
