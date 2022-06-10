@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "866c09e3_35a66ef0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-10T12:35:30Z",
+      "side": 1,
+      "message": "FWIW, IMO this isn\u0027t a valid revert as it doesn\u0027t explain why the cl it references can\u0027t be adjusted to do things properly instead of relying on cwd",
+      "revId": "4e37ec8c021e5739e720d2847ac814f8eef296a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
