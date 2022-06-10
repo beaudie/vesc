@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a8ff481_9acc47e5",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-10T19:41:07Z",
+      "side": 1,
+      "message": "Maybe also `#!/usr/bin/python3` at the top to support running this outside of git-cl?",
+      "range": {
+        "startLine": 17,
+        "startChar": 31,
+        "endLine": 17,
+        "endChar": 37
+      },
+      "revId": "f8afb5145d580655a37b0c67607c02b4faf3f60c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
