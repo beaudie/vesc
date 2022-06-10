@@ -87,6 +87,24 @@
       "parentUuid": "346f3ae5_a40557b1",
       "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4acc774d_afe6c010",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-10T23:20:53Z",
+      "side": 1,
+      "message": "ok that sounds good :) Thank you!!",
+      "parentUuid": "0284fe6e_83ae1d33",
+      "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
