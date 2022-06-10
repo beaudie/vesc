@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f8b01a9_a59a756e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-10T01:59:23Z",
+      "side": 1,
+      "message": "`baseVertex+baseInstance` is more complicated than just `baseInstance`. So a driver might expose the latter, but not the former.\n\nThe check here is not strictly wrong, but you wouldn\u0027t be exposing `baseInstance` on hardware that cannot _also_ do `baseVertex`. Not a big deal in the end, just inconsistent with the code around (where `extensions-\u003eX` checks for `functions-\u003ehas(X)`)\n\n---\n\nFor sure, this check could remain as is, but check for `EXT_base_instance` _additionally_ (not _instead_)",
+      "parentUuid": "f2cb9153_85e80f96",
+      "revId": "42eb7a65337061903b2ff605bde57764161f7470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0097c22_ec502caa",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 3
