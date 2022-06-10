@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27288654_dfd49740",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-10T21:42:50Z",
+      "side": 1,
+      "message": "The ANGLE version of this validation uses `ValidateDrawElementsInstancedBase()` and not `ValidateDrawElementsInstancedBaseVertexBaseInstance()`. To maintain consistency, I am using the same function to check for validation.",
+      "parentUuid": "bafd7737_f3d05a43",
+      "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "346f3ae5_a40557b1",
         "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
         "patchSetId": 6
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-10T21:28:04Z",
       "side": 1,
       "message": "Please add a //TODO here mentioning that we will add another test to check glDrawElementsInstancedBaseInstance() can work properly.",
+      "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0284fe6e_83ae1d33",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-10T21:42:50Z",
+      "side": 1,
+      "message": "I\u0027m implementing the tests for `glDrawElementsInstancedBaseInstance()` in the next patchset (recommended by Shabi to keep all the remaining implementation in this singular CL) so the //TODO will be to-done 😎",
+      "parentUuid": "346f3ae5_a40557b1",
       "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
