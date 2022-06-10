@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2beace60_240affbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-10T21:59:53Z",
+      "side": 1,
+      "message": "I thought the change should be much simpler, mostly a few lines of change:\n \nRenderPassDesc::mHasFramebufferFetch will be set based on ContextVk::mHasFramebufferFetch.\n\nDetecting if we should switch to new mode will change to \nIf(!RenderPassDesc-\u003ehasFramebufferFetch() \u0026\u0026 program_\u003ehasFramebufferFetch())\n{\ncontextVk-\u003eforceFramebufferFetchMode();\n...\n// All other code remains as is, which will close renderPass etc.\n// Next time when you see a program does not have fetch, since context\u0027s fetch is enabled, renderPassDesc will have fetch enabled and the above if() will be false, thus nothing will happen.\n// If the same program also used on another context, same thing will happen on other context. if not, other context will keep non-fetch mode.\n}\n",
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62ce5c9c_d75260ee",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-10T21:59:53Z",
+      "side": 1,
+      "message": "Why not be part of context instead of shareGroup? If they only use fetch on one context, there is no need to change other context to be using fetch as well.",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
