@@ -39,6 +39,30 @@
       },
       "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc4c918_934530e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8296,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-10T18:53:39Z",
+      "side": 1,
+      "message": "Just use `std::erase` with lambda like before, it will take care of all this.",
+      "parentUuid": "e91d3a86_90ee164c",
+      "range": {
+        "startLine": 8296,
+        "startChar": 12,
+        "endLine": 8296,
+        "endChar": 72
+      },
+      "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

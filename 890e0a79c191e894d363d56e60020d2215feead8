@@ -137,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cd2964cf_6046a037",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-10T18:53:39Z",
+      "side": 1,
+      "message": "Got it. I suggest clumping this up with the other clears, so it can be superseded. Note that there can never be another update before this (it\u0027s asserted by `verifyEmulatedClearsAreBeforeOtherUpdates` in the caller), so it won\u0027t incorrectly supersede anything.\n\nIf you look closely, that\u0027s what the code previously used to do.",
+      "parentUuid": "ed144d5b_d5bebab3",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f947c315_675eb9cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -166,6 +184,24 @@
       "side": 1,
       "message": "\u003e If your use case benefits from this reset, that\u0027s fine with me\n\nMost patterns i have seen are a batch of texture uploads concentrated in one area and then another batch in another area.\n\ni had a \"merge\" function implemented in gl::Box but got rid of it for simplicity. Can alywas create a follow up change if we do find usecases where benefits outweigh the complexity / cost",
       "parentUuid": "f947c315_675eb9cf",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4047dd9f_aae1ce64",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-10T18:53:39Z",
+      "side": 1,
+      "message": "Ack, can be deferred.\n\nFWIW, some refactoring to `ExtendRectangle` should make it trivial either way.",
+      "parentUuid": "287f8091_c56a2eba",
       "revId": "890e0a79c191e894d363d56e60020d2215feead8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
