@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c39bcf9_5c9d8050",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7979,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e so it looks like only the loop above that flushes the update needs to do it as well.\n\nand a couple other places. Done",
+      "parentUuid": "40204aec_ea490be1",
+      "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93d576b4_3e8c4475",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-06-09T17:57:07Z",
       "side": 1,
       "message": "This is likely to have someone complain about OOM on smaller devices.\n\nWhy not use a smaller size, and then wrap the for loop in another for loop that repeats the uploads many times?",
+      "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c629909_896ccc5b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2000,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e Why not use a smaller size, and then wrap the for loop in another for loop that repeats the uploads many times?\n\nnot sure i understand, total memory allocated with be the same either way, right? and the pruning logic wont work until we alloc \u003e\u003d 16MB of staging buffers",
+      "parentUuid": "93d576b4_3e8c4475",
       "revId": "1df3a3d1f94ad1aeb01382885a3bd0ed414e3222",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "365c7912_29343d51",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8206,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "609c47db_2ca41061",
+      "range": {
+        "startLine": 8206,
+        "startChar": 33,
+        "endLine": 8206,
+        "endChar": 49
+      },
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c44deafb_4ba1bfc9",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-06-09T17:57:07Z",
       "side": 1,
       "message": "nit: please use `update.getDestSubresource(mLayerCount, \u0026layerIndex, \u0026layerCount);` for simplicity.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c2e5bb4_bab0fb80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8215,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c44deafb_4ba1bfc9",
       "revId": "890e0a79c191e894d363d56e60020d2215feead8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -77,6 +119,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed144d5b_d5bebab3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8250,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e so this update will always be superseded by any subsequent update!\n\nno it wont since `currentUpdateBox.valid()` will be false in this case",
+      "parentUuid": "9a3124e5_aae28fb1",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f947c315_675eb9cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -94,6 +154,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "287f8091_c56a2eba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8273,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e If your use case benefits from this reset, that\u0027s fine with me\n\nMost patterns i have seen are a batch of texture uploads concentrated in one area and then another batch in another area.\n\ni had a \"merge\" function implemented in gl::Box but got rid of it for simplicity. Can alywas create a follow up change if we do find usecases where benefits outweigh the complexity / cost",
+      "parentUuid": "f947c315_675eb9cf",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "69e04058_a4556890",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 6
@@ -105,6 +183,24 @@
       "writtenOn": "2022-06-09T17:57:07Z",
       "side": 1,
       "message": "`resetSupersededUpdateWindow` seems redundant here, just move this up inside `else`",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d2eaabb_1bf2d203",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8277,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69e04058_a4556890",
       "revId": "890e0a79c191e894d363d56e60020d2215feead8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +224,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c99ef778_34e6f43e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8306,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e Once the first range is removed, the indices specified by the second range are no longer valid\n\nyikes, indeed\n\n\u003e Could you please add a test for this?\n\nwill do\n\n\u003e If you continue using a lambda\n\nfixed with reverse iterator logic",
+      "parentUuid": "42c3dc66_a357b07b",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c42ce007_812b3f40",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 6
@@ -145,6 +259,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0981daf6_92d1b2fd",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "\u003e Have you verified the optimization works with this test?\n\n1. yes, when i skip the optimization test crashes with OOM errors\n2. the test passes locally with swiftshader but for some reason SwS on the CI bot doesnt\n\n\u003e If all but one update is dropped, shouldn\u0027t the workload not be large anymore?\n\ni suspect the issue might be with mem allocatioins, each update is at least 8MB and grows to as large as 50MB",
+      "parentUuid": "c42ce007_812b3f40",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d346f6d4_1d7fcada",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 6
@@ -156,6 +288,24 @@
       "writtenOn": "2022-06-09T17:57:07Z",
       "side": 1,
       "message": "Could you use a different color for the uploads? At least between the one that supersedes the rest, and the other ones.",
+      "revId": "890e0a79c191e894d363d56e60020d2215feead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ac4b87_a99a4276",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-10T18:33:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d346f6d4_1d7fcada",
       "revId": "890e0a79c191e894d363d56e60020d2215feead8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
