@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b5c04de_1cf1cd2a",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-10T23:20:31Z",
+      "side": 1,
+      "message": "Oh ok I see. After a second read I think it should be ok to keep it with `ValidateDrawElementsInstancedBase()` then. I saw that all the functions start with `ValidateDrawElementsInstaced*()` either returns true, or directs the call to `ValidateDrawElementsInstancedBase()`, so `ValidateDrawElementsInstancedBase()` should be good for now. Though I am not sure if we should add different checks based on whether it is baseVertexBaseInstance, baseVertex, or baseInstance. We can probably look into the specs later.",
+      "parentUuid": "27288654_dfd49740",
+      "revId": "7ba6dc4b64b020e0e36a080acfcbe087f6e4343d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "346f3ae5_a40557b1",
