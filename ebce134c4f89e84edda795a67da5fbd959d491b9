@@ -51,6 +51,52 @@
       "parentUuid": "3f6ceb7c_bad4964b",
       "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82cc0010_edda1609",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-10T14:34:22Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right to me, Base looks correct to me (using exeDir to get the full path instead of SetCWD) - is there a reason to change cwd that I might be missing?",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 38
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44d8637f_a82320e0",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-10T14:34:22Z",
+      "side": 1,
+      "message": "Is it intentional that this file will end up directly under chromium_tests_root/ ?\n\nIs this file handled correctly when traces are ran under android runner / catapult? Doesn\u0027t it need to be added to dependencies somewhere?",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
