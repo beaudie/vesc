@@ -1290,7 +1290,7 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
 }
 
 angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
-    vk::Context *context,
+    ContextVk *contextVk,
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDescBuilder &descriptorSetDesc,
@@ -1298,7 +1298,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
 {
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[setIndex].get().getOrAllocateDescriptorSet(
-        context, commandBufferHelper, descriptorSetDesc.getDesc(),
+        contextVk, commandBufferHelper, descriptorSetDesc.getDesc(),
         mDescriptorSetLayouts[setIndex].get(), &mDescriptorPoolBindings[setIndex],
         &mDescriptorSets[setIndex], &cacheResult));
     ASSERT(mDescriptorSets[setIndex] != VK_NULL_HANDLE);
@@ -1341,7 +1341,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
 }
 
 angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
-    vk::Context *context,
+    ContextVk *contextVk,
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::BufferHelper *defaultUniformBuffer,
@@ -1350,12 +1350,12 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
     mCurrentDefaultUniformBufferSerial =
         defaultUniformBuffer ? defaultUniformBuffer->getBufferSerial() : vk::kInvalidBufferSerial;
 
-    return getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
+    return getOrAllocateDescriptorSet(contextVk, updateBuilder, commandBufferHelper,
                                       uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb);
 }
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
-    vk::Context *context,
+    ContextVk *contextVk,
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
@@ -1367,7 +1367,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 {
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture].get().getOrAllocateDescriptorSet(
-        context, commandBufferHelper, texturesDesc,
+        contextVk, commandBufferHelper, texturesDesc,
         mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
         &mDescriptorPoolBindings[DescriptorSetIndex::Texture],
         &mDescriptorSets[DescriptorSetIndex::Texture], &cacheResult));
@@ -1375,10 +1375,18 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
+        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
+            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
+
+        // Let each pool know there is a shared cache key created and destroys the shared cache key
+        // when it destroys the pool.
+        mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().onNewDescriptorSetAllocated(
+            sharedCacheKey);
+
         vk::DescriptorSetDescBuilder fullDesc;
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
-                                                    samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType));
+        ANGLE_TRY(fullDesc.updateFullActiveTextures(
+            contextVk, mVariableInfoMap, executable, textures, samplers,
+            emulateSeamfulCubeMapSampling, pipelineType, sharedCacheKey));
         fullDesc.updateDescriptorSet(updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
@@ -1392,7 +1400,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
 template <typename CommandBufferT>
 angle::Result ProgramExecutableVk::bindDescriptorSets(
-    vk::Context *context,
+    ContextVk *contextVk,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     CommandBufferT *commandBuffer,
     PipelineType pipelineType)
@@ -1430,7 +1438,7 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
         VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex];
         if (descSet == VK_NULL_HANDLE)
         {
-            if (!context->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
+            if (!contextVk->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
             {
                 continue;
             }
@@ -1440,7 +1448,7 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
             if (mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE)
             {
                 ANGLE_TRY(mDescriptorPools[descriptorSetIndex].get().allocateDescriptorSets(
-                    context, commandBufferHelper, mDescriptorSetLayouts[descriptorSetIndex].get(),
+                    contextVk, commandBufferHelper, mDescriptorSetLayouts[descriptorSetIndex].get(),
                     1, &mDescriptorPoolBindings[descriptorSetIndex],
                     &mEmptyDescriptorSets[descriptorSetIndex]));
             }
@@ -1475,12 +1483,12 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
 }
 
 template angle::Result ProgramExecutableVk::bindDescriptorSets<vk::priv::SecondaryCommandBuffer>(
-    vk::Context *context,
+    ContextVk *contextVk,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::priv::SecondaryCommandBuffer *commandBuffer,
     PipelineType pipelineType);
 template angle::Result ProgramExecutableVk::bindDescriptorSets<vk::VulkanSecondaryCommandBuffer>(
-    vk::Context *context,
+    ContextVk *contextVk,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::VulkanSecondaryCommandBuffer *commandBuffer,
     PipelineType pipelineType);
@@ -1498,7 +1506,7 @@ void ProgramExecutableVk::setAllDefaultUniformsDirty(const gl::ProgramExecutable
 }
 
 angle::Result ProgramExecutableVk::updateUniforms(
-    vk::Context *context,
+    ContextVk *contextVk,
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::BufferHelper *emptyBuffer,
@@ -1519,7 +1527,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
     // buffer for uniform data have switched, because all shader stages are using the same buffer,
     // we then must update uniform data for all shader stages to keep all shader stages' uniform
     // data in the same buffer.
-    requiredSpace = calcUniformUpdateRequiredSpace(context, glExecutable, &offsets);
+    requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, &offsets);
     ASSERT(requiredSpace > 0);
 
     // Allocate space from dynamicBuffer. Always try to allocate from the current buffer first.
@@ -1528,8 +1536,8 @@ angle::Result ProgramExecutableVk::updateUniforms(
     {
         setAllDefaultUniformsDirty(glExecutable);
 
-        requiredSpace = calcUniformUpdateRequiredSpace(context, glExecutable, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
+        requiredSpace = calcUniformUpdateRequiredSpace(contextVk, glExecutable, &offsets);
+        ANGLE_TRY(defaultUniformStorage->allocate(contextVk, requiredSpace, &defaultUniformBuffer,
                                                   &anyNewBufferAllocated));
     }
 
@@ -1549,7 +1557,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
         }
         ++offsetIndex;
     }
-    ANGLE_TRY(defaultUniformBuffer->flush(context->getRenderer()));
+    ANGLE_TRY(defaultUniformBuffer->flush(contextVk->getRenderer()));
 
     // Because the uniform buffers are per context, we can't rely on dynamicBuffer's allocate
     // function to tell us if you have got a new buffer or not. Other program's use of the buffer
@@ -1564,11 +1572,11 @@ angle::Result ProgramExecutableVk::updateUniforms(
         // modify the descriptor sets once initialized.
         vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
         uniformsAndXfbDesc.updateUniformsAndXfb(
-            context, glExecutable, *this, defaultUniformBuffer, *emptyBuffer,
+            contextVk, glExecutable, *this, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,
             glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
-        ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, commandBufferHelper,
+        ANGLE_TRY(updateUniformsAndXfbDescriptorSet(contextVk, updateBuilder, commandBufferHelper,
                                                     defaultUniformBuffer, uniformsAndXfbDesc));
     }
 
