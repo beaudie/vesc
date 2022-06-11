@@ -2065,20 +2065,9 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         }
     }
 
-    // In case bound program uses shader framebuffer fetch and bound attachments are changed without
-    // program change, we update framebuffer fetch mode in Renderpass here.
-    bool programUsesFramebufferFetch        = false;
-    const gl::State &glState                = contextVk->getState();
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
-    if (executable)
+    if (contextVk->isInFramebufferFetchMode())
     {
-        programUsesFramebufferFetch = executable->usesFramebufferFetch();
-    }
-
-    if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
-    {
-        mCurrentFramebufferDesc.updateFramebufferFetchMode(programUsesFramebufferFetch);
-        mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
+        mRenderPassDesc.setFramebufferFetchMode(true);
     }
 
     if (contextVk->getFeatures().enableMultisampledRenderToTexture.enabled)
@@ -2980,17 +2969,26 @@ void FramebufferVk::updateRenderPassReadOnlyDepthMode(ContextVk *contextVk,
     renderPass->updateStartedRenderPassWithDepthMode(readOnlyDepthStencilMode);
 }
 
-void FramebufferVk::onSwitchProgramFramebufferFetch(ContextVk *contextVk,
-                                                    bool programUsesFramebufferFetch)
+void FramebufferVk::switchToFramebufferFetchMode(ContextVk *contextVk, bool hasFramebufferFetch)
 {
-    if (programUsesFramebufferFetch != mRenderPassDesc.getFramebufferFetchMode())
+    // The switch happens once, and is permanent.
+    if (mRenderPassDesc.getFramebufferFetchMode() == hasFramebufferFetch)
     {
-        // Make sure framebuffer is recreated.
-        mCurrentFramebuffer.release();
-        mCurrentFramebufferDesc.updateFramebufferFetchMode(programUsesFramebufferFetch);
+        return;
+    }
 
-        mRenderPassDesc.setFramebufferFetchMode(programUsesFramebufferFetch);
-        contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
+    // Make sure framebuffer is recreated.
+    mCurrentFramebuffer.release();
+    mCurrentFramebufferDesc.setFramebufferFetchMode(hasFramebufferFetch);
+
+    mRenderPassDesc.setFramebufferFetchMode(hasFramebufferFetch);
+    contextVk->onDrawFramebufferRenderPassDescChange(this, nullptr);
+
+    // Clear the framebuffer cache, as none of the old framebuffers are usable.
+    if (contextVk->getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
+    {
+        ASSERT(hasFramebufferFetch);
+        resetCache(contextVk);
     }
 }
 }  // namespace rx
