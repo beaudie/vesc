@@ -4072,7 +4072,7 @@ void FramebufferDesc::updateLayerCount(uint32_t layerCount)
     SetBitField(mLayerCount, layerCount);
 }
 
-void FramebufferDesc::updateFramebufferFetchMode(bool hasFramebufferFetch)
+void FramebufferDesc::setFramebufferFetchMode(bool hasFramebufferFetch)
 {
     SetBitField(mHasFramebufferFetch, hasFramebufferFetch);
 }
