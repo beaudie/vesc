@@ -87,6 +87,30 @@
       },
       "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02afe540_a6e545f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8296,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-11T01:27:43Z",
+      "side": 1,
+      "message": "\u003e confused as to how it was handling removal of non-contiguous superseded updates\n\nah, you were looking for only those updates that covered the whole subresource which meant you could erase all updates that came before it. My situation is a little different which wont lend well to erase / lambda pattern",
+      "parentUuid": "c7cd7d69_1e658f8d",
+      "range": {
+        "startLine": 8296,
+        "startChar": 12,
+        "endLine": 8296,
+        "endChar": 72
+      },
+      "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
