@@ -384,6 +384,9 @@ class ProgramExecutableVk
     //   PRE_RASTERIZATION_SHADERS|FRAGMENT_SHADER pipelines.
     //
     vk::PipelineCache mPipelineCache;
+
+    // Manages the texture descriptor set cache that created with this texture
+    vk::DescriptorSetCacheManager mTextureDescriptorSetCacheManager;
 };
 
 }  // namespace rx
