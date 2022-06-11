@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f226c80_70673fd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-11T02:20:19Z",
+      "side": 1,
+      "message": "Instead of switching to framebuffer fetch on first _use_, I do it on first _link_. My reasoning is that switch on first use means a potential render pass break. The performance impact of this is kind of negligible (although would be worst if we ever support multiple open render passes, but nevertheless it\u0027s a one time thing), but I dislike that more because of how it can affect debugging experience.\n\nLike imagine a few years from now a developer is trying to optimize their GL game that\u0027s running on ANGLE, they use AGI, and start inspecting frame 1 and wonder why there\u0027s a render pass break where there shouldn\u0027t be. If they don\u0027t happen to notice that other frames don\u0027t have this render pass break and that it\u0027s rather benign, they may do all sorts of things from getting frustrated to hacks like rendering offscreen once during loading just to get ANGLE to switch to this mode.\n\nIn terms of code maintainability, I also think it\u0027s better if `ContextVk::invalidateProgramExecutableHelper` simply doesn\u0027t have code to break the render pass, rather than a condition that \"we promise\" only runs once.\n\n---\n\nThe change is not really big, but it\u0027s cluttered by random changes. Let me split that up into a cleanup CL.",
+      "parentUuid": "2beace60_240affbe",
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62ce5c9c_d75260ee",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 5
@@ -31,6 +49,30 @@
       "writtenOn": "2022-06-10T21:59:53Z",
       "side": 1,
       "message": "Why not be part of context instead of shareGroup? If they only use fetch on one context, there is no need to change other context to be using fetch as well.",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c2dc352_22c7388c",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-11T02:20:19Z",
+      "side": 1,
+      "message": "So, first, do we agree that multi context and framebuffer fetch is exceedingly rare, if at all used by any app?\n\nI think switching to framebuffer fetch earlier than on first use (i.e. on link, which this CL does) leads to a better experience (see other thread). Trying to keep the other contexts from not switching to framebuffer fetch is an optimization that likely affects no app (while hurting apps that normally use framebuffer fetch).",
+      "parentUuid": "62ce5c9c_d75260ee",
       "range": {
         "startLine": 101,
         "startChar": 9,
