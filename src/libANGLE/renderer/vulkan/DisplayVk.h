@@ -28,6 +28,7 @@ class ShareGroupVk : public ShareGroupImpl
 {
   public:
     ShareGroupVk();
+    void init(RendererVk *renderer) { mRenderer = renderer; }
     void onDestroy(const egl::Display *display) override;
 
     FramebufferCache &getFramebufferCache() { return mFramebufferCache; }
@@ -38,10 +39,7 @@ class ShareGroupVk : public ShareGroupImpl
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
     const ContextVkSet &getContexts() const { return mContexts; }
-    vk::MetaDescriptorPool &getMetaDescriptorPool(DescriptorSetIndex descriptorSetIndex)
-    {
-        return mMetaDescriptorPools[descriptorSetIndex];
-    }
+    vk::MetaDescriptorPool &getMetaDescriptorPool(DescriptorSetIndex descriptorSetIndex);
 
     void releaseResourceUseLists(const Serial &submitSerial);
     void acquireResourceUseList(vk::ResourceUseList &&resourceUseList)
@@ -93,7 +91,11 @@ class ShareGroupVk : public ShareGroupImpl
 
     // If true, it is expected that a BufferBlock may still in used by textures that outlived
     // ShareGroup. The non-empty BufferBlock will be put into RendererVk's orphan list instead.
-    bool mOrphanNonEmptyBufferBlock;
+    // If true, we will alos use per renderer descriptorSet cache instead of per sharedGroup for the
+    // same reason that texture may outlive sharedGroup..
+    bool mHasDisplayTextureShareGroup;
+
+    RendererVk *mRenderer;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context
