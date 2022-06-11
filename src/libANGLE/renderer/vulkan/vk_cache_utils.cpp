@@ -4601,6 +4601,13 @@ void DescriptorSetDesc::streamOut(std::ostream &ostr) const
     }
 }
 
+// DescriptorSetDescAndPool implementation.
+void DescriptorSetDescAndPool::destroy(Context *context)
+{
+    ASSERT(mPool != nullptr);
+    mPool->destroyCachedDescriptorSet(context, mDesc);
+}
+
 // DescriptorSetDescBuilder implementation.
 DescriptorSetDescBuilder::DescriptorSetDescBuilder() = default;
 
@@ -4804,14 +4811,15 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType)
+    PipelineType pipelineType,
+    const SharedDescriptorSetCachekey &sharedCacheKey)
 {
     reset();
     for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         ANGLE_TRY(updateExecutableActiveTexturesForShader(
             context, shaderType, variableInfoMap, executable, textures, samplers,
-            emulateSeamfulCubeMapSampling, pipelineType));
+            emulateSeamfulCubeMapSampling, pipelineType, sharedCacheKey));
     }
 
     return angle::Result::Continue;
@@ -4825,7 +4833,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType)
+    PipelineType pipelineType,
+    const SharedDescriptorSetCachekey &sharedCacheKey)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<gl::LinkedUniform> &uniforms         = executable.getUniforms();
@@ -4873,6 +4882,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
 
+                textureVk->addTextureDescriptorSetCacheKey(sharedCacheKey);
+
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
                 mHandles[infoIndex].bufferView = view->getHandle();
@@ -4889,6 +4900,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(samplerState);
+
+                textureVk->addTextureDescriptorSetCacheKey(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
 
@@ -5282,6 +5295,51 @@ void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *
 {
     mDesc.updateDescriptorSet(updateBuilder, mHandles.data(), descriptorSet);
 }
+
+// SharedCachekeyManager implementation.
+template <class sharedCacheKeyT>
+void SharedCachekeyManager<sharedCacheKeyT>::addSharedCacheKey(
+    const sharedCacheKeyT &sharedCachekey)
+{
+    // If there is invalid key in the array, use it instead of keep expanding the array
+    for (auto &cacheKey : mSharedCacheKeys)
+    {
+        if (!cacheKey)
+        {
+            cacheKey = sharedCachekey;
+            return;
+        }
+    }
+    mSharedCacheKeys.push_back(sharedCachekey);
+}
+
+template <class sharedCacheKeyT>
+void SharedCachekeyManager<sharedCacheKeyT>::releaseSharedCachekey(Context *context)
+{
+    for (auto &cacheKey : mSharedCacheKeys)
+    {
+        if (cacheKey)
+        {
+            // Immediate destroy the cached object when first releaseRef call is made
+            cacheKey.get()->get()->destroy(context);
+        }
+    }
+    mSharedCacheKeys.clear();
+}
+
+template <class sharedCacheKeyT>
+void SharedCachekeyManager<sharedCacheKeyT>::destroy()
+{
+    // Caller must have already freed all caches
+    for (auto &cacheKey : mSharedCacheKeys)
+    {
+        ASSERT(!cacheKey);
+    }
+    mSharedCacheKeys.clear();
+}
+
+// Explict instantiate for DescriptorSetCacheManager
+template class SharedCachekeyManager<SharedDescriptorSetCachekey>;
 }  // namespace vk
 
 // RenderPassCache implementation.

@@ -5783,7 +5783,7 @@ TEST_P(VulkanPerformanceCounterTest, CreateDestroyTextureDoesNotIncreaseDescript
 
     // Respecify texture in a loop
     GLubyte kLinearColor[]    = {132, 55, 219, 255};
-    constexpr size_t kMaxLoop = 2;
+    constexpr size_t kMaxLoop = 20;
     GLint textureDescriptorSetCacheTotalSizeBefore =
         getPerfCounters().textureDescriptorSetCacheTotalSize;
     for (size_t loop = 0; loop < kMaxLoop; loop++)
@@ -5808,7 +5808,7 @@ TEST_P(VulkanPerformanceCounterTest, CreateDestroyTextureDoesNotIncreaseDescript
         textureDescriptorSetCacheTotalSizeBefore;
 
     // We don't expect descriptorSet cache to keep growing
-    EXPECT_EQ(1, textureDescriptorSetCacheTotalSizeIncrease);
+    EXPECT_EQ(0, textureDescriptorSetCacheTotalSizeIncrease);
 }
 
 // Test that post-render-pass-to-swapchain glFenceSync followed by eglSwapBuffers incurs only a

@@ -1270,6 +1270,20 @@ class DescriptorSetDesc
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
+// A standalone object that used with SharedCachekeyManager class
+class DescriptorPoolHelper;
+class DescriptorSetDescAndPool
+{
+  public:
+    DescriptorSetDescAndPool(const DescriptorSetDesc &desc, DescriptorPoolHelper *pool)
+        : mDesc(desc), mPool(pool)
+    {}
+    void destroy(Context *context);
+    DescriptorSetDesc mDesc;
+    DescriptorPoolHelper *mPool;
+};
+using SharedDescriptorSetCachekey = std::shared_ptr<std::unique_ptr<DescriptorSetDescAndPool>>;
+
 constexpr VkDescriptorType kStorageBufferDescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 
 // Manages a descriptor set desc with a few helper routines and also stores object handles.
@@ -1346,7 +1360,8 @@ class DescriptorSetDescBuilder final
                                            const gl::ActiveTextureArray<TextureVk *> &textures,
                                            const gl::SamplerBindingVector &samplers,
                                            bool emulateSeamfulCubeMapSampling,
-                                           PipelineType pipelineType);
+                                           PipelineType pipelineType,
+                                           const SharedDescriptorSetCachekey &sharedCacheKey);
 
     void updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
                              VkDescriptorSet descriptorSet) const;
@@ -1363,7 +1378,8 @@ class DescriptorSetDescBuilder final
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
         bool emulateSeamfulCubeMapSampling,
-        PipelineType pipelineType);
+        PipelineType pipelineType,
+        const SharedDescriptorSetCachekey &sharedCacheKey);
 
     void updateWriteDesc(uint32_t bindingIndex,
                          VkDescriptorType descriptorType,
@@ -1524,6 +1540,30 @@ class RenderPassHelper final : angle::NonCopyable
     RenderPass mRenderPass;
     RenderPassPerfCounters mPerfCounters;
 };
+
+// Helper class manages the lifetime of varius cache objects so that the cache entry can be
+// destroyed when one of the components becomes invalid.
+template <class sharedCacheKeyT>
+class SharedCachekeyManager
+{
+  public:
+    SharedCachekeyManager() = default;
+    ~SharedCachekeyManager() { ASSERT(empty()); }
+    // Store the pointer to the cache key and retains it
+    void addSharedCacheKey(const sharedCacheKeyT &cachekeyRef);
+    // Iterate over the descriptor array and destroy the descriptor and cache.
+    void releaseSharedCachekey(Context *context);
+    void destroy();
+    bool empty() { return mSharedCacheKeys.empty(); }
+
+  private:
+    // Tracks an array of cache keys with refcounting. Note this owns one refcount of
+    // RefCountedFramebufferDescHelper object and when the last refcount goes away, we are
+    // responsible to destroy RefCountedFramebufferDescHelper object.
+    std::vector<sharedCacheKeyT> mSharedCacheKeys;
+};
+
+using DescriptorSetCacheManager = SharedCachekeyManager<SharedDescriptorSetCachekey>;
 }  // namespace vk
 }  // namespace rx
 
@@ -1679,6 +1719,9 @@ class CacheStats final : angle::NonCopyable
     }
 
     ANGLE_INLINE uint32_t getSize() const { return mSize; }
+    // In some cases we do not keep cache size up to date. We will figure out actual and update
+    // once.
+    ANGLE_INLINE void setSize(uint32_t size) { mSize = size; }
 
     void reset()
     {
@@ -1989,6 +2032,13 @@ class DescriptorSetCache final : angle::NonCopyable
     {
         mPayload.emplace(desc, descriptorSet);
     }
+
+    ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
+    {
+        mPayload.erase(desc);
+    }
+
+    ANGLE_INLINE size_t getTotalCacheSize() const { return mPayload.size(); }
 
     size_t getTotalCacheKeySizeBytes() const
     {

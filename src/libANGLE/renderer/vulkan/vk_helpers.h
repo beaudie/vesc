@@ -172,8 +172,10 @@ class DescriptorPoolHelper final : public Resource
 
     bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
 
+    void destroyCachedDescriptorSet(Context *context, const DescriptorSetDesc &desc);
     void resetCache();
 
+    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
@@ -229,10 +231,24 @@ class DynamicDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
-        accum->accumulateCacheStats(cacheType, mCacheStats);
+        CacheStats cacheStats = mCacheStats;
+        cacheStats.setSize(static_cast<uint32_t>(getTotalCacheSize()));
+        accum->accumulateCacheStats(cacheType, cacheStats);
     }
 
     void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+
+    size_t getTotalCacheSize() const
+    {
+        size_t totalSize = 0;
+
+        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
+        {
+            totalSize += pool->get().getTotalCacheSize();
+        }
+
+        return totalSize;
+    }
 
     size_t getTotalCacheKeySizeBytes() const
     {
