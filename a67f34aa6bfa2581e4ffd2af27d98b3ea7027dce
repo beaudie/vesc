@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7992669c_ace4260e",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-11T02:46:53Z",
+      "side": 1,
+      "message": "Took a stab at adding it to the harness",
+      "parentUuid": "4de71316_3376887a",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3bd3001_352df5a4",
         "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
         "patchSetId": 11
@@ -83,6 +101,24 @@
       "writtenOn": "2022-06-10T23:20:04Z",
       "side": 1,
       "message": "Similar point here about reusing existing test helpers.",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5880ecb2_75fa1d24",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-11T02:46:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3bd3001_352df5a4",
       "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +154,24 @@
       "side": 1,
       "message": "\"left, top, right, bottom\" -- I\u0027ll choose a better name.",
       "parentUuid": "910215d3_93255569",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "305c420a_9d4c771b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-11T02:46:53Z",
+      "side": 1,
+      "message": "Is \"rect\" better? It doesn\u0027t clarify whether it\u0027s XYWH or LTRB, but that\u0027s quickly ascertainable from the code..",
+      "parentUuid": "3238eeb0_9c244b50",
       "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
