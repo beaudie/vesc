@@ -189,6 +189,32 @@ class SharedBufferSuballocationGarbage
 };
 using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
 
+class SharedDescriptorSetGarbage
+{
+  public:
+    SharedDescriptorSetGarbage() = default;
+    SharedDescriptorSetGarbage(SharedDescriptorSetGarbage &&other)
+        : mLifetime(std::move(other.mLifetime))
+    {
+        mDescriptorSet       = other.mDescriptorSet;
+        other.mDescriptorSet = VK_NULL_HANDLE;
+    }
+    SharedDescriptorSetGarbage(const SharedResourceUse &use, const VkDescriptorSet &descriptorSet)
+    {
+        mLifetime.init();
+        mLifetime.updateSerialOneOff(use.getSerial());
+        mDescriptorSet = descriptorSet;
+    }
+    ~SharedDescriptorSetGarbage() = default;
+
+    bool destroyIfComplete(VkDevice device, DescriptorPool &pool, Serial completedSerial);
+
+  private:
+    SharedResourceUse mLifetime;
+    VkDescriptorSet mDescriptorSet;
+};
+using SharedDescriptorSetGarbageList = std::queue<SharedDescriptorSetGarbage>;
+
 class SharedGarbage
 {
   public:

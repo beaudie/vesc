@@ -145,6 +145,22 @@ bool SharedBufferSuballocationGarbage::destroyIfComplete(RendererVk *renderer,
     return true;
 }
 
+// SharedDescriptorSetGarbage implementation.
+bool SharedDescriptorSetGarbage::destroyIfComplete(VkDevice device,
+                                                   DescriptorPool &pool,
+                                                   Serial completedSerial)
+{
+    if (mLifetime.isCurrentlyInUse(completedSerial))
+    {
+        return false;
+    }
+
+    pool.freeDescriptorSets(device, 1, &mDescriptorSet);
+    mDescriptorSet = VK_NULL_HANDLE;
+    mLifetime.release();
+    return true;
+}
+
 // SharedGarbage implementation.
 SharedGarbage::SharedGarbage() = default;
 

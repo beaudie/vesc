@@ -5783,7 +5783,7 @@ TEST_P(VulkanPerformanceCounterTest, CreateDestroyTextureDoesNotIncreaseDescript
 
     // Respecify texture in a loop
     GLubyte kLinearColor[]    = {132, 55, 219, 255};
-    constexpr size_t kMaxLoop = 2;
+    constexpr size_t kMaxLoop = 20;
     GLint textureDescriptorSetCacheTotalSizeBefore =
         getPerfCounters().textureDescriptorSetCacheTotalSize;
     for (size_t loop = 0; loop < kMaxLoop; loop++)

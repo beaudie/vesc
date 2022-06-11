@@ -172,17 +172,25 @@ class DescriptorPoolHelper final : public Resource
 
     bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
 
+    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
     void resetCache();
 
+    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
   private:
+    void cleanupGarbage(VkDevice device, Serial lastCompletedQueueSerial);
+
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
     DescriptorSetCache mDescriptorSetCache;
+    // Because freeing descriptorSet require DescriptorPool, we store individually released
+    // descriptor sets here instead of usual garbage list in the renderer to avoid complicated
+    // threading issues and other oddity associated with pooled object destruction.
+    SharedDescriptorSetGarbageList mDescriptorSetGarbageList;
 };
 
 using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
@@ -229,10 +237,26 @@ class DynamicDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
+        // total cache size can change when cached descriptorSet gets destroyed, and mCacheStats
+        // will not get updated since the call does not go through DynamicDescriptorPool. Thus we
+        // have to calculate total cache size as needed here.
+        mCacheStats.setSize(static_cast<uint32_t>(getTotalCacheSize()));
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
 
     void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+
+    size_t getTotalCacheSize() const
+    {
+        size_t totalSize = 0;
+
+        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
+        {
+            totalSize += pool->get().getTotalCacheSize();
+        }
+
+        return totalSize;
+    }
 
     size_t getTotalCacheKeySizeBytes() const
     {
@@ -265,7 +289,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
-    CacheStats mCacheStats;
+    // Mutable so that we may update cache stats when needed.
+    mutable CacheStats mCacheStats;
 };
 
 struct DescriptorSetAndPoolIndex

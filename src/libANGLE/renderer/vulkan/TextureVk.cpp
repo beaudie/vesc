@@ -3127,6 +3127,8 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    releaseTextureDescriptorSetCachekey(contextVk);
+
     if (mImage == nullptr)
     {
         for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
