@@ -4611,6 +4611,13 @@ void DescriptorSetDesc::streamOut(std::ostream &ostr) const
     }
 }
 
+// DescriptorSetDescAndPool implementation.
+void DescriptorSetDescAndPool::destroyCachedObject(ContextVk *contextVk)
+{
+    ASSERT(mPool != nullptr);
+    mPool->releaseCachedDescriptorSet(contextVk, mDesc);
+}
+
 // DescriptorSetDescBuilder implementation.
 DescriptorSetDescBuilder::DescriptorSetDescBuilder() = default;
 
@@ -4814,14 +4821,15 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType)
+    PipelineType pipelineType,
+    const SharedDescriptorSetCacheKey &sharedCacheKey)
 {
     reset();
     for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         ANGLE_TRY(updateExecutableActiveTexturesForShader(
             context, shaderType, variableInfoMap, executable, textures, samplers,
-            emulateSeamfulCubeMapSampling, pipelineType));
+            emulateSeamfulCubeMapSampling, pipelineType, sharedCacheKey));
     }
 
     return angle::Result::Continue;
@@ -4835,7 +4843,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType)
+    PipelineType pipelineType,
+    const SharedDescriptorSetCacheKey &sharedCacheKey)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<gl::LinkedUniform> &uniforms         = executable.getUniforms();
@@ -4883,6 +4892,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
 
+                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
+
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
                 mHandles[infoIndex].bufferView = view->getHandle();
@@ -4899,6 +4910,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(samplerState);
+
+                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
 
@@ -5353,6 +5366,8 @@ bool SharedCacheKeyManager<SharedCacheKeyT>::containsKey(const SharedCacheKeyT &
 
 // Explict instantiate for FramebufferCacheManager
 template class SharedCacheKeyManager<SharedFramebufferCacheKey>;
+// Explict instantiate for DescriptorSetCacheManager
+template class SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
 }  // namespace vk
 
 // FramebufferCache implementation.
