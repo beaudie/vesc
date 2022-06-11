@@ -3193,10 +3193,10 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 
     VkDescriptorPoolCreateInfo descriptorPoolInfo = {};
     descriptorPoolInfo.sType                      = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    descriptorPoolInfo.flags                      = 0;
-    descriptorPoolInfo.maxSets                    = maxSets;
-    descriptorPoolInfo.poolSizeCount              = static_cast<uint32_t>(poolSizes.size());
-    descriptorPoolInfo.pPoolSizes                 = poolSizes.data();
+    descriptorPoolInfo.flags         = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+    descriptorPoolInfo.maxSets       = maxSets;
+    descriptorPoolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+    descriptorPoolInfo.pPoolSizes    = poolSizes.data();
 
     mFreeDescriptorSets = maxSets;
 
@@ -3259,6 +3259,18 @@ bool DescriptorPoolHelper::getCachedDescriptorSet(const DescriptorSetDesc &desc,
                                                   VkDescriptorSet *descriptorSetOut)
 {
     return mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut);
+}
+
+void DescriptorPoolHelper::destroyCachedDescriptorSet(Context *context,
+                                                      const DescriptorSetDesc &desc)
+{
+    VkDescriptorSet descriptorSet;
+    if (getCachedDescriptorSet(desc, &descriptorSet))
+    {
+        mDescriptorPool.freeDescriptorSets(context->getDevice(), 1, &descriptorSet);
+        mDescriptorSetCache.eraseDescriptorSet(desc);
+        mFreeDescriptorSets++;
+    }
 }
 
 void DescriptorPoolHelper::resetCache()
