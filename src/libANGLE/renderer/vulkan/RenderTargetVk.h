@@ -136,10 +136,16 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     void onNewFramebuffer(const vk::SharedFramebufferCacheKey &sharedFramebufferCacheKey)
     {
+        ASSERT(!mFramebufferCacheManager.containsKey(sharedFramebufferCacheKey));
         mFramebufferCacheManager.addKey(sharedFramebufferCacheKey);
     }
     void release(ContextVk *contextVk) { mFramebufferCacheManager.releaseKeys(contextVk); }
-    void destroy() { mFramebufferCacheManager.destroy(); }
+    void destroy()
+    {
+        // Caller must have already freed all caches
+        ASSERT(mFramebufferCacheManager.empty());
+        mFramebufferCacheManager.destroy();
+    }
 
   private:
     void reset();
