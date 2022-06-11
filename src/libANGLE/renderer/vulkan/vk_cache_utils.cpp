@@ -4062,9 +4062,9 @@ void FramebufferDesc::updateLayerCount(uint32_t layerCount)
     SetBitField(mLayerCount, layerCount);
 }
 
-void FramebufferDesc::updateFramebufferFetchMode(bool hasFramebufferFetch)
+void FramebufferDesc::setFramebufferFetchMode()
 {
-    SetBitField(mHasFramebufferFetch, hasFramebufferFetch);
+    SetBitField(mHasFramebufferFetch, true);
 }
 
 void FramebufferDesc::updateRenderToTexture(bool isRenderToTexture)
