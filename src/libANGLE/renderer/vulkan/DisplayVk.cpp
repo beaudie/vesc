@@ -417,7 +417,7 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
     mRenderer->getFeatures().populateFeatureList(features);
 }
 
-ShareGroupVk::ShareGroupVk() : mOrphanNonEmptyBufferBlock(false)
+ShareGroupVk::ShareGroupVk() : mOrphanNonEmptyBufferBlock(false), mIsFramebufferFetchUsed(false)
 {
     mLastPruneTime = angle::GetCurrentSystemTime();
 }
@@ -609,5 +609,32 @@ void ShareGroupVk::logBufferPools() const
         mSmallBufferPool->addStats(&log);
         INFO() << "\t" << log.str();
     }
+}
+
+angle::Result ShareGroupVk::onFramebufferFetchUsed()
+{
+    // If the program uses framebuffer fetch and this is the first time this happens, switch all
+    // contexts in the share group to "framebuffer fetch mode".  In this mode, all render passes
+    // assume framebuffer fetch may be used, so they are prepared to accept a program that uses
+    // input attachments.  This is done only when a program with framebuffer fetch is created to
+    // avoid potential performance impact on applications that don't use this extension.
+
+    if (mIsFramebufferFetchUsed)
+    {
+        return angle::Result::Continue;
+    }
+    mIsFramebufferFetchUsed = true;
+
+    // When switching to framebuffer fetch mode, if any context in the share group has a render pass
+    // open, it's closed here.  It's exceedingly rare to have an application that uses multiple
+    // contexts, uses framebuffer fetch, and links a framebuffer fetch program while other contexts
+    // have a render pass open.  Thus, in practice, no render passes should be open here.  If there
+    // are any, closing them is a one time operation that will not be repeated in any other frame.
+    for (ContextVk *ctx : mContexts)
+    {
+        ANGLE_TRY(ctx->switchToFramebufferFetchMode());
+    }
+
+    return angle::Result::Continue;
 }
 }  // namespace rx
