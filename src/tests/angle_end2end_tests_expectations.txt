@@ -649,3 +649,6 @@
 
 // imageLoad after imageStore with barrier is not coherent on Pixel 4 GLES.
 7388 ANDROID GLES : PixelLocalStorageTest.*/ES3_1_OpenGLES = SKIP
+
+7419 SWIFTSHADER : MultithreadingTestES3.CreateFramebufferFetchBeforeRenderPass/* = SKIP
+7419 ASAN VULKAN SWIFTSHADER : MultithreadingTestES3.CreateFramebufferFetchBeforeRenderPass/* = SKIP

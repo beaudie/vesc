@@ -206,10 +206,7 @@ class alignas(4) RenderPassDesc final
     void setViewCount(GLsizei viewCount) { mViewCount = static_cast<uint8_t>(viewCount); }
     uint8_t viewCount() const { return mViewCount; }
 
-    void setFramebufferFetchMode(bool hasFramebufferFetch)
-    {
-        mHasFramebufferFetch = hasFramebufferFetch;
-    }
+    void setFramebufferFetchMode() { mHasFramebufferFetch = true; }
     bool getFramebufferFetchMode() const { return mHasFramebufferFetch; }
 
     void updateRenderToTexture(bool isRenderToTexture) { mIsRenderToTexture = isRenderToTexture; }
@@ -1437,8 +1434,7 @@ class FramebufferDesc
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
-    void updateFramebufferFetchMode(bool hasFramebufferFetch);
-    bool hasFramebufferFetch() const { return mHasFramebufferFetch; }
+    void setFramebufferFetchMode();
 
     bool isMultiview() const { return mIsMultiview; }
 
