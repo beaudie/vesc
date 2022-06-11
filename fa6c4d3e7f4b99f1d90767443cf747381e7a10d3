@@ -111,6 +111,30 @@
       },
       "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5014a6_832bd19a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8296,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-11T03:02:16Z",
+      "side": 1,
+      "message": "The C++ API here is horrible to understand, I agree, but actually the original lambda works. Simpler example: https://onlinegdb.com/1kzbFI45l\n\nBasically `std::remove_if` removes any entry for which the predicate is true, and it does it by shifting the other ones forward as it drops elements. This leaves a number of elements empty at the end of the vector, which `vector::erase` removes. It by no means requires the elements to be removed to be contiguous.",
+      "parentUuid": "02afe540_a6e545f0",
+      "range": {
+        "startLine": 8296,
+        "startChar": 12,
+        "endLine": 8296,
+        "endChar": 72
+      },
+      "revId": "fa6c4d3e7f4b99f1d90767443cf747381e7a10d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
