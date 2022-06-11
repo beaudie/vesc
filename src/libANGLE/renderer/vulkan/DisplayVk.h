@@ -48,6 +48,14 @@ class ShareGroupVk : public ShareGroupImpl
     {
         mResourceUseLists.emplace_back(std::move(resourceUseList));
     }
+    void addResource(vk::Resource *resource)
+    {
+        if (mResourceUseLists.empty())
+        {
+            mResourceUseLists.emplace_back(vk::ResourceUseList());
+        }
+        resource->retain(&mResourceUseLists.back());
+    }
 
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer,
                                          VkDeviceSize size,
