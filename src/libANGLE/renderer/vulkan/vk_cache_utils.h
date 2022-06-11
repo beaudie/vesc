@@ -1442,8 +1442,7 @@ class FramebufferDesc
 
     void updateLayerCount(uint32_t layerCount);
     uint32_t getLayerCount() const { return mLayerCount; }
-    void updateFramebufferFetchMode(bool hasFramebufferFetch);
-    bool hasFramebufferFetch() const { return mHasFramebufferFetch; }
+    void setFramebufferFetchMode(bool hasFramebufferFetch);
 
     bool isMultiview() const { return mIsMultiview; }
 
