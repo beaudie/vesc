@@ -393,6 +393,8 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
     mComputeProgramInfo.release(contextVk);
 
     contextVk->onProgramExecutableReset(this);
+
+    mTextureDescriptorSetCacheManager.releaseKeys(contextVk);
 }
 
 void ProgramExecutableVk::reset(ContextVk *contextVk)
@@ -1363,10 +1365,15 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
+        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
+            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
+
+        mTextureDescriptorSetCacheManager.addKey(sharedCacheKey);
+
         vk::DescriptorSetDescBuilder fullDesc;
         ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
                                                     samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType));
+                                                    pipelineType, sharedCacheKey));
         fullDesc.updateDescriptorSet(updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
