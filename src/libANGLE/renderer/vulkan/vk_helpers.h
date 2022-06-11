@@ -135,6 +135,30 @@ enum class DescriptorCacheResult
     NewAllocation,
 };
 
+// Class DescriptorSetHelper
+class DescriptorSetHelper final : public Resource
+{
+  public:
+    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
+    DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
+    {
+        mDescriptorSet       = other.mDescriptorSet;
+        other.mDescriptorSet = VK_NULL_HANDLE;
+    }
+
+    // Adds the resource to a resource use list.
+    void retain(ResourceUseList *resourceUseList) { resourceUseList->add(mUse); }
+    void destroy(VkDevice device, DescriptorPool &pool)
+    {
+        pool.freeDescriptorSets(device, 1, &mDescriptorSet);
+        mDescriptorSet = VK_NULL_HANDLE;
+    }
+
+  private:
+    VkDescriptorSet mDescriptorSet;
+};
+using DescriptorSetList = std::queue<DescriptorSetHelper>;
+
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. RendererVk takes care of the lifetime of the discarded
 // pools. Note that we used a fixed layout for descriptor pools in ANGLE.
@@ -172,17 +196,28 @@ class DescriptorPoolHelper final : public Resource
 
     bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
 
+    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
     void resetCache();
+    // Scan descriptorSet garbage list and destroy all GPU completed garbage
+    void cleanupGarbage(Context *context);
 
+    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
   private:
+    // Reset entire descriptorSet garbage list. This should only used when pool gets reset.
+    void resetGarbageList();
+
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
     DescriptorSetCache mDescriptorSetCache;
+    // Because freeing descriptorSet require DescriptorPool, we store individually released
+    // descriptor sets here instead of usual garbage list in the renderer to avoid complicated
+    // threading issues and other weirdness associated with pooled object destruction.
+    DescriptorSetList mDescriptorSetGarbageList;
 };
 
 using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
@@ -229,6 +264,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
+        // Total cache size is not been kepted up to date due to cache destruction could occur
+        // outside this class. Thus we have to calculate total cache size as needed here.
+        updateCacheStats();
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
 
@@ -255,6 +293,16 @@ class DynamicDescriptorPool final : angle::NonCopyable
   private:
     angle::Result allocateNewPool(Context *context);
 
+    void updateCacheStats() const
+    {
+        size_t totalSize = 0;
+        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
+        {
+            totalSize += pool->get().getTotalCacheSize();
+        }
+        mCacheStats.setSize(static_cast<uint32_t>(totalSize));
+    }
+
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;
@@ -265,7 +313,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
-    CacheStats mCacheStats;
+    // Mutable so that we may update cache stats from accumulateDescriptorCacheStats() function.
+    mutable CacheStats mCacheStats;
 };
 
 struct DescriptorSetAndPoolIndex
