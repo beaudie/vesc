@@ -344,6 +344,9 @@ class ProgramExecutableVk
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
 
     ShaderInfo mOriginalShaderInfo;
+
+    // Manages the texture descriptor set cache that created with this texture
+    vk::DescriptorSetCacheManager mTextureDescriptorSetCacheManager;
 };
 
 }  // namespace rx
