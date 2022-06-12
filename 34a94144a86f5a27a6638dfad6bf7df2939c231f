@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1610fb54_72f48558",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-12T02:01:10Z",
+      "side": 1,
+      "message": "👍\n\nThere seems to be some accounting errors, otherwise LGTM",
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4625c003_942dac82",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 8277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-12T02:01:10Z",
+      "side": 1,
+      "message": "nit: shouldn\u0027t happen! And if it does, might as well let the next `if` drop the update.\n\nYou should be able to delete this.",
+      "range": {
+        "startLine": 8272,
+        "startChar": 0,
+        "endLine": 8277,
+        "endChar": 9
+      },
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
