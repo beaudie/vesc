@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a88a4a4_89fed65d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-13T14:32:28Z",
+      "side": 1,
+      "message": "Thanks for finding this issue Gert. Instead of skipping the clear, can we force it through a path that works? I\u0027m wondering if there are cases of YUV texture that could expose some uninitialized pixels to WebGL, or if this is impossible.",
+      "revId": "a8c468e73b5e48e625dae487437cdd79dad301e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
