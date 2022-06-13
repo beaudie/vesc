@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90cb890d_d056840e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-13T14:36:43Z",
+      "side": 1,
+      "message": "LGTM as long as the redness is b/c of missing goldens, not LGTM if we need to update skips.",
+      "revId": "3efe97c6e33bb2f1e0f036d024235217ae5e20f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
