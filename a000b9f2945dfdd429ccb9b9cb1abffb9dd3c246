@@ -122,6 +122,24 @@
       "parentUuid": "8eef176d_1ba27994",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0989628_b652de42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-13T15:08:06Z",
+      "side": 1,
+      "message": "Thanks Corentin. Yuly, the two CL are not mutually exclusive anyway and I think yours would simplify how we manage wayland as a dependency, as we will have just one way to do that which is the same in both Chromium and ANGLE.\n\nI guess, once yours gets merged, I can update this one.",
+      "parentUuid": "c0a4ecd8_e1516df4",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
