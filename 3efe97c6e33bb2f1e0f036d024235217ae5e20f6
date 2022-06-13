@@ -16,6 +16,24 @@
       "message": "LGTM as long as the redness is b/c of missing goldens, not LGTM if we need to update skips.",
       "revId": "3efe97c6e33bb2f1e0f036d024235217ae5e20f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14aeda8e_041400c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-13T15:44:00Z",
+      "side": 1,
+      "message": "Its hitting a problem with sample count on Pixel 4:\n```\nAPI, Error, High: Samples must not be greater than maximum supported value for the format.\n\n    ../../src/tests/perf_tests/ANGLEPerfTest.h:125: Failure\n\n    Failed\n\n    Failing test because of unexpected error:\n\n    Samples must not be greater than maximum supported value for the format.\n```\n\nThe trace was created on ARM, which has max of 8 samples, but QCOM is exposing 4.\nSo we\u0027re leaning toward re-record the trace with sample count limited to 4.",
+      "parentUuid": "90cb890d_d056840e",
+      "revId": "3efe97c6e33bb2f1e0f036d024235217ae5e20f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
