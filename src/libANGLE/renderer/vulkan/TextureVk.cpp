@@ -2794,11 +2794,21 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
         contextVk->getRenderer()->getFormat(desc.format.info->sizedInternalFormat);
 
     ASSERT(mImage);
-    // Note that we cannot ensure the image is initialized because we might be calling subImage
-    // on a non-complete cube map.
-    return mImage->stageRobustResourceClearWithFormat(
-        contextVk, imageIndex, desc.size, format.getIntendedFormat(),
-        format.getActualImageFormat(getRequiredImageAccess()));
+
+    if (format.getIntendedFormat().isYUV)
+    {
+        // The Vulkan spec states: image must not use any of the formats that require a
+        // sampler {YCbCr} conversion, so skip the content initialization
+        return angle::Result::Continue;
+    }
+    else
+    {
+        // Note that we cannot ensure the image is initialized because we might be calling subImage
+        // on a non-complete cube map.
+        return mImage->stageRobustResourceClearWithFormat(
+            contextVk, imageIndex, desc.size, format.getIntendedFormat(),
+            format.getActualImageFormat(getRequiredImageAccess()));
+    }
 }
 
 angle::Result TextureVk::initializeContentsWithBlack(const gl::Context *context,
