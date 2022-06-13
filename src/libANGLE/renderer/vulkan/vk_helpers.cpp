@@ -7458,11 +7458,11 @@ angle::Result ImageHelper::stageResourceClearWithFormat(ContextVk *contextVk,
     ASSERT(!hasStagedUpdatesForSubresource(gl::LevelIndex(index.getLevelIndex()),
                                            index.getLayerIndex(), index.getLayerCount()));
 
-    const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(imageFormat);
+    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(imageFormat);
 
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
 
-    if (imageFormat.isBlock)
+    if (imageFormat.isBlock || imageFormat.isYUV)
     {
         // This only supports doing an initial clear to 0, not clearing to a specific encoded RGBA
         // value
@@ -7471,9 +7471,20 @@ angle::Result ImageHelper::stageResourceClearWithFormat(ContextVk *contextVk,
 
         const gl::InternalFormat &formatInfo =
             gl::GetSizedInternalFormatInfo(imageFormat.glInternalFormat);
+
         GLuint totalSize;
-        ANGLE_VK_CHECK_MATH(contextVk,
-                            formatInfo.computeCompressedImageSize(glExtents, &totalSize));
+        if (imageFormat.isBlock)
+        {
+            ANGLE_VK_CHECK_MATH(contextVk,
+                                formatInfo.computeCompressedImageSize(glExtents, &totalSize));
+        }
+        else
+        {
+            ASSERT(imageFormat.isYUV);
+            totalSize =
+                formatInfo.pixelBytes * glExtents.width * glExtents.height * glExtents.depth;
+            aspectFlags = VK_IMAGE_ASPECT_PLANE_0_BIT;
+        }
 
         std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
             std::make_unique<RefCounted<BufferHelper>>();
