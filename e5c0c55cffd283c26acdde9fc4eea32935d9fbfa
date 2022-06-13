@@ -16,6 +16,24 @@
       "message": "How would you sync wayland directories other than `src`? I guess that should happen manually. Is a similar approach used for other third_party dependencies?",
       "revId": "e5c0c55cffd283c26acdde9fc4eea32935d9fbfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "093e26c0_376e3545",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-13T13:36:01Z",
+      "side": 1,
+      "message": "Yes, unfortunately we can\u0027t sync automatically with the sources in Chromium repo, so this would need to happen manually.\nThere are other third_party directories which also behave this way, like third_party/logdog.\nIf this breaks too often, we can try pulling out Chromium\u0027s sources into a separate repo, like it works with third_party/googletest.\nIdeally, wayland\u0027s GN files should be kept in wayland\u0027s repo, like we do with Vulkan-Headers, for example.",
+      "parentUuid": "12972b3b_86752442",
+      "revId": "e5c0c55cffd283c26acdde9fc4eea32935d9fbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
