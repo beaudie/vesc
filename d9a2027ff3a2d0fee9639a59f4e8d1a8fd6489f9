@@ -70,6 +70,24 @@
       "parentUuid": "90298cce_c6b2690f",
       "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30d0b87b_d67cbd3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-13T20:02:37Z",
+      "side": 1,
+      "message": "Ah, ok.\n\nThe extension does have a mechanism for binding user-generated textures to PLS, so it looks like we have the same problem here as for ES 3.1 in general. And since this extension targets ES 3.0, #2 doesn\u0027t help PLS.\n\nIf it helps, here\u0027s another option for the brainstorm:\n\n4) Lazily convert user textures to typeless as needed; do a one-time copy from the old texture to typeless upon conversion.",
+      "parentUuid": "52757362_f6814ca9",
+      "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
