@@ -74,6 +74,7 @@ ANGLE_CHROMIUM_DEPS = [
     'third_party/requests/src',
     'third_party/six',
     'third_party/turbine',
+    'third_party/wayland/src',
     'third_party/zlib',
     'tools/android/errorprone_plugin',
     'tools/clang',

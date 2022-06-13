@@ -223,7 +223,7 @@ declare_args() {
                         (target_cpu == "x86" || target_cpu == "x64"))
 
   # Directory where to find wayland source files
-  angle_wayland_dir = "$angle_root/third_party/wayland"
+  angle_wayland_dir = "$angle_root/third_party/wayland/src"
 
   angle_vulkan_headers_dir =
       "$angle_root/third_party/vulkan-deps/vulkan-headers/src"
