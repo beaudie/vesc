@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04ba83f7_758d3df1",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-13T14:33:23Z",
+      "side": 1,
+      "message": "what does this line do?",
+      "range": {
+        "startLine": 1219,
+        "startChar": 8,
+        "endLine": 1219,
+        "endChar": 58
+      },
+      "revId": "1a7f5003953b67a42b722b600ba2e0eb72dcab44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
