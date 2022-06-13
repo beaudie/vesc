@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12972b3b_86752442",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-13T13:16:27Z",
+      "side": 1,
+      "message": "How would you sync wayland directories other than `src`? I guess that should happen manually. Is a similar approach used for other third_party dependencies?",
+      "revId": "e5c0c55cffd283c26acdde9fc4eea32935d9fbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
