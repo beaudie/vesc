@@ -50,6 +50,24 @@
       "message": "Do you need this if we land https://chromium-review.googlesource.com/c/angle/angle/+/3702353?",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15b89461_4ece98e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-13T14:44:42Z",
+      "side": 1,
+      "message": "Your CL would simplify this, but I still need to introduce `//build_override/wayland.gni`, as it will be expected by SwiftShader in both ANGLE-standalone and Chromium builds.",
+      "parentUuid": "d6568a62_0b036685",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
