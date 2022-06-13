@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e3111f0_85f389a7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-13T20:43:01Z",
+      "side": 1,
+      "message": "Agreed, this was the reason we didn\u0027t support them in D3D. It would be good to know if that has changed.",
+      "parentUuid": "75cd3100_89d9c90e",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0efe5eba_7be42cf3",
         "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
         "patchSetId": 2
