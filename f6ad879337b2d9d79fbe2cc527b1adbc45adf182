@@ -51,6 +51,24 @@
       "parentUuid": "611652bd_7123395f",
       "revId": "f6ad879337b2d9d79fbe2cc527b1adbc45adf182",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4bc6e2_13208473",
+        "filename": "src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-13T15:10:54Z",
+      "side": 1,
+      "message": "Ack. It\u0027s just on resize, we probably could have just done this when recreating swapchains on all platforms instead of just Wayland.\n\nIt\u0027s fine as-is though, we\u0027ll see if any other platform ever needs this.",
+      "parentUuid": "fb5fed8b_701457ef",
+      "revId": "f6ad879337b2d9d79fbe2cc527b1adbc45adf182",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
