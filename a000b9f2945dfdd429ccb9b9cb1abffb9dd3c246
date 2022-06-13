@@ -16,6 +16,23 @@
       "message": "Nice thanks",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3354ec2a_3baea5dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-13T14:30:04Z",
+      "side": 1,
+      "message": "Not really sure what the root cause of the problem you\u0027re fixing is, but LGTM.",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
