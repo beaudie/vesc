@@ -68,6 +68,24 @@
       "parentUuid": "d6568a62_0b036685",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f7eacb0_659f39b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-13T14:49:59Z",
+      "side": 1,
+      "message": "My intention was that ANGLE-standalone and Chromium would have exactly the same structure in third_party/wayland, so there would be no need to override.\nBut perhaps this is needed in other projects, like Dawn-standalone?",
+      "parentUuid": "15b89461_4ece98e7",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
