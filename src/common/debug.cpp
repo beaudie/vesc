@@ -60,6 +60,8 @@ bool ShouldCreateLogMessage(LogSeverity severity)
     return true;
 #elif defined(ANGLE_ENABLE_ASSERTS)
     return severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN;
+#elif defined(ANGLE_PLATFORM_ANDROID)
+    return severity == LOG_FATAL || severity == LOG_ERR;
 #else
     return false;
 #endif
