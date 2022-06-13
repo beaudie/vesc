@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1971773_2bdee88c",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-13T20:03:44Z",
+      "side": 1,
+      "message": "Thanks for doing this - the new variants look good.",
+      "parentUuid": "7992669c_ace4260e",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3bd3001_352df5a4",
@@ -176,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9c5a328_c1cfbdc7",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-13T20:03:44Z",
+      "side": 1,
+      "message": "\"rect\" sounds better, thanks.",
+      "parentUuid": "305c420a_9d4c771b",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac23e44f_ff36013f",
@@ -207,6 +243,24 @@
       "side": 1,
       "message": "I think these need to be exact, at least unless proven otherwise.\n\nGL_R32F is spec\u0027d as a 32-bit IEEE float, and it\u0027s a similar story for GL_R32UI, so I believe we can expect these to have exact precision. There is some slop allowed for fused operations, but \"a + b\" is required to be correctly rounded.\n\nFrom the GLSL ES 3.1 spec:\n\n  \"Highp unsigned integers have exactly 32 bits of precision. Highp signed integers use 32 bits, including a sign bit, in two\u0027s complement form.\"\n\n  \"Highp floating-point variables within a shader are encoded according to the IEEE 754 specification for single-precision floating-point values (logically, not necessarily physically).\"\n\nI\u0027ll add a comment.",
       "parentUuid": "ac23e44f_ff36013f",
+      "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b99f59e7_a6994cd1",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-13T20:03:44Z",
+      "side": 1,
+      "message": "OK, let\u0027s go with the assumption that these comparisons are exact.",
+      "parentUuid": "2657ff59_e0fca5b0",
       "revId": "a67f34aa6bfa2581e4ffd2af27d98b3ea7027dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
