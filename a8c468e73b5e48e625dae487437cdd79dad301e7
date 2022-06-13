@@ -16,6 +16,24 @@
       "message": "Thanks for finding this issue Gert. Instead of skipping the clear, can we force it through a path that works? I\u0027m wondering if there are cases of YUV texture that could expose some uninitialized pixels to WebGL, or if this is impossible.",
       "revId": "a8c468e73b5e48e625dae487437cdd79dad301e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c06b213_780c3544",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-13T14:41:40Z",
+      "side": 1,
+      "message": "I guess that would need some texture view to expose a format that is accepted for clear, with GL there are none, have to check whether Vulkan offers a texture view to support this, or whether we would have to clear the texture by drawing a full-sized rectangle.",
+      "parentUuid": "7a88a4a4_89fed65d",
+      "revId": "a8c468e73b5e48e625dae487437cdd79dad301e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
