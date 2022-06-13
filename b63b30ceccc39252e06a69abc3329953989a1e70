@@ -81,6 +81,30 @@
       },
       "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72db4c7b_1869098e",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-13T16:53:00Z",
+      "side": 1,
+      "message": "\u003e do we agree that multi context and framebuffer fetch is exceedingly rare\nAgree. but that could argue the other way around as well, that there is no point to optimize that.\n\nMy main concern is that it is anti-opengl convention. rendering state is context state, and buffer/textures are shared group owned. This framebuffer fetch is a rendering state, so it is reasonable to store it in context. And it is one less pointer indirection to retrieve from context versus from sharedGroup. The other part of concern is that what if app load and compile/link all shaders at launch and only used that program when certain effects are enabled or a certain game level? Not sure if there is real use on that, mostly speculation. (maybe you can find out with app traces we have). \n\nI understand your debugging thing, but I realistic don\u0027t think it is a real problem. No one should expect every frame is the same, especially the first frame where tons of texture load/buffer update/program compile occurring.",
+      "parentUuid": "6c2dc352_22c7388c",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
