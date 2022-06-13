@@ -1200,13 +1200,23 @@ Result SerializeTextureData(JsonSerializer *json,
                             gl::Texture *texture,
                             ScratchBuffer *scratchBuffer)
 {
+    // The base level must be <= max level, skip if this is not the case.
+    if (texture->getBaseLevel() > texture->getMipmapMaxLevel())
+        return Result::Continue;
+
     gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
         texture->getType(), texture->getBaseLevel(), texture->getMipmapMaxLevel() + 1,
         gl::ImageIndex::kEntireLevel, gl::ImageIndex::kEntireLevel);
+
     while (imageIter.hasNext())
     {
         gl::ImageIndex index = imageIter.next();
 
+        // Skip serializing level data if the level index is out of range
+        if (index.getLevelIndex() > static_cast<GLint>(gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS))
+            continue;
+
+        texture->getTextureState().getEffectiveMaxLevel();
         const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
 
         if (desc.size.empty())
