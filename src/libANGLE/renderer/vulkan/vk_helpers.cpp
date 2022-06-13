@@ -7462,7 +7462,7 @@ angle::Result ImageHelper::stageResourceClearWithFormat(ContextVk *contextVk,
 
     gl::LevelIndex updateLevelGL(index.getLevelIndex());
 
-    if (imageFormat.isBlock)
+    if (imageFormat.isBlock || imageFormat.isYUV)
     {
         // This only supports doing an initial clear to 0, not clearing to a specific encoded RGBA
         // value
