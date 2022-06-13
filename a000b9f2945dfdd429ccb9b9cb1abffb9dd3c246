@@ -104,6 +104,24 @@
       "parentUuid": "7f7eacb0_659f39b0",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0a4ecd8_e1516df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2022-06-13T15:01:31Z",
+      "side": 1,
+      "message": "Dawn has some form of Wayland support but doesn\u0027t enable it in GN builds yet. When we want to add it I think we can only enable it in Chromium, so Dawn imports build_overrides/wayland.gni which case we\u0027d use wayland_gn_dir to find the correct GN targets. So what you have seems like it would work for Dawn.",
+      "parentUuid": "8eef176d_1ba27994",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
