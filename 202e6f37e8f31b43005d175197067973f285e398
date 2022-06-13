@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4577ee5_dd768ed5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-13T20:25:39Z",
+      "side": 1,
+      "message": "Let me approve this, I believe I recently added a `toupper` usage here.",
+      "revId": "202e6f37e8f31b43005d175197067973f285e398",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
