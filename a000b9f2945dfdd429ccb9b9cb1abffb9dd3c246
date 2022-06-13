@@ -140,6 +140,24 @@
       "parentUuid": "c0a4ecd8_e1516df4",
       "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96dd1b6_21bf27a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-13T15:14:05Z",
+      "side": 1,
+      "message": "I don\u0027t like the manual sync part of my CL, and you have a working solution, so I prefer to abandon mine.\nNote that in order to land this, you need to land the Chromium-side first and then roll Chromium into ANGLE.",
+      "parentUuid": "f0989628_b652de42",
+      "revId": "a000b9f2945dfdd429ccb9b9cb1abffb9dd3c246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
