@@ -52,6 +52,23 @@
       "parentUuid": "093e26c0_376e3545",
       "revId": "e5c0c55cffd283c26acdde9fc4eea32935d9fbfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f3aec1b_8d411500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-13T14:46:58Z",
+      "side": 1,
+      "message": "I\u0027m unsure now if we should go with this or with the build_overrides approach.\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3695277 mentions Dawn, so if Dawn needs SwiftShader with Wayland, this is not going to fix it.\nBut Dawn could copy this, too?",
+      "revId": "e5c0c55cffd283c26acdde9fc4eea32935d9fbfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
