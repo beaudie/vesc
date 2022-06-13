@@ -52,6 +52,24 @@
       "parentUuid": "7f4d0d97_4371f4fe",
       "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52757362_f6814ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115763
+      },
+      "writtenOn": "2022-06-13T18:50:51Z",
+      "side": 1,
+      "message": "Ken: Done.\n\nChris: if you have control of the texture created for PLS, then you\u0027re fine. Just create it TYPELESS and I think it\u0027ll have the same semantics and limitations as read/write Images in GLES (binding point can only be single-component 32I, 32U or 32F, but can be bound to a limited set of multi-component texture types).\n\nI was thinking more in terms of ANGLE supporting GLES 3.1 generally: if we don\u0027t know a texture is going to be used as a UAV, we don\u0027t know whether it should be created TYPELESS or not. So we would have to create all textures as TYPELESS. I haven\u0027t been able to find hard data as to whether there\u0027s a performance penalty for that. Options I\u0027m pondering:\n\n1) Create all textures as TYPELESS (where possible); check benchmark results.\n2) In a GLES 3.1 context, create all textures as TYPELESS (where possible). As long as Chrome continues to use ES 3.0, it would have no impact.\n3) Add an extension to create typeless textures. This wouldn\u0027t let us pass dEQP though.",
+      "parentUuid": "90298cce_c6b2690f",
+      "revId": "d9a2027ff3a2d0fee9639a59f4e8d1a8fd6489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
