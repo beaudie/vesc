@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d483b46c_7f4d169f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-14T19:25:09Z",
+      "side": 1,
+      "message": "nit: `ANGLE_SKIP_TEST_IF`",
+      "range": {
+        "startLine": 1376,
+        "startChar": 4,
+        "endLine": 1376,
+        "endChar": 7
+      },
+      "revId": "f7a83ff5982e03efd20c6a0fcdb96d3bec6cde4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
