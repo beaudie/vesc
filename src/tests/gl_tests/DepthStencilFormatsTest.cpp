@@ -172,6 +172,11 @@ void main()
 
     bool hasReadDepthSupport() const { return IsGLExtensionEnabled("GL_NV_read_depth"); }
 
+    bool hasReadDepthStencilSupport() const
+    {
+        return IsGLExtensionEnabled("GL_NV_read_depth_stencil");
+    }
+
     bool hasReadStencilSupport() const { return IsGLExtensionEnabled("GL_NV_read_stencil"); }
 
     bool hasFloatDepthSupport() const { return IsGLExtensionEnabled("GL_NV_depth_buffer_float2"); }
@@ -356,8 +361,7 @@ void DepthStencilFormatsTestBase::depthStencilReadbackCase(const ReadbackTestPar
     GLubyte actualPixels[destRes * destRes * 8];
     glReadPixels(0, 0, destRes, destRes, GL_DEPTH_COMPONENT,
                  hasFloatDepth ? GL_FLOAT : GL_UNSIGNED_SHORT, actualPixels);
-    // NV_read_depth and NV_read_stencil do not support packed depth/stencil
-    if (hasReadDepthSupport() && type.format != GL_DEPTH_STENCIL)
+    if (hasReadDepthSupport())
     {
         EXPECT_GL_NO_ERROR();
         if (hasFloatDepth)
@@ -395,7 +399,62 @@ void DepthStencilFormatsTestBase::depthStencilReadbackCase(const ReadbackTestPar
         {
             EXPECT_GL_NO_ERROR();
             ASSERT_TRUE((actualPixels[0] == 1) && (actualPixels[1] == 2) &&
-                        (actualPixels[0 + destRes] == 3) && (actualPixels[1 + destRes] = 4));
+                        (actualPixels[0 + destRes] == 3) && (actualPixels[1 + destRes] == 4));
+        }
+        else
+        {
+            EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        }
+
+        glReadPixels(0, 0, destRes, destRes, GL_DEPTH_STENCIL_OES,
+                     hasFloatDepth ? GL_FLOAT_32_UNSIGNED_INT_24_8_REV : GL_UNSIGNED_INT_24_8_OES,
+                     actualPixels);
+        if (hasReadDepthStencilSupport())
+        {
+            EXPECT_GL_NO_ERROR();
+            if (hasFloatDepth)
+            {
+                struct Pixel
+                {
+                    float d32;
+                    uint8_t s8;
+                    char x24[3];
+                };
+
+                constexpr float kEpsilon = 0.002f;
+                Pixel *pixels            = reinterpret_cast<Pixel *>(actualPixels);
+                ASSERT_NEAR(pixels[0].d32, d00, kEpsilon);
+                ASSERT_NEAR(pixels[0 + destRes].d32, d01, kEpsilon);
+                ASSERT_NEAR(pixels[1].d32, d10, kEpsilon);
+                ASSERT_NEAR(pixels[1 + destRes].d32, d11, kEpsilon);
+                ASSERT_TRUE((pixels[0].s8 == 1) && (pixels[1].s8 == 2) &&
+                            (pixels[0 + destRes].s8 == 3) && (pixels[1 + destRes].s8 == 4));
+            }
+            else
+            {
+                struct Pixel
+                {
+                    uint32_t x;
+
+                    uint32_t d24() const { return x >> 8; }
+
+                    uint8_t s8() const { return x & 0xff; }
+                };
+
+                constexpr unsigned short kEpsilon = 2;
+                const Pixel *pixels               = reinterpret_cast<const Pixel *>(actualPixels);
+
+                auto scale = [](float f) {
+                    return static_cast<uint32_t>(static_cast<float>((1 << 24) - 1) * f);
+                };
+
+                ASSERT_NEAR(pixels[0].d24(), scale(d00), kEpsilon);
+                ASSERT_NEAR(pixels[0 + destRes].d24(), scale(d01), kEpsilon);
+                ASSERT_NEAR(pixels[1].d24(), scale(d10), kEpsilon);
+                ASSERT_NEAR(pixels[1 + destRes].d24(), scale(d11), kEpsilon);
+                ASSERT_TRUE((pixels[0].s8() == 1) && (pixels[1].s8() == 2) &&
+                            (pixels[0 + destRes].s8() == 3) && (pixels[1 + destRes].s8() == 4));
+            }
         }
         else
         {
