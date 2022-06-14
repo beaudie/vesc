@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be21226c_9f003c77",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-14T14:55:29Z",
+      "side": 1,
+      "message": "Following your earlier logic of using baseLevel and maxLevel, wouldn\u0027t you want to check that here too?\n```\n        if (index.getLevelIndex() \u003c texture-\u003egetBaseLevel() ||\n            index.getLevelIndex() \u003e texture-\u003egetMipmapMaxLevel())\n```",
+      "range": {
+        "startLine": 1216,
+        "startChar": 55,
+        "endLine": 1216,
+        "endChar": 93
+      },
+      "revId": "aa37860e1b5832f90b591cea1e1ce54daea61760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
