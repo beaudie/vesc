@@ -16,6 +16,24 @@
       "message": "We can\u0027t call discard after pixelLocalStore because that will behave differently if we\u0027re implemented on top of shader images vs render target attachments.\n\nIs it too complicated to define a compiler error iff any codepath can call pixelLocalStore before the discard?\n\nI hope we don\u0027t have to disallow discard completely.",
       "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b12efd5f_da911362",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-14T15:37:25Z",
+      "side": 1,
+      "message": "Should be quite easy",
+      "parentUuid": "d6bc85b8_fefec4e6",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
