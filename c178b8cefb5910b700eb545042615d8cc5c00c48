@@ -70,6 +70,30 @@
       },
       "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5210af07_b225c8a5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-14T20:14:06Z",
+      "side": 1,
+      "message": "*sigh* gtest seems to make this way more complicated than I thought :\\\n\nTests are parametrized by `const TracePerfParams`, so it needs to be constructed and fully initialized before creating the test, so we can\u0027t call LoadTraceInfoFromJSON from within the test. For instance, TracePerfParams.windowWidth depends on traceInfo.drawSurfaceWidth and hence traceInfo needs to be passed from the outside. So we end up with this weird partially-initialized state regardless of how \"failure to initialize\" is passed around - best I can do is pass it as an argument to TracePerfParams constructor but then I\u0027m not sure if that\u0027s any better than the current way this CL is.",
+      "parentUuid": "f3778bfa_2176e6a1",
+      "range": {
+        "startLine": 2102,
+        "startChar": 32,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
