@@ -8527,22 +8527,19 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
     if (angleFormat.redBits > 0 || angleFormat.blueBits > 0 || angleFormat.greenBits > 0 ||
         angleFormat.alphaBits > 0 || angleFormat.luminanceBits > 0)
     {
-        aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT;
+        aspectFlags = static_cast<VkImageAspectFlagBits>(aspectFlags | VK_IMAGE_ASPECT_COLOR_BIT);
     }
     else
     {
         if (angleFormat.depthBits > 0)
         {
-            if (angleFormat.stencilBits != 0)
-            {
-                // TODO (anglebug.com/4688) Support combined depth stencil for GetTexImage
-                WARN() << "Unable to pull stencil from combined depth/stencil for GetTexImage";
-            }
-            aspectFlags = VK_IMAGE_ASPECT_DEPTH_BIT;
+            aspectFlags =
+                static_cast<VkImageAspectFlagBits>(aspectFlags | VK_IMAGE_ASPECT_DEPTH_BIT);
         }
-        else if (angleFormat.stencilBits > 0)
+        if (angleFormat.stencilBits > 0)
         {
-            aspectFlags = VK_IMAGE_ASPECT_STENCIL_BIT;
+            aspectFlags =
+                static_cast<VkImageAspectFlagBits>(aspectFlags | VK_IMAGE_ASPECT_STENCIL_BIT);
         }
     }
 
@@ -8661,6 +8658,9 @@ bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &pack
            isPitchMultipleOfTexelSize;
 }
 
+constexpr auto IMAGE_ASPECT_DEPTH_STENCIL =
+    static_cast<VkImageAspectFlagBits>(VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT);
+
 angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       const gl::Rectangle &area,
                                       const PackPixelsParams &packPixelsParams,
@@ -8670,6 +8670,111 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       void *pixels)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::readPixels");
+
+    const angle::Format *intendedFormat = &getIntendedFormat();
+    const angle::Format *readFormat     = &getActualFormat();
+
+    if (intendedFormat->depthBits == 0)
+    {
+        copyAspectFlags =
+            static_cast<VkImageAspectFlagBits>(copyAspectFlags & ~VK_IMAGE_ASPECT_DEPTH_BIT);
+    }
+    if (intendedFormat->stencilBits == 0)
+    {
+        copyAspectFlags =
+            static_cast<VkImageAspectFlagBits>(copyAspectFlags & ~VK_IMAGE_ASPECT_STENCIL_BIT);
+    }
+
+    if (copyAspectFlags == IMAGE_ASPECT_DEPTH_STENCIL)
+    {
+        const angle::Format *depthFormat =
+            &GetDepthStencilImageToBufferFormat(*readFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+        const angle::Format *stencilFormat =
+            &GetDepthStencilImageToBufferFormat(*readFormat, VK_IMAGE_ASPECT_STENCIL_BIT);
+
+        int depthOff   = 0;
+        int stencilOff = depthFormat->pixelBytes;
+
+        switch (readFormat->id)
+        {
+            case angle::FormatID::D24_UNORM_S8_UINT:
+                depthOff   = 1;
+                stencilOff = 0;
+                break;
+
+            case angle::FormatID::D32_FLOAT_S8X24_UINT:
+                depthOff   = 0;
+                stencilOff = 4;
+                break;
+
+            default:
+                UNREACHABLE();
+        }
+
+        ASSERT(depthOff > 0 || stencilOff > 0);
+        ASSERT(depthOff + depthFormat->depthBits / 8 <= readFormat->pixelBytes);
+        ASSERT(stencilOff + stencilFormat->stencilBits / 8 <= readFormat->pixelBytes);
+
+        auto depthBuffer =
+            std::make_unique<uint8_t[]>(depthFormat->pixelBytes * area.width * area.height);
+        ANGLE_TRY(realReadPixels(
+            contextVk, area,
+            PackPixelsParams(area, *depthFormat, depthFormat->pixelBytes * area.width, false,
+                             nullptr, 0),
+            VK_IMAGE_ASPECT_DEPTH_BIT, levelGL, layer, depthBuffer.get()));
+
+        auto stencilBuffer =
+            std::make_unique<uint8_t[]>(stencilFormat->pixelBytes * area.width * area.height);
+        ANGLE_TRY(realReadPixels(
+            contextVk, area,
+            PackPixelsParams(area, *stencilFormat, stencilFormat->pixelBytes * area.width, false,
+                             nullptr, 0),
+            VK_IMAGE_ASPECT_STENCIL_BIT, levelGL, layer, stencilBuffer.get()));
+
+        auto readPixelBuffer =
+            std::make_unique<uint8_t[]>(readFormat->pixelBytes * area.width * area.height);
+        memset(readPixelBuffer.get(), 0, area.width * area.height * readFormat->pixelBytes);
+        for (int i = 0; i < area.width * area.height; i++)
+        {
+            auto readPixel = readPixelBuffer.get() + i * readFormat->pixelBytes;
+            memcpy(readPixel + depthOff, depthBuffer.get() + i * depthFormat->pixelBytes,
+                   depthFormat->depthBits / 8);
+            memcpy(readPixel + stencilOff, stencilBuffer.get() + i * stencilFormat->pixelBytes,
+                   stencilFormat->stencilBits / 8);
+        }
+
+        if (packPixelsParams.packBuffer)
+        {
+            // Must map the PBO in order to read its contents (and then unmap it later)
+            BufferVk *packBufferVk = GetImpl(packPixelsParams.packBuffer);
+            void *mapPtr           = nullptr;
+            ANGLE_TRY(packBufferVk->mapImpl(contextVk, GL_MAP_WRITE_BIT, &mapPtr));
+            uint8_t *dst = static_cast<uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixels);
+            PackPixels(packPixelsParams, *readFormat, area.width * readFormat->pixelBytes,
+                       readPixelBuffer.get(), static_cast<uint8_t *>(dst));
+            ANGLE_TRY(packBufferVk->unmapImpl(contextVk));
+        }
+        else
+        {
+            PackPixels(packPixelsParams, *readFormat, area.width * readFormat->pixelBytes,
+                       readPixelBuffer.get(), static_cast<uint8_t *>(pixels));
+        }
+
+        return angle::Result::Continue;
+    }
+
+    return realReadPixels(contextVk, area, packPixelsParams, copyAspectFlags, levelGL, layer,
+                          pixels);
+}
+
+angle::Result ImageHelper::realReadPixels(ContextVk *contextVk,
+                                          const gl::Rectangle &area,
+                                          const PackPixelsParams &packPixelsParams,
+                                          VkImageAspectFlagBits copyAspectFlags,
+                                          gl::LevelIndex levelGL,
+                                          uint32_t layer,
+                                          void *pixels)
+{
     RendererVk *renderer = contextVk->getRenderer();
 
     // If the source image is multisampled, we need to resolve it into a temporary image before
