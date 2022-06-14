@@ -5109,6 +5109,8 @@ void GL_APIENTRY glBlitFramebufferNV(GLint srcX0,
 
 // GL_NV_read_depth
 
+// GL_NV_read_depth_stencil
+
 // GL_NV_read_stencil
 
 // GL_NV_robustness_video_memory_purge
