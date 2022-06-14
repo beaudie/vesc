@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a16c6c1b_e280efa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-14T20:24:09Z",
+      "side": 1,
+      "message": "thanks a ton shabi -\n\n1. very curious why i couldn\u0027t repro any of the assert crashes\n2. i would like to not cache the size but instead loop through updates but that would be a lot more CPU overhead that desired. Do you see any other option?",
+      "parentUuid": "6b6dd513_379c62aa",
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4625c003_942dac82",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
@@ -119,6 +137,30 @@
       "writtenOn": "2022-06-12T02:01:10Z",
       "side": 1,
       "message": "nit: shouldn\u0027t happen! And if it does, might as well let the next `if` drop the update.\n\nYou should be able to delete this.",
+      "range": {
+        "startLine": 8272,
+        "startChar": 0,
+        "endLine": 8277,
+        "endChar": 9
+      },
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c538b090_71b760ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 8277,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-14T20:24:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4625c003_942dac82",
       "range": {
         "startLine": 8272,
         "startChar": 0,
