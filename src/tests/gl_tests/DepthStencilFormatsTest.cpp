@@ -172,6 +172,11 @@ void main()
 
     bool hasReadDepthSupport() const { return IsGLExtensionEnabled("GL_NV_read_depth"); }
 
+    bool hasReadDepthStencilSupport() const
+    {
+        return IsGLExtensionEnabled("GL_NV_read_depth_stencil");
+    }
+
     bool hasReadStencilSupport() const { return IsGLExtensionEnabled("GL_NV_read_stencil"); }
 
     bool hasFloatDepthSupport() const { return IsGLExtensionEnabled("GL_NV_depth_buffer_float2"); }

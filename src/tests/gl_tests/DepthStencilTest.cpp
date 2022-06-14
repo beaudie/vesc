@@ -298,6 +298,92 @@ TEST_P(DepthStencilTest, StencilOnlyDrawThenCopyThenDraw)
     ASSERT_GL_NO_ERROR();
 }
 
+// Verify that packed D/S readPixels with a D24_UNORM_S8_UINT attachment
+TEST_P(DepthStencilTestES3, ReadPixelsPackedDepth24Stencil8)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_depth24") ||
+                       !IsGLExtensionEnabled("GL_OES_packed_depth_stencil") ||
+                       !IsGLExtensionEnabled("GL_NV_read_depth") ||
+                       !IsGLExtensionEnabled("GL_NV_read_depth_stencil") ||
+                       !IsGLExtensionEnabled("GL_NV_read_stencil"));
+
+    GLFramebuffer FBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    ASSERT_GL_NO_ERROR();
+
+    GLTexture depthStencilTexture;
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, getWindowWidth(), getWindowHeight(), 0,
+                 GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8_OES, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    glBindRenderbuffer(GL_RENDERBUFFER, depthStencilTexture);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, getWindowWidth(),
+                          getWindowHeight());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              depthStencilTexture);
+    ASSERT_GL_NO_ERROR();
+
+    float d = static_cast<float>(static_cast<double>((1 << 24) - 1) / static_cast<double>(1 << 24));
+
+    glClearDepthf(d);
+    glClearStencil(0x42);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t pixel = 0;
+    glReadPixels(0, 0, 1, 1, GL_DEPTH_STENCIL_OES, GL_UNSIGNED_INT_24_8_OES, &pixel);
+    ASSERT_GL_NO_ERROR();
+
+    // Bits 0:8 should contain our stencil value and 8:32 the depth value.
+    EXPECT_EQ(pixel, 0xFFFFFE42U);
+}
+
+// Verify that packed D/S readPixels with a D32_FLOAT_S8X24_UINT attachment
+TEST_P(DepthStencilTestES3, ReadPixelsPackedDepth32Stencil8Unused24)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_packed_depth_stencil") ||
+                       !IsGLExtensionEnabled("GL_NV_depth_buffer_float2") ||
+                       !IsGLExtensionEnabled("GL_NV_read_depth") ||
+                       !IsGLExtensionEnabled("GL_NV_read_depth_stencil") ||
+                       !IsGLExtensionEnabled("GL_NV_read_stencil"));
+
+    GLFramebuffer FBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    ASSERT_GL_NO_ERROR();
+
+    GLTexture depthStencilTexture;
+    glBindTexture(GL_TEXTURE_2D, depthStencilTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, getWindowWidth(), getWindowHeight(), 0,
+                 GL_DEPTH_STENCIL, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    glBindRenderbuffer(GL_RENDERBUFFER, depthStencilTexture);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH32F_STENCIL8, getWindowWidth(),
+                          getWindowHeight());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              depthStencilTexture);
+    ASSERT_GL_NO_ERROR();
+
+    glClearDepthf(0.123f);
+    glClearStencil(0x42);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    struct
+    {
+        float depth;
+        uint8_t stencil;
+        char unused[3];
+    } pixel = {};
+    glReadPixels(0, 0, 1, 1, GL_DEPTH_STENCIL_OES, GL_FLOAT_32_UNSIGNED_INT_24_8_REV, &pixel);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_FLOAT_EQ(pixel.depth, 0.123f);
+    EXPECT_EQ(pixel.stencil, 0x42);
+}
+
 // Tests that clearing depth/stencil followed by draw works when the depth/stencil attachment is a
 // texture.
 TEST_P(DepthStencilTestES3, ClearThenDraw)
