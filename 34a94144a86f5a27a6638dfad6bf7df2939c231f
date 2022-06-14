@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e00192b1_cfb46a2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-14T19:24:53Z",
+      "side": 1,
+      "message": "Here\u0027s the fix:\n\n```\n@@ -6918,6 +6931,9 @@ angle::Result ImageHelper::reformatStagedBufferUpdates(ContextVk *contextVk,\n                 update.data.buffer.formatID                \u003d dstFormatID;\n                 update.data.buffer.copyRegion.bufferOffset \u003d dstBufferOffset;\n \n+                mTotalStagedBufferUpdateSize -\u003d srcBuffer-\u003egetSize();\n+                mTotalStagedBufferUpdateSize +\u003d dstBuffer-\u003egetSize();\n+\n                 // Let update structure owns the staging buffer\n                 if (update.refCounted.buffer)\n                 {\n```",
+      "parentUuid": "c1a21901_dfd6bbcb",
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4625c003_942dac82",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
