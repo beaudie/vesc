@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "312db2e2_2356c517",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7485,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-14T14:52:00Z",
+      "side": 1,
+      "message": "Since this is YUV specific, can you `ASSERT(imageFormat.isYUV)` in the else block?\n\nActually, this should be handled in GetFormatAspectFlags.  Maybe hold off on the YUV work until we hear back from folks pushing on YUV.",
+      "range": {
+        "startLine": 7485,
+        "startChar": 0,
+        "endLine": 7485,
+        "endChar": 54
+      },
+      "revId": "0037cd385294300d7b7b98f6c250ddbc0593906f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
