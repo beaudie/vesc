@@ -2152,6 +2152,14 @@ class ImageHelper final : public Resource, public angle::Subject
                              uint32_t layer,
                              void *pixels);
 
+    angle::Result realReadPixels(ContextVk *contextVk,
+                                 const gl::Rectangle &area,
+                                 const PackPixelsParams &packPixelsParams,
+                                 VkImageAspectFlagBits copyAspectFlags,
+                                 gl::LevelIndex levelGL,
+                                 uint32_t layer,
+                                 void *pixels);
+
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
                                       const gl::InternalFormat &formatInfo,

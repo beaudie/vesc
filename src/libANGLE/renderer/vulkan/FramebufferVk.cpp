@@ -821,6 +821,7 @@ RenderTargetVk *FramebufferVk::getReadPixelsRenderTarget(GLenum format) const
     {
         case GL_DEPTH_COMPONENT:
         case GL_STENCIL_INDEX_OES:
+        case GL_DEPTH_STENCIL_OES:
             return getDepthStencilRenderTarget();
         default:
             return getColorReadRenderTarget();
@@ -835,6 +836,9 @@ VkImageAspectFlagBits FramebufferVk::getReadPixelsAspectFlags(GLenum format) con
             return VK_IMAGE_ASPECT_DEPTH_BIT;
         case GL_STENCIL_INDEX_OES:
             return VK_IMAGE_ASPECT_STENCIL_BIT;
+        case GL_DEPTH_STENCIL_OES:
+            return static_cast<VkImageAspectFlagBits>(VK_IMAGE_ASPECT_DEPTH_BIT |
+                                                      VK_IMAGE_ASPECT_STENCIL_BIT);
         default:
             return VK_IMAGE_ASPECT_COLOR_BIT;
     }
