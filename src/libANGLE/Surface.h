@@ -187,6 +187,9 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     void setTimestampsEnabled(bool enabled);
     bool isTimestampsEnabled() const;
 
+    // EGL_ANDROID_front_buffer_auto_refresh entry points
+    Error setAutoRefreshEnabled(bool enabled);
+
     const SupportedCompositorTiming &getSupportedCompositorTimings() const;
     Error getCompositorTiming(EGLint numTimestamps,
                               const EGLint *names,
