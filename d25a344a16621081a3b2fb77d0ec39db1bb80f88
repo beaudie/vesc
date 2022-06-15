@@ -16,6 +16,24 @@
       "message": "Trying to roll https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/3696963 to hopefully fix win-trace",
       "revId": "d25a344a16621081a3b2fb77d0ec39db1bb80f88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5550aed7_e2e3dd47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-15T18:31:25Z",
+      "side": 1,
+      "message": "The bots don\u0027t use depot_tools from Chromium repo, it\u0027s somewhere from the recipe.",
+      "parentUuid": "5bc53a7d_967fb964",
+      "revId": "d25a344a16621081a3b2fb77d0ec39db1bb80f88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
