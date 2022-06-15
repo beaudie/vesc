@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c7a8bc_fcdd1c01",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Thank you for the advice! Adding the specifications into `entry_point_packed_gl_enums.json` worked.",
+      "parentUuid": "4fd0841a_f1c2cb8e",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a48292a9_bc6e124b",
@@ -88,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa3bbc4_18475ef1",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad5fb779_040eb0ed",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b54f9911_1fffe171",
@@ -101,6 +137,24 @@
       "writtenOn": "2022-06-15T19:22:59Z",
       "side": 1,
       "message": "How about calling `ContextVk::drawElementsInstancedBaseVertexBaseInstance` with `baseVertex\u003d0`? You could apply the `if/else` pattern here that avoids duplicating the Vulkan call to that function.",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ab2bfbf_10af1d38",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3652,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b54f9911_1fffe171",
       "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -122,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b10f70_f48a1f67",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adca0c84_56ca8cd5",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02f75ae5_dfc31259",
@@ -135,6 +207,24 @@
       "writtenOn": "2022-06-15T18:43:43Z",
       "side": 1,
       "message": "Do we still need to extension with \"ANGLE\" key word?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aa21400_724eae75",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02f75ae5_dfc31259",
       "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -158,6 +248,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e75d5dbf_be4eb342",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "If I remove this one, things break :(",
+      "parentUuid": "307e92d4_70e0c021",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d2f1a8c_da909a0a",
         "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
         "patchSetId": 8
@@ -169,6 +277,24 @@
       "writtenOn": "2022-06-15T18:43:43Z",
       "side": 1,
       "message": "We can probably skip this call since we already call at at line 1127 above?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adfff620_ee6f8708",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d2f1a8c_da909a0a",
       "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -186,6 +312,30 @@
       "writtenOn": "2022-06-15T19:22:59Z",
       "side": 1,
       "message": "Is `BaseVertexOption::UseBaseVertex` valid for this test suite?",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 89
+      },
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cef6c9d_f58f8044",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-15T22:52:35Z",
+      "side": 1,
+      "message": "Should I remove the whole `BaseVertexOption` suite?",
+      "parentUuid": "6316f941_8bb2732c",
       "range": {
         "startLine": 1196,
         "startChar": 8,
