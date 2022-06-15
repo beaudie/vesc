@@ -5332,6 +5332,13 @@ bool ValidateSurfaceAttrib(const ValidationContext *val,
             }
             break;
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+        case EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID:
+            // EGL Wrapper handles validation
+            ASSERT(value == EGL_TRUE || value == EGL_FALSE);
+            break;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
         case EGL_RENDER_BUFFER:
             if (value != EGL_BACK_BUFFER && value != EGL_SINGLE_BUFFER)
             {

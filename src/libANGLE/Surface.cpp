@@ -693,6 +693,11 @@ bool Surface::isTimestampsEnabled() const
     return mState.timestampsEnabled;
 }
 
+Error Surface::setAutoRefreshEnabled(bool enabled)
+{
+    return mImplementation->setAutoRefreshEnabled(enabled);
+}
+
 bool Surface::hasProtectedContent() const
 {
     return mState.hasProtectedContent();
