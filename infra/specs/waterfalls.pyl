@@ -28,7 +28,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'android_gtests',
-          'isolated_scripts': 'common_isolated_scripts',
+          'isolated_scripts': 'android_isolated_scripts',
         },
       },
       'android-arm64-pixel4-perf': {
@@ -52,6 +52,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'android_vulkan_gtests',
+          'isolated_scripts': 'angle_android_helper_isolated_scripts',
         },
       },
       'linux-amd': {
