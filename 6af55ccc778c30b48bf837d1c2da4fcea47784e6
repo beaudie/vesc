@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd631a28_a4acccae",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 6780,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T19:22:59Z",
+      "side": 1,
+      "message": "This should be done in autogen. Amirali, you did this with multidraw, could you please point how what needs to be done?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a48292a9_bc6e124b",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 8
@@ -31,6 +48,58 @@
       "writtenOn": "2022-06-15T18:43:43Z",
       "side": 1,
       "message": "nit: change getFunctions() to functions?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93e30ef_0273e743",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T19:22:59Z",
+      "side": 1,
+      "message": "That function doesn\u0027t exist in the `else` case (see if condition). FWIW, this is copied from the basevertex variant below.",
+      "parentUuid": "a48292a9_bc6e124b",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54f9911_1fffe171",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3652,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T19:22:59Z",
+      "side": 1,
+      "message": "How about calling `ContextVk::drawElementsInstancedBaseVertexBaseInstance` with `baseVertex\u003d0`? You could apply the `if/else` pattern here that avoids duplicating the Vulkan call to that function.",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adca0c84_56ca8cd5",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T19:22:59Z",
+      "side": 1,
+      "message": "Again, should be autogen, see how the parameters of `ValidateDrawElementsInstancedBaseVertexBaseInstanceEXT` look like",
       "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +151,29 @@
       "writtenOn": "2022-06-15T18:43:43Z",
       "side": 1,
       "message": "We can probably skip this call since we already call at at line 1127 above?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6316f941_8bb2732c",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T19:22:59Z",
+      "side": 1,
+      "message": "Is `BaseVertexOption::UseBaseVertex` valid for this test suite?",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 89
+      },
       "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
