@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70776c0c_6600a558",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-15T14:00:43Z",
+      "side": 1,
+      "message": "Question",
+      "revId": "00077834c76b02be892f8d8917813c3fb3e9eb55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94bd004e_57a62f0e",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-15T14:00:43Z",
+      "side": 1,
+      "message": "Do we need a full stop if the modifiers are not supported?",
+      "revId": "00077834c76b02be892f8d8917813c3fb3e9eb55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
