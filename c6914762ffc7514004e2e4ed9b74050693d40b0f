@@ -16,6 +16,23 @@
       "message": "Per the discussion on b/236026298, we\u0027ll enable this feature on Android",
       "revId": "c6914762ffc7514004e2e4ed9b74050693d40b0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18b9a329_48edc3c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-06-15T04:08:32Z",
+      "side": 1,
+      "message": "On modern Android, I agree this is good.",
+      "revId": "c6914762ffc7514004e2e4ed9b74050693d40b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
