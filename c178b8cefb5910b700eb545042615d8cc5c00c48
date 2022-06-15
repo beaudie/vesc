@@ -166,6 +166,30 @@
       },
       "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9208c982_2d5a3713",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T15:08:07Z",
+      "side": 1,
+      "message": "I believe this CL is actually an improvement in that aspect as described in the first paragraph in the description.\n\nRegarding graceful failures, I think there are two cases that should be considered separately:\n1. loading a json file fails but the corresponding test wasn\u0027t supposed to run (e.g. filtered out by --gtest_filter)\n2. loading a json fails and the test is expected to run\n\nNote how (2) is already taken care of by `failTest(\"Failed to load trace json.\");`, and results in helpful error messages.\n\nI think it\u0027s debatable whether (1) should be blowing up the test suite, as long as failure to load a test-specific json can somehow have an effect on other tests. If this test loaded that JSON file during its initialization (which would be the normal gtest situation IIUC), that wouldn\u0027t be even attempted if test didn\u0027t match --gtest_filter. In my opinion graceful handling of (1) would be consistent with what you normally expect from gtest. I find it kind of weird if the harness fails saying it couldn\u0027t load Y.json when it was ran with --gtest_filter\u003dX.",
+      "parentUuid": "cf7bfe1e_eaa97752",
+      "range": {
+        "startLine": 2102,
+        "startChar": 32,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
