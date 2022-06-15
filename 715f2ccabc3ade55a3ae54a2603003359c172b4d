@@ -34,6 +34,24 @@
       "parentUuid": "9e7e5e66_b9c01e18",
       "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a08b92e_dedfdece",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T17:38:26Z",
+      "side": 1,
+      "message": "No, I didn\u0027t have such a plan. Samsung mentioned Jamie\u0027s original change (that did this permanently) didn\u0027t actually affect performance on their hardware.\n\n\u003e could you check with app traces to see how much perf impact we have on pixel device or within noise?\n\nGenshin was checked, and it improves perf by 20%. I can do a comparison of all our framebuffer-fetch traces if you prefer.",
+      "parentUuid": "cec53f99_fd40bfc9",
+      "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
