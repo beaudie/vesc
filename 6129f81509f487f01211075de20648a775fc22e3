@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efc90412_7f0f9d63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1323141
+      },
+      "writtenOn": "2022-06-15T18:30:51Z",
+      "side": 1,
+      "message": "This is very similar to https://chromium-review.googlesource.com/c/angle/angle/+/3704236",
+      "revId": "6129f81509f487f01211075de20648a775fc22e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
