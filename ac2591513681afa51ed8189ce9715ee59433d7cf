@@ -118,6 +118,30 @@
       },
       "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5e8449_9153b8ab",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T16:11:55Z",
+      "side": 1,
+      "message": "Inspected things on Pixel 6 with AGI; draw-time pipeline creation still misses the cache after warm up, so warm up is useless.\n\nI disabled this on ARM and Imagination. On open source Qualcomm drivers, this warm up should actually be very effective (see ddoc). On SwiftShader, I\u0027ve also seen cache is hit.\n\nWe can adjust this based on Brandon\u0027s feedback when testing is done on Samsung.\n\nIMO, this is practically as far as we can go without VK_EXT_graphics_pipeline_library",
+      "parentUuid": "afec5f0c_258b2f96",
+      "range": {
+        "startLine": 739,
+        "startChar": 0,
+        "endLine": 748,
+        "endChar": 0
+      },
+      "revId": "ac2591513681afa51ed8189ce9715ee59433d7cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
