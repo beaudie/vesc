@@ -16,6 +16,24 @@
       "message": "shabi, do you mind providing some pointers for the win-trace bot failure? all the tests mentioned in the log pass on my machine",
       "revId": "5b809d9f98193fb81a5142d46b465cf099ca4395",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdc3fda7_e4ab9541",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T15:32:48Z",
+      "side": 1,
+      "message": "Not your fault. We\u0027re fixing the bot.",
+      "parentUuid": "91f9d789_f3e400f8",
+      "revId": "5b809d9f98193fb81a5142d46b465cf099ca4395",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
