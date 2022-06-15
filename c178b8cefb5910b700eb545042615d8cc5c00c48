@@ -142,6 +142,30 @@
       },
       "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7bfe1e_eaa97752",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-15T14:42:39Z",
+      "side": 1,
+      "message": "Sorry Roman, I didn\u0027t say that I wanted to stop the change. My main object I guess is that failing to load the json should be a flagrant error that blows up the test suite, not something we gracefully fail.",
+      "parentUuid": "58ff6cc0_045683f8",
+      "range": {
+        "startLine": 2102,
+        "startChar": 32,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
