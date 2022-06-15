@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8bfd934d_1fd5116e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T01:50:17Z",
+      "side": 1,
+      "message": "No problem.\n\n1. Because the format the test was using likely already had COLOR_ATTACHMENT support on your hardware, but not mine. The fallback for that was causing this issue.\n2. Caching `mTotalStagedBufferUpdateSize` is fine IMO, the ASSERT is there to catch the bugs, and we\u0027ll fix\u0027em as they come.",
+      "parentUuid": "a16c6c1b_e280efa5",
+      "revId": "34a94144a86f5a27a6638dfad6bf7df2939c231f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4625c003_942dac82",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
