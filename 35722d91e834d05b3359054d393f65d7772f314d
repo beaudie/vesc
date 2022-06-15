@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9afa5b0_28166eeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 43
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-15T16:20:56Z",
+      "side": 1,
+      "message": "Looks like SwiftShader is allocating a large buffer.\n\n[5478/9746] BindUniformLocationTest.Basic/ES2_Vulkan_SwiftShader (CRASH)\n\n[ RUN      ] BindUniformLocationTest.Basic/ES2_Vulkan_SwiftShader\n\u003d\u003d7936\u003d\u003dERROR: ThreadSanitizer failed to allocate 0xf759fffff000 (271965919113216) bytes at address 84000001000 (errno: 12)\n",
+      "revId": "35722d91e834d05b3359054d393f65d7772f314d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
