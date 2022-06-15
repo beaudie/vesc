@@ -88,6 +88,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72410493_8075402f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "Looks good for a first pass, just a few style requests.",
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5f52aad_a3c6aabc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8661,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "Can you call this \"constexpr VkImageAspectFlagBits kImageAspectDepthStencil` and move it to vk_helpers.h?  Then you could use it in FramebufferVk.cpp as well.\n\nAlso, we try to reserve use of auto for complicated types.",
+      "range": {
+        "startLine": 8661,
+        "startChar": 15,
+        "endLine": 8661,
+        "endChar": 42
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19144f35_47cfada0",
@@ -106,6 +146,99 @@
         "startChar": 27,
         "endLine": 8664,
         "endChar": 37
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba7ae3d_29b8eb2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8664,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "I think the packPixelsParams.packBuffer block below is the only thing that is repeated from another part of the file.",
+      "parentUuid": "19144f35_47cfada0",
+      "range": {
+        "startLine": 8664,
+        "startChar": 27,
+        "endLine": 8664,
+        "endChar": 37
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aaa0679_a6d413de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8695,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "Can you go ahead and call this depthOffset and stencilOffset?  It reads like a bool at first.",
+      "range": {
+        "startLine": 8695,
+        "startChar": 12,
+        "endLine": 8695,
+        "endChar": 23
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94313faf_dd84e394",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8696,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "It looks like stencilOffset gets a value in every case below, so you can init it to zero.",
+      "range": {
+        "startLine": 8696,
+        "startChar": 24,
+        "endLine": 8696,
+        "endChar": 48
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69e09bcb_370c91c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8724,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-15T18:43:00Z",
+      "side": 1,
+      "message": "These blocks could use some general comments to help future readers, like:\n// Read back depth values\n..\n// Read back stencil values\n..\n// Interleave the two\n..\n// Pack them to the destination",
+      "range": {
+        "startLine": 8717,
+        "startChar": 0,
+        "endLine": 8724,
+        "endChar": 75
       },
       "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
