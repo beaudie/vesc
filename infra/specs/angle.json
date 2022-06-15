@@ -480,6 +480,36 @@
     ],
     "isolated_scripts": [
       {
+        "isolate_name": "angle_android_helper_tests",
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
+        },
+        "name": "angle_android_helper_tests",
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "cipd_packages": [
+            {
+              "cipd_package": "infra/tools/luci/logdog/butler/${platform}",
+              "location": "bin",
+              "revision": "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c"
+            }
+          ],
+          "containment_type": "AUTO",
+          "dimension_sets": [
+            {
+              "device_os": "R",
+              "device_os_type": "userdebug",
+              "device_type": "flame",
+              "os": "Android",
+              "pool": "chromium.tests.gpu"
+            }
+          ],
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+        },
+        "test_id_prefix": "ninja://src/tests:angle_android_helper_tests/"
+      },
+      {
         "args": [
           "--log=debug",
           "--smoke-test-mode",
@@ -974,6 +1004,39 @@
         "test": "angle_unittests",
         "test_id_prefix": "ninja://src/tests:angle_unittests/",
         "use_isolated_scripts_api": true
+      }
+    ],
+    "isolated_scripts": [
+      {
+        "isolate_name": "angle_android_helper_tests",
+        "merge": {
+          "args": [],
+          "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
+        },
+        "name": "angle_android_helper_tests",
+        "swarming": {
+          "can_use_on_swarming_builders": true,
+          "cipd_packages": [
+            {
+              "cipd_package": "infra/tools/luci/logdog/butler/${platform}",
+              "location": "bin",
+              "revision": "git_revision:ff387eadf445b24c935f1cf7d6ddd279f8a6b04c"
+            }
+          ],
+          "containment_type": "AUTO",
+          "dimension_sets": [
+            {
+              "device_os": "T",
+              "device_os_type": "userdebug",
+              "device_type": "oriole",
+              "os": "Android",
+              "pool": "chromium.tests.gpu"
+            }
+          ],
+          "expiration": 21600,
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+        },
+        "test_id_prefix": "ninja://src/tests:angle_android_helper_tests/"
       }
     ]
   },
