@@ -783,7 +783,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
       mFrameCount(1),
-      mBufferAgeQueryFrameNumber(0)
+      mBufferAgeQueryFrameNumber(0),
+      mAutoRefreshEnabled(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -1358,7 +1359,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
         // This feature is by default disabled, and only affects Android platform wsi behavior
         // transparent to angle internal tracking for shared present.
-        if (renderer->getFeatures().forceContinuousRefreshOnSharedPresent.enabled)
+        if (renderer->getFeatures().forceContinuousRefreshOnSharedPresent.enabled ||
+            mAutoRefreshEnabled)
         {
             swapchainInfo.presentMode = VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR;
         }
@@ -2464,6 +2466,17 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
                                    Is90DegreeRotation(getPreTransform())));
 
     return angle::Result::Continue;
+}
+
+egl::Error WindowSurfaceVk::setAutoRefreshEnabled(bool enabled)
+{
+    mAutoRefreshEnabled = enabled;
+    if (enabled && !supportsPresentMode(VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR))
+    {
+        mAutoRefreshEnabled = false;
+        return egl::EglBadMatch();
+    }
+    return egl::NoError();
 }
 
 egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age)
