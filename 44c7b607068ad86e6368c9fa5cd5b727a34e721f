@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a50f020_5f393439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-15T23:17:18Z",
+      "side": 1,
+      "message": "+sunnyps for comment on the GPU scheduler\n",
+      "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a3e4ef9_7ac18fba",
@@ -67,6 +84,24 @@
       "side": 1,
       "message": "@Ken, please enlighten me, why are there preemptions? Actually I have specific questions:\n\n1. Does the GPU process use one global context, or one context per WebGL context?\n2. If single context, do the WebGL commands from different sources get interleaved (with state switch, perhaps?)?\n3. If multiple contexts, does eglMakeCurrent happen often, especially in the middle of frame?\n\nPotential problems with PLS aside, preemptions in the middle of render passes will have a disastrous effect on performance on mobile. If that\u0027s how Chrome works, we should probably revisit that.",
       "parentUuid": "679b058d_bde39f9b",
+      "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0840e375_b307ddfa",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-15T23:17:18Z",
+      "side": 1,
+      "message": "The preemptions happen every 20 commands here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:gpu/command_buffer/service/command_buffer_service.cc;l\u003d193;drc\u003dc673ac8876330a42eed34e298ff585636af113bc;bpv\u003d1;bpt\u003d1\n\nIn the current state of Chrome with out-of-process rasterization, out-of-process 2D canvas launching everywhere, and with WebGL being the last client of the GLES2 commands in the renderer process - I\u0027m not sure how much of Chrome\u0027s rendering this preemption applies to. sunnyps@, who wrote the GPU scheduler, will know more.\n\nTo answer these questions:\n\n1) One context per WebGL context.\n2) ANGLE handles this multiplexing by switching among multiple EGL contexts on the client side.\n3) Yes.\n\nIt\u0027s quite possible that Chrome\u0027s rendering code is highly optimized and that WebGL use cases have been pessimmized. Some of these were deliberate design decisions, for example to try to prevent WebGL from interfering with the browser\u0027s UI or other web page rendering.\n\nIf more concerns - feel free to file a Chromium-side bug so the discussion\u0027s in a more archived place than this comment thread of this CL.",
+      "parentUuid": "20551039_f08a0997",
       "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
