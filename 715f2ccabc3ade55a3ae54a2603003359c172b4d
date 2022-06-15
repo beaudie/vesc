@@ -52,6 +52,24 @@
       "parentUuid": "cec53f99_fd40bfc9",
       "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f0503a1_2d705ab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T20:34:50Z",
+      "side": 1,
+      "message": "Numbers from apps using FF:\n\nhttps://docs.google.com/spreadsheets/d/1MJqrwPISj-itsn5OUA7MMX1tYRYNiFnZYjLNyTTT1eU/edit#gid\u003d598666683\n\nThe change doesn\u0027t affect most of them. dead_by_daylight is severely affected, but genship_impact and real_racing3 show big improvements.",
+      "parentUuid": "6a08b92e_dedfdece",
+      "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
