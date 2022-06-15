@@ -1603,6 +1603,14 @@ if (build_angle_deqp_tests && !is_fuchsia) {
   }
 }
 
+if (is_android && build_angle_trace_perf_tests) {
+  group("angle_android_helper_tests") {
+    testonly = true
+    data_deps = [ ":angle_perftests" ]
+    data = [ "py_utils/android_helper_tests.py" ]
+  }
+}
+
 group("angle_tests") {
   testonly = true
   deps = [
@@ -1635,5 +1643,8 @@ group("angle_tests") {
     if (!is_win && !is_apple) {
       deps += [ ":angle_gles1_covgl_tests" ]
     }
+  }
+  if (is_android && build_angle_trace_perf_tests) {
+    deps += [ ":angle_android_helper_tests" ]
   }
 }
