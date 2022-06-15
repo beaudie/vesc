@@ -33,6 +33,41 @@
       "message": "On modern Android, I agree this is good.",
       "revId": "c6914762ffc7514004e2e4ed9b74050693d40b0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69473fbd_ea18f8b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-15T14:24:03Z",
+      "side": 1,
+      "message": "Thanks Cody, Roman, Chris, and Yiwei for helping us get to the best long-term solution!",
+      "revId": "c6914762ffc7514004e2e4ed9b74050693d40b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "388631c7_6fa60f22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-15T14:24:03Z",
+      "side": 1,
+      "message": "Agreed.  ANGLE is intended for modern Android.",
+      "parentUuid": "18b9a329_48edc3c1",
+      "revId": "c6914762ffc7514004e2e4ed9b74050693d40b0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
