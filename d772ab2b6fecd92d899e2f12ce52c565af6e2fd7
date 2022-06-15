@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6527c4dd_182b1db7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-15T14:20:08Z",
+      "side": 1,
+      "message": "Thanks, LGTM if bots become green and Cody\u0027s comments are addressed.",
+      "revId": "d772ab2b6fecd92d899e2f12ce52c565af6e2fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
