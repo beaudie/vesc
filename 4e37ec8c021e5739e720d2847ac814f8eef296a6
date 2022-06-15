@@ -70,6 +70,30 @@
       },
       "revId": "4e37ec8c021e5739e720d2847ac814f8eef296a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30483b67_00e12d5b",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-15T17:15:29Z",
+      "side": 0,
+      "message": "My bad Roman - we had some offline discussion. I think I was rushing and after some chat I went and moved this into a standalone test so we don\u0027t run a smoke test in  the init code for every test invocation.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3707732",
+      "parentUuid": "0d17671e_d858cc89",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 41
+      },
+      "revId": "4e37ec8c021e5739e720d2847ac814f8eef296a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
