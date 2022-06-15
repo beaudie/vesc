@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6f20e8_a006f241",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-15T23:21:08Z",
+      "side": 1,
+      "message": "Clever test. lgtm\n",
+      "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf8aee0c_0919e395",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-15T23:21:08Z",
+      "side": 1,
+      "message": "Please move this skip to the top of the test.",
+      "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
