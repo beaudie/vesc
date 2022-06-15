@@ -118,6 +118,30 @@
       },
       "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ff6cc0_045683f8",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T14:33:24Z",
+      "side": 1,
+      "message": "I had considered and tried ANGLE_CRASH and described resulting behavior here: https://anglebug.com/7410#c2\nI find the approach in this CL better because it results in a meaningful error message and not some obscure test list failure, especially now that people are still relying on Android runner so we can\u0027t take care of it in our scripts.\nANGLE_CRASH or exit(1) is particularly obscure on Android in general because stack trace or other logs go into logcat so the runner output isn\u0027t helpful. A test failure results in a message displayed in the runner output, and in this case it also points to a specific test that had an issue with the json file.\n\nIt would be great if you could elaborate on your objection to this change, what kind of risks you see it create, so that everyone understands why you are suggesting alternatives.",
+      "parentUuid": "c4d82c7a_a41d4b03",
+      "range": {
+        "startLine": 2102,
+        "startChar": 32,
+        "endLine": 2102,
+        "endChar": 53
+      },
+      "revId": "c178b8cefb5910b700eb545042615d8cc5c00c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
