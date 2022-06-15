@@ -12,6 +12,10 @@
 
 {
   'basic_suites': {
+    'angle_android_helper_isolated_scripts': {
+      'angle_android_helper_tests': {
+      },
+    },
     'angle_deqp_egl_d3d11_gtests': {
       'angle_deqp_egl_d3d11_tests': {
         'args': [
@@ -1072,6 +1076,12 @@
       'angle_deqp_khr_gles3_vulkan_gtests',
       'angle_end2end_gtests',
       'angle_unit_gtests',
+    ],
+
+    'android_isolated_scripts': [
+      'angle_android_helper_isolated_scripts',
+      'angle_perf_smoke_isolated_scripts',
+      'angle_restricted_trace_gold_isolated_scripts',
     ],
 
     'android_vulkan_gtests': [
