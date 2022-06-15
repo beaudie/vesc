@@ -270,6 +270,8 @@ class WindowSurfaceVk : public SurfaceVk
         return mPreTransform;
     }
 
+    egl::Error setAutoRefreshEnabled(bool enabled) override;
+
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
@@ -428,6 +430,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // EGL_ANDROID_front_buffer_auto_refresh
+    bool mAutoRefreshEnabled;
 };
 
 }  // namespace rx
