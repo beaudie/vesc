@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf54b4c_da96c0af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T19:03:29Z",
+      "side": 1,
+      "message": "Ah, that\u0027s an interesting way to do this.\n\nIf this suite fails, would it stop running other test suites? My idea with the smoke test was to kind of \"short-circuit\" perftests by running this test with a short timeout. If this isn\u0027t going to work this way then this serves a different purpose, and then do you find it useful to have it?",
+      "revId": "385a261aa4f2ecb06133a92a76aa5817c52fa53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
