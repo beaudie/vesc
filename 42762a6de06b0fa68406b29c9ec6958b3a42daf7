@@ -52,6 +52,24 @@
       "parentUuid": "5506848b_44a6fa7f",
       "revId": "42762a6de06b0fa68406b29c9ec6958b3a42daf7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cb4990c_ef08f307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T17:19:26Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s kind of convoluted. I ran into mysterious crashes when trying to change this line:\nhttps://crsrc.org/c/third_party/angle/src/tests/perf_tests/TracePerfTest.cpp;drc\u003d54e08a5af1f7ca50d5c154a09cc056166a9e49fa;l\u003d2143\nbecause TracePerfTest(const T\u0026) captures T by reference which is uncommon, making it easy to shoot yourself in the foot.\n\nThis happened as I was trying to make json failures more reasonable. Given that I abandoned that path (as noted on https://chromium-review.googlesource.com/c/angle/angle/+/3690734/comments/0824a7c8_70098f7e), it becomes just a code health improvement just to avoid someone else running into the same issue in future. But I\u0027m also fine with just leaving it be if this cl looks like a weird way to do it.",
+      "parentUuid": "2ffc98d8_1c103501",
+      "revId": "42762a6de06b0fa68406b29c9ec6958b3a42daf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
