@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84b8f701_f2b2a0c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-15T16:14:12Z",
+      "side": 1,
+      "message": "Check this pNext",
+      "revId": "5a58bdc55bf3cc29f919c30243fc9a29e05b2a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb01ca0b_8ee469a3",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-15T16:14:12Z",
+      "side": 1,
+      "message": "Line 203 and line 209. imageFormatListInfo - is it pNext to externalImageFormatInfo, or to imageFormatInfo?",
+      "revId": "5a58bdc55bf3cc29f919c30243fc9a29e05b2a46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
