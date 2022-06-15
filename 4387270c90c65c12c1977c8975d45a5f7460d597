@@ -16,6 +16,23 @@
       "message": "We should always enable FATAL and ERR messages on Android.  I think we should also enable WARN messages, but I\u0027d need to look more into that before pushing harder.",
       "revId": "4387270c90c65c12c1977c8975d45a5f7460d597",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f018a8ec_780bb59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-15T14:14:14Z",
+      "side": 1,
+      "message": "Roman: just always log them regardless of platform. No reason to treat Android specially here.",
+      "revId": "4387270c90c65c12c1977c8975d45a5f7460d597",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
