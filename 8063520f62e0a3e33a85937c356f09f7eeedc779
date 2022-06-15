@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2475f6a5_529b6d6d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-15T23:25:30Z",
+      "side": 1,
+      "message": "Re-using the hack works practically, but I\u0027m not sure if ANGLE folks want a deeper fix to update `mDesiredSwapchainPresentMode` and recreate the swapchain accordingly based on what the app requests.\n\nThe reason it works practically is because of the comment above. Currently we have two call sequences:\n1. app requests autorefresh before angle recreates swapchain for shared present\n2. app toggles autorefresh after angle recreates the swapchain\n\nFor (1), `mAutoRefreshEnabled` makes angle to create with `VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR`.\n\nFor (2), angle doesn\u0027t recreate the swapchain, but that\u0027s fine since the platform would still passthrough the app\u0027s request into the Surface to toggle it, and that behavior is still transparent to both angle and the Vulkan implementation.\n\nConsidering the cost/overhead of swapchain recreation, I\u0027m not a big fan for the deeper fix. Up to our angle folks ; )",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
