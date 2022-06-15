@@ -367,12 +367,14 @@ void FramebufferVk::insertCache(ContextVk *contextVk,
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
-        colorRenderTargets[colorIndexGL]->addSharedFramebufferCacheKey(sharedFramebufferCacheKey);
+        colorRenderTargets[colorIndexGL]->getImage().onFramebufferCacheCreate(
+            sharedFramebufferCacheKey);
     }
 
     if (getDepthStencilRenderTarget())
     {
-        getDepthStencilRenderTarget()->addSharedFramebufferCacheKey(sharedFramebufferCacheKey);
+        getDepthStencilRenderTarget()->getImage().onFramebufferCacheCreate(
+            sharedFramebufferCacheKey);
     }
 }
 

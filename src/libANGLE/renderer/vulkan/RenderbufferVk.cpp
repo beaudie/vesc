@@ -297,9 +297,8 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     }
     else
     {
-        mRenderTarget.releaseSharedFramebufferCacheKey(contextVk);
-        mImage->collectViewGarbage(renderer, &mImageViews);
-        mImage->collectViewGarbage(renderer, &mMultisampledImageViews);
+        mImage->collectViewGarbage(contextVk, &mImageViews);
+        mImage->collectViewGarbage(contextVk, &mMultisampledImageViews);
     }
 
     if (mImage && mOwnsImage)

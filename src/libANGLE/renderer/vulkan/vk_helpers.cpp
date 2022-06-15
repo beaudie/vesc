@@ -4894,6 +4894,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
+    ASSERT(mFramebufferCacheManager.empty());
 }
 
 void ImageHelper::resetCachedProperties()
@@ -5269,8 +5270,10 @@ void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk 
     releaseImage(renderer);
 }
 
-void ImageHelper::collectViewGarbage(RendererVk *renderer, vk::ImageViewHelper *imageView)
+void ImageHelper::collectViewGarbage(ContextVk *contextVk, vk::ImageViewHelper *imageView)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     imageView->release(renderer, mImageAndViewGarbage);
     // If we do not have any ImageHelper::mUse retained in ResourceUseList, make a cloned copy of
     // ImageHelper::mUse and use it to free any garbage in mImageAndViewGarbage immediately.
@@ -5283,6 +5286,30 @@ void ImageHelper::collectViewGarbage(RendererVk *renderer, vk::ImageViewHelper *
         renderer->collectGarbage(std::move(clonedmUse), std::move(mImageAndViewGarbage));
     }
     ASSERT(mImageAndViewGarbage.size() <= 1000);
+
+    // Now views has been garbage collected, it should never used by any FBO. Remove all cached
+    // objects that use any of the imageViews of the image.
+    mFramebufferCacheManager.releaseSharedCacheKey(contextVk);
+}
+
+void ImageHelper::releaseViewGarbage(RendererVk *renderer, vk::ImageViewHelper *imageView)
+{
+    ASSERT(!mUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()));
+    imageView->release(renderer, mImageAndViewGarbage);
+    // If we do not have any ImageHelper::mUse retained in ResourceUseList, make a cloned copy of
+    // ImageHelper::mUse and use it to free any garbage in mImageAndViewGarbage immediately.
+    if (!mUse.usedInRecordedCommands() && !mImageAndViewGarbage.empty())
+    {
+        // clone ImageHelper::mUse
+        rx::vk::SharedResourceUse clonedmUse;
+        clonedmUse.init();
+        clonedmUse.updateSerialOneOff(mUse.getSerial());
+        renderer->collectGarbage(std::move(clonedmUse), std::move(mImageAndViewGarbage));
+    }
+    ASSERT(mImageAndViewGarbage.size() <= 1000);
+
+    // Destroy all cached objects that use any of the imageViews of the image.
+    mFramebufferCacheManager.destroy();
 }
 
 void ImageHelper::releaseStagedUpdates(RendererVk *renderer)

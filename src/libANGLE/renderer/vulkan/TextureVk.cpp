@@ -3125,8 +3125,6 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 
 void TextureVk::releaseImageViews(ContextVk *contextVk)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     if (mImage == nullptr)
     {
         for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
@@ -3138,27 +3136,18 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 
     for (vk::ImageViewHelper &imageViewHelper : mMultisampledImageViews)
     {
-        mImage->collectViewGarbage(renderer, &imageViewHelper);
+        mImage->collectViewGarbage(contextVk, &imageViewHelper);
     }
 
     for (auto &renderTargets : mSingleLayerRenderTargets)
     {
         for (RenderTargetVector &renderTargetLevels : renderTargets)
         {
-            for (RenderTargetVk &renderTargetVk : renderTargetLevels)
-            {
-                renderTargetVk.releaseSharedFramebufferCacheKey(contextVk);
-            }
             // Clear the layers tracked for each level
             renderTargetLevels.clear();
         }
         // Then clear the levels
         renderTargets.clear();
-    }
-
-    for (auto &renderTargetPair : mMultiLayerRenderTargets)
-    {
-        renderTargetPair.second->releaseSharedFramebufferCacheKey(contextVk);
     }
     mMultiLayerRenderTargets.clear();
 }
@@ -3448,23 +3437,7 @@ angle::Result TextureVk::refreshImageViews(ContextVk *contextVk)
     }
     else
     {
-        RendererVk *renderer = contextVk->getRenderer();
-        mImage->collectViewGarbage(renderer, &imageView);
-
-        for (auto &renderTargets : mSingleLayerRenderTargets)
-        {
-            for (RenderTargetVector &renderTargetLevels : renderTargets)
-            {
-                for (RenderTargetVk &renderTargetVk : renderTargetLevels)
-                {
-                    renderTargetVk.releaseSharedFramebufferCacheKey(contextVk);
-                }
-            }
-        }
-        for (auto &renderTargetPair : mMultiLayerRenderTargets)
-        {
-            renderTargetPair.second->releaseSharedFramebufferCacheKey(contextVk);
-        }
+        mImage->collectViewGarbage(contextVk, &imageView);
     }
 
     ANGLE_TRY(initImageViews(contextVk, getImageViewLevelCount()));

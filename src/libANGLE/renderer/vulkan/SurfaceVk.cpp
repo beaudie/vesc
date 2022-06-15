@@ -419,11 +419,7 @@ angle::Result GetPresentModes(DisplayVk *displayVk,
 
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
 
-SurfaceVk::~SurfaceVk()
-{
-    mColorRenderTarget.destroy();
-    mDepthStencilRenderTarget.destroy();
-}
+SurfaceVk::~SurfaceVk() = default;
 
 angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
@@ -490,7 +486,7 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     // Front end must ensure all usage has been submitted.
-    image.collectViewGarbage(renderer, &imageViews);
+    image.releaseViewGarbage(renderer, &imageViews);
     image.releaseImage(renderer);
     image.releaseStagedUpdates(renderer);
 }
@@ -1537,19 +1533,16 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    mColorRenderTarget.releaseSharedFramebufferCacheKey(contextVk);
-    mDepthStencilRenderTarget.releaseSharedFramebufferCacheKey(contextVk);
-
     if (mDepthStencilImage.valid())
     {
-        mDepthStencilImage.collectViewGarbage(renderer, &mDepthStencilImageViews);
+        mDepthStencilImage.collectViewGarbage(contextVk, &mDepthStencilImageViews);
         mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk);
         mDepthStencilImage.releaseStagedUpdates(renderer);
     }
 
     if (mColorImageMS.valid())
     {
-        mColorImageMS.collectViewGarbage(renderer, &mColorImageMSViews);
+        mColorImageMS.collectViewGarbage(contextVk, &mColorImageMSViews);
         mColorImageMS.releaseImageFromShareContexts(renderer, contextVk);
         mColorImageMS.releaseStagedUpdates(renderer);
         contextVk->addGarbage(&mFramebufferMS);
@@ -1559,7 +1552,7 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
-        swapchainImage.image.collectViewGarbage(renderer, &swapchainImage.imageViews);
+        swapchainImage.image.collectViewGarbage(contextVk, &swapchainImage.imageViews);
         swapchainImage.image.releaseImageAndViewGarbage(renderer);
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image.resetImageWeakReference();

@@ -1752,7 +1752,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
     void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
-    void collectViewGarbage(RendererVk *renderer, vk::ImageViewHelper *imageView);
+    void releaseViewGarbage(RendererVk *renderer, vk::ImageViewHelper *imageView);
+    void collectViewGarbage(ContextVk *contextVk, vk::ImageViewHelper *imageView);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2218,6 +2219,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    void onFramebufferCacheCreate(
+        const vk::SharedFramebufferCacheKey &sharedFramebufferCacheKey) const
+    {
+        mFramebufferCacheManager.addSharedCacheKey(sharedFramebufferCacheKey);
+    }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2481,6 +2488,10 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
 
     std::vector<vk::GarbageObject> mImageAndViewGarbage;
+
+    // Track references to the cached Framebuffer object that created out of this object. This is
+    // mutable because itself does not track Image or view itself, but the other usage of the image.
+    mutable vk::FramebufferCacheManager mFramebufferCacheManager;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
