@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "878b066c_09b4e3b6",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T22:16:22Z",
+      "side": 1,
+      "message": "Unsure if you intended to upload a new patchset? The one I\u0027m seeing #6 is still using SetCWD but it looks like you were going to remove that",
+      "parentUuid": "f693fb9b_6cdcb19a",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 38
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44d8637f_a82320e0",
         "filename": "src/tests/py_utils/android_helper.py",
         "patchSetId": 6
@@ -160,6 +184,53 @@
         "startChar": 22,
         "endLine": 103,
         "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "756467ea_8cfc90d7",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T22:16:22Z",
+      "side": 1,
+      "message": "oh, it does show up in runtime_deps:\n\n```\n% grep angle_trace_list out/Android/gen.runtime/src/tests/angle_perftests__test_runner_script.runtime_deps\nangle_trace_list.txt\n```\n\nAdding angle_trace_list.txt to root sounds risky because of the way catapult handles stale files https://anglebug.com/6854#c13\n\nWould it make sense to put it under `$root/src/tests/restricted_traces/angle_trace_list.txt` where the json file used to be?\n\nThis patch seems to work on top of your change: https://paste.googleplex.com/4702139419983872?raw",
+      "parentUuid": "2ad9633e_70f2bd6a",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "792d5828_3956ae0d",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-15T22:16:22Z",
+      "side": 1,
+      "message": "This made me have a look at `ReadEntireFileToString` implementation and it looks like it silently truncates contents to buffer size when file is bigger than buffer and returns `true`:\n\nhttps://crsrc.org/c/third_party/angle/util/test_utils.cpp;drc\u003dc673ac8876330a42eed34e298ff585636af113bc;l\u003d56\n\nAlso wondering if this could be happening in other places.. Can\u0027t a shader be longer than 2000 characters, for example?\n\nhttps://crsrc.org/c/third_party/angle/util/shader_utils.cpp;drc\u003db0d75fb5c165fc0f8218ec7e8852bd47df49dedf;l\u003d21\n\n\nMaybe that function could be just like\n`ReadEntireFileToString(const char *filePath, std::string *contentsOut)` and then we wouldn\u0027t need to hard-code buffer sizes? Note how the implementation already reads the entire file into memory regardless of `maxLen`, then silently truncates into output.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
       },
       "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
