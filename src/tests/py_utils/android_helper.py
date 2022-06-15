@@ -291,7 +291,7 @@ def _RemoveFlag(args, f):
 
 
 def RunSmokeTest():
-    test_name = 'TracePerfTest.Run/vulkan_words_with_friends_2'
+    test_name = 'TracePerfTest.Run/vulkan_words_with_friends_2asldkf'
     run_instrumentation_timeout = 60
 
     logging.info('Running smoke test (%s)', test_name)
