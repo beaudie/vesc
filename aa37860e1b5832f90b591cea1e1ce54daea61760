@@ -22,6 +22,30 @@
       },
       "revId": "aa37860e1b5832f90b591cea1e1ce54daea61760",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3747e45d_b850c498",
+        "filename": "src/libANGLE/capture/frame_capture_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-15T11:30:53Z",
+      "side": 1,
+      "message": "Done. However `getLevelIndex()` returns `GLint` and `getBaseLevel()` + `getMipmapMaxLevel()` return `GLuint`, so this needs a temporary to quell the warning.",
+      "parentUuid": "be21226c_9f003c77",
+      "range": {
+        "startLine": 1216,
+        "startChar": 55,
+        "endLine": 1216,
+        "endChar": 93
+      },
+      "revId": "aa37860e1b5832f90b591cea1e1ce54daea61760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
