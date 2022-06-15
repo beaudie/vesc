@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a48292a9_bc6e124b",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-15T18:43:43Z",
+      "side": 1,
+      "message": "should we call drawElementsInstancedBaseInstance() instead?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad5fb779_040eb0ed",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 633,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-15T18:43:43Z",
+      "side": 1,
+      "message": "nit: change getFunctions() to functions?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f75ae5_dfc31259",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-15T18:43:43Z",
+      "side": 1,
+      "message": "Do we still need to extension with \"ANGLE\" key word?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "307e92d4_70e0c021",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-15T18:43:43Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d2f1a8c_da909a0a",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-15T18:43:43Z",
+      "side": 1,
+      "message": "We can probably skip this call since we already call at at line 1127 above?",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
