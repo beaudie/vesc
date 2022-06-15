@@ -33,6 +33,24 @@
       "message": "Out of curiosity what would happen if a different context were made current at this point and work were done on it? In Chrome, it\u0027s common for WebGL contexts to be preempted at arbitrary points. If a real pixel local storage extension were in use would this preemption need to be halted in between glBeginPixelLocalStorageANGLE / glEndPixelLocalStorageANGLE calls because otherwise memoryless textures\u0027 contents would be lost?",
       "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "679b058d_bde39f9b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-15T01:27:36Z",
+      "side": 1,
+      "message": "That\u0027s a really good question that I don\u0027t know the answer to. I don\u0027t see mention of context preemption in the original PLS spec:\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_shader_pixel_local_storage.txt\n\nFirst of all, I think that switching contexts in the middle of a PLS render pass doesn\u0027t mean that the render pass is actually active on the GPU yet. Also, \nVulkan uses the word \"transient\" instead of \"memoryless\" for this type of thing: https://gpuopen.com/learn/vulkan-renderpasses/\n\n\"the data in the attachments only lives within the renderpass and never needs to be written to main memory. Although we’ll still allocate memory for such an attachment, the data may never leave the GPU\"\n\nSo I assume that the goal of transient memory is to keep the data on-chip, but to have somewhere to dump to in the unfortunate event that the GPU needs to flush. I also assume that Metal \"memoryless\" attachments and PLS work the same way, just less explicitly.\n\nTL;DR, I think it\u0027s ok, but we will have to test to make sure.",
+      "parentUuid": "0a3e4ef9_7ac18fba",
+      "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
