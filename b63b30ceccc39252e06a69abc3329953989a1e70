@@ -105,6 +105,30 @@
       },
       "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d20978_d11bb8ee",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-15T03:20:46Z",
+      "side": 1,
+      "message": "\u003e My main concern is that it is anti-opengl convention. rendering state is context state\n\nOk that\u0027s fair. I moved it to context.",
+      "parentUuid": "72db4c7b_1869098e",
+      "range": {
+        "startLine": 101,
+        "startChar": 9,
+        "endLine": 101,
+        "endChar": 32
+      },
+      "revId": "b63b30ceccc39252e06a69abc3329953989a1e70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
