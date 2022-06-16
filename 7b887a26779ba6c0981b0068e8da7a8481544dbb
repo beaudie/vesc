@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c5ffc2db_54761d63",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5335,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-16T23:20:51Z",
+      "side": 1,
+      "message": "\u003e I think it\u0027s okay to leave out the  #if .  The code path will never be taken.\n\nim fine with either approach. just want to mention that if a negative deqp test for eglSurfaceAttrib is added and run on non-android platforms it will be a problem",
+      "parentUuid": "6c38b61d_ca783142",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca610148_693e5139",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
