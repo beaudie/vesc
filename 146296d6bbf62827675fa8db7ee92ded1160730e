@@ -1,6 +1,161 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ddd6e6_1c05a340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "Some style nits. Looks like a failure in the CI?",
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df90eeb_63b9ff45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8673,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "nit: use const \u0026",
+      "range": {
+        "startLine": 8671,
+        "startChar": 0,
+        "endLine": 8673,
+        "endChar": 0
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7a35543_d47055b6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8691,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "nit: use const \u0026",
+      "range": {
+        "startLine": 8687,
+        "startChar": 9,
+        "endLine": 8691,
+        "endChar": 0
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85c37f9_122e7a84",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8715,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "see below. actually, for these, use the scratch buffer - i believe owned by ContextVk.",
+      "range": {
+        "startLine": 8715,
+        "startChar": 8,
+        "endLine": 8715,
+        "endChar": 13
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f0d8917_1953d9bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8724,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "see below",
+      "range": {
+        "startLine": 8724,
+        "startChar": 8,
+        "endLine": 8724,
+        "endChar": 13
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8142bf8_0ccc69d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8734,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "nit: use a RAII type like angle::MemoryBuffer. also avoid auto except for long templated type names.",
+      "range": {
+        "startLine": 8733,
+        "startChar": 0,
+        "endLine": 8734,
+        "endChar": 91
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b19163c_b87ab16e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8738,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "nit: avoid auto",
+      "range": {
+        "startLine": 8738,
+        "startChar": 12,
+        "endLine": 8738,
+        "endChar": 17
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85d4a866_a8c87a71",
@@ -14,6 +169,29 @@
       "writtenOn": "2022-06-16T01:33:13Z",
       "side": 1,
       "message": "I\u0027m not certain what to do with the component count check. I understand previously it would forbid depth-only readPixels from an attachment that has both depth and stencil components? But there seems to be nothing GL_NV_read_depth that forbids this.",
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb980f4_603f7b80",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:33:14Z",
+      "side": 1,
+      "message": "nit: use RAII types (GLTexture, etc) whenever possible.",
+      "range": {
+        "startLine": 315,
+        "startChar": 4,
+        "endLine": 315,
+        "endChar": 11
+      },
       "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
