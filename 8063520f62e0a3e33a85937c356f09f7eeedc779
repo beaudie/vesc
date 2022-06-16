@@ -51,6 +51,24 @@
       "parentUuid": "2475f6a5_529b6d6d",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b8d883f_dce52ddd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-16T06:52:32Z",
+      "side": 1,
+      "message": "That makes sense to me. A more robust fix is prefered.\n\n\u003e How about letting the toggle cause a swapchain recreation, and in  GetDesiredPresentMode  we choose whether to use auto or demand refresh by querying the front-end? Then we also don\u0027t need to cache  mAutoRefreshEnabled  in the backend.\n\nThat should work.",
+      "parentUuid": "812fd6af_88d32491",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
