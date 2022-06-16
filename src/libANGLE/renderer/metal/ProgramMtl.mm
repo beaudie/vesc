@@ -15,6 +15,7 @@
 
 #include "common/debug.h"
 #include "common/system_utils.h"
+#include "compiler/translator/blocklayoutMetal.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/renderer/metal/BufferMtl.h"
@@ -80,7 +81,7 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
         return;
     }
 
-    sh::Std140BlockEncoder blockEncoder;
+    sh::BlockLayoutEncoderMTL blockEncoder;
     sh::GetActiveUniformBlockInfo(uniforms, "", &blockEncoder, blockLayoutMapOut);
 
     size_t blockSize = blockEncoder.getCurrentOffset();
@@ -93,7 +94,7 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
     }
 
     // Need to round up to multiple of vec4
-    *blockSizeOut = roundUp(blockSize, static_cast<size_t>(16));
+    *blockSizeOut = blockSize;
     return;
 }
 
@@ -110,7 +111,20 @@ void UpdateDefaultUniformBlock(GLsizei count,
                                const sh::BlockMemberInfo &layoutInfo,
                                angle::MemoryBuffer *uniformData)
 {
-    const int elementSize = sizeof(T) * componentCount;
+    UpdateDefaultUniformBlockWithElementSize(count, arrayIndex, componentCount, v, sizeof(T),
+                                             layoutInfo, uniformData);
+}
+
+template <typename T>
+void UpdateDefaultUniformBlockWithElementSize(GLsizei count,
+                                              uint32_t arrayIndex,
+                                              int componentCount,
+                                              const T *v,
+                                              size_t baseElementSize,
+                                              const sh::BlockMemberInfo &layoutInfo,
+                                              angle::MemoryBuffer *uniformData)
+{
+    const int elementSize = baseElementSize * componentCount;
 
     uint8_t *dst = uniformData->data() + layoutInfo.offset;
     if (layoutInfo.arrayStride == 0 || layoutInfo.arrayStride == elementSize)
@@ -135,17 +149,28 @@ void UpdateDefaultUniformBlock(GLsizei count,
         }
     }
 }
-
 template <typename T>
 void ReadFromDefaultUniformBlock(int componentCount,
                                  uint32_t arrayIndex,
                                  T *dst,
+                                 size_t elementSize,
                                  const sh::BlockMemberInfo &layoutInfo,
                                  const angle::MemoryBuffer *uniformData)
 {
+    ReadFromDefaultUniformBlockWithElementSize(componentCount, arrayIndex, dst, sizeof(T),
+                                               layoutInfo, uniformData);
+}
+
+void ReadFromDefaultUniformBlockWithElementSize(int componentCount,
+                                                uint32_t arrayIndex,
+                                                void *dst,
+                                                size_t baseElementSize,
+                                                const sh::BlockMemberInfo &layoutInfo,
+                                                const angle::MemoryBuffer *uniformData)
+{
     ASSERT(layoutInfo.offset != -1);
 
-    const int elementSize = sizeof(T) * componentCount;
+    const int elementSize = baseElementSize * componentCount;
     const uint8_t *source = uniformData->data() + layoutInfo.offset;
 
     if (layoutInfo.arrayStride == 0 || layoutInfo.arrayStride == elementSize)
@@ -162,10 +187,16 @@ void ReadFromDefaultUniformBlock(int componentCount,
     }
 }
 
-class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
+class Std430BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
 {
   public:
-    sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std140BlockEncoder(); }
+    sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std430BlockEncoder(); }
+};
+
+class StdMTLBLockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
+{
+  public:
+    sh::BlockLayoutEncoder *makeEncoder() override { return new sh::BlockLayoutEncoderMTL(); }
 };
 
 void InitArgumentBufferEncoder(mtl::Context *context,
@@ -483,8 +514,8 @@ mtl::BufferPool *ProgramMtl::getBufferPool(ContextMtl *context)
 void ProgramMtl::linkResources(const gl::Context *context,
                                const gl::ProgramLinkedResources &resources)
 {
-    Std140BlockLayoutEncoderFactory std140EncoderFactory;
-    gl::ProgramLinkedResourcesLinker linker(&std140EncoderFactory);
+    StdMTLBLockLayoutEncoderFactory std430EncoderFactory;
+    gl::ProgramLinkedResourcesLinker linker(&std430EncoderFactory);
 
     linker.linkResources(context, mState, resources);
 }
@@ -763,7 +794,7 @@ angle::Result ProgramMtl::createMslShaderLib(
             ss << translatedMslInfo->metalShaderSource;
             ss << "-----\n";
 
-            ERR() << ss.str();
+            // ERR() << ss.str();
             infoLog << ss.str();
 
             ANGLE_MTL_HANDLE_ERROR(context, ss.str().c_str(), GL_INVALID_OPERATION);
@@ -948,9 +979,12 @@ void ProgramMtl::setUniformImpl(GLint location, GLsizei count, const T *v, GLenu
                 continue;
             }
 
-            const GLint componentCount = linkedUniform.typeInfo->componentCount;
-            UpdateDefaultUniformBlock(count, locationInfo.arrayIndex, componentCount, v, layoutInfo,
-                                      &uniformBlock.uniformData);
+            const GLint componentCount    = linkedUniform.typeInfo->componentCount;
+            const GLint baseComponentSize = sh::mtl::GetMetalSizeForGLType(
+                gl::VariableComponentType(linkedUniform.typeInfo->type));
+            UpdateDefaultUniformBlockWithElementSize(count, locationInfo.arrayIndex, componentCount,
+                                                     v, baseComponentSize, layoutInfo,
+                                                     &uniformBlock.uniformData);
             mDefaultUniformBlocksDirty.set(shaderType);
         }
     }
@@ -976,8 +1010,8 @@ void ProgramMtl::setUniformImpl(GLint location, GLsizei count, const T *v, GLenu
             for (GLint i = 0; i < count; i++)
             {
                 GLint elementOffset = i * layoutInfo.arrayStride + initialArrayOffset;
-                GLint *dest =
-                    reinterpret_cast<GLint *>(uniformBlock.uniformData.data() + elementOffset);
+                bool *dest =
+                    reinterpret_cast<bool *>(uniformBlock.uniformData.data() + elementOffset);
                 const T *source = v + i * componentCount;
 
                 for (int c = 0; c < componentCount; c++)
@@ -1012,12 +1046,20 @@ void ProgramMtl::getUniformImpl(GLint location, T *v, GLenum entryPointType) con
     {
         const uint8_t *ptrToElement = uniformBlock.uniformData.data() + layoutInfo.offset +
                                       (locationInfo.arrayIndex * layoutInfo.arrayStride);
-        GetMatrixUniform(linkedUniform.type, v, reinterpret_cast<const T *>(ptrToElement), false);
+        GetMatrixUniformMetal(linkedUniform.type, v, reinterpret_cast<const T *>(ptrToElement),
+                              false);
     }
     else
     {
-        ReadFromDefaultUniformBlock(linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex,
-                                    v, layoutInfo, &uniformBlock.uniformData);
+        const GLint baseComponentSize =
+            sh::mtl::GetMetalSizeForGLType(gl::VariableComponentType(linkedUniform.typeInfo->type));
+        if (baseComponentSize != sizeof(T))
+        {
+            memset(v, 0, sizeof(T));
+        }
+        ReadFromDefaultUniformBlockWithElementSize(linkedUniform.typeInfo->componentCount,
+                                                   locationInfo.arrayIndex, v, baseComponentSize,
+                                                   layoutInfo, &uniformBlock.uniformData);
     }
 }
 
@@ -1101,7 +1143,7 @@ void ProgramMtl::setUniformMatrixfv(GLint location,
             continue;
         }
 
-        SetFloatUniformMatrixGLSL<cols, rows>::Run(
+        SetFloatUniformMatrixMetal<cols, rows>::Run(
             locationInfo.arrayIndex, linkedUniform.getArraySizeProduct(), count, transpose, value,
             uniformBlock.uniformData.data() + layoutInfo.offset);
 

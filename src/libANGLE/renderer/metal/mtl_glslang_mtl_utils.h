@@ -53,7 +53,6 @@ angle::Result GlslangGetMSL(const gl::Context *glContext,
 
 // Get equivalent shadow compare mode that is used in translated msl shader.
 uint MslGetShaderShadowCompareMode(GLenum mode, GLenum func);
-
 }  // namespace mtl
 }  // namespace rx
 

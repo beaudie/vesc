@@ -231,26 +231,7 @@ Name Pipeline::getStructInstanceName(Variant variant) const
 
 static bool AllowPacking(Pipeline::Type type)
 {
-    using Type = Pipeline::Type;
-
-    switch (type)
-    {
-        case Type::UniformBuffer:
-        case Type::UserUniforms:
-            return true;
-
-        case Type::VertexIn:
-        case Type::VertexOut:
-        case Type::FragmentIn:
-        case Type::FragmentOut:
-        case Type::AngleUniforms:
-        case Type::NonConstantGlobals:
-        case Type::InvocationVertexGlobals:
-        case Type::InvocationFragmentGlobals:
-        case Type::Texture:
-        case Type::InstanceId:
-            return false;
-    }
+    return false;
 }
 
 static bool AllowPadding(Pipeline::Type type)
@@ -259,7 +240,6 @@ static bool AllowPadding(Pipeline::Type type)
 
     switch (type)
     {
-        case Type::UserUniforms:
         case Type::VertexIn:
         case Type::VertexOut:
         case Type::FragmentIn:
@@ -268,11 +248,12 @@ static bool AllowPadding(Pipeline::Type type)
         case Type::NonConstantGlobals:
         case Type::InvocationVertexGlobals:
         case Type::InvocationFragmentGlobals:
-        case Type::UniformBuffer:
             return true;
 
+        case Type::UserUniforms:
         case Type::Texture:
         case Type::InstanceId:
+        case Type::UniformBuffer:
             return false;
     }
 }
@@ -378,9 +359,9 @@ ModifyStructConfig Pipeline::externalStructModifyConfig() const
             };
             break;
         case Type::UserUniforms:
-            config.promoteBoolToUint            = Pred::True;
-            config.saturateMatrixRows           = SatVec::FullySaturate;
-            config.saturateScalarOrVectorArrays = SatVec::FullySaturate;
+            config.promoteBoolToUint            = Pred::False;
+            config.saturateMatrixRows           = SatVec::DontSaturate;
+            config.saturateScalarOrVectorArrays = SatVec::DontSaturate;
             config.recurseStruct                = Pred::True;
             break;
 
@@ -391,9 +372,9 @@ ModifyStructConfig Pipeline::externalStructModifyConfig() const
         case Type::NonConstantGlobals:
             break;
         case Type::UniformBuffer:
-            config.promoteBoolToUint            = Pred::True;
-            config.saturateMatrixRows           = SatVec::FullySaturate;
-            config.saturateScalarOrVectorArrays = SatVec::FullySaturate;
+            config.promoteBoolToUint            = Pred::False;
+            config.saturateMatrixRows           = SatVec::DontSaturate;
+            config.saturateScalarOrVectorArrays = SatVec::DontSaturate;
             config.recurseStruct                = Pred::True;
             break;
         case Type::InvocationVertexGlobals:
