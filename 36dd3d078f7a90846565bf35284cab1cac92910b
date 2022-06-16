@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "495b7139_8d420614",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-16T20:11:04Z",
+      "side": 1,
+      "message": "Shabi, I understand that ANGLE_CONTEXT_TRY is used to normally eat the angle::Result.  That result also needs to trigger a GL error, as we discussed in a previous CL.\n\nIn looking in Code Search, I see that ANGLE_VK_TRY will generate a GL error (by calling DefaultGLErrorCode with the Vulkan errorCode.  Is that good enough?",
+      "parentUuid": "0f59f35c_9c315494",
+      "range": {
+        "startLine": 1223,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 5
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "652453dc_1c21de3d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
