@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1ae465_6a536785",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-16T21:09:07Z",
+      "side": 1,
+      "message": "Yup! No problem. Change is reflected in the updated patchset I just uploaded.",
+      "parentUuid": "fcf8ce6b_f212c404",
+      "revId": "ad827a003c549336374d369335226a5528967aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb85d01a_0ef3c164",
