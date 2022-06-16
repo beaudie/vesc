@@ -143,6 +143,24 @@
       "message": "nit: Use function instead! You can pass `GLTexture` as `GLTexture \u0026` or `GLuint`",
       "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26cf6bd2_0d921acf",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-16T18:37:06Z",
+      "side": 1,
+      "message": "lambdas can work too IMO",
+      "parentUuid": "472ed9d7_67c476d3",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
