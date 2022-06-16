@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0fd8e20e_076f05b7",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T15:16:44Z",
+      "side": 1,
+      "message": "My bad, I was getting confused between the files. I think this is correct - it\u0027s loading the trace txt file from the same path as the exe, which is where it ends up. If you\u0027re still concerned about a bug or bad behaviour here, can you clarify how I can fix it and still load the trace file from the right path? I could also use the CWD path too I imagine when calling LoadTraceNames, although that\u0027s not terribly different. LMKWYT",
+      "parentUuid": "878b066c_09b4e3b6",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 38
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44d8637f_a82320e0",
         "filename": "src/tests/py_utils/android_helper.py",
         "patchSetId": 6
@@ -215,6 +239,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c4f51a7_72c9e3c5",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T15:16:44Z",
+      "side": 1,
+      "message": "We can\u0027t put files into the source dir, only the out dir. I was using \"out/Release/angle/txt\" but then the loading got weird.\n\nMaybe the solution here is to ditch the chromium test runner.",
+      "parentUuid": "756467ea_8cfc90d7",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "792d5828_3956ae0d",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 6
@@ -226,6 +274,30 @@
       "writtenOn": "2022-06-15T22:16:22Z",
       "side": 1,
       "message": "This made me have a look at `ReadEntireFileToString` implementation and it looks like it silently truncates contents to buffer size when file is bigger than buffer and returns `true`:\n\nhttps://crsrc.org/c/third_party/angle/util/test_utils.cpp;drc\u003dc673ac8876330a42eed34e298ff585636af113bc;l\u003d56\n\nAlso wondering if this could be happening in other places.. Can\u0027t a shader be longer than 2000 characters, for example?\n\nhttps://crsrc.org/c/third_party/angle/util/shader_utils.cpp;drc\u003db0d75fb5c165fc0f8218ec7e8852bd47df49dedf;l\u003d21\n\n\nMaybe that function could be just like\n`ReadEntireFileToString(const char *filePath, std::string *contentsOut)` and then we wouldn\u0027t need to hard-code buffer sizes? Note how the implementation already reads the entire file into memory regardless of `maxLen`, then silently truncates into output.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16713fb7_bed46c5a",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T15:16:44Z",
+      "side": 1,
+      "message": "That would be a better implementation and the thought did occur to me as well that we should use dynamic allocation to be safe. I didn\u0027t see it as a major risk so I didn\u0027t implement it. Will take another look unless you don\u0027t mind the small risk to testing-only code.",
+      "parentUuid": "792d5828_3956ae0d",
       "range": {
         "startLine": 39,
         "startChar": 4,
