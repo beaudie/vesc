@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cf2c53ec_47cb9ac1",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T17:43:10Z",
+      "side": 1,
+      "message": "nit: `workaroundImageLoadFailures` or something like that",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b3dbe3c_99b07689",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T17:43:10Z",
+      "side": 1,
+      "message": "Why is `return` disallowed?",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6bc85b8_fefec4e6",
         "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
         "patchSetId": 3
@@ -50,6 +84,63 @@
       "side": 1,
       "message": "Awesome 🙌",
       "parentUuid": "b12efd5f_da911362",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c85fe3_8a72bb33",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T17:43:10Z",
+      "side": 1,
+      "message": "I highly recommend splitting this into N test, where every test is checking one such situation. That way, if there\u0027s a bug with stencil test for example, it\u0027s immediately obvious (and easier to debug). If you suspect the sequence of X then Y matters, that could be another test.",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92d828f0_fdf6c665",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T17:43:10Z",
+      "side": 1,
+      "message": "Please use this pattern instead:\n\n```\nconstexpr char kVS[] \u003d R\"(...)\";\nconstexpr char kFS[] \u003d R\"(...)\";\n\nANGLE_GL_PROGRAM(blitProgram, kVS, kFS);\n```\n\nThat creates the variable, calls `makeRaster` and asserts the program is valid.",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1137,
+        "endChar": 37
+      },
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "472ed9d7_67c476d3",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T17:43:10Z",
+      "side": 1,
+      "message": "nit: Use function instead! You can pass `GLTexture` as `GLTexture \u0026` or `GLuint`",
       "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
