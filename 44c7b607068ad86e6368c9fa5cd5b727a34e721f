@@ -104,6 +104,24 @@
       "parentUuid": "20551039_f08a0997",
       "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dba37ded_e710adeb",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:53:50Z",
+      "side": 1,
+      "message": "Done, crbug.com/1336981",
+      "parentUuid": "0840e375_b307ddfa",
+      "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
