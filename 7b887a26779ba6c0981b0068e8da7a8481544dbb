@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ec4789f_ac2d11f8",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T02:13:26Z",
+      "side": 1,
+      "message": "nit: Why the `#if`?",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
