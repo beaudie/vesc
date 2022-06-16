@@ -949,6 +949,30 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::insertRenderPipelin
     return re.first->second;
 }
 
+static bool ValidateRenderPipelineState(const MTLRenderPipelineDescriptor *descriptor,
+                                        ContextMtl *context,
+                                        const mtl::ContextDevice &device)
+{
+    // Ensure the device can support the storage requirement for render targets.
+    if (DeviceHasMaximumRenderTargetSize(device))
+    {
+        // TODO: Is the use of NSUInteger in 32 bit systems ok without any overflow checking?
+        NSUInteger maxSize = GetMaxRenderTargetSizeForDeviceInBytes(device);
+        NSUInteger renderTargetSize =
+            ComputeTotalSizeUsedForMTLRenderPipelineDescriptor(descriptor, context, device);
+        if (renderTargetSize > maxSize)
+        {
+            std::stringstream errorStream;
+            errorStream << "This set of render targets requires " << renderTargetSize
+                        << " bytes of pixel storage. This device supports " << maxSize << " bytes.";
+            ANGLE_MTL_HANDLE_ERROR(context, errorStream.str().c_str(), GL_INVALID_OPERATION);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelineState(
     ContextMtl *context,
     const RenderPipelineDesc &originalDesc,
@@ -1026,6 +1050,11 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelin
                 ANGLE_MTL_HANDLE_ERROR(context, errorStream.str().c_str(), GL_INVALID_OPERATION);
                 return nil;
             }
+        }
+
+        if (!ValidateRenderPipelineState(objCDesc, context, metalDevice))
+        {
+            return nil;
         }
 
         // Special attribute slot for default attribute
