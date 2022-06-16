@@ -282,6 +282,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39effe98_7ae6fc89",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-16T18:28:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a8c1506_b6b3eb33",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d2f1a8c_da909a0a",
@@ -378,6 +396,30 @@
       "side": 1,
       "message": "One of the functions introduced by extension `EXT_base_instance`  https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_base_instance.txt, is `DrawElementsInstancedBaseVertexBaseInstanceEXT()`, which might use a base vertex offset. So I think we should keep `BaseVertexOption::UseBaseVertex` ?",
       "parentUuid": "2cef6c9d_f58f8044",
+      "range": {
+        "startLine": 1196,
+        "startChar": 8,
+        "endLine": 1196,
+        "endChar": 89
+      },
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2e25b77_94af755d",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1196,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-06-16T18:28:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3c11914_39678c5c",
       "range": {
         "startLine": 1196,
         "startChar": 8,
