@@ -16,6 +16,218 @@
       "message": "PTAL",
       "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "003baa62_841b43dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "Mostly nits and naming suggestions",
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b34c8561_e7854952",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "Missing move of `mFramebufferCacheManager`",
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f263100c_1d14a57a",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: `onNewFramebuffer`",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 37
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348b17a9_f68ebe8b",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: I\u0027d just call this `release`. That might get confusing with `reset()` in this class, but that function is actually used only in one place, so you could either move it to `private` or remove it.",
+      "range": {
+        "startLine": 143,
+        "startChar": 9,
+        "endLine": 143,
+        "endChar": 41
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89f734d2_ad21fdb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 5295,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: Could you ASSERT that the key is not already in mFramebufferCacheManager?\n\nIf you make an anonymous-namespace function and call that inside the `ASSERT`, it gets completely optimized out, so it never hurts!",
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30ddeff4_9c7b728e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 5299,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: (explicit bool conversion:) `\u003d\u003d nullptr`. Same in `releaseSharedCacheKey`",
+      "range": {
+        "startLine": 5299,
+        "startChar": 12,
+        "endLine": 5299,
+        "endChar": 14
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76583c54_56854641",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: `std::move(framebufferDescPointer)`",
+      "range": {
+        "startLine": 1493,
+        "startChar": 52,
+        "endLine": 1493,
+        "endChar": 84
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d569cc3b_4fe352f3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1553,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: suggest keeping the names simpler:\n\n```\naddKey();\nreleaseKeys(); // Note: plural\n```",
+      "range": {
+        "startLine": 1551,
+        "startChar": 0,
+        "endLine": 1553,
+        "endChar": 53
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "607cdb57_03c0a865",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "Stale comment. `SaredCacheKeyT`?",
+      "range": {
+        "startLine": 1559,
+        "startChar": 7,
+        "endLine": 1559,
+        "endChar": 38
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e24e8c9_6eab08e9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T14:20:58Z",
+      "side": 1,
+      "message": "nit: The last phrase makes it sound like there\u0027s something somebody should be doing, but I didn\u0027t notice anything special about that. `shared_ptr` handles all that, no?\n\nMaybe just drop that part after `and when ...`, it\u0027s sufficient to know this holds a refcount.",
+      "range": {
+        "startLine": 1559,
+        "startChar": 45,
+        "endLine": 1560,
+        "endChar": 68
+      },
+      "revId": "ad5231f7a0820140a99d5df312c3ccdcf9a4f045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
