@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18e94755_9a28d34e",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-16T02:28:47Z",
+      "side": 1,
+      "message": "Just to make sure, you\u0027re leaving this (and other setLabel methods) stubbed until the plumbing up till Context class is certain.  True?",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf305f7_0cf7bd6f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-16T02:28:47Z",
+      "side": 1,
+      "message": "Mark, this seems like the correct way to do this.  Shabi, does this look correct to you?",
+      "range": {
+        "startLine": 1223,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 5
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
