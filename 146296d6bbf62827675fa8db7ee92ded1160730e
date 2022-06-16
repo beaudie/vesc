@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85d4a866_a8c87a71",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:33:13Z",
+      "side": 1,
+      "message": "I\u0027m not certain what to do with the component count check. I understand previously it would forbid depth-only readPixels from an attachment that has both depth and stencil components? But there seems to be nothing GL_NV_read_depth that forbids this.",
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
