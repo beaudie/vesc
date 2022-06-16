@@ -69,6 +69,24 @@
       "parentUuid": "f74fd010_a99ec8fb",
       "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6d1a9f0_d229fe11",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-16T02:16:35Z",
+      "side": 1,
+      "message": "`ANGLE_SKIP_TEST_IF` in the middle of test is perfectly fine. Failures before the skip should generate an error, but now I\u0027m also curious whether that\u0027s always been _my_ assumption.",
+      "parentUuid": "afd42608_21961d2b",
+      "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
