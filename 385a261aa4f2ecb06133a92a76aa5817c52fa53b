@@ -16,6 +16,24 @@
       "message": "Ah, that\u0027s an interesting way to do this.\n\nIf this suite fails, would it stop running other test suites? My idea with the smoke test was to kind of \"short-circuit\" perftests by running this test with a short timeout. If this isn\u0027t going to work this way then this serves a different purpose, and then do you find it useful to have it?",
       "revId": "385a261aa4f2ecb06133a92a76aa5817c52fa53b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f30a853_5330cd06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T14:26:29Z",
+      "side": 1,
+      "message": "Sorry, when you say \"then do you find it useful to have it\", what are you referring to? And can you identify what the primary concern was with the short timeout - was it to save bots from an expensive failure cycle? We can enforce that in other ways by having a max # failures or other heuristic potentially. I\u0027m not too particular on what we do except I think the smoke test way wasn\u0027t the best way because it relied on a specific trace + test suite and there may be ways that get the same result without using as much time talking to the device.",
+      "parentUuid": "ddf54b4c_da96c0af",
+      "revId": "385a261aa4f2ecb06133a92a76aa5817c52fa53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
