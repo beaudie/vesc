@@ -1040,10 +1040,10 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         // the statement they are used in. As such it must come after
         // SeparateCompoundExpressions since it is not aware of short circuits
         // and side effects.
-        if (!RewriteRowMajorMatrices(this, root, &getSymbolTable()))
-        {
-            return false;
-        }
+        // if (!RewriteRowMajorMatrices(this, root, &getSymbolTable()))
+        // {
+        //     return false;
+        // }
     }
 
     // Note: ReduceInterfaceBlocks removes row_major matrix layout specifiers
