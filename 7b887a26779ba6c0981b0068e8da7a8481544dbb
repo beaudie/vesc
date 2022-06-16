@@ -34,6 +34,41 @@
       "parentUuid": "4ec4789f_ac2d11f8",
       "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c38b61d_ca783142",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5335,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-16T23:03:51Z",
+      "side": 1,
+      "message": "Hmm.  As long as the code will compile on non-Android OSs, I think it\u0027s okay to leave out the `#if`.  The code path will never be taken.",
+      "parentUuid": "89ac3a46_a08b7324",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca610148_693e5139",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-16T23:03:51Z",
+      "side": 1,
+      "message": "IIRC from my testing (at the office), this test failed on ES2 on my Pixel 6.  Does that match your testing?\n\nIf so, I think we should skip it here for:\n- ES2\n- non-Android",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
