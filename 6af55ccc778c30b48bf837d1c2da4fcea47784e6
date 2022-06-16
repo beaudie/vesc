@@ -266,6 +266,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a8c1506_b6b3eb33",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-16T00:57:07Z",
+      "side": 1,
+      "message": "As discussed offline, since `gl_BaseVertex` and `gl_BaseInstance` are only available with the extension `ANGLE_base_vertex_base_instance_shader_builtin`:  https://chromium.googlesource.com/angle/angle/+/refs/heads/main/extensions/ANGLE_base_vertex_base_instance_shader_builtin.txt, let\u0027s keep it in the vertex shader code, and update the function `requestExtensions()`: https://chromium-review.googlesource.com/c/angle/angle/+/3697206/9/src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp#793.\n\nIf we don\u0027t use any `*multiDraw` calls in the test suite, we can remove the `isMultiDraw` params in the function.",
+      "parentUuid": "e75d5dbf_be4eb342",
+      "revId": "6af55ccc778c30b48bf837d1c2da4fcea47784e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4d2f1a8c_da909a0a",
         "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
         "patchSetId": 8
