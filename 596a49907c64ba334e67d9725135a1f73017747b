@@ -16,6 +16,29 @@
       "message": "lgtm, though I only skimmed the test.\n",
       "revId": "596a49907c64ba334e67d9725135a1f73017747b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e0a65d8_aba5b4d5",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-16T18:29:45Z",
+      "side": 1,
+      "message": "nit: could be pre-initialized with MAX_FRAGMENT_OUTPUTS_WITH_LOCAL_STORAGE x GL_RGBA32UI\n\nUnless you plan on changing the format later.",
+      "range": {
+        "startLine": 1610,
+        "startChar": 42,
+        "endLine": 1610,
+        "endChar": 43
+      },
+      "revId": "596a49907c64ba334e67d9725135a1f73017747b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
