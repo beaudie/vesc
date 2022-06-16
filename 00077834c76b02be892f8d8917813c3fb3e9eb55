@@ -33,6 +33,24 @@
       "message": "Do we need a full stop if the modifiers are not supported?",
       "revId": "00077834c76b02be892f8d8917813c3fb3e9eb55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f06979ae_2c0a631c",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/SurfaceVkGbm.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-16T09:09:44Z",
+      "side": 1,
+      "message": "Without ExternalMemoryDmaBufAndModifiers DisplayVkGbm would advertise no config, therefore I believe this is unreachable as ANGLE would fail earlier with `EGL_BAD_CONFIG`.",
+      "parentUuid": "94bd004e_57a62f0e",
+      "revId": "00077834c76b02be892f8d8917813c3fb3e9eb55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
