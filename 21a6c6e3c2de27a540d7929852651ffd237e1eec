@@ -51,6 +51,24 @@
       "parentUuid": "bf8aee0c_0919e395",
       "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afd42608_21961d2b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1378,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-16T01:26:54Z",
+      "side": 1,
+      "message": "I see. My request was more for clarity, but I\u0027m not sure whether ANGLE\u0027s test skipping mechanism will squelch earlier failures. Other ANGLE engineers can tell you for sure. If you intend to run the top portion of the test then please try injecting a failure in the EXPECT_PIXEL_RECT32UI_EQ and make sure it\u0027s reported when the test\u0027s run on Vulkan.",
+      "parentUuid": "f74fd010_a99ec8fb",
+      "revId": "21a6c6e3c2de27a540d7929852651ffd237e1eec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
