@@ -31,6 +31,12 @@ namespace rx
 #define SHADER_ENTRY_NAME @"main0"
 class ContextMtl;
 
+struct UBOConversionInfo
+{
+    std::vector<sh::BlockMemberInfo> stdInfo, metalInfo;
+    size_t stdSize, metalSize;
+};
+
 struct ProgramArgumentBufferEncoderMtl
 {
     void reset(ContextMtl *contextMtl);
@@ -179,6 +185,11 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
     angle::Result resizeDefaultUniformBlocksMemory(const gl::Context *glContext,
                                                    const gl::ShaderMap<size_t> &requiredBufferSize);
+
+    void saveInterfaceBlockInfo(gl::BinaryOutputStream *stream);
+    angle::Result loadInterfaceBlockInfo(const gl::Context *glContext,
+                                         gl::BinaryInputStream *stream);
+
     void saveDefaultUniformBlocksInfo(gl::BinaryOutputStream *stream);
     angle::Result loadDefaultUniformBlocksInfo(const gl::Context *glContext,
                                                gl::BinaryInputStream *stream);
@@ -200,6 +211,9 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
                                                     mtl::RenderCommandEncoder *cmdEncoder,
                                                     const std::vector<gl::InterfaceBlock> &blocks,
                                                     gl::ShaderType shaderType);
+
+    void initUniformBlocksRemapper(gl::Shader *shader, const gl::Context *glContext);
+
     angle::Result encodeUniformBuffersInfoArgumentBuffer(
         ContextMtl *context,
         mtl::RenderCommandEncoder *cmdEncoder,
@@ -248,7 +262,9 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
     bool mProgramHasFlatAttributes;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
     gl::ShaderBitSet mSamplerBindingsDirty;
+
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
+    std::unordered_map<std::string, UBOConversionInfo> mUniformBlockConversions;
 
     // Translated metal shaders:
     gl::ShaderMap<mtl::TranslatedShaderInfo> mMslShaderTranslateInfo;

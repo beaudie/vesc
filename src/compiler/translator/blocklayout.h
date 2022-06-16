@@ -16,6 +16,7 @@
 
 #include <GLSLANG/ShaderLang.h>
 #include "angle_gl.h"
+#include "blocklayoutMetal.h"
 
 namespace sh
 {
@@ -26,24 +27,37 @@ struct BlockMemberInfo
 {
     constexpr BlockMemberInfo() = default;
 
-    constexpr BlockMemberInfo(int offset, int arrayStride, int matrixStride, bool isRowMajorMatrix)
-        : offset(offset),
+    constexpr BlockMemberInfo(GLenum type,
+                              int offset,
+                              int arrayStride,
+                              int matrixStride,
+                              int arraySize,
+                              bool isRowMajorMatrix)
+        : type(type),
+          offset(offset),
           arrayStride(arrayStride),
           matrixStride(matrixStride),
+          arraySize(arraySize),
           isRowMajorMatrix(isRowMajorMatrix)
     {}
 
-    constexpr BlockMemberInfo(int offset,
+    constexpr BlockMemberInfo(GLenum type,
+                              int offset,
                               int arrayStride,
                               int matrixStride,
+                              int arraySize,
                               bool isRowMajorMatrix,
                               int topLevelArrayStride)
-        : offset(offset),
+        : type(type),
+          offset(offset),
           arrayStride(arrayStride),
           matrixStride(matrixStride),
+          arraySize(arraySize),
           isRowMajorMatrix(isRowMajorMatrix),
           topLevelArrayStride(topLevelArrayStride)
     {}
+
+    GLenum type = GL_INVALID_ENUM;
 
     // A single integer identifying the offset of an active variable.
     int offset = -1;
@@ -54,6 +68,9 @@ struct BlockMemberInfo
     // A single integer identifying the stride between columns of a column-major matrix or rows of a
     // row-major matrix.
     int matrixStride = -1;
+
+    // A single integer, identifying the length of an array variable.
+    int arraySize = -1;
 
     // A single integer identifying whether an active variable is a row-major matrix.
     bool isRowMajorMatrix = false;
@@ -76,17 +93,18 @@ class BlockLayoutEncoder
     BlockLayoutEncoder();
     virtual ~BlockLayoutEncoder() {}
 
-    BlockMemberInfo encodeType(GLenum type,
-                               const std::vector<unsigned int> &arraySizes,
-                               bool isRowMajorMatrix);
+    virtual BlockMemberInfo encodeType(GLenum type,
+                                       const std::vector<unsigned int> &arraySizes,
+                                       bool isRowMajorMatrix);
     // Advance the offset based on struct size and array dimensions.  Size can be calculated with
     // getShaderVariableSize() or equivalent.  |enterAggregateType|/|exitAggregateType| is necessary
     // around this call.
-    BlockMemberInfo encodeArrayOfPreEncodedStructs(size_t size,
-                                                   const std::vector<unsigned int> &arraySizes);
+    virtual BlockMemberInfo encodeArrayOfPreEncodedStructs(
+        size_t size,
+        const std::vector<unsigned int> &arraySizes);
 
-    size_t getCurrentOffset() const;
-    size_t getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor);
+    virtual size_t getCurrentOffset() const;
+    virtual size_t getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor);
 
     // Called when entering/exiting a structure variable.
     virtual void enterAggregateType(const ShaderVariable &structVar) = 0;
@@ -113,6 +131,45 @@ class BlockLayoutEncoder
                                int matrixStride)          = 0;
 
     size_t mCurrentOffset;
+};
+
+class BlockLayoutEncoderMTL : public BlockLayoutEncoder
+{
+  public:
+    BlockLayoutEncoderMTL();
+    ~BlockLayoutEncoderMTL() override {}
+
+    BlockMemberInfo encodeType(GLenum type,
+                               const std::vector<unsigned int> &arraySizes,
+                               bool isRowMajorMatrix) override;
+    // Advance the offset based on struct size and array dimensions.  Size can be calculated with
+    // getShaderVariableSize() or equivalent.  |enterAggregateType|/|exitAggregateType| is necessary
+    // around this call.
+    BlockMemberInfo encodeArrayOfPreEncodedStructs(
+        size_t size,
+        const std::vector<unsigned int> &arraySizes) override;
+
+    size_t getCurrentOffset() const override;
+    size_t getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor) override;
+
+    // Called when entering/exiting a structure variable.
+    void enterAggregateType(const ShaderVariable &structVar) override;
+    void exitAggregateType(const ShaderVariable &structVar) override;
+
+  private:
+    void getBlockLayoutInfo(GLenum type,
+                            const std::vector<unsigned int> &arraySizes,
+                            bool isRowMajorMatrix,
+                            int *arrayStrideOut,
+                            int *matrixStrideOut) override;
+    void advanceOffset(GLenum type,
+                       const std::vector<unsigned int> &arraySizes,
+                       bool isRowMajorMatrix,
+                       int arrayStride,
+                       int matrixStride) override;
+
+    size_t getBaseAlignment(const ShaderVariable &variable) const;
+    size_t getTypeBaseAlignment(GLenum type, bool isRowMajorMatrix) const;
 };
 
 // Will return default values for everything.
