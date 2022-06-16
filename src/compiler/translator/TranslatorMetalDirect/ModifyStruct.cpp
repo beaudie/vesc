@@ -366,7 +366,7 @@ class ConvertStructState : angle::NonCopyable
             reflection->addOriginalName(structure.uniqueId().get(), structure.name().data());
             const Name name = idGen.createNewName(structure.name().data());
             if (!TryCreateModifiedStruct(mCompiler, symbolEnv, idGen, config, structure, name,
-                                         outMachineries, isUBORecurse, true))
+                                         outMachineries, isUBORecurse, config.allowPadding))
             {
                 return false;
             }
@@ -1064,7 +1064,6 @@ bool sh::TryCreateModifiedStruct(TCompiler &compiler,
     {
         return false;
     }
-
     state.publish(originalStruct, modifiedStructName);
 
     return true;

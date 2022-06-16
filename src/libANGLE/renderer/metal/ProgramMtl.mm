@@ -80,7 +80,7 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
         return;
     }
 
-    sh::Std140BlockEncoder blockEncoder;
+    sh::Std430BlockEncoder blockEncoder;
     sh::GetActiveUniformBlockInfo(uniforms, "", &blockEncoder, blockLayoutMapOut);
 
     size_t blockSize = blockEncoder.getCurrentOffset();
@@ -162,10 +162,10 @@ void ReadFromDefaultUniformBlock(int componentCount,
     }
 }
 
-class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
+class Std430BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
 {
   public:
-    sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std140BlockEncoder(); }
+    sh::BlockLayoutEncoder *makeEncoder() override { return new sh::Std430BlockEncoder(); }
 };
 
 void InitArgumentBufferEncoder(mtl::Context *context,
@@ -481,8 +481,8 @@ mtl::BufferPool *ProgramMtl::getBufferPool(ContextMtl *context)
 }
 void ProgramMtl::linkResources(const gl::ProgramLinkedResources &resources)
 {
-    Std140BlockLayoutEncoderFactory std140EncoderFactory;
-    gl::ProgramLinkedResourcesLinker linker(&std140EncoderFactory);
+    Std430BlockLayoutEncoderFactory std430EncoderFactory;
+    gl::ProgramLinkedResourcesLinker linker(&std430EncoderFactory);
 
     linker.linkResources(mState, resources);
 }
@@ -761,7 +761,7 @@ angle::Result ProgramMtl::createMslShaderLib(
             ss << translatedMslInfo->metalShaderSource;
             ss << "-----\n";
 
-            ERR() << ss.str();
+            //ERR() << ss.str();
             infoLog << ss.str();
 
             ANGLE_MTL_HANDLE_ERROR(context, ss.str().c_str(), GL_INVALID_OPERATION);

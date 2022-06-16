@@ -138,10 +138,11 @@ class GeneratePipelineStruct : private TIntermRebuild
 
         ModifiedStructMachineries modifiedMachineries;
         const bool isUBO    = mPipeline.type == Pipeline::Type::UniformBuffer;
+        const bool isUniform = mPipeline.type == Pipeline::Type::UniformBuffer || mPipeline.type == Pipeline::Type::UserUniforms;
         const bool modified = TryCreateModifiedStruct(
             mCompiler, mSymbolEnv, mIdGen, mPipeline.externalStructModifyConfig(), pipelineStruct,
             mPipeline.getStructTypeName(Pipeline::Variant::Modified), modifiedMachineries, isUBO,
-            !isUBO);
+            !isUniform);
 
         if (modified)
         {
