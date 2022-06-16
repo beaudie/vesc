@@ -166,6 +166,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c84b922_c1aebcd3",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T18:35:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fd8e20e_076f05b7",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 38
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44d8637f_a82320e0",
@@ -298,6 +322,30 @@
       "side": 1,
       "message": "That would be a better implementation and the thought did occur to me as well that we should use dynamic allocation to be safe. I didn\u0027t see it as a major risk so I didn\u0027t implement it. Will take another look unless you don\u0027t mind the small risk to testing-only code.",
       "parentUuid": "792d5828_3956ae0d",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8387629f_c8a961d7",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-16T18:35:10Z",
+      "side": 1,
+      "message": "Done\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3708602/1",
+      "parentUuid": "16713fb7_bed46c5a",
       "range": {
         "startLine": 39,
         "startChar": 4,
