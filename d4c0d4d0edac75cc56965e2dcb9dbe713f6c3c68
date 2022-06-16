@@ -71,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19c5efa1_0bc6f390",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-16T15:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc02f79c_e6c12da0",
+      "range": {
+        "startLine": 824,
+        "startChar": 0,
+        "endLine": 824,
+        "endChar": 40
+      },
+      "revId": "d4c0d4d0edac75cc56965e2dcb9dbe713f6c3c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1cefc97_c144a370",
@@ -84,6 +108,30 @@
       "writtenOn": "2022-06-14T19:31:30Z",
       "side": 1,
       "message": "Let\u0027s make this angle::Result (per discussion in \"Texture.cpp\")",
+      "range": {
+        "startLine": 271,
+        "startChar": 4,
+        "endLine": 271,
+        "endChar": 10
+      },
+      "revId": "d4c0d4d0edac75cc56965e2dcb9dbe713f6c3c68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64968b9f_14b6f950",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-16T15:40:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1cefc97_c144a370",
       "range": {
         "startLine": 271,
         "startChar": 4,

@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e57bee4_dee1805d",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-16T15:40:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18e94755_9a28d34e",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebf305f7_0cf7bd6f",
@@ -60,6 +78,29 @@
         "startChar": 0,
         "endLine": 1226,
         "endChar": 5
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "652453dc_1c21de3d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-16T15:40:38Z",
+      "side": 1,
+      "message": "Just want to confirm that the glObjectLabel/vkSetDebugUtilsObjectName handling should be gated by this AGI debug output flag.",
+      "range": {
+        "startLine": 2704,
+        "startChar": 58,
+        "endLine": 2704,
+        "endChar": 87
       },
       "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
