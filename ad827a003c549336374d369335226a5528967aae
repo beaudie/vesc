@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcf8ce6b_f212c404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-16T19:34:54Z",
+      "side": 1,
+      "message": "Great Work Faye! \n\nI talked to Shabi this morning, and here is one more change we would appreciate if you can make to this CL:\n\nIn the frontend context.cpp file, we can consider doing this for function `drawElementsInstancedBaseInstance()`:\n```\nvoid Context::drawElementsInstancedBaseInstance(PrimitiveMode mode,\n                                                GLsizei count,\n                                                DrawElementsType type,\n                                                const void *indices,\n                                                GLsizei instanceCount,\n                                                GLuint baseInstance)\n{\n    drawElementsInstancedBaseVertexBaseInstance(mode, count, type, indices, instanceCount, 0, baseInstance);\n}\n```\n\nThat way we direct the call to `drawElementsInstancedBaseInstance` to `drawElementsInstancedBaseVertexBaseInstance` in the frontend. And then in all the backend, ContextImpl.h, Context11,h, Context11.cpp, Context9.h, Context9.cpp, ContextGL.h, ContextGL.cpp, ContextMtl.h, ContextMtl.mm, ContextNULL.h, ContextNULL.cpp, ContextVk.h, ContextVk.cpp, we can remove the function definition and declaration for `drawElementsInstancedBaseInstance()`. That way your change is much cleaner.\n\nAgain thank you for all the hard work!\n\n",
+      "revId": "ad827a003c549336374d369335226a5528967aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb85d01a_0ef3c164",
         "filename": "src/libANGLE/validationGL4_autogen.h",
         "patchSetId": 11
