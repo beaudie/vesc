@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e7d4369_6638f7d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-16T18:26:38Z",
+      "side": 1,
+      "message": "LGTM and agree that the way that Chrome passes cmds to ANGLE can be greatly improved for GPU perf.",
+      "revId": "44c7b607068ad86e6368c9fa5cd5b727a34e721f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a3e4ef9_7ac18fba",
