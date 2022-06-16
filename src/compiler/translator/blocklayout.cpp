@@ -12,6 +12,7 @@
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "compiler/translator/Common.h"
+#include "compiler/translator/blocklayoutMetal.h"
 
 namespace sh
 {
@@ -159,6 +160,11 @@ size_t GetStd430BaseAlignment(GLenum variableType, bool isRowMajor)
     return ComponentAlignment(numComponents);
 }
 
+size_t GetMTLBaseAlignment(GLenum variableType, bool isRowMajor)
+{
+    return mtl::GetMetalAlignmentForGLType(variableType);
+}
+
 class BaseAlignmentVisitor : public ShaderVariableVisitor
 {
   public:
@@ -255,6 +261,10 @@ size_t BlockLayoutEncoder::GetBlockRegisterElement(const BlockMemberInfo &info)
 
 void BlockLayoutEncoder::align(size_t baseAlignment)
 {
+    if (baseAlignment == 0)
+    {
+        return;
+    }
     angle::base::CheckedNumeric<size_t> checkedOffset(mCurrentOffset);
     checkedOffset += baseAlignment;
     checkedOffset -= 1;
@@ -262,6 +272,7 @@ void BlockLayoutEncoder::align(size_t baseAlignment)
     checkedAlignmentOffset %= baseAlignment;
     checkedOffset -= checkedAlignmentOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
     mCurrentOffset = checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+    assert(mCurrentOffset >= 0);
 }
 
 // StubBlockEncoder implementation.
@@ -663,4 +674,154 @@ void TraverseShaderVariable(const ShaderVariable &variable,
         visitor->visitVariable(variable, isRowMajor);
     }
 }
+
+// BlockLayoutEncoder implementation.
+BlockLayoutEncoderMTL::BlockLayoutEncoderMTL() : BlockLayoutEncoder() {}
+
+void BlockLayoutEncoderMTL::getBlockLayoutInfo(GLenum type,
+                                               const std::vector<unsigned int> &arraySizes,
+                                               bool isRowMajorMatrix,
+                                               int *arrayStrideOut,
+                                               int *matrixStrideOut)
+{
+    size_t baseAlignment = 0;
+    int matrixStride     = 0;
+    int arrayStride      = 0;
+
+    if (gl::IsMatrixType(type))
+    {
+        baseAlignment = static_cast<int>(mtl::GetMetalAlignmentForGLType(type));
+        matrixStride  = static_cast<int>(mtl::GetMetalAlignmentForGLType(type));
+        if (!arraySizes.empty())
+        {
+            arrayStride = static_cast<int>(mtl::GetMetalSizeForGLType(type));
+        }
+    }
+    else if (!arraySizes.empty())
+    {
+        baseAlignment = static_cast<int>(mtl::GetMetalAlignmentForGLType(type));
+        arrayStride   = static_cast<int>(mtl::GetMetalSizeForGLType(type));
+    }
+    else
+    {
+        baseAlignment = mtl::GetMetalAlignmentForGLType(type);
+    }
+    align(baseAlignment);
+    *matrixStrideOut = matrixStride;
+    *arrayStrideOut  = arrayStride;
+}
+BlockMemberInfo BlockLayoutEncoderMTL::encodeType(GLenum type,
+                                                  const std::vector<unsigned int> &arraySizes,
+                                                  bool isRowMajorMatrix)
+{
+    int arrayStride;
+    int matrixStride;
+
+    getBlockLayoutInfo(type, arraySizes, isRowMajorMatrix, &arrayStride, &matrixStride);
+    const BlockMemberInfo memberInfo(static_cast<int>(mCurrentOffset),
+                                     static_cast<int>(arrayStride), static_cast<int>(matrixStride),
+                                     isRowMajorMatrix);
+    assert(memberInfo.offset >= 0);
+
+    advanceOffset(type, arraySizes, isRowMajorMatrix, arrayStride, matrixStride);
+
+    return memberInfo;
+}
+
+BlockMemberInfo BlockLayoutEncoderMTL::encodeArrayOfPreEncodedStructs(
+    size_t size,
+    const std::vector<unsigned int> &arraySizes)
+{
+    const unsigned int innerArraySizeProduct = gl::InnerArraySizeProduct(arraySizes);
+    const unsigned int outermostArraySize    = gl::OutermostArraySize(arraySizes);
+
+    // The size of struct is expected to be already aligned appropriately.
+    const size_t arrayStride = size * innerArraySizeProduct;
+
+    const BlockMemberInfo memberInfo(static_cast<int>(mCurrentOffset),
+                                     static_cast<int>(arrayStride), -1, false);
+
+    angle::base::CheckedNumeric<size_t> checkedOffset(arrayStride);
+    checkedOffset *= outermostArraySize;
+    checkedOffset += mCurrentOffset;
+    mCurrentOffset = checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+
+    return memberInfo;
+}
+
+size_t BlockLayoutEncoderMTL::getCurrentOffset() const
+{
+    angle::base::CheckedNumeric<size_t> checkedOffset(mCurrentOffset);
+    return checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+}
+
+void BlockLayoutEncoderMTL::enterAggregateType(const ShaderVariable &structVar)
+{
+    align(getBaseAlignment(structVar));
+}
+
+void BlockLayoutEncoderMTL::exitAggregateType(const ShaderVariable &structVar)
+{
+    align(getBaseAlignment(structVar));
+}
+
+size_t BlockLayoutEncoderMTL::getShaderVariableSize(const ShaderVariable &structVar,
+                                                    bool isRowMajor)
+{
+    size_t currentOffset = mCurrentOffset;
+    mCurrentOffset       = 0;
+    BlockEncoderVisitor visitor("", "", this);
+    enterAggregateType(structVar);
+    TraverseShaderVariables(structVar.fields, isRowMajor, &visitor);
+    exitAggregateType(structVar);
+    size_t structVarSize = getCurrentOffset();
+    mCurrentOffset       = currentOffset;
+    return structVarSize;
+}
+
+void BlockLayoutEncoderMTL::advanceOffset(GLenum type,
+                                          const std::vector<unsigned int> &arraySizes,
+                                          bool isRowMajorMatrix,
+                                          int arrayStride,
+                                          int matrixStride)
+{
+    if (!arraySizes.empty())
+    {
+        angle::base::CheckedNumeric<size_t> checkedOffset(arrayStride);
+        checkedOffset *= gl::ArraySizeProduct(arraySizes);
+        checkedOffset += mCurrentOffset;
+        mCurrentOffset = checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+    }
+    else if (gl::IsMatrixType(type))
+    {
+        angle::base::CheckedNumeric<size_t> checkedOffset;
+        checkedOffset = mtl::GetMetalSizeForGLType(type);
+        checkedOffset += mCurrentOffset;
+        mCurrentOffset = checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+    }
+    else
+    {
+        angle::base::CheckedNumeric<size_t> checkedOffset(mCurrentOffset);
+        checkedOffset += mtl::GetMetalSizeForGLType(type);
+        mCurrentOffset = checkedOffset.ValueOrDefault(std::numeric_limits<size_t>::max());
+    }
+}
+
+size_t BlockLayoutEncoderMTL::getBaseAlignment(const ShaderVariable &shaderVar) const
+{
+    if (shaderVar.isStruct())
+    {
+        BaseAlignmentVisitor visitor;
+        TraverseShaderVariables(shaderVar.fields, false, &visitor);
+        return visitor.getBaseAlignment();
+    }
+
+    return GetMTLBaseAlignment(shaderVar.type, shaderVar.isRowMajorLayout);
+}
+
+size_t BlockLayoutEncoderMTL::getTypeBaseAlignment(GLenum type, bool isRowMajorMatrix) const
+{
+    return GetMTLBaseAlignment(type, isRowMajorMatrix);
+}
+
 }  // namespace sh

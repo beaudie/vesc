@@ -137,11 +137,13 @@ class GeneratePipelineStruct : private TIntermRebuild
         }();
 
         ModifiedStructMachineries modifiedMachineries;
-        const bool isUBO    = mPipeline.type == Pipeline::Type::UniformBuffer;
+        const bool isUBO     = mPipeline.type == Pipeline::Type::UniformBuffer;
+        const bool isUniform = mPipeline.type == Pipeline::Type::UniformBuffer ||
+                               mPipeline.type == Pipeline::Type::UserUniforms;
         const bool modified = TryCreateModifiedStruct(
             mCompiler, mSymbolEnv, mIdGen, mPipeline.externalStructModifyConfig(), pipelineStruct,
             mPipeline.getStructTypeName(Pipeline::Variant::Modified), modifiedMachineries, isUBO,
-            !isUBO);
+            !isUniform);
 
         if (modified)
         {
@@ -776,7 +778,7 @@ class UpdatePipelineFunctions : private TIntermRebuild
                 for (const TField *field : mPipelineStruct.external->fields())
                 {
                     auto *var        = new TVariable(&mSymbolTable, field->name(), field->type(),
-                                              field->symbolType());
+                                                     field->symbolType());
                     auto *symbol     = new TIntermSymbol(var);
                     auto &accessNode = AccessField(*mPipelineMainLocalVar.internal, var->name());
                     auto *assignNode = new TIntermBinary(TOperator::EOpAssign, &accessNode, symbol);

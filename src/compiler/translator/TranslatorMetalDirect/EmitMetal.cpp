@@ -1143,13 +1143,16 @@ static std::map<Name, size_t> BuildExternalAttributeIndexMap(
             ++attributeIndex;  // TODO: Might need to increment more if shader var type is a matrix.
         }
 
-        const size_t cols = internalType.isMatrix() ? internalType.getCols() : 1;
+        const size_t cols =
+            (internalType.isMatrix() && !externalFields[externalIndex]->type()->isMatrix())
+                ? internalType.getCols()
+                : 1;
 
         for (size_t c = 0; c < cols; ++c)
         {
             const TField &externalField = *externalFields[externalIndex];
             const Name externalName     = Name(externalField);
-            ASSERT(!externalField.type()->isMatrix());
+            // ASSERT(!externalField.type()->isMatrix()); // Work around
 
             externalNameToAttributeIndex[externalName] = attributeIndex;
 
@@ -1262,20 +1265,20 @@ void GenMetalTraverser::emitStructDeclaration(const TType &type)
         mOut << ";\n";
     }
 
-    if (!mPipelineStructs.matches(structure, true, true))
-    {
-        MetalLayoutOfConfig layoutConfig;
-        layoutConfig.treatSamplersAsTextureEnv = true;
-        Layout layout                          = MetalLayoutOf(type, layoutConfig);
-        size_t pad = (kDefaultStructAlignmentSize - layout.sizeOf) % kDefaultStructAlignmentSize;
-        if (pad != 0)
-        {
-            emitIndentation();
-            mOut << "char ";
-            EmitName(mOut, mIdGen.createNewName("pad"));
-            mOut << "[" << pad << "];\n";
-        }
-    }
+    // if (!mPipelineStructs.matches(structure, true, true))
+    // {
+    //     MetalLayoutOfConfig layoutConfig;
+    //     layoutConfig.treatSamplersAsTextureEnv = true;
+    //     Layout layout                          = MetalLayoutOf(type, layoutConfig);
+    //     size_t pad = (kDefaultStructAlignmentSize - layout.sizeOf) % kDefaultStructAlignmentSize;
+    //     if (pad != 0)
+    //     {
+    //         emitIndentation();
+    //         mOut << "char ";
+    //         EmitName(mOut, mIdGen.createNewName("pad"));
+    //         mOut << "[" << pad << "];\n";
+    //     }
+    // }
 
     emitCloseBrace();
 }
