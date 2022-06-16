@@ -69,6 +69,24 @@
       "parentUuid": "812fd6af_88d32491",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e82a5bd_043931c8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-16T21:43:00Z",
+      "side": 1,
+      "message": "\u003e Would that work?\n\u003e That should work.\n\n1 small wrinkle, the spec does not require a context to be current when eglSurfaceAttrib is called",
+      "parentUuid": "1b8d883f_dce52ddd",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

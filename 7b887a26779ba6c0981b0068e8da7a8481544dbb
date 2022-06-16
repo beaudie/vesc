@@ -16,6 +16,24 @@
       "message": "nit: Why the `#if`?",
       "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ac3a46_a08b7324",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5335,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-16T21:43:00Z",
+      "side": 1,
+      "message": "`EGL_ANDROID_front_buffer_auto_refresh` on android is exposed by wrapper and not angle, which means there is no clean way to check for extension support and return error when extension is not supported (say on a windows machine)\n\ncompromise was - guard it within android macro and assume extension is always supported",
+      "parentUuid": "4ec4789f_ac2d11f8",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
