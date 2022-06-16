@@ -808,6 +808,14 @@ ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 3);
 
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 2, 2);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 3, 3);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 2, 3);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 3, 2);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 2, 4);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 3, 4);
+ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(Metal, 4, 3);
+
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 2, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 3, 3);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 2, 3);
@@ -837,6 +845,42 @@ ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 4);
 ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 4);
 
 #undef ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC
+
+#define ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(api, cols, rows) \
+    template void SetFloatUniformMatrix##api<cols, rows>::Run(             \
+        unsigned int, unsigned int, GLsizei, GLboolean, const GLfloat *, uint8_t *)
+
+template <int cols>
+struct SetFloatUniformMatrixMetal<cols, 4>
+{
+    static void Run(unsigned int arrayElementOffset,
+                    unsigned int elementCount,
+                    GLsizei countIn,
+                    GLboolean transpose,
+                    const GLfloat *value,
+                    uint8_t *targetData);
+};
+
+template <int cols>
+struct SetFloatUniformMatrixMetal<cols, 2>
+{
+    static void Run(unsigned int arrayElementOffset,
+                    unsigned int elementCount,
+                    GLsizei countIn,
+                    GLboolean transpose,
+                    const GLfloat *value,
+                    uint8_t *targetData);
+};
+
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 2, 4);
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 3, 4);
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 4, 4);
+
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 2, 2);
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 3, 2);
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(Metal, 4, 2);
+
+#undef ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC
 
 #define ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(api, cols, rows)                      \
     template void SetFloatUniformMatrix##api<4, rows>::Run(unsigned int, unsigned int, GLsizei, \
@@ -903,6 +947,79 @@ void SetFloatUniformMatrixGLSL<cols, rows>::Run(unsigned int arrayElementOffset,
     {
         SetFloatUniformMatrix<false, cols, rows, true, cols, 4>(arrayElementOffset, elementCount,
                                                                 countIn, value, targetData);
+    }
+}
+
+template <int cols>
+void SetFloatUniformMatrixMetal<cols, 4>::Run(unsigned int arrayElementOffset,
+                                              unsigned int elementCount,
+                                              GLsizei countIn,
+                                              GLboolean transpose,
+                                              const GLfloat *value,
+                                              uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (isSrcColumnMajor)
+    {
+        // Both src and dst matrixs are has same layout,
+        // a single memcpy updates all the matrices
+        constexpr size_t srcMatrixSize = sizeof(GLfloat) * cols * 4;
+        SetFloatUniformMatrixFast(arrayElementOffset, elementCount, countIn, srcMatrixSize, value,
+                                  targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        SetFloatUniformMatrix<false, cols, 4, true, cols, 4>(arrayElementOffset, elementCount,
+                                                             countIn, value, targetData);
+    }
+}
+
+template <int cols>
+void SetFloatUniformMatrixMetal<cols, 2>::Run(unsigned int arrayElementOffset,
+                                              unsigned int elementCount,
+                                              GLsizei countIn,
+                                              GLboolean transpose,
+                                              const GLfloat *value,
+                                              uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (isSrcColumnMajor)
+    {
+        // Both src and dst matrixs are has same layout,
+        // a single memcpy updates all the matrices
+        constexpr size_t srcMatrixSize = sizeof(GLfloat) * cols * 2;
+        SetFloatUniformMatrixFast(arrayElementOffset, elementCount, countIn, srcMatrixSize, value,
+                                  targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        SetFloatUniformMatrix<false, cols, 2, true, cols, 2>(arrayElementOffset, elementCount,
+                                                             countIn, value, targetData);
+    }
+}
+
+template <int cols, int rows>
+void SetFloatUniformMatrixMetal<cols, rows>::Run(unsigned int arrayElementOffset,
+                                                 unsigned int elementCount,
+                                                 GLsizei countIn,
+                                                 GLboolean transpose,
+                                                 const GLfloat *value,
+                                                 uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    constexpr size_t numRows    = rows == 3 ? 4 : rows;
+    // Metal expects matrix uniforms to be column-major, and each column is padded to 4 rows.
+    if (isSrcColumnMajor)
+    {
+        SetFloatUniformMatrix<true, cols, rows, true, cols, numRows>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
+    else
+    {
+        SetFloatUniformMatrix<false, cols, rows, true, cols, numRows>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
     }
 }
 
@@ -973,8 +1090,34 @@ void GetMatrixUniform(GLenum type, GLfloat *dataOut, const GLfloat *source, bool
     }
 }
 
+template void GetMatrixUniformMetal<GLint>(GLenum, GLint *, const GLint *, bool);
+template void GetMatrixUniformMetal<GLuint>(GLenum, GLuint *, const GLuint *, bool);
+
+void GetMatrixUniformMetal(GLenum type, GLfloat *dataOut, const GLfloat *source, bool transpose)
+{
+    int columns    = gl::VariableColumnCount(type);
+    int rows       = gl::VariableRowCount(type);
+    int rowsPerCol = rows == 3 ? 4 : rows;
+    for (GLint col = 0; col < columns; ++col)
+    {
+        for (GLint row = 0; row < rows; ++row)
+        {
+            GLfloat *outptr = dataOut + ((col * rows) + row);
+            const GLfloat *inptr =
+                transpose ? source + ((row * col) + col) : source + ((col * rowsPerCol) + row);
+            *outptr = *inptr;
+        }
+    }
+}
+
 template <typename NonFloatT>
 void GetMatrixUniform(GLenum type, NonFloatT *dataOut, const NonFloatT *source, bool transpose)
+{
+    UNREACHABLE();
+}
+
+template <typename NonFloatT>
+void GetMatrixUniformMetal(GLenum type, NonFloatT *dataOut, const NonFloatT *source, bool transpose)
 {
     UNREACHABLE();
 }

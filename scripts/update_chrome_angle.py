@@ -6,8 +6,7 @@
 #
 # update_chrome_angle.py:
 #   Helper script that copies ANGLE libraries into the Chromium Canary (on Windows and macOS)
-#   or Dev (on Linux) installed directory. Testing ANGLE this way is much faster than compiling
-#   Chromium from source. The script checks for the most recent build in a set of search paths,
+#   or Dev (on Linux) installed directory. Testing ANGLE this way is much faster than compiling #   Chromium from source. The script checks for the most recent build in a set of search paths,
 #   and copies that into:
 #
 #    - /opt/google/chrome-unstable on Linux
