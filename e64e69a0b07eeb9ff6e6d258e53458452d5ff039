@@ -128,6 +128,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a727e0_e0ee1ec8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8661,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5f52aad_a3c6aabc",
+      "range": {
+        "startLine": 8661,
+        "startChar": 15,
+        "endLine": 8661,
+        "endChar": 42
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19144f35_47cfada0",
@@ -175,6 +199,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d93f99a_c3a13faa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8664,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ba7ae3d_29b8eb2b",
+      "range": {
+        "startLine": 8664,
+        "startChar": 27,
+        "endLine": 8664,
+        "endChar": 37
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aaa0679_a6d413de",
@@ -188,6 +236,30 @@
       "writtenOn": "2022-06-15T18:43:00Z",
       "side": 1,
       "message": "Can you go ahead and call this depthOffset and stencilOffset?  It reads like a bool at first.",
+      "range": {
+        "startLine": 8695,
+        "startChar": 12,
+        "endLine": 8695,
+        "endChar": 23
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb498e8_b1f81c1f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8695,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3aaa0679_a6d413de",
       "range": {
         "startLine": 8695,
         "startChar": 12,
@@ -221,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "71af43a3_313eb84e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8696,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94313faf_dd84e394",
+      "range": {
+        "startLine": 8696,
+        "startChar": 24,
+        "endLine": 8696,
+        "endChar": 48
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69e09bcb_370c91c9",
@@ -234,6 +330,30 @@
       "writtenOn": "2022-06-15T18:43:00Z",
       "side": 1,
       "message": "These blocks could use some general comments to help future readers, like:\n// Read back depth values\n..\n// Read back stencil values\n..\n// Interleave the two\n..\n// Pack them to the destination",
+      "range": {
+        "startLine": 8717,
+        "startChar": 0,
+        "endLine": 8724,
+        "endChar": 75
+      },
+      "revId": "e64e69a0b07eeb9ff6e6d258e53458452d5ff039",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "262f1eb3_33db8069",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8724,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-16T01:07:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69e09bcb_370c91c9",
       "range": {
         "startLine": 8717,
         "startChar": 0,
