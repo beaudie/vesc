@@ -70,6 +70,24 @@
       "parentUuid": "a2a5349a_dbcdb89f",
       "revId": "385a261aa4f2ecb06133a92a76aa5817c52fa53b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198231a6_f11c79d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T15:55:36Z",
+      "side": 1,
+      "message": "Well, if you feel that \u003c1% of a typical angle_perftests runtime\n```\nshard #0 (runtime (5m 42s) + overhead (32s): 6m 14s)\nshard #1 test results\nshard #1 (runtime (5m 40s) + overhead (30s): 6m 10s)\n```\nis significant enough to outweigh the benefits I described then we should probably drop this test altogether as I still don\u0027t see what running this test separately achieves. Do you?\n\nNote: sorry if I didn\u0027t make it clear but I was never against removing this smoke test altogether if it doesn\u0027t seem useful - my objection was around removing something solely because it\u0027s getting in the way, which is why I asked if you had other reasons to remove it.",
+      "parentUuid": "48da5b70_77944654",
+      "revId": "385a261aa4f2ecb06133a92a76aa5817c52fa53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
