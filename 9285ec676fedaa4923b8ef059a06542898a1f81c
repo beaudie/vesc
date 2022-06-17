@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2d5a19e_99c166f2",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T00:20:43Z",
+      "side": 1,
+      "message": "WDYT about \"hasImageLoadANGLEBug7398\"? Did you not like the bug number or the lack of descriptiveness?",
+      "parentUuid": "cf2c53ec_47cb9ac1",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2b3dbe3c_99b07689",
         "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2022-06-16T17:43:10Z",
       "side": 1,
       "message": "Why is `return` disallowed?",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9316a97a_d696d9c8",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T00:20:43Z",
+      "side": 1,
+      "message": "Simply because GL_ARB_fragment_shader_interlock isn\u0027t allowed after a return from main.",
+      "parentUuid": "2b3dbe3c_99b07689",
       "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f57bf9d_32deb71f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1095,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T00:20:43Z",
+      "side": 1,
+      "message": "Done. I like this much better!",
+      "parentUuid": "00c85fe3_8a72bb33",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92d828f0_fdf6c665",
@@ -118,6 +172,30 @@
       "writtenOn": "2022-06-16T17:43:10Z",
       "side": 1,
       "message": "Please use this pattern instead:\n\n```\nconstexpr char kVS[] \u003d R\"(...)\";\nconstexpr char kFS[] \u003d R\"(...)\";\n\nANGLE_GL_PROGRAM(blitProgram, kVS, kFS);\n```\n\nThat creates the variable, calls `makeRaster` and asserts the program is valid.",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1137,
+        "endChar": 37
+      },
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "933cb257_64517c54",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T00:20:43Z",
+      "side": 1,
+      "message": "I ended up moving it into a helper method on the class. Does the new format look good?",
+      "parentUuid": "92d828f0_fdf6c665",
       "range": {
         "startLine": 1116,
         "startChar": 0,
@@ -159,6 +237,24 @@
       "side": 1,
       "message": "lambdas can work too IMO",
       "parentUuid": "472ed9d7_67c476d3",
+      "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38857d15_a8c5af4a",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1141,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T00:20:43Z",
+      "side": 1,
+      "message": "I initially put it in a MACRO so the __LINE__ output would be helpful for debugging, but this one is unruly. I kept the MACRO but moved most the logic to a helper function on the class. Does this work?",
+      "parentUuid": "26cf6bd2_0d921acf",
       "revId": "9285ec676fedaa4923b8ef059a06542898a1f81c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
