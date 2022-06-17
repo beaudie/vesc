@@ -102,6 +102,8 @@ Surface::Surface(EGLint surfaceType,
       mDepthStencilInitState(gl::InitState::Initialized),
       mImplObserverBinding(this, kSurfaceImplSubjectIndex)
 {
+    mId = sNextId.fetch_add(1);
+
     mPostSubBufferRequested =
         (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
 
@@ -617,10 +619,11 @@ bool Surface::isYUV() const
     return false;
 }
 
+std::atomic_uint32_t Surface::sNextId{1};
+
 GLuint Surface::getId() const
 {
-    UNREACHABLE();
-    return 0;
+    return mId;
 }
 
 Error Surface::getBufferAgeImpl(const gl::Context *context, EGLint *age) const
