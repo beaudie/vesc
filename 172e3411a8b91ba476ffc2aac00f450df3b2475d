@@ -177,6 +177,23 @@
       "parentUuid": "ee8a99a9_634a837e",
       "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c23cef2_2835b943",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1503927
+      },
+      "writtenOn": "2022-06-17T20:20:47Z",
+      "side": 1,
+      "message": "After chatting with vasiliy, I think we are all ok with limiting max texture size workaround to webgl context only?\n\nLooking into doing that for angle and probably need some help from geoff. So the workaround conditions is computed once per \"renderer\":\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/RendererGL.cpp;drc\u003d169c6cc102b39295a5bfe2f2a176b42b1c2fe2c4;l\u003d156\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/renderergl_utils.cpp;drc\u003d169c6cc102b39295a5bfe2f2a176b42b1c2fe2c4;l\u003d679\n\nwebgl is per \"context\" of course:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.h;drc\u003d7a85d114b5a37de93a0738491ffb7faf69b33469;l\u003d773\n\nAnd the validations will need to be different per-context as well. So the goal is to update limit the max sizes in Context\u0027s caps here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.cpp;drc\u003d06ff0e3cb062d523390639a8011307f9c153eec3;l\u003d3807\n\nWhich means we need to pass up whether the workaround is enabled from renderer to context. Looking around existing code paths, I think most natural place is add like maxWebGLTextureSize4096 to gl::Limitations:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Caps.h;drc\u003d169c6cc102b39295a5bfe2f2a176b42b1c2fe2c4;l\u003d110\n\nNot sure if that\u0027s what gl::Limitations is for though.",
+      "revId": "172e3411a8b91ba476ffc2aac00f450df3b2475d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
