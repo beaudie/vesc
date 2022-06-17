@@ -743,6 +743,34 @@ EGLBoolean EGLWindow::destroyImageKHR(Image image)
     return eglDestroyImageKHR(getDisplay(), image);
 }
 
+GLWindowBase::Surface EGLWindow::createPbufferSurface(const EGLint *attrib_list)
+{
+    return eglCreatePbufferSurface(getDisplay(), getConfig(), attrib_list);
+}
+
+EGLBoolean EGLWindow::destroySurface(Surface surface)
+{
+    return eglDestroySurface(getDisplay(), surface);
+}
+
+EGLBoolean EGLWindow::bindTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglBindTexImage(getDisplay(), surface, buffer);
+}
+
+EGLBoolean EGLWindow::releaseTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglReleaseTexImage(getDisplay(), surface, buffer);
+}
+
+bool EGLWindow::makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context)
+{
+    if (!draw && !read)
+        return makeCurrent(context);
+
+    return eglMakeCurrent(getDisplay(), draw, read, context) == EGL_TRUE;
+}
+
 bool EGLWindow::makeCurrent(EGLContext context)
 {
     if (isGLInitialized())
