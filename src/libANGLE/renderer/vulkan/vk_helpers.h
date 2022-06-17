@@ -1392,6 +1392,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     RenderPassSerial getRenderPassSerial() const { return mRenderPassSerial; }
 
+    void setQuery() { mHasAnyQuery = true; }
+    bool hasAnyQuery() const { return mHasAnyQuery; }
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
@@ -1438,6 +1441,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
+    bool mHasAnyQuery;
 
     // Transform feedback state
     gl::TransformFeedbackBuffersArray<VkBuffer> mTransformFeedbackCounterBuffers;
