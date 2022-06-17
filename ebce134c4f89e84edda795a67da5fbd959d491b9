@@ -359,6 +359,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed9ce7f9_06d8387a",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T15:26:07Z",
+      "side": 1,
+      "message": "I had `angle_restricted_traces \u003d [\"trex_200\"]` in gn args and then ran:\n```\n(cd out/Android; ./angle_perftests --gtest_filter\u003d\u0027*trex_200*\u0027 --verbose --local-output --warmup-loops\u003d1 --samples-per-test\u003d1)\n```\n\n\u003e IIRC there is a GN check that prevents us from generating files to the source dir\nMy code doesn\u0027t generate files to the source dir, but files from `src/` and `out/` end up in the same place when running _on an Android device_\n\nSo I did not test my patch on Linux; however I just tried and does seem to load the txt file correctly from this path:\n\n```\n% cat out/Debug/src/tests/restricted_traces/angle_trace_list.txt\ntrex_200\n```\n\nIt then fails the tests but so does `refs/changes/39/3690739/7` with these gn args:\n```\nuse_goma\u003dtrue\nbuild_angle_trace_perf_tests \u003d true\nangle_restricted_traces \u003d [\"trex_200\"]\n```\n\nLooks like #7 is trying to load `out/Debug/src/tests/restricted_traces/trex_200/trex_200.json` instead of `src/...` on Linux?\n\n(note that this probably works just fine on Android due to what I mentioned above, files from `src/` and `out/` end up in the same location on the device)\n\nWe might need to search for files in multiple locations (as `angle::FindTestDataPath` does?) to make this work correctly everywhere?",
+      "parentUuid": "eedaf365_73f82bc3",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "792d5828_3956ae0d",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 6
