@@ -3147,6 +3147,86 @@ TEST_P(ImageTestES3, ClearYUVAHB)
 }
 
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+TEST_P(ImageTestES3, AHBClearNotBeingPerformed)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+
+    const GLubyte kRed[] = {255, 0, 0, 255};
+    const GLubyte kBlack[] = {0, 0, 0, 0};
+
+    // Create one image backed by the AHB.
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage1;
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                              kDefaultAHBUsage, kDefaultAttribs,
+                                              {{kBlack, 4}}, &ahb, &ahbImage1);
+    GLTexture ahbTexture1;
+    createEGLImageTargetTexture2D(ahbImage1, ahbTexture1);
+
+    // Create one framebuffer backed by the AHB.
+    {
+        GLFramebuffer ahbFbo1;
+        glBindFramebuffer(GL_FRAMEBUFFER, ahbFbo1);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ahbTexture1, 0);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Draw fullscreen red.
+        drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
+        glFinish();
+    }
+
+    verifyResultAHB(ahb, {{kRed, 4}});
+
+    // Create a second image backed by the same AHB.
+    EGLImageKHR ahbImage2 = eglCreateImageKHR(window->getDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID, angle::android::AHardwareBufferToClientBuffer(ahb), kDefaultAttribs);
+    ASSERT_EGL_SUCCESS();
+    GLTexture ahbTexture2;
+    createEGLImageTargetTexture2D(ahbImage2, ahbTexture2);
+
+    // Create a second framebuffer which is again backed by the same AHB.
+    {
+        GLFramebuffer ahbFbo2;
+        glBindFramebuffer(GL_FRAMEBUFFER, ahbFbo2);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ahbTexture2, 0);
+        EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        glBindFramebuffer(GL_FRAMEBUFFER, ahbFbo2);
+
+        // Clear to transparent black.
+        glClear(GL_COLOR_BUFFER_BIT);
+        glFinish();
+
+        // From ANGLE and SwiftShader tracing, I see:
+        //
+        //   ANGLE   : EVENT: glClear(context = 1, mask = GL_COLOR_BUFFER_BIT)
+        //   SwiftShader: vkBeginCommandBuffer(VkCommandBuffer, const VkCommandBufferBeginInfo *) (VkCommandBuffer commandBuffer = 0x7cc9c9207480, const VkCommandBufferBeginInfo* pBeginInfo = 0x7cc95fe1b600)
+        //   SwiftShader: vkCmdPipelineBarrier(VkCommandBuffer, VkPipelineStageFlags, VkPipelineStageFlags, VkDependencyFlags, uint32_t, const VkMemoryBarrier *, uint32_t, const VkBufferMemoryBarrier *, uint32_t, const VkImageMemoryBarrier *) (VkCommandBuffer commandBuffer = 0x7cc9c9207480, VkPipelineStageFlags srcStageMask = 0x14000, VkPipelineStageFlags dstStageMask = 0x400, VkDependencyFlags dependencyFlags = 0, uint32_t memoryBarrierCount = 0, onst VkMemoryBarrier* pMemoryBarriers = 0x0, uint32_t bufferMemoryBarrierCount = 0, const VkBufferMemoryBarrier* pBufferMemoryBarriers = 0x0, uint32_t imageMemoryBarrierCount = 1, const VkImageMemoryBarrier* pImageMemoryBarriers = 0x7cc9c9211498)
+        //   ANGLE   : EVENT: glFinish(context = 1)
+        //   SwiftShader: vkEndCommandBuffer(VkCommandBuffer) (VkCommandBuffer commandBuffer = 0x7cc9c9207480)
+        //   SwiftShader: vkResetFences(VkDevice, uint32_t, const VkFence *) (VkDevice device = 0x7cc9601bf160, uint32_t fenceCount = 1, const VkFence* pFences = 0x7cc95fe1b340)
+        //   SwiftShader: vkQueueSubmit(VkQueue, uint32_t, const VkSubmitInfo *, VkFence) (VkQueue queue = 0x7ccae91d9040, uint32_t submitCount = 1, const VkSubmitInfo* pSubmits = 0x7cc9c9211498, VkFence fence = 0x7cc9994fa0b8)
+        //   SwiftShader: vkGetFenceStatus(VkDevice, VkFence) (VkDevice device = 0x7cc9601bf160, VkFence fence = 0x7cc9994fa0b8)
+        //   SwiftShader: vkResetCommandBuffer(VkCommandBuffer, VkCommandBufferResetFlags) (VkCommandBuffer commandBuffer = 0x7cc9c9207480, VkCommandBufferResetFlags flags = 0)
+        //
+        // where it looks like the clear is lost!
+    }
+
+    verifyResultAHB(ahb, {{kBlack, 4}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage1);
+    eglDestroyImageKHR(window->getDisplay(), ahbImage2);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
 // Test that RGBX data are preserved when importing from AHB.  Regression test for a bug in the
 // Vulkan backend where the image was cleared due to format emulation.
 TEST_P(ImageTestES3, RGBXAHBImportPreservesData)
