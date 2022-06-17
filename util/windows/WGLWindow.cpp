@@ -380,6 +380,18 @@ EGLBoolean WGLWindow::destroyImageKHR(Image image)
     return EGL_FALSE;
 }
 
+Surface WGLWindow::createPbufferSurface(const EGLint *attrib_list)
+{
+    std::cerr << "WGLWindow::destroyImageKHR not implemented.\n";
+    return EGL_FALSE;
+}
+
+EGLBoolean WGLWindow::destroySurface(Surface surface)
+{
+    std::cerr << "WGLWindow::destroyImageKHR not implemented.\n";
+    return EGL_FALSE;
+}
+
 bool WGLWindow::setSwapInterval(EGLint swapInterval)
 {
     if (!_wglSwapIntervalEXT || _wglSwapIntervalEXT(swapInterval) == FALSE)
