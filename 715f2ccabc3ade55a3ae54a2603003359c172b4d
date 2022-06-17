@@ -70,6 +70,24 @@
       "parentUuid": "6a08b92e_dedfdece",
       "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b865c653_f26c2bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-17T19:01:20Z",
+      "side": 1,
+      "message": "The app trace did sjhow regression, and I looked at on my pixel device and it appears due to GPU gets throttled down. If I force GPU clock, I am not seeing any perf difference. so I think this looks good to me. I will still trying to figure out why GPU utilization goes down as the side task here.",
+      "parentUuid": "1f0503a1_2d705ab6",
+      "revId": "715f2ccabc3ade55a3ae54a2603003359c172b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
