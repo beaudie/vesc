@@ -193,6 +193,8 @@ EGLSurface CreatePbufferSurface(Thread *thread,
     ANGLE_EGL_TRY_RETURN(thread, display->createPbufferSurface(configuration, attributes, &surface),
                          "eglCreatePbufferSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
+    ANGLE_CAPTURE_EGL(EGLCreatePbufferSurface, thread, attributes, surface);
+
     return static_cast<EGLSurface>(surface);
 }
 
@@ -308,8 +310,12 @@ EGLBoolean DestroySurface(Thread *thread, Display *display, Surface *eglSurface)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySurface",
                          GetDisplayIfValid(display), EGL_FALSE);
+
     ANGLE_EGL_TRY_RETURN(thread, display->destroySurface(eglSurface), "eglDestroySurface",
                          GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+
+    if (ValidateSurface(nullptr, display, eglSurface))
+        ANGLE_CAPTURE_EGL(EGLDestroySurface, thread, display, eglSurface);
 
     thread->setSuccess();
     return EGL_TRUE;
