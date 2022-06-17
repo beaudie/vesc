@@ -88,6 +88,14 @@ EGLBoolean KHRONOS_APIENTRY EGLReleaseTexImage(EGLDisplay display,
 {
     return gEGLWindow->releaseTexImage(surface, buffer);
 }
+
+EGLBoolean KHRONOS_APIENTRY EGLMakeCurrent(EGLDisplay display,
+                                           EGLSurface draw,
+                                           EGLSurface read,
+                                           EGLContext context)
+{
+    return gEGLWindow->makeCurrent(draw, read, context);
+}
 }  // namespace
 
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
@@ -130,6 +138,10 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
         if (strcmp(procName, "eglReleaseTexImage") == 0)
         {
             return reinterpret_cast<angle::GenericProc>(EGLReleaseTexImage);
+        }
+        if (strcmp(procName, "eglMakeCurrent") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(EGLMakeCurrent);
         }
         return gEGLWindow->getProcAddress(procName);
     }
