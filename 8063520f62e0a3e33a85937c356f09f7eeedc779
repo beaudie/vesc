@@ -87,6 +87,24 @@
       "parentUuid": "1b8d883f_dce52ddd",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2092093_fdf8cb9b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-17T19:34:51Z",
+      "side": 1,
+      "message": "Do we need the context? We already handle switch from and to single buffer mode with this method. Just need to change `mDesiredSwapchainPresentMode` to `vk::PresentMode::SharedContinuousRefreshKHR` and make sure `GetDesiredPresentMode()` handle both `vk::PresentMode::SharedDemandRefreshKHR` and `vk::PresentMode::SharedContinuousRefreshKHR` correctly.",
+      "parentUuid": "7e82a5bd_043931c8",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
