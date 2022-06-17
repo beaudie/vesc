@@ -50,6 +50,14 @@ angle::CallCapture CaptureEGLDestroyImage(gl::Context *context,
                                           egl::Display *display,
                                           egl::Image *image);
 
+angle::CallCapture CaptureEGLCreatePbufferSurface(gl::Context *context,
+                                                  const AttributeMap &attrib_list,
+                                                  egl::Surface *surface);
+
+angle::CallCapture CaptureEGLDestroySurface(gl::Context *context,
+                                            Display *display,
+                                            Surface *surface);
+
 }  // namespace egl
 
 #endif  // LIBANGLE_FRAME_CAPTURE_H_

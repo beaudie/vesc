@@ -61,6 +61,9 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
                          const AttribKHR *attrib_list) override;
     EGLBoolean destroyImage(Image image) override;
     EGLBoolean destroyImageKHR(Image image) override;
+    Surface createPbufferSurface(const EGLint *attrib_list) override;
+    EGLBoolean destroySurface(Surface surface) override;
+
 
     // Create a WGL context with this window's configuration
     HGLRC createContext(const ConfigParameters &configParams, HGLRC shareContext);
