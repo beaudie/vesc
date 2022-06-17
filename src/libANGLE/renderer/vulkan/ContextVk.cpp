@@ -565,6 +565,8 @@ constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPas
     {RenderPassClosureReason::EndNonRenderPassQuery,
      "Render pass closed due to non-render-pass query end"},
     {RenderPassClosureReason::TimestampQuery, "Render pass closed due to timestamp query"},
+    {RenderPassClosureReason::EndRenderPassQuery,
+     "Render pass closed due to switch from query enabled draw to query disabled draw"},
     {RenderPassClosureReason::GLReadPixels, "Render pass closed due to glReadPixels()"},
     {RenderPassClosureReason::BufferUseThenReleaseToExternal,
      "Render pass closed due to buffer (used by render pass) release to external"},
@@ -803,6 +805,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsPipelineDesc;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE] =
         &ContextVk::handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_END_RENDER_PASS_QUERY] =
+        &ContextVk::handleDirtyEndRenderPassQuery;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_RENDER_PASS]  = &ContextVk::handleDirtyGraphicsRenderPass;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_EVENT_LOG]    = &ContextVk::handleDirtyGraphicsEventLog;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_COLOR_ACCESS] = &ContextVk::handleDirtyGraphicsColorAccess;
@@ -1890,6 +1894,25 @@ angle::Result ContextVk::handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode(
     return updateRenderPassDepthFeedbackLoopModeImpl(dirtyBitsIterator, dirtyBitMask,
                                                      UpdateDepthFeedbackLoopReason::Draw,
                                                      UpdateDepthFeedbackLoopReason::Draw);
+}
+
+angle::Result ContextVk::handleDirtyEndRenderPassQuery(DirtyBits::Iterator *dirtyBitsIterator,
+                                                       DirtyBits dirtyBitMask)
+{
+    // When we switch from query enabled draw to query disabled draw, we do immediate flush to
+    // ensure the query result will be ready early so that application thread calling getQueryResult
+    // gets unblocked sooner.
+    ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::EndRenderPassQuery));
+
+    // flushImpl will add new dirty bits, we need to add these back to the later bits so that they
+    // can get processed for this draw call.
+    DirtyBits newDirtyBits = mGraphicsDirtyBits;
+    newDirtyBits.reset(DIRTY_BIT_END_RENDER_PASS_QUERY);
+    newDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+    newDirtyBits &= dirtyBitMask;
+    dirtyBitsIterator->setLaterBits(newDirtyBits);
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
@@ -7189,6 +7212,8 @@ angle::Result ContextVk::beginRenderPassQuery(QueryVk *queryVk)
     if (mRenderPassCommandBuffer)
     {
         ANGLE_TRY(queryVk->getQueryHelper()->beginRenderPassQuery(this));
+        // Remove the dirty bit since next draw call will have active query enabled
+        mGraphicsDirtyBits.reset(DIRTY_BIT_END_RENDER_PASS_QUERY);
     }
 
     // Update rasterizer discard emulation with primitives generated query if necessary.
@@ -7221,6 +7246,9 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
     if (mRenderPassCommandBuffer && queryVk->hasQueryBegun())
     {
         queryVk->getQueryHelper()->endRenderPassQuery(this);
+        // Set dirty bit so that we can detect and do something when a draw without active query is
+        // issued.
+        mGraphicsDirtyBits.set(DIRTY_BIT_END_RENDER_PASS_QUERY);
     }
 
     // Update rasterizer discard emulation with primitives generated query if necessary.
