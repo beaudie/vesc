@@ -54,6 +54,7 @@ enum class Feature
     CompressVertexData,
     CopyIOSurfaceToNonIOSurfaceForReadOptimization,
     CopyTextureToBufferForReadOptimization,
+    CreatePipelineDuringLink,
     DecodeEncodeSRGBForGenerateMipmap,
     DeferFlushUntilEndRenderPass,
     DepthClamping,
@@ -262,7 +263,6 @@ enum class Feature
     UseUnusedBlocksWithStandardOrSharedLayout,
     VertexIDDoesNotIncludeBaseVertex,
     WaitIdleBeforeSwapchainRecreation,
-    WarmUpPipelineCacheAtLink,
     ZeroMaxLodWorkaround,
 
     InvalidEnum,
