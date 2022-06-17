@@ -565,6 +565,8 @@ constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPas
     {RenderPassClosureReason::EndNonRenderPassQuery,
      "Render pass closed due to non-render-pass query end"},
     {RenderPassClosureReason::TimestampQuery, "Render pass closed due to timestamp query"},
+    {RenderPassClosureReason::SwitchFromQueryEnabledDrawToQueryDisabledDraw,
+     "Render pass closed due to switch from query enabled draw to query disabled draw"},
     {RenderPassClosureReason::GLReadPixels, "Render pass closed due to glReadPixels()"},
     {RenderPassClosureReason::BufferUseThenReleaseToExternal,
      "Render pass closed due to buffer (used by render pass) release to external"},
@@ -713,6 +715,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mHasDeferredFlush(false),
       mHasAnyCommandsPendingSubmission(false),
       mIsInFramebufferFetchMode(false),
+      mHasActiveQuery(false),
       mTotalBufferToImageCopySize(0),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
@@ -1272,6 +1275,20 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mXfbBaseVertex             = firstVertexOrInvalid;
         mXfbVertexCountPerInstance = vertexOrIndexCount;
         invalidateGraphicsDriverUniforms();
+    }
+
+    if (hasStartedRenderPassWithCommands())
+    {
+        if (mHasActiveQuery)
+        {
+            mRenderPassCommands->setQuery();
+        }
+        else if (mRenderPassCommands->hasAnyQuery())
+        {
+            ANGLE_TRY(flushImpl(
+                nullptr, RenderPassClosureReason::SwitchFromQueryEnabledDrawToQueryDisabledDraw));
+            mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
+        }
     }
 
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
@@ -7195,6 +7212,7 @@ angle::Result ContextVk::beginRenderPassQuery(QueryVk *queryVk)
 
     ASSERT(mActiveRenderPassQueries[type] == nullptr);
     mActiveRenderPassQueries[type] = queryVk;
+    mHasActiveQuery                = true;
 
     return angle::Result::Continue;
 }
@@ -7225,7 +7243,7 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 
     ASSERT(mActiveRenderPassQueries[type] == queryVk);
     mActiveRenderPassQueries[type] = nullptr;
-
+    mHasActiveQuery                = false;
     return angle::Result::Continue;
 }
 
