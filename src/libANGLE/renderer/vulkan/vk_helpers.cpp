@@ -1572,6 +1572,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mCounter(0),
       mClearValues{},
       mRenderPassStarted(false),
+      mHasAnyQuery(false),
       mTransformFeedbackCounterBuffers{},
       mTransformFeedbackCounterBufferOffsets{},
       mValidTransformFeedbackBufferCount(0),
@@ -1616,6 +1617,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mStencilResolveAttachment.reset();
 
     mRenderPassStarted                 = false;
+    mHasAnyQuery                       = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
     mHasShaderStorageOutput            = false;

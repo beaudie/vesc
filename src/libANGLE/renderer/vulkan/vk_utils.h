@@ -1156,6 +1156,7 @@ enum class RenderPassClosureReason
     BeginNonRenderPassQuery,
     EndNonRenderPassQuery,
     TimestampQuery,
+    SwitchFromQueryEnabledDrawToQueryDisabledDraw,
     GLReadPixels,
 
     // Synchronization
