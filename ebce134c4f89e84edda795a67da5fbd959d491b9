@@ -383,6 +383,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50738007_a70c1b8e",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T20:38:16Z",
+      "side": 1,
+      "message": "\u003e Looks like #7 is trying to load\n\u003e out/Debug/src/tests/restricted_traces/trex_200/trex_200.json  instead of  src/...  \u003e on Linux?\n\nYIKES. I think I now understand how that happened. That\u0027s because my patch created the directory `out/Debug/src/tests/restricted_traces`, and that was now being returned by `FindTraceTestDataPath`. When I checked out #7 to test, that directory was still there and that\u0027s what led to issues - and they persisted in `origin/main` until I realized what was going on \u003e_\u003c\n\nYeah this is fragile.. going to need to look into alternatives, placing file at root still sounds like a potential source of trouble to me but maybe \nwe can use `root/some_other_path` or find some other way to resolve the consequences of `{src} -\u003e {src, out}` that this approach creates.\n\nIn the mean time, Shabi and I thought it would be good to have https://crrev.com/c/3438425 as a stop-gap. Then this CL can be landed to improve the implementation.",
+      "parentUuid": "ed9ce7f9_06d8387a",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "792d5828_3956ae0d",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 6
