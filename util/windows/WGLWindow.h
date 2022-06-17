@@ -64,6 +64,8 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
     Surface createPbufferSurface(const EGLint *attrib_list) override;
     EGLBoolean destroySurface(Surface surface) override;
 
+    EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer) override;
+    EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) override;
 
     // Create a WGL context with this window's configuration
     HGLRC createContext(const ConfigParameters &configParams, HGLRC shareContext);

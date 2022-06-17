@@ -76,6 +76,18 @@ EGLBoolean KHRONOS_APIENTRY EGLDestroySurface(EGLDisplay display, EGLSurface sur
 {
     return gEGLWindow->destroySurface(surface);
 }
+
+EGLBoolean KHRONOS_APIENTRY EGLBindTexImage(EGLDisplay display, EGLSurface surface, EGLint buffer)
+{
+    return gEGLWindow->bindTexImage(surface, buffer);
+}
+
+EGLBoolean KHRONOS_APIENTRY EGLReleaseTexImage(EGLDisplay display,
+                                               EGLSurface surface,
+                                               EGLint buffer)
+{
+    return gEGLWindow->releaseTexImage(surface, buffer);
+}
 }  // namespace
 
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
@@ -110,6 +122,14 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
         if (strcmp(procName, "eglCreatePbufferSurface") == 0)
         {
             return reinterpret_cast<angle::GenericProc>(EGLCreatePbufferSurface);
+        }
+        if (strcmp(procName, "eglBindTexImage") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(EGLBindTexImage);
+        }
+        if (strcmp(procName, "eglReleaseTexImage") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(EGLReleaseTexImage);
         }
         return gEGLWindow->getProcAddress(procName);
     }
