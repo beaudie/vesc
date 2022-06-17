@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "917b89ba_2720de9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T14:26:24Z",
+      "side": 1,
+      "message": "Re: export, if ever needed we could export a C style wrapper using this function as implementation and handling the edge cases appropriately",
+      "revId": "ca96cba9c5dca3c6e901950ea02c01ccc4c51d4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
