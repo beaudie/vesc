@@ -16,6 +16,24 @@
       "message": "Thanks for upstreaming this fix Dan. The mac-angle-chromium-try failure looks like an unrelated flake; this can be ignored. The mac-test failure though is a real issue. Could you please build ANGLE standalone on your machine and try to reproduce it? It should be reproducible by building the angle_end2end_tests target and running:\n\nout/Release/angle_end2end_tests --gtest_filter\u003dTexture2DBaseMaxTestES3.Fuzz545ImmutableTexRenderFeedback/ES3_Metal\n\nNote though that this test is currently skipped on M1, possibly because of the issue you\u0027re fixing:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/angle_end2end_tests_expectations.txt;l\u003d282?q\u003dFuzz545ImmutableTexRenderFeedback\n\nso depending on which hardware you\u0027re developing on this might enail a little more work. Thanks in advance for getting this over the finish line.\n",
       "revId": "33c525c782107d2b40dc37a8b561d241bb386a19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3042570_be8e6b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-17T20:18:32Z",
+      "side": 1,
+      "message": "BTW the assertion failure in this test when run on M1 without this patch is:\n\nmtl_command_buffer.mm:1293 (encodeMetalEncoder): \t! Assert failed in encodeMetalEncoder (../../third_party/angle/src/libANGLE/renderer/metal/mtl_command_buffer.mm:1293): get()\nStack trace:\n0   angle_end2end_tests                 0x0000000101c3506c angle::(anonymous namespace)::TestPlatform_logError(angle::PlatformMethods*, char const*) + 80\n1   libGLESv2.dylib                     0x0000000107db6eb4 angle::LoggingAnnotator::logMessage(gl::LogMessage const\u0026) const + 136\n2   libGLESv2.dylib                     0x0000000108433db8 gl::LogMessage::~LogMessage() + 144\n3   libGLESv2.dylib                     0x00000001082f2108 rx::mtl::RenderCommandEncoder::encodeMetalEncoder() + 272\n4   libGLESv2.dylib                     0x00000001082f1f88 rx::mtl::RenderCommandEncoder::endEncodingImpl(bool) + 432\n5   libGLESv2.dylib                     0x00000001082b7c20 rx::ContextMtl::onDrawFrameBufferChangedState(gl::Context const*, rx::FramebufferMtl*, bool) + 488\n6   libGLESv2.dylib                     0x00000001082c2654 rx::FramebufferMtl::syncState(gl::Context const*, unsigned int, angle::BitSetT\u003c29ul, unsigned long long, unsigned long\u003e const\u0026, gl::Command) + 600\n7   libGLESv2.dylib                     0x0000000107d9d5c4 gl::Framebuffer::syncState(gl::Context const*, unsigned int, gl::Command) const + 100\n8   libGLESv2.dylib                     0x0000000107e1172c gl::State::syncDrawFramebuffer(gl::Context const*, gl::Command) + 268\n9   libGLESv2.dylib                     0x0000000107d1252c GL_DrawArrays + 1152",
+      "parentUuid": "b378b30e_de15aa74",
+      "revId": "33c525c782107d2b40dc37a8b561d241bb386a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
