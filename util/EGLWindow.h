@@ -126,6 +126,8 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
     virtual Surface createPbufferSurface(const EGLint *attrib_list)     = 0;
     virtual EGLBoolean destroySurface(Surface surface)                  = 0;
 
+    virtual EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer)    = 0;
+    virtual EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) = 0;
     bool isMultisample() const { return mConfigParams.multisample; }
     bool isDebugEnabled() const { return mConfigParams.debug; }
 
@@ -213,6 +215,8 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
     Surface createPbufferSurface(const EGLint *attrib_list) override;
     EGLBoolean destroySurface(Surface surface) override;
 
+    EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer) override;
+    EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) override;
     // Only initializes the Context.
     bool initializeContext();
 

@@ -71,6 +71,8 @@ EGLBoolean BindTexImage(Thread *thread, Display *display, Surface *eglSurface, E
         gl::Texture *textureObject = context->getTextureByType(type);
         ANGLE_EGL_TRY_RETURN(thread, eglSurface->bindTexImage(context, textureObject, buffer),
                              "eglBindTexImage", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
+
+        ANGLE_CAPTURE_EGL(EGLBindTexImage, thread, eglSurface, buffer);
     }
 
     thread->setSuccess();
@@ -601,6 +603,7 @@ EGLBoolean ReleaseTexImage(Thread *thread, Display *display, Surface *eglSurface
             ANGLE_EGL_TRY_RETURN(thread, eglSurface->releaseTexImage(thread->getContext(), buffer),
                                  "eglReleaseTexImage", GetSurfaceIfValid(display, eglSurface),
                                  EGL_FALSE);
+            ANGLE_CAPTURE_EGL(EGLBindTexImage, thread, eglSurface, buffer);
         }
     }
     thread->setSuccess();

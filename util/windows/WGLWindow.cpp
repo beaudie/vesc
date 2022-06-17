@@ -392,6 +392,18 @@ EGLBoolean WGLWindow::destroySurface(Surface surface)
     return EGL_FALSE;
 }
 
+EGLBoolean WGLWindow::bindTexImage(EGLSurface surface, EGLint buffer)
+{
+    std::cerr << "WGLWindow::destroyImageKHR not implemented.\n";
+    return EGL_FALSE;
+}
+
+EGLBoolean WGLWindow::releaseTexImage(EGLSurface surface, EGLint buffer)
+{
+    std::cerr << "WGLWindow::destroyImageKHR not implemented.\n";
+    return EGL_FALSE;
+}
+
 bool WGLWindow::setSwapInterval(EGLint swapInterval)
 {
     if (!_wglSwapIntervalEXT || _wglSwapIntervalEXT(swapInterval) == FALSE)
