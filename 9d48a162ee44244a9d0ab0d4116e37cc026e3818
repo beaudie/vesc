@@ -16,6 +16,121 @@
       "message": "Didn\u0027t manage to figure out the crash on GLES 31 yet. Probably some bad tests that need to be skipped.",
       "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79ee268e_9d92d266",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 10
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-17T14:22:16Z",
+      "side": 1,
+      "message": "Please remove this until the tests that crash the machines are skipped.",
+      "range": {
+        "startLine": 1098,
+        "startChar": 7,
+        "endLine": 1098,
+        "endChar": 38
+      },
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89015b63_139ddee7",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-17T14:22:16Z",
+      "side": 1,
+      "message": "I prefer to have LINUX here as well.\nI\u0027m thinking about running these tests on ChromeOS AMD. Maybe also on Windows.\nWe can have different failures on different drivers.",
+      "range": {
+        "startLine": 657,
+        "startChar": 5,
+        "endLine": 657,
+        "endChar": 15
+      },
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "186f946d_a1645098",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-17T14:22:16Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 322,
+        "startChar": 5,
+        "endLine": 322,
+        "endChar": 15
+      },
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d83fd66e_2ed9906a",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-17T14:22:16Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 778,
+        "startChar": 5,
+        "endLine": 778,
+        "endChar": 15
+      },
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "605f9e1c_ef82c314",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-17T14:22:16Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 293,
+        "startChar": 5,
+        "endLine": 293,
+        "endChar": 15
+      },
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
