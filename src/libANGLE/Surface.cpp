@@ -59,6 +59,16 @@ EGLint SurfaceState::getPreferredSwapInterval() const
     return attributes.getAsInt(EGL_SWAP_INTERVAL_ANGLE, 1);
 }
 
+uint32_t Surface::getNextId()
+{
+    // Can the first initialization of serialFactory result in a race condition,
+    // or is the first surface always created from a single thread code path?
+    static rx::AtomicSerialFactory serialFactory;
+    uint64_t id = serialFactory.generate().getValue();
+    ASSERT(id <= 0xffffffffull);
+    return static_cast<uint32_t>(id);
+}
+
 Surface::Surface(EGLint surfaceType,
                  const egl::Config *config,
                  const AttributeMap &attributes,
@@ -100,7 +110,8 @@ Surface::Surface(EGLint surfaceType,
       mIsDamageRegionSet(false),
       mColorInitState(gl::InitState::Initialized),
       mDepthStencilInitState(gl::InitState::Initialized),
-      mImplObserverBinding(this, kSurfaceImplSubjectIndex)
+      mImplObserverBinding(this, kSurfaceImplSubjectIndex),
+      mSerialId(getNextId())
 {
     mPostSubBufferRequested =
         (attributes.get(EGL_POST_SUB_BUFFER_SUPPORTED_NV, EGL_FALSE) == EGL_TRUE);
@@ -619,8 +630,7 @@ bool Surface::isYUV() const
 
 GLuint Surface::getId() const
 {
-    UNREACHABLE();
-    return 0;
+    return mSerialId;
 }
 
 Error Surface::getBufferAgeImpl(const gl::Context *context, EGLint *age) const

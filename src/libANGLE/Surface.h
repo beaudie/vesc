@@ -293,9 +293,12 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    static uint32_t getNextId();
+
     gl::InitState mColorInitState;
     gl::InitState mDepthStencilInitState;
     angle::ObserverBinding mImplObserverBinding;
+    uint32_t mSerialId;
 };
 
 class WindowSurface final : public Surface
