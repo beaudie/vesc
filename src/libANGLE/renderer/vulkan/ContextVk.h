@@ -783,6 +783,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // Dirty bits that must be processed before the render pass is started.  The handlers for
         // these dirty bits don't record any commands.
 
+        // the render pass query has been ended.
+        DIRTY_BIT_END_RENDER_PASS_QUERY,
         // A glMemoryBarrier has been called and command buffers may need flushing.
         DIRTY_BIT_MEMORY_BARRIER,
         // Update default attribute buffers.
@@ -1073,6 +1075,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode(
         DirtyBits::Iterator *dirtyBitsIterator,
         DirtyBits dirtyBitMask);
+    angle::Result handleDirtyEndRenderPassQuery(DirtyBits::Iterator *dirtyBitsIterator,
+                                                DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                 DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsEventLog(DirtyBits::Iterator *dirtyBitsIterator,
