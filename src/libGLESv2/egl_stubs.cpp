@@ -502,6 +502,8 @@ EGLBoolean MakeCurrent(Thread *thread,
             thread,
             display->makeCurrent(thread, previousContext, drawSurface, readSurface, context),
             "eglMakeCurrent", GetContextIfValid(display, context), EGL_FALSE);
+
+        ANGLE_CAPTURE_EGL(EGLMakeCurrent, thread, drawSurface, readSurface, context);
     }
 
     thread->setSuccess();

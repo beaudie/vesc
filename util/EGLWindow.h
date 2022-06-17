@@ -128,6 +128,9 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
 
     virtual EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer)    = 0;
     virtual EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) = 0;
+
+    virtual bool makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context) = 0;
+
     bool isMultisample() const { return mConfigParams.multisample; }
     bool isDebugEnabled() const { return mConfigParams.debug; }
 
@@ -217,6 +220,8 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 
     EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer) override;
     EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) override;
+    bool makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context) override;
+
     // Only initializes the Context.
     bool initializeContext();
 

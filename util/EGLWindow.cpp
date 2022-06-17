@@ -763,6 +763,14 @@ EGLBoolean EGLWindow::releaseTexImage(EGLSurface surface, EGLint buffer)
     return eglReleaseTexImage(getDisplay(), surface, buffer);
 }
 
+bool EGLWindow::makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context)
+{
+    if (!draw && !read)
+        return makeCurrent(context);
+
+    return eglMakeCurrent(getDisplay(), draw, read, context);
+}
+
 bool EGLWindow::makeCurrent(EGLContext context)
 {
     if (isGLInitialized())
