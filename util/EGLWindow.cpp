@@ -753,6 +753,16 @@ EGLBoolean EGLWindow::destroySurface(Surface surface)
     return eglDestroySurface(getDisplay(), surface);
 }
 
+EGLBoolean EGLWindow::bindTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglBindTexImage(getDisplay(), surface, buffer);
+}
+
+EGLBoolean EGLWindow::releaseTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglReleaseTexImage(getDisplay(), surface, buffer);
+}
+
 bool EGLWindow::makeCurrent(EGLContext context)
 {
     if (isGLInitialized())

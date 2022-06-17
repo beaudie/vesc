@@ -58,6 +58,14 @@ angle::CallCapture CaptureEGLDestroySurface(gl::Context *context,
                                             Display *display,
                                             Surface *surface);
 
+angle::CallCapture CaptureEGLBindTexImage(gl::Context *context,
+                                          egl::Surface *surface,
+                                          EGLint buffer);
+
+angle::CallCapture CaptureEGLReleaseTexImage(gl::Context *context,
+                                             egl::Surface *surface,
+                                             EGLint buffer);
+
 }  // namespace egl
 
 #endif  // LIBANGLE_FRAME_CAPTURE_H_
