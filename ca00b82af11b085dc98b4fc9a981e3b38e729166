@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "682d3711_19c873cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-17T20:00:09Z",
+      "side": 1,
+      "message": "And if there are future problems, please exclude the platform in this feature first: https://chromium-review.googlesource.com/c/angle/angle/+/3671977/48/src/libANGLE/renderer/vulkan/RendererVk.cpp#3609\n\nSome upcoming changes that are about to land will probably conflict with this revert, so things can get messy.",
+      "revId": "ca00b82af11b085dc98b4fc9a981e3b38e729166",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
