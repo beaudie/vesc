@@ -123,6 +123,24 @@
       "parentUuid": "b2092093_fdf8cb9b",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b9fac5_b32249b8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T23:41:49Z",
+      "side": 1,
+      "message": "note that having cotinuous refresh mode supported will mean we no longer have to call vulkan present (via swapImpl) in glFlush",
+      "parentUuid": "4365b53e_d5712713",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
