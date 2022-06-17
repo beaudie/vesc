@@ -193,6 +193,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreferSkippingInvalidateForEmulatedFormats,
      "preferSkippingInvalidateForEmulatedFormats"},
     {Feature::PreferSubmitAtFBOBoundary, "preferSubmitAtFBOBoundary"},
+    {Feature::PreferSubmitAtLastAnySamplePassedQuery, "preferSubmitAtLastAnySamplePassedQuery"},
     {Feature::PromotePackedFormatsTo8BitPerChannel, "promotePackedFormatsTo8BitPerChannel"},
     {Feature::ProvokingVertex, "provokingVertex"},
     {Feature::QueryCounterBitsGeneratesErrors, "queryCounterBitsGeneratesErrors"},

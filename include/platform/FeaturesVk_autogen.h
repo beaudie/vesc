@@ -760,6 +760,12 @@ struct FeaturesVk : FeatureSetBase
         "supports compute shader transcode etc format to bc format",
         &members,
     };
+
+    FeatureInfo preferSubmitAtLastAnySamplePassedQuery = {
+        "preferSubmitAtLastAnySamplePassedQuery", FeatureCategory::VulkanWorkarounds,
+        "Submit commands to driver when last GL_ANY_SAMPLES_PASSED query is made for performance "
+        "improvements.",
+        &members, "https://issuetracker.google.com/250706693"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
