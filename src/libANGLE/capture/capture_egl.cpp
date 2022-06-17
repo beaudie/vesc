@@ -222,4 +222,36 @@ angle::CallCapture CaptureEGLDestroySurface(gl::Context *context,
     return angle::CallCapture(angle::EntryPoint::EGLDestroySurface, std::move(paramBuffer));
 }
 
+angle::CallCapture CaptureEGLBindTexImage(gl::Context *context,
+                                          egl::Surface *surface,
+                                          EGLint buffer)
+{
+    angle::ParamBuffer paramBuffer;
+    paramBuffer.addValueParam("display", angle::ParamType::TEGLDisplay, EGL_NO_DISPLAY);
+
+    angle::ParamCapture paramImage("surface", angle::ParamType::TEGLSurface);
+    uint64_t surfaceID    = surface->getId();
+    EGLSurface eglSurface = reinterpret_cast<EGLContext>(surfaceID);
+    angle::SetParamVal<angle::ParamType::TEGLSurface, EGLSurface>(eglSurface, &paramImage.value);
+    paramBuffer.addParam(std::move(paramImage));
+    paramBuffer.addValueParam("buffer", angle::ParamType::TEGLint, buffer);
+    return angle::CallCapture(angle::EntryPoint::EGLBindTexImage, std::move(paramBuffer));
+}
+
+angle::CallCapture CaptureEGLReleaseTexImage(gl::Context *context,
+                                             egl::Surface *surface,
+                                             EGLint buffer)
+{
+    angle::ParamBuffer paramBuffer;
+    paramBuffer.addValueParam("display", angle::ParamType::TEGLDisplay, EGL_NO_DISPLAY);
+
+    angle::ParamCapture paramImage("surface", angle::ParamType::TEGLSurface);
+    uint64_t surfaceID    = surface->getId();
+    EGLSurface eglSurface = reinterpret_cast<EGLContext>(surfaceID);
+    angle::SetParamVal<angle::ParamType::TEGLSurface, EGLSurface>(eglSurface, &paramImage.value);
+    paramBuffer.addParam(std::move(paramImage));
+    paramBuffer.addValueParam("buffer", angle::ParamType::TEGLint, buffer);
+    return angle::CallCapture(angle::EntryPoint::EGLBindTexImage, std::move(paramBuffer));
+}
+
 }  // namespace egl
