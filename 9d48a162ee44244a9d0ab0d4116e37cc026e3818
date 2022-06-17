@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf0badb_3f0d3b7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-17T14:07:02Z",
+      "side": 1,
+      "message": "Didn\u0027t manage to figure out the crash on GLES 31 yet. Probably some bad tests that need to be skipped.",
+      "revId": "9d48a162ee44244a9d0ab0d4116e37cc026e3818",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
