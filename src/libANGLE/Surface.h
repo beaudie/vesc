@@ -296,6 +296,9 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     gl::InitState mColorInitState;
     gl::InitState mDepthStencilInitState;
     angle::ObserverBinding mImplObserverBinding;
+
+    static std::atomic_uint32_t sNextId;
+    uint32_t mId;
 };
 
 class WindowSurface final : public Surface
