@@ -335,6 +335,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eedaf365_73f82bc3",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-06-17T14:57:18Z",
+      "side": 1,
+      "message": "When you say \"it worked\", what test did you run? IIRC there is a GN check that prevents us from generating files to the source dir, but it could be something that doesn\u0027t show up in this particular case.\n\nLoading gets weird in that we have to add more paths to the list of search paths for loading data if we add subdirectories. I\u0027ll find that dir list and post it later.",
+      "parentUuid": "28354b27_a8c15240",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "792d5828_3956ae0d",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 6
