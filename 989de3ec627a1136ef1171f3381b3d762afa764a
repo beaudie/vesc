@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9eafe03_b7d5c8c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-17T19:54:10Z",
+      "side": 1,
+      "message": "Please make the tests actually run on the bots with this change:\n\n```\n-ANGLE_INSTANTIATE_TEST_ES3(DXT1CompressedTextureTestES3);\n+ANGLE_INSTANTIATE_TEST_ES3_AND(DXT1CompressedTextureTestES3,\n+   ES3_VULKAN().enable(angle::Feature::ForceRobustResourceInit));\n```\n\nIf there are unrelated bugs surfaced from that, just suppress them.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 75
+      },
+      "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "efb03262_4aea625d",
