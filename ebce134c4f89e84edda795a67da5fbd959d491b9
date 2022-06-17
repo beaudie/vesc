@@ -190,6 +190,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bc2ea06_2db684a3",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T14:34:58Z",
+      "side": 1,
+      "message": "Sorry I wasn\u0027t very clear, yeah what you did is what I had in mind - using full path instead of relying on cwd and relative location. #7 looks good.",
+      "parentUuid": "8c84b922_c1aebcd3",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 260,
+        "endChar": 38
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44d8637f_a82320e0",
@@ -287,6 +311,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28354b27_a8c15240",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T14:34:58Z",
+      "side": 1,
+      "message": "Sorry about the back and forth but this still isn\u0027t clear to me..\n\nSo I did test my https://paste.googleplex.com/4702139419983872?raw and it worked. What appears to happen is `src/relative_path` seems to get merged with `out/relative_path` and that looks like reasonable behavior to me. So I\u0027m not sure what you mean by \"loading got weird\"?",
+      "parentUuid": "6c4f51a7_72c9e3c5",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "792d5828_3956ae0d",
         "filename": "util/capture/frame_capture_test_utils.cpp",
         "patchSetId": 6
@@ -346,6 +394,30 @@
       "side": 1,
       "message": "Done\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3708602/1",
       "parentUuid": "16713fb7_bed46c5a",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 43
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "610450eb_eb4357a7",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-17T14:34:58Z",
+      "side": 1,
+      "message": "Thanks! Yeah testing-only code is kind of gray area but there\u0027s value in having core functionality robust when possible so that we don\u0027t end up blind to silent failures.",
+      "parentUuid": "8387629f_c8a961d7",
       "range": {
         "startLine": 39,
         "startChar": 4,
