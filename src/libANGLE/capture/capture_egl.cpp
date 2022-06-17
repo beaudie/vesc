@@ -254,4 +254,27 @@ angle::CallCapture CaptureEGLReleaseTexImage(gl::Context *context,
     return angle::CallCapture(angle::EntryPoint::EGLBindTexImage, std::move(paramBuffer));
 }
 
+angle::CallCapture CaptureEGLMakeCurrent(gl::Context *dummy,
+                                         Surface *drawSurface,
+                                         Surface *readSurface,
+                                         gl::Context *context)
+{
+    angle::ParamBuffer paramBuffer;
+    paramBuffer.addValueParam("display", angle::ParamType::TEGLDisplay, EGL_NO_DISPLAY);
+
+    uint64_t drawSurfaceID    = drawSurface ? drawSurface->getId() : 0;
+    EGLSurface eglDrawSurface = reinterpret_cast<EGLContext>(drawSurfaceID);
+    paramBuffer.addValueParam("draw", angle::ParamType::TEGLSurface, eglDrawSurface);
+
+    uint64_t readSurfaceID    = readSurface ? readSurface->getId() : 0;
+    EGLSurface eglReadSurface = reinterpret_cast<EGLContext>(readSurfaceID);
+    paramBuffer.addValueParam("read", angle::ParamType::TEGLSurface, eglReadSurface);
+
+    uint64_t contextID    = context->id().value;
+    EGLContext eglContext = reinterpret_cast<EGLContext>(contextID);
+    paramBuffer.addValueParam("context", angle::ParamType::TEGLContext, eglContext);
+
+    return angle::CallCapture(angle::EntryPoint::EGLMakeCurrent, std::move(paramBuffer));
+}
+
 }  // namespace egl
