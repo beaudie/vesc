@@ -64,6 +64,18 @@ EGLBoolean KHRONOS_APIENTRY EGLDestroyImageKHR(EGLDisplay display, EGLImage imag
 {
     return gEGLWindow->destroyImageKHR(image);
 }
+
+EGLSurface KHRONOS_APIENTRY EGLCreatePbufferSurface(EGLDisplay display,
+                                                    EGLConfig *config,
+                                                    const EGLint *attrib_list)
+{
+    return gEGLWindow->createPbufferSurface(attrib_list);
+}
+
+EGLBoolean KHRONOS_APIENTRY EGLDestroySurface(EGLDisplay display, EGLSurface surface)
+{
+    return gEGLWindow->destroySurface(surface);
+}
 }  // namespace
 
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
@@ -90,6 +102,14 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
         if (strcmp(procName, "eglDestroyImageKHR") == 0)
         {
             return reinterpret_cast<angle::GenericProc>(EGLDestroyImageKHR);
+        }
+        if (strcmp(procName, "eglDestroySurface") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(EGLDestroySurface);
+        }
+        if (strcmp(procName, "eglCreatePbufferSurface") == 0)
+        {
+            return reinterpret_cast<angle::GenericProc>(EGLCreatePbufferSurface);
         }
         return gEGLWindow->getProcAddress(procName);
     }
