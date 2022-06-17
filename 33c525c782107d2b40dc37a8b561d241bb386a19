@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b378b30e_de15aa74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-17T20:14:39Z",
+      "side": 1,
+      "message": "Thanks for upstreaming this fix Dan. The mac-angle-chromium-try failure looks like an unrelated flake; this can be ignored. The mac-test failure though is a real issue. Could you please build ANGLE standalone on your machine and try to reproduce it? It should be reproducible by building the angle_end2end_tests target and running:\n\nout/Release/angle_end2end_tests --gtest_filter\u003dTexture2DBaseMaxTestES3.Fuzz545ImmutableTexRenderFeedback/ES3_Metal\n\nNote though that this test is currently skipped on M1, possibly because of the issue you\u0027re fixing:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/angle_end2end_tests_expectations.txt;l\u003d282?q\u003dFuzz545ImmutableTexRenderFeedback\n\nso depending on which hardware you\u0027re developing on this might enail a little more work. Thanks in advance for getting this over the finish line.\n",
+      "revId": "33c525c782107d2b40dc37a8b561d241bb386a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
