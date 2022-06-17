@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0730c33a_eface76e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-06-17T21:31:37Z",
+      "side": 1,
+      "message": "Thanks Faye! Great work.\nLGTM. As per the discussion in the group, let\u0027s disable the failing tests on the D3D backend for the dynamic draw cases and file a bug for it. The tests can be added to `angle_end2end_tests_expectations.txt` and `capture_replay_expectations.txt` to be skipped.",
+      "revId": "27f443ceb59f8e293abc48304f19d9d016350710",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
