@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26f2220c_888e11d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T22:12:40Z",
+      "side": 1,
+      "message": "squashed the revert into this change\n\nwill wait for shabi\u0027s response to \"mip level\" comment before landing",
+      "revId": "2c93c9e2bd5f0c99aa98206d47b37c1b7817063c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
