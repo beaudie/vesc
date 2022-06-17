@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c7e099c_34208590",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T20:26:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e992e131_5792dc44",
+      "range": {
+        "startLine": 80,
+        "startChar": 34,
+        "endLine": 80,
+        "endChar": 56
+      },
+      "revId": "cedc02fcf314fa8e1d66fad71fa0f23eff005bfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7eb55ad_bb531ab0",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-15T23:29:55Z",
       "side": 1,
       "message": "recitfying possible typo from earlier change\n\ncc antonio for comment",
+      "range": {
+        "startLine": 1100,
+        "startChar": 70,
+        "endLine": 1100,
+        "endChar": 92
+      },
+      "revId": "cedc02fcf314fa8e1d66fad71fa0f23eff005bfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4aa39c_4ced344f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T20:26:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e7eb55ad_bb531ab0",
       "range": {
         "startLine": 1100,
         "startChar": 70,

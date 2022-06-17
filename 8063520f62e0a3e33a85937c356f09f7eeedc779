@@ -105,6 +105,24 @@
       "parentUuid": "7e82a5bd_043931c8",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4365b53e_d5712713",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T20:26:14Z",
+      "side": 1,
+      "message": "when are we actually going to recreate the swapchain then?",
+      "parentUuid": "b2092093_fdf8cb9b",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
