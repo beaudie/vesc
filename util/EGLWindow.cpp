@@ -743,19 +743,77 @@ EGLBoolean EGLWindow::destroyImageKHR(Image image)
     return eglDestroyImageKHR(getDisplay(), image);
 }
 
-bool EGLWindow::makeCurrent(EGLContext context)
+GLWindowBase::Surface EGLWindow::createPbufferSurface(const EGLint *attrib_list)
 {
+    return eglCreatePbufferSurface(getDisplay(), getConfig(), attrib_list);
+}
+
+EGLBoolean EGLWindow::destroySurface(Surface surface)
+{
+    return eglDestroySurface(getDisplay(), surface);
+}
+
+EGLBoolean EGLWindow::bindTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglBindTexImage(getDisplay(), surface, buffer);
+}
+
+EGLBoolean EGLWindow::releaseTexImage(EGLSurface surface, EGLint buffer)
+{
+    return eglReleaseTexImage(getDisplay(), surface, buffer);
+}
+
+bool EGLWindow::makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context)
+{
+    if (context != EGL_NO_CONTEXT)
+    {
+        // If the draw buffer is EGL_NO_SURFACE and a context is given, then we use mSurface for
+        // the draw buffer because we didn't add mSurface to gSurfaceMap, and as long as we don't
+        // support capture/replay with a surfaceless context it is the most likely case that we
+        // actually wanted the default surface here.- Likewise for the read buffer.
+        //
+        // Note that if we want to support capture/replay with a surfaceless context then
+        // we have to identify and handle the case of a valid context and EGL_NO_SURFACE for both
+        // surfaces.
+
+        if (draw == EGL_NO_SURFACE)
+        {
+            draw = mSurface;
+        }
+
+        if (read == EGL_NO_SURFACE)
+        {
+            read = mSurface;
+        }
+    }
+    else
+    {
+        if (draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE)
+        {
+            // EGL 1.5, Section 3.7.3: If ctx is EGL_NO_CONTEXT and either draw or read
+            // are not EGL_NO_SURFACE, an EGL_BAD_MATCH error is generated.
+            fprintf(stderr,
+                    "eglMakeCurrent: EGL_NO_CONTEXT was given, but the draw and the"
+                    "read buffer where not both EGL_NO_SURFACE\n");
+            return false;
+        }
+    }
+
     if (isGLInitialized())
     {
-        if (eglMakeCurrent(mDisplay, mSurface, mSurface, context) == EGL_FALSE ||
+        if (eglMakeCurrent(mDisplay, draw, read, context) == EGL_FALSE ||
             eglGetError() != EGL_SUCCESS)
         {
             fprintf(stderr, "Error during eglMakeCurrent.\n");
             return false;
         }
     }
-
     return true;
+}
+
+bool EGLWindow::makeCurrent(EGLContext context)
+{
+    return makeCurrent(mSurface, mSurface, context);
 }
 
 bool EGLWindow::setSwapInterval(EGLint swapInterval)
