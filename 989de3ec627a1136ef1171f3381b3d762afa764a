@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3b4c44c8_9dd29850",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T20:20:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9eafe03_b7d5c8c3",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 75
+      },
+      "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "efb03262_4aea625d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,23 @@
       "writtenOn": "2022-06-17T19:00:02Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677f76fb_37245f02",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7537,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-17T20:20:55Z",
+      "side": 1,
+      "message": "Is it intentional that we never initialize any other mip level but claim robust resource init as done?",
       "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
