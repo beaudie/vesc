@@ -66,6 +66,7 @@ class ANGLE_UTIL_EXPORT WGLWindow : public GLWindowBase
 
     EGLBoolean bindTexImage(EGLSurface surface, EGLint buffer) override;
     EGLBoolean releaseTexImage(EGLSurface surface, EGLint buffer) override;
+    bool makeCurrent(EGLSurface draw, EGLSurface read, EGLContext context) override;
 
     // Create a WGL context with this window's configuration
     HGLRC createContext(const ConfigParameters &configParams, HGLRC shareContext);
