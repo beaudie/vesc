@@ -16,6 +16,24 @@
       "message": "I can file a bug for this once the CL lands.",
       "revId": "efb471ef5a1baade318697542d66ff28d2b37937",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "732a3905_778bf2cb",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-17T22:09:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93c39202_05579437",
+      "revId": "efb471ef5a1baade318697542d66ff28d2b37937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
