@@ -195,6 +195,24 @@
       "parentUuid": "cd39d689_a116244a",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4959e59e_012874cf",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-18T00:51:28Z",
+      "side": 1,
+      "message": "\u003e implementation still has to make that call because of Android WSI specialty to queueBuffer/dequeueBuffer\n\ni am a little confused, the spec states -\n If attribute is EGL_ANDROID_front_buffer_auto_refresh, then value specifies\n whether to enable or disable auto-refresh in the Android compositor when\n doing front-buffer rendering.\n \nIIUC, whenever it is time to update the display (say near vsync boundary) if SF knows that an app\u0027s window is in auto-refresh mode the spec states that SF must pull in latest content from app.\n\nAlso, in single buffer mode queueBuffer / dequeueBuffer is not that meaningful since swapchain image count will be 1",
+      "parentUuid": "aa425d64_a13c2016",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
