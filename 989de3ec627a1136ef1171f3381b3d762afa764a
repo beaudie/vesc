@@ -80,6 +80,24 @@
       "message": "Is it intentional that we never initialize any other mip level but claim robust resource init as done?",
       "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b1e912_b1c8f739",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-18T01:16:12Z",
+      "side": 1,
+      "message": "This function should be called once per level (indicated in `index`). No, it\u0027s a bug if in the end the whole image is not initialized.",
+      "parentUuid": "677f76fb_37245f02",
+      "revId": "989de3ec627a1136ef1171f3381b3d762afa764a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
