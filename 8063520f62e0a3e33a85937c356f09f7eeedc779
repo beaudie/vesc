@@ -177,6 +177,24 @@
       "parentUuid": "69fc4f6d_1b922290",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa425d64_a13c2016",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-18T00:41:54Z",
+      "side": 1,
+      "message": "You are right that app no longer needs to call swap, however, implementation still has to make that call because of Android WSI specialty to queueBuffer/dequeueBuffer. demand v.s. auto would hint the platform presentation engine to choose to do IPC binder call for them or short-cut within the app side.\n\nThe overhead of this is trivial when in auto refresh mode.\n\nHere\u0027s also some docs for the mesa egl implementation: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/third_party/mesa/include/GL/internal/dri_interface.h;l\u003d2108",
+      "parentUuid": "cd39d689_a116244a",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
