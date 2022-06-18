@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2451e1aa_a51c8685",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-18T01:14:27Z",
+      "side": 1,
+      "message": "nit: please add another line `Bug: angleproject:7441` under `Bug: angleproject:6983`. So that when you check in this CL, those two tickets get an update comment automatically.",
+      "revId": "be78841faff9b7d1be4a2e30426474a193448164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d7ba827c_e7d61fa5",
