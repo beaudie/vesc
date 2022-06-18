@@ -159,6 +159,24 @@
       "parentUuid": "62b9fac5_b32249b8",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd39d689_a116244a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-18T00:30:16Z",
+      "side": 1,
+      "message": "\u003e I thought mode change triggers the swap\n\nthis assumes app keeps calling swap. check for the following sequence -\n\n1. switch to single buffer mode\n2. call swap\n3. some time later, enable auto refresh\n4. flush (no more swaps from app)\n\nat this point we are relying on behavior introduced by method \"WindowSurfaceVk::onSharedPresentContextFlush\", which forces a swap inside a flush. (to truly support auto refresh we need to update this method to take into account auto refresh mode as well)",
+      "parentUuid": "69fc4f6d_1b922290",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
