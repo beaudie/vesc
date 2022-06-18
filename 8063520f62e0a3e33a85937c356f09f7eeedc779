@@ -213,6 +213,24 @@
       "parentUuid": "aa425d64_a13c2016",
       "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b58f0d5_1e809090",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1363,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-18T04:45:44Z",
+      "side": 1,
+      "message": "To be honest, the intention is to make the implementation easier. After app enables auto-refresh which triggers angle swapchain recreate, upon app glFlush, angle is still required to present once for the 1st flush. After that, the glFlush \u003d\u003e vkQueueSubmit.\n\nPer spec:\n\u003e VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR ... The application is only required to make one initial presentation request, after which the presentation engine must update the current image without any need for further presentation requests. The application can indicate the image contents have been updated by making a presentation request, but this does not guarantee the timing of when it will be updated. This mode may result in visible tearing if rendering to the image is not timed correctly.\n\nPer extension issue:\n\u003e 9) What should subsequent calls to vkQueuePresentKHR for VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR swapchains be defined to do?\n\u003e \n\u003e RESOLVED: State that implementations may use it as a hint for updated content.\n\nAndroid WSI doesn\u0027t use follow up present calls as hints, but other compositor might respect it, and will consume the gpu out-fence to make wiser decision if needed.",
+      "parentUuid": "4959e59e_012874cf",
+      "revId": "8063520f62e0a3e33a85937c356f09f7eeedc779",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
