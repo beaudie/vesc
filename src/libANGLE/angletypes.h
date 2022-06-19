@@ -205,6 +205,9 @@ struct Box
     bool coversSameExtent(const Extents &size) const;
 
     bool contains(const Box &other) const;
+    bool isAdjacent(const Box &other) const;
+    void merge(const Box &other);
+    void grow(const Box &other);
 
     int x;
     int y;

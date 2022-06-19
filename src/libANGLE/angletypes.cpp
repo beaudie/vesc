@@ -873,6 +873,51 @@ bool Box::contains(const Box &other) const
            y + height >= other.y + other.height && z + depth >= other.z + other.depth;
 }
 
+bool Box::isAdjacent(const Box &other) const
+{
+    const bool xCoordSame = x == other.x && width == other.width;
+    const bool yCoordSame = y == other.y && height == other.height;
+    const bool zCoordSame = z == other.z && depth == other.depth;
+
+    const bool shareOneXCoord = (x == other.x + other.width) || (x + width == other.x);
+    const bool shareOneYCoord = (y == other.y + other.height) || (y + height == other.y);
+    const bool shareOneZCoord = (z == other.z + other.depth) || (z + depth == other.z);
+
+    return (!xCoordSame && shareOneXCoord && yCoordSame && zCoordSame) ||
+           (!yCoordSame && shareOneYCoord && xCoordSame && zCoordSame) ||
+           (!zCoordSame && shareOneZCoord && xCoordSame && yCoordSame);
+}
+
+void Box::merge(const Box &other)
+{
+    int newX = std::min(x, other.x);
+    int newY = std::min(y, other.y);
+    int newZ = std::min(z, other.z);
+    width    = std::max(x + width, other.x + other.width) - newX;
+    height   = std::max(y + height, other.y + other.height) - newY;
+    depth    = std::max(z + depth, other.z + other.depth) - newZ;
+    x        = newX;
+    y        = newY;
+    z        = newZ;
+}
+
+void Box::grow(const Box &other)
+{
+    // There are many ways to grow a box to accommodate the other box, for example we can perform a
+    // non trivial union, when possible, to get a new box as long as the area of the
+    // resulting box is larger than either of the original boxes.
+    //
+    // For simplicity - check boxes for adjacency and merge, otherwise copy over other box's values.
+    if (isAdjacent(other))
+    {
+        merge(other);
+    }
+    else
+    {
+        *this = other;
+    }
+}
+
 bool operator==(const Offset &a, const Offset &b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z;
