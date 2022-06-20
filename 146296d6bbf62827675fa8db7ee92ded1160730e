@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ab1cc09_d598f323",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8673,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4df90eeb_63b9ff45",
+      "range": {
+        "startLine": 8671,
+        "startChar": 0,
+        "endLine": 8673,
+        "endChar": 0
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7a35543_d47055b6",
@@ -89,6 +113,30 @@
       "writtenOn": "2022-06-16T14:33:14Z",
       "side": 1,
       "message": "nit: use const \u0026",
+      "range": {
+        "startLine": 8687,
+        "startChar": 9,
+        "endLine": 8691,
+        "endChar": 0
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad2f674e_f19cf2cd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8691,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7a35543_d47055b6",
       "range": {
         "startLine": 8687,
         "startChar": 9,
@@ -124,6 +172,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9601bd2c_9805a438",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8715,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Scratch buffers are owned by gl::Context, which I didn\u0027t find how we\u0027d get from ContextImpl (which ContextVk is) other than having it be passed explicitly",
+      "parentUuid": "f85c37f9_122e7a84",
+      "range": {
+        "startLine": 8715,
+        "startChar": 8,
+        "endLine": 8715,
+        "endChar": 13
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f0d8917_1953d9bb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -135,6 +207,30 @@
       "writtenOn": "2022-06-16T14:33:14Z",
       "side": 1,
       "message": "see below",
+      "range": {
+        "startLine": 8724,
+        "startChar": 8,
+        "endLine": 8724,
+        "endChar": 13
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f68d9a3_d5294e89",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8724,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f0d8917_1953d9bb",
       "range": {
         "startLine": 8724,
         "startChar": 8,
@@ -168,6 +264,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c9f995_12056d11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8734,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8142bf8_0ccc69d0",
+      "range": {
+        "startLine": 8733,
+        "startChar": 0,
+        "endLine": 8734,
+        "endChar": 91
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b19163c_b87ab16e",
@@ -181,6 +301,30 @@
       "writtenOn": "2022-06-16T14:33:14Z",
       "side": 1,
       "message": "nit: avoid auto",
+      "range": {
+        "startLine": 8738,
+        "startChar": 12,
+        "endLine": 8738,
+        "endChar": 17
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c10d4c_4073b908",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8738,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b19163c_b87ab16e",
       "range": {
         "startLine": 8738,
         "startChar": 12,
@@ -221,6 +365,30 @@
       "writtenOn": "2022-06-16T14:33:14Z",
       "side": 1,
       "message": "nit: use RAII types (GLTexture, etc) whenever possible.",
+      "range": {
+        "startLine": 315,
+        "startChar": 4,
+        "endLine": 315,
+        "endChar": 11
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79a36f69_076f689e",
+        "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-20T02:47:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb980f4_603f7b80",
       "range": {
         "startLine": 315,
         "startChar": 4,
