@@ -16,6 +16,24 @@
       "message": "You can do better, by adding a 3D version of `ExtendRectangle` (with some refactoring). No need to check for adjacency, and covers more scenarios.",
       "revId": "4d73b9661b242c9392984fad4ad2afb27d453074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9da9fbc8_5b554a98",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-20T17:05:24Z",
+      "side": 1,
+      "message": "i believe we tabled that until we had usecase to warrant that since the pattern I have seen so far does not fit well with \"extend\" logic\n\nthe \"if (adjacent) then merge\" was uncovered by the robust init issue where test would update all mip levels and supersede robust clear update but lack of adjacency check would leave us with a smaller box than earlier. With this change we will have parity in dropped updates with what angle used to be before i started working on pruning",
+      "parentUuid": "9fb54ea7_bdf6a4d6",
+      "revId": "4d73b9661b242c9392984fad4ad2afb27d453074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
