@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fb54ea7_bdf6a4d6",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-20T12:53:54Z",
+      "side": 1,
+      "message": "You can do better, by adding a 3D version of `ExtendRectangle` (with some refactoring). No need to check for adjacency, and covers more scenarios.",
+      "revId": "4d73b9661b242c9392984fad4ad2afb27d453074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
