@@ -318,6 +318,14 @@ class IOSurfaceClientBufferTest : public ANGLETest
         bindIOSurfaceToTexture(ioSurface, width, height, plane, internalFormat, type, &pbuffer,
                                &texture);
 
+        // Make sure changing base/max level won't affect bound texture.
+        // bug: https://bugs.chromium.org/p/chromium/issues/detail?id=1337324
+        if (getClientMajorVersion() >= 3)
+        {
+            glTexParameteri(getGLTextureTarget(), GL_TEXTURE_BASE_LEVEL, 0);
+            glTexParameteri(getGLTextureTarget(), GL_TEXTURE_MAX_LEVEL, 0);
+        }
+
         doSampleTestWithTexture(texture, mask);
 
         EGLBoolean result = eglDestroySurface(mDisplay, pbuffer);
@@ -1173,4 +1181,5 @@ ANGLE_INSTANTIATE_TEST(IOSurfaceClientBufferTest,
                        ES3_OPENGL(),
                        ES2_VULKAN_SWIFTSHADER(),
                        ES3_VULKAN_SWIFTSHADER(),
-                       ES2_METAL());
+                       ES2_METAL(),
+                       ES3_METAL());
