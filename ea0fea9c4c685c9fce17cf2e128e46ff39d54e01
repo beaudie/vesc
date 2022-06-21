@@ -69,6 +69,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47e86d93_9aac4732",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-21T14:56:10Z",
+      "side": 1,
+      "message": "resolved",
+      "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9729302_d40f1669",
@@ -135,6 +152,24 @@
       "writtenOn": "2022-06-20T18:13:08Z",
       "side": 1,
       "message": "?Should be:\nimageFormatListInfo.pNext \u003d \u0026drmFormatModifierInfo;\n\nThen they chain up in order.",
+      "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20674eb8_e7b0f09f",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-21T14:56:10Z",
+      "side": 1,
+      "message": "resolved",
+      "parentUuid": "cdf5528c_25a2949f",
       "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
