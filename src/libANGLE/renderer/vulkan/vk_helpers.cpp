@@ -68,8 +68,6 @@ constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Compute, PipelineStage::ComputeShader},
 };
 
-constexpr size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
-
 struct ImageMemoryBarrierData
 {
     char name[44];
@@ -1305,24 +1303,19 @@ CommandBufferHelperCommon::CommandBufferHelperCommon()
 
 CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
 
-void CommandBufferHelperCommon::initializeImpl(Context *context, CommandPool *commandPool)
+void CommandBufferHelperCommon::initializeImpl(CommandPool *commandPool)
 {
-    mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
-    // Push a scope into the pool allocator so we can easily free and re-init on reset()
-    mAllocator.push();
-
-    mUsedBufferCount = 0;
-
-    mCommandPool = commandPool;
+    if (mAllocatorManager.initAndCheckIfPoolInitNeeded())
+    {
+        mUsedBufferCount = 0;
+        mCommandPool     = commandPool;
+    }
 }
 
 void CommandBufferHelperCommon::resetImpl()
 {
-    mAllocator.pop();
-    mAllocator.push();
-
+    mAllocatorManager.resetAllocator();
     mUsedBufferCount = 0;
-
     ASSERT(mResourceUseList.empty());
 }
 
@@ -1502,13 +1495,12 @@ OutsideRenderPassCommandBufferHelper::~OutsideRenderPassCommandBufferHelper() {}
 angle::Result OutsideRenderPassCommandBufferHelper::initialize(Context *context,
                                                                CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
+    initializeImpl(commandPool);
     return initializeCommandBuffer(context);
 }
-
 angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return mCommandBuffer.initialize(context, mCommandPool, false, &mAllocator);
+    return mCommandBuffer.initialize(mAllocatorManager.getAllocator());
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
@@ -1557,6 +1549,24 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
     return reset(context);
 }
 
+void OutsideRenderPassCommandBufferHelper::attachAllocator(
+    RenderPassCommandsAllocatorType *allocator)
+{
+    mAllocatorManager.attachAllocator(allocator);
+    getCommandBuffer().attachAllocator(mAllocatorManager.getAllocator());
+}
+
+RenderPassCommandsAllocatorType *OutsideRenderPassCommandBufferHelper::detachAllocator()
+{
+    getCommandBuffer().detachAllocator(mAllocatorManager.getAllocator());
+    return mAllocatorManager.detachAllocator(getCommandBuffer().empty());
+}
+
+void OutsideRenderPassCommandBufferHelper::checkForRecycle()
+{
+    mAllocatorManager.checkForRecycle(&getCommandBuffer(), empty());
+}
+
 void OutsideRenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 {
     std::ostringstream out;
@@ -1590,13 +1600,12 @@ RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()
 
 angle::Result RenderPassCommandBufferHelper::initialize(Context *context, CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
+    initializeImpl(commandPool);
     return initializeCommandBuffer(context);
 }
-
 angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return getCommandBuffer().initialize(context, mCommandPool, true, &mAllocator);
+    return getCommandBuffer().initialize(mAllocatorManager.getAllocator());
 }
 
 angle::Result RenderPassCommandBufferHelper::reset(Context *context)
@@ -2396,6 +2405,23 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
     // Remove invalidates that are no longer applicable.
     mDepthAttachment.onRenderAreaGrowth(contextVk, mRenderArea);
     mStencilAttachment.onRenderAreaGrowth(contextVk, mRenderArea);
+}
+
+void RenderPassCommandBufferHelper::attachAllocator(RenderPassCommandsAllocatorType *allocator)
+{
+    mAllocatorManager.attachAllocator(allocator);
+    getCommandBuffer().attachAllocator(mAllocatorManager.getAllocator());
+}
+
+RenderPassCommandsAllocatorType *RenderPassCommandBufferHelper::detachAllocator()
+{
+    getCommandBuffer().detachAllocator(mAllocatorManager.getAllocator());
+    return mAllocatorManager.detachAllocator(getCommandBuffer().empty());
+}
+
+void RenderPassCommandBufferHelper::checkForRecycle()
+{
+    mAllocatorManager.checkForRecycle(&getCommandBuffer(), empty());
 }
 
 void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
