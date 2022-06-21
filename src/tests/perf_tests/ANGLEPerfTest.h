@@ -204,6 +204,7 @@ class ANGLERenderTest : public ANGLEPerfTest
 
   protected:
     const RenderTestParams &mTestParams;
+    bool mEnableDebugCallback = true;
 
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
     void setRobustResourceInit(bool enabled);
