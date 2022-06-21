@@ -1110,6 +1110,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
   public:
     CommandPool *getCommandPool() { return mCommandPool; }
 
+    bool hasAllocatorLinks() const { return mAllocator || mAllocSharedCP; }
+
     void bufferRead(ContextVk *contextVk,
                     VkAccessFlags readAccessType,
                     PipelineStage readStage,
@@ -1182,9 +1184,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Identifies the command buffer.
     CommandBufferID mID;
 
-    // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
-    //  that occur w/ shared allocator between multiple CBHs.
-    angle::PoolAllocator mAllocator;
+    angle::SharedRingBufferAllocator *mAllocator;
+    angle::SharedRingBufferAllocator::CheckPoint *mAllocSharedCP;
+    angle::RingBufferAllocator::CheckPoint mAllocRelaseCP;
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
@@ -1221,6 +1223,9 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
+
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1270,6 +1275,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentSubpass]; }
 
     bool empty() const { return !started(); }
+
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }

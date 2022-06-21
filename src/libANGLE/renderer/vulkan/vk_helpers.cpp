@@ -68,8 +68,6 @@ constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Compute, PipelineStage::ComputeShader},
 };
 
-constexpr size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
-
 struct ImageMemoryBarrierData
 {
     char name[44];
@@ -1313,7 +1311,9 @@ bool RenderPassAttachment::onAccessImpl(ResourceAccess access, uint32_t currentC
 
 // CommandBufferHelperCommon implementation.
 CommandBufferHelperCommon::CommandBufferHelperCommon()
-    : mPipelineBarriers(),
+    : mAllocator(nullptr),
+      mAllocSharedCP(nullptr),
+      mPipelineBarriers(),
       mPipelineBarrierMask(),
       mCommandPool(nullptr),
       mHasShaderStorageOutput(false),
@@ -1323,23 +1323,78 @@ CommandBufferHelperCommon::CommandBufferHelperCommon()
 
 CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
 
-void CommandBufferHelperCommon::initializeImpl(Context *context, CommandPool *commandPool)
+void RenderPassCommandBufferHelper::attachAllocator(angle::SharedRingBufferAllocator *allocator)
 {
-    mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
-    // Push a scope into the pool allocator so we can easily free and re-init on reset()
-    mAllocator.push();
+    ASSERT(allocator);
+    ASSERT(!mAllocator);
+    mAllocator = allocator;
+    if (mAllocator->isShared())
+    {
+        mAllocator->releaseToSharedCP();
+    }
 
-    mUsedBufferCount = 0;
+    getCommandBuffer().attachAllocator(std::move(mAllocator->get()));
+}
 
-    mCommandPool = commandPool;
+void OutsideRenderPassCommandBufferHelper::attachAllocator(
+    angle::SharedRingBufferAllocator *allocator)
+{
+    ASSERT(allocator);
+    ASSERT(!mAllocator);
+    mAllocator = allocator;
+    if (mAllocator->isShared())
+    {
+        mAllocator->releaseToSharedCP();
+    }
+
+    getCommandBuffer().attachAllocator(std::move(mAllocator->get()));
+}
+
+angle::SharedRingBufferAllocator *RenderPassCommandBufferHelper::detachAllocator()
+{
+    ASSERT(mAllocator);
+    getCommandBuffer().detachAllocator(mAllocator->get());
+    if (!getCommandBuffer().empty())  // OK to have empty RP
+    {
+        // Must call "reset()" after detach from non-empty "mCommandBuffer"
+        ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
+        mAllocSharedCP = mAllocator->acquireSharedCP();
+        mAllocRelaseCP = mAllocator->get().getReleaseCheckPoint();
+    }
+    angle::SharedRingBufferAllocator *result = mAllocator;
+    mAllocator                               = nullptr;
+    return result;
+}
+
+angle::SharedRingBufferAllocator *OutsideRenderPassCommandBufferHelper::detachAllocator()
+{
+    ASSERT(mAllocator);
+    getCommandBuffer().detachAllocator(mAllocator->get());
+    if (!getCommandBuffer().empty())  // OK to have empty RP
+    {
+        // Must call "reset()" after detach from non-empty "mCommandBuffer"
+        ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
+        mAllocSharedCP = mAllocator->acquireSharedCP();
+        mAllocRelaseCP = mAllocator->get().getReleaseCheckPoint();
+    }
+    angle::SharedRingBufferAllocator *result = mAllocator;
+    mAllocator                               = nullptr;
+    return result;
 }
 
 void CommandBufferHelperCommon::resetImpl()
 {
-    mAllocator.pop();
-    mAllocator.push();
-
-    mUsedBufferCount = 0;
+    if (mAllocator)
+    {
+        ASSERT(!mAllocator->isShared());  // If shared - must have been detached
+        // Memory will be released in the "mCommandBuffer.reset()"
+    }
+    else if (mAllocSharedCP)
+    {
+        mAllocSharedCP->releaseAndUpdate(&mAllocRelaseCP);
+        mAllocSharedCP = nullptr;
+    }
+    ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
 
     ASSERT(mResourceUseList.empty());
 }
@@ -1520,13 +1575,12 @@ OutsideRenderPassCommandBufferHelper::~OutsideRenderPassCommandBufferHelper() {}
 angle::Result OutsideRenderPassCommandBufferHelper::initialize(Context *context,
                                                                CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
     return initializeCommandBuffer(context);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return mCommandBuffer.initialize(context, mCommandPool, false, &mAllocator);
+    return angle::Result::Continue;
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
@@ -1608,13 +1662,12 @@ RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()
 
 angle::Result RenderPassCommandBufferHelper::initialize(Context *context, CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
     return initializeCommandBuffer(context);
 }
 
 angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return getCommandBuffer().initialize(context, mCommandPool, true, &mAllocator);
+    return angle::Result::Continue;
 }
 
 angle::Result RenderPassCommandBufferHelper::reset(Context *context)
