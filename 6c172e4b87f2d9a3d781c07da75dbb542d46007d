@@ -142,6 +142,24 @@
       "parentUuid": "49904aed_5c3787e0",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0ba625_eaaa5ea5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-21T23:15:53Z",
+      "side": 1,
+      "message": "Thanks Mohan. Let me poke at these OOMs to understand them a bit better, it looks like we might be running into some interaction between our test app and the way Android releases resources.\n\nAlso, I\u0027m told most Android application don\u0027t even exit normally but get sigkill\u0027d instead. I tested a couple of games and I\u0027m seeing (sometimes multiple) ProcessCleanupCallback invocations mid-process but not when I\u0027m closing the app, so this approach does not seem to be working as intended for real apps unless I\u0027m missing something.",
+      "parentUuid": "1fd5aeb7_6895649c",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
