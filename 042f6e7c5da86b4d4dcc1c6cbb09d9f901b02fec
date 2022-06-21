@@ -33,6 +33,24 @@
       "message": "One question - why is this base/max level resetting being done inside this test? Is this something that should be handled inside the Metal backend? (Or has this test essentially been wrong all along for all backends?)",
       "revId": "042f6e7c5da86b4d4dcc1c6cbb09d9f901b02fec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61caff5c_d870fefb",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-06-21T19:48:28Z",
+      "side": 1,
+      "message": "It\u0027s actually for metal, but I just wanted to reuse the existing IOSurface\u0027s test code hence I added it here.\n\nI can create a dedicated IOSurface test case with base/max level modifications if you want.",
+      "parentUuid": "2cc76795_93a6be6e",
+      "revId": "042f6e7c5da86b4d4dcc1c6cbb09d9f901b02fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
