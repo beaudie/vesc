@@ -14,6 +14,12 @@
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#if ANGLE_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+#    include "libANGLE/renderer/vulkan/AllocatorManagerRing.h"
+#else
+#    include "libANGLE/renderer/vulkan/AllocatorManagerPool.h"
+#endif
+
 #include <functional>
 
 namespace gl
@@ -1135,7 +1141,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
 
-    void initializeImpl(Context *context, CommandPool *commandPool);
+    void initializeImpl(CommandPool *commandPool);
 
     void resetImpl();
 
@@ -1162,9 +1168,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Identifies the command buffer.
     CommandBufferID mID;
 
-    // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
-    //  that occur w/ shared allocator between multiple CBHs.
-    angle::PoolAllocator mAllocator;
+    SharedAllocatorManager mAllocatorManager;
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
@@ -1201,6 +1205,10 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
+
+    void attachAllocator(RenderPassCommandsAllocatorType *allocator);
+    RenderPassCommandsAllocatorType *detachAllocator();
+    void checkForRecycle();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1293,6 +1301,10 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentSubpass]; }
 
     bool empty() const { return !started(); }
+
+    void attachAllocator(RenderPassCommandsAllocatorType *allocator);
+    RenderPassCommandsAllocatorType *detachAllocator();
+    void checkForRecycle();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }
