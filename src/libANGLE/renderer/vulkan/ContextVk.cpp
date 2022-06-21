@@ -1032,7 +1032,10 @@ void ContextVk::onDestroy(const gl::Context *context)
         queryPool.destroy(device);
     }
 
-    // Recycle current commands buffers.
+    // Recycle current command buffers.
+    mOutsideRenderPassCommands->detachAllocator();
+    mRenderPassCommands->detachAllocator();
+
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(device, &mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(device, &mRenderPassCommands);
 
@@ -1178,6 +1181,9 @@ angle::Result ContextVk::initialize()
         this, &mCommandPools.outsideRenderPassPool, &mOutsideRenderPassCommands));
     ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(this, &mCommandPools.renderPassPool,
                                                           &mRenderPassCommands));
+
+    mOutsideRenderPassCommands->attachAllocator(&mOutsideRenderPassCommandsAllocator);
+    mRenderPassCommands->attachAllocator(&mRenderPassCommandsAllocator);
 
     if (mGpuEventsEnabled)
     {
