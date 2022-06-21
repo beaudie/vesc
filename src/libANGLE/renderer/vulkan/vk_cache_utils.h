@@ -557,7 +557,6 @@ class GraphicsPipelineDesc final
   public:
     // Use aligned allocation and free so we can use the alignas keyword.
     void *operator new(std::size_t size);
-    void operator delete(void *ptr);
 
     GraphicsPipelineDesc();
     ~GraphicsPipelineDesc();

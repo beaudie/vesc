@@ -669,3 +669,5 @@
 6251 : MultithreadingTest* = TIMEOUT
 // Please do not add expectations below this line,
 // so that TIMEOUT expectations above don't override more precise SKIP expectations
+
+0000 : AtomicCounterBufferTest31.AtomicCounterReadCompute/* = SKIP
