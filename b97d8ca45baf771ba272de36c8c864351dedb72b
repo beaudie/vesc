@@ -22,6 +22,30 @@
       },
       "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb20d43_35f4ad8d",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:55:39Z",
+      "side": 1,
+      "message": "That seems quite heavy-weight: Its constructor takes a serial number and an ID as parameter, I would only need one of the two, and still have to make sure that I create the serial ID in an atomic way, and the ref-counting is actually not needed at all. \n\nI\u0027ve now used `rx::AtomicSerialFactory`, and in order to not change the constructor interface of Surface, I\u0027ve added it in a static method, so that it is unique across all Surface instances, but I\u0027m not sure whether the initialization is really thread save, because I don\u0027t know whether the first surface can be created from a multi-threaded code path already that might lead to a race condition.\n\nAdding the serialFactory as static member was not possible, because it has a non-trivial constructor, and warnings about global constructors are handled as errors.",
+      "parentUuid": "08356197_bcae935f",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 17
+      },
+      "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
