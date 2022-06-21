@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3395dc_e6d3ddbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T23:38:59Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "1f4eb4b7a6707d8db5e7a7eb03abc4f288c7c640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeba7060_8b51bcb8",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T23:38:59Z",
+      "side": 1,
+      "message": "Reindent to match \"(\"? Not sure what\u0027s most consistent.",
+      "revId": "1f4eb4b7a6707d8db5e7a7eb03abc4f288c7c640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03590676_4100a6e2",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T23:38:59Z",
+      "side": 1,
+      "message": "Please add yourself and say you fixed typos and type usage, or similar.",
+      "revId": "1f4eb4b7a6707d8db5e7a7eb03abc4f288c7c640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e7ed11_a5bc7a60",
+        "filename": "extensions/ANGLE_multi_draw.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T23:38:59Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "1f4eb4b7a6707d8db5e7a7eb03abc4f288c7c640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
