@@ -59,6 +59,7 @@ class Thread;
 
 using ContextSet = std::set<gl::Context *>;
 using SurfaceSet = std::set<Surface *>;
+using ThreadSet  = std::set<Thread *>;
 
 struct DisplayState final : private angle::NonCopyable
 {
@@ -134,7 +135,7 @@ class Display final : public LabeledObject,
     {
         Api,
         InternalCleanup,
-        ProcessExit,
+        NoActiveThreads,
 
         InvalidEnum,
         EnumCount = InvalidEnum,
@@ -148,6 +149,10 @@ class Display final : public LabeledObject,
     // Called on eglReleaseThread. Backends can tear down thread-specific backend state through
     // this function.
     Error releaseThread();
+
+    void addActiveThread(Thread *thread) { mActiveThreads.insert(thread); }
+    void removeActiveThread(Thread *thread) { mActiveThreads.erase(thread); }
+    bool hasActiveThreads() const { return mActiveThreads.size() > 0; }
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
@@ -214,6 +219,7 @@ class Display final : public LabeledObject,
     void destroySync(Sync *sync);
 
     bool isInitialized() const;
+    bool isTerminated() const;
     bool isValidConfig(const Config *config) const;
     bool isValidContext(const gl::Context *context) const;
     bool isValidSurface(const Surface *surface) const;
@@ -405,6 +411,7 @@ class Display final : public LabeledObject,
     std::mutex mProgramCacheMutex;
 
     bool mIsTerminated;
+    ThreadSet mActiveThreads;
 };
 
 }  // namespace egl

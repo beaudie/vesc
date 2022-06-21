@@ -861,7 +861,8 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mMemoryProgramCache(mBlobCache),
       mGlobalTextureShareGroupUsers(0),
       mGlobalSemaphoreShareGroupUsers(0),
-      mIsTerminated(false)
+      mIsTerminated(false),
+      mActiveThreads()
 {}
 
 Display::~Display()
@@ -1105,7 +1106,12 @@ Error Display::destroyInvalidEglObjects()
 
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
-    mIsTerminated = true;
+    if (terminateReason == TerminateReason::Api)
+    {
+        mIsTerminated = true;
+        // "thread" is no longer an active thread, remove it from the active thread set.
+        mActiveThreads.erase(thread);
+    }
 
     if (!mInitialized)
     {
@@ -1119,6 +1125,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     // as eglTerminate returns
     // Cache EGL objects that are no longer valid
     // TODO (http://www.anglebug.com/6798): Invalidate context handles as well.
+    if (mIsTerminated)
     {
         std::lock_guard<std::mutex> lock(mInvalidEglObjectsMutex);
 
@@ -1136,13 +1143,13 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     }
 
     // All EGL objects, except contexts, have been marked invalid by the block above and will be
-    // cleaned up during eglReleaseThread. If no contexts are current on any thread, perform the
-    // cleanup right away.
+    // cleaned up during eglReleaseThread. If no contexts are current on any thread or app called
+    // eglTerminate and there are no active threads left, perform the cleanup right away.
     for (gl::Context *context : mState.contextSet)
     {
         if (context->getRefCount() > 0)
         {
-            if (terminateReason == TerminateReason::ProcessExit)
+            if (mIsTerminated && terminateReason == TerminateReason::NoActiveThreads)
             {
                 context->release();
                 (void)context->unMakeCurrent(this);
@@ -1855,6 +1862,11 @@ const Caps &Display::getCaps() const
 bool Display::isInitialized() const
 {
     return mInitialized;
+}
+
+bool Display::isTerminated() const
+{
+    return mIsTerminated;
 }
 
 bool Display::isValidConfig(const Config *config) const
