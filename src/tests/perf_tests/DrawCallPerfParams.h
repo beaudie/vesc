@@ -78,6 +78,14 @@ ParamsT VulkanSwiftShader(const ParamsT &in)
 }
 
 template <typename ParamsT>
+ParamsT Metal(const ParamsT &in)
+{
+    ParamsT out       = in;
+    out.eglParameters = angle::egl_platform::METAL();
+    return out;
+}
+
+template <typename ParamsT>
 ParamsT WGL(const ParamsT &in)
 {
     ParamsT out = in;

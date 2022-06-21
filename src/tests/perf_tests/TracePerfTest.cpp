@@ -2108,7 +2108,7 @@ void RegisterTraceTests()
         surfaceTypes.push_back(SurfaceType::WindowWithVSync);
     }
 
-    std::vector<ModifierFunc<P>> renderers = {Vulkan<P>, Native<P>};
+    std::vector<ModifierFunc<P>> renderers = {Vulkan<P>, Native<P>, Metal<P>};
     if (gEnableAllTraceTests)
     {
         if (!IsAndroid())

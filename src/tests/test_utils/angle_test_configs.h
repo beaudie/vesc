@@ -120,6 +120,8 @@ EGLPlatformParameters VULKAN();
 EGLPlatformParameters VULKAN_NULL();
 EGLPlatformParameters VULKAN_SWIFTSHADER();
 
+EGLPlatformParameters METAL();
+
 }  // namespace egl_platform
 
 // ANGLE tests platforms
