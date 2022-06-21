@@ -555,25 +555,22 @@ size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>
 #    define ANGLE_MACRO_STRINGIFY(x) ANGLE_STRINGIFY(x)
 #endif
 
-// Detect support for C++17 [[nodiscard]]
-#if !defined(__has_cpp_attribute)
-#    define __has_cpp_attribute(name) 0
-#endif  // !defined(__has_cpp_attribute)
-
+/*
 #if __has_cpp_attribute(nodiscard)
-#    define ANGLE_NO_DISCARD [[nodiscard]]
+#    define [[nodiscard]] [[nodiscard]]
 #else
-#    define ANGLE_NO_DISCARD
+#    define [[nodiscard]]
 #endif  // __has_cpp_attribute(nodiscard)
 
 #if __has_cpp_attribute(maybe_unused)
-#    define ANGLE_MAYBE_UNUSED [[maybe_unused]]
+#    define [[maybe_unused]] [[maybe_unused]]
 #else
-#    define ANGLE_MAYBE_UNUSED
+#    define [[maybe_unused]]
 #endif  // __has_cpp_attribute(maybe_unused)
+*/
 
-#if __has_cpp_attribute(require_constant_initialization)
-#    define ANGLE_REQUIRE_CONSTANT_INIT [[require_constant_initialization]]
+#if __has_cpp_attribute(clang::require_constant_initialization)
+#    define ANGLE_REQUIRE_CONSTANT_INIT [[clang::require_constant_initialization]]
 #else
 #    define ANGLE_REQUIRE_CONSTANT_INIT
 #endif  // __has_cpp_attribute(require_constant_initialization)
