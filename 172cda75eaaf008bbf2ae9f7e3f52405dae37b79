@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa750f9_4f4298f1",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de84ffef_858e9430",
+      "range": {
+        "startLine": 196,
+        "startChar": 45,
+        "endLine": 196,
+        "endChar": 55
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cebc272e_6db210d0",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-21T03:52:08Z",
       "side": 1,
       "message": "EGLSurface",
+      "range": {
+        "startLine": 211,
+        "startChar": 45,
+        "endLine": 211,
+        "endChar": 55
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd2a1c7f_7cdeed5f",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cebc272e_6db210d0",
       "range": {
         "startLine": 211,
         "startChar": 45,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5636c2e_4cf67dac",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6f15ed7_5ed7d31c",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 26
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0cb725b_7cba8a7a",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-06-21T03:52:08Z",
       "side": 1,
       "message": "This appears to be common code with the next function.  Can you move it to a helper?  It would make it easier to spot errors like below.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 75
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5057e109_b61cf964",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0cb725b_7cba8a7a",
       "range": {
         "startLine": 229,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfa22294_7a1cefbf",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6547ade_f1c96b1f",
+      "range": {
+        "startLine": 254,
+        "startChar": 49,
+        "endLine": 254,
+        "endChar": 64
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "133aad50_6315b291",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-06-21T03:52:08Z",
       "side": 1,
       "message": "style nit: braces for consistency",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 0
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2651fa8b_3e5c79e7",
+        "filename": "src/libANGLE/capture/capture_egl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "133aad50_6315b291",
       "range": {
         "startLine": 29,
         "startChar": 0,
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83dbe79c_75686229",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f696b78_289e21fd",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 74
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c4415d3_e5a6ac33",
@@ -175,6 +343,30 @@
       "writtenOn": "2022-06-21T03:52:08Z",
       "side": 1,
       "message": "Can you put these in the same order as above?",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 9
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b32818f_b8f74ca6",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c4415d3_e5a6ac33",
       "range": {
         "startLine": 126,
         "startChar": 0,
@@ -210,6 +402,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9817fd2c_8fea0470",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "I\u0027ve refactored the whole function and pulled in some code from below to make it more consistent and easier to understand what\u0027s going on here. \n\nFor now we don\u0027t add the default surface to the `gSurfaceMap` filled out by the test fixture, but if we ever want to support surfaceless contexts  with capture, we may have to do this.",
+      "parentUuid": "9c679394_846c67b7",
+      "range": {
+        "startLine": 768,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 36
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0a37673_d1621bc7",
         "filename": "util/windows/WGLWindow.cpp",
         "patchSetId": 7
@@ -221,6 +437,30 @@
       "writtenOn": "2022-06-21T03:52:08Z",
       "side": 1,
       "message": "This and below need the comment updated for correct function name.",
+      "range": {
+        "startLine": 385,
+        "startChar": 29,
+        "endLine": 385,
+        "endChar": 45
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d7ffff1_6b0e09f4",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-21T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0a37673_d1621bc7",
       "range": {
         "startLine": 385,
         "startChar": 29,
