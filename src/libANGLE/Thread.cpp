@@ -16,21 +16,24 @@
 namespace angle
 {
 bool gUseAndroidOpenGLTlsSlot;
-std::atomic_int gProcessCleanupRefCount(0);
 
-void ProcessCleanupCallback(void *ptr)
+void PthreadKeyDestructorCallback(void *ptr)
 {
     egl::Thread *thread = static_cast<egl::Thread *>(ptr);
     ASSERT(thread);
 
-    ASSERT(gProcessCleanupRefCount > 0);
-    if (--gProcessCleanupRefCount == 0)
+    egl::Display::EglDisplaySet displays = egl::Display::GetEglDisplaySet();
+    for (egl::Display *display : displays)
     {
-        egl::Display::EglDisplaySet displays = egl::Display::GetEglDisplaySet();
-        for (egl::Display *display : displays)
+        ASSERT(display);
+
+        // Remove the thread being destroyed from display's active thread set.
+        display->removeActiveThread(thread);
+
+        // If the display has no active threads and was terminated by the app, perform cleanup.
+        if (!display->hasActiveThreads() && display->isTerminated())
         {
-            ASSERT(display);
-            (void)display->terminate(thread, egl::Display::TerminateReason::ProcessExit);
+            (void)display->terminate(thread, egl::Display::TerminateReason::NoActiveThreads);
         }
     }
 }
@@ -109,6 +112,11 @@ EGLenum Thread::getAPI() const
 void Thread::setCurrent(gl::Context *context)
 {
     mContext = context;
+    if (mContext)
+    {
+        ASSERT(mContext->getDisplay());
+        mContext->getDisplay()->addActiveThread(this);
+    }
 }
 
 Surface *Thread::getCurrentDrawSurface() const
