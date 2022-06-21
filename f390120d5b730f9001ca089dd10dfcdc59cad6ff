@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec9449db_afc74fd0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T21:12:52Z",
+      "side": 1,
+      "message": "I\u0027d prefer to keep the platform/vendor specific checks isolated to TracePerfTest.cpp.  Can we add a new member called mEnableDebugCallback and set that to false on ARM with majorVersion \u003d\u003d 1?",
+      "range": {
+        "startLine": 866,
+        "startChar": 0,
+        "endLine": 866,
+        "endChar": 56
+      },
+      "revId": "f390120d5b730f9001ca089dd10dfcdc59cad6ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
