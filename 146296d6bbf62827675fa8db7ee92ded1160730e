@@ -196,6 +196,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "839eb06f_32248112",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8715,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T04:07:15Z",
+      "side": 1,
+      "message": "Let\u0027s move forward with MemoryBuffer for now.",
+      "parentUuid": "9601bd2c_9805a438",
+      "range": {
+        "startLine": 8715,
+        "startChar": 8,
+        "endLine": 8715,
+        "endChar": 13
+      },
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f0d8917_1953d9bb",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
