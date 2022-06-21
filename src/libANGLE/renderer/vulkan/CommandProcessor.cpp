@@ -816,11 +816,18 @@ angle::Result CommandProcessor::flushOutsideRPCommands(
     ANGLE_TRY(checkAndPopPendingError(context));
 
     (*outsideRPCommands)->markClosed();
+
+    // Only ring buffer allocators are attached or detached. These functions are no-op for pool
+    // allocators.
     CommandProcessorTask task;
     task.initOutsideRenderPassProcessCommands(hasProtectedContent, *outsideRPCommands);
     queueCommand(std::move(task));
-    return mRenderer->getOutsideRenderPassCommandBufferHelper(
-        context, (*outsideRPCommands)->getCommandPool(), outsideRPCommands);
+
+    ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
+        context, (*outsideRPCommands)->getCommandPool(), (*outsideRPCommands)->detachAllocator(),
+        outsideRPCommands));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::flushRenderPassCommands(
@@ -832,11 +839,18 @@ angle::Result CommandProcessor::flushRenderPassCommands(
     ANGLE_TRY(checkAndPopPendingError(context));
 
     (*renderPassCommands)->markClosed();
+
+    // Only ring buffer allocators are attached or detached. These functions are no-op for pool
+    // allocators.
     CommandProcessorTask task;
     task.initRenderPassProcessCommands(hasProtectedContent, *renderPassCommands, &renderPass);
     queueCommand(std::move(task));
-    return mRenderer->getRenderPassCommandBufferHelper(
-        context, (*renderPassCommands)->getCommandPool(), renderPassCommands);
+
+    ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(
+        context, (*renderPassCommands)->getCommandPool(), (*renderPassCommands)->detachAllocator(),
+        renderPassCommands));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::ensureNoPendingWork(Context *context)
