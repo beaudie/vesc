@@ -168,18 +168,13 @@ const char *GetCommandString(CommandID id)
 }
 }  // namespace
 
-ANGLE_INLINE const CommandHeader *NextCommand(const CommandHeader *command)
-{
-    return reinterpret_cast<const CommandHeader *>(reinterpret_cast<const uint8_t *>(command) +
-                                                   command->size);
-}
-
 // Parse the cmds in this cmd buffer into given primary cmd buffer
 void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
 {
     VkCommandBuffer cmdBuffer = primary->getHandle();
 
     ANGLE_TRACE_EVENT0("gpu.angle", "SecondaryCommandBuffer::executeCommands");
+    mAllocatorManager.terminateLastCommandBlock();
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -784,22 +779,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
                                                  size_t *allocatedMemoryOut) const
 {
-    *allocatedMemoryOut = kBlockSize * mCommands.size();
-
-    *usedMemoryOut = 0;
-    for (const CommandHeader *command : mCommands)
-    {
-        const CommandHeader *commandEnd = command;
-        while (commandEnd->id != CommandID::Invalid)
-        {
-            commandEnd = NextCommand(commandEnd);
-        }
-
-        *usedMemoryOut += reinterpret_cast<const uint8_t *>(commandEnd) -
-                          reinterpret_cast<const uint8_t *>(command) + sizeof(CommandHeader::id);
-    }
-
-    ASSERT(*usedMemoryOut <= *allocatedMemoryOut);
+    mAllocatorManager.getMemoryUsageStats(usedMemoryOut, allocatedMemoryOut);
 }
 
 std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
