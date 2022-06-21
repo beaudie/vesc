@@ -75,6 +75,47 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fe4acf_ef59ac8f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-21T21:14:31Z",
+      "side": 1,
+      "message": "This is used. See line 5339 in this file. \nBut I have moved it into anonymous function.",
+      "parentUuid": "96694f5f_c48b1d6b",
+      "range": {
+        "startLine": 4620,
+        "startChar": 31,
+        "endLine": 4620,
+        "endChar": 50
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "151dce0b_85f5e78e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5339,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-21T21:14:31Z",
+      "side": 1,
+      "message": "Used here. @syoussefi",
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c26a4ca_32ce57af",
@@ -88,6 +129,30 @@
       "writtenOn": "2022-06-21T18:09:07Z",
       "side": 1,
       "message": "```\nmFreeDescriptorSets +\u003d mDescriptorSetGarbageList.size();\nmDescriptorSetGarbageList.clear();\n```",
+      "range": {
+        "startLine": 3226,
+        "startChar": 0,
+        "endLine": 3230,
+        "endChar": 5
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a024c45_d03507c4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3230,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-21T21:14:31Z",
+      "side": 1,
+      "message": "The problem is mDescriptorSetGarbageList is a std::queue, which does not have a clear() call. In new patch, I have chnaged to std::deque which allows clear().",
+      "parentUuid": "9c26a4ca_32ce57af",
       "range": {
         "startLine": 3226,
         "startChar": 0,
@@ -115,6 +180,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9995bdfc_8a2e489e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-21T21:14:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d56d6314_efd344ab",
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99cba5af_2db9ebd2",
@@ -128,6 +211,30 @@
       "writtenOn": "2022-06-21T18:09:07Z",
       "side": 1,
       "message": "I suggest instead adding a function like `accumulateCacheStatsAndSize` where the size is explicitly passed in together with mCacheStats. Then `accumulateDescriptorCacheStats` can remain `const`, we don\u0027t need `mutable` here, and tracking of size in cache stats can be removed from elsewhere in this class.",
+      "range": {
+        "startLine": 317,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 11
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4169edf_7eab4ccd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-21T21:14:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99cba5af_2db9ebd2",
       "range": {
         "startLine": 317,
         "startChar": 4,
