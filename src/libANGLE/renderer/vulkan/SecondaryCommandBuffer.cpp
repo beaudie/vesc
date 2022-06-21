@@ -180,6 +180,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
     VkCommandBuffer cmdBuffer = primary->getHandle();
 
     ANGLE_TRACE_EVENT0("gpu.angle", "SecondaryCommandBuffer::executeCommands");
+    mAllocatorManager.terminateLastCommandBlock();
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -784,19 +785,27 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
                                                  size_t *allocatedMemoryOut) const
 {
-    *allocatedMemoryOut = kBlockSize * mCommands.size();
+    mAllocatorManager.getMemoryUsageStats(usedMemoryOut, allocatedMemoryOut);
+}
+
+void SecondaryCommandBuffer::getMemoryUsageStatsForPoolAlloc(size_t blockSize,
+                                                             size_t *usedMemoryOut,
+                                                             size_t *allocatedMemoryOut) const
+{
+    *allocatedMemoryOut = blockSize * mCommands.size();
 
     *usedMemoryOut = 0;
-    for (const CommandHeader *command : mCommands)
+    for (const priv::CommandHeader *command : mCommands)
     {
-        const CommandHeader *commandEnd = command;
-        while (commandEnd->id != CommandID::Invalid)
+        const priv::CommandHeader *commandEnd = command;
+        while (commandEnd->id != priv::CommandID::Invalid)
         {
-            commandEnd = NextCommand(commandEnd);
+            commandEnd = priv::NextCommand(commandEnd);
         }
 
         *usedMemoryOut += reinterpret_cast<const uint8_t *>(commandEnd) -
-                          reinterpret_cast<const uint8_t *>(command) + sizeof(CommandHeader::id);
+                          reinterpret_cast<const uint8_t *>(command) +
+                          sizeof(priv::CommandHeader::id);
     }
 
     ASSERT(*usedMemoryOut <= *allocatedMemoryOut);
