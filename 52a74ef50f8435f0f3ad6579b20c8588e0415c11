@@ -16,6 +16,109 @@
       "message": "Move Frank to reviewer since Shabi is out",
       "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97b2e587_501ac099",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T18:09:07Z",
+      "side": 1,
+      "message": "Some feedback, I\u0027ll review the rest by tonight or tomorrow morning",
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96694f5f_c48b1d6b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4620,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T18:09:07Z",
+      "side": 1,
+      "message": "This is unused!\n\nAlso, instead of adding member functions to structs, make the function an anonymous one and pass the struct to it.",
+      "range": {
+        "startLine": 4620,
+        "startChar": 31,
+        "endLine": 4620,
+        "endChar": 50
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c26a4ca_32ce57af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T18:09:07Z",
+      "side": 1,
+      "message": "```\nmFreeDescriptorSets +\u003d mDescriptorSetGarbageList.size();\nmDescriptorSetGarbageList.clear();\n```",
+      "range": {
+        "startLine": 3226,
+        "startChar": 0,
+        "endLine": 3230,
+        "endChar": 5
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d56d6314_efd344ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T18:09:07Z",
+      "side": 1,
+      "message": "No need for this, it\u0027s inherited from `Resource`",
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99cba5af_2db9ebd2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T18:09:07Z",
+      "side": 1,
+      "message": "I suggest instead adding a function like `accumulateCacheStatsAndSize` where the size is explicitly passed in together with mCacheStats. Then `accumulateDescriptorCacheStats` can remain `const`, we don\u0027t need `mutable` here, and tracking of size in cache stats can be removed from elsewhere in this class.",
+      "range": {
+        "startLine": 317,
+        "startChar": 4,
+        "endLine": 317,
+        "endChar": 11
+      },
+      "revId": "52a74ef50f8435f0f3ad6579b20c8588e0415c11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
