@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e66137_5fc9c2fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "Mark, Shabi\u0027s most recent comments confirmed what I figured out last week:\n\n- The `SetDebugUtilsObjectName()` function uses ANGLE_VK_TRY to call vkSetDebugUtilsObjectNameEXT\n- ANGLE_VK_TRY will generate a GL error if vkSetDebugUtilsObjectNameEXT does not return VK_SUCCESS; it will also return `angle::Result::Continue` for `VK_SUCCESS` and `angle::Result::Stop` otherwise\n- The `angle::Result` will be eaten by ANGLE_CONTEXT_TRY in `Context.cpp`\n- Thus the pattern established by textures will apply to other objects:\n  - `Context::objectLabel()` will call down to a given object\u0027s `setLabel()` method\n  - You\u0027ll have a *Impl::setLabel() method with a default implementation (i.e. return angle::Result::Continue`) that allows a *Vk::setLabel() method to call the `SetDebugUtilsObjectName()` function.\n  - You\u0027ll want the *Vk object to call its `setLabel()` method when a Vulkan object is actually created.\n  \nPlease let me know if that\u0027s not clear.",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18e94755_9a28d34e",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "18e94755_9a28d34e",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ca8169c_b0920860",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "This and similar methods can be like the Texture::setLabel() method now (calling down through the Impl class to the BufferVk::setLabel() method, which will call the SetDebugUtilsObjectName() function (that actually calls the Vulkan vkSetDebugUtilsObjectNameEXT function).",
+      "parentUuid": "7e57bee4_dee1805d",
       "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -133,6 +168,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afa25930_3cb6a84a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "Thanks Shabi!\n\nMark, per Shabi\u0027s one comment, these lines can just be replaced with:\n\n```\nANGLE_CONTEXT_TRY(object-\u003esetLabel(this, labelName));\n```",
+      "parentUuid": "1de18852_6feca56e",
+      "range": {
+        "startLine": 1223,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 5
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6dc4811_ec0dfffd",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "This looks correct now",
+      "range": {
+        "startLine": 818,
+        "startChar": 0,
+        "endLine": 820,
+        "endChar": 35
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "652453dc_1c21de3d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -149,6 +231,70 @@
         "startChar": 58,
         "endLine": 2704,
         "endChar": 87
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169a400b_6fa0f6e8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "I spoke with Cody about this.  This label functionality can be useful to more than AGI; so let\u0027s remove that check.",
+      "parentUuid": "652453dc_1c21de3d",
+      "range": {
+        "startLine": 2704,
+        "startChar": 58,
+        "endLine": 2704,
+        "endChar": 87
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dd849e1_24f9038a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3047,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "IIUC this will apply the label when the Vulkan object is actually created.  That solves the one problem we had before.",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "275212e5_cdf69f71",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-21T17:19:11Z",
+      "side": 1,
+      "message": "Mark, this macro will set the GL error if vkSetDebugUtilsObjectNameEXT doesn\u0027t return VK_SUCCESS.  I didn\u0027t realize that before, but do now.",
+      "range": {
+        "startLine": 817,
+        "startChar": 8,
+        "endLine": 817,
+        "endChar": 20
       },
       "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
