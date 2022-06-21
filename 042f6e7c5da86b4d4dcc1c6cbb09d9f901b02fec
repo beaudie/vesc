@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a348c0c9_372d2f75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T19:32:54Z",
+      "side": 1,
+      "message": "lgtm\n\nThank you Quyen for jumping in unasked and tracking down and fixing this! This unblocks a major feature - OOP-R using GLES3 contexts on macOS. The entire team greatly appreciates your help!\n",
+      "revId": "042f6e7c5da86b4d4dcc1c6cbb09d9f901b02fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc76795_93a6be6e",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-21T19:32:54Z",
+      "side": 1,
+      "message": "One question - why is this base/max level resetting being done inside this test? Is this something that should be handled inside the Metal backend? (Or has this test essentially been wrong all along for all backends?)",
+      "revId": "042f6e7c5da86b4d4dcc1c6cbb09d9f901b02fec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
