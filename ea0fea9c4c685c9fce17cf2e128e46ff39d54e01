@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9fa04f7_d1f1d5f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-21T14:54:45Z",
+      "side": 1,
+      "message": "Resolved.",
+      "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9729302_d40f1669",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "This function applies a rule from [VkImageCreateInfo spec](https://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/VkImageCreateInfo.html):\n\n```\nif flags contains VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT, then the VkImageFormatListCreateInfo structure included in the pNext chain of VkPhysicalDeviceImageFormatInfo2 must be equivalent to the one included in the pNext chain of VkImageCreateInfo;\n```\n\nThe pNext chain in this function follows this order to adhere to this rule.\nSo the order here is: imageFormatInfo2 -\u003e `imageFormatListCreateInfo -\u003e externalImageFormatInfo -\u003e drmFormatModifierInfo`, and the second part \"is equivalent\" to the `imageFormatListCreateInfo` derived at [line 465](https://chromium-review.googlesource.com/c/angle/angle/+/3645124/3/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp#465).\n\nI fixed the order in this function some months ago when I was trying to solve some Vulkan validation errors. You can find more context about it on [issue 7027](https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7027)",
       "parentUuid": "a9729302_d40f1669",
+      "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d75920c8_65e3e4f5",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-06-21T14:54:45Z",
+      "side": 1,
+      "message": "If you have checked it, then great.",
+      "parentUuid": "e711ba7c_37e08371",
       "revId": "ea0fea9c4c685c9fce17cf2e128e46ff39d54e01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
