@@ -34,6 +34,24 @@
       "parentUuid": "9fb54ea7_bdf6a4d6",
       "revId": "4d73b9661b242c9392984fad4ad2afb27d453074",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16835670_7f4dd25a",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-21T14:36:48Z",
+      "side": 1,
+      "message": "`extend` strictly merges more than `if (adjacent) then merge`. So you can achieve what you are trying to achieve right now, but also cover more cases for free.",
+      "parentUuid": "9da9fbc8_5b554a98",
+      "revId": "4d73b9661b242c9392984fad4ad2afb27d453074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
