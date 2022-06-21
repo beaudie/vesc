@@ -22,6 +22,30 @@
       },
       "revId": "f9438d950c7f5ca584e1bf2431b6402dcd15933f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3eb465_7db9ecb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8701,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-21T18:26:46Z",
+      "side": 1,
+      "message": "Done; I wasn\u0027t sure where these offsets are actually specced so put this in as reference.",
+      "parentUuid": "8021d655_a528f5a3",
+      "range": {
+        "startLine": 8701,
+        "startChar": 19,
+        "endLine": 8701,
+        "endChar": 137
+      },
+      "revId": "f9438d950c7f5ca584e1bf2431b6402dcd15933f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

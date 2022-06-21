@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca92fd6b_53719922",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-21T18:26:46Z",
+      "side": 1,
+      "message": "I wasn\u0027t able to easily reuse depthStencilReadbackCase for this depth format, is it fine if there\u0027s a special test for it for now? This also means code in depthStencilReadbackCase, starting at line 417 in this file, is unreachable currently.",
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
