@@ -124,6 +124,24 @@
       "parentUuid": "e7b233cf_0a39e49a",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd5aeb7_6895649c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-21T21:19:56Z",
+      "side": 1,
+      "message": "\u003e Do these usually call eglTerminate but don\u0027t clean up some of the contexts in other threads?\n\nthe test `EGLMultiContextTest.RepeatedEglInitAndTerminate` captures what the CTS test does\n\n\u003e And then if an app doesn\u0027t call  eglTerminate  at all then the cleanup won\u0027t happen after the fix you\u0027re suggesting?\n\nunfortunately yes since we now no longer know for sure if there is a dormant thread that might spring up and call an EGL / GL call\n\n\u003e we should rename TerminateReason::ProcessExit to something else\n\n`TerminateReason::NoActiveThreads` should be more appropriate\n\n\u003e where those threads that are still referencing contexts might blow up due to this cleanup\n\nif app did call terminate then it cant submit work for any resource. we wait for idle before destroy so already submitted work should be fine\n\n\u003e why we need to do anything special on process exit on Android\n\nrevert this change and run the end2end test and you will see OOM pretty quickly. Only the GLES driver knows enough to perform the cleanup",
+      "parentUuid": "49904aed_5c3787e0",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
