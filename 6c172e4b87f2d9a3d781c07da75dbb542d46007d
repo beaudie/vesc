@@ -34,6 +34,24 @@
       "parentUuid": "1f4af5b6_9921b4ce",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bde9903_0c43782d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-21T17:44:02Z",
+      "side": 1,
+      "message": "\u003e cant access this\nSorry, here are the details from that comment:\n```\nThere are two threads, AAA and BBB:\n\nAAA: V SDL     : Running main function SDL_main from library /data/app/~~UVP3mqpQpmFC9furUQf6AA\u003d\u003d/com.vectorunit.red-7lplkg8KaR8WnfJaOjQ90A\u003d\u003d/lib/arm64/libmain.so\nAAA does not call into ANGLE yet!\n\nBBB: D libEGL  : dlopen_ext from APK (libEGL_angle.so)\nBBB: I ANGLE   : EVENT: eglGetProcAddress(procname \u003d 0x0000007b2ac0b956)\n....\nBBB: I ANGLE   : EVENT: eglInitialize\n...\nBBB exits, triggers cleanup, eglReleaseThread via TLS - but apparently passes the display from eglInitialize to AAA\n\nAAA: now starts using ANGLE:\nAAA: I ANGLE   : EVENT: eglGetError()\nAAA: SDL_main -\u003e VuEngine::init -\u003e SDL_CreateWindow_REAL -\u003e SDL_EGL_LoadLibraryOnly -\u003e eglGetProcAddress -\u003e egl::GetCurrentThread()\n\nbut AAA tries to keep using the same display that was initialized by BBB - AAA didn\u0027t expect that BBB termination would also terminate the display.\n```\n\n\n\u003e spec states that a display that has been terminated needs to be initialized before use\nMakes sense, but that assumes that _the app_ made an `eglTerminate` call to terminate the display, right? This isn\u0027t what\u0027s happening here - `Display::terminate()` is called by `ProcessCleanupCallback` added in this CL, without the app being aware of this happening.\n\n\u003e process exit is when there are no threads, that issue EGL/GL api calls, left in the process and when the last such thread is terminated (pthread_exit) \"gProcessCleanupRefCount\" value goes to 0. What am i missing?\n\nProcess could have a non-GL thread that keeps it alive but start/stop any number of GL threads in any order. If we have N GL threads running at a point in time, it doesn\u0027t imply the process has terminated as it can start a new GL thread and N will go from 0 to 1.",
+      "parentUuid": "86a486da_b4fc8e4e",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
