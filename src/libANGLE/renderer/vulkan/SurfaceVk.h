@@ -270,14 +270,13 @@ class WindowSurfaceVk : public SurfaceVk
         return mPreTransform;
     }
 
+    egl::Error setAutoRefreshEnabled(bool enabled) override;
+
     egl::Error getBufferAge(const gl::Context *context, EGLint *age) override;
 
     egl::Error setRenderBuffer(EGLint renderBuffer) override;
 
-    bool isSharedPresentMode() const
-    {
-        return (mSwapchainPresentMode == vk::PresentMode::SharedDemandRefreshKHR);
-    }
+    bool isSharedPresentMode() const { return isSharedPresentModeImpl(mSwapchainPresentMode); }
 
     egl::Error lockSurface(const egl::Display *display,
                            EGLint usageHint,
@@ -322,7 +321,7 @@ class WindowSurfaceVk : public SurfaceVk
     VkResult acquireNextSwapchainImage(vk::Context *context);
     // This method is called when a swapchain image is presented.  It schedules
     // acquireNextSwapchainImage() to be called later.
-    void deferAcquireNextImage(const gl::Context *context);
+    void deferAcquireNextImage();
     // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
     // will recreate the swapchain (if needed) and call the acquireNextSwapchainImage() method.
     angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
@@ -344,6 +343,12 @@ class WindowSurfaceVk : public SurfaceVk
     bool isMultiSampled() const;
 
     bool supportsPresentMode(vk::PresentMode presentMode) const;
+
+    bool isSharedPresentModeImpl(vk::PresentMode presentMode) const
+    {
+        return (presentMode == vk::PresentMode::SharedDemandRefreshKHR ||
+                presentMode == vk::PresentMode::SharedContinuousRefreshKHR);
+    }
 
     std::vector<vk::PresentMode> mPresentModes;
 
