@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de84ffef_858e9430",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "EGLSurface",
+      "range": {
+        "startLine": 196,
+        "startChar": 45,
+        "endLine": 196,
+        "endChar": 55
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cebc272e_6db210d0",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "EGLSurface",
+      "range": {
+        "startLine": 211,
+        "startChar": 45,
+        "endLine": 211,
+        "endChar": 55
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6f15ed7_5ed7d31c",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "Debug prints to remove",
+      "range": {
+        "startLine": 215,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 26
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0cb725b_7cba8a7a",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "This appears to be common code with the next function.  Can you move it to a helper?  It would make it easier to spot errors like below.",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 75
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6547ade_f1c96b1f",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "ReleaseTexImage.  Moving the remaining code to a helper will make this easier to spot.",
+      "range": {
+        "startLine": 254,
+        "startChar": 49,
+        "endLine": 254,
+        "endChar": 64
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "133aad50_6315b291",
+        "filename": "src/libANGLE/capture/capture_egl.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "style nit: braces for consistency",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 0
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f696b78_289e21fd",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "style nit: braces please",
+      "range": {
+        "startLine": 320,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 74
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4415d3_e5a6ac33",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "Can you put these in the same order as above?",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 9
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c679394_846c67b7",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "Can you add a comment explaining the condition?\nstyle nit: braces please",
+      "range": {
+        "startLine": 768,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 36
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0a37673_d1621bc7",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-21T03:52:08Z",
+      "side": 1,
+      "message": "This and below need the comment updated for correct function name.",
+      "range": {
+        "startLine": 385,
+        "startChar": 29,
+        "endLine": 385,
+        "endChar": 45
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
