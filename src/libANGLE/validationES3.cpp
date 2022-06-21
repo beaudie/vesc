@@ -2887,7 +2887,8 @@ bool ValidateCompressedTexSubImage3D(const Context *context,
         return false;
     }
 
-    if (!data)
+    if (data == nullptr &&
+        context->getState().getTargetBuffer(BufferBinding::PixelUnpack) == nullptr)
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kPixelDataNull);
         return false;
