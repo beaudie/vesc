@@ -88,6 +88,24 @@
       "parentUuid": "d53fb483_0b7b2d65",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7b233cf_0a39e49a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-21T20:02:56Z",
+      "side": 1,
+      "message": "Thanks for looking into this Mohan!\n\nSo I don\u0027t fully understand the context of https://anglebug.com/6723:\n\n\u003e CTS tests and real world apps that don\u0027t cleanup well before exit\nDo these usually call eglTerminate but don\u0027t clean up some of the contexts in other threads?\n\nAnd then if an app doesn\u0027t call `eglTerminate` at all then the cleanup won\u0027t happen after the fix you\u0027re suggesting?\n\nAlso, a minor detail that if we go with that I think we should rename `TerminateReason::ProcessExit` to something else given how it\u0027s not guaranteed that the process is exiting. And there might still be some risk of running into edge cases where those threads that are still referencing contexts might blow up due to this cleanup, or do you know that it would be very unlikely?",
+      "parentUuid": "2d0f56d0_1ed4a929",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
