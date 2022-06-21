@@ -52,6 +52,24 @@
       "parentUuid": "8b1ab61d_1e2c08c1",
       "revId": "a0df3c63b16bb6410d5fcf09147f9f95d57631c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd0dc1f_2d71ed56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-06-21T00:47:11Z",
+      "side": 1,
+      "message": "I\u0027ve updated this change where it avoids erroring for online compression with S3TC, RGTC, and BPTC.",
+      "parentUuid": "e4e39480_3713d7d4",
+      "revId": "a0df3c63b16bb6410d5fcf09147f9f95d57631c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
