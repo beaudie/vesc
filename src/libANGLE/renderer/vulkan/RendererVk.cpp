@@ -4947,32 +4947,35 @@ VkResult RendererVk::queuePresent(vk::Context *context,
 template <typename CommandBufferHelperT, typename RecyclerT>
 angle::Result RendererVk::getCommandBufferImpl(vk::Context *context,
                                                vk::CommandPool *commandPool,
+                                               vk::CommandsAllocator *commandsAllocator,
                                                RecyclerT *recycler,
                                                CommandBufferHelperT **commandBufferHelperOut)
 {
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    return recycler->getCommandBufferHelper(context, commandPool, &mCommandBufferHandleAllocator,
-                                            commandBufferHelperOut);
+    return recycler->getCommandBufferHelper(context, commandPool, commandsAllocator,
+                                            &mCommandBufferHandleAllocator, commandBufferHelperOut);
 }
 
 angle::Result RendererVk::getOutsideRenderPassCommandBufferHelper(
     vk::Context *context,
     vk::CommandPool *commandPool,
+    vk::CommandsAllocator *commandsAllocator,
     vk::OutsideRenderPassCommandBufferHelper **commandBufferHelperOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getOutsideRenderPassCommandBufferHelper");
-    return getCommandBufferImpl(context, commandPool, &mOutsideRenderPassCommandBufferRecycler,
-                                commandBufferHelperOut);
+    return getCommandBufferImpl(context, commandPool, commandsAllocator,
+                                &mOutsideRenderPassCommandBufferRecycler, commandBufferHelperOut);
 }
 
 angle::Result RendererVk::getRenderPassCommandBufferHelper(
     vk::Context *context,
     vk::CommandPool *commandPool,
+    vk::CommandsAllocator *commandsAllocator,
     vk::RenderPassCommandBufferHelper **commandBufferHelperOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::getRenderPassCommandBufferHelper");
-    return getCommandBufferImpl(context, commandPool, &mRenderPassCommandBufferRecycler,
-                                commandBufferHelperOut);
+    return getCommandBufferImpl(context, commandPool, commandsAllocator,
+                                &mRenderPassCommandBufferRecycler, commandBufferHelperOut);
 }
 
 void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
@@ -4981,6 +4984,7 @@ void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleOutsideRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
+
     mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(
         device, &mCommandBufferHandleAllocator, commandBuffer);
 }
@@ -4991,6 +4995,7 @@ void RendererVk::recycleRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
+
     mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(
         device, &mCommandBufferHandleAllocator, commandBuffer);
 }

@@ -1024,7 +1024,12 @@ void ContextVk::onDestroy(const gl::Context *context)
         queryPool.destroy(device);
     }
 
-    // Recycle current commands buffers.
+    // Recycle current command buffers.
+    // Only ring buffer allocators are attached or detached. These functions are no-op for pool
+    // allocators.
+    mOutsideRenderPassCommands->detachAllocator();
+    mRenderPassCommands->detachAllocator();
+
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(device, &mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(device, &mRenderPassCommands);
 
@@ -1140,9 +1145,14 @@ angle::Result ContextVk::initialize()
         this, &mCommandPools.renderPassPool, mRenderer->getDeviceQueueIndex(),
         hasProtectedContent()));
     ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
-        this, &mCommandPools.outsideRenderPassPool, &mOutsideRenderPassCommands));
+        this, &mCommandPools.outsideRenderPassPool, nullptr, &mOutsideRenderPassCommands));
     ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(this, &mCommandPools.renderPassPool,
-                                                          &mRenderPassCommands));
+                                                          nullptr, &mRenderPassCommands));
+
+    // Only ring buffer allocators are attached or detached. These functions are no-op for pool
+    // allocators.
+    mOutsideRenderPassCommands->attachAllocator(&mOutsideRenderPassCommandsAllocator);
+    mRenderPassCommands->attachAllocator(&mRenderPassCommandsAllocator);
 
     if (mGpuEventsEnabled)
     {
