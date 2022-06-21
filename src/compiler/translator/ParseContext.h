@@ -577,6 +577,7 @@ class TParseContext : angle::NonCopyable
     void checkImageBindingIsValid(const TSourceLoc &location,
                                   int binding,
                                   int arrayTotalElementCount);
+    void checkPixelLocalStorageBindingIsValid(const TSourceLoc &location, int binding);
     void checkSamplerBindingIsValid(const TSourceLoc &location,
                                     int binding,
                                     int arrayTotalElementCount);
