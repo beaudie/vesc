@@ -1794,6 +1794,62 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                 break;
         }
     }
+    else if (IsPixelLocal(publicType.getBasicType()))
+    {
+        if (getShaderType() != GL_FRAGMENT_SHADER)
+        {
+            error(identifierLocation,
+                  "undefined use of pixel local storage outside a fragment shader",
+                  getBasicString(publicType.getBasicType()));
+            return;
+        }
+        switch (layoutQualifier.imageInternalFormat)
+        {
+            case EiifRGBA32F:
+            case EiifRGBA16F:
+            case EiifR32F:
+            case EiifRGBA8:
+                if (publicType.getBasicType() != EbtPixelLocalANGLE)
+                {
+                    error(identifierLocation, "pixel local storage format requires pixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifRGBA16I:
+            case EiifRGBA8I:
+                if (publicType.getBasicType() != EbtIPixelLocalANGLE)
+                {
+                    error(identifierLocation,
+                          "pixel local storage format requires ipixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifRGBA32UI:
+            case EiifRGBA16UI:
+            case EiifRGBA8UI:
+            case EiifR32UI:
+                if (publicType.getBasicType() != EbtUPixelLocalANGLE)
+                {
+                    error(identifierLocation,
+                          "pixel local storage format requires upixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifR32I:
+            case EiifRGBA8_SNORM:
+            case EiifRGBA32I:
+            default:
+                error(identifierLocation, "illegal pixel local storage format",
+                      getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                break;
+            case EiifUnspecified:
+                error(identifierLocation, "pixel local storage requires a format specifier",
+                      "layout qualifier");
+                break;
+        }
+        checkMemoryQualifierIsNotSpecified(publicType.memoryQualifier, identifierLocation);
+        checkDeclaratorLocationIsNotSpecified(identifierLocation, publicType);
+    }
     else
     {
         checkInternalFormatIsNotSpecified(identifierLocation, layoutQualifier.imageInternalFormat);
@@ -1832,6 +1888,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     else if (IsAtomicCounter(type.getBasicType()))
     {
         checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
+    else if (IsPixelLocal(type.getBasicType()))
+    {
+        checkPixelLocalStorageBindingIsValid(identifierLocation, type);
     }
     else
     {
@@ -1976,6 +2036,35 @@ void TParseContext::checkAtomicCounterBindingIsValid(const TSourceLoc &location,
     {
         error(location, "atomic counter binding greater than gl_MaxAtomicCounterBindings",
               "binding");
+    }
+}
+
+void TParseContext::checkPixelLocalStorageBindingIsValid(const TSourceLoc &location,
+                                                         const TType &type)
+{
+    TLayoutQualifier layoutQualifier = type.getLayoutQualifier();
+    if (type.isArray())
+    {
+        // PLS is not allowed in arrays.
+        // TODO(anglebug.com/7279): Consider allowing this once more backends are implemented.
+        error(location, "pixel local storage handles cannot be aggregated in arrays", "array");
+    }
+    else if (layoutQualifier.binding < 0)
+    {
+        error(location, "pixel local storage requires a binding index", "layout qualifier");
+    }
+    // TODO(anglebug.com/7279):
+    // else if (binding >= GL_MAX_LOCAL_STORAGE_PLANES_ANGLE)
+    // {
+    // }
+    else if (mPLSBindings.find(layoutQualifier.binding) != mPLSBindings.end())
+    {
+        error(location, "duplicate pixel local storage binding index",
+              std::to_string(layoutQualifier.binding).c_str());
+    }
+    else
+    {
+        mPLSBindings[layoutQualifier.binding] = layoutQualifier.imageInternalFormat;
     }
 }
 
@@ -5979,7 +6068,10 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
             error(field.line(), "invalid qualifier on struct member", "invariant");
         }
         // ESSL 3.10 section 4.1.8 -- atomic_uint or images are not allowed as structure member.
-        if (IsImage(field.type()->getBasicType()) || IsAtomicCounter(field.type()->getBasicType()))
+        // ANGLE_shader_pixel_local_storage also disallows PLS as struct members.
+        if (IsImage(field.type()->getBasicType()) ||
+            IsAtomicCounter(field.type()->getBasicType()) ||
+            IsPixelLocal(field.type()->getBasicType()))
         {
             error(field.line(), "disallowed type in struct", field.type()->getBasicString());
         }
