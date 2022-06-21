@@ -91,6 +91,11 @@ class TParseContext : angle::NonCopyable
 
     int getNumViews() const { return mNumViews; }
 
+    const std::map<int, TLayoutImageInternalFormat> &pixelLocalStorageBindings() const
+    {
+        return mPLSBindings;
+    }
+
     void enterFunctionDeclaration() { mDeclaringFunction = true; }
 
     void exitFunctionDeclaration() { mDeclaringFunction = false; }
@@ -585,6 +590,7 @@ class TParseContext : angle::NonCopyable
                                   int binding,
                                   int arraySize);
     void checkAtomicCounterBindingIsValid(const TSourceLoc &location, int binding);
+    void checkPixelLocalStorageBindingIsValid(const TSourceLoc &, const TType &);
 
     void checkUniformLocationInRange(const TSourceLoc &location,
                                      int objectLocationCount,
@@ -727,6 +733,9 @@ class TParseContext : angle::NonCopyable
 
     // Track the state of each atomic counter binding.
     std::map<int, AtomicCounterBindingState> mAtomicCounterBindingStates;
+
+    // Track the format of each pixel local storage binding.
+    std::map<int, TLayoutImageInternalFormat> mPLSBindings;
 
     // Track the geometry shader global parameters declared in layout.
     TLayoutPrimitiveType mGeometryShaderInputPrimitiveType;
