@@ -1090,6 +1090,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
   public:
     CommandPool *getCommandPool() { return mCommandPool; }
 
+    bool hasAllocatorLinks() const { return mAllocator || mAllocSharedCP; }
+
     void bufferRead(ContextVk *contextVk,
                     VkAccessFlags readAccessType,
                     PipelineStage readStage,
@@ -1135,8 +1137,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
 
-    void initializeImpl(Context *context, CommandPool *commandPool);
-
     void resetImpl();
 
     void imageReadImpl(ContextVk *contextVk,
@@ -1162,9 +1162,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Identifies the command buffer.
     CommandBufferID mID;
 
-    // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
-    //  that occur w/ shared allocator between multiple CBHs.
-    angle::PoolAllocator mAllocator;
+    angle::SharedRingBufferAllocator *mAllocator;
+    angle::SharedRingBufferCheckPoint *mAllocSharedCP;
+    angle::RingBufferCheckPoint mAllocReleaseCP;
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
@@ -1194,13 +1194,14 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBufferHelper();
     ~OutsideRenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context, CommandPool *commandPool);
-
     angle::Result reset(Context *context);
 
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
+
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1232,8 +1233,6 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     void addCommandDiagnostics(ContextVk *contextVk);
 
   private:
-    angle::Result initializeCommandBuffer(Context *context);
-
     OutsideRenderPassCommandBuffer mCommandBuffer;
 };
 
@@ -1286,13 +1285,14 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBufferHelper();
     ~RenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context, CommandPool *commandPool);
-
     angle::Result reset(Context *context);
 
     RenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentSubpass]; }
 
     bool empty() const { return !started(); }
+
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }
@@ -1436,7 +1436,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassSerial getRenderPassSerial() const { return mRenderPassSerial; }
 
   private:
-    angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
     angle::Result endRenderPassCommandBuffer(ContextVk *contextVk);
 

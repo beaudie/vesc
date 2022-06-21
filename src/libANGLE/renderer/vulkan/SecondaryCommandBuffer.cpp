@@ -180,6 +180,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
     VkCommandBuffer cmdBuffer = primary->getHandle();
 
     ANGLE_TRACE_EVENT0("gpu.angle", "SecondaryCommandBuffer::executeCommands");
+    terminateLastCommandBlock();
     for (const CommandHeader *command : mCommands)
     {
         for (const CommandHeader *currentCommand                      = command;
@@ -784,22 +785,8 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
 void SecondaryCommandBuffer::getMemoryUsageStats(size_t *usedMemoryOut,
                                                  size_t *allocatedMemoryOut) const
 {
-    *allocatedMemoryOut = kBlockSize * mCommands.size();
-
-    *usedMemoryOut = 0;
-    for (const CommandHeader *command : mCommands)
-    {
-        const CommandHeader *commandEnd = command;
-        while (commandEnd->id != CommandID::Invalid)
-        {
-            commandEnd = NextCommand(commandEnd);
-        }
-
-        *usedMemoryOut += reinterpret_cast<const uint8_t *>(commandEnd) -
-                          reinterpret_cast<const uint8_t *>(command) + sizeof(CommandHeader::id);
-    }
-
-    ASSERT(*usedMemoryOut <= *allocatedMemoryOut);
+    *usedMemoryOut      = getCommandSize();
+    *allocatedMemoryOut = getCommandSize();
 }
 
 std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
