@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f2c1b9_63d2bf5f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-06-21T02:49:05Z",
+      "side": 1,
+      "message": "Please check that this block is executed. Looks like INVALID_VALUE would be generated on L1492.",
+      "range": {
+        "startLine": 1513,
+        "startChar": 0,
+        "endLine": 1525,
+        "endChar": 9
+      },
+      "revId": "9e3773311a37a81596e9c17124577294177536ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
