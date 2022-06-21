@@ -848,7 +848,7 @@ class PipelineLayoutDesc final
   private:
     DescriptorSetArray<DescriptorSetLayoutDesc> mDescriptorSetLayouts;
     PackedPushConstantRange mPushConstantRange;
-    ANGLE_MAYBE_UNUSED uint32_t mPadding;
+    [[maybe_unused]] uint32_t mPadding;
 
     // Verify the arrays are properly packed.
     static_assert(sizeof(decltype(mDescriptorSetLayouts)) ==
