@@ -70,6 +70,24 @@
       "parentUuid": "5bde9903_0c43782d",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0f56d0_1ed4a929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-21T19:23:22Z",
+      "side": 1,
+      "message": "\u003e but that assumes that _the app_ made an  eglTerminate  call to terminate the display, right?\n\nthat is correct\n\n\u003e This isn\u0027t what\u0027s happening here\n\nAck\n\n\u003e If we have N GL threads running at a point in time, it doesn\u0027t imply the process has terminated as it can start a new GL thread\n\nAck\n\nshould be a simple fix where i check to see if a display is terminated and only then call into terminate(...). WDYT?",
+      "parentUuid": "d53fb483_0b7b2d65",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
