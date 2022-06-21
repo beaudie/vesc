@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb7ceea7_f2939133",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-21T19:08:04Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ec4789f_ac2d11f8",
@@ -72,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "983ec297_830996b6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5335,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-21T19:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5ffc2db_54761d63",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca610148_693e5139",
@@ -85,6 +120,24 @@
       "writtenOn": "2022-06-16T23:03:51Z",
       "side": 1,
       "message": "IIRC from my testing (at the office), this test failed on ES2 on my Pixel 6.  Does that match your testing?\n\nIf so, I think we should skip it here for:\n- ES2\n- non-Android",
+      "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ead8433_2c2d186e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-21T19:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca610148_693e5139",
       "revId": "7b887a26779ba6c0981b0068e8da7a8481544dbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
