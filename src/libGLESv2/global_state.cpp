@@ -11,6 +11,7 @@
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
+#include "common/tls.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Thread.h"
 #include "libGLESv2/resource.h"
@@ -68,19 +69,18 @@ Thread *AllocateCurrentThread()
 #endif
 
 #if defined(ANGLE_PLATFORM_ANDROID)
-    static pthread_once_t keyOnce           = PTHREAD_ONCE_INIT;
-    static TLSIndex gProcessCleanupTLSIndex = TLS_INVALID_INDEX;
+    static pthread_once_t keyOnce          = PTHREAD_ONCE_INIT;
+    static TLSIndex gThreadCleanupTLSIndex = TLS_INVALID_INDEX;
 
-    // Create process cleanup TLS slot
-    auto CreateProcessCleanupTLSIndex = []() {
-        gProcessCleanupTLSIndex = CreateTLSIndex(angle::ProcessCleanupCallback);
+    // Create thread cleanup TLS slot
+    auto CreateThreadCleanupTLSIndex = []() {
+        gThreadCleanupTLSIndex = CreateTLSIndex(angle::PthreadKeyDestructorCallback);
     };
-    pthread_once(&keyOnce, CreateProcessCleanupTLSIndex);
-    ASSERT(gProcessCleanupTLSIndex != TLS_INVALID_INDEX);
+    pthread_once(&keyOnce, CreateThreadCleanupTLSIndex);
+    ASSERT(gThreadCleanupTLSIndex != TLS_INVALID_INDEX);
 
-    // Initialize process cleanup TLS slot
-    angle::gProcessCleanupRefCount++;
-    SetTLSValue(gProcessCleanupTLSIndex, thread);
+    // Initialize thread cleanup TLS slot
+    SetTLSValue(gThreadCleanupTLSIndex, thread);
 #endif  // ANGLE_PLATFORM_ANDROID
 
     ASSERT(thread);
