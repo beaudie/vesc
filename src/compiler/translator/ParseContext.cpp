@@ -1794,6 +1794,12 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                 break;
         }
     }
+    else if (IsPixelLocal(publicType.getBasicType()))
+    {
+        checkMemoryQualifierIsNotSpecified(publicType.memoryQualifier, identifierLocation);
+        checkDeclaratorLocationIsNotSpecified(identifierLocation, publicType);
+        // PLS validates its own format qualifiers.
+    }
     else
     {
         checkInternalFormatIsNotSpecified(identifierLocation, layoutQualifier.imageInternalFormat);
@@ -1832,6 +1838,10 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     else if (IsAtomicCounter(type.getBasicType()))
     {
         checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
+    else if (IsPixelLocal(type.getBasicType()))
+    {
+        // PLS validates its own bindings.
     }
     else
     {
