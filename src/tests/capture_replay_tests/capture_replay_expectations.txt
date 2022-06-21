@@ -168,3 +168,5 @@
 7449 : MultisampleTest.Line/* = SKIP_FOR_CAPTURE
 7449 : MultisampleTest.Point/* = SKIP_FOR_CAPTURE
 7449 : MultisampleTest.Triangle/* = SKIP_FOR_CAPTURE
+
+6723 : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP_FOR_CAPTURE
