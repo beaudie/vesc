@@ -64,25 +64,25 @@ IP Status
 
 New Procedures and Functions
 
-    void MultiDrawArraysANGLE(enum mode,
+    void MultiDrawArraysANGLE(GLenum mode,
                               const GLint* firsts,
                               const GLsizei* counts,
                               const GLsizei drawcount);
 
-    void MultiDrawElementsANGLE(enum mode,
-                                const GLint* counts,
+    void MultiDrawElementsANGLE(GLenum mode,
+                                const GLsizei* counts,
                                 GLenum type,
                                 const GLvoid* const* indices,
                                 const GLsizei drawcount);
 
-    void MultiDrawArraysInstancedANGLE(enum mode,
+    void MultiDrawArraysInstancedANGLE(GLenum mode,
                                        const GLint* firsts,
                                        const GLsizei* counts,
                                        const GLsizei* instanceCounts,
                                        const GLsizei drawcount);
 
-    void MultiDrawElementsInstancedANGLE(enum mode,
-                                         const GLint* counts,
+    void MultiDrawElementsInstancedANGLE(GLenum mode,
+                                         const GLsizei* counts,
                                          GLenum type,
                                          const GLvoid* const* indices,
                                          const GLsizei* instanceCounts,

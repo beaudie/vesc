@@ -68,7 +68,7 @@ IP Status
 
 New Procedures and Functions
 
-    void DrawArraysInstancedBaseInstanceANGLE(enum mode,
+    void DrawArraysInstancedBaseInstanceANGLE(GLenum mode,
                                               GLint first,
                                               GLsizei count,
                                               GLsizei instanceCount,
@@ -82,15 +82,15 @@ New Procedures and Functions
                                                         GLint baseVertex,
                                                         GLuint baseInstance);
 
-    void MultiDrawArraysInstancedBaseInstanceANGLE(enum mode,
+    void MultiDrawArraysInstancedBaseInstanceANGLE(GLenum mode,
                                                 const GLint* firsts,
                                                 const GLsizei* counts,
                                                 const GLsizei* instanceCounts,
                                                 const GLuint* baseInstances,
                                                 const GLsizei drawcount);
 
-    void MultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(enum mode,
-                                                const GLint* counts,
+    void MultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(GLenum mode,
+                                                const GLsizei* counts,
                                                 GLenum type,
                                                 const GLvoid* const* indices,
                                                 const GLsizei* instanceCounts,
