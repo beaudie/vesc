@@ -21,6 +21,7 @@
 #include "compiler/translator/ValidateLimitations.h"
 #include "compiler/translator/ValidateMaxParameters.h"
 #include "compiler/translator/ValidateOutputs.h"
+#include "compiler/translator/ValidatePixelLocalStorage.h"
 #include "compiler/translator/ValidateTypeSizeLimitations.h"
 #include "compiler/translator/ValidateVaryingLocations.h"
 #include "compiler/translator/VariablePacker.h"
@@ -39,6 +40,7 @@
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
+#include "compiler/translator/tree_ops/RewritePixelLocalStorage.h"
 #include "compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.h"
 #include "compiler/translator/tree_ops/SeparateDeclarations.h"
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
@@ -666,6 +668,24 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (!validateAST(root))
     {
         return false;
+    }
+
+    // The PLS rewrite needs to occur before collecting variables or any operations on images. We
+    // also do it as early as possible in order to take advantage of as many simplifications as
+    // possible.
+    if (IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_shader_pixel_local_storage))
+    {
+        auto usage = sh::ValidatePixelLocalStorage(root, mShaderType, &mSymbolTable, &mDiagnostics);
+        if (usage == PixelLocalStorageUsage::Invalid)
+        {
+            return false;  // The shader has PLS errors.
+        }
+        if (usage == PixelLocalStorageUsage::Valid &&
+            !sh::RewritePixelLocalStorageToImages(this, root, getSymbolTable(), getShaderVersion()))
+        {
+            mDiagnostics.globalError("internal compiler error translating pixel local storage");
+            return false;
+        }
     }
 
     // Disallow expressions deemed too complex.

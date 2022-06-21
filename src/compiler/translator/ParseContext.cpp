@@ -1794,6 +1794,55 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                 break;
         }
     }
+    else if (IsPixelLocal(publicType.getBasicType()))
+    {
+        switch (layoutQualifier.imageInternalFormat)
+        {
+            case EiifRGBA32F:
+            case EiifRGBA16F:
+            case EiifR32F:
+            case EiifRGBA8:
+                if (publicType.getBasicType() != EbtPixelLocalANGLE)
+                {
+                    error(identifierLocation, "pixel local storage format requires pixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifRGBA16I:
+            case EiifRGBA8I:
+                if (publicType.getBasicType() != EbtIPixelLocalANGLE)
+                {
+                    error(identifierLocation,
+                          "pixel local storage format requires ipixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifRGBA32UI:
+            case EiifRGBA16UI:
+            case EiifRGBA8UI:
+            case EiifR32UI:
+                if (publicType.getBasicType() != EbtUPixelLocalANGLE)
+                {
+                    error(identifierLocation,
+                          "pixel local storage format requires upixelLocalANGLE",
+                          getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                }
+                break;
+            case EiifR32I:
+            case EiifRGBA8_SNORM:
+            case EiifRGBA32I:
+            default:
+                error(identifierLocation, "illegal pixel local storage format",
+                      getImageInternalFormatString(layoutQualifier.imageInternalFormat));
+                break;
+            case EiifUnspecified:
+                error(identifierLocation, "pixel local storage requires a format specifier",
+                      "layout qualifier");
+                break;
+        }
+        checkMemoryQualifierIsNotSpecified(publicType.memoryQualifier, identifierLocation);
+        checkDeclaratorLocationIsNotSpecified(identifierLocation, publicType);
+    }
     else
     {
         checkInternalFormatIsNotSpecified(identifierLocation, layoutQualifier.imageInternalFormat);
@@ -1832,6 +1881,15 @@ void TParseContext::checkBindingIsValid(const TSourceLoc &identifierLocation, co
     else if (IsAtomicCounter(type.getBasicType()))
     {
         checkAtomicCounterBindingIsValid(identifierLocation, layoutQualifier.binding);
+    }
+    else if (IsPixelLocal(type.getBasicType()))
+    {
+        if (type.isArray())
+        {
+            error(identifierLocation, "pixel local storage handles cannot be aggregated in arrays",
+                  "array");
+        }
+        checkPixelLocalStorageBindingIsValid(identifierLocation, layoutQualifier.binding);
     }
     else
     {
@@ -1889,7 +1947,8 @@ void TParseContext::checkInternalFormatIsNotSpecified(const TSourceLoc &location
 {
     if (internalFormat != EiifUnspecified)
     {
-        error(location, "invalid layout qualifier: only valid when used with images",
+        error(location,
+              "invalid layout qualifier: only valid when used with images or pixel local storage",
               getImageInternalFormatString(internalFormat));
     }
 }
@@ -1932,6 +1991,19 @@ void TParseContext::checkImageBindingIsValid(const TSourceLoc &location,
     if (binding >= 0 && binding + arrayTotalElementCount > mMaxImageUnits)
     {
         error(location, "image binding greater than gl_MaxImageUnits", "binding");
+    }
+}
+
+void TParseContext::checkPixelLocalStorageBindingIsValid(const TSourceLoc &location, int binding)
+{
+    if (binding < 0)
+    {
+        error(location, "pixel local storage requires a binding index", "layout qualifier");
+    }
+    else if (binding >= mMaxImageUnits)  // TODO(anglebug.com/7279): mMaxPixelLocalStoragePlanes.
+    {
+        // TODO(anglebug.com/7279): gl_MaxPixelLocalStoragePlanes.
+        error(location, "pixel local storage binding greater than gl_MaxImageUnits", "binding");
     }
 }
 
