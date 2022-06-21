@@ -862,7 +862,11 @@ void ANGLERenderTest::SetUp()
 #if defined(ANGLE_ENABLE_ASSERTS)
     if (IsGLExtensionEnabled("GL_KHR_debug"))
     {
-        EnableDebugCallback(&PerfTestDebugCallback, this);
+        // glDebugMessageControlKHR and glDebugMessageCallbackKHR crash on ARM GLES1.
+        if (!(mTestParams.majorVersion == 1 && IsARM()))
+        {
+            EnableDebugCallback(&PerfTestDebugCallback, this);
+        }
     }
 #endif
 
