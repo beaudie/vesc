@@ -1040,6 +1040,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     }
 
     // Recycle current commands buffers.
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    mOutsideRenderPassCommands->detachAllocator();
+    mRenderPassCommands->detachAllocator();
+#endif
+
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(device, &mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(device, &mRenderPassCommands);
 
@@ -1185,6 +1190,16 @@ angle::Result ContextVk::initialize()
         this, &mCommandPools.outsideRenderPassPool, &mOutsideRenderPassCommands));
     ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(this, &mCommandPools.renderPassPool,
                                                           &mRenderPassCommands));
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+#    if ANGLE_RING_BUFFER_ALLOCATOR_DEBUG
+    std::string contextIDStr = std::to_string(mState.getContextID().value);
+    mOutsideRenderPassCommandsAllocator.get().debugName = "NON_RP: " + contextIDStr;
+    mRenderPassCommandsAllocator.get().debugName        = "RP_CMD: " + contextIDStr;
+#    endif
+    mOutsideRenderPassCommands->attachAllocator(&mOutsideRenderPassCommandsAllocator);
+    mRenderPassCommands->attachAllocator(&mRenderPassCommandsAllocator);
+#endif
 
     if (mGpuEventsEnabled)
     {

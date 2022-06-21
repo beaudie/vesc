@@ -817,11 +817,21 @@ angle::Result CommandProcessor::flushOutsideRPCommands(
     ANGLE_TRY(checkAndPopPendingError(context));
 
     (*outsideRPCommands)->markClosed();
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    const auto allocator = (*outsideRPCommands)->detachAllocator();
+#endif
     CommandProcessorTask task;
     task.initOutsideRenderPassProcessCommands(hasProtectedContent, *outsideRPCommands);
     queueCommand(std::move(task));
-    return mRenderer->getOutsideRenderPassCommandBufferHelper(
-        context, (*outsideRPCommands)->getCommandPool(), outsideRPCommands);
+
+    ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
+        context, (*outsideRPCommands)->getCommandPool(), outsideRPCommands));
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    (*outsideRPCommands)->attachAllocator(allocator);
+#endif
+
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::flushRenderPassCommands(
@@ -833,11 +843,21 @@ angle::Result CommandProcessor::flushRenderPassCommands(
     ANGLE_TRY(checkAndPopPendingError(context));
 
     (*renderPassCommands)->markClosed();
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    const auto allocator = (*renderPassCommands)->detachAllocator();
+#endif
     CommandProcessorTask task;
     task.initRenderPassProcessCommands(hasProtectedContent, *renderPassCommands, &renderPass);
     queueCommand(std::move(task));
-    return mRenderer->getRenderPassCommandBufferHelper(
-        context, (*renderPassCommands)->getCommandPool(), renderPassCommands);
+
+    ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(
+        context, (*renderPassCommands)->getCommandPool(), renderPassCommands));
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    (*renderPassCommands)->attachAllocator(allocator);
+#endif
+
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::ensureNoPendingWork(Context *context)

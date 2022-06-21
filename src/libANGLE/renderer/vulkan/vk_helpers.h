@@ -1073,6 +1073,10 @@ class CommandBufferHelperCommon : angle::NonCopyable
   public:
     CommandPool *getCommandPool() { return mCommandPool; }
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    bool hasAllocatorLinks() const { return mAllocator || mAllocSharedCP; }
+#endif
+
     void bufferRead(ContextVk *contextVk,
                     VkAccessFlags readAccessType,
                     PipelineStage readStage,
@@ -1145,9 +1149,15 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Identifies the command buffer.
     CommandBufferID mID;
 
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    angle::SharedRingBufferAllocator *mAllocator;
+    angle::SharedRingBufferAllocator::CheckPoint *mAllocSharedCP;
+    angle::RingBufferAllocator::CheckPoint mAllocRelaseCP;
+#else
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
     //  that occur w/ shared allocator between multiple CBHs.
     angle::PoolAllocator mAllocator;
+#endif
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
@@ -1184,6 +1194,11 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
+#endif
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1233,6 +1248,11 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentSubpass]; }
 
     bool empty() const { return !started(); }
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    void attachAllocator(angle::SharedRingBufferAllocator *allocator);
+    angle::SharedRingBufferAllocator *detachAllocator();
+#endif
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }

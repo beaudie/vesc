@@ -1419,6 +1419,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::OutsideRenderPassCommandBufferHelper *mOutsideRenderPassCommands;
     vk::RenderPassCommandBufferHelper *mRenderPassCommands;
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    angle::SharedRingBufferAllocator mOutsideRenderPassCommandsAllocator;
+    angle::SharedRingBufferAllocator mRenderPassCommandsAllocator;
+#endif
 
     // The following is used when creating debug-util markers for graphics debuggers (e.g. AGI).  A
     // given gl{Begin|End}Query command may result in commands being submitted to the outside or

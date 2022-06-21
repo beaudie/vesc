@@ -68,7 +68,9 @@ constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Compute, PipelineStage::ComputeShader},
 };
 
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
 constexpr size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
+#endif
 
 struct ImageMemoryBarrierData
 {
@@ -1313,7 +1315,12 @@ bool RenderPassAttachment::onAccessImpl(ResourceAccess access, uint32_t currentC
 
 // CommandBufferHelperCommon implementation.
 CommandBufferHelperCommon::CommandBufferHelperCommon()
-    : mPipelineBarriers(),
+    :
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+      mAllocator(nullptr),
+      mAllocSharedCP(nullptr),
+#endif
+      mPipelineBarriers(),
       mPipelineBarrierMask(),
       mCommandPool(nullptr),
       mHasShaderStorageOutput(false),
@@ -1325,6 +1332,12 @@ CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
 
 void CommandBufferHelperCommon::initializeImpl(Context *context, CommandPool *commandPool)
 {
+    // #if !SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS
+    //  constexpr size_t kInitialBufferCount = 128;
+    //  mUsedBuffers.ensureCapacity(kInitialBufferCount);  // Alternative?
+    // #endif
+
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
     mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
     // Push a scope into the pool allocator so we can easily free and re-init on reset()
     mAllocator.push();
@@ -1332,16 +1345,93 @@ void CommandBufferHelperCommon::initializeImpl(Context *context, CommandPool *co
     mUsedBufferCount = 0;
 
     mCommandPool = commandPool;
+#endif
 }
+
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+void RenderPassCommandBufferHelper::attachAllocator(angle::SharedRingBufferAllocator *allocator)
+{
+    ASSERT(allocator);
+    ASSERT(!mAllocator);
+    mAllocator = allocator;
+    if (mAllocator->isShared())
+    {
+        mAllocator->releaseToSharedCP();
+    }
+
+    getCommandBuffer().attachAllocator(std::move(mAllocator->get()));
+}
+
+void OutsideRenderPassCommandBufferHelper::attachAllocator(
+    angle::SharedRingBufferAllocator *allocator)
+{
+    ASSERT(allocator);
+    ASSERT(!mAllocator);
+    mAllocator = allocator;
+    if (mAllocator->isShared())
+    {
+        mAllocator->releaseToSharedCP();
+    }
+
+    getCommandBuffer().attachAllocator(std::move(mAllocator->get()));
+}
+
+angle::SharedRingBufferAllocator *RenderPassCommandBufferHelper::detachAllocator()
+{
+    ASSERT(mAllocator);
+    getCommandBuffer().detachAllocator(mAllocator->get());
+    if (!getCommandBuffer().empty())  // OK to have empty RP
+    {
+        // Must call "reset()" after detach from non-empty "mCommandBuffer"
+        ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
+        mAllocSharedCP = mAllocator->acquireSharedCP();
+        mAllocRelaseCP = mAllocator->get().getReleaseCheckPoint();
+    }
+    angle::SharedRingBufferAllocator *result = mAllocator;
+    mAllocator                               = nullptr;
+    return result;
+}
+
+angle::SharedRingBufferAllocator *OutsideRenderPassCommandBufferHelper::detachAllocator()
+{
+    ASSERT(mAllocator);
+    getCommandBuffer().detachAllocator(mAllocator->get());
+    if (!getCommandBuffer().empty())  // OK to have empty RP
+    {
+        // Must call "reset()" after detach from non-empty "mCommandBuffer"
+        ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
+        mAllocSharedCP = mAllocator->acquireSharedCP();
+        mAllocRelaseCP = mAllocator->get().getReleaseCheckPoint();
+    }
+    angle::SharedRingBufferAllocator *result = mAllocator;
+    mAllocator                               = nullptr;
+    return result;
+}
+
+#endif  // SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
 
 void CommandBufferHelperCommon::resetImpl()
 {
+#if SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    if (mAllocator)
+    {
+        ASSERT(!mAllocator->isShared());  // If shared - must have been detached
+        // Memory will be released in the "mCommandBuffer.reset()"
+    }
+    else if (mAllocSharedCP)
+    {
+        mAllocSharedCP->releaseAndUpdate(&mAllocRelaseCP);
+        mAllocSharedCP = nullptr;
+    }
+    ASSERT(!mAllocSharedCP && !mAllocRelaseCP.valid());
+#else
     mAllocator.pop();
     mAllocator.push();
 
     mUsedBufferCount = 0;
 
     ASSERT(mResourceUseList.empty());
+#endif
 }
 
 void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
@@ -1526,7 +1616,10 @@ angle::Result OutsideRenderPassCommandBufferHelper::initialize(Context *context,
 
 angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return mCommandBuffer.initialize(context, mCommandPool, false, &mAllocator);
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    ANGLE_TRY(mCommandBuffer.initialize(context, mCommandPool, false, &mAllocator));
+#endif
+    return angle::Result::Continue;
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
@@ -1614,7 +1707,10 @@ angle::Result RenderPassCommandBufferHelper::initialize(Context *context, Comman
 
 angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
 {
-    return getCommandBuffer().initialize(context, mCommandPool, true, &mAllocator);
+#if !SVDT_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC
+    ANGLE_TRY(getCommandBuffer().initialize(context, mCommandPool, true, &mAllocator));
+#endif
+    return angle::Result::Continue;
 }
 
 angle::Result RenderPassCommandBufferHelper::reset(Context *context)
