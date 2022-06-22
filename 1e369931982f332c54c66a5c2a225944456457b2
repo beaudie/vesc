@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78f4ef90_5a283cbe",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-22T15:56:50Z",
+      "side": 1,
+      "message": "These DEPS are synched with Chromium here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/scripts/roll_chromium_deps.py\n\nThis breaks rolling Chromium into ANGLE with a message:\nYou need to do a manual roll and remove/add entries in DEPS so the old and new list match.\n\nYou need to either add these packages in Chrome\u0027s DEPS and then do a manuall roll, or choose another folder.",
+      "range": {
+        "startLine": 143,
+        "startChar": 3,
+        "endLine": 143,
+        "endChar": 21
+      },
+      "revId": "1e369931982f332c54c66a5c2a225944456457b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e89d8d06_f837cd5e",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-22T15:56:50Z",
+      "side": 1,
+      "message": "nit: missing \u0027n\u0027 in the end",
+      "range": {
+        "startLine": 140,
+        "startChar": 29,
+        "endLine": 140,
+        "endChar": 36
+      },
+      "revId": "1e369931982f332c54c66a5c2a225944456457b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
