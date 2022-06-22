@@ -154,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c091a8ed_8237176d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T18:16:34Z",
+      "side": 1,
+      "message": "Thanks for pointing out, I did not realize clearImpl() not always call getFramebuffer. But I think it really does not really hurt to call getFramebuffer there as well since you will need tVkFramebuffer object sooner or later.\n\nBut as you said, it is perfectly okay to add logic in syncState and store it in FramebufferVk. The whole point is this is immutable information of VkFramebuffer, no need to figure out at every clear call.",
+      "parentUuid": "060b957d_c2cdf2aa",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2144,
+        "endChar": 34
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b47f0a0d_c494d685",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 2
