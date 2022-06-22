@@ -145,7 +145,11 @@ deps = {
       {
         'package': 'gn/gn/linux-${{arch}}',
         'version': 'git_revision:ae474cc51337c3fe823f936371c5e92891e86b48',
-      }
+      },
+      {
+        'package': 'infra/3pp/tools/ninja/${{platform}}',
+        'version': 'version:2@1.8.2.chromium.3',
+      },
     ],
     'dep_type': 'cipd',
     'condition': 'not build_with_chromium and host_os == "linux"',
@@ -156,7 +160,11 @@ deps = {
       {
         'package': 'gn/gn/mac-${{arch}}',
         'version': 'git_revision:ae474cc51337c3fe823f936371c5e92891e86b48',
-      }
+      },
+      {
+        'package': 'infra/3pp/tools/ninja/${{platform}}',
+        'version': 'version:2@1.8.2.chromium.3',
+      },
     ],
     'dep_type': 'cipd',
     'condition': 'not build_with_chromium and host_os == "mac"',
@@ -182,7 +190,11 @@ deps = {
       {
         'package': 'gn/gn/windows-amd64',
         'version': 'git_revision:ae474cc51337c3fe823f936371c5e92891e86b48',
-      }
+      },
+      {
+        'package': 'infra/3pp/tools/ninja/${{platform}}',
+        'version': 'version:2@1.8.2.chromium.3',
+      },
     ],
     'dep_type': 'cipd',
     'condition': 'not build_with_chromium and host_os == "win"',
