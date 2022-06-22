@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f8fbd70_f5efcf7d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T03:20:59Z",
+      "side": 1,
+      "message": "What\u0027s the significance of checking stencilBits here?",
+      "range": {
+        "startLine": 215,
+        "startChar": 63,
+        "endLine": 215,
+        "endChar": 80
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d94e21_2c871f52",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T03:20:59Z",
+      "side": 1,
+      "message": "Can you add a quick comment explaining what this does for future readers?",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 18
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ca92fd6b_53719922",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 7
@@ -14,6 +60,24 @@
       "writtenOn": "2022-06-21T18:26:46Z",
       "side": 1,
       "message": "I wasn\u0027t able to easily reuse depthStencilReadbackCase for this depth format, is it fine if there\u0027s a special test for it for now? This also means code in depthStencilReadbackCase, starting at line 417 in this file, is unreachable currently.",
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23e05c87_591bf43e",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T03:20:59Z",
+      "side": 1,
+      "message": "Okay to split it out, but removing the unreachable code would be good.",
+      "parentUuid": "ca92fd6b_53719922",
       "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

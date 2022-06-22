@@ -402,6 +402,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "125eee8a_98e77848",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T03:20:59Z",
+      "side": 1,
+      "message": "Not clear to me either.  Probably okay to drop it if not tests are depending on it.",
+      "parentUuid": "85d4a866_a8c87a71",
+      "revId": "146296d6bbf62827675fa8db7ee92ded1160730e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ffb980f4_603f7b80",
         "filename": "src/tests/gl_tests/DepthStencilTest.cpp",
         "patchSetId": 4
