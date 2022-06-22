@@ -70,6 +70,30 @@
       },
       "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "316e0e2b_8270de71",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-22T13:50:05Z",
+      "side": 1,
+      "message": "This will give out a new ID every time `getID()` is called, I don\u0027t think that\u0027s what we want. \n\nBTW: I now saw that there are two templates called `RefCountObject` and non of these is used for `mRefCount`.",
+      "parentUuid": "883edcf7_06aca08f",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 17
+      },
+      "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
