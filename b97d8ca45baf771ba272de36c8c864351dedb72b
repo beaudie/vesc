@@ -94,6 +94,30 @@
       },
       "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "246d32cd_9e73b37c",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T15:42:59Z",
+      "side": 1,
+      "message": "\u003e This will give out a new ID every time  getID()  is called, I don\u0027t think that\u0027s what we want. \n\n/facepalm - Right, apologies, I was trying to do too many things at once.\n\n\u003e BTW: I now saw that there are two templates called  RefCountObject  and non of these is used for  mRefCount .\n\nYeah, that\u0027s what got me thinking we shouldn\u0027t try to do too much with egl::Surface",
+      "parentUuid": "316e0e2b_8270de71",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 17
+      },
+      "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
