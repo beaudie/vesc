@@ -214,6 +214,24 @@
       "parentUuid": "9925c6a7_8f06de4e",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3066de5f_fc64abc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2022-06-22T23:18:16Z",
+      "side": 1,
+      "message": "Be sure to take a look at b/202334452 also.   Specifically, running `android.opengl.cts.WrapperTest#testThreadCleanup` on Cuttlefish, since Mohan\u0027s CL `feb599ad Invalidate EGL handles during eglTerminate` fixed that test.\n\nThe test calls `eglTerminate()` and then `eglReleaseThread()`, so it\u0027s slightly different than what\u0027s being described here, but it\u0027s another path that resulted in OOMs.\n\nTest code:\nhttps://source.corp.google.com/aosp-nougat/cts/tests/tests/opengl/src/android/opengl/cts/WrapperTest.java;rcl\u003dbd2c8f50ddcfe686bd9789b5a474796691e07129;l\u003d301\n\nAlso related to this code path is anglebug.com/6208, so it would be a good idea to make sure `com.netmarble.sknightsmmo` still runs correctly after any changes in this area.",
+      "parentUuid": "01d0cfb1_1d91f433",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
