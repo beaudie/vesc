@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "374835c5_a295b56f",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-06-22T16:55:26Z",
+      "side": 1,
+      "message": "nit: remove?",
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bbc93c0_488736f1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-06-22T16:55:26Z",
+      "side": 1,
+      "message": "Could it be faster to use for (size_t colorIndexGL : mState.getColorAttachmentsMask) { if (mState.getColorAttachment(colorIndexGL)-\u003eisCreatedWithAHB()) } ?",
+      "range": {
+        "startLine": 1696,
+        "startChar": 0,
+        "endLine": 1705,
+        "endChar": 5
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
