@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d08eacdc_a1c27c5e",
+        "filename": "src/libANGLE/renderer/ImageImpl.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "374835c5_a295b56f",
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ccdc450_9c9da6c4",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-06-22T17:58:33Z",
       "side": 1,
       "message": "I think this can be simpler if you go through backend instead of front end, and figure out in FramebufferVk::getFramebuffer() when we created VkFramebuffer object. You store a bool in FramebufferHelper, lets say `bool mHasAHBAttachment;` and you figure this out in FramebufferVk::getFramebuffer() (around line 2141 to 2151). That way, you only figure out once during creation time instead of every clerar call. \n\nSee my comment bellow on how to figure out if it has AHB or not.",
+      "range": {
+        "startLine": 1696,
+        "startChar": 9,
+        "endLine": 1701,
+        "endChar": 13
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35925c85_0d5c4e6d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ccdc450_9c9da6c4",
       "range": {
         "startLine": 1696,
         "startChar": 9,
@@ -95,6 +137,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "9bbc93c0_488736f1",
+      "range": {
+        "startLine": 1696,
+        "startChar": 0,
+        "endLine": 1705,
+        "endChar": 5
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe7956d7_60186410",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "This function is removed, the check for AHB color attachment is done in syncState() and updateColorAttachment() instead.",
+      "parentUuid": "2a925f10_9c1fd6b7",
       "range": {
         "startLine": 1696,
         "startChar": 0,
@@ -176,6 +242,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "562a6655_c3a2d484",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c091a8ed_8237176d",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2144,
+        "endChar": 34
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b47f0a0d_c494d685",
@@ -189,6 +279,30 @@
       "writtenOn": "2022-06-22T17:08:14Z",
       "side": 1,
       "message": "nit: the name of the test should say what it does, not what ANGLE used to do wrong. For example `AHBClearAppliedBeforeReadBack`",
+      "range": {
+        "startLine": 3152,
+        "startChar": 21,
+        "endLine": 3152,
+        "endChar": 46
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f7ef6fc_d7b3941e",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3152,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Thank you for pointing that out. I changed the test name as suggested.",
+      "parentUuid": "b47f0a0d_c494d685",
       "range": {
         "startLine": 3152,
         "startChar": 21,
@@ -222,6 +336,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3b99c03_628fc87f",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3188,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb59e923_1acf2578",
+      "range": {
+        "startLine": 3170,
+        "startChar": 0,
+        "endLine": 3188,
+        "endChar": 38
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc09baac_f700ffcb",
@@ -245,6 +383,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e24a16d5_b5a2d9d6",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3235,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Apologize for this. The test was copied from https://chromium-review.googlesource.com/c/angle/angle/+/3711692 created by Jason Macnak, and he added some notes to explain why he thinks the bug is caused by clear command being dropped. I cleaned up the comments in the test.",
+      "parentUuid": "cc09baac_f700ffcb",
+      "range": {
+        "startLine": 3210,
+        "startChar": 0,
+        "endLine": 3235,
+        "endChar": 49
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df1c64df_55fab3d5",
@@ -258,6 +420,24 @@
       "writtenOn": "2022-06-22T17:08:14Z",
       "side": 1,
       "message": "Thanks for the test! While you\u0027re around here, may I ask for a couple more tests (just small mostly-one-liner variations of this)? They will come in handy if someone attempts to keep clears of AHBs deferred!\n\n- Same test, but detach the image from the framebuffer before `glFinish`.\n- Same test, but attach a random texture to the framebuffer before `glFinish` on the same slot as the AHB (so it\u0027s implicitly detached)\n- Same test, but bind the default framebuffer (0) before `glFinish`.\n- Same test, but instead of `glFinish`, initialize a GLSync object and immediately wait on it (`glClientWaitSync`). This is effectively `glFinish`.",
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "526737d7_1e8d3bd8",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3244,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-06-22T23:02:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df1c64df_55fab3d5",
       "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
