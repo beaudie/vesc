@@ -356,6 +356,16 @@ void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driverType)
     LoadGLES(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
 }
+
+bool IsFormatEmulated(GLenum target)
+{
+    GLint readFormat;
+    glGetTexParameteriv(target, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &readFormat);
+
+    // Keep this list of formats in sync with Texture::isColorFormatEmulated()
+    return readFormat == GL_RGBA || readFormat == GL_RG || readFormat == GL_RED;
+}
+
 }  // namespace angle
 
 using namespace angle;

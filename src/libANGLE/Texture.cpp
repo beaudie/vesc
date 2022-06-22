@@ -2447,6 +2447,20 @@ GLenum Texture::getImplementationColorReadType(const Context *context) const
     return mTexture->getColorReadType(context);
 }
 
+bool Texture::isColorFormatEmulated(const Context *context) const
+{
+    // TODO(anglebug.com/6177): Check for all formats ANGLE will use to emulate a compressed texture
+    GLenum implFormat = getImplementationColorReadFormat(context);
+
+    // Keep this list of formats in sync with IsFormatEmulated in GetImageTest.cpp
+    if (implFormat == GL_RGBA || implFormat == GL_RG || implFormat == GL_RED)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 angle::Result Texture::getTexImage(const Context *context,
                                    const PixelPackState &packState,
                                    Buffer *packBuffer,
