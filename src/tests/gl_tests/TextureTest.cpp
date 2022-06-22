@@ -1825,6 +1825,34 @@ class PBOCompressedTextureTest : public Texture2DTest
     GLuint mPBO;
 };
 
+class PBOCompressedTexture3DTest : public Texture3DTestES3
+{
+  protected:
+    PBOCompressedTexture3DTest() : Texture3DTestES3() {}
+
+    void testSetUp() override
+    {
+        TexCoordDrawTest::testSetUp();
+        glGenTextures(1, &mTexture3D);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture3D);
+        EXPECT_GL_NO_ERROR();
+
+        setUpProgram();
+
+        glGenBuffers(1, &mPBO);
+    }
+
+    void testTearDown() override
+    {
+        glDeleteBuffers(1, &mPBO);
+        Texture3DTestES3::testTearDown();
+    }
+
+    void runCompressedSubImage();
+
+    GLuint mPBO;
+};
+
 class ETC1CompressedTextureTest : public Texture2DTest
 {
   protected:
@@ -10163,6 +10191,91 @@ TEST_P(PBOCompressedTextureTest, PBOCompressedSubImageWithUnpackRowLength)
     runCompressedSubImage();
 }
 
+void PBOCompressedTexture3DTest::runCompressedSubImage()
+{
+    // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    // http://anglebug.com/4115
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsDesktopOpenGL());
+    // ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsDesktopOpenGL());
+
+    if (getClientMajorVersion() < 3)
+    {
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_pixel_buffer_object"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_compressed_ETC2_RGB8_texture"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_3D"));
+    }
+
+    const GLuint width  = 4u;
+    const GLuint height = 4u;
+    const GLuint depth  = 1u;
+
+    setWindowWidth(width);
+    setWindowHeight(height);
+
+    // Setup primary Texture
+    glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture3D);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    if (getClientMajorVersion() < 3)
+    {
+        glTexStorage3DEXT(GL_TEXTURE_2D_ARRAY, 1, GL_COMPRESSED_RGB8_ETC2, width, height, depth);
+    }
+    else
+    {
+        glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_COMPRESSED_RGB8_ETC2, width, height, depth);
+    }
+
+    ASSERT_GL_NO_ERROR();
+
+    int i = 0;
+    while (i < 10)
+    {
+
+        // Setup PBO and fill it with a red
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, mPBO);
+        glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height * depth / 2u, kCompressedImageETC2,
+                     GL_STATIC_DRAW);
+        ASSERT_GL_NO_ERROR();
+
+        // Write PBO to mTexture
+        if (getClientMajorVersion() < 3)
+        {
+            glCompressedTexSubImage3DOES(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, width, height, depth,
+                                         GL_COMPRESSED_RGB8_ETC2, width * height * depth / 2u,
+                                         nullptr);
+        }
+        else
+        {
+            glCompressedTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, 0, width, height, depth,
+                                      GL_COMPRESSED_RGB8_ETC2, width * height * depth / 2u,
+                                      nullptr);
+        }
+        ASSERT_GL_NO_ERROR();
+
+        // Draw using PBO updated texture
+        glUseProgram(mProgram);
+        glUniform1i(mTexture3DUniformLocation, 0);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture3D);
+        drawQuad(mProgram, "position", 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::red);
+        ASSERT_GL_NO_ERROR();
+
+        swapBuffers();
+        i++;
+    }
+}
+
+// Test that uses glCompressedTexSubImage3D combined with a PBO
+TEST_P(PBOCompressedTexture3DTest, PBOCompressedSubImage)
+{
+    runCompressedSubImage();
+}
+
 // Test using ETC1_RGB8 with subimage updates
 TEST_P(ETC1CompressedTextureTest, ETC1CompressedSubImage)
 {
@@ -10920,6 +11033,7 @@ ANGLE_INSTANTIATE_TEST_ES3(Texture3DIntegerTestES3);
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(Texture2DDepthTest);
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(PBOCompressedTextureTest);
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ETC1CompressedTextureTest);
+ANGLE_INSTANTIATE_TEST_ES3(PBOCompressedTexture3DTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TextureBufferTestES31);
 ANGLE_INSTANTIATE_TEST_ES31(TextureBufferTestES31);
