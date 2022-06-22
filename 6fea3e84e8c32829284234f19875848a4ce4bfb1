@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3590dcfa_112d3b3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-22T00:21:41Z",
+      "side": 1,
+      "message": "I think all the comments are addressed and dependencies are merged. This one looks ready to go.",
+      "revId": "6fea3e84e8c32829284234f19875848a4ce4bfb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
