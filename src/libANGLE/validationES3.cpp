@@ -2887,10 +2887,21 @@ bool ValidateCompressedTexSubImage3D(const Context *context,
         return false;
     }
 
-    if (!data)
+    if (data == nullptr)
     {
-        context->validationError(entryPoint, GL_INVALID_VALUE, kPixelDataNull);
-        return false;
+        if (context->getState().getTargetBuffer(BufferBinding::PixelUnpack) == nullptr)
+        {
+            // If data is null, we need an unpack buffer to read from
+            context->validationError(entryPoint, GL_INVALID_VALUE, kPixelDataNull);
+            return false;
+        }
+
+        if (context->getTextureByTarget(target)->isColorFormatEmulated(context))
+        {
+            // We can't populate a texture from a buffer using an emulated format
+            context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidEmulatedFormat);
+            return false;
+        }
     }
 
     return true;
