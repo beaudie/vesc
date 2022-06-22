@@ -107,6 +107,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "284ce7b7_7ba4d319",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T22:48:16Z",
+      "side": 1,
+      "message": "See CPU perf data here\nhttps://docs.google.com/spreadsheets/d/1AaFvKiuO_iNCC6VP6muswpve64VRJpZrUt2eRH5iJAk/edit?usp\u003dsharing\n\nMost of them seems improving, but I think these are also within noise.",
+      "parentUuid": "d7f13a58_c25e2c50",
+      "range": {
+        "startLine": 3200,
+        "startChar": 39,
+        "endLine": 3200,
+        "endChar": 88
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "311c19eb_857d315d",
