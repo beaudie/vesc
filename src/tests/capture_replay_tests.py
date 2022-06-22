@@ -130,8 +130,18 @@ class ChildProcessesManager():
 
     @classmethod
     def _GetGnAndNinjaAbsolutePaths(self):
-        path = os.path.join('third_party', 'depot_tools')
-        return os.path.join(path, winext('gn', 'bat')), os.path.join(path, winext('ninja', 'exe'))
+        if sys.platform.startswith(('cygwin', 'win')):
+            subdir = 'win'
+        elif sys.platform == 'darwin':
+            subdir = 'mac'
+        elif sys.platform.startswith('linux'):
+            subdir = 'linux64'
+        else:
+            raise Exception('Unknow platform: ' + sys.platform)
+        tools_path = os.path.join('buildtools', subdir)
+        gn_path = os.path.join(tools_path, winext('gn', 'exe'))
+        ninja_path = os.path.join(tools_path, winext('ninja', 'exe'))
+        return gn_path, ninja_path
 
     def __init__(self, args, logger, ninja_lock):
         # a dictionary of Subprocess, with pid as key
