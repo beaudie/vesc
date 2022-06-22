@@ -178,6 +178,24 @@
       "parentUuid": "af0ba625_eaaa5ea5",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9925c6a7_8f06de4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-22T21:49:22Z",
+      "side": 1,
+      "message": "Hi Mohan,\n\nSorry about the delays; I\u0027ll actually be mostly OOO for the next couple of weeks.\n\nSo one issue I see with https://crrev.com/c/3717277 is that the code is getting more complicated while the benefit for real apps is still unclear to me. I\u0027ve had a look at a few games and I don\u0027t see eglTerminate calls at all, which makes me wonder if all of this cleanup logic is only going to apply specifically for the test app use case.. and if so then maybe we could find another solution to that OOM issue that you mentioned, but I would need a repro to look into that.\n\nI tried to run end2end tests including some modifications of `RepeatedEglInitAndTerminate` that you mentioned above, but I am not sure how to reproduce the OOM issue. I see free memory go down quite a bit but I didn\u0027t see crashes (or I failed to identify them). Could it be that those crashes are specific to an Android version, device etc, or maybe they no longer happen on recent ANGLE builds? Do you remember if there was anything specific you needed to do to repro? I noticed this comment: https://crsrc.org/c/third_party/angle/src/tests/egl_tests/EGLMultiContextTest.cpp;drc\u003d3dfc800437f79626bfd2158c04b13a5aaae2e016;l\u003d350\nbut I don\u0027t think we would need to revert 3329273 - or am I missing something?\n\nThanks!",
+      "parentUuid": "ebe2f7f9_995f0516",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
