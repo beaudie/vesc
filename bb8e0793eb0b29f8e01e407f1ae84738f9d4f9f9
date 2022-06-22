@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "273ab8ae_c0641cea",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-22T14:30:00Z",
+      "side": 1,
+      "message": "Jamie suggested this to me, with the first set of functions I was using asserts.",
+      "parentUuid": "858b8b22_26e79d2e",
+      "range": {
+        "startLine": 770,
+        "startChar": 8,
+        "endLine": 770,
+        "endChar": 15
+      },
+      "revId": "bb8e0793eb0b29f8e01e407f1ae84738f9d4f9f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fbf205b_657c7e30",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41e003cc_7dfaf368",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-22T14:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fbf205b_657c7e30",
+      "range": {
+        "startLine": 778,
+        "startChar": 14,
+        "endLine": 778,
+        "endChar": 27
+      },
+      "revId": "bb8e0793eb0b29f8e01e407f1ae84738f9d4f9f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff98307c_7a2b5a95",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-06-22T02:41:49Z",
       "side": 1,
       "message": "This was hard to parse.  Can you break it up as:\n```\nif (context !\u003d EGL_NO_CONTEXT)\n{\n    draw \u003d read \u003d mSurface;\n}\nelse\n{\n    draw \u003d read \u003d EGL_NO_SURFACE;\n}\n```",
+      "range": {
+        "startLine": 783,
+        "startChar": 0,
+        "endLine": 783,
+        "endChar": 76
+      },
+      "revId": "bb8e0793eb0b29f8e01e407f1ae84738f9d4f9f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "265fd428_c62f0276",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-22T14:30:00Z",
+      "side": 1,
+      "message": "There was actually an error in the code: I didn\u0027t account for the case where one might call `eglMakeCurrent` with the default surface for one of read/draw and another surface that was properly captured at creation for the other. I\u0027ve updated the patch accordingly.",
+      "parentUuid": "ff98307c_7a2b5a95",
       "range": {
         "startLine": 783,
         "startChar": 0,
