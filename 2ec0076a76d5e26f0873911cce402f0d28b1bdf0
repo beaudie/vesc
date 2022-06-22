@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2978926_6b6d9ace",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-22T16:33:02Z",
+      "side": 1,
+      "message": "`isSharedPresentMode` checks `mSwapchainPresentMode` which means a swap has already been called after switch to single buffer. This condition checks for the corner case where app switched to single buffer but has not yet called a swap but enabled autorefresh. In this case we should not do deferAcquire, we should let app call swap which will get the right mode (demand or continuous) at that time.",
+      "parentUuid": "d4207999_62fa62b4",
+      "range": {
+        "startLine": 2501,
+        "startChar": 12,
+        "endLine": 2501,
+        "endChar": 33
+      },
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73891acb_36517461",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 5
@@ -37,6 +61,24 @@
       "writtenOn": "2022-06-22T14:32:30Z",
       "side": 1,
       "message": "nit: Just inline it in `isSharedPresentMode()`. All the callers pass `mSwapchainPresentMode`",
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2875370d_a17a3de2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-22T16:33:02Z",
+      "side": 1,
+      "message": "\u003e All the callers pass  mSwapchainPresentMode\n\nnot really, check -\u003e `ContextVk::flush`",
+      "parentUuid": "73891acb_36517461",
       "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
