@@ -33,6 +33,24 @@
       "message": "LGTM? Can\u0027t really have this be a guarantee, so it\u0027s more like a \"make sure it works in practice\". The test is wrong either way per every spec.",
       "revId": "6fea3e84e8c32829284234f19875848a4ce4bfb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01e04466_676a41ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-22T16:13:26Z",
+      "side": 1,
+      "message": "Agreed. The point of this test is to convince ourselves that the WebGL extension isn\u0027t _too_ bad, even though it requires a barrier.\n\nThe alternative would be to only expose the coherent extension in WebGL, which looks like it should work on modern enough hardware from every major vendor on every API.\n\nI\u0027m fine either way, but I can\u0027t land patches, so if we decide to take this can someone please do the submit? 😊",
+      "parentUuid": "99ff429e_7e81d08e",
+      "revId": "6fea3e84e8c32829284234f19875848a4ce4bfb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
