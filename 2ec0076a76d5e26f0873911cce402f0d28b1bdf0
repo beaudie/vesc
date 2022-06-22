@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4207999_62fa62b4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T14:32:30Z",
+      "side": 1,
+      "message": "This is always true here!",
+      "range": {
+        "startLine": 2501,
+        "startChar": 12,
+        "endLine": 2501,
+        "endChar": 33
+      },
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73891acb_36517461",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T14:32:30Z",
+      "side": 1,
+      "message": "nit: Just inline it in `isSharedPresentMode()`. All the callers pass `mSwapchainPresentMode`",
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
