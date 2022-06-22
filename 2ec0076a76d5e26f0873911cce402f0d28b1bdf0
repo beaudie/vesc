@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68637d3f_c08b5437",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2501,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T16:41:23Z",
+      "side": 1,
+      "message": "Ack, mistook the mode `isSharedPresentMode` used for `mDesiredSwapchainPresentMode` (which also prompted the other comment).\n\nCould you please add an `isSharedPresentModeDesired()` helper next to `isSharedPresentMode()`? That should help readability.",
+      "parentUuid": "a2978926_6b6d9ace",
+      "range": {
+        "startLine": 2501,
+        "startChar": 12,
+        "endLine": 2501,
+        "endChar": 33
+      },
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73891acb_36517461",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 5
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "\u003e All the callers pass  mSwapchainPresentMode\n\nnot really, check -\u003e `ContextVk::flush`",
       "parentUuid": "73891acb_36517461",
+      "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a141af97_36959307",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T16:41:23Z",
+      "side": 1,
+      "message": "No change to `ContextVk` in this CL, and it\u0027s a private function anyway. But I just realized some callers use `mDesiredSwapchainPresentMode`, never mind!",
+      "parentUuid": "2875370d_a17a3de2",
       "revId": "2ec0076a76d5e26f0873911cce402f0d28b1bdf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
