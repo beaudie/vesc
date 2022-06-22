@@ -424,6 +424,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4207c38_4fe66203",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-22T02:41:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9817fd2c_8fea0470",
+      "range": {
+        "startLine": 768,
+        "startChar": 0,
+        "endLine": 769,
+        "endChar": 36
+      },
+      "revId": "172cda75eaaf008bbf2ae9f7e3f52405dae37b79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0a37673_d1621bc7",
