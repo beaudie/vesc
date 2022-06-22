@@ -247,6 +247,7 @@ class FramebufferVk : public FramebufferImpl
                                              const VkClearColorValue &clearColor) const;
 
     void updateLayerCount();
+    bool isAnyColorAttachmentCreatedWithAHB() const;
 
     WindowSurfaceVk *mBackbuffer;
 

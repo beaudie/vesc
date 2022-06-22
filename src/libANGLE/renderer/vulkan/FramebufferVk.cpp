@@ -593,7 +593,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                 mRenderTargetCache, mState.getColorAttachmentsMask(),
                 mCurrentFramebufferDesc.getLayerCount());
 
-            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers)
+            if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers ||
+                isAnyColorAttachmentCreatedWithAHB())
             {
                 ANGLE_TRY(flushDeferredClears(contextVk));
             }
@@ -1688,6 +1689,21 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
+}
+
+bool FramebufferVk::isAnyColorAttachmentCreatedWithAHB() const
+{
+    for (const gl::FramebufferAttachment &colorAttachment : mState.getColorAttachments())
+    {
+        if (colorAttachment.isAttached())
+        {
+            if (colorAttachment.isCreatedWithAHB())
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,

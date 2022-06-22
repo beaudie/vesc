@@ -44,6 +44,7 @@ class ExternalImageSiblingImpl : public FramebufferAttachmentObjectImpl
     virtual bool hasProtectedContent() const = 0;
     virtual gl::Extents getSize() const      = 0;
     virtual size_t getSamples() const        = 0;
+
     virtual uint32_t getLevelCount() const;
 };
 
