@@ -196,6 +196,24 @@
       "parentUuid": "ebe2f7f9_995f0516",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01d0cfb1_1d91f433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-22T21:58:55Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t see eglTerminate calls at all\n\nterminate calls wont happen during game play, im assuming you will need some focus shift (move app to background) or some other even like that to see this call\n\n\u003e which makes me wonder if all of this cleanup logic is only going to apply specifically for the test app use case\n\nwe needed android cts conformance and had this code to get us there (things changed a bit with `eglReleaseThread`, see comment below)\n\n\u003e but I am not sure how to reproduce the OOM issue...Do you remember if there was anything specific you needed to do to repro?\n\nah, the reason end2end is not repro is because i added `eglReleaseThread` call to the test to correctly mirror the CTS test (and forgot to update the comment when i added it, oops). `eglReleaseThread()` is an optional call that apps dont have to make, while discussing this with Tim, the ask was something to the effect of - \"yes that call is optional and it will trigger OOM but for now lets address CTS call pattern\"\n\n`eglReleaseThread` is what does the magic of freeing memory in the test case, remove that and you will have oom",
+      "parentUuid": "9925c6a7_8f06de4e",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
