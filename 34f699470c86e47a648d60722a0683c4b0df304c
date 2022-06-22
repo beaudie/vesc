@@ -16,6 +16,24 @@
       "message": "Missing `pool` and `hidpi` are normal?",
       "revId": "34f699470c86e47a648d60722a0683c4b0df304c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a85a33_def74405",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-22T15:22:31Z",
+      "side": 0,
+      "message": "I was suspicious about the pool, too, but it seems to work everywhere else.\nI guess there is a default \u0027pool\u0027: \u0027chromium.tests\u0027 somewhere.\n\nAs for hidpi, yes, AMD is MacBook with Retina display, but Intel is Mac Mini connected to a KVM with something like 1024x786 resolution. (OK, maybe it\u0027s 1080p).",
+      "parentUuid": "0c010148_69b00067",
+      "revId": "34f699470c86e47a648d60722a0683c4b0df304c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
