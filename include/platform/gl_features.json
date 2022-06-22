@@ -628,6 +628,15 @@
                 "Imagination devices generate INVALID_ENUM when setting the texture border color."
             ],
             "issue": "https://anglebug.com/7405"
+        },
+        {
+            "name": "reset_unpack_image_height_during_compressed_tex_image_3D",
+            "category": "Workarounds",
+            "description": [
+                "Reset GL_UNPACK_IMAGE_HEIGHT to 0 during calls to glCompressedTexImage3D ",
+                "to work around a driver bug."
+            ],
+            "issue": "https://crbug.com/1335688"
         }
     ]
 }

@@ -602,6 +602,14 @@ angle::Result TextureGL::setCompressedImage(const gl::Context *context,
     else
     {
         ASSERT(nativegl::UseTexImage3D(getType()));
+
+        if (features.resetUnpackImageHeightDuringCompressedTexImage3D.enabled)
+        {
+            gl::PixelUnpackState resetImageHeightParam(unpack);
+            resetImageHeightParam.imageHeight = 0;
+            ANGLE_TRY(stateManager->setPixelUnpackState(context, resetImageHeightParam));
+        }
+
         ANGLE_GL_TRY_ALWAYS_CHECK(
             context, functions->compressedTexImage3D(ToGLenum(target), static_cast<GLint>(level),
                                                      compressedTexImageFormat.internalFormat,

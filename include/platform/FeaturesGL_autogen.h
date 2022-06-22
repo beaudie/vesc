@@ -454,6 +454,12 @@ struct FeaturesGL : FeatureSetBase
         "disableTextureClampToBorder", FeatureCategory::OpenGLWorkarounds,
         "Imagination devices generate INVALID_ENUM when setting the texture border color.",
         &members, "https://anglebug.com/7405"};
+
+    FeatureInfo resetUnpackImageHeightDuringCompressedTexImage3D = {
+        "resetUnpackImageHeightDuringCompressedTexImage3D", FeatureCategory::OpenGLWorkarounds,
+        "Reset GL_UNPACK_IMAGE_HEIGHT to 0 during calls to glCompressedTexImage3D "
+        "to work around a driver bug.",
+        &members, "https://crbug.com/1335688"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

@@ -193,6 +193,8 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::RemoveDynamicIndexingOfSwizzledVector, "removeDynamicIndexingOfSwizzledVector"},
     {Feature::RemoveInvariantAndCentroidForESSL3, "removeInvariantAndCentroidForESSL3"},
     {Feature::ResetTexImage2DBaseLevel, "resetTexImage2DBaseLevel"},
+    {Feature::ResetUnpackImageHeightDuringCompressedTexImage3D,
+     "resetUnpackImageHeightDuringCompressedTexImage3D"},
     {Feature::RetainSPIRVDebugInfo, "retainSPIRVDebugInfo"},
     {Feature::RewriteFloatUnaryMinusOperator, "rewriteFloatUnaryMinusOperator"},
     {Feature::RewriteRepeatedAssignToSwizzled, "rewriteRepeatedAssignToSwizzled"},

@@ -181,6 +181,7 @@ enum class Feature
     RemoveDynamicIndexingOfSwizzledVector,
     RemoveInvariantAndCentroidForESSL3,
     ResetTexImage2DBaseLevel,
+    ResetUnpackImageHeightDuringCompressedTexImage3D,
     RetainSPIRVDebugInfo,
     RewriteFloatUnaryMinusOperator,
     RewriteRepeatedAssignToSwizzled,

@@ -2225,6 +2225,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     // https://anglebug.com/7405
     ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, isImagination);
+
+    // https://crbug.com/1335688
+    ANGLE_FEATURE_CONDITION(features, resetUnpackImageHeightDuringCompressedTexImage3D, IsApple());
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
