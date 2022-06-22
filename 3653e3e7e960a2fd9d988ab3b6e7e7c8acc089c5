@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ccdc450_9c9da6c4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T17:58:33Z",
+      "side": 1,
+      "message": "I think this can be simpler if you go through backend instead of front end, and figure out in FramebufferVk::getFramebuffer() when we created VkFramebuffer object. You store a bool in FramebufferHelper, lets say `bool mHasAHBAttachment;` and you figure this out in FramebufferVk::getFramebuffer() (around line 2141 to 2151). That way, you only figure out once during creation time instead of every clerar call. \n\nSee my comment bellow on how to figure out if it has AHB or not.",
+      "range": {
+        "startLine": 1696,
+        "startChar": 9,
+        "endLine": 1701,
+        "endChar": 13
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9bbc93c0_488736f1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -77,6 +100,29 @@
         "startChar": 0,
         "endLine": 1705,
         "endChar": 5
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22800939_76368a0c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T17:58:33Z",
+      "side": 1,
+      "message": "Ref. Here you figure out if any attachment has AHB.\nbool hasAHBAttachment \u003d false;\nfor (size_t colorIndexGL : mState.getColorAttachmentsMask())\n{\n if(colorRenderTarget-\u003egetImageForRenderPass().isCreatedWithAHB())\n {\n     hasAHBAttachment \u003d true;\n...\n\nThen later on at line 2215 either you pass hasAHBAttachment as an argument for newFramebuffer.init(), or you add a set API.\n\nOn how to figure out ImageHelper is created with AHB or not: You can either pass a boolean flag from ImageHelper::initExternalMemory(), or I think you may able to figure out just by inspecting extraAllocationInfo.",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2144,
+        "endChar": 34
       },
       "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
