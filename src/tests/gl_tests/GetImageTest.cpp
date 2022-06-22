@@ -7,6 +7,7 @@
 //   Tests for the ANGLE_get_image extension.
 //
 
+#include "common/PackedEnums.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -370,7 +371,7 @@ TEST_P(GetImageTest, GetTexImageLuminance)
 
     constexpr GLColorR kMediumLuminance = GLColorR(kUNormHalf);
     std::vector<GLColorR> expectedData  = {kMediumLuminance, kMediumLuminance, kMediumLuminance,
-                                          kMediumLuminance};
+                                           kMediumLuminance};
 
     glViewport(0, 0, kSmallSize, kSmallSize);
 
@@ -717,7 +718,9 @@ bool IsFormatEmulated(GLenum target)
 {
     GLint readFormat;
     glGetTexParameteriv(target, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &readFormat);
-    return readFormat == GL_RGBA || readFormat == GL_RG || readFormat == GL_RED;
+
+    // This helper only works for compressed formats
+    return gl::IsEmulatedCompressedFormat(readFormat);
 }
 
 // Basic GetCompressedTexImage.
