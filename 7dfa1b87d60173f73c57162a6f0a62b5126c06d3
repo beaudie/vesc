@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d54eb5ed_8465044e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-22T23:57:11Z",
+      "side": 1,
+      "message": "It\u0027s for making sure that the buffer we\u0027re reading from has the stencil component. If we didn\u0027t check for stencilBits, readPixels with GL_DEPTH_STENCIL_OES from a depth-only attachment, of format such as D16_UNORM or D24_UNORM_X8_UINT, would be allowed, which it should not be according to GL_NV_read_depth_stencil.",
+      "parentUuid": "6f8fbd70_f5efcf7d",
+      "range": {
+        "startLine": 215,
+        "startChar": 63,
+        "endLine": 215,
+        "endChar": 80
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88d94e21_2c871f52",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 7
@@ -37,6 +61,30 @@
       "writtenOn": "2022-06-22T03:20:59Z",
       "side": 1,
       "message": "Can you add a quick comment explaining what this does for future readers?",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 18
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c11692b7_044062bc",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-22T23:57:11Z",
+      "side": 1,
+      "message": "Replaced this and the function on line 378 (does the same thing, but for 16-bit UNORM) with a common one, that\u0027s commented.",
+      "parentUuid": "88d94e21_2c871f52",
       "range": {
         "startLine": 447,
         "startChar": 0,
@@ -78,6 +126,24 @@
       "side": 1,
       "message": "Okay to split it out, but removing the unreachable code would be good.",
       "parentUuid": "ca92fd6b_53719922",
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "772749a5_3ad9c092",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-22T23:57:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23e05c87_591bf43e",
       "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
