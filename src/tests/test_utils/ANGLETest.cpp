@@ -356,6 +356,16 @@ void LoadEntryPointsWithUtilLoader(angle::GLESDriverType driverType)
     LoadGLES(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
 }
+
+bool IsFormatEmulated(GLenum target)
+{
+    GLint readFormat;
+    glGetTexParameteriv(target, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &readFormat);
+
+    // This helper only works for compressed formats
+    return gl::IsEmulatedCompressedFormat(readFormat);
+}
+
 }  // namespace angle
 
 using namespace angle;
