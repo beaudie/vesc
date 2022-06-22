@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d436e583_cd3e8eeb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T20:23:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3ef7c30_e04fa3f1",
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ddc628c_e2223156",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aee3529c_3bd7ab38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T20:23:11Z",
+      "side": 1,
+      "message": "It should not for two reasons: 1) this is in cache miss code path which is expected not a common case and 2) pool is created with same layout, so allocation should be easy to full fill. But anyway, will do some test here just to be sure.",
+      "parentUuid": "7ddc628c_e2223156",
+      "range": {
+        "startLine": 3200,
+        "startChar": 39,
+        "endLine": 3200,
+        "endChar": 88
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "311c19eb_857d315d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
@@ -54,6 +96,24 @@
       "writtenOn": "2022-06-22T15:48:39Z",
       "side": 1,
       "message": "Useless comment is useless. Could you please add some comment here that describes what the class is used for? (i.e. clean up of desc sets through garbage collection)",
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9edf4933_befdcfeb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T20:23:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "311c19eb_857d315d",
       "revId": "d468c584dec2335675aa38e441188408795213e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7efd72e7_1adeebe6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T20:23:11Z",
+      "side": 1,
+      "message": "Depends on if you have this CL or not. Before this CL, the pool will keep growing in usage case like surfaceflinger notification shade. I think a few to a few dozen for normal apps. But anyway this is in stats code that no real app will run into, only for app traces and even for tests we usually only call this twice (before run and after run), so performance should not be a concern.",
+      "parentUuid": "c95e7c04_98f1d659",
+      "range": {
+        "startLine": 266,
+        "startChar": 52,
+        "endLine": 266,
+        "endChar": 68
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab5828bf_792acd1f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
@@ -94,6 +178,24 @@
       "writtenOn": "2022-06-22T15:48:39Z",
       "side": 1,
       "message": "Ref: I see the problem with `accumulateCacheStatsAndSize`, it doesn\u0027t accumulate size. Sorry for the bad suggestion.\n\nSomething else that could work is this:\n\n```\nsize_t cacheSize \u003d 0;\nfor (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)\n{\n    cacheSize +\u003d pool-\u003eget().getTotalCacheSize();\n}\nCacheStats adjusted \u003d mCacheStats;\nadjusted.setSize(cacheSize);\naccum-\u003eaccumulateCacheStats(cacheType, adjusted);\n```",
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ea3c65_673b9199",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-22T20:23:11Z",
+      "side": 1,
+      "message": "Done. BTW, this is what I did earlier and I changed to mutable try to avoid this ugliness. But anyway, I do not have issue with either way.",
+      "parentUuid": "ab5828bf_792acd1f",
       "revId": "d468c584dec2335675aa38e441188408795213e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
