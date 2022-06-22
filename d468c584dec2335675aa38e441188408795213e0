@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7f13a58_c25e2c50",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T20:29:18Z",
+      "side": 1,
+      "message": "Thanks. I\u0027m mostly concerned with the driver switching to some inefficient algorithm upon seeing this (because now free and reallocate should be supported)",
+      "parentUuid": "aee3529c_3bd7ab38",
+      "range": {
+        "startLine": 3200,
+        "startChar": 39,
+        "endLine": 3200,
+        "endChar": 88
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "311c19eb_857d315d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
@@ -155,6 +179,30 @@
       "side": 1,
       "message": "Depends on if you have this CL or not. Before this CL, the pool will keep growing in usage case like surfaceflinger notification shade. I think a few to a few dozen for normal apps. But anyway this is in stats code that no real app will run into, only for app traces and even for tests we usually only call this twice (before run and after run), so performance should not be a concern.",
       "parentUuid": "c95e7c04_98f1d659",
+      "range": {
+        "startLine": 266,
+        "startChar": 52,
+        "endLine": 266,
+        "endChar": 68
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "364318a2_8a39a690",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T20:29:18Z",
+      "side": 1,
+      "message": "Ack.\n\nFYI, this is not just for traces. We call this on every submission (4+ times). Our perf counters currently count regardless of whether they are enabled, and persist in release builds.",
+      "parentUuid": "7efd72e7_1adeebe6",
       "range": {
         "startLine": 266,
         "startChar": 52,
