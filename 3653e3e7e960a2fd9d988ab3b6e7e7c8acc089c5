@@ -130,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "060b957d_c2cdf2aa",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-22T18:06:21Z",
+      "side": 1,
+      "message": "This is too late for caching this value. If a framebuffer is created and `glClear` is immediately called, we never call this function.\n\nThe caching can be done earlier (and inside `FramebufferVk` itself, no need to leak this information to `FramebufferHelper`), by updating the cached value in `FramebufferVk::syncState`. For that, you\u0027d need to keep a mask (instead of bool) of whether each attachment is AHB or not (that would be a `gl::DrawBufferMask`). Then, inside `updateColorAttachment()`, you set/unset the corresponding bit.",
+      "parentUuid": "22800939_76368a0c",
+      "range": {
+        "startLine": 2143,
+        "startChar": 8,
+        "endLine": 2144,
+        "endChar": 34
+      },
+      "revId": "3653e3e7e960a2fd9d988ab3b6e7e7c8acc089c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b47f0a0d_c494d685",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 2
