@@ -51,6 +51,24 @@
       "parentUuid": "efce99ad_dd8babb7",
       "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98640314_2afba283",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-23T23:57:23Z",
+      "side": 1,
+      "message": "Super, thank you. A stress test that performs redundant uniform updates would be fine if that provokes the problem in a user-visible way. If you can e.g. see the wrong color being rendered, or similar, that\u0027d be perfect - doesn\u0027t have to reproduce the earlier crash.\n\nIf you can\u0027t get a test working within a couple of hours, let us know and let\u0027s get this in ASAP. Thanks.",
+      "parentUuid": "e2ae97fb_02e9221f",
+      "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
