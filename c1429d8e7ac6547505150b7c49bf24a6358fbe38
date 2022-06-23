@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a7e8d8_2cd4018b",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-23T19:26:28Z",
+      "side": 1,
+      "message": "Updated this CL to delete these commented lines.",
+      "parentUuid": "c1517107_2f59ee39",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 44
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2519a19_ad3bba58",
@@ -108,6 +132,30 @@
       "writtenOn": "2022-06-23T19:21:44Z",
       "side": 1,
       "message": "Looks like I could\u0027ve refactored this as well -- `[[fallthrough]]` is brought in by C++17.",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 23
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1b822f2_5b38d565",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-23T19:26:28Z",
+      "side": 1,
+      "message": "Updated this CL to replace usages of `ANGLE_FALLTHROUGH` with `[[fallthrough]]` and I deleted these macro lines regarding `[[clang::fallthrough]]`.",
+      "parentUuid": "3db90cdc_b604f598",
       "range": {
         "startLine": 578,
         "startChar": 4,
