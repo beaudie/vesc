@@ -250,6 +250,24 @@
       "parentUuid": "3066de5f_fc64abc3",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f023b072_615e6998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-23T12:34:35Z",
+      "side": 1,
+      "message": "One more thought:\n\nIf eglTerminate is called mid-process, doesn\u0027t it mean that there will likely be another eglInitialize call to set up a new display?\n\nIf so, we might need to be careful around global vs per-display state as there may be a race condition between thread cleanup and the second eglInitialize call. For instance, we may never reach a global gProcessCleanupRefCount \u003d\u003d 0 after an eglTerminate if the second eglInitialize happens before GL threads exit - so maybe ref counter should be part of the display state rather than global?",
+      "parentUuid": "6fbfd988_56af0a87",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
