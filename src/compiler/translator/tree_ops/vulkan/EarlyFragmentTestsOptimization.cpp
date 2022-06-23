@@ -66,6 +66,7 @@ bool CheckEFTOptimizationTraverser::visitBranch(Visit visit, TIntermBranch *node
 
 bool CheckEarlyFragmentTestsFeasible(TCompiler *compiler, TIntermNode *root)
 {
+#ifdef ANGLE_ENABLE_VULKAN
     CheckEFTOptimizationTraverser traverser;
     root->traverse(&traverser);
 
@@ -74,6 +75,10 @@ bool CheckEarlyFragmentTestsFeasible(TCompiler *compiler, TIntermNode *root)
         return false;
     }
     return true;
+#else
+    UNREACHABLE();
+    return false;
+#endif
 }
 
 }  // namespace sh

@@ -18,16 +18,7 @@ namespace sh
 class TCompiler;
 class TIntermNode;
 
-#ifdef ANGLE_ENABLE_VULKAN
 ANGLE_NO_DISCARD bool CheckEarlyFragmentTestsFeasible(TCompiler *compiler, TIntermNode *root);
-#else
-ANGLE_NO_DISCARD ANGLE_INLINE bool CheckEarlyFragmentTestsFeasible(TCompiler *compiler,
-                                                                   TIntermNode *root)
-{
-    UNREACHABLE();
-    return false;
-}
-#endif
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_VULKAN_EARLYFRAGMENTTESTSOPTIMIZATION_H_
