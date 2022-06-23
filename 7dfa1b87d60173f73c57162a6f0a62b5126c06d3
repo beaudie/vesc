@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9275c624_c126c931",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T20:34:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d54eb5ed_8465044e",
+      "range": {
+        "startLine": 215,
+        "startChar": 63,
+        "endLine": 215,
+        "endChar": 80
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88d94e21_2c871f52",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Replaced this and the function on line 378 (does the same thing, but for 16-bit UNORM) with a common one, that\u0027s commented.",
       "parentUuid": "88d94e21_2c871f52",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 18
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6968f9f_a89014a7",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T20:34:11Z",
+      "side": 1,
+      "message": "There might be a helper that does this already, but I\u0027m not finding it quickly, so we can just move forward.",
+      "parentUuid": "c11692b7_044062bc",
       "range": {
         "startLine": 447,
         "startChar": 0,
