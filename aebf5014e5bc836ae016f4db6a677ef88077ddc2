@@ -16,6 +16,23 @@
       "message": "Looks great Dan, thank you for this catch. ",
       "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efce99ad_dd8babb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-23T23:12:39Z",
+      "side": 1,
+      "message": "Amazing catch Dan. lgtm as well.\n\nBefore we commit this: how was this discovered? Was there an associated WebKit bug? Is it possible to write a test for this?",
+      "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
