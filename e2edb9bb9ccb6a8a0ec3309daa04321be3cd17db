@@ -16,6 +16,92 @@
       "message": "Is this expected to ship or is it just for testing? It\u0027s not particularly big, but it does add ~50KB of binary size to an Android build (which is particularly redundant, as Android vendors support ASTC).\n\nAlso, looks like the decoding is buggy. For example look at the GOLD failure for war_planet_online, especially the foliage looks very blurry.\n",
       "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d39f7bc_5ccf5277",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 1,
+      "message": "I approved a bunch of the image diffs that were minor, but not `car_chase` yet since it is clearly wrong.  It may have nothing to do with the texture format, it is the first time it has run on Nvidia, may need a skip.",
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "450af627_4ccb074f",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 1,
+      "message": "Much of the code in this function doesn\u0027t align with ANGLE\u0027s formatting rules, but I can see that it does match the rules used by the library (snake_case).  I\u0027m okay leaving it as you\u0027ve uploaded it to keep the code easy to read.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 42
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c486560_087acbc6",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 1,
+      "message": "Can you provide any context for how you chose these defaults?  If performance of the library becomes a problem, these might be knobs we can tweak.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbdd75cd_99fc296c",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 1,
+      "message": "Multiple decode threads might help the slow debug performance as well.",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 42
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c4c5a26_d472e08d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9161,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 0,
+      "message": "This is an odd comment.  It also shows up in getEmulatedChannelsMask [ref], so may need an update there too.\n\nShabi added this so can provide color on whether it still makes sense.",
+      "range": {
+        "startLine": 9158,
+        "startChar": 0,
+        "endLine": 9161,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44110a77_365f078a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9204,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T17:43:28Z",
+      "side": 0,
+      "message": "ref",
+      "range": {
+        "startLine": 9203,
+        "startChar": 0,
+        "endLine": 9204,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
