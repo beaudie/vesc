@@ -168,6 +168,9 @@ Shader::~Shader()
 angle::Result Shader::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+
+    if (mImplementation)
+        return mImplementation->onLabelUpdate(context);
     return angle::Result::Continue;
 }
 
