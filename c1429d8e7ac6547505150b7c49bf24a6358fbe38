@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1517107_2f59ee39",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-23T19:21:44Z",
+      "side": 1,
+      "message": "Oops! I meant to delete these! Good catch.",
+      "parentUuid": "e21618a6_a2788a8b",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 44
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2519a19_ad3bba58",
         "filename": "src/common/angleutils.h",
         "patchSetId": 2
@@ -42,6 +66,53 @@
         "startChar": 24,
         "endLine": 572,
         "endChar": 29
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41ddbfc2_2c3914b3",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-23T19:21:44Z",
+      "side": 1,
+      "message": "I tried to refactor this in a similar way to the others and I got an error that the `require_constant_initialization` attrib does not exist. Turns out it is a clang specific one (I think gcc has a workaround with `__constinit`, `constinit` in C++20).\n\nIf we are only building with clang, then maybe we don\u0027t need this `__has_cpp_attribute` check since it looks like `clang::require_constant_initialization` is supported since C++11.",
+      "parentUuid": "d2519a19_ad3bba58",
+      "range": {
+        "startLine": 572,
+        "startChar": 24,
+        "endLine": 572,
+        "endChar": 29
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db90cdc_b604f598",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-23T19:21:44Z",
+      "side": 1,
+      "message": "Looks like I could\u0027ve refactored this as well -- `[[fallthrough]]` is brought in by C++17.",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 23
       },
       "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
