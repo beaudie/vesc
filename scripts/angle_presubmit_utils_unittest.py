@@ -8,9 +8,9 @@ angle_presubmit_utils_unittest.py: Top-level unittest script for ANGLE presubmit
 
 import imp
 import os
+import tempfile
 import unittest
 from angle_presubmit_utils import *
-
 
 def SetCWDToAngleFolder():
     angle_folder = "angle"
@@ -22,7 +22,6 @@ def SetCWDToAngleFolder():
 SetCWDToAngleFolder()
 
 PRESUBMIT = imp.load_source('PRESUBMIT', 'PRESUBMIT.py')
-
 
 class CommitMessageFormattingCheckTest(unittest.TestCase):
 
@@ -314,6 +313,30 @@ bbbbbbbbbbbbbbbbbbbb
 Change-Id: I443c36aaa8956c20da1abddf7aea613659e2cd5b"""
         errors = self.run_check_commit_message_formatting(commit_msg)
         self.assertEqual(len(errors), 0)
+
+
+class GClientFileExistenceCheck(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(GClientFileExistenceCheck, self).__init__(*args, **kwargs)
+        self.output_api = OutputAPI_mock()
+
+    def run_gclient_presubmit(self, cwd):
+        input_api = InputAPI_mock('')
+        input_api.cwd = cwd
+        return PRESUBMIT._CheckGClientExists(input_api, self.output_api)
+
+    def test_with_existing_gclient(self):
+        with tempfile.TemporaryDirectory() as cwd:
+            with open(os.path.join(cwd, '.gclient'), 'w'):
+                errors = self.run_gclient_presubmit(cwd)
+                self.assertEqual(len(errors), 0)
+
+    def test_with_missing_gclient(self):
+        with tempfile.TemporaryDirectory() as cwd:
+            errors = self.run_gclient_presubmit(cwd)
+            self.assertEqual(len(errors), 1)
+            self.assertEqual(errors[0], self.output_api.PresubmitError('Missing .gclient file.'))
 
 
 if __name__ == '__main__':
