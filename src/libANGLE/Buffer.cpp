@@ -65,6 +65,8 @@ void Buffer::onDestroy(const Context *context)
 angle::Result Buffer::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+    if (mImpl)
+        return mImpl->onLabelUpdate(context);
     return angle::Result::Continue;
 }
 
