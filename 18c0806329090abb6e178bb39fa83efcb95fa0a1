@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9653b4da_821f8e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T17:03:50Z",
+      "side": 1,
+      "message": "This is left over from something that has been removed. Can you instead just delete these two files?",
+      "revId": "18c0806329090abb6e178bb39fa83efcb95fa0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
