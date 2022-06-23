@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1523feb_5d0c8a3a",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T19:40:39Z",
+      "side": 1,
+      "message": "Actually I didn\u0027t even see the comment markers.  One of the hazards of using block comments.  Good to remove anyway.",
+      "parentUuid": "e0a7e8d8_2cd4018b",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 44
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2519a19_ad3bba58",
@@ -121,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec6d7e75_17cc4b72",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T19:40:39Z",
+      "side": 1,
+      "message": "It looks like we still have public docs referring to `is_clang \u003d false` so maybe keep the checks, with the `clang::` fix:\n```\nWe also recommend using is_clang \u003d false with UWP.\n```\nhttps://chromium.googlesource.com/angle/angle/+/HEAD/doc/DevSetup.md#getting-the-source",
+      "parentUuid": "41ddbfc2_2c3914b3",
+      "range": {
+        "startLine": 572,
+        "startChar": 24,
+        "endLine": 572,
+        "endChar": 29
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3db90cdc_b604f598",
         "filename": "src/common/angleutils.h",
         "patchSetId": 2
@@ -156,6 +204,30 @@
       "side": 1,
       "message": "Updated this CL to replace usages of `ANGLE_FALLTHROUGH` with `[[fallthrough]]` and I deleted these macro lines regarding `[[clang::fallthrough]]`.",
       "parentUuid": "3db90cdc_b604f598",
+      "range": {
+        "startLine": 578,
+        "startChar": 4,
+        "endLine": 578,
+        "endChar": 23
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47dcc709_21b1810f",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T19:40:39Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "d1b822f2_5b38d565",
       "range": {
         "startLine": 578,
         "startChar": 4,
