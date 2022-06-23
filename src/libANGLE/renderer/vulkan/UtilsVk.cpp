@@ -1616,10 +1616,11 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
     commandBuffer = &commandBufferHelper->getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ConvertIndexBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     std::array<VkDescriptorBufferInfo, 2> buffers = {{
         {dst->getBuffer().getHandle(), dst->getOffset(), dst->getSize()},
@@ -1684,11 +1685,12 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
     commandBuffer = &commandBufferHelper->getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndexIndirectBuffer, &descriptorPoolBinding,
-                                    &descriptorSet));
+                                    &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     std::array<VkDescriptorBufferInfo, 4> buffers = {{
         {dstIndexBuf->getBuffer().getHandle(), dstIndexBuf->getOffset(), dstIndexBuf->getSize()},
@@ -1759,11 +1761,12 @@ angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
     commandBuffer = &commandBufferHelper->getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndexIndirectLineLoopBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     std::array<VkDescriptorBufferInfo, 4> buffers = {{
         {dstIndexBuffer->getBuffer().getHandle(), dstIndexBuffer->getOffset(),
@@ -1828,11 +1831,12 @@ angle::Result UtilsVk::convertLineLoopArrayIndirectBuffer(
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
     commandBuffer = &commandBufferHelper->getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::ConvertIndirectLineLoopBuffer, &descriptorPoolBinding,
-                                    &descriptorSet));
+                                    &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     std::array<VkDescriptorBufferInfo, 3> buffers = {{
         {srcIndirectBuffer->getBuffer().getHandle(), srcIndirectBuffer->getOffset(),
@@ -1998,10 +2002,11 @@ angle::Result UtilsVk::convertVertexBufferImpl(
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     commandBuffer = &commandBufferHelper->getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ConvertVertexBuffer,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     VkWriteDescriptorSet writeInfo    = {};
     VkDescriptorBufferInfo buffers[2] = {
@@ -2500,10 +2505,12 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     vk::RenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer, nullptr));
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
-                                    Function::BlitResolve, &descriptorPoolBinding, &descriptorSet));
+                                    Function::BlitResolve, &descriptorPoolBinding,
+                                    &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
                                      src);
@@ -2719,7 +2726,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                 depthStencilImage->getAspectFlags(), depthStencilImage);
     access.onBufferComputeShaderWrite(&blitBuffer.get());
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
@@ -2727,7 +2734,8 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     commandBuffer = &commandBufferHelper->getCommandBuffer();
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper,
                                     Function::BlitResolveStencilNoExport, &descriptorPoolBinding,
-                                    &descriptorSet));
+                                    &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     // Blit/resolve stencil into the buffer.
     VkDescriptorImageInfo imageInfo = {};
@@ -2941,10 +2949,12 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ANGLE_TRY(
         startRenderPass(contextVk, dst, destView, renderPassDesc, renderArea, &commandBuffer));
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
-                                    Function::ImageCopy, &descriptorPoolBinding, &descriptorSet));
+                                    Function::ImageCopy, &descriptorPoolBinding,
+                                    &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
 
@@ -3254,10 +3264,11 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBufferHelper));
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::GenerateMipmap,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     VkDescriptorImageInfo destImageInfos[kGenerateMipmapMaxLevels] = {};
     for (uint32_t level = 0; level < kGenerateMipmapMaxLevels; ++level)
@@ -3404,10 +3415,11 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
     vk::RenderPassCommandBuffer *commandBuffer =
         &contextVk->getStartedRenderPassCommands().getCommandBuffer();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(), function,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     vk::FramebufferAttachmentArray<VkDescriptorImageInfo> inputImageInfo = {};
     for (uint32_t attachmentIndex = 0; attachmentIndex < colorAttachmentCount; ++attachmentIndex)
@@ -3555,10 +3567,11 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     vk::RenderPassCommandBufferHelper *commandBufferHelper =
         &contextVk->getStartedRenderPassCommands();
 
-    VkDescriptorSet descriptorSet;
+    vk::DescriptorSetHelper *descriptorSetOut = nullptr;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::OverlayDraw,
-                                    &descriptorPoolBinding, &descriptorSet));
+                                    &descriptorPoolBinding, &descriptorSetOut));
+    VkDescriptorSet descriptorSet = descriptorSetOut->getDescriptorSet();
 
     UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
 
@@ -3657,11 +3670,11 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
                                              vk::CommandBufferHelperCommon *commandBufferHelper,
                                              Function function,
                                              vk::RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut)
+                                             vk::DescriptorSetHelper **descriptorSetOut)
 {
     ANGLE_TRY(mDescriptorPools[function].allocateDescriptorSets(
         contextVk, commandBufferHelper,
-        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
+        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), bindingOut,
         descriptorSetOut));
 
     return angle::Result::Continue;
