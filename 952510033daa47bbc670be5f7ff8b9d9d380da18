@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7802532b_669ca5de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T21:31:41Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "952510033daa47bbc670be5f7ff8b9d9d380da18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7b47d25_2147d7e3",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "It is defined in the first CL in this series.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3719160\n\nI\u0027m sure there\u0027s a way to make it work, but just trying to limit the amount of effort we put into this, since the formats aren\u0027t emulated on Android.  Let me know think it is important.",
       "parentUuid": "c7b47d25_2147d7e3",
+      "range": {
+        "startLine": 2899,
+        "startChar": 49,
+        "endLine": 2899,
+        "endChar": 70
+      },
+      "revId": "952510033daa47bbc670be5f7ff8b9d9d380da18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f5871ef_a0e1d138",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T21:31:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0499bcc7_5d9d9831",
       "range": {
         "startLine": 2899,
         "startChar": 49,
