@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb17cda7_948c6834",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Is this comment aimed at future CLs that fully implement labelling the other objects, or does it imply that I should do a full implementation for everything as part of this CL?",
+      "parentUuid": "3ca8169c_b0920860",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ebf305f7_0cf7bd6f",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 2
@@ -190,6 +208,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80a688eb_a9522757",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afa25930_3cb6a84a",
+      "range": {
+        "startLine": 1223,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 5
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6dc4811_ec0dfffd",
@@ -203,6 +245,30 @@
       "writtenOn": "2022-06-21T17:19:11Z",
       "side": 1,
       "message": "This looks correct now",
+      "range": {
+        "startLine": 818,
+        "startChar": 0,
+        "endLine": 820,
+        "endChar": 35
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b3f921c_8af011f7",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6dc4811_ec0dfffd",
       "range": {
         "startLine": 818,
         "startChar": 0,
@@ -260,6 +326,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc26329_97f32574",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "169a400b_6fa0f6e8",
+      "range": {
+        "startLine": 2704,
+        "startChar": 58,
+        "endLine": 2704,
+        "endChar": 87
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dd849e1_24f9038a",
@@ -277,6 +367,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efadf6b6_32151b5d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3047,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2dd849e1_24f9038a",
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "275212e5_cdf69f71",
@@ -290,6 +398,30 @@
       "writtenOn": "2022-06-21T17:19:11Z",
       "side": 1,
       "message": "Mark, this macro will set the GL error if vkSetDebugUtilsObjectNameEXT doesn\u0027t return VK_SUCCESS.  I didn\u0027t realize that before, but do now.",
+      "range": {
+        "startLine": 817,
+        "startChar": 8,
+        "endLine": 817,
+        "endChar": 20
+      },
+      "revId": "36dd3d078f7a90846565bf35284cab1cac92910b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee1f461_d8ce1f34",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-06-23T23:12:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "275212e5_cdf69f71",
       "range": {
         "startLine": 817,
         "startChar": 8,
