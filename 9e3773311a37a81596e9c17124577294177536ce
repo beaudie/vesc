@@ -22,6 +22,30 @@
       },
       "revId": "9e3773311a37a81596e9c17124577294177536ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca561f9f_67096306",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1525,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-06-23T00:53:59Z",
+      "side": 1,
+      "message": "Good catch. Things are slightly different in this file compared to validationES3.cpp.",
+      "parentUuid": "b6f2c1b9_63d2bf5f",
+      "range": {
+        "startLine": 1513,
+        "startChar": 0,
+        "endLine": 1525,
+        "endChar": 9
+      },
+      "revId": "9e3773311a37a81596e9c17124577294177536ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
