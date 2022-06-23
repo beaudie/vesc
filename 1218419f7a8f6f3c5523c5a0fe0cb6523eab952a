@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d41501d_88f58513",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:26:16Z",
+      "side": 1,
+      "message": "This is a weird one. If I call it on a non-compressed format like R8, it would still say yes.\n\nMy suggestion is to add a helper in `src/common/` that takes the `GLenum` format and returns the condition in the if below, then use that both in `validationESEXT.cpp` and the tests. In `validationESEXT.cpp`, you can continue to use `getImplementationColorReadFormat` to get the format, while the tests use `glGetTexParameteriv`.",
+      "range": {
+        "startLine": 2450,
+        "startChar": 14,
+        "endLine": 2450,
+        "endChar": 35
+      },
+      "revId": "1218419f7a8f6f3c5523c5a0fe0cb6523eab952a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091bbf78_d9aa7525",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:26:16Z",
+      "side": 1,
+      "message": "Nit: `if (x) return true; else return false;` \u003d\u003d `return x;`.",
+      "range": {
+        "startLine": 2456,
+        "startChar": 0,
+        "endLine": 2461,
+        "endChar": 17
+      },
+      "revId": "1218419f7a8f6f3c5523c5a0fe0cb6523eab952a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
