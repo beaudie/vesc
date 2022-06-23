@@ -16,6 +16,24 @@
       "message": "Replacing myself with Trevor, since I\u0027m no longer on the ANGLE team.",
       "revId": "8adc3d0d89d2c81c06ac56ad0f228c6cc48d83ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "855fa302_6934d1bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-06-23T22:36:32Z",
+      "side": 1,
+      "message": "Oops, sorry about that. I knew *someone* had left the ANGLE team and stared at the list of possible code owners for a couple minutes before I took a guess.",
+      "parentUuid": "45eda40d_e862aa07",
+      "revId": "8adc3d0d89d2c81c06ac56ad0f228c6cc48d83ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
