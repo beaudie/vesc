@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "863ed457_435e0eb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:21:36Z",
+      "side": 1,
+      "message": "Excellent thanks!",
+      "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59f14f55_1353fbc7",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:21:36Z",
+      "side": 1,
+      "message": "Let\u0027s land this first, but this should be generalized to include any AHB-like import, like dma bufs etc. Could you please file a bug for follow up?",
+      "range": {
+        "startLine": 431,
+        "startChar": 12,
+        "endLine": 431,
+        "endChar": 28
+      },
+      "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2ffaf5a_7d43d2e7",
@@ -36,6 +76,29 @@
         "startChar": 39,
         "endLine": 597,
         "endChar": 50
+      },
+      "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c5e6eb_2464772c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:21:36Z",
+      "side": 1,
+      "message": "Can be shortened to:\n\n```\nconst bool isCreatedWithAHB \u003d mState.getColorAttachments()[colorIndexGL].isCreatedWithAHB();\nmIsAHBColorAttachments.set(colorIndexGL, isCreatedWithAHB);\n```\n\nNote that `set(N, value)` already has an `if` inside.",
+      "range": {
+        "startLine": 1723,
+        "startChar": 0,
+        "endLine": 1730,
+        "endChar": 9
       },
       "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
