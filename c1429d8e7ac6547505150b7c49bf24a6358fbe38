@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21618a6_a2788a8b",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T16:26:39Z",
+      "side": 1,
+      "message": "I think for these you should just drop the ifdefs and defines altogether and put `nodiscard` and `maybe_unused` directly in the code.  We\u0027re basically asserting that they are both supported now.",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 569,
+        "endChar": 44
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2519a19_ad3bba58",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-23T16:26:39Z",
+      "side": 1,
+      "message": "Did this pop out as a warning or something?  Seems like a good fix.",
+      "range": {
+        "startLine": 572,
+        "startChar": 24,
+        "endLine": 572,
+        "endChar": 29
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
