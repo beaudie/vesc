@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a406fb6_3ade5106",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2450,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T21:33:32Z",
+      "side": 1,
+      "message": "Or maybe then func name should be more explicit/restrictive?",
+      "parentUuid": "7267ea1b_e780f04d",
+      "range": {
+        "startLine": 2450,
+        "startChar": 14,
+        "endLine": 2450,
+        "endChar": 35
+      },
+      "revId": "1218419f7a8f6f3c5523c5a0fe0cb6523eab952a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "091bbf78_d9aa7525",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 1
