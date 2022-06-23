@@ -131,6 +131,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26917d99_293fa541",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T16:12:44Z",
+      "side": 1,
+      "message": "If the CPU improvements are real, that\u0027s a pretty nice win! I see that the ones that show degradation, when you tried them individually actually show little difference. I wonder if the same is true for those that show improvement (i.e. maybe the improvement is not really there either).\n\nThe change LGTM for landing, but could you also do a few individual runs of the ones that show a huge improvement? Like `sakura_school_simulator`, `scary_teacher_3d`, `respawnables` and `slingshot_test1`? The ones with big improvements are consecutive tests, I\u0027m wondering if the phone simply got hot during the run of \"before CL\" around those tests. Thanks!",
+      "parentUuid": "284ce7b7_7ba4d319",
+      "range": {
+        "startLine": 3200,
+        "startChar": 39,
+        "endLine": 3200,
+        "endChar": 88
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "311c19eb_857d315d",
