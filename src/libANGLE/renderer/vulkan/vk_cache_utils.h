@@ -65,6 +65,7 @@ class DynamicDescriptorPool;
 class ImageHelper;
 class SamplerHelper;
 enum class ImageLayout;
+class DescriptorSetHelper;
 
 using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
@@ -1303,24 +1304,6 @@ class DescriptorSetDesc
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
-// SharedDescriptorSetCacheKey.
-// Because DescriptorSet must associate with a pool, we need to define a structure that wraps both.
-class DescriptorPoolHelper;
-struct DescriptorSetDescAndPool
-{
-    DescriptorSetDesc mDesc;
-    DescriptorPoolHelper *mPool;
-};
-using DescriptorSetAndPoolPointer = std::unique_ptr<DescriptorSetDescAndPool>;
-using SharedDescriptorSetCacheKey = std::shared_ptr<DescriptorSetAndPoolPointer>;
-ANGLE_INLINE const SharedDescriptorSetCacheKey
-CreateSharedDescriptorSetCacheKey(const DescriptorSetDesc &desc, DescriptorPoolHelper *pool)
-{
-    DescriptorSetAndPoolPointer DescriptorAndPoolPointer =
-        std::make_unique<DescriptorSetDescAndPool>(DescriptorSetDescAndPool{desc, pool});
-    return std::make_shared<DescriptorSetAndPoolPointer>(std::move(DescriptorAndPoolPointer));
-}
-
 constexpr VkDescriptorType kStorageBufferDescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 
 // Manages a descriptor set desc with a few helper routines and also stores object handles.
@@ -1397,8 +1380,7 @@ class DescriptorSetDescBuilder final
                                            const gl::ActiveTextureArray<TextureVk *> &textures,
                                            const gl::SamplerBindingVector &samplers,
                                            bool emulateSeamfulCubeMapSampling,
-                                           PipelineType pipelineType,
-                                           const SharedDescriptorSetCacheKey &sharedCacheKey);
+                                           PipelineType pipelineType);
 
     void updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
                              VkDescriptorSet descriptorSet) const;
@@ -1415,8 +1397,7 @@ class DescriptorSetDescBuilder final
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
         bool emulateSeamfulCubeMapSampling,
-        PipelineType pipelineType,
-        const SharedDescriptorSetCacheKey &sharedCacheKey);
+        PipelineType pipelineType);
 
     void updateWriteDesc(uint32_t bindingIndex,
                          VkDescriptorType descriptorType,
@@ -1616,8 +1597,7 @@ class SharedCacheKeyManager
     std::vector<SharedCacheKeyT> mSharedCacheKeys;
 };
 
-using FramebufferCacheManager   = SharedCacheKeyManager<SharedFramebufferCacheKey>;
-using DescriptorSetCacheManager = SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
+using FramebufferCacheManager = SharedCacheKeyManager<SharedFramebufferCacheKey>;
 }  // namespace vk
 }  // namespace rx
 
@@ -2069,68 +2049,6 @@ class SamplerYcbcrConversionCache final
         std::unordered_map<vk::YcbcrConversionDesc, vk::SamplerYcbcrConversion>;
     SamplerYcbcrConversionMap mExternalFormatPayload;
     SamplerYcbcrConversionMap mVkFormatPayload;
-};
-
-// Descriptor Set Cache
-class DescriptorSetCache final : angle::NonCopyable
-{
-  public:
-    DescriptorSetCache() = default;
-    ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
-
-    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
-    {
-        *this = std::move(other);
-    }
-
-    DescriptorSetCache &operator=(DescriptorSetCache &&other)
-    {
-        std::swap(mPayload, other.mPayload);
-        return *this;
-    }
-
-    void resetCache() { mPayload.clear(); }
-
-    ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                       VkDescriptorSet *descriptorSet)
-    {
-        auto iter = mPayload.find(desc);
-        if (iter != mPayload.end())
-        {
-            *descriptorSet = iter->second;
-            return true;
-        }
-        return false;
-    }
-
-    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet)
-    {
-        mPayload.emplace(desc, descriptorSet);
-    }
-
-    ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
-    {
-        mPayload.erase(desc);
-    }
-
-    ANGLE_INLINE size_t getTotalCacheSize() const { return mPayload.size(); }
-
-    size_t getTotalCacheKeySizeBytes() const
-    {
-        size_t totalSize = 0;
-        for (const auto &iter : mPayload)
-        {
-            const vk::DescriptorSetDesc &desc = iter.first;
-            totalSize += desc.getKeySizeBytes();
-        }
-        return totalSize;
-    }
-
-    bool empty() const { return mPayload.empty(); }
-
-  private:
-    angle::HashMap<vk::DescriptorSetDesc, VkDescriptorSet> mPayload;
 };
 
 // Only 1 driver uniform binding is used.

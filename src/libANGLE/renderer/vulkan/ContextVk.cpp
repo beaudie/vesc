@@ -680,7 +680,6 @@ void ContextVk::DriverUniformsDescriptorSet::init(RendererVk *rendererVk)
 void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
 {
     descriptorSetLayout.reset();
-    descriptorPoolBinding.reset();
     dynamicBuffer.destroy(renderer);
 }
 
@@ -1018,6 +1017,13 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         dynamicDescriptorPool.destroy(mRenderer, VulkanCacheType::DriverUniformsDescriptors);
     }
+
+    mMetaDescriptorPools[DescriptorSetIndex::UniformsAndXfb].destroy(
+        mRenderer, VulkanCacheType::UniformsAndXfbDescriptors);
+    mMetaDescriptorPools[DescriptorSetIndex::Texture].destroy(mRenderer,
+                                                              VulkanCacheType::TextureDescriptors);
+    mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].destroy(
+        mRenderer, VulkanCacheType::ShaderResourcesDescriptors);
 
     mDefaultUniformStorage.release(mRenderer);
     mEmptyBuffer.release(mRenderer);
@@ -2857,12 +2863,12 @@ void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQ
     // Share group descriptor set allocations and caching stats.
     memset(mVulkanCacheStats.data(), 0, sizeof(CacheStats) * mVulkanCacheStats.size());
 
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::UniformsAndXfb)
-        .accumulateDescriptorCacheStats(VulkanCacheType::UniformsAndXfbDescriptors, this);
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::Texture)
-        .accumulateDescriptorCacheStats(VulkanCacheType::TextureDescriptors, this);
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::ShaderResource)
-        .accumulateDescriptorCacheStats(VulkanCacheType::ShaderResourcesDescriptors, this);
+    mMetaDescriptorPools[DescriptorSetIndex::UniformsAndXfb].accumulateDescriptorCacheStats(
+        VulkanCacheType::UniformsAndXfbDescriptors, this);
+    mMetaDescriptorPools[DescriptorSetIndex::Texture].accumulateDescriptorCacheStats(
+        VulkanCacheType::TextureDescriptors, this);
+    mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].accumulateDescriptorCacheStats(
+        VulkanCacheType::ShaderResourcesDescriptors, this);
 
     for (vk::DynamicDescriptorPool &pool : mDriverUniformsDescriptorPools)
     {
@@ -2893,8 +2899,7 @@ void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQ
 
     for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums<DescriptorSetIndex>())
     {
-        vk::MetaDescriptorPool &descriptorPool =
-            mShareGroupVk->getMetaDescriptorPool(descriptorSetIndex);
+        vk::MetaDescriptorPool &descriptorPool = mMetaDescriptorPools[descriptorSetIndex];
         mPerfCounters.descriptorSetCacheKeySizeBytes += descriptorPool.getTotalCacheKeySizeBytes();
     }
 
@@ -6245,21 +6250,13 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *comma
                                                      VkPipelineBindPoint bindPoint,
                                                      DriverUniformsDescriptorSet *driverUniforms)
 {
-    // The descriptor pool that this descriptor set was allocated from needs to be retained when the
-    // descriptor set is used in a new command. Since the descriptor pools are specific to each
-    // ContextVk, we only need to retain them once to ensure the reference count and Serial are
-    // updated correctly.
-    if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
-    {
-        commandBufferHelper->retainResource(&driverUniforms->descriptorPoolBinding.get());
-    }
-
     ProgramExecutableVk *executableVk = getExecutable();
     const uint32_t dynamicOffset =
         static_cast<uint32_t>(driverUniforms->currentBuffer->getOffset());
+    VkDescriptorSet descriptorSet = driverUniforms->descriptorSet->getDescriptorSet();
     commandBufferHelper->getCommandBuffer().bindDescriptorSets(
         executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
-        &driverUniforms->descriptorSet, 1, &dynamicOffset);
+        &descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -6317,17 +6314,9 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     desc.updateUniformWrite(1);
     desc.updateUniformBuffer(0, *driverUniforms.currentBuffer, driverUniformsSize);
 
-    vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].getOrAllocateDescriptorSet(
         this, commandBufferHelper, desc.getDesc(), driverUniforms.descriptorSetLayout.get(),
-        &driverUniforms.descriptorPoolBinding, &driverUniforms.descriptorSet, &cacheResult));
-    if (cacheResult == vk::DescriptorCacheResult::CacheHit)
-    {
-        // The descriptor pool that this descriptor set was allocated from needs to be retained each
-        // time the descriptor set is used in a new command.
-        commandBufferHelper->retainResource(&driverUniforms.descriptorPoolBinding.get());
-        return angle::Result::Continue;
-    }
+        &driverUniforms.descriptorSet));
 
     // Update the driver uniform descriptor set.
     VkDescriptorBufferInfo &bufferInfo = mUpdateDescriptorSetsBuilder.allocDescriptorBufferInfo();
@@ -6337,7 +6326,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
 
     VkWriteDescriptorSet &writeInfo = mUpdateDescriptorSetsBuilder.allocWriteDescriptorSet();
     writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet                = driverUniforms.descriptorSet;
+    writeInfo.dstSet                = driverUniforms.descriptorSet->getDescriptorSet();
     writeInfo.dstBinding            = 0;
     writeInfo.dstArrayElement       = 0;
     writeInfo.descriptorCount       = 1;
@@ -7739,9 +7728,7 @@ angle::Result ContextVk::bindCachedDescriptorPool(
     uint32_t descriptorCountMultiplier,
     vk::DescriptorPoolPointer *poolPointerOut)
 {
-    vk::MetaDescriptorPool &descriptorPool =
-        mShareGroupVk->getMetaDescriptorPool(descriptorSetIndex);
-    return descriptorPool.bindCachedDescriptorPool(
+    return mMetaDescriptorPools[descriptorSetIndex].bindCachedDescriptorPool(
         this, descriptorSetLayoutDesc, descriptorCountMultiplier,
         &mShareGroupVk->getDescriptorSetLayoutCache(), poolPointerOut);
 }
@@ -7892,10 +7879,8 @@ void ContextVk::resetPerFramePerfCounters()
 
     mRenderer->resetCommandQueuePerFrameCounters();
 
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::UniformsAndXfb)
-        .resetDescriptorCacheStats();
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::Texture).resetDescriptorCacheStats();
-    mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::ShaderResource)
-        .resetDescriptorCacheStats();
+    mMetaDescriptorPools[DescriptorSetIndex::UniformsAndXfb].resetDescriptorCacheStats();
+    mMetaDescriptorPools[DescriptorSetIndex::Texture].resetDescriptorCacheStats();
+    mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].resetDescriptorCacheStats();
 }
 }  // namespace rx

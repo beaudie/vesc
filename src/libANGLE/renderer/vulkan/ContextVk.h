@@ -944,10 +944,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         void destroy(RendererVk *rendererVk);
 
         vk::DynamicBuffer dynamicBuffer;
-        VkDescriptorSet descriptorSet;
+        vk::DescriptorSetHelper *descriptorSet;
         vk::BufferHelper *currentBuffer;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
-        vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     };
 
     // The GpuEventQuery struct holds together a timestamp query and enough data to create a
@@ -1508,6 +1507,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Storage for vkUpdateDescriptorSets
     UpdateDescriptorSetsBuilder mUpdateDescriptorSetsBuilder;
+
+    // Descriptor set caches
+    vk::DescriptorSetArray<vk::MetaDescriptorPool> mMetaDescriptorPools;
 
     ShareGroupVk *mShareGroupVk;
 
