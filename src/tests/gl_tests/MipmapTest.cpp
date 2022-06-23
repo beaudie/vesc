@@ -1672,6 +1672,21 @@ TEST_P(MipmapTestES3, TextureArrayUseThenRedefineThenGenerateMipmap)
     EXPECT_PIXEL_COLOR_EQ(px, py, GLColor::green);
 }
 
+// Create a large 2d Array
+TEST_P(MipmapTestES3, Large2DArray)
+{
+    int px = getWindowWidth() / 2;
+    int py = getWindowHeight() / 2;
+
+    glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture);
+
+    // Fill the whole texture with red.
+    std::vector<GLColor> pixelsRed(2 * 2 * 4, GLColor::red);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 2, GL_RGBA8, 32, 5, 0x300);
+    glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Create a 2D texture with levels 0-2, call GenerateMipmap with base level 1 so that level 0 stays
 // the same, and then sample levels 0 and 2.
 // GLES 3.0.4 section 3.8.10:
