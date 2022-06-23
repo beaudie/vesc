@@ -232,6 +232,24 @@
       "parentUuid": "01d0cfb1_1d91f433",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fbfd988_56af0a87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-23T12:19:55Z",
+      "side": 1,
+      "message": "Thanks for the pointers!\n\nIf I\u0027m reading https://anglebug.com/6208#c3 right, Mohan\u0027s suggested fix https://crrev.com/c/3717277 should still work correctly as the issue there is an explicit eglTerminate call. Good to know `com.netmarble.sknightsmmo` does (did) this so we know that this isn\u0027t limited to the test app and happens in real apps too.\n\nMohan, could you go ahead with https://crrev.com/c/3717277 ? It would also be great if you update the comment about the OOM repro while on this. Let\u0027s try to make it clear where possible that this code is specifically about cleanup after an _explicit eglTerminate call_ and not clenanup on process termination. Some of the eglTerminate cleanup must be delayed as per https://anglebug.com/6208#c3, and that bug says the the app was crashing at the loading screen so the process wasn\u0027t terminating.\n\nThanks!",
+      "parentUuid": "3066de5f_fc64abc3",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
