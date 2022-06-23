@@ -2390,22 +2390,10 @@ void ReleaseCachedObject(ContextVk *contextVk, const FramebufferDesc &desc)
     contextVk->getShareGroup()->getFramebufferCache().erase(contextVk, desc);
 }
 
-void ReleaseCachedObject(ContextVk *contextVk, const DescriptorSetDescAndPool &descAndPool)
-{
-    ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc);
-}
-
 void DestroyCachedObject(const FramebufferDesc &desc)
 {
     // Framebuffer cache are implemented in a way that each cache entry tracks GPU progress and we
     // always guarantee cache entries are released before calling destroy.
-}
-
-void DestroyCachedObject(const DescriptorSetDescAndPool &descAndPool)
-{
-    ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->destroyCachedDescriptorSet(descAndPool.mDesc);
 }
 }  // anonymous namespace
 
@@ -4872,15 +4860,14 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType,
-    const SharedDescriptorSetCacheKey &sharedCacheKey)
+    PipelineType pipelineType)
 {
     reset();
     for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         ANGLE_TRY(updateExecutableActiveTexturesForShader(
             context, shaderType, variableInfoMap, executable, textures, samplers,
-            emulateSeamfulCubeMapSampling, pipelineType, sharedCacheKey));
+            emulateSeamfulCubeMapSampling, pipelineType));
     }
 
     return angle::Result::Continue;
@@ -4894,8 +4881,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
     bool emulateSeamfulCubeMapSampling,
-    PipelineType pipelineType,
-    const SharedDescriptorSetCacheKey &sharedCacheKey)
+    PipelineType pipelineType)
 {
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<gl::LinkedUniform> &uniforms         = executable.getUniforms();
@@ -4943,8 +4929,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
 
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
-
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
                 mHandles[infoIndex].bufferView = view->getHandle();
@@ -4961,8 +4945,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(samplerState);
-
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
 
@@ -5438,8 +5420,6 @@ void SharedCacheKeyManager<SharedCacheKeyT>::assertAllEntriesDestroyed()
 
 // Explict instantiate for FramebufferCacheManager
 template class SharedCacheKeyManager<SharedFramebufferCacheKey>;
-// Explict instantiate for DescriptorSetCacheManager
-template class SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
 }  // namespace vk
 
 // FramebufferCache implementation.
