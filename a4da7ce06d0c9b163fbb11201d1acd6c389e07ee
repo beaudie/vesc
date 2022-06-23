@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18b55b7a_a055183b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T00:26:11Z",
+      "side": 1,
+      "message": "LGTM. Leaving Shabi a chance to +2.",
+      "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2ffaf5a_7d43d2e7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T00:26:11Z",
+      "side": 1,
+      "message": "can be just `mIsAHBColorAttachments.any()`",
+      "range": {
+        "startLine": 597,
+        "startChar": 39,
+        "endLine": 597,
+        "endChar": 50
+      },
+      "revId": "a4da7ce06d0c9b163fbb11201d1acd6c389e07ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
