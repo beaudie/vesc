@@ -6265,9 +6265,10 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *comma
     ProgramExecutableVk *executableVk = getExecutable();
     const uint32_t dynamicOffset =
         static_cast<uint32_t>(driverUniforms->currentBuffer->getOffset());
+    VkDescriptorSet descriptorSet = driverUniforms->descriptorSet->getDescriptorSet();
     commandBufferHelper->getCommandBuffer().bindDescriptorSets(
         executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
-        &driverUniforms->descriptorSet, 1, &dynamicOffset);
+        &descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -6345,7 +6346,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
 
     VkWriteDescriptorSet &writeInfo = mUpdateDescriptorSetsBuilder.allocWriteDescriptorSet();
     writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet                = driverUniforms.descriptorSet;
+    writeInfo.dstSet                = driverUniforms.descriptorSet->getDescriptorSet();
     writeInfo.dstBinding            = 0;
     writeInfo.dstArrayElement       = 0;
     writeInfo.descriptorCount       = 1;

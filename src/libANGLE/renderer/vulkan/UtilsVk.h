@@ -541,7 +541,7 @@ class UtilsVk : angle::NonCopyable
                                         vk::CommandBufferHelperCommon *commandBufferHelper,
                                         Function function,
                                         vk::RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetOut);
+                                        vk::DescriptorSetHelper **descriptorSetOut);
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
     angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
