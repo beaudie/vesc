@@ -155,6 +155,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2676a75d_46d9ae9f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3200,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T17:56:19Z",
+      "side": 1,
+      "message": "The improvement is also not real. See the updated sheet. perf test on mobile is a bit tricky. But anyway I dont expect this CL change CPU perf any any direction for the exact same reason I described above. This is more of memory saving by removing the invalid caches.",
+      "parentUuid": "26917d99_293fa541",
+      "range": {
+        "startLine": 3200,
+        "startChar": 39,
+        "endLine": 3200,
+        "endChar": 88
+      },
+      "revId": "d468c584dec2335675aa38e441188408795213e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "311c19eb_857d315d",
