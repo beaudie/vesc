@@ -143,6 +143,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "262c3a11_470cb787",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-23T20:42:19Z",
+      "side": 1,
+      "message": "Indeed there is, switched to that.",
+      "parentUuid": "e6968f9f_a89014a7",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 449,
+        "endChar": 18
+      },
+      "revId": "7dfa1b87d60173f73c57162a6f0a62b5126c06d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca92fd6b_53719922",
