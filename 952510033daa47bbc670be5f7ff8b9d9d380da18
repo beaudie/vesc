@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7b47d25_2147d7e3",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-23T16:27:54Z",
+      "side": 1,
+      "message": "Odd that I grep `isColorFormatEmulated` and did not see where it is defined. But even if we emulated the format, shouldn\u0027t we still allow texSUbImage from PBO, we just need to fall back and do a CPU copy?",
+      "range": {
+        "startLine": 2899,
+        "startChar": 49,
+        "endLine": 2899,
+        "endChar": 70
+      },
+      "revId": "952510033daa47bbc670be5f7ff8b9d9d380da18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
