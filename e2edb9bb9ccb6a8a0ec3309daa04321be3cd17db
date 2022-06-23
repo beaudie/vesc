@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a83ea2a_84c744a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-23T17:41:10Z",
+      "side": 1,
+      "message": "Is this expected to ship or is it just for testing? It\u0027s not particularly big, but it does add ~50KB of binary size to an Android build (which is particularly redundant, as Android vendors support ASTC).\n\nAlso, looks like the decoding is buggy. For example look at the GOLD failure for war_planet_online, especially the foliage looks very blurry.\n",
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
