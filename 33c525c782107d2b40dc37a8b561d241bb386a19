@@ -34,6 +34,24 @@
       "parentUuid": "b378b30e_de15aa74",
       "revId": "33c525c782107d2b40dc37a8b561d241bb386a19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5389175a_8d7d3660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-06-23T22:01:42Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ll take a look at that test. It didn\u0027t fail on my M1 but I now have an Intel machine available to me so I\u0027ll take a look there.\n\nIt appears to be an issue with immutable textures allocated with glTexStorage and the Metal backend. The Metal backend is not checking for immutable textures when applying GL_TEXTURE_BASE_LEVEL and GL_TEXTURE_MAX_LEVEL logic.",
+      "parentUuid": "e3042570_be8e6b17",
+      "revId": "33c525c782107d2b40dc37a8b561d241bb386a19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
