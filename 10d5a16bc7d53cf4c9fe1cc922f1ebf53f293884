@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef5d7548_35d599a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-23T00:19:47Z",
+      "side": 1,
+      "message": "Jonah: would you be willing to +2 this?\n\nThis would have been caught on ANGLE\u0027s waterfall if a Mac ASAN bot were there running angle_end2end_tests on AMD GPUs.\n\nConfirmed that on the Chromium-side Mac ASAN Retina AMD bot, the new test in https://chromium-review.googlesource.com/c/chromium/src/+/3715383 verifies this fix.\n\nThanks.\n",
+      "revId": "10d5a16bc7d53cf4c9fe1cc922f1ebf53f293884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
