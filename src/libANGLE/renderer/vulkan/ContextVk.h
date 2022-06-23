@@ -944,7 +944,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         void destroy(RendererVk *rendererVk);
 
         vk::DynamicBuffer dynamicBuffer;
-        VkDescriptorSet descriptorSet;
+        vk::DescriptorSetHelper *descriptorSet;
         vk::BufferHelper *currentBuffer;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
         vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;

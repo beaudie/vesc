@@ -3659,11 +3659,13 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
                                              vk::RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut)
 {
+    vk::DescriptorSetHelper *descriptorSetHelper = nullptr;
     ANGLE_TRY(mDescriptorPools[function].allocateDescriptorSets(
         contextVk, commandBufferHelper,
-        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), 1, bindingOut,
-        descriptorSetOut));
+        mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get(), bindingOut,
+        &descriptorSetHelper));
 
+    *descriptorSetOut = descriptorSetHelper->getDescriptorSet();
     return angle::Result::Continue;
 }
 

@@ -65,6 +65,7 @@ class DynamicDescriptorPool;
 class ImageHelper;
 class SamplerHelper;
 enum class ImageLayout;
+class DescriptorSetHelper;
 
 using RefCountedDescriptorSetLayout    = RefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout         = RefCounted<PipelineLayout>;
@@ -2077,61 +2078,28 @@ class DescriptorSetCache final : angle::NonCopyable
 {
   public:
     DescriptorSetCache() = default;
-    ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
+    ~DescriptorSetCache();
 
-    DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
-    {
-        *this = std::move(other);
-    }
+    DescriptorSetCache(DescriptorSetCache &&other);
+    DescriptorSetCache &operator=(DescriptorSetCache &&other);
 
-    DescriptorSetCache &operator=(DescriptorSetCache &&other)
-    {
-        std::swap(mPayload, other.mPayload);
-        return *this;
-    }
+    void resetCache(RendererVk *renderer);
+    bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                          vk::DescriptorSetHelper **descriptorSet);
 
-    void resetCache() { mPayload.clear(); }
+    void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                             vk::DescriptorSetHelper *descriptorSet);
+    void eraseDescriptorSet(const vk::DescriptorSetDesc &desc);
+    bool releaseDescriptorSet(const vk::DescriptorSetDesc &desc,
+                              vk::DescriptorSetHelper **descriptorSet);
 
-    ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                       VkDescriptorSet *descriptorSet)
-    {
-        auto iter = mPayload.find(desc);
-        if (iter != mPayload.end())
-        {
-            *descriptorSet = iter->second;
-            return true;
-        }
-        return false;
-    }
-
-    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet)
-    {
-        mPayload.emplace(desc, descriptorSet);
-    }
-
-    ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
-    {
-        mPayload.erase(desc);
-    }
-
-    ANGLE_INLINE size_t getTotalCacheSize() const { return mPayload.size(); }
-
-    size_t getTotalCacheKeySizeBytes() const
-    {
-        size_t totalSize = 0;
-        for (const auto &iter : mPayload)
-        {
-            const vk::DescriptorSetDesc &desc = iter.first;
-            totalSize += desc.getKeySizeBytes();
-        }
-        return totalSize;
-    }
+    size_t getTotalCacheSize() const;
+    size_t getTotalCacheKeySizeBytes() const;
 
     bool empty() const { return mPayload.empty(); }
 
   private:
-    angle::HashMap<vk::DescriptorSetDesc, VkDescriptorSet> mPayload;
+    angle::HashMap<vk::DescriptorSetDesc, std::unique_ptr<vk::DescriptorSetHelper>> mPayload;
 };
 
 // Only 1 driver uniform binding is used.

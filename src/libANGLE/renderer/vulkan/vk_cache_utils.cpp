@@ -6071,4 +6071,84 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+// DescriptorSetCache implementation
+DescriptorSetCache::~DescriptorSetCache()
+{
+    ASSERT(mPayload.empty());
+}
+
+DescriptorSetCache::DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
+{
+    *this = std::move(other);
+}
+
+DescriptorSetCache &DescriptorSetCache::operator=(DescriptorSetCache &&other)
+{
+    std::swap(mPayload, other.mPayload);
+    return *this;
+}
+
+void DescriptorSetCache::resetCache(RendererVk *renderer)
+{
+    Serial lastCompletedSerial = renderer->getLastCompletedQueueSerial();
+    for (const auto &iter : mPayload)
+    {
+        const std::unique_ptr<vk::DescriptorSetHelper> &descriptorSet = iter.second;
+        ASSERT(!descriptorSet->isCurrentlyInUse(lastCompletedSerial));
+    }
+    mPayload.clear();
+}
+
+bool DescriptorSetCache::getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                          vk::DescriptorSetHelper **descriptorSet)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *descriptorSet = iter->second.get();
+        return true;
+    }
+    return false;
+}
+
+void DescriptorSetCache::insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                             vk::DescriptorSetHelper *descriptorSet)
+{
+    mPayload.emplace(desc, std::unique_ptr<vk::DescriptorSetHelper>(descriptorSet));
+}
+
+void DescriptorSetCache::eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
+{
+    mPayload.erase(desc);
+}
+
+bool DescriptorSetCache::releaseDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                              vk::DescriptorSetHelper **descriptorSet)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *descriptorSet = iter->second.release();
+        mPayload.erase(iter);
+        return true;
+    }
+    return false;
+}
+
+size_t DescriptorSetCache::getTotalCacheSize() const
+{
+    return mPayload.size();
+}
+
+size_t DescriptorSetCache::getTotalCacheKeySizeBytes() const
+{
+    size_t totalSize = 0;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &desc = iter.first;
+        totalSize += desc.getKeySizeBytes();
+    }
+    return totalSize;
+}
 }  // namespace rx
