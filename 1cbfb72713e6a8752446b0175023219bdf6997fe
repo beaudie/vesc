@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70c840db_3b2bb6d6",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-24T17:06:41Z",
+      "side": 1,
+      "message": "I have added support for this along with a test case in patch set 4.",
+      "parentUuid": "8328a944_c2093a74",
+      "revId": "1cbfb72713e6a8752446b0175023219bdf6997fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "754e8154_80c7259e",
