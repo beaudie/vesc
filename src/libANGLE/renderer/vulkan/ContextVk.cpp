@@ -722,6 +722,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mTotalBufferToImageCopySize(0),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
+      mFramebufferFetchSamples(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
@@ -4312,6 +4313,21 @@ void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasteriz
     mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, 0, mask);
 }
 
+void ContextVk::updateFrameBufferFetchSamples(const FramebufferVk &framebuffer)
+{
+    GLint drawFramebufferSamples = framebuffer.getSamples();
+    if (mFramebufferFetchSamples < 1 && drawFramebufferSamples > 1)
+    {
+        // If we change from single sample to multisample, we need to use the Shader Program with
+        // ProgramTransformOptions.multisampleFramebufferFetch == true. Invalidate the graphics
+        // pipeline so that we can fetch the shader with the correct permutation option in
+        // handleDirtyGraphicsPipelineDesc()
+        invalidateCurrentGraphicsPipeline();
+    }
+
+    mFramebufferFetchSamples = drawFramebufferSamples;
+}
+
 gl::Rectangle ContextVk::getCorrectedViewport(const gl::Rectangle &viewport) const
 {
     const gl::Caps &caps                   = getCaps();
@@ -4996,6 +5012,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 onDrawFramebufferRenderPassDescChange(drawFramebufferVk, nullptr);
 
+                updateFrameBufferFetchSamples(*drawFramebufferVk);
+
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
@@ -5583,6 +5601,7 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
 
     onDrawFramebufferRenderPassDescChange(framebufferVk, nullptr);
 
+    updateFrameBufferFetchSamples(*framebufferVk);
     return angle::Result::Continue;
 }
 

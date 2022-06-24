@@ -316,6 +316,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        !optionBits.removeTransformFeedbackEmulation;
     options.isTransformFeedbackEmulated = contextVk->getFeatures().emulateTransformFeedback.enabled;
     options.negativeViewportSupported   = contextVk->getFeatures().supportsNegativeViewport.enabled;
+    options.isMultisampledFramebufferFetch = optionBits.multiSampleFramebufferFetch;
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(options, variableInfoMap, originalSpirvBlob,
                                                &transformedSpirvBlob));
@@ -1065,6 +1066,11 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     transformOptions.removeTransformFeedbackEmulation =
         contextVk->getFeatures().emulateTransformFeedback.enabled &&
         !glState.isTransformFeedbackActiveUnpaused();
+    FramebufferVk *drawFrameBuffer = vk::GetImpl(contextVk->getState().getDrawFramebuffer());
+    GLint samples                  = drawFrameBuffer->getSamples();
+    bool hasFramebufferFetch       = desc.getFramebufferFetchMode();
+    bool isMultisampled            = (samples > 1) ? true : false;
+    transformOptions.multiSampleFramebufferFetch = hasFramebufferFetch && isMultisampled;
 
     const gl::DrawBufferMask framebufferMask = glState.getDrawFramebuffer()->getDrawBufferMask();
 
