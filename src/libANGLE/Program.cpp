@@ -1106,6 +1106,9 @@ angle::Result Program::setLabel(const Context *context, const std::string &label
 {
     ASSERT(!mLinkingState);
     mState.mLabel = label;
+
+    if (mProgram)
+        return mProgram->onLabelUpdate(context);
     return angle::Result::Continue;
 }
 
