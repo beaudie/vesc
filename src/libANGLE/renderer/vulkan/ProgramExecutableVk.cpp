@@ -188,6 +188,7 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
                                        !optionBits.removeTransformFeedbackEmulation;
     options.isTransformFeedbackEmulated = contextVk->getFeatures().emulateTransformFeedback.enabled;
     options.negativeViewportSupported   = contextVk->getFeatures().supportsNegativeViewport.enabled;
+    options.isMultisampledFramebufferFetch = optionBits.perSampledShading;
 
     ANGLE_TRY(GlslangWrapperVk::TransformSpirV(options, variableInfoMap, originalSpirvBlob,
                                                &transformedSpirvBlob));
@@ -742,6 +743,11 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     mTransformOptions.removeTransformFeedbackEmulation =
         contextVk->getFeatures().emulateTransformFeedback.enabled &&
         !glState.isTransformFeedbackActiveUnpaused();
+    FramebufferVk *drawFrameBuffer      = vk::GetImpl(contextVk->getState().getDrawFramebuffer());
+    GLint samples                       = drawFrameBuffer->getSamples();
+    mTransformOptions.perSampledShading = (samples > 0) ? true : false;
+
+    INFO() << "Yuxin Debug: drawFrameBuffer->getSamples() is: " << samples;
 
     // This must be called after mTransformOptions have been set.
     ProgramInfo &programInfo                  = getGraphicsProgramInfo();
