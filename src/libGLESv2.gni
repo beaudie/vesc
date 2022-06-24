@@ -423,6 +423,7 @@ libangle_sources = [
   "src/libANGLE/renderer/ProgramImpl.cpp",
   "src/libANGLE/renderer/ProgramPipelineImpl.cpp",
   "src/libANGLE/renderer/QueryImpl.cpp",
+  "src/libANGLE/renderer/RenderbufferImpl.cpp",
   "src/libANGLE/renderer/ShaderImpl.cpp",
   "src/libANGLE/renderer/SurfaceImpl.cpp",
   "src/libANGLE/renderer/TextureImpl.cpp",

@@ -124,6 +124,9 @@ Renderbuffer::~Renderbuffer() {}
 angle::Result Renderbuffer::setLabel(const Context *context, const std::string &label)
 {
     mLabel = label;
+
+    if (mImplementation)
+        return mImplementation->onLabelUpdate(context);
     return angle::Result::Continue;
 }
 
