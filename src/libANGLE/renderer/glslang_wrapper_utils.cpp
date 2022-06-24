@@ -20,6 +20,7 @@
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/renderer/ShaderInterfaceVariableInfoMap.h"
 #include "libANGLE/trace.h"
+// SPIR-V tools include for disassembly
 
 namespace spirv = angle::spirv;
 
@@ -2787,6 +2788,104 @@ void SpirvPositionTransformer::writePositionTransformation(const SpirvIDDiscover
     spirv::WriteStore(blobOut, positionPointerId, transformedPositionId, nullptr);
 }
 
+class SpirvMultiSampleTransformer final : angle::NonCopyable
+{
+  public:
+    SpirvMultiSampleTransformer(const GlslangSpirvOptions &options)
+        : mOptions(options),
+          mIsSampleRateShadingCapabilityEnabled(false),
+          mIsSubpassDataMultisampled(false)
+    {}
+
+    void visitName(spirv::IdRef id, const spirv::LiteralString &name);
+
+    void visitCapability(const uint32_t *instruction);
+
+    void visitDecorate(const uint32_t *instruction);
+
+    void visitSubpassLoad(const uint32_t *instruction);
+
+    void visitLoadSampleID(const uint32_t *instruction);
+
+  private:
+    GlslangSpirvOptions mOptions;
+    spirv::IdRef mBuiltInGLSampleID;
+    spirv::IdRef mSamplerID;
+    bool mIsSampleRateShadingCapabilityEnabled;
+    bool mIsSubpassDataMultisampled;
+};
+
+void SpirvMultiSampleTransformer::visitName(spirv::IdRef id, const spirv::LiteralString &name)
+{
+    if (angle::BeginsWith(name, "gl_SampleID"))
+    {
+        ASSERT(!mBuiltInGLSampleID.valid());
+        mBuiltInGLSampleID = id;
+    }
+}
+
+void SpirvMultiSampleTransformer::visitLoadSampleID(const uint32_t *instruction)
+{
+    spirv::IdRef idRef;
+    spirv::IdResult idResult;
+    spirv::IdResultType idResultType;
+    spirv::ParseLoad(instruction, &idResultType, &idResult, &idRef, nullptr);
+    // TODO how to check mBuiltInGLSampleID is the same as the IdResultType??
+    // if(mBuiltInGLSampleID.valid() && )
+    {
+        mSamplerID = idRef;
+    }
+}
+
+void SpirvMultiSampleTransformer::visitSubpassLoad(const uint32_t *instruction)
+{
+    spirv::IdResult idResult;
+    spirv::IdRef sampledType;
+    spv::Dim dim;
+    spirv::LiteralInteger depth;
+    spirv::LiteralInteger arrayed;
+    spirv::LiteralInteger ms;
+    spirv::LiteralInteger sampled;
+    spv::ImageFormat imageFormat;
+    spv::AccessQualifier accessQualifier;
+    spirv::ParseTypeImage(instruction, &idResult, &sampledType, &dim, &depth, &arrayed, &ms,
+                          &sampled, &imageFormat, &accessQualifier);
+    if (ms == 1)
+    {
+        mIsSubpassDataMultisampled = true;
+    }
+}
+
+void SpirvMultiSampleTransformer::visitDecorate(const uint32_t *instruction)
+{
+    spirv::IdRef id;
+    spv::Decoration decoration;
+    spirv::LiteralIntegerList valueList;
+    spirv::ParseDecorate(instruction, &id, &decoration, &valueList);
+    if (valueList[0] == spv::BuiltInSampleId)
+    {
+        // if the id is already declared in the OpName before, check that the id matches
+        if (mBuiltInGLSampleID.valid())
+        {
+            ASSERT(mBuiltInGLSampleID == id);
+        }
+        else
+        {
+            mBuiltInGLSampleID = id;
+        }
+    }
+}
+
+void SpirvMultiSampleTransformer::visitCapability(const uint32_t *instruction)
+{
+    spv::Capability capability;
+    spirv::ParseCapability(instruction, &capability);
+    if (capability == spv::CapabilitySampleRateShading)
+    {
+        mIsSampleRateShadingCapabilityEnabled = true;
+    }
+}
+
 // A SPIR-V transformer.  It walks the instructions and modifies them as necessary, for example to
 // assign bindings or locations.
 class SpirvTransformer final : public SpirvTransformerBase
@@ -2799,7 +2898,8 @@ class SpirvTransformer final : public SpirvTransformerBase
         : SpirvTransformerBase(spirvBlobIn, variableInfoMap, spirvBlobOut),
           mOptions(options),
           mXfbCodeGenerator(options.isTransformFeedbackEmulated),
-          mPositionTransformer(options)
+          mPositionTransformer(options),
+          mMultiSampleTransformer(options)
     {}
 
     void transform();
@@ -2821,6 +2921,7 @@ class SpirvTransformer final : public SpirvTransformerBase
     void visitTypePointer(const uint32_t *instruction);
     void visitTypeVector(const uint32_t *instruction);
     void visitVariable(const uint32_t *instruction);
+    void visitCapability(const uint32_t *instruction);
 
     // Instructions that potentially need transformation.  They return true if the instruction is
     // transformed.  If false is returned, the instruction should be copied as-is.
@@ -2859,6 +2960,7 @@ class SpirvTransformer final : public SpirvTransformerBase
     SpirvVaryingPrecisionFixer mVaryingPrecisionFixer;
     SpirvTransformFeedbackCodeGenerator mXfbCodeGenerator;
     SpirvPositionTransformer mPositionTransformer;
+    SpirvMultiSampleTransformer mMultiSampleTransformer;
 };
 
 void SpirvTransformer::transform()
@@ -2900,6 +3002,9 @@ void SpirvTransformer::resolveVariableIds()
 
         switch (opCode)
         {
+                // TODO: visit capability
+            case spv::OpCapability:
+                visitCapability(instruction);
             case spv::OpDecorate:
                 visitDecorate(instruction);
                 break;
@@ -3136,6 +3241,11 @@ void SpirvTransformer::writeOutputPrologue()
     }
 }
 
+void SpirvTransformer::visitCapability(const uint32_t *instruction)
+{
+    mMultiSampleTransformer.visitCapability(instruction);
+}
+
 void SpirvTransformer::visitDecorate(const uint32_t *instruction)
 {
     spirv::IdRef id;
@@ -3166,6 +3276,7 @@ void SpirvTransformer::visitName(const uint32_t *instruction)
     mIds.visitName(id, name);
     mXfbCodeGenerator.visitName(id, name);
     mPositionTransformer.visitName(id, name);
+    mMultiSampleTransformer.visitName(id, name);
 }
 
 void SpirvTransformer::visitMemberName(const uint32_t *instruction)
@@ -4823,6 +4934,9 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
         return angle::Result::Continue;
     }
 
+    INFO() << "Yuxin Debug: before Spirv Transform";
+    spirv::Print(initialSpirvBlob);
+
     // Transform the SPIR-V code by assigning location/set/binding values.
     SpirvTransformer transformer(initialSpirvBlob, options, variableInfoMap, spirvBlobOut);
     transformer.transform();
@@ -4840,6 +4954,9 @@ angle::Result GlslangTransformSpirvCode(const GlslangSpirvOptions &options,
     spirvBlobOut->shrink_to_fit();
 
     ASSERT(spirv::Validate(*spirvBlobOut));
+
+    INFO() << "Yuxin Debug: after Spirv Transform";
+    spirv::Print(*spirvBlobOut);
 
     return angle::Result::Continue;
 }

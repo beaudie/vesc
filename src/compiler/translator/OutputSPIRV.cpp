@@ -31,7 +31,7 @@ namespace spv
 
 // Enable this for debug logging of pre-transform SPIR-V:
 #if !defined(ANGLE_DEBUG_SPIRV_GENERATION)
-#    define ANGLE_DEBUG_SPIRV_GENERATION 0
+#    define ANGLE_DEBUG_SPIRV_GENERATION 1
 #endif  // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
 
 namespace sh
@@ -6300,13 +6300,13 @@ spirv::Blob OutputSPIRVTraverser::getSpirv()
     // Validate that correct SPIR-V was generated
     ASSERT(spirv::Validate(result));
 
-#if ANGLE_DEBUG_SPIRV_GENERATION
-    // Disassemble and log the generated SPIR-V for debugging.
-    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
-    std::string readableSpirv;
-    spirvTools.Disassemble(result, &readableSpirv, 0);
-    fprintf(stderr, "%s\n", readableSpirv.c_str());
-#endif  // ANGLE_DEBUG_SPIRV_GENERATION
+    // #if ANGLE_DEBUG_SPIRV_GENERATION
+    //     // Disassemble and log the generated SPIR-V for debugging.
+    //     spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+    //     std::string readableSpirv;
+    //     spirvTools.Disassemble(result, &readableSpirv, 0);
+    //     fprintf(stderr, "%s\n", readableSpirv.c_str());
+    // #endif  // ANGLE_DEBUG_SPIRV_GENERATION
 
     return result;
 }
