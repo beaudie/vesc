@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd4e2370_1a4b809d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-24T16:51:45Z",
+      "side": 1,
+      "message": "Swap myself with Stephen since I am not working on D3D backend.",
+      "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
