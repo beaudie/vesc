@@ -69,6 +69,24 @@
       "parentUuid": "e2ae97fb_02e9221f",
       "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bd5c8e8_82079094",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-06-24T23:05:03Z",
+      "side": 1,
+      "message": "I spent the day trying to get a test case but getting the timing right in an isolated test is quite difficult. I need to artificially create long running GPU work that is much slower than the CPU to keep the submitted buffers \"busy\".",
+      "parentUuid": "98640314_2afba283",
+      "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
