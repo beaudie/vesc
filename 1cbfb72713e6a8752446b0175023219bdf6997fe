@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8328a944_c2093a74",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T04:04:20Z",
+      "side": 1,
+      "message": "This is going to cause trouble with developers working on ANGLE in a chromium checkout. In my local checkout of chromium, I have:\n\n```\nchromium/\n  .gclient\n  src/\n    PRESUBMIT.py\n    third_party/\n      angle/\n        PRESUBMIT.py\n```\n\nHow about walking up the tree until root and be satisfied if `.gclient` is found anywhere in a parent directory?",
+      "revId": "1cbfb72713e6a8752446b0175023219bdf6997fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "754e8154_80c7259e",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T04:04:20Z",
+      "side": 1,
+      "message": "Please wrap the source code to 100 chars (regardless of textwrap rewrapping it to whatever size)",
+      "range": {
+        "startLine": 436,
+        "startChar": 25,
+        "endLine": 436,
+        "endChar": 187
+      },
+      "revId": "1cbfb72713e6a8752446b0175023219bdf6997fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
