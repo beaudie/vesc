@@ -425,6 +425,7 @@ libangle_sources = [
   "src/libANGLE/renderer/ShaderImpl.cpp",
   "src/libANGLE/renderer/SurfaceImpl.cpp",
   "src/libANGLE/renderer/TextureImpl.cpp",
+  "src/libANGLE/renderer/VertexArrayImpl.cpp",
   "src/libANGLE/renderer/driver_utils.cpp",
   "src/libANGLE/renderer/load_functions_table_autogen.cpp",
   "src/libANGLE/renderer/renderer_utils.cpp",
