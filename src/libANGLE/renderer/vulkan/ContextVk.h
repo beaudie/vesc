@@ -468,6 +468,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateColorMasks();
     void updateBlendFuncsAndEquations();
     void updateSampleMaskWithRasterizationSamples(const uint32_t rasterizationSamples);
+    void updateFrameBufferFetchSamples(const FramebufferVk &framebuffer);
 
     void handleError(VkResult errorCode,
                      const char *file,
@@ -1503,6 +1504,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::PerfMonitorCounterGroups mPerfMonitorCounters;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+
+    GLint mFramebufferFetchSamples;
 
     egl::ContextPriority mContextPriority;
 
