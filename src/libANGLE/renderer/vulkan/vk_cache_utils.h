@@ -717,6 +717,8 @@ class GraphicsPipelineDesc final
         return mInputAssemblyAndRasterizationStateInfo.misc.surfaceRotation;
     }
 
+    bool getFramebufferFetchMode() const { return mRenderPassDesc.hasFramebufferFetch(); }
+
     void updateEmulatedDitherControl(GraphicsPipelineTransitionBits *transition, uint16_t value);
     uint32_t getEmulatedDitherControl() const { return mDither.emulatedDitherControl; }
 
