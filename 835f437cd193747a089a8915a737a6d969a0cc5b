@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8085db20_b16547b5",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-06-24T08:08:45Z",
+      "side": 1,
+      "message": "Nit: to keep all per-format expectations in one place, this could be added as a template parameter to the _Test class below.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 0
+      },
+      "revId": "835f437cd193747a089a8915a737a6d969a0cc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
