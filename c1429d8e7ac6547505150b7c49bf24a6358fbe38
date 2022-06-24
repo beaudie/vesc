@@ -191,6 +191,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c25f8f54_5a3e4288",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T01:54:54Z",
+      "side": 1,
+      "message": "FYI, we do have users that use g++ or msvc",
+      "parentUuid": "f6232186_b41bbd79",
+      "range": {
+        "startLine": 572,
+        "startChar": 24,
+        "endLine": 572,
+        "endChar": 29
+      },
+      "revId": "c1429d8e7ac6547505150b7c49bf24a6358fbe38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3db90cdc_b604f598",
