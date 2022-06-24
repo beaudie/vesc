@@ -4312,6 +4312,21 @@ void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasteriz
     mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, 0, mask);
 }
 
+void ContextVk::updateFrameBufferFetchSamples(const uint32_t prevFramebufferFetchSamples,
+                                              const uint32_t curFramebufferFetchSamples)
+{
+    const bool isPrevMultisampled = prevFramebufferFetchSamples > 1;
+    const bool isCurMultisampled  = curFramebufferFetchSamples > 1;
+    if (isPrevMultisampled != isCurMultisampled)
+    {
+        // If we change from single sample to multisample, we need to use the Shader Program with
+        // ProgramTransformOptions.multisampleFramebufferFetch == true. Invalidate the graphics
+        // pipeline so that we can fetch the shader with the correct permutation option in
+        // handleDirtyGraphicsPipelineDesc()
+        invalidateCurrentGraphicsPipeline();
+    }
+}
+
 gl::Rectangle ContextVk::getCorrectedViewport(const gl::Rectangle &viewport) const
 {
     const gl::Caps &caps                   = getCaps();
@@ -4538,6 +4553,8 @@ void ContextVk::updateSampleShadingWithRasterizationSamples(const uint32_t raste
 // rasterization sample should be updated.
 void ContextVk::updateRasterizationSamples(const uint32_t rasterizationSamples)
 {
+    uint32_t previousFramebufferFetchSampleCount = mGraphicsPipelineDesc->getRasterizationSamples();
+    updateFrameBufferFetchSamples(previousFramebufferFetchSampleCount, rasterizationSamples);
     mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
                                                       rasterizationSamples);
     updateSampleShadingWithRasterizationSamples(rasterizationSamples);
@@ -5582,7 +5599,6 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
     }
 
     onDrawFramebufferRenderPassDescChange(framebufferVk, nullptr);
-
     return angle::Result::Continue;
 }
 
