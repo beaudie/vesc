@@ -90,6 +90,30 @@
       },
       "revId": "49431f442a5415ff3f1b8915089c9ae336c8663e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e73e010_5ba71c03",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-06-24T16:49:16Z",
+      "side": 1,
+      "message": "It seems like the spec is vague about that. Reading this:\n\nhttps://www.khronos.org/registry/vulkan/specs/1.3-extensions/man/html/vkGetPhysicalDeviceFragmentShadingRatesKHR.html\n\nIt only states that the function can return VK_SUCCESS or VK_INCOMPLETE on success, but isn\u0027t clear about which of the two happens with pFragmentShadingRates \u003d\u003d nullptr. It does explicitly specify the return value if the value of pFragmentShadingRateCount is less than the supported fragment shading rates (which to my read includes 0).\n\nBut maybe my mind is just too pedantic about it. I\u0027ll change it.",
+      "parentUuid": "b23e945f_46fe7efb",
+      "range": {
+        "startLine": 3017,
+        "startChar": 35,
+        "endLine": 3017,
+        "endChar": 58
+      },
+      "revId": "49431f442a5415ff3f1b8915089c9ae336c8663e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
