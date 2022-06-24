@@ -33,6 +33,46 @@
       "message": "Geoff\u0027s generally busy, so I switched reviewers to Mohan (as the author of this code)",
       "revId": "49431f442a5415ff3f1b8915089c9ae336c8663e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fb88ced_78c1e531",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-24T16:26:13Z",
+      "side": 1,
+      "message": "small nit, thanks for the fix shabi",
+      "revId": "49431f442a5415ff3f1b8915089c9ae336c8663e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23e945f_46fe7efb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-24T16:26:13Z",
+      "side": 1,
+      "message": "`vkGetPhysicalDeviceFragmentShadingRatesKHR` with a nullptr has to return `VK_SUCCESS`",
+      "range": {
+        "startLine": 3017,
+        "startChar": 35,
+        "endLine": 3017,
+        "endChar": 58
+      },
+      "revId": "49431f442a5415ff3f1b8915089c9ae336c8663e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
