@@ -418,6 +418,7 @@ libangle_sources = [
   "src/libANGLE/renderer/EGLReusableSync.cpp",
   "src/libANGLE/renderer/EGLSyncImpl.cpp",
   "src/libANGLE/renderer/Format_table_autogen.cpp",
+  "src/libANGLE/renderer/FramebufferImpl.cpp",
   "src/libANGLE/renderer/ImageImpl.cpp",
   "src/libANGLE/renderer/ProgramImpl.cpp",
   "src/libANGLE/renderer/ProgramPipelineImpl.cpp",
