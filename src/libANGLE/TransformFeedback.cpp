@@ -123,6 +123,9 @@ TransformFeedback::~TransformFeedback()
 angle::Result TransformFeedback::setLabel(const Context *context, const std::string &label)
 {
     mState.mLabel = label;
+
+    if (mImplementation)
+        return mImplementation->onLabelUpdate(context);
     return angle::Result::Continue;
 }
 
