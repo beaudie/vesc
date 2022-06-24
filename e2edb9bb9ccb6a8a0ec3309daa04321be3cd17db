@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe5a0a1c_fa23051f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T02:13:33Z",
+      "side": 1,
+      "message": "Ah makes sense, I once again forgot to check that. It may very well not be the fault of the emulation, though a quick check with RenderDoc to make sure the emulated and original textures look the same (for example on Nvidia vs Pixel) would be nice.\n\nIn the very least, I\u0027d suggest adding a gn arg for it that\u0027s defaulted to !android.",
+      "parentUuid": "2692bc8a_3b12b1c0",
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "450af627_4ccb074f",
