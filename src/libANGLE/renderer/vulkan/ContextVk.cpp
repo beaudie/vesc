@@ -4996,6 +4996,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // We may need to update the framebuffer's use of fetch to match the in-use program
                 ANGLE_TRY(checkAndUpdateFramebufferFetchStatus(glState.getProgramExecutable()));
 
+                invalidateCurrentGraphicsPipeline();
+
                 break;
             }
             case gl::State::DIRTY_BIT_RENDERBUFFER_BINDING:
@@ -5583,6 +5585,7 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
 
     onDrawFramebufferRenderPassDescChange(framebufferVk, nullptr);
 
+    invalidateCurrentGraphicsPipeline();
     return angle::Result::Continue;
 }
 
