@@ -71,6 +71,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e83515d7_427d80d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "I am now disabling build and usage of the library on `is_android`. This reduced the debug APK size by ~90kb for me.",
+      "parentUuid": "fe5a0a1c_fa23051f",
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f4e61a3_83c57563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "I ran `car_chase` with ASTC emulation on AMD/Mesa and did not encounter the visual artifacts visible in the Gold tests. It might be unrelated to ASTC and require a skip on NVIDIA.",
+      "parentUuid": "0d39f7bc_5ccf5277",
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "450af627_4ccb074f",
@@ -118,6 +154,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c367d2e9_72f5673a",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b708f8a6_f90f360a",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 42
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c486560_087acbc6",
@@ -131,6 +191,30 @@
       "writtenOn": "2022-06-23T17:43:28Z",
       "side": 1,
       "message": "Can you provide any context for how you chose these defaults?  If performance of the library becomes a problem, these might be knobs we can tweak.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ace912a0_ba48aeba",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "The `astcenc_profile` is related to the input data we are receiving. It is set to `ASTCENC_PRF_LDR` as we currently only emulate `GL_KHR_texture_compression_astc_ldr`. The other profile would be relevant if we also exposed `GL_KHR_texture_compression_astc_hdr`.\n\nI chose `ASTCENC_PRE_MEDIUM` quality as it was the default used in the library\u0027s example code. Benchmarking against `ASTCENC_PRE_FASTEST` only gave a performance gain of `0.575s` when loading up the `war_planet_online` trace.\n\nLooking into the library the quality option is also mostly related to encoding, I am not sure it is actually used during decoding. SwiftShader has a modified version of the library with encoding stripped out, and does not have the notion of quality profiles at all.\n\nFor performance on Debug builds, it turns out that setting `-02` for only the `astc-encoder` library is enough to cut down loading times significantly.\nIn the benchmark I am using the `time` command with `--max-steps-performed 1` to time the full duration of the load up. So it contains the performance impact of loading up the shaders as well, compared to release builds.\n\nMy suggestion is to append `-O2` when building angle with `is_debug \u003d true`.\n\nFull benchmarks:\n\n```\ntime ./out/Debug/angle_perftests --gtest_filter\u003dTracePerfTest.Run/vulkan_war_planet_online --max-steps-performed 1\n```\n\n```\n2m36.226s No optimizations\n2m36.568s Thread count set to 24 (using a 24 thread CPU)\n2m35.651s ASTCENC_PRE_FASTEST profile\n2m25.026s SSE4.1 (ASTCENC_SSE\u003d1 and -msse4.1)\n2m12.339s SSE 4.1 and link time optimization (ASTCENC_SSE\u003d1 and -msse4.1 -flto)\n0m42.648s -O2 on only `astc-encoder`\n0m42.255s -O3 on only `astc-encoder`\n0m 6.518s Release build\n```",
+      "parentUuid": "7c486560_087acbc6",
       "range": {
         "startLine": 34,
         "startChar": 0,
@@ -166,6 +250,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21b5b41d_760e5993",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "I tried setting this to 24 on a 24 thread CPU and did not notice any performance benefit at all. Also looking into the process manager, it did not seem to start up more threads.\n\nAgain, looking into the library code it seems that this parameter is used for compression, being guarded behind that needs `ASTCENC_DECOMPRESS_ONLY` unset, which we have set.",
+      "parentUuid": "fbdd75cd_99fc296c",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 42
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc66c53c_200a9684",
         "filename": "src/image_util/loadimage_astc.cpp",
         "patchSetId": 9
@@ -177,6 +285,30 @@
       "writtenOn": "2022-06-23T18:23:21Z",
       "side": 1,
       "message": "nit: static_cast",
+      "range": {
+        "startLine": 58,
+        "startChar": 30,
+        "endLine": 58,
+        "endChar": 31
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d6ad4a4_430ee46a",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc66c53c_200a9684",
       "range": {
         "startLine": 58,
         "startChar": 30,

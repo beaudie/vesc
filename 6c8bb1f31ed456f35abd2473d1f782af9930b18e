@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af33dd25_9bb8c0d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9161,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-24T15:15:21Z",
+      "side": 0,
+      "message": "I was hitting the assertion when running the ASTC compression end2end tests. It seems that for ASTC we are emulating the red channel. I will try to hit the other assert and modify it accordingly.\n\nShabi\u0027s input on this would be appreciated.",
+      "parentUuid": "2c4c5a26_d472e08d",
+      "range": {
+        "startLine": 9158,
+        "startChar": 0,
+        "endLine": 9161,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44110a77_365f078a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
