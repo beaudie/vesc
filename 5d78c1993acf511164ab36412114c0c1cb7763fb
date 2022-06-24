@@ -22,6 +22,30 @@
       },
       "revId": "5d78c1993acf511164ab36412114c0c1cb7763fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f9836b6_7ec73fdf",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-24T20:21:40Z",
+      "side": 1,
+      "message": "Good catch. Iterating through the `parents` array of the PRESUBMIT path works across platforms and better communicates what this check is trying to do than the while loop solution, so I went with that in patchset 6.",
+      "parentUuid": "be3ac8c0_6391e84b",
+      "range": {
+        "startLine": 427,
+        "startChar": 47,
+        "endLine": 427,
+        "endChar": 77
+      },
+      "revId": "5d78c1993acf511164ab36412114c0c1cb7763fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
