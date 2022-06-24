@@ -59,6 +59,8 @@ struct GlslangSpirvOptions
     bool isLastPreFragmentStage      = false;
     bool isTransformFeedbackStage    = false;
     bool isTransformFeedbackEmulated = false;
+    // TODO: add isMultiSampleFramebufferFetch
+    bool isMultisampledFramebufferFetch = true;
 };
 
 struct UniformBindingInfo final
