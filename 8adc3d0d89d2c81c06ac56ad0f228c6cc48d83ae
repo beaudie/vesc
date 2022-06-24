@@ -34,6 +34,23 @@
       "parentUuid": "45eda40d_e862aa07",
       "revId": "8adc3d0d89d2c81c06ac56ad0f228c6cc48d83ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f8b5b35_08d78359",
+        "filename": "src/common/vulkan/vulkan_icd.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T03:21:46Z",
+      "side": 1,
+      "message": "A bit of overlap with `preferredICD`, but ok.",
+      "revId": "8adc3d0d89d2c81c06ac56ad0f228c6cc48d83ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
