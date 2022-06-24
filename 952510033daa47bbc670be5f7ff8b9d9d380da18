@@ -87,6 +87,23 @@
       },
       "revId": "952510033daa47bbc670be5f7ff8b9d9d380da18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74e3bac_6a437521",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-24T02:09:12Z",
+      "side": 1,
+      "message": "Please open a bug for this. If we emulate the format, it\u0027s our problem. The app shouldn\u0027t get an error for a valid use case. In this case, the backend could reformat the buffer in a compute call similar to `ConvertVertex.comp` in the Vulkan backend.",
+      "revId": "952510033daa47bbc670be5f7ff8b9d9d380da18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
