@@ -87,6 +87,41 @@
       "parentUuid": "98640314_2afba283",
       "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "853739a8_fc09445f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-24T23:16:39Z",
+      "side": 1,
+      "message": "CQ\u0027ing now to get this important fix in sooner.\n",
+      "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1052e0f_7aeeda50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-24T23:16:39Z",
+      "side": 1,
+      "message": "Thanks for trying Dan and no worries. Let\u0027s integrate this bug fix and try to invest more time in a regression test later. Have filed http://anglebug.com/7463 as a follow-on to the one you\u0027ve fixed here.",
+      "parentUuid": "3bd5c8e8_82079094",
+      "revId": "aebf5014e5bc836ae016f4db6a677ef88077ddc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
