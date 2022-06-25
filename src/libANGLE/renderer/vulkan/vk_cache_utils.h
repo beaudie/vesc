@@ -1272,24 +1272,6 @@ class DescriptorSetDesc
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
-// SharedDescriptorSetCacheKey.
-// Because DescriptorSet must associate with a pool, we need to define a structure that wraps both.
-class DescriptorPoolHelper;
-struct DescriptorSetDescAndPool
-{
-    DescriptorSetDesc mDesc;
-    DescriptorPoolHelper *mPool;
-};
-using DescriptorSetAndPoolPointer = std::unique_ptr<DescriptorSetDescAndPool>;
-using SharedDescriptorSetCacheKey = std::shared_ptr<DescriptorSetAndPoolPointer>;
-ANGLE_INLINE const SharedDescriptorSetCacheKey
-CreateSharedDescriptorSetCacheKey(const DescriptorSetDesc &desc, DescriptorPoolHelper *pool)
-{
-    DescriptorSetAndPoolPointer DescriptorAndPoolPointer =
-        std::make_unique<DescriptorSetDescAndPool>(DescriptorSetDescAndPool{desc, pool});
-    return std::make_shared<DescriptorSetAndPoolPointer>(std::move(DescriptorAndPoolPointer));
-}
-
 constexpr VkDescriptorType kStorageBufferDescriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 
 // Manages a descriptor set desc with a few helper routines and also stores object handles.
@@ -1366,8 +1348,7 @@ class DescriptorSetDescBuilder final
                                            const gl::ActiveTextureArray<TextureVk *> &textures,
                                            const gl::SamplerBindingVector &samplers,
                                            bool emulateSeamfulCubeMapSampling,
-                                           PipelineType pipelineType,
-                                           const SharedDescriptorSetCacheKey &sharedCacheKey);
+                                           PipelineType pipelineType);
 
     void updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
                              VkDescriptorSet descriptorSet) const;
@@ -1384,8 +1365,7 @@ class DescriptorSetDescBuilder final
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
         bool emulateSeamfulCubeMapSampling,
-        PipelineType pipelineType,
-        const SharedDescriptorSetCacheKey &sharedCacheKey);
+        PipelineType pipelineType);
 
     void updateWriteDesc(uint32_t bindingIndex,
                          VkDescriptorType descriptorType,
@@ -1582,8 +1562,7 @@ class SharedCacheKeyManager
     std::vector<SharedCacheKeyT> mSharedCacheKeys;
 };
 
-using FramebufferCacheManager   = SharedCacheKeyManager<SharedFramebufferCacheKey>;
-using DescriptorSetCacheManager = SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
+using FramebufferCacheManager = SharedCacheKeyManager<SharedFramebufferCacheKey>;
 }  // namespace vk
 }  // namespace rx
 

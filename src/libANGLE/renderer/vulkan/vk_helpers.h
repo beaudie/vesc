@@ -152,6 +152,7 @@ class DescriptorSetHelper final : public Resource
         pool.freeDescriptorSets(device, 1, &mDescriptorSet);
         mDescriptorSet = VK_NULL_HANDLE;
     }
+    void copyResourceUse(vk::SharedResourceUse &use);
 
     VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
 
@@ -182,47 +183,19 @@ class DescriptorPoolHelper final : angle::NonCopyable
                        const std::vector<VkDescriptorPoolSize> &poolSizesIn,
                        uint32_t maxSets);
     void destroy(RendererVk *renderer, VulkanCacheType cacheType);
-    void release(ContextVk *contextVk, VulkanCacheType cacheType);
+    void release(std::vector<vk::GarbageObject> &sharedGarbage);
 
     angle::Result allocateDescriptorSets(Context *context,
                                          CommandBufferHelperCommon *commandBufferHelper,
                                          const DescriptorSetLayout &descriptorSetLayout,
                                          DescriptorSetHelper **descriptorSetsOut);
 
-    angle::Result allocateAndCacheDescriptorSet(Context *context,
-                                                CommandBufferHelperCommon *commandBufferHelper,
-                                                const DescriptorSetDesc &desc,
-                                                const DescriptorSetLayout &descriptorSetLayout,
-                                                DescriptorSetHelper **descriptorSetOut);
-
-    bool getCachedDescriptorSet(const DescriptorSetDesc &desc,
-                                DescriptorSetHelper **descriptorSetOut);
-
-    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
-    void resetCache(RendererVk *renderer);
-    // Scan descriptorSet garbage list and destroy all GPU completed garbage
-    void cleanupGarbage(Context *context);
-    bool isCurrentlyInUse(Serial lastCompletedQueueSerial);
-
-    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
-    size_t getTotalCacheKeySizeBytes() const
-    {
-        return mDescriptorSetCache.getTotalCacheKeySizeBytes();
-    }
+    size_t getTotalCacheSize() const { return 0; }
+    size_t getTotalCacheKeySizeBytes() const { return 0; }
 
   private:
-    // Reset entire descriptorSet garbage list. This should only used when pool gets reset.
-    void resetGarbageList();
-
-    // The most recent used descriptorSet.
-    DescriptorSetHelper *mLastDescriptorSet;
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
-    DescriptorSetCache mDescriptorSetCache;
-    // Because freeing descriptorSet require DescriptorPool, we store individually released
-    // descriptor sets here instead of usual garbage list in the renderer to avoid complicated
-    // threading issues and other weirdness associated with pooled object destruction.
-    DescriptorSetList mDescriptorSetGarbageList;
 };
 
 using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
@@ -300,7 +273,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
   private:
     angle::Result allocateNewPool(Context *context);
-
+    void cleanupDescriptorSets(Serial lastCompletedQueueSerial);
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;
@@ -312,6 +285,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
     CacheStats mCacheStats;
+
+    DescriptorSetList mAllocatedDescriptorSets;
 };
 
 struct DescriptorSetAndPoolIndex

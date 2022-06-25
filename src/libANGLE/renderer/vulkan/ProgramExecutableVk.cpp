@@ -1374,22 +1374,16 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         &mDescriptorSets[DescriptorSetIndex::Texture], &cacheResult));
     ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet() != VK_NULL_HANDLE);
 
-    if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
-    {
-        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
-            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
+    ASSERT(cacheResult == vk::DescriptorCacheResult::NewAllocation);
 
-        vk::DescriptorSetDescBuilder fullDesc;
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
-                                                    samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType, sharedCacheKey));
-        fullDesc.updateDescriptorSet(
-            updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
-    }
-    else
-    {
-        commandBufferHelper->retainResource(mDescriptorSets[DescriptorSetIndex::Texture]);
-    }
+    vk::DescriptorSetDescBuilder fullDesc;
+    ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
+                                                samplers, emulateSeamfulCubeMapSampling,
+                                                pipelineType));
+    fullDesc.updateDescriptorSet(updateBuilder,
+                                 mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
+
+    commandBufferHelper->retainResource(mDescriptorSets[DescriptorSetIndex::Texture]);
 
     return angle::Result::Continue;
 }
