@@ -22,6 +22,40 @@
       },
       "revId": "e2a4bf44f1e52b5777ea4b56423d5d1689cc349d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a794b96_a6c4dd84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-25T01:07:02Z",
+      "side": 1,
+      "message": "lgtm with Shabi\u0027s comments addressed. One question about the test.\n",
+      "revId": "e2a4bf44f1e52b5777ea4b56423d5d1689cc349d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1036543d_5a5d42fe",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1687,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-25T01:07:02Z",
+      "side": 1,
+      "message": "What would happen in this test before the bug fix?\n\nCan any more assertions be made, for example about the texture\u0027s contents after the glGenerateMipmap call?",
+      "revId": "e2a4bf44f1e52b5777ea4b56423d5d1689cc349d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
