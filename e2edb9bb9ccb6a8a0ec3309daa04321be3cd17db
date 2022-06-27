@@ -227,6 +227,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74b74a24_2b146374",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T15:25:49Z",
+      "side": 1,
+      "message": "\u003e SwiftShader has a modified version of the library with encoding stripped out\n\nIs there a way for ANGLE to share that? The binary size still affects builds of ANGLE distributed on desktop through Chrome.\n\n\u003e My suggestion is to append `-O2` when building angle with `is_debug \u003d true`\n\nThat will actually make debugging harder.\n\n\u003e For performance on Debug builds, it turns out that setting `-02` for only the `astc-encoder` library is enough to cut down loading times significantly\n\nI wasn\u0027t aware that load time is an issue with this, but if the alternative is \"can\u0027t run\", it\u0027s acceptable. However, we should be able to build this library itself with optimization, while the rest of ANGLE is built without optimization. This is how we have disabled optimization somewhere I could find:\n\n```\nconfigs +\u003d [ \"//build/config/compiler:no_optimize\" ]\n```\n\nProbably adding this to the build of the ASTC lib would do:\n\n```\nconfigs +\u003d [ \"//build/config/compiler:optimize\" ]\n```",
+      "parentUuid": "ace912a0_ba48aeba",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbdd75cd_99fc296c",
         "filename": "src/image_util/loadimage_astc.cpp",
         "patchSetId": 9
