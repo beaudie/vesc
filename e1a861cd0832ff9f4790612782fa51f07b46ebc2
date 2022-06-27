@@ -39,6 +39,24 @@
       "message": "Would it make sense to only make `DescriptorSetIndex::Texture` use the renderer\u0027s pool?",
       "revId": "e1a861cd0832ff9f4790612782fa51f07b46ebc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bbddb27_e7e4e8c3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-27T19:47:40Z",
+      "side": 1,
+      "message": "ShaderResource is going to have the same issue if I apply the same fix to that (have not done yet, but is going to be the next). UniformsAndXfb can be SharedGrup only, but I think it is better to be consistent here given that impact is limited to chromium. Also note that if we end up completely removing the descriptor set cache, then all these will be reverted (deleted).",
+      "parentUuid": "c512a02d_27692cdb",
+      "revId": "e1a861cd0832ff9f4790612782fa51f07b46ebc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
