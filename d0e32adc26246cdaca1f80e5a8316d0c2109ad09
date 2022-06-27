@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8bb54457_65b30b5f",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-27T16:51:37Z",
+      "side": 1,
+      "message": "Currently, I only use this parameter in the unit tests for reproducibility (https://chromium-review.googlesource.com/c/angle/angle/+/3720557/6/scripts/angle_presubmit_utils_unittest.py#329:~:text\u003dpathlib.Path(search_limit)). \n\nThe tests run in a temporary dir (e.g. `/tmp/1234`). During the tests, I pass `search_limit\u003d\u0027/tmp/1234\u0027` so that if the person running the tests happens to have an unrelated `/tmp/.gclient` file on disk (which I did happen to have), the tests don\u0027t fail/pass as a result of that.\n\nThere may be a better way to handle this, I just wanted to tests to be able to run in a sandbox.",
+      "parentUuid": "98aa2a60_c9262c2f",
+      "revId": "d0e32adc26246cdaca1f80e5a8316d0c2109ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9d57327e_001f6a4b",
         "filename": "PRESUBMIT.py",
         "patchSetId": 6
