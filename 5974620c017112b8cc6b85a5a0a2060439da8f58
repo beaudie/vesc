@@ -16,6 +16,24 @@
       "message": "Seems to be working!\n\nMaybe link this to Jamie\u0027s bug? (Bug: angleproject:7404)",
       "revId": "5974620c017112b8cc6b85a5a0a2060439da8f58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aba1e70_2f062d22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T20:45:38Z",
+      "side": 1,
+      "message": "Thanks for confirming, didn\u0027t notice this comment before (gerrit doesn\u0027t notify comments on WIP, why? WHY?!)\n\nI had just tried it too and came to report that it works :)",
+      "parentUuid": "da32f263_0da91238",
+      "revId": "5974620c017112b8cc6b85a5a0a2060439da8f58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
