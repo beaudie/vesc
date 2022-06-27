@@ -1233,6 +1233,14 @@ void RendererVk::onDestroy(vk::Context *context)
         handleDeviceLost();
     }
 
+    // These will be used only if display texture share group is enabled.
+    mMetaDescriptorPools[DescriptorSetIndex::UniformsAndXfb].destroy(
+        this, VulkanCacheType::UniformsAndXfbDescriptors);
+    mMetaDescriptorPools[DescriptorSetIndex::Texture].destroy(this,
+                                                              VulkanCacheType::TextureDescriptors);
+    mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].destroy(
+        this, VulkanCacheType::ShaderResourcesDescriptors);
+
     for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
     {
         ASSERT(block->isEmpty());
