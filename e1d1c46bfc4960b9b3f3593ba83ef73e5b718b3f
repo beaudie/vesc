@@ -16,6 +16,24 @@
       "message": "Can be removed in favor of the one added in ANGLETest.h?",
       "revId": "e1d1c46bfc4960b9b3f3593ba83ef73e5b718b3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db75ff9_ac27cf4f",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-27T16:01:18Z",
+      "side": 1,
+      "message": "Yes, good catch - the whole point of this CL.",
+      "parentUuid": "2579da3f_76d11947",
+      "revId": "e1d1c46bfc4960b9b3f3593ba83ef73e5b718b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
