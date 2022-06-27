@@ -311,7 +311,10 @@ angle_source_set("angle_vulkan_backend") {
   public_configs = [ ":angle_vulkan_backend_config" ]
 
   if (angle_use_wayland) {
-    public_configs += [ "$angle_root:angle_wayland_config" ]
+    public_configs += [
+      "$angle_root:angle_wayland_config",
+      "$angle_root:angle_wayland_egl_backend_config",
+    ]
   }
 
   data_deps = []
