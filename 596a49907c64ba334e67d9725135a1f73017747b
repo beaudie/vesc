@@ -39,6 +39,30 @@
       },
       "revId": "596a49907c64ba334e67d9725135a1f73017747b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c3b40f4_bab3d47b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-27T20:04:40Z",
+      "side": 1,
+      "message": "I\u0027m not quite sure what that would look like. Is there a way to \"pre-emplace\" n elements?",
+      "parentUuid": "6e0a65d8_aba5b4d5",
+      "range": {
+        "startLine": 1610,
+        "startChar": 42,
+        "endLine": 1610,
+        "endChar": 43
+      },
+      "revId": "596a49907c64ba334e67d9725135a1f73017747b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
