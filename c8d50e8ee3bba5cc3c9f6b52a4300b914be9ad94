@@ -205,6 +205,30 @@
       },
       "revId": "c8d50e8ee3bba5cc3c9f6b52a4300b914be9ad94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30431c0e_54e8b057",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T18:00:29Z",
+      "side": 1,
+      "message": "Ack, sorry I didn\u0027t notice the readback format is different.",
+      "parentUuid": "18358fdb_a20ad8ea",
+      "range": {
+        "startLine": 495,
+        "startChar": 35,
+        "endLine": 495,
+        "endChar": 68
+      },
+      "revId": "c8d50e8ee3bba5cc3c9f6b52a4300b914be9ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
