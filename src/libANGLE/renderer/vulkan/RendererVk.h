@@ -612,6 +612,11 @@ class RendererVk : angle::NonCopyable
                                                               : VK_FILTER_NEAREST;
     }
 
+    vk::MetaDescriptorPool &getMetaDescriptorPool(DescriptorSetIndex descriptorSetIndex)
+    {
+        return mMetaDescriptorPools[descriptorSetIndex];
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -757,6 +762,8 @@ class RendererVk : angle::NonCopyable
 
     // Holds orphaned BufferBlocks when ShareGroup gets destroyed
     vk::BufferBlockPointerVector mOrphanedBufferBlocks;
+    // Holds descriptor set caches only if display texture share group is used.
+    vk::DescriptorSetArray<vk::MetaDescriptorPool> mMetaDescriptorPools;
 
     // All access to the pipeline cache is done through EGL objects so it is thread safe to not use
     // a lock.

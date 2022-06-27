@@ -175,7 +175,9 @@ ImageImpl *DisplayVk::createImage(const egl::ImageState &state,
 
 ShareGroupImpl *DisplayVk::createShareGroup()
 {
-    return new ShareGroupVk();
+    ShareGroupVk *shareGroupVk = new ShareGroupVk();
+    shareGroupVk->init(mRenderer);
+    return shareGroupVk;
 }
 
 ContextImpl *DisplayVk::createContext(const gl::State &state,
@@ -417,7 +419,7 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
     mRenderer->getFeatures().populateFeatureList(features);
 }
 
-ShareGroupVk::ShareGroupVk() : mOrphanNonEmptyBufferBlock(false)
+ShareGroupVk::ShareGroupVk() : mHasDisplayTextureShareGroup(false)
 {
     mLastPruneTime = angle::GetCurrentSystemTime();
 }
@@ -428,7 +430,7 @@ void ShareGroupVk::addContext(ContextVk *contextVk)
 
     if (contextVk->getState().hasDisplayTextureShareGroup())
     {
-        mOrphanNonEmptyBufferBlock = true;
+        mHasDisplayTextureShareGroup = true;
     }
 }
 
@@ -445,13 +447,13 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     {
         if (pool)
         {
-            pool->destroy(renderer, mOrphanNonEmptyBufferBlock);
+            pool->destroy(renderer, mHasDisplayTextureShareGroup);
         }
     }
 
     if (mSmallBufferPool)
     {
-        mSmallBufferPool->destroy(renderer, mOrphanNonEmptyBufferBlock);
+        mSmallBufferPool->destroy(renderer, mHasDisplayTextureShareGroup);
     }
 
     mPipelineLayoutCache.destroy(renderer);
@@ -611,5 +613,18 @@ void ShareGroupVk::logBufferPools() const
         mSmallBufferPool->addStats(&log);
         INFO() << "\t" << log.str();
     }
+}
+
+vk::MetaDescriptorPool &ShareGroupVk::getMetaDescriptorPool(DescriptorSetIndex descriptorSetIndex)
+{
+    if (mHasDisplayTextureShareGroup)
+    {
+        // If display texture gare group is used, texture can outlive SharedGroup. Since textures
+        // holds a pointer to descriptorSet cache, we need to ensure the descriprorSet pools are not
+        // destroyed before textures, thus we will use per renderer pools.
+        return mRenderer->getMetaDescriptorPool(descriptorSetIndex);
+    }
+
+    return mMetaDescriptorPools[descriptorSetIndex];
 }
 }  // namespace rx
