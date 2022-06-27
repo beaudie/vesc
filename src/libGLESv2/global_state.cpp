@@ -80,6 +80,15 @@ Thread *AllocateCurrentThread()
 
     // Initialize process cleanup TLS slot
     angle::gProcessCleanupRefCount++;
+
+    static int n = 0;
+    WARN() << "qwe n = " << n;
+    if (n == 3)
+        ANGLE_CRASH();
+    n++;
+
+    // WARN() << "qwe gProcessCleanupRefCount++, now " << angle::gProcessCleanupRefCount;
+
     SetTLSValue(gProcessCleanupTLSIndex, thread);
 #endif  // ANGLE_PLATFORM_ANDROID
 
