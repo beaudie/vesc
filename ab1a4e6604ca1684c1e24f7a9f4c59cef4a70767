@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6397b723_32af63d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T20:01:35Z",
+      "side": 1,
+      "message": "Marking WIP until VK_EXT_graphics_pipeline_library can be relied on",
+      "revId": "ab1a4e6604ca1684c1e24f7a9f4c59cef4a70767",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
