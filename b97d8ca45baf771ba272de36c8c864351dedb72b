@@ -166,6 +166,30 @@
       },
       "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a9e1f0_15ab13f4",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T15:12:45Z",
+      "side": 1,
+      "message": "My suggestion is to avoid static and instead make the serial factory owned by Display, which is the entity that creates surfaces. Basically this:\n\n\u003e I\u0027ve now used `rx::AtomicSerialFactory`, and in order to not change the constructor interface of Surface, I\u0027ve added it in a static method\n\nbut don\u0027t be afraid to change the constructor interface of `Surface`. The internal API of ANGLE is not set in stone for us to have to work around it.",
+      "parentUuid": "f6f76a81_8eafc1c1",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 17
+      },
+      "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
