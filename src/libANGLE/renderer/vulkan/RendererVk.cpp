@@ -3736,6 +3736,12 @@ void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) c
     bool isSwiftShader =
         IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 
+    // Enable extra logging and checking on Cuttlefish (Android+SWANGLE) to try to find the root
+    // cause of a rare/random crash.
+    // https://issuetracker.google.com/issues/236098131
+    ANGLE_FEATURE_CONDITION(features, extraBufferLoggingAndChecking,
+                            (IsAndroid() && isSwiftShader));
+
     // Hopefully-temporary work-around for a crash on SwiftShader.  An Android process is turning
     // off GL error checking, and then asking ANGLE to write past the end of a buffer.
     // https://issuetracker.google.com/issues/220069903
