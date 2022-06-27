@@ -268,6 +268,24 @@
       "parentUuid": "6fbfd988_56af0a87",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "108b7876_12a139e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-06-27T23:17:09Z",
+      "side": 1,
+      "message": "\u003e eglReleaseThread  is what does the magic of freeing memory in the test case, remove that and you will have oom\n\nFWIW, when commenting out eglReleaseThread and bumping up the thread count to 1000 in RepeatedEglInitAndTerminate test, the test app stops responding and this CL doesn\u0027t seem to make a difference. I traced `gProcessCleanupRefCount` and I don\u0027t think we reach gProcessCleanupRefCount \u003d\u003d 0 until tests are finished. The main thread uses a display during initialization:\nhttps://crsrc.org/c/third_party/angle/src/tests/egl_tests/EGLContextCompatibilityTest.cpp;drc\u003df71283c987e895f3d004c7472d1d6ad8a74cdcb4;l\u003d508\nand then naturally stays alive until all tests are done, so `gProcessCleanupRefCount` stays at 1.\n\nThat thread does eglTerminate the display though:\nhttps://crsrc.org/c/third_party/angle/src/tests/egl_tests/EGLContextCompatibilityTest.cpp;drc\u003df71283c987e895f3d004c7472d1d6ad8a74cdcb4;l\u003d628\n\nSo this might boil down to per-display state that I suggested above, global counter can only clean up when the process is exiting in this case AFAICT.\n\n\ngn args that I used in my testing:\n\ntarget_os \u003d \"android\"\ntarget_cpu \u003d \"arm64\"\nis_component_build \u003d false\nangle_assert_always_on \u003d true\nis_debug \u003d false",
+      "parentUuid": "f023b072_615e6998",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
