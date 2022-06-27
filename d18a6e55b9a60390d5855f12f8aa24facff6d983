@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f815b34e_25b00a89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-06-27T15:19:08Z",
+      "side": 1,
+      "message": "I\u0027ll wait for https://chromium-review.googlesource.com/c/angle/angle/+/3726096 to land before retrying this.",
+      "revId": "d18a6e55b9a60390d5855f12f8aa24facff6d983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
