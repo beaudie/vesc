@@ -87,6 +87,11 @@ struct FrontendFeatures : FeatureSetBase
         "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
         "http://anglebug.com/5658"};
 
+    FeatureInfo extraBufferLoggingAndChecking = {
+        "extraBufferLoggingAndChecking", FeatureCategory::FrontendFeatures,
+        "Enable extra buffer logging and checking to catch rare crashes", &members,
+        "https://issuetracker.google.com/236098131"};
+
     FeatureInfo forceGlErrorChecking = {
         "forceGlErrorChecking", FeatureCategory::FrontendFeatures,
         "Force GL error checking (i.e. prevent applications from disabling error checking",
