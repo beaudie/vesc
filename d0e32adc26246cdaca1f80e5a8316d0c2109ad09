@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58b0f25e_b94720fa",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-27T20:57:17Z",
+      "side": 1,
+      "message": "Done (patchset 7)",
+      "parentUuid": "68399b00_1bc2ccc9",
+      "revId": "d0e32adc26246cdaca1f80e5a8316d0c2109ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d57327e_001f6a4b",
@@ -94,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcd70687_ea83bdd1",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-27T20:57:17Z",
+      "side": 1,
+      "message": "Done (patchset 7)",
+      "parentUuid": "9d57327e_001f6a4b",
+      "range": {
+        "startLine": 444,
+        "startChar": 17,
+        "endLine": 444,
+        "endChar": 18
+      },
+      "revId": "d0e32adc26246cdaca1f80e5a8316d0c2109ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ae4b2bea_d94f6a5a",
@@ -107,6 +149,30 @@
       "writtenOn": "2022-06-27T15:37:11Z",
       "side": 1,
       "message": "nit: space before",
+      "range": {
+        "startLine": 445,
+        "startChar": 17,
+        "endLine": 445,
+        "endChar": 18
+      },
+      "revId": "d0e32adc26246cdaca1f80e5a8316d0c2109ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "618fdb99_9ee588a7",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-06-27T20:57:17Z",
+      "side": 1,
+      "message": "Done (patchset 7)",
+      "parentUuid": "ae4b2bea_d94f6a5a",
       "range": {
         "startLine": 445,
         "startChar": 17,
