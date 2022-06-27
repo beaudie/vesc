@@ -1363,13 +1363,10 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
-        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
-            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
-
         vk::DescriptorSetDescBuilder fullDesc;
         ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
                                                     samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType, sharedCacheKey));
+                                                    pipelineType));
         fullDesc.updateDescriptorSet(updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
