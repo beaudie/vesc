@@ -74,9 +74,9 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
     // Get the results of dFdx(operand) and dFdy(operand), and multiply them by the swizzles
     TIntermTyped *operand = node->getChildNode(0)->getAsTyped();
 
-    TIntermTyped *dFdx = CreateBuiltInUnaryFunctionCallNode("dFdx", operand, *mSymbolTable, 300);
+    TIntermTyped *dFdx = CreateBuiltInUnaryFunctionCallNode("dFdx", operand, *mSymbolTable);
     TIntermTyped *dFdy =
-        CreateBuiltInUnaryFunctionCallNode("dFdy", operand->deepCopy(), *mSymbolTable, 300);
+        CreateBuiltInUnaryFunctionCallNode("dFdy", operand->deepCopy(), *mSymbolTable);
 
     // Get rotation multiplier
     TIntermTyped *swapXY = mSpecConst->getSwapXY();

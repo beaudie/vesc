@@ -96,6 +96,7 @@ class SymbolRule
                        sh::GLenum shaderType,
                        const ShBuiltInResources &resources,
                        const TSymbolTableBase &symbolTable) const;
+    const TSymbol *get(const TSymbolTableBase &symbolTable) const;
 
     template <Spec spec, int version, Shader shaders, size_t extensionIndex, typename T>
     constexpr static SymbolRule Get(T value);
@@ -174,6 +175,10 @@ const TSymbol *FindMangledBuiltIn(ShShaderSpec shaderSpec,
                                   const SymbolRule *rules,
                                   uint16_t startIndex,
                                   uint16_t endIndex);
+const TSymbol *FindMangledBuiltInForInternalEmulation(const TSymbolTableBase &symbolTable,
+                                                      const SymbolRule *rules,
+                                                      uint16_t startIndex,
+                                                      uint16_t endIndex);
 
 class UnmangledEntry
 {
@@ -276,6 +281,8 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     const TSymbol *findGlobalWithConversion(const std::vector<ImmutableString> &names) const;
 
     const TSymbol *findBuiltIn(const ImmutableString &name, int shaderVersion) const;
+    // Find a builtin symbol without version validation for internal emulation
+    const TSymbol *findBuiltForInternalEmulation(const ImmutableString &name) const;
     const TSymbol *findBuiltInWithConversion(const std::vector<ImmutableString> &names,
                                              int shaderVersion) const;
 

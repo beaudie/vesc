@@ -300,7 +300,6 @@ const TSymbol *TSymbolTable::findGlobalWithConversion(
     }
     return nullptr;
 }
-
 const TSymbol *TSymbolTable::findBuiltInWithConversion(const std::vector<ImmutableString> &names,
                                                        int shaderVersion) const
 {
@@ -484,6 +483,11 @@ const TSymbol *SymbolRule::get(ShShaderSpec shaderSpec,
     if (mExtensionIndex != 0 && !CheckExtension(mExtensionIndex, resources))
         return nullptr;
 
+    return get(symbolTable);
+}
+
+const sh::TSymbol *SymbolRule::get(const TSymbolTableBase &symbolTable) const
+{
     return mIsVar > 0 ? symbolTable.*(mSymbolOrVar.var) : mSymbolOrVar.symbol;
 }
 
@@ -500,6 +504,23 @@ const TSymbol *FindMangledBuiltIn(ShShaderSpec shaderSpec,
     {
         const TSymbol *symbol =
             rules[ruleIndex].get(shaderSpec, shaderVersion, shaderType, resources, symbolTable);
+        if (symbol)
+        {
+            return symbol;
+        }
+    }
+
+    return nullptr;
+}
+
+const sh::TSymbol *FindMangledBuiltInForInternalEmulation(const TSymbolTableBase &symbolTable,
+                                                          const SymbolRule *rules,
+                                                          uint16_t startIndex,
+                                                          uint16_t endIndex)
+{
+    for (uint32_t ruleIndex = startIndex; ruleIndex < endIndex; ++ruleIndex)
+    {
+        const TSymbol *symbol = rules[ruleIndex].get(symbolTable);
         if (symbol)
         {
             return symbol;

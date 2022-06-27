@@ -888,7 +888,7 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
     {
         if (!EmulateGLFragColorBroadcast(this, root, mResources.MaxDrawBuffers, &mOutputVariables,
-                                         &mSymbolTable, mShaderVersion))
+                                         &mSymbolTable))
         {
             return false;
         }

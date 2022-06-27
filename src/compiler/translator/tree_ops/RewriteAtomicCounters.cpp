@@ -252,8 +252,8 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
         if (op == EOpMemoryBarrierAtomicCounter)
         {
             TIntermSequence emptySequence;
-            TIntermTyped *substituteCall = CreateBuiltInFunctionCallNode(
-                "memoryBarrierBuffer", &emptySequence, *mSymbolTable, 310);
+            TIntermTyped *substituteCall =
+                CreateBuiltInFunctionCallNode("memoryBarrierBuffer", &emptySequence, *mSymbolTable);
             queueReplacement(substituteCall, OriginalNode::IS_DROPPED);
             return true;
         }
@@ -294,8 +294,8 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
             CreateAtomicCounterRef(param, mAtomicCounters, mAcbBufferOffsets));
         substituteArguments.push_back(CreateUIntNode(valueChange));
 
-        TIntermTyped *substituteCall = CreateBuiltInFunctionCallNode(
-            kAtomicAddFunction, &substituteArguments, *mSymbolTable, 310);
+        TIntermTyped *substituteCall =
+            CreateBuiltInFunctionCallNode(kAtomicAddFunction, &substituteArguments, *mSymbolTable);
 
         // Note that atomicCounterDecrement returns the *new* value instead of the prior value,
         // unlike atomicAdd.  So we need to do a -1 on the result as well.

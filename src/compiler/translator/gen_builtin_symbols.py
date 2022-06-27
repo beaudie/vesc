@@ -341,26 +341,47 @@ uint16_t GetNextRuleIndex(uint32_t nameHash)
         return ArraySize(BuiltInArray::kRules);
     return BuiltInArray::kMangledOffsets[nameHash + 1];
 }}
+
+bool ValidateBuiltinName(const ImmutableString &name, uint16_t* outStartIndex,  uint16_t* outNextIndex)
+{{
+    if (name.length() > {max_mangled_name_length})
+        return false;
+
+    uint32_t nameHash = name.mangledNameHash();
+    if (nameHash >= {num_mangled_names})
+        return false;
+
+    const char *actualName = BuiltInArray::kMangledNames[nameHash];
+    if (name != actualName)
+        return false;
+
+    *outStartIndex = BuiltInArray::kMangledOffsets[nameHash];
+    *outNextIndex = GetNextRuleIndex(nameHash);
+
+    return true;
+}}
+
 }}  // namespace
 
 const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
                                          int shaderVersion) const
 {{
-    if (name.length() > {max_mangled_name_length})
+    uint16_t startIndex = 0;
+    uint16_t nextIndex = 0;
+    if (!ValidateBuiltinName(name, &startIndex, &nextIndex))
         return nullptr;
-
-    uint32_t nameHash = name.mangledNameHash();
-    if (nameHash >= {num_mangled_names})
-        return nullptr;
-
-    const char *actualName = BuiltInArray::kMangledNames[nameHash];
-    if (name != actualName)
-        return nullptr;
-
-    uint16_t startIndex = BuiltInArray::kMangledOffsets[nameHash];
-    uint16_t nextIndex = GetNextRuleIndex(nameHash);
 
     return FindMangledBuiltIn(mShaderSpec, shaderVersion, mShaderType, mResources, *this, BuiltInArray::kRules, startIndex, nextIndex);
+}}
+
+const TSymbol *TSymbolTable::findBuiltForInternalEmulation(const ImmutableString &name) const
+{{
+    uint16_t startIndex = 0;
+    uint16_t nextIndex = 0;
+    if (!ValidateBuiltinName(name, &startIndex, &nextIndex))
+        return nullptr;
+
+    return FindMangledBuiltInForInternalEmulation(*this, BuiltInArray::kRules, startIndex, nextIndex);
 }}
 
 bool TSymbolTable::isUnmangledBuiltInName(const ImmutableString &name,

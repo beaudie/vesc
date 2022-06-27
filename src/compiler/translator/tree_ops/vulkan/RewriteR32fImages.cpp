@@ -204,7 +204,7 @@ TIntermTyped *RewriteBuiltinFunctionCall(TCompiler *compiler,
         // The last parameter is float data, which should be changed to floatBitsToUint(data).
         TIntermTyped *data = substituteArguments.back()->getAsTyped();
         substituteArguments.back() =
-            CreateBuiltInUnaryFunctionCallNode("floatBitsToUint", data, *symbolTable, 300);
+            CreateBuiltInUnaryFunctionCallNode("floatBitsToUint", data, *symbolTable);
     }
     else if (functionName == "imageLoad")
     {
@@ -218,7 +218,7 @@ TIntermTyped *RewriteBuiltinFunctionCall(TCompiler *compiler,
     }
 
     TIntermTyped *replacementCall =
-        CreateBuiltInFunctionCallNode(functionName.data(), &substituteArguments, *symbolTable, 310);
+        CreateBuiltInFunctionCallNode(functionName.data(), &substituteArguments, *symbolTable);
 
     // If imageLoad or imageAtomicExchange, the result is now uint, which should be converted with
     // uintBitsToFloat.  With imageLoad, the alpha channel should always read 1.0 regardless.
@@ -231,8 +231,8 @@ TIntermTyped *RewriteBuiltinFunctionCall(TCompiler *compiler,
         }
 
         // uintBitsToFloat(imageLoad().rgb), or uintBitsToFloat(imageAtomicExchange())
-        replacementCall = CreateBuiltInUnaryFunctionCallNode("uintBitsToFloat", replacementCall,
-                                                             *symbolTable, 300);
+        replacementCall =
+            CreateBuiltInUnaryFunctionCallNode("uintBitsToFloat", replacementCall, *symbolTable);
 
         if (isImageLoad)
         {

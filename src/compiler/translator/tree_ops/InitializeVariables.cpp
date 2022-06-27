@@ -196,8 +196,7 @@ void InsertInitCode(TCompiler *compiler,
         TIntermTyped *initializedSymbol = nullptr;
         if (var.isBuiltIn() && !symbolTable->findUserDefined(tempVariableName))
         {
-            initializedSymbol =
-                ReferenceBuiltInVariable(tempVariableName, *symbolTable, shaderVersion);
+            initializedSymbol = ReferenceBuiltInVariable(tempVariableName, *symbolTable);
             if (initializedSymbol->getQualifier() == EvqFragData &&
                 !IsExtensionEnabled(extensionBehavior, TExtension::EXT_draw_buffers))
             {

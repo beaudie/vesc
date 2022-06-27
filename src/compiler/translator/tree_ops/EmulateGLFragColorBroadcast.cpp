@@ -30,11 +30,10 @@ constexpr const ImmutableString kGlFragDataString("gl_FragData");
 class GLFragColorBroadcastTraverser : public TIntermTraverser
 {
   public:
-    GLFragColorBroadcastTraverser(int maxDrawBuffers, TSymbolTable *symbolTable, int shaderVersion)
+    GLFragColorBroadcastTraverser(int maxDrawBuffers, TSymbolTable *symbolTable)
         : TIntermTraverser(true, false, false, symbolTable),
           mGLFragColorUsed(false),
-          mMaxDrawBuffers(maxDrawBuffers),
-          mShaderVersion(shaderVersion)
+          mMaxDrawBuffers(maxDrawBuffers)
     {}
 
     [[nodiscard]] bool broadcastGLFragColor(TCompiler *compiler, TIntermBlock *root);
@@ -50,13 +49,11 @@ class GLFragColorBroadcastTraverser : public TIntermTraverser
   private:
     bool mGLFragColorUsed;
     int mMaxDrawBuffers;
-    const int mShaderVersion;
 };
 
 TIntermBinary *GLFragColorBroadcastTraverser::constructGLFragDataNode(int index) const
 {
-    TIntermSymbol *symbol =
-        ReferenceBuiltInVariable(kGlFragDataString, *mSymbolTable, mShaderVersion);
+    TIntermSymbol *symbol   = ReferenceBuiltInVariable(kGlFragDataString, *mSymbolTable);
     TIntermTyped *indexNode = CreateIndexNode(index);
 
     TIntermBinary *binary = new TIntermBinary(EOpIndexDirect, symbol, indexNode);
@@ -106,11 +103,10 @@ bool EmulateGLFragColorBroadcast(TCompiler *compiler,
                                  TIntermBlock *root,
                                  int maxDrawBuffers,
                                  std::vector<sh::ShaderVariable> *outputVariables,
-                                 TSymbolTable *symbolTable,
-                                 int shaderVersion)
+                                 TSymbolTable *symbolTable)
 {
     ASSERT(maxDrawBuffers > 1);
-    GLFragColorBroadcastTraverser traverser(maxDrawBuffers, symbolTable, shaderVersion);
+    GLFragColorBroadcastTraverser traverser(maxDrawBuffers, symbolTable);
     root->traverse(&traverser);
     if (traverser.isGLFragColorUsed())
     {

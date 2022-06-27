@@ -28,8 +28,7 @@ class TSymbolTable;
                                                TIntermBlock *root,
                                                int maxDrawBuffers,
                                                std::vector<ShaderVariable> *outputVariables,
-                                               TSymbolTable *symbolTable,
-                                               int shaderVersion);
+                                               TSymbolTable *symbolTable);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_

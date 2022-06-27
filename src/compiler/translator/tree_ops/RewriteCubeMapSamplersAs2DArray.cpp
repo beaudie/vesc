@@ -63,8 +63,7 @@ void TransformXMajor(const TSymbolTable &symbolTable,
 {
     // uc = -sign(x)*z
     // vc = -y
-    TIntermTyped *signX =
-        CreateBuiltInUnaryFunctionCallNode("sign", x->deepCopy(), symbolTable, 100);
+    TIntermTyped *signX = CreateBuiltInUnaryFunctionCallNode("sign", x->deepCopy(), symbolTable);
 
     TIntermTyped *ucValue =
         new TIntermUnary(EOpNegative, new TIntermBinary(EOpMul, signX, z->deepCopy()), nullptr);
@@ -117,8 +116,7 @@ void TransformYMajor(const TSymbolTable &symbolTable,
 {
     // uc = x
     // vc = sign(y)*z
-    TIntermTyped *signY =
-        CreateBuiltInUnaryFunctionCallNode("sign", y->deepCopy(), symbolTable, 100);
+    TIntermTyped *signY = CreateBuiltInUnaryFunctionCallNode("sign", y->deepCopy(), symbolTable);
 
     TIntermTyped *ucValue = x->deepCopy();
     TIntermTyped *vcValue = new TIntermBinary(EOpMul, signY, z->deepCopy());
@@ -170,8 +168,7 @@ void TransformZMajor(const TSymbolTable &symbolTable,
 {
     // uc = size(z)*x
     // vc = -y
-    TIntermTyped *signZ =
-        CreateBuiltInUnaryFunctionCallNode("sign", z->deepCopy(), symbolTable, 100);
+    TIntermTyped *signZ = CreateBuiltInUnaryFunctionCallNode("sign", z->deepCopy(), symbolTable);
 
     TIntermTyped *ucValue = new TIntermBinary(EOpMul, signZ, x->deepCopy());
     TIntermTyped *vcValue = new TIntermUnary(EOpNegative, y->deepCopy(), nullptr);
@@ -399,7 +396,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         inVec3Type->setQualifier(EvqParamIn);
 
         TVariable *pVar    = new TVariable(mSymbolTable, ImmutableString("P"), inVec3Type,
-                                        SymbolType::AngleInternal);
+                                           SymbolType::AngleInternal);
         TVariable *dPdxVar = new TVariable(mSymbolTable, ImmutableString("dPdx"), inVec3Type,
                                            SymbolType::AngleInternal);
         TVariable *dPdyVar = new TVariable(mSymbolTable, ImmutableString("dPdy"), inVec3Type,
@@ -441,13 +438,13 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 
         TIntermDeclaration *absXDecl = CreateTempInitDeclarationNode(
             &absX->variable(),
-            CreateBuiltInUnaryFunctionCallNode("abs", x->deepCopy(), *mSymbolTable, 100));
+            CreateBuiltInUnaryFunctionCallNode("abs", x->deepCopy(), *mSymbolTable));
         TIntermDeclaration *absYDecl = CreateTempInitDeclarationNode(
             &absY->variable(),
-            CreateBuiltInUnaryFunctionCallNode("abs", y->deepCopy(), *mSymbolTable, 100));
+            CreateBuiltInUnaryFunctionCallNode("abs", y->deepCopy(), *mSymbolTable));
         TIntermDeclaration *absZDecl = CreateTempInitDeclarationNode(
             &absZ->variable(),
-            CreateBuiltInUnaryFunctionCallNode("abs", z->deepCopy(), *mSymbolTable, 100));
+            CreateBuiltInUnaryFunctionCallNode("abs", z->deepCopy(), *mSymbolTable));
 
         body->appendStatement(absXDecl);
         body->appendStatement(absYDecl);
@@ -470,7 +467,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
                                              pRecipVar->deepCopy())};
         TIntermDeclaration *recipOuterDecl = CreateTempInitDeclarationNode(
             &recipOuter->variable(),
-            CreateBuiltInFunctionCallNode("outerProduct", &args, *mSymbolTable, 300));
+            CreateBuiltInFunctionCallNode("outerProduct", &args, *mSymbolTable));
         body->appendStatement(recipOuterDecl);
 
         TIntermSymbol *dPDXdx = nullptr;
@@ -491,27 +488,27 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
             TIntermDeclaration *dPDXdxDecl = CreateTempInitDeclarationNode(
                 &dPDXdx->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdx", IndexDirect(recipOuter, 0)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
             TIntermDeclaration *dPDYdxDecl = CreateTempInitDeclarationNode(
                 &dPDYdx->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdx", IndexDirect(recipOuter, 1)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
             TIntermDeclaration *dPDZdxDecl = CreateTempInitDeclarationNode(
                 &dPDZdx->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdx", IndexDirect(recipOuter, 2)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
             TIntermDeclaration *dPDXdyDecl = CreateTempInitDeclarationNode(
                 &dPDXdy->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdy", IndexDirect(recipOuter, 0)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
             TIntermDeclaration *dPDYdyDecl = CreateTempInitDeclarationNode(
                 &dPDYdy->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdy", IndexDirect(recipOuter, 1)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
             TIntermDeclaration *dPDZdyDecl = CreateTempInitDeclarationNode(
                 &dPDZdy->variable(),
                 CreateBuiltInUnaryFunctionCallNode("dFdy", IndexDirect(recipOuter, 2)->deepCopy(),
-                                                   *mSymbolTable, 300));
+                                                   *mSymbolTable));
 
             body->appendStatement(dPDXdxDecl);
             body->appendStatement(dPDYdxDecl);
@@ -543,10 +540,9 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 
         // ma = max(|x|, max(|y|, |z|))
         TIntermSequence argsMaxYZ = {absY->deepCopy(), absZ->deepCopy()};
-        TIntermTyped *maxYZ = CreateBuiltInFunctionCallNode("max", &argsMaxYZ, *mSymbolTable, 100);
+        TIntermTyped *maxYZ       = CreateBuiltInFunctionCallNode("max", &argsMaxYZ, *mSymbolTable);
         TIntermSequence argsMaxValue = {absX->deepCopy(), maxYZ};
-        TIntermTyped *maValue =
-            CreateBuiltInFunctionCallNode("max", &argsMaxValue, *mSymbolTable, 100);
+        TIntermTyped *maValue = CreateBuiltInFunctionCallNode("max", &argsMaxValue, *mSymbolTable);
         body->appendStatement(new TIntermBinary(EOpAssign, ma, maValue));
 
         // ma == |x| and ma == |y| expressions
@@ -900,7 +896,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
             TIntermTyped *bias       = (*arguments)[2]->getAsTyped()->deepCopy();
             TIntermSequence exp2Args = {bias};
             TIntermTyped *exp2Call =
-                CreateBuiltInFunctionCallNode("exp2", &exp2Args, *mSymbolTable, 100);
+                CreateBuiltInFunctionCallNode("exp2", &exp2Args, *mSymbolTable);
             TIntermSymbol *biasFac = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
             coordTransform.push_back(CreateTempInitDeclarationNode(&biasFac->variable(), exp2Call));
             dUVdxArg =
@@ -931,7 +927,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         }
 
         TIntermTyped *substituteCall = CreateBuiltInFunctionCallNode(
-            substituteFunctionName, &substituteArguments, *mSymbolTable, 300);
+            substituteFunctionName, &substituteArguments, *mSymbolTable);
 
         queueReplacement(substituteCall, OriginalNode::IS_DROPPED);
 

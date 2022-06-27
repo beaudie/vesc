@@ -225,8 +225,7 @@ void EmitFragmentOutputDither(TCompiler *compiler,
 
         // fragmentOutput.rgb = round(fragmentOutput.rgb * roundMultiplier) / roundMultiplier
         TIntermTyped *scaledUp = new TIntermBinary(EOpMul, fragmentOutput->deepCopy(), multiplier);
-        TIntermTyped *rounded =
-            CreateBuiltInUnaryFunctionCallNode("round", scaledUp, *symbolTable, 300);
+        TIntermTyped *rounded = CreateBuiltInUnaryFunctionCallNode("round", scaledUp, *symbolTable);
         TIntermTyped *scaledDown = new TIntermBinary(EOpDiv, rounded, multiplier->deepCopy());
         ditherBlock->appendStatement(
             new TIntermBinary(EOpAssign, fragmentOutput->deepCopy(), scaledDown));

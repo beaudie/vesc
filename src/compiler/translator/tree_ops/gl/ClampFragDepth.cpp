@@ -43,7 +43,7 @@ bool ClampFragDepth(TCompiler *compiler, TIntermBlock *root, TSymbolTable *symbo
     clampArguments.push_back(minFragDepthNode);
     clampArguments.push_back(maxFragDepthNode);
     TIntermTyped *clampedFragDepth =
-        CreateBuiltInFunctionCallNode("clamp", &clampArguments, *symbolTable, 100);
+        CreateBuiltInFunctionCallNode("clamp", &clampArguments, *symbolTable);
 
     // gl_FragDepth = clamp(gl_FragDepth, 0.0, 1.0)
     TIntermBinary *assignFragDepth = new TIntermBinary(EOpAssign, fragDepthNode, clampedFragDepth);

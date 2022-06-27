@@ -24,30 +24,25 @@ class Traverser : public TIntermTraverser
   public:
     [[nodiscard]] static bool Apply(TCompiler *compiler,
                                     TIntermNode *root,
-                                    const TSymbolTable &symbolTable,
-                                    int shaderVersion);
+                                    const TSymbolTable &symbolTable);
 
   private:
-    Traverser(const TSymbolTable &symbolTable, int shaderVersion);
+    Traverser(const TSymbolTable &symbolTable);
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     void nextIteration();
 
     const TSymbolTable *symbolTable;
-    const int shaderVersion;
     bool mFound = false;
 };
 
-Traverser::Traverser(const TSymbolTable &symbolTable, int shaderVersion)
-    : TIntermTraverser(true, false, false), symbolTable(&symbolTable), shaderVersion(shaderVersion)
+Traverser::Traverser(const TSymbolTable &symbolTable)
+    : TIntermTraverser(true, false, false), symbolTable(&symbolTable)
 {}
 
 // static
-bool Traverser::Apply(TCompiler *compiler,
-                      TIntermNode *root,
-                      const TSymbolTable &symbolTable,
-                      int shaderVersion)
+bool Traverser::Apply(TCompiler *compiler, TIntermNode *root, const TSymbolTable &symbolTable)
 {
-    Traverser traverser(symbolTable, shaderVersion);
+    Traverser traverser(symbolTable);
     do
     {
         traverser.nextIteration();
@@ -141,8 +136,8 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
     ASSERT(texelFetchArguments.size() == 3u);
 
-    TIntermTyped *texelFetchNode = CreateBuiltInFunctionCallNode("texelFetch", &texelFetchArguments,
-                                                                 *symbolTable, shaderVersion);
+    TIntermTyped *texelFetchNode =
+        CreateBuiltInFunctionCallNode("texelFetch", &texelFetchArguments, *symbolTable);
     texelFetchNode->setLine(node->getLine());
 
     // Replace the old node by this new node.
@@ -162,7 +157,7 @@ bool RewriteTexelFetchOffset(TCompiler *compiler,
     if (shaderVersion < 300)
         return true;
 
-    return Traverser::Apply(compiler, root, symbolTable, shaderVersion);
+    return Traverser::Apply(compiler, root, symbolTable);
 }
 
 }  // namespace sh

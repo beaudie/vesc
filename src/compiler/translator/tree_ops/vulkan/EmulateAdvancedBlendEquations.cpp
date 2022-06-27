@@ -286,11 +286,11 @@ void Builder::generateHslHelperFunctions()
 
         // min(c.r, c.g)
         TIntermSequence cRcG = {cR, cG};
-        TIntermTyped *minRG  = CreateBuiltInFunctionCallNode("min", &cRcG, *mSymbolTable, 100);
+        TIntermTyped *minRG  = CreateBuiltInFunctionCallNode("min", &cRcG, *mSymbolTable);
 
         // min(min(c.r, c.g), c.b)
         TIntermSequence minRGcB = {minRG, cB};
-        TIntermTyped *minRGB = CreateBuiltInFunctionCallNode("min", &minRGcB, *mSymbolTable, 100);
+        TIntermTyped *minRGB    = CreateBuiltInFunctionCallNode("min", &minRGcB, *mSymbolTable);
 
         mMinv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_minv3", minRGB, {c});
     }
@@ -308,11 +308,11 @@ void Builder::generateHslHelperFunctions()
 
         // max(c.r, c.g)
         TIntermSequence cRcG = {cR, cG};
-        TIntermTyped *maxRG  = CreateBuiltInFunctionCallNode("max", &cRcG, *mSymbolTable, 100);
+        TIntermTyped *maxRG  = CreateBuiltInFunctionCallNode("max", &cRcG, *mSymbolTable);
 
         // max(max(c.r, c.g), c.b)
         TIntermSequence maxRGcB = {maxRG, cB};
-        TIntermTyped *maxRGB = CreateBuiltInFunctionCallNode("max", &maxRGcB, *mSymbolTable, 100);
+        TIntermTyped *maxRGB    = CreateBuiltInFunctionCallNode("max", &maxRGcB, *mSymbolTable);
 
         mMaxv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_maxv3", maxRGB, {c});
     }
@@ -329,7 +329,7 @@ void Builder::generateHslHelperFunctions()
 
         // dot(c, coeff)
         TIntermSequence cCoeff = {c, coeff};
-        TIntermTyped *dot      = CreateBuiltInFunctionCallNode("dot", &cCoeff, *mSymbolTable, 100);
+        TIntermTyped *dot      = CreateBuiltInFunctionCallNode("dot", &cCoeff, *mSymbolTable);
 
         mLumv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_lumv3", dot, {c});
     }
@@ -678,7 +678,7 @@ void Builder::generateBlendFunctions()
                     // src * dst
                     TIntermSequence minArgs = {src, dst};
                     TIntermTyped *result =
-                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable);
 
                     mBlendFuncs[equation] = MakeSimpleFunctionDefinition(
                         mSymbolTable, "ANGLE_blend_darken", result, {src, dst});
@@ -696,7 +696,7 @@ void Builder::generateBlendFunctions()
                     // src * dst
                     TIntermSequence maxArgs = {src, dst};
                     TIntermTyped *result =
-                        CreateBuiltInFunctionCallNode("max", &maxArgs, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("max", &maxArgs, *mSymbolTable);
 
                     mBlendFuncs[equation] = MakeSimpleFunctionDefinition(
                         mSymbolTable, "ANGLE_blend_lighten", result, {src, dst});
@@ -732,7 +732,7 @@ void Builder::generateBlendFunctions()
                     // min(1., dst / (1. - src))
                     TIntermSequence minArgs = {Float(1), dstDivOneMinusSrc};
                     TIntermTyped *result =
-                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable);
 
                     // src >= 1
                     TIntermTyped *greaterOne =
@@ -780,7 +780,7 @@ void Builder::generateBlendFunctions()
                     // min(1., (1. - dst) / src)
                     TIntermSequence minArgs = {Float(1), oneMinusDstDivSrc};
                     TIntermTyped *result =
-                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("min", &minArgs, *mSymbolTable);
                     // 1. - min(1., (1. - dst) / src)
                     result = new TIntermBinary(EOpSub, Float(1), result);
 
@@ -852,7 +852,7 @@ void Builder::generateBlendFunctions()
                     // sqrt(dst)
                     TIntermSequence sqrtArg = {dst->deepCopy()};
                     TIntermTyped *sqrtDst =
-                        CreateBuiltInFunctionCallNode("sqrt", &sqrtArg, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("sqrt", &sqrtArg, *mSymbolTable);
                     // sqrt(dst) - dst
                     TIntermTyped *sqrtDstMinusDst =
                         new TIntermBinary(EOpSub, sqrtDst, dst->deepCopy());
@@ -893,7 +893,7 @@ void Builder::generateBlendFunctions()
                     // abs(dst - src)
                     TIntermSequence absArgs = {dstMinusSrc};
                     TIntermTyped *result =
-                        CreateBuiltInFunctionCallNode("abs", &absArgs, *mSymbolTable, 100);
+                        CreateBuiltInFunctionCallNode("abs", &absArgs, *mSymbolTable);
 
                     mBlendFuncs[equation] = MakeSimpleFunctionDefinition(
                         mSymbolTable, "ANGLE_blend_difference", result, {src, dst});
@@ -1063,9 +1063,9 @@ void Builder::generatePreamble(TIntermBlock *blendBlock)
     // TODO: support interaction with multisampled framebuffers.  For example, the sample ID needs
     // to be provided to the built-in call here.  http://anglebug.com/6195
 
-    TIntermSequence subpassArguments  = {new TIntermSymbol(mSubpassInputVar)};
-    TIntermTyped *subpassLoadFuncCall = CreateBuiltInFunctionCallNode(
-        "subpassLoad", &subpassArguments, *mSymbolTable, kESSLVulkanOnly);
+    TIntermSequence subpassArguments = {new TIntermSymbol(mSubpassInputVar)};
+    TIntermTyped *subpassLoadFuncCall =
+        CreateBuiltInFunctionCallNode("subpassLoad", &subpassArguments, *mSymbolTable);
 
     blendBlock->appendStatement(
         CreateTempInitDeclarationNode(&subpassInputData->variable(), subpassLoadFuncCall));

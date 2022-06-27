@@ -284,7 +284,7 @@ TIntermTyped *DriverUniform::getFlipXY(TSymbolTable *symbolTable, DriverUniformF
 {
     TIntermTyped *flipXY = createDriverUniformRef(kFlipXY);
     TIntermTyped *values =
-        CreateBuiltInUnaryFunctionCallNode("unpackSnorm4x8", flipXY, *symbolTable, 310);
+        CreateBuiltInUnaryFunctionCallNode("unpackSnorm4x8", flipXY, *symbolTable);
 
     if (stage == DriverUniformFlip::Fragment)
     {

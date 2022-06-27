@@ -19,11 +19,10 @@ namespace
 
 const TFunction *LookUpBuiltInFunction(const char *name,
                                        const TIntermSequence *arguments,
-                                       const TSymbolTable &symbolTable,
-                                       int shaderVersion)
+                                       const TSymbolTable &symbolTable)
 {
     const ImmutableString &mangledName = TFunctionLookup::GetMangledName(name, *arguments);
-    const TSymbol *symbol              = symbolTable.findBuiltIn(mangledName, shaderVersion);
+    const TSymbol *symbol              = symbolTable.findBuiltForInternalEmulation(mangledName);
     if (symbol)
     {
         ASSERT(symbol->isFunction());
@@ -343,21 +342,19 @@ TIntermSymbol *ReferenceGlobalVariable(const ImmutableString &name, const TSymbo
 }
 
 TIntermSymbol *ReferenceBuiltInVariable(const ImmutableString &name,
-                                        const TSymbolTable &symbolTable,
-                                        int shaderVersion)
+                                        const TSymbolTable &symbolTable)
 {
     const TVariable *var =
-        static_cast<const TVariable *>(symbolTable.findBuiltIn(name, shaderVersion));
+        static_cast<const TVariable *>(symbolTable.findBuiltForInternalEmulation(name));
     ASSERT(var);
     return new TIntermSymbol(var);
 }
 
 TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
                                             TIntermSequence *arguments,
-                                            const TSymbolTable &symbolTable,
-                                            int shaderVersion)
+                                            const TSymbolTable &symbolTable)
 {
-    const TFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable, shaderVersion);
+    const TFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable);
     ASSERT(fn);
     TOperator op = fn->getBuiltInOp();
     if (BuiltInGroup::IsMath(op) && arguments->size() == 1)
@@ -369,11 +366,10 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
 
 TIntermTyped *CreateBuiltInUnaryFunctionCallNode(const char *name,
                                                  TIntermTyped *argument,
-                                                 const TSymbolTable &symbolTable,
-                                                 int shaderVersion)
+                                                 const TSymbolTable &symbolTable)
 {
     TIntermSequence seq = {argument};
-    return CreateBuiltInFunctionCallNode(name, &seq, symbolTable, shaderVersion);
+    return CreateBuiltInFunctionCallNode(name, &seq, symbolTable);
 }
 
 // Returns true if a block ends in a branch (break, continue, return, etc).  This is only correct

@@ -41,7 +41,7 @@ bool ClampPointSize(TCompiler *compiler,
     minArguments.push_back(pointSizeNode->deepCopy());
     minArguments.push_back(maxPointSizeNode);
     TIntermTyped *clampedPointSize =
-        CreateBuiltInFunctionCallNode("min", &minArguments, *symbolTable, 100);
+        CreateBuiltInFunctionCallNode("min", &minArguments, *symbolTable);
 
     // gl_PointSize = min(gl_PointSize, maxPointSize)
     TIntermBinary *assignPointSize = new TIntermBinary(EOpAssign, pointSizeNode, clampedPointSize);

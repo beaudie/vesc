@@ -79,17 +79,14 @@ TIntermSymbol *ReferenceGlobalVariable(const ImmutableString &name,
 // Note: this can't access desktop GLSL built-ins. Those can only be accessed directly through
 // BuiltIn.h.
 TIntermSymbol *ReferenceBuiltInVariable(const ImmutableString &name,
-                                        const TSymbolTable &symbolTable,
-                                        int shaderVersion);
+                                        const TSymbolTable &symbolTable);
 
 TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
                                             TIntermSequence *arguments,
-                                            const TSymbolTable &symbolTable,
-                                            int shaderVersion);
+                                            const TSymbolTable &symbolTable);
 TIntermTyped *CreateBuiltInUnaryFunctionCallNode(const char *name,
                                                  TIntermTyped *argument,
-                                                 const TSymbolTable &symbolTable,
-                                                 int shaderVersion);
+                                                 const TSymbolTable &symbolTable);
 
 inline void GetSwizzleIndex(TVector<int> *indexOut) {}
 

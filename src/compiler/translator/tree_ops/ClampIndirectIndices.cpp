@@ -68,7 +68,7 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
             {
                 TIntermSequence constructorArgs = {max};
                 max                             = TIntermAggregate::CreateConstructor(
-                    *StaticType::GetBasic<EbtFloat, EbpHigh>(), &constructorArgs);
+                                                *StaticType::GetBasic<EbtFloat, EbpHigh>(), &constructorArgs);
             }
         }
         else if (leftType.isArray())
@@ -99,8 +99,7 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         args.push_back(index);
         args.push_back(zero);
         args.push_back(max);
-        TIntermTyped *clamped =
-            CreateBuiltInFunctionCallNode("clamp", &args, *mSymbolTable, useFloatClamp ? 100 : 300);
+        TIntermTyped *clamped = CreateBuiltInFunctionCallNode("clamp", &args, *mSymbolTable);
 
         // Cast back to int if float clamp was used.
         if (useFloatClamp)
