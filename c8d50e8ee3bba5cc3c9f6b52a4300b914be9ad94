@@ -181,6 +181,30 @@
       },
       "revId": "c8d50e8ee3bba5cc3c9f6b52a4300b914be9ad94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18358fdb_a20ad8ea",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-06-27T15:20:11Z",
+      "side": 1,
+      "message": "But this is exactly the test that covers D32_FLOAT_S8X24_UINT, at least that\u0027s what readPixels gets for readFormat in this test. The D24_UNORM_S8_UINT test is the test right above, called DepthStencilReadback_DepthStencil.",
+      "parentUuid": "5dd0c9f1_a35970d1",
+      "range": {
+        "startLine": 495,
+        "startChar": 35,
+        "endLine": 495,
+        "endChar": 68
+      },
+      "revId": "c8d50e8ee3bba5cc3c9f6b52a4300b914be9ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
