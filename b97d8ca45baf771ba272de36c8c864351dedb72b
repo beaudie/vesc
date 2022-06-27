@@ -214,6 +214,30 @@
       },
       "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95f62786_fd056c3e",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-27T19:25:46Z",
+      "side": 1,
+      "message": "`class DisplayImpl : public EGLImplFactory`: there are as many `EGLImplFactory`s as there are `DisplayImpl`s, so one. Adding the serial factory to `EGLImplFactory` SGTM.",
+      "parentUuid": "eaf6309f_d5b016fc",
+      "range": {
+        "startLine": 301,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 17
+      },
+      "revId": "b97d8ca45baf771ba272de36c8c864351dedb72b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
