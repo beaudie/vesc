@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bdfa93f_741336d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-28T20:24:13Z",
+      "side": 1,
+      "message": "I went with a simplified way of switching between desktop glsl and essl for now. I tried a more full refactoring of not needing to pass a version for internal builtin lookups but it turns out some code uses the version to differentiate between which overloaded function is returned.",
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
