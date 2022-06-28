@@ -22,6 +22,30 @@
       },
       "revId": "1c05b95543dd547c58daf1962745851a66416bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9ab37f_1bb825ff",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-28T07:39:11Z",
+      "side": 1,
+      "message": "No longer needed.",
+      "parentUuid": "cec534af_05aac464",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 77
+      },
+      "revId": "1c05b95543dd547c58daf1962745851a66416bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
