@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ebb0227_c654529b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-28T20:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "002e9175_f6047960",
+      "range": {
+        "startLine": 1459,
+        "startChar": 51,
+        "endLine": 1459,
+        "endChar": 54
+      },
+      "revId": "6111ad94315f47e35afe064cd5a8283860be0822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49c1199a_9481acf0",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-05-26T16:42:11Z",
       "side": 1,
       "message": "This file is already huge. Should we create another file for DesktopGLSL (which could also then be excluded from build when desktop GL support is compiled out)",
+      "revId": "6111ad94315f47e35afe064cd5a8283860be0822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5d1195_33eced21",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-28T20:23:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49c1199a_9481acf0",
       "revId": "6111ad94315f47e35afe064cd5a8283860be0822",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
