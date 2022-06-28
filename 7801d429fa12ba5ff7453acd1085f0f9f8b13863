@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adcf4665_111f879d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2022-06-28T11:37:08Z",
+      "side": 1,
+      "message": "This fix prevents use_system_libwayland  from using third_party/wayland includes. But with that, we need wayland-egl-backend.h that requires it to be installed (so I added pkgconfig check for that). This cannot be landed without making our sysroot include the wayland-egl-backend package.",
+      "revId": "7801d429fa12ba5ff7453acd1085f0f9f8b13863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
