@@ -1798,27 +1798,27 @@ void TracePerfTest::validateSerializedState(const char *expectedCapturedSerializ
 
     GTEST_NONFATAL_FAILURE_("Serialization mismatch!");
 
-    char aFilePath[kMaxPath] = {};
-    if (CreateTemporaryFile(aFilePath, kMaxPath))
+    Optional<std::string> aFilePath = CreateTemporaryFile();
+    if (aFilePath.valid())
     {
-        printf("Saving \"expected\" capture serialization to \"%s\".\n", aFilePath);
-        FILE *fpA = fopen(aFilePath, "wt");
+        printf("Saving \"expected\" capture serialization to \"%s\".\n", aFilePath.value().c_str());
+        FILE *fpA = fopen(aFilePath.value(), "wt");
         ASSERT(fpA);
         fprintf(fpA, "%s", expectedCapturedSerializedState);
         fclose(fpA);
     }
 
-    char bFilePath[kMaxPath] = {};
-    if (CreateTemporaryFile(bFilePath, kMaxPath))
+    Optional<std::string> bFilePath = CreateTemporaryFile();
+    if (bFilePath.valid())
     {
-        printf("Saving \"actual\" replay serialization to \"%s\".\n", bFilePath);
-        FILE *fpB = fopen(bFilePath, "wt");
+        printf("Saving \"actual\" replay serialization to \"%s\".\n", bFilePath.value().c_str());
+        FILE *fpB = fopen(bFilePath.value(), "wt");
         ASSERT(fpB);
         fprintf(fpB, "%s", actualReplayedSerializedState);
         fclose(fpB);
     }
 
-    PrintFileDiff(aFilePath, bFilePath);
+    PrintFileDiff(aFilePath.value(), bFilePath.value());
 }
 
 bool TracePerfTest::isDefaultFramebuffer(GLenum target) const
