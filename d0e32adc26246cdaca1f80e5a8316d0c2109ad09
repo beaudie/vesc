@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d535403_f8125a43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-28T02:19:34Z",
+      "side": 1,
+      "message": "Turns out presubmit from a chromium checkout is terribly broken anyway: anglebug.com/7468\n\nCurrent change LGTM.",
+      "parentUuid": "90efc600_5f1954ec",
+      "revId": "d0e32adc26246cdaca1f80e5a8316d0c2109ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98aa2a60_c9262c2f",
