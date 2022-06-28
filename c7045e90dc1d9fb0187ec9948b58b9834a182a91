@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cce5696a_caaac9f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-28T15:13:50Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "c7045e90dc1d9fb0187ec9948b58b9834a182a91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "072651d3_5980e87c",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-28T15:13:50Z",
+      "side": 1,
+      "message": "Why does this need validation, but not any of the other ones?",
+      "revId": "c7045e90dc1d9fb0187ec9948b58b9834a182a91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
