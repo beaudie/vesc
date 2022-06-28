@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6eb6ef1c_7b71679a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-28T18:00:07Z",
+      "side": 1,
+      "message": "Jonah, can you take a look at this too? It slightly changes the logic for device selection to also match vendor/device ID.",
+      "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "53da3ce2_abb4faac",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 2
@@ -48,6 +65,24 @@
       "writtenOn": "2022-06-24T16:55:07Z",
       "side": 1,
       "message": "Anecdotally, while this extension appears by name in the \"extensions\" subdirectory, it doesn\u0027t ever get declared as supported by EGL(?)",
+      "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c31c47_aa3f9cfd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-28T18:00:07Z",
+      "side": 1,
+      "message": "Hmm, looks like a bunch of parts of this extension are missing implementation. It\u0027s not in the ClientExtensions struct at all. I think it\u0027s been superseded by the more generalized EGL_ANGLE_platform_angle_device_id. We should probably remove it.\n\nAdding Jonah to be aware of this.",
+      "parentUuid": "53da3ce2_abb4faac",
       "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
