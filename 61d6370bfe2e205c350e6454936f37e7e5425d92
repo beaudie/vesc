@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48030948_d359453f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-28T16:28:17Z",
+      "side": 1,
+      "message": "Thanks Shabi - one nit of course",
+      "revId": "61d6370bfe2e205c350e6454936f37e7e5425d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5ca296a_d16e8eac",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-28T16:28:17Z",
+      "side": 1,
+      "message": "The text and example LGTM.\n\nCan you put this under a separate bullet called `(Optional) Reducing the trace count` as a follow on peer to `Building the trace tests` just to help separate it from the required steps?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 5
+      },
+      "revId": "61d6370bfe2e205c350e6454936f37e7e5425d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
