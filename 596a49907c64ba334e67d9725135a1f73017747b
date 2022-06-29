@@ -63,6 +63,30 @@
       },
       "revId": "596a49907c64ba334e67d9725135a1f73017747b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c67248b_902a93bb",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-29T14:38:49Z",
+      "side": 1,
+      "message": "Yup, `std::vector\u003cPLSTestTexture\u003e renderTexs(MAX_FRAGMENT_OUTPUTS_WITH_LOCAL_STORAGE, GL_RGBA32UI);` will initialize the vector with the specific value.\n\nIt\u0027s constructor (3) here: https://en.cppreference.com/w/cpp/container/vector/vector",
+      "parentUuid": "4c3b40f4_bab3d47b",
+      "range": {
+        "startLine": 1610,
+        "startChar": 42,
+        "endLine": 1610,
+        "endChar": 43
+      },
+      "revId": "596a49907c64ba334e67d9725135a1f73017747b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
