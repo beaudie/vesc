@@ -3317,7 +3317,7 @@ void DescriptorPoolHelper::destroyCachedDescriptorSet(const DescriptorSetDesc &d
 void DescriptorPoolHelper::resetCache()
 {
     mDescriptorSetCacheManager.destroyKeys();
-    mDescriptorSetCache.resetCache();
+    ASSERT(mDescriptorSetCache.empty());
 }
 
 // DynamicDescriptorPool implementation.
