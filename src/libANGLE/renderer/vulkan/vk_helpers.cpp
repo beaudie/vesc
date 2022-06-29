@@ -2285,8 +2285,16 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderArea.y);
     beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
-    beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
-    beginInfo.pClearValues             = mClearValues.data();
+    if (mAttachmentOps.anyAttachmentWithLoadClearOps())
+    {
+        beginInfo.clearValueCount = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
+    }
+    else
+    {
+        beginInfo.clearValueCount = 0;
+    }
+    INFO() << "Yuxin Debug: beginInfo.clearValueCount: " << beginInfo.clearValueCount;
+    beginInfo.pClearValues = mClearValues.data();
 
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =

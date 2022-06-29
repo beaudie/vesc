@@ -3745,6 +3745,7 @@ void AttachmentOpsArray::initWithLoadStore(PackedAttachmentIndex index,
     setLayouts(index, initialLayout, finalLayout);
     setOps(index, RenderPassLoadOp::Load, RenderPassStoreOp::Store);
     setStencilOps(index, RenderPassLoadOp::Load, RenderPassStoreOp::Store);
+    mAttachmentClearOps.reset();
 }
 
 void AttachmentOpsArray::setLayouts(PackedAttachmentIndex index,
@@ -3764,6 +3765,12 @@ void AttachmentOpsArray::setOps(PackedAttachmentIndex index,
     SetBitField(ops.loadOp, loadOp);
     SetBitField(ops.storeOp, storeOp);
     ops.isInvalidated = false;
+
+    RenderPassLoadOp stencilLoadOp = static_cast<RenderPassLoadOp>(ops.stencilLoadOp);
+    if (stencilLoadOp != RenderPassLoadOp::Clear)
+    {
+        mAttachmentClearOps.set(index.get(), 0);
+    }
 }
 
 void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
@@ -3774,18 +3781,26 @@ void AttachmentOpsArray::setStencilOps(PackedAttachmentIndex index,
     SetBitField(ops.stencilLoadOp, loadOp);
     SetBitField(ops.stencilStoreOp, storeOp);
     ops.isStencilInvalidated = false;
+
+    RenderPassLoadOp colorloadOp = static_cast<RenderPassLoadOp>(ops.loadOp);
+    if (colorloadOp != RenderPassLoadOp::Clear)
+    {
+        mAttachmentClearOps.set(index.get(), 0);
+    }
 }
 
 void AttachmentOpsArray::setClearOp(PackedAttachmentIndex index)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.loadOp, RenderPassLoadOp::Clear);
+    mAttachmentClearOps.set(index.get(), 1);
 }
 
 void AttachmentOpsArray::setClearStencilOp(PackedAttachmentIndex index)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.stencilLoadOp, RenderPassLoadOp::Clear);
+    mAttachmentClearOps.set(index.get(), 1);
 }
 
 size_t AttachmentOpsArray::hash() const
@@ -3796,6 +3811,11 @@ size_t AttachmentOpsArray::hash() const
 bool operator==(const AttachmentOpsArray &lhs, const AttachmentOpsArray &rhs)
 {
     return (memcmp(&lhs, &rhs, sizeof(AttachmentOpsArray)) == 0);
+}
+
+bool AttachmentOpsArray::anyAttachmentWithLoadClearOps() const
+{
+    return mAttachmentClearOps.any();
 }
 
 // DescriptorSetLayoutDesc implementation.

@@ -353,13 +353,16 @@ class AttachmentOpsArray final
 
     size_t hash() const;
 
+    bool anyAttachmentWithLoadClearOps() const;
+
   private:
     gl::AttachmentArray<PackedAttachmentOpsDesc> mOps;
+    gl::AttachmentsMask mAttachmentClearOps;
 };
 
 bool operator==(const AttachmentOpsArray &lhs, const AttachmentOpsArray &rhs);
 
-static_assert(sizeof(AttachmentOpsArray) == 40, "Size check failed");
+// static_assert(sizeof(AttachmentOpsArray) == 40, "Size check failed");
 
 struct PackedAttribDesc final
 {
