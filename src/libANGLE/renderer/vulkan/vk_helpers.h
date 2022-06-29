@@ -186,25 +186,10 @@ class DescriptorPoolHelper final : public Resource
                                          uint32_t descriptorSetCount,
                                          VkDescriptorSet *descriptorSetsOut);
 
-    angle::Result allocateAndCacheDescriptorSet(Context *context,
-                                                CommandBufferHelperCommon *commandBufferHelper,
-                                                const DescriptorSetDesc &desc,
-                                                const DescriptorSetLayout &descriptorSetLayout,
-                                                VkDescriptorSet *descriptorSetOut);
-
-    bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
-
-    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
-    void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
     void resetCache();
     // Scan descriptorSet garbage list and destroy all GPU completed garbage
     void cleanupGarbage(Context *context);
-
-    size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
-    size_t getTotalCacheKeySizeBytes() const
-    {
-        return mDescriptorSetCache.getTotalCacheKeySizeBytes();
-    }
+    void addGarbage(ContextVk *contextVk, VkDescriptorSet descriptorSet);
 
     void onNewDescriptorSetAllocated(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
@@ -217,7 +202,6 @@ class DescriptorPoolHelper final : public Resource
 
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
-    DescriptorSetCache mDescriptorSetCache;
     // Because freeing descriptorSet require DescriptorPool, we store individually released
     // descriptor sets here instead of usual garbage list in the renderer to avoid complicated
     // threading issues and other weirdness associated with pooled object destruction.
@@ -226,7 +210,6 @@ class DescriptorPoolHelper final : public Resource
     vk::DescriptorSetCacheManager mDescriptorSetCacheManager;
 };
 
-using RefCountedDescriptorPoolHelper  = RefCounted<DescriptorPoolHelper>;
 using RefCountedDescriptorPoolBinding = BindingPointer<DescriptorPoolHelper>;
 
 class DynamicDescriptorPool final : angle::NonCopyable
@@ -268,31 +251,20 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut,
                                              DescriptorCacheResult *cacheResultOut);
 
+    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
+    void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
+
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
-        size_t cacheSize = 0;
-        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
-        {
-            cacheSize += pool->get().getTotalCacheSize();
-        }
         CacheStats adjusted = mCacheStats;
-        adjusted.setSize(static_cast<uint32_t>(cacheSize));
+        adjusted.setSize(static_cast<uint32_t>(mDescriptorSetCache.getTotalCacheSize()));
         accum->accumulateCacheStats(cacheType, adjusted);
     }
-
     void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
-
     size_t getTotalCacheKeySizeBytes() const
     {
-        size_t totalSize = 0;
-
-        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
-        {
-            totalSize += pool->get().getTotalCacheKeySizeBytes();
-        }
-
-        return totalSize;
+        return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
     // For testing only!
@@ -314,13 +286,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
-    CacheStats mCacheStats;
-};
 
-struct DescriptorSetAndPoolIndex
-{
-    VkDescriptorSet descriptorSet;
-    size_t poolIndex;
+    DescriptorSetCache mDescriptorSetCache;
+    CacheStats mCacheStats;
 };
 
 using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
