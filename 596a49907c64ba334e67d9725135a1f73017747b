@@ -87,6 +87,30 @@
       },
       "revId": "596a49907c64ba334e67d9725135a1f73017747b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4881764d_fd7b4998",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-06-29T15:53:38Z",
+      "side": 1,
+      "message": "That constructor doesn\u0027t work for PLSTestTexture because its copy constructor is deleted (which is also why we need to use emplace_back() in the loop). I\u0027m not seeing a way to pre-initialize an std::vector with \"emplace\" arguments.",
+      "parentUuid": "7c67248b_902a93bb",
+      "range": {
+        "startLine": 1610,
+        "startChar": 42,
+        "endLine": 1610,
+        "endChar": 43
+      },
+      "revId": "596a49907c64ba334e67d9725135a1f73017747b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
