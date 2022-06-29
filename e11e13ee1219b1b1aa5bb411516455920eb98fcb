@@ -16,6 +16,132 @@
       "message": "PTAL. The patchset 1 is the reland of original CL without any modification. patchset 10 is the fix for chrome crash angleproject:7466. So you can diff between patchset1 and 10 for the additional changes that try to fix the chrome crash. \n\nThe chrome crash is specific with display texture share group extension where the texture can outlive context. The cache belongs to share group and with my CL the tetxure has a pointer to the cache which caused the crash. The fix I did here is a more general fix. It is essentially the same way I did for Framebuffer cache. For each DescriptorPoolHelper, I also keeps the shared cache keys. When DescriptorPoolHelper release/destroy/reset, I destroy the shared cache key so that no one will be pointing to it. This way it is much safer and robust. I was aware of this with first CL, but since we never destroy pool before shareGroup destroy, I thought it is safe. But display texture share group is one example of this. And this also paved the way for future optimizations that when we want to implement LRU and destroy excessive pools, this will come in handy as well. And this is consistent with how FramebufferCache is tracked as well.\n\nAnd there are still other investigation/optimizations going with descriptorSet cache, so this may pave ways for future work, or the entire cache code might be removed if it turns out cache is not helping CPU perf any more with all the optimizations we did for VkUpdateDescriptorSets.\n\nThe chrome crash bug test result is here, https://chromium-review.googlesource.com/c/chromium/src/+/3727477. All green.",
       "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9608271_fc86d856",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "LGTM with some nits",
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ce2e7da_41506e50",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "Please move these helpers up to the anonymous namespace",
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b69530_dfa91943",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "entry? (as in \"cached _object_\")",
+      "range": {
+        "startLine": 5347,
+        "startChar": 60,
+        "endLine": 5347,
+        "endChar": 65
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be00e652_07ff986d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5348,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "Entries or caches?",
+      "range": {
+        "startLine": 5348,
+        "startChar": 17,
+        "endLine": 5348,
+        "endChar": 23
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f01ea0_74e5dc88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "\"freed all caches\", what do you mean by that?",
+      "range": {
+        "startLine": 5360,
+        "startChar": 32,
+        "endLine": 5360,
+        "endChar": 48
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b513100a_c26271c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-06-29T01:50:13Z",
+      "side": 1,
+      "message": "nit: `assertAllEntriesDestroyed`, it\u0027s one cache.",
+      "range": {
+        "startLine": 1581,
+        "startChar": 18,
+        "endLine": 1581,
+        "endChar": 24
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
