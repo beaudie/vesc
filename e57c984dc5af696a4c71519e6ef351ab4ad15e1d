@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f96c86f_83e7cfb3",
+        "filename": "src/tests/gl_tests/RendererTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-29T19:24:15Z",
+      "side": 1,
+      "message": "Yea, this one is intentional because it adds ANGLE_ALL_TEST_PLATFORMS_GL32_CORE to the list already described in the macro. I don\u0027t love the naming but it\u0027s a patnern in a bunch of our instantiation macros.",
+      "parentUuid": "71e337c1_6a9958ed",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 56
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5261f682_5ffe6f7c",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-06-29T17:28:47Z",
       "side": 1,
       "message": "Prefer really loud aborts when unhandled blocks are hit, but I can see this is the precedent in this file.",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 30
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "331531e7_ab9dc359",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-29T19:24:15Z",
+      "side": 1,
+      "message": "Added an `UNREACHABLE()`",
+      "parentUuid": "5261f682_5ffe6f7c",
       "range": {
         "startLine": 179,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e2d45d_41498aae",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-29T19:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e93bef3f_82e1139b",
+      "range": {
+        "startLine": 189,
+        "startChar": 9,
+        "endLine": 189,
+        "endChar": 23
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35bbdca6_931bffbd",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-06-29T17:28:47Z",
       "side": 1,
       "message": "typo: the",
+      "range": {
+        "startLine": 447,
+        "startChar": 33,
+        "endLine": 447,
+        "endChar": 37
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5623669a_660dc869",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-06-29T19:24:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35bbdca6_931bffbd",
       "range": {
         "startLine": 447,
         "startChar": 33,
