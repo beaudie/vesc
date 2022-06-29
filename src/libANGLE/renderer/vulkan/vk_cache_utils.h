@@ -1303,18 +1303,21 @@ class DescriptorSetDesc
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
+class DescriptorPoolHelper;
+using RefCountedDescriptorPoolHelper = RefCounted<DescriptorPoolHelper>;
+
 // SharedDescriptorSetCacheKey.
 // Because DescriptorSet must associate with a pool, we need to define a structure that wraps both.
-class DescriptorPoolHelper;
+class DynamicDescriptorPool;
 struct DescriptorSetDescAndPool
 {
     DescriptorSetDesc mDesc;
-    DescriptorPoolHelper *mPool;
+    DynamicDescriptorPool *mPool;
 };
 using DescriptorSetAndPoolPointer = std::unique_ptr<DescriptorSetDescAndPool>;
 using SharedDescriptorSetCacheKey = std::shared_ptr<DescriptorSetAndPoolPointer>;
 ANGLE_INLINE const SharedDescriptorSetCacheKey
-CreateSharedDescriptorSetCacheKey(const DescriptorSetDesc &desc, DescriptorPoolHelper *pool)
+CreateSharedDescriptorSetCacheKey(const DescriptorSetDesc &desc, DynamicDescriptorPool *pool)
 {
     DescriptorSetAndPoolPointer DescriptorAndPoolPointer =
         std::make_unique<DescriptorSetDescAndPool>(DescriptorSetDescAndPool{desc, pool});
@@ -2071,6 +2074,12 @@ class SamplerYcbcrConversionCache final
     SamplerYcbcrConversionMap mVkFormatPayload;
 };
 
+struct DescriptorSetAndPool
+{
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolHelper *pool;
+};
+
 // Descriptor Set Cache
 class DescriptorSetCache final : angle::NonCopyable
 {
@@ -2092,7 +2101,7 @@ class DescriptorSetCache final : angle::NonCopyable
     void resetCache() { mPayload.clear(); }
 
     ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                       VkDescriptorSet *descriptorSet)
+                                       DescriptorSetAndPool *descriptorSet)
     {
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
@@ -2104,7 +2113,7 @@ class DescriptorSetCache final : angle::NonCopyable
     }
 
     ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet)
+                                          DescriptorSetAndPool &descriptorSet)
     {
         mPayload.emplace(desc, descriptorSet);
     }
@@ -2130,7 +2139,7 @@ class DescriptorSetCache final : angle::NonCopyable
     bool empty() const { return mPayload.empty(); }
 
   private:
-    angle::HashMap<vk::DescriptorSetDesc, VkDescriptorSet> mPayload;
+    angle::HashMap<vk::DescriptorSetDesc, DescriptorSetAndPool> mPayload;
 };
 
 // Only 1 driver uniform binding is used.
