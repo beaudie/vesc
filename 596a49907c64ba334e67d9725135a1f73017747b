@@ -111,6 +111,30 @@
       },
       "revId": "596a49907c64ba334e67d9725135a1f73017747b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8421605f_f4a7eb6d",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-06-29T23:45:54Z",
+      "side": 1,
+      "message": "Since this is a relatively minor issue, I\u0027m going to unblock this and its two dependent CLs by considering this resolved, and CQ\u0027ing this one. We can revisit this initialization loop if desired later.",
+      "parentUuid": "4881764d_fd7b4998",
+      "range": {
+        "startLine": 1610,
+        "startChar": 42,
+        "endLine": 1610,
+        "endChar": 43
+      },
+      "revId": "596a49907c64ba334e67d9725135a1f73017747b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
