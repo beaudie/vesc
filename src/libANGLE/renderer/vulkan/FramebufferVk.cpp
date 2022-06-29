@@ -2541,6 +2541,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     // Initialize RenderPass info.
     vk::AttachmentOpsArray renderPassAttachmentOps;
+    gl::AttachmentsMask attachmentClearOps;
     vk::PackedClearValuesArray packedClearValues;
     gl::DrawBufferMask previousUnresolveColorMask =
         mRenderPassDesc.getColorUnresolveAttachmentMask();
@@ -2570,6 +2571,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         if (mDeferredClears.test(colorIndexGL))
         {
             renderPassAttachmentOps.setOps(colorIndexVk, vk::RenderPassLoadOp::Clear, storeOp);
+            attachmentClearOps.set(colorIndexVk.get(), 1);
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mDeferredClears[colorIndexGL]);
             mDeferredClears.reset(colorIndexGL);
@@ -2740,6 +2742,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         renderPassAttachmentOps.setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
         renderPassAttachmentOps.setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
                                               stencilStoreOp);
+        if (depthLoadOp == vk::RenderPassLoadOp::Clear ||
+            stencilLoadOp == vk::RenderPassLoadOp::Clear)
+        {
+            attachmentClearOps.set(depthStencilAttachmentIndex.get(), 1);
+        }
     }
 
     // If render pass description is changed, the previous render pass desc is no longer compatible.
@@ -2774,8 +2781,8 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
-        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, attachmentClearOps,
+        colorIndexVk, depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);

@@ -1632,6 +1632,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mDepthResolveAttachment.reset();
     mStencilAttachment.reset();
     mStencilResolveAttachment.reset();
+    mAttachmentClearOps.reset();
 
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
@@ -1887,6 +1888,11 @@ void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
         colorAttachment.restoreContent();
     }
 
+    if (loadOp == RenderPassLoadOp::Clear)
+    {
+        mAttachmentClearOps.set(packedAttachmentIndex.get(), 1);
+    }
+
     SetBitField(ops.loadOp, loadOp);
     SetBitField(ops.storeOp, storeOp);
 }
@@ -2060,6 +2066,10 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
         }
     }
 
+    if (depthLoadOp == RenderPassLoadOp::Clear || stencilLoadOp == RenderPassLoadOp::Clear)
+    {
+        mAttachmentClearOps.set(mDepthStencilAttachmentIndex.get(), 1);
+    }
     SetBitField(dsOps.loadOp, depthLoadOp);
     SetBitField(dsOps.storeOp, depthStoreOp);
     SetBitField(dsOps.stencilLoadOp, stencilLoadOp);
@@ -2092,6 +2102,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const gl::Rectangle &renderArea,
     const RenderPassDesc &renderPassDesc,
     const AttachmentOpsArray &renderPassAttachmentOps,
+    const gl::AttachmentsMask &attachmentClearOps,
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
@@ -2101,6 +2112,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
 
     mRenderPassDesc              = renderPassDesc;
     mAttachmentOps               = renderPassAttachmentOps;
+    mAttachmentClearOps          = attachmentClearOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mColorAttachmentsCount       = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
@@ -2285,8 +2297,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderArea.y);
     beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
-    beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
-    beginInfo.pClearValues             = mClearValues.data();
+    beginInfo.clearValueCount =
+        mAttachmentClearOps.any() ? static_cast<uint32_t>(mRenderPassDesc.attachmentCount()) : 0;
+    beginInfo.pClearValues = mClearValues.data();
 
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =
@@ -2345,6 +2358,7 @@ void RenderPassCommandBufferHelper::updateRenderPassColorClear(PackedAttachmentI
                                                                const VkClearValue &clearValue)
 {
     mAttachmentOps.setClearOp(colorIndexVk);
+    mAttachmentClearOps.set(colorIndexVk.get(), 1);
     mClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT, clearValue);
 }
 
@@ -2366,7 +2380,7 @@ void RenderPassCommandBufferHelper::updateRenderPassDepthStencilClear(
         mAttachmentOps.setClearStencilOp(mDepthStencilAttachmentIndex);
         combinedClearValue.depthStencil.stencil = clearValue.depthStencil.stencil;
     }
-
+    mAttachmentClearOps.set(mDepthStencilAttachmentIndex.get(), 1);
     // Bypass special D/S handling. This clear values array stores values packed.
     mClearValues.storeNoDepthStencil(mDepthStencilAttachmentIndex, combinedClearValue);
 }

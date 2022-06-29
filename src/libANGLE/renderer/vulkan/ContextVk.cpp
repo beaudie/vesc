@@ -6870,6 +6870,7 @@ angle::Result ContextVk::beginNewRenderPass(
     const gl::Rectangle &renderArea,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const gl::AttachmentsMask &attachmentClearOps,
     const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
@@ -6881,7 +6882,7 @@ angle::Result ContextVk::beginNewRenderPass(
 
     mPerfCounters.renderPasses++;
     return mRenderPassCommands->beginRenderPass(
-        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
+        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps, attachmentClearOps,
         colorAttachmentCount, depthStencilAttachmentIndex, clearValues, commandBufferOut);
 }
 

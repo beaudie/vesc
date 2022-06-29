@@ -1280,6 +1280,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
                                   const AttachmentOpsArray &renderPassAttachmentOps,
+                                  const gl::AttachmentsMask &attachmentClearOps,
                                   const PackedAttachmentCount colorAttachmentCount,
                                   const PackedAttachmentIndex depthStencilAttachmentIndex,
                                   const PackedClearValuesArray &clearValues,
@@ -1412,6 +1413,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     uint32_t mCounter;
     RenderPassDesc mRenderPassDesc;
     AttachmentOpsArray mAttachmentOps;
+    gl::AttachmentsMask mAttachmentClearOps;
     Framebuffer mFramebuffer;
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;

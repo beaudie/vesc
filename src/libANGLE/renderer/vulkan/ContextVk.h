@@ -613,6 +613,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const gl::Rectangle &renderArea,
                                      const vk::RenderPassDesc &renderPassDesc,
                                      const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                     const gl::AttachmentsMask &attachmentClearOps,
                                      const vk::PackedAttachmentCount colorAttachmentCount,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
                                      const vk::PackedClearValuesArray &clearValues,
