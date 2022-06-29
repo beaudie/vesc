@@ -16,6 +16,115 @@
       "message": "I went with a simplified way of switching between desktop glsl and essl for now. I tried a more full refactoring of not needing to pass a version for internal builtin lookups but it turns out some code uses the version to differentiate between which overloaded function is returned.",
       "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daef93df_70e875f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-29T17:28:47Z",
+      "side": 1,
+      "message": "Geoff, this looks great!  Thanks for pushing on it.  Just some minor comments.",
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71e337c1_6a9958ed",
+        "filename": "src/tests/gl_tests/RendererTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-29T17:28:47Z",
+      "side": 1,
+      "message": "Did you mean to end this with `_AND`?  Would be clearer if you had `_AND_OTHERS` or `_AND_VARARGS` or something like that.  Not that big of a deal, but looked like a mistake at first.",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 56
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5261f682_5ffe6f7c",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-29T17:28:47Z",
+      "side": 1,
+      "message": "Prefer really loud aborts when unhandled blocks are hit, but I can see this is the precedent in this file.",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 30
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93bef3f_82e1139b",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-29T17:28:47Z",
+      "side": 1,
+      "message": "This could use an `ASSERT(pp.profileMask !\u003d 0)` if `pp.clientType \u003d\u003d EGL_OPENGL_API` so the logic below never breaks.  Maybe already handled elsewhere.",
+      "range": {
+        "startLine": 189,
+        "startChar": 9,
+        "endLine": 189,
+        "endChar": 23
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35bbdca6_931bffbd",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-29T17:28:47Z",
+      "side": 1,
+      "message": "typo: the",
+      "range": {
+        "startLine": 447,
+        "startChar": 33,
+        "endLine": 447,
+        "endChar": 37
+      },
+      "revId": "e57c984dc5af696a4c71519e6ef351ab4ad15e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
