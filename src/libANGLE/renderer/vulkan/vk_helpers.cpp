@@ -3317,7 +3317,7 @@ void DescriptorPoolHelper::destroyCachedDescriptorSet(const DescriptorSetDesc &d
 void DescriptorPoolHelper::resetCache()
 {
     mDescriptorSetCacheManager.destroyKeys();
-    mDescriptorSetCache.resetCache();
+    ASSERT(mDescriptorSetCache.empty());
 }
 
 // DynamicDescriptorPool implementation.
@@ -3435,6 +3435,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     const DescriptorSetLayout &descriptorSetLayout,
     RefCountedDescriptorPoolBinding *bindingOut,
     VkDescriptorSet *descriptorSetOut,
+    SharedDescriptorSetCacheKey *sharedCacheKeyOut,
     DescriptorCacheResult *cacheResultOut)
 {
     // First scan the descriptor pools.
@@ -3474,11 +3475,30 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
         }
     }
 
+    if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(kDescriptorSetCount))
+    {
+        WARN() << "bindingOut:" << &bindingOut->get()
+               << " FreeDescriptorSets:" << bindingOut->get().getFreeDescriptorSets();
+        WARN() << "mCurrentPoolIndex:" << mCurrentPoolIndex
+               << " mDescriptorPools[mCurrentPoolIndex]"
+               << &mDescriptorPools[mCurrentPoolIndex]->get() << " FreeDescriptorSets:"
+               << mDescriptorPools[mCurrentPoolIndex]->get().getFreeDescriptorSets();
+    }
+    ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(kDescriptorSetCount));
+
     bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     ANGLE_TRY(mDescriptorPools[mCurrentPoolIndex]->get().allocateAndCacheDescriptorSet(
         context, commandBufferHelper, desc, descriptorSetLayout, descriptorSetOut));
     *cacheResultOut = DescriptorCacheResult::NewAllocation;
     ++context->getPerfCounters().descriptorSetAllocations;
+
+    // Let pool know there is a shared cache key created and destroys the shared cache key
+    // when it destroys the pool.
+    SharedDescriptorSetCacheKey sharedCacheKey =
+        CreateSharedDescriptorSetCacheKey(desc, &mDescriptorPools[mCurrentPoolIndex]->get());
+    mDescriptorPools[mCurrentPoolIndex]->get().onNewDescriptorSetAllocated(sharedCacheKey);
+    *sharedCacheKeyOut = sharedCacheKey;
+
     return angle::Result::Continue;
 }
 

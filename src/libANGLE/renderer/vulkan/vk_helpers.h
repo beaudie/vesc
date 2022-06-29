@@ -211,6 +211,8 @@ class DescriptorPoolHelper final : public Resource
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
 
+    uint32_t getFreeDescriptorSets() const { return mFreeDescriptorSets; }
+
   private:
     // Reset entire descriptorSet garbage list. This should only used when pool gets reset.
     void resetGarbageList();
@@ -265,6 +267,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              const DescriptorSetLayout &descriptorSetLayout,
                                              RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut,
+                                             SharedDescriptorSetCacheKey *sharedCacheKeyOut,
                                              DescriptorCacheResult *cacheResultOut);
 
     template <typename Accumulator>
