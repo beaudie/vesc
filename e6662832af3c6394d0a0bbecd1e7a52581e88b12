@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "159b2b5b_576de053",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1131550
+      },
+      "writtenOn": "2022-06-29T04:32:54Z",
+      "side": 1,
+      "message": "FYI, The Android infra does not guarantee access to git -- this will be flaky (and completely broken in partner build environments that do not use git). We\u0027re working on phasing git access out entirely in the Android infra. See b/235609189",
+      "revId": "e6662832af3c6394d0a0bbecd1e7a52581e88b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
