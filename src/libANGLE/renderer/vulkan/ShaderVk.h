@@ -11,6 +11,7 @@
 #define LIBANGLE_RENDERER_VULKAN_SHADERVK_H_
 
 #include "libANGLE/renderer/ShaderImpl.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 
 namespace rx
 {
@@ -26,6 +27,11 @@ class ShaderVk : public ShaderImpl
                                                   ShCompileOptions options) override;
 
     std::string getDebugInfo() const override;
+
+    angle::Result onLabelUpdate(const gl::Context *context) override;
+
+  private:
+    angle::Result updateShaderLabel(ContextVk *contextVk);
 };
 
 }  // namespace rx

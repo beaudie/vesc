@@ -109,4 +109,23 @@ std::string ShaderVk::getDebugInfo() const
     return mState.getCompiledBinary().empty() ? "" : "<binary blob>";
 }
 
+angle::Result ShaderVk::updateShaderLabel(ContextVk *contextVk)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+    std::string label    = mState.getLabel();
+    if (!label.empty() && renderer->enableDebugUtils() /* && imageValid()*/)
+    {
+        // return vk::SetDebugUtilsObjectName(contextVk, VK_OBJECT_TYPE_IMAGE,
+        //                                    (uint64_t)(getImage().getImage().getHandle()),
+        //                                    mState.getLabel());
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ShaderVk::onLabelUpdate(const gl::Context *context)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    return updateShaderLabel(contextVk);
+}
+
 }  // namespace rx
