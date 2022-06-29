@@ -69,6 +69,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6a7f44_fb57f414",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-29T16:55:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ce2e7da_41506e50",
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5b69530_dfa91943",
@@ -82,6 +100,30 @@
       "writtenOn": "2022-06-29T01:50:13Z",
       "side": 1,
       "message": "entry? (as in \"cached _object_\")",
+      "range": {
+        "startLine": 5347,
+        "startChar": 60,
+        "endLine": 5347,
+        "endChar": 65
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c4f1808_a1d89fdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5347,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-29T16:55:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b69530_dfa91943",
       "range": {
         "startLine": 5347,
         "startChar": 60,
@@ -115,6 +157,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c20573_0f414922",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5348,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-29T16:55:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be00e652_07ff986d",
+      "range": {
+        "startLine": 5348,
+        "startChar": 17,
+        "endLine": 5348,
+        "endChar": 23
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8f01ea0_74e5dc88",
@@ -138,6 +204,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7b63d2_8a972614",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5360,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-29T16:55:59Z",
+      "side": 1,
+      "message": "Left over comment from previous code. Removed.",
+      "parentUuid": "e8f01ea0_74e5dc88",
+      "range": {
+        "startLine": 5360,
+        "startChar": 32,
+        "endLine": 5360,
+        "endChar": 48
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b513100a_c26271c1",
@@ -151,6 +241,30 @@
       "writtenOn": "2022-06-29T01:50:13Z",
       "side": 1,
       "message": "nit: `assertAllEntriesDestroyed`, it\u0027s one cache.",
+      "range": {
+        "startLine": 1581,
+        "startChar": 18,
+        "endLine": 1581,
+        "endChar": 24
+      },
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7141d91_23e597c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-29T16:55:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b513100a_c26271c1",
       "range": {
         "startLine": 1581,
         "startChar": 18,
