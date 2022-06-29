@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc033f08_3539d6de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-29T12:57:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cce5696a_caaac9f1",
+      "range": {
+        "startLine": 11,
+        "startChar": 36,
+        "endLine": 11,
+        "endChar": 45
+      },
+      "revId": "c7045e90dc1d9fb0187ec9948b58b9834a182a91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "072651d3_5980e87c",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-06-28T15:13:50Z",
       "side": 1,
       "message": "Why does this need validation, but not any of the other ones?",
+      "revId": "c7045e90dc1d9fb0187ec9948b58b9834a182a91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a4f164_1a37c9c7",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-06-29T12:57:09Z",
+      "side": 1,
+      "message": "This was not the correct way of doing it - since we query an ID from the surface, we need to access the surface variable before the surface is destroyed. I changed the code accordingly.",
+      "parentUuid": "072651d3_5980e87c",
       "revId": "c7045e90dc1d9fb0187ec9948b58b9834a182a91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
