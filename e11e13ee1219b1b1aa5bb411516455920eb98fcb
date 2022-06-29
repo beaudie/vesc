@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6d0914f_3270dbf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-06-29T14:58:55Z",
+      "side": 1,
+      "message": "LGTM after addressing Shabi\u0027s comments.  Thanks!",
+      "revId": "e11e13ee1219b1b1aa5bb411516455920eb98fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ce2e7da_41506e50",
