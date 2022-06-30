@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dfaf467_cdec13e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-06-30T00:58:12Z",
+      "side": 1,
+      "message": "Hello Antonio,\nThis is Sungyong Choi from Samsung Electronics(DS korea).\nI\u0027m porting your code related to wayland and gbm winsys.\nWhile doing this, I found that DisplayVkGbm can\u0027t access dmabuf extensions related functions.\nWould you please review this patch?\n",
+      "revId": "1c455abb625b40374c48d29891c3cb7c7466c8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
