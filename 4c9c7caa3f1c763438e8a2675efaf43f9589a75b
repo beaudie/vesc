@@ -54,6 +54,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "754499c9_f4ff56f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-06-30T15:15:25Z",
+      "side": 1,
+      "message": "A problem I have with this is that EGL_ANGLE_platform_angle_device_id is supposed to define an identifier that\u0027s specific to a single GPU. If the user has two of the same GPUs in their system, this logic will now arbitrarily pick one of them.\n\nI guess this is ok, since we are just overloading functionality and can still select based on adapter Luid. But this is now behavior that\u0027s not really captured in the extension spec.\n\nGeoff/others, what do you think?",
+      "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "53da3ce2_abb4faac",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 2
