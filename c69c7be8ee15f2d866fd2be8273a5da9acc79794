@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "778faf25_9ddc721a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-06-30T01:26:07Z",
+      "side": 1,
+      "message": "Hello Antonio,\n\nWould you please review this?\nOr, do you already have a related patch which I didn\u0027t find?\nIf so, I\u0027ll abandon this.\nI could find your last related patch was:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3596042",
+      "revId": "c69c7be8ee15f2d866fd2be8273a5da9acc79794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
