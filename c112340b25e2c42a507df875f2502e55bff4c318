@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e060e00_9bfaba90",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-06-30T01:44:15Z",
+      "side": 1,
+      "message": "Hello Antonio,\nWhen I\u0027m applying this patchset to my BSP, I encountered image layout issue because selected vulkan queue doesn\u0027t support presentation.\nAnd below change worked for me.\n    if (currentFramebuffer.valid() \u0026\u0026\n        mSwapchainPresentMode !\u003d vk::PresentMode::GbmANGLE)\nBecause GBM winsys doesn\u0027t use present engine of Vulkan, we can not re-select queue with RendererVk::selectPresentQueueForSurface().",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
