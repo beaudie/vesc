@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16bae764_be6b4a55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9161,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-30T12:16:10Z",
+      "side": 0,
+      "message": "@Shahbaz can you provide any input on this assert and if it makes sense to remove it for ASTC emulation?",
+      "parentUuid": "af33dd25_9bb8c0d6",
+      "range": {
+        "startLine": 9158,
+        "startChar": 0,
+        "endLine": 9161,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44110a77_365f078a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -61,6 +85,30 @@
       "writtenOn": "2022-06-23T17:43:28Z",
       "side": 0,
       "message": "ref",
+      "range": {
+        "startLine": 9203,
+        "startChar": 0,
+        "endLine": 9204,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed5ebc3e_87601f13",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9204,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-30T12:16:10Z",
+      "side": 0,
+      "message": "`ImageHelper::getEmulatedChannelsMask` only seems to be called by `ImageHelper::stageClearIfEmulatedFormat`, which is only called by `ImageHelper::initExternal` and `ImageHelper::init2DWeakReference`. This seems to be related to external images. I did not find any end2end test using external images in combination with compressed images, so I was not able to trigger this assertion.\n\nShould I remove this like the other assert?",
+      "parentUuid": "44110a77_365f078a",
       "range": {
         "startLine": 9203,
         "startChar": 0,

@@ -251,6 +251,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbe4eadb_04209d76",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-30T12:16:10Z",
+      "side": 1,
+      "message": "\u003e Probably adding this to the build of the ASTC lib would do:\nIndeed this has the same performance benefits as adding `-O2` and is more compiler independent. I now enable this only for `is_debug` on only the ASTC library.\n\n\u003e The binary size still affects builds of ANGLE distributed on desktop through Chrome.\n\nI now only enable the build of the library on `angle_standalone`, which won\u0027t include it in the Chromium build. The library was already disabled for WebGL, so it makes sense not to built it in these cases.\n\n\u003e Is there a way for ANGLE to share that?\n\nSwiftShader\u0027s fork of the library could be built using the SwiftShader third_party module. Unfortunately SwiftShader remove all the library API, so the entry points I am currently using won\u0027t be available and the `loadimage_astc.cpp` would need a complete rewrite.\nThe advantage of using `astc-decoder` directly is to benefit from upstream changes. The SwiftShader fork did not see updates since it landed.\nIn addition, I am disabling the part SwiftShader removed at build time anyway, through the `ASTCENC_DECOMPRESS_ONLY` define. So the binary size should not differ much.",
+      "parentUuid": "74b74a24_2b146374",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbdd75cd_99fc296c",
         "filename": "src/image_util/loadimage_astc.cpp",
         "patchSetId": 9
@@ -286,6 +310,30 @@
       "side": 1,
       "message": "I tried setting this to 24 on a 24 thread CPU and did not notice any performance benefit at all. Also looking into the process manager, it did not seem to start up more threads.\n\nAgain, looking into the library code it seems that this parameter is used for compression, being guarded behind that needs `ASTCENC_DECOMPRESS_ONLY` unset, which we have set.",
       "parentUuid": "fbdd75cd_99fc296c",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 42
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fc5c1db_ce0cbfc9",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-06-30T12:16:10Z",
+      "side": 1,
+      "message": "As this has only effects when encoding and I am adding `configs +\u003d [ \"//build/config/compiler:optimize\" ]` for debug builds to improve performance I am marking this as resolved.",
+      "parentUuid": "21b5b41d_760e5993",
       "range": {
         "startLine": 47,
         "startChar": 30,
