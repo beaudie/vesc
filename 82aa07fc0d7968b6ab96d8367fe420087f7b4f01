@@ -68,6 +68,24 @@
       "parentUuid": "d261e4da_9a92ce78",
       "revId": "82aa07fc0d7968b6ab96d8367fe420087f7b4f01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34107287_8157fd3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-06-30T22:14:08Z",
+      "side": 1,
+      "message": "Sorry I don\u0027t have CQ+2. Could you help with that? Thanks!\n\nWe do need this asap to be fully conformant. Currently I\u0027m still sync-merging angle to our tree because it\u0027s too early to do cherry-picks. I\u0027d prefer less CLs squeezes in between the desert point I\u0027ve verified locally \u003dP",
+      "parentUuid": "8aa039d8_7a3780d8",
+      "revId": "82aa07fc0d7968b6ab96d8367fe420087f7b4f01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
