@@ -40,6 +40,8 @@ constexpr size_t kStagingBufferSize = 1024 * 16;
 
 constexpr VkImageCreateFlags kVkImageCreateFlagsNone = 0;
 
+constexpr VkFilter kDefaultYCbCrChromaFilter = VK_FILTER_NEAREST;
+
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
 
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
@@ -2232,8 +2234,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                     xChromaOffset, yChromaOffset, chromaFilter, components,
                                     intendedFormatID);
     }
-
-    void updateImmutableSamplerState(const gl::SamplerState &samplerState);
 
     // Used by framebuffer and render pass functions to decide loadOps and invalidate/un-invalidate
     // render target contents.

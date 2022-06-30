@@ -4174,11 +4174,6 @@ void YcbcrConversionDesc::reset()
     mReserved           = 0;
 }
 
-void YcbcrConversionDesc::updateChromaFilter(VkFilter filter)
-{
-    SetBitField(mChromaFilter, filter);
-}
-
 void YcbcrConversionDesc::update(RendererVk *rendererVk,
                                  uint64_t externalFormat,
                                  VkSamplerYcbcrModelConversion conversionModel,
@@ -4189,6 +4184,10 @@ void YcbcrConversionDesc::update(RendererVk *rendererVk,
                                  VkComponentMapping components,
                                  angle::FormatID intendedFormatID)
 {
+    // Update chroma filter based on preferLinearFilterForYUV feature.
+    VkFilter preferredChromaFilter = rendererVk->getPreferredFilterForYUV(chromaFilter);
+    ASSERT(preferredChromaFilter == VK_FILTER_LINEAR || preferredChromaFilter == VK_FILTER_NEAREST);
+
     const vk::Format &vkFormat = rendererVk->getFormat(intendedFormatID);
     ASSERT(externalFormat != 0 || vkFormat.getIntendedFormat().isYUV);
 
@@ -4200,7 +4199,7 @@ void YcbcrConversionDesc::update(RendererVk *rendererVk,
     SetBitField(mColorRange, colorRange);
     SetBitField(mXChromaOffset, xChromaOffset);
     SetBitField(mYChromaOffset, yChromaOffset);
-    SetBitField(mChromaFilter, chromaFilter);
+    SetBitField(mChromaFilter, preferredChromaFilter);
     SetBitField(mRSwizzle, components.r);
     SetBitField(mGSwizzle, components.g);
     SetBitField(mBSwizzle, components.b);
@@ -4316,10 +4315,37 @@ void SamplerDesc::update(ContextVk *contextVk,
     mMinLod        = samplerState.getMinLod();
     mMaxLod        = samplerState.getMaxLod();
 
+    GLenum minFilter = samplerState.getMinFilter();
+    GLenum magFilter = samplerState.getMagFilter();
     if (ycbcrConversionDesc && ycbcrConversionDesc->valid())
     {
         // Update the SamplerYcbcrConversionCache key
         mYcbcrConversionDesc = *ycbcrConversionDesc;
+
+        // Reconcile chroma filter and min/mag filters.
+        //
+        // VUID-VkSamplerCreateInfo-minFilter-01645
+        // If sampler YCBCR conversion is enabled and the potential format features of the
+        // sampler YCBCR conversion do not support
+        // VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT,
+        // minFilter and magFilter must be equal to the sampler YCBCR conversions chromaFilter.
+        //
+        // For simplicity assume external formats do not support that feature bit.
+        ASSERT((mYcbcrConversionDesc.getExternalFormat() != 0) ||
+               (angle::Format::Get(intendedFormatID).isYUV));
+        const bool filtersMustMatch =
+            (mYcbcrConversionDesc.getExternalFormat() != 0) ||
+            !contextVk->getRenderer()->hasImageFormatFeatureBits(
+                intendedFormatID,
+                VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT);
+        if (filtersMustMatch)
+        {
+            GLenum glFilter = (mYcbcrConversionDesc.getChromaFilter() == VK_FILTER_LINEAR)
+                                  ? GL_LINEAR
+                                  : GL_NEAREST;
+            minFilter       = glFilter;
+            magFilter       = glFilter;
+        }
     }
 
     bool compareEnable    = samplerState.getCompareMode() == GL_COMPARE_REF_TO_TEXTURE;
@@ -4333,8 +4359,6 @@ void SamplerDesc::update(ContextVk *contextVk,
         compareOp     = VK_COMPARE_OP_ALWAYS;
     }
 
-    GLenum magFilter = samplerState.getMagFilter();
-    GLenum minFilter = samplerState.getMinFilter();
     if (featuresVk.forceNearestFiltering.enabled)
     {
         magFilter = gl::ConvertToNearestFilterMode(magFilter);
@@ -4426,16 +4450,12 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
             contextVk, mYcbcrConversionDesc, &samplerYcbcrConversionInfo.conversion));
         AddToPNextChain(&createInfo, &samplerYcbcrConversionInfo);
 
-        const VkFilter filter = contextVk->getRenderer()->getPreferredFilterForYUV();
-
         // Vulkan spec requires these settings:
         createInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
         createInfo.anisotropyEnable        = VK_FALSE;
         createInfo.unnormalizedCoordinates = VK_FALSE;
-        createInfo.magFilter               = filter;
-        createInfo.minFilter               = filter;
     }
 
     VkSamplerCustomBorderColorCreateInfoEXT customBorderColorInfo = {};
