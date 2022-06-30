@@ -85,6 +85,24 @@
       "message": "nit: ANGLE always uses { } with if.",
       "revId": "1c455abb625b40374c48d29891c3cb7c7466c8ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11cdece9_342736f5",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DisplayVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-06-30T23:28:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ed85c58_c7896549",
+      "revId": "1c455abb625b40374c48d29891c3cb7c7466c8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
