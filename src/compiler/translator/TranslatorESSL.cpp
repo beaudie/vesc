@@ -171,6 +171,11 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
                 ASSERT((compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0);
                 continue;
             }
+            else if (iter->first == TExtension::ANGLE_shader_pixel_local_storage)
+            {
+                // Don't emit anything. This extension is emulated
+                continue;
+            }
             else if (iter->first == TExtension::WEBGL_video_texture)
             {
                 // Don't emit anything. This extension is emulated

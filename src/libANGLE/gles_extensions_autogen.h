@@ -656,6 +656,9 @@ struct Extensions
     // GL_ANGLE_semaphore_fuchsia
     bool semaphoreFuchsiaANGLE = false;
 
+    // GL_ANGLE_shader_pixel_local_storage
+    bool shaderPixelLocalStorageANGLE = false;
+
     // GL_CHROMIUM_sync_query
     bool syncQueryCHROMIUM = false;
 
