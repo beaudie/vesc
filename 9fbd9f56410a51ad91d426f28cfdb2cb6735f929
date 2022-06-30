@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b67fc13_d5e333a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-30T20:45:31Z",
+      "side": 1,
+      "message": "LGTM with one nit",
+      "revId": "9fbd9f56410a51ad91d426f28cfdb2cb6735f929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a9aef73_b0ec1647",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-30T20:45:31Z",
+      "side": 1,
+      "message": "Can you refer to https://anglebug.com/4905 in the comments of https://anglebug.com/7475 and simply explain it here?  Like \"We can\u0027t import python3 only libs yet\"",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 30
+      },
+      "revId": "9fbd9f56410a51ad91d426f28cfdb2cb6735f929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
