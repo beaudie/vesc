@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c75de90_d9e0b7bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-30T21:22:36Z",
+      "side": 1,
+      "message": "LGTM, one request on the test filter.",
+      "revId": "58132157fabbadf545e311063acadd54fbea922f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d966b3cc_6b87f00f",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-06-30T21:22:36Z",
+      "side": 1,
+      "message": "Note: The trace renders correctly on Nvidia\u0027s native driver (tested on Windows).  Can you add:\n```\n\u0026\u0026 mParams-\u003eisVulkan()\n```\nto isolate this skip to ANGLE?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 12,
+        "endLine": 1224,
+        "endChar": 22
+      },
+      "revId": "58132157fabbadf545e311063acadd54fbea922f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
