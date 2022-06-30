@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "6d3cc8ae259c0ced466b8ff772d835eb78509766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f030005_5e56fb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-06-30T17:34:40Z",
+      "side": 1,
+      "message": "LGTM. Will shipping device get impacted by this?",
+      "revId": "6d3cc8ae259c0ced466b8ff772d835eb78509766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
