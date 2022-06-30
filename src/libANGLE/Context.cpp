@@ -3669,16 +3669,18 @@ Extensions Context::generateSupportedExtensions() const
     if (getClientVersion() < ES_3_1)
     {
         // Disable ES3.1+ extensions
-        supportedExtensions.geometryShaderEXT       = false;
-        supportedExtensions.geometryShaderOES       = false;
-        supportedExtensions.tessellationShaderEXT   = false;
-        supportedExtensions.gpuShader5EXT           = false;
-        supportedExtensions.primitiveBoundingBoxEXT = false;
-        supportedExtensions.shaderImageAtomicOES    = false;
-        supportedExtensions.shaderIoBlocksEXT       = false;
-        supportedExtensions.shaderIoBlocksOES       = false;
-        supportedExtensions.textureBufferEXT        = false;
-        supportedExtensions.textureBufferOES        = false;
+        supportedExtensions.geometryShaderEXT                    = false;
+        supportedExtensions.geometryShaderOES                    = false;
+        supportedExtensions.gpuShader5EXT                        = false;
+        supportedExtensions.primitiveBoundingBoxEXT              = false;
+        supportedExtensions.shaderImageAtomicOES                 = false;
+        supportedExtensions.shaderIoBlocksEXT                    = false;
+        supportedExtensions.shaderIoBlocksOES                    = false;
+        supportedExtensions.shaderPixelLocalStorageANGLE         = false;
+        supportedExtensions.shaderPixelLocalStorageCoherentANGLE = false;
+        supportedExtensions.tessellationShaderEXT                = false;
+        supportedExtensions.textureBufferEXT                     = false;
+        supportedExtensions.textureBufferOES                     = false;
 
         // TODO(http://anglebug.com/2775): Multisample arrays could be supported on ES 3.0 as well
         // once 2D multisample texture extension is exposed there.
