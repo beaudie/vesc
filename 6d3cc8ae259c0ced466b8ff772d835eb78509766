@@ -50,6 +50,24 @@
       "message": "Also adding Yuxin since she is interested in compiler.",
       "revId": "6d3cc8ae259c0ced466b8ff772d835eb78509766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "137e8231_34b569c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-06-30T20:50:43Z",
+      "side": 1,
+      "message": "\u003e Will shipping device get impacted by this?\n\nif you run these tests on an AMD 5700 with ToT it fails, so shipped devices are impacted, but in a positive way. Our product had patches that was before direct spirv so it was already doing the right thing",
+      "parentUuid": "0f030005_5e56fb10",
+      "revId": "6d3cc8ae259c0ced466b8ff772d835eb78509766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
