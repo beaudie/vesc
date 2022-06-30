@@ -1515,6 +1515,10 @@ void GenerateCaps(const FunctionsGL *functions,
         (functions->hasGLExtension("GL_ARB_robust_buffer_access_behavior") ||
          functions->hasGLESExtension("GL_KHR_robust_buffer_access_behavior"));
 
+    extensions->shaderPixelLocalStorageANGLE =
+        functions->isAtLeastGL(gl::Version(4, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
+        functions->hasGLExtension("GL_ARB_shader_image_load_store");
+
     extensions->copyTextureCHROMIUM = true;
     extensions->syncQueryCHROMIUM   = SyncQueryGL::IsSupported(functions);
 
