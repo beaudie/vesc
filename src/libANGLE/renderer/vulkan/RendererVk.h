@@ -606,10 +606,14 @@ class RendererVk : angle::NonCopyable
         return mSuballocationGarbageSizeInBytesCachedAtomic.load(std::memory_order_consume);
     }
 
-    ANGLE_INLINE VkFilter getPreferredFilterForYUV()
+    ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
     {
-        return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR
-                                                              : VK_FILTER_NEAREST;
+        // preferLinearFilterForYUV enforces linear filter while forceNearestFiltering and
+        // forceNearestMipFiltering enforces nearest filter. Enabling one precludes the other.
+        ASSERT(!getFeatures().preferLinearFilterForYUV.enabled ||
+               (!getFeatures().forceNearestFiltering.enabled &&
+                !getFeatures().forceNearestMipFiltering.enabled));
+        return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
   private:
