@@ -2748,7 +2748,13 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         (dirtyBits.test(gl::Texture::DIRTY_BIT_MIN_FILTER) ||
          dirtyBits.test(gl::Texture::DIRTY_BIT_MAG_FILTER)))
     {
-        ANGLE_TRY(refreshImageViews(contextVk));
+        const gl::SamplerState &samplerState = mState.getSamplerState();
+        ASSERT(samplerState.getMinFilter() == samplerState.getMagFilter());
+        if (mImage->updateChromaFilter(renderer, gl_vk::GetFilter(samplerState.getMinFilter())))
+        {
+            mSampler.reset();
+            ANGLE_TRY(refreshImageViews(contextVk));
+        }
     }
 
     if (localBits.none() && mSampler.valid())
@@ -3077,11 +3083,6 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk, uint32_t levelCoun
 
     // Use this as a proxy for the SRGB override & skip decode settings.
     bool createExtraSRGBViews = mRequiresMutableStorage;
-
-    if (mImage->hasImmutableSampler())
-    {
-        mImage->updateImmutableSamplerState(mState.getSamplerState());
-    }
 
     ANGLE_TRY(getImageViews().initReadViews(contextVk, mState.getType(), *mImage, formatSwizzle,
                                             readSwizzle, baseLevelVk, levelCount, baseLayer,
