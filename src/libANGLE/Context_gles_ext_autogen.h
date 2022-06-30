@@ -562,6 +562,7 @@
     /* GL_ANGLE_semaphore_fuchsia */                                                               \
     void importSemaphoreZirconHandle(SemaphoreID semaphorePacked, HandleType handleTypePacked,     \
                                      GLuint handle);                                               \
+    /* GL_ANGLE_shader_pixel_local_storage */                                                      \
     /* GL_ANGLE_texture_compression_dxt3 */                                                        \
     /* GL_ANGLE_texture_compression_dxt5 */                                                        \
     /* GL_ANGLE_texture_external_update */                                                         \
