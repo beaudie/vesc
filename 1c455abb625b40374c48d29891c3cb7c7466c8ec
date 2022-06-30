@@ -33,6 +33,24 @@
       "message": "Hello Antonio,\nThis is Sungyong Choi from Samsung Electronics(DS korea).\nI\u0027m porting your code related to wayland and gbm winsys.\nWhile doing this, I found that DisplayVkGbm can\u0027t access dmabuf extensions related functions.\nWould you please review this patch?",
       "revId": "1c455abb625b40374c48d29891c3cb7c7466c8ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1470e3_0f6c7490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-06-30T10:41:33Z",
+      "side": 1,
+      "message": "Hi Sungyong,\nWith this change all kinds of displays under `renderer/vulkan/linux` will be able to access dmabuf extensions.\nIt makes totally sense to me!",
+      "parentUuid": "74da79f5_c6fed1fc",
+      "revId": "1c455abb625b40374c48d29891c3cb7c7466c8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
