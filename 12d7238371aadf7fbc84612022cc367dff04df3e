@@ -16,6 +16,24 @@
       "message": "Constantine, it looks like the `win-trace` failure is real.  I was able to repro with the following:\n\n```\nvpython3 src/tests/capture_replay_tests.py --gtest_filter\u003dMultisampleTest.AlphaToSampleCoverage/ES2_Vulkan_SwiftShader\n```\n\nand got the following output:\n\n```\n! Assert failed in readPixelsImpl (../../../src/libANGLE/renderer/vulkan/vk_helpers.cpp:8862): copyAspectFlags \u003d\u003d VK_IMAGE_ASPECT_COLOR_BIT\n```\n\nCan you take a look at that?  I would guess something needs to change in `SerializeFramebufferAttachment`.\n\n+Gert for any more insight.",
       "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7820f166_b5fc3d08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-07-01T16:40:50Z",
+      "side": 1,
+      "message": "The issue boils down to the fact that in this test we\u0027re trying to serialize a multisampled depth/stencil attachment. Vulkan readpixels currently can only read multisampled color attachments, but not depth or stencil, so that\u0027s the reason it fails. I guess we should add a fail expectation for MultisampleTest*Vulkan* and create a tracking issue for multisampled depth/stencil vulkan readpixels?",
+      "parentUuid": "271e4548_e6472fd4",
+      "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
