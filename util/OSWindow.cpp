@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 #include "common/debug.h"
 #include "common/system_utils.h"
