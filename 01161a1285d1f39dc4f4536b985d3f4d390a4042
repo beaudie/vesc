@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38637372_3fb1afe3",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-01T22:13:01Z",
+      "side": 1,
+      "message": "Remove this because OpName is optional, but OpDecorate is mandatory if we are using gl_sampleID.",
+      "revId": "01161a1285d1f39dc4f4536b985d3f4d390a4042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fec26dd2_a75caa67",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-01T22:13:01Z",
+      "side": 1,
+      "message": "Just add OpLoad to load sampleID again before we use it for OpImageRead",
+      "revId": "01161a1285d1f39dc4f4536b985d3f4d390a4042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3264426b_bded10cf",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2840,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-01T22:13:01Z",
+      "side": 1,
+      "message": "No need to check this one now, because we do not add multismple in translator now.",
+      "revId": "01161a1285d1f39dc4f4536b985d3f4d390a4042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
