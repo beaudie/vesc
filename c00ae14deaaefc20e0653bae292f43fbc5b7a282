@@ -16,6 +16,23 @@
       "message": "Fixes EXT_color_buffer_half_float WebGL CTS on macOS OpenGL.",
       "revId": "c00ae14deaaefc20e0653bae292f43fbc5b7a282",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92eb9111_5012a0c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-01T00:07:28Z",
+      "side": 1,
+      "message": "lgtm. +2\u0027ing since this seems straightforward.\n\nIs this covered by existing tests as described in anglebug.com/5038 ?\n",
+      "revId": "c00ae14deaaefc20e0653bae292f43fbc5b7a282",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
