@@ -175,6 +175,9 @@ config("internal_config") {
     if (angle_use_wayland) {
       defines += [ "ANGLE_USE_WAYLAND" ]
     }
+    if (angle_use_gbm) {
+      defines += [ "ANGLE_USE_GBM" ]
+    }
 
     if (angle_vulkan_display_mode == "simple") {
       defines += [ "ANGLE_VULKAN_DISPLAY_MODE_SIMPLE" ]
@@ -854,6 +857,10 @@ config("libANGLE_config") {
 
   if (angle_use_wayland) {
     defines += [ "ANGLE_USE_WAYLAND" ]
+  }
+
+  if (angle_use_gbm) {
+    defines += [ "ANGLE_USE_GBM" ]
   }
 
   if (angle_enable_overlay) {
