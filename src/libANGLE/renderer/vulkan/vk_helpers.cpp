@@ -3008,6 +3008,8 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     VmaVirtualAllocation allocation;
     VkDeviceSize offset;
     VkDeviceSize alignedSize = roundUp(sizeInBytes, alignment);
+    bool extraBufferLoggingAndChecking =
+        context->getRenderer()->getFeatures().extraBufferLoggingAndChecking.enabled;
 
     if (alignedSize >= kMaxBufferSizeForSuballocation)
     {
@@ -3039,6 +3041,14 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         VkDeviceSize sizeOut;
         ANGLE_TRY(AllocateBufferMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut,
                                        nullptr, &buffer.get(), &deviceMemory.get(), &sizeOut));
+        // Explicitly check the ASSERT on Android-Swiftshader
+        if (extraBufferLoggingAndChecking && !(sizeOut >= alignedSize))
+        {
+            ALOGE(
+                "BufferPool::allocateBuffer(): ASSERT FAILED: \"sizeOut >= alignedSize\""
+                " with sizeOut = %" PRIu64 " and alignSize = %" PRIu64,
+                sizeOut, alignedSize);
+        }
         ASSERT(sizeOut >= alignedSize);
 
         suballocation->initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
@@ -3064,10 +3074,25 @@ angle::Result BufferPool::allocateBuffer(Context *context,
             continue;
         }
 
+        if (extraBufferLoggingAndChecking)
+        {
+            ALOGI("BufferPool::allocateBuffer(): about to call block->allocate(alignedSize(%" PRIu64
+                  "), alignment(%" PRIu64 "), ...)",
+                  alignedSize, alignment);
+        }
         if (block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS)
         {
+            if (extraBufferLoggingAndChecking)
+            {
+                ALOGI("BufferPool::allocateBuffer():\t block->allocate() success: offset=%" PRIu64,
+                      offset);
+            }
             suballocation->init(context->getDevice(), block.get(), allocation, offset, alignedSize);
             return angle::Result::Continue;
+        }
+        if (extraBufferLoggingAndChecking)
+        {
+            ALOGI("BufferPool::allocateBuffer():\t block->allocate() DID NOT return VK_SUCCESS");
         }
         ++iter;
     }

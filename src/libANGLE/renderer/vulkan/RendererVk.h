@@ -35,6 +35,13 @@
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <android/log.h>
+#    include <unistd.h>
+#    define ALOGE(...) __android_log_print(ANDROID_LOG_ERROR, "ANGLEDbg", __VA_ARGS__)
+#    define ALOGI(...) __android_log_print(ANDROID_LOG_INFO, "ANGLEDbg", __VA_ARGS__)
+#endif
+
 namespace angle
 {
 class Library;
