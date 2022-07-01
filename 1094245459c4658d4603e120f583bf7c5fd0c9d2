@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ace5c087_5a3830c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-01T00:09:50Z",
+      "side": 1,
+      "message": "From a quick glance LGTM.  Will start CQ run, and let Shabi take a look.",
+      "revId": "1094245459c4658d4603e120f583bf7c5fd0c9d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
