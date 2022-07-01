@@ -34,6 +34,24 @@
       "parentUuid": "271e4548_e6472fd4",
       "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d109619_340666ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-01T20:41:11Z",
+      "side": 1,
+      "message": "The extension states:\n```\n    3. Should this extension add reading of coverage samples?\n\n      No.  That should be left to the EGL_NV_coverage_sample\n       specification.\n```\nSo adding a skip and a tracking issue SGTM.",
+      "parentUuid": "7820f166_b5fc3d08",
+      "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
