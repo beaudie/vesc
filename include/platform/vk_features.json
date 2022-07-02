@@ -901,6 +901,14 @@
             "description": [
                 "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion"
             ]
+        },
+        {
+            "name": "map_unspecified_color_space_to_pass_through",
+            "category": "Features",
+            "description": [
+                "Use VK_COLOR_SPACE_PASS_THROUGH_EXT for EGL_NONE or unspecifed color ",
+                "spaces"
+            ]
         }
     ]
 }

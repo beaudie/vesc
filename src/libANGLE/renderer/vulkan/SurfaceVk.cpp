@@ -173,11 +173,17 @@ angle::Result InitImageHelper(DisplayVk *displayVk,
     return angle::Result::Continue;
 }
 
-VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace)
+VkColorSpaceKHR MapEglColorSpaceToVkColorSpace(EGLenum EGLColorspace,
+                                               const angle::FeaturesVk &features)
 {
     switch (EGLColorspace)
     {
         case EGL_NONE:
+            if (features.mapUnspecifiedColorSpaceToPassThrough.enabled)
+            {
+                return VK_COLOR_SPACE_PASS_THROUGH_EXT;
+            }
+            return VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         case EGL_GL_COLORSPACE_LINEAR:
         case EGL_GL_COLORSPACE_SRGB_KHR:
         case EGL_GL_COLORSPACE_DISPLAY_P3_PASSTHROUGH_EXT:
@@ -1058,7 +1064,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     bool surfaceFormatSupported = false;
     VkColorSpaceKHR colorSpace  = MapEglColorSpaceToVkColorSpace(
-         static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)),
+        renderer->getFeatures());
 
     if (renderer->getFeatures().supportsSurfaceCapabilities2Extension.enabled)
     {
@@ -1341,7 +1348,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.minImageCount   = mMinImageCount;
     swapchainInfo.imageFormat     = vk::GetVkFormatFromFormatID(actualFormatID);
     swapchainInfo.imageColorSpace = MapEglColorSpaceToVkColorSpace(
-        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
+        static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)),
+        renderer->getFeatures());
     // Note: Vulkan doesn't allow 0-width/height swapchains.
     swapchainInfo.imageExtent.width     = std::max(rotatedExtents.width, 1);
     swapchainInfo.imageExtent.height    = std::max(rotatedExtents.height, 1);

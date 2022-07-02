@@ -671,6 +671,14 @@ struct FeaturesVk : FeatureSetBase
         "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion",
         &members,
     };
+
+    FeatureInfo mapUnspecifiedColorSpaceToPassThrough = {
+        "mapUnspecifiedColorSpaceToPassThrough",
+        FeatureCategory::VulkanFeatures,
+        "Use VK_COLOR_SPACE_PASS_THROUGH_EXT for EGL_NONE or unspecifed color "
+        "spaces",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
