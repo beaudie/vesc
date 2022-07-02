@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94369cfa_de1dda81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-02T05:44:05Z",
+      "side": 1,
+      "message": "Fixes unreachable assertion when calling copyTexImage2D on a floating-point buffer. Makes EXT_color_buffer_half_float pass on D3D9.",
+      "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
