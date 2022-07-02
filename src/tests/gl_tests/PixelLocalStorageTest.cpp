@@ -755,7 +755,7 @@ class PixelLocalStorageTest : public ANGLETest<>
             constexpr static const char *kFS =
                 R"(#version 310 es
                 precision highp float;
-                uniform highp sampler2D tex;  // FIXME! layout(binding=0) causes an ANGLE crash!
+                layout(binding=0) uniform highp sampler2D tex;
                 in vec2 texcoord;
                 out vec4 fragcolor;
                 void main()
@@ -765,8 +765,6 @@ class PixelLocalStorageTest : public ANGLETest<>
 
             mRenderTextureProgram.makeRaster(kVS, kFS);
             ASSERT_TRUE(mRenderTextureProgram.valid());
-            glUseProgram(mRenderTextureProgram);
-            glUniform1i(glGetUniformLocation(mRenderTextureProgram, "tex"), 0);
         }
 
         glUseProgram(mRenderTextureProgram);
