@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c679bf3_9e5c2cf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-03T14:44:32Z",
+      "side": 1,
+      "message": "Fixes deqp/functional/gles3/internalformatquery.html",
+      "revId": "ed631f991931b89ebb02e9407dd66dccf98c2de6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
