@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9dd8dfd_7e2a34d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-04T16:26:41Z",
+      "side": 1,
+      "message": "These skips are also ignored on M1. See the linked issue for more details.",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
