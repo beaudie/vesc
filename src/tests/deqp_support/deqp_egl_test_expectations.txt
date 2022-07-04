@@ -232,8 +232,6 @@
 6485 MAC METAL : dEQP-EGL.functional.image.render_multiple_contexts.gles2_renderbuffer* = FAIL
 6485 MAC METAL : dEQP-EGL.functional.image.render_multiple_contexts.gles2_texture* = FAIL
 
-6485 MAC METAL : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_depth_no_stencil = FAIL
-6485 MAC METAL : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_no_depth_stencil = FAIL
 6485 MAC METAL : dEQP-EGL.functional.render.multi_context.gles2.rgba8888_pbuffer = FAIL
 6485 MAC METAL : dEQP-EGL.functional.render.multi_context.gles2_gles3.rgba8888_pbuffer = FAIL
 6485 MAC METAL : dEQP-EGL.functional.render.multi_context.gles3.rgba8888_pbuffer = FAIL

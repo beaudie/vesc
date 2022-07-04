@@ -537,8 +537,6 @@ egl::ConfigSet DisplayMtl::generateConfigs()
     config.bindToTextureRGB  = EGL_FALSE;
     config.bindToTextureRGBA = EGL_TRUE;
 
-    config.surfaceType = EGL_WINDOW_BIT | EGL_PBUFFER_BIT;
-
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
     config.minSwapInterval = 0;
     config.maxSwapInterval = 1;
@@ -548,7 +546,6 @@ egl::ConfigSet DisplayMtl::generateConfigs()
 #endif
 
     config.renderTargetFormat = GL_RGBA8;
-    config.depthStencilFormat = GL_DEPTH24_STENCIL8;
 
     config.conformant     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
     config.renderableType = config.conformant;
@@ -557,42 +554,65 @@ egl::ConfigSet DisplayMtl::generateConfigs()
 
     config.colorComponentType = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
 
-    constexpr int samplesSupported[] = {0, 4};
+    auto generateConfigsForSurfaceTypeFunc = [&configs](EGLint surfaceType,
+                                                        const egl::Config &configTemplate) {
+        egl::Config config = configTemplate;
 
-    for (int samples : samplesSupported)
-    {
-        config.samples       = samples;
-        config.sampleBuffers = (samples == 0) ? 0 : 1;
+        config.surfaceType = surfaceType;
 
-        // Buffer sizes
-        config.redSize    = 8;
-        config.greenSize  = 8;
-        config.blueSize   = 8;
-        config.alphaSize  = 8;
-        config.bufferSize = config.redSize + config.greenSize + config.blueSize + config.alphaSize;
+        constexpr int samplesSupported[] = {0, 4};
 
-        // With DS
-        config.depthSize   = 24;
-        config.stencilSize = 8;
+        for (int samples : samplesSupported)
+        {
+            config.samples       = samples;
+            config.sampleBuffers = (samples == 0) ? 0 : 1;
 
-        configs.add(config);
+            // Buffer sizes
+            config.redSize   = 8;
+            config.greenSize = 8;
+            config.blueSize  = 8;
+            config.alphaSize = 8;
+            config.bufferSize =
+                config.redSize + config.greenSize + config.blueSize + config.alphaSize;
 
-        // With D
-        config.depthSize   = 24;
-        config.stencilSize = 0;
-        configs.add(config);
+            // With DS
+            config.depthSize          = 24;
+            config.stencilSize        = 8;
+            config.depthStencilFormat = GL_DEPTH24_STENCIL8;
 
-        // With S
-        config.depthSize   = 0;
-        config.stencilSize = 8;
-        configs.add(config);
+            configs.add(config);
 
-        // Tests like dEQP-GLES2.functional.depth_range.* assume EGL_DEPTH_SIZE is properly set even
-        // if renderConfig attributes are set to glu::RenderConfig::DONT_CARE
-        config.depthSize   = GetDepthSize(config.depthStencilFormat);
-        config.stencilSize = GetStencilSize(config.depthStencilFormat);
-        configs.add(config);
-    }
+            // With D
+            config.depthSize          = 24;
+            config.stencilSize        = 0;
+            config.depthStencilFormat = GL_DEPTH_COMPONENT24;
+            configs.add(config);
+
+            // With S
+            config.depthSize          = 0;
+            config.stencilSize        = 8;
+            config.depthStencilFormat = GL_STENCIL_INDEX8;
+            configs.add(config);
+
+            // No DS
+            config.depthSize          = 0;
+            config.stencilSize        = 0;
+            config.depthStencilFormat = GL_NONE;
+            configs.add(config);
+
+            // Tests like dEQP-GLES2.functional.depth_range.* assume EGL_DEPTH_SIZE is properly
+            // set even if renderConfig attributes are set to glu::RenderConfig::DONT_CARE
+            config.depthSize   = GetDepthSize(config.depthStencilFormat);
+            config.stencilSize = GetStencilSize(config.depthStencilFormat);
+            configs.add(config);
+        }
+    };  // generateConfigsForSurfaceTypeFunc
+
+    generateConfigsForSurfaceTypeFunc(EGL_WINDOW_BIT, config);
+    // dEQP-EGL.functional.query_surface.simple.pbuffer.* requires that
+    // for pbuffer with swap behavior=EGL_BUFFER_PRESERVED (See SurfaceMtl::getSwapBehavior()),
+    // surfaceType must contain EGL_SWAP_BEHAVIOR_PRESERVED_BIT
+    generateConfigsForSurfaceTypeFunc(EGL_PBUFFER_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT, config);
 
     return configs;
 }

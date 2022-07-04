@@ -708,6 +708,16 @@ void OffscreenSurfaceMtl::destroy(const egl::Display *display)
     SurfaceMtl::destroy(display);
 }
 
+EGLint OffscreenSurfaceMtl::getWidth() const
+{
+    return mSize.width;
+}
+
+EGLint OffscreenSurfaceMtl::getHeight() const
+{
+    return mSize.height;
+}
+
 egl::Error OffscreenSurfaceMtl::swap(const gl::Context *context)
 {
     // Check for surface resize.
