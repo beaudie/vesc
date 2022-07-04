@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6b1f2a23_93261bb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-04T21:51:29Z",
+      "side": 1,
+      "message": "need to update expectations file once i have confirmation from shabi",
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fbe2db10_4d082ab0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
