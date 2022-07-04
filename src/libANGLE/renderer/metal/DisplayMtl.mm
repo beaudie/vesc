@@ -587,6 +587,11 @@ egl::ConfigSet DisplayMtl::generateConfigs()
         config.stencilSize = 8;
         configs.add(config);
 
+        // Without DS
+        config.depthSize   = 0;
+        config.stencilSize = 0;
+        configs.add(config);
+
         // Tests like dEQP-GLES2.functional.depth_range.* assume EGL_DEPTH_SIZE is properly set even
         // if renderConfig attributes are set to glu::RenderConfig::DONT_CARE
         config.depthSize   = GetDepthSize(config.depthStencilFormat);

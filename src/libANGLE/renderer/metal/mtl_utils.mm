@@ -160,16 +160,16 @@ void StartFrameCapture(id<MTLDevice> metalDevice, id<MTLCommandQueue> metalCmdQu
     else
 #    endif  // __MAC_10_15
         if (ANGLE_APPLE_AVAILABLE_XCI(10.15, 13.0, 13))
-    {
-        auto captureDescriptor = mtl::adoptObjCObj([[MTLCaptureDescriptor alloc] init]);
-        captureDescriptor.get().captureObject = metalDevice;
-
-        NSError *error;
-        if (![captureManager startCaptureWithDescriptor:captureDescriptor.get() error:&error])
         {
-            NSLog(@"Failed to start capture, error %@", error);
+            auto captureDescriptor = mtl::adoptObjCObj([[MTLCaptureDescriptor alloc] init]);
+            captureDescriptor.get().captureObject = metalDevice;
+
+            NSError *error;
+            if (![captureManager startCaptureWithDescriptor:captureDescriptor.get() error:&error])
+            {
+                NSLog(@"Failed to start capture, error %@", error);
+            }
         }
-    }
 #endif  // ANGLE_METAL_FRAME_CAPTURE_ENABLED
 }
 
@@ -344,7 +344,7 @@ static angle::Result InitializeCompressedTextureContents(const gl::Context *cont
     return angle::Result::Continue;
 }
 
-}
+}  // namespace
 
 angle::Result InitializeTextureContents(const gl::Context *context,
                                         const TextureRef &texture,
@@ -1206,7 +1206,12 @@ size_t EstimateTextureSizeInBytes(const mtl::Format &mtlFormat,
     }
     else
     {
-        textureSizeInBytes = mtlFormat.getCaps().pixelBytes * width * height * depth * sampleCount;
+        size_t pixelBytes = mtlFormat.getCaps().pixelBytes;
+        if (!pixelBytes)
+        {
+            pixelBytes = mtlFormat.actualAngleFormat().pixelBytes;
+        }
+        textureSizeInBytes = pixelBytes * width * height * depth * sampleCount;
     }
     if (numMips > 1)
     {

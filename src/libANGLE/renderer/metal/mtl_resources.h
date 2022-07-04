@@ -44,10 +44,12 @@ using TextureWeakRef = std::weak_ptr<Texture>;
 using BufferRef      = std::shared_ptr<Buffer>;
 using BufferWeakRef  = std::weak_ptr<Buffer>;
 
+class ResourceMemUsageReporter;
+
 class Resource : angle::NonCopyable
 {
   public:
-    virtual ~Resource() {}
+    virtual ~Resource();
 
     // Check whether the resource still being used by GPU including the pending (uncommitted)
     // command buffer.
@@ -75,9 +77,10 @@ class Resource : angle::NonCopyable
     virtual id getID() const                 = 0;
 
   protected:
-    Resource();
+    Resource() = delete;
+    Resource(ResourceMemUsageReporter *memUsageReporter);
     // Share the GPU usage ref with other resource
-    Resource(Resource *other);
+    Resource(ResourceMemUsageReporter *memUsageReporter, Resource *other);
 
     void reset();
 
@@ -106,6 +109,8 @@ class Resource : angle::NonCopyable
     // is being used by a command buffer, it means the other object is being used also. In this
     // case, the two objects must share the same UsageRef property.
     std::shared_ptr<UsageRef> mUsageRef;
+
+    ResourceMemUsageReporter *mResourceMemUsageReporter;
 };
 
 class Texture final : public Resource,
