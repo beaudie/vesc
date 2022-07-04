@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c0903eef_d8acbca9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-04T20:23:47Z",
+      "side": 0,
+      "message": "The ASSERT and this function were written based on the assumption that block formats (ASTC, ETC, etc) are never emulated. That assumption is broken with this change, so both the ASSERT and the implementation need to be updated. The code you added below works, but is not being very clear about its logic (it\u0027s that block formats don\u0027t have red bits, but it\u0027s kind of indirect).\n\nHow about adding something like this above the `ASSERT` instead?\n\n```\n// Block formats may be decoded and emulated with a non-block format.\nif (angleFmt.isBlock \u0026\u0026 !textureFmt.isBlock)\n{\n    return true;\n}\n```\n\nThe you can leave the rest of the function as it was.",
+      "parentUuid": "16bae764_be6b4a55",
+      "range": {
+        "startLine": 9158,
+        "startChar": 0,
+        "endLine": 9161,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44110a77_365f078a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -109,6 +133,30 @@
       "side": 0,
       "message": "`ImageHelper::getEmulatedChannelsMask` only seems to be called by `ImageHelper::stageClearIfEmulatedFormat`, which is only called by `ImageHelper::initExternal` and `ImageHelper::init2DWeakReference`. This seems to be related to external images. I did not find any end2end test using external images in combination with compressed images, so I was not able to trigger this assertion.\n\nShould I remove this like the other assert?",
       "parentUuid": "44110a77_365f078a",
+      "range": {
+        "startLine": 9203,
+        "startChar": 0,
+        "endLine": 9204,
+        "endChar": 38
+      },
+      "revId": "6c8bb1f31ed456f35abd2473d1f782af9930b18e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ebd77ad_7a339415",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 9204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-04T20:23:47Z",
+      "side": 0,
+      "message": "Similarly, please special case block images:\n\n```\nif (angleFmt.isBlock \u0026\u0026 !textureFmt.isBlock)\n   ...\n```\n\nThe logic inside the if could be as simple as `return 0` if the block formats are always emulated with a format that has the same channels. Otherwise there might need to be a switch-case that determines which channels were expected to be there, and which are actually there in the emulation.\n\nThis also depends on the decoder, if some RGB block format is decoded to RGBA with the A field initialized appropriately, there\u0027s nothing to do so `return 0` would still be approprate.\n\nBear in mind that `ImageHelper::stageClearIfEmulatedFormat` would then need to early out in case of `clearOnlyEmulatedChannels \u0026\u0026 colorMaskFlags \u003d\u003d 0`.",
+      "parentUuid": "ed5ebc3e_87601f13",
       "range": {
         "startLine": 9203,
         "startChar": 0,
