@@ -177,6 +177,7 @@ libangle_gpu_info_util_ios_sources = [
 libangle_includes = [
   "include/angle_gl.h",
   "include/export.h",
+  "include/angle_mem_stats.h",
   "include/EGL/egl.h",
   "include/EGL/eglext.h",
   "include/EGL/eglext_angle.h",
@@ -206,6 +207,7 @@ libangle_includes = [
 ]
 
 libangle_headers = [
+  "src/libANGLE/MemoryUsageStats.h",
   "src/libANGLE/AttributeMap.h",
   "src/libANGLE/BinaryStream.h",
   "src/libANGLE/BlobCache.h",
@@ -376,6 +378,7 @@ libangle_sources = [
   "src/libANGLE/LoggingAnnotator.cpp",
   "src/libANGLE/MemoryObject.cpp",
   "src/libANGLE/MemoryProgramCache.cpp",
+  "src/libANGLE/MemoryUsageStats.cpp",
   "src/libANGLE/Observer.cpp",
   "src/libANGLE/Overlay.cpp",
   "src/libANGLE/OverlayWidgets.cpp",

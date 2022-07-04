@@ -9,6 +9,8 @@
 
 #include "libANGLE/ResourceManager.h"
 
+#include <sstream>
+
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Fence.h"
@@ -106,7 +108,24 @@ template class TypedResourceManager<Framebuffer, FramebufferManager, Framebuffer
 template class TypedResourceManager<ProgramPipeline, ProgramPipelineManager, ProgramPipelineID>;
 
 // BufferManager Implementation.
-BufferManager::~BufferManager() = default;
+BufferManager::BufferManager()
+{
+    MemoryUsageStats::GetInstance()->registerMemoryUsageReporter("angle/buffers", this);
+}
+BufferManager::~BufferManager()
+{
+    MemoryUsageStats::GetInstance()->unregisterMemoryUsageReporter("angle/buffers", this);
+}
+
+size_t BufferManager::getTotalMemorySize()
+{
+    size_t totalBytes = 0;
+    for (const std::pair<GLuint, Buffer *> &buffer : *this)
+    {
+        totalBytes += static_cast<size_t>(buffer.second->getSize());
+    }
+    return totalBytes;
+}
 
 // static
 Buffer *BufferManager::AllocateNewObject(rx::GLImplFactory *factory, BufferID handle)
@@ -213,7 +232,55 @@ void ShaderProgramManager::deleteObject(const Context *context,
 
 // TextureManager Implementation.
 
-TextureManager::~TextureManager() = default;
+TextureManager::TextureManager()
+{
+    MemoryUsageStats::GetInstance()->registerMemoryUsageReporter("angle/textures", this);
+}
+TextureManager::~TextureManager()
+{
+    MemoryUsageStats::GetInstance()->unregisterMemoryUsageReporter("angle/textures", this);
+}
+
+size_t TextureManager::getTotalMemorySize()
+{
+    size_t totalBytes = 0;
+    for (const std::pair<GLuint, Texture *> &texture : *this)
+    {
+        totalBytes += static_cast<size_t>(texture.second->getMemorySize());
+    }
+    return totalBytes;
+}
+
+void TextureManager::dumpMemory(MemoryCategoryVisitFunc callback)
+{
+    for (const std::pair<GLuint, Texture *> &texture : *this)
+    {
+        std::ostringstream ss;
+        ss << "angle/textures/";
+        if (texture.second->getBoundSurface() || texture.second->isEGLImageTarget())
+        {
+            // assume external texture
+            ss << "external/";
+        }
+        else
+        {
+            ss << "normal/";
+        }
+        ss << texture.second;
+
+        std::map<std::string, size_t> extraProps;
+        extraProps["id"] = texture.second->getId();
+        if (texture.second->isMipmapComplete())
+        {
+            const gl::ImageDesc &desc         = texture.second->getState().getLevelZeroDesc();
+            extraProps["width"]               = desc.size.width;
+            extraProps["height"]              = desc.size.height;
+            extraProps["depth"]               = desc.size.depth;
+            extraProps["sizedInternalFormat"] = desc.format.info->sizedInternalFormat;
+        }
+        callback(ss.str(), static_cast<size_t>(texture.second->getMemorySize()), extraProps);
+    }
+}
 
 // static
 Texture *TextureManager::AllocateNewObject(rx::GLImplFactory *factory,
@@ -256,7 +323,39 @@ void TextureManager::enableHandleAllocatorLogging()
 
 // RenderbufferManager Implementation.
 
-RenderbufferManager::~RenderbufferManager() = default;
+RenderbufferManager::RenderbufferManager()
+{
+    MemoryUsageStats::GetInstance()->registerMemoryUsageReporter("angle/renderbuffers", this);
+}
+RenderbufferManager::~RenderbufferManager()
+{
+    MemoryUsageStats::GetInstance()->unregisterMemoryUsageReporter("angle/renderbuffers", this);
+}
+
+size_t RenderbufferManager::getTotalMemorySize()
+{
+    size_t totalBytes = 0;
+    for (const std::pair<GLuint, Renderbuffer *> &rb : *this)
+    {
+        totalBytes += static_cast<size_t>(rb.second->getMemorySize());
+    }
+    return totalBytes;
+}
+
+void RenderbufferManager::dumpMemory(MemoryCategoryVisitFunc callback)
+{
+    for (const std::pair<GLuint, Renderbuffer *> &rb : *this)
+    {
+        std::ostringstream ss;
+        ss << "angle/renderbuffers/" << rb.second;
+        std::map<std::string, size_t> extraProps;
+        extraProps["id"]                  = rb.second->getId();
+        extraProps["width"]               = rb.second->getWidth();
+        extraProps["height"]              = rb.second->getHeight();
+        extraProps["sizedInternalFormat"] = rb.second->getFormat().info->sizedInternalFormat;
+        callback(ss.str(), static_cast<size_t>(rb.second->getMemorySize()), extraProps);
+    }
+}
 
 // static
 Renderbuffer *RenderbufferManager::AllocateNewObject(rx::GLImplFactory *factory,
