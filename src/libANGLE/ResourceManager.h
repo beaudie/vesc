@@ -14,6 +14,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/HandleAllocator.h"
+#include "libANGLE/MemoryUsageStats.h"
 #include "libANGLE/ResourceMap.h"
 
 namespace rx
@@ -126,11 +127,17 @@ class TypedResourceManager : public ResourceManagerBase
     }
 };
 
-class BufferManager : public TypedResourceManager<Buffer, BufferManager, BufferID>
+class BufferManager : public TypedResourceManager<Buffer, BufferManager, BufferID>,
+                      public MemoryUsageReporter
 {
   public:
+    BufferManager();
+
     BufferID createBuffer();
     Buffer *getBuffer(BufferID handle) const;
+
+    // MemoryUsageReporter implementation
+    size_t getTotalMemorySize() override;
 
     ANGLE_INLINE Buffer *checkBufferAllocation(rx::GLImplFactory *factory, BufferID handle)
     {
@@ -186,9 +193,15 @@ class ShaderProgramManager : public ResourceManagerBase
     ResourceMap<Program, ShaderProgramID> mPrograms;
 };
 
-class TextureManager : public TypedResourceManager<Texture, TextureManager, TextureID>
+class TextureManager : public TypedResourceManager<Texture, TextureManager, TextureID>,
+                       public MemoryUsageReporter
 {
   public:
+    TextureManager();
+    // MemoryUsageReporter implementation
+    size_t getTotalMemorySize() override;
+    void dumpMemory(MemoryCategoryVisitFunc callback) override;
+
     TextureID createTexture();
     ANGLE_INLINE Texture *getTexture(TextureID handle) const
     {
@@ -217,9 +230,15 @@ class TextureManager : public TypedResourceManager<Texture, TextureManager, Text
 };
 
 class RenderbufferManager
-    : public TypedResourceManager<Renderbuffer, RenderbufferManager, RenderbufferID>
+    : public TypedResourceManager<Renderbuffer, RenderbufferManager, RenderbufferID>,
+      public MemoryUsageReporter
 {
   public:
+    RenderbufferManager();
+    // MemoryUsageReporter implementation
+    size_t getTotalMemorySize() override;
+    void dumpMemory(MemoryCategoryVisitFunc callback) override;
+
     RenderbufferID createRenderbuffer();
     Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
 

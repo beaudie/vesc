@@ -12,8 +12,10 @@
 #include <TargetConditionals.h>
 
 #include <algorithm>
+#include <set>
 
 #include "common/debug.h"
+#include "libANGLE/MemoryUsageStats.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
@@ -27,6 +29,7 @@ namespace mtl
 {
 namespace
 {
+
 inline NSUInteger GetMipSize(NSUInteger baseSize, const MipmapNativeLevel level)
 {
     return std::max<NSUInteger>(1, baseSize >> level.get());
@@ -64,14 +67,145 @@ void EnsureCPUMemWillBeSynced(ContextMtl *context, T *resource)
     resource->resetCPUReadMemNeedSync();
 }
 
+std::string GetTextureTag(Texture *tex)
+{
+    std::ostringstream ss;
+    ss << "angleMtl/mtl/textures/";
+    if (tex->hasIOSurface())
+    {
+        ss << "iosurface/";
+    }
+    else
+    {
+        ss << "normal/";
+    }
+    ss << tex;
+
+    return ss.str();
+}
+
 }  // namespace
+
+class ResourceMemUsageReporter : public gl::MemoryUsageReporter
+{
+  public:
+    static ResourceMemUsageReporter *GetInstanceForTextures();
+    static ResourceMemUsageReporter *GetInstanceForBuffers();
+
+    void addResource(Resource *res);
+    void deleteResource(Resource *res);
+
+    size_t getTotalMemorySize() override;
+    void dumpMemory(gl::MemoryCategoryVisitFunc callback) override;
+
+  private:
+    ResourceMemUsageReporter(bool isForTextures) : mResourcesAreTexture(isForTextures) {}
+    ~ResourceMemUsageReporter() override = default;
+
+    std::set<Resource *> mResources;
+    const bool mResourcesAreTexture;
+};
+
+ResourceMemUsageReporter *ResourceMemUsageReporter::GetInstanceForTextures()
+{
+    static ResourceMemUsageReporter *instance = nullptr;
+
+    if (!instance)
+    {
+        instance = new ResourceMemUsageReporter(true);
+
+        gl::MemoryUsageStats::GetBackendInstance()->registerMemoryUsageReporter(
+            "angleMtl/mtl/textures", instance);
+    }
+    return instance;
+}
+
+ResourceMemUsageReporter *ResourceMemUsageReporter::GetInstanceForBuffers()
+{
+    static ResourceMemUsageReporter *instance = nullptr;
+
+    if (!instance)
+    {
+        instance = new ResourceMemUsageReporter(false);
+
+        gl::MemoryUsageStats::GetBackendInstance()->registerMemoryUsageReporter(
+            "angleMtl/mtl/buffers", instance);
+    }
+    return instance;
+}
+
+void ResourceMemUsageReporter::addResource(Resource *res)
+{
+    mResources.insert(res);
+}
+void ResourceMemUsageReporter::deleteResource(Resource *res)
+{
+    mResources.erase(res);
+}
+
+size_t ResourceMemUsageReporter::getTotalMemorySize()
+{
+    size_t totalBytes = 0;
+    for (Resource *res : mResources)
+    {
+        if (mResourcesAreTexture && static_cast<Texture *>(res)->get().parentTexture)
+        {
+            // ignore texture view
+            continue;
+        }
+        totalBytes += res->estimatedByteSize();
+    }
+
+    return totalBytes;
+}
+
+void ResourceMemUsageReporter::dumpMemory(gl::MemoryCategoryVisitFunc callback)
+{
+    if (!mResourcesAreTexture)
+    {
+        return;
+    }
+
+    for (Resource *res : mResources)
+    {
+        auto tex = static_cast<Texture *>(res);
+
+        if (tex->get().parentTexture)
+        {
+            // ignore texture view
+            continue;
+        }
+
+        std::map<std::string, size_t> extraProps;
+        extraProps["width"]       = tex->widthAt0();
+        extraProps["height"]      = tex->heightAt0();
+        extraProps["depth"]       = tex->depthAt0();
+        extraProps["arrayLength"] = tex->cubeFacesOrArrayLength();
+        extraProps["format"]      = static_cast<size_t>(tex->pixelFormat());
+        extraProps["samples"]     = static_cast<size_t>(tex->samples());
+        extraProps["iosurface"]   = reinterpret_cast<uintptr_t>(tex->get().iosurface);
+        callback(GetTextureTag(tex), tex->estimatedByteSize(), extraProps);
+    }
+}
+
 // Resource implementation
-Resource::Resource() : mUsageRef(std::make_shared<UsageRef>()) {}
+Resource::Resource(ResourceMemUsageReporter *memUsageReporter)
+    : mUsageRef(std::make_shared<UsageRef>()), mResourceMemUsageReporter(memUsageReporter)
+{
+    mResourceMemUsageReporter->addResource(this);
+}
 
 // Share the GPU usage ref with other resource
-Resource::Resource(Resource *other) : mUsageRef(other->mUsageRef)
+Resource::Resource(ResourceMemUsageReporter *memUsageReporter, Resource *other)
+    : mUsageRef(other->mUsageRef), mResourceMemUsageReporter(memUsageReporter)
 {
+    mResourceMemUsageReporter->addResource(this);
     ASSERT(mUsageRef);
+}
+
+Resource::~Resource()
+{
+    mResourceMemUsageReporter->deleteResource(this);
 }
 
 void Resource::reset()
@@ -330,11 +464,15 @@ bool needMultisampleColorFormatShaderReadWorkaround(ContextMtl *context, MTLText
 /** static */
 TextureRef Texture::MakeFromMetal(id<MTLTexture> metalTexture)
 {
-    ANGLE_MTL_OBJC_SCOPE { return TextureRef(new Texture(metalTexture)); }
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        return TextureRef(new Texture(metalTexture));
+    }
 }
 
 Texture::Texture(id<MTLTexture> metalTexture)
-    : mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures()),
+      mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
 {
     set(metalTexture);
 }
@@ -353,7 +491,8 @@ Texture::Texture(ContextMtl *context,
                  bool renderTargetOnly,
                  bool allowFormatView,
                  bool memoryLess)
-    : mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures()),
+      mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
 {
     ANGLE_MTL_OBJC_SCOPE
     {
@@ -416,7 +555,8 @@ Texture::Texture(ContextMtl *context,
                  IOSurfaceRef iosurface,
                  NSUInteger plane,
                  bool renderTargetOnly)
-    : mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures()),
+      mColorWritableMask(std::make_shared<MTLColorWriteMask>(MTLColorWriteMaskAll))
 {
     ANGLE_MTL_OBJC_SCOPE
     {
@@ -449,7 +589,7 @@ Texture::Texture(ContextMtl *context,
 }
 
 Texture::Texture(Texture *original, MTLPixelFormat format)
-    : Resource(original),
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures(), original),
       mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
 {
     ANGLE_MTL_OBJC_SCOPE
@@ -463,7 +603,7 @@ Texture::Texture(Texture *original, MTLPixelFormat format)
 }
 
 Texture::Texture(Texture *original, MTLTextureType type, NSRange mipmapLevelRange, NSRange slices)
-    : Resource(original),
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures(), original),
       mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
 {
     ANGLE_MTL_OBJC_SCOPE
@@ -480,7 +620,7 @@ Texture::Texture(Texture *original, MTLTextureType type, NSRange mipmapLevelRang
 }
 
 Texture::Texture(Texture *original, const TextureSwizzleChannels &swizzle)
-    : Resource(original),
+    : Resource(ResourceMemUsageReporter::GetInstanceForTextures(), original),
       mColorWritableMask(original->mColorWritableMask)  // Share color write mask property
 {
 #if ANGLE_MTL_SWIZZLE_AVAILABLE
@@ -931,11 +1071,13 @@ angle::Result Buffer::MakeBufferWithResOpt(ContextMtl *context,
 }
 
 Buffer::Buffer(ContextMtl *context, bool forceUseSharedMem, size_t size, const uint8_t *data)
+    : Resource(ResourceMemUsageReporter::GetInstanceForBuffers())
 {
     (void)resetWithSharedMemOpt(context, forceUseSharedMem, size, data);
 }
 
 Buffer::Buffer(ContextMtl *context, MTLResourceOptions options, size_t size, const uint8_t *data)
+    : Resource(ResourceMemUsageReporter::GetInstanceForBuffers())
 {
     (void)resetWithResOpt(context, options, size, data);
 }
@@ -1072,5 +1214,5 @@ bool Buffer::useSharedMem() const
 {
     return get().storageMode == MTLStorageModeShared;
 }
-}
-}
+}  // namespace mtl
+}  // namespace rx
