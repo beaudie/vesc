@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31f00700_c34be207",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-04T21:51:08Z",
+      "side": 1,
+      "message": "shabi, could you let me know if the test \"ImageTestES3.SourceYUVAHBTargetExternalYUVSampleLinearFiltering/ES3_Vulkan\" passes without VVL errors once you cherry-pick this change?",
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbe2db10_4d082ab0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-04T21:51:08Z",
+      "side": 1,
+      "message": "refreshed",
+      "range": {
+        "startLine": 2746,
+        "startChar": 72,
+        "endLine": 2746,
+        "endChar": 79
+      },
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
