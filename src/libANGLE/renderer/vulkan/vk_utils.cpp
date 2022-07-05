@@ -996,6 +996,44 @@ ScopedContextUnlock::ScopedContextUnlock(Context *context, ContextVk *contextVk)
     ASSERT(context != nullptr);
     ASSERT(context == contextVk || context->getType() == ContextType::kDisplayVk);
 }
+
+// ErrorProxyContext implementation.
+ErrorProxyContext::ErrorProxyContext(Context *errorHandlingContext)
+    : Context(errorHandlingContext->getRenderer()), mErrorHandlingContext(errorHandlingContext)
+{}
+
+ErrorProxyContext::~ErrorProxyContext()
+{
+    while (!mErrors.empty())
+    {
+        Error err = mErrors.front();
+        mErrors.pop_front();
+        mErrorHandlingContext->handleError(err.errorCode, err.file, err.function, err.line);
+    }
+}
+
+void ErrorProxyContext::handleError(VkResult result,
+                                    const char *file,
+                                    const char *function,
+                                    unsigned int line)
+{
+    ASSERT(result != VK_SUCCESS);
+    Error error = {result, file, function, line};
+    mErrors.emplace_back(error);
+}
+
+// DummyErrorProxyContext implementation.
+DummyErrorProxyContext::DummyErrorProxyContext(Context *errorHandlingContext)
+    : Context(errorHandlingContext->getRenderer()), mErrorHandlingContext(errorHandlingContext)
+{}
+
+void DummyErrorProxyContext::handleError(VkResult result,
+                                         const char *file,
+                                         const char *function,
+                                         unsigned int line)
+{
+    mErrorHandlingContext->handleError(result, file, function, line);
+}
 }  // namespace priv
 }  // namespace vk
 
