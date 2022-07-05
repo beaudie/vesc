@@ -1810,13 +1810,14 @@ class ImageHelper final : public Resource, public angle::Subject
     void release(RendererVk *renderer) { destroy(renderer); }
 
     void init2DWeakReference(Context *context,
-                             VkImage handle,
                              const gl::Extents &glExtents,
                              bool rotatedAspectRatio,
                              angle::FormatID intendedFormatID,
                              angle::FormatID actualFormatID,
-                             GLint samples,
-                             bool isRobustResourceInitEnabled);
+                             GLint samples);
+    void update2DWeakReferenceHandle(VkImage handle,
+                                     ImageLayout layout,
+                                     bool isRobustResourceInitEnabled);
     void resetImageWeakReference();
     void releaseImageAndViewGarbage(RendererVk *renderer);
 

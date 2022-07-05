@@ -167,7 +167,13 @@ struct SwapchainImage : angle::NonCopyable
     SwapchainImage(SwapchainImage &&other);
     ~SwapchainImage();
 
-    vk::ImageHelper image;
+    // The actual image and its layout.  A single ImageHelper is used to represent the swapchain
+    // image for the purposes of resource tracking.  This allows the image to be updated in the
+    // ImageHelper later than the beginning of the render pass.
+    vk::Image image;
+    vk::ImageLayout imageLayout;
+
+    // Associated Vulkan objects.
     vk::ImageViewHelper imageViews;
     vk::Framebuffer framebuffer;
     vk::Framebuffer fetchFramebuffer;
@@ -346,9 +352,13 @@ class WindowSurfaceVk : public SurfaceVk
                           const void *pNextChain,
                           bool *presentOutOfDate);
 
+    // Update the swapchain image's weak reference on vkAcquireNextImageKHR and vkQueuePresentKHR.
+    void updateColorImageWeakReference(impl::SwapchainImage *currentImage,
+                                       impl::SwapchainImage *newImage);
+
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
-    angle::Result drawOverlay(ContextVk *contextVk, impl::SwapchainImage *image) const;
+    angle::Result drawOverlay(ContextVk *contextVk, impl::SwapchainImage *image);
 
     angle::Result newPresentSemaphore(vk::Context *context, vk::Semaphore *semaphoreOut);
 
@@ -381,7 +391,7 @@ class WindowSurfaceVk : public SurfaceVk
     std::vector<impl::SwapchainCleanupData> mOldSwapchains;
 
     std::vector<impl::SwapchainImage> mSwapchainImages;
-    std::vector<angle::ObserverBinding> mSwapchainImageBindings;
+    angle::ObserverBinding mSwapchainImageBinding;
     uint32_t mCurrentSwapchainImageIndex;
 
     // Given that the CPU is throttled after a number of swaps, there is an upper bound to the
@@ -413,6 +423,9 @@ class WindowSurfaceVk : public SurfaceVk
     // During window resizing when swapchains are recreated every frame, the number of in-flight
     // present semaphores can grow indefinitely.  See doc/PresentSemaphores.md.
     vk::Recycler<vk::Semaphore> mPresentSemaphoreRecycler;
+
+    // Weak reference to the currently acquired swapchain image.  Updated on vkAcquireNextImageKHR.
+    vk::ImageHelper mColorImage;
 
     // Depth/stencil image.  Possibly multisampled.
     vk::ImageHelper mDepthStencilImage;
