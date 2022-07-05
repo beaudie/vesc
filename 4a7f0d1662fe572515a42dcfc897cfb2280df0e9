@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b35cacea_a6b3087f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T21:02:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd72c8dc_f5ee8677",
+      "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8209ce69_954d88ed",
@@ -49,6 +67,24 @@
       "writtenOn": "2022-07-05T20:42:16Z",
       "side": 1,
       "message": "Could you please add to the issue a description of how it fails in d3d?\n\nIf it fails everywhere, is passing `writeonly image2D` to a function even legal GLSL ES?",
+      "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28ba613d_8138e61a",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T21:02:01Z",
+      "side": 1,
+      "message": "Description updated.\n\nAnd I think `writeonly image2D` is a valid function argument, based on my reading of the spec: \"Except for image variables qualified with the format qualifiers r32f, r32i, and r32ui, image variables must specify either memory qualifier readonly or the memory qualifier writeonly\"\n\nIf I omit the writeonly qualifier from the function argument, I get an appropriate compile error:\n\n`ERROR: 0:11: \u0027uniformImage\u0027 : Function call discards the \u0027writeonly\u0027 qualifier from image`",
+      "parentUuid": "8209ce69_954d88ed",
       "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
