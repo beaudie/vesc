@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f5d9a4_72fc42d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T01:49:33Z",
+      "side": 1,
+      "message": "Yeap, fixes Pixel 6. Please remove the suppression in `angle_end2end_tests_expectations.txt` (should be able to also remove for Pixel4)",
+      "parentUuid": "31f00700_c34be207",
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbe2db10_4d082ab0",
@@ -70,6 +88,29 @@
         "startChar": 72,
         "endLine": 2746,
         "endChar": 79
+      },
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19201432_8cc7f9d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T01:49:33Z",
+      "side": 1,
+      "message": "nit: no need, `[[nodiscard]]` is not specified on the function.",
+      "range": {
+        "startLine": 4195,
+        "startChar": 4,
+        "endLine": 4195,
+        "endChar": 10
       },
       "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
