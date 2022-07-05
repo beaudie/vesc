@@ -34,6 +34,24 @@
       "parentUuid": "342e0113_dae557ce",
       "revId": "9f5eceee63b73566a46b19fa68889939f6340e9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729d719f_57c84138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T19:47:43Z",
+      "side": 1,
+      "message": "Yeah, if something totally unrelated fails, rerun the bot once before attempting to investigate!",
+      "parentUuid": "495282fb_7d452f60",
+      "revId": "9f5eceee63b73566a46b19fa68889939f6340e9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
