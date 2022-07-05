@@ -16,6 +16,41 @@
       "message": "What do I do about the win-trac failure?\n\n[INFO/MainProcess] Unexpected \u0027Skipped\u0027 (1):\n[INFO/MainProcess]      GLSLTest_ES31.Image2DAsFunctionArg/ES3_1_Vulkan_SwiftShader Skipped (expected Pass or is new test)",
       "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd72c8dc_f5ee8677",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T20:42:16Z",
+      "side": 1,
+      "message": "You\u0027d need to add expectations to `capture_replay_expectations.txt` too. Unfortunately we don\u0027t currently pick up expectations from `angle_end2end_tests_expectations.txt` automatically.",
+      "parentUuid": "18950b11_0a36d9d2",
+      "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8209ce69_954d88ed",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T20:42:16Z",
+      "side": 1,
+      "message": "Could you please add to the issue a description of how it fails in d3d?\n\nIf it fails everywhere, is passing `writeonly image2D` to a function even legal GLSL ES?",
+      "revId": "4a7f0d1662fe572515a42dcfc897cfb2280df0e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
