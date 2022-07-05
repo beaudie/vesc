@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "200e94e9_df10fd57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T01:25:28Z",
+      "side": 1,
+      "message": "This will break Fuchsia. Reverted (and fixed) here: https://chromium-review.googlesource.com/c/angle/angle/+/3744362",
+      "revId": "defd99dc4cd5964ca8950e78cdda1a1518ad0e15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
