@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dff2f819_00ce379a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-05T17:22:38Z",
+      "side": 1,
+      "message": "thanks, will land this for now",
+      "revId": "0e39ed04b14a2e8a61835a0a35760162f70a0e16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e080fa6d_1437b3b0",
@@ -48,6 +65,24 @@
       "writtenOn": "2022-07-04T20:03:56Z",
       "side": 1,
       "message": "Are you sure this is because the hardware is not producing 1.0 for the division, or maybe the compiler optimizer is trying to be too smart and messes up premultiply-alpha?\n\nIt\u0027s highly strange that this happens, and that it only affects the premultiply-alpha function of advanced blend!\n\nHave you checked if the RDNA disassembly looks correct?",
+      "revId": "0e39ed04b14a2e8a61835a0a35760162f70a0e16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777e4a11_699a5013",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateAdvancedBlendEquations.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-05T17:22:38Z",
+      "side": 1,
+      "message": "\u003e or maybe the compiler optimizer is trying to be too smart and messes up premultiply-alpha?\n\nour compiler team is looking into it. Given how off-the-shelf AMD 5700 HW and driver also shows this behavior i suspect a genuine issue. Can revert once we have fixed the compiler\n\n\u003e It\u0027s highly strange that this happens, and that it only affects the premultiply-alpha function of advanced blend!\n\nWe suspect it is some bad interaction between subPassLoad and the division\n\n\u003e Have you checked if the RDNA disassembly looks correct?\n\nthe spirv between passing and failing trees look the same (other than the specialized division). Compiler team is looking at machine code",
+      "parentUuid": "e080fa6d_1437b3b0",
       "revId": "0e39ed04b14a2e8a61835a0a35760162f70a0e16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
