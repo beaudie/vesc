@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e35a1a5_9a71b8c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-05T18:15:28Z",
+      "side": 1,
+      "message": "\u003e Please remove the suppression\n\nwill do\n\n\u003e should be able to also remove for Pixel4\n\nunfortunately no, vulkan spec says for external images vulkan driver must support `VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT` -\n\n\u003e The formatFeatures member ... should include VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT and VK_FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT.\n \nit looks like Pixel4 vulkan ICD is not spec compliant",
+      "parentUuid": "c4f5d9a4_72fc42d4",
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbe2db10_4d082ab0",
@@ -93,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4002bcc2_44a519e2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2746,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-05T18:15:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbe2db10_4d082ab0",
+      "range": {
+        "startLine": 2746,
+        "startChar": 72,
+        "endLine": 2746,
+        "endChar": 79
+      },
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19201432_8cc7f9d1",
@@ -106,6 +148,30 @@
       "writtenOn": "2022-07-05T01:49:33Z",
       "side": 1,
       "message": "nit: no need, `[[nodiscard]]` is not specified on the function.",
+      "range": {
+        "startLine": 4195,
+        "startChar": 4,
+        "endLine": 4195,
+        "endChar": 10
+      },
+      "revId": "0255b80075cc397246fffdc88cb6fca34355f589",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77555e6_42660b4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4195,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-05T18:15:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19201432_8cc7f9d1",
       "range": {
         "startLine": 4195,
         "startChar": 4,
