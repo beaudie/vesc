@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb5c2db_a5feffa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T01:31:07Z",
+      "side": 1,
+      "message": "Thanks for the contribution!",
+      "revId": "4cfd50d8cab8c8d8689b9503d93af755c7d6bc4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4943867_87da8048",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DisplayVkLinux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-05T01:31:07Z",
+      "side": 1,
+      "message": "nit: please follow the instructions here to set up depot_tools: https://chromium.googlesource.com/angle/angle/+/main/doc/DevSetup.md#required-first-setup-do-this-first\n\nThen use `git cl upload` to upload changes to gerrit. There are a few presubmit errors that should have been automatically caught:\n\n- `git cl format` is missing\n- The `Bug: ` tag is missing from the description",
+      "revId": "4cfd50d8cab8c8d8689b9503d93af755c7d6bc4f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
