@@ -5732,13 +5732,11 @@ void ImageHelper::destroy(RendererVk *renderer)
 }
 
 void ImageHelper::init2DWeakReference(Context *context,
-                                      VkImage handle,
                                       const gl::Extents &glExtents,
                                       bool rotatedAspectRatio,
                                       angle::FormatID intendedFormatID,
                                       angle::FormatID actualFormatID,
-                                      GLint samples,
-                                      bool isRobustResourceInitEnabled)
+                                      GLint samples)
 {
     ASSERT(!valid());
     ASSERT(!IsAnySubresourceContentDefined(mContentDefined));
@@ -5754,10 +5752,25 @@ void ImageHelper::init2DWeakReference(Context *context,
     mCurrentLayout           = ImageLayout::Undefined;
     mLayerCount              = 1;
     mLevelCount              = 1;
+}
 
+void ImageHelper::update2DWeakReferenceHandle(VkImage handle,
+                                              ImageLayout layout,
+                                              bool isRobustResourceInitEnabled)
+{
     mImage.setHandle(handle);
+    mCurrentLayout = layout;
 
-    stageClearIfEmulatedFormat(isRobustResourceInitEnabled, false);
+    // Reset state that pertained to old image only.
+    mCurrentSingleClearValue.reset();
+    mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
+    mCurrentShaderReadStageMask  = 0;
+
+    // Clear if emulated format on first encounter.
+    if (layout == ImageLayout::Undefined)
+    {
+        stageClearIfEmulatedFormat(isRobustResourceInitEnabled, false);
+    }
 }
 
 angle::Result ImageHelper::init2DStaging(Context *context,
