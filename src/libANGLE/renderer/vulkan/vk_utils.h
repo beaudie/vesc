@@ -1110,12 +1110,42 @@ class [[nodiscard]] DummyScopedContextUnlock final : angle::NonCopyable
   public:
     explicit DummyScopedContextUnlock(Context *context, ContextVk *contextVk = nullptr) {}
 };
+
+class ErrorProxyContext final : public Context
+{
+  public:
+    explicit ErrorProxyContext(Context *errorHandlingContext);
+    virtual ~ErrorProxyContext() override;
+    virtual void handleError(VkResult result,
+                             const char *file,
+                             const char *function,
+                             unsigned int line) override;
+
+  private:
+    Context *const mErrorHandlingContext;
+    std::deque<Error> mErrors;
+};
+
+class DummyErrorProxyContext final : public Context
+{
+  public:
+    explicit DummyErrorProxyContext(Context *errorHandlingContext);
+    virtual void handleError(VkResult result,
+                             const char *file,
+                             const char *function,
+                             unsigned int line) override;
+
+  protected:
+    Context *const mErrorHandlingContext;
+};
 }  // namespace priv
 
 #if defined(ANGLE_ENABLE_GLOBAL_MUTEX_UNLOCK)
 using ScopedContextUnlock = priv::ScopedContextUnlock;
+using ErrorProxyContext   = priv::ErrorProxyContext;
 #else
 using ScopedContextUnlock                    = priv::DummyScopedContextUnlock;
+using ErrorProxyContext                      = priv::DummyErrorProxyContext;
 #endif
 }  // namespace vk
 
