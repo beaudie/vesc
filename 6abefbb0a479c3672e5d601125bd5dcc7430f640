@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cf9fcaf_f6670a03",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Good idea adding both at once. Done",
+      "parentUuid": "62e2609c_883f966b",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e5e5e94_9c36e29e",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-02T00:14:40Z",
       "side": 1,
       "message": "Should this have comment be prefixed with TODO(anglebug.com/7279), because EXT_shader_pixel_local_storage will eventually be used on some hardware?",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0336df1d_60f52c1e",
+        "filename": "src/compiler/translator/TranslatorESSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e5e5e94_9c36e29e",
       "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "859b1e9c_a47dc93a",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0b0f2e0_f6e9b665",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54b937a5_9b09e08d",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-07-02T00:14:40Z",
       "side": 1,
       "message": "Please alphabetize.",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "116cb593_649b48c8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3682,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54b937a5_9b09e08d",
       "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4de044_79e06f6c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b8de49e_09f26ed9",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f705c15c_c7a10857",
@@ -120,6 +210,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f38faef7_89aa2f6f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Agreed, I like this better now",
+      "parentUuid": "f705c15c_c7a10857",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89198816_0b2c21fa",
@@ -133,6 +241,24 @@
       "writtenOn": "2022-07-02T00:14:40Z",
       "side": 1,
       "message": "TODO(anglebug.com/7279) for tracking purposes please.",
+      "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "912fcc75_d504906d",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1914,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-05T14:36:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89198816_0b2c21fa",
       "revId": "6abefbb0a479c3672e5d601125bd5dcc7430f640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
