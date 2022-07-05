@@ -120,7 +120,13 @@ angle::Result SyncHelper::clientWait(Context *context,
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForResourceUseToFinishWithUserTimeout(context, mUse, timeout, &status));
+    {
+        const ResourceUse use = mUse;
+        ErrorProxyContext proxyContext(context);
+        ScopedContextUnlock unlock(context, contextVk);
+        ANGLE_TRY(renderer->waitForResourceUseToFinishWithUserTimeout(&proxyContext, use, timeout,
+                                                                      &status));
+    }
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -327,8 +333,11 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     if (mUse.valid())
     {
         // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForResourceUseToFinishWithUserTimeout(context, mUse, timeout, &status));
+        const ResourceUse use = mUse;
+        ErrorProxyContext proxyContext(context);
+        ScopedContextUnlock unlock(context, contextVk);
+        ANGLE_TRY(renderer->waitForResourceUseToFinishWithUserTimeout(&proxyContext, use, timeout,
+                                                                      &status));
     }
     else
     {
