@@ -33,6 +33,41 @@
       "message": "My worry is that this may becomes a bit fragile when people use it wrong way in the future. How about keep it with different ImageHelper (and possibly turn it into a strong reference if needed) but have it point to an dummy VkImage which gets updated at later time with a real swapchain image? That way you an assert if dummy vkImage is been actually referenced when it should not and mean time all other state is still maintained properly.",
       "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c2356a3_d2b99cf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T20:32:11Z",
+      "side": 1,
+      "message": "Tell me more Charlie.  Is the concern about vk::ImageHelper having a weak reference, or with having only one vk::ImageHelper per swapchain?",
+      "parentUuid": "1c100b84_4054ce94",
+      "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54db39c7_1c44f03a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T20:32:11Z",
+      "side": 1,
+      "message": "LGTM but I want to understand and see us resolve Charlie\u0027s concern",
+      "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
