@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a631338_ea251900",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-06T22:43:39Z",
+      "side": 1,
+      "message": "Adding the default implementations in the header files resulted in this:  `error: [chromium-style] virtual methods with non-empty bodies shouldn\u0027t be declared inline`, so I felt I needed to move them out of the headers.",
+      "parentUuid": "737dbd07_f47ae08d",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53df02c9_824cd65f",
