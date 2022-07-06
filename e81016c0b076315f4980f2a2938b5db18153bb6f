@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebf38fd4_e799ba7d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-06T18:37:04Z",
+      "side": 1,
+      "message": "nit: Prefix with `Vulkan: `",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c768377d_3c6eaa6b",
@@ -14,6 +37,23 @@
       "writtenOn": "2022-07-06T18:20:54Z",
       "side": 1,
       "message": "LGTM with nits",
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4258a65_a9a0e243",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-06T18:37:04Z",
+      "side": 1,
+      "message": "I\u0027m going to go ahead and suggest ignoring this \"BestPractices\" message. Sometimes it\u0027s trivial to resolve them, and that\u0027d be good, but in this particular case, it seems overkill to add tracking just to avoid passing in something harmless.",
       "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
