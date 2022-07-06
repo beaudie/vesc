@@ -180,17 +180,16 @@ class DescriptorPoolHelper final : public Resource
     void destroy(RendererVk *renderer, VulkanCacheType cacheType);
     void release(ContextVk *contextVk, VulkanCacheType cacheType);
 
-    angle::Result allocateDescriptorSets(Context *context,
-                                         CommandBufferHelperCommon *commandBufferHelper,
-                                         const DescriptorSetLayout &descriptorSetLayout,
-                                         uint32_t descriptorSetCount,
-                                         VkDescriptorSet *descriptorSetsOut);
+    bool allocateDescriptorSet(Context *context,
+                               CommandBufferHelperCommon *commandBufferHelper,
+                               const DescriptorSetLayout &descriptorSetLayout,
+                               VkDescriptorSet *descriptorSetsOut);
 
-    angle::Result allocateAndCacheDescriptorSet(Context *context,
-                                                CommandBufferHelperCommon *commandBufferHelper,
-                                                const DescriptorSetDesc &desc,
-                                                const DescriptorSetLayout &descriptorSetLayout,
-                                                VkDescriptorSet *descriptorSetOut);
+    bool allocateAndCacheDescriptorSet(Context *context,
+                                       CommandBufferHelperCommon *commandBufferHelper,
+                                       const DescriptorSetDesc &desc,
+                                       const DescriptorSetLayout &descriptorSetLayout,
+                                       VkDescriptorSet *descriptorSetOut);
 
     bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
 
@@ -252,12 +251,11 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
-    angle::Result allocateDescriptorSets(Context *context,
-                                         CommandBufferHelperCommon *commandBufferHelper,
-                                         const DescriptorSetLayout &descriptorSetLayout,
-                                         uint32_t descriptorSetCount,
-                                         RefCountedDescriptorPoolBinding *bindingOut,
-                                         VkDescriptorSet *descriptorSetsOut);
+    angle::Result allocateDescriptorSet(Context *context,
+                                        CommandBufferHelperCommon *commandBufferHelper,
+                                        const DescriptorSetLayout &descriptorSetLayout,
+                                        RefCountedDescriptorPoolBinding *bindingOut,
+                                        VkDescriptorSet *descriptorSetsOut);
 
     angle::Result getOrAllocateDescriptorSet(Context *context,
                                              CommandBufferHelperCommon *commandBufferHelper,
