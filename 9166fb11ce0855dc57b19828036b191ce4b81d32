@@ -68,6 +68,24 @@
       "message": "LGTM but I want to understand and see us resolve Charlie\u0027s concern",
       "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d4200ef_28fdca03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-06T21:24:57Z",
+      "side": 1,
+      "message": "Mainly about only one vk::ImageHelper per swapchain that it might get overwritten accidentally. Shabi is going to play with it a bit and see what works out cleaner. Will +1 once he finalize it.",
+      "parentUuid": "3c2356a3_d2b99cf6",
+      "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
