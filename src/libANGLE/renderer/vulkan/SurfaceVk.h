@@ -251,6 +251,15 @@ class WindowSurfaceVk : public SurfaceVk
                                      GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
 
+    // Called when the swapchain image is really accessed.  All swapchain images are accessed
+    // through a single ImageHelper (mColorImage), so it's possible for the Surface's RenderTarget
+    // to be returned without having actually acquired an image, and only acquire one when the image
+    // is accessed.  In particular, this is used to delay vkAcquireNextImageKHR to the end of the
+    // render pass instead of doing it at the beginning.
+    angle::Result onAccess(ContextVk *contextVk,
+                           vk::RenderPassCommandBufferHelper *renderPassCommands,
+                           bool *framebufferChangedOut);
+
     vk::Framebuffer &chooseFramebuffer(const SwapchainResolveMode swapchainResolveMode);
 
     angle::Result getCurrentFramebuffer(ContextVk *context,
@@ -308,7 +317,7 @@ class WindowSurfaceVk : public SurfaceVk
                            const void *pNextChain);
     // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
     // will recreate the swapchain (if needed) and call the acquireNextSwapchainImage() method.
-    angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
+    angle::Result doDeferredAcquireNextImage(ContextVk *contextVk, bool presentOutOfDate);
 
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;

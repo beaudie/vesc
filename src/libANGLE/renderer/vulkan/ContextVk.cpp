@@ -1982,6 +1982,15 @@ angle::Result ContextVk::handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dir
                 mState, framebufferState, drawFramebufferVk->getEmulatedAlphaAttachmentMask(),
                 executable->usesFramebufferFetch(), colorIndexGL);
             mRenderPassCommands->onColorAccess(colorIndexVk, colorAccess);
+
+            // TODO: comment.  Also, change so it's only called if access was previously Unused?
+            // onWindowSurfaceAccess would automatically no-op though if already ANI, so minor
+            // optim.
+            if (colorAccess != vk::ResourceAccess::Unused &&
+                mRenderPassCommands->isDefaultFramebufferRenderPass())
+            {
+                ANGLE_TRY(onWindowSurfaceAccessImpl(dirtyBitsIterator));
+            }
         }
         ++colorIndexVk;
     }
@@ -3957,10 +3966,14 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
         return angle::Result::Continue;
     }
 
-    if (framebufferHandle != mRenderPassCommands->getFramebufferHandle())
+    if (!mRenderPassCommands->isDefaultFramebufferRenderPass())
     {
         return angle::Result::Continue;
     }
+
+    // TODO: after confirmation, don't pass framebufferHandle at all.  Move the assert to
+    // SurfaceVk.
+    ASSERT(framebufferHandle == mRenderPassCommands->getFramebufferHandle());
 
     // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
     // eglSwapBuffers
@@ -5732,6 +5745,40 @@ angle::Result ContextVk::onPauseTransformFeedback()
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::onWindowSurfaceAccess()
+{
+    return onWindowSurfaceAccessImpl(nullptr);
+}
+
+angle::Result ContextVk::onWindowSurfaceAccessImpl(DirtyBits::Iterator *dirtyBitsIterator)
+{
+    // Ignore if surface is a pbuffer.
+    if (mCurrentWindowSurface == nullptr)
+    {
+        return angle::Result::Continue;
+    }
+
+    // Make sure next swapchain image is acquired.
+    bool framebufferChanged = false;
+    ANGLE_TRY(mCurrentWindowSurface->onAccess(this, mRenderPassCommands, &framebufferChanged));
+
+    // Make sure input attachment descriptors are updated if a new image has been acquired.
+    if (framebufferChanged && mRenderPassCommands->started() &&
+        mRenderPassCommands->getRenderPassDesc().hasFramebufferFetch())
+    {
+        if (dirtyBitsIterator)
+        {
+            dirtyBitsIterator->setLaterBits(kResourcesAndDescSetDirtyBits);
+        }
+        else
+        {
+            mGraphicsDirtyBits |= kResourcesAndDescSetDirtyBits;
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
 void ContextVk::invalidateGraphicsPipelineBinding()
 {
     mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_BINDING);
@@ -6873,6 +6920,7 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
+    bool isDefaultFramebuffer,
     vk::RenderPassCommandBuffer **commandBufferOut)
 {
     // Next end any currently outstanding render pass.  The render pass is normally closed before
@@ -6880,9 +6928,10 @@ angle::Result ContextVk::beginNewRenderPass(
     ANGLE_TRY(flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
 
     mPerfCounters.renderPasses++;
-    return mRenderPassCommands->beginRenderPass(
-        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
-        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, commandBufferOut);
+    return mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
+                                                renderPassAttachmentOps, colorAttachmentCount,
+                                                depthStencilAttachmentIndex, clearValues,
+                                                isDefaultFramebuffer, commandBufferOut);
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
@@ -6968,6 +7017,20 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
     mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
     // Restart at subpass 0.
     mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
+
+    // If vkAcquireNextImageKHR is deferred but the render pass accesses the color attachment, make
+    // sure it's done.  If the render pass doesn't access the color attachment,
+    // vkAcquireNextImageKHR continues to be deferred.  This only works if supportsRenderPassLoadStoreOpNone
+    // is enabled, as otherwise it's currently impossible to "exclude" the image from the render
+    // pass.
+    if (mRenderPassCommands->isDefaultFramebufferRenderPass() && 
+        (!getFeatures().supportsRenderPassLoadStoreOpNone.enabled ||
+        mRenderPassCommands->hasAnyColorAccess(vk::PackedAttachmentIndex(0))))
+    {
+        // TODO: not necessary to check for has access?  handleDirtyGraphicsColorAccess should take
+        // care of it.  Otherwise, every sync of FramebufferVk calls ANI.
+        ANGLE_TRY(onWindowSurfaceAccess());
+    }
 
     mCurrentTransformFeedbackBuffers.clear();
 

@@ -436,6 +436,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void onColorAccessChange() { mGraphicsDirtyBits |= kColorAccessChangeDirtyBits; }
     void onDepthStencilAccessChange() { mGraphicsDirtyBits |= kDepthStencilAccessChangeDirtyBits; }
 
+    angle::Result onWindowSurfaceAccess();
+
     // When UtilsVk issues draw or dispatch calls, it binds a new pipeline and descriptor sets that
     // the context is not aware of.  These functions are called to make sure the pipeline and
     // affected descriptor set bindings are dirtied for the next application draw/dispatch call.
@@ -621,6 +623,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const vk::PackedAttachmentCount colorAttachmentCount,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
                                      const vk::PackedClearValuesArray &clearValues,
+                                     bool isDefaultFramebuffer,
                                      vk::RenderPassCommandBuffer **commandBufferOut);
 
     // Only returns true if we have a started RP and we've run setupDraw.
@@ -1279,6 +1282,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result onResourceAccess(const vk::CommandBufferAccess &access);
     angle::Result flushCommandBuffersIfNecessary(const vk::CommandBufferAccess &access);
     bool renderPassUsesStorageResources() const;
+
+    angle::Result onWindowSurfaceAccessImpl(DirtyBits::Iterator *dirtyBitsIterator);
 
     angle::Result pushDebugGroupImpl(GLenum source, GLuint id, const char *message);
     angle::Result popDebugGroupImpl();

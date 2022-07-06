@@ -1125,13 +1125,11 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
                                                          GLsizei samples,
                                                          FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (mNeedToAcquireNextSwapchainImage)
-    {
-        // Acquire the next image (previously deferred) before it is drawn to or read from.
-        ContextVk *contextVk = vk::GetImpl(context);
-        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
+    // Note: |doDeferredAcquireNextImage()| is still not called even though it seems that the image
+    // is about to be used.  That is called through onAccess if and when the image is truly used.
+    // If |doDeferredAcquireNextImage()| is not called by the time this function is called, the
+    // render target will continue to refer to the previously acquired image, which is ok if it's
+    // never used in the end.
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
 
@@ -1587,6 +1585,8 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
         }
     }
 
+    mCurrentSwapchainImageIndex = 0;
+
     mSwapchainImages.clear();
 }
 
@@ -1656,7 +1656,7 @@ angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
         // acquired if there was no rendering done at all to the default framebuffer in this frame,
         // for example if all rendering was done to FBOs.
         ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+        ANGLE_TRY(doDeferredAcquireNextImage(vk::GetImpl(context), false));
     }
     return angle::Result::Continue;
 }
@@ -1917,8 +1917,8 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     {
         // Immediately try to acquire the next image, which will recognize the out-of-date
         // swapchain (potentially because of a rotation change), and recreate it.
-        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, presentOutOfDate));
+        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-date swapchain");
+        ANGLE_TRY(doDeferredAcquireNextImage(contextVk, presentOutOfDate));
     }
 
     RendererVk *renderer = contextVk->getRenderer();
@@ -1952,11 +1952,51 @@ void WindowSurfaceVk::deferAcquireNextImage()
     onStateChange(angle::SubjectMessage::SubjectChanged);
 }
 
-angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *context,
+angle::Result WindowSurfaceVk::onAccess(ContextVk *contextVk,
+                                        vk::RenderPassCommandBufferHelper *renderPassCommands,
+                                        bool *framebufferChangedOut)
+{
+    *framebufferChangedOut = false;
+
+    if (!mNeedToAcquireNextSwapchainImage)
+    {
+        return angle::Result::Continue;
+    }
+
+    // Acquire the next image (previously deferred) before it is drawn to or read from.
+    {
+        ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
+        ANGLE_TRY(doDeferredAcquireNextImage(contextVk, false));
+    }
+
+    // If the currently open render pass is using the swapchain image, adjust it to point to use
+    // the newly acquired image and its associated framebuffer.
+    if (!renderPassCommands->started() || !renderPassCommands->isDefaultFramebufferRenderPass())
+    {
+        return angle::Result::Continue;
+    }
+
+    // There is nothing to do if the surface is multisampled however, as the render pass will be
+    // using the multisampled image.  In fact, ANI could be avoided and only done at swap() for
+    // multisampled surfaces as a future optimization.
+    if (isMultiSampled())
+    {
+        return angle::Result::Continue;
+    }
+
+    SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
+    vk::Framebuffer &currentFramebuffer = chooseFramebuffer(SwapchainResolveMode::Disabled);
+
+    renderPassCommands->updateSwapchainColorImage(&image.image, &currentFramebuffer);
+
+    *framebufferChangedOut = true;
+
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(ContextVk *contextVk,
                                                           bool presentOutOfDate)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-
     // TODO(jmadill): Expose in CommandQueueInterface, or manage in CommandQueue. b/172704839
     if (contextVk->getRenderer()->isAsyncCommandQueueEnabled())
     {
@@ -2056,7 +2096,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     // Single Image Mode
     if (isSharedPresentMode() &&
-        (image.image.getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
+        image.image.getCurrentImageLayout() != vk::ImageLayout::SharedPresent)
     {
         rx::RendererVk *rendererVk = context->getRenderer();
         rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
@@ -2291,7 +2331,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     vk::Framebuffer **framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
-    ASSERT(!mNeedToAcquireNextSwapchainImage);
+    //ASSERT(!mNeedToAcquireNextSwapchainImage);
 
     // Track the new fetch mode
     mFramebufferFetchMode = fetchMode;
@@ -2401,7 +2441,7 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
         // GenerateMipmapWithRedefineBenchmark.Run/vulkan_webgl) cause this path to be taken,
         // because of dirty-object processing.
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Initialize Swap Image");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+        ANGLE_TRY(doDeferredAcquireNextImage(contextVk, false));
     }
 
     ASSERT(mSwapchainImages.size() > 0);
@@ -2415,19 +2455,19 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
                                          ? &mColorImageMS
                                          : &mSwapchainImages[mCurrentSwapchainImageIndex].image;
             image->stageRobustResourceClear(imageIndex);
-            ANGLE_TRY(image->flushAllStagedUpdates(contextVk));
             break;
         }
         case GL_DEPTH:
         case GL_STENCIL:
             ASSERT(mDepthStencilImage.valid());
             mDepthStencilImage.stageRobustResourceClear(gl::ImageIndex::Make2D(0));
-            ANGLE_TRY(mDepthStencilImage.flushAllStagedUpdates(contextVk));
             break;
         default:
             UNREACHABLE();
             break;
     }
+
+    onStateChange(angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
 }
@@ -2514,27 +2554,29 @@ egl::Error WindowSurfaceVk::setAutoRefreshEnabled(bool enabled)
 
 egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age)
 {
-    if (mNeedToAcquireNextSwapchainImage)
-    {
-        // Acquire the current image if needed.
-        DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-        egl::Error result =
-            angle::ToEGL(doDeferredAcquireNextImage(context, false), displayVk, EGL_BAD_SURFACE);
-        if (result.isError())
-        {
-            return result;
-        }
-    }
-
     if (isMultiSampled())
     {
         *age = 0;
         return egl::NoError();
     }
 
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    if (mNeedToAcquireNextSwapchainImage)
+    {
+        // Acquire the current image if needed.
+        DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+        egl::Error result =
+            angle::ToEGL(doDeferredAcquireNextImage(contextVk, false), displayVk, EGL_BAD_SURFACE);
+        if (result.isError())
+        {
+            return result;
+        }
+    }
+
     if (mBufferAgeQueryFrameNumber == 0)
     {
-        ANGLE_VK_PERF_WARNING(vk::GetImpl(context), GL_DEBUG_SEVERITY_LOW,
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_LOW,
                               "Querying age of a surface will make it retain its content");
 
         mBufferAgeQueryFrameNumber = mFrameCount;
