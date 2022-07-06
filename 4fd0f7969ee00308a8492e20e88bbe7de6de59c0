@@ -16,6 +16,23 @@
       "message": "These skips are also ignored on M1. See the linked issue for more details.",
       "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "455dfe86_5bb93b42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-06T22:42:06Z",
+      "side": 1,
+      "message": "What tests determined the necessity of enabling this emulation on the M1?\n\nPlease file a new bug, make it depend on anglebug.com/4849, and describe in the bug how you discovered this. Also please expand the CL description a bit to summarize what\u0027s put into the bug.\n\nThanks.\n",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
