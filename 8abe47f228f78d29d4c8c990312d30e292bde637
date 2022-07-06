@@ -1,0 +1,265 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "737dbd07_f47ae08d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "LGTM with some nits about curly braces and creating new files.\n\nQuestion for Shabi about whether to put some of the *Impl methods in the header file (rather than create a .cpp file).\n\nAlso Shabi, in talking with AGI, there\u0027s a desire to land proper support for Textures soon, and then move on to creating the GLES layer (so that AGI can use a built-in ANGLE; and have that layer auto-generate labels for textures, etc.).  Once we have the layer, then can go back and pick-off more objects (e.g. buffers).",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53df02c9_824cd65f",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "nit: ANGLE code standards means you have to put curly braces around line 69, with each on a separate line--as in:\n\n    if (mImpl)\n    {\n            return mImpl-\u003eonLabelUpdate(context);\n    }",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebea645a_3d444600",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d023653_c5895b8c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54e01601_adf26b1d",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab705298_af97d19b",
+        "filename": "src/libANGLE/Query.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6b63e34_06ce8fc5",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cdcb026_93ee59a1",
+        "filename": "src/libANGLE/Sampler.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ffc5b02_9a7a13d2",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe53163e_15ef25f3",
+        "filename": "src/libANGLE/TransformFeedback.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f22cac0_a3415400",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90562c10_0a14c3cc",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Shabi would prefer this implementation live in the header file (to avoid adding this file)?\n\nAs in the \"src/libANGLE/renderer/SamplerImpl.h\" file?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c96d119_69b07f1e",
+        "filename": "src/libANGLE/renderer/ProgramImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto my question to Shabi on putting this default method in the header",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ed3bfa_355f935d",
+        "filename": "src/libANGLE/renderer/VertexArrayImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "Ditto on putting in the header",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969beaf9_c73f4fb5",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-06T21:26:22Z",
+      "side": 1,
+      "message": "To clarify, this is the same approach used in TextureVk, so that the Vulkan command can be called when the Vulkan object is actually created (e.g. in BufferVk::setExternalBufferData)???",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
