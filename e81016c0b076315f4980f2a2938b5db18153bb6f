@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c768377d_3c6eaa6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-06T18:20:54Z",
+      "side": 1,
+      "message": "LGTM with nits",
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b83b5e1_0158b68b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2124,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-06T18:20:54Z",
+      "side": 1,
+      "message": "You can avoid this for loop if you track mAttachmentClearOps in the FramebufferVk::startNewRenderPass() and pass into this function.",
+      "range": {
+        "startLine": 2124,
+        "startChar": 4,
+        "endLine": 2124,
+        "endChar": 7
+      },
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cdf89f6_fe6313c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2317,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-06T18:20:54Z",
+      "side": 1,
+      "message": "nit: Can be shortened to mAttachmentClearOps.any()? static_cast\u003cuint32_t\u003e(mRenderPassDesc.attachmentCount()) : 0;",
+      "range": {
+        "startLine": 2310,
+        "startChar": 4,
+        "endLine": 2317,
+        "endChar": 5
+      },
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
