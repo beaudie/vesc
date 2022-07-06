@@ -16,6 +16,24 @@
       "message": "Hello Antonio, \nI submitted this patch to resolve build errors I encountered on Yocto BSP.\nCan I get a review ?\nIf you already have your patch I missed, please just let me know.\nI\u0027ll abandon it.\nThank you.\n",
       "revId": "3b4af9bf261af56fee57f1dff3b62d32b7b5e98f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ffde86_ee558e2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-07-06T08:03:47Z",
+      "side": 1,
+      "message": "GN GBM defines and cstring header changes look fine to me.\nNot sure about angle.gni though.",
+      "parentUuid": "544a0bf4_238ce906",
+      "revId": "3b4af9bf261af56fee57f1dff3b62d32b7b5e98f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
