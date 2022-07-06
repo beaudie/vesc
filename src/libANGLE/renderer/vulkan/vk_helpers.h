@@ -147,13 +147,15 @@ class DescriptorSetHelper final : public Resource
         mDescriptorSet       = other.mDescriptorSet;
         other.mDescriptorSet = VK_NULL_HANDLE;
     }
+    ~DescriptorSetHelper() override;
 
     VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
 
   private:
     VkDescriptorSet mDescriptorSet;
 };
-using DescriptorSetList = std::deque<DescriptorSetHelper>;
+using DescriptorSetPtr  = std::unique_ptr<DescriptorSetHelper>;
+using DescriptorSetList = std::deque<DescriptorSetPtr>;
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. RendererVk takes care of the lifetime of the discarded
@@ -163,11 +165,11 @@ using DescriptorSetList = std::deque<DescriptorSetHelper>;
 // Can be used to share descriptor pools between multiple ProgramVks and the ContextVk.
 class CommandBufferHelperCommon;
 
-class DescriptorPoolHelper final : public Resource
+class DescriptorPoolHelper final : angle::NonCopyable
 {
   public:
     DescriptorPoolHelper();
-    ~DescriptorPoolHelper() override;
+    ~DescriptorPoolHelper();
 
     bool valid() { return mDescriptorPool.valid(); }
 
@@ -181,19 +183,23 @@ class DescriptorPoolHelper final : public Resource
     bool allocateDescriptorSet(Context *context,
                                CommandBufferHelperCommon *commandBufferHelper,
                                const DescriptorSetLayout &descriptorSetLayout,
-                               VkDescriptorSet *descriptorSetsOut);
+                               DescriptorSetHelper **descriptorSetOut);
 
     bool allocateAndCacheDescriptorSet(Context *context,
                                        CommandBufferHelperCommon *commandBufferHelper,
                                        const DescriptorSetDesc &desc,
                                        const DescriptorSetLayout &descriptorSetLayout,
-                                       VkDescriptorSet *descriptorSetOut);
+                                       DescriptorSetHelper **descriptorSetOut);
 
-    bool getCachedDescriptorSet(const DescriptorSetDesc &desc, VkDescriptorSet *descriptorSetOut);
+    bool getCachedDescriptorSet(const DescriptorSetDesc &desc,
+                                DescriptorSetHelper **descriptorSetOut);
 
     void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
-    void resetCache();
+    void resetCache(RendererVk *renderer);
+    // Scan descriptorSet garbage list and destroy all GPU completed garbage
+    void cleanupGarbage(Context *context);
+    bool isCurrentlyInUse(Serial lastCompletedQueueSerial);
 
     size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
     size_t getTotalCacheKeySizeBytes() const
@@ -207,6 +213,8 @@ class DescriptorPoolHelper final : public Resource
     }
 
   private:
+    // The most recent used descriptorSet.
+    DescriptorSetHelper *mLastDescriptorSet;
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
     DescriptorSetCache mDescriptorSetCache;
@@ -248,14 +256,14 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                         CommandBufferHelperCommon *commandBufferHelper,
                                         const DescriptorSetLayout &descriptorSetLayout,
                                         RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetsOut);
+                                        DescriptorSetHelper **descriptorSetOut);
 
     angle::Result getOrAllocateDescriptorSet(Context *context,
                                              CommandBufferHelperCommon *commandBufferHelper,
                                              const DescriptorSetDesc &desc,
                                              const DescriptorSetLayout &descriptorSetLayout,
                                              RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorSetHelper **descriptorSetOut,
                                              DescriptorCacheResult *cacheResultOut);
 
     template <typename Accumulator>
