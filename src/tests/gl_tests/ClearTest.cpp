@@ -8,6 +8,7 @@
 
 #include "platform/FeaturesVk_autogen.h"
 #include "test_utils/gl_raii.h"
+#include "util/OSWindow.h"
 #include "util/random_utils.h"
 #include "util/shader_utils.h"
 #include "util/test_utils.h"
@@ -2938,6 +2939,38 @@ TEST_P(ClearTestES3, MaskedScissoredClearThenFullMaskedClear)
     EXPECT_PIXEL_RECT_EQ(3 * w / 4, 0, w / 4, h, GLColor::green);
 
     EXPECT_PIXEL_RECT_EQ(w / 4, h / 4, w / 2, h / 2, GLColor::yellow);
+}
+
+// Test that clear after a window resize is applied correctly before drawing.
+TEST_P(ClearTestES3, ResizeThenClearAndDraw)
+{
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    ANGLE_GL_PROGRAM(drawBlue, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    // First, clear and draw once.
+    glClearColor(1, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    const int originalWidth  = getWindowWidth();
+    const int originalHeight = getWindowHeight();
+
+    // Then, resize the window and clear and draw again.
+    getOSWindow()->resize(originalWidth / 2, originalHeight * 2);
+    swapBuffers();
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(drawBlue, essl1_shaders::PositionAttrib(), 0);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::magenta);
+
+    // Reset window to original dimensions
+    getOSWindow()->resize(originalWidth, originalHeight);
 }
 
 #ifdef Bool

@@ -1030,6 +1030,7 @@ class RenderPassAttachment final
               uint32_t layerIndex,
               uint32_t layerCount,
               VkImageAspectFlagBits aspect);
+    void updateSwapchainImage(ImageHelper *image);
     void reset();
 
     void onAccess(ResourceAccess access, uint32_t currentCmdCount);
@@ -1299,6 +1300,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                 uint32_t layerCount,
                                 ImageHelper *image,
                                 ImageHelper *resolveImage);
+    void updateSwapchainColorImage(ImageHelper *image, Framebuffer *newFramebuffer);
 
     bool usesImage(const ImageHelper &image) const;
     bool isImageWithLayoutTransition(const ImageHelper &image) const;
@@ -1320,6 +1322,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   const PackedAttachmentCount colorAttachmentCount,
                                   const PackedAttachmentIndex depthStencilAttachmentIndex,
                                   const PackedClearValuesArray &clearValues,
+                                  bool isDefaultFramebuffer,
                                   RenderPassCommandBuffer **commandBufferOut);
 
     angle::Result endRenderPass(ContextVk *contextVk);
@@ -1359,6 +1362,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void pauseTransformFeedback();
     bool isTransformFeedbackStarted() const { return mValidTransformFeedbackBufferCount > 0; }
     bool isTransformFeedbackActiveUnpaused() const { return mIsTransformFeedbackActiveUnpaused; }
+
+    bool isDefaultFramebufferRenderPass() const { return mIsDefaultFramebufferRenderPass; }
 
     uint32_t getAndResetCounter()
     {
@@ -1437,6 +1442,15 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void retainImage(ImageHelper *imageHelper);
 
+    // If a swapchain image is used as the color attachment, but it's never accessed:
+    //
+    // - The layout is left intact
+    // - Load and store ops are set to None.
+    //
+    // This effectly disables access to the attachment, allowing the swapchain image to not be
+    // acquired (vkAcquireNextImageKHR) in the first place.
+    bool disableUnacquiredSwapchainImage(Context *context, bool isResolveImage);
+
     // When using Vulkan secondary command buffers, each subpass must be recorded in a separate
     // command buffer.  Currently ANGLE produces render passes with at most 2 subpasses.  Once
     // framebuffer-fetch is appropriately implemented to use subpasses, this array must be made
@@ -1460,6 +1474,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     uint32_t mValidTransformFeedbackBufferCount;
     bool mRebindTransformFeedbackBuffers;
     bool mIsTransformFeedbackActiveUnpaused;
+
+    // Whether this is a render pass for the default framebuffer
+    bool mIsDefaultFramebufferRenderPass;
 
     // State tracking for whether to optimize the storeOp to DONT_CARE
     uint32_t mPreviousSubpassesCmdCount;

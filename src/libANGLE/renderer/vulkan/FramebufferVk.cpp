@@ -1880,6 +1880,14 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    // If this is the default framebuffer, make sure vkAcquireNextImageKHR is called as the image is
+    // about to be accessed.  This is not done for draw commands, because the decision is delayed to
+    // when the image is actually used.
+    if (mState.isDefault() && command != gl::Command::Draw)
+    {
+        ANGLE_TRY(contextVk->onWindowSurfaceAccess());
+    }
+
     vk::FramebufferDesc priorFramebufferDesc = mCurrentFramebufferDesc;
 
     // Keep track of which attachments have dirty content and need their staged updates flushed.
@@ -2799,7 +2807,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        depthStencilAttachmentIndex, packedClearValues, mState.isDefault(), commandBufferOut));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);

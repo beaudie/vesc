@@ -1094,6 +1094,16 @@ void RenderPassAttachment::init(ImageHelper *image,
     mImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
 }
 
+void RenderPassAttachment::updateSwapchainImage(ImageHelper *image)
+{
+    // Replace the current placeholder swapchain image with the real one after
+    // vkAcquireNextImageKHR is called.
+    ASSERT(mImage != nullptr);
+
+    mImage = image;
+    mImage->setRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment);
+}
+
 void RenderPassAttachment::reset()
 {
     mImage = nullptr;
@@ -1595,6 +1605,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
       mIsTransformFeedbackActiveUnpaused(false),
+      mIsDefaultFramebufferRenderPass(false),
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
@@ -1636,6 +1647,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
     mRebindTransformFeedbackBuffers    = false;
+    mIsDefaultFramebufferRenderPass    = false;
     mHasShaderStorageOutput            = false;
     mHasGLMemoryBarrierIssued          = false;
     mPreviousSubpassesCmdCount         = 0;
@@ -1707,6 +1719,16 @@ void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
         mColorResolveAttachments[packedAttachmentIndex].init(resolveImage, level, layerStart,
                                                              layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
     }
+}
+
+void RenderPassCommandBufferHelper::updateSwapchainColorImage(ImageHelper *image,
+                                                              Framebuffer *newFramebuffer)
+{
+    retainImage(image);
+    mColorAttachments[PackedAttachmentIndex(0)].updateSwapchainImage(image);
+
+    ASSERT(newFramebuffer);
+    mFramebuffer.setHandle(newFramebuffer->getHandle());
 }
 
 void RenderPassCommandBufferHelper::retainImage(ImageHelper *imageHelper)
@@ -1802,6 +1824,18 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthMode(
     }
 }
 
+bool RenderPassCommandBufferHelper::disableUnacquiredSwapchainImage(Context *context, bool isResolveImage)
+{
+    // Disable any access to the color attachment if:
+    //
+    // - It's from the swapchain
+    // - It's the color attachment (not resolve)
+    // - It's unused
+    // - VK_ATTACHMENT_LOAD/STORE_OP_NONE_EXT are supported.
+    return mIsDefaultFramebufferRenderPass && !isResolveImage &&
+        !hasAnyColorAccess(PackedAttachmentIndex(0)) && context->getRenderer()->getFeatures().supportsRenderPassLoadStoreOpNone.enabled;
+}
+
 void RenderPassCommandBufferHelper::finalizeColorImageLayout(
     Context *context,
     ImageHelper *image,
@@ -1810,6 +1844,12 @@ void RenderPassCommandBufferHelper::finalizeColorImageLayout(
 {
     ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
     ASSERT(image != nullptr);
+
+    // Skip the layout change for surface color attachments that may not have been acquired at all.
+    if (disableUnacquiredSwapchainImage(context, isResolveImage))
+    {
+        return;
+    }
 
     // Do layout change.
     ImageLayout imageLayout;
@@ -1859,7 +1899,18 @@ void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
     RenderPassLoadOp loadOp      = static_cast<RenderPassLoadOp>(ops.loadOp);
     RenderPassStoreOp storeOp    = static_cast<RenderPassStoreOp>(ops.storeOp);
 
+    // Use None/None as load and store ops for surface color attachments that may not have been acquired at all.
+    if (disableUnacquiredSwapchainImage(context, false))
+    {
+        SetBitField(ops.loadOp, RenderPassLoadOp::None);
+        SetBitField(ops.storeOp, RenderPassStoreOp::None);
+        return;
+    }
+
     // This has to be called after layout been finalized
+    // TODO: if deferred ANI, this could actually be true, so maybe special-case that to explicitly
+    // become None/None.  BUT! If None/None is not available, then we can't _not_ ANI.  So maybe end
+    // RP's test should be a bit more rigurous, like call ANI if None/None is not supported.
     ASSERT(ops.initialLayout != static_cast<uint16_t>(ImageLayout::Undefined));
 
     uint32_t currentCmdCount = getRenderPassWriteCommandCount();
@@ -2110,6 +2161,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    bool isDefaultFramebuffer,
     RenderPassCommandBuffer **commandBufferOut)
 {
     ASSERT(!mRenderPassStarted);
@@ -2123,7 +2175,8 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mClearValues      = clearValues;
     *commandBufferOut = &getCommandBuffer();
 
-    mRenderPassStarted = true;
+    mIsDefaultFramebufferRenderPass = isDefaultFramebuffer;
+    mRenderPassStarted              = true;
     mCounter++;
 
     return beginRenderPassCommandBuffer(contextVk);

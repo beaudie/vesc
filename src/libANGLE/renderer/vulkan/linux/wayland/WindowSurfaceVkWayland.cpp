@@ -98,7 +98,7 @@ angle::Result WindowSurfaceVkWayland::getAttachmentRenderTarget(
     {
         // A wl_egl_window_resize() should take effect on the next operation which provokes a
         // backbuffer to be pulled
-        ANGLE_TRY(doDeferredAcquireNextImage(context, true));
+        ANGLE_TRY(doDeferredAcquireNextImage(vk::GetImpl(context), true));
         mResized = false;
     }
     return WindowSurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
