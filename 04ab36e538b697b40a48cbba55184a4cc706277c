@@ -16,6 +16,23 @@
       "message": "charlie, can i get a review here?",
       "revId": "04ab36e538b697b40a48cbba55184a4cc706277c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1872beb7_16055f60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-06T18:24:46Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "04ab36e538b697b40a48cbba55184a4cc706277c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
