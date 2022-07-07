@@ -33,6 +33,46 @@
       "message": "lgtm\n\nWow, this is great! Thanks Alexey for getting this path working on D3D9!\n\nGeoff\u0027s on vacation. Jonah, could you review this too?\n",
       "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f14ac070_87cf3fb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-07-07T14:23:52Z",
+      "side": 1,
+      "message": "LGTM after addressing one comment",
+      "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e62c88b_b15270f8",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Image9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-07-07T14:23:52Z",
+      "side": 1,
+      "message": "Can you use C++ style casts instead? https://google.github.io/styleguide/cppguide.html#Casting\n\nSame goes for all casts below",
+      "range": {
+        "startLine": 767,
+        "startChar": 60,
+        "endLine": 767,
+        "endChar": 72
+      },
+      "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
