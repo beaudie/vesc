@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3023585_63055d8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-07T22:30:40Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThis is small enough that it doesn\u0027t seem to need a second review.\n",
+      "revId": "0886d28d1cd5983ddf70642a916a8ddee0a4be92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
