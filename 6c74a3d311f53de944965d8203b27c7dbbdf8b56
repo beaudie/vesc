@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f0cbc8_1c6fc6d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-07-07T16:39:30Z",
+      "side": 1,
+      "message": "Note, this fix doesn\u0027t entirely resolve issues with the reported shader. There\u0027s still problems with over allocation of registers due to original-to-modified expansion. However, this patch is needed to fix compile failures. ",
+      "revId": "6c74a3d311f53de944965d8203b27c7dbbdf8b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
