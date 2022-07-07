@@ -427,6 +427,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d26748a_a3ed093b",
+        "filename": "src/libANGLE/renderer/FramebufferImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-07T15:03:52Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "90562c10_0a14c3cc",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 0
+      },
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c96d119_69b07f1e",
@@ -444,6 +468,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3499f1fc_7290d7dd",
+        "filename": "src/libANGLE/renderer/ProgramImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-07T15:03:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c96d119_69b07f1e",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49ed3bfa_355f935d",
@@ -457,6 +499,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto on putting in the header",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "619417f3_adc3a552",
+        "filename": "src/libANGLE/renderer/VertexArrayImpl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-07T15:03:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49ed3bfa_355f935d",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
