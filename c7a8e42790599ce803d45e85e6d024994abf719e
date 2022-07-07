@@ -39,6 +39,30 @@
       },
       "revId": "c7a8e42790599ce803d45e85e6d024994abf719e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b30ff44_5515c1cb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-07T16:40:02Z",
+      "side": 1,
+      "message": "Right. If you look at left side line 3405 to 3427, caller has to call cleanupGarbage and hasCapacity(), these calls are all gone with this change.",
+      "parentUuid": "5d38aa4c_e45e7c62",
+      "range": {
+        "startLine": 3229,
+        "startChar": 0,
+        "endLine": 3229,
+        "endChar": 4
+      },
+      "revId": "c7a8e42790599ce803d45e85e6d024994abf719e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
