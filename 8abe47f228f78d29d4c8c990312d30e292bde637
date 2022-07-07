@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7f91ef9_c26fb561",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Ah, yeah, sorry.  I was looking at onDestroy as an example.",
+      "parentUuid": "53df02c9_824cd65f",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebea645a_3d444600",
@@ -84,6 +102,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7829aeb6_b4aa22a5",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebea645a_3d444600",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db1a66cf_f2c1955e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d023653_c5895b8c",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54e01601_adf26b1d",
@@ -118,6 +172,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7318fea_736eedfc",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54e01601_adf26b1d",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -139,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6b80d2b_6405629b",
+        "filename": "src/libANGLE/Query.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab705298_af97d19b",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6b63e34_06ce8fc5",
@@ -152,6 +242,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto comment on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e738d256_f6e63ac9",
+        "filename": "src/libANGLE/Renderbuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6b63e34_06ce8fc5",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -173,6 +281,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b309c73_da80e544",
+        "filename": "src/libANGLE/Sampler.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cdcb026_93ee59a1",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ffc5b02_9a7a13d2",
@@ -186,6 +312,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "055c0f0e_3ac66eb9",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ffc5b02_9a7a13d2",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -207,6 +351,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7415671_07892199",
+        "filename": "src/libANGLE/TransformFeedback.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe53163e_15ef25f3",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f22cac0_a3415400",
@@ -220,6 +382,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "Ditto on curly braces",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eeb732b_1e93b3a7",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f22cac0_a3415400",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -294,6 +474,24 @@
       "writtenOn": "2022-07-06T21:26:22Z",
       "side": 1,
       "message": "To clarify, this is the same approach used in TextureVk, so that the Vulkan command can be called when the Vulkan object is actually created (e.g. in BufferVk::setExternalBufferData)???",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd50b18_54ecd9bc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-07-07T01:31:02Z",
+      "side": 1,
+      "message": "No, this was some stuff I need to save for later -- taking it out for now.",
+      "parentUuid": "969beaf9_c73f4fb5",
       "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
