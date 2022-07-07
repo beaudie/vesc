@@ -4239,6 +4239,11 @@ bool YcbcrConversionDesc::updateChromaFilter(RendererVk *rendererVk, VkFilter fi
     return false;
 }
 
+void YcbcrConversionDesc::updateConversionModel(VkSamplerYcbcrModelConversion conversionModel)
+{
+    SetBitField(mConversionModel, conversionModel);
+}
+
 angle::Result YcbcrConversionDesc::init(Context *context,
                                         SamplerYcbcrConversion *conversionOut) const
 {
@@ -4983,6 +4988,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
         updateWriteDesc(info.binding, descriptorType, descriptorCount);
 
+        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
         {
             GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
@@ -5030,7 +5037,10 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
 
-                if (emulateSeamfulCubeMapSampling)
+                // __samplerExternal2DY2YEXT cannot be used with
+                // emulateSeamfulCubeMapSampling because that's only enabled in GLES == 2.
+                // Use the read image view here anyway.
+                if (emulateSeamfulCubeMapSampling && !isSamplerExternalY2Y)
                 {
                     // If emulating seamful cube mapping, use the fetch image view.  This is
                     // basically the same image view as read, except it's a 2DArray view for
@@ -5042,7 +5052,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                 else
                 {
                     const ImageView &imageView = textureVk->getReadImageView(
-                        context, samplerState.getSRGBDecode(), samplerUniform.texelFetchStaticUse);
+                        context, samplerState.getSRGBDecode(), samplerUniform.texelFetchStaticUse,
+                        isSamplerExternalY2Y);
                     mHandles[infoIndex].imageView = imageView.getHandle();
                 }
             }
