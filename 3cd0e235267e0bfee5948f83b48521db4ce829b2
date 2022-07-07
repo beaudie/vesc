@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37824f67_cf8cdd5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T15:19:00Z",
+      "side": 1,
+      "message": "I accepted the GOLD diffs, there is a SwiftShader change that slightly affects depth test results.",
+      "revId": "3cd0e235267e0bfee5948f83b48521db4ce829b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
