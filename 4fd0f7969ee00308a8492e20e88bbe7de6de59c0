@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c37229a_8a7bd356",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-07T22:22:47Z",
+      "side": 1,
+      "message": "Could you please mention:\n\nconformance2/reading/read-pixels-pack-parameters.html is failing in WebKit on M1 without this workaround.",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a9dd8dfd_7e2a34d4",
@@ -121,6 +138,24 @@
       "side": 1,
       "message": "WebKit has only a suppressed bug from pre-ANGLE times for this issue.",
       "parentUuid": "b15dcb5a_46f18529",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ce664e_3fb5b455",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-07T22:22:47Z",
+      "side": 1,
+      "message": "OK. Please address the comment in the CL description, then lgtm.",
+      "parentUuid": "67f95c5f_38f2db36",
       "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
