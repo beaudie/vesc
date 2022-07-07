@@ -4995,6 +4995,7 @@ void ImageHelper::resetCachedProperties()
     mLevelCount                  = 0;
     mTotalStagedBufferUpdateSize = 0;
     mYcbcrConversionDesc.reset();
+    mSamplerExternal2DY2YEXTYcbcrConversionDesc.reset();
     mCurrentSingleClearValue.reset();
     mRenderPassUsageFlags.reset();
 
@@ -5188,6 +5189,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     }
 
     mYcbcrConversionDesc.reset();
+    mSamplerExternal2DY2YEXTYcbcrConversionDesc.reset();
 
     const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
     VkFormat actualVkFormat           = GetVkFormatFromFormatID(actualFormatID);
@@ -5225,8 +5227,8 @@ angle::Result ImageHelper::initExternal(Context *context,
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
         // Update the SamplerYcbcrConversionCache key
-        mYcbcrConversionDesc.update(rendererVk, 0, conversionModel, colorRange, supportedLocation,
-                                    supportedLocation, chromaFilter, components, intendedFormatID);
+        updateYcbcrConversionDesc(rendererVk, 0, conversionModel, colorRange, supportedLocation,
+                                  supportedLocation, chromaFilter, components, intendedFormatID);
     }
 
     if (hasProtectedContent)
@@ -5604,7 +5606,8 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
                                               uint32_t layerCount,
-                                              gl::SrgbWriteControlMode mode) const
+                                              gl::SrgbWriteControlMode mode,
+                                              bool samplerExternal2DY2YEXT) const
 {
     angle::FormatID actualFormat = mActualFormatID;
 
@@ -5622,7 +5625,8 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
 
     return initLayerImageViewImpl(context, textureType, aspectMask, swizzleMap, imageViewOut,
                                   baseMipLevelVk, levelCount, baseArrayLayer, layerCount,
-                                  GetVkFormatFromFormatID(actualFormat), 0);
+                                  GetVkFormatFromFormatID(actualFormat), 0,
+                                  samplerExternal2DY2YEXT);
 }
 
 angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
@@ -5635,9 +5639,11 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
                                                   uint32_t baseArrayLayer,
                                                   uint32_t layerCount,
                                                   VkFormat imageFormat,
-                                                  VkImageUsageFlags usageFlags) const
+                                                  VkImageUsageFlags usageFlags,
+                                                  bool samplerExternal2DY2YEXT) const
 {
-    ANGLE_LOG(ERR) << __func__ << " extent " << mExtents.width << " " << mExtents.height;
+    ANGLE_LOG(ERR) << __func__ << " extent " << mExtents.width << " " << mExtents.height
+                   << " samplerExternal2DY2YEXT? " << samplerExternal2DY2YEXT;
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.flags                 = 0;
@@ -5678,24 +5684,51 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
     }
 
     VkSamplerYcbcrConversionInfo yuvConversionInfo = {};
-    if (mYcbcrConversionDesc.valid())
+    if (samplerExternal2DY2YEXT)
     {
-        ANGLE_LOG(ERR) << __func__ << " has ycbcr conversion";
-        ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
-        yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
-        yuvConversionInfo.pNext = nullptr;
-        ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
-            context, mYcbcrConversionDesc, &yuvConversionInfo.conversion));
-        AddToPNextChain(&viewInfo, &yuvConversionInfo);
-
-        // VUID-VkImageViewCreateInfo-image-02399
-        // If image has an external format, format must be VK_FORMAT_UNDEFINED
-        if (mYcbcrConversionDesc.getExternalFormat() != 0)
+        if (mSamplerExternal2DY2YEXTYcbcrConversionDesc.valid())
         {
-            ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
-            viewInfo.format = VK_FORMAT_UNDEFINED;
+            ANGLE_LOG(ERR) << __func__ << " has ycbcr conversion (samplerExternal2DY2YEXT path)";
+            ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
+            yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+            yuvConversionInfo.pNext = nullptr;
+            ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
+                context, mSamplerExternal2DY2YEXTYcbcrConversionDesc,
+                &yuvConversionInfo.conversion));
+            AddToPNextChain(&viewInfo, &yuvConversionInfo);
+
+            // VUID-VkImageViewCreateInfo-image-02399
+            // If image has an external format, format must be VK_FORMAT_UNDEFINED
+            if (mSamplerExternal2DY2YEXTYcbcrConversionDesc.getExternalFormat() != 0)
+            {
+                ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
+                viewInfo.format = VK_FORMAT_UNDEFINED;
+            }
+            ANGLE_LOG(ERR) << __func__ << " viewInfo pNext ? " << (viewInfo.pNext != nullptr);
         }
-        ANGLE_LOG(ERR) << __func__ << " viewInfo pNext ? " << (viewInfo.pNext != nullptr);
+    }
+    else
+    {
+        if (mYcbcrConversionDesc.valid())
+        {
+            ANGLE_LOG(ERR) << __func__
+                           << " has ycbcr conversion (non-samplerExternal2DY2YEXT path)";
+            ASSERT((context->getRenderer()->getFeatures().supportsYUVSamplerConversion.enabled));
+            yuvConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+            yuvConversionInfo.pNext = nullptr;
+            ANGLE_TRY(context->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
+                context, mYcbcrConversionDesc, &yuvConversionInfo.conversion));
+            AddToPNextChain(&viewInfo, &yuvConversionInfo);
+
+            // VUID-VkImageViewCreateInfo-image-02399
+            // If image has an external format, format must be VK_FORMAT_UNDEFINED
+            if (mYcbcrConversionDesc.getExternalFormat() != 0)
+            {
+                ANGLE_LOG(ERR) << __func__ << " has external format, set format undefiend";
+                viewInfo.format = VK_FORMAT_UNDEFINED;
+            }
+            ANGLE_LOG(ERR) << __func__ << " viewInfo pNext ? " << (viewInfo.pNext != nullptr);
+        }
     }
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
     return angle::Result::Continue;
@@ -9381,6 +9414,8 @@ ImageViewHelper::ImageViewHelper(ImageViewHelper &&other)
     std::swap(mPerLevelRangeLinearCopyImageViews, other.mPerLevelRangeLinearCopyImageViews);
     std::swap(mPerLevelRangeSRGBCopyImageViews, other.mPerLevelRangeSRGBCopyImageViews);
     std::swap(mPerLevelRangeStencilReadImageViews, other.mPerLevelRangeStencilReadImageViews);
+    std::swap(mPerLevelRangeSamplerExternal2DY2YEXTImageViews,
+              other.mPerLevelRangeSamplerExternal2DY2YEXTImageViews);
 
     std::swap(mLayerLevelDrawImageViews, other.mLayerLevelDrawImageViews);
     std::swap(mLayerLevelDrawImageViewsLinear, other.mLayerLevelDrawImageViewsLinear);
@@ -9412,6 +9447,7 @@ void ImageViewHelper::release(RendererVk *renderer, std::vector<vk::GarbageObjec
     ReleaseImageViews(&mPerLevelRangeLinearCopyImageViews, &garbage);
     ReleaseImageViews(&mPerLevelRangeSRGBCopyImageViews, &garbage);
     ReleaseImageViews(&mPerLevelRangeStencilReadImageViews, &garbage);
+    ReleaseImageViews(&mPerLevelRangeSamplerExternal2DY2YEXTImageViews, &garbage);
 
     // Release the draw views
     for (ImageViewVector &layerViews : mLayerLevelDrawImageViews)
@@ -9471,9 +9507,10 @@ bool ImageViewHelper::isImageViewGarbageEmpty() const
            mPerLevelRangeLinearFetchImageViews.empty() &&
            mPerLevelRangeSRGBReadImageViews.empty() && mPerLevelRangeSRGBCopyImageViews.empty() &&
            mPerLevelRangeSRGBFetchImageViews.empty() &&
-           mPerLevelRangeStencilReadImageViews.empty() && mLayerLevelDrawImageViews.empty() &&
-           mLayerLevelDrawImageViewsLinear.empty() && mSubresourceDrawImageViews.empty() &&
-           mLayerLevelStorageImageViews.empty();
+           mPerLevelRangeStencilReadImageViews.empty() &&
+           mPerLevelRangeSamplerExternal2DY2YEXTImageViews.empty() &&
+           mLayerLevelDrawImageViews.empty() && mLayerLevelDrawImageViewsLinear.empty() &&
+           mSubresourceDrawImageViews.empty() && mLayerLevelStorageImageViews.empty();
 }
 
 void ImageViewHelper::destroy(VkDevice device)
@@ -9488,6 +9525,7 @@ void ImageViewHelper::destroy(VkDevice device)
     DestroyImageViews(&mPerLevelRangeLinearCopyImageViews, device);
     DestroyImageViews(&mPerLevelRangeSRGBCopyImageViews, device);
     DestroyImageViews(&mPerLevelRangeStencilReadImageViews, device);
+    DestroyImageViews(&mPerLevelRangeSamplerExternal2DY2YEXTImageViews, device);
 
     // Release the draw views
     for (ImageViewVector &layerViews : mLayerLevelDrawImageViews)
@@ -9557,6 +9595,7 @@ angle::Result ImageViewHelper::initReadViews(ContextVk *contextVk,
         mPerLevelRangeLinearCopyImageViews.resize(maxViewCount);
         mPerLevelRangeSRGBCopyImageViews.resize(maxViewCount);
         mPerLevelRangeStencilReadImageViews.resize(maxViewCount);
+        mPerLevelRangeSamplerExternal2DY2YEXTImageViews.resize(maxViewCount);
     }
 
     // Determine if we already have ImageViews for the new max level
@@ -9609,6 +9648,10 @@ angle::Result ImageViewHelper::initReadViewsImpl(ContextVk *contextVk,
         ANGLE_TRY(image.initLayerImageView(contextVk, viewType, aspectFlags, readSwizzle,
                                            &getReadImageView(), baseLevel, levelCount, baseLayer,
                                            layerCount, gl::SrgbWriteControlMode::Default));
+        ANGLE_TRY(image.initLayerImageView(
+            contextVk, viewType, aspectFlags, readSwizzle, &getSamplerExternal2DY2YEXTImageView(),
+            baseLevel, levelCount, baseLayer, layerCount, gl::SrgbWriteControlMode::Default,
+            true /* is samplerExternal2DY2YEXT */));
     }
 
     gl::TextureType fetchType = viewType;

@@ -217,7 +217,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     const vk::ImageView &getReadImageView(vk::Context *context,
                                           GLenum srgbDecode,
-                                          bool texelFetchStaticUse) const;
+                                          bool texelFetchStaticUse,
+                                          bool samplerExternal2DY2YEXT) const;
 
     // A special view for cube maps as a 2D array, used with shaders that do texelFetch() and for
     // seamful cube map emulation.
@@ -521,7 +522,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     angle::Result refreshImageViews(ContextVk *contextVk);
     bool shouldDecodeSRGB(vk::Context *contextVk,
                           GLenum srgbDecode,
-                          bool texelFetchStaticUse) const;
+                          bool texelFetchStaticUse,
+                          bool samplerExternal2DY2YEXT) const;
     void initImageUsageFlags(ContextVk *contextVk, angle::FormatID actualFormatID);
     void handleImmutableSamplerTransition(const vk::ImageHelper *previousImage,
                                           const vk::ImageHelper *nextImage);
@@ -565,6 +567,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // - index 0: views for the texture's image (regardless of |mOwnsImage|).
     // - index N: views for mMultisampledImages[N]
     gl::RenderToTextureImageMap<vk::ImageViewHelper> mMultisampledImageViews;
+    // Extra duplicate set of image views when image is external + we are using
+    // __samperExternal2DY2YEXT.
+    gl::RenderToTextureImageMap<vk::ImageViewHelper> mIdentityMultisampledImageViews;
 
     // Texture buffers create texel buffer views instead.  |BufferViewHelper| contains the views
     // corresponding to the attached buffer range.
