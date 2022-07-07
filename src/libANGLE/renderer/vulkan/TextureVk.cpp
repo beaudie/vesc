@@ -2845,11 +2845,18 @@ void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
 
 bool TextureVk::shouldDecodeSRGB(vk::Context *context,
                                  GLenum srgbDecode,
-                                 bool texelFetchStaticUse) const
+                                 bool texelFetchStaticUse,
+                                 bool samplerExternal2DY2YEXT) const
 {
     // By default, we decode SRGB images.
     const vk::Format &format = getBaseLevelFormat(context->getRenderer());
     bool decodeSRGB          = format.getActualImageFormat(getRequiredImageAccess()).isSRGB;
+
+    // Don't decode SRGB for external 2D Y2YEXT.
+    if (samplerExternal2DY2YEXT)
+    {
+        return false;
+    }
 
     // If the SRGB override is enabled, we also decode SRGB.
     if (isSRGBOverrideEnabled() &&
@@ -2875,7 +2882,8 @@ bool TextureVk::shouldDecodeSRGB(vk::Context *context,
 
 const vk::ImageView &TextureVk::getReadImageView(vk::Context *context,
                                                  GLenum srgbDecode,
-                                                 bool texelFetchStaticUse) const
+                                                 bool texelFetchStaticUse,
+                                                 bool samplerExternal2DY2YEXT) const
 {
     ASSERT(mImage->valid());
 
@@ -2886,10 +2894,16 @@ const vk::ImageView &TextureVk::getReadImageView(vk::Context *context,
         return imageViews.getStencilReadImageView();
     }
 
-    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse))
+    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse, samplerExternal2DY2YEXT))
     {
         ASSERT(imageViews.getSRGBReadImageView().valid());
         return imageViews.getSRGBReadImageView();
+    }
+
+    if (samplerExternal2DY2YEXT)
+    {
+        ASSERT(imageViews.getSamplerExternal2DY2YEXTImageView().valid());
+        return imageViews.getSamplerExternal2DY2YEXTImageView();
     }
 
     ASSERT(imageViews.getLinearReadImageView().valid());
@@ -2907,7 +2921,7 @@ const vk::ImageView &TextureVk::getFetchImageView(vk::Context *context,
     // We don't currently support fetch for depth/stencil cube map textures.
     ASSERT(!imageViews.hasStencilReadImageView() || !imageViews.hasFetchImageView());
 
-    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse))
+    if (shouldDecodeSRGB(context, srgbDecode, texelFetchStaticUse, false))
     {
         return (imageViews.hasFetchImageView() ? imageViews.getSRGBFetchImageView()
                                                : imageViews.getSRGBReadImageView());

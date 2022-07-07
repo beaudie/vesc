@@ -949,6 +949,13 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
                 ((*activeTextures)[textureUnit]->getImage().hasImmutableSampler()))
             {
                 ASSERT(samplerBinding.boundTextureUnits.size() == 1);
+
+                // TODO: Pipeline layout needs identically defined samplerycbcrconversion object
+                // bool isSamplerExternalY2Y = samplerBinding.samplerType ==
+                // GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT; ANGLE_LOG(ERR) << "isSamplerExternalY2Y ? " <<
+                // isSamplerExternalY2Y; const vk::Sampler &immutableSampler =
+                // textureVk->getSampler(isSamplerExternalY2Y).get();
+
                 // Always take the texture's sampler, that's only way to get to yuv conversion for
                 // externalFormat
                 const TextureVk *textureVk          = (*activeTextures)[textureUnit];

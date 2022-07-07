@@ -4996,6 +4996,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
         updateWriteDesc(info.binding, descriptorType, descriptorCount);
 
+        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
         {
             GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
@@ -5020,6 +5022,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
             }
             else
             {
+                // get the right sampler here
                 gl::Sampler *sampler       = samplers[textureUnit].get();
                 const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
@@ -5045,17 +5048,32 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 if (emulateSeamfulCubeMapSampling)
                 {
-                    // If emulating seamful cube mapping, use the fetch image view.  This is
-                    // basically the same image view as read, except it's a 2DArray view for
-                    // cube maps.
-                    const ImageView &imageView = textureVk->getFetchImageView(
-                        context, samplerState.getSRGBDecode(), samplerUniform.texelFetchStaticUse);
-                    mHandles[infoIndex].imageView = imageView.getHandle();
+                    if (isSamplerExternalY2Y)
+                    {
+                        // __samplerExternal2DY2YEXT cannot be used with
+                        // emulateSeamfulCubeMapSampling because that's only enabled in GLES == 2.
+                        // Use the read image view here anyway.
+                        const ImageView &imageView = textureVk->getReadImageView(
+                            context, samplerState.getSRGBDecode(),
+                            samplerUniform.texelFetchStaticUse, isSamplerExternalY2Y);
+                        mHandles[infoIndex].imageView = imageView.getHandle();
+                    }
+                    else
+                    {
+                        // If emulating seamful cube mapping, use the fetch image view.  This is
+                        // basically the same image view as read, except it's a 2DArray view for
+                        // cube maps.
+                        const ImageView &imageView =
+                            textureVk->getFetchImageView(context, samplerState.getSRGBDecode(),
+                                                         samplerUniform.texelFetchStaticUse);
+                        mHandles[infoIndex].imageView = imageView.getHandle();
+                    }
                 }
                 else
                 {
                     const ImageView &imageView = textureVk->getReadImageView(
-                        context, samplerState.getSRGBDecode(), samplerUniform.texelFetchStaticUse);
+                        context, samplerState.getSRGBDecode(), samplerUniform.texelFetchStaticUse,
+                        isSamplerExternalY2Y);
                     mHandles[infoIndex].imageView = imageView.getHandle();
                 }
             }

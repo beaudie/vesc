@@ -1719,7 +1719,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
                                      uint32_t layerCount,
-                                     gl::SrgbWriteControlMode mode) const;
+                                     gl::SrgbWriteControlMode mode,
+                                     bool samplerExternal2DY2YEXT = false) const;
     angle::Result initReinterpretedLayerImageView(Context *context,
                                                   gl::TextureType textureType,
                                                   VkImageAspectFlags aspectMask,
@@ -2216,6 +2217,7 @@ class ImageHelper final : public Resource, public angle::Subject
     uint64_t getExternalFormat() const { return mYcbcrConversionDesc.getExternalFormat(); }
     bool updateChromaFilter(RendererVk *rendererVk, VkFilter filter)
     {
+        mSamplerExternal2DY2YEXTYcbcrConversionDesc.updateChromaFilter(rendererVk, filter);
         return mYcbcrConversionDesc.updateChromaFilter(rendererVk, filter);
     }
     const YcbcrConversionDesc &getYcbcrConversionDesc() const { return mYcbcrConversionDesc; }
@@ -2232,6 +2234,9 @@ class ImageHelper final : public Resource, public angle::Subject
         mYcbcrConversionDesc.update(rendererVk, externalFormat, conversionModel, colorRange,
                                     xChromaOffset, yChromaOffset, chromaFilter, components,
                                     intendedFormatID);
+        mSamplerExternal2DY2YEXTYcbcrConversionDesc.update(
+            rendererVk, externalFormat, VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY, colorRange,
+            xChromaOffset, yChromaOffset, chromaFilter, components, intendedFormatID);
     }
 
     // Used by framebuffer and render pass functions to decide loadOps and invalidate/un-invalidate
@@ -2476,7 +2481,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                          uint32_t baseArrayLayer,
                                          uint32_t layerCount,
                                          VkFormat imageFormat,
-                                         VkImageUsageFlags usageFlags) const;
+                                         VkImageUsageFlags usageFlags,
+                                         bool samplerExternal2DY2YEXT = false) const;
 
     bool canCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
                                            const angle::Format *readFormat);
@@ -2513,6 +2519,9 @@ class ImageHelper final : public Resource, public angle::Subject
 
     // For imported images
     YcbcrConversionDesc mYcbcrConversionDesc;
+    // To be kept in sync with mYcbcrConversionDesc, except with
+    // VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY as conversion model.
+    YcbcrConversionDesc mSamplerExternal2DY2YEXTYcbcrConversionDesc;
 
     // The first level that has been allocated. For mutable textures, this should be same as
     // mBaseLevel since we always reallocate VkImage based on mBaseLevel change. But for immutable
@@ -2633,6 +2642,16 @@ class ImageViewHelper final : angle::NonCopyable
     {
         return mLinearColorspace ? getReadViewImpl(mPerLevelRangeLinearCopyImageViews)
                                  : getReadViewImpl(mPerLevelRangeSRGBCopyImageViews);
+    }
+
+    ImageView &getSamplerExternal2DY2YEXTImageView()
+    {
+        return getReadViewImpl(mPerLevelRangeSamplerExternal2DY2YEXTImageViews);
+    }
+
+    const ImageView &getSamplerExternal2DY2YEXTImageView() const
+    {
+        return getValidReadViewImpl(mPerLevelRangeSamplerExternal2DY2YEXTImageViews);
     }
 
     // Used when initialized RenderTargets.
@@ -2817,6 +2836,7 @@ class ImageViewHelper final : angle::NonCopyable
     ImageViewVector mPerLevelRangeLinearCopyImageViews;
     ImageViewVector mPerLevelRangeSRGBCopyImageViews;
     ImageViewVector mPerLevelRangeStencilReadImageViews;
+    ImageViewVector mPerLevelRangeSamplerExternal2DY2YEXTImageViews;
 
     // Draw views
     LayerLevelImageViewVector mLayerLevelDrawImageViews;
