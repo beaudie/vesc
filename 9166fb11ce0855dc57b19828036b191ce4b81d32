@@ -86,6 +86,41 @@
       "parentUuid": "3c2356a3_d2b99cf6",
       "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "118e28fb_c0876b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T15:13:23Z",
+      "side": 1,
+      "message": "(forgot to reply yesterday)",
+      "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "021e2283_d987ea73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T15:13:23Z",
+      "side": 1,
+      "message": "Talked offline. The alternative is to keep one ImageHelper per VkImage (as is done currently), and patch the command buffer helper at the end of the RP (after ANI) to point to the correct ImageHelper (in addition to Framebuffer, which needs to be done anyway). That might just end up being cleaner.",
+      "parentUuid": "1c100b84_4054ce94",
+      "revId": "9166fb11ce0855dc57b19828036b191ce4b81d32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
