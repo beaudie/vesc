@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9963665_82f9f0e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T01:07:39Z",
+      "side": 1,
+      "message": "Odd that it seems to have worked for some files but not others. Nevertheless, adding it to cpp is perfectly fine. Otherwise, we also have files where the implementation is inline in the header (not the class), see e.g. `RenderbufferImpl::getMemorySize`.\n\nFor virtual methods, inlining them really has no benefit, so implementing in cpp LGTM.\n\n---\n\nAs for landing texture support first, by all means go ahead!",
+      "parentUuid": "6a631338_ea251900",
+      "revId": "8abe47f228f78d29d4c8c990312d30e292bde637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53df02c9_824cd65f",
