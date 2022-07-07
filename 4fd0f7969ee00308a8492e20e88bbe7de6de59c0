@@ -69,6 +69,24 @@
       "parentUuid": "45e8de92_79dd026c",
       "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f961f01a_6e360dcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-07T21:31:29Z",
+      "side": 1,
+      "message": "It fails in WebKit. The linked issue explains why Chrome is unaffected:\n\u003e In order to maintain the tightest packing of data read back from the GPU process to the renderer process, Chromium\u0027s command buffer has always emulated these parameters, never passing them down to the driver. Perhaps this is how this driver bug went unnoticed for so long, but it does seem extraordinarily unlikely.",
+      "parentUuid": "6a411c67_dc9b07fb",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
