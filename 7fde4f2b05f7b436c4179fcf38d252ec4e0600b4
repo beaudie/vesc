@@ -97,6 +97,30 @@
       },
       "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eedd82bb_17217ac2",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Image9.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-07-07T21:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fc5cb24_3b8d0f98",
+      "range": {
+        "startLine": 767,
+        "startChar": 60,
+        "endLine": 767,
+        "endChar": 72
+      },
+      "revId": "7fde4f2b05f7b436c4179fcf38d252ec4e0600b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
