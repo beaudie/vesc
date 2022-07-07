@@ -1059,8 +1059,7 @@ bool sh::TryCreateModifiedStruct(TCompiler &compiler,
 
     state.finalize(allowPadding);
 
-    if (identicalFieldCount == originalFields.size() && !state.hasPacking() &&
-        !state.hasPadding() && !isUBO)
+    if (identicalFieldCount == originalFields.size() && !state.hasPacking() && !state.hasPadding())
     {
         return false;
     }

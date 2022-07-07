@@ -1326,8 +1326,8 @@ void GenMetalTraverser::emitVariableDeclaration(const VarDecl &decl,
 
         default:
         {
-            ASSERT(symbolType != SymbolType::Empty || evdConfig.isParameter);
-            emitOrdinaryVariableDeclaration(decl, evdConfig);
+            if (symbolType != SymbolType::Empty || evdConfig.isParameter)
+                emitOrdinaryVariableDeclaration(decl, evdConfig);
         }
     }
 
