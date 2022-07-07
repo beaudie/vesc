@@ -120,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f7382a6_08cdef03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T01:14:52Z",
+      "side": 1,
+      "message": "\u003e ny reason why it is harmless to pass a non-zero VkRenderPassBeginInfo.clearValueCount when non of the FrameBufferVk attachments has VK_ATTACHMENT_LOAD_OP_CLEAR\n\nBecause if none of the attachments clear, then the driver is not going to look at the clear values at all. Notice that the VVL message is a \"best practices\" message, not a validation error or even warning. It means that what ANGLE is doing is perfectly ok with the spec, it\u0027s just that VVL is trying to be helpful and point out a potential inefficiency.\n\nIn this case, actually avoiding giving the clear values is a source of inefficiency, so it\u0027s better to just always blindly supply the array, even if not used.\n\n\u003e in that case I will hold on checking this change in\n\n:thumbsup: You can change the status of the CL to WIP from the ... menu so gerrit doesn\u0027t attempt to show it to reviewers as CLs needing attention.",
+      "parentUuid": "006eca7f_a2e0ddd5",
+      "revId": "e81016c0b076315f4980f2a2938b5db18153bb6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b83b5e1_0158b68b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
