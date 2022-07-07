@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c697ef_ec289bac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T01:20:14Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "f41a637aff2909a75c82bb350c9a614490252670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "871988bf_1f1182ae",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "Currently, the condition reads as \"ES 2.0 and extension not enabled\". I think it\u0027s correct because `GL_RENDERBUFFER_SAMPLES` is defined in ES 3.0 core.",
       "parentUuid": "871988bf_1f1182ae",
+      "revId": "f41a637aff2909a75c82bb350c9a614490252670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1da060b_24cb91de",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-07T01:20:14Z",
+      "side": 1,
+      "message": "`\u0026\u0026` looks good to me.",
+      "parentUuid": "fec04fb9_de147a92",
       "revId": "f41a637aff2909a75c82bb350c9a614490252670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
