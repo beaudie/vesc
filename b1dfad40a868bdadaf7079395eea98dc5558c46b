@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ae4c992_f9c29267",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-07T08:27:04Z",
+      "side": 1,
+      "message": "Hi, Geoff, I wrote email to rafael.Cintron@microsoft.com, he helped to confirm that if all timestamps happen in the same disjoint query(with disjoint carefully checked), the data are comparable. The confirmed logic is as below:\n{\n  g_pContext-\u003eBegin(pQueryDisjoint);\n  // Multiple  timestamps inside one disjoint.\n  g_pContext-\u003eEnd(pQueryTimestamp1);\n  RunComputeShader();\n  g_pContext-\u003eEnd(pQueryTimestamp2);\n  RunComputeShader();\n  g_pContext-\u003eEnd(pQueryTimestamp3);\n  RunComputeShader();\n  g_pContext-\u003eEnd(pQueryTimestamp4);\n  RunComputeShader();\n   …\n  g_pContext-\u003eEnd(pQueryTimestampEnd);\n  g_pContext-\u003eEnd(pQueryDisjoint);\n}\n\nSo could you please help to review the new change?",
+      "parentUuid": "5e3111f0_85f389a7",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0efe5eba_7be42cf3",
         "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
         "patchSetId": 2
