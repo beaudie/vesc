@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f90b5b31_dd3d9c6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-07T01:50:10Z",
+      "side": 1,
+      "message": "I took a quick look, and it LGTM.  I\u0027d like Shabi to look at, and then I\u0027ll re-review.",
+      "revId": "c7a8e42790599ce803d45e85e6d024994abf719e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d38aa4c_e45e7c62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-07-07T01:50:10Z",
+      "side": 1,
+      "message": "Why drop the `angle::Result` return value?  Is it to make the code below easier?",
+      "range": {
+        "startLine": 3229,
+        "startChar": 0,
+        "endLine": 3229,
+        "endChar": 4
+      },
+      "revId": "c7a8e42790599ce803d45e85e6d024994abf719e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
