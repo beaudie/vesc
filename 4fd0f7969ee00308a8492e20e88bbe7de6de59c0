@@ -51,6 +51,24 @@
       "parentUuid": "455dfe86_5bb93b42",
       "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a411c67_dc9b07fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-07T21:23:45Z",
+      "side": 1,
+      "message": "https://www.khronos.org/registry/webgl/sdk/tests/conformance2/reading/read-pixels-pack-parameters.html passes on my M1 MacBook Pro:\n\nData exported 2022-07-07T21:21:15.094Z\nChrome version Chrome/105.0.5165.0\nOperating system Mac OS X 12.4.0\n...\nGPU0\nVENDOR\u003d 0x106b [Google Inc. (Apple)], DEVICE\u003d0x0000 [ANGLE (Apple, Apple M1 Max, OpenGL 4.1 Metal - 76.3)], DRIVER_VENDOR\u003dApple, DRIVER_VERSION\u003d76.3 *ACTIVE*\n...\nGL_VENDOR\nGoogle Inc. (Apple)\nGL_RENDERER\nANGLE (Apple, Apple M1 Max, OpenGL 4.1 Metal - 76.3)\nGL_VERSION\nOpenGL ES 2.0.0 (ANGLE 2.1.19019 git hash: 39e88e6e5179)\n\nOn what configuration do you see this test failing without this patch?",
+      "parentUuid": "45e8de92_79dd026c",
+      "revId": "4fd0f7969ee00308a8492e20e88bbe7de6de59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
