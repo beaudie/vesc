@@ -362,6 +362,94 @@ MapBufferRangeParams BufferUpdateD3D11Params()
     return params;
 }
 
+MapBufferRangeParams BufferUpdateMetalParams()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsMidBuffer()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateOffset         = 524288;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsLargeUpdate()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateSize           = 524288;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsFullBuffer()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateSize           = 1048576;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsTinyUpdate()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateSize           = 128;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsNonPowerOf2()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateSize           = 32000;
+    params.bufferSize           = 800000;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsUnsynchronized()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.access               = GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+    return params;
+}
+
+MapBufferRangeParams BufferUpdateMetalParamsLargeUpdateUnsynchronized()
+{
+    MapBufferRangeParams params;
+    params.eglParameters        = egl_platform::METAL();
+    params.vertexType           = GL_FLOAT;
+    params.vertexComponentCount = 4;
+    params.vertexNormalized     = GL_FALSE;
+    params.updateSize           = 524288;
+    params.access               = GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+    return params;
+}
 MapBufferRangeParams BufferUpdateOpenGLOrGLESParams()
 {
     MapBufferRangeParams params;
@@ -469,6 +557,14 @@ TEST_P(MapBufferRangeBenchmark, Run)
 ANGLE_INSTANTIATE_TEST(MapBufferRangeBenchmark,
                        BufferUpdateD3D11Params(),
                        BufferUpdateOpenGLOrGLESParams(),
+                       BufferUpdateMetalParams(),
+                       BufferUpdateMetalParamsMidBuffer(),
+                       BufferUpdateMetalParamsLargeUpdate(),
+                       BufferUpdateMetalParamsFullBuffer(),
+                       BufferUpdateMetalParamsTinyUpdate(),
+                       BufferUpdateMetalParamsNonPowerOf2(),
+                       BufferUpdateMetalParamsUnsynchronized(),
+                       BufferUpdateMetalParamsLargeUpdateUnsynchronized(),
                        BufferUpdateVulkanParams(),
                        BufferUpdateVulkanParamsMidBuffer(),
                        BufferUpdateVulkanParamsLargeUpdate(),
