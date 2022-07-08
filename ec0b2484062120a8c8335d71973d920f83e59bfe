@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b3b9b3_4f6948d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:05:26Z",
+      "side": 1,
+      "message": "Looks good overall but a few comments.\n",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4ed704_7682b421",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:05:26Z",
+      "side": 1,
+      "message": "This TexImage2D call is only necessary if !requiresInitialization, because the texture\u0027s been zero-filled above otherwise.",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9affb980_b0ea248a",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:05:26Z",
+      "side": 1,
+      "message": "This should use destOffset.x/y and clippedArea.x/y/width/height rather than sourceArea. Or add a different code path doing that if (requiresInitialization).",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8ba359e_0244a35a",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:05:26Z",
+      "side": 1,
+      "message": "The earlier code had a bug where the texture was sized to clippedArea.width/height rather than sourceArea.width/height. Could that be related to the crashes, too?",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
