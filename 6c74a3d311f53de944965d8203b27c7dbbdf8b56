@@ -33,6 +33,23 @@
       "message": "Let\u0027s see how this looks on the bots.\n",
       "revId": "6c74a3d311f53de944965d8203b27c7dbbdf8b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ae798ea_41e89b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T22:27:11Z",
+      "side": 1,
+      "message": "The branch from which this CL was uploaded was based off that for https://chromium-review.googlesource.com/c/angle/angle/+/3722601 , which has a compilation failure. While on this branch, \"git branch --set-uptream-to main\" and re-uploading should, I think, break the dependency and allow this to land separately.\n",
+      "revId": "6c74a3d311f53de944965d8203b27c7dbbdf8b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
