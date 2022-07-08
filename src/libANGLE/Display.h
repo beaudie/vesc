@@ -292,6 +292,10 @@ class Display final : public LabeledObject,
     void overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled);
 
     const angle::FeatureList &getFeatures() const { return mFeatures; }
+    bool isFeatureEnabled(const std::string &featureName) const
+    {
+        return angle::IsFeatureEnabled(mFeatures, featureName);
+    }
 
     const char *queryStringi(const EGLint name, const EGLint index);
 

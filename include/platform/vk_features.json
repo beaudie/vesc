@@ -892,7 +892,16 @@
             "category": "Features",
             "description": [
                 "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion"
-            ]
+            ],
+            "issue": "https://anglebug.com/7382"
+        },
+        {
+            "name": "supports_timestamp_surface_attribute",
+            "category": "Features",
+            "description": [
+                "Platform supports setting frame timestamp surface attribute"
+            ],
+            "issue": "https://anglebug.com/7489"
         }
     ]
 }

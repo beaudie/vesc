@@ -1194,6 +1194,12 @@ void InitFragmentShadingRateKHRFunctions(VkDevice device)
     GET_DEVICE_FUNC(vkCmdSetFragmentShadingRateKHR);
 }
 
+// VK_GOOGLE_display_timing
+void InitGetPastPresentationTimingGoogleFunction(VkDevice device)
+{
+    GET_DEVICE_FUNC(vkGetPastPresentationTimingGOOGLE);
+}
+
 #    undef GET_INSTANCE_FUNC
 #    undef GET_DEVICE_FUNC
 
