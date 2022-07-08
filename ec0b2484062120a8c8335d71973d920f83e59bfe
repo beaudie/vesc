@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f78ae30_2455cf40",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-08T19:24:35Z",
+      "side": 1,
+      "message": "If `requiresInitialization \u003d\u003d true`, this branch is not executed at all, see L706, L767, L795.",
+      "parentUuid": "1b4ed704_7682b421",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9affb980_b0ea248a",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 2
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4507f81_1cb8605e",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-08T19:24:35Z",
+      "side": 1,
+      "message": "This code is not executed when `requiresInitialization \u003d\u003d true`, so I think `sourceArea` should work correct here (unless there are more driver bugs).",
+      "parentUuid": "9affb980_b0ea248a",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d8ba359e_0244a35a",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 2
@@ -65,6 +101,24 @@
       "writtenOn": "2022-07-08T19:05:26Z",
       "side": 1,
       "message": "The earlier code had a bug where the texture was sized to clippedArea.width/height rather than sourceArea.width/height. Could that be related to the crashes, too?",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deed13eb_06d1f46f",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-08T19:24:35Z",
+      "side": 1,
+      "message": "I don\u0027t think so. In the test that crashes, the texture dimensions are the same as the framebuffer, so all clipping logic is bypassed. The crash seems to be related to the framebuffer and the texture using the same texture object (although different mip levels).",
+      "parentUuid": "d8ba359e_0244a35a",
       "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
