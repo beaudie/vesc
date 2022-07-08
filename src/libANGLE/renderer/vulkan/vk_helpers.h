@@ -151,6 +151,8 @@ class DescriptorSetHelper final : public Resource
 
     VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
 
+    void copyResourceUse(vk::SharedResourceUse &use);
+
   private:
     VkDescriptorSet mDescriptorSet;
 };
@@ -179,6 +181,7 @@ class DescriptorPoolHelper final : angle::NonCopyable
                        uint32_t maxSets);
     void destroy(RendererVk *renderer, VulkanCacheType cacheType);
     void release(ContextVk *contextVk, VulkanCacheType cacheType);
+    void collectGarbage(std::vector<vk::GarbageObject> &sharedGarbage);
 
     bool allocateDescriptorSet(Context *context,
                                CommandBufferHelperCommon *commandBufferHelper,
@@ -197,8 +200,6 @@ class DescriptorPoolHelper final : angle::NonCopyable
     void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
     void resetCache(RendererVk *renderer);
-    // Scan descriptorSet garbage list and destroy all GPU completed garbage
-    void cleanupGarbage(Context *context);
     bool isCurrentlyInUse(Serial lastCompletedQueueSerial);
 
     size_t getTotalCacheSize() const { return mDescriptorSetCache.getTotalCacheSize(); }
@@ -313,6 +314,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
     CacheStats mCacheStats;
+
+    void cleanupDescriptorSets(Serial lastCompletedQueueSerial);
+    DescriptorSetList mAllocatedDescriptorSets;
 };
 
 struct DescriptorSetAndPoolIndex
