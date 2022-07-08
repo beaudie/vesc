@@ -88,6 +88,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5bae07fc_b65655c4",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-08T20:42:25Z",
+      "side": 1,
+      "message": "I couldn\u0027t find a place where it would fix the `type` for the desktop GL calls without breaking ANGLE internal assumptions. For instance, `GetInternalFormatInfo` may reject LUMINANCE16F_EXT with HALF_FLOAT.",
+      "parentUuid": "69ecd591_0ab20490",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1b4ed704_7682b421",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 2
