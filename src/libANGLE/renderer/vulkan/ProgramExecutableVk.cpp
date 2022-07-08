@@ -1376,13 +1376,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
-        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
-            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
-
-        // Let each pool know there is a shared cache key created and destroys the shared cache key
-        // when it destroys the pool.
-        mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().onNewDescriptorSetAllocated(
-            sharedCacheKey);
+        vk::SharedDescriptorSetCacheKey sharedCacheKey = nullptr;
 
         vk::DescriptorSetDescBuilder fullDesc;
         ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
