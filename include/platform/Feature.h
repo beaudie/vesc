@@ -110,6 +110,8 @@ struct FeatureInfo;
 using FeatureMap  = std::map<std::string, FeatureInfo *>;
 using FeatureList = std::vector<const FeatureInfo *>;
 
+bool IsFeatureEnabled(const FeatureList &features, const std::string &name);
+
 struct FeatureInfo
 {
     FeatureInfo(const FeatureInfo &other);
@@ -169,7 +171,7 @@ struct FeatureSetBase
 
   private:
     // Non-copyable
-    FeatureSetBase(const FeatureSetBase &other) = delete;
+    FeatureSetBase(const FeatureSetBase &other)            = delete;
     FeatureSetBase &operator=(const FeatureSetBase &other) = delete;
 
   protected:

@@ -72,6 +72,19 @@ FeatureInfo *FindFeatureByName(FeatureMap *features, const std::string &name)
 }
 }  // anonymous namespace
 
+// Search for a given feature by name and return true if enabled.
+bool IsFeatureEnabled(const FeatureList &features, const std::string &name)
+{
+    for (const FeatureInfo *feature : features)
+    {
+        if (FeatureNameMatch(std::string(feature->name), name))
+        {
+            return feature->enabled;
+        }
+    }
+    return false;
+}
+
 // FeatureSetBase implementation
 void FeatureSetBase::overrideFeatures(const std::vector<std::string> &featureNames, bool enabled)
 {
