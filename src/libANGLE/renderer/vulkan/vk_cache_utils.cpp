@@ -4900,7 +4900,8 @@ void UpdatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
             const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
             const SamplerHelper &samplerHelper =
-                samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
+                samplerVk ? samplerVk->getSampler()
+                          : textureVk->getSampler(false /* don't use samplerExternal2DY2YEXT */);
             const gl::SamplerState &samplerState =
                 sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
@@ -5010,7 +5011,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                 const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
                 const SamplerHelper &samplerHelper =
-                    samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
+                    samplerVk ? samplerVk->getSampler()
+                              : textureVk->getSampler(isSamplerExternalY2Y);
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
