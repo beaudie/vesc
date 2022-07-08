@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e6c67bb_1b30bf44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T20:00:22Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "f41a637aff2909a75c82bb350c9a614490252670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "871988bf_1f1182ae",
@@ -84,6 +101,24 @@
       "side": 1,
       "message": "`\u0026\u0026` looks good to me.",
       "parentUuid": "fec04fb9_de147a92",
+      "revId": "f41a637aff2909a75c82bb350c9a614490252670",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53ec58b6_bebf27c5",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6841,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T20:00:22Z",
+      "side": 1,
+      "message": "I see - thanks.",
+      "parentUuid": "b1da060b_24cb91de",
       "revId": "f41a637aff2909a75c82bb350c9a614490252670",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
