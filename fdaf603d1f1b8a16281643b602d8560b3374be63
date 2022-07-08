@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc261f72_539c38b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:55:00Z",
+      "side": 1,
+      "message": "Still lgtm\n",
+      "revId": "fdaf603d1f1b8a16281643b602d8560b3374be63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d762d7_436b315b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3817,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:55:00Z",
+      "side": 1,
+      "message": "Out of curiosity how often does this test provoke GL_OUT_OF_MEMORY in practice?",
+      "revId": "fdaf603d1f1b8a16281643b602d8560b3374be63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab78ab34_e0fd32d1",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3845,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:55:00Z",
+      "side": 1,
+      "message": "Should this say \"large\" or \"very large\" instead of \"too-big\"? The texture\u0027s size is legal according to OpenGL semantics.",
+      "revId": "fdaf603d1f1b8a16281643b602d8560b3374be63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
