@@ -951,19 +951,22 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
                 ASSERT(samplerBinding.boundTextureUnits.size() == 1);
 
                 // TODO: Pipeline layout needs identically defined samplerycbcrconversion object
-                // bool isSamplerExternalY2Y = samplerBinding.samplerType ==
-                // GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT; ANGLE_LOG(ERR) << "isSamplerExternalY2Y ? " <<
-                // isSamplerExternalY2Y; const vk::Sampler &immutableSampler =
-                // textureVk->getSampler(isSamplerExternalY2Y).get();
+                bool isSamplerExternalY2Y =
+                    samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+                ANGLE_LOG(ERR) << "isSamplerExternalY2Y ? " << isSamplerExternalY2Y;
 
                 // Always take the texture's sampler, that's only way to get to yuv conversion for
                 // externalFormat
-                const TextureVk *textureVk          = (*activeTextures)[textureUnit];
-                const vk::Sampler &immutableSampler = textureVk->getSampler().get();
+                const TextureVk *textureVk = (*activeTextures)[textureUnit];
+                // const vk::Sampler &immutableSampler = textureVk->getSampler().get();
+                const vk::Sampler &immutableSampler =
+                    textureVk->getSampler(isSamplerExternalY2Y).get();
                 descOut->update(info.binding, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, arraySize,
                                 activeStages, &immutableSampler);
-                const vk::ImageHelper &image                              = textureVk->getImage();
-                mImmutableSamplerIndexMap[image.getYcbcrConversionDesc()] = textureIndex;
+                const vk::ImageHelper &image = textureVk->getImage();
+                mImmutableSamplerIndexMap
+                    [isSamplerExternalY2Y ? image.getSamplerExternal2DY2YEXTYcbcrConversionDesc()
+                                          : image.getYcbcrConversionDesc()] = textureIndex;
                 // The Vulkan spec has the following note -
                 // All descriptors in a binding use the same maximum
                 // combinedImageSamplerDescriptorCount descriptors to allow implementations to use a
