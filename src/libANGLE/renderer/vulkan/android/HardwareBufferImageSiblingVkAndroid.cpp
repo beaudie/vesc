@@ -237,7 +237,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
                                                      &mSize.depth, &pixelFormat, &mUsage);
     GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
-    mFormat               = gl::Format(internalFormat);
+    if (pixelFormat == AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM)
+    {
+        internalFormat = GL_RGBA8;
+    }
+
+    mFormat = gl::Format(internalFormat);
 
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
