@@ -16,6 +16,23 @@
       "message": "Note, this fix doesn\u0027t entirely resolve issues with the reported shader. There\u0027s still problems with over allocation of registers due to original-to-modified expansion. However, this patch is needed to fix compile failures. ",
       "revId": "6c74a3d311f53de944965d8203b27c7dbbdf8b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a90a639d_60cc197b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T21:56:44Z",
+      "side": 1,
+      "message": "Let\u0027s see how this looks on the bots.\n",
+      "revId": "6c74a3d311f53de944965d8203b27c7dbbdf8b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
