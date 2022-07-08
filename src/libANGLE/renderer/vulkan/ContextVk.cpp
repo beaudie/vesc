@@ -2095,8 +2095,9 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures())
     {
+        const std::vector<gl::SamplerBinding> &samplerBindings = executable->getSamplerBindings();
         UpdatePreCacheActiveTextures(executable->getActiveSamplersMask(), mActiveTextures,
-                                     mState.getSamplers(), &mActiveTexturesDesc);
+                                     samplerBindings, mState.getSamplers(), &mActiveTexturesDesc);
 
         ProgramExecutableVk *executableVk = getExecutable();
 

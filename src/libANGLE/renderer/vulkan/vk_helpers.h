@@ -2221,6 +2221,10 @@ class ImageHelper final : public Resource, public angle::Subject
         return mYcbcrConversionDesc.updateChromaFilter(rendererVk, filter);
     }
     const YcbcrConversionDesc &getYcbcrConversionDesc() const { return mYcbcrConversionDesc; }
+    const YcbcrConversionDesc &getSamplerExternal2DY2YEXTYcbcrConversionDesc() const
+    {
+        return mSamplerExternal2DY2YEXTYcbcrConversionDesc;
+    }
     void updateYcbcrConversionDesc(RendererVk *rendererVk,
                                    uint64_t externalFormat,
                                    VkSamplerYcbcrModelConversion conversionModel,
@@ -2234,9 +2238,15 @@ class ImageHelper final : public Resource, public angle::Subject
         mYcbcrConversionDesc.update(rendererVk, externalFormat, conversionModel, colorRange,
                                     xChromaOffset, yChromaOffset, chromaFilter, components,
                                     intendedFormatID);
+        VkComponentMapping identityComponents = {
+            VK_COMPONENT_SWIZZLE_G,
+            VK_COMPONENT_SWIZZLE_B,
+            VK_COMPONENT_SWIZZLE_R,
+            VK_COMPONENT_SWIZZLE_IDENTITY,
+        };
         mSamplerExternal2DY2YEXTYcbcrConversionDesc.update(
             rendererVk, externalFormat, VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY, colorRange,
-            xChromaOffset, yChromaOffset, chromaFilter, components, intendedFormatID);
+            xChromaOffset, yChromaOffset, chromaFilter, identityComponents, intendedFormatID);
     }
 
     // Used by framebuffer and render pass functions to decide loadOps and invalidate/un-invalidate
