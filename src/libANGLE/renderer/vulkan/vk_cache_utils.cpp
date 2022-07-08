@@ -4996,8 +4996,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
 
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
-
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
                 mHandles[infoIndex].bufferView = view->getHandle();
@@ -5014,8 +5012,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(samplerState);
-
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
 
