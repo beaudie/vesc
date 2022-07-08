@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a90e51_115b7326",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-08T01:15:06Z",
+      "side": 1,
+      "message": "LGTM. I\u0027ll keep this +1 since you\u0027ve added four reviewers, to give the others a chance to participate.",
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f833fa7_c8832099",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-08T01:15:06Z",
+      "side": 1,
+      "message": "One problem we encountered with `GL_EXT_shader_framebuffer_fetch` and `GL_EXT_shader_framebuffer_fetch_non_coherent` was that applications `strstr`ed for `GL_EXT_shader_framebuffer_fetch` inside the extension string, unwittingly matched `GL_EXT_shader_framebuffer_fetch_non_coherent` and assumed coherent framebuffer fetch is present.\n\nTo avoid that, I suggest naming this `GL_ANGLE_shader_pixel_local_storage_non_coherent` (while the coherent remains as-is), so neither extension string is a substring of the other.",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 45
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a8ea2e_61ee1276",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-08T01:15:06Z",
+      "side": 1,
+      "message": "Maybe worth mentioning that this is not universally true. Where framebuffer fetch is available (i.e. the Vulkan backend), it won\u0027t be using GL images even on IMR.",
+      "range": {
+        "startLine": 110,
+        "startChar": 73,
+        "endLine": 111,
+        "endChar": 48
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "055b3d5d_c36c2c06",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-08T01:15:06Z",
+      "side": 1,
+      "message": "Please increment this number when changing this file. Beware that on rebase, another change that touches this file would have also incremented this, and git doesn\u0027t produce a merge conflict there (You\u0027d need to re-increment then).",
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
