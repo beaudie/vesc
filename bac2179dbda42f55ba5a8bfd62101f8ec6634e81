@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40630e1f_2a1ffe21",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-07-08T21:26:26Z",
+      "side": 1,
+      "message": "What becomes of this block?",
+      "revId": "bac2179dbda42f55ba5a8bfd62101f8ec6634e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e593466b_81c91d8c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2022-07-08T21:26:26Z",
+      "side": 1,
+      "message": "Suspicious of this. There shouldn\u0027t be any interaction between multisampling and YUV?",
+      "revId": "bac2179dbda42f55ba5a8bfd62101f8ec6634e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
