@@ -4891,6 +4891,7 @@ void DescriptorSetDescBuilder::updateUniformsAndXfb(Context *context,
 
 void UpdatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
                                   const gl::ActiveTextureArray<TextureVk *> &textures,
+                                  const std::vector<gl::SamplerBinding> &samplerBindings,
                                   const gl::SamplerBindingVector &samplers,
                                   DescriptorSetDesc *desc)
 {
@@ -4898,7 +4899,9 @@ void UpdatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
 
     for (size_t textureIndex : activeTextures)
     {
-        TextureVk *textureVk = textures[textureIndex];
+        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+        TextureVk *textureVk      = textures[textureIndex];
 
         DescriptorInfoDesc infoDesc = {};
 
@@ -4913,7 +4916,7 @@ void UpdatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
             const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
             const SamplerHelper &samplerHelper =
-                samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
+                samplerVk ? samplerVk->getSampler() : textureVk->getSampler(isSamplerExternalY2Y);
             const gl::SamplerState &samplerState =
                 sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
@@ -5024,7 +5027,8 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                 const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
 
                 const SamplerHelper &samplerHelper =
-                    samplerVk ? samplerVk->getSampler() : textureVk->getSampler();
+                    samplerVk ? samplerVk->getSampler()
+                              : textureVk->getSampler(isSamplerExternalY2Y);
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
