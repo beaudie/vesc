@@ -2184,6 +2184,10 @@ class ImageHelper final : public Resource, public angle::Subject
         return mYcbcrConversionDesc.updateChromaFilter(rendererVk, filter);
     }
     const YcbcrConversionDesc &getYcbcrConversionDesc() const { return mYcbcrConversionDesc; }
+    const YcbcrConversionDesc &getSamplerExternal2DY2YEXTYcbcrConversionDesc() const
+    {
+        return mSamplerExternal2DY2YEXTYcbcrConversionDesc;
+    }
     void updateYcbcrConversionDesc(RendererVk *rendererVk,
                                    uint64_t externalFormat,
                                    VkSamplerYcbcrModelConversion conversionModel,
