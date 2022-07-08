@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b5fc6b_2777c38f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:48:23Z",
+      "side": 1,
+      "message": "lgtm\n\nIt would be great to get this landed and unsuppress the associated failing tests on M1 hardware.\n",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4ed704_7682b421",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "If `requiresInitialization \u003d\u003d true`, this branch is not executed at all, see L706, L767, L795.",
       "parentUuid": "1b4ed704_7682b421",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e1475fc_b85d5977",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:48:23Z",
+      "side": 1,
+      "message": "Ah, I see.",
+      "parentUuid": "0f78ae30_2455cf40",
       "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f575a46_c82afa4b",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:48:23Z",
+      "side": 1,
+      "message": "I see. Sounds fine then.",
+      "parentUuid": "c4507f81_1cb8605e",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8ba359e_0244a35a",
@@ -119,6 +172,24 @@
       "side": 1,
       "message": "I don\u0027t think so. In the test that crashes, the texture dimensions are the same as the framebuffer, so all clipping logic is bypassed. The crash seems to be related to the framebuffer and the texture using the same texture object (although different mip levels).",
       "parentUuid": "d8ba359e_0244a35a",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cec5f64_186d8787",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-08T19:48:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "deed13eb_06d1f46f",
       "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
