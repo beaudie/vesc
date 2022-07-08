@@ -239,10 +239,21 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                       const gl::ImageUnit &binding,
                                       const vk::ImageView **imageViewOut);
 
-    const vk::SamplerHelper &getSampler() const
+    const vk::SamplerHelper &getSampler(bool isSamplerExternalY2Y) const
     {
+        if (isSamplerExternalY2Y)
+        {
+            ASSERT(mSamplerExternal2DY2YEXTSampler.valid());
+            return mSamplerExternal2DY2YEXTSampler.get();
+        }
         ASSERT(mSampler.valid());
         return mSampler.get();
+    }
+
+    void resetSampler()
+    {
+        mSampler.reset();
+        mSamplerExternal2DY2YEXTSampler.reset();
     }
 
     // Normally, initialize the image with enabled mipmap level counts.
@@ -601,6 +612,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // |mSampler| contains the relevant Vulkan sampler states representing the OpenGL Texture
     // sampling states for the Texture.
     vk::SamplerBinding mSampler;
+    // |mSamplerExternal2DY2YEXTSampler| contains a version of mSampler that is meant for use with
+    // __samplerExternal2DY2YEXT (i.e., skipping conversion of YUV to RGB).
+    vk::SamplerBinding mSamplerExternal2DY2YEXTSampler;
 
     // The created vkImage usage flag.
     VkImageUsageFlags mImageUsageFlags;
