@@ -52,6 +52,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a289d72_d1171361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-08T20:02:59Z",
+      "side": 1,
+      "message": "lgtm, just one comment",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ecd591_0ab20490",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-08T20:02:59Z",
+      "side": 1,
+      "message": "this check happens twice (here and line 804). Does it make any sense to put in one place? No problem with leaving it as is, just asking as it might bite someone later",
+      "revId": "ec0b2484062120a8c8335d71973d920f83e59bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4ed704_7682b421",
