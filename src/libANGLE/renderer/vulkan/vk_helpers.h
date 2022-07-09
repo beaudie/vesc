@@ -305,6 +305,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
     CacheStats mCacheStats;
+
+    double totalCacheLookupTime;
+    int totalCacheLookupCount;
 };
 
 struct DescriptorSetAndPoolIndex

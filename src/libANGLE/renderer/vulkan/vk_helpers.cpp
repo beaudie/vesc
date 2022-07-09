@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include "common/system_utils.h"
 #include "common/utilities.h"
 #include "common/vulkan/vk_headers.h"
 #include "image_util/loadimage.h"
@@ -3352,6 +3353,9 @@ angle::Result DynamicDescriptorPool::init(Context *context,
             mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(mMaxSetsPerPool)));
     ASSERT(mCachedDescriptorSetLayout == VK_NULL_HANDLE);
 
+    totalCacheLookupTime  = 0;
+    totalCacheLookupCount = 0;
+
     mPoolSizes.assign(setSizes, setSizes + setSizeCount);
     mCachedDescriptorSetLayout = descriptorSetLayout;
 
@@ -3362,6 +3366,12 @@ angle::Result DynamicDescriptorPool::init(Context *context,
 
 void DynamicDescriptorPool::destroy(RendererVk *renderer, VulkanCacheType cacheType)
 {
+    if (totalCacheLookupCount > 0)
+    {
+        ALOG("average cache lookup time: %f ms",
+             (totalCacheLookupTime * 1.0e6) / totalCacheLookupCount);
+    }
+
     for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
     {
         ASSERT(!pool->isReferenced());
@@ -3428,6 +3438,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     VkDescriptorSet *descriptorSetOut,
     DescriptorCacheResult *cacheResultOut)
 {
+    double t1 = angle::GetCurrentSystemTime();
     // First scan the descriptor pools.
     for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
     {
@@ -3436,9 +3447,15 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
             *cacheResultOut = DescriptorCacheResult::CacheHit;
             bindingOut->set(pool);
             mCacheStats.hit();
+            double t2 = angle::GetCurrentSystemTime();
+            totalCacheLookupTime += t2 - t1;
+            totalCacheLookupCount++;
             return angle::Result::Continue;
         }
     }
+    double t2 = angle::GetCurrentSystemTime();
+    totalCacheLookupTime += t2 - t1;
+    totalCacheLookupCount++;
 
     mCacheStats.miss();
 
