@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "303f85ac_391b30b1",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-09T18:18:02Z",
+      "side": 1,
+      "message": "So in this specific case, `GL_ANGLE_shader_pixel_local_storage` is a strict subset of `GL_ANGLE_shader_pixel_local_storage_coherent`. If you try to use the `_coherent` extension as the former, you will still get correct behavior, because the coherent version is identical except that `glPixelLocalStorageBarrierANGLE()` is explicitly a no-op. (@geofflang brought this up earlier, and it\u0027s why I intentionally proposed making the non-coherent version a substring of the coherent one, as opposed to how `GL_EXT_shader_framebuffer_fetch(_non_coherent)` are named.)\n\nFor the shader, my hope is to only support `#enable GL_ANGLE_shader_pixel_local_storage` (not the _coherent string), similar to how `KHR_blend_equation_advanced` works -- https://www.khronos.org/registry/OpenGL/extensions/KHR/KHR_blend_equation_advanced.txt. I think this is positive because otherwise you would have to generate two different shader strings enabling different extensions, even if you didn\u0027t care about coherency.\n\nTL;DR, I think the `KHR_blend_equation_advanced(_coherent)` naming pattern is ideal and doesn\u0027t have the problem you mentioned above, and I hope we can use it for PLS as well.",
+      "parentUuid": "3f833fa7_c8832099",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 45
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19a8ea2e_61ee1276",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-08T01:15:06Z",
       "side": 1,
       "message": "Maybe worth mentioning that this is not universally true. Where framebuffer fetch is available (i.e. the Vulkan backend), it won\u0027t be using GL images even on IMR.",
+      "range": {
+        "startLine": 110,
+        "startChar": 73,
+        "endLine": 111,
+        "endChar": 48
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd294b70_0471cf3d",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-09T18:18:02Z",
+      "side": 1,
+      "message": "Done.\n\nIIUC, Vulkan can only support `GL_EXT_shader_framebuffer_fetch_non_coherent` on most (if not all) IMR architectures. Is this correct?\n\nSo if we want `GL_ANGLE_shader_pixel_local_storage_coherent` we will still need shader images and `VK_EXT_fragment_shader_interlock`.",
+      "parentUuid": "19a8ea2e_61ee1276",
       "range": {
         "startLine": 110,
         "startChar": 73,
@@ -77,6 +125,24 @@
       "writtenOn": "2022-07-08T01:15:06Z",
       "side": 1,
       "message": "Please increment this number when changing this file. Beware that on rebase, another change that touches this file would have also incremented this, and git doesn\u0027t produce a merge conflict there (You\u0027d need to re-increment then).",
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17095392_cb608983",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-09T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "055b3d5d_c36c2c06",
       "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
