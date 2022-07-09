@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97ef5f0b_1a4d8c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-09T01:56:20Z",
+      "side": 1,
+      "message": "This appears not making much difference for overall CPU perf, mainly due to the improvement is too small (less than 1ms for average lookup). But it does show the cache lookup uses less CPU if you add cpu timing around the cache lookup code. See the file attached to the bug https://buganizer.corp.google.com/issues/237686097 comment #2. Overall this also made cacheStat code simpler as well. I think it worth take the CL given the data. ",
+      "revId": "5b646785d94b4a93a15564b93562c5194d18a4a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
