@@ -304,6 +304,24 @@
       "parentUuid": "108b7876_12a139e0",
       "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3f95566_ff85d0d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-10T22:20:28Z",
+      "side": 1,
+      "message": "\u003e i think i can update that a bit to cover the end2end usecase as well\n\nDone -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3717277",
+      "parentUuid": "a124333b_1b67c280",
+      "revId": "6c172e4b87f2d9a3d781c07da75dbb542d46007d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
