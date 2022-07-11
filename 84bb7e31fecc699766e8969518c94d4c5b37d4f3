@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1af33d3f_2bd20d2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "I don\u0027t have any plans to run the perf tests on the bots. Rather I just want to be able to compare GL to Metal",
+      "parentUuid": "de41803f_fcf8660c",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f6f441a7_6b664b6c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -59,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9b9a534_66970b8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "Thanks for the list\n\n\u003e BindingPerf.cpp\n\nSeems to only test the NULL devices and there\u0027s no NULL device for Metal yet?\n\n\u003e DispatchComputePerf.cpp\n\nThere\u0027s no compute on metal\n\n\u003e DrawElementsPerf.cpp\n\u003e InstancingPerf.cpp\n\u003e TexturesPerf.cpp\n\nadded\n\n\u003e MultiviewPerf.cpp\n\nI don\u0027t think metal supports multiview?",
+      "parentUuid": "597889e6_950455ec",
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b262ac2_10241be8",
@@ -72,6 +114,30 @@
       "writtenOn": "2022-07-11T15:19:54Z",
       "side": 1,
       "message": "false, true\ntrue, true\n\nto match the other backends",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 365,
+        "endChar": 48
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43e9081c_4ad06a87",
+        "filename": "src/tests/perf_tests/GenerateMipmapPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b262ac2_10241be8",
       "range": {
         "startLine": 364,
         "startChar": 0,
@@ -105,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48cf01ae_14d30402",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "since my goal is to compare GL to Metal I\u0027d like to keep at least the large update test is larger might more easily show a difference",
+      "parentUuid": "9fd453b2_93f395ce",
+      "range": {
+        "startLine": 560,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 74
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a68c1da1_e12ac7b8",
@@ -128,6 +218,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0af2e25_502c328e",
+        "filename": "src/tests/perf_tests/UniformsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "Removed one so it should match GL now.",
+      "parentUuid": "a68c1da1_e12ac7b8",
+      "range": {
+        "startLine": 521,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 92
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11db705c_58fe0b26",
@@ -141,6 +255,30 @@
       "writtenOn": "2022-07-11T15:19:54Z",
       "side": 1,
       "message": "nit: please move above OPENGL (to keep this sorted)",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 30
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8e39ec_95ad3426",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-07-11T18:00:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11db705c_58fe0b26",
       "range": {
         "startLine": 122,
         "startChar": 0,
