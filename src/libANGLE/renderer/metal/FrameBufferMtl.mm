@@ -1422,6 +1422,19 @@ angle::Result FramebufferMtl::invalidateImpl(const gl::Context *context,
     {
         if (invalidateColorBuffers.test(i))
         {
+            // Skip invalidation when the actual format has alpha channel
+            RenderTargetMtl *renderTarget = mColorRenderTargets[i];
+            if (renderTarget && renderTarget->getTexture())
+            {
+                const mtl::Format &mtlFormat        = *renderTarget->getFormat();
+                const angle::Format &intendedFormat = mtlFormat.intendedAngleFormat();
+                const angle::Format &actualFormat   = mtlFormat.actualAngleFormat();
+                if (intendedFormat.alphaBits == 0 && actualFormat.alphaBits)
+                {
+                    continue;
+                }
+            }
+
             mtl::RenderPassColorAttachmentDesc &colorAttachment =
                 mRenderPassDesc.colorAttachments[i];
             colorAttachment.storeAction = MTLStoreActionDontCare;
