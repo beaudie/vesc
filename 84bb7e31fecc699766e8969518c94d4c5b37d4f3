@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "de41803f_fcf8660c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "Could you please open a separate bug and describe there what are your plans for Metal Perf testing?",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f6f441a7_6b664b6c",
@@ -14,6 +37,116 @@
       "writtenOn": "2022-07-08T19:45:32Z",
       "side": 1,
       "message": "I just blindly added Metal almost everywhere I saw Vulkan",
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "597889e6_950455ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "Since Metal replaces Desktop GL, I think it would make more sense to add it everywhere you see OPENGL and not Vulkan.\n\nSome files where it looks like it can also be added:\nBindingPerf.cpp\nDispatchComputePerf.cpp\nDrawElementsPerf.cpp\nInstancingPerf.cpp\nMultiviewPerf.cpp\nTexturesPerf.cpp\n\nAlso note that we don\u0027t run angle_perftests on https://ci.chromium.org/ui/p/angle/builders/ci/mac-test/1976/overview, so this is going to affect only local runs. Not sure if this was your goal.\nAlso, if you want to track the performance on the dashboards, you\u0027ll need a dedicated Mac Perf bot.\nWe then should discuss how long do these tests take and how much capacity do we have.",
+      "parentUuid": "f6f441a7_6b664b6c",
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b262ac2_10241be8",
+        "filename": "src/tests/perf_tests/GenerateMipmapPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "false, true\ntrue, true\n\nto match the other backends",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 365,
+        "endChar": 48
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fd453b2_93f395ce",
+        "filename": "src/tests/perf_tests/MapBufferRange.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "Do these variations trigger different codepaths in Metal (like I assume that they do in Vulkan)?\nIf not, maybe you can simplify this with something similar to BufferUpdateOpenGLOrGLESParams",
+      "range": {
+        "startLine": 560,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 74
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a68c1da1_e12ac7b8",
+        "filename": "src/tests/perf_tests/UniformsPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "This is more combinations than OpenGL, but less than Vulkan.\nJust wanted to double-check this is intentional.",
+      "range": {
+        "startLine": 521,
+        "startChar": 0,
+        "endLine": 522,
+        "endChar": 92
+      },
+      "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11db705c_58fe0b26",
+        "filename": "src/tests/test_utils/angle_test_configs.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-11T15:19:54Z",
+      "side": 1,
+      "message": "nit: please move above OPENGL (to keep this sorted)",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 30
+      },
       "revId": "84bb7e31fecc699766e8969518c94d4c5b37d4f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
