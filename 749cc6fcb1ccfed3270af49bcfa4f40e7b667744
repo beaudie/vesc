@@ -160,6 +160,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dd8689e_18918c0d",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-11T20:40:56Z",
+      "side": 1,
+      "message": "That would be super cool. Maybe they would advertise VK_ARM_rasterization_order_attachment_access or something.",
+      "parentUuid": "3b2080b4_361a4a8f",
+      "range": {
+        "startLine": 110,
+        "startChar": 73,
+        "endLine": 111,
+        "endChar": 48
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "055b3d5d_c36c2c06",
