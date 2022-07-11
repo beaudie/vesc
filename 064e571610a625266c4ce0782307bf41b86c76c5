@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "594fddb2_fca07002",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3665,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T20:15:35Z",
+      "side": 1,
+      "message": "Is the Android check necessary? Please comment that said enabling is through a call to `vkGetPastPresentationTimingGOOGLE` which has that as side effect on Android only.",
+      "range": {
+        "startLine": 3665,
+        "startChar": 28,
+        "endLine": 3665,
+        "endChar": 43
+      },
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72f454bc_0afd3350",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T20:15:35Z",
+      "side": 1,
+      "message": "Please comment that this is a side effect to a call to `vkGetPastPresentationTimingGOOGLE`. Otherwise it\u0027s not clear how this is enabled by calling a _getter_.",
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7c120c2_8e16acdd",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T20:15:35Z",
+      "side": 1,
+      "message": "Please don\u0027t! 😊\n\nThe proper way of doing this is to add an ANGLE extension that exposes this query alone, and check here if that extension is supported. You would expose that extension only from the Vulkan backend, based on the feature you\u0027ve added.\n\nNo need to walk the feature list and string-match.",
+      "range": {
+        "startLine": 5351,
+        "startChar": 16,
+        "endLine": 5351,
+        "endChar": 79
+      },
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
