@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45474ac9_f77cf89f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-11T17:28:50Z",
+      "side": 1,
+      "message": "This needs to be b/223456677",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd5d1fc7_3a16b3a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-11T17:28:50Z",
+      "side": 1,
+      "message": "Overall looks good to me with some nits. Do we have test for this?",
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de16dae8_ff6683f7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-11T17:28:50Z",
+      "side": 1,
+      "message": "Since external 2D Y2YEXT and srgb are mutually exclusive, this can be just:\nif(samplerExternal2DY2YEXT)\n{\n...\n}\nelse if(shouldDecodeSRGB())\n{\n...\n}\n\nAnd then you don\u0027t need to pass samplerExternal2DY2YEXT into shouldDecodeSRGB. You may add assertion to ensure they are mutually exclusive.",
+      "range": {
+        "startLine": 2891,
+        "startChar": 4,
+        "endLine": 2898,
+        "endChar": 5
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8270826_503256f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-11T17:28:50Z",
+      "side": 1,
+      "message": "I think the convention here is not use default argument.",
+      "range": {
+        "startLine": 2496,
+        "startChar": 70,
+        "endLine": 2496,
+        "endChar": 77
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
