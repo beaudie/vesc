@@ -20,6 +20,258 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51799033_6ad8fd37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Thanks Yuxin! Please add a test as such in `FramebufferFetchTest.cpp`:\n\n- Create 3 framebuffers, A, B and C, where A and C are single sampled and B is multisampled.\n- Clear each framebuffer to a different color and readback (`EXPECT_PIXEL_COLOR_EQ`); this makes sure they are all initialized.\n- Use a program that reads the input attachment and modifies in whatever way you like\n- Bind A, draw\n- Bind B, draw\n- Bind C, draw\n- Verify contents of A, B and C.\n\nThere should be no validation errors.\n",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c21f830_1c253651",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Don\u0027t need `mIsFragmentShader`, `ProgramExecutableVk` should make `isMultisampledFramebufferFetch` true only for fragment shaders.",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "802779b5_844ee365",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "nit: you don\u0027t need this, you can use `mBuiltInGLSampleID.valid()` instead.",
+      "range": {
+        "startLine": 2837,
+        "startChar": 9,
+        "endLine": 2837,
+        "endChar": 35
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a08e66a_55273a8f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2853,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "nit: remove TODO",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86dd10b7_3d08b98c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2966,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Please turn this into an ASSERT. You can use a function in the anonymous namespace to check this, and have this `ASSERT(that_function())`. Or use `std::any_of` to the same effect.",
+      "range": {
+        "startLine": 2960,
+        "startChar": 0,
+        "endLine": 2966,
+        "endChar": 9
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f375340_542abbac",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Given the above ASSERT, this can also be simplified to the else case only.",
+      "range": {
+        "startLine": 2971,
+        "startChar": 0,
+        "endLine": 2981,
+        "endChar": 5
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "424867f2_0435d026",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this function (nor `mBuiltInGLSampleOpVariable`). If you have `mBuiltInGLSampleID`, then its variable must have been defined.",
+      "range": {
+        "startLine": 3059,
+        "startChar": 0,
+        "endLine": 3070,
+        "endChar": 1
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db3c1fa4_17946314",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Please contain this to the transformer itself. I don\u0027t think you\u0027d particularly need the checks, but if you want to keep them, you can put them in `visitCapability` for example.\n\nThen you can remove the getters.",
+      "range": {
+        "startLine": 3168,
+        "startChar": 0,
+        "endLine": 3170,
+        "endChar": 77
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "037e02be_e76491f6",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Could you please move the `if (options.blah)` checks inside the transformation itself? See how other transformations are directly called without an if check. Each function call itself does the if check and early-returns if not needed.\n\nThat helps keep the logic of `SpirvTransformer` simpler and more high-level.",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a7b16c_29fccb06",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3633,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "Remove this `\u0026\u0026` and move the check inside `mMultiSampleTransformer.transformDecoration`. This logic belong to the transformer.",
+      "range": {
+        "startLine": 3632,
+        "startChar": 47,
+        "endLine": 3633,
+        "endChar": 57
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9e47d4f_d68b668f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "This is kind of odd, because both transformations can\u0027t meaningfully be transforming/replacing the same capability. In this very particular case, I suggest simplifying this (untested code):\n\n    TransformationState status \u003d\n        mXfbCodeGenerator.transformCapability(capability, mSpirvBlobOut);\n    ASSERT(status \u003d\u003d TransformationState::Unchanged);\n        \n    status \u003d\n        mMultiSampleTransformer.transformCapability(capability, mSpirvBlobOut);\n    ASSERT(status \u003d\u003d TransformationState::Unchanged);\n\n    return TransformationState::Unchanged;",
+      "range": {
+        "startLine": 3750,
+        "startChar": 0,
+        "endLine": 3764,
+        "endChar": 42
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69ffeb5d_1e85bc30",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "I suggest calling this function from `updateRasterizationSamples` directly. That function can then get the sample count out of `mGraphicsPipelineDesc` (before updating it) and pass it to this function. You wouldn\u0027t need to track `mFramebufferFetchSamples` then. You also wouldn\u0027t need to call this function from two places.",
+      "range": {
+        "startLine": 4316,
+        "startChar": 16,
+        "endLine": 4316,
+        "endChar": 45
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "24530fe1_ad2f0af8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
@@ -37,6 +289,93 @@
         "endLine": 4319,
         "endChar": 66
       },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92f27c7b_571fe220",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "While it\u0027s rare, this logic doesn\u0027t need to apply when changing from 2x to 4x multisampling for example.\n\nI suggest this clean up and fix Yuxin:\n\n```\n    const bool isPrevMultisampled \u003d mFramebufferFetchSamples \u003e 1;\n    const bool isCurrentMultisampled \u003d drawFramebufferSamples \u003e 1;\n    if (isPrevMultisampled !\u003d isCurrentMultisampled)\n```\n\nNote that we don\u0027t just need the a different pipeline when going from single-\u003emulti sampled. We also need it from multi-\u003esingle sampled.",
+      "parentUuid": "24530fe1_ad2f0af8",
+      "range": {
+        "startLine": 4319,
+        "startChar": 8,
+        "endLine": 4319,
+        "endChar": 66
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc7e686_cfa57467",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "nit: \u0026\u0026 `shaderType \u003d\u003d Fragment`",
+      "range": {
+        "startLine": 319,
+        "startChar": 56,
+        "endLine": 319,
+        "endChar": 83
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd9e63f_6281922f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "`x ? true : false` is the same as `x`. This could simply be `const bool isMultisampled \u003d samples \u003e 1;`.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 37,
+        "endLine": 1072,
+        "endChar": 65
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bbbc459_ca1e6c7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T19:36:02Z",
+      "side": 1,
+      "message": "nit: move next to `setRenderPassFramebufferFetchMode`, and call it `getRenderPassFramebufferFetchMode`",
       "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
