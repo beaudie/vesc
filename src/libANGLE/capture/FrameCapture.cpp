@@ -1221,38 +1221,69 @@ void MaybeResetResources(const gl::Context *context,
         }
         case ResourceIDType::VertexArray:
         {
-            ResourceSet &newVertextArrays =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray)
-                    .getNewResources();
+            TrackedResource &trackedVertexArrays =
+                resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray);
+            ResourceSet &newVertexArrays           = trackedVertexArrays.getNewResources();
+            ResourceSet &vertexArraysToRegen       = trackedVertexArrays.getResourcesToRegen();
+            ResourceSet &vertexArraysToRestore     = trackedVertexArrays.getResourcesToRestore();
+            ResourceCalls &vertexArrayRegenCalls   = trackedVertexArrays.getResourceRegenCalls();
+            ResourceCalls &vertexArrayRestoreCalls = trackedVertexArrays.getResourceRestoreCalls();
 
-            // If we have any new vertex arrays generated and not deleted during the run, delete
-            // them now
-            if (!newVertextArrays.empty())
+            // If we have any new vertex arrays generated and not deleted during the run, or any
+            // vertex arrays we need to regen, delete them now
+            if (!newVertexArrays.empty() || !vertexArraysToRegen.empty())
             {
                 size_t count = 0;
 
                 out << "    const GLuint deleteVertexArrays[] = {";
 
-                for (auto &newVA : newVertextArrays)
+                for (auto &oldVA : vertexArraysToRegen)
+                {
+                    formatResourceIndex(out, count);
+                    out << "gVertexArrayMap[" << oldVA << "]";
+                    ++count;
+                }
+
+                for (auto &newVA : newVertexArrays)
                 {
                     formatResourceIndex(out, count);
                     out << "gVertexArrayMap[" << newVA << "]";
                     ++count;
                 }
 
+                // Delete all the new and old vertex arrays at once
                 out << "};\n";
                 out << "    glDeleteVertexArrays(" << count << ", deleteVertexArrays);\n";
             }
 
-            // TODO (http://anglebug.com/4599): Handle vertex arrays that need regen
-            // This would only happen if a starting vertex array was deleted during the run.
-            ASSERT(resourceTracker->getTrackedResource(ResourceIDType::VertexArray)
-                       .getResourcesToRegen()
-                       .empty());
+            // If any of our starting vertex arrays were deleted during the run, recreate them
+            for (GLuint id : vertexArraysToRegen)
+            {
+                // Emit their regen calls
+                for (CallCapture &call : vertexArrayRegenCalls[id])
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(call, replayWriter, out, header, binaryData);
+                    out << ";\n";
+                }
+            }
+
+            // If any of our starting vertex arrays were modified during the run, restore their
+            // contents
+            for (GLuint id : vertexArraysToRestore)
+            {
+                // Emit their restore calls
+                for (CallCapture &call : vertexArrayRestoreCalls[id])
+                {
+                    out << "    ";
+                    WriteCppReplayForCall(call, replayWriter, out, header, binaryData);
+                    out << ";\n";
+                }
+            }
             break;
         }
         default:
-            // TODO (http://anglebug.com/4599): Reset more than just buffers
+            // TODO (http://anglebug.com/4599): Reset more resource types
             break;
     }
 }
@@ -1947,6 +1978,26 @@ bool IsTextureUpdate(CallCapture &call)
         case EntryPoint::GLCopyImageSubData:
         case EntryPoint::GLCopyImageSubDataEXT:
         case EntryPoint::GLCopyImageSubDataOES:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool IsVertexArrayUpdate(CallCapture &call)
+{
+    switch (call.entryPoint)
+    {
+        case EntryPoint::GLVertexAttribFormat:
+        case EntryPoint::GLVertexAttribIFormat:
+        case EntryPoint::GLBindVertexBuffer:
+        case EntryPoint::GLVertexAttribBinding:
+        case EntryPoint::GLVertexAttribPointer:
+        case EntryPoint::GLVertexAttribIPointer:
+        case EntryPoint::GLEnableVertexAttribArray:
+        case EntryPoint::GLDisableVertexAttribArray:
+        case EntryPoint::GLVertexBindingDivisor:
+        case EntryPoint::GLVertexAttribDivisor:
             return true;
         default:
             return false;
@@ -3749,29 +3800,48 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     gl::VertexArrayID boundVertexArrayID     = {0};
     for (const auto &vertexArrayIter : vertexArrayMap)
     {
+        TrackedResource &trackedVertexArrays =
+            resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray);
+
         gl::VertexArrayID vertexArrayID = {vertexArrayIter.first};
+
+        // Track this as a starting resource that may need to be restored
+        resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray)
+            .getStartingResources()
+            .insert(vertexArrayID.value);
+
+        // Create two lists of calls for initial setup
+        ResourceCalls &vertexArrayRegenCalls = trackedVertexArrays.getResourceRegenCalls();
+        CallVector vertexArrayGenCalls({setupCalls, &vertexArrayRegenCalls[vertexArrayID.value]});
+
         if (vertexArrayID.value != 0)
         {
-            cap(CaptureGenVertexArrays(replayState, true, 1, &vertexArrayID));
-
-            resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray)
-                .getStartingResources()
-                .insert(vertexArrayID.value);
-
-            MaybeCaptureUpdateResourceIDs(context, resourceTracker, setupCalls);
+            // Gen the vertex array
+            for (std::vector<CallCapture> *calls : vertexArrayGenCalls)
+            {
+                Capture(calls, CaptureGenVertexArrays(replayState, true, 1, &vertexArrayID));
+                MaybeCaptureUpdateResourceIDs(context, resourceTracker, calls);
+            }
         }
+
+        // Create two lists of calls for populating the vertex array
+        ResourceCalls &vertexArrayRestoreCalls = trackedVertexArrays.getResourceRestoreCalls();
+        CallVector vertexArraySetupCalls(
+            {setupCalls, &vertexArrayRestoreCalls[vertexArrayID.value]});
 
         if (vertexArrayIter.second)
         {
             const gl::VertexArray *vertexArray = vertexArrayIter.second;
 
-            // Bind the vertexArray (unless default) and populate it
-            if (vertexArrayID.value != 0)
+            // Populate the vertex array
+            for (std::vector<CallCapture> *calls : vertexArraySetupCalls)
             {
-                cap(CaptureBindVertexArray(replayState, true, vertexArrayID));
+                // Bind the vertexArray and populate it
+                Capture(calls, CaptureBindVertexArray(replayState, true, vertexArrayID));
                 boundVertexArrayID = vertexArrayID;
+
+                CaptureVertexArrayState(calls, context, vertexArray, &replayState);
             }
-            CaptureVertexArrayState(setupCalls, context, vertexArray, &replayState);
         }
     }
 
@@ -3781,6 +3851,10 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CaptureBindVertexArray(replayState, true, currentVertexArray->id()));
     }
+
+    // Track the calls necessary to bind the vertex array back to initial state
+    Capture(&resetCalls[angle::EntryPoint::GLBindVertexArray],
+            CaptureBindVertexArray(replayState, true, currentVertexArray->id()));
 
     // Capture indexed buffer bindings.
     const gl::BufferVector &uniformIndexedBuffers =
@@ -5539,6 +5613,16 @@ void FrameCaptureShared::trackDefaultUniformUpdate(const gl::Context *context,
     }
 }
 
+void FrameCaptureShared::trackVertexArrayUpdate(const gl::Context *context, const CallCapture &call)
+{
+    // Look up the currently bound vertex array
+    gl::VertexArrayID id = context->getState().getVertexArray()->id();
+
+    // Mark it as modified
+    mResourceTracker.getTrackedResource(context->id(), ResourceIDType::VertexArray)
+        .setModifiedResource(id.value);
+}
+
 void FrameCaptureShared::updateCopyImageSubData(CallCapture &call)
 {
     // This call modifies srcName and dstName to no longer be object IDs (GLuint), but actual
@@ -6238,6 +6322,43 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
+        case EntryPoint::GLGenVertexArrays:
+        case EntryPoint::GLGenVertexArraysOES:
+        {
+            GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+            const gl::VertexArrayID *arrayIDs =
+                call.params.getParam("arraysPacked", ParamType::TVertexArrayIDPointer, 1)
+                    .value.VertexArrayIDPointerVal;
+            for (GLsizei i = 0; i < count; i++)
+            {
+                handleGennedResource(context, arrayIDs[i]);
+            }
+            break;
+        }
+        case EntryPoint::GLDeleteVertexArrays:
+        case EntryPoint::GLDeleteVertexArraysOES:
+        {
+            GLsizei count = call.params.getParam("n", ParamType::TGLsizei, 0).value.GLsizeiVal;
+            const gl::VertexArrayID *arrayIDs =
+                call.params.getParam("arraysPacked", ParamType::TVertexArrayIDConstPointer, 1)
+                    .value.VertexArrayIDConstPointerVal;
+            for (GLsizei i = 0; i < count; i++)
+            {
+                // If we're capturing, track which vertex arrays have been deleted
+                handleDeletedResource(context, arrayIDs[i]);
+            }
+            break;
+        }
+        case EntryPoint::GLBindVertexArray:
+        case EntryPoint::GLBindVertexArrayOES:
+        {
+            if (isCaptureActive())
+            {
+                context->getFrameCapture()->getStateResetHelper().setEntryPointDirty(
+                    EntryPoint::GLBindVertexArray);
+            }
+            break;
+        }
         default:
             break;
     }
@@ -6251,6 +6372,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
     if (isCaptureActive() && GetDefaultUniformType(call) != DefaultUniformType::None)
     {
         trackDefaultUniformUpdate(context, call);
+    }
+
+    if (IsVertexArrayUpdate(call))
+    {
+        trackVertexArrayUpdate(context, call);
     }
 
     updateReadBufferSize(call.params.getReadBufferSize());
