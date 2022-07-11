@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73fb4ccf_a903eb11",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T20:18:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "303f85ac_391b30b1",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 45
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a8ea2e_61ee1276",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "Done.\n\nIIUC, Vulkan can only support `GL_EXT_shader_framebuffer_fetch_non_coherent` on most (if not all) IMR architectures. Is this correct?\n\nSo if we want `GL_ANGLE_shader_pixel_local_storage_coherent` we will still need shader images and `VK_EXT_fragment_shader_interlock`.",
       "parentUuid": "19a8ea2e_61ee1276",
+      "range": {
+        "startLine": 110,
+        "startChar": 73,
+        "endLine": 111,
+        "endChar": 48
+      },
+      "revId": "749cc6fcb1ccfed3270af49bcfa4f40e7b667744",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b2080b4_361a4a8f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-11T20:18:57Z",
+      "side": 1,
+      "message": "I\u0027m not quite certain, but I often hear of Intel having TBR-like features. Like they said they have hardware features that could make `VK_EXT_multisampled_render_to_single_sampled` relevant, which I believed would have applied to TBRs only. So I wouldn\u0027t be surprised if `GL_EXT_shader_framebuffer_fetch` (coherent) applied to Intel at some point in the future too.",
+      "parentUuid": "bd294b70_0471cf3d",
       "range": {
         "startLine": 110,
         "startChar": 73,
