@@ -16,6 +16,24 @@
       "message": "Could you please expand this comment to describe \"why\", not just \"what\"? For example (correct me if I\u0027m wrong):\n\n\"...has alpha channel, since in this case the color buffer\u0027s pre-invalidation contents may be visible via blending.\"\n\nThanks.",
       "revId": "7759c9f8ba980b86fd30912a53e6c650353a6106",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd72830_48d9242a",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-11T20:29:05Z",
+      "side": 1,
+      "message": "Done. The linked issue has two failures. This CL fixes the RGB8 case, not the one related to blending.",
+      "parentUuid": "d3a34724_e69d9737",
+      "revId": "7759c9f8ba980b86fd30912a53e6c650353a6106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
