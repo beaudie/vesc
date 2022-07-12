@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "823e47b0_fbb9c44a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3665,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-12T00:20:43Z",
+      "side": 1,
+      "message": "\u003e Is the Android check necessary?\n\nthere is a tight coupling between AnativeWindow API call and timestamps and its Android specific. Any other platform enabling ANGLE with vulkan backend should verify platform support and only then enable it\n\n\u003e Please comment that said enabling is through a call to vkGetPastPresentationTimingGOOGLE  which has that as side effect on Android only.\n\nAck.",
+      "parentUuid": "594fddb2_fca07002",
+      "range": {
+        "startLine": 3665,
+        "startChar": 28,
+        "endLine": 3665,
+        "endChar": 43
+      },
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72f454bc_0afd3350",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fdebcd7_99691a68",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-12T00:20:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72f454bc_0afd3350",
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7c120c2_8e16acdd",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-07-11T20:15:35Z",
       "side": 1,
       "message": "Please don\u0027t! 😊\n\nThe proper way of doing this is to add an ANGLE extension that exposes this query alone, and check here if that extension is supported. You would expose that extension only from the Vulkan backend, based on the feature you\u0027ve added.\n\nNo need to walk the feature list and string-match.",
+      "range": {
+        "startLine": 5351,
+        "startChar": 16,
+        "endLine": 5351,
+        "endChar": 79
+      },
+      "revId": "064e571610a625266c4ce0782307bf41b86c76c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a52567_8f171942",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-12T00:20:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7c120c2_8e16acdd",
       "range": {
         "startLine": 5351,
         "startChar": 16,
