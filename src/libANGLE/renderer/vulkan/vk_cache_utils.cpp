@@ -2394,7 +2394,8 @@ void ReleaseCachedObject(ContextVk *contextVk, const FramebufferDesc &desc)
 void ReleaseCachedObject(ContextVk *contextVk, const DescriptorSetDescAndPool &descAndPool)
 {
     ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc);
+    descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc,
+                                                  descAndPool.mPoolIndex);
 }
 
 void DestroyCachedObject(const FramebufferDesc &desc)
@@ -2406,7 +2407,7 @@ void DestroyCachedObject(const FramebufferDesc &desc)
 void DestroyCachedObject(const DescriptorSetDescAndPool &descAndPool)
 {
     ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->destroyCachedDescriptorSet(descAndPool.mDesc);
+    descAndPool.mPool->destroyCachedDescriptorSet(descAndPool.mDesc, descAndPool.mPoolIndex);
 }
 }  // anonymous namespace
 
@@ -6087,5 +6088,47 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
+}
+
+bool DescriptorSetCache::getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                          vk::RefCountedDescriptorSetHelper **descriptorSetOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *descriptorSetOut = iter->second;
+        return true;
+    }
+    return false;
+}
+
+void DescriptorSetCache::insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                             vk::RefCountedDescriptorSetHelper *descriptorSet)
+{
+    mPayload.emplace(desc, descriptorSet);
+}
+
+vk::RefCountedDescriptorSetHelper *DescriptorSetCache::releaseDescriptorSet(
+    const vk::DescriptorSetDesc &desc)
+{
+    vk::RefCountedDescriptorSetHelper *descriptorSet = nullptr;
+    auto iter                                        = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        descriptorSet = iter->second;
+        mPayload.erase(iter);
+    }
+    return descriptorSet;
+}
+
+size_t DescriptorSetCache::getTotalCacheKeySizeBytes() const
+{
+    size_t totalSize = 0;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &desc = iter.first;
+        totalSize += desc.getKeySizeBytes();
+    }
+    return totalSize;
 }
 }  // namespace rx
