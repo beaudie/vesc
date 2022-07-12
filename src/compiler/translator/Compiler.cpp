@@ -605,21 +605,28 @@ bool TCompiler::validateAST(TIntermNode *root)
 {
     if ((mCompileOptions & SH_VALIDATE_AST) != 0)
     {
+        ANGLE_LOG(ERR) << "TCompiler::validateAST begin";
         bool valid = ValidateAST(root, &mDiagnostics, mValidateASTOptions);
 
-#if defined(ANGLE_ENABLE_ASSERTS)
         if (!valid)
         {
             OutputTree(root, mInfoSink.info);
-            fprintf(stderr, "AST validation error(s):\n%s\n", mInfoSink.info.c_str());
+            ANGLE_LOG(ERR) << "TCompiler::validateAST AST validation errors"
+                           << mInfoSink.info.c_str();
+            // fprintf(stderr, "AST validation error(s):\n%s\n", mInfoSink.info.c_str());
         }
-#endif
+        else
+        {
+            ANGLE_LOG(ERR) << "TCompiler::validateAST AST validation success";
+        }
+
         // In debug, assert validation.  In release, validation errors will be returned back to the
         // application as internal ANGLE errors.
         ASSERT(valid);
 
         return valid;
     }
+    ANGLE_LOG(ERR) << "TCompiler::validateAST skipping validation";
     return true;
 }
 

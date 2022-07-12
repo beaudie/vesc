@@ -1383,6 +1383,7 @@ void Context::bindImageTexture(GLuint unit,
 
 void Context::useProgram(ShaderProgramID program)
 {
+    ANGLE_LOG(ERR) << "Context::useProgram  program " << program.value;
     ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
     mStateCache.onProgramExecutableChange(this);
 }
@@ -6319,6 +6320,8 @@ void Context::bufferSubData(BufferBinding target,
 
 void Context::attachShader(ShaderProgramID program, ShaderProgramID shader)
 {
+    ANGLE_LOG(ERR) << "Context::attachShader  program " << program.value << " to shader "
+                   << shader.value;
     Program *programObject = mState.mShaderProgramManager->getProgram(program);
     Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
     ASSERT(programObject && shaderObject);
@@ -7374,6 +7377,7 @@ GLboolean Context::isTexture(TextureID texture) const
 
 void Context::linkProgram(ShaderProgramID program)
 {
+    ANGLE_LOG(ERR) << "Context::linkProgram  program " << program.value;
     Program *programObject = getProgramNoResolveLink(program);
     ASSERT(programObject);
     ANGLE_CONTEXT_TRY(programObject->link(this));
@@ -7430,6 +7434,12 @@ void Context::shaderSource(ShaderProgramID shader,
                            const GLchar *const *string,
                            const GLint *length)
 {
+    for (int i = 0; i < count; ++i)
+    {
+        ANGLE_LOG(ERR) << "Context::shaderSource for shader " << shader.value << " string " << i
+                       << " of " << count << " : " << string[i];
+    }
+
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
     shaderObject->setSource(count, string, length);

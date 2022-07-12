@@ -268,6 +268,7 @@ const TFunction *EmulateYUVBuiltInsTraverser::getYUVFunc(TPrecision precision,
 
 bool EmulateYUVBuiltInsTraverser::update(TCompiler *compiler, TIntermBlock *root)
 {
+    ANGLE_LOG(ERR) << "EmulateYUVBuiltInsTraverser::update call";
     // Insert any added function definitions before the first function.
     const size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(root);
     TIntermSequence funcDefs;
@@ -276,6 +277,7 @@ bool EmulateYUVBuiltInsTraverser::update(TCompiler *compiler, TIntermBlock *root
     {
         if (funcDef != nullptr)
         {
+            ANGLE_LOG(ERR) << "EmulateYUVBuiltInsTraverser::update (adding a function def)";
             funcDefs.push_back(funcDef);
         }
     }
@@ -284,10 +286,13 @@ bool EmulateYUVBuiltInsTraverser::update(TCompiler *compiler, TIntermBlock *root
     {
         if (funcDef != nullptr)
         {
+            ANGLE_LOG(ERR)
+                << "EmulateYUVBuiltInsTraverser::update (adding a function def for rgb2yuv)";
             funcDefs.push_back(funcDef);
         }
     }
 
+    ANGLE_LOG(ERR) << "EmulateYUVBuiltInsTraverser::update (insert child nodes)";
     root->insertChildNodes(firstFunctionIndex, funcDefs);
 
     return updateTree(compiler, root);
