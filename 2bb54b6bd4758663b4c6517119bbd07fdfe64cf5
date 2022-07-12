@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65de5cd7_90615f13",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 1512,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:25:25Z",
+      "side": 1,
+      "message": "what happens `if(_api \u003d\u003d \"gles2\")` is true?",
+      "revId": "2bb54b6bd4758663b4c6517119bbd07fdfe64cf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
