@@ -251,6 +251,7 @@ enum class Feature
     SupportsSurfacelessQueryExtension,
     SupportsSurfaceProtectedCapabilitiesExtension,
     SupportsSurfaceProtectedSwapchains,
+    SupportsTimestampSurfaceAttribute,
     SupportsTransformFeedbackExtension,
     SupportsYUVSamplerConversion,
     SwapbuffersOnFlushOrFinishWithSingleBuffer,
