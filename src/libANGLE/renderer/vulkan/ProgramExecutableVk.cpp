@@ -1301,13 +1301,14 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDescBuilder &descriptorSetDesc,
-    DescriptorSetIndex setIndex)
+    DescriptorSetIndex setIndex,
+    vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[setIndex].get().getOrAllocateDescriptorSet(
         context, commandBufferHelper, descriptorSetDesc.getDesc(),
         mDescriptorSetLayouts[setIndex].get(), &mDescriptorPoolBindings[setIndex],
-        &mDescriptorSets[setIndex], nullptr, &cacheResult));
+        &mDescriptorSets[setIndex], newSharedCacheKeyOut, &cacheResult));
     ASSERT(mDescriptorSets[setIndex] != VK_NULL_HANDLE);
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
@@ -1326,7 +1327,8 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
-    const vk::DescriptorSetDescBuilder &shaderResourcesDesc)
+    const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
+    vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     if (!mDescriptorPools[DescriptorSetIndex::ShaderResource].get().valid())
     {
@@ -1334,7 +1336,8 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     }
 
     ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                         shaderResourcesDesc, DescriptorSetIndex::ShaderResource));
+                                         shaderResourcesDesc, DescriptorSetIndex::ShaderResource,
+                                         newSharedCacheKeyOut));
 
     size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
     mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
@@ -1358,7 +1361,8 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
         defaultUniformBuffer ? defaultUniformBuffer->getBufferSerial() : vk::kInvalidBufferSerial;
 
     return getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                      uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb);
+                                      uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb,
+                                      nullptr);
 }
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
