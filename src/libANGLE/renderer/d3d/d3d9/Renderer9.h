@@ -295,12 +295,14 @@ class Renderer9 : public RendererD3D
                                            GLsizei height,
                                            int levels,
                                            const std::string &label,
-                                           bool hintLevelZeroOnly) override;
+                                           bool hintLevelZeroOnly,
+                                           bool typeless) override;
     TextureStorage *createTextureStorageCube(GLenum internalformat,
                                              bool renderTarget,
                                              int size,
                                              int levels,
                                              bool hintLevelZeroOnly,
+                                             bool typeless,
                                              const std::string &label) override;
     TextureStorage *createTextureStorage3D(GLenum internalformat,
                                            bool renderTarget,

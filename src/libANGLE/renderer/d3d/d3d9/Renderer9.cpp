@@ -2911,7 +2911,8 @@ TextureStorage *Renderer9::createTextureStorage2D(GLenum internalformat,
                                                   GLsizei height,
                                                   int levels,
                                                   const std::string &label,
-                                                  bool hintLevelZeroOnly)
+                                                  bool hintLevelZeroOnly,
+                                                  bool typeless)
 {
     return new TextureStorage9_2D(this, internalformat, renderTarget, width, height, levels, label);
 }
@@ -2921,6 +2922,7 @@ TextureStorage *Renderer9::createTextureStorageCube(GLenum internalformat,
                                                     int size,
                                                     int levels,
                                                     bool hintLevelZeroOnly,
+                                                    bool typeless,
                                                     const std::string &label)
 {
     return new TextureStorage9_Cube(this, internalformat, renderTarget, size, levels,
