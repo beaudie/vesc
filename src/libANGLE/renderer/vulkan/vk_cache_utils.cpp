@@ -2394,7 +2394,8 @@ void ReleaseCachedObject(ContextVk *contextVk, const FramebufferDesc &desc)
 void ReleaseCachedObject(ContextVk *contextVk, const DescriptorSetDescAndPool &descAndPool)
 {
     ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc);
+    descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc,
+                                                  descAndPool.mPoolIndex);
 }
 
 void DestroyCachedObject(const FramebufferDesc &desc)
@@ -2406,7 +2407,7 @@ void DestroyCachedObject(const FramebufferDesc &desc)
 void DestroyCachedObject(const DescriptorSetDescAndPool &descAndPool)
 {
     ASSERT(descAndPool.mPool != nullptr);
-    descAndPool.mPool->destroyCachedDescriptorSet(descAndPool.mDesc);
+    descAndPool.mPool->destroyCachedDescriptorSet(descAndPool.mDesc, descAndPool.mPoolIndex);
 }
 }  // anonymous namespace
 

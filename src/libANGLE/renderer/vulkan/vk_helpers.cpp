@@ -3179,22 +3179,15 @@ angle::Result DescriptorPoolHelper::init(Context *context,
                                          const std::vector<VkDescriptorPoolSize> &poolSizesIn,
                                          uint32_t maxSets)
 {
+    ASSERT(!mDescriptorPool.valid());
     RendererVk *renderer = context->getRenderer();
 
     // If there are descriptorSet garbage, they no longer relevant since the entire pool is going to
     // be destroyed.
     mDescriptorSetCacheManager.destroyKeys();
-    mDescriptorSetGarbageList.clear();
-
-    if (mDescriptorPool.valid())
-    {
-        ASSERT(!isCurrentlyInUse(renderer->getLastCompletedQueueSerial()));
-        mDescriptorPool.destroy(renderer->getDevice());
-    }
 
     // Make a copy of the pool sizes, so we can grow them to satisfy the specified maxSets.
     std::vector<VkDescriptorPoolSize> poolSizes = poolSizesIn;
-
     for (VkDescriptorPoolSize &poolSize : poolSizes)
     {
         poolSize.descriptorCount *= maxSets;
@@ -3231,7 +3224,7 @@ void DescriptorPoolHelper::release(ContextVk *contextVk, VulkanCacheType cacheTy
 bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
                                                  CommandBufferHelperCommon *commandBufferHelper,
                                                  const DescriptorSetLayout &descriptorSetLayout,
-                                                 VkDescriptorSet *descriptorSetsOut)
+                                                 DescriptorSetHelper **descriptorSetOut)
 {
     // Try to reuse descriptorSet garbage first
     if (!mDescriptorSetGarbageList.empty())
@@ -3239,11 +3232,10 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
         RendererVk *rendererVk          = context->getRenderer();
         Serial lastCompletedQueueSerial = rendererVk->getLastCompletedQueueSerial();
 
-        DescriptorSetHelper &garbage = mDescriptorSetGarbageList.front();
-        if (!garbage.isCurrentlyInUse(lastCompletedQueueSerial))
+        DescriptorSetPtr &garbage = mDescriptorSetGarbageList.front();
+        if (!garbage->isCurrentlyInUse(lastCompletedQueueSerial))
         {
-            *descriptorSetsOut = garbage.getDescriptorSet();
-            commandBufferHelper->retainResource(this);
+            *descriptorSetOut = garbage.release();
             mDescriptorSetGarbageList.pop_front();
             return true;
         }
@@ -3257,14 +3249,14 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
         allocInfo.descriptorSetCount          = 1;
         allocInfo.pSetLayouts                 = descriptorSetLayout.ptr();
 
-        VkResult result = mDescriptorPool.allocateDescriptorSets(context->getDevice(), allocInfo,
-                                                                 descriptorSetsOut);
+        VkDescriptorSet descriptorSet;
+        VkResult result =
+            mDescriptorPool.allocateDescriptorSets(context->getDevice(), allocInfo, &descriptorSet);
         // If fail, it means our own accounting has a bug.
         ASSERT(result == VK_SUCCESS);
         mFreeDescriptorSets--;
 
-        // The pool is still in use every time a new descriptor set is allocated from it.
-        commandBufferHelper->retainResource(this);
+        *descriptorSetOut = new DescriptorSetHelper(descriptorSet);
         return true;
     }
 
@@ -3351,22 +3343,22 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
     CommandBufferHelperCommon *commandBufferHelper,
     const DescriptorSetLayout &descriptorSetLayout,
     RefCountedDescriptorPoolBinding *bindingOut,
-    VkDescriptorSet *descriptorSetsOut)
+    DescriptorSetHelper **descriptorSetOut)
 {
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
 
     if (!bindingOut->valid() ||
         !bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
-                                                 descriptorSetsOut))
+                                                 descriptorSetOut))
     {
         ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().valid());
         if (!mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetsOut))
+                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut))
         {
             ANGLE_TRY(allocateNewPool(context));
             bool success = mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetsOut);
+                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut);
             // Allocation in new pool must succeed
             ASSERT(success);
         }
@@ -3382,17 +3374,20 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     CommandBufferHelperCommon *commandBufferHelper,
     const DescriptorSetDesc &desc,
     const DescriptorSetLayout &descriptorSetLayout,
-    RefCountedDescriptorPoolBinding *bindingOut,
-    VkDescriptorSet *descriptorSetOut,
+    DescriptorSetHelper **descriptorSetOut,
     SharedDescriptorSetCacheKey *sharedCacheKeyOut,
     DescriptorCacheResult *cacheResultOut)
 {
+    // Add previous descriptorSet to resource list so that its queueSerial gets updated.
+    if (*descriptorSetOut != nullptr)
+    {
+        commandBufferHelper->retainResource(*descriptorSetOut);
+    }
+
     // First scan the descriptorSet cache.
-    vk::RefCountedDescriptorPoolHelper *poolOut;
-    if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &poolOut))
+    if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut))
     {
         *cacheResultOut = DescriptorCacheResult::CacheHit;
-        bindingOut->set(poolOut);
         mCacheStats.hit();
         return angle::Result::Continue;
     }
@@ -3402,61 +3397,51 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
 
-    if (!bindingOut->valid() ||
-        !bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
-                                                 descriptorSetOut))
+    // First try to allocate from existing pools
+    SharedDescriptorSetCacheKey sharedCacheKey;
+    DescriptorSetHelper *newDescriptorSet = nullptr;
+    for (size_t poolIndex = 0; poolIndex < sizeof(mDescriptorPools); poolIndex++)
     {
-        ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().valid());
-        if (!mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut))
+        if (mDescriptorPools[poolIndex]->get().allocateDescriptorSet(
+                context, commandBufferHelper, descriptorSetLayout, &newDescriptorSet))
         {
-            ANGLE_TRY(allocateNewPool(context));
-            bool success = mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut);
-            ASSERT(success);
+            // Let pool know there is a shared cache key created and destroys the shared cache key
+            // when it destroys the pool.
+            sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this, poolIndex);
+            mDescriptorPools[poolIndex]->get().onNewDescriptorSetAllocated(sharedCacheKey);
+            break;
         }
-        bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
-    mDescriptorSetCache.insertDescriptorSet(desc, *descriptorSetOut, bindingOut->getRefCounted());
-    *cacheResultOut = DescriptorCacheResult::NewAllocation;
-    ++context->getPerfCounters().descriptorSetAllocations;
+    // Try to allocate a new pool
+    if (newDescriptorSet == nullptr)
+    {
+        ANGLE_TRY(allocateNewPool(context));
+        mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
+            context, commandBufferHelper, descriptorSetLayout, &newDescriptorSet);
+        sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this, mCurrentPoolIndex);
+        mDescriptorPools[mCurrentPoolIndex]->get().onNewDescriptorSetAllocated(sharedCacheKey);
+    }
 
-    // Let pool know there is a shared cache key created and destroys the shared cache key
-    // when it destroys the pool.
-    SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this);
-    bindingOut->get().onNewDescriptorSetAllocated(sharedCacheKey);
+    mDescriptorSetCache.insertDescriptorSet(desc, newDescriptorSet);
+    *descriptorSetOut = newDescriptorSet;
+    *cacheResultOut   = DescriptorCacheResult::NewAllocation;
+    ++context->getPerfCounters().descriptorSetAllocations;
     if (sharedCacheKeyOut != nullptr)
     {
         *sharedCacheKeyOut = sharedCacheKey;
     }
+
     return angle::Result::Continue;
 }
 
 angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 {
-    bool found = false;
+    mDescriptorPools.push_back(new RefCountedDescriptorPoolHelper());
+    mCurrentPoolIndex = mDescriptorPools.size() - 1;
 
-    Serial lastCompletedSerial = context->getRenderer()->getLastCompletedQueueSerial();
-    for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
-    {
-        if (!mDescriptorPools[poolIndex]->isReferenced() &&
-            !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(lastCompletedSerial))
-        {
-            mCurrentPoolIndex = poolIndex;
-            found             = true;
-            break;
-        }
-    }
-
-    if (!found)
-    {
-        mDescriptorPools.push_back(new RefCountedDescriptorPoolHelper());
-        mCurrentPoolIndex = mDescriptorPools.size() - 1;
-
-        static constexpr size_t kMaxPools = 99999;
-        ANGLE_VK_CHECK(context, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
-    }
+    static constexpr size_t kMaxPools = 99999;
+    ANGLE_VK_CHECK(context, mDescriptorPools.size() < kMaxPools, VK_ERROR_TOO_MANY_OBJECTS);
 
     // This pool is getting hot, so grow its max size to try and prevent allocating another pool in
     // the future.
@@ -3469,24 +3454,20 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 }
 
 void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
-                                                       const DescriptorSetDesc &desc)
+                                                       const DescriptorSetDesc &desc,
+                                                       size_t poolIndex)
 {
-    VkDescriptorSet descriptorSet;
-    RefCountedDescriptorPoolHelper *poolOut;
-    if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
+    DescriptorSetHelper *descriptorSetHelper = mDescriptorSetCache.releaseDescriptorSet(desc);
+    if (descriptorSetHelper)
     {
-        // Remove from the cache hash map
-        mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
-
-        // Wrap it with helper object so that it can be GPU tracked and add it to resource list.
-        DescriptorSetHelper descriptorSetHelper(descriptorSet);
-        contextVk->retainResource(&descriptorSetHelper);
-        poolOut->get().getGarbageList().push_back(std::move(descriptorSetHelper));
+        mDescriptorPools[poolIndex]->get().getGarbageList().emplace_back(
+            std::move(descriptorSetHelper));
     }
 }
 
-void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &desc)
+void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &desc,
+                                                       size_t poolIndex)
 {
     // Remove from the cache hash map
     mDescriptorSetCache.eraseDescriptorSet(desc);

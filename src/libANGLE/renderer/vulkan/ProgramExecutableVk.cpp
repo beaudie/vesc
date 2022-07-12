@@ -1300,17 +1300,14 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[setIndex].get().getOrAllocateDescriptorSet(
         context, commandBufferHelper, descriptorSetDesc.getDesc(),
-        mDescriptorSetLayouts[setIndex].get(), &mDescriptorPoolBindings[setIndex],
-        &mDescriptorSets[setIndex], newSharedCacheKeyOut, &cacheResult));
+        mDescriptorSetLayouts[setIndex].get(), &mDescriptorSets[setIndex], newSharedCacheKeyOut,
+        &cacheResult));
     ASSERT(mDescriptorSets[setIndex] != VK_NULL_HANDLE);
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
-        descriptorSetDesc.updateDescriptorSet(updateBuilder, mDescriptorSets[setIndex]);
-    }
-    else
-    {
-        commandBufferHelper->retainResource(&mDescriptorPoolBindings[setIndex].get());
+        descriptorSetDesc.updateDescriptorSet(updateBuilder,
+                                              mDescriptorSets[setIndex]->getDescriptorSet());
     }
 
     return angle::Result::Continue;
@@ -1369,12 +1366,12 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDesc &texturesDesc)
 {
+    // Get descriptorSet from cache or allocate a new descriptorSet
     vk::SharedDescriptorSetCacheKey sharedCacheKey;
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture].get().getOrAllocateDescriptorSet(
         context, commandBufferHelper, texturesDesc,
         mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
-        &mDescriptorPoolBindings[DescriptorSetIndex::Texture],
         &mDescriptorSets[DescriptorSetIndex::Texture], &sharedCacheKey, &cacheResult));
     ASSERT(mDescriptorSets[DescriptorSetIndex::Texture] != VK_NULL_HANDLE);
 
@@ -1384,12 +1381,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
                                                     samplers, emulateSeamfulCubeMapSampling,
                                                     pipelineType, sharedCacheKey));
-        fullDesc.updateDescriptorSet(updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
-    }
-    else
-    {
-        commandBufferHelper->retainResource(
-            &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
+        fullDesc.updateDescriptorSet(
+            updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
     }
 
     return angle::Result::Continue;
@@ -1432,8 +1425,8 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
             continue;
         }
 
-        VkDescriptorSet descSet = mDescriptorSets[descriptorSetIndex];
-        if (descSet == VK_NULL_HANDLE)
+        vk::DescriptorSetHelper *descSetHelper = mDescriptorSets[descriptorSetIndex];
+        if (descSetHelper == nullptr)
         {
             if (!context->getRenderer()->getFeatures().bindEmptyForUnusedDescriptorSets.enabled)
             {
@@ -1449,12 +1442,13 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
                     &mDescriptorPoolBindings[descriptorSetIndex],
                     &mEmptyDescriptorSets[descriptorSetIndex]));
             }
-            descSet = mEmptyDescriptorSets[descriptorSetIndex];
+            descSetHelper = mEmptyDescriptorSets[descriptorSetIndex];
         }
 
         // Default uniforms are encompassed in a block per shader stage, and they are assigned
         // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
         // requires a dynamic offset.
+        VkDescriptorSet descSet = descSetHelper->getDescriptorSet();
         if (descriptorSetIndex == DescriptorSetIndex::UniformsAndXfb)
         {
             commandBuffer->bindDescriptorSets(

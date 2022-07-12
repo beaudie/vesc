@@ -141,7 +141,7 @@ enum class DescriptorCacheResult
 class DescriptorSetHelper final : public Resource
 {
   public:
-    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) { mDescriptorSet = descriptorSet; }
+    DescriptorSetHelper(const VkDescriptorSet &descriptorSet) : mDescriptorSet(descriptorSet) {}
     DescriptorSetHelper(DescriptorSetHelper &&other) : Resource(std::move(other))
     {
         mDescriptorSet       = other.mDescriptorSet;
@@ -153,7 +153,8 @@ class DescriptorSetHelper final : public Resource
   private:
     VkDescriptorSet mDescriptorSet;
 };
-using DescriptorSetList = std::deque<DescriptorSetHelper>;
+using DescriptorSetPtr  = std::unique_ptr<DescriptorSetHelper>;
+using DescriptorSetList = std::deque<DescriptorSetPtr>;
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
 // allocate new pools internally as needed. RendererVk takes care of the lifetime of the discarded
@@ -163,11 +164,11 @@ using DescriptorSetList = std::deque<DescriptorSetHelper>;
 // Can be used to share descriptor pools between multiple ProgramVks and the ContextVk.
 class CommandBufferHelperCommon;
 
-class DescriptorPoolHelper final : public Resource
+class DescriptorPoolHelper final : angle::NonCopyable
 {
   public:
     DescriptorPoolHelper();
-    ~DescriptorPoolHelper() override;
+    ~DescriptorPoolHelper();
 
     bool valid() { return mDescriptorPool.valid(); }
 
@@ -181,10 +182,8 @@ class DescriptorPoolHelper final : public Resource
     bool allocateDescriptorSet(Context *context,
                                CommandBufferHelperCommon *commandBufferHelper,
                                const DescriptorSetLayout &descriptorSetLayout,
-                               VkDescriptorSet *descriptorSetsOut);
+                               DescriptorSetHelper **descriptorSetOut);
 
-    // Scan descriptorSet garbage list and destroy all GPU completed garbage
-    void cleanupGarbage(Context *context);
     DescriptorSetList &getGarbageList() { return mDescriptorSetGarbageList; }
 
     void onNewDescriptorSetAllocated(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
@@ -232,19 +231,20 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                         CommandBufferHelperCommon *commandBufferHelper,
                                         const DescriptorSetLayout &descriptorSetLayout,
                                         RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetsOut);
+                                        DescriptorSetHelper **descriptorSetOut);
 
     angle::Result getOrAllocateDescriptorSet(Context *context,
                                              CommandBufferHelperCommon *commandBufferHelper,
                                              const DescriptorSetDesc &desc,
                                              const DescriptorSetLayout &descriptorSetLayout,
-                                             RefCountedDescriptorPoolBinding *bindingOut,
-                                             VkDescriptorSet *descriptorSetOut,
+                                             DescriptorSetHelper **descriptorSetOut,
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut,
                                              DescriptorCacheResult *cacheResultOut);
 
-    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
-    void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
+    void releaseCachedDescriptorSet(ContextVk *contextVk,
+                                    const DescriptorSetDesc &desc,
+                                    size_t poolIndex);
+    void destroyCachedDescriptorSet(const DescriptorSetDesc &desc, size_t poolIndex);
 
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
@@ -272,6 +272,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     size_t mCurrentPoolIndex;
     std::vector<RefCountedDescriptorPoolHelper *> mDescriptorPools;
     std::vector<VkDescriptorPoolSize> mPoolSizes;
+
     // This cached handle is used for verifying the layout being used to allocate descriptor sets
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
