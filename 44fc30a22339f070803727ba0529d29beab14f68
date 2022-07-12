@@ -16,6 +16,103 @@
       "message": "LGTM, but I haven\u0027t looked too deep. Leaving to Roman to verify.",
       "revId": "44fc30a22339f070803727ba0529d29beab14f68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d85e46e8_5d9488d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-12T14:57:59Z",
+      "side": 1,
+      "message": "Looking great, thanks Mohan! Just a few nits.",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3009734_a96bfd61",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-12T14:57:59Z",
+      "side": 1,
+      "message": "Let\u0027s make the variable name `mIsTerminated` reflect the condition above. Something like `mTerminatedByApi` / `mEglTerminateCalled` / etc? Also I noticed the other variable name is `mInitialized` not `mIsInitialized` so we should probably drop `Is` here for consistency.",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f9620cf_35689a50",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-12T14:57:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the \"If no contexts are current on any thread or\" part be removed now given that we require that `eglTerminate` had been called?",
+      "range": {
+        "startLine": 1146,
+        "startChar": 43,
+        "endLine": 1146,
+        "endChar": 83
+      },
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "059d9e00_9b2e1658",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-12T14:57:59Z",
+      "side": 1,
+      "message": "How about moving the block below inside this function? This will make Display better encapsulated - we can drop `hasActiveThreads` and `isTerminated` from its api.",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eeb244f_6fa09464",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-12T14:57:59Z",
+      "side": 1,
+      "message": "Could you add a comment describing how this test fails if `threadA` termination causes cleanup? Does makeCurrent or some other api call validate that the display wasn\u0027t fully terminated?",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
