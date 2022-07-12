@@ -70,6 +70,24 @@
       "parentUuid": "9d109619_340666ee",
       "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d300442f_57187d3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-07-12T19:44:00Z",
+      "side": 1,
+      "message": "I have added an expectation, although this is not a capture-replay but rather an end2end test, that moreover doesn\u0027t seem like it should call any readPixels on depth-stencil, so it\u0027s strange it\u0027s hitting the assert.",
+      "parentUuid": "e09e3b6f_7bc8ffc7",
+      "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
