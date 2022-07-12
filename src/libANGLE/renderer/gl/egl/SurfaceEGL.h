@@ -45,7 +45,7 @@ class SurfaceEGL : public SurfaceGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-    void setTimestampsEnabled(bool enabled) override;
+    void setTimestampsEnabled(const egl::Display *display, bool enabled) override;
     egl::SupportedCompositorTimings getSupportedCompositorTimings() const override;
     egl::Error getCompositorTiming(EGLint numTimestamps,
                                    const EGLint *names,

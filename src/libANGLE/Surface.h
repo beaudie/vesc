@@ -186,7 +186,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     const gl::Format &getBindTexImageFormat() const { return mColorFormat; }
 
     // EGL_ANDROID_get_frame_timestamps entry points
-    void setTimestampsEnabled(bool enabled);
+    void setTimestampsEnabled(const egl::Display *display, bool enabled);
     bool isTimestampsEnabled() const;
 
     // EGL_ANDROID_front_buffer_auto_refresh entry points

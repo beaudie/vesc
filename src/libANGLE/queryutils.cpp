@@ -4415,7 +4415,10 @@ egl::Error QuerySurfaceAttrib64KHR(const Display *display,
     return NoError();
 }
 
-egl::Error SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
+egl::Error SetSurfaceAttrib(const Display *display,
+                            Surface *surface,
+                            EGLint attribute,
+                            EGLint value)
 {
     switch (attribute)
     {
@@ -4435,7 +4438,7 @@ egl::Error SetSurfaceAttrib(Surface *surface, EGLint attribute, EGLint value)
             surface->setFixedHeight(value);
             break;
         case EGL_TIMESTAMPS_ANDROID:
-            surface->setTimestampsEnabled(value != EGL_FALSE);
+            surface->setTimestampsEnabled(display, value != EGL_FALSE);
             break;
         case EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID:
             return surface->setAutoRefreshEnabled(value == EGL_TRUE);

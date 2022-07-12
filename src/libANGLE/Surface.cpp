@@ -689,9 +689,9 @@ void Surface::setInitState(GLenum binding,
     }
 }
 
-void Surface::setTimestampsEnabled(bool enabled)
+void Surface::setTimestampsEnabled(const egl::Display *display, bool enabled)
 {
-    mImplementation->setTimestampsEnabled(enabled);
+    mImplementation->setTimestampsEnabled(display, enabled);
     mState.timestampsEnabled = enabled;
 }
 
