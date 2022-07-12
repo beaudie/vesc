@@ -4902,8 +4902,12 @@ void UpdatePreCacheActiveTextures(const gl::ActiveTextureMask &activeTextures,
 
     for (size_t textureIndex : activeTextures)
     {
-        const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
-        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+        ANGLE_LOG(ERR) << "Try to access samplerBindings at texture index " << textureIndex
+                       << " total sampler binding size: " << samplerBindings.size();
+        // const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
+        ANGLE_LOG(ERR) << "Try to access samplerBindings at texture index " << textureIndex
+                       << " (success)";
+        bool isSamplerExternalY2Y = false;
         TextureVk *textureVk      = textures[textureIndex];
 
         DescriptorInfoDesc infoDesc = {};

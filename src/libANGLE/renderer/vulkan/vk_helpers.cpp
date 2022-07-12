@@ -5221,15 +5221,16 @@ angle::Result ImageHelper::initExternal(Context *context,
         mCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
 
-    VkImageCreateInfo imageInfo     = {};
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.pNext                 = imageCreateInfoPNext;
-    imageInfo.flags                 = mCreateFlags;
-    imageInfo.imageType             = mImageType;
-    imageInfo.format                = actualVkFormat;
-    imageInfo.extent                = mExtents;
-    imageInfo.mipLevels             = mLevelCount;
-    imageInfo.arrayLayers           = mLayerCount;
+    VkImageCreateInfo imageInfo = {};
+    imageInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext             = imageCreateInfoPNext;
+    imageInfo.flags             = mCreateFlags;
+    imageInfo.imageType         = mImageType;
+    imageInfo.format            = actualVkFormat;
+    imageInfo.extent            = mExtents;
+    imageInfo.mipLevels         = mLevelCount;
+    imageInfo.arrayLayers       = mLayerCount;
+    ANGLE_LOG(ERR) << "initExternal array layers: " << imageInfo.arrayLayers;
     imageInfo.samples               = gl_vk::GetSamples(mSamples);
     imageInfo.tiling                = mTilingMode;
     imageInfo.usage                 = mUsage;
@@ -5540,6 +5541,8 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
                                               uint32_t currentQueueFamilyIndex,
                                               VkMemoryPropertyFlags flags)
 {
+    ANGLE_LOG(ERR) << "ImageHelper::initExternalMemory. requirements size: "
+                   << memoryRequirements.size;
     // Vulkan allows up to 4 memory planes.
     constexpr size_t kMaxMemoryPlanes                                     = 4;
     constexpr VkImageAspectFlagBits kMemoryPlaneAspects[kMaxMemoryPlanes] = {
@@ -5836,14 +5839,15 @@ angle::Result ImageHelper::initStaging(Context *context,
 
     mCurrentLayout = ImageLayout::Undefined;
 
-    VkImageCreateInfo imageInfo     = {};
-    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.flags                 = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
-    imageInfo.imageType             = mImageType;
-    imageInfo.format                = GetVkFormatFromFormatID(actualFormatID);
-    imageInfo.extent                = mExtents;
-    imageInfo.mipLevels             = mLevelCount;
-    imageInfo.arrayLayers           = mLayerCount;
+    VkImageCreateInfo imageInfo = {};
+    imageInfo.sType             = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.flags             = hasProtectedContent ? VK_IMAGE_CREATE_PROTECTED_BIT : 0;
+    imageInfo.imageType         = mImageType;
+    imageInfo.format            = GetVkFormatFromFormatID(actualFormatID);
+    imageInfo.extent            = mExtents;
+    imageInfo.mipLevels         = mLevelCount;
+    imageInfo.arrayLayers       = mLayerCount;
+    ANGLE_LOG(ERR) << "initStaging array layers: " << imageInfo.arrayLayers;
     imageInfo.samples               = gl_vk::GetSamples(mSamples);
     imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
     imageInfo.usage                 = usage;

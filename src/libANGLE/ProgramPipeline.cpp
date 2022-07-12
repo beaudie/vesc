@@ -604,6 +604,7 @@ bool ProgramPipeline::linkVaryings(InfoLog &infoLog) const
 
 void ProgramPipeline::validate(const gl::Context *context)
 {
+    ANGLE_LOG(ERR) << "ProgramPipeline::validate start";
     const Caps &caps = context->getCaps();
     mState.mValid    = true;
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
@@ -633,14 +634,15 @@ void ProgramPipeline::validate(const gl::Context *context)
         }
     }
 
-    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
-    if (drawStatesError)
-    {
-        mState.mValid            = false;
-        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
-        infoLog << errorMessage << "\n";
-        return;
-    }
+    ANGLE_LOG(ERR) << "Skipping basic draw states error check";
+    // intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
+    // if (drawStatesError)
+    // {
+    //     mState.mValid            = false;
+    //     const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
+    //     infoLog << errorMessage << "\n";
+    //     return;
+    // }
 
     if (!linkVaryings(infoLog))
     {
@@ -658,6 +660,7 @@ void ProgramPipeline::validate(const gl::Context *context)
             }
         }
     }
+    ANGLE_LOG(ERR) << "ProgramPipeline::validate end";
 }
 
 void ProgramPipeline::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)

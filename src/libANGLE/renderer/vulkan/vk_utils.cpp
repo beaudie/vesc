@@ -139,6 +139,7 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::Image *image,
                                                  vk::DeviceMemory *deviceMemoryOut)
 {
+    ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (142) for " << memoryRequirements.size;
     const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
 
     ANGLE_TRY(FindAndAllocateCompatibleMemory(
@@ -154,11 +155,17 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
         bindInfo.memory                   = deviceMemoryOut->getHandle();
         bindInfo.memoryOffset             = 0;
 
+        ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (142) (bindMemory2) for "
+                       << memoryRequirements.size;
         ANGLE_VK_TRY(context, image->bindMemory2(context->getDevice(), bindInfo));
+        ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (142) (bindMemory2) (done)";
     }
     else
     {
+        ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (142) (bindMemory) for "
+                       << memoryRequirements.size;
         ANGLE_VK_TRY(context, image->bindMemory(context->getDevice(), *deviceMemoryOut));
+        ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (142) (bindMemory) done";
     }
 
     return angle::Result::Continue;
@@ -174,6 +181,7 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::Buffer *buffer,
                                                  vk::DeviceMemory *deviceMemoryOut)
 {
+    ANGLE_LOG(ERR) << "AllocateAndBindBufferOrImageMemory (178) for " << memoryRequirements.size;
     ASSERT(extraBindInfo == nullptr);
 
     const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();

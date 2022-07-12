@@ -341,8 +341,10 @@ void GetANativeWindowBufferProperties(const ANativeWindowBuffer *buffer,
                                       int *pixelFormat,
                                       uint64_t *usage)
 {
-    *width       = buffer->width;
-    *height      = buffer->height;
+    *width  = buffer->width;
+    *height = buffer->height;
+    ANGLE_LOG(ERR) << "GetANativeWindowBufferProperties: ANativeWindowBuffer layerCount is "
+                   << buffer->layerCount;
     *depth       = static_cast<int>(buffer->layerCount);
     *height      = buffer->height;
     *pixelFormat = buffer->format;
