@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a0eaca2_2d3872e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T19:12:22Z",
+      "side": 1,
+      "message": "I started a review, but as I get deeper in the code, I feel like maybe it\u0027s better to just put this change on ice. It doesn\u0027t give us any benefits (without async queue), and I personally don\u0027t intend to verify its thread-safety w.r.t async queue over review. In other words, it\u0027s complexity with no benefit.\n\nSorry you had to spend time on it. How about moving this to WIP and we can revive it if we ever decide async queue is worth enabling.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de169681_accde12c",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T19:12:22Z",
+      "side": 1,
+      "message": "Please move these outside the class with appropriate rename, we try to avoid nested classes. Also, remove the initial `I`.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4969046a_db84fc1b",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T19:12:22Z",
+      "side": 1,
+      "message": "Please remove this. The class is beyond debugging now, so no need for a hack like this. If ever needed, we could pass a string to the `release` function that actually uses this.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bff96351_b01f5578",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T19:12:22Z",
+      "side": 1,
+      "message": "Same, move out of class.\n\nAlso, this has member functions, so turn it into a `class` (move members to `private`, rename to `mFoo` etc).",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db056593_579b1070",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T19:12:22Z",
+      "side": 1,
+      "message": "Redundant.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
