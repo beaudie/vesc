@@ -141,6 +141,7 @@ class TextureStorage11 : public TextureStorage
                                                  Image11 *incomingImage)                = 0;
 
     GLsizei getRenderToTextureSamples() const override;
+    bool isTypeless() const override { return false; }
 
   protected:
     TextureStorage11(Renderer11 *renderer,
@@ -297,7 +298,8 @@ class TextureStorage11_2D : public TextureStorage11
                         GLsizei height,
                         int levels,
                         const std::string &label,
-                        bool hintLevelZeroOnly = false);
+                        bool hintLevelZeroOnly = false,
+                        bool typeless          = false);
     ~TextureStorage11_2D() override;
 
     angle::Result onDestroy(const gl::Context *context) override;
@@ -341,6 +343,7 @@ class TextureStorage11_2D : public TextureStorage11
     angle::Result ensureTextureExists(const gl::Context *context, int mipLevels);
 
     angle::Result resolveTexture(const gl::Context *context) override;
+    bool isTypeless() const override { return mTypeless; }
 
   private:
     angle::Result createSRVForSampler(const gl::Context *context,
@@ -378,6 +381,7 @@ class TextureStorage11_2D : public TextureStorage11
     TextureHelper11 mLevelZeroTexture;
     std::unique_ptr<RenderTarget11> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
+    bool mTypeless;
 
     // Swizzle-related variables
     TextureHelper11 mSwizzleTexture;
