@@ -273,6 +273,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1635ef_727db503",
+        "filename": "src/image_util/loadimage_astc.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-07-12T11:07:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbe4eadb_04209d76",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 59
+      },
+      "revId": "e2edb9bb9ccb6a8a0ec3309daa04321be3cd17db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbdd75cd_99fc296c",
