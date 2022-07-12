@@ -3363,24 +3363,26 @@ TextureStorage *Renderer11::createTextureStorageExternal(
 
 TextureStorage *Renderer11::createTextureStorage2D(GLenum internalformat,
                                                    bool renderTarget,
+                                                   bool typeless,
                                                    GLsizei width,
                                                    GLsizei height,
                                                    int levels,
                                                    const std::string &label,
                                                    bool hintLevelZeroOnly)
 {
-    return new TextureStorage11_2D(this, internalformat, renderTarget, width, height, levels, label,
-                                   hintLevelZeroOnly);
+    return new TextureStorage11_2D(this, internalformat, renderTarget, typeless, width, height,
+                                   levels, label, hintLevelZeroOnly);
 }
 
 TextureStorage *Renderer11::createTextureStorageCube(GLenum internalformat,
                                                      bool renderTarget,
+                                                     bool typeless,
                                                      int size,
                                                      int levels,
                                                      bool hintLevelZeroOnly,
                                                      const std::string &label)
 {
-    return new TextureStorage11_Cube(this, internalformat, renderTarget, size, levels,
+    return new TextureStorage11_Cube(this, internalformat, renderTarget, typeless, size, levels,
                                      hintLevelZeroOnly, label);
 }
 
