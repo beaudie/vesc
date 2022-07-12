@@ -2397,12 +2397,6 @@ void ReleaseCachedObject(ContextVk *contextVk, const DescriptorSetDescAndPool &d
     descAndPool.mPool->releaseCachedDescriptorSet(contextVk, descAndPool.mDesc);
 }
 
-void DestroyCachedObject(const FramebufferDesc &desc)
-{
-    // Framebuffer cache are implemented in a way that each cache entry tracks GPU progress and we
-    // always guarantee cache entries are released before calling destroy.
-}
-
 void DestroyCachedObject(const DescriptorSetDescAndPool &descAndPool)
 {
     ASSERT(descAndPool.mPool != nullptr);
@@ -5461,6 +5455,7 @@ void DescriptorSetDescBuilder::updateImagesAndBuffersWithSharedCacheKey(
 template <class SharedCacheKeyT>
 void SharedCacheKeyManager<SharedCacheKeyT>::addKey(const SharedCacheKeyT &key)
 {
+    ASSERT(key);
     // If there is invalid key in the array, use it instead of keep expanding the array
     for (SharedCacheKeyT &sharedCacheKey : mSharedCacheKeys)
     {
@@ -5537,9 +5532,17 @@ void SharedCacheKeyManager<SharedCacheKeyT>::assertAllEntriesDestroyed()
 }
 
 // Explict instantiate for FramebufferCacheManager
-template class SharedCacheKeyManager<SharedFramebufferCacheKey>;
+template void SharedCacheKeyManager<SharedFramebufferCacheKey>::addKey(
+    const SharedFramebufferCacheKey &key);
+template void SharedCacheKeyManager<SharedFramebufferCacheKey>::releaseKeys(ContextVk *contextVk);
+template void SharedCacheKeyManager<SharedFramebufferCacheKey>::clear();
+template bool SharedCacheKeyManager<SharedFramebufferCacheKey>::containsKey(
+    const SharedFramebufferCacheKey &key) const;
 // Explict instantiate for DescriptorSetCacheManager
-template class SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
+template void SharedCacheKeyManager<SharedDescriptorSetCacheKey>::addKey(
+    const SharedDescriptorSetCacheKey &key);
+template void SharedCacheKeyManager<SharedDescriptorSetCacheKey>::releaseKeys(ContextVk *contextVk);
+template void SharedCacheKeyManager<SharedDescriptorSetCacheKey>::destroyKeys();
 }  // namespace vk
 
 // FramebufferCache implementation.
@@ -6120,5 +6123,47 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     contextVk->getRenderer()->onAllocateHandle(vk::HandleType::Sampler);
 
     return angle::Result::Continue;
+}
+
+bool DescriptorSetCache::getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                          vk::RefCountedDescriptorSetHelper **descriptorSetOut)
+{
+    auto iter = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        *descriptorSetOut = iter->second;
+        return true;
+    }
+    return false;
+}
+
+void DescriptorSetCache::insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                             vk::RefCountedDescriptorSetHelper *descriptorSet)
+{
+    mPayload.emplace(desc, descriptorSet);
+}
+
+vk::RefCountedDescriptorSetHelper *DescriptorSetCache::releaseDescriptorSet(
+    const vk::DescriptorSetDesc &desc)
+{
+    vk::RefCountedDescriptorSetHelper *descriptorSet = nullptr;
+    auto iter                                        = mPayload.find(desc);
+    if (iter != mPayload.end())
+    {
+        descriptorSet = iter->second;
+        mPayload.erase(iter);
+    }
+    return descriptorSet;
+}
+
+size_t DescriptorSetCache::getTotalCacheKeySizeBytes() const
+{
+    size_t totalSize = 0;
+    for (const auto &iter : mPayload)
+    {
+        const vk::DescriptorSetDesc &desc = iter.first;
+        totalSize += desc.getKeySizeBytes();
+    }
+    return totalSize;
 }
 }  // namespace rx

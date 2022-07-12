@@ -663,9 +663,7 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
-ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet()
-    : descriptorSet(VK_NULL_HANDLE), currentBuffer(nullptr)
-{}
+ContextVk::DriverUniformsDescriptorSet::DriverUniformsDescriptorSet() : currentBuffer(nullptr) {}
 
 ContextVk::DriverUniformsDescriptorSet::~DriverUniformsDescriptorSet() = default;
 
@@ -680,7 +678,7 @@ void ContextVk::DriverUniformsDescriptorSet::init(RendererVk *rendererVk)
 void ContextVk::DriverUniformsDescriptorSet::destroy(RendererVk *renderer)
 {
     descriptorSetLayout.reset();
-    descriptorPoolBinding.reset();
+    descriptorSetBinding.reset();
     dynamicBuffer.destroy(renderer);
 }
 
@@ -5765,7 +5763,7 @@ void ContextVk::invalidateGraphicsDescriptorSet(DescriptorSetIndex usedDescripto
 {
     // UtilsVk currently only uses set 0
     ASSERT(usedDescriptorSet == DescriptorSetIndex::Internal);
-    if (mDriverUniforms[PipelineType::Graphics].descriptorSet != VK_NULL_HANDLE)
+    if (mDriverUniforms[PipelineType::Graphics].descriptorSetBinding.valid())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
     }
@@ -5775,7 +5773,7 @@ void ContextVk::invalidateComputeDescriptorSet(DescriptorSetIndex usedDescriptor
 {
     // UtilsVk currently only uses set 0
     ASSERT(usedDescriptorSet == DescriptorSetIndex::Internal);
-    if (mDriverUniforms[PipelineType::Compute].descriptorSet != VK_NULL_HANDLE)
+    if (mDriverUniforms[PipelineType::Compute].descriptorSetBinding.valid())
     {
         mComputeDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS_BINDING);
     }
@@ -6267,21 +6265,13 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *comma
                                                      VkPipelineBindPoint bindPoint,
                                                      DriverUniformsDescriptorSet *driverUniforms)
 {
-    // The descriptor pool that this descriptor set was allocated from needs to be retained when the
-    // descriptor set is used in a new command. Since the descriptor pools are specific to each
-    // ContextVk, we only need to retain them once to ensure the reference count and Serial are
-    // updated correctly.
-    if (!driverUniforms->descriptorPoolBinding.get().usedInRecordedCommands())
-    {
-        commandBufferHelper->retainResource(&driverUniforms->descriptorPoolBinding.get());
-    }
-
     ProgramExecutableVk *executableVk = getExecutable();
     const uint32_t dynamicOffset =
         static_cast<uint32_t>(driverUniforms->currentBuffer->getOffset());
+    VkDescriptorSet descriptorSet = driverUniforms->descriptorSetBinding.get().getDescriptorSet();
     commandBufferHelper->getCommandBuffer().bindDescriptorSets(
         executableVk->getPipelineLayout(), bindPoint, DescriptorSetIndex::Internal, 1,
-        &driverUniforms->descriptorSet, 1, &dynamicOffset);
+        &descriptorSet, 1, &dynamicOffset);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
@@ -6342,7 +6332,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].getOrAllocateDescriptorSet(
         this, commandBufferHelper, desc.getDesc(), driverUniforms.descriptorSetLayout.get(),
-        &driverUniforms.descriptorPoolBinding, &driverUniforms.descriptorSet, &newSharedCacheKey));
+        &driverUniforms.descriptorSetBinding, &newSharedCacheKey));
 
     desc.updateImagesAndBuffersWithSharedCacheKey(newSharedCacheKey);
 
@@ -6350,7 +6340,6 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     {
         // Cache hit. The descriptor pool that this descriptor set was allocated from needs to be
         // retained each time the descriptor set is used in a new command.
-        commandBufferHelper->retainResource(&driverUniforms.descriptorPoolBinding.get());
         return angle::Result::Continue;
     }
 
@@ -6362,7 +6351,7 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
 
     VkWriteDescriptorSet &writeInfo = mUpdateDescriptorSetsBuilder.allocWriteDescriptorSet();
     writeInfo.sType                 = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    writeInfo.dstSet                = driverUniforms.descriptorSet;
+    writeInfo.dstSet                = driverUniforms.descriptorSetBinding.get().getDescriptorSet();
     writeInfo.dstBinding            = 0;
     writeInfo.dstArrayElement       = 0;
     writeInfo.descriptorCount       = 1;
@@ -7762,7 +7751,7 @@ angle::Result ContextVk::bindCachedDescriptorPool(
     DescriptorSetIndex descriptorSetIndex,
     const vk::DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
     uint32_t descriptorCountMultiplier,
-    vk::DescriptorPoolPointer *poolPointerOut)
+    vk::DynamicDescriptorPoolPointer *poolPointerOut)
 {
     vk::MetaDescriptorPool &descriptorPool =
         mShareGroupVk->getMetaDescriptorPool(descriptorSetIndex);
