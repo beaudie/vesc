@@ -52,6 +52,24 @@
       "parentUuid": "7820f166_b5fc3d08",
       "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e09e3b6f_7bc8ffc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-12T15:06:44Z",
+      "side": 1,
+      "message": "Looks like we\u0027re still getting failures with win-trace.\n\nIf you can add the following to expectations, maybe this will pass:\n\n```\n7483 : MultisampleTestES3.ResolveToFBO/* \u003d SKIP_FOR_CAPTURE\n```\n\nI tested locally with the failing block and it is good with that addition.",
+      "parentUuid": "9d109619_340666ee",
+      "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
