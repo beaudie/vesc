@@ -2879,7 +2879,11 @@ angle::Result StateManager11::setTextureForImage(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    textureImpl                = GetImplAs<TextureD3D>(imageUnit.texture.get());
+    textureImpl = GetImplAs<TextureD3D>(imageUnit.texture.get());
+
+    // Ensure that texture is typeless; convert it if not.
+    ANGLE_TRY(textureImpl->ensureTypeless(context));
+
     TextureStorage *texStorage = nullptr;
     ANGLE_TRY(textureImpl->getNativeTexture(context, &texStorage));
     // Texture should be complete and have a storage
@@ -2912,7 +2916,10 @@ angle::Result StateManager11::getUAVForRWImage(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    textureImpl                = GetImplAs<TextureD3D>(imageUnit.texture.get());
+    textureImpl = GetImplAs<TextureD3D>(imageUnit.texture.get());
+
+    ANGLE_TRY(textureImpl->ensureTypeless(context));
+
     TextureStorage *texStorage = nullptr;
     ANGLE_TRY(textureImpl->getNativeTexture(context, &texStorage));
     // Texture should be complete and have a storage
