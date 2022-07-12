@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dcba549_e906e65c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T02:38:19Z",
+      "side": 1,
+      "message": "Code smell: This class is keeping a reference to a refcounted object, but it\u0027s not actually contributing to the ref count.",
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ae2e9a_012ad19f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T02:38:19Z",
+      "side": 1,
+      "message": "`getRefCounted` looks like an anti-pattern. Aren\u0027t we able to tell what the binding is referencing already? If it\u0027s already valid, would it still be `mDescriptorPools[mCurrentPoolIndex]` as is the case when not valid?",
+      "range": {
+        "startLine": 3421,
+        "startChar": 69,
+        "endLine": 3421,
+        "endChar": 96
+      },
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
