@@ -591,6 +591,7 @@ class RefCounted : angle::NonCopyable
     }
 
     bool isReferenced() const { return mRefCount != 0; }
+    bool isLastReference() const { return mRefCount == 1; }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }
@@ -608,6 +609,15 @@ class BindingPointer final : angle::NonCopyable
 {
   public:
     BindingPointer() = default;
+    BindingPointer(RefCounted<T> *refCounted)
+    {
+        mRefCounted = refCounted;
+
+        if (mRefCounted)
+        {
+            mRefCounted->addRef();
+        }
+    }
     ~BindingPointer() { reset(); }
 
     BindingPointer(BindingPointer &&other)
@@ -638,7 +648,14 @@ class BindingPointer final : angle::NonCopyable
 
     bool valid() const { return mRefCounted != nullptr; }
 
-    RefCounted<T> *getRefCounted() { return mRefCounted; }
+    RefCounted<T> *release()
+    {
+        RefCounted<T> *refCounted = mRefCounted;
+        reset();
+        return refCounted;
+    }
+
+    bool isLastReference() const { return mRefCounted->isLastReference(); }
 
   private:
     RefCounted<T> *mRefCounted = nullptr;
