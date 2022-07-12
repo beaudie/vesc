@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a24a7a_dd47dbfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-12T15:24:33Z",
+      "side": 1,
+      "message": "Gert, this LGTM.  Faye, can you confirm whether this helps with Pinterest?",
+      "revId": "ea17b106b702821ef61f4cea047cf550fc4c2bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
