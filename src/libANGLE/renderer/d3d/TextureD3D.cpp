@@ -93,7 +93,7 @@ TextureD3D::~TextureD3D()
 angle::Result TextureD3D::getNativeTexture(const gl::Context *context, TextureStorage **outStorage)
 {
     // ensure the underlying texture is created
-    ANGLE_TRY(initializeStorage(context, false));
+    ANGLE_TRY(initializeStorage(context, false, false));
 
     if (mTexStorage)
     {
@@ -589,7 +589,7 @@ bool TextureD3D::isBaseImageZeroSize() const
 
 angle::Result TextureD3D::ensureRenderTarget(const gl::Context *context)
 {
-    ANGLE_TRY(initializeStorage(context, true));
+    ANGLE_TRY(initializeStorage(context, true, false));
 
     // initializeStorage can fail with NoError if the texture is not complete. This is not
     // an error for incomplete sampling, but it is a big problem for rendering.
@@ -605,7 +605,39 @@ angle::Result TextureD3D::ensureRenderTarget(const gl::Context *context)
         if (!mTexStorage->isRenderTarget())
         {
             TexStoragePointer newRenderTargetStorage;
-            ANGLE_TRY(createCompleteStorage(context, true, &newRenderTargetStorage));
+            ANGLE_TRY(createCompleteStorage(context, true, false, &newRenderTargetStorage));
+
+            ANGLE_TRY(mTexStorage->copyToStorage(context, newRenderTargetStorage.get()));
+            ANGLE_TRY(setCompleteTexStorage(context, newRenderTargetStorage.get()));
+            newRenderTargetStorage.release();
+            // If this texture is used in compute shader, we should invalidate this texture so that
+            // the UAV/SRV is rebound again with this new texture storage in next dispatch call.
+            mTexStorage->invalidateTextures();
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureD3D::ensureTypeless(const gl::Context *context)
+{
+    ANGLE_TRY(initializeStorage(context, false, true));
+
+    // initializeStorage can fail with NoError if the texture is not complete. This is not
+    // an error for incomplete sampling, but it is a big problem for rendering.
+    if (!mTexStorage)
+    {
+        ANGLE_HR_UNREACHABLE(GetImplAs<ContextD3D>(context));
+        return angle::Result::Stop;
+    }
+
+    if (!isBaseImageZeroSize())
+    {
+        ASSERT(mTexStorage);
+        if (!mTexStorage->isTypeless())
+        {
+            TexStoragePointer newRenderTargetStorage;
+            ANGLE_TRY(createCompleteStorage(context, false, true, &newRenderTargetStorage));
 
             ANGLE_TRY(mTexStorage->copyToStorage(context, newRenderTargetStorage.get()));
             ANGLE_TRY(setCompleteTexStorage(context, newRenderTargetStorage.get()));
@@ -1322,7 +1354,7 @@ angle::Result TextureD3D_2D::copyCompressedTexture(const gl::Context *context,
                      static_cast<int>(source->getHeight(sourceTarget, sourceLevel)), 1);
     ANGLE_TRY(redefineImage(context, destLevel, sizedInternalFormat, size, false));
 
-    ANGLE_TRY(initializeStorage(context, false));
+    ANGLE_TRY(initializeStorage(context, false, false));
     ASSERT(mTexStorage);
 
     ANGLE_TRY(
@@ -1353,10 +1385,10 @@ angle::Result TextureD3D_2D::setStorage(const gl::Context *context,
 
     // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget         = IsRenderTargetUsage(mState.getUsage());
-    TexStoragePointer storage = {
-        mRenderer->createTextureStorage2D(internalFormat, renderTarget, size.width, size.height,
-                                          static_cast<int>(levels), mState.getLabel(), false),
-        context};
+    TexStoragePointer storage = {mRenderer->createTextureStorage2D(
+                                     internalFormat, renderTarget, false, size.width, size.height,
+                                     static_cast<int>(levels), mState.getLabel(), false),
+                                 context};
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -1450,7 +1482,7 @@ angle::Result TextureD3D_2D::initMipmapImages(const gl::Context *context)
     }
 
     // We should be mip-complete now so generate the storage.
-    ANGLE_TRY(initializeStorage(context, true));
+    ANGLE_TRY(initializeStorage(context, true, false));
 
     return angle::Result::Continue;
 }
@@ -1523,7 +1555,9 @@ bool TextureD3D_2D::isImageComplete(const gl::ImageIndex &index) const
 }
 
 // Constructs a native texture resource from the texture images
-angle::Result TextureD3D_2D::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_2D::initializeStorage(const gl::Context *context,
+                                               bool renderTarget,
+                                               bool typeless)
 {
     // Only initialize the first time this texture is used as a render target or shader resource
     if (mTexStorage)
@@ -1540,7 +1574,7 @@ angle::Result TextureD3D_2D::initializeStorage(const gl::Context *context, bool 
     bool createRenderTarget = (renderTarget || IsRenderTargetUsage(mState.getUsage()));
 
     TexStoragePointer storage;
-    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, &storage));
+    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, false, &storage));
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -1555,6 +1589,7 @@ angle::Result TextureD3D_2D::initializeStorage(const gl::Context *context, bool 
 
 angle::Result TextureD3D_2D::createCompleteStorage(const gl::Context *context,
                                                    bool renderTarget,
+                                                   bool typeless,
                                                    TexStoragePointer *outStorage) const
 {
     GLsizei width         = getLevelZeroWidth();
@@ -1579,9 +1614,10 @@ angle::Result TextureD3D_2D::createCompleteStorage(const gl::Context *context,
     }
 
     // TODO(geofflang): Determine if the texture creation succeeded
-    *outStorage = {mRenderer->createTextureStorage2D(internalFormat, renderTarget, width, height,
-                                                     levels, mState.getLabel(), hintLevelZeroOnly),
-                   context};
+    *outStorage = {
+        mRenderer->createTextureStorage2D(internalFormat, renderTarget, typeless, width, height,
+                                          levels, mState.getLabel(), hintLevelZeroOnly),
+        context};
 
     return angle::Result::Continue;
 }
@@ -2109,7 +2145,7 @@ angle::Result TextureD3D_Cube::setStorage(const gl::Context *context,
     bool renderTarget = IsRenderTargetUsage(mState.getUsage());
 
     TexStoragePointer storage = {
-        mRenderer->createTextureStorageCube(internalFormat, renderTarget, size.width,
+        mRenderer->createTextureStorageCube(internalFormat, renderTarget, false, size.width,
                                             static_cast<int>(levels), false, mState.getLabel()),
         context};
 
@@ -2180,7 +2216,7 @@ angle::Result TextureD3D_Cube::initMipmapImages(const gl::Context *context)
     }
 
     // We should be mip-complete now so generate the storage.
-    ANGLE_TRY(initializeStorage(context, true));
+    ANGLE_TRY(initializeStorage(context, true, false));
 
     return angle::Result::Continue;
 }
@@ -2199,7 +2235,9 @@ angle::Result TextureD3D_Cube::getRenderTarget(const gl::Context *context,
     return mTexStorage->getRenderTarget(context, index, samples, outRT);
 }
 
-angle::Result TextureD3D_Cube::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_Cube::initializeStorage(const gl::Context *context,
+                                                 bool renderTarget,
+                                                 bool typeless)
 {
     // Only initialize the first time this texture is used as a render target or shader resource
     if (mTexStorage)
@@ -2216,7 +2254,7 @@ angle::Result TextureD3D_Cube::initializeStorage(const gl::Context *context, boo
     bool createRenderTarget = (renderTarget || IsRenderTargetUsage(mState.getUsage()));
 
     TexStoragePointer storage;
-    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, &storage));
+    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, false, &storage));
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -2231,6 +2269,7 @@ angle::Result TextureD3D_Cube::initializeStorage(const gl::Context *context, boo
 
 angle::Result TextureD3D_Cube::createCompleteStorage(const gl::Context *context,
                                                      bool renderTarget,
+                                                     bool typeless,
                                                      TexStoragePointer *outStorage) const
 {
     GLsizei size = getLevelZeroWidth();
@@ -2259,8 +2298,8 @@ angle::Result TextureD3D_Cube::createCompleteStorage(const gl::Context *context,
 
     // TODO (geofflang): detect if storage creation succeeded
     *outStorage = {
-        mRenderer->createTextureStorageCube(getBaseLevelInternalFormat(), renderTarget, size,
-                                            levels, hintLevelZeroOnly, mState.getLabel()),
+        mRenderer->createTextureStorageCube(getBaseLevelInternalFormat(), renderTarget, typeless,
+                                            size, levels, hintLevelZeroOnly, mState.getLabel()),
         context};
 
     return angle::Result::Continue;
@@ -2837,10 +2876,10 @@ angle::Result TextureD3D_3D::setStorage(const gl::Context *context,
 
     // TODO(geofflang): Verify storage creation had no errors
     bool renderTarget         = IsRenderTargetUsage(mState.getUsage());
-    TexStoragePointer storage = {
-        mRenderer->createTextureStorage3D(internalFormat, renderTarget, size.width, size.height,
-                                          size.depth, static_cast<int>(levels), mState.getLabel()),
-        context};
+    TexStoragePointer storage = {mRenderer->createTextureStorage3D(
+                                     internalFormat, renderTarget, false, size.width, size.height,
+                                     size.depth, static_cast<int>(levels), mState.getLabel()),
+                                 context};
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -2879,7 +2918,7 @@ angle::Result TextureD3D_3D::initMipmapImages(const gl::Context *context)
     }
 
     // We should be mip-complete now so generate the storage.
-    ANGLE_TRY(initializeStorage(context, true));
+    ANGLE_TRY(initializeStorage(context, true, false));
 
     return angle::Result::Continue;
 }
@@ -2904,7 +2943,9 @@ angle::Result TextureD3D_3D::getRenderTarget(const gl::Context *context,
     return mTexStorage->getRenderTarget(context, index, samples, outRT);
 }
 
-angle::Result TextureD3D_3D::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_3D::initializeStorage(const gl::Context *context,
+                                               bool renderTarget,
+                                               bool typeless)
 {
     // Only initialize the first time this texture is used as a render target or shader resource
     if (mTexStorage)
@@ -2921,7 +2962,7 @@ angle::Result TextureD3D_3D::initializeStorage(const gl::Context *context, bool 
     bool createRenderTarget = (renderTarget || IsRenderTargetUsage(mState.getUsage()));
 
     TexStoragePointer storage;
-    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, &storage));
+    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, false, &storage));
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -2936,6 +2977,7 @@ angle::Result TextureD3D_3D::initializeStorage(const gl::Context *context, bool 
 
 angle::Result TextureD3D_3D::createCompleteStorage(const gl::Context *context,
                                                    bool renderTarget,
+                                                   bool typeless,
                                                    TexStoragePointer *outStorage) const
 {
     GLsizei width         = getLevelZeroWidth();
@@ -2950,8 +2992,8 @@ angle::Result TextureD3D_3D::createCompleteStorage(const gl::Context *context,
         (mTexStorage ? mTexStorage->getLevelCount() : creationLevels(width, height, depth));
 
     // TODO: Verify creation of the storage succeeded
-    *outStorage = {mRenderer->createTextureStorage3D(internalFormat, renderTarget, width, height,
-                                                     depth, levels, mState.getLabel()),
+    *outStorage = {mRenderer->createTextureStorage3D(internalFormat, renderTarget, typeless, width,
+                                                     height, depth, levels, mState.getLabel()),
                    context};
 
     return angle::Result::Continue;
@@ -3630,7 +3672,7 @@ angle::Result TextureD3D_2DArray::initMipmapImages(const gl::Context *context)
     }
 
     // We should be mip-complete now so generate the storage.
-    ANGLE_TRY(initializeStorage(context, true));
+    ANGLE_TRY(initializeStorage(context, true, false));
 
     return angle::Result::Continue;
 }
@@ -3646,7 +3688,9 @@ angle::Result TextureD3D_2DArray::getRenderTarget(const gl::Context *context,
     return mTexStorage->getRenderTarget(context, index, samples, outRT);
 }
 
-angle::Result TextureD3D_2DArray::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_2DArray::initializeStorage(const gl::Context *context,
+                                                    bool renderTarget,
+                                                    bool typeless)
 {
     // Only initialize the first time this texture is used as a render target or shader resource
     if (mTexStorage)
@@ -3663,7 +3707,7 @@ angle::Result TextureD3D_2DArray::initializeStorage(const gl::Context *context, 
     bool createRenderTarget = (renderTarget || IsRenderTargetUsage(mState.getUsage()));
 
     TexStoragePointer storage;
-    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, &storage));
+    ANGLE_TRY(createCompleteStorage(context, createRenderTarget, typeless, &storage));
 
     ANGLE_TRY(setCompleteTexStorage(context, storage.get()));
     storage.release();
@@ -3678,6 +3722,7 @@ angle::Result TextureD3D_2DArray::initializeStorage(const gl::Context *context, 
 
 angle::Result TextureD3D_2DArray::createCompleteStorage(const gl::Context *context,
                                                         bool renderTarget,
+                                                        bool typeless,
                                                         TexStoragePointer *outStorage) const
 {
     GLsizei width         = getLevelZeroWidth();
@@ -4106,7 +4151,9 @@ bool TextureD3D_External::isImageComplete(const gl::ImageIndex &index) const
     return (index.getLevelIndex() == 0) ? (mTexStorage != nullptr) : false;
 }
 
-angle::Result TextureD3D_External::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_External::initializeStorage(const gl::Context *context,
+                                                     bool renderTarget,
+                                                     bool typeless)
 {
     // Texture storage is created when an external image is bound
     ASSERT(mTexStorage);
@@ -4115,6 +4162,7 @@ angle::Result TextureD3D_External::initializeStorage(const gl::Context *context,
 
 angle::Result TextureD3D_External::createCompleteStorage(const gl::Context *context,
                                                          bool renderTarget,
+                                                         bool typeless,
                                                          TexStoragePointer *outStorage) const
 {
     UNREACHABLE();
@@ -4234,7 +4282,8 @@ GLsizei TextureD3D_2DMultisample::getLayerCount(int level) const
 void TextureD3D_2DMultisample::markAllImagesDirty() {}
 
 angle::Result TextureD3D_2DMultisample::initializeStorage(const gl::Context *context,
-                                                          bool renderTarget)
+                                                          bool renderTarget,
+                                                          bool typeless)
 {
     // initializeStorage should only be called in a situation where the texture already has storage
     // associated with it (storage is created in setStorageMultisample).
@@ -4244,6 +4293,7 @@ angle::Result TextureD3D_2DMultisample::initializeStorage(const gl::Context *con
 
 angle::Result TextureD3D_2DMultisample::createCompleteStorage(const gl::Context *context,
                                                               bool renderTarget,
+                                                              bool typeless,
                                                               TexStoragePointer *outStorage) const
 {
     UNREACHABLE();
@@ -4352,7 +4402,8 @@ GLsizei TextureD3D_2DMultisampleArray::getLayerCount(int level) const
 void TextureD3D_2DMultisampleArray::markAllImagesDirty() {}
 
 angle::Result TextureD3D_2DMultisampleArray::initializeStorage(const gl::Context *context,
-                                                               bool renderTarget)
+                                                               bool renderTarget,
+                                                               bool typeless)
 {
     // initializeStorage should only be called in a situation where the texture already has storage
     // associated with it (storage is created in setStorageMultisample).
@@ -4363,6 +4414,7 @@ angle::Result TextureD3D_2DMultisampleArray::initializeStorage(const gl::Context
 angle::Result TextureD3D_2DMultisampleArray::createCompleteStorage(
     const gl::Context *context,
     bool renderTarget,
+    bool typeless,
     TexStoragePointer *outStorage) const
 {
     UNREACHABLE();
@@ -4502,7 +4554,9 @@ bool TextureD3D_Buffer::isImageComplete(const gl::ImageIndex &index) const
     return (index.getLevelIndex() == 0) ? (mTexStorage != nullptr) : false;
 }
 
-angle::Result TextureD3D_Buffer::initializeStorage(const gl::Context *context, bool renderTarget)
+angle::Result TextureD3D_Buffer::initializeStorage(const gl::Context *context,
+                                                   bool renderTarget,
+                                                   bool typeless)
 {
     ASSERT(mTexStorage);
     return angle::Result::Continue;
@@ -4510,6 +4564,7 @@ angle::Result TextureD3D_Buffer::initializeStorage(const gl::Context *context, b
 
 angle::Result TextureD3D_Buffer::createCompleteStorage(const gl::Context *context,
                                                        bool renderTarget,
+                                                       bool typeless,
                                                        TexStoragePointer *outStorage) const
 {
     ANGLE_HR_UNREACHABLE(GetImplAs<ContextD3D>(context));
