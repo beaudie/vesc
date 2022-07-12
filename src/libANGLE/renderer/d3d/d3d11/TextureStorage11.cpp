@@ -1026,7 +1026,8 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer,
                                          GLsizei height,
                                          int levels,
                                          const std::string &label,
-                                         bool hintLevelZeroOnly)
+                                         bool hintLevelZeroOnly,
+                                         bool typeless)
     : TextureStorage11(
           renderer,
           GetTextureBindFlags(internalformat, renderer->getRenderer11DeviceCaps(), renderTarget),
@@ -1041,6 +1042,7 @@ TextureStorage11_2D::TextureStorage11_2D(Renderer11 *renderer,
       mLevelZeroTexture(),
       mLevelZeroRenderTarget(nullptr),
       mUseLevelZeroTexture(hintLevelZeroOnly && levels > 1),
+      mTypeless(typeless),
       mSwizzleTexture()
 {
     for (unsigned int i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
@@ -1293,7 +1295,7 @@ angle::Result TextureStorage11_2D::ensureTextureExists(const gl::Context *contex
         desc.Height             = mTextureHeight;
         desc.MipLevels          = mipLevels;
         desc.ArraySize          = 1;
-        desc.Format             = mFormatInfo.texFormat;
+        desc.Format             = mTypeless ? mFormatInfo.typelessFormat : mFormatInfo.texFormat;
         desc.SampleDesc.Count   = 1;
         desc.SampleDesc.Quality = 0;
         desc.Usage              = D3D11_USAGE_DEFAULT;
