@@ -257,6 +257,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              const DescriptorSetLayout &descriptorSetLayout,
                                              RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut,
+                                             SharedDescriptorSetCacheKey *sharedCacheKeyOut,
                                              DescriptorCacheResult *cacheResultOut);
 
     template <typename Accumulator>
@@ -903,6 +904,12 @@ class BufferHelper : public ReadWriteResource
                                           VkDeviceSize actualDataSize,
                                           VkDeviceSize *offsetOut);
 
+    void onNewDescriptorSet(SharedDescriptorSetCacheKey sharedCacheKey)
+    {
+        mDescriptorSetCacheManager.addKey(sharedCacheKey);
+    }
+    BufferBlock *getBufferBlock() const { return mSuballocation.getBufferBlock(); }
+
   private:
     void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
@@ -932,6 +939,8 @@ class BufferHelper : public ReadWriteResource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+    // Manages the descriptor set cache that created with this buffer
+    vk::DescriptorSetCacheManager mDescriptorSetCacheManager;
 };
 
 class BufferPool : angle::NonCopyable

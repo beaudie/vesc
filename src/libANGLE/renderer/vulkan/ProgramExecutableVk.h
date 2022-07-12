@@ -166,13 +166,15 @@ class ProgramExecutableVk
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
         vk::CommandBufferHelperCommon *commandBufferHelper,
-        const vk::DescriptorSetDescBuilder &shaderResourcesDesc);
+        const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
+        vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
     angle::Result updateUniformsAndXfbDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
         vk::CommandBufferHelperCommon *commandBufferHelper,
         vk::BufferHelper *defaultUniformBuffer,
-        const vk::DescriptorSetDescBuilder &uniformsAndXfbDesc);
+        const vk::DescriptorSetDescBuilder &uniformsAndXfbDesc,
+        vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     template <typename CommandBufferT>
     angle::Result bindDescriptorSets(vk::Context *context,
@@ -324,7 +326,8 @@ class ProgramExecutableVk
                                              UpdateDescriptorSetsBuilder *updateBuilder,
                                              vk::CommandBufferHelperCommon *commandBufferHelper,
                                              const vk::DescriptorSetDescBuilder &descriptorSetDesc,
-                                             DescriptorSetIndex setIndex);
+                                             DescriptorSetIndex setIndex,
+                                             vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     angle::Result initializePipelineCache(ContextVk *contextVk,
                                           const std::vector<uint8_t> &compressedPipelineData);

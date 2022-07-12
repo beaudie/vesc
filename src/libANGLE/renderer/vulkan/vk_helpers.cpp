@@ -3426,6 +3426,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     const DescriptorSetLayout &descriptorSetLayout,
     RefCountedDescriptorPoolBinding *bindingOut,
     VkDescriptorSet *descriptorSetOut,
+    SharedDescriptorSetCacheKey *sharedCacheKeyOut,
     DescriptorCacheResult *cacheResultOut)
 {
     // First scan the descriptor pools.
@@ -3435,6 +3436,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
         {
             *cacheResultOut = DescriptorCacheResult::CacheHit;
             bindingOut->set(pool);
+            *sharedCacheKeyOut = nullptr;
             mCacheStats.hit();
             return angle::Result::Continue;
         }
@@ -3463,6 +3465,13 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
 
     *cacheResultOut = DescriptorCacheResult::NewAllocation;
     ++context->getPerfCounters().descriptorSetAllocations;
+
+    // Let pool know there is a shared cache key created and destroys the shared cache key
+    // when it destroys the pool.
+    SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this);
+    bindingOut->get().onNewDescriptorSetAllocated(sharedCacheKey);
+    *sharedCacheKeyOut = sharedCacheKey;
+
     return angle::Result::Continue;
 }
 
@@ -4690,6 +4699,7 @@ void BufferHelper::destroy(RendererVk *renderer)
     unmap(renderer);
     mBufferForVertexArray.destroy(renderer->getDevice());
     mSuballocation.destroy(renderer);
+    mDescriptorSetCacheManager.destroyKeys();
 }
 
 void BufferHelper::release(RendererVk *renderer)

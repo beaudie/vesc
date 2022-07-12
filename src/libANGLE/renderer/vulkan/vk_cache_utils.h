@@ -1404,6 +1404,8 @@ class DescriptorSetDescBuilder final
     void updateDescriptorSet(UpdateDescriptorSetsBuilder *updateBuilder,
                              VkDescriptorSet descriptorSet) const;
 
+    void updateShaderResourcesSharedCacheKey(SharedDescriptorSetCacheKey sharedCacheKey);
+
     const uint32_t *getDynamicOffsets() const { return mDynamicOffsets.data(); }
     size_t getDynamicOffsetsSize() const { return mDynamicOffsets.size(); }
 
@@ -1427,6 +1429,9 @@ class DescriptorSetDescBuilder final
     angle::FastMap<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
     angle::FastMap<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
     uint32_t mCurrentInfoIndex = 0;
+    std::vector<TextureVk *> mUsedImages;
+    std::vector<BufferHelper *> mUsedBuffers;
+    std::vector<BufferBlock *> mUsedBufferBlocks;
 };
 
 // Specialized update for textures.

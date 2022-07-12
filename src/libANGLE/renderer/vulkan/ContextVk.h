@@ -1303,6 +1303,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageBits usageBits);
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
+    void updateShaderResourcesSharedCacheKey(vk::SharedDescriptorSetCacheKey sharedCacheKey);
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;

@@ -1506,7 +1506,7 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
     }
     mBufferViews.release(contextVk);
     mRedefinedLevels.reset();
-    mTextureDescriptorSetCacheManager.releaseKeys(contextVk);
+    mDescriptorSetCacheManager.releaseKeys(contextVk);
 }
 
 void TextureVk::initImageUsageFlags(ContextVk *contextVk, angle::FormatID actualFormatID)
@@ -2730,7 +2730,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
         mBufferViews.release(contextVk);
         mBufferViews.init(renderer, offset, size);
-        mTextureDescriptorSetCacheManager.releaseKeys(contextVk);
+        mDescriptorSetCacheManager.releaseKeys(contextVk);
         return angle::Result::Continue;
     }
 
@@ -3137,7 +3137,7 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    mTextureDescriptorSetCacheManager.releaseKeys(contextVk);
+    mDescriptorSetCacheManager.releaseKeys(contextVk);
 
     if (mImage == nullptr)
     {

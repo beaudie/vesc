@@ -1294,13 +1294,14 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDescBuilder &descriptorSetDesc,
-    DescriptorSetIndex setIndex)
+    DescriptorSetIndex setIndex,
+    vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut)
 {
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[setIndex].get().getOrAllocateDescriptorSet(
         context, commandBufferHelper, descriptorSetDesc.getDesc(),
         mDescriptorSetLayouts[setIndex].get(), &mDescriptorPoolBindings[setIndex],
-        &mDescriptorSets[setIndex], &cacheResult));
+        &mDescriptorSets[setIndex], sharedCacheKeyOut, &cacheResult));
     ASSERT(mDescriptorSets[setIndex] != VK_NULL_HANDLE);
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
@@ -1319,7 +1320,8 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
-    const vk::DescriptorSetDescBuilder &shaderResourcesDesc)
+    const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
+    vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut)
 {
     if (!mDescriptorPools[DescriptorSetIndex::ShaderResource].get().valid())
     {
@@ -1327,7 +1329,8 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     }
 
     ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                         shaderResourcesDesc, DescriptorSetIndex::ShaderResource));
+                                         shaderResourcesDesc, DescriptorSetIndex::ShaderResource,
+                                         sharedCacheKeyOut));
 
     size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
     mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
@@ -1345,13 +1348,15 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::BufferHelper *defaultUniformBuffer,
-    const vk::DescriptorSetDescBuilder &uniformsAndXfbDesc)
+    const vk::DescriptorSetDescBuilder &uniformsAndXfbDesc,
+    vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut)
 {
     mCurrentDefaultUniformBufferSerial =
         defaultUniformBuffer ? defaultUniformBuffer->getBufferSerial() : vk::kInvalidBufferSerial;
 
     return getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                      uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb);
+                                      uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb,
+                                      sharedCacheKeyOut);
 }
 
 angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
@@ -1365,24 +1370,17 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDesc &texturesDesc)
 {
+    vk::SharedDescriptorSetCacheKey sharedCacheKey;
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDescriptorPools[DescriptorSetIndex::Texture].get().getOrAllocateDescriptorSet(
         context, commandBufferHelper, texturesDesc,
         mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
         &mDescriptorPoolBindings[DescriptorSetIndex::Texture],
-        &mDescriptorSets[DescriptorSetIndex::Texture], &cacheResult));
+        &mDescriptorSets[DescriptorSetIndex::Texture], &sharedCacheKey, &cacheResult));
     ASSERT(mDescriptorSets[DescriptorSetIndex::Texture] != VK_NULL_HANDLE);
 
     if (cacheResult == vk::DescriptorCacheResult::NewAllocation)
     {
-        vk::SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(
-            texturesDesc, &mDescriptorPoolBindings[DescriptorSetIndex::Texture].get());
-
-        // Let each pool know there is a shared cache key created and destroys the shared cache key
-        // when it destroys the pool.
-        mDescriptorPoolBindings[DescriptorSetIndex::Texture].get().onNewDescriptorSetAllocated(
-            sharedCacheKey);
-
         vk::DescriptorSetDescBuilder fullDesc;
         ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
                                                     samplers, emulateSeamfulCubeMapSampling,
@@ -1576,8 +1574,10 @@ angle::Result ProgramExecutableVk::updateUniforms(
             isTransformFeedbackActiveUnpaused,
             glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
+        vk::SharedDescriptorSetCacheKey sharedCacheKey;
         ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                                    defaultUniformBuffer, uniformsAndXfbDesc));
+                                                    defaultUniformBuffer, uniformsAndXfbDesc,
+                                                    &sharedCacheKey));
     }
 
     return angle::Result::Continue;

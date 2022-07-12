@@ -4731,7 +4731,9 @@ DescriptorSetDescBuilder::DescriptorSetDescBuilder(const DescriptorSetDescBuilde
     : mDesc(other.mDesc),
       mHandles(other.mHandles),
       mDynamicOffsets(other.mDynamicOffsets),
-      mCurrentInfoIndex(other.mCurrentInfoIndex)
+      mCurrentInfoIndex(other.mCurrentInfoIndex),
+      mUsedImages(other.mUsedImages),
+      mUsedBufferBlocks(other.mUsedBufferBlocks)
 {}
 
 DescriptorSetDescBuilder &DescriptorSetDescBuilder::operator=(const DescriptorSetDescBuilder &other)
@@ -4740,6 +4742,8 @@ DescriptorSetDescBuilder &DescriptorSetDescBuilder::operator=(const DescriptorSe
     mHandles          = other.mHandles;
     mDynamicOffsets   = other.mDynamicOffsets;
     mCurrentInfoIndex = other.mCurrentInfoIndex;
+    mUsedImages       = other.mUsedImages;
+    mUsedBufferBlocks = other.mUsedBufferBlocks;
     return *this;
 }
 
@@ -4749,6 +4753,8 @@ void DescriptorSetDescBuilder::reset()
     mHandles.clear();
     mDynamicOffsets.clear();
     mCurrentInfoIndex = 0;
+    mUsedImages.clear();
+    mUsedBufferBlocks.clear();
 }
 
 void DescriptorSetDescBuilder::updateWriteDesc(uint32_t bindingIndex,
@@ -4796,6 +4802,7 @@ void DescriptorSetDescBuilder::updateUniformBuffer(uint32_t bindingIndex,
     DescriptorInfoDesc infoDesc = {};
     SetBitField(infoDesc.imageLayoutOrRange, bufferRange);
     infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+    mUsedBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
 
     uint32_t infoIndex = mDesc.getInfoDescIndex(bindingIndex);
 
@@ -4832,6 +4839,7 @@ void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     SetBitField(infoDesc.imageLayoutOrRange, adjustedRange);
     SetBitField(infoDesc.imageViewSerialOrOffset, alignedOffset);
     infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+    mUsedBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
 
     uint32_t infoIndex = mDesc.getInfoDescIndex(baseBinding) + xfbBufferIndex;
 
@@ -4996,7 +5004,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
 
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
+                textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, false, &view));
@@ -5015,7 +5023,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getImageViewSubresourceSerial(samplerState);
 
-                textureVk->onNewTextureDescriptorSet(sharedCacheKey);
+                textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
 
@@ -5151,10 +5159,12 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
             if (IsDynamicDescriptor(descriptorType))
             {
                 SetBitField(mDynamicOffsets[infoDescIndex], offset);
+                mUsedBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
             }
             else
             {
                 SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+                mUsedBuffers.emplace_back(&bufferHelper);
             }
 
             mDesc.updateInfoDesc(infoDescIndex, infoDesc);
@@ -5231,6 +5241,7 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         SetBitField(infoDesc.imageLayoutOrRange, range);
         SetBitField(infoDesc.imageViewSerialOrOffset, offset);
         infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+        mUsedBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
 
         mDesc.updateInfoDesc(infoIndex, infoDesc);
         mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
@@ -5305,6 +5316,7 @@ angle::Result DescriptorSetDescBuilder::updateImages(
                 DescriptorInfoDesc infoDesc = {};
                 infoDesc.imageViewSerialOrOffset =
                     textureVk->getBufferViewSerial().viewSerial.getValue();
+                mUsedImages.emplace_back(textureVk);
 
                 mDesc.updateInfoDesc(infoIndex, infoDesc);
                 mHandles[infoIndex].bufferView = view->getHandle();
@@ -5335,6 +5347,7 @@ angle::Result DescriptorSetDescBuilder::updateImages(
                 SetBitField(infoDesc.imageLayoutOrRange, image->getCurrentImageLayout());
                 memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
                 infoDesc.imageViewSerialOrOffset = serial.viewSerial.getValue();
+                mUsedImages.emplace_back(textureVk);
 
                 mDesc.updateInfoDesc(infoIndex, infoDesc);
                 mHandles[infoIndex].imageView = imageView->getHandle();
@@ -5408,6 +5421,25 @@ void DescriptorSetDescBuilder::updateDescriptorSet(UpdateDescriptorSetsBuilder *
                                                    VkDescriptorSet descriptorSet) const
 {
     mDesc.updateDescriptorSet(updateBuilder, mHandles.data(), descriptorSet);
+}
+
+void DescriptorSetDescBuilder::updateShaderResourcesSharedCacheKey(
+    SharedDescriptorSetCacheKey sharedCacheKey)
+{
+    for (TextureVk *image : mUsedImages)
+    {
+        image->onNewDescriptorSet(sharedCacheKey);
+    }
+
+    for (BufferHelper *buffer : mUsedBuffers)
+    {
+        buffer->onNewDescriptorSet(sharedCacheKey);
+    }
+
+    for (BufferBlock *bufferBlock : mUsedBufferBlocks)
+    {
+        bufferBlock->onNewDescriptorSet(sharedCacheKey);
+    }
 }
 
 // SharedCacheKeyManager implementation.

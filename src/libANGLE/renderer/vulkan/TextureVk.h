@@ -308,9 +308,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result onLabelUpdate(const gl::Context *context) override;
 
-    void onNewTextureDescriptorSet(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
+    void onNewDescriptorSet(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
-        mTextureDescriptorSetCacheManager.addKey(sharedCacheKey);
+        mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
 
   private:
@@ -626,7 +626,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSkipDecode;
 
     // Manages the texture descriptor set cache that created with this texture
-    vk::DescriptorSetCacheManager mTextureDescriptorSetCacheManager;
+    vk::DescriptorSetCacheManager mDescriptorSetCacheManager;
 };
 
 }  // namespace rx

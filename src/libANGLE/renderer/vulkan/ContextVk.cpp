@@ -2268,8 +2268,16 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
 
     ProgramExecutableVk *executableVk = getExecutable();
 
+    vk::SharedDescriptorSetCacheKey sharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
-        this, &mUpdateDescriptorSetsBuilder, commandBufferHelper, mShaderBuffersDescriptorDesc));
+        this, &mUpdateDescriptorSetsBuilder, commandBufferHelper, mShaderBuffersDescriptorDesc,
+        &sharedCacheKey));
+
+    // If this is a new cache entry, record the sharedCacheKey in each object
+    if (sharedCacheKey != nullptr)
+    {
+        updateShaderResourcesSharedCacheKey(sharedCacheKey);
+    }
 
     // Record usage of storage buffers and images in the command buffer to aid handling of
     // glMemoryBarrier.
@@ -2410,9 +2418,10 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
         this, *executable, *executableVk, currentUniformBuffer, mEmptyBuffer,
         mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
 
+    vk::SharedDescriptorSetCacheKey sharedCacheKey;
     return executableVk->updateUniformsAndXfbDescriptorSet(
         this, &mUpdateDescriptorSetsBuilder, mRenderPassCommands, currentUniformBuffer,
-        uniformsAndXfbDesc);
+        uniformsAndXfbDesc, &sharedCacheKey);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
@@ -6320,10 +6329,12 @@ angle::Result ContextVk::updateDriverUniformsDescriptorSet(
     desc.updateUniformWrite(1);
     desc.updateUniformBuffer(0, *driverUniforms.currentBuffer, driverUniformsSize);
 
+    vk::SharedDescriptorSetCacheKey sharedCacheKey;
     vk::DescriptorCacheResult cacheResult;
     ANGLE_TRY(mDriverUniformsDescriptorPools[pipelineType].getOrAllocateDescriptorSet(
         this, commandBufferHelper, desc.getDesc(), driverUniforms.descriptorSetLayout.get(),
-        &driverUniforms.descriptorPoolBinding, &driverUniforms.descriptorSet, &cacheResult));
+        &driverUniforms.descriptorPoolBinding, &driverUniforms.descriptorSet, &sharedCacheKey,
+        &cacheResult));
     if (cacheResult == vk::DescriptorCacheResult::CacheHit)
     {
         // The descriptor pool that this descriptor set was allocated from needs to be retained each
