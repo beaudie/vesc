@@ -853,6 +853,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
                                 egl::Surface *drawSurface,
                                 egl::Surface *readSurface)
 {
+    ANGLE_LOG(ERR) << "Context::makeCurrent w/ draw " << drawSurface << " read " << readSurface;
     mDisplay = display;
 
     if (!mHasBeenCurrent)
@@ -1383,6 +1384,7 @@ void Context::bindImageTexture(GLuint unit,
 
 void Context::useProgram(ShaderProgramID program)
 {
+    ANGLE_LOG(ERR) << "Context::useProgram  program " << program.value;
     ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
     mStateCache.onProgramExecutableChange(this);
 }
@@ -2922,11 +2924,14 @@ GLenum Context::getError()
 {
     if (mErrors.empty())
     {
+        ANGLE_LOG(ERR) << "No error.";
         return GL_NO_ERROR;
     }
     else
     {
-        return mErrors.popError();
+        GLenum e = mErrors.popError();
+        ANGLE_LOG(ERR) << "Has error: " << e;
+        return e;
     }
 }
 
@@ -6319,6 +6324,8 @@ void Context::bufferSubData(BufferBinding target,
 
 void Context::attachShader(ShaderProgramID program, ShaderProgramID shader)
 {
+    ANGLE_LOG(ERR) << "Context::attachShader  program " << program.value << " to shader "
+                   << shader.value;
     Program *programObject = mState.mShaderProgramManager->getProgram(program);
     Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
     ASSERT(programObject && shaderObject);
@@ -7374,6 +7381,7 @@ GLboolean Context::isTexture(TextureID texture) const
 
 void Context::linkProgram(ShaderProgramID program)
 {
+    ANGLE_LOG(ERR) << "Context::linkProgram  program " << program.value;
     Program *programObject = getProgramNoResolveLink(program);
     ASSERT(programObject);
     ANGLE_CONTEXT_TRY(programObject->link(this));
@@ -7430,6 +7438,12 @@ void Context::shaderSource(ShaderProgramID shader,
                            const GLchar *const *string,
                            const GLint *length)
 {
+    // for (int i = 0; i < count; ++i)
+    // {
+    //     ANGLE_LOG(ERR) << "Context::shaderSource for shader " << shader.value << " string " << i
+    //                    << " of " << count << " : " << string[i];
+    // }
+
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
     shaderObject->setSource(count, string, length);
@@ -7647,9 +7661,11 @@ void Context::validateProgramPipeline(ProgramPipelineID pipeline)
         return;
     }
 
+    ANGLE_LOG(ERR) << "before checkProgramPipelineAllocation";
     ProgramPipeline *programPipeline =
         mState.mProgramPipelineManager->checkProgramPipelineAllocation(mImplementation.get(),
                                                                        pipeline);
+    ANGLE_LOG(ERR) << "after checkProgramPipelineAllocation";
     ASSERT(programPipeline);
 
     programPipeline->validate(this);

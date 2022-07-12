@@ -306,6 +306,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     const uint32_t layerCount = mSize.depth;
     vkExtents.depth           = 1;
 
+    ANGLE_LOG(ERR) << "Wanted extents: " << vkExtents.width << " by " << vkExtents.height;
+
     mImage = new vk::ImageHelper();
 
     // disable robust init for this external image.
@@ -348,6 +350,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalMemoryRequirements.alignment            = 0;
     externalMemoryRequirements.memoryTypeBits       = bufferProperties.memoryTypeBits;
 
+    ANGLE_LOG(ERR) << "bufferProperties.allocationSize " << bufferProperties.allocationSize;
     const VkMemoryPropertyFlags flags =
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
         (hasProtectedContent() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);

@@ -4153,6 +4153,7 @@ const char *ValidateDrawStates(const Context *context)
 
     if (!framebuffer->isComplete(context))
     {
+        ANGLE_LOG(ERR) << "Generate kDrawFramebufferIncomplete, because FBO is not complete";
         // Note: this error should be generated as INVALID_FRAMEBUFFER_OPERATION.
         return kDrawFramebufferIncomplete;
     }
@@ -7119,6 +7120,9 @@ bool ValidateGetTexParameterBase(const Context *context,
                                          kProtectedTexturesExtensionRequired);
                 return false;
             }
+            break;
+
+        case GL_REQUIRED_TEXTURE_IMAGE_UNITS_OES:
             break;
 
         default:

@@ -1243,16 +1243,20 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
     {
         if (colorAttachment.isAttached())
         {
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd Has attachment";
             FramebufferStatus attachmentCompleteness =
                 CheckAttachmentCompleteness(context, colorAttachment);
             if (!attachmentCompleteness.isComplete())
             {
+                ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd attachment not complete";
                 return attachmentCompleteness;
             }
 
             const InternalFormat &format = *colorAttachment.getFormat().info;
             if (format.depthBits > 0 || format.stencilBits > 0)
             {
+                ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd attachment not complete "
+                                  "(ds in color buffer)";
                 return FramebufferStatus::Incomplete(
                     GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
                     err::kFramebufferIncompleteDepthStencilInColorBuffer);
@@ -1263,6 +1267,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                                                   &fixedSampleLocations, &renderToTextureSamples);
             if (!attachmentSampleCompleteness.isComplete())
             {
+                ANGLE_LOG(ERR)
+                    << "Framebuffer::checkStatusWithGLFrontEnd attachment not sample complete";
                 return attachmentSampleCompleteness;
             }
 
@@ -1274,6 +1280,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                 {
                     if (format.pixelBytes != colorbufferSize.value())
                     {
+                        ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd attachment not "
+                                          "consistent bit planes";
                         return FramebufferStatus::Incomplete(
                             GL_FRAMEBUFFER_UNSUPPORTED,
                             err::kFramebufferIncompleteAttachmentInconsistantBitPlanes);
@@ -1289,6 +1297,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                 CheckMultiviewStateMatchesForCompleteness(firstAttachment, &colorAttachment);
             if (!attachmentMultiviewCompleteness.isComplete())
             {
+                ANGLE_LOG(ERR)
+                    << "Framebuffer::checkStatusWithGLFrontEnd attachment not multiview complete";
                 return attachmentMultiviewCompleteness;
             }
 
@@ -1312,6 +1322,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                 ASSERT(isLayered.valid());
                 if (isLayered.value() != colorAttachment.isLayered())
                 {
+                    ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd attachment "
+                                      "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT";
                     return FramebufferStatus::Incomplete(
                         GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT,
                         err::kFramebufferIncompleteMismatchedLayeredAttachments);
@@ -1322,6 +1334,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                     if (colorAttachmentsTextureType.value() !=
                         colorAttachment.getTextureImageIndex().getType())
                     {
+                        ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd attachment "
+                                          "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT (2)";
                         return FramebufferStatus::Incomplete(
                             GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT,
                             err::kFramebufferIncompleteMismatchedLayeredTexturetypes);
@@ -1338,12 +1352,15 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
             CheckAttachmentCompleteness(context, depthAttachment);
         if (!attachmentCompleteness.isComplete())
         {
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd depth attachemtn incomplete";
             return attachmentCompleteness;
         }
 
         const InternalFormat &format = *depthAttachment.getFormat().info;
         if (format.depthBits == 0)
         {
+            ANGLE_LOG(ERR)
+                << "Framebuffer::checkStatusWithGLFrontEnd no depth bits in depth buffer";
             return FramebufferStatus::Incomplete(
                 GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
                 err::kFramebufferIncompleteAttachmentNoDepthBitsInDepthBuffer);
@@ -1354,6 +1371,7 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
                                               &fixedSampleLocations, &renderToTextureSamples);
         if (!attachmentSampleCompleteness.isComplete())
         {
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd depth not sample complete";
             return attachmentSampleCompleteness;
         }
 
@@ -1361,6 +1379,7 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
             CheckMultiviewStateMatchesForCompleteness(firstAttachment, &depthAttachment);
         if (!attachmentMultiviewCompleteness.isComplete())
         {
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd depth not multiview complete";
             return attachmentMultiviewCompleteness;
         }
 
@@ -1379,6 +1398,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
             ASSERT(isLayered.valid());
             if (isLayered.value() != depthAttachment.isLayered())
             {
+                ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd depth "
+                                  "GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT";
                 return FramebufferStatus::Incomplete(
                     GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT,
                     err::kFramebufferIncompleteMismatchedLayeredAttachments);
@@ -1445,6 +1466,7 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
     if (state.getClientMajorVersion() >= 3 && depthAttachment.isAttached() &&
         stencilAttachment.isAttached() && stencilAttachment != depthAttachment)
     {
+        ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd incomplete, ds separate images";
         return FramebufferStatus::Incomplete(
             GL_FRAMEBUFFER_UNSUPPORTED,
             err::kFramebufferIncompleteDepthAndStencilBuffersNotTheSame);
@@ -1501,6 +1523,8 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
     GLint defaultHeight = mState.getDefaultHeight();
     if (!hasAttachments && (defaultWidth == 0 || defaultHeight == 0))
     {
+        ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd incomplete, missing attachment "
+                          "and defaultwh 0";
         return FramebufferStatus::Incomplete(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
                                              err::kFramebufferIncompleteDefaultZeroSize);
     }
@@ -1510,6 +1534,7 @@ FramebufferStatus Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
     if ((state.getClientMajorVersion() < 3 || state.getExtensions().webglCompatibilityANGLE) &&
         !mState.attachmentsHaveSameDimensions())
     {
+        ANGLE_LOG(ERR) << "Framebuffer::checkStatusWithGLFrontEnd incomplete dimensions";
         return FramebufferStatus::Incomplete(
             GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS,
             err::kFramebufferIncompleteInconsistantAttachmentSizes);

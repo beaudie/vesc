@@ -5540,6 +5540,8 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
                                               uint32_t currentQueueFamilyIndex,
                                               VkMemoryPropertyFlags flags)
 {
+    ANGLE_LOG(ERR) << "ImageHelper::initExternalMemory. requirements size: "
+                   << memoryRequirements.size;
     // Vulkan allows up to 4 memory planes.
     constexpr size_t kMaxMemoryPlanes                                     = 4;
     constexpr VkImageAspectFlagBits kMemoryPlaneAspects[kMaxMemoryPlanes] = {

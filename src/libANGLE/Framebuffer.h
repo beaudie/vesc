@@ -315,9 +315,14 @@ class Framebuffer final : public angle::ObserverInterface,
         ASSERT(!isDefault() || mCachedStatus.valid());
         if (isDefault() || (!hasAnyDirtyBit() && mCachedStatus.valid()))
         {
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatus using cached value. default? "
+                           << isDefault();
+            ANGLE_LOG(ERR) << "Framebuffer::checkStatus cached value reason: "
+                           << mCachedStatus.value().reason;
             return mCachedStatus.value();
         }
 
+        ANGLE_LOG(ERR) << "Framebuffer::checkStatus regenerating value";
         return checkStatusImpl(context);
     }
 
