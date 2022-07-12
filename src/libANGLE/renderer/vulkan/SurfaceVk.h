@@ -300,6 +300,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     bool hasStagedUpdates() const;
 
+    void setTimestampsEnabled(const egl::Display *display, bool enabled) override;
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,

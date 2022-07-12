@@ -157,7 +157,7 @@ EGLSurface SurfaceEGL::getSurface() const
     return mSurface;
 }
 
-void SurfaceEGL::setTimestampsEnabled(bool enabled)
+void SurfaceEGL::setTimestampsEnabled(const egl::Display *display, bool enabled)
 {
     ASSERT(mEGL->hasExtension("EGL_ANDROID_get_frame_timestamps"));
 
