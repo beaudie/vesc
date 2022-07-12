@@ -88,6 +88,24 @@
       "parentUuid": "e09e3b6f_7bc8ffc7",
       "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "383d772e_1b664d03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-12T20:42:21Z",
+      "side": 1,
+      "message": "The capture_replay_test script actually iterates through all the end2end tests.  The end2end test by itself passes locally with your CL, so I think it probably has to do with serialization again?  Adding it to capture_replay_expectations.txt should be the right place.",
+      "parentUuid": "d300442f_57187d3d",
+      "revId": "12d7238371aadf7fbc84612022cc367dff04df3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
