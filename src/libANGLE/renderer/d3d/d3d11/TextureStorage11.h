@@ -293,6 +293,7 @@ class TextureStorage11_2D : public TextureStorage11
     TextureStorage11_2D(Renderer11 *renderer,
                         GLenum internalformat,
                         bool renderTarget,
+                        bool typeless,
                         GLsizei width,
                         GLsizei height,
                         int levels,
@@ -327,6 +328,7 @@ class TextureStorage11_2D : public TextureStorage11
     angle::Result useLevelZeroWorkaroundTexture(const gl::Context *context,
                                                 bool useLevelZeroTexture) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return mTypeless; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -378,6 +380,7 @@ class TextureStorage11_2D : public TextureStorage11
     TextureHelper11 mLevelZeroTexture;
     std::unique_ptr<RenderTarget11> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
+    bool mTypeless;
 
     // Swizzle-related variables
     TextureHelper11 mSwizzleTexture;
@@ -419,6 +422,7 @@ class TextureStorage11_External : public TextureStorage11
                                          const gl::ImageIndex &index,
                                          Image11 *incomingImage) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return false; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -516,6 +520,7 @@ class TextureStorage11_EGLImage final : public TextureStorage11ImmutableBase
     angle::Result useLevelZeroWorkaroundTexture(const gl::Context *context,
                                                 bool useLevelZeroTexture) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return false; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -552,6 +557,7 @@ class TextureStorage11_Cube : public TextureStorage11
     TextureStorage11_Cube(Renderer11 *renderer,
                           GLenum internalformat,
                           bool renderTarget,
+                          bool typeless,
                           int size,
                           int levels,
                           bool hintLevelZeroOnly,
@@ -589,6 +595,7 @@ class TextureStorage11_Cube : public TextureStorage11
     angle::Result useLevelZeroWorkaroundTexture(const gl::Context *context,
                                                 bool useLevelZeroTexture) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return mTypeless; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -635,6 +642,7 @@ class TextureStorage11_Cube : public TextureStorage11
     TextureHelper11 mLevelZeroTexture;
     CubeFaceArray<std::unique_ptr<RenderTarget11>> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
+    bool mTypeless;
 
     TextureHelper11 mSwizzleTexture;
     gl::TexLevelArray<d3d11::RenderTargetView> mSwizzleRenderTargets;
@@ -648,6 +656,7 @@ class TextureStorage11_3D : public TextureStorage11
     TextureStorage11_3D(Renderer11 *renderer,
                         GLenum internalformat,
                         bool renderTarget,
+                        bool typeless,
                         GLsizei width,
                         GLsizei height,
                         GLsizei depth,
@@ -677,6 +686,7 @@ class TextureStorage11_3D : public TextureStorage11
                                          const gl::ImageIndex &index,
                                          Image11 *incomingImage) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return mTypeless; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -713,6 +723,7 @@ class TextureStorage11_3D : public TextureStorage11
     gl::TexLevelArray<d3d11::RenderTargetView> mSwizzleRenderTargets;
 
     gl::TexLevelArray<Image11 *> mAssociatedImages;
+    bool mTypeless;
 };
 
 class TextureStorage11_2DArray : public TextureStorage11
@@ -721,6 +732,7 @@ class TextureStorage11_2DArray : public TextureStorage11
     TextureStorage11_2DArray(Renderer11 *renderer,
                              GLenum internalformat,
                              bool renderTarget,
+                             bool typeless,
                              GLsizei width,
                              GLsizei height,
                              GLsizei depth,
@@ -748,6 +760,7 @@ class TextureStorage11_2DArray : public TextureStorage11
                                          const gl::ImageIndex &index,
                                          Image11 *incomingImage) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return mTypeless; }
 
     struct LevelLayerRangeKey
     {
@@ -813,6 +826,7 @@ class TextureStorage11_2DArray : public TextureStorage11
 
     typedef std::map<LevelLayerRangeKey, Image11 *> ImageMap;
     ImageMap mAssociatedImages;
+    bool mTypeless;
 };
 
 class TextureStorage11_2DMultisample final : public TextureStorage11ImmutableBase
@@ -843,6 +857,7 @@ class TextureStorage11_2DMultisample final : public TextureStorage11ImmutableBas
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return false; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -900,6 +915,7 @@ class TextureStorage11_2DMultisampleArray final : public TextureStorage11Immutab
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
     void onLabelUpdate() override;
+    bool isTypeless() const override { return false; }
 
   protected:
     angle::Result getSwizzleTexture(const gl::Context *context,
@@ -958,6 +974,7 @@ class TextureStorage11_Buffer : public TextureStorage11
                                   RenderTargetD3D **outRT) override;
 
     void onLabelUpdate() override;
+    bool isTypeless() const override { return false; }
 
     void associateImage(Image11 *image, const gl::ImageIndex &index) override;
     void disassociateImage(const gl::ImageIndex &index, Image11 *expectedImage) override;

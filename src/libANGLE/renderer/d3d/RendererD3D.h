@@ -320,6 +320,7 @@ class RendererD3D : public BufferFactoryD3D
         const std::string &label)                                                            = 0;
     virtual TextureStorage *createTextureStorage2D(GLenum internalformat,
                                                    bool renderTarget,
+                                                   bool typeless,
                                                    GLsizei width,
                                                    GLsizei height,
                                                    int levels,
@@ -327,12 +328,14 @@ class RendererD3D : public BufferFactoryD3D
                                                    bool hintLevelZeroOnly)                   = 0;
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat,
                                                      bool renderTarget,
+                                                     bool typeless,
                                                      int size,
                                                      int levels,
                                                      bool hintLevelZeroOnly,
                                                      const std::string &label)               = 0;
     virtual TextureStorage *createTextureStorage3D(GLenum internalformat,
                                                    bool renderTarget,
+                                                   bool typeless,
                                                    GLsizei width,
                                                    GLsizei height,
                                                    GLsizei depth,
@@ -340,6 +343,7 @@ class RendererD3D : public BufferFactoryD3D
                                                    const std::string &label)                 = 0;
     virtual TextureStorage *createTextureStorage2DArray(GLenum internalformat,
                                                         bool renderTarget,
+                                                        bool typeless,
                                                         GLsizei width,
                                                         GLsizei height,
                                                         GLsizei depth,
