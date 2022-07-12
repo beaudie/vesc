@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e7e3e1d_95075cda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-12T16:42:45Z",
+      "side": 1,
+      "message": "Its not that anti-pattern as well, if you look at     \nclass DynamicDescriptorPool final : angle::NonCopyable\n{\n...\nstd::vector\u003cRefCountedDescriptorPoolHelper *\u003e mDescriptorPools;\n..\n}\n\nmDescriptorPools also does not retain the refcounted object as well. This usage here is exact the same kind of usage. \n\nFrom reference counting point of view, let cache not retain an object is not a bad idea. If we use c++ smart pointer, these will be much obvious, but without smart pointer, we kind of have to live with a slight odd stituation. Will a comment here explaining why it is not retained/released acceptable for now?",
+      "parentUuid": "17805054_9ebdd7fd",
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22ae2e9a_012ad19f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
