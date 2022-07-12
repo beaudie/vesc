@@ -1306,6 +1306,8 @@ class DescriptorSetDesc
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
+class DescriptorSetHelper;
+using RefCountedDescriptorSetHelper = RefCounted<DescriptorSetHelper>;
 class DescriptorPoolHelper;
 using RefCountedDescriptorPoolHelper = RefCounted<DescriptorPoolHelper>;
 
@@ -1619,6 +1621,7 @@ class SharedCacheKeyManager
     void addKey(const SharedCacheKeyT &key);
     // Iterate over the descriptor array and release the descriptor and cache.
     void releaseKeys(ContextVk *contextVk);
+    void releaseKeys();
     // Iterate over the descriptor array and destroy the descriptor and cache.
     void destroyKeys();
     void clear();
@@ -2110,26 +2113,11 @@ class DescriptorSetCache final : angle::NonCopyable
 
     void resetCache() { mPayload.clear(); }
 
-    ANGLE_INLINE bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                       VkDescriptorSet *descriptorSetOut,
-                                       vk::RefCountedDescriptorPoolHelper **poolOut)
-    {
-        auto iter = mPayload.find(desc);
-        if (iter != mPayload.end())
-        {
-            *descriptorSetOut = iter->second->getDescriptorSet();
-            *poolOut          = iter->second->getPool();
-            return true;
-        }
-        return false;
-    }
-
-    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet,
-                                          vk::RefCountedDescriptorPoolHelper *pool)
-    {
-        mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
-    }
+    bool getDescriptorSet(const vk::DescriptorSetDesc &desc,
+                          vk::RefCountedDescriptorSetHelper **descriptorSetOut);
+    void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                             vk::RefCountedDescriptorSetHelper *descriptorSet);
+    vk::RefCountedDescriptorSetHelper *releaseDescriptorSet(const vk::DescriptorSetDesc &desc);
 
     ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
     {
@@ -2137,38 +2125,12 @@ class DescriptorSetCache final : angle::NonCopyable
     }
 
     ANGLE_INLINE size_t getTotalCacheSize() const { return mPayload.size(); }
-
-    size_t getTotalCacheKeySizeBytes() const
-    {
-        size_t totalSize = 0;
-        for (const auto &iter : mPayload)
-        {
-            const vk::DescriptorSetDesc &desc = iter.first;
-            totalSize += desc.getKeySizeBytes();
-        }
-        return totalSize;
-    }
+    size_t getTotalCacheKeySizeBytes() const;
 
     bool empty() const { return mPayload.empty(); }
 
   private:
-    class dsCacheEntry
-    {
-      public:
-        dsCacheEntry(VkDescriptorSet descriptorSet, vk::RefCountedDescriptorPoolHelper *pool)
-            : mDescriptorSet(descriptorSet), mPool(pool)
-        {}
-        VkDescriptorSet getDescriptorSet() const { return mDescriptorSet; }
-        vk::RefCountedDescriptorPoolHelper *getPool() const { return mPool; }
-
-      private:
-        VkDescriptorSet mDescriptorSet;
-        // Weak pointer to the pool this descriptorSet allocated from. The RefCount is tracking if
-        // this pool is bound as the current pool in any ProgramExecutableVk or not, so we should
-        // not add refcount from the cache.
-        vk::RefCountedDescriptorPoolHelper *mPool;
-    };
-    angle::HashMap<vk::DescriptorSetDesc, std::unique_ptr<dsCacheEntry>> mPayload;
+    angle::HashMap<vk::DescriptorSetDesc, vk::RefCountedDescriptorSetHelper *> mPayload;
 };
 
 // Only 1 driver uniform binding is used.
