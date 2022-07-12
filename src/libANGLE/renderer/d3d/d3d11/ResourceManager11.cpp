@@ -322,7 +322,13 @@ angle::Result ClearResource(d3d::Context *context,
     {
         ASSERT((desc->BindFlags & D3D11_BIND_RENDER_TARGET) != 0);
         d3d11::RenderTargetView rtv;
-        ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format =
+            desc->Format == DXGI_FORMAT_R32_TYPELESS ? DXGI_FORMAT_R32_UINT : desc->Format;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ANGLE_TRY(renderer->allocateResource(context, rtvDesc, texture, &rtv));
 
         deviceContext->ClearRenderTargetView(rtv.get(), kDebugColorInitClearValue);
     }

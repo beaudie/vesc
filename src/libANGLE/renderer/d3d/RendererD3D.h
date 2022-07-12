@@ -324,7 +324,8 @@ class RendererD3D : public BufferFactoryD3D
                                                    GLsizei height,
                                                    int levels,
                                                    const std::string &label,
-                                                   bool hintLevelZeroOnly)                   = 0;
+                                                   bool hintLevelZeroOnly,
+                                                   bool typeless)                            = 0;
     virtual TextureStorage *createTextureStorageCube(GLenum internalformat,
                                                      bool renderTarget,
                                                      int size,

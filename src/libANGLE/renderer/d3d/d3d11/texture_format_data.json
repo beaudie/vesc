@@ -16,6 +16,7 @@
     "srvFormat": "DXGI_FORMAT_R8G8B8A8_UNORM",
     "uavFormat": "DXGI_FORMAT_R8G8B8A8_UNORM",
     "rtvFormat": "DXGI_FORMAT_R8G8B8A8_UNORM",
+    "typelessFormat": "DXGI_FORMAT_R8G8B8A8_TYPELESS",
     "channels": "rgba",
     "componentType": "unorm",
     "bits": {
@@ -102,6 +103,7 @@
     "texFormat": "DXGI_FORMAT_B8G8R8A8_UNORM",
     "srvFormat": "DXGI_FORMAT_B8G8R8A8_UNORM",
     "rtvFormat": "DXGI_FORMAT_B8G8R8A8_UNORM",
+    "typelessFormat": "DXGI_FORMAT_B8G8R8A8_TYPELESS",
     "channels": "bgra",
     "componentType": "unorm",
     "bits": {
@@ -158,6 +160,7 @@
     "texFormat": "DXGI_FORMAT_B8G8R8X8_UNORM",
     "srvFormat": "DXGI_FORMAT_B8G8R8X8_UNORM",
     "rtvFormat": "DXGI_FORMAT_B8G8R8X8_UNORM",
+    "typelessFormat": "DXGI_FORMAT_B8G8R8X8_TYPELESS",
     "channels": "bgra",
     "componentType": "unorm",
     "bits": {
@@ -409,6 +412,7 @@
     "srvFormat": "DXGI_FORMAT_R32_FLOAT",
     "uavFormat": "DXGI_FORMAT_R32_FLOAT",
     "rtvFormat": "DXGI_FORMAT_R32_FLOAT",
+    "typelessFormat": "DXGI_FORMAT_R32_TYPELESS",
     "channels": "r",
     "componentType": "float",
     "bits": { "red": 32 },
@@ -419,6 +423,7 @@
     "srvFormat": "DXGI_FORMAT_R32_SINT",
     "uavFormat": "DXGI_FORMAT_R32_SINT",
     "rtvFormat": "DXGI_FORMAT_R32_SINT",
+    "typelessFormat": "DXGI_FORMAT_R32_TYPELESS",
     "channels": "r",
     "componentType": "int",
     "bits": { "red": 32 },
@@ -429,6 +434,7 @@
     "srvFormat": "DXGI_FORMAT_R32_UINT",
     "uavFormat": "DXGI_FORMAT_R32_UINT",
     "rtvFormat": "DXGI_FORMAT_R32_UINT",
+    "typelessFormat": "DXGI_FORMAT_R32_TYPELESS",
     "channels": "r",
     "componentType": "uint",
     "bits": { "red": 32 },
@@ -473,6 +479,7 @@
     "texFormat": "DXGI_FORMAT_R16G16_FLOAT",
     "srvFormat": "DXGI_FORMAT_R16G16_FLOAT",
     "rtvFormat": "DXGI_FORMAT_R16G16_FLOAT",
+    "typelessFormat": "DXGI_FORMAT_R16G16_TYPELESS",
     "channels": "rg",
     "componentType": "float",
     "bits": {
@@ -485,6 +492,7 @@
     "texFormat": "DXGI_FORMAT_R16G16_SINT",
     "srvFormat": "DXGI_FORMAT_R16G16_SINT",
     "rtvFormat": "DXGI_FORMAT_R16G16_SINT",
+    "typelessFormat": "DXGI_FORMAT_R16G16_TYPELESS",
     "channels": "rg",
     "componentType": "int",
     "bits": {
@@ -497,6 +505,7 @@
     "texFormat": "DXGI_FORMAT_R16G16_UINT",
     "srvFormat": "DXGI_FORMAT_R16G16_UINT",
     "rtvFormat": "DXGI_FORMAT_R16G16_UINT",
+    "typelessFormat": "DXGI_FORMAT_R16G16_TYPELESS",
     "channels": "rg",
     "componentType": "uint",
     "bits": {
@@ -592,6 +601,7 @@
     "texFormat": "DXGI_FORMAT_R10G10B10A2_UNORM",
     "srvFormat": "DXGI_FORMAT_R10G10B10A2_UNORM",
     "rtvFormat": "DXGI_FORMAT_R10G10B10A2_UNORM",
+    "typelessFormat": "DXGI_FORMAT_R10G10B10A2_TYPELESS",
     "channels": "rgba",
     "componentType": "unorm",
     "bits": {
@@ -606,6 +616,7 @@
     "texFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
     "srvFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
     "rtvFormat": "DXGI_FORMAT_R10G10B10A2_UINT",
+    "typelessFormat": "DXGI_FORMAT_R10G10B10A2_TYPELESS",
     "channels": "rgba",
     "componentType": "uint",
     "bits": {
@@ -817,6 +828,7 @@
     "texFormat": "DXGI_FORMAT_R16G16_UNORM",
     "srvFormat": "DXGI_FORMAT_R16G16_UNORM",
     "rtvFormat": "DXGI_FORMAT_R16G16_UNORM",
+    "typelessFormat": "DXGI_FORMAT_R16G16_TYPELESS",
     "channels": "rg",
     "componentType": "unorm",
     "bits": {
@@ -836,6 +848,7 @@
   "R16G16_SNORM": {
     "texFormat": "DXGI_FORMAT_R16G16_SNORM",
     "srvFormat": "DXGI_FORMAT_R16G16_SNORM",
+    "typelessFormat": "DXGI_FORMAT_R16G16_TYPELESS",
     "channels": "rg",
     "componentType": "snorm",
     "bits": {

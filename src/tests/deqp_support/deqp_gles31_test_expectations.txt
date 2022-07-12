@@ -13,7 +13,7 @@
 
 1442 D3D11 : dEQP-GLES31.functional.image_load_store.3d.qualifiers.coherent_r32f = SKIP
 1442 D3D11 : dEQP-GLES31.functional.image_load_store.3d.qualifiers.volatile_r32f = SKIP
-1442 D3D11 : dEQP-GLES31.functional.image_load_store.2d.format_reinterpret.* = SKIP
+// 1442 D3D11 : dEQP-GLES31.functional.image_load_store.2d.format_reinterpret.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.image_load_store.cube.format_reinterpret.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.image_load_store.3d.format_reinterpret.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.image_load_store.2d_array.format_reinterpret.* = SKIP
