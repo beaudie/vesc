@@ -137,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84401ee2_aff6c8e3",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T18:33:06Z",
+      "side": 1,
+      "message": "In that case, a `bool` was better than the `pre`/`post` ids. After all, the `pre` id is used only for its `valid`! You could have `bool mSampleIDExists` or something.",
+      "parentUuid": "ae38936d_01296943",
+      "range": {
+        "startLine": 2837,
+        "startChar": 9,
+        "endLine": 2837,
+        "endChar": 35
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a08e66a_55273a8f",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 15
@@ -301,6 +325,30 @@
       "side": 1,
       "message": "I have the same question as https://chromium-review.googlesource.com/c/angle/angle/+/3724165/comments/802779b5_844ee365, thanks!",
       "parentUuid": "424867f2_0435d026",
+      "range": {
+        "startLine": 3059,
+        "startChar": 0,
+        "endLine": 3070,
+        "endChar": 1
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a6acc9_236f5196",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T18:33:06Z",
+      "side": 1,
+      "message": "Still shouldn\u0027t need this. You can already tell if gl_SampleID is defined by noticing its decoration. I.e. in `visitDecorate` where you set `mBuiltInGLSampleID`, you can set `mSampleIDExists \u003d true` at the same time.",
+      "parentUuid": "59b08c58_b92fead8",
       "range": {
         "startLine": 3059,
         "startChar": 0,
