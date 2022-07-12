@@ -540,12 +540,12 @@ class UtilsVk : angle::NonCopyable
     angle::Result allocateDescriptorSet(ContextVk *contextVk,
                                         vk::CommandBufferHelperCommon *commandBufferHelper,
                                         Function function,
-                                        vk::RefCountedDescriptorPoolBinding *bindingOut,
                                         VkDescriptorSet *descriptorSetOut);
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
     angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;
     angle::PackedEnumMap<Function, vk::DynamicDescriptorPool> mDescriptorPools;
+    angle::PackedEnumMap<Function, vk::RefCountedDescriptorSetBinding> mDescriptorSetBindings;
 
     vk::ShaderProgramHelper mConvertIndexPrograms[vk::InternalShader::ConvertIndex_comp::kArrayLen];
     vk::ShaderProgramHelper mConvertIndexIndirectLineLoopPrograms
