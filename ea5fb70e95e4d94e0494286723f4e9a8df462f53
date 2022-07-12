@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f68d99c_0cfe4d49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51799033_6ad8fd37",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c21f830_1c253651",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "Don\u0027t need `mIsFragmentShader`, `ProgramExecutableVk` should make `isMultisampledFramebufferFetch` true only for fragment shaders.",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7250921_66d82bb7",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2798,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c21f830_1c253651",
       "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -77,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ae38936d_01296943",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "I found that using just a single mBuiltInGLSampleID to track the id for gl_SampleId is tricky, because mBuiltInGLSampleID could become valid during transform phase, even if it was invalid during the first traverse phase. \n\nI am using two variables now: `mPreTransformBuiltInGLSampleID` and `mAfterTransformBuiltInGLSampleID`. If `mPreTransformBuiltInGLSampleID.valid()` is true, it means before transform, the shader already has the gl_SampleId declared and used, then during the transform phase I am not adding any new declarations. If `mPreTransformBuiltInGLSampleID.valid()` is false, then during the transform phase I will assign the newly created id for gl_SampleId to the `mAfterTransformBuiltInGLSampleID` and use it for all the subsequent `OpDecorate`, `OpVariable`, etc. Is this an acceptable solution?",
+      "parentUuid": "802779b5_844ee365",
+      "range": {
+        "startLine": 2837,
+        "startChar": 9,
+        "endLine": 2837,
+        "endChar": 35
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a08e66a_55273a8f",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 15
@@ -88,6 +148,24 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "nit: remove TODO",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8def9ab_91c5fbbc",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2853,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a08e66a_55273a8f",
       "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c385805c_88db3d23",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2966,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86dd10b7_3d08b98c",
+      "range": {
+        "startLine": 2960,
+        "startChar": 0,
+        "endLine": 2966,
+        "endChar": 9
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f375340_542abbac",
@@ -128,6 +230,30 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "Given the above ASSERT, this can also be simplified to the else case only.",
+      "range": {
+        "startLine": 2971,
+        "startChar": 0,
+        "endLine": 2981,
+        "endChar": 5
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "416436e8_e09898a5",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2981,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f375340_542abbac",
       "range": {
         "startLine": 2971,
         "startChar": 0,
@@ -163,6 +289,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59b08c58_b92fead8",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "I have the same question as https://chromium-review.googlesource.com/c/angle/angle/+/3724165/comments/802779b5_844ee365, thanks!",
+      "parentUuid": "424867f2_0435d026",
+      "range": {
+        "startLine": 3059,
+        "startChar": 0,
+        "endLine": 3070,
+        "endChar": 1
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db3c1fa4_17946314",
         "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
         "patchSetId": 15
@@ -174,6 +324,30 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "Please contain this to the transformer itself. I don\u0027t think you\u0027d particularly need the checks, but if you want to keep them, you can put them in `visitCapability` for example.\n\nThen you can remove the getters.",
+      "range": {
+        "startLine": 3168,
+        "startChar": 0,
+        "endLine": 3170,
+        "endChar": 77
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05130f3a_1bd44491",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3170,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db3c1fa4_17946314",
       "range": {
         "startLine": 3168,
         "startChar": 0,
@@ -201,6 +375,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e47fcfc_1eb6b37f",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3454,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "037e02be_e76491f6",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7a7b16c_29fccb06",
@@ -214,6 +406,30 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "Remove this `\u0026\u0026` and move the check inside `mMultiSampleTransformer.transformDecoration`. This logic belong to the transformer.",
+      "range": {
+        "startLine": 3632,
+        "startChar": 47,
+        "endLine": 3633,
+        "endChar": 57
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf55d3a2_66543599",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3633,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7a7b16c_29fccb06",
       "range": {
         "startLine": 3632,
         "startChar": 47,
@@ -247,6 +463,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49738791_0cc3ef1a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9e47d4f_d68b668f",
+      "range": {
+        "startLine": 3750,
+        "startChar": 0,
+        "endLine": 3764,
+        "endChar": 42
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69ffeb5d_1e85bc30",
@@ -260,6 +500,30 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "I suggest calling this function from `updateRasterizationSamples` directly. That function can then get the sample count out of `mGraphicsPipelineDesc` (before updating it) and pass it to this function. You wouldn\u0027t need to track `mFramebufferFetchSamples` then. You also wouldn\u0027t need to call this function from two places.",
+      "range": {
+        "startLine": 4316,
+        "startChar": 16,
+        "endLine": 4316,
+        "endChar": 45
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc0fedaa_c46254d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4316,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69ffeb5d_1e85bc30",
       "range": {
         "startLine": 4316,
         "startChar": 16,
@@ -317,6 +581,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d89c1b_06a62556",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4319,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92f27c7b_571fe220",
+      "range": {
+        "startLine": 4319,
+        "startChar": 8,
+        "endLine": 4319,
+        "endChar": 66
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bc7e686_cfa57467",
@@ -330,6 +618,30 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "nit: \u0026\u0026 `shaderType \u003d\u003d Fragment`",
+      "range": {
+        "startLine": 319,
+        "startChar": 56,
+        "endLine": 319,
+        "endChar": 83
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a3184b6_856db237",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bc7e686_cfa57467",
       "range": {
         "startLine": 319,
         "startChar": 56,
@@ -363,6 +675,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87e10744_ce1dd859",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bd9e63f_6281922f",
+      "range": {
+        "startLine": 1072,
+        "startChar": 37,
+        "endLine": 1072,
+        "endChar": 65
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bbbc459_ca1e6c7d",
@@ -376,6 +712,24 @@
       "writtenOn": "2022-07-11T19:36:02Z",
       "side": 1,
       "message": "nit: move next to `setRenderPassFramebufferFetchMode`, and call it `getRenderPassFramebufferFetchMode`",
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9eafe6_5092f504",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T18:14:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bbbc459_ca1e6c7d",
       "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
