@@ -141,6 +141,7 @@ class TextureStorage11 : public TextureStorage
                                                  Image11 *incomingImage)                = 0;
 
     GLsizei getRenderToTextureSamples() const override;
+    bool isTypeless() const override { return false; }
 
   protected:
     TextureStorage11(Renderer11 *renderer,
@@ -293,6 +294,7 @@ class TextureStorage11_2D : public TextureStorage11
     TextureStorage11_2D(Renderer11 *renderer,
                         GLenum internalformat,
                         bool renderTarget,
+                        bool typeless,
                         GLsizei width,
                         GLsizei height,
                         int levels,
@@ -341,6 +343,7 @@ class TextureStorage11_2D : public TextureStorage11
     angle::Result ensureTextureExists(const gl::Context *context, int mipLevels);
 
     angle::Result resolveTexture(const gl::Context *context) override;
+    bool isTypeless() const override { return mTypeless; }
 
   private:
     angle::Result createSRVForSampler(const gl::Context *context,
@@ -378,6 +381,7 @@ class TextureStorage11_2D : public TextureStorage11
     TextureHelper11 mLevelZeroTexture;
     std::unique_ptr<RenderTarget11> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
+    bool mTypeless;
 
     // Swizzle-related variables
     TextureHelper11 mSwizzleTexture;
@@ -552,6 +556,7 @@ class TextureStorage11_Cube : public TextureStorage11
     TextureStorage11_Cube(Renderer11 *renderer,
                           GLenum internalformat,
                           bool renderTarget,
+                          bool typeless,
                           int size,
                           int levels,
                           bool hintLevelZeroOnly,
@@ -635,6 +640,7 @@ class TextureStorage11_Cube : public TextureStorage11
     TextureHelper11 mLevelZeroTexture;
     CubeFaceArray<std::unique_ptr<RenderTarget11>> mLevelZeroRenderTarget;
     bool mUseLevelZeroTexture;
+    bool mTypeless;
 
     TextureHelper11 mSwizzleTexture;
     gl::TexLevelArray<d3d11::RenderTargetView> mSwizzleRenderTargets;
@@ -648,6 +654,7 @@ class TextureStorage11_3D : public TextureStorage11
     TextureStorage11_3D(Renderer11 *renderer,
                         GLenum internalformat,
                         bool renderTarget,
+                        bool typeless,
                         GLsizei width,
                         GLsizei height,
                         GLsizei depth,
@@ -713,6 +720,7 @@ class TextureStorage11_3D : public TextureStorage11
     gl::TexLevelArray<d3d11::RenderTargetView> mSwizzleRenderTargets;
 
     gl::TexLevelArray<Image11 *> mAssociatedImages;
+    bool mTypeless;
 };
 
 class TextureStorage11_2DArray : public TextureStorage11
@@ -721,6 +729,7 @@ class TextureStorage11_2DArray : public TextureStorage11
     TextureStorage11_2DArray(Renderer11 *renderer,
                              GLenum internalformat,
                              bool renderTarget,
+                             bool typeless,
                              GLsizei width,
                              GLsizei height,
                              GLsizei depth,
@@ -813,6 +822,7 @@ class TextureStorage11_2DArray : public TextureStorage11
 
     typedef std::map<LevelLayerRangeKey, Image11 *> ImageMap;
     ImageMap mAssociatedImages;
+    bool mTypeless;
 };
 
 class TextureStorage11_2DMultisample final : public TextureStorage11ImmutableBase
