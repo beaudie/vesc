@@ -159,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a150e903_ae960d2c",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2837,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84401ee2_aff6c8e3",
+      "range": {
+        "startLine": 2837,
+        "startChar": 9,
+        "endLine": 2837,
+        "endChar": 35
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a08e66a_55273a8f",
@@ -349,6 +373,30 @@
       "side": 1,
       "message": "Still shouldn\u0027t need this. You can already tell if gl_SampleID is defined by noticing its decoration. I.e. in `visitDecorate` where you set `mBuiltInGLSampleID`, you can set `mSampleIDExists \u003d true` at the same time.",
       "parentUuid": "59b08c58_b92fead8",
+      "range": {
+        "startLine": 3059,
+        "startChar": 0,
+        "endLine": 3070,
+        "endChar": 1
+      },
+      "revId": "ea5fb70e95e4d94e0494286723f4e9a8df462f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b0a168_55008824",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3070,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "I see, thank you. I have added a boolean `mSampleIDExists` to track if the pre-transformed SPIRV already has `gl_SampleID` declared, and keep a single `mBuiltInGLSampleID`",
+      "parentUuid": "f0a6acc9_236f5196",
       "range": {
         "startLine": 3059,
         "startChar": 0,

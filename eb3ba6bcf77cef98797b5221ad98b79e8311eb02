@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "859bce21_f5bb910f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4315,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e362551f_c6ef0420",
+      "range": {
+        "startLine": 4315,
+        "startChar": 61,
+        "endLine": 4315,
+        "endChar": 88
+      },
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41c66a01_907836fe",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b8e6fde_f9747176",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2116,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41c66a01_907836fe",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f4b3ef8_b953acb6",
@@ -54,6 +96,24 @@
       "writtenOn": "2022-07-12T18:40:28Z",
       "side": 1,
       "message": "ditto",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfd79714_8f683a5d",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f4b3ef8_b953acb6",
       "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -81,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f9aee9_3249a7b9",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2132,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36842c28_cdb1d967",
+      "range": {
+        "startLine": 2131,
+        "startChar": 0,
+        "endLine": 2132,
+        "endChar": 84
+      },
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4dfc905_37120116",
@@ -98,6 +182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d04db6_ec1433cc",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2136,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "I see. Thanks for pointing it out! I have verified that `invalidateCurrentGraphicsPipeline` is triggered from `ContextVk::updateFrameBufferFetchSamples` when switching between single sampled and multi sampled framebuffers. Although `invalidateCurrentGraphicsPipeline` is also triggered from other callstacks, e.g. from `ContextVk::updateRasterizerDiscardEnabled`.",
+      "parentUuid": "a4dfc905_37120116",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e24a9be1_880721d3",
@@ -111,6 +213,24 @@
       "writtenOn": "2022-07-12T18:40:28Z",
       "side": 1,
       "message": "ditto",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1341207_8c551916",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e24a9be1_880721d3",
       "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +258,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9c6ab7c_2980afc4",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2145,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdb5adf4_2576f9e3",
+      "range": {
+        "startLine": 2140,
+        "startChar": 0,
+        "endLine": 2145,
+        "endChar": 82
+      },
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58668d09_91eeed66",
@@ -155,6 +299,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba40e8bb_a59be5cd",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2149,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58668d09_91eeed66",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70d32450_bd6590e6",
@@ -168,6 +330,24 @@
       "writtenOn": "2022-07-12T18:40:28Z",
       "side": 1,
       "message": "ditto",
+      "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43c2b81e_a66661b7",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-12T22:13:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70d32450_bd6590e6",
       "revId": "eb3ba6bcf77cef98797b5221ad98b79e8311eb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
