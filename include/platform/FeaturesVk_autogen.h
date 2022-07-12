@@ -666,11 +666,14 @@ struct FeaturesVk : FeatureSetBase
         "VkDevice supports VK_EXT_image_2d_view_of_3d", &members, "https://anglebug.com/7320"};
 
     FeatureInfo preferLinearFilterForYUV = {
-        "preferLinearFilterForYUV",
-        FeatureCategory::VulkanFeatures,
-        "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion",
-        &members,
-    };
+        "preferLinearFilterForYUV", FeatureCategory::VulkanFeatures,
+        "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion", &members,
+        "https://anglebug.com/7382"};
+
+    FeatureInfo supportsTimestampSurfaceAttribute = {
+        "supportsTimestampSurfaceAttribute", FeatureCategory::VulkanFeatures,
+        "Platform supports setting frame timestamp surface attribute", &members,
+        "https://anglebug.com/7489"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
