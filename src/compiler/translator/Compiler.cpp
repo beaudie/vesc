@@ -605,7 +605,7 @@ bool TCompiler::validateAST(TIntermNode *root)
 {
     if ((mCompileOptions & SH_VALIDATE_AST) != 0)
     {
-        ANGLE_LOG(ERR) << "TCompiler::validateAST begin";
+        // ANGLE_LOG(ERR) << "TCompiler::validateAST begin";
         bool valid = ValidateAST(root, &mDiagnostics, mValidateASTOptions);
 
         if (!valid)
@@ -617,7 +617,7 @@ bool TCompiler::validateAST(TIntermNode *root)
         }
         else
         {
-            ANGLE_LOG(ERR) << "TCompiler::validateAST AST validation success";
+            // ANGLE_LOG(ERR) << "TCompiler::validateAST AST validation success";
         }
 
         // In debug, assert validation.  In release, validation errors will be returned back to the

@@ -853,6 +853,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
                                 egl::Surface *drawSurface,
                                 egl::Surface *readSurface)
 {
+    ANGLE_LOG(ERR) << "Context::makeCurrent w/ draw " << drawSurface << " read " << readSurface;
     mDisplay = display;
 
     if (!mHasBeenCurrent)
@@ -2923,11 +2924,14 @@ GLenum Context::getError()
 {
     if (mErrors.empty())
     {
+        ANGLE_LOG(ERR) << "No error.";
         return GL_NO_ERROR;
     }
     else
     {
-        return mErrors.popError();
+        GLenum e = mErrors.popError();
+        ANGLE_LOG(ERR) << "Has error: " << e;
+        return e;
     }
 }
 
@@ -7434,11 +7438,11 @@ void Context::shaderSource(ShaderProgramID shader,
                            const GLchar *const *string,
                            const GLint *length)
 {
-    for (int i = 0; i < count; ++i)
-    {
-        ANGLE_LOG(ERR) << "Context::shaderSource for shader " << shader.value << " string " << i
-                       << " of " << count << " : " << string[i];
-    }
+    // for (int i = 0; i < count; ++i)
+    // {
+    //     ANGLE_LOG(ERR) << "Context::shaderSource for shader " << shader.value << " string " << i
+    //                    << " of " << count << " : " << string[i];
+    // }
 
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
@@ -7657,9 +7661,11 @@ void Context::validateProgramPipeline(ProgramPipelineID pipeline)
         return;
     }
 
+    ANGLE_LOG(ERR) << "before checkProgramPipelineAllocation";
     ProgramPipeline *programPipeline =
         mState.mProgramPipelineManager->checkProgramPipelineAllocation(mImplementation.get(),
                                                                        pipeline);
+    ANGLE_LOG(ERR) << "after checkProgramPipelineAllocation";
     ASSERT(programPipeline);
 
     programPipeline->validate(this);
