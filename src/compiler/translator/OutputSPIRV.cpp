@@ -678,6 +678,7 @@ spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *sym
         case EvqLayerIn:
         case EvqSampleID:
         case EvqPrimitiveID:
+        case EvqViewIDOVR:
             if (*storageClass == spv::StorageClassInput)
             {
                 spirv::WriteDecorate(mBuilder.getSpirvDecorations(), varId, spv::DecorationFlat,
