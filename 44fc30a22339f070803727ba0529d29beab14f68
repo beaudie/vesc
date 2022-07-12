@@ -100,6 +100,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e73c4a70_257e12c9",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-12T16:24:52Z",
+      "side": 1,
+      "message": "Also now that the thread set is made thread-safe, maybe these pass? Otherwise, please open a new bug, explaining how they fail.",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4eeb244f_6fa09464",
         "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
         "patchSetId": 12
