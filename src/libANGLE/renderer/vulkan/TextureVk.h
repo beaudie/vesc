@@ -23,7 +23,7 @@ enum class ImageMipLevels
 {
     EnabledLevels                 = 0,
     FullMipChainForGenerateMipmap = 1,
-    FullMipChain                  = 2,
+    DefinedLevelsBeforeFlush      = 2,
 
     InvalidEnum = 3,
 };

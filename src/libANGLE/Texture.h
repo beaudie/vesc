@@ -179,6 +179,9 @@ class TextureState final : private angle::NonCopyable
     bool getImmutableFormat() const { return mImmutableFormat; }
     GLuint getImmutableLevels() const { return mImmutableLevels; }
 
+    // Return the number of defined levels.
+    GLuint getDefinedLevelCount() const { return mDefinedLevelCount; }
+
     const std::vector<ImageDesc> &getImageDescs() const { return mImageDescs; }
 
     InitState getInitState() const { return mInitState; }
@@ -250,6 +253,8 @@ class TextureState final : private angle::NonCopyable
     gl::TilingMode mTilingMode;
 
     std::vector<ImageDesc> mImageDescs;
+
+    GLuint mDefinedLevelCount;
 
     // GLES1 emulation: Texture crop rectangle
     // For GL_OES_draw_texture

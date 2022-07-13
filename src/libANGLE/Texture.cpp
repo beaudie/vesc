@@ -132,6 +132,7 @@ TextureState::TextureState(TextureType type)
       mRenderabilityValidation(true),
       mTilingMode(gl::TilingMode::Optimal),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) * (type == TextureType::CubeMap ? 6 : 1)),
+      mDefinedLevelCount(0),
       mCropRect(0, 0, 0, 0),
       mGenerateMipmapHint(GL_FALSE),
       mInitState(InitState::Initialized),
@@ -683,6 +684,11 @@ void TextureState::setImageDesc(TextureTarget target, size_t level, const ImageD
         {
             mInitState = InitState::Initialized;
         }
+    }
+
+    if (mDefinedLevelCount < level + 1)
+    {
+        mDefinedLevelCount = static_cast<GLuint>(level + 1);
     }
 }
 
