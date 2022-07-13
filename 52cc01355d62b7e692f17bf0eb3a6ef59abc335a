@@ -39,6 +39,30 @@
       },
       "revId": "52cc01355d62b7e692f17bf0eb3a6ef59abc335a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9365ed44_f584cf7c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T02:04:23Z",
+      "side": 1,
+      "message": "One for swiftshader, one for GL, assuming they fail in different ways. Thanks!",
+      "parentUuid": "b48c5e40_ad92945e",
+      "range": {
+        "startLine": 673,
+        "startChar": 0,
+        "endLine": 673,
+        "endChar": 5
+      },
+      "revId": "52cc01355d62b7e692f17bf0eb3a6ef59abc335a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
