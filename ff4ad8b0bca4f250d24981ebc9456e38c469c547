@@ -70,6 +70,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d52133d_4b09a31f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-13T18:52:18Z",
+      "side": 1,
+      "message": "\u003e For example, a thread could do eglInitialize -\u003e test -\u003e eglTerminate in a loop, and then we would postpone all cleanups until the very end\n\nif that was the only active thread and the test did something like this -\n```\n for (...)\n {\n     eglInitialize\n     test(...)\n     {\n         create context\n         create surface\n         makecurrent\n         draw\n         unmakecurrent\n     }\n     eglTerminate\n }\n```\n\nthen the regular flow of terminate will free all resources",
+      "parentUuid": "4f34cc1f_151d85ad",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
