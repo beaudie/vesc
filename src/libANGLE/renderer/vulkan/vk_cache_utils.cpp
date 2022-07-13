@@ -5428,7 +5428,11 @@ void DescriptorSetDescBuilder::updateShaderResourcesSharedCacheKey(
 template <class SharedCacheKeyT>
 void SharedCacheKeyManager<SharedCacheKeyT>::addKey(const SharedCacheKeyT &key)
 {
-    ASSERT(key);
+    if (!key)
+    {
+        return;
+    }
+
     // If there is invalid key in the array, use it instead of keep expanding the array
     for (SharedCacheKeyT &sharedCacheKey : mSharedCacheKeys)
     {
