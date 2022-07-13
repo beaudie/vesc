@@ -572,6 +572,14 @@ libangle_capture_sources = [
 ]
 
 libgl_sources = [
+  "src/libGL/egl_ext_stubs.cpp",
+  "src/libGL/egl_ext_stubs_autogen.h",
+  "src/libGL/egl_stubs.cpp",
+  "src/libGL/egl_stubs_autogen.h",
+  "src/libGL/entry_points_egl_autogen.cpp",
+  "src/libGL/entry_points_egl_autogen.h",
+  "src/libGL/entry_points_egl_ext_autogen.cpp",
+  "src/libGL/entry_points_egl_ext_autogen.h",
   "src/libGL/entry_points_gl_1_autogen.cpp",
   "src/libGL/entry_points_gl_1_autogen.h",
   "src/libGL/entry_points_gl_2_autogen.cpp",
@@ -580,11 +588,9 @@ libgl_sources = [
   "src/libGL/entry_points_gl_3_autogen.h",
   "src/libGL/entry_points_gl_4_autogen.cpp",
   "src/libGL/entry_points_gl_4_autogen.h",
-  "src/libGL/entry_points_wgl.cpp",
-  "src/libGL/entry_points_wgl.h",
   "src/libGL/libGL_autogen.cpp",
-  "src/libGL/proc_table_wgl.h",
-  "src/libGL/proc_table_wgl_autogen.cpp",
+  "src/libGL/proc_table_egl.h",
+  "src/libGL/proc_table_egl_autogen.cpp",
   "src/libGLESv2/global_state.cpp",
   "src/libGLESv2/global_state.h",
   "src/libGLESv2/resource.h",
@@ -592,8 +598,12 @@ libgl_sources = [
 
 if (is_win) {
   libgl_sources += [
+    "src/libGL/entry_points_wgl.cpp",
+    "src/libGL/entry_points_wgl.h",
     "src/libGL/libGL.rc",
     "src/libGL/libGL_autogen.def",
+    "src/libGL/proc_table_wgl.h",
+    "src/libGL/proc_table_wgl_autogen.cpp",
   ]
 }
 

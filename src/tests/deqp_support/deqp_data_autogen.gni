@@ -317,6 +317,9 @@ angle_deqp_external_openglcts_data_gles3 = [
   "$root_gen_dir/vk_gl_cts_data/data/gl_cts/data/gles3/switch.test",
 ]
 
+angle_deqp_external_openglcts_data_gl30 =
+    [ "$root_gen_dir/vk_gl_cts_data/data/gl_cts/data/gl30/declarations.test" ]
+
 angle_deqp_data_copy_targets = [
   "deqp_support:vk_gl_cts_data_data_gles2_data",
   "deqp_support:vk_gl_cts_data_data_gles2_data_etc1",
@@ -331,5 +334,6 @@ angle_deqp_data_copy_targets = [
   "deqp_support:vk_gl_cts_data_external_graphicsfuzz_data_gles3_graphicsfuzz",
   "deqp_support:vk_gl_cts_data_external_graphicsfuzz_data_gles3_graphicsfuzz_bubblesort_flag",
   "deqp_support:vk_gl_cts_data_external_graphicsfuzz_data_gles3_graphicsfuzz_synthetic",
+  "deqp_support:vk_gl_cts_data_external_openglcts_data_gl30",
   "deqp_support:vk_gl_cts_data_external_openglcts_data_gles3",
 ]

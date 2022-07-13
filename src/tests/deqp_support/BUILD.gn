@@ -366,6 +366,13 @@ copy("vk_gl_cts_data_external_graphicsfuzz_data_gles3_graphicsfuzz_synthetic") {
   outputs = [ "$root_gen_dir/vk_gl_cts_data/data/gles3/graphicsfuzz/synthetic/{{source_file_part}}" ]
 }
 
+copy("vk_gl_cts_data_external_openglcts_data_gl30") {
+  sources = [ "$deqp_path/external/openglcts/data/gl30/declarations.test" ]
+  outputs = [
+    "$root_gen_dir/vk_gl_cts_data/data/gl_cts/data/gl30/{{source_file_part}}",
+  ]
+}
+
 copy("vk_gl_cts_data_external_openglcts_data_gles3") {
   sources = [
     "$deqp_path/external/openglcts/data/gles3/declarations.test",

@@ -1298,32 +1298,30 @@ if (angle_has_frame_capture) {
   }
 }
 
-if (is_win && !angle_is_winuwp) {
-  angle_shared_library("libGL") {
-    sources = libgl_sources
+angle_shared_library("libGL") {
+  sources = libgl_sources
 
-    output_name = "openGL32"
-    output_dir = "$root_out_dir/angle_libs"
+  #output_name = "openGL32"
+  #output_dir = "$root_out_dir/angle_libs"
 
-    configs += [
-      ":angle_gl_visibility_config",
-      ":debug_annotations_config",
-      ":gl_prototypes",
-    ]
+  configs += [
+    ":angle_gl_visibility_config",
+    ":debug_annotations_config",
+    ":gl_prototypes",
+  ]
 
-    defines = [
-      "ANGLE_CAPTURE_ENABLED=0",
-      "LIBGL_IMPLEMENTATION",
-    ]
+  defines = [
+    "ANGLE_CAPTURE_ENABLED=0",
+    "LIBGL_IMPLEMENTATION",
+  ]
 
-    deps = [
-      ":includes",
-      ":libANGLE",
-    ]
+  deps = [
+    ":includes",
+    ":libANGLE",
+  ]
 
-    if (is_win) {
-      deps += [ ":angle_version" ]
-    }
+  if (is_win) {
+    deps += [ ":angle_version" ]
   }
 }
 
@@ -1415,7 +1413,10 @@ angle_shared_library("libEGL") {
 
   public_deps = [ ":includes" ]
 
-  data_deps = [ ":libGLESv2" ]
+  data_deps = [
+    #":libGLESv2",
+    ":libGL",
+  ]
 }
 
 angle_static_library("libEGL_static") {
@@ -1427,7 +1428,9 @@ angle_static_library("libEGL_static") {
   public_configs += [ ":angle_static" ]
   deps = [
     ":includes",
-    ":libGLESv2_static",
+
+    #":libGLESv2_static",
+    ":libGL",
   ]
 }
 

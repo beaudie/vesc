@@ -38,7 +38,7 @@ void EnsureEGLLoaded()
     }
 
     std::string errorOut;
-    gEntryPointsLib = OpenSystemLibraryAndGetError(ANGLE_GLESV2_LIBRARY_NAME,
+    gEntryPointsLib = OpenSystemLibraryAndGetError(/*ANGLE_GLESV2_LIBRARY_NAME*/ "libGL",
                                                    angle::SearchType::ModuleDir, &errorOut);
     if (gEntryPointsLib)
     {

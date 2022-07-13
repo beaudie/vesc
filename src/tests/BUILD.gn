@@ -1,4 +1,4 @@
-# Copyright 2015 The ANGLE Project Authors. All rights reserved.
+# cOPyright 2015 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -1419,6 +1419,27 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     ]
   }
 
+  angle_deqp_source_set("angle_deqp_gl") {
+    sources = deqp_khr_gl_sources + deqp_khr_common_sources +
+              deqp_khr_glesext_sources + deqp_khr_gles31_sources +
+              [ "deqp_support/glcTestPackageEntry_override.cpp" ]
+    public_deps = [
+      ":angle_deqp_framework_egl",
+      ":angle_deqp_glshared",
+      "${angle_glslang_dir}:glslang_lib_sources",
+      "${angle_spirv_tools_dir}:spvtools_val",
+    ]
+    public_configs = [ ":angle_deqp_khr_common_config" ]
+    include_dirs = [
+      "$angle_root/third_party/vulkan-deps/spirv-tools/src/include",
+      "$angle_root/third_party/vulkan-deps/glslang/src",
+    ]
+    cflags = [
+      "-Wno-implicit-const-int-float-conversion",
+      "-Wno-return-type",
+    ]
+  }
+
   template("angle_deqp_core_gtest") {
     _api = target_name
     angle_deqp_gtest(target_name) {
@@ -1435,6 +1456,8 @@ if (build_angle_deqp_tests && !is_fuchsia) {
         data = angle_deqp_data_gles3
       } else if (_api == "gles31") {
         data = angle_deqp_data_gles31
+      } else if (_api == "gl") {
+        data = angle_deqp_external_openglcts_data_gl30
       } else {
         # Make sure we include something so that angle_deqp_libtester_main.cpp can find something.
         data = [ "$root_gen_dir/vk_gl_cts_data/data/gles2/shaders/misc.test" ]
@@ -1458,6 +1481,12 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     defines = [ "ANGLE_DEQP_GLES31_TESTS" ]
     deps = [ ":angle_deqp_gles31_common" ]
     mustpass_dir = _aosp_mustpass
+  }
+
+  angle_deqp_core_gtest("gl") {
+    defines = [ "ANGLE_DEQP_GL_TESTS" ]
+    deps = [ ":angle_deqp_khr_common" ]
+    mustpass_dir = _khronos_mustpass
   }
 
   angle_deqp_core_gtest("egl") {
@@ -1625,6 +1654,7 @@ group("angle_tests") {
   if (build_angle_deqp_tests && !is_fuchsia) {
     deps += [
       ":angle_deqp_egl_tests",
+      ":angle_deqp_gl_tests",
       ":angle_deqp_gles2_tests",
       ":angle_deqp_gles31_tests",
       ":angle_deqp_gles3_tests",
