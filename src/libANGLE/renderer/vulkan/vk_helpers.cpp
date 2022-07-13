@@ -3387,6 +3387,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     SharedDescriptorSetCacheKey *sharedCacheKeyOut,
     DescriptorCacheResult *cacheResultOut)
 {
+#if 0
     // Add previous descriptorSet to resource list so that its queueSerial gets updated.
     if (descriptorSetBindingOut->valid())
     {
@@ -3459,8 +3460,17 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
 
     mDescriptorSetCache.insertDescriptorSet(desc, newDescriptorSetHelper);
     descriptorSetBindingOut->set(newDescriptorSetHelper);
-    *cacheResultOut = DescriptorCacheResult::NewAllocation;
     ++context->getPerfCounters().descriptorSetAllocations;
+    if (sharedCacheKeyOut != nullptr)
+    {
+        *sharedCacheKeyOut = sharedCacheKey;
+    }
+#else
+    ANGLE_TRY(allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
+                                    descriptorSetBindingOut));
+    SharedDescriptorSetCacheKey sharedCacheKey = nullptr;
+#endif
+    *cacheResultOut = DescriptorCacheResult::NewAllocation;
     if (sharedCacheKeyOut != nullptr)
     {
         *sharedCacheKeyOut = sharedCacheKey;
