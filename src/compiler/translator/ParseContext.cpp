@@ -211,6 +211,8 @@ TParseContext::TParseContext(TSymbolTable &symt,
       mFragmentPrecisionHighOnESSL1(false),
       mEarlyFragmentTestsSpecified(false),
       mSampleQualifierSpecified(false),
+      mPositionRedeclaredForSeparateShaderObject(false),
+      mPointSizeRedeclaredForSeparateShaderObject(false),
       mDefaultUniformMatrixPacking(EmpColumnMajor),
       mDefaultUniformBlockStorage(sh::IsWebGLBasedSpec(spec) ? EbsStd140 : EbsShared),
       mDefaultBufferMatrixPacking(EmpColumnMajor),
@@ -1403,6 +1405,32 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
             return false;
         }
     }
+    else if (isExtensionEnabled(TExtension::EXT_separate_shader_objects) &&
+             mShaderType == GL_VERTEX_SHADER)
+    {
+        if (identifier == "gl_Position")
+        {
+            if (type->getBasicType() != EbtFloat || type->getNominalSize() != 4 ||
+                type->getSecondarySize() != 1 || type->isArray())
+            {
+                error(line, "gl_Position can only be redeclared as vec4", identifier);
+                return false;
+            }
+            needsReservedCheck                         = false;
+            mPositionRedeclaredForSeparateShaderObject = true;
+        }
+        else if (identifier == "gl_PointSize")
+        {
+            if (type->getBasicType() != EbtFloat || type->getNominalSize() != 1 ||
+                type->getSecondarySize() != 1 || type->isArray())
+            {
+                error(line, "gl_PointSize can only be redeclared as float", identifier);
+                return false;
+            }
+            needsReservedCheck                          = false;
+            mPointSizeRedeclaredForSeparateShaderObject = true;
+        }
+    }
 
     if (needsReservedCheck && !checkIsNotReserved(line, identifier))
         return false;
@@ -2241,6 +2269,38 @@ const TVariable *TParseContext::getNamedVariable(const TSourceLoc &location,
     {
         checkNoncoherentIsSpecified(location, variable->getType().getLayoutQualifier().noncoherent);
     }
+
+    // When EXT_separate_shader_objects is enabled, gl_Position and gl_PointSize must both be
+    // redeclared before either is accessed:
+    //
+    // > The following vertex shader outputs may be redeclared at global scope to
+    // > specify a built-in output interface, with or without special qualifiers:
+    // >
+    // >     gl_Position
+    // >     gl_PointSize
+    // >
+    // >   When compiling shaders using either of the above variables, both such
+    // >   variables must be redeclared prior to use.  ((Note:  This restriction
+    // >   applies only to shaders using version 300 that enable the
+    // >   EXT_separate_shader_objects extension; shaders not enabling the
+    // >   extension do not have this requirement.))
+    if (isExtensionEnabled(TExtension::EXT_separate_shader_objects) &&
+        mShaderType == GL_VERTEX_SHADER)
+    {
+        if (variable->getType().getQualifier() == EvqPosition ||
+            variable->getType().getQualifier() == EvqPointSize)
+        {
+            if (!mPositionRedeclaredForSeparateShaderObject ||
+                !mPointSizeRedeclaredForSeparateShaderObject)
+            {
+                error(location,
+                      "When EXT_separate_shader_objects is enabled, both gl_Position and "
+                      "gl_PointSize must be redeclared before either is used",
+                      name);
+            }
+        }
+    }
+
     return variable;
 }
 
@@ -2311,6 +2371,14 @@ void TParseContext::adjustRedeclaredBuiltInType(const ImmutableString &identifie
     else if (identifier == "gl_LastFragData")
     {
         type->setQualifier(EvqLastFragData);
+    }
+    else if (identifier == "gl_Position")
+    {
+        type->setQualifier(EvqPosition);
+    }
+    else if (identifier == "gl_PointSize")
+    {
+        type->setQualifier(EvqPointSize);
     }
 }
 
@@ -3001,6 +3069,8 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
             symbol = new TIntermSymbol(variable);
         }
     }
+
+    adjustRedeclaredBuiltInType(identifier, type);
 
     TIntermDeclaration *declaration = new TIntermDeclaration();
     declaration->setLine(identifierOrTypeLocation);
