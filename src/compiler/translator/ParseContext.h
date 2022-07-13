@@ -693,6 +693,10 @@ class TParseContext : angle::NonCopyable
                                          // ESSL1.
     bool mEarlyFragmentTestsSpecified;   // true if layout(early_fragment_tests) in; is specified.
     bool mSampleQualifierSpecified;      // true if the |sample| qualifier is used
+    bool mPositionRedeclaredForSeparateShaderObject;   // true if EXT_separate_shader_objects is
+                                                       // enabled and gl_Position is redefined.
+    bool mPointSizeRedeclaredForSeparateShaderObject;  // true if EXT_separate_shader_objects is
+                                                       // enabled and gl_PointSize is redefined.
     TLayoutMatrixPacking mDefaultUniformMatrixPacking;
     TLayoutBlockStorage mDefaultUniformBlockStorage;
     TLayoutMatrixPacking mDefaultBufferMatrixPacking;
