@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f491c90c_da06874b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T14:50:43Z",
+      "side": 1,
+      "message": "Hmm, why can\u0027t this call be replaced with `removeActiveThreadAndPerformCleanup`?\n\nif `mActiveThreads.size() \u003e 1`, `removeActiveThreadAndPerformCleanup()` and `removeActiveThread()` calls are equivalent.\n\nif `mActiveThreads.size() \u003d\u003d 1`, then the thread calling eglTerminate is the last active thread - shouldn\u0027t we be performing the cleanup right away then? If I\u0027m missing something, could you add a comment to the code explaining why `removeActiveThreadAndPerformCleanup` can\u0027t be called here?",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

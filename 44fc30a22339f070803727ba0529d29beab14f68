@@ -201,6 +201,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1e50fb7_8645212c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T14:50:43Z",
+      "side": 1,
+      "message": "ES3_1_Vulkan failing as well on my laptop, also due to a missing extension:\n\n```\n[ RUN      ] EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan\n../../src/tests/test_utils/ANGLETest.cpp:65: Failure\nRendererVk.cpp:144 (VerifyExtensionsPresent): Extension not supported: VK_KHR_surface\n```\n\nI don\u0027t know enough about extensions, but isn\u0027t it weird that we\u0027re missing VK_KHR_surface on Vulkan?",
+      "parentUuid": "db6e274d_0212bb67",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4eeb244f_6fa09464",
         "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
         "patchSetId": 12
