@@ -588,8 +588,25 @@ bool IsConfigAllowlisted(const SystemInfo &systemInfo, const PlatformParameters 
                 return true;
             case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
                 // http://issuetracker.google.com/173004081
-                return !IsIntel() || !param.isEnabled(Feature::AsyncCommandQueue) ||
-                       param.isDisabled(Feature::AsyncCommandQueue);
+                {
+                    std::stringstream strstr;
+                    strstr << param;
+                    int rr = !IsIntel() || !param.isEnabled(Feature::AsyncCommandQueue) ||
+                             param.isDisabled(Feature::AsyncCommandQueue);
+                    if (strstr.str() == std::string("ES3_1_Vulkan_SwiftShader_AsyncCommandQueue"))
+                    {
+                        WARN() << "qwe renderer EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE "
+                               << " IsIntel()=" << IsIntel()
+                               << " param.isEnabled(Feature::AsyncCommandQueue)="
+                               << param.isEnabled(Feature::AsyncCommandQueue)
+                               << " param.isDisabled(Feature::AsyncCommandQueue)="
+                               << param.isDisabled(Feature::AsyncCommandQueue) << " rr=" << rr;
+                    }
+
+                    return !IsIntel() || param.isSwiftshader() ||
+                           !param.isEnabled(Feature::AsyncCommandQueue) ||
+                           param.isDisabled(Feature::AsyncCommandQueue);
+                }
             default:
                 return false;
         }
@@ -748,6 +765,8 @@ bool IsPlatformAvailable(const PlatformParameters &param)
         else
         {
             const SystemInfo *systemInfo = GetTestSystemInfo();
+
+            // WARN() << "qwe p " << param << " si " << systemInfo;
 
             if (systemInfo)
             {
