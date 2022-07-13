@@ -23,7 +23,7 @@ enum class ImageMipLevels
 {
     EnabledLevels                 = 0,
     FullMipChainForGenerateMipmap = 1,
-    FullMipChain                  = 2,
+    DefinedLevelsBeforeFlush      = 2,
 
     InvalidEnum = 3,
 };
@@ -658,6 +658,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Saved between updates.
     gl::LevelIndex mCurrentBaseLevel;
     gl::LevelIndex mCurrentMaxLevel;
+
+    // Number of defined levels to be allocated in case of previous mutable texture flushing
+    uint32_t mDefinedLevelCount;
 
     // Cached subresource indexes.
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSRGBDecode;
