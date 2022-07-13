@@ -16,6 +16,23 @@
       "message": "I guess Shabi is out for today.\nCody, can you PTAL, I need this to fix a new bot I\u0027ve added https://ci.chromium.org/p/angle/builders/ci/linux-exp-test",
       "revId": "b35906b8c5e5408c3836da2d9d1ea427de789cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8367877_4b290b2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-13T22:00:30Z",
+      "side": 1,
+      "message": "LGTM as a follow up to https://chromium-review.googlesource.com/c/angle/angle/+/3761034\n\nBTW, do you have a pointer to a doc or page that describes what all these bots are (including the new one)?",
+      "revId": "b35906b8c5e5408c3836da2d9d1ea427de789cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
