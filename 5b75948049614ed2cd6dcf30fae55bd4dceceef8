@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "162486f6_34fd4c3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-13T20:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16a36b5b_27da38fe",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0214760d_2c90ffbe",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50fde4f4_58a3c550",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-13T20:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0214760d_2c90ffbe",
+      "range": {
+        "startLine": 9,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 107
+      },
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9920558_83f2f4b8",
@@ -60,6 +108,24 @@
       "writtenOn": "2022-07-13T19:50:01Z",
       "side": 1,
       "message": "Bug: angleproject:5777\nBug: angleproject:6017",
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7449c3a3_2028fcda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-13T20:17:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9920558_83f2f4b8",
       "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
