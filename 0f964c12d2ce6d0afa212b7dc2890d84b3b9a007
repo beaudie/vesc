@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "181f13d2_af084a24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-13T20:38:06Z",
+      "side": 1,
+      "message": "I\u0027ve approved the new images for `genshin_impact` several times, but they keep failing.  Doing a local diff of two approved images from Linux, I can see there is some noise on the cliff sides that prevents ever finding a match.  I think you\u0027ll need to skip this trace on Nvidia Windows and Linux.  I just posted anglebug.com/7496 with my findings.",
+      "revId": "0f964c12d2ce6d0afa212b7dc2890d84b3b9a007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
