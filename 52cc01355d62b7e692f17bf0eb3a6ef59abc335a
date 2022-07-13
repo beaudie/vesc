@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e68c310e_286c2f04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-13T00:47:48Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "52cc01355d62b7e692f17bf0eb3a6ef59abc335a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b48c5e40_ad92945e",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-13T00:47:48Z",
+      "side": 1,
+      "message": "shabi, you need a new bug for all 3 or just for swiftshader?",
+      "range": {
+        "startLine": 673,
+        "startChar": 0,
+        "endLine": 673,
+        "endChar": 5
+      },
+      "revId": "52cc01355d62b7e692f17bf0eb3a6ef59abc335a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
