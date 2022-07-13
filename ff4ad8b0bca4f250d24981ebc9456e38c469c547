@@ -22,6 +22,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ec0eb52_90193e16",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-13T16:48:13Z",
+      "side": 1,
+      "message": "wanted to keep `removeActiveThread` as a simple helper that does just 1 thing.\n\nI was thinking about this a bit more and it is not at all necessary to call `removeActiveThread` here. We can have good logical separation by allowing thread destruction call to perform any necessary cleanup and let `Display::terminate` not call into any additional cleanup routine. There is no value added by preempting the existing call flow with the clean up call flow when we can just wait for the thread to be destroyed and handle the clean up there. Let me know your thoughts",
+      "parentUuid": "f491c90c_da06874b",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
