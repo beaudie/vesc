@@ -253,6 +253,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec3754f_93dea863",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T18:31:04Z",
+      "side": 1,
+      "message": "I found some existing similar weirdness in our infra: https://anglebug.com/7494#c2\n\nThat ES3_1_Vulkan issue that I was running into is probably due to something with my local setup.\n\nI\u0027ll have a look into this separately afterwards, thanks for filing those bugs.",
+      "parentUuid": "aa78c6ea_09c3a34d",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4eeb244f_6fa09464",

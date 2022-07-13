@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "bbd1fc8fa58c1e168c90f791f835cd5133b8682f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cf7cabf_9c4fd96b",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T18:31:04Z",
+      "side": 1,
+      "message": "Could you change these to\nWIN OpenGL\nWIN GLES\n?\n\nIt seems that they\u0027re only failing on Windows, passing on Linux and Android.\n\n\n7494 SWIFTSHADER below seems to be failing on both Win and Linux though.",
+      "range": {
+        "startLine": 671,
+        "startChar": 0,
+        "endLine": 672,
+        "endChar": 65
+      },
+      "revId": "bbd1fc8fa58c1e168c90f791f835cd5133b8682f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
