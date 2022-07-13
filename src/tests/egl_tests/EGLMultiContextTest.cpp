@@ -405,6 +405,7 @@ TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
     getEGLWindow()->destroyGL();
 
     EGLDisplay dpy;
+    WARN() << "qwe ReuseUnterminatedDisplay GetParam().getRenderer()=" << GetParam().getRenderer();
     EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
 
     std::thread threadA = std::thread([&]() {

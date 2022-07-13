@@ -167,6 +167,8 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
 
     std::vector<EGLAttrib> displayAttributes;
     displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
+    std::cerr << "qwe EGLWindow::initializeDisplay params.renderer=" << params.renderer
+              << std::endl;
     displayAttributes.push_back(params.renderer);
     displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE);
     displayAttributes.push_back(params.majorVersion);
