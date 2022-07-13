@@ -129,6 +129,16 @@ bool ExtensionFound(const char *needle, const vk::ExtensionNameList &haystack)
     return std::binary_search(haystack.begin(), haystack.end(), needle, StrLess);
 }
 
+void mylog(const vk::ExtensionNameList &haystack)
+{
+    std::ostringstream log;
+    for (const char *h : haystack)
+    {
+        log << h << " ";
+    }
+    WARN() << "qwe ext list " << log.str();
+}
+
 VkResult VerifyExtensionsPresent(const vk::ExtensionNameList &haystack,
                                  const vk::ExtensionNameList &needles)
 {
@@ -1508,6 +1518,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         mEnabledInstanceExtensions.push_back(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME);
         ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfacelessQueryExtension, true);
     }
+
+    mylog(instanceExtensionNames);
 
     // Verify the required extensions are in the extension names set. Fail if not.
     std::sort(mEnabledInstanceExtensions.begin(), mEnabledInstanceExtensions.end(), StrLess);
