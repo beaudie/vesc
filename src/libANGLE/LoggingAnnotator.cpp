@@ -48,7 +48,7 @@ void LoggingAnnotator::logMessage(const gl::LogMessage &msg) const
                 plat->logError(plat, msg.getMessage().c_str());
                 break;
             case gl::LOG_WARN:
-                plat->logWarning(plat, msg.getMessage().c_str());
+                // plat->logWarning(plat, msg.getMessage().c_str());
                 break;
             case gl::LOG_INFO:
                 plat->logInfo(plat, msg.getMessage().c_str());

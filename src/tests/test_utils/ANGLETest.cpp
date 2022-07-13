@@ -607,6 +607,8 @@ void ANGLETestBase::ANGLETestSetUp()
         angle::Sleep(GetTestStartDelaySeconds() * 1000);
     }
 
+    WARN() << "qwe ANGLETestSetUp";
+
     gDefaultPlatformMethods.logError   = TestPlatform_logError;
     gDefaultPlatformMethods.logWarning = TestPlatform_logWarning;
     gDefaultPlatformMethods.logInfo    = TestPlatform_logInfo;

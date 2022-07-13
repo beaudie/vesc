@@ -13,8 +13,11 @@ namespace angle
 class ContextLostTest : public ANGLETest<>
 {
   protected:
-    ContextLostTest()
+    ContextLostTest() {}
+
+    void testSetUp() override
     {
+        std::cerr << "qwe ContextLostTest()" << std::endl;
         if (IsEGLClientExtensionEnabled("EGL_EXT_create_context_robustness"))
         {
             setContextResetStrategy(EGL_LOSE_CONTEXT_ON_RESET_EXT);
@@ -29,6 +32,7 @@ class ContextLostTest : public ANGLETest<>
 // GL_CHROMIUM_lose_context is implemented in the frontend
 TEST_P(ContextLostTest, ExtensionStringExposed)
 {
+    std::cerr << "qwe ExtensionStringExposed" << std::endl;
     EXPECT_TRUE(EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
 }
 
@@ -121,7 +125,9 @@ TEST_P(ContextLostTest, ParallelCompileReadyQuery)
 class ContextLostSkipValidationTest : public ANGLETest<>
 {
   protected:
-    ContextLostSkipValidationTest()
+    ContextLostSkipValidationTest() {}
+
+    void testSetUp() override
     {
         if (IsEGLClientExtensionEnabled("EGL_EXT_create_context_robustness"))
         {

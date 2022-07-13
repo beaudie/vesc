@@ -5,6 +5,7 @@
 
 #include "angle_test_platform.h"
 
+#include <iostream>
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
 
