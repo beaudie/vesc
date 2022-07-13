@@ -219,6 +219,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d42b401a_dc60b165",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T15:17:41Z",
+      "side": 1,
+      "message": "Talked to Shabi, this doesn\u0027t seem right - I\u0027ll dig a bit into what\u0027s going on here as it\u0027s easy for me to repro, possibly something going wrong during re-initialization.",
+      "parentUuid": "e1e50fb7_8645212c",
+      "revId": "44fc30a22339f070803727ba0529d29beab14f68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4eeb244f_6fa09464",
         "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
         "patchSetId": 12
