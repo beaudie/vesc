@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02a9b68a_a729a9b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-13T20:37:38Z",
+      "side": 1,
+      "message": "The logs from the Vulkan run:\nhttps://chromium-swarm.appspot.com/task?id\u003d5c0cda831894ea10\n\n---\nWarning: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000502, in ../../src/libANGLE/renderer/vulkan/vk_helpers.cpp, CalculateBufferInfo:7032. Internal Vulkan error (-1000011001): The validation layers detected invalid API usage.\nWARN: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000502, in ../../src/libANGLE/renderer/vulkan/vk_helpers.cpp, CalculateBufferInfo:7032. Internal Vulkan error (-1000011001): The validation layers detected invalid API usage.\n../../src/tests/gl_tests/TextureTest.cpp:3818: Failure\nValue of: passed\n  Actual: false\nExpected: true\n---\n\nPlease file a new bug describing this failure, and then add ANGLE_SKIP_TEST_IF(IsVulkan()), or similar, to the new test.\n",
+      "revId": "e7e52eea0fac1e46a53dcc39a68340c449cc76b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
