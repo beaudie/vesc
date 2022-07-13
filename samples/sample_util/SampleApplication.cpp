@@ -251,7 +251,7 @@ int SampleApplication::run()
     mRunning   = true;
     int result = 0;
 
-#if defined(ANGLE_ENABLE_ASSERTS)
+#if defined(ANGLE_ENABLE_ASSERTS) && !defined(ANGLE_ENABLE_GL_DESKTOP)
     if (IsGLExtensionEnabled("GL_KHR_debug"))
     {
         EnableDebugCallback(nullptr, nullptr);
