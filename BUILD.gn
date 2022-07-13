@@ -1243,14 +1243,13 @@ config("angle_static") {
 set_defaults("angle_libGLESv2") {
   sources = []
   output_name = "libGLESv2"
+  deps = []
 }
 
 template("angle_libGLESv2") {
   angle_shared_library(target_name) {
-    sources = libglesv2_sources + invoker.sources
-    if (angle_enable_cl) {
-      sources += libglesv2_cl_sources
-    }
+    sources = invoker.sources
+    deps = invoker.deps + [ ":includes" ]
 
     output_name = "${invoker.output_name}${angle_libs_suffix}"
     if (angle_glesv2_extension != "") {
@@ -1263,14 +1262,22 @@ template("angle_libGLESv2") {
       ":gl_prototypes",
     ]
 
-    defines = [ "LIBGLESV2_IMPLEMENTATION" ]
+    if (angle_enable_gl_desktop) {
+      sources = libglesv2_gl_sources
+      defines = [ "LIBGL_IMPLEMENTATION" ]
+    } else {
+      sources = libglesv2_sources
+      defines = [ "LIBGLESV2_IMPLEMENTATION" ]
+    }
 
-    deps = invoker.deps + [ ":includes" ]
+    if (angle_enable_cl) {
+      sources += libglesv2_cl_sources
+    }
 
     if (is_win) {
       sources += [
+        "src/libGLESv2/${invoker.output_name}.rc",
         "src/libGLESv2/${invoker.output_name}_autogen.def",
-        "src/libGLESv2/libGLESv2.rc",
       ]
       deps += [ ":angle_version" ]
     }
@@ -1298,33 +1305,15 @@ if (angle_has_frame_capture) {
   }
 }
 
-if (is_win && !angle_is_winuwp) {
-  angle_shared_library("libGL") {
-    sources = libgl_sources
-
+angle_libGLESv2("libGL") {
+  if (is_win) {
     output_name = "openGL32"
     output_dir = "$root_out_dir/angle_libs"
-
-    configs += [
-      ":angle_gl_visibility_config",
-      ":debug_annotations_config",
-      ":gl_prototypes",
-    ]
-
-    defines = [
-      "ANGLE_CAPTURE_ENABLED=0",
-      "LIBGL_IMPLEMENTATION",
-    ]
-
-    deps = [
-      ":includes",
-      ":libANGLE",
-    ]
-
-    if (is_win) {
-      deps += [ ":angle_version" ]
-    }
+  } else {
+    output_name = "libGL"
   }
+
+  deps = [ ":libANGLE" ]
 }
 
 angle_static_library("libGLESv2_static") {
@@ -1427,7 +1416,9 @@ angle_static_library("libEGL_static") {
   public_configs += [ ":angle_static" ]
   deps = [
     ":includes",
-    ":libGLESv2_static",
+
+    #":libGLESv2_static",
+    ":libGL",
   ]
 }
 
@@ -1599,7 +1590,10 @@ if ((angle_standalone || build_with_chromium) && is_android &&
 group("angle") {
   data_deps = [
     ":libEGL",
-    ":libGLESv1_CM",
     ":libGLESv2",
   ]
+
+  if (!angle_enable_gl_desktop) {
+    data_deps += [ ":libGLESv1_CM" ]
+  }
 }
