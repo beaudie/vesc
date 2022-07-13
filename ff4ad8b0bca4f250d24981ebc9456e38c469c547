@@ -94,6 +94,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "245efd29_8b4e52b0",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-13T19:03:16Z",
+      "side": 1,
+      "message": "Ahh, yes I think you\u0027re right! We don\u0027t need to invoke `terminate(NoActiveThreads)` if it\u0027s explicitly terminated and there are no outstanding threads as `terminate(Api)` will have taken care of everything. We only need `terminate(NoActiveThreads)` when `terminate(Api)` couldn\u0027t have done a full cleanup due to outstanding threads, in which case doing what you did is going to take care of it. Thanks for bearing with me :) and all the adjustments!",
+      "parentUuid": "6d52133d_4b09a31f",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
