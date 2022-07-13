@@ -143,7 +143,20 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
         {
             for (TExtensionBehavior::iterator iter = mExtensionBehavior.begin();
                  iter != mExtensionBehavior.end(); ++iter)
+            {
+                // EXT_separate_shader_objects requires the vertex shader to redeclare gl_Position
+                // and gl_PointSize.  This is not adopted by GLES3.2, and seems to be generally
+                // forgotten about.  CTS tests that enable all extensions for one don't expect this
+                // behavior.  As a workaround, this extension is not enabled with "all", but only
+                // when explicitly enabled.
+                // anglebug.com/6590
+                if (iter->first == TExtension::EXT_separate_shader_objects)
+                {
+                    continue;
+                }
+
                 iter->second = behaviorVal;
+            }
         }
         return;
     }

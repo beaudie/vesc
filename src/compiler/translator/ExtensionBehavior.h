@@ -37,6 +37,7 @@ enum class TExtension : uint8_t
     EXT_gpu_shader5,
     EXT_primitive_bounding_box,
     OES_primitive_bounding_box,
+    EXT_separate_shader_objects,
     EXT_shader_framebuffer_fetch,
     EXT_shader_framebuffer_fetch_non_coherent,
     EXT_shader_non_constant_global_initializers,
