@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16a36b5b_27da38fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-13T19:50:01Z",
+      "side": 1,
+      "message": "\"Tests: Remove platform skips for cookie_run_kingdom and real_cricket_20\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 53
+      },
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0214760d_2c90ffbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-13T19:50:01Z",
+      "side": 1,
+      "message": "\"after being trimmed to not include unused shaders in commit \u003c####\u003e.\"",
+      "range": {
+        "startLine": 9,
+        "startChar": 22,
+        "endLine": 9,
+        "endChar": 107
+      },
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9920558_83f2f4b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-13T19:50:01Z",
+      "side": 1,
+      "message": "Bug: angleproject:5777\nBug: angleproject:6017",
+      "revId": "5b75948049614ed2cd6dcf30fae55bd4dceceef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
