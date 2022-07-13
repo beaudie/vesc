@@ -674,7 +674,6 @@
 // GL, GLES and Swiftshader don't seem to perform appropriate cleanup
 7495 WIN OpenGL : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
 7495 WIN GLES : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
-7494 SWIFTSHADER : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
 
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
