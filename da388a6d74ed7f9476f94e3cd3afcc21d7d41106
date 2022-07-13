@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8e05db5_fca56b96",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T17:19:25Z",
+      "side": 1,
+      "message": "Intentional conflict with https://chromium-review.googlesource.com/c/angle/angle/+/3739590/8/include/GLSLANG/ShaderLang.h#29",
+      "parentUuid": "7abc122a_67e62435",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "da388a6d74ed7f9476f94e3cd3afcc21d7d41106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72025914_27849797",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa7625c5_bb8d688c",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T17:19:25Z",
+      "side": 1,
+      "message": "Eww indeed. The warning will serve to confuse IMO, because it seems like it was a mistake of the extension to require the redefinitions. No CTS test enables this extension explicitly, so I\u0027ll bet driver behavior will vary here. I think it\u0027s best not to draw developer attention to this. I could open a separate bug for this if you prefer? (so _we_ track it)",
+      "parentUuid": "72025914_27849797",
+      "range": {
+        "startLine": 150,
+        "startChar": 30,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "da388a6d74ed7f9476f94e3cd3afcc21d7d41106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7bbe513_a02ab373",
         "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
         "patchSetId": 3
@@ -77,6 +125,30 @@
       "writtenOn": "2022-07-13T17:03:11Z",
       "side": 1,
       "message": "essl31_shaders::PositionAttrib() since you just added it.",
+      "range": {
+        "startLine": 1654,
+        "startChar": 20,
+        "endLine": 1654,
+        "endChar": 32
+      },
+      "revId": "da388a6d74ed7f9476f94e3cd3afcc21d7d41106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb59f90f_7a6205aa",
+        "filename": "src/tests/gl_tests/ProgramPipelineTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1654,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T17:19:25Z",
+      "side": 1,
+      "message": "Nack. `essl31_shaders::PositionAttrib()` is used where `essl31_shaders::vs::Simple()` is used. I used `\"a_position\"` here because this test defines its own shader. The fact that they have the same value is a coincidence :)",
+      "parentUuid": "b7bbe513_a02ab373",
       "range": {
         "startLine": 1654,
         "startChar": 20,
