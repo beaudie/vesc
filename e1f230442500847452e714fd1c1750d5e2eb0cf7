@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e166cba4_0d26b9ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T01:35:45Z",
+      "side": 1,
+      "message": "LGTM, very good job!",
+      "revId": "e1f230442500847452e714fd1c1750d5e2eb0cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f8a83dd_1a80926a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T01:35:45Z",
+      "side": 1,
+      "message": "minor point: For future reference, you can be more C++y and also succinct here with a range-based loop:\n\n```\nfor (spirv::IdRef interfaceId : interfaceList)\n{\n    if (interfaceId \u003d\u003d id) ...\n}\n```",
+      "range": {
+        "startLine": 2947,
+        "startChar": 0,
+        "endLine": 2949,
+        "endChar": 37
+      },
+      "revId": "e1f230442500847452e714fd1c1750d5e2eb0cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d8b0286_ea8f837a",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-13T01:35:45Z",
+      "side": 1,
+      "message": "nit: `interfaceList-\u003epush_back(mBuiltInGLSampleID)`",
+      "range": {
+        "startLine": 2987,
+        "startChar": 0,
+        "endLine": 2991,
+        "endChar": 64
+      },
+      "revId": "e1f230442500847452e714fd1c1750d5e2eb0cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
