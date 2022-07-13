@@ -118,6 +118,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94a513c9_c3f6a694",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-13T19:36:59Z",
+      "side": 1,
+      "message": "\u003e We only need  terminate(NoActiveThreads)  when  terminate(Api)  couldn\u0027t have done a full cleanup due to outstanding threads\n\nexactly\n\nthank you for the review!",
+      "parentUuid": "245efd29_8b4e52b0",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
