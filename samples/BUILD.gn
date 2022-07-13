@@ -28,6 +28,7 @@ angle_source_set("sample_util") {
   ]
   data_deps = [
     "../:libEGL",
+    "../:libGL",
     "../:libGLESv1_CM",
     "../:libGLESv2",
   ]

@@ -17,10 +17,14 @@
 
 #include "util/shader_utils.h"
 
+#include <iostream>
+
 class HelloTriangleSample : public SampleApplication
 {
   public:
-    HelloTriangleSample(int argc, char **argv) : SampleApplication("HelloTriangle", argc, argv) {}
+    HelloTriangleSample(int argc, char **argv)
+        : SampleApplication("HelloTriangle", argc, argv, ClientType::GL3_3_CORE)
+    {}
 
     bool initialize() override
     {
@@ -51,6 +55,14 @@ void main()
 
     void draw() override
     {
+        std::string vendor = (const char *)glGetString(GL_VENDOR);
+        std::cout << vendor << '\n';
+
+        std::string renderer = (const char *)glGetString(GL_RENDERER);
+        std::cout << renderer << '\n';
+
+        glDepthRangef(1.0, 2.0);
+
         GLfloat vertices[] = {
             0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
         };
