@@ -56,6 +56,13 @@
 235877059 VULKAN : MultisampleTestES3.ResolveToFBO/ES3_Vulkan_EmulatedPrerotation180 = SKIP
 235877059 VULKAN : MultisampleTestES3.ResolveToFBO/ES3_Vulkan_EmulatedPrerotation270 = SKIP
 
+// LAO: texture descriptor set cache related tests
+237686097 VULKAN: VulkanPerformanceCounterTest.ChangingUBOsHitsDescriptorSetCache/* = SKIP
+237686097 VULKAN: VulkanPerformanceCounterTest.Source2DAndRepeatedlyRespecifyTarget2DWithSameParameter/* = SKIP
+237686097 VULKAN: VulkanPerformanceCounterTest.TextureDescriptorsAreShared/* = SKIP
+237686097 VULKAN: VulkanPerformanceCounterTest.UniformBufferDescriptorsAreShared/* = SKIP
+237686097 VULKAN: VulkanPerformanceCounterTest.UniformUpdatesHitDescriptorSetCache/* = SKIP
+
 // Windows
 3786 WIN NVIDIA D3D11 : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
 4092 WIN VULKAN : BufferDataOverflowTest.VertexBufferIntegerOverflow/* = SKIP
