@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2675b65d_8bc35ec8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-13T18:26:32Z",
+      "side": 1,
+      "message": "Sounds good. I shall move it to WIP for now.",
+      "parentUuid": "1a0eaca2_2d3872e4",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de169681_accde12c",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-12T19:12:22Z",
       "side": 1,
       "message": "Please move these outside the class with appropriate rename, we try to avoid nested classes. Also, remove the initial `I`.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bea4ce5_ebe1c4f5",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-13T18:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de169681_accde12c",
       "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2eea1fe_a9cea1f3",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-13T18:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4969046a_db84fc1b",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bff96351_b01f5578",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eabaf0a_82bdff8f",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-13T18:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bff96351_b01f5578",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db056593_579b1070",
@@ -82,6 +154,24 @@
       "writtenOn": "2022-07-12T19:12:22Z",
       "side": 1,
       "message": "Redundant.",
+      "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db7163ef_5b87286c",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-13T18:26:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db056593_579b1070",
       "revId": "59b061fa720c9dfdfb1d94d331a67a746c874eed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
