@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d044f728_e7f68ee5",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T23:30:51Z",
+      "side": 0,
+      "message": "Your change seems right to me - I am not seeing languages in the spec says glValidateProgramPipeline needs to check for framebuffer state. But this block of code was added by the following CL, and the comment from Brandon says this is required (See https://chromium-review.googlesource.com/c/angle/angle/+/2906723/10).  Could you run bots to see if any deqp test fail?",
+      "range": {
+        "startLine": 636,
+        "startChar": 3,
+        "endLine": 643,
+        "endChar": 5
+      },
+      "revId": "cd445b9fa95086d59e3b1b7cae45067c4b0d2581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
