@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a334b8_7ab0bf5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T17:16:55Z",
+      "side": 1,
+      "message": "Proper fix for the gcam clear issue",
+      "revId": "c828e84d6cf4e2d57b6b56326bfd54102170e9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
