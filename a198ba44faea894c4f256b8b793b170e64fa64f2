@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f6123b2_e3953b42",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T17:17:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ac2868f_15da2502",
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22ae2e9a_012ad19f",
@@ -133,6 +151,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "33f9c922_436edd80",
+      "range": {
+        "startLine": 3421,
+        "startChar": 69,
+        "endLine": 3421,
+        "endChar": 96
+      },
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f2050e_7dfd82a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T17:17:54Z",
+      "side": 1,
+      "message": "This can be cleaner if we are willing to modify BindingPointer class to override operator \u0027-\u003e\u0027 to return the underline object and use `get` to return the actual refCounted pointer, i.e, similar to semantics of std::unique_ptr or std::shared_ptr. But lets not touch that part in this CL.",
+      "parentUuid": "3f94afe3_1114fde9",
       "range": {
         "startLine": 3421,
         "startChar": 69,
