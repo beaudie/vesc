@@ -16,6 +16,24 @@
       "message": "As mentioned - I was probably wrong about this - should instead add a SKIP expectation for Vulkan in src/tests/angle_end2end_tests_expectations.txt .",
       "revId": "ff475958621c063c2ad9a29a44ad1b6bfacab176",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7005a1d_2dae9e27",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3848,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-14T22:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "394294cb_ec93f085",
+      "revId": "ff475958621c063c2ad9a29a44ad1b6bfacab176",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
