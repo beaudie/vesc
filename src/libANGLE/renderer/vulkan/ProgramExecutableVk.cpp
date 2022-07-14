@@ -347,7 +347,8 @@ ProgramExecutableVk::ProgramExecutableVk()
     : mNumDefaultUniformDescriptors(0),
       mImmutableSamplersMaxDescriptorCount(1),
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
-      mDynamicUniformDescriptorOffsets{}
+      mDynamicUniformDescriptorOffsets{},
+      mShaderStageFlags(0)
 {
     for (std::shared_ptr<DefaultUniformBlock> &defaultBlock : mDefaultUniformBlocks)
     {
@@ -372,6 +373,7 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
 
     mDescriptorSets.fill(VK_NULL_HANDLE);
     mNumDefaultUniformDescriptors = 0;
+    mShaderStageFlags             = 0;
 
     for (vk::RefCountedDescriptorPoolBinding &binding : mDescriptorPoolBindings)
     {
@@ -1214,21 +1216,37 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
         contextVk, texturesSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Texture]));
 
-    // Driver uniforms
-    vk::DescriptorSetLayoutDesc driverUniformsSetDesc =
-        contextVk->getDriverUniformsDescriptorSetDesc();
-    ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
-        contextVk, driverUniformsSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Internal]));
-
-    // Create pipeline layout with these 4 descriptor sets.
+    // Create pipeline layout with these 3 descriptor sets.
     vk::PipelineLayoutDesc pipelineLayoutDesc;
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::UniformsAndXfb,
                                                  uniformsAndXfbSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::ShaderResource,
                                                  resourcesSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Texture, texturesSetDesc);
-    pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
-                                                 driverUniformsSetDesc);
+
+    // Set up driver uniforms as push constants. The size and shader stages used for them are set
+    // based on the pipeline type, which is determined by checking the linked shader stages. We can
+    // then create the pipeline layout using the push constant range.
+    bool hasGraphics = false;
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        if (shaderType != gl::ShaderType::Compute)
+        {
+            hasGraphics = true;
+            break;
+        }
+    }
+
+    if (hasGraphics)
+    {
+        mShaderStageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS &
+                             contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask();
+    }
+    mShaderStageFlags |= VK_SHADER_STAGE_COMPUTE_BIT;
+
+    PipelineType pipelineType = (hasGraphics) ? PipelineType::Graphics : PipelineType::Compute;
+    uint32_t pushConstantSize = contextVk->getDriverUniformSize(pipelineType);
+    pipelineLayoutDesc.updatePushConstantRange(mShaderStageFlags, 0, pushConstantSize);
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
@@ -1387,10 +1405,6 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
     DescriptorSetIndex lastNonNullDescriptorSetIndex = DescriptorSetIndex::InvalidEnum;
     for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums<DescriptorSetIndex>())
     {
-        if (descriptorSetIndex == DescriptorSetIndex::Internal)
-        {
-            continue;
-        }
         if (mDescriptorSets[descriptorSetIndex] != VK_NULL_HANDLE)
         {
             lastNonNullDescriptorSetIndex = descriptorSetIndex;
@@ -1403,8 +1417,7 @@ angle::Result ProgramExecutableVk::bindDescriptorSets(
 
     for (DescriptorSetIndex descriptorSetIndex : angle::AllEnums<DescriptorSetIndex>())
     {
-        if (descriptorSetIndex == DescriptorSetIndex::Internal ||
-            ToUnderlying(descriptorSetIndex) > ToUnderlying(lastNonNullDescriptorSetIndex))
+        if (ToUnderlying(descriptorSetIndex) > ToUnderlying(lastNonNullDescriptorSetIndex))
         {
             continue;
         }
