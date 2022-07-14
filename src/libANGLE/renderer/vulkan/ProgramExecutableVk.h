@@ -231,6 +231,11 @@ class ProgramExecutableVk
     angle::Result warmUpPipelineCache(ContextVk *contextVk,
                                       const gl::ProgramExecutable &glExecutable);
 
+    VkShaderStageFlags getPushConstantShaderStageFlags() const
+    {
+        return mPushConstantShaderStageFlags;
+    }
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
@@ -362,6 +367,9 @@ class ProgramExecutableVk
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
 
     ShaderInfo mOriginalShaderInfo;
+
+    // Shader stage flags used for the push constant range during the pipeline layout creation.
+    VkShaderStageFlags mPushConstantShaderStageFlags;
 
     // The pipeline cache specific to this program executable.  Currently:
     //
