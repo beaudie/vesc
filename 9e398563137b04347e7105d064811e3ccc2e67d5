@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbbd5f49_d32948ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-14T05:45:52Z",
+      "side": 1,
+      "message": "I think this has had plenty of soak time now, as have the PLS tests in main. Can we go ahead and land now?",
+      "revId": "9e398563137b04347e7105d064811e3ccc2e67d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
