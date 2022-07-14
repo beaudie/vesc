@@ -70,6 +70,23 @@
       "parentUuid": "25d62c21_6799b734",
       "revId": "0d3ecf4638dde008e4e6a3c85931b9a2316004b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6189a18_7e17915f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T15:29:47Z",
+      "side": 1,
+      "message": "One problem is that this is made permanent (by the `permanentlySwitchToFramebufferFetchMode` feature) as soon as framebuffer fetch is used once. The check here should really be on the program executable itself, not the `GraphicsPipelineDesc`.",
+      "revId": "0d3ecf4638dde008e4e6a3c85931b9a2316004b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
