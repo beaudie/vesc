@@ -52,6 +52,23 @@
       "parentUuid": "2f99958c_0c30ca46",
       "revId": "e7e52eea0fac1e46a53dcc39a68340c449cc76b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26a1bae1_3899bb56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-07-14T17:08:07Z",
+      "side": 1,
+      "message": "Vulkan bug here: \nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7499",
+      "revId": "e7e52eea0fac1e46a53dcc39a68340c449cc76b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
