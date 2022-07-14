@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18f6f165_81011a26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T23:32:53Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "cd445b9fa95086d59e3b1b7cae45067c4b0d2581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dffbd375_6b46cd1d",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T23:32:53Z",
+      "side": 1,
+      "message": "can this be a link and merge next line to the same line here?",
+      "range": {
+        "startLine": 239,
+        "startChar": 7,
+        "endLine": 239,
+        "endChar": 21
+      },
+      "revId": "cd445b9fa95086d59e3b1b7cae45067c4b0d2581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
