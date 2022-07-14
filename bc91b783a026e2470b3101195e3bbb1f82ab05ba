@@ -52,6 +52,24 @@
       "parentUuid": "5808375b_1efba6e3",
       "revId": "bc91b783a026e2470b3101195e3bbb1f82ab05ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dacf096_1b262872",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-14T23:27:09Z",
+      "side": 1,
+      "message": "Got it, thanks!\n\nSo ShCompileOptions is almost out of room, but we could theoretically add flags either there or somewhere else that say things like (just spitballing here):\n\n```\n plsMode -\u003e {None, Images, FramebufferFetch, TexelFetchWithBarrier, CustomBackend}\n plsImagesCanBeReadWrite\n plsImageCoherencyMode -\u003e {NONE, VK_EXT, GL_INTEL, GL_ARB, D3D_ROV}\n ```\n \nThen the backend configures these flags and the shader compiler acts accordingly. Sound right?",
+      "parentUuid": "63df57c1_dcaa1d4e",
+      "revId": "bc91b783a026e2470b3101195e3bbb1f82ab05ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
