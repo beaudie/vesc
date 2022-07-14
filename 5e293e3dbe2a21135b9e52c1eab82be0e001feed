@@ -33,6 +33,103 @@
       "message": "Geoff/Shahbaz, can you take another look for Xing\u0027s latest change? Thanks.",
       "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89705486_42d5f970",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T02:26:29Z",
+      "side": 1,
+      "message": "nit: suggest directly checking the `enableTimestampQueries` feature and avoid caching these value in the Query. You have access to context everywhere this is needed.",
+      "range": {
+        "startLine": 87,
+        "startChar": 9,
+        "endLine": 87,
+        "endChar": 32
+      },
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dffa210_b4d4c433",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T02:26:29Z",
+      "side": 1,
+      "message": "Whether timestamp queries are supported cannot be queried from d3d? This is always defaulting to false unless overridden from outside.",
+      "range": {
+        "startLine": 1605,
+        "startChar": 47,
+        "endLine": 1605,
+        "endChar": 69
+      },
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54f14f5_db53334b",
+        "filename": "src/tests/egl_tests/EGLFeatureControlTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T02:26:29Z",
+      "side": 1,
+      "message": "Unnecessary but ok.",
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da76bda_f99e0faa",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T02:26:29Z",
+      "side": 1,
+      "message": "nit: useless scope is useless",
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "803af5e1_d79035ff",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T02:26:29Z",
+      "side": 1,
+      "message": "Please use the `GLQuery` RAII type. No need for gen/delete",
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
