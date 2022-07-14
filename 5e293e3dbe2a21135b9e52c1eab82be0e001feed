@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "260e19a3_48e51b3c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-14T06:29:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "89705486_42d5f970",
+      "range": {
+        "startLine": 87,
+        "startChar": 9,
+        "endLine": 87,
+        "endChar": 32
+      },
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dffa210_b4d4c433",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-07-14T02:26:29Z",
       "side": 1,
       "message": "Whether timestamp queries are supported cannot be queried from d3d? This is always defaulting to false unless overridden from outside.",
+      "range": {
+        "startLine": 1605,
+        "startChar": 47,
+        "endLine": 1605,
+        "endChar": 69
+      },
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a46dad0_c4c351f6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1605,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-14T06:29:13Z",
+      "side": 1,
+      "message": "This is not queried from d3d, instead, it is set by the user. User(developer) can use chromium commandline flag to turn on timestamp query like this:\n--enable-angle-features\u003d\"enableTimestampQueries\"\n\nThis flag will be added to chromium by this PR:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3669847",
+      "parentUuid": "2dffa210_b4d4c433",
       "range": {
         "startLine": 1605,
         "startChar": 47,
@@ -115,6 +163,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c97d0f0d_ffacedd5",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-14T06:29:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0da76bda_f99e0faa",
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "803af5e1_d79035ff",
@@ -128,6 +194,24 @@
       "writtenOn": "2022-07-14T02:26:29Z",
       "side": 1,
       "message": "Please use the `GLQuery` RAII type. No need for gen/delete",
+      "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81a55058_e778da22",
+        "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-14T06:29:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "803af5e1_d79035ff",
       "revId": "5e293e3dbe2a21135b9e52c1eab82be0e001feed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
