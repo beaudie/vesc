@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f5bbd41_59f035d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4904,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T23:42:06Z",
+      "side": 1,
+      "message": "Why \"don\u0027t use samplerExternal2DY2YEXT\" but at line 5015 uses isSamplerExternalY2Y? Because this sampler information is baked into the cache, and this function is calculating cache key, isn\u0027t this will generate incorrect cache keys by forcing isSamplerExternalY2Y to false?",
+      "range": {
+        "startLine": 4904,
+        "startChar": 50,
+        "endLine": 4904,
+        "endChar": 55
+      },
+      "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
