@@ -2752,14 +2752,25 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // transitions that cover many stages (such as AllGraphicsReadOnly) to mask out unsupported
     // stages, which avoids enumerating every possible combination of stages in the layouts.
     VkPipelineStageFlags unsupportedStages = 0;
+    mSupportedVulkanGraphicsShaderStageMask =
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
     if (!mPhysicalDeviceFeatures.tessellationShader)
     {
         unsupportedStages |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
                              VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT;
     }
+    else
+    {
+        mSupportedVulkanGraphicsShaderStageMask |=
+            VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT | VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+    }
     if (!mPhysicalDeviceFeatures.geometryShader)
     {
         unsupportedStages |= VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT;
+    }
+    else
+    {
+        mSupportedVulkanGraphicsShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
