@@ -518,7 +518,14 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     bool clearDepthWithDraw   = clearDepth && scissoredClear;
     bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
 
-    const bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
+    bool isAnyAttachment3DWithoutAllLayers =
+        IsAnyAttachment3DWithoutAllLayers(mRenderTargetCache, mState.getColorAttachmentsMask(),
+                                          mCurrentFramebufferDesc.getLayerCount());
+
+    const bool isMidRenderPassClear =
+        contextVk->hasStartedRenderPassWithCommands() ||
+        (contextVk->hasStartedRenderPass() &&
+         (isAnyAttachment3DWithoutAllLayers || mIsAHBColorAttachments.any()));
 
     if (isMidRenderPassClear)
     {
@@ -606,6 +613,31 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         }
         else
         {
+            // BUG: 223456677
+            // syoussefi@: The assert failure [here] is fixable. In fact, it's
+            // wrong, or rather has recently been made wrong. Originally, the
+            // logic for deferred clears was such that if a render pass was
+            // opened, it was always because a command was about to be recorded
+            // in it. The only other reason for starting the render pass was to
+            // apply clears through loadOp (i.e., no commands recorded), but in
+            // that case we always deferred the clear instead.  However, two
+            // additional conditions were later added to start the render passw
+            // ith loadOp=CLEAR without necessarily recording commands
+            // (attachment3dwithoutalllayers, isahbcolorattachments.any) Both
+            // in the case of 3d attachments without all layers and
+            // mIsAHBColorAttachments, if there's a clear, it's immediately
+            // applied by opening a render pass. if another clear is followed,
+            // the assertion will fire.  The solution is simple: const bool
+            // isMidRenderPassClear =
+            // contextVk->hasStartedRenderPassWithCommands() ||
+            // (contextVk->hasStartedRenderPass() &&
+            // (isAnyAttachment3DWithoutAllLayers ||
+            // mIsAHBColorAttachments.any())); That will fix the issue and make
+            // sure the second clear ends up as vkCmdClearAttachments.
+            // Alternatively, the ASSERT could be turned into an if, followed
+            // by a modification of the currently open render pass's loadOp's.
+            // The latter is a little more involved, but is definitely more
+            // efficient.
             ASSERT(!contextVk->hasStartedRenderPass());
 
             // This path will defer the current clears along with deferred clears.  This won't work
@@ -617,13 +649,13 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
             // depth than the framebuffer layers, clears cannot be deferred.  This is because the
             // clear may later need to be flushed with vkCmdClearColorImage, which cannot partially
             // clear the 3D texture.  In that case, the clears are flushed immediately too.
-            bool isAnyAttachment3DWithoutAllLayers = IsAnyAttachment3DWithoutAllLayers(
-                mRenderTargetCache, mState.getColorAttachmentsMask(),
-                mCurrentFramebufferDesc.getLayerCount());
 
             if (clearAnyWithDraw || isAnyAttachment3DWithoutAllLayers ||
                 mIsAHBColorAttachments.any())
             {
+                // BUG: 223456677
+                // Opens render pass, but doesn't put commands in it (just to clear).
+                // Next round, we need to go in isMidRenderPassClear
                 ANGLE_TRY(flushDeferredClears(contextVk));
             }
             else
