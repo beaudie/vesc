@@ -1,0 +1,278 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e97a8f8_8531994f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "nit: transformation",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 58
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65c6c6c_08713ff5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "Very good job! Looking forwards to see this work to completion 😊",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5c7fa9_03cf29cd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "How does this extension interact with multisampling?",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43164e4e_7cebdb52",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "\"doesn\u0027t allow\"",
+      "range": {
+        "startLine": 234,
+        "startChar": 40,
+        "endLine": 234,
+        "endChar": 53
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "876602eb_f1fd5710",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "Should usage of gl_LastFragColor etc (and generally framebuffer fetch) be disallowed too? No point in using both, and that could simplify matters when TLS maps to framebuffer fetch too.",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "446af71a_314c75b3",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "Ok for now, but in the long run this should actually run after collecting variables. If you add introspection to the API, collect variables is where information regarding the TLS variables are collected to report to application.",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8044ff0_82091685",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "nit: already in namespace `sh`, can drop this.",
+      "range": {
+        "startLine": 679,
+        "startChar": 12,
+        "endLine": 679,
+        "endChar": 16
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b57ddd80_c37d7274",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "All these can be validated in ParseContext, I suggest doing that to keep the code more uniform. The condition to trigger half of these validations is `isExtensionEnabled(TExtension::...)`. The PLS image binding/format/etc validation would mirror the existing validation for storage images.",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee142b0e_c33dee2e",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "Why the `__`?",
+      "range": {
+        "startLine": 1426,
+        "startChar": 52,
+        "endLine": 1426,
+        "endChar": 54
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89939357_9e39eb95",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "No need for a static function here; just move the constructor to `public` and move the implementation to `RewritePixelLocalStorageToImages`",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc35db3_68816c68",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "Please avoid `auto` when the type is simple. We use that for complicated (typically nested templated types)",
+      "range": {
+        "startLine": 64,
+        "startChar": 13,
+        "endLine": 64,
+        "endChar": 17
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfbcc7d9_f28b69f6",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "You can have `vec2 x \u003d gl_FragCoord;` in the global scope? Good to know, I usually left the initialization to the beginning of main (which by the way we have a helper for)",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a461f283_3908c483",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "You don\u0027t need two passes. You can do both transformations in one pass. Don\u0027t you think so?\n\nFYI, we have a way to replace one node with multiple. Look for `mMultiReplacements.emplace_back`.",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 9
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aabd12d0_b8b6d913",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:14:51Z",
+      "side": 1,
+      "message": "No need for this. Instead, add yourself to the `AUTHORS` file at the root of the repo.",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
