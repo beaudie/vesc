@@ -34,6 +34,24 @@
       "parentUuid": "e90f0e40_fc15e0ad",
       "revId": "bc91b783a026e2470b3101195e3bbb1f82ab05ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63df57c1_dcaa1d4e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:37:59Z",
+      "side": 1,
+      "message": "It\u0027s kind of the other way around. Down the line, you\u0027d need to add flags in ShaderLang.h to instruct the translator on what transformations to apply. The backend decides that in `ShaderVk.cpp`, `ShaderGL.cpp` etc. The backend would also be the one that first checks if it can implement it itself (and set a backend \"feature\" accordingly), and then decide if the front-end feature should be set.\n\nThe front-end would only do its emulation based on whether the front-end feature is set. The backend would also decide on what compiler flags to use based on its backend feature.\n\nMakes sense?",
+      "parentUuid": "5808375b_1efba6e3",
+      "revId": "bc91b783a026e2470b3101195e3bbb1f82ab05ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
