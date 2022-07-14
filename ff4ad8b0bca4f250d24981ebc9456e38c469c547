@@ -142,6 +142,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3909447d_286579e1",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-14T12:45:27Z",
+      "side": 1,
+      "message": "Mohan, I just realized that the way you had it on the previous iteration (with `removeActiveThread`) was probably right. Here is a scenario where that matters:\n\n```\nthreadA:\neglInitialize\nspawn longer-running threadB(dpy)\neglTerminate  \u003c-- can\u0027t fully cleanup due to threadB still running\n(threadA stays alive)\n\nthreadB:\nterminates but can\u0027t fully cleanup because threadA still in `mActiveThreads`\n*** we should be running cleanup here ***\n\nthreadA continues running (maybe does more of the above with more threads to aggravate)\n\nfull cleanup only possible when threadA terminates\n```\n\nSo I think you were right about calling `removeActiveThread` here. WDYT? LMK if you\u0027d like to add it or you want me to add it. Not sure if worth adding a test specifically for this as this is a fairly special case.",
+      "parentUuid": "94a513c9_c3f6a694",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
