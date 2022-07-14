@@ -641,6 +641,14 @@ void ProgramPipeline::validate(const gl::Context *context)
         infoLog << errorMessage << "\n";
         return;
     }
+    //     intptr_t programPipelineError =
+    //     context->getStateCache().getProgramPipelineError(context); if (programPipelineError)
+    //     {
+    //         mState.mValid            = false;
+    //         const char *errorMessage = reinterpret_cast<const char *>(programPipelineError);
+    //         infoLog << errorMessage << "\n";
+    //         return;
+    //     }
 
     if (!linkVaryings(infoLog))
     {
