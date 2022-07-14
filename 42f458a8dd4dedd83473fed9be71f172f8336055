@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e54bf79c_fbec1017",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-07-14T22:59:32Z",
+      "side": 1,
+      "message": "Shabi PTAL, I added a test for this one.",
+      "revId": "42f458a8dd4dedd83473fed9be71f172f8336055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
