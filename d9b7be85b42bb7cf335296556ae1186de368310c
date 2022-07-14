@@ -16,6 +16,24 @@
       "message": "Unfortunate that the texture and image paths are so different to require this. Would be great if the paths were made more similar in the future.",
       "revId": "d9b7be85b42bb7cf335296556ae1186de368310c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4820ae22_468e39f9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T19:51:35Z",
+      "side": 1,
+      "message": "Agree.",
+      "parentUuid": "0425ca6e_b9b6f253",
+      "revId": "d9b7be85b42bb7cf335296556ae1186de368310c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
