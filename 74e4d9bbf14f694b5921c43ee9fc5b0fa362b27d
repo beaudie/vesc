@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "105f9b0c_a6065353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T18:46:28Z",
+      "side": 1,
+      "message": "From the test failures, surprisingly this path seems to be covered already...",
+      "parentUuid": "76d5d312_65931fa1",
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de16dae8_ff6683f7",
