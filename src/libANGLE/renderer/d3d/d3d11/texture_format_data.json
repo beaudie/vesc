@@ -405,7 +405,7 @@
     "glInternalFormat": "GL_R16UI"
   },
   "R32_FLOAT": {
-    "texFormat": "DXGI_FORMAT_R32_FLOAT",
+    "texFormat": "DXGI_FORMAT_R32_TYPELESS",
     "srvFormat": "DXGI_FORMAT_R32_FLOAT",
     "uavFormat": "DXGI_FORMAT_R32_FLOAT",
     "rtvFormat": "DXGI_FORMAT_R32_FLOAT",
@@ -415,7 +415,7 @@
     "glInternalFormat": "GL_R32F"
   },
   "R32_SINT": {
-    "texFormat": "DXGI_FORMAT_R32_SINT",
+    "texFormat": "DXGI_FORMAT_R32_TYPELESS",
     "srvFormat": "DXGI_FORMAT_R32_SINT",
     "uavFormat": "DXGI_FORMAT_R32_SINT",
     "rtvFormat": "DXGI_FORMAT_R32_SINT",
@@ -425,7 +425,7 @@
     "glInternalFormat": "GL_R32I"
   },
   "R32_UINT": {
-    "texFormat": "DXGI_FORMAT_R32_UINT",
+    "texFormat": "DXGI_FORMAT_R32_TYPELESS",
     "srvFormat": "DXGI_FORMAT_R32_UINT",
     "uavFormat": "DXGI_FORMAT_R32_UINT",
     "rtvFormat": "DXGI_FORMAT_R32_UINT",

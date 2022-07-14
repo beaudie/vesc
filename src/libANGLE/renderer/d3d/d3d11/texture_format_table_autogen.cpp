@@ -1948,7 +1948,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_R32F,
                                          angle::FormatID::R32_FLOAT,
-                                         DXGI_FORMAT_R32_FLOAT,
+                                         DXGI_FORMAT_R32_TYPELESS,
                                          DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
                                          DXGI_FORMAT_R32_FLOAT,
@@ -1963,7 +1963,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_R32I,
                                          angle::FormatID::R32_SINT,
-                                         DXGI_FORMAT_R32_SINT,
+                                         DXGI_FORMAT_R32_TYPELESS,
                                          DXGI_FORMAT_R32_SINT,
                                          DXGI_FORMAT_R32_SINT,
                                          DXGI_FORMAT_R32_SINT,
@@ -1978,7 +1978,7 @@ const Format &Format::Get(GLenum internalFormat, const Renderer11DeviceCaps &dev
         {
             static constexpr Format info(GL_R32UI,
                                          angle::FormatID::R32_UINT,
-                                         DXGI_FORMAT_R32_UINT,
+                                         DXGI_FORMAT_R32_TYPELESS,
                                          DXGI_FORMAT_R32_UINT,
                                          DXGI_FORMAT_R32_UINT,
                                          DXGI_FORMAT_R32_UINT,
