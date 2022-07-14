@@ -2958,7 +2958,11 @@ GLint FramebufferVk::getSamples() const
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         const gl::FramebufferAttachment *color = mState.getColorAttachment(colorIndexGL);
-        ASSERT(color);
+
+        if (!color)
+        {
+            return 1;
+        }
 
         if (color->isRenderToTexture())
         {
