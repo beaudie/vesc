@@ -16,6 +16,23 @@
       "message": "Re-lgtm. ",
       "revId": "839a68f31e5c977d34a3c9432d14cd4196f47984",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96c6d284_e859efb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-14T02:03:47Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "839a68f31e5c977d34a3c9432d14cd4196f47984",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
