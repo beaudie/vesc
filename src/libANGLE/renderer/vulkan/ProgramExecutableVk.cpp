@@ -1229,6 +1229,8 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Texture, texturesSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
                                                  driverUniformsSetDesc);
+    pipelineLayoutDesc.updatePushConstantRange(
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, 32);  // Get size?
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
