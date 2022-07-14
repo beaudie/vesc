@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70061909_2dd2787a",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3817,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-14T21:52:34Z",
+      "side": 1,
+      "message": "Got it, thanks. (For other observers, AS \u003d Apple Silicon)",
+      "parentUuid": "311f3517_79545e79",
+      "revId": "fdaf603d1f1b8a16281643b602d8560b3374be63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab78ab34_e0fd32d1",
