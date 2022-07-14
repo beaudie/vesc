@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e90f0e40_fc15e0ad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T14:45:41Z",
+      "side": 1,
+      "message": "nit: the extension is not actually implemented yet! My suggestion is to keep this disabled until implementation is actually done. You can still have your tests force-enable this extension by doing this:\n\n- In `include/platform/frontend_features.json`, add a front-end feature like `emulatePixelLocalStorage`\n- In `Display.cpp`, use `ANGLE_FEATURE_CONDITION` to default initialize it to false. When the implementation is completed, this can be flipped to true. Backends that specialize the implementation would make sure it stays false.\n- In `Context::generateSupportedExtensions`, decide support for `shaderPixelLocalStorageANGLE` based on `emulatePixelLocalStorage`\n- In the test, where you instantiate the platforms, instead of `ANGLE_INSTANTIATE_TEST_ES31`, use:\n\n```\nANGLE_INSTANTIATE_TEST(...,\n                       ES31_VULKAN().enable(Feature::EmulatePixelLocalStorage),\n                       ...);\n```\n\nThis way, the extension isn\u0027t exposed to users while still WIP, while it is to the tests!",
+      "revId": "bc91b783a026e2470b3101195e3bbb1f82ab05ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
