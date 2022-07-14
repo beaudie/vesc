@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "941369e7_60a92110",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-14T13:38:42Z",
+      "side": 1,
+      "message": "This fails on Pixel 6\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1132/overview\nI  163.688s run_tests_on_device(17261FDF6000T3)  [ RUN      ] dEQP-GLES31.functional.texture.multisample.samples_4.use_texture_uint_2d_array\nI  163.688s run_tests_on_device(17261FDF6000T3)  ../../src/tests/deqp_support/angle_deqp_gtest.cpp:52: Failure\nI  163.688s run_tests_on_device(17261FDF6000T3)  Failed\nI  163.688s run_tests_on_device(17261FDF6000T3)  glslang_wrapper_utils.cpp:5185 (GlslangTransformSpirvCode): \t! Assert failed in GlslangTransformSpirvCode (../../src/libANGLE/renderer/glslang_wrapper_utils.cpp:5185): spirv::Validate(*spirvBlobOut)\n",
+      "revId": "0d3ecf4638dde008e4e6a3c85931b9a2316004b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
