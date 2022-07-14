@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "92c8ed22_699ee980",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "This didn\u0027t work, the",
+      "parentUuid": "45474ac9_f77cf89f",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 14
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fd5d1fc7_3a16b3a6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-11T17:28:50Z",
       "side": 1,
       "message": "Overall looks good to me with some nits. Do we have test for this?",
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76d5d312_65931fa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "It seems hard to test atm since EXT_YUV_target isn\u0027t enabled for the Vulkan backend in CI, and the test setup would need to be able to look inside the TextureVk implementation and check that the right code path was used in updateTexturesDescriptorSet. What would you suggest?",
+      "parentUuid": "fd5d1fc7_3a16b3a6",
       "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f4f3ffd_d7d178db",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de16dae8_ff6683f7",
+      "range": {
+        "startLine": 2891,
+        "startChar": 4,
+        "endLine": 2898,
+        "endChar": 5
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8270826_503256f8",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-07-11T17:28:50Z",
       "side": 1,
       "message": "I think the convention here is not use default argument.",
+      "range": {
+        "startLine": 2496,
+        "startChar": 70,
+        "endLine": 2496,
+        "endChar": 77
+      },
+      "revId": "74e4d9bbf14f694b5921c43ee9fc5b0fa362b27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1764fdca_05c0b4c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2496,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8270826_503256f8",
       "range": {
         "startLine": 2496,
         "startChar": 70,

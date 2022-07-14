@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56601173_de73e16c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2895a48_b78d3df7",
+      "revId": "bac2179dbda42f55ba5a8bfd62101f8ec6634e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e593466b_81c91d8c",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "sorry, accidentally left it in. This didnt need to be used :)",
       "parentUuid": "e593466b_81c91d8c",
+      "revId": "bac2179dbda42f55ba5a8bfd62101f8ec6634e81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a8f5b6a_4943fb45",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-14T17:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8ee104d_4f032a63",
       "revId": "bac2179dbda42f55ba5a8bfd62101f8ec6634e81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
