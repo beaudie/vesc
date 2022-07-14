@@ -1405,6 +1405,8 @@ struct TLayoutQualifier
     int binding;
     int offset;
 
+    bool pushConstant;
+
     // Image format layout qualifier
     TLayoutImageInternalFormat imageInternalFormat;
 
@@ -1448,6 +1450,7 @@ struct TLayoutQualifier
           localSize(-1),
           binding(-1),
           offset(-1),
+          pushConstant(false),
           imageInternalFormat(EiifUnspecified),
           numViews(-1),
           yuv(false),

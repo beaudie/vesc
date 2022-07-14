@@ -31,8 +31,8 @@ namespace spv
 
 // Enable this for debug logging of pre-transform SPIR-V:
 #if !defined(ANGLE_DEBUG_SPIRV_GENERATION)
-#    define ANGLE_DEBUG_SPIRV_GENERATION 0
-#endif  // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
+#    define ANGLE_DEBUG_SPIRV_GENERATION 1  // Temp
+#endif                                      // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
 
 namespace sh
 {
@@ -479,10 +479,16 @@ spv::StorageClass GetStorageClass(const TType &type, GLenum shaderType)
 
         default:
             // Uniform and storage buffers have the Uniform storage class.  Default uniforms are
-            // gathered in a uniform block as well.
+            // gathered in a uniform block as well. Push constants use the PushConstant storage
+            // class instead.
             ASSERT(type.getInterfaceBlock() != nullptr || qualifier == EvqUniform);
             // I/O blocks must have already been classified as input or output above.
             ASSERT(!IsShaderIoBlock(qualifier));
+
+            if (type.getLayoutQualifier().pushConstant)
+            {
+                return spv::StorageClassPushConstant;
+            }
             return spv::StorageClassUniform;
     }
 }
@@ -5997,7 +6003,14 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     }
 
     // Write DescriptorSet, Binding, Location etc decorations if necessary.
-    mBuilder.writeInterfaceVariableDecorations(type, variableId);
+    if (!type.getLayoutQualifier().pushConstant)
+    {
+        mBuilder.writeInterfaceVariableDecorations(type, variableId);
+    }
+    else
+    {
+        // specify push constant ranges?
+    }
 
     // Remember the id of the variable for future look up.  For interface blocks, also remember the
     // id of the interface block.

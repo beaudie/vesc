@@ -6252,6 +6252,13 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                                                      driverUniforms->acbBufferOffsets.size());
     }
 
+    // Update push_constant driver uniforms
+    ProgramExecutableVk *executableVk = getExecutable();
+    mRenderPassCommands->getCommandBuffer().pushConstants(
+        executableVk->getPipelineLayout(),
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(*driverUniforms),
+        driverUniforms);
+
     return updateDriverUniformsDescriptorSet(mRenderPassCommands, newBuffer, driverUniformSize,
                                              PipelineType::Graphics);
 }
@@ -6273,6 +6280,13 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms()
         writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
                                                      driverUniforms->acbBufferOffsets.size());
     }
+
+    // Update push_constant driver uniforms
+    ProgramExecutableVk *executableVk = getExecutable();
+    mOutsideRenderPassCommands->getCommandBuffer().pushConstants(
+        executableVk->getPipelineLayout(),
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(*driverUniforms),
+        driverUniforms);
 
     return updateDriverUniformsDescriptorSet(mOutsideRenderPassCommands, newBuffer,
                                              sizeof(ComputeDriverUniforms), PipelineType::Compute);
