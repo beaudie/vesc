@@ -37,6 +37,14 @@
             ]
         },
         {
+            "name": "mutable_mipmap_texture_upload",
+            "category": "Features",
+            "description": [
+                "Enable uploading the previous mutable mipmap texture"
+            ],
+			"issue": "https://anglebug.com/7308"
+        },
+        {
             "name": "clamp_point_size",
             "category": "Workarounds",
             "description": [
