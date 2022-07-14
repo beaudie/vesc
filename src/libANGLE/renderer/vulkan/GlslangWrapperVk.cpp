@@ -39,6 +39,9 @@ void GlslangWrapperVk::ResetGlslangProgramInterfaceInfo(
     glslangProgramInterfaceInfo->shaderResourceDescriptorSetIndex =
         ToUnderlying(DescriptorSetIndex::ShaderResource);
     glslangProgramInterfaceInfo->currentShaderResourceBindingIndex = 0;
+
+    // TODO: driverUniformsDescriptorSetIndex is no longer used in Vulkan. It can be removed
+    // altogether if Metal discontinues using it as well.
     glslangProgramInterfaceInfo->driverUniformsDescriptorSetIndex =
         ToUnderlying(DescriptorSetIndex::Internal);
 
