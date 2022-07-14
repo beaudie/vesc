@@ -33,6 +33,24 @@
       "message": "Nice! Didn\u0027t happen to fix GL?",
       "revId": "3b3f08f3c97c02f7fa46512a5bebd4d20747f358",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cf3cd92_b229118d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-14T12:30:49Z",
+      "side": 1,
+      "message": "\u003e 1. why is swiftshader special?\nNot sure, might be because it\u0027s not the default? So maybe in other cases default is ok but for swiftshader we fall back to something else.\n\n\u003e 2. can you check if we can remove the skip in  RepeatedEglInitAndTerminate  as well?\nIndeed, will have a look, thanks for pointing that out!",
+      "parentUuid": "ecdcc18f_9f4e1cb0",
+      "revId": "3b3f08f3c97c02f7fa46512a5bebd4d20747f358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
