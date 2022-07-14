@@ -236,6 +236,11 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     int pixelFormat = 0;
     angle::android::GetANativeWindowBufferProperties(windowBuffer, &mSize.width, &mSize.height,
                                                      &mSize.depth, &pixelFormat, &mUsage);
+
+    // BUG: b/223456677 Android sometimes uses an uninitialized value for layerCount of the
+    // ANativeWindowBuffer. Force depth=1 here.
+    mSize.depth = 1;
+
     GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
     mFormat               = gl::Format(internalFormat);
 
