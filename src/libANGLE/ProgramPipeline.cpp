@@ -633,15 +633,6 @@ void ProgramPipeline::validate(const gl::Context *context)
         }
     }
 
-    intptr_t drawStatesError = context->getStateCache().getBasicDrawStatesError(context);
-    if (drawStatesError)
-    {
-        mState.mValid            = false;
-        const char *errorMessage = reinterpret_cast<const char *>(drawStatesError);
-        infoLog << errorMessage << "\n";
-        return;
-    }
-
     if (!linkVaryings(infoLog))
     {
         mState.mValid = false;
