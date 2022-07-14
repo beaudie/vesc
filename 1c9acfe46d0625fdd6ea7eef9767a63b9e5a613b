@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9bee34_b29c94b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-14T17:48:16Z",
+      "side": 1,
+      "message": "The CL description only talks about the bug. It would be helpful to add a sentence briefly describe how you fixed it.\n\nBut, nice fix!",
+      "revId": "1c9acfe46d0625fdd6ea7eef9767a63b9e5a613b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
