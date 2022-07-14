@@ -16,6 +16,24 @@
       "message": "Do you know why you get context lost on Win/intel? Is it because of run out of memory or what? ",
       "revId": "26121746cf9ebee1d92186968300e29115ef6580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee397f9d_07f959ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-14T21:12:56Z",
+      "side": 1,
+      "message": "The lost context error does not happen every time, but sometimes, one or a few perf tests fail. Currently not sure why it happens. It has been seen in `nba`, `kotor`, `beach_buggy_racing` and `professional_baseball_spirits` traces.\nThis is the error:\n```WARN: ContextVk.cpp:6385 (handleError): Internal Vulkan error (-4): The logical or physical device has been lost.\nWARN: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, queueSubmit:1340. Internal Vulkan error (-4): The logical or physical device has been lost.\nAPI, Error, High: Error: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, queueSubmit:1340. Internal Vulkan error (-4): The logical or physical device has been lost.\n..\\..\\src\\tests\\perf_tests\\ANGLEPerfTest.h(125): error: Failed\nFailing test because of unexpected error:\nError: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, queueSubmit:1340. Internal Vulkan error (-4): The logical or physical device has been lost.```",
+      "parentUuid": "9724d267_ac864415",
+      "revId": "26121746cf9ebee1d92186968300e29115ef6580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
