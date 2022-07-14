@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ac2868f_15da2502",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:21:36Z",
+      "side": 1,
+      "message": "Chatted offline. Yes a comment would be good, thanks.",
+      "parentUuid": "6e7e3e1d_95075cda",
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22ae2e9a_012ad19f",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -91,6 +109,30 @@
       "side": 1,
       "message": "If bindingOut-\u003evalid() is true, then you still need to extract out the refcounted object out of bindingOut. If you look at RefCountedDescriptorPoolBinding, it has a    set API that takes refcounted object\n void set(RefCounted\u003cT\u003e *refCounted)\n\nBut the get API returns the underline T object\n    T \u0026get() { return mRefCounted-\u003eget(); }\n\nIn this case, I need an API to return RefCounted\u003cT\u003e object. So it really is the original API is a bit anti-pattern. This just made it more orthogonal.\n\nAgain, similar to the other comment, my preference is to remove  RefCountedDescriptorPoolBinding in the future CL. So this should be short lived once the future CL comes out.",
       "parentUuid": "22ae2e9a_012ad19f",
+      "range": {
+        "startLine": 3421,
+        "startChar": 69,
+        "endLine": 3421,
+        "endChar": 96
+      },
+      "revId": "a198ba44faea894c4f256b8b793b170e64fa64f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f94afe3_1114fde9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3421,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-14T16:21:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "33f9c922_436edd80",
       "range": {
         "startLine": 3421,
         "startChar": 69,
