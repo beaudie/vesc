@@ -49,6 +49,11 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo mutableMipmapTextureUpload = {
+        "mutableMipmapTextureUpload", FeatureCategory::VulkanFeatures,
+        "Enable uploading the previous mutable mipmap texture", &members,
+        "https://anglebug.com/7308"};
+
     FeatureInfo clampPointSize = {
         "clampPointSize", FeatureCategory::VulkanWorkarounds,
         "The point size range reported from the API is inconsistent with the actual behavior",
