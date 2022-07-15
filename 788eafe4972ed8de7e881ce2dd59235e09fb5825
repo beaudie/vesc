@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddec087f_6af52a87",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-15T02:24:29Z",
+      "side": 1,
+      "message": "FWIW, `VulkanPerformanceCounterTest` already retrieves the ANGLE features and adjusts behavior accordingly. You could always read back the status of your new feature and `ANGLE_SKIP_TEST_IF` based on that.",
+      "revId": "788eafe4972ed8de7e881ce2dd59235e09fb5825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
