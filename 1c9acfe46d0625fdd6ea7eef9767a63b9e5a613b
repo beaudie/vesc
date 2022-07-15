@@ -16,6 +16,24 @@
       "message": "The CL description only talks about the bug. It would be helpful to add a sentence briefly describe how you fixed it.\n\nBut, nice fix!",
       "revId": "1c9acfe46d0625fdd6ea7eef9767a63b9e5a613b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aa2b132_64941289",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-15T02:15:15Z",
+      "side": 1,
+      "message": "Sorry Charlie, I missed this comment. The title is indeed the sentence that describes how it\u0027s fixed (fix up applied only if executable has FF)",
+      "parentUuid": "2c9bee34_b29c94b1",
+      "revId": "1c9acfe46d0625fdd6ea7eef9767a63b9e5a613b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
