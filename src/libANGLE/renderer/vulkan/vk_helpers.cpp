@@ -4705,6 +4705,7 @@ const Buffer &BufferHelper::getBufferForVertexArray(ContextVk *contextVk,
 
 void BufferHelper::destroy(RendererVk *renderer)
 {
+    mDescriptorSetCacheManager.destroyKeys();
     unmap(renderer);
     mBufferForVertexArray.destroy(renderer->getDevice());
     mSuballocation.destroy(renderer);
@@ -4721,8 +4722,13 @@ void BufferHelper::release(RendererVk *renderer)
 
         if (mReadWriteUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
         {
+            mDescriptorSetCacheManager.destroyKeys();
             mReadWriteUse.release();
             mReadWriteUse.init();
+        }
+        else
+        {
+            mDescriptorSetCacheManager.destroyKeys();
         }
     }
     ASSERT(!mBufferForVertexArray.valid());
