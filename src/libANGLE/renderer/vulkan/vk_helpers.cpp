@@ -3408,14 +3408,13 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     const DescriptorSetLayout &descriptorSetLayout,
     RefCountedDescriptorPoolBinding *bindingOut,
     VkDescriptorSet *descriptorSetOut,
-    SharedDescriptorSetCacheKey *sharedCacheKeyOut,
-    DescriptorCacheResult *cacheResultOut)
+    SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     // First scan the descriptorSet cache.
     vk::RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &poolOut))
     {
-        *cacheResultOut = DescriptorCacheResult::CacheHit;
+        *newSharedCacheKeyOut = nullptr;
         bindingOut->set(poolOut);
         mCacheStats.hit();
         return angle::Result::Continue;
@@ -3443,17 +3442,13 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     }
 
     mDescriptorSetCache.insertDescriptorSet(desc, *descriptorSetOut, bindingOut->getRefCounted());
-    *cacheResultOut = DescriptorCacheResult::NewAllocation;
     ++context->getPerfCounters().descriptorSetAllocations;
 
     // Let pool know there is a shared cache key created and destroys the shared cache key
     // when it destroys the pool.
-    SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this);
-    bindingOut->get().onNewDescriptorSetAllocated(sharedCacheKey);
-    if (sharedCacheKeyOut != nullptr)
-    {
-        *sharedCacheKeyOut = sharedCacheKey;
-    }
+    *newSharedCacheKeyOut = CreateSharedDescriptorSetCacheKey(desc, this);
+    bindingOut->get().onNewDescriptorSetAllocated(*newSharedCacheKeyOut);
+
     return angle::Result::Continue;
 }
 
