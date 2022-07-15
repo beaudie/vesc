@@ -352,7 +352,7 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 {
     // GL and GLES drivers don't seem to perform appropriate cleanup
     // SwiftShader fails with "Extension not supported" error on the bots
-    ANGLE_SKIP_TEST_IF(!IsVulkan() || isSwiftshader());
+    // ANGLE_SKIP_TEST_IF(!IsVulkan() || isSwiftshader());
 
     // Release all resources in parent thread
     getEGLWindow()->destroyGL();
@@ -360,7 +360,9 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
     EGLDisplay dpy;
     EGLSurface srf;
     EGLContext ctx;
-    EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
+    EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(),
+                          EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, GetParam().getDeviceType(),
+                          EGL_NONE};
 
     for (int i = 0; i < 100; i++)
     {
@@ -386,8 +388,8 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 
             eglTerminate(dpy);
             EXPECT_EGL_SUCCESS();
-            eglReleaseThread();
-            EXPECT_EGL_SUCCESS();
+            // eglReleaseThread();
+            // EXPECT_EGL_SUCCESS();
             dpy = EGL_NO_DISPLAY;
             srf = EGL_NO_SURFACE;
             ctx = EGL_NO_CONTEXT;
@@ -414,6 +416,8 @@ TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
                                        reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
         EXPECT_TRUE(dpy != EGL_NO_DISPLAY);
         EXPECT_EGL_TRUE(eglInitialize(dpy, nullptr, nullptr));
+
+        WARN() << "qwe eglInitialize";
     });
     threadA.join();
 
@@ -436,6 +440,7 @@ TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
         glClear(GL_COLOR_BUFFER_BIT);
         EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
 
+        WARN() << "qwe eglTerminate";
         eglTerminate(dpy);
         EXPECT_EGL_SUCCESS();
         EXPECT_EGL_SUCCESS();

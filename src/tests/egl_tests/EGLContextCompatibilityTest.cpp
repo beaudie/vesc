@@ -475,6 +475,8 @@ class EGLContextCompatibilityTest_PbufferDifferentConfig : public EGLContextComp
 
 void RegisterContextCompatibilityTests()
 {
+    if (rand())
+        return;
     std::vector<EGLint> renderers = {{
         EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
         EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,

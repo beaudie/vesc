@@ -961,6 +961,8 @@ void Display::setupDisplayPlatform(rx::DisplayImpl *impl)
 
 Error Display::initialize()
 {
+    WARN() << "qwe initialize " << this;
+
     mTerminatedByApi = false;
 
     ASSERT(mImplementation != nullptr);
@@ -1055,6 +1057,8 @@ Error Display::initialize()
 
     mInitialized = true;
 
+    WARN() << "qwe initialize done " << this;
+
     return NoError();
 }
 
@@ -1108,7 +1112,13 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
     if (terminateReason == TerminateReason::Api)
     {
+        WARN() << "qwe setting mTerminatedByApi = true " << this;
         mTerminatedByApi = true;
+
+        // Handle the caller of eglTerminate as if the thread terminated so that full cleanup
+        // can be performed once all other threads finish.
+        std::lock_guard<std::mutex> lock(mActiveThreadsMutex);
+        mActiveThreads.erase(thread);
     }
 
     if (!mInitialized)
@@ -1222,8 +1232,14 @@ void Display::addActiveThread(Thread *thread)
 void Display::removeActiveThreadAndPerformCleanup(Thread *thread)
 {
     std::lock_guard<std::mutex> lock(mActiveThreadsMutex);
+    size_t previousSize = mActiveThreads.size();
     mActiveThreads.erase(thread);
-    if (mTerminatedByApi && mActiveThreads.size() == 0)
+    WARN() << "qwe removeActiveThreadAndPerformCleanup " << this << " mTerminatedByApi "
+           << mTerminatedByApi << " previousSize " << previousSize << " mActiveThreads.size() "
+           << mActiveThreads.size();
+    // Cleanup only when the number of active threads goes from 1 to 0.
+    // Don't need to call terminate() again if 0 was reached during eglTerminate.
+    if (mTerminatedByApi && previousSize == 1 && mActiveThreads.size() == 0)
     {
         (void)terminate(thread, TerminateReason::NoActiveThreads);
     }
@@ -1293,6 +1309,7 @@ Error Display::createPbufferSurface(const Config *configuration,
                                     const AttributeMap &attribs,
                                     Surface **outSurface)
 {
+    WARN() << "qwe Display::createPbufferSurface";
     ASSERT(isInitialized());
 
     if (mImplementation->testDeviceLost())
@@ -1303,7 +1320,9 @@ Error Display::createPbufferSurface(const Config *configuration,
     SurfacePointer surface(new PbufferSurface(mImplementation, configuration, attribs,
                                               mFrontendFeatures.forceRobustResourceInit.enabled),
                            this);
+    WARN() << "qwe surface->initialize";
     ANGLE_TRY(surface->initialize(this));
+    WARN() << "qwe surface->initialize ok";
 
     ASSERT(outSurface != nullptr);
     *outSurface = surface.release();
@@ -1914,7 +1933,9 @@ bool Display::hasExistingWindowSurface(EGLNativeWindowType window)
     WindowSurfaceMap *windowSurfaces = GetWindowSurfaces();
     ASSERT(windowSurfaces);
 
-    return windowSurfaces->find(window) != windowSurfaces->end();
+    bool result = windowSurfaces->find(window) != windowSurfaces->end();
+    WARN() << "qwe hasExistingWindowSurface ? " << result;
+    return result;
 }
 
 static ClientExtensions GenerateClientExtensions()
