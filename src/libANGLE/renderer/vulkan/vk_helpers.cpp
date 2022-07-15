@@ -6255,6 +6255,7 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t layerCount,
                              OutsideRenderPassCommandBuffer *commandBuffer)
 {
+    ANGLE_LOG(ERR) << "run clearColorImage";
     ASSERT(valid());
 
     ASSERT(mCurrentLayout == ImageLayout::TransferDst ||
@@ -8878,12 +8879,24 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    // If the source image is external or undefiend format with ycbcr conversion,
+    // assume this is a situation where we have to do a compute dispatch sampling the YUV image and
+    // converting to RGBA.
+    bool isAndroidExternalImage = angle::FormatID::EXTERNAL == mActualFormatID;
+    if (isAndroidExternalImage)
+    {
+        ANGLE_LOG(ERR) << "ImageHelper::readPixels flush end render pass";
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+    }
+
     // If the source image is multisampled, we need to resolve it into a temporary image before
     // performing a readback.
     bool isMultisampled = mSamples > 1;
     RendererScoped<ImageHelper> resolvedImage(contextVk->getRenderer());
 
     ImageHelper *src = this;
+    ANGLE_LOG(ERR) << "ImageHelper::readPixels for " << this << " yuv conversion? "
+                   << this->getYcbcrConversionDesc().valid();
 
     ASSERT(!hasStagedUpdatesForSubresource(levelGL, layer, 1));
 
@@ -8895,13 +8908,40 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
     }
 
+    if (isAndroidExternalImage)
+    {
+        ANGLE_TRY(resolvedImage.get().init2DStaging(
+            contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(area.width, area.height, 1), angle::FormatID::R8G8B8A8_UNORM,
+            angle::FormatID::R8G8B8A8_UNORM,
+            VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            1));
+    }
+
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
 
     // Note that although we're reading from the image, we need to update the layout below.
     CommandBufferAccess access;
-    access.onImageTransferRead(layoutChangeAspectFlags, this);
+    if (isAndroidExternalImage)
+    {
+        ANGLE_LOG(ERR) << "transitioning image to compute shader read";
+        access.onImageComputeShaderRead(layoutChangeAspectFlags, this);
+    }
+    else
+    {
+        access.onImageTransferRead(layoutChangeAspectFlags, this);
+    }
     if (isMultisampled)
     {
+        access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+                                    &resolvedImage.get());
+    }
+
+    if (isAndroidExternalImage)
+    {
+        // access.onImageComputeShaderWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
+        //                                  &resolvedImage.get());
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
                                     &resolvedImage.get());
     }
@@ -8909,7 +8949,10 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    const angle::Format *readFormat = &getActualFormat();
+    const angle::Format *actualFormat = &getActualFormat();
+    const angle::Format *rgbaFormat   = &angle::Format::Get(angle::FormatID::R8G8B8A8_UNORM);
+
+    const angle::Format *readFormat = isAndroidExternalImage ? rgbaFormat : actualFormat;
     const vk::Format &vkFormat      = contextVk->getRenderer()->getFormat(readFormat->id);
     const gl::InternalFormat &storageFormatInfo =
         vkFormat.getInternalFormatInfo(readFormat->componentType);
@@ -8929,12 +8972,38 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 
     VkExtent3D srcExtent = {static_cast<uint32_t>(area.width), static_cast<uint32_t>(area.height),
                             1};
+    ANGLE_LOG(ERR) << "ImageHelper::readPixels for " << this << " src extent " << area.width << " "
+                   << area.height;
 
     if (mExtents.depth > 1)
     {
         // Depth > 1 means this is a 3D texture and we need special handling
         srcOffset.z                   = layer;
         srcSubresource.baseArrayLayer = 0;
+    }
+
+    if (isAndroidExternalImage)
+    {
+        // convert to rgba with compute dispatch in shader
+        // according to ycbcr conversion info
+        // and texelFetch
+        // ycbcrConversionViaCompute();
+
+        ANGLE_LOG(ERR) << "ImageHelper::readPixels android external image, convert yuv to rgba";
+        ANGLE_TRY(contextVk->getUtils().yuvRgbaConversion(contextVk, src, &resolvedImage.get()));
+        ANGLE_LOG(ERR)
+            << "ImageHelper::readPixels android external image, convert yuv to rgba (done)";
+
+        CommandBufferAccess readAccess;
+        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readAccess, &commandBuffer));
+
+        // Make the resolved image the target of buffer copy.
+        src                           = &resolvedImage.get();
+        srcOffset                     = {0, 0, 0};
+        srcSubresource.baseArrayLayer = 0;
+        srcSubresource.layerCount     = 1;
+        srcSubresource.mipLevel       = 0;
     }
 
     if (isMultisampled)
@@ -9004,8 +9073,10 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
     ANGLE_TRY(stagingBuffer->allocateForCopyImage(contextVk, allocationSize,
-                                                  MemoryCoherency::Coherent, mActualFormatID,
+                                                  MemoryCoherency::Coherent, readFormat->id,
                                                   &stagingOffset, &readPixelBuffer));
+    ANGLE_LOG(ERR) << "ImageHelper::readPixels first readPixelBuffer word is "
+                   << *(uint32_t *)(readPixelBuffer);
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
 
     VkBufferImageCopy region = {};
@@ -9015,6 +9086,14 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     region.imageExtent       = srcExtent;
     region.imageOffset       = srcOffset;
     region.imageSubresource  = srcSubresource;
+
+    ANGLE_LOG(ERR) << "ImageHelper::readPixels bufferImageCopy params: bufferimageheight "
+                   << srcExtent.height << " bufferoffset " << stagingOffset << " srcExtentwidth "
+                   << srcExtent.width << " srcExtent " << srcExtent.width << " " << srcExtent.height
+                   << " srcimageoffset " << srcOffset.x << " " << srcOffset.y;
+
+    ANGLE_LOG(ERR) << "ImageHelper::readPixels first readPixelBuffer at staging buffer is "
+                   << *(uint32_t *)(readPixelBuffer + stagingOffset);
 
     // For compressed textures, vkCmdCopyImageToBuffer requires
     // a region that is a multiple of the block size.
