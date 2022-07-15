@@ -38,6 +38,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9dba7630_c71faf82",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-07-15T21:03:48Z",
+      "side": 1,
+      "message": "This line crashes the pinterest upon app launch. In order for addValueParam to call the correct SetParamVal (from InitParamValue()) function, the paramValue passed in needs to be of type \u0027EGLContext\u0027. This works instead:\n\nparamBuffer.addValueParam(\"context\", angle::ParamType::TEGLContext, reinterpret_cast\u003cEGLContext\u003e(0));",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 79
+      },
+      "revId": "b9f911b002a139875a428b710e11db955118112c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9b6d4544_43b082bb",
         "filename": "src/libGLESv2/egl_ext_stubs.cpp",
         "patchSetId": 1
