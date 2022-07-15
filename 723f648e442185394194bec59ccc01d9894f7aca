@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9dd62b3_3d82827d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1964,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-15T16:54:15Z",
+      "side": 1,
+      "message": "looking at AOSP code, this might be unnecessary since libEGL wrapper would have already made the ANativeWindow API call. Once i confirm this will revert the code back to how it was before",
+      "range": {
+        "startLine": 1960,
+        "startChar": 4,
+        "endLine": 1964,
+        "endChar": 5
+      },
+      "revId": "723f648e442185394194bec59ccc01d9894f7aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
