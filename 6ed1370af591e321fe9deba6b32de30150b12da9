@@ -50,6 +50,24 @@
       "message": "Shabi, can you help Kyle skip this trace test on Windows?\n",
       "revId": "6ed1370af591e321fe9deba6b32de30150b12da9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8543d9e0_5353d41e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-15T02:44:05Z",
+      "side": 1,
+      "message": "You\u0027d need to add an expectation in `capture_replay_expectations.txt` with `NOT_RUN`. Unfortunately, we don\u0027t yet pick the end2end expectations up automatically for capture/replay.",
+      "parentUuid": "dba1500f_a3b7102a",
+      "revId": "6ed1370af591e321fe9deba6b32de30150b12da9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
