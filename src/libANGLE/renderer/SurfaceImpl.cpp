@@ -54,7 +54,7 @@ void SurfaceImpl::setFixedHeight(EGLint height)
     UNREACHABLE();
 }
 
-void SurfaceImpl::setTimestampsEnabled(bool enabled)
+void SurfaceImpl::setTimestampsEnabled(const egl::Display *display, bool enabled)
 {
     UNREACHABLE();
 }
