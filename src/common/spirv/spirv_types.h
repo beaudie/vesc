@@ -127,6 +127,13 @@ enum HeaderIndex
 bool Validate(const Blob &blob);
 void Print(const Blob &blob);
 
+// For writing extended SPIRV decoration enums that are not yet merged in
+// the grammar json
+void WriteDecorateUint32(Blob *blob,
+                         IdRef target,
+                         uint32_t decoration,
+                         const LiteralIntegerList &valuesList);
+
 }  // namespace spirv
 }  // namespace angle
 
