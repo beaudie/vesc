@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43adf9f4_78211bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-07-15T20:24:33Z",
+      "side": 1,
+      "message": "KHR-GLES32.core.tessellation_shader.single.xfb_captures_data_from_correct_stage started to pass for us on our hw when we made this change.",
+      "parentUuid": "b044d4c7_5b178811",
+      "revId": "42f458a8dd4dedd83473fed9be71f172f8336055",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c91dafe3_513e37f2",
