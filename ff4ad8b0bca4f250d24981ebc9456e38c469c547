@@ -262,6 +262,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c24d2c4_e94eda73",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-15T22:04:47Z",
+      "side": 1,
+      "message": "ANGLETest setup calls `eglWindow-\u003einitializeContext()` https://crsrc.org/c/third_party/angle/src/tests/test_utils/ANGLETest.cpp;drc\u003d785353fd350133e4172bbe376841765dcc9597ff;l\u003d746\n\nwhich calls `makeCurrent`. Does that make sense or am I misunderstanding your question?",
+      "parentUuid": "09acc22c_67fc716b",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
