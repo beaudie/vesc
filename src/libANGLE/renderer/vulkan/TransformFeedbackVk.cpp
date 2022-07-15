@@ -43,17 +43,15 @@ TransformFeedbackVk::~TransformFeedbackVk() {}
 
 void TransformFeedbackVk::onDestroy(const gl::Context *context)
 {
-    ContextVk *contextVk   = vk::GetImpl(context);
-    RendererVk *rendererVk = contextVk->getRenderer();
-
-    releaseCounterBuffers(rendererVk);
+    ContextVk *contextVk = vk::GetImpl(context);
+    releaseCounterBuffers(contextVk);
 }
 
-void TransformFeedbackVk::releaseCounterBuffers(RendererVk *renderer)
+void TransformFeedbackVk::releaseCounterBuffers(ContextVk *contextVk)
 {
     for (vk::BufferHelper &bufferHelper : mCounterBufferHelpers)
     {
-        bufferHelper.release(renderer);
+        bufferHelper.release(contextVk);
     }
     for (VkBuffer &buffer : mCounterBufferHandles)
     {
@@ -152,7 +150,7 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
 
     contextVk->onEndTransformFeedback();
 
-    releaseCounterBuffers(contextVk->getRenderer());
+    releaseCounterBuffers(contextVk);
 
     return angle::Result::Continue;
 }
