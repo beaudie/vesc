@@ -214,6 +214,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab85811_2f6635e0",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-15T18:42:10Z",
+      "side": 1,
+      "message": "Thanks Mohan. I\u0027ve been looking into what is happening in tests, some findings:\n\n1. The same Display object is being reused again and again (probably because of this: https://crsrc.org/c/third_party/angle/src/libANGLE/Display.cpp;drc\u003d75425ebb5303c7bb416b2261e9b27114ec903d3f;l\u003d708). So the same object ends up transitioning between intialized / (partially)terminated states.\n\n2. When display is partially terminated (mTerminatedByApi\u003dtrue but mActiveThreads not empty, **mInitialized\u003dtrue** \u003c-- only false when fully terminated) we end up bypassing initialization here: https://crsrc.org/c/third_party/angle/src/libANGLE/Display.cpp;drc\u003d75425ebb5303c7bb416b2261e9b27114ec903d3f;l\u003d985\n\n3. destroyGL called by RepeatedEglInitAndTerminate calls eglTerminate, but the thread is still alive - so we end up in the situation I described above. If I comment out eglReleaseThread as your comment suggests, I see mActiveThreads never reaching 0 and so display is never terminated. When I add a patch that removes the thread calling eglTerminate from mActiveThreads, then the display is fully terminated.\n\n4. RepeatedEglInitAndTerminate becomes very slow (like 300ms per iteration) when display is actually fully terminated. The full termination/initialization cycle without the bypass in (2) seems quite expensive.",
+      "parentUuid": "f0707889_e47597ab",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
