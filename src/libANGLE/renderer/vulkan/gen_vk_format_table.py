@@ -263,6 +263,7 @@ def main():
     vk_format_cases = [
         get_vk_format_case(format_id, vk_format)
         for format_id, vk_format in sorted(vk_json_data["map"].items())
+        if format_id != "EXTERNAL"  # Prevent duplicate VK_FORMAT_UNDEFINED case
     ]
 
     vk_cases = [
