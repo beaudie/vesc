@@ -1553,7 +1553,8 @@ angle::Result UtilsVk::setupGraphicsProgram(ContextVk *contextVk,
                                             const VkDescriptorSet descriptorSet,
                                             const void *pushConstants,
                                             size_t pushConstantsSize,
-                                            vk::RenderPassCommandBuffer *commandBuffer)
+                                            vk::RenderPassCommandBuffer *commandBuffer,
+                                            uint64_t color0ExternalFormat)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -1575,7 +1576,7 @@ angle::Result UtilsVk::setupGraphicsProgram(ContextVk *contextVk,
     ANGLE_TRY(program->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), &pipelineCache, pipelineLayout.get(),
         PipelineSource::Utils, *pipelineDesc, gl::AttributesMask(), gl::ComponentTypeMask(),
-        gl::DrawBufferMask(), &descPtr, &helper));
+        gl::DrawBufferMask(), color0ExternalFormat, &descPtr, &helper));
     contextVk->getStartedRenderPassCommands().retainResource(helper);
     commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
@@ -2042,7 +2043,9 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        vk::RenderPassCommandBuffer **commandBufferOut)
 {
     vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
+    ANGLE_LOG(ERR) << __func__ << " with image ext format " << image->getExternalFormat();
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, image->getExternalFormat(),
+                                                 &compatibleRenderPass));
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
@@ -2067,9 +2070,10 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                               vk::ImageLayout::ColorAttachment,
                                               vk::ImageLayout::ColorAttachment);
 
-    ANGLE_TRY(contextVk->beginNewRenderPass(
-        framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
-        vk::PackedAttachmentCount(1), vk::kAttachmentIndexInvalid, clearValues, commandBufferOut));
+    ANGLE_TRY(contextVk->beginNewRenderPass(framebuffer, renderArea, renderPassDesc,
+                                            renderPassAttachmentOps, vk::PackedAttachmentCount(1),
+                                            vk::kAttachmentIndexInvalid, clearValues,
+                                            image->getExternalFormat(), commandBufferOut));
 
     contextVk->addGarbage(&framebuffer);
 
@@ -2166,9 +2170,11 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         contextVk->getStartedRenderPassCommands().isTransformFeedbackActiveUnpaused();
     contextVk->pauseTransformFeedbackIfActiveUnpaused();
 
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
     ANGLE_TRY(setupGraphicsProgram(contextVk, Function::ImageClear, vertexShader, fragmentShader,
                                    imageClearProgram, &pipelineDesc, VK_NULL_HANDLE, &shaderParams,
-                                   sizeof(shaderParams), commandBuffer));
+                                   sizeof(shaderParams), commandBuffer,
+                                   framebuffer->getRenderPassColor0ExternalFormat()));
 
     // Set dynamic state
     VkViewport viewport;
@@ -2300,9 +2306,11 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
     ANGLE_TRY(shaderLibrary.getFullScreenTri_vert(contextVk, 0, &vertexShader));
     ANGLE_TRY(shaderLibrary.getImageClear_frag(contextVk, flags, &fragmentShader));
 
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
     ANGLE_TRY(setupGraphicsProgram(contextVk, Function::ImageClear, vertexShader, fragmentShader,
                                    &mImageClearPrograms[flags], &pipelineDesc, VK_NULL_HANDLE,
-                                   &shaderParams, sizeof(shaderParams), commandBuffer));
+                                   &shaderParams, sizeof(shaderParams), commandBuffer,
+                                   dst->getExternalFormat()));
 
     // Set dynamic state
     VkViewport viewport;
@@ -2571,9 +2579,12 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     ANGLE_TRY(shaderLibrary.getFullScreenTri_vert(contextVk, 0, &vertexShader));
     ANGLE_TRY(shaderLibrary.getBlitResolve_frag(contextVk, flags, &fragmentShader));
 
-    ANGLE_TRY(setupGraphicsProgram(contextVk, Function::BlitResolve, vertexShader, fragmentShader,
-                                   &mBlitResolvePrograms[flags], &pipelineDesc, descriptorSet,
-                                   &shaderParams, sizeof(shaderParams), commandBuffer));
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
+    ANGLE_TRY(setupGraphicsProgram(
+        contextVk, Function::BlitResolve, vertexShader, fragmentShader,
+        &mBlitResolvePrograms[flags], &pipelineDesc, descriptorSet, &shaderParams,
+        sizeof(shaderParams), commandBuffer,
+        0 /* don't support blit resolve for external format render targets */));
 
     // Set dynamic state
     VkViewport viewport;
@@ -2975,9 +2986,11 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ANGLE_TRY(shaderLibrary.getFullScreenTri_vert(contextVk, 0, &vertexShader));
     ANGLE_TRY(shaderLibrary.getImageCopy_frag(contextVk, flags, &fragmentShader));
 
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
     ANGLE_TRY(setupGraphicsProgram(contextVk, Function::ImageCopy, vertexShader, fragmentShader,
                                    &mImageCopyPrograms[flags], &pipelineDesc, descriptorSet,
-                                   &shaderParams, sizeof(shaderParams), commandBuffer));
+                                   &shaderParams, sizeof(shaderParams), commandBuffer,
+                                   dst->getExternalFormat()));
 
     // Set dynamic state
     VkViewport viewport;
@@ -3454,9 +3467,11 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
     ANGLE_TRY(GetUnresolveFrag(contextVk, colorAttachmentCount, colorAttachmentTypes,
                                params.unresolveDepth, params.unresolveStencil, fragmentShader));
 
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
     ANGLE_TRY(setupGraphicsProgram(contextVk, function, vertexShader, fragmentShader,
                                    &mUnresolvePrograms[flags], &pipelineDesc, descriptorSet,
-                                   nullptr, 0, commandBuffer));
+                                   nullptr, 0, commandBuffer,
+                                   0 /* don't support unresolve for external format targets */));
 
     // Set dynamic state
     VkViewport viewport;
@@ -3611,9 +3626,10 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
     ANGLE_TRY(shaderLibrary.getOverlayDraw_vert(contextVk, 0, &vertexShader));
     ANGLE_TRY(shaderLibrary.getOverlayDraw_frag(contextVk, 0, &fragmentShader));
 
+    ANGLE_LOG(ERR) << __func__ << " setupGraphicsProgram";
     ANGLE_TRY(setupGraphicsProgram(contextVk, Function::OverlayDraw, vertexShader, fragmentShader,
                                    &mOverlayDrawProgram, &pipelineDesc, descriptorSet, nullptr, 0,
-                                   commandBuffer));
+                                   commandBuffer, dst->getExternalFormat()));
 
     // Set dynamic state
     VkViewport viewport;

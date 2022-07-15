@@ -677,6 +677,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         clearColorBuffers.reset();
     }
 
+    ANGLE_LOG(ERR) << "FramebufferVk clearWithDraw";
+
     // The most costly clear mode is when we need to mask out specific color channels or stencil
     // bits. This can only be done with a draw call.
     return clearWithDraw(contextVk, scissoredRenderArea, clearColorBuffers, clearDepthWithDraw,
@@ -2064,6 +2066,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
     mRenderPassDesc.setSamples(getSamples());
     mRenderPassDesc.setViewCount(
         mState.isMultiview() && mState.getNumViews() > 1 ? mState.getNumViews() : 0);
+    mRenderPassColor0ExternalFormat = 0;
 
     // Color attachments.
     const auto &colorRenderTargets               = mRenderTargetCache.getColors();
@@ -2074,8 +2077,16 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         {
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
-            mRenderPassDesc.packColorAttachment(
-                colorIndexGL, colorRenderTarget->getImageForRenderPass().getActualFormatID());
+
+            const vk::ImageHelper &imageForRenderPass = colorRenderTarget->getImageForRenderPass();
+
+            if (colorIndexGL == 0)
+            {
+                mRenderPassColor0ExternalFormat = imageForRenderPass.getExternalFormat();
+            }
+
+            mRenderPassDesc.packColorAttachment(colorIndexGL,
+                                                imageForRenderPass.getActualFormatID());
 
             // Add the resolve attachment, if any.
             if (colorRenderTarget->hasResolveAttachment())
@@ -2158,12 +2169,15 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
-
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
     {
+        // Assume that mBackbuffer implies color0 is never external format.
+        vk::RenderPass *compatibleRenderPass = nullptr;
+        ANGLE_LOG(ERR) << __func__
+                       << " getCompatibleRenderPass for backbuffer, assume no external format";
+        ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, 0 /* color0ExternalFormat */,
+                                                     &compatibleRenderPass));
         return mBackbuffer->getCurrentFramebuffer(
             contextVk,
             mRenderPassDesc.hasFramebufferFetch() ? FramebufferFetchMode::Enabled
@@ -2178,10 +2192,16 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
+    uint64_t color0ExternalFormat  = 0;
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
+
+        if (colorIndexGL == 0)
+        {
+            color0ExternalFormat = colorRenderTarget->getImageForRenderPass().getExternalFormat();
+        }
 
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
@@ -2235,6 +2255,14 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
         attachments.push_back(imageView->getHandle());
     }
+
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_LOG(ERR) << __func__
+                   << " getCompatibleRenderPass for backbuffer with color0ExternalFormat "
+                   << color0ExternalFormat << " and member variable version "
+                   << mRenderPassColor0ExternalFormat;
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, color0ExternalFormat,
+                                                 &compatibleRenderPass));
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
@@ -2323,6 +2351,9 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
     params.colorClearValue                     = clearColorValue;
     params.depthStencilClearValue              = clearDepthStencilValue;
     params.stencilMask                         = stencilMask;
+    ANGLE_LOG(ERR) << "FramebufferVk::" << __func__ << " color " << clearColorValue.float32[0]
+                   << " " << clearColorValue.float32[1] << " " << clearColorValue.float32[2] << " "
+                   << clearColorValue.float32[3];
 
     params.clearColor   = true;
     params.clearDepth   = clearDepth;
@@ -2614,11 +2645,16 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     vk::PackedAttachmentIndex colorIndexVk(0);
+    uint64_t color0ExternalFormat = 0;
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
+        if (colorIndexGL == 0)
+        {
+            color0ExternalFormat = colorRenderTarget->getImageForRenderPass().getExternalFormat();
+        }
         // Color render targets are never entirely transient.  Only depth/stencil
         // multisampled-render-to-texture textures can be so.
         ASSERT(!colorRenderTarget->isEntirelyTransient());
@@ -2834,7 +2870,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        depthStencilAttachmentIndex, packedClearValues, color0ExternalFormat, commandBufferOut));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);
