@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dbf5561_fd0e55e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-07-15T03:23:00Z",
+      "side": 1,
+      "message": "Feature disabled on Windows/Intel GPU to avoid the flakiness: https://chromium-review.googlesource.com/c/angle/angle/+/3764460",
+      "parentUuid": "04285fd3_b763e1e1",
+      "revId": "38969f79a7df3dd37261e5d7d9b2e16e6a3fb85b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24a33a92_4005dd9b",
