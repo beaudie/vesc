@@ -238,6 +238,30 @@
       },
       "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09acc22c_67fc716b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-15T21:52:38Z",
+      "side": 1,
+      "message": "re-reading your test case -\n```\nthreadA:\neglInitialize\nspawn longer-running threadB(dpy)\neglTerminate  \u003c-- can\u0027t fully cleanup due to threadB still running\n(threadA stays alive)\n\nthreadB:\nterminates but can\u0027t fully cleanup because threadA still in `mActiveThreads`\n*** we should be running cleanup here ***\n```\n\nwith the code as it stands, im not sure how\n\u003e terminates but can\u0027t fully cleanup because threadA still in `mActiveThreads`\n\nis possible. threadA never called makeCurrent so will never be added to `mActiveThreads`, can you clarify?",
+      "parentUuid": "9ab85811_2f6635e0",
+      "range": {
+        "startLine": 1114,
+        "startChar": 8,
+        "endLine": 1114,
+        "endChar": 26
+      },
+      "revId": "ff4ad8b0bca4f250d24981ebc9456e38c469c547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
