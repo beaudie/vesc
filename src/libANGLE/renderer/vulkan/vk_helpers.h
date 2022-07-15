@@ -132,12 +132,6 @@ class DynamicBuffer : angle::NonCopyable
     BufferHelperPointerVector mBufferFreeList;
 };
 
-enum class DescriptorCacheResult
-{
-    CacheHit,
-    NewAllocation,
-};
-
 // Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
 class DescriptorSetHelper final : public Resource
 {
@@ -239,8 +233,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              const DescriptorSetLayout &descriptorSetLayout,
                                              RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut,
-                                             SharedDescriptorSetCacheKey *sharedCacheKeyOut,
-                                             DescriptorCacheResult *cacheResultOut);
+                                             SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
@@ -798,6 +791,7 @@ class BufferHelper : public ReadWriteResource
         ASSERT(mSuballocation.valid());
         return mSuballocation.getBlockSerial();
     }
+    BufferBlock *getBufferBlock() const { return mSuballocation.getBufferBlock(); }
     bool valid() const { return mSuballocation.valid(); }
     const Buffer &getBuffer() const { return mSuballocation.getBuffer(); }
     VkDeviceSize getOffset() const { return mSuballocation.getOffset(); }
@@ -869,6 +863,11 @@ class BufferHelper : public ReadWriteResource
                                           VkDeviceSize actualDataSize,
                                           VkDeviceSize *offsetOut);
 
+    void onNewDescriptorSet(const SharedDescriptorSetCacheKey &sharedCacheKey)
+    {
+        mDescriptorSetCacheManager.addKey(sharedCacheKey);
+    }
+
   private:
     void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
@@ -898,6 +897,8 @@ class BufferHelper : public ReadWriteResource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+    // Manages the texture descriptor set cache that created with this texture
+    DescriptorSetCacheManager mDescriptorSetCacheManager;
 };
 
 class BufferPool : angle::NonCopyable
