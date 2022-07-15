@@ -33,6 +33,23 @@
       "message": "win-trace failure is \n\n[INFO/MainProcess] Unexpected \u0027Skipped\u0027 (1):\n[INFO/MainProcess]      Texture2DTest.TextureMaxSize/ES2_Vulkan_SwiftShader Skipped (expected Pass or is new test)\n[INFO/MainProcess] ",
       "revId": "6ed1370af591e321fe9deba6b32de30150b12da9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba1500f_a3b7102a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-15T00:16:57Z",
+      "side": 1,
+      "message": "Shabi, can you help Kyle skip this trace test on Windows?\n",
+      "revId": "6ed1370af591e321fe9deba6b32de30150b12da9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
