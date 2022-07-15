@@ -18,6 +18,8 @@
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <optional>
+
 namespace gl
 {
 class ProgramExecutable;
@@ -893,7 +895,6 @@ class YcbcrConversionDesc final
 
     angle::Result init(Context *context, SamplerYcbcrConversion *conversionOut) const;
 
-  private:
     // If the sampler needs to convert the image content (e.g. from YUV to RGB) then
     // mExternalOrVkFormat will be non-zero. The value is either the external format
     // as returned by vkGetAndroidHardwareBufferPropertiesANDROID or a YUV VkFormat.
@@ -1875,8 +1876,14 @@ class RenderPassCache final : angle::NonCopyable
 
     ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *contextVk,
                                                        const vk::RenderPassDesc &desc,
+                                                       uint64_t color0ExternalFormat,
                                                        vk::RenderPass **renderPassOut)
     {
+        if (color0ExternalFormat != 0)
+        {
+            return addRenderPass(contextVk, desc, color0ExternalFormat, renderPassOut);
+        }
+
         auto outerIt = mPayload.find(desc);
         if (outerIt != mPayload.end())
         {
@@ -1890,12 +1897,13 @@ class RenderPassCache final : angle::NonCopyable
         }
 
         mCompatibleRenderPassCacheStats.missAndIncrementSize();
-        return addRenderPass(contextVk, desc, renderPassOut);
+        return addRenderPass(contextVk, desc, 0 /* no external format ID */, renderPassOut);
     }
 
     angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
+                                       uint64_t color0ExternalFormat,
                                        vk::RenderPass **renderPassOut);
 
   private:
@@ -1903,10 +1911,12 @@ class RenderPassCache final : angle::NonCopyable
                                            const vk::RenderPassDesc &desc,
                                            const vk::AttachmentOpsArray &attachmentOps,
                                            bool updatePerfCounters,
+                                           uint64_t color0ExternalFormat,
                                            vk::RenderPass **renderPassOut);
 
     angle::Result addRenderPass(ContextVk *contextVk,
                                 const vk::RenderPassDesc &desc,
+                                uint64_t color0ExternalFormat,
                                 vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
@@ -1918,6 +1928,10 @@ class RenderPassCache final : angle::NonCopyable
     OuterCache mPayload;
     CacheStats mCompatibleRenderPassCacheStats;
     CacheStats mRenderPassWithOpsCacheStats;
+
+    // What FormatID::External currently means for any entry in the render pass
+    // cache for color0 external format.
+    uint64_t mColor0ExternalFormatForCache = 0;
 };
 
 // A class that encapsulates the vk::PipelineCache and associated mutex.  The mutex may be nullptr
