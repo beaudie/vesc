@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb3d1b6_82f58759",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-15T13:46:21Z",
+      "side": 1,
+      "message": "Various tests started failing on Pixel 6 after this.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1146/overview\nAt least ProgramPipelineTest32.CreateProgramWithTransformFeedbackVarying/ES3_2_Vulkan seems related.\nOthers maybe due to changes in test order or bad state?",
+      "revId": "5911243cd2115fa62a518e6ac6ef757ca26efa6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
