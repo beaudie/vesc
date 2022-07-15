@@ -701,6 +701,7 @@ angle::Result CreateRenderPass2(Context *context,
                                 bool unresolveStencil,
                                 bool isRenderToTextureThroughExtension,
                                 uint8_t renderToTextureSamples,
+                                uint64_t color0ExternalFormat,
                                 RenderPass *renderPass)
 {
     // Convert the attachments to VkAttachmentDescription2.
@@ -793,20 +794,18 @@ angle::Result CreateRenderPass2(Context *context,
     renderToTextureInfo.depthResolveMode     = VK_RESOLVE_MODE_SAMPLE_ZERO_BIT;
     renderToTextureInfo.stencilResolveMode   = VK_RESOLVE_MODE_SAMPLE_ZERO_BIT;
 
+    RendererVk *renderer = context->getRenderer();
+
     // Append the depth/stencil resolve attachment to the pNext chain of last subpass, if any.
     if (depthStencilResolve.pDepthStencilResolveAttachment != nullptr)
     {
         ASSERT(!isRenderToTextureThroughExtension);
         subpassDescriptions.back().pNext = &depthStencilResolve;
     }
-    else
+    else if (isRenderToTextureThroughExtension &&
+             renderer->getFeatures().supportsMultisampledRenderToSingleSampled.enabled &&
+             subpassDescriptions.size() == 1)
     {
-        RendererVk *renderer = context->getRenderer();
-
-        ASSERT(isRenderToTextureThroughExtension);
-        ASSERT(renderer->getFeatures().supportsMultisampledRenderToSingleSampled.enabled);
-        ASSERT(subpassDescriptions.size() == 1);
-
         subpassDescriptions.back().pNext = &renderToTextureInfo;
     }
 
@@ -1000,6 +999,7 @@ void UpdateRenderPassPerfCounters(
 angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            const RenderPassDesc &desc,
                                            const AttachmentOpsArray &ops,
+                                           uint64_t color0ExternalFormat,
                                            RenderPassHelper *renderPassHelper)
 {
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
@@ -1083,8 +1083,6 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
             }
         }
         attachmentDescs[attachmentCount.get()].format = GetVkFormatFromFormatID(attachmentFormatID);
-        ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
-
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
         ++attachmentCount;
@@ -1302,15 +1300,15 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
     // If depth/stencil resolve is used, we need to create the render pass with
     // vkCreateRenderPass2KHR.  Same when using the VK_EXT_multisampled_render_to_single_sampled
-    // extension.
+    // extension, or when the first color attachment has external format.
     if (depthStencilResolve.pDepthStencilResolveAttachment != nullptr ||
-        isRenderToTextureThroughExtension)
+        isRenderToTextureThroughExtension || color0ExternalFormat != 0)
     {
         ANGLE_TRY(CreateRenderPass2(contextVk, createInfo, depthStencilResolve, multiviewInfo,
                                     desc.hasDepthUnresolveAttachment(),
                                     desc.hasStencilUnresolveAttachment(),
                                     isRenderToTextureThroughExtension, renderToTextureSamples,
-                                    &renderPassHelper->getRenderPass()));
+                                    color0ExternalFormat, &renderPassHelper->getRenderPass()));
     }
     else
     {
@@ -5637,6 +5635,18 @@ void RenderPassCache::destroy(RendererVk *rendererVk)
         }
     }
     mPayload.clear();
+
+    for (auto &outerIt : mPayloadExternalFormat)
+    {
+        for (auto &midIt : outerIt.second)
+        {
+            for (auto &innerIt : midIt.second)
+            {
+                innerIt.second.destroy(device);
+            }
+        }
+    }
+    mPayloadExternalFormat.clear();
 }
 
 void RenderPassCache::clear(ContextVk *contextVk)
@@ -5653,6 +5663,7 @@ void RenderPassCache::clear(ContextVk *contextVk)
 
 angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
                                              const vk::RenderPassDesc &desc,
+                                             uint64_t color0ExternalFormat,
                                              vk::RenderPass **renderPassOut)
 {
     // Insert some placeholder attachment ops.  Note that render passes with different ops are still
@@ -5687,23 +5698,83 @@ angle::Result RenderPassCache::addRenderPass(ContextVk *contextVk,
         ops.initWithLoadStore(colorIndexVk, imageLayout, imageLayout);
     }
 
-    return getRenderPassWithOpsImpl(contextVk, desc, ops, false, renderPassOut);
+    return getRenderPassWithOpsImpl(contextVk, desc, ops, false, color0ExternalFormat,
+                                    renderPassOut);
 }
 
 angle::Result RenderPassCache::getRenderPassWithOps(ContextVk *contextVk,
                                                     const vk::RenderPassDesc &desc,
                                                     const vk::AttachmentOpsArray &attachmentOps,
+                                                    uint64_t color0ExternalFormat,
                                                     vk::RenderPass **renderPassOut)
 {
-    return getRenderPassWithOpsImpl(contextVk, desc, attachmentOps, true, renderPassOut);
+    return getRenderPassWithOpsImpl(contextVk, desc, attachmentOps, true, color0ExternalFormat,
+                                    renderPassOut);
 }
 
 angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
                                                         const vk::RenderPassDesc &desc,
                                                         const vk::AttachmentOpsArray &attachmentOps,
                                                         bool updatePerfCounters,
+                                                        uint64_t color0ExternalFormat,
                                                         vk::RenderPass **renderPassOut)
 {
+    // if color0ExternalFormat != 0, use a separate cache. Otherwise we add a layer of
+    // caching just for an uncommon case, which is cringe.
+    bool color0External = color0ExternalFormat != 0;
+
+    if (color0External)
+    {
+        auto outerIt = mPayloadExternalFormat.find(desc);
+        MidExternalFormatCache::iterator midIt;
+        if (outerIt != mPayloadExternalFormat.end())
+        {
+            MidExternalFormatCache &midCache = outerIt->second;
+
+            midIt = midCache.find(color0ExternalFormat);
+            if (midIt != midCache.end())
+            {
+                InnerExternalFormatCache &innerCache = midIt->second;
+                auto innerIt                         = innerCache.find(attachmentOps);
+                if (innerIt != innerCache.end())
+                {
+                    // TODO(jmadill): Could possibly use an MRU cache here.
+                    vk::GetRenderPassAndUpdateCounters(contextVk, updatePerfCounters,
+                                                       &innerIt->second, renderPassOut);
+                    return angle::Result::Continue;
+                }
+            }
+            else
+            {
+                auto emplaceResult =
+                    midCache.emplace(color0ExternalFormat, InnerExternalFormatCache());
+                midIt = emplaceResult.first;
+            }
+        }
+        else
+        {
+            auto emplaceResult = mPayloadExternalFormat.emplace(desc, MidExternalFormatCache());
+            outerIt            = emplaceResult.first;
+            MidExternalFormatCache &midCache = outerIt->second;
+            auto midEmplaceResult =
+                midCache.emplace(color0ExternalFormat, InnerExternalFormatCache());
+            midIt = midEmplaceResult.first;
+        }
+
+        mRenderPassWithOpsCacheStats.miss();
+        vk::RenderPassHelper newRenderPass;
+        ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps,
+                                                   color0ExternalFormat, &newRenderPass));
+
+        InnerExternalFormatCache &innerCache = midIt->second;
+        auto insertPos = innerCache.emplace(attachmentOps, std::move(newRenderPass));
+
+        vk::GetRenderPassAndUpdateCounters(contextVk, updatePerfCounters, &insertPos.first->second,
+                                           renderPassOut);
+        // TODO(jmadill): Trim cache, and pre-populate with the most common RPs on startup.
+        return angle::Result::Continue;
+    }
+
     auto outerIt = mPayload.find(desc);
     if (outerIt != mPayload.end())
     {
@@ -5727,10 +5798,12 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
 
     mRenderPassWithOpsCacheStats.missAndIncrementSize();
     vk::RenderPassHelper newRenderPass;
-    ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, &newRenderPass));
+    ANGLE_TRY(vk::InitializeRenderPassFromDesc(contextVk, desc, attachmentOps, color0ExternalFormat,
+                                               &newRenderPass));
 
     InnerCache &innerCache = outerIt->second;
     auto insertPos         = innerCache.emplace(attachmentOps, std::move(newRenderPass));
+
     vk::GetRenderPassAndUpdateCounters(contextVk, updatePerfCounters, &insertPos.first->second,
                                        renderPassOut);
 
