@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c7cf00_b7d9607f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-15T02:41:57Z",
+      "side": 1,
+      "message": "Is draw to surfaceless contexts entirely forbidden? Is a no-FS draw also expected to generate an error? Maybe the problem is that the draw state check is ensuring a surface when one isn\u0027t necessary?",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 66
+      },
+      "revId": "7ac159fe915295d7ee8f33e0f807e204db7b03aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
