@@ -99,7 +99,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
     virtual const angle::Format *getD3DTextureColorFormat() const;
 
     // EGL_ANDROID_get_frame_timestamps
-    virtual void setTimestampsEnabled(bool enabled);
+    virtual void setTimestampsEnabled(const egl::Display *display, bool enabled);
     virtual egl::SupportedCompositorTimings getSupportedCompositorTimings() const;
     virtual egl::Error getCompositorTiming(EGLint numTimestamps,
                                            const EGLint *names,
