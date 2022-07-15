@@ -16,6 +16,23 @@
       "message": "I think all the comments are resolved. Is this ready to go now?",
       "revId": "3eafae82f14d3bff6b7b4582b6f1a7a96d10b91d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ad6dce_726e82e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-15T20:25:02Z",
+      "side": 1,
+      "message": "Upgrading my review to +2 so this can land.\n",
+      "revId": "3eafae82f14d3bff6b7b4582b6f1a7a96d10b91d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
