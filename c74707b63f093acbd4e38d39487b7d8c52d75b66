@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e82addc9_109f8d71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e97a8f8_8531994f",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 58
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d65c6c6c_08713ff5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c23abbd_31a26ad9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "It doesn\u0027t currently support multisampling because EXT_shader_pixel_local_storage doesn\u0027t support it, and that extension is our only path to implementing this feature on a big chunk of worldwide devices. The draft spec calls out an error if GL_SAMPLE_BUFFERS \u003d\u003d 1.\n\nI could see adding a future extension for MSAA that relies heavily on this one, and provides gsampleLocalANGLE types and sampleLocalLoadANGLE()/sampleLocalStoreANGLE() functions. We would either force-enable sample shading like EXT_framebuffer_fetch, or else require the application to do so. However, I would expect it be be quite slow because framebuffer compression plays an even bigger role when using MSAA.",
+      "parentUuid": "8e5c7fa9_03cf29cd",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43164e4e_7cebdb52",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -71,6 +113,30 @@
       "writtenOn": "2022-07-14T16:14:51Z",
       "side": 1,
       "message": "\"doesn\u0027t allow\"",
+      "range": {
+        "startLine": 234,
+        "startChar": 40,
+        "endLine": 234,
+        "endChar": 53
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39fbdb37_2b77f68c",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43164e4e_7cebdb52",
       "range": {
         "startLine": 234,
         "startChar": 40,
@@ -98,6 +164,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a43f1c5_3ab8df91",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "The draft spec allows rendering to color attachments while also using PLS. (This is desirable if PLS is implemented by shader images, since you\u0027re probably better off rendering to an attachment if you don\u0027t need to read the data back.)\n\nTo account for when PLS maps to framebuffer fetch, the draft spec reduces the number of color attachments you are allowed to use while PLS is active, with a very poorly named enum: \"GL_MAX_FRAGMENT_OUTPUTS_WITH_PIXEL_LOCAL_STORAGE_ANGLE\".\n\nWhile there probably isn\u0027t much point in using it, fb fetch and PLS ought to work together just fine as currently spec\u0027d. (And there _is_ a point in being able to render to color attachments while also using PLS if it\u0027s using shader images.)",
+      "parentUuid": "876602eb_f1fd5710",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "446af71a_314c75b3",
@@ -115,6 +199,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c5be122_7b226687",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Updated the comment.",
+      "parentUuid": "446af71a_314c75b3",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8044ff0_82091685",
@@ -128,6 +230,30 @@
       "writtenOn": "2022-07-14T16:14:51Z",
       "side": 1,
       "message": "nit: already in namespace `sh`, can drop this.",
+      "range": {
+        "startLine": 679,
+        "startChar": 12,
+        "endLine": 679,
+        "endChar": 16
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d04866c4_86ae2328",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8044ff0_82091685",
       "range": {
         "startLine": 679,
         "startChar": 12,
@@ -157,6 +283,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fac62a8d_80c17893",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "I was hoping we could use isExtensionEnabled as well, but it turns out you can enable `TExtension::ANGLE_shader_pixel_local_storage` by just saying:\n\n```\n#extension all : warn\n```\n\n(There is a test for this.)\n\nWe can\u0027t start disallowing discards et. al. just because somebody used `#extension all : warn`, so we actually have to parse the shader first and check if any PLS uniforms are declared before enforcing some of these rules.\n\nI\u0027ve moved as much as possible into ParseContext and like it better. Let me know what you think. This file is now reserved for the additional shader-wide restrictions that go into effect iff you declare PLS.",
+      "parentUuid": "b57ddd80_c37d7274",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b61a4a7_734c2434",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Here they also have a `__`. Any idea why?",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ee142b0e_c33dee2e",
         "filename": "src/compiler/translator/glslang.y",
         "patchSetId": 3
@@ -168,6 +329,30 @@
       "writtenOn": "2022-07-14T16:14:51Z",
       "side": 1,
       "message": "Why the `__`?",
+      "range": {
+        "startLine": 1426,
+        "startChar": 52,
+        "endLine": 1426,
+        "endChar": 54
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf445d7a_e4f0bf8f",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "I was copying the image extensions ¯\\_(ツ)_/¯\n\nI\u0027m not sure why either, and am happy to go either way.",
+      "parentUuid": "ee142b0e_c33dee2e",
       "range": {
         "startLine": 1426,
         "startChar": 52,
@@ -195,6 +380,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d60fba_1329c435",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89939357_9e39eb95",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfc35db3_68816c68",
@@ -208,6 +411,30 @@
       "writtenOn": "2022-07-14T16:14:51Z",
       "side": 1,
       "message": "Please avoid `auto` when the type is simple. We use that for complicated (typically nested templated types)",
+      "range": {
+        "startLine": 64,
+        "startChar": 13,
+        "endLine": 64,
+        "endChar": 17
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad396008_2959fe0d",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc35db3_68816c68",
       "range": {
         "startLine": 64,
         "startChar": 13,
@@ -237,6 +464,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "634a236b_038035f4",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Looks like it was a WebGL thing: https://chromium.googlesource.com/angle/angle/+/d4f4c11b92cb03d121bda62fa75f605d8b190940/src/compiler/translator/DeferGlobalInitializers.cpp\n\nI manually moved it into main so this can run after that transformation. Did I find the right helper?",
+      "parentUuid": "cfbcc7d9_f28b69f6",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a461f283_3908c483",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
         "patchSetId": 3
@@ -260,6 +505,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5eb1acd4_df1653ee",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done! (Is it safe to call traverse() recursively from a visit function?)",
+      "parentUuid": "a461f283_3908c483",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 9
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aabd12d0_b8b6d913",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.h",
         "patchSetId": 3
@@ -271,6 +540,24 @@
       "writtenOn": "2022-07-14T16:14:51Z",
       "side": 1,
       "message": "No need for this. Instead, add yourself to the `AUTHORS` file at the root of the repo.",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfa55b82_6f8e33d7",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aabd12d0_b8b6d913",
       "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

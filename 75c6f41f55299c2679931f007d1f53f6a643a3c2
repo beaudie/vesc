@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c0333ce_406786c2",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Can we monomorphize functions that take pixel local storage functions and lift this restriction?",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 56
+      },
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc1fc8bc_aa29cbc7",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-15T09:41:05Z",
+      "side": 1,
+      "message": "Is this safe???",
+      "range": {
+        "startLine": 145,
+        "startChar": 23,
+        "endLine": 145,
+        "endChar": 31
+      },
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
