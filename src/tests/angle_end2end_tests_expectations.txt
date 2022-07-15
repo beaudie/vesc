@@ -674,8 +674,8 @@
 7389 MAC OPENGL : Texture2DTest.ManySupersedingTextureUpdates/* = SKIP
 
 // GL, GLES run into issues with cleanup
-7495 WIN OpenGL : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
-7495 WIN GLES : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
+//7495 WIN OpenGL : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
+//7495 WIN GLES : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
 
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
