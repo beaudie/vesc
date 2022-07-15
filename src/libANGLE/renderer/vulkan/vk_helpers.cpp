@@ -1571,6 +1571,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
     : mCurrentSubpass(0),
       mCounter(0),
       mClearValues{},
+      mRenderPassColor0ExternalFormat(0),
       mRenderPassStarted(false),
       mTransformFeedbackCounterBuffers{},
       mTransformFeedbackCounterBufferOffsets{},
@@ -2092,6 +2093,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    uint64_t color0ExternalFormat,
     RenderPassCommandBuffer **commandBufferOut)
 {
     ASSERT(!mRenderPassStarted);
@@ -2101,9 +2103,10 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mColorAttachmentsCount       = colorAttachmentCount;
     mFramebuffer.setHandle(framebuffer.getHandle());
-    mRenderArea       = renderArea;
-    mClearValues      = clearValues;
-    *commandBufferOut = &getCommandBuffer();
+    mRenderArea                     = renderArea;
+    mClearValues                    = clearValues;
+    mRenderPassColor0ExternalFormat = color0ExternalFormat;
+    *commandBufferOut               = &getCommandBuffer();
 
     mRenderPassStarted = true;
     mCounter++;
@@ -2115,7 +2118,8 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPassCommandBuffer(Contex
 {
     VkCommandBufferInheritanceInfo inheritanceInfo = {};
     ANGLE_TRY(RenderPassCommandBuffer::InitializeRenderPassInheritanceInfo(
-        contextVk, mFramebuffer, mRenderPassDesc, &inheritanceInfo));
+        contextVk, mFramebuffer, mRenderPassDesc, mRenderPassColor0ExternalFormat,
+        &inheritanceInfo));
     inheritanceInfo.subpass = mCurrentSubpass;
 
     return getCommandBuffer().begin(contextVk, inheritanceInfo);
