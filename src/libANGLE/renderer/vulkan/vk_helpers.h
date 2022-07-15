@@ -784,6 +784,7 @@ class BufferHelper : public ReadWriteResource
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
+    void release(ContextVk *contextVk);
 
     BufferSerial getBufferSerial() const { return mSerial; }
     BufferSerial getBlockSerial() const
@@ -863,6 +864,11 @@ class BufferHelper : public ReadWriteResource
                                           VkDeviceSize actualDataSize,
                                           VkDeviceSize *offsetOut);
 
+    void onNewDescriptorSet(const SharedDescriptorSetCacheKey &sharedCacheKey)
+    {
+        mDescriptorSetCacheManager.addKey(sharedCacheKey);
+    }
+
   private:
     void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
@@ -892,6 +898,8 @@ class BufferHelper : public ReadWriteResource
     VkPipelineStageFlags mCurrentReadStages;
 
     BufferSerial mSerial;
+    // Manages the texture descriptor set cache that created with this texture
+    DescriptorSetCacheManager mDescriptorSetCacheManager;
 };
 
 class BufferPool : angle::NonCopyable
