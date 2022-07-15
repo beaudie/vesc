@@ -274,6 +274,12 @@ class UtilsVk : angle::NonCopyable
                             const FramebufferVk *framebuffer,
                             const UnresolveParameters &params);
 
+    // Converts the yuv image (as texture) to rgba via fragment shader.
+    // The yuvSrc image is assumed to hold ycbcr conversion info.
+    angle::Result yuvRgbaConversion(ContextVk *contextVk,
+                                    vk::ImageHelper *yuvSrc,
+                                    vk::ImageHelper *rgbaDst);
+
     // Overlay utilities.
     angle::Result drawOverlay(ContextVk *contextVk,
                               vk::BufferHelper *textWidgetsBuffer,
@@ -422,6 +428,12 @@ class UtilsVk : angle::NonCopyable
         uint32_t levelCount   = 0;
     };
 
+    struct YuvRgbaConversionShaderParams
+    {
+        // Structure matching PushConstants in YuvRgbaConversion.frag
+        float invSrcExtent[2] = {};
+    };
+
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
     // Functions implemented by the class:
@@ -444,19 +456,20 @@ class UtilsVk : angle::NonCopyable
         Unresolve8Attachments  = 11,
         Unresolve9Attachments  = 12,
         Unresolve10Attachments = 13,
+        YuvRgbaConversion      = 14,
 
         // Functions implemented in compute
-        ComputeStartIndex          = 14,  // Special value to separate draw and dispatch functions.
-        ConvertIndexBuffer         = 14,
-        ConvertVertexBuffer        = 15,
-        BlitResolveStencilNoExport = 16,
-        ConvertIndexIndirectBuffer = 17,
-        ConvertIndexIndirectLineLoopBuffer = 18,
-        ConvertIndirectLineLoopBuffer      = 19,
-        GenerateMipmap                     = 20,
+        ComputeStartIndex          = 15,  // Special value to separate draw and dispatch functions.
+        ConvertIndexBuffer         = 16,
+        ConvertVertexBuffer        = 17,
+        BlitResolveStencilNoExport = 18,
+        ConvertIndexIndirectBuffer = 19,
+        ConvertIndexIndirectLineLoopBuffer = 20,
+        ConvertIndirectLineLoopBuffer      = 21,
+        GenerateMipmap                     = 22,
 
-        InvalidEnum = 21,
-        EnumCount   = 21,
+        InvalidEnum = 23,
+        EnumCount   = 23,
     };
 
     // Common functions that create the pipeline for the specified function, binds it and prepares
@@ -509,8 +522,16 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureUnresolveResourcesInitialized(ContextVk *contextVk,
                                                       Function function,
                                                       uint32_t attachmentIndex);
+    angle::Result ensureYuvRgbaConversionResourcesInitialized(
+        ContextVk *contextVk,
+        const vk::YcbcrConversionDesc &ycbcrConversionDesc);
 
     angle::Result ensureSamplersInitialized(ContextVk *context);
+
+    angle::Result createSamplerWithYcbcrConversion(
+        ContextVk *context,
+        const vk::YcbcrConversionDesc &ycbcrConversionDesc,
+        vk::Sampler *outSampler);
 
     angle::Result startRenderPass(ContextVk *contextVk,
                                   vk::ImageHelper *image,
@@ -568,6 +589,18 @@ class UtilsVk : angle::NonCopyable
     // combinations.
     std::unordered_map<uint32_t, vk::RefCounted<vk::ShaderAndSerial>> mUnresolveFragShaders;
     std::unordered_map<uint32_t, vk::ShaderProgramHelper> mUnresolvePrograms;
+
+    // YuvRgbaConversion shaders are special as they use immutable samplers,
+    // which need to be associated with ycbcr conversion objects and descriptor
+    // set layouts, not individual descriptor sets.
+    std::unordered_map<vk::YcbcrConversionDesc, vk::Sampler> mYuvRgbaConversionImmutableSamplers;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::DescriptorSetLayoutPointerArray>
+        mYuvRgbaConversionDescriptorSetLayouts;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::DynamicDescriptorPool>
+        mYuvRgbaConversionDescriptorPools;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::BindingPointer<vk::PipelineLayout>>
+        mYuvRgbaConversionPipelineLayouts;
+    std::unordered_map<vk::YcbcrConversionDesc, vk::ShaderProgramHelper> mYuvRgbaConversionPrograms;
 
     vk::Sampler mPointSampler;
     vk::Sampler mLinearSampler;
