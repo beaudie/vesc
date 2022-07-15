@@ -8897,14 +8897,29 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    // If the source image is multisampled, we need to resolve it into a temporary image before
-    // performing a readback.
+    // If the source image is external, assume this is a situation under
+    // GL_EXT_YUV_target where the color attachment we are trying to
+    // glReadPixels is YUV formatted and needs to be converted to RGBA
+    bool isExternalImage = angle::FormatID::EXTERNAL == mActualFormatID;
+    if (isExternalImage)
+    {
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+    }
+
+    // If the source image is multisampled or external, we need to resolve it
+    // into a temporary image before performing a readback.
     bool isMultisampled = mSamples > 1;
     RendererScoped<ImageHelper> resolvedImage(contextVk->getRenderer());
 
     ImageHelper *src = this;
 
     ASSERT(!hasStagedUpdatesForSubresource(levelGL, layer, 1));
+
+    // We don't expect external and multisampled attachments
+    if (isMultisampled || isExternalImage)
+    {
+        ASSERT(isMultisampled != isExternalImage);
+    }
 
     if (isMultisampled)
     {
@@ -8913,12 +8928,30 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
             gl::Extents(area.width, area.height, 1), mIntendedFormatID, mActualFormatID,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
     }
+    else if (isExternalImage)
+    {
+        // The resolved image is obtained through running the YUV source image
+        // through a fragment shader for YUV / RGB conversion.
+        ANGLE_TRY(resolvedImage.get().init2DStaging(
+            contextVk, contextVk->hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(area.width, area.height, 1), angle::FormatID::R8G8B8A8_UNORM,
+            angle::FormatID::R8G8B8A8_UNORM,
+            VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            1));
+    }
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
 
     // Note that although we're reading from the image, we need to update the layout below.
     CommandBufferAccess access;
-    access.onImageTransferRead(layoutChangeAspectFlags, this);
+    // We will use a color attachment output instead of transfer in the case of
+    // YUV RGBA conversion.
+    if (!isExternalImage)
+    {
+        access.onImageTransferRead(layoutChangeAspectFlags, this);
+    }
+
     if (isMultisampled)
     {
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, layoutChangeAspectFlags,
@@ -8928,7 +8961,12 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
 
-    const angle::Format *readFormat = &getActualFormat();
+    const angle::Format *actualFormat = &getActualFormat();
+    const angle::Format *rgbaFormat   = &angle::Format::Get(angle::FormatID::R8G8B8A8_UNORM);
+
+    // Per the GL_EXT_YUV_target spec, glReadPixels always converts the external format to RGBA
+    // UNSIGNED_BYTE.
+    const angle::Format *readFormat = isExternalImage ? rgbaFormat : actualFormat;
     const vk::Format &vkFormat      = contextVk->getRenderer()->getFormat(readFormat->id);
     const gl::InternalFormat &storageFormatInfo =
         vkFormat.getInternalFormatInfo(readFormat->componentType);
@@ -8954,6 +8992,22 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
         // Depth > 1 means this is a 3D texture and we need special handling
         srcOffset.z                   = layer;
         srcSubresource.baseArrayLayer = 0;
+    }
+
+    if (isExternalImage)
+    {
+        ANGLE_TRY(contextVk->getUtils().yuvRgbaConversion(contextVk, src, &resolvedImage.get()));
+
+        CommandBufferAccess readAccess;
+        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readAccess, &commandBuffer));
+
+        // Make the resolved image the target of buffer copy.
+        src                           = &resolvedImage.get();
+        srcOffset                     = {0, 0, 0};
+        srcSubresource.baseArrayLayer = 0;
+        srcSubresource.layerCount     = 1;
+        srcSubresource.mipLevel       = 0;
     }
 
     if (isMultisampled)
@@ -9023,7 +9077,7 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
     ANGLE_TRY(stagingBuffer->allocateForCopyImage(contextVk, allocationSize,
-                                                  MemoryCoherency::Coherent, mActualFormatID,
+                                                  MemoryCoherency::Coherent, readFormat->id,
                                                   &stagingOffset, &readPixelBuffer));
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
 
