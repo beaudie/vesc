@@ -1186,6 +1186,39 @@ void UtilsVk::destroy(RendererVk *renderer)
     }
     mUnresolveFragShaders.clear();
 
+    for (auto &programIter : mYuvRgbaConversionPrograms)
+    {
+        vk::ShaderProgramHelper &program = programIter.second;
+        program.destroy(renderer);
+    }
+
+    for (auto &pipelineLayoutIter : mYuvRgbaConversionPipelineLayouts)
+    {
+        vk::BindingPointer<vk::PipelineLayout> &pipelineLayout = pipelineLayoutIter.second;
+        pipelineLayout.reset();
+    }
+
+    for (auto &descriptorPoolIter : mYuvRgbaConversionDescriptorPools)
+    {
+        vk::DynamicDescriptorPool &descriptorPool = descriptorPoolIter.second;
+        descriptorPool.destroy(renderer);
+    }
+
+    for (auto &descriptorSetLayoutIter : mYuvRgbaConversionDescriptorSetLayouts)
+    {
+        vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts = descriptorSetLayoutIter.second;
+        for (auto &descriptorSetLayout : descriptorSetLayouts)
+        {
+            descriptorSetLayout.reset();
+        }
+    }
+
+    for (auto &samplerIter : mYuvRgbaConversionImmutableSamplers)
+    {
+        vk::Sampler &sampler = samplerIter.second;
+        sampler.destroy(device);
+    }
+
     mPointSampler.destroy(device);
     mLinearSampler.destroy(device);
 }
@@ -1460,6 +1493,91 @@ angle::Result UtilsVk::ensureUnresolveResourcesInitialized(ContextVk *contextVk,
     return ensureResourcesInitialized(contextVk, function, setSizes.data(), attachmentCount, 0);
 }
 
+angle::Result UtilsVk::ensureYuvRgbaConversionResourcesInitialized(
+    ContextVk *contextVk,
+    const vk::YcbcrConversionDesc &ycbcrConversionDesc)
+{
+    if (mYuvRgbaConversionPipelineLayouts[ycbcrConversionDesc].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[1] = {
+        {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1},
+    };
+
+    size_t setSizesCount = 1;
+
+    vk::Sampler &immutableSampler = mYuvRgbaConversionImmutableSamplers[ycbcrConversionDesc];
+
+    // create immutable sampler for this ycbcrconversiondesc
+    ANGLE_TRY(createSamplerWithYcbcrConversion(contextVk, ycbcrConversionDesc, &immutableSampler));
+
+    ASSERT(mYuvRgbaConversionImmutableSamplers[ycbcrConversionDesc].valid());
+
+    vk::DescriptorSetLayoutDesc descriptorSetLayoutDesc;
+    VkShaderStageFlags descStages = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+    uint32_t currentBinding = 0;
+    for (size_t i = 0; i < setSizesCount; ++i)
+    {
+        descriptorSetLayoutDesc.update(
+            currentBinding, setSizes[i].type, setSizes[i].descriptorCount, descStages,
+            i == 0 ? &mYuvRgbaConversionImmutableSamplers[ycbcrConversionDesc] : nullptr);
+        ++currentBinding;
+    }
+
+    ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
+        contextVk, descriptorSetLayoutDesc,
+        &mYuvRgbaConversionDescriptorSetLayouts[ycbcrConversionDesc]
+                                               [DescriptorSetIndex::Internal]));
+
+    vk::DescriptorSetLayoutBindingVector bindingVector;
+    std::vector<VkSampler> immutableSamplers;
+    descriptorSetLayoutDesc.unpackBindings(
+        &bindingVector, &immutableSamplers);  // side effects immutableSamplers to be populated in
+                                              // the binding vector
+    std::vector<VkDescriptorPoolSize> descriptorPoolSizes;
+
+    for (const VkDescriptorSetLayoutBinding &binding : bindingVector)
+    {
+        if (binding.descriptorCount > 0)
+        {
+            VkDescriptorPoolSize poolSize = {};
+
+            poolSize.type            = binding.descriptorType;
+            poolSize.descriptorCount = binding.descriptorCount;
+            descriptorPoolSizes.emplace_back(poolSize);
+        }
+    }
+    if (!descriptorPoolSizes.empty())
+    {
+        ANGLE_TRY(mYuvRgbaConversionDescriptorPools[ycbcrConversionDesc].init(
+            contextVk, descriptorPoolSizes.data(), descriptorPoolSizes.size(),
+            mYuvRgbaConversionDescriptorSetLayouts[ycbcrConversionDesc]
+                                                  [DescriptorSetIndex::Internal]
+                                                      .get()));
+    }
+
+    // Corresponding pipeline layouts:
+    vk::PipelineLayoutDesc pipelineLayoutDesc;
+
+    pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
+                                                 descriptorSetLayoutDesc);
+    size_t pushConstantsSize = sizeof(YuvRgbaConversionShaderParams);
+    if (pushConstantsSize)
+    {
+        pipelineLayoutDesc.updatePushConstantRange(descStages, 0,
+                                                   static_cast<uint32_t>(pushConstantsSize));
+    }
+
+    ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
+        contextVk, pipelineLayoutDesc, mYuvRgbaConversionDescriptorSetLayouts[ycbcrConversionDesc],
+        &mYuvRgbaConversionPipelineLayouts[ycbcrConversionDesc]));
+
+    return angle::Result::Continue;
+}
+
 angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
 {
     VkSamplerCreateInfo samplerInfo     = {};
@@ -1493,6 +1611,42 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
     {
         ANGLE_VK_TRY(contextVk, mLinearSampler.init(contextVk->getDevice(), samplerInfo));
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::createSamplerWithYcbcrConversion(
+    ContextVk *contextVk,
+    const vk::YcbcrConversionDesc &ycbcrConversionDesc,
+    vk::Sampler *outSampler)
+{
+    VkSamplerCreateInfo samplerInfo     = {};
+    samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.flags                   = 0;
+    samplerInfo.magFilter               = VK_FILTER_NEAREST;
+    samplerInfo.minFilter               = VK_FILTER_NEAREST;
+    samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    samplerInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.mipLodBias              = 0.0f;
+    samplerInfo.anisotropyEnable        = VK_FALSE;
+    samplerInfo.maxAnisotropy           = 1;
+    samplerInfo.compareEnable           = VK_FALSE;
+    samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.minLod                  = 0;
+    samplerInfo.maxLod                  = 0;
+    samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+    VkSamplerYcbcrConversionInfo samplerYcbcrConversionInfo = {};
+    samplerYcbcrConversionInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO;
+    ANGLE_TRY(contextVk->getRenderer()->getYuvConversionCache().getSamplerYcbcrConversion(
+        contextVk, ycbcrConversionDesc, &samplerYcbcrConversionInfo.conversion));
+
+    samplerInfo.pNext = &samplerYcbcrConversionInfo;
+
+    ANGLE_VK_TRY(contextVk, outSampler->init(contextVk->getDevice(), samplerInfo));
 
     return angle::Result::Continue;
 }
@@ -2598,6 +2752,175 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     // Note: this utility starts the render pass directly, thus bypassing
     // ContextVk::startRenderPass. As such, occlusion queries are not enabled.
     commandBuffer->draw(3, 0);
+
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::yuvRgbaConversion(ContextVk *contextVk,
+                                         vk::ImageHelper *yuvSrc,
+                                         vk::ImageHelper *rgbaDst)
+{
+    ANGLE_TRY(
+        contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::TemporaryForImageCopy));
+    ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+
+    const vk::YcbcrConversionDesc &ycbcrConversionDesc = yuvSrc->getYcbcrConversionDesc();
+
+    ANGLE_TRY(ensureYuvRgbaConversionResourcesInitialized(contextVk, ycbcrConversionDesc));
+
+    gl::Extents extents = yuvSrc->getLevelExtents(vk::LevelIndex(0));
+
+    vk::DeviceScoped<vk::ImageView> yuvSrcLevelZeroView(contextVk->getDevice());
+    vk::DeviceScoped<vk::ImageView> rgbaDstLevelZeroView(contextVk->getDevice());
+    ANGLE_TRY(yuvSrc->initImageView(contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT,
+                                    gl::SwizzleState(), &yuvSrcLevelZeroView.get(),
+                                    vk::LevelIndex(0), 1));
+    ANGLE_TRY(rgbaDst->initImageView(contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT,
+                                     gl::SwizzleState(), &rgbaDstLevelZeroView.get(),
+                                     vk::LevelIndex(0), 1));
+
+    YuvRgbaConversionShaderParams shaderParams = {
+        {1.0f / (float)extents.width, 1.0f / (float)extents.height},
+    };
+
+    vk::CommandBufferAccess access;
+    vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
+    commandBuffer = &commandBufferHelper->getCommandBuffer();
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(mYuvRgbaConversionDescriptorPools[ycbcrConversionDesc].allocateDescriptorSet(
+        contextVk,
+        mYuvRgbaConversionDescriptorSetLayouts[ycbcrConversionDesc][DescriptorSetIndex::Internal]
+            .get(),
+        &descriptorPoolBinding, &descriptorSet));
+
+    // Add the individual descriptorSet in the resource use list. Because this is a one time use
+    // descriptorSet, we immediately put it in the garbage list for recycle.
+    vk::DescriptorSetHelper descriptorSetHelper(descriptorSet);
+    commandBufferHelper->retainResource(&descriptorSetHelper);
+    descriptorPoolBinding.get().addGarbage(std::move(descriptorSetHelper));
+
+    // Since the eviction is relying on the pool's mUse, we need to update pool's mUse here.
+    commandBufferHelper->retainResource(&descriptorPoolBinding.get());
+    descriptorPoolBinding.reset();
+
+    vk::RenderPassDesc renderPassDesc;
+    renderPassDesc.setSamples(1);
+    renderPassDesc.packColorAttachment(0, rgbaDst->getActualFormatID());
+
+    vk::GraphicsPipelineDesc pipelineDesc;
+    pipelineDesc.initDefaults(contextVk);
+    pipelineDesc.setRenderPassDesc(renderPassDesc);
+    pipelineDesc.setRasterizationSamples(1);
+
+    gl::Rectangle renderArea;
+    renderArea.x      = 0;
+    renderArea.y      = 0;
+    renderArea.width  = rgbaDst->getExtents().width;
+    renderArea.height = rgbaDst->getExtents().height;
+
+    ANGLE_TRY(startRenderPass(contextVk, rgbaDst, &rgbaDstLevelZeroView.get(), renderPassDesc,
+                              renderArea, &commandBuffer));
+
+    UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
+
+    VkViewport viewport;
+    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, false, rgbaDst->getExtents().height,
+                       &viewport);
+    commandBuffer->setViewport(0, 1, &viewport);
+
+    VkRect2D scissor = gl_vk::GetRect(renderArea);
+    commandBuffer->setScissor(0, 1, &scissor);
+
+    // Change source layout inside render pass.
+    contextVk->onImageRenderPassRead(VK_IMAGE_ASPECT_COLOR_BIT,
+                                     vk::ImageLayout::FragmentShaderReadOnly, yuvSrc);
+    contextVk->onImageRenderPassWrite(gl::LevelIndex(0), 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                      vk::ImageLayout::ColorAttachment, rgbaDst);
+
+    VkDescriptorImageInfo srcImageInfo = {};
+    srcImageInfo.imageView             = yuvSrcLevelZeroView.get().getHandle();
+    srcImageInfo.imageLayout           = yuvSrc->getCurrentLayout();
+    srcImageInfo.sampler               = VK_NULL_HANDLE;  // immutable sampler
+                                                          //
+    VkWriteDescriptorSet writeInfos[1] = {};
+    writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[0].dstSet               = descriptorSet;
+    writeInfos[0].dstBinding           = 0;
+    writeInfos[0].descriptorCount      = 1;
+    writeInfos[0].descriptorType       = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+    writeInfos[0].pImageInfo           = &srcImageInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, writeInfos, 0, nullptr);
+
+    vk::RefCounted<vk::ShaderAndSerial> *vertexShader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getFullScreenTri_vert(contextVk, 0, &vertexShader));
+    vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getYuvRgbaConversion_frag(contextVk, 0, &shader));
+
+    // Setup graphics program
+    {
+        RendererVk *renderer                          = contextVk->getRenderer();
+        vk::RefCounted<vk::ShaderAndSerial> *vsShader = vertexShader;
+        vk::RefCounted<vk::ShaderAndSerial> *fsShader = shader;
+        vk::ShaderProgramHelper *program = &mYuvRgbaConversionPrograms[ycbcrConversionDesc];
+        const void *pushConstants        = &shaderParams;
+        size_t pushConstantsSize         = sizeof(shaderParams);
+        uint64_t color0ExternalFormat    = 0;
+
+        const vk::BindingPointer<vk::PipelineLayout> &pipelineLayout =
+            mYuvRgbaConversionPipelineLayouts[ycbcrConversionDesc];
+
+        program->setShader(gl::ShaderType::Vertex, vsShader);
+        if (fsShader)
+        {
+            program->setShader(gl::ShaderType::Fragment, fsShader);
+        }
+
+        // This value is not used but is passed to getGraphicsPipeline to avoid a nullptr check.
+        const vk::GraphicsPipelineDesc *descPtr;
+        vk::PipelineHelper *helper;
+        PipelineCacheAccess pipelineCache;
+        ANGLE_TRY(renderer->getPipelineCache(&pipelineCache));
+        ANGLE_TRY(program->getGraphicsPipeline(
+            contextVk, &contextVk->getRenderPassCache(), &pipelineCache, pipelineLayout.get(),
+            PipelineSource::Utils, pipelineDesc, gl::AttributesMask(), gl::ComponentTypeMask(),
+            gl::DrawBufferMask(), color0ExternalFormat, &descPtr, &helper));
+        commandBufferHelper->retainResource(helper);
+        commandBuffer->bindGraphicsPipeline(helper->getPipeline());
+
+        contextVk->invalidateGraphicsPipelineBinding();
+
+        if (descriptorSet != VK_NULL_HANDLE)
+        {
+            commandBuffer->bindDescriptorSets(pipelineLayout.get(), VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                              DescriptorSetIndex::Internal, 1, &descriptorSet, 0,
+                                              nullptr);
+            contextVk->invalidateGraphicsDescriptorSet(DescriptorSetIndex::Internal);
+        }
+
+        if (pushConstants)
+        {
+            commandBuffer->pushConstants(pipelineLayout.get(), VK_SHADER_STAGE_FRAGMENT_BIT, 0,
+                                         static_cast<uint32_t>(pushConstantsSize), pushConstants);
+        }
+    }
+
+    // Note: this utility creates its own framebuffer, thus bypassing ContextVk::startRenderPass.
+    // As such, occlusion queries are not enabled.
+    commandBuffer->draw(3, 0);
+
+    ANGLE_TRY(
+        contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::TemporaryForImageCopy));
+    ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+
+    vk::ImageView yuvSrcViewForRelease = yuvSrcLevelZeroView.release();
+    contextVk->addGarbage(&yuvSrcViewForRelease);
+    vk::ImageView rgbaDstLevelZeroViewForRelease = rgbaDstLevelZeroView.release();
+    contextVk->addGarbage(&rgbaDstLevelZeroViewForRelease);
 
     return angle::Result::Continue;
 }
