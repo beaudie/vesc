@@ -16,6 +16,23 @@
       "message": "Hi Ken, PTAL. Thanks",
       "revId": "96b6f9db67533d19287ab4539717d42b6acc933d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3dea3c3_7873d435",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-15T17:28:37Z",
+      "side": 1,
+      "message": "lgtm+2, good idea.\n",
+      "revId": "96b6f9db67533d19287ab4539717d42b6acc933d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
