@@ -23,10 +23,6 @@ constexpr static int MAX_LOCAL_STORAGE_PLANES                = 3;
 constexpr static int MAX_LOCAL_STORAGE_BYTES                 = 16;
 constexpr static int MAX_FRAGMENT_OUTPUTS_WITH_LOCAL_STORAGE = 1;
 
-constexpr static const char kLocalStorageGLSLDefines[] = R"(
-layout(early_fragment_tests) in;
-)";
-
 class PixelLocalStoragePrototype
 {
   public:
@@ -586,7 +582,6 @@ class PixelLocalStorageTest : public ANGLETest<>
             in vec4 color;
             in vec4 aux1;
             in vec4 aux2;)")
-                .append(kLocalStorageGLSLDefines)
                 .append(fsMain)
                 .c_str());
 
@@ -1830,6 +1825,104 @@ TEST_P(PixelLocalStorageTest, FunctionArguments)
     attachTextureToScratchFBO(dst);
     EXPECT_PIXEL_RECT_EQ(0, 0, 25, H, GLColor(255, 0, 255, 0));
     EXPECT_PIXEL_RECT_EQ(25, 0, W - 25, H, GLColor(0, 255, 255, 0));
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Check that early_fragment_tests are not triggered when PLS uniforms are not declared.
+TEST_P(PixelLocalStorageTest, EarlyFragmentTests)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+
+    PixelLocalStoragePrototype pls;
+
+    PLSTestTexture tex(GL_RGBA8);
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+    GLuint stencil;
+    glGenRenderbuffers(1, &stencil);
+    glBindRenderbuffer(GL_RENDERBUFFER, stencil);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, W, H);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencil);
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+
+    // Emits a fullscreen quad.
+    static const char *kFullscreenVS = R"(#version 310 es
+    precision highp float;
+    void main()
+    {
+        gl_Position.x = (gl_VertexID & 1) == 0 ? -1.0 : 1.0;
+        gl_Position.y = (gl_VertexID & 2) == 0 ? -1.0 : 1.0;
+        gl_Position.zw = vec2(0, 1);
+    })";
+
+    // Renders green to the framebuffer.
+    static const char *kDrawRed = R"(#version 310 es
+    out mediump vec4 fragColor;
+    void main()
+    {
+        fragColor = vec4(1, 0, 0, 1);
+    })";
+
+    ANGLE_GL_PROGRAM(drawGreen, kFullscreenVS, kDrawRed);
+
+    // Render to stencil without PLS uniforms and with a discard. Since we discard, and since the
+    // shader shouldn't enable early_fragment_tests, stencil should not be affected.
+    static const std::string kNonPLSDiscard(R"(#version 310 es
+    #extension GL_ANGLE_shader_pixel_local_storage : enable
+    void f(highp ipixelLocalANGLE pls)
+    {
+        // Function arguments don't trigger PLS restrictions.
+        pixelLocalStoreANGLE(pls, ivec4(8));
+    }
+    void main()
+    {
+        discard;
+    })");
+    ANGLE_GL_PROGRAM(lateDiscard, kFullscreenVS, kNonPLSDiscard.c_str());
+    glUseProgram(lateDiscard);
+    glStencilFunc(GL_ALWAYS, 1, ~0u);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    // Clear the framebuffer to green.
+    glClearColor(0, 1, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Render red to the framebuffer with a stencil test. This should have no effect because the
+    // stencil buffer should be all zeros.
+    glUseProgram(drawGreen);
+    glStencilFunc(GL_NOTEQUAL, 0, ~0u);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_RECT_EQ(0, 0, W, H, GLColor::green);
+
+    if (IsContextVersionAtLeast(3, 1))
+    {
+        // Now double check that this test would have failed if the shader had enabled
+        // early_fragment_tests. Render to stencil *with* early_fragment_tests and a discard.
+        // Stencil should be affected this time even though we discard.
+        ANGLE_GL_PROGRAM(earlyDiscard, kFullscreenVS,
+                         (kNonPLSDiscard + "layout(early_fragment_tests) in;").c_str());
+        glUseProgram(earlyDiscard);
+        glStencilFunc(GL_ALWAYS, 1, ~0u);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        // Clear the framebuffer to green.
+        glClearColor(0, 1, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Render red to the framebuffer again. This time the stencil test should pass because the
+        // stencil buffer should be all ones.
+        glUseProgram(drawGreen);
+        glStencilFunc(GL_NOTEQUAL, 0, ~0u);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        EXPECT_PIXEL_RECT_EQ(0, 0, W, H, GLColor::red);
+    }
 
     ASSERT_GL_NO_ERROR();
 }
