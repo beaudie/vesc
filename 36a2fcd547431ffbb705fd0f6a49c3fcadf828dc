@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ece46a65_afce6827",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-16T04:47:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb4c8b2_74b8dc5a",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa3bd7d8_be82e587",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-07-16T02:12:47Z",
       "side": 1,
       "message": "I would really like to see this function deleted and the functionality moved to ParseContext.",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fa4a79d_06f162dc",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-16T04:47:18Z",
+      "side": 1,
+      "message": "Ok, let\u0027s do it! Here are the shaders I\u0027m concerned about:\n\nThis one should generate an error at the discard:\n```\n#extension all : warn\nvoid main()\n{\n    discard;\n}\nlayout(binding\u003d0, rgba16f) highp uniform pixelLocalANGLE pls;\n```\n\n\n\nThis one should compile successfully:\n```\n#extension all : warn\nvoid main()\n{\n    discard;\n}\n```\n\nParseContext does have a map of PLS bindings now, so we can ultimately use that to determine if the discard should error on discard.\n\nShould we:\n\n  * Parse in two passes?\n  * Keep a list of *potential* PLS errors, but only apply them when finished parsing and we know whether PLS was declared?\n  * Something else?",
+      "parentUuid": "fa3bd7d8_be82e587",
       "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c30bab41_89257497",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-16T04:47:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47bdf6f1_79b0ed34",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6056ae3_5bd582ab",
@@ -99,6 +153,30 @@
       "writtenOn": "2022-07-16T02:12:47Z",
       "side": 1,
       "message": "Instead, use this transformation: `RunAtTheBeginningOfShader`",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 74
+      },
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d34a778_7f3f3313",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-16T04:47:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6056ae3_5bd582ab",
       "range": {
         "startLine": 273,
         "startChar": 0,
