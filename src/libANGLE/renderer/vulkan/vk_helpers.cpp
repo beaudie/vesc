@@ -3616,6 +3616,13 @@ void DynamicDescriptorPool::SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSe
     mMaxSetsPerPoolMultiplier = maxSetsPerPoolMultiplier;
 }
 
+void DynamicDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{" << mDescriptorPools.size() << "," << mDescriptorSetCache.getTotalCacheSize() << ", "
+         << mCacheStats.getHitRatio() << "}";
+    mCacheStats.resetHitAndMissCount();
+}
+
 // DynamicallyGrowingPool implementation
 template <typename Pool>
 DynamicallyGrowingPool<Pool>::DynamicallyGrowingPool()
@@ -10396,6 +10403,18 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     descriptorPoolOut->set(&descriptorPool);
 
     return angle::Result::Continue;
+}
+
+void MetaDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{";
+    for (const auto &iter : mPayload)
+    {
+        const RefCountedDescriptorPool &pool = iter.second;
+        pool.get().logDescriptorPool(out);
+        *out << ", ";
+    }
+    *out << "} ";
 }
 
 static_assert(static_cast<uint32_t>(PresentMode::ImmediateKHR) == VK_PRESENT_MODE_IMMEDIATE_KHR,
