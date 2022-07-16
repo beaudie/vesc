@@ -3276,7 +3276,7 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
 
 // DynamicDescriptorPool implementation.
 DynamicDescriptorPool::DynamicDescriptorPool()
-    : mCurrentPoolIndex(0), mCachedDescriptorSetLayout(VK_NULL_HANDLE)
+    : mCurrentPoolIndex(0), mCachedDescriptorSetLayout(VK_NULL_HANDLE), mPoolAllocationCount(0)
 {}
 
 DynamicDescriptorPool::~DynamicDescriptorPool()
@@ -3297,6 +3297,7 @@ DynamicDescriptorPool &DynamicDescriptorPool::operator=(DynamicDescriptorPool &&
     std::swap(mPoolSizes, other.mPoolSizes);
     std::swap(mCachedDescriptorSetLayout, other.mCachedDescriptorSetLayout);
     std::swap(mDescriptorSetCache, other.mDescriptorSetCache);
+    std::swap(mPoolAllocationCount, other.mPoolAllocationCount);
     return *this;
 }
 
@@ -3318,6 +3319,7 @@ angle::Result DynamicDescriptorPool::init(Context *context,
     mCurrentPoolIndex = mDescriptorPools.size() - 1;
     ANGLE_TRY(
         mDescriptorPools[mCurrentPoolIndex]->get().init(context, mPoolSizes, mMaxSetsPerPool));
+    mPoolAllocationCount++;
 
     return angle::Result::Continue;
 }
@@ -3462,6 +3464,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
         mMaxSetsPerPool *= mMaxSetsPerPoolMultiplier;
     }
 
+    mPoolAllocationCount++;
     return mDescriptorPools[mCurrentPoolIndex]->get().init(context, mPoolSizes, mMaxSetsPerPool);
 }
 
@@ -3550,6 +3553,13 @@ uint32_t DynamicDescriptorPool::GetMaxSetsPerPoolMultiplierForTesting()
 void DynamicDescriptorPool::SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPoolMultiplier)
 {
     mMaxSetsPerPoolMultiplier = maxSetsPerPoolMultiplier;
+}
+
+void DynamicDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{" << mPoolAllocationCount << " ," << mDescriptorPools.size() << ","
+         << mDescriptorSetCache.getTotalCacheSize() << ", " << mCacheStats.getHitRatio() << "}";
+    mCacheStats.resetHitAndMissCount();
 }
 
 // DynamicallyGrowingPool implementation
@@ -10331,6 +10341,18 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     descriptorPoolOut->set(&descriptorPool);
 
     return angle::Result::Continue;
+}
+
+void MetaDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{";
+    for (const auto &iter : mPayload)
+    {
+        const RefCountedDescriptorPool &pool = iter.second;
+        pool.get().logDescriptorPool(out);
+        *out << ", ";
+    }
+    *out << "} ";
 }
 
 static_assert(static_cast<uint32_t>(PresentMode::ImmediateKHR) == VK_PRESENT_MODE_IMMEDIATE_KHR,
