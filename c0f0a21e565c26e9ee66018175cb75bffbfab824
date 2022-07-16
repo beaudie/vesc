@@ -70,6 +70,24 @@
       "parentUuid": "deb229a0_8040284d",
       "revId": "c0f0a21e565c26e9ee66018175cb75bffbfab824",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceefa5e7_4e34e9ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T04:06:41Z",
+      "side": 1,
+      "message": "I was wondering why I didn\u0027t see my comments on the bug linked to this... turned out Yiwei found the same issue in b/234620157",
+      "parentUuid": "4a22ae1d_41fe4c24",
+      "revId": "c0f0a21e565c26e9ee66018175cb75bffbfab824",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
