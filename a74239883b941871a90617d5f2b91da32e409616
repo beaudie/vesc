@@ -16,6 +16,40 @@
       "message": "LGTM. I guess this is just partial implementation to get it going?",
       "revId": "a74239883b941871a90617d5f2b91da32e409616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83b9854a_8f9611ea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:26:10Z",
+      "side": 1,
+      "message": "nit: Apply `[[maybe_unused]]` to the parameter if possible.",
+      "revId": "a74239883b941871a90617d5f2b91da32e409616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e24fa68_d5406735",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:26:10Z",
+      "side": 1,
+      "message": "A comment would be good",
+      "revId": "a74239883b941871a90617d5f2b91da32e409616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
