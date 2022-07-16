@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "756efa7d_665f00ac",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "That\u0027s what that transformation is for 😊",
+      "parentUuid": "6c0333ce_406786c2",
+      "range": {
+        "startLine": 43,
+        "startChar": 7,
+        "endLine": 43,
+        "endChar": 56
+      },
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc1fc8bc_aa29cbc7",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-15T09:41:05Z",
       "side": 1,
       "message": "Is this safe???",
+      "range": {
+        "startLine": 145,
+        "startChar": 23,
+        "endLine": 145,
+        "endChar": 31
+      },
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e69c14ab_022636bd",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Yes it is!\n\nBut note that in the absence of `updateTree()`, the traverser will have \"replacements\" queued that aren\u0027t applied. That\u0027s fine, except the gotcha with the translator\u0027s transformations is that if there\u0027s a replacement queued for example to replace A.child(1) with B, and A.child(1).child(0) with C, you basically lose C because once A.child(1) is replaced with B, the replacement of C is applied to a node that is no longer part of the tree.\n\nUsually that\u0027s not a problem, but it can be if the nodes being transformed can be in direct parent-child relationship. One common situation is nested array subscripts. Your example does fall into that category, but you\u0027ve managed to avoid the pitfall by breaking that relationship and separate the child (by assigning it to a temp).\n\n---\n\nThere\u0027s another pitfall you\u0027ve fallen into however. You may not actually be in a place where you can afford to move code up to the parent. For example, consider this short circuit:\n\n```\nif (something_false \u0026\u0026 PLS(..., PLS(...)))\n```\n\nThe PLS calls should not actually be made due to short circuit, but your transformation makes them anyway.\n\nFor now, you could just add a test and skip it so the bug is known, and move on. The proper fix is to break up short circuits to separate ifs, as a prepass, because other transformations have this bug too, which is out of the scope of your work.",
+      "parentUuid": "cc1fc8bc_aa29cbc7",
       "range": {
         "startLine": 145,
         "startChar": 23,

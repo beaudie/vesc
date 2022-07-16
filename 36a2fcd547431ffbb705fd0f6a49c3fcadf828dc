@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4763c74e_c977dca2",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Can be moved to ParseContext, and the error emitted when the branch is encountered.",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d09f77e_f49c90c7",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Can be moved to ParseContext",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb4c8b2_74b8dc5a",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Can be moved to ParseContext",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa3bd7d8_be82e587",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "I would really like to see this function deleted and the functionality moved to ParseContext.",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47bdf6f1_79b0ed34",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Line 128 says `pixelLocalLoad/Store can\u0027t recurse on themselves or each other.` which contradicts this.",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6056ae3_5bd582ab",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Instead, use this transformation: `RunAtTheBeginningOfShader`",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 74
+      },
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dfa77e5d_b1568cbd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Explicitly forbidding MSAA sounds good to me since there is precedence.",
+      "parentUuid": "8c23abbd_31a26ad9",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43164e4e_7cebdb52",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -178,6 +196,24 @@
       "side": 1,
       "message": "The draft spec allows rendering to color attachments while also using PLS. (This is desirable if PLS is implemented by shader images, since you\u0027re probably better off rendering to an attachment if you don\u0027t need to read the data back.)\n\nTo account for when PLS maps to framebuffer fetch, the draft spec reduces the number of color attachments you are allowed to use while PLS is active, with a very poorly named enum: \"GL_MAX_FRAGMENT_OUTPUTS_WITH_PIXEL_LOCAL_STORAGE_ANGLE\".\n\nWhile there probably isn\u0027t much point in using it, fb fetch and PLS ought to work together just fine as currently spec\u0027d. (And there _is_ a point in being able to render to color attachments while also using PLS if it\u0027s using shader images.)",
       "parentUuid": "876602eb_f1fd5710",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81f0c6e5_fe95aa6f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Ok that\u0027s fair",
+      "parentUuid": "7a43f1c5_3ab8df91",
       "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -316,6 +352,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ca31e7_069a0e1d",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "No I don\u0027t actually. Weird. Never mind the other comment then!",
+      "parentUuid": "2b61a4a7_734c2434",
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee142b0e_c33dee2e",
@@ -353,6 +407,30 @@
       "side": 1,
       "message": "I was copying the image extensions ¯\\_(ツ)_/¯\n\nI\u0027m not sure why either, and am happy to go either way.",
       "parentUuid": "ee142b0e_c33dee2e",
+      "range": {
+        "startLine": 1426,
+        "startChar": 52,
+        "endLine": 1426,
+        "endChar": 54
+      },
+      "revId": "c74707b63f093acbd4e38d39487b7d8c52d75b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29508b4f_2031b791",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T02:12:47Z",
+      "side": 1,
+      "message": "Ack, let\u0027s keep it",
+      "parentUuid": "bf445d7a_e4f0bf8f",
       "range": {
         "startLine": 1426,
         "startChar": 52,
