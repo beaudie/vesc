@@ -124,3 +124,11 @@ bool IsGLExtensionRequestable(const std::string &extName)
     return CheckExtensionExists(
         reinterpret_cast<const char *>(glGetString(GL_REQUESTABLE_EXTENSIONS_ANGLE)), extName);
 }
+
+bool IsContextVersionAtLeast(int major, int minor)
+{
+    GLint contextMajor, contextMinor;
+    glGetIntegerv(GL_MAJOR_VERSION, &contextMajor);
+    glGetIntegerv(GL_MINOR_VERSION, &contextMinor);
+    return contextMajor >= major ? true : contextMajor == major ? contextMinor >= minor : false;
+}
