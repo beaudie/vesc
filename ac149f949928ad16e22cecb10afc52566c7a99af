@@ -16,6 +16,24 @@
       "message": "Awesome, thank you for doing this!! 🎉\n\nAny way we can get some or all of this goodness higher up the stack? Images as function args don\u0027t work in GLSL or D3D either, and it would be great if we could Monomorphize for pixel local types as well.",
       "revId": "ac149f949928ad16e22cecb10afc52566c7a99af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b041973f_dbe4fea2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-16T01:40:43Z",
+      "side": 1,
+      "message": "It\u0027s a matter of calling this transformation for the other backends, which is a one-liner. I don\u0027t believe it hurts to let it do _all_ it does for all outputs, but each backend _may_ still want to limit its scope. I don\u0027t really have the bandwidth to chase after issues with the other backends though, sorry.\n\nOnce this lands, you can always try just calling the transformation for the other two outputs and see how it fares on the bots!",
+      "parentUuid": "555ed86a_615e0623",
+      "revId": "ac149f949928ad16e22cecb10afc52566c7a99af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
