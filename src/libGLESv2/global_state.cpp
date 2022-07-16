@@ -44,6 +44,12 @@ void SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
 #endif
 }
 
+void ThreadCleanupCallback(void *ptr)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    angle::PthreadKeyDestructorCallback(ptr);
+}
+
 Thread *AllocateCurrentThread()
 {
     Thread *thread;
@@ -73,7 +79,7 @@ Thread *AllocateCurrentThread()
 
     // Create thread cleanup TLS slot
     auto CreateThreadCleanupTLSIndex = []() {
-        gThreadCleanupTLSIndex = CreateTLSIndex(angle::PthreadKeyDestructorCallback);
+        gThreadCleanupTLSIndex = CreateTLSIndex(ThreadCleanupCallback);
     };
     pthread_once(&keyOnce, CreateThreadCleanupTLSIndex);
     ASSERT(gThreadCleanupTLSIndex != TLS_INVALID_INDEX);
