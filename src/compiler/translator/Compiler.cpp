@@ -684,7 +684,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         {
             return false;  // The shader has PLS errors.
         }
-        if (!RewritePixelLocalStorageToImages(this, root, getSymbolTable(), getShaderVersion()))
+        if (!RewritePixelLocalStorageToImages(this, root, getSymbolTable(), compileOptions,
+                                              getShaderVersion()))
         {
             mDiagnostics.globalError("internal compiler error translating pixel local storage");
             return false;

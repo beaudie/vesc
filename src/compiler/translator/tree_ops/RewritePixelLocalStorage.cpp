@@ -8,6 +8,7 @@
 
 #include "common/angleutils.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/tree_util/RunAtTheBeginningOfShader.h"
@@ -254,8 +255,16 @@ class RewriteToImagesTraverser : public TIntermTraverser
 bool RewritePixelLocalStorageToImages(TCompiler *compiler,
                                       TIntermBlock *root,
                                       TSymbolTable &symbolTable,
+                                      ShCompileOptions compileOptions,
                                       int shaderVersion)
 {
+    // Inline PLS functions, as described in the spec. Since function arguments don't carry layout
+    // qualifier information, there isn't a way to rewrite them without inlining.
+    if (!MonomorphizeUnsupportedFunctions(compiler, root, &symbolTable, compileOptions,
+                                          UnsupportedFunctionArguments::PixelLocalStorage))
+    {
+        return false;
+    }
     RewriteToImagesTraverser traverser(symbolTable, shaderVersion);
     root->traverse(&traverser);
     if (!traverser.updateTree(compiler, root))
