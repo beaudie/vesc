@@ -28,10 +28,23 @@ namespace sh
 class TIntermBlock;
 class TSymbolTable;
 
-[[nodiscard]] bool MonomorphizeUnsupportedFunctions(TCompiler *compiler,
-                                                    TIntermBlock *root,
-                                                    TSymbolTable *symbolTable,
-                                                    ShCompileOptions compileOptions);
+// Types of function prameters that should trigger monomorphization.
+enum class UnsupportedFunctionArguments
+{
+    StructContainingSamplers     = 1 << 0,
+    ArrayOfArrayOfSamplerOrImage = 1 << 1,
+    AtomicCounter                = 1 << 2,
+    SamplerCubeEmulation         = 1 << 3,
+    R32fImage                    = 1 << 4,
+    PixelLocalStorage            = 1 << 5
+};
+
+[[nodiscard]] bool MonomorphizeUnsupportedFunctions(
+    TCompiler *compiler,
+    TIntermBlock *root,
+    TSymbolTable *symbolTable,
+    ShCompileOptions compileOptions,
+    UnsupportedFunctionArguments = (UnsupportedFunctionArguments)~0);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_VULKAN_MONOMORPHIZEUNSUPPORTEDFUNCTIONS_H_
