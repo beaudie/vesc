@@ -3206,6 +3206,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
     RendererVk *renderer = context->getRenderer();
     ASSERT(!mDescriptorPool.valid());
     ASSERT(mDescriptorSetCacheManager.empty());
+    ALOG("DescriptorPoolHelper::init");
 
     // Make a copy of the pool sizes, so we can grow them to satisfy the specified maxSets.
     std::vector<VkDescriptorPoolSize> poolSizes = poolSizesIn;
@@ -3341,6 +3342,7 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
         RefCountedDescriptorSetHelper *garbage = mDescriptorSetGarbageList.front();
         if (!garbage->get().isCurrentlyInUse(lastCompletedQueueSerial))
         {
+            ALOG("allocateDescriptorSet reuse from garbage");
             newDescriptorSetHelper = garbage;
             mDescriptorSetGarbageList.pop_front();
         }
@@ -3423,6 +3425,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
         RefCountedDescriptorSetHelper *garbage = mDescriptorSetGarbageList.front();
         if (!garbage->get().isCurrentlyInUse(lastCompletedQueueSerial))
         {
+            ALOG("getOrAllocateDescriptorSet reuse from garbage");
             newDescriptorSetHelper = garbage;
             mDescriptorSetGarbageList.pop_front();
         }
@@ -3505,6 +3508,7 @@ void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &
     if (descriptorSetHelper)
     {
         mCacheStats.decrementSize();
+        ALOG("destroyCachedDescriptorSet");
         // Put descriptorSet to the garbage list for reuse.
         mDescriptorSetGarbageList.emplace_back(descriptorSetHelper);
     }
@@ -3532,6 +3536,11 @@ uint32_t DynamicDescriptorPool::GetMaxSetsPerPoolMultiplierForTesting()
 void DynamicDescriptorPool::SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPoolMultiplier)
 {
     mMaxSetsPerPoolMultiplier = maxSetsPerPoolMultiplier;
+}
+
+void DynamicDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{" << mDescriptorPools.size() << "," << mDescriptorSetCache.getTotalCacheSize() << "}";
 }
 
 // DynamicallyGrowingPool implementation
@@ -10280,6 +10289,18 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     descriptorPoolOut->set(&descriptorPool);
 
     return angle::Result::Continue;
+}
+
+void MetaDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{";
+    for (const auto &iter : mPayload)
+    {
+        const RefCountedDescriptorPool &pool = iter.second;
+        pool.get().logDescriptorPool(out);
+        *out << ", ";
+    }
+    *out << "} ";
 }
 
 static_assert(static_cast<uint32_t>(PresentMode::ImmediateKHR) == VK_PRESENT_MODE_IMMEDIATE_KHR,
