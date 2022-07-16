@@ -247,7 +247,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     {
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
-    void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+    void resetDescriptorCacheStats()
+    { /*mCacheStats.resetHitAndMissCount();*/
+    }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
@@ -255,6 +257,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
     // Erase the given pool from the list.
     void erasePool(const DescriptorPoolHelper *pool);
+    void logDescriptorPool(std::ostringstream *out) const;
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
@@ -280,7 +283,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // You can't have a descriptorSet in both list.
     DescriptorSetCache mDescriptorSetCache;
     // Keeps statistics for the cache
-    CacheStats mCacheStats;
+    mutable CacheStats mCacheStats;
 };
 
 using RefCountedDynamicDescriptorPool = RefCounted<DynamicDescriptorPool>;
@@ -334,6 +337,8 @@ class MetaDescriptorPool final : angle::NonCopyable
 
         return totalSize;
     }
+
+    void logDescriptorPool(std::ostringstream *out) const;
 
   private:
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDynamicDescriptorPool> mPayload;

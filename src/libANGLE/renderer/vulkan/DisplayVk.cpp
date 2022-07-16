@@ -421,6 +421,7 @@ void DisplayVk::populateFeatureList(angle::FeatureList *features)
 ShareGroupVk::ShareGroupVk() : mOrphanNonEmptyBufferBlock(false)
 {
     mLastPruneTime              = angle::GetCurrentSystemTime();
+    mLastLogTime                = angle::GetCurrentSystemTime();
     mPrevUploadedMutableTexture = nullptr;
 }
 
@@ -650,5 +651,21 @@ void ShareGroupVk::logBufferPools() const
         mSmallBufferPool->addStats(&log);
         INFO() << "\t" << log.str();
     }
+}
+
+void ShareGroupVk::logDescriptorPool() const
+{
+    if (angle::GetCurrentSystemTime() - mLastLogTime < 60)
+    {
+        return;
+    }
+
+    mLastLogTime = angle::GetCurrentSystemTime();
+    std::ostringstream log;
+    for (const vk::MetaDescriptorPool &pool : mMetaDescriptorPools)
+    {
+        pool.logDescriptorPool(&log);
+    }
+    ALOG("\nDescriptorPool: %s", log.str().c_str());
 }
 }  // namespace rx
