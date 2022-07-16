@@ -995,6 +995,8 @@ ContextVk::~ContextVk()
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    mShareGroupVk->logDescriptorPool();
+
     // Remove context from the share group
     mShareGroupVk->removeContext(this);
 

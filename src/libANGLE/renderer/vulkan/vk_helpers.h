@@ -247,6 +247,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
+    void logDescriptorPool(std::ostringstream *out) const;
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
@@ -330,6 +331,8 @@ class MetaDescriptorPool final : angle::NonCopyable
 
         return totalSize;
     }
+
+    void logDescriptorPool(std::ostringstream *out) const;
 
   private:
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
