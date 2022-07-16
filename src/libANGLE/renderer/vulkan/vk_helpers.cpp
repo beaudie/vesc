@@ -3206,6 +3206,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 {
     RendererVk *renderer = context->getRenderer();
 
+    ALOG("DescriptorPoolHelper::init");
     // If there are descriptorSet garbage, they no longer relevant since the entire pool is going to
     // be destroyed.
     mDescriptorSetCacheManager.destroyKeys();
@@ -3267,6 +3268,7 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
         DescriptorSetHelper &garbage = mDescriptorSetGarbageList.front();
         if (!garbage.isCurrentlyInUse(lastCompletedQueueSerial))
         {
+            ALOG("allocateDescriptorSet reuse from garbage");
             *descriptorSetsOut = garbage.getDescriptorSet();
             commandBufferHelper->retainResource(this);
             mDescriptorSetGarbageList.pop_front();
@@ -3498,7 +3500,7 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
         // Remove from the cache hash map
         mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
-
+        ALOG("releaseCachedDescriptorSet");
         // Wrap it with helper object so that it can be GPU tracked and add it to resource list.
         DescriptorSetHelper descriptorSetHelper(descriptorSet);
         contextVk->retainResource(&descriptorSetHelper);
@@ -3515,6 +3517,7 @@ void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &
         // Remove from the cache hash map
         mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
+        ALOG("destroyCachedDescriptorSet");
         // Put descriptorSet to the garbage list for reuse.
         poolOut->get().getGarbageList().emplace_back(descriptorSet);
     }
@@ -3542,6 +3545,11 @@ uint32_t DynamicDescriptorPool::GetMaxSetsPerPoolMultiplierForTesting()
 void DynamicDescriptorPool::SetMaxSetsPerPoolMultiplierForTesting(uint32_t maxSetsPerPoolMultiplier)
 {
     mMaxSetsPerPoolMultiplier = maxSetsPerPoolMultiplier;
+}
+
+void DynamicDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{" << mDescriptorPools.size() << "," << mDescriptorSetCache.getTotalCacheSize() << "}";
 }
 
 // DynamicallyGrowingPool implementation
@@ -10287,6 +10295,18 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     descriptorPoolOut->set(&descriptorPool);
 
     return angle::Result::Continue;
+}
+
+void MetaDescriptorPool::logDescriptorPool(std::ostringstream *out) const
+{
+    *out << "{";
+    for (const auto &iter : mPayload)
+    {
+        const RefCountedDescriptorPool &pool = iter.second;
+        pool.get().logDescriptorPool(out);
+        *out << ", ";
+    }
+    *out << "} ";
 }
 
 static_assert(static_cast<uint32_t>(PresentMode::ImmediateKHR) == VK_PRESENT_MODE_IMMEDIATE_KHR,
