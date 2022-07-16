@@ -252,7 +252,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     {
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
-    void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+    void resetDescriptorCacheStats()
+    { /*mCacheStats.resetHitAndMissCount();*/
+    }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
@@ -262,6 +264,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     void checkAndEraseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
 
     // For testing only!
+    void logDescriptorPool(std::ostringstream *out) const;
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
     static uint32_t GetMaxSetsPerPoolMultiplierForTesting();
@@ -283,7 +286,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
 
     DescriptorSetCache mDescriptorSetCache;
-    CacheStats mCacheStats;
+    // Keeps statistics for the cache
+    mutable CacheStats mCacheStats;
 };
 
 using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
@@ -337,6 +341,8 @@ class MetaDescriptorPool final : angle::NonCopyable
 
         return totalSize;
     }
+
+    void logDescriptorPool(std::ostringstream *out) const;
 
   private:
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
