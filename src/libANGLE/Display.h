@@ -151,7 +151,7 @@ class Display final : public LabeledObject,
 
     // Helpers to maintain active thread set to assist with freeing invalid EGL objects.
     void addActiveThread(Thread *thread);
-    void removeActiveThreadAndPerformCleanup(Thread *thread);
+    void threadCleanup(Thread *thread);
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
@@ -336,6 +336,7 @@ class Display final : public LabeledObject,
 
     Error restoreLostDevice();
     Error releaseContext(gl::Context *context, Thread *thread);
+    Error releaseContextImpl(gl::Context *context, ContextSet *contexts);
 
     void initDisplayExtensions();
     void initVendorString();
@@ -365,12 +366,14 @@ class Display final : public LabeledObject,
     typedef std::set<Sync *> SyncSet;
     SyncSet mSyncSet;
 
+    Error destroyContextImpl(gl::Context *context, ContextSet *contexts);
     void destroyImageImpl(Image *image, ImageSet *images);
     void destroyStreamImpl(Stream *stream, StreamSet *streams);
     Error destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces);
     void destroySyncImpl(Sync *sync, SyncSet *syncs);
 
     std::mutex mInvalidEglObjectsMutex;
+    ContextSet mInvalidContextSet;
     ImageSet mInvalidImageSet;
     StreamSet mInvalidStreamSet;
     SurfaceSet mInvalidSurfaceSet;

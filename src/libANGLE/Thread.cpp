@@ -28,7 +28,7 @@ void PthreadKeyDestructorCallback(void *ptr)
         ASSERT(display);
         // Remove the thread being destroyed from display's active thread set
         // and perform any necessary cleanup.
-        display->removeActiveThreadAndPerformCleanup(thread);
+        display->threadCleanup(thread);
     }
 }
 }  // namespace angle
