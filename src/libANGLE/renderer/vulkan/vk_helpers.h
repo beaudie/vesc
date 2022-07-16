@@ -249,7 +249,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
     {
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
-    void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+    void resetDescriptorCacheStats()
+    { /*mCacheStats.resetHitAndMissCount();*/
+    }
     size_t getTotalCacheKeySizeBytes() const
     {
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
@@ -259,6 +261,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     void checkAndReleaseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
 
     // For testing only!
+    void logDescriptorPool(std::ostringstream *out) const;
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
     static uint32_t GetMaxSetsPerPoolMultiplierForTesting();
@@ -281,7 +284,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // busy.
     DescriptorSetCache mDescriptorSetCache;
     // Statistics for the cache.
-    CacheStats mCacheStats;
+    mutable CacheStats mCacheStats;
+    int mPoolAllocationCount;
 };
 
 using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
@@ -335,6 +339,8 @@ class MetaDescriptorPool final : angle::NonCopyable
 
         return totalSize;
     }
+
+    void logDescriptorPool(std::ostringstream *out) const;
 
   private:
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
@@ -997,8 +1003,8 @@ class PackedClearValuesArray final
 
 // Reference to a render pass attachment (color or depth/stencil) alongside render-pass-related
 // tracking such as when the attachment is last written to or invalidated.  This is used to
-// determine loadOp and storeOp of the attachment, and enables optimizations that need to know
-// how the attachment has been used.
+// determine loadOp and storeOp DynamicDescriptorPoolof the attachment, and enables optimizations
+// that need to know how the attachment has been used.
 class RenderPassAttachment final
 {
   public:
