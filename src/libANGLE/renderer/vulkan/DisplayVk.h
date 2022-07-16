@@ -65,6 +65,7 @@ class ShareGroupVk : public ShareGroupImpl
     void removeContext(ContextVk *contextVk);
 
     void onTextureRelease(TextureVk *textureVk);
+    void logDescriptorPool() const;
 
   private:
     // VkFramebuffer caches
@@ -104,6 +105,9 @@ class ShareGroupVk : public ShareGroupImpl
     // If true, it is expected that a BufferBlock may still in used by textures that outlived
     // ShareGroup. The non-empty BufferBlock will be put into RendererVk's orphan list instead.
     bool mOrphanNonEmptyBufferBlock;
+
+    // The system time when last logDescriptorPool gets called.
+    mutable double mLastLogTime;
 };
 
 class DisplayVk : public DisplayImpl, public vk::Context
