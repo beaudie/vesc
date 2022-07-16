@@ -37,4 +37,6 @@ bool IsEGLDisplayExtensionEnabled(EGLDisplay display, const std::string &extName
 bool IsGLExtensionEnabled(const std::string &extName);
 bool IsGLExtensionRequestable(const std::string &extName);
 
+bool IsContextVersionAtLeast(int major, int minor);
+
 #endif  // ANGLE_TESTS_ANGLE_TEST_PLATFORM_H_
