@@ -1892,6 +1892,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
 
     contextVk->resetPerFramePerfCounters();
+    contextVk->getShareGroup()->logDescriptorPool();
 
     return angle::Result::Continue;
 }
