@@ -1515,6 +1515,17 @@ void GenerateCaps(const FunctionsGL *functions,
         (functions->hasGLExtension("GL_ARB_robust_buffer_access_behavior") ||
          functions->hasGLESExtension("GL_KHR_robust_buffer_access_behavior"));
 
+    extensions->shaderPixelLocalStorageANGLE =
+        functions->isAtLeastGL(gl::Version(4, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
+        functions->hasGLExtension("GL_ARB_shader_image_load_store");
+    if (extensions->shaderPixelLocalStorageANGLE)
+    {
+        extensions->shaderPixelLocalStorageCoherentANGLE =
+            features.supportsFragmentShaderInterlockNV.enabled ||
+            features.supportsFragmentShaderOrderingINTEL.enabled ||
+            features.supportsFragmentShaderInterlockARB.enabled;
+    }
+
     extensions->copyTextureCHROMIUM = true;
     extensions->syncQueryCHROMIUM   = SyncQueryGL::IsSupported(functions);
 
@@ -2233,6 +2244,16 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     // https://anglebug.com/7405
     ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, isImagination);
+
+    // Desktop GLSL-only fragment synchronization extensions. These are injected internally by the
+    // compiler to make pixel local storage coherent.
+    // https://anglebug.com/7279
+    ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderInterlockNV,
+                            functions->hasGLExtension("GL_NV_fragment_shader_interlock"));
+    ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderOrderingINTEL,
+                            functions->hasGLExtension("GL_INTEL_fragment_shader_ordering"));
+    ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderInterlockARB,
+                            functions->hasGLExtension("GL_ARB_fragment_shader_interlock"));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
