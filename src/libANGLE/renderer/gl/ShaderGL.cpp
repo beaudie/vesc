@@ -177,6 +177,11 @@ void ShaderGL::compileAndCheckShader(const char *source)
 
 void ShaderGL::compileShader(const char *source)
 {
+    if (strstr(source, "_pls"))
+    {
+        printf("<PLSShader>\n\n\n%s\n\n\n</PLSShader>\n", source);
+        fflush(stdout);
+    }
     const FunctionsGL *functions = mRenderer->getFunctions();
     functions->shaderSource(mShaderID, 1, &source, nullptr);
     functions->compileShader(mShaderID);
@@ -368,6 +373,29 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
     if (features.rewriteRowMajorMatrices.enabled)
     {
         additionalOptions |= SH_REWRITE_ROW_MAJOR_MATRICES;
+    }
+
+    if (features.supportsFragmentShaderInterlockNV.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_430_CORE_OUTPUT);
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_NV;
+    }
+    else if (features.supportsFragmentShaderOrderingINTEL.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_440_CORE_OUTPUT);
+        // Prioritize INTEL_fragment_shader_ordering last, since it doesn't have an end() delimiter.
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_INTEL;
+    }
+    else if (features.supportsFragmentShaderInterlockARB.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_450_CORE_OUTPUT);
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_ARB;
     }
 
     options |= additionalOptions;
