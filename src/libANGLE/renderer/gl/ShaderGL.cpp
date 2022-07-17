@@ -370,6 +370,29 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         additionalOptions |= SH_REWRITE_ROW_MAJOR_MATRICES;
     }
 
+    if (features.supportsFragmentShaderInterlockARB.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_450_CORE_OUTPUT);
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_ARB;
+    }
+    else if (features.supportsFragmentShaderInterlockNV.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_430_CORE_OUTPUT);
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_NV;
+    }
+    else if (features.supportsFragmentShaderOrderingINTEL.enabled)
+    {
+        // We advertise ANGLE_shader_pixel_local_storage_coherent based on the existence of this
+        // extension, so we better only use compatible backend GLSL versions.
+        ASSERT(compilerInstance->getShaderOutputType() >= SH_GLSL_440_CORE_OUTPUT);
+        // Prioritize INTEL_fragment_shader_ordering last, since it doesn't have an end() delimiter.
+        additionalOptions |= SH_FRAGMENT_SYNCHRONIZATION_TYPE_INTEL;
+    }
+
     options |= additionalOptions;
 
     auto workerThreadPool = context->getShaderCompileThreadPool();
