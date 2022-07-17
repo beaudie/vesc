@@ -1156,6 +1156,25 @@ GROUP BEGIN PixelLocal {"queryFunction": true}
     GROUP END Store
 GROUP END PixelLocal
 
+// Desktop GLSL-only fragment synchronization functions. These are injected internally by the
+// compiler to make pixel local storage coherent.
+GROUP BEGIN FragmentSynchronization
+    GROUP BEGIN NV
+      DEFAULT METADATA {"glsl_level": "GLSL4_3_BUILTINS", "glsl_extension": "NV_fragment_shader_interlock", "hasSideEffects": "true"}
+        void beginInvocationInterlockNV();
+        void endInvocationInterlockNV();
+    GROUP END NV
+    GROUP BEGIN INTEL
+      DEFAULT METADATA {"glsl_level": "GLSL4_4_BUILTINS", "glsl_extension": "INTEL_fragment_shader_ordering", "hasSideEffects": "true"}
+        void beginFragmentShaderOrderingINTEL();
+    GROUP END INTEL
+    GROUP BEGIN ARB
+      DEFAULT METADATA {"glsl_level": "GLSL4_5_BUILTINS", "glsl_extension": "ARB_fragment_shader_interlock", "hasSideEffects": "true"}
+        void beginInvocationInterlockARB();
+        void endInvocationInterlockARB();
+    GROUP END ARB
+GROUP END FragmentSynchronization
+
 GROUP BEGIN Noise
   DEFAULT METADATA {"glsl_level": "COMMON_BUILTINS", "hasSideEffects": "true"}
     float noise1(genType);
