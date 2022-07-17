@@ -621,7 +621,18 @@ TIntermAggregate *TIntermAggregate::CreateBuiltInFunctionCall(const TFunction &f
 
 TIntermAggregate *TIntermAggregate::CreateConstructor(const TType &type, TIntermSequence *arguments)
 {
+    if (arguments == nullptr)
+    {
+        TIntermSequence emptyArgs;
+        return new TIntermAggregate(nullptr, type, EOpConstruct, &emptyArgs);
+    }
     return new TIntermAggregate(nullptr, type, EOpConstruct, arguments);
+}
+
+TIntermAggregate *TIntermAggregate::CreateConstructor(const TType &type,
+                                                      TIntermSequence &&arguments)
+{
+    return new TIntermAggregate(nullptr, type, EOpConstruct, &arguments);
 }
 
 TIntermAggregate::TIntermAggregate(const TFunction *func,

@@ -304,6 +304,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     mResources.DriverUniformsBindingIndex    = caps.driverUniformsBindingIndex;
     mResources.DefaultUniformsBindingIndex   = caps.defaultUniformsBindingIndex;
     mResources.UBOArgumentBufferBindingIndex = caps.UBOArgumentBufferBindingIndex;
+
+    // For ANGLE_shader_pixel_local_storage_coherent.
+    mResources.FragmentSynchronizationType = caps.fragmentSynchronizationType;
 }
 
 Compiler::~Compiler() = default;

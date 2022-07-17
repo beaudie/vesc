@@ -619,6 +619,7 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     static TIntermAggregate *CreateBuiltInFunctionCall(const TFunction &func,
                                                        TIntermSequence *arguments);
     static TIntermAggregate *CreateConstructor(const TType &type, TIntermSequence *arguments);
+    static TIntermAggregate *CreateConstructor(const TType &type, TIntermSequence &&arguments);
     ~TIntermAggregate() override {}
 
     // Note: only supported for nodes that can be a part of an expression.
