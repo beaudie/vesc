@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 282
+#define ANGLE_SH_VERSION 283
 
 enum ShShaderSpec
 {
@@ -77,6 +77,16 @@ enum ShShaderOutput
 
     // Output for MSL
     SH_MSL_METAL_OUTPUT = 0x8B4D,
+};
+
+// For ANGLE_shader_pixel_local_storage_coherent.
+// Instructs the compiler which fragment synchronization method to use, if any.
+enum class ShFragmentSynchronizationType
+{
+    None,
+    FragmentShaderInterlock_NV_GL,
+    FragmentShaderOrdering_INTEL_GL,
+    FragmentShaderInterlock_ARB_GL,
 };
 
 // Compile options.
@@ -604,6 +614,9 @@ struct ShBuiltInResources
     int DefaultUniformsBindingIndex;
     // Binding index for UBO's argument buffer
     int UBOArgumentBufferBindingIndex;
+
+    // For ANGLE_shader_pixel_local_storage_coherent.
+    ShFragmentSynchronizationType FragmentSynchronizationType;
 };
 
 //
