@@ -177,6 +177,12 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     // GL_OES_primitive_bounding_box
     mResources.OES_primitive_bounding_box = extensions.primitiveBoundingBoxOES;
 
+    // Desktop GLSL-only fragment synchronization extensions. These are injected internally by the
+    // compiler to make pixel local storage coherent.
+    mResources.ARB_fragment_shader_interlock  = false;
+    mResources.NV_fragment_shader_interlock   = false;
+    mResources.INTEL_fragment_shader_ordering = false;
+
     // GLSL ES 3.0 constants
     mResources.MaxVertexOutputVectors  = caps.maxVertexOutputComponents / 4;
     mResources.MaxFragmentInputVectors = caps.maxFragmentInputComponents / 4;
