@@ -390,6 +390,9 @@ struct Caps
     GLuint driverUniformsBindingIndex    = 0;
     GLuint defaultUniformsBindingIndex   = 0;
     GLuint UBOArgumentBufferBindingIndex = 0;
+
+    // For ANGLE_shader_pixel_local_storage_coherent.
+    ShFragmentSynchronizationType fragmentSynchronizationType;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);

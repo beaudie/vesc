@@ -357,6 +357,11 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
                                             const TSymbolTable &symbolTable,
                                             int shaderVersion)
 {
+    if (arguments == nullptr)
+    {
+        TIntermSequence emptyArgs;
+        return CreateBuiltInFunctionCallNode(name, &emptyArgs, symbolTable, shaderVersion);
+    }
     const TFunction *fn = LookUpBuiltInFunction(name, arguments, symbolTable, shaderVersion);
     ASSERT(fn);
     TOperator op = fn->getBuiltInOp();
@@ -367,13 +372,20 @@ TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
     return TIntermAggregate::CreateBuiltInFunctionCall(*fn, arguments);
 }
 
+TIntermTyped *CreateBuiltInFunctionCallNode(const char *name,
+                                            TIntermSequence &&arguments,
+                                            const TSymbolTable &symbolTable,
+                                            int shaderVersion)
+{
+    return CreateBuiltInFunctionCallNode(name, &arguments, symbolTable, shaderVersion);
+}
+
 TIntermTyped *CreateBuiltInUnaryFunctionCallNode(const char *name,
                                                  TIntermTyped *argument,
                                                  const TSymbolTable &symbolTable,
                                                  int shaderVersion)
 {
-    TIntermSequence seq = {argument};
-    return CreateBuiltInFunctionCallNode(name, &seq, symbolTable, shaderVersion);
+    return CreateBuiltInFunctionCallNode(name, {argument}, symbolTable, shaderVersion);
 }
 
 int GetESSLOrGLSLVersion(ShShaderSpec spec, int esslVersion, int glslVersion)
