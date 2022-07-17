@@ -7,11 +7,13 @@
 #include "compiler/translator/tree_ops/RewritePixelLocalStorage.h"
 
 #include "common/angleutils.h"
+#include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
+#include "compiler/translator/tree_util/BuiltIn.h"
+#include "compiler/translator/tree_util/FindMain.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
-#include "compiler/translator/tree_util/RunAtTheBeginningOfShader.h"
 
 namespace sh
 {
@@ -51,14 +53,115 @@ constexpr static TBasicType Image2DTypeOfPLSType(TBasicType plsType)
     }
 }
 
+// Simple helper for building nodes during PLS rewrite.
+class NodeBuilder
+{
+  public:
+    NodeBuilder(TSymbolTable &symbolTable, ShCompileOptions compileOptions, int shaderVersion)
+        : mSymbolTable(&symbolTable), mCompileOptions(compileOptions), mShaderVersion(shaderVersion)
+    {}
+
+    TSymbolTable *symbolTable() { return mSymbolTable; }
+
+    TIntermTyped *referenceBuiltInVariable(const char *name)
+    {
+        return ReferenceBuiltInVariable(ImmutableString(name), *mSymbolTable, mShaderVersion);
+    }
+
+    static TIntermTyped *CreateTypeConversion(const TType &newType, TIntermTyped *oldTyped)
+    {
+        TIntermSequence typeConversionArgs{oldTyped};
+        return TIntermAggregate::CreateConstructor(TType(EbtInt, 2), &typeConversionArgs);
+    }
+
+    TIntermTyped *createBuiltInFunctionCall(const char *name)
+    {
+        TIntermSequence emptyArgs;
+        return createBuiltInFunctionCall(name, &emptyArgs);
+    }
+
+    TIntermTyped *createBuiltInFunctionCall(const char *name, TIntermTyped *arg)
+    {
+        return CreateBuiltInUnaryFunctionCallNode(name, arg, *mSymbolTable, mShaderVersion);
+    }
+
+    TIntermTyped *createBuiltInFunctionCall(const char *name, TIntermSequence *args)
+    {
+        return CreateBuiltInFunctionCallNode(name, args, *mSymbolTable, mShaderVersion);
+    }
+
+    // Delimits the beginning of a per-pixel critical section. Makes pixel local storage coherent.
+    //
+    // Either: GL_ARB_fragment_shader_interlock,
+    //         GL_NV_fragment_shader_interlock,
+    //         GL_INTEL_fragment_shader_ordering
+    TIntermNode *createBuiltInInterlockBeginCall()
+    {
+        switch (mCompileOptions & SH_FRAGMENT_SYNCHRONIZATION_TYPE_MASK)
+        {
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_ARB:
+                return CreateBuiltInFunctionCall(EOpBeginInvocationInterlockARB,
+                                                 BuiltInId::beginInvocationInterlockARB,
+                                                 "beginInvocationInterlockARB");
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_NV:
+                return CreateBuiltInFunctionCall(EOpBeginInvocationInterlockNV,
+                                                 BuiltInId::beginInvocationInterlockNV,
+                                                 "beginInvocationInterlockNV");
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_INTEL:
+                return CreateBuiltInFunctionCall(EOpBeginFragmentShaderOrderingINTEL,
+                                                 BuiltInId::beginFragmentShaderOrderingINTEL,
+                                                 "beginFragmentShaderOrderingINTEL");
+        }
+        return nullptr;
+    }
+
+    // Delimits the end of a per-pixel critical section. Makes pixel local storage coherent.
+    //
+    // Either: GL_ARB_fragment_shader_interlock or GL_NV_fragment_shader_interlock.
+    // GL_INTEL_fragment_shader_ordering doesn't have an "end()" call.
+    TIntermNode *createBuiltInInterlockEndCall()
+    {
+        switch (mCompileOptions & SH_FRAGMENT_SYNCHRONIZATION_TYPE_MASK)
+        {
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_ARB:
+                return CreateBuiltInFunctionCall(EOpEndInvocationInterlockARB,
+                                                 BuiltInId::endInvocationInterlockARB,
+                                                 "endInvocationInterlockARB");
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_NV:
+                return CreateBuiltInFunctionCall(EOpEndInvocationInterlockNV,
+                                                 BuiltInId::endInvocationInterlockNV,
+                                                 "endInvocationInterlockNV");
+            case SH_FRAGMENT_SYNCHRONIZATION_TYPE_INTEL:
+                return nullptr;  // GL_INTEL_fragment_shader_ordering doesn't have an "end()" call.
+        }
+        return nullptr;
+    }
+
+  private:
+    static TIntermAggregate *CreateBuiltInFunctionCall(TOperator op,
+                                                       const TSymbolUniqueId &id,
+                                                       const char *name)
+    {
+        TIntermSequence emptyArgs;
+        TFunction *function =
+            new TFunction(id, ImmutableString(name), TExtension::UNDEFINED, nullptr, 0,
+                          StaticType::GetBasic<EbtVoid, EbpUndefined>(), op, false);
+        return TIntermAggregate::CreateBuiltInFunctionCall(*function, &emptyArgs);
+    }
+
+    TSymbolTable *const mSymbolTable;
+    const ShCompileOptions mCompileOptions;
+    const int mShaderVersion;
+};
+
 // Rewrites high level PLS operations to shader image operations.
 class RewriteToImagesTraverser : public TIntermTraverser
 {
   public:
-    RewriteToImagesTraverser(TCompiler *compiler, TSymbolTable &symbolTable, int shaderVersion)
-        : TIntermTraverser(true, false, false, &symbolTable),
+    RewriteToImagesTraverser(TCompiler *compiler, NodeBuilder *nodeBuilder)
+        : TIntermTraverser(true, false, false, nodeBuilder->symbolTable()),
           mCompiler(compiler),
-          mShaderVersion(shaderVersion)
+          mNodeBuilder(nodeBuilder)
     {}
 
     bool visitDeclaration(Visit, TIntermDeclaration *decl) override
@@ -145,8 +248,7 @@ class RewriteToImagesTraverser : public TIntermTraverser
             // Replace the pixelLocalLoadANGLE with imageLoad.
             TIntermSequence imageLoadArgs = {new TIntermSymbol(pls.image2DForLoading),
                                              new TIntermSymbol(mGlobalPixelCoord)};
-            queueReplacement(CreateBuiltInFunctionCallNode("imageLoad", &imageLoadArgs,
-                                                           *mSymbolTable, mShaderVersion),
+            queueReplacement(mNodeBuilder->createBuiltInFunctionCall("imageLoad", &imageLoadArgs),
                              OriginalNode::IS_DROPPED);
 
             return false;  // No need to recurse since this node is being dropped.
@@ -174,18 +276,19 @@ class RewriteToImagesTraverser : public TIntermTraverser
                                             plsSymbol->getPrecision(), EvqTemporary, 4);
             TVariable *valueVar = CreateTempVariable(mSymbolTable, valueType);
             TIntermDeclaration *valueDecl =
-                CreateTempInitDeclarationNode(valueVar, args[1]->deepCopy()->getAsTyped());
+                CreateTempInitDeclarationNode(valueVar, args[1]->getAsTyped());
             valueDecl->traverse(this);  // Rewrite any potential pixelLocalLoadANGLEs in valueDecl.
 
-            insertStatementsInParentBlock({valueDecl, createMemoryBarrierImageNode()},  // Before.
-                                          {createMemoryBarrierImageNode()});            // After.
+            insertStatementsInParentBlock(
+                {valueDecl,
+                 mNodeBuilder->createBuiltInFunctionCall("memoryBarrierImage")},   // Before.
+                {mNodeBuilder->createBuiltInFunctionCall("memoryBarrierImage")});  // After.
 
             // Rewrite the pixelLocalStoreANGLE with imageStore.
             TIntermSequence imageStoreArgs = {new TIntermSymbol(pls.image2DForStoring),
                                               new TIntermSymbol(mGlobalPixelCoord),
                                               new TIntermSymbol(valueVar)};
-            queueReplacement(CreateBuiltInFunctionCallNode("imageStore", &imageStoreArgs,
-                                                           *mSymbolTable, mShaderVersion),
+            queueReplacement(mNodeBuilder->createBuiltInFunctionCall("imageStore", &imageStoreArgs),
                              OriginalNode::IS_DROPPED);
 
             return false;  // No need to recurse since this node is being dropped.
@@ -269,16 +372,8 @@ class RewriteToImagesTraverser : public TIntermTraverser
         return new TVariable(mSymbolTable, ImmutableString(name), imageType, SymbolType::BuiltIn);
     }
 
-    // Creates a function call to memoryBarrier().
-    TIntermNode *createMemoryBarrierImageNode()
-    {
-        TIntermSequence emptyArgs;
-        return CreateBuiltInFunctionCallNode("memoryBarrierImage", &emptyArgs, *mSymbolTable,
-                                             mShaderVersion);
-    }
-
     const TCompiler *const mCompiler;
-    const int mShaderVersion;
+    NodeBuilder *const mNodeBuilder;
 
     // Stores the shader invocation's pixel coordinate as "ivec2(floor(gl_FragCoord.xy))".
     TVariable *mGlobalPixelCoord = nullptr;
@@ -295,39 +390,54 @@ bool RewritePixelLocalStorageToImages(TCompiler *compiler,
                                       ShCompileOptions compileOptions,
                                       int shaderVersion)
 {
-    // Inline PLS functions, as described in the spec. Since function arguments don't carry layout
-    // qualifier information, there isn't a way to rewrite them without inlining.
+    // Inline functions with PLS arguments, as described in the spec. Since function arguments don't
+    // carry layout qualifier information, there isn't a way to rewrite them without inlining.
     if (!MonomorphizeUnsupportedFunctions(compiler, root, &symbolTable, compileOptions,
                                           UnsupportedFunctionArguments::PixelLocalStorage))
     {
         return false;
     }
-    RewriteToImagesTraverser traverser(compiler, symbolTable, shaderVersion);
+
+    NodeBuilder nodeBuilder(symbolTable, compileOptions, shaderVersion);
+    TIntermBlock *mainBody = FindMainBody(root);
+
+    // Surround the critical section of PLS operations in fragment synchronization calls, if
+    // supported. This makes pixel local storage coherent.
+    //
+    // TODO(anglebug.com/7279): Inject these functions in a tight critical section, instead of just
+    // locking the entire main() function:
+    //   - Monomorphize all PLS calls into main().
+    //   - Insert begin/end calls around the first/last PLS calls (and outside of flow control).
+    if (compileOptions & SH_FRAGMENT_SYNCHRONIZATION_TYPE_MASK)
+    {
+        mainBody->insertStatement(0, nodeBuilder.createBuiltInInterlockBeginCall());
+        mainBody->appendStatement(nodeBuilder.createBuiltInInterlockEndCall());
+    }
+
+    // Rewrite PLS operations to image operations.
+    RewriteToImagesTraverser traverser(compiler, &nodeBuilder);
     root->traverse(&traverser);
     if (!traverser.updateTree(compiler, root))
     {
         return false;
     }
+
+    // Initialize the global pixel coord at the beginning of main():
+    //
+    //     pixelCoord = ivec2(floor(gl_FragCoord.xy));
+    //
     if (traverser.globalPixelCoord())
     {
-        // Initialize the global pixel coord at the beginning of main():
-        //
-        //     pixelCoord = ivec2(floor(gl_FragCoord.xy));
-        //
-        TIntermTyped *expr;
-        expr =
-            ReferenceBuiltInVariable(ImmutableString("gl_FragCoord"), symbolTable, shaderVersion);
-        expr = CreateSwizzle(expr, 0, 1);
-        expr = CreateBuiltInUnaryFunctionCallNode("floor", expr, symbolTable, shaderVersion);
-        TIntermSequence typeConversionArgs = {expr};
-        expr = TIntermAggregate::CreateConstructor(TType(EbtInt, 2), &typeConversionArgs);
-        if (!RunAtTheBeginningOfShader(
-                compiler, root, CreateTempAssignmentNode(traverser.globalPixelCoord(), expr)))
-        {
-            return false;
-        }
+        TIntermTyped *node;
+        node = nodeBuilder.referenceBuiltInVariable("gl_FragCoord");
+        node = CreateSwizzle(node, 0, 1);
+        node = nodeBuilder.createBuiltInFunctionCall("floor", node);
+        node = NodeBuilder::CreateTypeConversion(TType(EbtInt, 2), node);
+        node = CreateTempAssignmentNode(traverser.globalPixelCoord(), node);
+        mainBody->insertStatement(0, node);
     }
-    return true;
+
+    return compiler->validateAST(root);
 }
 
 }  // namespace sh

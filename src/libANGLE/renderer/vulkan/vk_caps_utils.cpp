@@ -383,6 +383,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.memoryObjectFlagsANGLE       = true;
     mNativeExtensions.memoryObjectFuchsiaANGLE =
         getFeatures().supportsExternalMemoryFuchsia.enabled;
+    mNativeExtensions.shaderPixelLocalStorageANGLE = true;
 
     mNativeExtensions.semaphoreEXT   = true;
     mNativeExtensions.semaphoreFdEXT = getFeatures().supportsExternalSemaphoreFd.enabled;

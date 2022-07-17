@@ -356,6 +356,16 @@ const ShCompileOptions SH_ROUND_OUTPUT_AFTER_DITHERING = UINT64_C(1) << 60;
 // Need to emit different division code for such platforms.
 const ShCompileOptions SH_PRECISION_SAFE_DIVISION = UINT64_C(1) << 61;
 
+// Which extension can we use internally for fragment shader synhronization, in order to make pixel
+// local storge coherent?
+const ShCompileOptions SH_FRAGMENT_SYNCHRONIZATION_TYPE_MASK = UINT64_C(3) << 62;
+// GL_ARB_fragment_shader_interlock
+const ShCompileOptions SH_FRAGMENT_SYNCHRONIZATION_TYPE_ARB = UINT64_C(3) << 62;
+// GL_NV_fragment_shader_interlock
+const ShCompileOptions SH_FRAGMENT_SYNCHRONIZATION_TYPE_NV = UINT64_C(2) << 62;
+// GL_INTEL_fragment_shader_ordering
+const ShCompileOptions SH_FRAGMENT_SYNCHRONIZATION_TYPE_INTEL = UINT64_C(1) << 62;
+
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
 using ShHashFunction64 = khronos_uint64_t (*)(const char *, size_t);
@@ -433,6 +443,12 @@ struct ShBuiltInResources
     // EXT_draw_buffers by using it in combination with GLES3.0 glDrawBuffers
     // function. This applies to Tegra K1 devices.
     int NV_draw_buffers;
+
+    // GLSL-only fragment synchronization extensions. Used internally by the compiler to make pixel
+    // local storage coherent.
+    int ARB_fragment_shader_interlock;
+    int NV_fragment_shader_interlock;
+    int INTEL_fragment_shader_ordering;
 
     // Set to 1 if highp precision is supported in the ESSL 1.00 version of the
     // fragment language. Does not affect versions of the language where highp
