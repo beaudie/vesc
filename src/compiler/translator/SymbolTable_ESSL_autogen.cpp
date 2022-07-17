@@ -23,7 +23,7 @@ namespace sh
 using Resources = ShBuiltInResources;
 using TableBase = TSymbolTableBase;
 
-const int TSymbolTable::kLastBuiltInId = 5593;
+const int TSymbolTable::kLastBuiltInId = 5598;
 
 namespace BuiltInName
 {
