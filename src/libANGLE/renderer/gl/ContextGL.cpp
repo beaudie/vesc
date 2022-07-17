@@ -53,7 +53,7 @@ angle::Result ContextGL::initialize()
 
 CompilerImpl *ContextGL::createCompiler()
 {
-    return new CompilerGL(getFunctions());
+    return new CompilerGL(getFunctions(), getNativeExtensions(), getFeaturesGL());
 }
 
 ShaderImpl *ContextGL::createShader(const gl::ShaderState &data)

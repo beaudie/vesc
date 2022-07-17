@@ -11,6 +11,16 @@
 
 #include "libANGLE/renderer/CompilerImpl.h"
 
+namespace angle
+{
+struct FeaturesGL;
+}  // namespace angle
+
+namespace gl
+{
+struct Extensions;
+}  // namespace gl
+
 namespace rx
 {
 class FunctionsGL;
@@ -18,7 +28,7 @@ class FunctionsGL;
 class CompilerGL : public CompilerImpl
 {
   public:
-    CompilerGL(const FunctionsGL *functions);
+    CompilerGL(const FunctionsGL *, const gl::Extensions &, const angle::FeaturesGL &);
     ~CompilerGL() override {}
 
     ShShaderOutput getTranslatorOutputType() const override;
