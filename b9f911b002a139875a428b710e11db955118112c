@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b190b5_9957966f",
+        "filename": "src/libANGLE/capture/capture_egl.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-07-18T06:16:33Z",
+      "side": 1,
+      "message": "I\u0027ve replaced the `0` with `EGL_NO_CONTEXT` which has the right type.",
+      "parentUuid": "9dba7630_c71faf82",
+      "range": {
+        "startLine": 154,
+        "startChar": 8,
+        "endLine": 154,
+        "endChar": 79
+      },
+      "revId": "b9f911b002a139875a428b710e11db955118112c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b6d4544_43b082bb",
@@ -72,6 +96,30 @@
       "writtenOn": "2022-07-15T15:19:26Z",
       "side": 1,
       "message": "Unfortunate that this just happily accepted bad parameters, but I guess the context gets reintroduced in CaptureCallToCaptureEGL, so we didn\u0027t notice.",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 21
+      },
+      "revId": "b9f911b002a139875a428b710e11db955118112c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3acc543_6e4f33b1",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-07-18T06:16:33Z",
+      "side": 1,
+      "message": "My guess too.",
+      "parentUuid": "9b6d4544_43b082bb",
       "range": {
         "startLine": 58,
         "startChar": 4,
