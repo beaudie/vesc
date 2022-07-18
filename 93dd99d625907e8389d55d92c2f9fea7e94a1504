@@ -16,6 +16,75 @@
       "message": "PTAL\n\n@romanl let me know if the test case i added covers your usecase or if it needs some tweaks",
       "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "058b1613_cae88148",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-18T15:35:32Z",
+      "side": 1,
+      "message": "This looks racy as by the time we get to `mState.contextSet.clear()` different locks are acquired/released so `mState.contextSet` could have been modified in the mean time so the contents of `invalidContextSet` might differ from `mState.contextSet` at that point.\n\nAlso, something else I might be missing about locks here. I saw that ANGLE API stubs grab a global lock, which IIUC is why any of Display code isn\u0027t holding explicit locks for `mState` changes. However, now this code is invoked without calling into ANGLE API but on thread destruction so the global lock isn\u0027t acquired. Doesn\u0027t this need to be somehow taken into account to make this actually thread safe, or am I misunderstanding something?",
+      "range": {
+        "startLine": 1139,
+        "startChar": 8,
+        "endLine": 1139,
+        "endChar": 88
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf3016a6_3d29ffe4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-18T15:35:32Z",
+      "side": 1,
+      "message": "We now have `destroyContext` and `destroyContextImpl` with two different implementations which seems odd - is that intentional?",
+      "range": {
+        "startLine": 1741,
+        "startChar": 15,
+        "endLine": 1741,
+        "endChar": 29
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e18b938_8c3b3ca7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1794,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-18T15:35:32Z",
+      "side": 1,
+      "message": "terminate with `InternalCleanup` called here only if `mTerminatedByApi`, but this CL now calls it without checking for `mTerminatedByApi`?",
+      "range": {
+        "startLine": 1794,
+        "startChar": 50,
+        "endLine": 1794,
+        "endChar": 65
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
