@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10476a51_eaeb9d91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-18T21:27:54Z",
+      "side": 1,
+      "message": "nit: do you mean \"with this buffer\", instead of \"with this texture\" in the comment?",
+      "revId": "56d62ca8300ae1cbff8aabfdd3609a04e340be2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
