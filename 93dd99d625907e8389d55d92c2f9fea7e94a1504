@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0eb1d21f_fa3f63f9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-18T17:40:22Z",
+      "side": 1,
+      "message": "1. with the addition of `if (!mTerminatedByApi)` check we cant be here without app calling terminate which means no more new contexts can be added and hence `mState.contextSet` cant change.\n\n2.\n\u003e but on thread destruction so the global lock isn\u0027t acquired ... Doesn\u0027t this need to be somehow taken into account to make this actually thread safe, or am I misunderstanding something?\n\nyou are correct that thread cleanup doesnt take global lock but as i mentioned before only 1 thread will ever clear `mState.contextSet` since we -\n1. take the `mActiveThreadsMutex` mutex\n2. have this check right after -\n```\nif (!mInitialized)\n{\n    return NoError();\n}\n```",
+      "parentUuid": "058b1613_cae88148",
+      "range": {
+        "startLine": 1139,
+        "startChar": 8,
+        "endLine": 1139,
+        "endChar": 88
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf3016a6_3d29ffe4",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2022-07-18T15:35:32Z",
       "side": 1,
       "message": "We now have `destroyContext` and `destroyContextImpl` with two different implementations which seems odd - is that intentional?",
+      "range": {
+        "startLine": 1741,
+        "startChar": 15,
+        "endLine": 1741,
+        "endChar": 29
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0656a9e1_fb6ca465",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-18T17:40:22Z",
+      "side": 1,
+      "message": "\u003e which seems odd\n\ngood point, i can see how that can be confusing. Will just directly call `releaseImpl(...)` instead and get rid of `destroyContextImpl`",
+      "parentUuid": "bf3016a6_3d29ffe4",
       "range": {
         "startLine": 1741,
         "startChar": 15,
