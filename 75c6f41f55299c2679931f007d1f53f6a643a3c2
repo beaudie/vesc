@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2394514_635cbf55",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-18T20:46:37Z",
+      "side": 1,
+      "message": "Yeah, the idea is to generate a GL error.\n\nTechnically we would only need to do this validation once per shader if there are a lot of draw calls, and the validation is hopefully not too bad either -- just a small number of PLS binding.",
+      "parentUuid": "c866a3a6_79c1b112",
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c0333ce_406786c2",
         "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
         "patchSetId": 4
