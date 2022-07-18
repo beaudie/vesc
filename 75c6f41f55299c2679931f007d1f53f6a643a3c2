@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c866a3a6_79c1b112",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-18T01:30:56Z",
+      "side": 1,
+      "message": "How is this enforced? Does the draw call generate an INVALID_OPERATION?\n\nThe reason I ask is that per-draw-call validation checks are already expensive - wondering if this will measurably increase the cost.",
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c0333ce_406786c2",
         "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
         "patchSetId": 4
