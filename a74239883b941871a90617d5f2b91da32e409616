@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2125246_16276103",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-18T23:23:38Z",
+      "side": 1,
+      "message": "Yeah, just to support query from a particular image processing app.",
+      "parentUuid": "01db2a0d_7c5b5b3e",
+      "revId": "a74239883b941871a90617d5f2b91da32e409616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83b9854a_8f9611ea",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52b49d16_ceef31eb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-18T23:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83b9854a_8f9611ea",
+      "revId": "a74239883b941871a90617d5f2b91da32e409616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e24fa68_d5406735",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-07-16T02:26:10Z",
       "side": 1,
       "message": "A comment would be good",
+      "revId": "a74239883b941871a90617d5f2b91da32e409616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb96fe19_95c45b1a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-18T23:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e24fa68_d5406735",
       "revId": "a74239883b941871a90617d5f2b91da32e409616",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
