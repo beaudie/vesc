@@ -22,6 +22,30 @@
       },
       "revId": "7ac159fe915295d7ee8f33e0f807e204db7b03aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "481031b7_17b3e0ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-18T23:31:45Z",
+      "side": 1,
+      "message": "hmm, not sure about no-FS draws (as in glDraw*); is that possible in gles 2?\n\nDo you mean if we can detect the program is only using compute stage, then we can skip the draw check? But what if the app initializes a program in surfaceless then switches or makes a surface current then uses draw?\n\nIn the particular use case this CL is designed to fix, the problem seems to be validating draw state in glValidateProgramPipelines when the app doesn\u0027t end up using the program for drawing; app ended up using glDispatchCompute later on, so it didn\u0027t do a draw.\n\nThe proximate cause of draw state validation failing on surfaceless is that the framebuffer doesn\u0027t have a color attachment.",
+      "parentUuid": "16c7cf00_b7d9607f",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 66
+      },
+      "revId": "7ac159fe915295d7ee8f33e0f807e204db7b03aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
