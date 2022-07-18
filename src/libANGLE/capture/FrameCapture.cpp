@@ -295,12 +295,32 @@ std::ostream &operator<<(std::ostream &os, const FmtSetupFunction &fmt)
 
 struct FmtResetFunction
 {
-    FmtResetFunction() {}
+    FmtResetFunction(uint32_t partIdIn, gl::ContextID contextIdIn)
+        : partId(partIdIn), contextId(contextIdIn)
+    {}
+
+    uint32_t partId;
+    gl::ContextID contextId;
 };
 
 std::ostream &operator<<(std::ostream &os, const FmtResetFunction &fmt)
 {
-    os << "ResetReplay()";
+    os << "ResetReplayContext";
+
+    if (fmt.contextId == kSharedContextId)
+    {
+        os << "Shared";
+    }
+    else
+    {
+        os << fmt.contextId;
+    }
+
+    if (fmt.partId != kNoPartId)
+    {
+        os << "Part" << fmt.partId;
+    }
+    os << "()";
     return os;
 }
 
@@ -332,7 +352,7 @@ std::ostream &operator<<(std::ostream &os, const FmtFunction &fmt)
             break;
 
         case ReplayFunc::Reset:
-            os << FmtResetFunction();
+            os << FmtResetFunction(fmt.partId, fmt.contextId);
             break;
 
         default:
@@ -899,7 +919,7 @@ void WriteInitReplayCall(bool compression,
 }
 
 // TODO (http://anglebug.com/4599): Reset more state on frame loop
-void MaybeResetResources(const gl::Context *context,
+void MaybeResetResources(gl::ContextID contextID,
                          ResourceIDType resourceIDType,
                          ReplayWriter &replayWriter,
                          std::stringstream &out,
@@ -927,7 +947,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::Buffer:
         {
             TrackedResource &trackedBuffers =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::Buffer);
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::Buffer);
             ResourceSet &newBuffers           = trackedBuffers.getNewResources();
             ResourceSet &buffersToRegen       = trackedBuffers.getResourcesToRegen();
             ResourceCalls &bufferRegenCalls   = trackedBuffers.getResourceRegenCalls();
@@ -999,7 +1019,7 @@ void MaybeResetResources(const gl::Context *context,
                     out << ";\n";
 
                     // Also note that this buffer has been implicitly unmapped by this call
-                    resourceTracker->setBufferUnmapped(context, id);
+                    resourceTracker->setBufferUnmapped(contextID, id);
                 }
             }
 
@@ -1047,7 +1067,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::Framebuffer:
         {
             TrackedResource &trackedFramebuffers =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::Framebuffer);
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::Framebuffer);
             ResourceSet &newFramebuffers           = trackedFramebuffers.getNewResources();
             ResourceSet &framebuffersToRegen       = trackedFramebuffers.getResourcesToRegen();
             ResourceCalls &framebufferRegenCalls   = trackedFramebuffers.getResourceRegenCalls();
@@ -1109,7 +1129,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::Renderbuffer:
         {
             ResourceSet &newRenderbuffers =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::Renderbuffer)
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::Renderbuffer)
                     .getNewResources();
 
             // Delete any new renderbuffers generated and not deleted during the run
@@ -1132,7 +1152,7 @@ void MaybeResetResources(const gl::Context *context,
 
             // TODO (http://anglebug.com/4599): Handle renderbuffers that need regen
             // This would only happen if a starting renderbuffer was deleted during the run.
-            ASSERT(resourceTracker->getTrackedResource(context->id(), ResourceIDType::Renderbuffer)
+            ASSERT(resourceTracker->getTrackedResource(contextID, ResourceIDType::Renderbuffer)
                        .getResourcesToRegen()
                        .empty());
             break;
@@ -1140,7 +1160,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::ShaderProgram:
         {
             ResourceSet &newPrograms =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::ShaderProgram)
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::ShaderProgram)
                     .getNewResources();
 
             // If we have any new programs created and not deleted during the run, delete them now
@@ -1153,7 +1173,7 @@ void MaybeResetResources(const gl::Context *context,
             // This would only happen if a starting program was deleted during the run
             // Note - this would also require an update to default uniform handling.  A program
             // deleted or recreated wouldn't need partial uniform updates.
-            ASSERT(resourceTracker->getTrackedResource(context->id(), ResourceIDType::ShaderProgram)
+            ASSERT(resourceTracker->getTrackedResource(contextID, ResourceIDType::ShaderProgram)
                        .getResourcesToRegen()
                        .empty());
             break;
@@ -1161,7 +1181,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::Texture:
         {
             TrackedResource &trackedTextures =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::Texture);
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::Texture);
             ResourceSet &newTextures           = trackedTextures.getNewResources();
             ResourceSet &texturesToRegen       = trackedTextures.getResourcesToRegen();
             ResourceCalls &textureRegenCalls   = trackedTextures.getResourceRegenCalls();
@@ -1222,7 +1242,7 @@ void MaybeResetResources(const gl::Context *context,
         case ResourceIDType::VertexArray:
         {
             TrackedResource &trackedVertexArrays =
-                resourceTracker->getTrackedResource(context->id(), ResourceIDType::VertexArray);
+                resourceTracker->getTrackedResource(contextID, ResourceIDType::VertexArray);
             ResourceSet &newVertexArrays           = trackedVertexArrays.getNewResources();
             ResourceSet &vertexArraysToRegen       = trackedVertexArrays.getResourcesToRegen();
             ResourceSet &vertexArraysToRestore     = trackedVertexArrays.getResourcesToRestore();
@@ -2000,6 +2020,94 @@ bool IsVertexArrayUpdate(CallCapture &call)
         case EntryPoint::GLVertexAttribDivisor:
             return true;
         default:
+            return false;
+    }
+}
+
+bool IsSharedObjectResource(ResourceIDType type)
+{
+    // This helper function informs us which objects are shared vs. per context
+    //
+    //   OpenGL ES Version 3.2 (October 22, 2019)
+    //   Chapter 5 Shared Objects and Multiple Contexts:
+    //
+    //   - Objects that can be shared between contexts include buffer objects, program
+    //     and shader objects, renderbuffer objects, sampler objects, sync objects, and texture
+    //     objects (except for the texture objects named zero).
+    //   - Objects which contain references to other objects include framebuffer, program
+    //     pipeline, transform feedback, and vertex array objects. Such objects are called
+    //     container objects and are not shared.
+    //
+    // Notably absent from this list are Sync objects, which are not ResourceIDType, are handled
+    // elsewhere, and are shared:
+    //   - 2.6.13 Sync Objects: Sync objects may be shared.
+
+    switch (type)
+    {
+        case ResourceIDType::Buffer:
+            // 2.6.2 Buffer Objects: Buffer objects may be shared.
+            return true;
+
+        case ResourceIDType::Framebuffer:
+            // 2.6.9 Framebuffer Objects: Framebuffer objects are container objects including
+            // references to renderbuffer and / or texture objects, and are not shared.
+            return false;
+
+        case ResourceIDType::ProgramPipeline:
+            // 2.6.5 Program Pipeline Objects: Program pipeline objects are container objects
+            // including references to program objects, and are not shared.
+            return false;
+
+        case ResourceIDType::TransformFeedback:
+            // 2.6.11 Transform Feedback Objects: Transform feedback objects are container objects
+            // including references to buffer objects, and are not shared
+            return false;
+
+        case ResourceIDType::VertexArray:
+            // 2.6.10 Vertex Array Objects: Vertex array objects are container objects including
+            // references to buffer objects, and are not shared
+            return false;
+
+        case ResourceIDType::FenceNV:
+            // From https://registry.khronos.org/OpenGL/extensions/NV/NV_fence.txt
+            //  Are the fences sharable between multiple contexts?
+            //   RESOLUTION: No.
+            return false;
+
+        case ResourceIDType::Renderbuffer:
+            // 2.6.8 Renderbuffer Objects: Renderbuffer objects may be shared.
+            return true;
+
+        case ResourceIDType::ShaderProgram:
+            // 2.6.3 Shader Objects: Shader objects may be shared.
+            // 2.6.4 Program Objects: Program objects may be shared.
+            return true;
+
+        case ResourceIDType::Sampler:
+            // 2.6.7 Sampler Objects: Sampler objects may be shared
+            return true;
+
+        case ResourceIDType::Texture:
+            // 2.6.6 Texture Objects: Texture objects may be shared
+            return true;
+
+        case ResourceIDType::Query:
+            // 2.6.12 Query Objects: Query objects are not shared
+            return false;
+
+        case ResourceIDType::MemoryObject:
+            // From https://registry.khronos.org/OpenGL/extensions/EXT/EXT_external_objects.txt
+            // 2.6.14 Semaphore Objects: Semaphore objects may be shared.
+            return true;
+
+        case ResourceIDType::Semaphore:
+            // From https://registry.khronos.org/OpenGL/extensions/EXT/EXT_external_objects.txt
+            // 2.6.15 Memory Objects: Memory objects may be shared.
+            return true;
+
+        case ResourceIDType::InvalidEnum:
+            ERR() << "Unhandled ResourceIDType= " << static_cast<int>(type);
+            UNREACHABLE();
             return false;
     }
 }
@@ -3150,14 +3258,7 @@ void CaptureDefaultVertexAttribs(const gl::State &replayState,
 }
 
 // Capture the setup of the state that's shared by all of the contexts in the share group
-// OpenGL ES Version 3.2 (October 22, 2019)
-// Chapter 5 Shared Objects and Multiple Contexts
-//     Objects that can be shared between contexts include buffer objects, program
-//   and shader objects, renderbuffer objects, sampler objects, sync objects, and texture
-//   objects (except for the texture objects named zero).
-//     Objects which contain references to other objects include framebuffer, program
-//   pipeline, transform feedback, and vertex array objects. Such objects are called
-//   container objects and are not shared.
+// See IsSharedObjectResource for the list of objects covered here.
 void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                                         std::vector<CallCapture> *setupCalls,
                                         ResourceTracker *resourceTracker,
@@ -5468,7 +5569,7 @@ void FrameCaptureShared::trackBufferMapping(const gl::Context *context,
                                             bool coherent)
 {
     // Track that the buffer was mapped
-    mResourceTracker.setBufferMapped(context, id.value);
+    mResourceTracker.setBufferMapped(context->id(), id.value);
 
     if (writable)
     {
@@ -6258,7 +6359,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 call.params.getParam("targetPacked", ParamType::TBufferBinding, 0)
                     .value.BufferBindingVal;
             gl::Buffer *buffer = context->getState().getTargetBuffer(target);
-            mResourceTracker.setBufferUnmapped(context, buffer->id().value);
+            mResourceTracker.setBufferUnmapped(context->id(), buffer->id().value);
 
             // Remove from CoherentBufferTracker
             mCoherentBufferTracker.removeBuffer(buffer->id());
@@ -6285,7 +6386,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             //     6.3.1) is executed in each such context prior to deleting the existing data
             //     store.
             // Track that the buffer was unmapped, for use during state reset
-            mResourceTracker.setBufferUnmapped(context, buffer->id().value);
+            mResourceTracker.setBufferUnmapped(context->id(), buffer->id().value);
 
             break;
         }
@@ -7099,79 +7200,26 @@ void ResourceTracker::setModifiedDefaultUniform(gl::ShaderProgramID programID,
     mDefaultUniformsToReset[programID].insert(location);
 }
 
-bool ResourceTracker::isSharedObjectResource(ResourceIDType type) const
+TrackedResource &ResourceTracker::getTrackedResource(gl::ContextID contextID, ResourceIDType type)
 {
-    //
-    // Notably absent from this list are Sync objects, which are not ResourceIDType, and handled
-    // elsewhere. 2.6.13 Sync Objects Sync objects may be shared.
-
-    switch (type)
+    if (IsSharedObjectResource(type))
     {
-        case ResourceIDType::Buffer:
-            // 2.6.2 Buffer Objects: Buffer objects may be shared.
-            return true;
+        // No need to index with context if not shared
+        return mTrackedResourcesShared[static_cast<uint32_t>(type)];
+    }
+    else
+    {
+        // TODO: Don't just grow the map, make sure this is sane
+        return mTrackedResourcesPerContext[contextID][static_cast<uint32_t>(type)];
+    }
+}
 
-        case ResourceIDType::Framebuffer:
-            // 2.6.9 Framebuffer Objects: Framebuffer objects are container objects including
-            // references to renderbuffer and / or texture objects, and are not shared.
-            return false;
-
-        case ResourceIDType::ProgramPipeline:
-            // 2.6.5 Program Pipeline Objects: Program pipeline objects are container objects
-            // including references to program objects, and are not shared.
-            return false;
-
-        case ResourceIDType::TransformFeedback:
-            // 2.6.11 Transform Feedback Objects: Transform feedback objects are container objects
-            // including references to buffer objects, and are not shared
-            return false;
-
-        case ResourceIDType::VertexArray:
-            // 2.6.10 Vertex Array Objects: Vertex array objects are container objects including
-            // references to buffer objects, and are not shared
-            return false;
-
-        case ResourceIDType::FenceNV:
-            // From https://registry.khronos.org/OpenGL/extensions/NV/NV_fence.txt
-            //  Are the fences sharable between multiple contexts?
-            //   RESOLUTION: No.
-            return false;
-
-        case ResourceIDType::Renderbuffer:
-            // 2.6.8 Renderbuffer Objects: Renderbuffer objects may be shared.
-            return true;
-
-        case ResourceIDType::ShaderProgram:
-            // 2.6.3 Shader Objects: Shader objects may be shared.
-            // 2.6.4 Program Objects: Program objects may be shared.
-            return true;
-
-        case ResourceIDType::Sampler:
-            // 2.6.7 Sampler Objects: Sampler objects may be shared
-            return true;
-
-        case ResourceIDType::Texture:
-            // 2.6.6 Texture Objects: Texture objects may be shared
-            return true;
-
-        case ResourceIDType::Query:
-            // 2.6.12 Query Objects: Query objects are not shared
-            return false;
-
-        case ResourceIDType::MemoryObject:
-            // From https://registry.khronos.org/OpenGL/extensions/EXT/EXT_external_objects.txt
-            // 2.6.14 Semaphore Objects: Semaphore objects may be shared.
-            return true;
-
-        case ResourceIDType::Semaphore:
-            // From https://registry.khronos.org/OpenGL/extensions/EXT/EXT_external_objects.txt
-            // 2.6.15 Memory Objects: Memory objects may be shared.
-            return true;
-
-        case ResourceIDType::InvalidEnum:
-            ERR() << "Unhandled ResourceIDType= " << static_cast<int>(type);
-            UNREACHABLE();
-            return false;
+void ResourceTracker::getContextIDs(std::set<gl::ContextID> &idsOut)
+{
+    for (const auto &trackedResourceIterator : mTrackedResourcesPerContext)
+    {
+        gl::ContextID contextID = trackedResourceIterator.first;
+        idsOut.insert(contextID);
     }
 }
 
@@ -7228,14 +7276,13 @@ void TrackedResource::setModifiedResource(GLuint id)
     }
 }
 
-void ResourceTracker::setBufferMapped(const gl::Context *context, GLuint id)
+void ResourceTracker::setBufferMapped(gl::ContextID contextID, GLuint id)
 {
     // If this was a starting buffer, we may need to restore it to original state during Reset.
     // Skip buffers that were deleted after the starting point.
-    const TrackedResource &trackedBuffers =
-        getTrackedResource(context->id(), ResourceIDType::Buffer);
-    const ResourceSet &startingBuffers = trackedBuffers.getStartingResources();
-    const ResourceSet &buffersToRegen  = trackedBuffers.getResourcesToRegen();
+    const TrackedResource &trackedBuffers = getTrackedResource(contextID, ResourceIDType::Buffer);
+    const ResourceSet &startingBuffers    = trackedBuffers.getStartingResources();
+    const ResourceSet &buffersToRegen     = trackedBuffers.getResourcesToRegen();
     if (startingBuffers.find(id) != startingBuffers.end() &&
         buffersToRegen.find(id) == buffersToRegen.end())
     {
@@ -7244,14 +7291,13 @@ void ResourceTracker::setBufferMapped(const gl::Context *context, GLuint id)
     }
 }
 
-void ResourceTracker::setBufferUnmapped(const gl::Context *context, GLuint id)
+void ResourceTracker::setBufferUnmapped(gl::ContextID contextID, GLuint id)
 {
     // If this was a starting buffer, we may need to restore it to original state during Reset.
     // Skip buffers that were deleted after the starting point.
-    const TrackedResource &trackedBuffers =
-        getTrackedResource(context->id(), ResourceIDType::Buffer);
-    const ResourceSet &startingBuffers = trackedBuffers.getStartingResources();
-    const ResourceSet &buffersToRegen  = trackedBuffers.getResourcesToRegen();
+    const TrackedResource &trackedBuffers = getTrackedResource(contextID, ResourceIDType::Buffer);
+    const ResourceSet &startingBuffers    = trackedBuffers.getStartingResources();
+    const ResourceSet &buffersToRegen     = trackedBuffers.getResourcesToRegen();
     if (startingBuffers.find(id) != startingBuffers.end() &&
         buffersToRegen.find(id) == buffersToRegen.end())
     {
@@ -7632,44 +7678,106 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
     // Emit code to reset back to starting state
     if (frameIndex == frameCount)
     {
-        std::stringstream protoStream;
-        std::stringstream headerStream;
-        std::stringstream bodyStream;
+        std::stringstream resetProtoStream;
+        std::stringstream resetHeaderStream;
+        std::stringstream resetBodyStream;
 
-        protoStream << "void " << FmtResetFunction();
-        std::string proto = protoStream.str();
+        resetProtoStream << "void ResetReplay()";
 
-        bodyStream << proto << "\n";
-        bodyStream << "{\n";
+        resetBodyStream << resetProtoStream.str() << "\n";
+        resetBodyStream << "{\n";
+
+        // Grab the list of contexts to be reset
+        std::set<gl::ContextID> contextIDs;
+        mResourceTracker.getContextIDs(contextIDs);
+
+        // If we're going to be switching contexts, grab the current one now
+        if (contextIDs.size() > 1)
+        {
+            resetBodyStream << "    EGLContext context = eglGetCurrentContext();\n";
+        }
 
         // TODO(http://anglebug.com/5878): Look at moving this into the shared context file since
         // it's resetting shared objects.
-        for (ResourceIDType resourceType : AllEnums<ResourceIDType>())
+
+        // TODO(??): Support function parts when writing Reset functions
+
+        // First emit shared object reset, including opaque and context state
         {
-            // Framebuffers must be done last so updated textures can be bound to them
-            if (resourceType == ResourceIDType::Framebuffer)
+            std::stringstream protoStream;
+            std::stringstream headerStream;
+            std::stringstream bodyStream;
+
+            protoStream << "void " << FmtResetFunction(kNoPartId, kSharedContextId);
+            bodyStream << protoStream.str() << "\n";
+            bodyStream << "{\n";
+
+            for (ResourceIDType resourceType : AllEnums<ResourceIDType>())
             {
-                continue;
+                if (!IsSharedObjectResource(resourceType))
+                {
+                    continue;
+                }
+                // Use current context for shared reset
+                MaybeResetResources(context->id(), resourceType, mReplayWriter, bodyStream,
+                                    headerStream, &mResourceTracker, &mBinaryData);
             }
 
-            MaybeResetResources(context, resourceType, mReplayWriter, bodyStream, headerStream,
-                                &mResourceTracker, &mBinaryData);
+            // Reset opaque type objects that don't have IDs, so are not ResourceIDTypes.
+            MaybeResetOpaqueTypeObjects(mReplayWriter, bodyStream, headerStream,
+                                        context->getState(), &mResourceTracker, &mBinaryData);
+
+            // Reset any context state
+            MaybeResetContextState(mReplayWriter, bodyStream, headerStream, &mResourceTracker,
+                                   context->getState(), &mBinaryData, stateResetHelper);
+
+            bodyStream << "}\n";
+
+            mReplayWriter.addPrivateFunction(protoStream.str(), headerStream, bodyStream);
         }
 
-        MaybeResetResources(context, ResourceIDType::Framebuffer, mReplayWriter, bodyStream,
-                            headerStream, &mResourceTracker, &mBinaryData);
+        // Emit the call to shared object reset
+        resetBodyStream << "    " << FmtResetFunction(kNoPartId, kSharedContextId) << ";\n";
 
-        // Reset opaque type objects that don't have IDs, so are not ResourceIDTypes.
-        MaybeResetOpaqueTypeObjects(mReplayWriter, bodyStream, headerStream, context->getState(),
-                                    &mResourceTracker, &mBinaryData);
+        // Walk through all contexts that need Reset
+        for (const gl::ContextID &contextID : contextIDs)
+        {
+            // Create a function to reset each context's non-shared objects
+            {
+                std::stringstream protoStream;
+                std::stringstream headerStream;
+                std::stringstream bodyStream;
 
-        // Reset any context state
-        MaybeResetContextState(mReplayWriter, bodyStream, headerStream, &mResourceTracker,
-                               context->getState(), &mBinaryData, stateResetHelper);
+                protoStream << "void " << FmtResetFunction(kNoPartId, contextID);
+                bodyStream << protoStream.str() << "\n";
+                bodyStream << "{\n";
 
-        bodyStream << "}\n";
+                for (ResourceIDType resourceType : AllEnums<ResourceIDType>())
+                {
+                    if (IsSharedObjectResource(resourceType))
+                    {
+                        continue;
+                    }
+                    MaybeResetResources(contextID, resourceType, mReplayWriter, bodyStream,
+                                        headerStream, &mResourceTracker, &mBinaryData);
+                }
+                bodyStream << "}\n";
+                mReplayWriter.addPrivateFunction(protoStream.str(), headerStream, bodyStream);
+            }
 
-        mReplayWriter.addPublicFunction(proto, headerStream, bodyStream);
+            // Emit a call to reset each context's non-shared objects
+            resetBodyStream << "    " << FmtResetFunction(kNoPartId, contextID) << ";\n";
+        }
+
+        // Bind the main context again if we bound any additional contexts
+        if (contextIDs.size() > 1)
+        {
+            resetBodyStream
+                << "    eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, context);\n";
+        }
+        resetBodyStream << "}\n";
+
+        mReplayWriter.addPublicFunction(resetProtoStream.str(), resetHeaderStream, resetBodyStream);
     }
 
     if (!mFrameCalls.empty())

@@ -353,8 +353,8 @@ class ResourceTracker final : angle::NonCopyable
 
     std::vector<CallCapture> &getBufferBindingCalls() { return mBufferBindingCalls; }
 
-    void setBufferMapped(const gl::Context *context, GLuint id);
-    void setBufferUnmapped(const gl::Context *context, GLuint id);
+    void setBufferMapped(gl::ContextID contextID, GLuint id);
+    void setBufferUnmapped(gl::ContextID contextID, GLuint id);
 
     bool getStartingBuffersMappedCurrent(GLuint id) const;
     bool getStartingBuffersMappedInitial(GLuint id) const;
@@ -386,21 +386,9 @@ class ResourceTracker final : angle::NonCopyable
     }
     void setModifiedDefaultUniform(gl::ShaderProgramID programID, gl::UniformLocation location);
 
-    bool isSharedObjectResource(ResourceIDType type) const;
+    TrackedResource &getTrackedResource(gl::ContextID contextID, ResourceIDType type);
 
-    TrackedResource &getTrackedResource(gl::ContextID contextID, ResourceIDType type)
-    {
-        if (isSharedObjectResource(type))
-        {
-            // No need to index with context if not shared
-            return mTrackedResourcesShared[static_cast<uint32_t>(type)];
-        }
-        else
-        {
-            // TODO: Don't just grow the map, make sure this is sane
-            return mTrackedResourcesPerContext[contextID][static_cast<uint32_t>(type)];
-        }
-    }
+    void getContextIDs(std::set<gl::ContextID> &idsOut);
 
   private:
     // Buffer map calls will map a buffer with correct offset, length, and access flags
