@@ -758,7 +758,8 @@ void RegisterGLCTSTests()
         size_t pos               = testCaseName.find('.');
         ASSERT(pos != std::string::npos);
         std::string moduleName = testCaseName.substr(0, pos);
-        std::string testName   = testCaseName.substr(pos + 1);
+        std::replace(moduleName.begin(), moduleName.end(), '-', '_');
+        std::string testName = testCaseName.substr(pos + 1);
         testing::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__,
                               __LINE__, factory);
     }
