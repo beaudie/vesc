@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f8d468f_6ca1de6e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-18T23:51:41Z",
+      "side": 1,
+      "message": "A few questions I was writing down just now as you replied, feel free to ignore if no longer relevant :)\n\n1. I think races are still possible. For instance, if two threads are terminating simultaneously, one thread could be at this line\n\n`invalidContextSet.insert(mState.contextSet.begin(), mState.contextSet.end());`\n\nand another thread at this line\n\n`mState.contextSet.clear();`\n\nbecause they\u0027re protected by different mutexes, which might result in some sort of undefined behavior (seems unlikely to be harmful, but technically it\u0027s still a data race)\n\n2. Is there a particular reason why this is protected by `mActiveThreadsMutex`? In other places it only guards `mActiveThreads` but here this variable doesn\u0027t seem to be used.\n\n3. I might be missing something but can we clean up contexts where `context-\u003egetRefCount() \u003d\u003d 0` even if not all contexts were released?\n\n4. What\u0027s the benefit of passing `mInvalidContextSet` to `destroyInvalidEglObjects` instead of calling `destroyContextImpl` directly in this function?",
+      "parentUuid": "0eb1d21f_fa3f63f9",
+      "range": {
+        "startLine": 1139,
+        "startChar": 8,
+        "endLine": 1139,
+        "endChar": 88
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf3016a6_3d29ffe4",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
