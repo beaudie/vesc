@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dc0d6b7_1c0a1471",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/YuvRgbaConversion.frag",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:49:52Z",
+      "side": 1,
+      "message": "super nit: `gl_FragCoord.xy / vec2(imageWidth, imageHeight)` is more succinct. But even better is if you avoid sending integer image dimensions and instead have the push constants take:\n\n```\n    vec2 invImageDim;\n```\n\nand just do `gl_FragCoord.xy * invImageDim`.",
+      "range": {
+        "startLine": 23,
+        "startChar": 39,
+        "endLine": 23,
+        "endChar": 130
+      },
+      "revId": "8767b0a66d0de429a9922f2b3248326daaf7c2fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
