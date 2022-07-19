@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf0ce87f_95774b46",
+        "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:05:52Z",
+      "side": 1,
+      "message": "\u003e  * Parse in two passes?\n\nNope! 😊\n\n\u003e  * Keep a list of *potential* PLS errors, but only apply them when finished parsing and we know whether PLS was declared?\n\nNope! 😊\n\n\u003e  * Something else?\n\nHow about keep a flag called `mHasDiscardInMain`, and error out if a PLS uniform is encountered if that is set? The other situation (discard after PLS uniform) is handled as you described:\n\n\u003e ParseContext does have a map of PLS bindings now, so we can ultimately use that to determine if the discard should error on discard [sic]",
+      "parentUuid": "1fa4a79d_06f162dc",
+      "revId": "36a2fcd547431ffbb705fd0f6a49c3fcadf828dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "47bdf6f1_79b0ed34",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
         "patchSetId": 5
