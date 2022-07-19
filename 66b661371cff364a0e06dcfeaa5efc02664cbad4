@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "283f8a0f_b14aca0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T13:22:18Z",
+      "side": 1,
+      "message": "LGTM, good job!",
+      "revId": "66b661371cff364a0e06dcfeaa5efc02664cbad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d866580_d2e34bbe",
@@ -18,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2627b192_cea4c6bd",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T13:22:18Z",
+      "side": 1,
+      "message": "None that I know of. What you have LGTM.",
+      "parentUuid": "4d866580_d2e34bbe",
+      "revId": "66b661371cff364a0e06dcfeaa5efc02664cbad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f969fa9_10d7ce43",
@@ -31,6 +66,30 @@
       "writtenOn": "2022-07-19T04:33:27Z",
       "side": 1,
       "message": "Is there a spot where we know we\u0027re done parsing and might want to clear this?",
+      "range": {
+        "startLine": 778,
+        "startChar": 68,
+        "endLine": 778,
+        "endChar": 87
+      },
+      "revId": "66b661371cff364a0e06dcfeaa5efc02664cbad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51095404_b449f234",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T13:22:18Z",
+      "side": 1,
+      "message": "The parser is never reused, so no need to clear this.",
+      "parentUuid": "0f969fa9_10d7ce43",
       "range": {
         "startLine": 778,
         "startChar": 68,
