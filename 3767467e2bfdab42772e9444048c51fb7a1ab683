@@ -16,6 +16,23 @@
       "message": "The angle related windows\\linux\\mac bots passed the test. The android\\ios failure seems not relate to thi schange.\n\nCould you please help to take another look? Or does this require lgtm from another reviewer?",
       "revId": "3767467e2bfdab42772e9444048c51fb7a1ab683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60050f7a_bae1fc48",
+        "filename": "scripts/code_generation_hashes/GL_CTS_(dEQP)_build_files.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T13:23:58Z",
+      "side": 1,
+      "message": "Looks like you forgot to `gclient sync` after a rebase, so `./scripts/run_code_generation.py` reverted some changes.",
+      "revId": "3767467e2bfdab42772e9444048c51fb7a1ab683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
