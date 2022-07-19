@@ -192,15 +192,7 @@ static ANGLE_INLINE void DirtyContextIfNeeded(Context *context)
 
 ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *context)
 {
-#if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
-    auto lock = std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex());
-
-    DirtyContextIfNeeded(context);
-    return lock;
-#else
-    return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
-                               : std::unique_lock<angle::GlobalMutex>();
-#endif
+    return {};
 }
 
 }  // namespace gl
