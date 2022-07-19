@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4f4e51_8c9e33ca",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1750,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:47:04Z",
+      "side": 1,
+      "message": "nit: unnecessary parentheses are unnecessary",
+      "range": {
+        "startLine": 1750,
+        "startChar": 27,
+        "endLine": 1750,
+        "endChar": 66
+      },
+      "revId": "88872618fc0f6642b08a81d7de8d1528edb9be0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2caddbf_eb7fbc25",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:47:04Z",
+      "side": 1,
+      "message": "What\u0027s the point of this? Why not use the existing `spirv::WriteDecorate`?",
+      "range": {
+        "startLine": 1792,
+        "startChar": 15,
+        "endLine": 1792,
+        "endChar": 34
+      },
+      "revId": "88872618fc0f6642b08a81d7de8d1528edb9be0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
