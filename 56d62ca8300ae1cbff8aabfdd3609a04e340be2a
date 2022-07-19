@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12f45ac6_521ae415",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:09:19Z",
+      "side": 1,
+      "message": "Please avoid overloading this name. Maybe call it `releaseAnd...`",
+      "range": {
+        "startLine": 4733,
+        "startChar": 19,
+        "endLine": 4733,
+        "endChar": 26
+      },
+      "revId": "56d62ca8300ae1cbff8aabfdd3609a04e340be2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "10476a51_eaeb9d91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 3
