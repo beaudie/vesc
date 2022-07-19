@@ -46,6 +46,30 @@
       },
       "revId": "7ac159fe915295d7ee8f33e0f807e204db7b03aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "412cef80_100351cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:20:30Z",
+      "side": 1,
+      "message": "\u003e hmm, not sure about no-FS draws (as in glDraw*); is that possible in gles 2?\n\nIt\u0027s possible in GLES3+ at least, or GLES2 + framebuffers. Nevertheless, this API is GLES3.1+.\n\nMy point really was that maybe the real bug is that draw state is considered invalid for surfaceless, but it\u0027s probably ok if surfaceless is allowed to have a depth/stencil buffer. If surfaceless means no attachments at all, then never mind any of this 😊\n\nRegardless, I have no opinion on whether this draw state check should or shouldn\u0027t be here. CC Brandon.",
+      "parentUuid": "481031b7_17b3e0ff",
+      "range": {
+        "startLine": 9,
+        "startChar": 47,
+        "endLine": 9,
+        "endChar": 66
+      },
+      "revId": "7ac159fe915295d7ee8f33e0f807e204db7b03aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
