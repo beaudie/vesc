@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c1da8eb_7c9e1ac3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4733,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T21:26:08Z",
+      "side": 1,
+      "message": "Renamed to releaseBufferAndDescriptorSetCache. In future we really should move to a model that always keep each object\u0027s mUse up to date, then you dont need contextVk argument here and we can revert this back.",
+      "parentUuid": "12f45ac6_521ae415",
+      "range": {
+        "startLine": 4733,
+        "startChar": 19,
+        "endLine": 4733,
+        "endChar": 26
+      },
+      "revId": "56d62ca8300ae1cbff8aabfdd3609a04e340be2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10476a51_eaeb9d91",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-18T21:27:54Z",
       "side": 1,
       "message": "nit: do you mean \"with this buffer\", instead of \"with this texture\" in the comment?",
+      "revId": "56d62ca8300ae1cbff8aabfdd3609a04e340be2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5085b4c_225938aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T21:26:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10476a51_eaeb9d91",
       "revId": "56d62ca8300ae1cbff8aabfdd3609a04e340be2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
