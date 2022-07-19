@@ -1112,10 +1112,6 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     // with the specified display for deletion. Handles to all such resources are invalid as soon
     // as eglTerminate returns
     // Cache EGL objects that are no longer valid
-    ContextSet invalidContextSet = {};
-    // Clear "mState.contextSet" later when we confirm that no contexts are current.
-    invalidContextSet.insert(mState.contextSet.begin(), mState.contextSet.end());
-
     mInvalidImageSet.insert(mImageSet.begin(), mImageSet.end());
     mImageSet.clear();
 
@@ -1130,7 +1126,8 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 
     // If app called eglTerminate and no active threads remain,
     // force realease any context that is still current.
-    for (gl::Context *context : invalidContextSet)
+    bool contextIsCurrent = false;
+    for (gl::Context *context : mState.contextSet)
     {
         if (context->getRefCount() > 0)
         {
@@ -1142,15 +1139,29 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
             }
             else
             {
-                return NoError();
+                contextIsCurrent = true;
+                continue;
             }
         }
+
+        mInvalidContextSet.emplace(context);
     }
 
-    // No contexts are current, clear "mState.contextSet".
+    // Remove contexts that weren't current from state tracking
+    ContextSet currentContextSet = {};
+    std::set_difference(mState.contextSet.begin(), mState.contextSet.end(),
+                        mInvalidContextSet.begin(), mInvalidContextSet.end(),
+                        std::inserter(currentContextSet, currentContextSet.end()));
+    mState.contextSet = currentContextSet;
+
+    if (contextIsCurrent)
+    {
+        // There was atleast 1 context that is still current on a thread, early return.
+        return NoError();
+    }
+
+    // No contexts were current, clear "mState.contextSet".
     mState.contextSet.clear();
-    mInvalidContextSet = invalidContextSet;
-    invalidContextSet.clear();
 
     mMemoryProgramCache.clear();
     mBlobCache.setBlobCacheFuncs(nullptr, nullptr);
@@ -1209,6 +1220,12 @@ void Display::threadCleanup(Thread *thread)
 
     (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
                                             : TerminateReason::InternalCleanup);
+
+    // If there are active threads try to clean up any invalid objects cached thus far.
+    if (!noActiveThreads)
+    {
+        (void)destroyInvalidEglObjects();
+    }
 }
 
 std::vector<const Config *> Display::getConfigs(const egl::AttributeMap &attribs) const

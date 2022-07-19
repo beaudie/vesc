@@ -815,7 +815,6 @@ TEST_P(EGLContextSharingTestNoFixture, InactiveThreadDoesntPreventCleanup)
         ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
 
         EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, srf, srf, ctx));
-        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
         threadSynchronization.nextStep(Step::Thread0MakeCurrent);
         ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1Render));
 
@@ -824,6 +823,7 @@ TEST_P(EGLContextSharingTestNoFixture, InactiveThreadDoesntPreventCleanup)
         threadSynchronization.nextStep(Step::Thread0Terminate);
         ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
 
+        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
         eglTerminate(mDisplay);
         EXPECT_EGL_SUCCESS();
 
