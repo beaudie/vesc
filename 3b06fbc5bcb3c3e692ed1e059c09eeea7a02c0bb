@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0882fcd_69a92619",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-19T17:00:29Z",
+      "side": 1,
+      "message": "need to add mac as well, might as well make it for all platforms",
+      "range": {
+        "startLine": 678,
+        "startChar": 11,
+        "endLine": 678,
+        "endChar": 18
+      },
+      "revId": "3b06fbc5bcb3c3e692ed1e059c09eeea7a02c0bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

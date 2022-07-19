@@ -132,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36f0f048_11c01a66",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-19T17:00:29Z",
+      "side": 1,
+      "message": "1. no longer relevant\n2. no longer relevant\n3. pre-existing design which can be updated in a follow up change\n4. `destroyInvalidEglObjects` doesn\u0027t take any parameters",
+      "parentUuid": "3f8d468f_6ca1de6e",
+      "range": {
+        "startLine": 1139,
+        "startChar": 8,
+        "endLine": 1139,
+        "endChar": 88
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf3016a6_3d29ffe4",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
@@ -167,6 +191,30 @@
       "side": 1,
       "message": "\u003e which seems odd\n\ngood point, i can see how that can be confusing. Will just directly call `releaseImpl(...)` instead and get rid of `destroyContextImpl`",
       "parentUuid": "bf3016a6_3d29ffe4",
+      "range": {
+        "startLine": 1741,
+        "startChar": 15,
+        "endLine": 1741,
+        "endChar": 29
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61df9bdf_977c5992",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1741,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-19T17:00:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0656a9e1_fb6ca465",
       "range": {
         "startLine": 1741,
         "startChar": 15,
