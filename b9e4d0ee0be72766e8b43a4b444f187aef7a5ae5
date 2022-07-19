@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "b9e4d0ee0be72766e8b43a4b444f187aef7a5ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f83d6e1_978557f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T20:38:48Z",
+      "side": 1,
+      "message": "There were two bugs pointed out during this review, for which evidently no tests exist. Could you please add regression tests while the issues are fresh in memory?",
+      "revId": "b9e4d0ee0be72766e8b43a4b444f187aef7a5ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
