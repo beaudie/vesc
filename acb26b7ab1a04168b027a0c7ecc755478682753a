@@ -142,6 +142,30 @@
       },
       "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d79f563b_f22f631c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4904,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-19T18:34:01Z",
+      "side": 1,
+      "message": "Sorry about that, forgot to propagate the isSamplerExternalY2Y here.",
+      "parentUuid": "6bbc7323_8477cf0d",
+      "range": {
+        "startLine": 4904,
+        "startChar": 50,
+        "endLine": 4904,
+        "endChar": 55
+      },
+      "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
