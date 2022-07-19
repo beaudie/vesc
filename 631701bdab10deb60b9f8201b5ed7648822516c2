@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bcda333_5bed11fc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T19:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff173650_e17fd916",
+      "range": {
+        "startLine": 1358,
+        "startChar": 33,
+        "endLine": 1358,
+        "endChar": 34
+      },
+      "revId": "631701bdab10deb60b9f8201b5ed7648822516c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e287febe_7cda8cf9",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-18T21:51:42Z",
       "side": 1,
       "message": "nit: the comment should be changed to \"created with this BufferBlock\".",
+      "revId": "631701bdab10deb60b9f8201b5ed7648822516c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7017eee1_374f83f3",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T19:31:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e287febe_7cda8cf9",
       "revId": "631701bdab10deb60b9f8201b5ed7648822516c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
