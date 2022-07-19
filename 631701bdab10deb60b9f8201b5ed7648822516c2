@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff173650_e17fd916",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:12:31Z",
+      "side": 1,
+      "message": "By convention, please use a pointer.",
+      "range": {
+        "startLine": 1358,
+        "startChar": 33,
+        "endLine": 1358,
+        "endChar": 34
+      },
+      "revId": "631701bdab10deb60b9f8201b5ed7648822516c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e287febe_7cda8cf9",
         "filename": "src/libANGLE/renderer/vulkan/Suballocation.h",
         "patchSetId": 6
