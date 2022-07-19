@@ -16,6 +16,29 @@
       "message": "Is there already a mechanism for this that I missed?",
       "revId": "66b661371cff364a0e06dcfeaa5efc02664cbad4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f969fa9_10d7ce43",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-19T04:33:27Z",
+      "side": 1,
+      "message": "Is there a spot where we know we\u0027re done parsing and might want to clear this?",
+      "range": {
+        "startLine": 778,
+        "startChar": 68,
+        "endLine": 778,
+        "endChar": 87
+      },
+      "revId": "66b661371cff364a0e06dcfeaa5efc02664cbad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
