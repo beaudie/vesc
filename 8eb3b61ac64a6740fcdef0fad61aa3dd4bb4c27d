@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24396a25_1d24eaee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-07-19T21:59:50Z",
+      "side": 1,
+      "message": "LGTM. This adds a lot of context awareness to reset.\nSuccessfully tested with \"The Battle of Polytopia\".",
+      "revId": "8eb3b61ac64a6740fcdef0fad61aa3dd4bb4c27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
