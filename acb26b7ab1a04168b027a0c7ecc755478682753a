@@ -118,6 +118,30 @@
       },
       "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bbc7323_8477cf0d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:43:23Z",
+      "side": 1,
+      "message": "Charlie, could you please help Frank device a regression test?",
+      "parentUuid": "66834e90_e39b763e",
+      "range": {
+        "startLine": 4904,
+        "startChar": 50,
+        "endLine": 4904,
+        "endChar": 55
+      },
+      "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
