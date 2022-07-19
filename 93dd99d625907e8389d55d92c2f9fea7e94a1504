@@ -156,6 +156,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa46f043_39dc0c46",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1139,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-19T17:40:02Z",
+      "side": 1,
+      "message": "\u003e 4.  destroyInvalidEglObjects  doesn\u0027t take any parameters\n\n`mInvalidContextSet` is effectively a parameter to `destroyInvalidEglObjects` because of the way the code is written. Note how for example `mInvalidImageSet` is different: it is always populated regardless of whether or not we return from the function early. `mInvalidContextSet` is only populated when we reach line `mInvalidContextSet \u003d invalidContextSet;` which only happens after the early return, and then unconditionally followed by `destroyInvalidEglObjects()`. Any other call to `destroyInvalidEglObjects()` is going to have an empty `mInvalidContextSet`. It really looks like a convoluted way to pass `invalidContextSet` as an argument to `destroyInvalidEglObjects`, hence my question.\n\n\u003e 3. pre-existing design which can be updated in a follow up change\n\nUp to you, just seems like a good opportunity to consider other options as you\u0027re making major changes to the logic here.",
+      "parentUuid": "36f0f048_11c01a66",
+      "range": {
+        "startLine": 1139,
+        "startChar": 8,
+        "endLine": 1139,
+        "endChar": 88
+      },
+      "revId": "93dd99d625907e8389d55d92c2f9fea7e94a1504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bf3016a6_3d29ffe4",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 3
