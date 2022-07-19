@@ -94,6 +94,30 @@
       },
       "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66834e90_e39b763e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4904,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T00:47:02Z",
+      "side": 1,
+      "message": "Unresolve this. I am not seeing isSamplerExternalY2Y is used here to compute desc. Isn\u0027t that two different descriptorSet (one with isSamplerExternalY2Y true and the other false) will end up having the same desc, which means cache look up could possibly get the wrong descriptorSet?\n\n(My understanding) the existing code works because texture only have one sampler. So whatever you put in desc, you are going to retrieve the same descriptorSet, or have a cache miss and created  the same descriptorSet (a potentially perf issue but not correctness issue). But with your CL, texture have two samplers, depends on bound sampler. This means if we did not build desc with correct isSamplerExternalY2Y information, you will get wrong descriptorSet, that is a correctness bug.",
+      "parentUuid": "7fc23d11_c74af47a",
+      "range": {
+        "startLine": 4904,
+        "startChar": 50,
+        "endLine": 4904,
+        "endChar": 55
+      },
+      "revId": "acb26b7ab1a04168b027a0c7ecc755478682753a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
