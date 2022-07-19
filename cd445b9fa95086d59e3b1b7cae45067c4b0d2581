@@ -46,6 +46,30 @@
       },
       "revId": "cd445b9fa95086d59e3b1b7cae45067c4b0d2581",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bac1b468_4f57a010",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2022-07-19T18:42:09Z",
+      "side": 0,
+      "message": "So in that change I added this test: ProgramPipelineTest31.PipelineWithoutShaders\n    // Generate a program pipeline\n    glGenProgramPipelines(1, \u0026mPipeline);\n    EXPECT_GL_NO_ERROR();\n\n    glBindProgramPipeline(mPipeline);\n    EXPECT_GL_NO_ERROR();\n\n    glDrawArrays(GL_POINTS, 0, 3);\n    EXPECT_GL_ERROR(GL_INVALID_OPERATION);\n\n    // Ensure validation fails\n    GLint value;\n    glValidateProgramPipeline(mPipeline);\n    glGetProgramPipelineiv(mPipeline, GL_VALIDATE_STATUS, \u0026value);\n    EXPECT_FALSE(value);\nAt draw time, we return an error due to the spec::\n    There is no current program object specified by UseProgram, there is a current program pipeline object, and that object is empty (no executable code is installed for any stage).\nMy thought was that glValidateProgramPipeline() was to check for this as a valid pipeline because this would result in a failed draw. If I\u0027m misunderstanding and the test is invalid, I\u0027m fine with this change as long as dEQP still passes.",
+      "parentUuid": "5efabd6d_916ddf77",
+      "range": {
+        "startLine": 636,
+        "startChar": 3,
+        "endLine": 643,
+        "endChar": 5
+      },
+      "revId": "cd445b9fa95086d59e3b1b7cae45067c4b0d2581",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
