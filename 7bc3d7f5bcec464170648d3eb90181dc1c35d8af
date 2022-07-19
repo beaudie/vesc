@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df566e0_d282583e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-19T20:53:03Z",
+      "side": 1,
+      "message": "LGTM, +2 while Ian is OOTO.",
+      "revId": "7bc3d7f5bcec464170648d3eb90181dc1c35d8af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
