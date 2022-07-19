@@ -72,6 +72,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e48f43_05d7c139",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-19T14:11:53Z",
+      "side": 1,
+      "message": "This CL blocks roll into Chromium due to one specific build: win10_chromium_x64_rel_ng\n\nhttp://screen/6fmXBUg72Ke6ozF\n\nAfter Shabi\u0027s follow up https://crrev.com/c/3770645, now it seems to be broken differently:\nhttp://screen/9uPWrUBbxNjjHTu\nRoll with Shabi\u0027s cl: https://crrev.com/c/3771669\n\nCould you have a look if this can be fixed easily or consider rolling back to unblock roll?",
+      "revId": "0d3ecf4638dde008e4e6a3c85931b9a2316004b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6189a18_7e17915f",
