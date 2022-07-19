@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ee575a9_e5966be8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-19T21:47:59Z",
+      "side": 1,
+      "message": "Thank you Yuly. I am working on rebaseline the tests with this CL: https://chromium-review.googlesource.com/c/chromium/src/+/3774400.",
+      "parentUuid": "d0598917_feb15ee8",
+      "revId": "0d3ecf4638dde008e4e6a3c85931b9a2316004b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6189a18_7e17915f",
