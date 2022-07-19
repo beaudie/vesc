@@ -33,6 +33,24 @@
       "message": "There were two bugs pointed out during this review, for which evidently no tests exist. Could you please add regression tests while the issues are fresh in memory?",
       "revId": "b9e4d0ee0be72766e8b43a4b444f187aef7a5ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8124118_a93e7e76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-19T20:40:21Z",
+      "side": 1,
+      "message": "We need the entire extension enabled and working in order to add an end2end test for this. Is there some way we can test this in isolation?",
+      "parentUuid": "0f83d6e1_978557f0",
+      "revId": "b9e4d0ee0be72766e8b43a4b444f187aef7a5ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
