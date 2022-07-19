@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9584792d_ae67900d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:52:45Z",
+      "side": 1,
+      "message": "Please squash with change that introduces the shaders themselves. I see one enum added for this, but the previous CL introduces two shaders (compute and fragment). If you intend to support both, it\u0027d be cleaner if UtilsVk also separated them as different operations.",
+      "revId": "2180bd91cf4c79bed2dde0bc8fec730e01d86154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b46804_1f786e9e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-19T02:52:45Z",
+      "side": 1,
+      "message": "nit: Multiple typos",
+      "revId": "2180bd91cf4c79bed2dde0bc8fec730e01d86154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
