@@ -16,6 +16,24 @@
       "message": "If you get 167, how do you know that\u0027s not garbage? Where does the magic number 256 come from?",
       "revId": "fc97b2da2c2988800a7ceb8b4e7535b7e26fdf57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71307253_af27e311",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-20T02:51:11Z",
+      "side": 1,
+      "message": "It comes from minimums for GL_MAX_ARRAY_TEXTURE_LAYERS (256). We have a separate bug to fix the issue from the Android side---this makes it so we don\u0027t break any legit use cases of layered AHBs.",
+      "parentUuid": "ec5c21aa_1c890c16",
+      "revId": "fc97b2da2c2988800a7ceb8b4e7535b7e26fdf57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
