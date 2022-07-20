@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e0935d_cd537b93",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-20T11:49:33Z",
+      "side": 1,
+      "message": "we can be a bit more aggressive and do this as well -\n```\n if (!noActiveThreads)\n {\n     destroyInvalidEglObjects();\n }\n```",
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
