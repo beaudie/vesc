@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a747169_c619251d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-07-20T23:48:46Z",
+      "side": 1,
+      "message": "\u003e when *any* thread calls  eglReleaseThread , we\u0027ll call  destroyInvalidEglObjects()  unconditionally regardless of how many other active threads there may be\n\nANGLE\u0027s implementation of `eglReleaseThread` is doing things that isn\u0027t listed in the spec. The only reason `eglReleaseThread` calls `destroyInvalidEglObjects` is to specifically address the \"Android CTS WrapperTest.testThreadCleanup\" test case, in other words it was a workaround designed to get past CTS issue.\n\nI have not yet verified this but with ToT ANGLE along with this change, we should be able to remove the workaround in `releaseThread` and be more aligned with the spec and still pass the \"Android CTS WrapperTest.testThreadCleanup\" test\n\n\u003e Why do we choose to call  releaseContextImpl  during eglReleaseThread on some random thread instead of doing it here right away?\n\nwith the removal of the workaround in `releaseThread` and enabling the \"aggressive\" cleanup i mentioned in the other comment we will end up with the thread being destroyed cleaning up its own resources.\n\nAs for why we have a dedicated method `destroyInvalidEglObjects` to cleanup invalid resources - its just a helper to be called from multiple places (earlier it was `releasThread` and `terminate` but now it will be `terminate` and `threadCleanup`)",
+      "parentUuid": "8e7a10c9_86837690",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
