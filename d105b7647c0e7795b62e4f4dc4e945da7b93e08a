@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7474bd_ab541d14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-20T22:24:49Z",
+      "side": 1,
+      "message": "Sorry about the delay, busy day",
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e7a10c9_86837690",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-20T22:24:49Z",
+      "side": 1,
+      "message": "I\u0027m still struggling to understand why contexts with `context-\u003egetRefCount() \u003d\u003d 0` are being moved into `mInvalidContextSet` here. Why do we need to postpone `releaseContextImpl` until `destroyInvalidEglObjects()` is invoked?\n\nLet\u0027s say we added a context to `mInvalidContextSet` and then run into the `!mState.contextSet.empty()` case below. `destroyInvalidEglObjects` is not going to be invoked during this call as we\u0027ll return on line 1160. However, when *any* thread calls `eglReleaseThread`, we\u0027ll call `destroyInvalidEglObjects()` unconditionally regardless of how many other active threads there may be. Why do we choose to call `releaseContextImpl` during eglReleaseThread on some random thread instead of doing it here right away? Was that done this way because eglReleaseThread was guarded by the global lock and this code wasn\u0027t?.. which is no longer the case?",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95e0935d_cd537b93",
