@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "958d7b89_cbd50f71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-20T04:03:55Z",
+      "side": 1,
+      "message": "Hi, Youssefi, currently only bot win-test fails. We tried it twice, and it failed twice: one is angle_restricted_trace_gold_tests.pubg_mobile_battle_royale(https://ci.chromium.org/ui/p/angle/builders/try/win-test/6859/overview), another failure is TestUtils.RunAppAsync(https://ci.chromium.org/ui/p/angle/builders/try/win-test/6861/overview, angle_unittests, this passed local).\n\nDo you know any background about this? Does this mean the win-test bot is not stable?",
+      "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

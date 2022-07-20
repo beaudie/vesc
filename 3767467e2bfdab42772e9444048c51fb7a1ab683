@@ -33,6 +33,24 @@
       "message": "Looks like you forgot to `gclient sync` after a rebase, so `./scripts/run_code_generation.py` reverted some changes.",
       "revId": "3767467e2bfdab42772e9444048c51fb7a1ab683",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3feb217a_156f23aa",
+        "filename": "scripts/code_generation_hashes/GL_CTS_(dEQP)_build_files.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-07-20T04:03:55Z",
+      "side": 1,
+      "message": "Thanks, gclient sync does work for this purpose.",
+      "parentUuid": "60050f7a_bae1fc48",
+      "revId": "3767467e2bfdab42772e9444048c51fb7a1ab683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
