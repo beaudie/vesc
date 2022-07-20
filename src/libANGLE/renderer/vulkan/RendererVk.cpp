@@ -4315,6 +4315,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       vk::SecondaryCommandPools *commandPools,
                                       Serial *submitSerialOut)
 {
+    INFO() << "Dummy comment line";
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
     vk::SecondaryCommandBufferList commandBuffersToReset = {
