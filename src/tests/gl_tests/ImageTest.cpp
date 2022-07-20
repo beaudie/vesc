@@ -4233,6 +4233,46 @@ void ImageTest::Source2DTargetRenderbuffer_helper(const EGLint *attribs)
     eglDestroyImageKHR(window->getDisplay(), image);
 }
 
+// Test to reproduce the pinterest app trace capture issues
+TEST_P(ImageTest, SourceNativeClientSwapBufferTargetExternal)
+{
+    ANGLE_SKIP_TEST_IF(!IsAndroid());
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // Create an Image backed by a native client buffer allocated using
+    // EGL_ANDROID_create_native_client_buffer API
+    EGLImageKHR image;
+    createEGLImageANWBClientBufferSource(1, 1, 1, kNativeClientBufferAttribs_RGBA8_Texture,
+                                         kColorspaceAttribs, {{kLinearColor, 4}}, &image);
+
+    // Create the target
+    GLTexture target;
+    createEGLImageTargetTextureExternal(image, target);
+
+    if (kColorspaceAttribs[kColorspaceAttributeIndex] == EGL_GL_COLORSPACE)
+    {
+        // Expect that the target texture has the corresponding sRGB color values
+        verifyResultsExternal(target, kSrgbColor);
+    }
+    else
+    {
+        // Expect that the target texture has the same color as the source texture
+        verifyResultsExternal(target, kLinearColor);
+    }
+
+    INFO() << "FAYE: swapping buffers";
+
+    // swap buffer
+    EGLDisplay display = getEGLWindow()->getDisplay();
+    EGLSurface surface = getEGLWindow()->getSurface();
+    eglSwapBuffers(display, surface);
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), image);
+}
+
 // Testing source native client buffer EGL image, target external texture
 // where source native client buffer is created using EGL_ANDROID_create_native_client_buffer API
 TEST_P(ImageTest, SourceNativeClientBufferTargetExternal)

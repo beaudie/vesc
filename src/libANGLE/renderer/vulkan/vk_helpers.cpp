@@ -4573,6 +4573,7 @@ angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,
                                                  VkDeviceSize *offset,
                                                  uint8_t **dataPtr)
 {
+    INFO() << "Yuxin Debug BufferHelper::allocateForCopyImage()";
     RendererVk *renderer = contextVk->getRenderer();
 
     // When a buffer is used in copyImage, the offset must be multiple of pixel bytes. This may
@@ -8643,6 +8644,7 @@ angle::Result ImageHelper::readPixelsForGetImage(ContextVk *contextVk,
                                                  GLenum type,
                                                  void *pixels)
 {
+    INFO() << "Yuxin Debug ImageHelper::readPixelsForGetImage()";
     const angle::Format &angleFormat = GetFormatFromFormatType(format, type);
 
     VkImageAspectFlagBits aspectFlags = {};
@@ -8788,6 +8790,7 @@ angle::Result ImageHelper::readPixels(ContextVk *contextVk,
                                       uint32_t layer,
                                       void *pixels)
 {
+    INFO() << "Yuxin Debug ImageHelper::readPixels()";
     ANGLE_TRACE_EVENT0("gpu.angle", "ImageHelper::readPixels");
 
     const angle::Format &readFormat = getActualFormat();

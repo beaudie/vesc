@@ -294,6 +294,7 @@ void FormatTable::initialize(RendererVk *renderer, gl::TextureCapsMap *outTextur
 
 size_t GetImageCopyBufferAlignment(angle::FormatID actualFormatID)
 {
+    INFO() << "Yuxin Debug GetImageCopyBufferAlignment";
     // vkCmdCopyBufferToImage must have an offset that is a multiple of 4 as well as a multiple
     // of the texel size (if uncompressed) or pixel block size (if compressed).
     // https://www.khronos.org/registry/vulkan/specs/1.0/man/html/VkBufferImageCopy.html
@@ -315,6 +316,8 @@ size_t GetImageCopyBufferAlignment(angle::FormatID actualFormatID)
     //
     const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
 
+    INFO() << "Yuxin Debug actualFormatID: " << static_cast<int>(actualFormatID);
+    INFO() << "Yuxin Debug actualFormat.pixelBytes: " << actualFormat.pixelBytes;
     ASSERT(actualFormat.pixelBytes != 0);
     const size_t texelSize  = actualFormat.pixelBytes;
     const size_t multiplier = texelSize % 2 != 0 ? 4 : texelSize % 4 != 0 ? 2 : 1;

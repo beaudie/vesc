@@ -3398,7 +3398,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                                   index.getType() == gl::TextureType::_2DArray ||
                                   index.getType() == gl::TextureType::Buffer ||
                                   index.getType() == gl::TextureType::CubeMap ||
-                                  index.getType() == gl::TextureType::CubeMapArray);
+                                  index.getType() == gl::TextureType::CubeMapArray ||
+                                  index.getType() == gl::TextureType::External);
 
             // Check for supported textures
             if (!supportedType)
@@ -3457,6 +3458,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                     bool result = data.resize(endByte);
                     ASSERT(result);
 
+                    INFO() << "Yuxin Debug FrameCapture.cpp: texture->getTexImage(): getFormat: "
+                           << getFormat << " getType: " << getType;
                     (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
                                                index.getLevelIndex(), getFormat, getType,
                                                data.data());
