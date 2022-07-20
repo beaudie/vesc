@@ -1432,6 +1432,112 @@ void main()
     }
 }
 
+// Use image uniform to read/modify/write a Texture2D in a compute shader, and verify the contents.
+TEST_P(ComputeShaderTest, ReadModifyWriteImageLoadStore)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32ui, binding = 0) uniform highp uimage2D uImage;
+void main()
+{
+    ivec2 pos = ivec2(gl_LocalInvocationID.xy);
+    uvec4 v = imageLoad(uImage, pos);
+    uvec4 result = v >> 1;
+    imageStore(uImage, pos, result);
+})";
+
+    constexpr int kWidth = 1, kHeight = 1;
+    constexpr GLuint kInputValue = 0x80402010;
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, kWidth, kHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RED_INTEGER, GL_UNSIGNED_INT,
+                    &kInputValue);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32UI);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    GLuint outputValues[kWidth * kHeight];
+    constexpr GLuint expectedValue = 0x40201008;
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth, kHeight, GL_RED_INTEGER, GL_UNSIGNED_INT, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < kWidth * kHeight; i++)
+    {
+        EXPECT_EQ(expectedValue, outputValues[i]);
+    }
+}
+
+// Use image uniform to read/modify/write an rgba8 Texture2D in a compute shader, and verify the
+// contents.
+TEST_P(ComputeShaderTest, ReadModifyWriteReinterpretImageLoadStore)
+{
+    GLTexture texture;
+    GLFramebuffer framebuffer;
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(r32f, binding = 0) uniform highp image2D uImage;
+void main()
+{
+    ivec2 pos = ivec2(gl_LocalInvocationID.xy);
+    vec4 v = imageLoad(uImage, pos);
+    uint i = floatBitsToUint(v.x);
+    uvec4 ui4 = uvec4(i & 0x000000FFu, (i & 0x0000FF00u) >> 8, (i & 0x00FF0000u) >> 16, (i & 0xFF000000u) >> 24);
+    vec4 result = vec4(ui4) / 255.0f;
+    result = result.zwxy;
+    imageStore(uImage, pos, result);
+})";
+
+    constexpr int kWidth = 1, kHeight = 1;
+    constexpr GLuint kInputValue = 0xDEADBEEF;
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kWidth, kHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE,
+                    &kInputValue);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA8);
+    EXPECT_GL_NO_ERROR();
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    GLuint outputValues[kWidth * kHeight];
+    constexpr GLuint expectedValue = 0xBEEFDEADu;
+    glUseProgram(0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_NO_ERROR();
+    glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, outputValues);
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < kWidth * kHeight; i++)
+    {
+        EXPECT_EQ(expectedValue, outputValues[i]);
+    }
+}
+
 // Use image uniform to read and write Texture2D with non-zero base in compute shader, and verify
 // the contents.
 TEST_P(ComputeShaderTest, BindImageTextureWithNonZeroBaseTexture2D)
