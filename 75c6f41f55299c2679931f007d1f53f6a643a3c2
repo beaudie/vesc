@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1286a5d6_087221e0",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-20T21:10:52Z",
+      "side": 1,
+      "message": "Thanks for pointing that out Ken. I\u0027ve captured this conversation in the \"Issues\" section of the PLS doc so we don\u0027t forget.\n\nIs there anything else to address in this change? Or are we ready to land?",
+      "parentUuid": "b2394514_635cbf55",
+      "revId": "75c6f41f55299c2679931f007d1f53f6a643a3c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c0333ce_406786c2",
         "filename": "src/compiler/translator/ValidatePixelLocalStorage.h",
         "patchSetId": 4
