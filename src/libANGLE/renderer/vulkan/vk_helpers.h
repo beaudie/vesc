@@ -170,27 +170,37 @@ class DescriptorPoolHelper final : public Resource
     angle::Result init(Context *context,
                        const std::vector<VkDescriptorPoolSize> &poolSizesIn,
                        uint32_t maxSets);
-    void destroy(RendererVk *renderer, VulkanCacheType cacheType);
-    void release(ContextVk *contextVk, VulkanCacheType cacheType);
+    void destroy(RendererVk *renderer);
+    void release(RendererVk *renderer);
 
     bool allocateDescriptorSet(Context *context,
                                CommandBufferHelperCommon *commandBufferHelper,
                                const DescriptorSetLayout &descriptorSetLayout,
                                VkDescriptorSet *descriptorSetsOut);
 
-    DescriptorSetList &getGarbageList() { return mDescriptorSetGarbageList; }
+    void addGarbage(DescriptorSetHelper &&garbage)
+    {
+        mValidDescriptorSets--;
+        mDescriptorSetGarbageList.emplace_back(std::move(garbage));
+    }
 
     void onNewDescriptorSetAllocated(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
+    bool hasValidDescriptorSet() const { return mValidDescriptorSets != 0; }
 
   private:
+    // Track the number of descriptorSets allocated out of this pool that are valid. DescriptorSets
+    // that have been allocated but in the mDescriptorSetGarbageList is considered as inactive.
+    uint32_t mValidDescriptorSets;
+    // Track the number of remaining descriptorSets in the pool that can be allocated.
     uint32_t mFreeDescriptorSets;
     DescriptorPool mDescriptorPool;
-    // Because freeing descriptorSet require DescriptorPool, we store individually released
-    // descriptor sets here instead of usual garbage list in the renderer to avoid complicated
-    // threading issues and other weirdness associated with pooled object destruction.
+    // Keeps track descriptorSets that has been released. Because freeing descriptorSet require
+    // DescriptorPool, we store individually released descriptor sets here instead of usual garbage
+    // list in the renderer to avoid complicated threading issues and other weirdness associated
+    // with pooled object destruction. This list is mutually exclusive with mDescriptorSetCache.
     DescriptorSetList mDescriptorSetGarbageList;
     // Manages the texture descriptor set cache that allocated from this pool
     vk::DescriptorSetCacheManager mDescriptorSetCacheManager;
@@ -214,8 +224,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                        const VkDescriptorPoolSize *setSizes,
                        size_t setSizeCount,
                        VkDescriptorSetLayout descriptorSetLayout);
-    void destroy(RendererVk *renderer, VulkanCacheType cacheType);
-    void release(ContextVk *contextVk, VulkanCacheType cacheType);
+    void destroy(RendererVk *renderer);
 
     bool valid() const { return !mDescriptorPools.empty(); }
 
@@ -236,7 +245,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
-    void destroyCachedDescriptorSet(const DescriptorSetDesc &desc);
+    void destroyCachedDescriptorSet(RendererVk *renderer, const DescriptorSetDesc &desc);
 
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
@@ -249,6 +258,9 @@ class DynamicDescriptorPool final : angle::NonCopyable
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
+    // Erase the pool if it is no longer been used and contains no valid descriptorSet.
+    void checkAndEraseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
+
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
     static void SetMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
@@ -258,6 +270,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
   private:
     angle::Result allocateNewPool(Context *context);
 
+    static constexpr size_t kInvalidPoolIndex    = -1;
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;
@@ -285,7 +298,7 @@ class MetaDescriptorPool final : angle::NonCopyable
     MetaDescriptorPool();
     ~MetaDescriptorPool();
 
-    void destroy(RendererVk *rendererVk, VulkanCacheType cacheType);
+    void destroy(RendererVk *rendererVk);
 
     angle::Result bindCachedDescriptorPool(Context *context,
                                            const DescriptorSetLayoutDesc &descriptorSetLayoutDesc,
