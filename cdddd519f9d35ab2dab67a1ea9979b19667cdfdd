@@ -16,6 +16,46 @@
       "message": "First pass CL (incomplete) to collect feedback.\nThis implementation does work for Candy Crush.",
       "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d138fd32_4f1f6ded",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T20:42:51Z",
+      "side": 1,
+      "message": "LGTM if it passes the bots! We can always add modes one by one as needed, so no need to try and be exhaustive here.",
+      "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5512c029_6bb8f418",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T20:42:51Z",
+      "side": 1,
+      "message": "The emulation code doesn\u0027t dither alpha, so you might as well not pay attention to alpha blend.",
+      "range": {
+        "startLine": 643,
+        "startChar": 11,
+        "endLine": 643,
+        "endChar": 85
+      },
+      "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
