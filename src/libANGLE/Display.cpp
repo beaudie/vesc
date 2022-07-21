@@ -1004,12 +1004,16 @@ Error Display::initialize()
     }
 
     // OpenGL ES1 is implemented in the frontend, explicitly add ES1 support to all configs
+    // If we aren't using desktop GL entry points, remove desktop GL support from all configs
     for (auto &config : mConfigSet)
     {
         // TODO(geofflang): Enable the conformant bit once we pass enough tests
         // config.second.conformant |= EGL_OPENGL_ES_BIT;
 
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
+#if !defined(ANGLE_ENABLE_GL_DESKTOP_FRONTEND)
+        config.second.renderableType &= ~EGL_OPENGL_BIT;
+#endif
     }
 
     if (!mState.featuresAllDisabled)

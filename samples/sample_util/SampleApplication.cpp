@@ -127,16 +127,16 @@ SampleApplication::SampleApplication(std::string name,
             glMajorVersion = 3;
             glMinorVersion = 1;
             break;
-        case ClientType::GL3_3_CORE:
+        case ClientType::GL4_6_CORE:
             eglClientType  = EGL_OPENGL_API;
-            glMajorVersion = 3;
-            glMinorVersion = 3;
+            glMajorVersion = 4;
+            glMinorVersion = 6;
             profileMask    = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT;
             break;
-        case ClientType::GL3_3_COMPATIBILITY:
+        case ClientType::GL4_6_COMPATIBILITY:
             eglClientType  = EGL_OPENGL_API;
-            glMajorVersion = 3;
-            glMinorVersion = 3;
+            glMajorVersion = 4;
+            glMinorVersion = 6;
             profileMask    = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT;
             break;
         default:
