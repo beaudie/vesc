@@ -36,6 +36,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 import traceback
 
@@ -293,8 +294,9 @@ class GroupedResult():
     Crashed = "Crashed"
     CompileFailed = "CompileFailed"
     Skipped = "Skipped"
+    FailedToTrace = "FailedToTrace"
 
-    ResultTypes = [Passed, Failed, TimedOut, Crashed, CompileFailed, Skipped]
+    ResultTypes = [Passed, Failed, TimedOut, Crashed, CompileFailed, Skipped, FailedToTrace]
 
     def __init__(self, resultcode, message, output, tests):
         self.resultcode = resultcode
@@ -367,6 +369,7 @@ class Test():
         self.context_id = 0
         self.test_index = -1  # index of test within a test batch
         self._label = self.full_test_name.replace(".", "_").replace("/", "_")
+        self.skipped_by_suite = False
 
     def __str__(self):
         return self.full_test_name + " Params: " + self.params
@@ -446,13 +449,27 @@ class TestBatch():
         filt = ':'.join([test.full_test_name for test in self.tests])
 
         cmd = GetRunCommand(args, test_exe_path)
-        cmd += ['--gtest_filter=%s' % filt, '--angle-per-test-capture-label']
+        temp_file = tempfile.mktemp()
+        cmd += [
+            '--gtest_filter=%s' % filt,
+            '--angle-per-test-capture-label',
+            '--isolated-script-test-output=' + temp_file,
+        ]
         self.logger.info('%s %s' % (_FormatEnv(extra_env), ' '.join(cmd)))
 
         returncode, output = child_processes_manager.RunSubprocess(
             cmd, env, timeout=SUBPROCESS_TIMEOUT)
+
+        with open(temp_file) as f:
+            test_results = json.load(f)
+        os.unlink(temp_file)
         if args.show_capture_stdout:
             self.logger.info("Capture stdout: %s" % output)
+        for test in self.tests:
+            test_result = test_results['tests'][test.full_test_name]
+            if test_result['actual'] == 'SKIP':
+                test.skipped_by_suite = True
+
         if returncode == -1:
             self.results.append(GroupedResult(GroupedResult.Crashed, "", output, self.tests))
             return False
@@ -464,17 +481,25 @@ class TestBatch():
     def RemoveTestsThatDoNotProduceAppropriateTraceFiles(self):
         continued_tests = []
         skipped_tests = []
+        failed_to_trace_tests = []
         for test in self.tests:
             if not test.CanRunReplay(self.trace_folder_path):
-                skipped_tests.append(test)
+                if test.skipped_by_suite:
+                    skipped_tests.append(test)
+                else:
+                    failed_to_trace_tests.append(test)
             else:
                 continued_tests.append(test)
         if len(skipped_tests) > 0:
             self.results.append(
-                GroupedResult(
-                    GroupedResult.Skipped,
-                    "Skipping replay since capture didn't produce necessary trace files", "",
-                    skipped_tests))
+                GroupedResult(GroupedResult.Skipped, "Skipping replay since test skipped by suite",
+                              "", skipped_tests))
+        if len(failed_to_trace_tests) > 0:
+            self.results.append(
+                GroupedResult(GroupedResult.FailedToTrace,
+                              "Test not skipped but failed to produce trace files", "",
+                              failed_to_trace_tests))
+
         return continued_tests
 
     def BuildReplay(self, replay_build_dir, composite_file_id, tests, child_processes_manager):
@@ -750,6 +775,7 @@ def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, nin
                 result_list.append(test_batch.GetResults())
                 logger.info(str(test_batch.GetResults()))
                 continue
+
             continued_tests = test_batch.RemoveTestsThatDoNotProduceAppropriateTraceFiles()
             if len(continued_tests) == 0:
                 result_list.append(test_batch.GetResults())
