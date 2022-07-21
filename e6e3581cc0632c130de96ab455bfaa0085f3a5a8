@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc4c025_192e7ddb",
+        "filename": "src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T18:14:39Z",
+      "side": 1,
+      "message": "Please remove the `Eufa` prefix, that\u0027s some ancient style in the translator code I\u0027d very much rather see gone.\n\nInstead, use an `enum class` and follow the pattern of `gl::ShaderType` for example:\n\n```\nenum class ShaderType : uint8_t  // uint8_t not necessary for your use case\n{\n    Vertex         \u003d 0,\n    TessControl    \u003d 1,\n    TessEvaluation \u003d 2,\n    Geometry       \u003d 3,\n    Fragment       \u003d 4,\n    Compute        \u003d 5,\n\n    InvalidEnum \u003d 6,\n    EnumCount   \u003d 6,\n};\n\nusing ShaderBitSet \u003d angle::PackedEnumBitSet\u003cShaderType, uint8_t\u003e;\n```\n\nThen you can pass a bitset to this function instead of a `uint32_t` and use `flags[UnsupportedFunctionArguments::StructContainingSamplers]` style of checking the bit.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 8
+      },
+      "revId": "e6e3581cc0632c130de96ab455bfaa0085f3a5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08a7b1a0_535cc04a",
+        "filename": "src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T18:14:39Z",
+      "side": 1,
+      "message": "We tend to avoid default initializers as much as possible; they are a source of bugs. Instead, please explicitly select the bits before calling this function:\n\n```\n    UnsupportedFunctionArgumentsBitSet args \u003d {\n        UnsupportedFunctionArguments::StructContainingSamplers,\n        ...\n    };\n```",
+      "range": {
+        "startLine": 46,
+        "startChar": 93,
+        "endLine": 46,
+        "endChar": 98
+      },
+      "revId": "e6e3581cc0632c130de96ab455bfaa0085f3a5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
