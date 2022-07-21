@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63c1a2ba_fd4b6107",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-21T16:39:26Z",
+      "side": 1,
+      "message": "Thanks for bearing with me, Mohan, and I apologize about all the back and forth but I\u0027m still confused. Let me take a little step back and try to explain my current state of confusion:\n\nI am trying to make sense of the eglTerminate spec to better understand where we\u0027re trying to get with this cl. \n\nOne thing that I still don\u0027t understand is what is supposed to happen to unreleased contexts when eglTerminate is called but then the display is brought back to life with eglInitialize again.\n\nThis part of the spec suggests that contexts are no longer valid immediately after the call:\n\n```\nTermination marks all EGL-specific resources, such as contexts and surfaces, associated with the specified display for deletion. Handles to all such resources are invalid as soon as eglTerminate returns, but the dpy handle itself remains valid. Passing such handles to any other EGL command will generate EGL_BAD_SURFACE or EGL_BAD_CONTEXT errors. Applications should not try to perform useful work with such resources following eglTerminate; only eglMakeCurrent or eglReleaseThread should be called, to complete deletion of these resources.\n```\n\nIt doesn\u0027t seem to state explicitly that those contexts remain invalid after eglInitialize is called again, but presumably that\u0027s the case. If so, then shouldn\u0027t *all* contexts be moved to some kind of \"invalid\" set regardless of whether or not ref count reached zero? My understanding is that if the display is initialized again, those objects are not supposed to become valid again.\n\nMy understanding of this following part of the spec is that these contexts may still be used by some threads and that\u0027s okay but rendering behavior is undefined as long as the app doesn\u0027t crash:\n\n```\nUse of bound contexts and surfaces (that is, continuing to issue commands to a bound client API context) will not result in interruption or termination of applications, but rendering results are undefined, and client APIs may generate errors\n```\n\nI had a look at \"Android CTS WrapperTest.testThreadCleanup\" and I don\u0027t understand why that test is problematic. It seems to do a proper cleanup on each thread. In that case, we should be able to release thread-specific resources in `eglReleaseThread`.. do you know what was the root cause there?\n\nI am still missing something in the logic behind the entire move-to-`mInvalid*Set`-then-destroy-in-`eglReleaseThread` approach. `eglReleaseThread` does not check for any ref counts so it will just destroy objects unconditionally. Why is the destroy operation postponed until `eglReleaseThread` then? If there is a good reason why it is postponed, what makes us believe that this reason is no longer there when `eglReleaseThread` gets called? There are potentially still other outstanding threads and current contexts.. so what is special about `eglReleaseThread` being called by some thread?..\n\nAm I making sense at all? :)",
+      "parentUuid": "9a747169_c619251d",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
