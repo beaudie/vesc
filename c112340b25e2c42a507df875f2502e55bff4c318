@@ -46,6 +46,30 @@
       },
       "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a657896_70b71e3d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-07-21T14:03:34Z",
+      "side": 1,
+      "message": "My pleasure!\n\nI used patchset 25 and got error from vulkan driver while changing layout to the PRESENT_SRC. The reason why vulkan driver failed to change layout was that the selected queue didn\u0027t support presentation feature.\n\nAnd the barrier command for layout transition is inserted by: \nRenderPassCommandBufferHelper::finalizeColorImageLayout()\n{\n...\n 1834     if (mImageOptimizeForPresent \u003d\u003d image)\n 1835     {\n 1836         ASSERT(packedAttachmentIndex \u003d\u003d kAttachmentIndexZero);\n 1837         // Use finalLayout instead of extra barrier for layout change to present\n 1838        mImageOptimizeForPresent-\u003esetCurrentImageLayout(ImageLayout::Present);\n...\n}\n\nbefore presentation.\n\nTo skip this, below can be the another point. But I didn\u0027t tested it yet.\n3979     // Use finalLayout instead of extra barrier for layout change to present\n3980     if (colorImage !\u003d nullptr)\n3981     {\n3982         mRenderPassCommands-\u003esetImageOptimizeForPresent(colorImage);\n3983     }\n\nAnd yes you\u0027re right about RendererVk::selectPresentQueueForSurface() is not involved on GBM. I just wanted to say it is used to re-select presentation queue by other platform (i.e. Android). But GBM can\u0027t use this because it can\u0027t use \u0027vkGetPhysicalDeviceSurfaceSupportKHR\u0027 function to query whether the selected queue supports presentation and GBM doesn\u0027t requires it.",
+      "parentUuid": "74f773e5_f0dd829d",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
