@@ -58,6 +58,11 @@ static tcu::TestPackage *createES32Package(tcu::TestContext &testCtx)
     return new es32cts::ES32TestPackage(testCtx, "KHR-GLES32");
 }
 
+// static tcu::TestPackage *createGL30Package(tcu::TestContext &testCtx)
+//{
+//     return new gl3cts::GL30TestPackage(testCtx, "KHR-GL30");
+// }
+
 // static tcu::TestPackage* createNoDefaultCustomContextPackage(tcu::TestContext& testCtx)
 // {
 //     return new glcts::NoDefaultContextPackage(testCtx, "KHR-NoContext");
@@ -104,10 +109,11 @@ static tcu::TestPackage *createES32Package(tcu::TestContext &testCtx)
 // {
 //     return new gl4cts::GL45TestPackage(testCtx, "KHR-GL45");
 // }
-// static tcu::TestPackage* createGL46Package(tcu::TestContext& testCtx)
-// {
-//     return new gl4cts::GL46TestPackage(testCtx, "KHR-GL46");
-// }
+
+static tcu::TestPackage *createGL46Package(tcu::TestContext &testCtx)
+{
+    return new gl4cts::GL46TestPackage(testCtx, "KHR-GL46");
+}
 
 void registerPackages(void)
 {
@@ -126,9 +132,9 @@ void registerPackages(void)
     // registry->registerPackage("KHR-NoContext", createNoDefaultCustomContextPackage);
 
     // registry->registerPackage("KHR-GL30", createGL30Package);
-    // registry->registerPackage("KHR-GL31", createGL31Package);
-    // registry->registerPackage("KHR-GL32", createGL32Package);
-    // registry->registerPackage("KHR-GL33", createGL33Package);
+    //  registry->registerPackage("KHR-GL31", createGL31Package);
+    //  registry->registerPackage("KHR-GL32", createGL32Package);
+    //  registry->registerPackage("KHR-GL33", createGL33Package);
 
     // registry->registerPackage("KHR-GL40", createGL40Package);
     // registry->registerPackage("KHR-GL41", createGL41Package);
@@ -136,7 +142,7 @@ void registerPackages(void)
     // registry->registerPackage("KHR-GL43", createGL43Package);
     // registry->registerPackage("KHR-GL44", createGL44Package);
     // registry->registerPackage("KHR-GL45", createGL45Package);
-    // registry->registerPackage("KHR-GL46", createGL46Package);
+    registry->registerPackage("KHR-GL46", createGL46Package);
 }
 }  // namespace glcts
 
