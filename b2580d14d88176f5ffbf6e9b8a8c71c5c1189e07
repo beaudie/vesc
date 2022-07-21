@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b8f6c10_30bc8203",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-21T21:05:24Z",
+      "side": 1,
+      "message": "Looks like the body of this has a lot in common with `ensureRenderTarget`. Can we refactor them?\n\nMaybe a `ensureStorage(bool renderTarget, bool typeless)`?",
+      "range": {
+        "startLine": 622,
+        "startChar": 26,
+        "endLine": 622,
+        "endChar": 40
+      },
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad5ed0d1_f2cca90f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-21T21:05:24Z",
+      "side": 1,
+      "message": "nit: Move this to the other classes below so we\u0027re less likely to forget to update them if they support typeless formats.",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 54
+      },
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
