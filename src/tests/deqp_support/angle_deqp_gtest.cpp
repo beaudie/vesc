@@ -75,18 +75,27 @@ const char *gCaseListFiles[] = {
     OPENGL_CTS_DIR("aosp_mustpass/main/gles31-rotate-landscape.txt"),
     OPENGL_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-portrait.txt"),
     OPENGL_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-landscape.txt"),
+    "external/openglcts/data/mustpass/gl/khronos_mustpass/main/gl46-master.txt",
 };
 
 #undef OPENGL_CTS_DIR
 
 const char *gTestExpectationsFiles[] = {
-    "deqp_gles2_test_expectations.txt",         "deqp_gles3_test_expectations.txt",
-    "deqp_gles31_test_expectations.txt",        "deqp_egl_test_expectations.txt",
-    "deqp_khr_gles2_test_expectations.txt",     "deqp_khr_gles3_test_expectations.txt",
-    "deqp_khr_gles31_test_expectations.txt",    "deqp_khr_gles32_test_expectations.txt",
-    "deqp_gles3_rotate_test_expectations.txt",  "deqp_gles3_rotate_test_expectations.txt",
-    "deqp_gles3_rotate_test_expectations.txt",  "deqp_gles31_rotate_test_expectations.txt",
-    "deqp_gles31_rotate_test_expectations.txt", "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gles2_test_expectations.txt",
+    "deqp_gles3_test_expectations.txt",
+    "deqp_gles31_test_expectations.txt",
+    "deqp_egl_test_expectations.txt",
+    "deqp_khr_gles2_test_expectations.txt",
+    "deqp_khr_gles3_test_expectations.txt",
+    "deqp_khr_gles31_test_expectations.txt",
+    "deqp_khr_gles32_test_expectations.txt",
+    "deqp_gles3_rotate_test_expectations.txt",
+    "deqp_gles3_rotate_test_expectations.txt",
+    "deqp_gles3_rotate_test_expectations.txt",
+    "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gl_test_expectations.txt",
 };
 
 using APIInfo = std::pair<const char *, GPUTestConfig::API>;
@@ -743,6 +752,10 @@ size_t GetTestModuleIndex()
 
 #ifdef ANGLE_DEQP_GLES31_ROTATE270_TESTS
     return 13;
+#endif
+
+#ifdef ANGLE_DEQP_GL_TESTS
+    return 14;
 #endif
 }
 
