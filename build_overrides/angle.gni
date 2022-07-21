@@ -24,3 +24,7 @@ angle_spirv_cross_dir = "//third_party/vulkan-deps/spirv-cross/src"
 angle_spirv_headers_dir = "//third_party/vulkan-deps/spirv-headers/src"
 angle_spirv_tools_dir = "//third_party/vulkan-deps/spirv-tools/src"
 angle_vulkan_memory_allocator_dir = "//third_party/vulkan_memory_allocator"
+
+# Disable the share context lock for GL calls, the client is reponsible for
+# using share context in threadsafe way
+angle_disable_share_context_lock = false
