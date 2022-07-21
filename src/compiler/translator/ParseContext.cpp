@@ -1842,8 +1842,6 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
         }
         switch (layoutQualifier.imageInternalFormat)
         {
-            case EiifRGBA32F:
-            case EiifRGBA16F:
             case EiifR32F:
             case EiifRGBA8:
                 if (publicType.getBasicType() != EbtPixelLocalANGLE)
@@ -1852,7 +1850,6 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                           getImageInternalFormatString(layoutQualifier.imageInternalFormat));
                 }
                 break;
-            case EiifRGBA16I:
             case EiifRGBA8I:
                 if (publicType.getBasicType() != EbtIPixelLocalANGLE)
                 {
@@ -1861,10 +1858,8 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                           getImageInternalFormatString(layoutQualifier.imageInternalFormat));
                 }
                 break;
-            case EiifRGBA32UI:
-            case EiifRGBA16UI:
-            case EiifRGBA8UI:
             case EiifR32UI:
+            case EiifRGBA8UI:
                 if (publicType.getBasicType() != EbtUPixelLocalANGLE)
                 {
                     error(identifierLocation,
@@ -1874,7 +1869,12 @@ void TParseContext::nonEmptyDeclarationErrorCheck(const TPublicType &publicType,
                 break;
             case EiifR32I:
             case EiifRGBA8_SNORM:
+            case EiifRGBA16F:
+            case EiifRGBA32F:
+            case EiifRGBA16I:
             case EiifRGBA32I:
+            case EiifRGBA16UI:
+            case EiifRGBA32UI:
             default:
                 error(identifierLocation, "illegal pixel local storage format",
                       getImageInternalFormatString(layoutQualifier.imageInternalFormat));
