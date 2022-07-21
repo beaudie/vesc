@@ -174,7 +174,6 @@ class DescriptorPoolHelper final : public Resource
     void release(RendererVk *renderer);
 
     bool allocateDescriptorSet(Context *context,
-                               CommandBufferHelperCommon *commandBufferHelper,
                                const DescriptorSetLayout &descriptorSetLayout,
                                VkDescriptorSet *descriptorSetsOut);
 
@@ -223,7 +222,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
     angle::Result init(Context *context,
                        const VkDescriptorPoolSize *setSizes,
                        size_t setSizeCount,
-                       VkDescriptorSetLayout descriptorSetLayout);
+                       const DescriptorSetLayout &descriptorSetLayout);
     void destroy(RendererVk *renderer);
 
     bool valid() const { return !mDescriptorPools.empty(); }
@@ -234,7 +233,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                         CommandBufferHelperCommon *commandBufferHelper,
                                         const DescriptorSetLayout &descriptorSetLayout,
                                         RefCountedDescriptorPoolBinding *bindingOut,
-                                        VkDescriptorSet *descriptorSetsOut);
+                                        VkDescriptorSet *descriptorSetOut);
 
     angle::Result getOrAllocateDescriptorSet(Context *context,
                                              CommandBufferHelperCommon *commandBufferHelper,
@@ -260,6 +259,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
     // Release the pool if it is no longer been used and contains no valid descriptorSet.
     void checkAndReleaseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
+    VkDescriptorSet getEmptyDescriptorSet() const { return mEmptyDescriptorSet; }
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
@@ -270,6 +270,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
   private:
     angle::Result allocateNewPool(Context *context);
 
+    static constexpr size_t kInvalidPoolIndex    = -1;
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;
@@ -280,8 +281,13 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
-
+    // Only used for bug workaround. See mFeatures.bindEmptyForUnusedDescriptorSets
+    VkDescriptorSet mEmptyDescriptorSet;
+    size_t mEmptyDescriptorSetPoolIndex;
+    // Tracks cache for descriptorSet. Note that cached DescriptorSet can be reuse even if it is GPU
+    // busy.
     DescriptorSetCache mDescriptorSetCache;
+    // Statistics for the cache.
     CacheStats mCacheStats;
 };
 
