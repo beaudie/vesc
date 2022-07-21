@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e7e8a67_144fe0a7",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T05:46:07Z",
+      "side": 1,
+      "message": "Hitchhiker: I don\u0027t think this needed to be a deep copy.",
+      "revId": "c449996a76690d69be188b4eeb1a2a0f5a5540ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
