@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb8ec603_7fbd861f",
+        "filename": "src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T20:25:32Z",
+      "side": 1,
+      "message": "Done. PackedEnumBitSet is nice.",
+      "parentUuid": "0cc4c025_192e7ddb",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 34,
+        "endChar": 8
+      },
+      "revId": "e6e3581cc0632c130de96ab455bfaa0085f3a5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08a7b1a0_535cc04a",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-21T18:14:39Z",
       "side": 1,
       "message": "We tend to avoid default initializers as much as possible; they are a source of bugs. Instead, please explicitly select the bits before calling this function:\n\n```\n    UnsupportedFunctionArgumentsBitSet args \u003d {\n        UnsupportedFunctionArguments::StructContainingSamplers,\n        ...\n    };\n```",
+      "range": {
+        "startLine": 46,
+        "startChar": 93,
+        "endLine": 46,
+        "endChar": 98
+      },
+      "revId": "e6e3581cc0632c130de96ab455bfaa0085f3a5a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "980e94a6_2f409a6c",
+        "filename": "src/compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T20:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08a7b1a0_535cc04a",
       "range": {
         "startLine": 46,
         "startChar": 93,
