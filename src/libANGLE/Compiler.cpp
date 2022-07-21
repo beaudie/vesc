@@ -305,7 +305,8 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     mResources.DefaultUniformsBindingIndex   = caps.defaultUniformsBindingIndex;
     mResources.UBOArgumentBufferBindingIndex = caps.UBOArgumentBufferBindingIndex;
 
-    // For ANGLE_shader_pixel_local_storage_coherent.
+    // For ANGLE_shader_pixel_local_storage(_coherent).
+    mResources.PixelLocalStorageType = caps.pixelLocalStorageType;
     mResources.FragmentSynchronizationType =
         mImplementation->getBackendFeatures().fragmentSynchronizationType;
 }
