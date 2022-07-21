@@ -395,7 +395,13 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.semaphoreFdEXT = getFeatures().supportsExternalSemaphoreFd.enabled;
     mNativeExtensions.semaphoreFuchsiaANGLE =
         getFeatures().supportsExternalSemaphoreFuchsia.enabled;
+
+    // ANGLE_shader_pixel_local_storage.
     mNativeExtensions.shaderPixelLocalStorageANGLE = true;
+    // TODO(anglebug.com/7524): rgba8i and rgba8ui formats in Vulkan give undefined behavior if the
+    // values being stored are larger than 8 bits. Enable r32* packing on Vulkan PLS to work around
+    // this. The Vulkan backend might want to handle this case generally.
+    mNativeCaps.pixelLocalStorageType = ShPixelLocalStorageType::R32Image2D;
 
     mNativeExtensions.vertexHalfFloatOES = true;
 

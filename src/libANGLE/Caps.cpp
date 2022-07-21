@@ -1198,6 +1198,11 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
         caps.maxCombinedTextureImageUnits = 96;
     }
 
+    if (extensions.shaderPixelLocalStorageANGLE)
+    {
+        caps.pixelLocalStorageType = ShPixelLocalStorageType::Image2D;
+    }
+
     for (ShaderType shaderType : AllShaderTypes())
     {
         caps.maxCombinedShaderUniformComponents[shaderType] =

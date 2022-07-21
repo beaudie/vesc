@@ -306,6 +306,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
     mResources.UBOArgumentBufferBindingIndex = caps.UBOArgumentBufferBindingIndex;
 
     // For ANGLE_shader_pixel_local_storage_coherent.
+    mResources.PixelLocalStorageType       = caps.pixelLocalStorageType;
     mResources.FragmentSynchronizationType = caps.fragmentSynchronizationType;
 }
 
