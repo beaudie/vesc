@@ -391,7 +391,8 @@ struct Caps
     GLuint defaultUniformsBindingIndex   = 0;
     GLuint UBOArgumentBufferBindingIndex = 0;
 
-    // For ANGLE_shader_pixel_local_storage_coherent.
+    // ANGLE_shader_pixel_local_storage.
+    ShPixelLocalStorageType pixelLocalStorageType             = ShPixelLocalStorageType::None;
     ShFragmentSynchronizationType fragmentSynchronizationType = ShFragmentSynchronizationType::None;
 };
 
