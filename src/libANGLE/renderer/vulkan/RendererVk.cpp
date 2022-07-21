@@ -3027,6 +3027,11 @@ gl::Version RendererVk::getMaxConformantESVersion() const
     return maxSupportedESVersion;
 }
 
+gl::Version RendererVk::getMaxSupportedDesktopVersion() const
+{
+    return {4, 6};
+}
+
 bool RendererVk::canSupportFragmentShadingRate(const vk::ExtensionNameList &deviceExtensionNames)
 {
     // Device needs to support VK_KHR_fragment_shading_rate and specifically
