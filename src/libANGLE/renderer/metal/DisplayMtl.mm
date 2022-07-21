@@ -87,6 +87,9 @@ static EGLint GetStencilSize(GLint internalformat)
 
 bool IsMetalDisplayAvailable()
 {
+    static bool queriedSystemDevice = false;
+    static bool gpuFamilySufficient = false;
+
     // We only support macos 10.13+ and 11 for now. Since they are requirements for Metal 2.0.
 #if TARGET_OS_SIMULATOR
     if (ANGLE_APPLE_AVAILABLE_XCI(10.13, 13.0, 13))
@@ -94,7 +97,28 @@ bool IsMetalDisplayAvailable()
     if (ANGLE_APPLE_AVAILABLE_XCI(10.13, 13.0, 11))
 #endif
     {
-        return true;
+        if (!queriedSystemDevice)
+        {
+            ANGLE_MTL_OBJC_SCOPE
+            {
+                queriedSystemDevice = true;
+                auto device         = [MTLCreateSystemDefaultDevice() ANGLE_MTL_AUTORELEASE];
+                if (!device)
+                    return false;
+#if defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
+                // Old Macs, such as MacBookPro11,4, cannot use ANGLE's Metal backend.
+                // This check can be removed once they are no longer supported.
+                if ([device supportsFamily:MTLGPUFamilyMac2])
+                    gpuFamilySufficient = true;
+#elif defined(ANGLE_PLATFORM_IOS) && !TARGET_OS_SIMULATOR
+                // A8 devices (iPad Mini 4, iPad Air 2) cannot use ANGLE's Metal backend.
+                // This check can be removed once they are no longer supported.
+                if ([device supportsFamily:MTLGPUFamilyApple3])
+                    gpuFamilySufficient = true;
+#endif
+            }
+        }
+        return gpuFamilySufficient;
     }
     return false;
 }
