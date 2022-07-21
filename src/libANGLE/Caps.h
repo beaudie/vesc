@@ -392,7 +392,7 @@ struct Caps
     GLuint UBOArgumentBufferBindingIndex = 0;
 
     // For ANGLE_shader_pixel_local_storage_coherent.
-    ShFragmentSynchronizationType fragmentSynchronizationType;
+    ShFragmentSynchronizationType fragmentSynchronizationType = ShFragmentSynchronizationType::None;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
