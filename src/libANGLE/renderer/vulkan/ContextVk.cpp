@@ -636,6 +636,15 @@ void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &grap
     out << "}\n";
 }
 
+bool BlendModeSupportsDither(const gl::State &state, size_t colorIndex)
+{
+    // TODO: Add reasoning, expand list based on that
+    return state.getBlendStateExt().getSrcColorIndexed(colorIndex) == GL_SRC_ALPHA &&
+           state.getBlendStateExt().getSrcAlphaIndexed(colorIndex) == GL_SRC_ALPHA &&
+           state.getBlendStateExt().getDstColorIndexed(colorIndex) == GL_ONE_MINUS_SRC_ALPHA &&
+           state.getBlendStateExt().getDstAlphaIndexed(colorIndex) == GL_ONE_MINUS_SRC_ALPHA;
+}
+
 }  // anonymous namespace
 
 void ContextVk::flushDescriptorSetUpdates()
@@ -4643,14 +4652,20 @@ void ContextVk::updateDither()
     uint16_t ditherControl = 0;
     if (mState.isDitherEnabled())
     {
-        // As dithering is emulated in the fragment shader itself, there are a number of situations
-        // that can lead to incorrect blending.  When blend is enabled, dither is not enabled to
-        // avoid such situations.
         const gl::DrawBufferMask attachmentMask =
-            framebufferVk->getState().getColorAttachmentsMask() &
-            ~mState.getBlendEnabledDrawBufferMask();
+            framebufferVk->getState().getColorAttachmentsMask();
+
         for (size_t colorIndex : attachmentMask)
         {
+            // As dithering is emulated in the fragment shader itself, there are a number of
+            // situations that can lead to incorrect blending.  We only allow blending with specific
+            // combinations know to not interfere with dithering.
+            if (mState.isBlendEnabledIndexed(static_cast<GLuint>(colorIndex)) &&
+                !BlendModeSupportsDither(mState, colorIndex))
+            {
+                continue;
+            }
+
             RenderTargetVk *attachment   = framebufferVk->getColorDrawRenderTarget(colorIndex);
             const angle::FormatID format = attachment->getImageActualFormatID();
 
