@@ -134,6 +134,10 @@ config("internal_config") {
     defines += [ "ANGLE_IS_LINUX" ]
   }
 
+  if (angle_disable_share_context_lock) {
+    defines += [ "ANGLE_DISABLE_SHARE_CONTEXT_LOCK=1" ]
+  }
+
   # Enables debug/trace-related functionality, including logging every GLES/EGL API command to the
   # "angle_debug.txt" file on desktop.  Enables debug markers for AGI, but must also set
   # angle_enable_annotator_run_time_checks to improve performance.
