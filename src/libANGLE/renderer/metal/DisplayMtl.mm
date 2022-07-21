@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include <sys/param.h>
 
+#include "common/apple_platform_utils.h"
 #include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
@@ -87,16 +88,7 @@ static EGLint GetStencilSize(GLint internalformat)
 
 bool IsMetalDisplayAvailable()
 {
-    // We only support macos 10.13+ and 11 for now. Since they are requirements for Metal 2.0.
-#if TARGET_OS_SIMULATOR
-    if (ANGLE_APPLE_AVAILABLE_XCI(10.13, 13.0, 13))
-#else
-    if (ANGLE_APPLE_AVAILABLE_XCI(10.13, 13.0, 11))
-#endif
-    {
-        return true;
-    }
-    return false;
+    return angle::IsMetalRendererAvailable();
 }
 
 DisplayImpl *CreateMetalDisplay(const egl::DisplayState &state)
