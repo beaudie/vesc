@@ -1191,6 +1191,20 @@ bool ValidateCompatibleSurface(const ValidationContext *val,
                 return false;
             }
             break;
+        case 4:
+            if (context->getClientType() == EGL_OPENGL_API)
+            {
+                if (!(surfaceConfig->renderableType & EGL_OPENGL_BIT))
+                {
+                    val->setError(EGL_BAD_MATCH, "Surface not compatible with OpenGL Desktop.");
+                    return false;
+                }
+            }
+            else
+            {
+                val->setError(EGL_BAD_MATCH, "Surface not compatible with Context API");
+            }
+            break;
         default:
             val->setError(EGL_BAD_MATCH, "Surface not compatible with Context API.");
             return false;
