@@ -69,6 +69,23 @@
       "parentUuid": "8c3d261d_73f86237",
       "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eea8478e_8b894e28",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-21T20:55:15Z",
+      "side": 1,
+      "message": "I want to make sure I understand the architecture here. There is a per-renderer D3D11_QUERY_TIMESTAMP_DISJOINT query that is started here in initializeDisjointQuery when a timer query is started and then `mDisjointQuery` is checked for disjoints then cleared.\n\nWhy not hold `mDisjointQuery` in the Query11? One renderer can have multiple contexts making queries so it\u0027s possible for timestamp queries to come from multiple contexts before any of them check the results.",
+      "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0cfe12a_c243a4f1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-21T20:55:15Z",
+      "side": 1,
+      "message": "Unfortunately, I don\u0027t think this helps. In GL, the user can keep calling glQueryCounterEXT over many frames and expect that the timestamps are all comparable. For this to work in D3D11, we would need to have a D3D11_QUERY_TIMESTAMP_DISJOINT query that runs forever and that means that we also can\u0027t check for disjoint events.\n\nEvery time we start and stop a D3D11_QUERY_TIMESTAMP_DISJOINT query, we would have to insert a disjoint in between because we don\u0027t know if the timestamps before and after are comparable. I think this would be bad experience for users, disjoints are expected to happen very rarely and users are often not prepared to handle them.",
+      "parentUuid": "4ae4c992_f9c29267",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0efe5eba_7be42cf3",
         "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
         "patchSetId": 2
