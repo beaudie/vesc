@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44808f3_b02ad6c5",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1877,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T18:22:00Z",
+      "side": 1,
+      "message": "nit: inconsistent string definitions here. FWIW, our preferred way is a constexpr array:\n\n```\nconstexpr char kNonPLSDiscard[] \u003d ...;\n```\n\n(no `static`)",
+      "range": {
+        "startLine": 1877,
+        "startChar": 4,
+        "endLine": 1877,
+        "endChar": 28
+      },
+      "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be3a712d_dceb574a",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T18:22:00Z",
+      "side": 1,
+      "message": "You don\u0027t need this check; these tests only run on ES3.1",
+      "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25e8039_cab1ccfc",
+        "filename": "src/tests/test_utils/angle_test_platform.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-21T18:22:00Z",
+      "side": 1,
+      "message": "nit:\n\n- `x ? true : y` is the same as `x || y`\n- `x ? y : false` is the same as `x \u0026\u0026 y`\n\nSo this expression really is:\n\n```\ncontextMajor \u003e\u003d major || (contextMajor \u003d\u003d major \u0026\u0026 contextMinor \u003e\u003d minor)\n```\n\n---\n\nThat said, you don\u0027t need this based on my comment on the test file. And if you have to, you might also like to look at `src/libANGLE/Version.inc` for how we did it elsewhere :)",
+      "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
