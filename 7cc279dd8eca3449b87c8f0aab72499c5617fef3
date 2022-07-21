@@ -22,6 +22,30 @@
       },
       "revId": "7cc279dd8eca3449b87c8f0aab72499c5617fef3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "880b2dad_12afa3c3",
+        "filename": "build_overrides/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-07-21T17:41:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf62696d_80fa5364",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 40
+      },
+      "revId": "7cc279dd8eca3449b87c8f0aab72499c5617fef3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
