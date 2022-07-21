@@ -634,6 +634,7 @@ class TestExpectation():
         expected_results_filename = "capture_replay_expectations.txt"
         expected_results_path = os.path.join(REPLAY_SAMPLE_FOLDER, expected_results_filename)
         self._asan = args.asan
+        self._also_run_broken_tests = args.also_run_broken_tests
         with open(expected_results_path, "rt") as f:
             for line in f:
                 l = line.strip()
@@ -665,9 +666,11 @@ class TestExpectation():
 
         if self._CheckTagsWithConfig(tags, config_tags):
             test_name_regex = re.compile('^' + test_name.replace('*', '.*') + '$')
-            if result_stripped == 'CRASH' or result_stripped == 'COMPILE_FAIL':
-                self.run_single[test_name] = self.result_map[result_stripped]
-                self.run_single_re[test_name] = test_name_regex
+            if self._also_run_broken_tests:
+                if result_stripped == 'CRASH' or result_stripped == 'COMPILE_FAIL':
+                    self.run_single[test_name] = self.result_map[result_stripped]
+                    self.run_single_re[test_name] = test_name_regex
+
             if result_stripped == 'SKIP_FOR_CAPTURE' or result_stripped == 'TIMEOUT':
                 self.skipped_for_capture_tests[test_name] = self.result_map[result_stripped]
                 self.skipped_for_capture_tests_re[test_name] = test_name_regex
@@ -1112,10 +1115,13 @@ if __name__ == '__main__':
         type=int,
         help='Maximum number of test processes. Default is %d.' % DEFAULT_MAX_JOBS)
     parser.add_argument(
-        '-a',
         '--also-run-skipped-for-capture-tests',
         action='store_true',
         help='Also run tests that are disabled in the expectations by SKIP_FOR_CAPTURE')
+    parser.add_argument(
+        '--also-run-broken-tests',
+        action='store_true',
+        help='Also run tests that are expected to be broken')
     parser.add_argument(
         '--max-ninja-jobs',
         type=int,
