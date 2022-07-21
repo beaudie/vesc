@@ -3418,19 +3418,38 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
 
-    if (!bindingOut->valid() ||
-        !bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
-                                                 descriptorSetOut))
+    bool success = false;
+    // First try to allocate from the same pool
+    if (bindingOut->valid() &&
+        bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
+                                                descriptorSetOut))
     {
-        ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().valid());
-        if (!mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut))
+        success = true;
+    }
+
+    if (!success)
+    {
+        // Next try to allocate from existing pools
+        for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
         {
-            ANGLE_TRY(allocateNewPool(context));
-            bool success = mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
-                context, commandBufferHelper, descriptorSetLayout, descriptorSetOut);
-            ASSERT(success);
+            if (pool->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
+                                                  descriptorSetOut))
+            {
+                bindingOut->set(pool);
+                success = true;
+                break;
+            }
         }
+    }
+
+    if (!success)
+    {
+        // Last, try to allocate a new pool (and/or evict an existing pool)
+        ANGLE_TRY(allocateNewPool(context));
+        mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
+            context, commandBufferHelper, descriptorSetLayout, descriptorSetOut);
+        // Allocate from a new pool must succeed.
+        ASSERT(success);
         bindingOut->set(mDescriptorPools[mCurrentPoolIndex]);
     }
 
