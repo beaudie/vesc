@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf62696d_80fa5364",
+        "filename": "build_overrides/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-21T16:34:25Z",
+      "side": 1,
+      "message": "I think we want this to be in the declare_args section of our root .gn file. We have gn helper variables like `build_with_chromium` to know if we\u0027re being built as part of Chrome to set the defaults.\n\nAlso, could you rename this variable to be the `angle_enable_shared_context_lock`? The double negative is harder to read.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 40
+      },
+      "revId": "7cc279dd8eca3449b87c8f0aab72499c5617fef3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
