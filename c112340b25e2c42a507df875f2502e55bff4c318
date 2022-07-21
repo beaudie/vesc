@@ -22,6 +22,30 @@
       },
       "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74f773e5_f0dd829d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-07-21T10:51:39Z",
+      "side": 1,
+      "message": "Hi Sungyong Choi,\n\nThanks for testing this!\n\nI believe this issue was already addressed and fixed here: https://chromium-review.googlesource.com/c/angle/angle/+/3596045/comments/0bebdbb7_aed350f8\n\nMaybe there is something I am missing, but I do not see any `RendererVk::selectPresentQueueForSurface()` involved.\n\nCould I ask you to be more specific about the image layout error you encounter?",
+      "parentUuid": "8e060e00_9bfaba90",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
