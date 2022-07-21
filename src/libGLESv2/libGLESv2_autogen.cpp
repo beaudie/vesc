@@ -16,6 +16,11 @@
 #include "libGLESv2/entry_points_gles_3_2_autogen.h"
 #include "libGLESv2/entry_points_gles_ext_autogen.h"
 
+#include "libGLESv2/entry_points_gl_1_autogen.h"
+#include "libGLESv2/entry_points_gl_2_autogen.h"
+#include "libGLESv2/entry_points_gl_3_autogen.h"
+#include "libGLESv2/entry_points_gl_4_autogen.h"
+
 #include "common/event_tracer.h"
 
 extern "C" {

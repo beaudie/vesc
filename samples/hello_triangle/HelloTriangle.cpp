@@ -20,7 +20,9 @@
 class HelloTriangleSample : public SampleApplication
 {
   public:
-    HelloTriangleSample(int argc, char **argv) : SampleApplication("HelloTriangle", argc, argv) {}
+    HelloTriangleSample(int argc, char **argv)
+        : SampleApplication("HelloTriangle", argc, argv, ClientType::GL3_3_CORE)
+    {}
 
     bool initialize() override
     {
