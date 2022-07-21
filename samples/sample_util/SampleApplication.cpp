@@ -139,6 +139,18 @@ SampleApplication::SampleApplication(std::string name,
             glMinorVersion = 3;
             profileMask    = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT;
             break;
+        case ClientType::GL4_6_CORE:
+            eglClientType  = EGL_OPENGL_API;
+            glMajorVersion = 4;
+            glMinorVersion = 6;
+            profileMask    = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT;
+            break;
+        case ClientType::GL4_6_COMPATIBILITY:
+            eglClientType  = EGL_OPENGL_API;
+            glMajorVersion = 4;
+            glMinorVersion = 6;
+            profileMask    = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT;
+            break;
         default:
             UNREACHABLE();
     }
