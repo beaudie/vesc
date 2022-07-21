@@ -31,6 +31,7 @@ angle_source_set("sample_util") {
     "../:libGLESv1_CM",
     "../:libGLESv2",
   ]
+
   public_deps = [
     "../:angle_common",
     "../util:angle_test_utils",
