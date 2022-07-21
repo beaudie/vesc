@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d75e0ff_75da2c97",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T18:44:49Z",
+      "side": 1,
+      "message": "It isn\u0027t in EXT_shader_pixel_local_storage, but I don\u0027t know why they didn\u0027t include it:\n\nhttps://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_pixel_local_storage.txt",
+      "parentUuid": "7c43b18f_26643ded",
+      "range": {
+        "startLine": 98,
+        "startChar": 71,
+        "endLine": 98,
+        "endChar": 98
+      },
+      "revId": "38cf33230cc6078b40d8799a3b109fe0b48feb4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ee9ce84_85f613fc",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
         "patchSetId": 9
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-21T18:30:54Z",
       "side": 1,
       "message": "One day you could also walk the tree first and see which image is used how. If the image is never loaded, no need to generate the readonly binding for example.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 40
+      },
+      "revId": "38cf33230cc6078b40d8799a3b109fe0b48feb4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b451008a_b71d5d48",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T18:44:49Z",
+      "side": 1,
+      "message": "Done - added your thought to the comment",
+      "parentUuid": "9ee9ce84_85f613fc",
       "range": {
         "startLine": 104,
         "startChar": 0,
