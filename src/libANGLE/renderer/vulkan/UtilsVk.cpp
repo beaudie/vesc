@@ -1237,7 +1237,7 @@ angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
     {
         ANGLE_TRY(mDescriptorPools[function].init(
             contextVk, descriptorPoolSizes.data(), descriptorPoolSizes.size(),
-            mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get().getHandle()));
+            mDescriptorSetLayouts[function][DescriptorSetIndex::Internal].get()));
     }
 
     // Corresponding pipeline layouts:
