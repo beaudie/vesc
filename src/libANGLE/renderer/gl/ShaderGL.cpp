@@ -370,6 +370,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         additionalOptions |= SH_REWRITE_ROW_MAJOR_MATRICES;
     }
 
+    if (features.passHighpToPackUnormSnormBuiltins.enabled)
+    {
+        additionalOptions |= SH_PASS_HIGHP_TO_PACK_UNORM_SNORM_BUILTINS;
+    }
+
     options |= additionalOptions;
 
     auto workerThreadPool = context->getShaderCompileThreadPool();
