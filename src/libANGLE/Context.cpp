@@ -1860,7 +1860,8 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
         break;
         case GL_CONTEXT_PROFILE_MASK:
             ASSERT(getClientType() == EGL_OPENGL_API);
-            *params = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT;
+            //*params = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT;
+            *params = GL_CONTEXT_CORE_PROFILE_BIT;
             break;
 
         // GL_ANGLE_request_extension

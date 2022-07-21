@@ -154,6 +154,7 @@ class RendererVk : angle::NonCopyable
 
     gl::Version getMaxSupportedESVersion() const;
     gl::Version getMaxConformantESVersion() const;
+    gl::Version getMaxSupportedDesktopVersion() const;
 
     uint32_t getApiVersion() const { return mApiVersion; }
     VkInstance getInstance() const { return mInstance; }
