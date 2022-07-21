@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db669321_cadb3bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-07-21T17:27:32Z",
+      "side": 1,
+      "message": "Current work involves disabling the block packing / modification. Running dry-run to get a list of failed tests. Not expecting to pass everything.",
+      "revId": "5e5f5479d31cc85b0e3a274ad27701c838775b28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
