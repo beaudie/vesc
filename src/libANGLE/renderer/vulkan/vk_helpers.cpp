@@ -3186,7 +3186,7 @@ void BufferPool::addStats(std::ostringstream *out) const
 }
 
 // DescriptorPoolHelper implementation.
-DescriptorPoolHelper::DescriptorPoolHelper() : mFreeDescriptorSets(0) {}
+DescriptorPoolHelper::DescriptorPoolHelper() : mValidDescriptorSets(0), mFreeDescriptorSets(0) {}
 
 DescriptorPoolHelper::~DescriptorPoolHelper()
 {
@@ -3208,7 +3208,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 
     // If there are descriptorSet garbage, they no longer relevant since the entire pool is going to
     // be destroyed.
-    mDescriptorSetCacheManager.destroyKeys();
+    mDescriptorSetCacheManager.destroyKeys(renderer);
     mDescriptorSetGarbageList.clear();
 
     if (mDescriptorPool.valid())
@@ -3232,25 +3232,30 @@ angle::Result DescriptorPoolHelper::init(Context *context,
     descriptorPoolInfo.poolSizeCount              = static_cast<uint32_t>(poolSizes.size());
     descriptorPoolInfo.pPoolSizes                 = poolSizes.data();
 
-    mFreeDescriptorSets = maxSets;
+    mValidDescriptorSets = 0;
+    mFreeDescriptorSets  = maxSets;
 
     ANGLE_VK_TRY(context, mDescriptorPool.init(renderer->getDevice(), descriptorPoolInfo));
 
     return angle::Result::Continue;
 }
 
-void DescriptorPoolHelper::destroy(RendererVk *renderer, VulkanCacheType cacheType)
+void DescriptorPoolHelper::destroy(RendererVk *renderer)
 {
-    mDescriptorSetCacheManager.destroyKeys();
+    mDescriptorSetCacheManager.destroyKeys(renderer);
     mDescriptorSetGarbageList.clear();
     mDescriptorPool.destroy(renderer->getDevice());
 }
 
-void DescriptorPoolHelper::release(ContextVk *contextVk, VulkanCacheType cacheType)
+void DescriptorPoolHelper::release(RendererVk *renderer)
 {
-    mDescriptorSetCacheManager.destroyKeys();
+    mDescriptorSetCacheManager.destroyKeys(renderer);
     mDescriptorSetGarbageList.clear();
-    contextVk->addGarbage(&mDescriptorPool);
+
+    GarbageList garbageList;
+    garbageList.emplace_back(GetGarbage(&mDescriptorPool));
+    renderer->collectGarbage(std::move(mUse), std::move(garbageList));
+    mUse.init();
 }
 
 bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
@@ -3270,6 +3275,7 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
             *descriptorSetsOut = garbage.getDescriptorSet();
             commandBufferHelper->retainResource(this);
             mDescriptorSetGarbageList.pop_front();
+            mValidDescriptorSets++;
             return true;
         }
     }
@@ -3290,6 +3296,7 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
 
         // The pool is still in use every time a new descriptor set is allocated from it.
         commandBufferHelper->retainResource(this);
+        mValidDescriptorSets++;
         return true;
     }
 
@@ -3343,26 +3350,12 @@ angle::Result DynamicDescriptorPool::init(Context *context,
     return mDescriptorPools[mCurrentPoolIndex]->get().init(context, mPoolSizes, mMaxSetsPerPool);
 }
 
-void DynamicDescriptorPool::destroy(RendererVk *renderer, VulkanCacheType cacheType)
+void DynamicDescriptorPool::destroy(RendererVk *renderer)
 {
     for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
     {
         ASSERT(!pool->isReferenced());
-        pool->get().destroy(renderer, cacheType);
-        delete pool;
-    }
-
-    mDescriptorPools.clear();
-    mCurrentPoolIndex          = 0;
-    mCachedDescriptorSetLayout = VK_NULL_HANDLE;
-}
-
-void DynamicDescriptorPool::release(ContextVk *contextVk, VulkanCacheType cacheType)
-{
-    for (RefCountedDescriptorPoolHelper *pool : mDescriptorPools)
-    {
-        ASSERT(!pool->isReferenced());
-        pool->get().release(contextVk, cacheType);
+        pool->get().destroy(renderer);
         delete pool;
     }
 
@@ -3385,8 +3378,10 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
         !bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
                                                  descriptorSetsOut))
     {
-        ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().valid());
-        if (!mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
+        ASSERT(mCurrentPoolIndex == kInvalidPoolIndex ||
+               mDescriptorPools[mCurrentPoolIndex]->get().valid());
+        if (mCurrentPoolIndex == kInvalidPoolIndex ||
+            !mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
                 context, commandBufferHelper, descriptorSetLayout, descriptorSetsOut))
         {
             ANGLE_TRY(allocateNewPool(context));
@@ -3430,8 +3425,10 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
         !bindingOut->get().allocateDescriptorSet(context, commandBufferHelper, descriptorSetLayout,
                                                  descriptorSetOut))
     {
-        ASSERT(mDescriptorPools[mCurrentPoolIndex]->get().valid());
-        if (!mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
+        ASSERT(mCurrentPoolIndex == kInvalidPoolIndex ||
+               mDescriptorPools[mCurrentPoolIndex]->get().valid());
+        if (mCurrentPoolIndex == kInvalidPoolIndex ||
+            !mDescriptorPools[mCurrentPoolIndex]->get().allocateDescriptorSet(
                 context, commandBufferHelper, descriptorSetLayout, descriptorSetOut))
         {
             ANGLE_TRY(allocateNewPool(context));
@@ -3457,12 +3454,16 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 {
     bool found = false;
 
+    RefCountedDescriptorPoolBinding tempBinding;
     Serial lastCompletedSerial = context->getRenderer()->getLastCompletedQueueSerial();
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
     {
         if (!mDescriptorPools[poolIndex]->isReferenced() &&
             !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(lastCompletedSerial))
         {
+            // The pool may have the cache, calling init will destroy all caches which may cause the
+            // pool gets destroyed. Temporary bind it to prevent it from getting destroyed.
+            tempBinding.set(mDescriptorPools[poolIndex]);
             mCurrentPoolIndex = poolIndex;
             found             = true;
             break;
@@ -3502,11 +3503,13 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
         // Wrap it with helper object so that it can be GPU tracked and add it to resource list.
         DescriptorSetHelper descriptorSetHelper(descriptorSet);
         contextVk->retainResource(&descriptorSetHelper);
-        poolOut->get().getGarbageList().push_back(std::move(descriptorSetHelper));
+        poolOut->get().addGarbage(std::move(descriptorSetHelper));
+        checkAndEraseUnusedPool(contextVk->getRenderer(), poolOut);
     }
 }
 
-void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &desc)
+void DynamicDescriptorPool::destroyCachedDescriptorSet(RendererVk *renderer,
+                                                       const DescriptorSetDesc &desc)
 {
     VkDescriptorSet descriptorSet;
     RefCountedDescriptorPoolHelper *poolOut;
@@ -3515,9 +3518,52 @@ void DynamicDescriptorPool::destroyCachedDescriptorSet(const DescriptorSetDesc &
         // Remove from the cache hash map
         mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
+
         // Put descriptorSet to the garbage list for reuse.
-        poolOut->get().getGarbageList().emplace_back(descriptorSet);
+        DescriptorSetHelper descriptorSetHelper(descriptorSet);
+        poolOut->get().addGarbage(std::move(descriptorSetHelper));
+        checkAndEraseUnusedPool(renderer, poolOut);
     }
+}
+
+void DynamicDescriptorPool::checkAndEraseUnusedPool(RendererVk *renderer,
+                                                    RefCountedDescriptorPoolHelper *pool)
+{
+    // If pool still contains any valid descriptorSet cache, then don't destroy it. Note that even
+    // if pool has no valid descriptorSet, pool itself may still be bound to a program until it gets
+    // unbound when next descriptorSet gets allocated. We always keep at least one pool around.
+    if (mDescriptorPools.size() < 2 || pool->get().hasValidDescriptorSet() || pool->isReferenced())
+    {
+        return;
+    }
+
+    // Erase it from the array
+    size_t poolIndex;
+    for (poolIndex = 0; poolIndex < mDescriptorPools.size(); ++poolIndex)
+    {
+        if (pool == mDescriptorPools[poolIndex])
+        {
+            break;
+        }
+    }
+    // There must be a match
+    ASSERT(poolIndex != mDescriptorPools.size());
+
+    ASSERT(pool->get().valid());
+    pool->get().release(renderer);
+    mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
+
+    // Update mCurrentPoolIndex.
+    if (mCurrentPoolIndex == poolIndex)
+    {
+        mCurrentPoolIndex = kInvalidPoolIndex;
+    }
+    else if (mCurrentPoolIndex != kInvalidPoolIndex && mCurrentPoolIndex > poolIndex)
+    {
+        mCurrentPoolIndex--;
+    }
+    ASSERT(mCurrentPoolIndex == kInvalidPoolIndex ||
+           mDescriptorPools[mCurrentPoolIndex]->get().valid());
 }
 
 // For testing only!
@@ -4705,7 +4751,7 @@ const Buffer &BufferHelper::getBufferForVertexArray(ContextVk *contextVk,
 
 void BufferHelper::destroy(RendererVk *renderer)
 {
-    mDescriptorSetCacheManager.destroyKeys();
+    mDescriptorSetCacheManager.destroyKeys(renderer);
     unmap(renderer);
     mBufferForVertexArray.destroy(renderer->getDevice());
     mSuballocation.destroy(renderer);
@@ -4740,7 +4786,7 @@ void BufferHelper::releaseBufferAndDescriptorSetCache(ContextVk *contextVk)
     }
     else
     {
-        mDescriptorSetCacheManager.destroyKeys();
+        mDescriptorSetCacheManager.destroyKeys(renderer);
     }
 
     release(renderer);
@@ -10281,13 +10327,13 @@ MetaDescriptorPool::~MetaDescriptorPool()
     ASSERT(mPayload.empty());
 }
 
-void MetaDescriptorPool::destroy(RendererVk *rendererVk, VulkanCacheType cacheType)
+void MetaDescriptorPool::destroy(RendererVk *rendererVk)
 {
     for (auto &iter : mPayload)
     {
         RefCountedDescriptorPool &refCountedPool = iter.second;
         ASSERT(!refCountedPool.isReferenced());
-        refCountedPool.get().destroy(rendererVk, cacheType);
+        refCountedPool.get().destroy(rendererVk);
     }
 
     mPayload.clear();
