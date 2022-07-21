@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3f7615e_a2387c42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-07-21T22:32:48Z",
+      "side": 1,
+      "message": "Thanks for your review!",
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b8f6c10_30bc8203",
@@ -26,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c348cded_55f26016",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-07-21T22:32:48Z",
+      "side": 1,
+      "message": "Sounds good.\n\nAlso, since these bools are repeated a lot (and often just literals at the call site), I was thinking about combining them into a flags enum. WDYT?",
+      "parentUuid": "3b8f6c10_30bc8203",
+      "range": {
+        "startLine": 622,
+        "startChar": 26,
+        "endLine": 622,
+        "endChar": 40
+      },
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad5ed0d1_f2cca90f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
         "patchSetId": 10
@@ -37,6 +78,30 @@
       "writtenOn": "2022-07-21T21:05:24Z",
       "side": 1,
       "message": "nit: Move this to the other classes below so we\u0027re less likely to forget to update them if they support typeless formats.",
+      "range": {
+        "startLine": 144,
+        "startChar": 4,
+        "endLine": 144,
+        "endChar": 54
+      },
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66360269_b304937d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-07-21T22:32:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad5ed0d1_f2cca90f",
       "range": {
         "startLine": 144,
         "startChar": 4,
