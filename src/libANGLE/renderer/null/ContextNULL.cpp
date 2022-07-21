@@ -111,6 +111,11 @@ ContextNULL::ContextNULL(const gl::State &state,
     mCaps = GenerateMinimumCaps(maxClientVersion, mExtensions);
 
     InitMinimumTextureCapsMap(maxClientVersion, mExtensions, &mTextureCaps);
+
+    if (mExtensions.shaderPixelLocalStorageANGLE)
+    {
+        mCaps.pixelLocalStorageType = ShPixelLocalStorageType::Image2D;
+    }
 }
 
 ContextNULL::~ContextNULL() {}

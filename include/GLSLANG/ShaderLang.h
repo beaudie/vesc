@@ -79,6 +79,14 @@ enum ShShaderOutput
     SH_MSL_METAL_OUTPUT = 0x8B4D,
 };
 
+// Instructs the compiler how to rewrite ANGLE_shader_pixel_local_storage.
+enum class ShPixelLocalStorageType
+{
+    None,
+    Image2D,
+    R32Image2D,  // Pack all PLS variables into r32* formatted image2Ds.
+};
+
 // Instructs the compiler which fragment synchronization method to use for
 // ANGLE_shader_pixel_local_storage_coherent, if any.
 enum class ShFragmentSynchronizationType
@@ -366,6 +374,11 @@ const ShCompileOptions SH_ROUND_OUTPUT_AFTER_DITHERING = UINT64_C(1) << 60;
 // Need to emit different division code for such platforms.
 const ShCompileOptions SH_PRECISION_SAFE_DIVISION = UINT64_C(1) << 61;
 
+// anglebug.com/7527: packUnorm4x8 fails on Pixel 4 if it is not passed a highp vec4.
+// TODO(anglebug.com/7527): This workaround is currently only applied for pixel local storage. We
+// may want to apply it generally.
+const ShCompileOptions SH_PASS_HIGHP_TO_PACK_UNORM_SNORM_BUILTINS = UINT64_C(1) << 62;
+
 // The 64 bits hash function. The first parameter is the input string; the
 // second parameter is the string length.
 using ShHashFunction64 = khronos_uint64_t (*)(const char *, size_t);
@@ -615,7 +628,8 @@ struct ShBuiltInResources
     // Binding index for UBO's argument buffer
     int UBOArgumentBufferBindingIndex;
 
-    // For ANGLE_shader_pixel_local_storage_coherent.
+    // ANGLE_shader_pixel_local_storage.
+    ShPixelLocalStorageType PixelLocalStorageType;
     ShFragmentSynchronizationType FragmentSynchronizationType;
 };
 

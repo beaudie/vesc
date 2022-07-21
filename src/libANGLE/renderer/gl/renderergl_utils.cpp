@@ -1515,11 +1515,17 @@ void GenerateCaps(const FunctionsGL *functions,
         (functions->hasGLExtension("GL_ARB_robust_buffer_access_behavior") ||
          functions->hasGLESExtension("GL_KHR_robust_buffer_access_behavior"));
 
+    // ANGLE_shader_pixel_local_storage.
     extensions->shaderPixelLocalStorageANGLE =
         functions->isAtLeastGL(gl::Version(4, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
         functions->hasGLExtension("GL_ARB_shader_image_load_store");
     if (extensions->shaderPixelLocalStorageANGLE)
     {
+        // OpenGL ES only allows r32* images to have read/write access in a shader.
+        caps->pixelLocalStorageType = functions->standard == STANDARD_GL_DESKTOP
+                                          ? ShPixelLocalStorageType::Image2D
+                                          : ShPixelLocalStorageType::R32Image2D;
+
         // Prefer vendor-specific extensions first. The PixelLocalStorageTest.Coherency test doesn't
         // always pass on Intel when we use the ARB extension.
         if (features.supportsFragmentShaderInterlockNV.enabled)
@@ -2258,6 +2264,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     // https://anglebug.com/7405
     ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, isImagination);
+
+    // https://anglebug.com/7527
+    ANGLE_FEATURE_CONDITION(features, passHighpToPackUnormSnormBuiltins, isQualcomm);
 
     // Desktop GLSL-only fragment synchronization extensions. These are injected internally by the
     // compiler to make pixel local storage coherent.
