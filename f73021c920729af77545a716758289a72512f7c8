@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea39ebc_ef46048b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-21T06:01:43Z",
+      "side": 1,
+      "message": "Please mention that this eliminates the need for the earlier workaround for the Intel driver bug where imageLoad() eventually started failing.",
+      "revId": "f73021c920729af77545a716758289a72512f7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c69f3c80_b46c11bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-21T06:01:43Z",
+      "side": 1,
+      "message": "Nice work. lgtm with a few comments.\n",
+      "revId": "f73021c920729af77545a716758289a72512f7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c6c46c3_4a171e49",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-21T06:01:43Z",
+      "side": 1,
+      "message": "I think it would be clearer if this comment were inside the if-block, but that\u0027s a matter of taste.",
+      "revId": "f73021c920729af77545a716758289a72512f7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a4b48af_0c35da69",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-21T06:01:43Z",
+      "side": 1,
+      "message": "typo: R32UI",
+      "revId": "f73021c920729af77545a716758289a72512f7c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
