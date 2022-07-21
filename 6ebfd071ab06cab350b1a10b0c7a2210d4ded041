@@ -34,6 +34,24 @@
       "parentUuid": "13902cdb_9127eeac",
       "revId": "6ebfd071ab06cab350b1a10b0c7a2210d4ded041",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86b30760_a8ef0e8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-21T23:01:24Z",
+      "side": 1,
+      "message": "There\u0027s no automerge that I know of. It will be quite a process, I think.",
+      "parentUuid": "8787131a_25128093",
+      "revId": "6ebfd071ab06cab350b1a10b0c7a2210d4ded041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
