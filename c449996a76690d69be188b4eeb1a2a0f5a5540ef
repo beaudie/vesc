@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93170c26_99188b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-21T06:11:12Z",
+      "side": 1,
+      "message": "I can\u0027t be an effective reviewer for this - it\u0027s too deep in the compiler internals for my knowledge - but am happy to rubber-stamp it once Shabi is happy.\n",
+      "revId": "c449996a76690d69be188b4eeb1a2a0f5a5540ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e7e8a67_144fe0a7",
