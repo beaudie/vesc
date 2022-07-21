@@ -54,6 +54,8 @@
 #    include "common/tls.h"
 #endif
 
+#include <iostream>
+
 namespace gl
 {
 namespace
@@ -3360,6 +3362,7 @@ void Context::initVersionStrings()
     versionString << clientVersion.major << "." << clientVersion.minor << ".0 (ANGLE "
                   << angle::GetANGLEVersionString() << ")";
     mVersionString = MakeStaticString(versionString.str());
+    std::cout << mVersionString << '\n';
 
     std::ostringstream shadingLanguageVersionString;
     if (getClientType() == EGL_OPENGL_ES_API)

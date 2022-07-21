@@ -14,6 +14,8 @@
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include <iostream>
+
 namespace rx
 {
 
@@ -22,6 +24,7 @@ static void GetGLVersion(PFNGLGETSTRINGPROC getStringFunction,
                          StandardGL *outStandard)
 {
     const std::string version = reinterpret_cast<const char *>(getStringFunction(GL_VERSION));
+    std::cout << version << '\n';
     if (version.find("OpenGL ES") == std::string::npos)
     {
         // OpenGL spec states the GL_VERSION string will be in the following format:

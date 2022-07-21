@@ -160,7 +160,9 @@ declare_args() {
 
   # Disable null backend to save space for official build.
   angle_enable_null = !is_official_build
-  angle_enable_gl_desktop = !is_android && !is_ios
+
+  # Add desktop entry points to libGLESv2 build.
+  angle_enable_gl_desktop = false
 
   # http://anglebug.com/2634
   angle_enable_metal = is_mac

@@ -28,9 +28,13 @@ angle_source_set("sample_util") {
   ]
   data_deps = [
     "../:libEGL",
-    "../:libGLESv1_CM",
     "../:libGLESv2",
   ]
+
+  if (!angle_enable_gl_desktop) {
+    data_deps += [ "../:libGLESv1_CM" ]
+  }
+
   public_deps = [
     "../:angle_common",
     "../util:angle_test_utils",
@@ -42,6 +46,9 @@ angle_source_set("sample_util") {
     ":sample_util_config",
     "../:no_gl_prototypes",
   ]
+
+  # This is used to skip some GLES-only commands called in sample_util/SampleApplication.cpp
+  defines = [ "ANGLE_ENABLE_GL_DESKTOP" ]
 }
 
 template("angle_sample") {
