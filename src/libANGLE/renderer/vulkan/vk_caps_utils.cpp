@@ -395,7 +395,10 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.semaphoreFdEXT = getFeatures().supportsExternalSemaphoreFd.enabled;
     mNativeExtensions.semaphoreFuchsiaANGLE =
         getFeatures().supportsExternalSemaphoreFuchsia.enabled;
+
+    // ANGLE_shader_pixel_local_storage.
     mNativeExtensions.shaderPixelLocalStorageANGLE = true;
+    mNativeCaps.pixelLocalStorageType              = ShPixelLocalStorageType::Image2D;
 
     mNativeExtensions.vertexHalfFloatOES = true;
 
