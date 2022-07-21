@@ -58,6 +58,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e5a553c_a1400eaa",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1904,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T22:27:17Z",
+      "side": 1,
+      "message": "Done. The goal is for these to run on at least 3.0, but we\u0027ll cross that bridge when we get to it.",
+      "parentUuid": "be3a712d_dceb574a",
+      "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e25e8039_cab1ccfc",
@@ -71,6 +89,24 @@
       "writtenOn": "2022-07-21T18:22:00Z",
       "side": 1,
       "message": "nit:\n\n- `x ? true : y` is the same as `x || y`\n- `x ? y : false` is the same as `x \u0026\u0026 y`\n\nSo this expression really is:\n\n```\ncontextMajor \u003e\u003d major || (contextMajor \u003d\u003d major \u0026\u0026 contextMinor \u003e\u003d minor)\n```\n\n---\n\nThat said, you don\u0027t need this based on my comment on the test file. And if you have to, you might also like to look at `src/libANGLE/Version.inc` for how we did it elsewhere :)",
+      "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb94bd9c_279a0f75",
+        "filename": "src/tests/test_utils/angle_test_platform.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-21T22:27:17Z",
+      "side": 1,
+      "message": "Done. I like your logic. Will revisit once these tests actually run on 3.0.",
+      "parentUuid": "e25e8039_cab1ccfc",
       "revId": "1f2a50eddcfdd0f3745cccefcbcf56b7204e8048",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
