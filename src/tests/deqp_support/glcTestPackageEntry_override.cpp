@@ -58,6 +58,11 @@ static tcu::TestPackage *createES32Package(tcu::TestContext &testCtx)
     return new es32cts::ES32TestPackage(testCtx, "KHR-GLES32");
 }
 
+static tcu::TestPackage *createGL30Package(tcu::TestContext &testCtx)
+{
+    return new gl3cts::GL30TestPackage(testCtx, "KHR-GL30");
+}
+
 // static tcu::TestPackage* createNoDefaultCustomContextPackage(tcu::TestContext& testCtx)
 // {
 //     return new glcts::NoDefaultContextPackage(testCtx, "KHR-NoContext");
@@ -125,7 +130,7 @@ void registerPackages(void)
 
     // registry->registerPackage("KHR-NoContext", createNoDefaultCustomContextPackage);
 
-    // registry->registerPackage("KHR-GL30", createGL30Package);
+    registry->registerPackage("KHR-GL30", createGL30Package);
     // registry->registerPackage("KHR-GL31", createGL31Package);
     // registry->registerPackage("KHR-GL32", createGL32Package);
     // registry->registerPackage("KHR-GL33", createGL33Package);
