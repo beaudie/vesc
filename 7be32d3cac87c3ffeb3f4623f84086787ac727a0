@@ -33,6 +33,23 @@
       "message": "CC\u0027ing Alexey as well.\n",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688ae8d6_5532fa99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-22T05:58:49Z",
+      "side": 1,
+      "message": "This change would make Metal backend completely unavailable on older devices, even via manual selection, right? Could we make it never-selected-by-default there instead?",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
