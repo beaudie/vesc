@@ -477,8 +477,8 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
                     LoadShaderInterfaceVariableXfbInfo(stream, &xfb);
                 }
                 info.useRelaxedPrecision     = stream->readBool();
-                info.varyingIsInput          = stream->readBool();
-                info.varyingIsOutput         = stream->readBool();
+                info.builtinIsInput          = stream->readBool();
+                info.builtinIsOutput         = stream->readBool();
                 info.attributeComponentCount = stream->readInt<uint8_t>();
                 info.attributeLocationCount  = stream->readInt<uint8_t>();
                 info.isDuplicate             = stream->readBool();
@@ -594,8 +594,8 @@ void ProgramExecutableVk::save(ContextVk *contextVk,
                     SaveShaderInterfaceVariableXfbInfo(xfb, stream);
                 }
                 stream->writeBool(info.useRelaxedPrecision);
-                stream->writeBool(info.varyingIsInput);
-                stream->writeBool(info.varyingIsOutput);
+                stream->writeBool(info.builtinIsInput);
+                stream->writeBool(info.builtinIsOutput);
                 stream->writeInt(info.attributeComponentCount);
                 stream->writeInt(info.attributeLocationCount);
                 stream->writeBool(info.isDuplicate);
@@ -1287,8 +1287,8 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
             ShaderInterfaceVariableInfo &info = mVariableInfoMap.getMutable(
                 mergedVarying.frontShaderStage, ShaderVariableType::Varying,
                 mergedVarying.frontShader->mappedName);
-            info.varyingIsOutput     = true;
-            info.useRelaxedPrecision = true;
+            // anglebug.com/7488 remove Spirv Precision Fixer
+            info.useRelaxedPrecision = false;
         }
         else
         {
@@ -1297,8 +1297,8 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
             ShaderInterfaceVariableInfo &info = mVariableInfoMap.getMutable(
                 mergedVarying.backShaderStage, ShaderVariableType::Varying,
                 mergedVarying.backShader->mappedName);
-            info.varyingIsInput      = true;
-            info.useRelaxedPrecision = true;
+            // anglebug.com/7488 remove Spirv Precision Fixer
+            info.useRelaxedPrecision = false;
         }
     }
 }

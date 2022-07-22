@@ -127,6 +127,8 @@ struct ShaderInterfaceVariableInfo
     // geometry shader)
     bool varyingIsInput  = false;
     bool varyingIsOutput = false;
+    bool builtinIsInput  = false;
+    bool builtinIsOutput = false;
     // For vertex attributes, this is the number of components / locations.  These are used by the
     // vertex attribute aliasing transformation only.
     uint8_t attributeComponentCount = 0;
