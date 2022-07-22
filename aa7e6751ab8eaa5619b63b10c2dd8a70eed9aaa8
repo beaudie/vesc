@@ -33,6 +33,24 @@
       "message": "The new tests fail on Pixel 6\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1193/overview\nPlease skip.",
       "revId": "aa7e6751ab8eaa5619b63b10c2dd8a70eed9aaa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f18491cf_e3ad4573",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-22T15:58:49Z",
+      "side": 1,
+      "message": "Thanks for pointing this out Yuly. Is there a way I can update the expectations to skip just pixel 6 and not the rest of android?",
+      "parentUuid": "852a8975_3513fd0f",
+      "revId": "aa7e6751ab8eaa5619b63b10c2dd8a70eed9aaa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
