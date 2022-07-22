@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f1af727_41868f5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-22T23:26:07Z",
+      "side": 1,
+      "message": "lgtm given that the changes are restricted to the validationES* files. I\u0027d expect ANGLE to support this in its (not shipping?) GL frontend.\n",
+      "revId": "ef89e074e71e8c302b82523493093c6b831632cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
