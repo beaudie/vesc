@@ -27,7 +27,11 @@ TIntermConstantUnion *CreateFloatNode(float value, TPrecision precision);
 TIntermConstantUnion *CreateVecNode(const float values[],
                                     unsigned int vecSize,
                                     TPrecision precision);
+TIntermConstantUnion *CreateUVecNode(const unsigned int values[],
+                                     unsigned int vecSize,
+                                     TPrecision precision);
 TIntermConstantUnion *CreateIndexNode(int index);
+TIntermConstantUnion *CreateIntNode(int value);
 TIntermConstantUnion *CreateUIntNode(unsigned int value);
 TIntermConstantUnion *CreateBoolNode(bool value);
 
