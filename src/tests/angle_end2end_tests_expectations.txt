@@ -514,6 +514,7 @@
 6931 PIXEL6 VULKAN : IndexedPointsTest* = SKIP
 6931 PIXEL6 VULKAN : MultisampleTest.Point/* = SKIP
 6931 PIXEL6 VULKAN : MultithreadingTestES3.* = SKIP
+6931 PIXEL6 VULKAN : PixelLocalStorageTest.EarlyFragmentTests/ES3_1_Vulkan_EmulatePixelLocalStorage* = SKIP
 6931 PIXEL6 VULKAN : PointSpritesTest.PointCoordAndPointSizeCompliance/* = SKIP
 6931 PIXEL6 VULKAN : PointSpritesTest.PointCoordRegressionTest/* = SKIP
 6931 PIXEL6 VULKAN : PointSpritesTest.PointSizeAboveMaxIsClamped/* = SKIP
