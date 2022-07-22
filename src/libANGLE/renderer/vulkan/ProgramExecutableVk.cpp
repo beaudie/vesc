@@ -1286,8 +1286,9 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
             ShaderInterfaceVariableInfo &info = mVariableInfoMap.getMutable(
                 mergedVarying.frontShaderStage, ShaderVariableType::Varying,
                 mergedVarying.frontShader->mappedName);
-            info.varyingIsOutput     = true;
-            info.useRelaxedPrecision = true;
+            // anglebug.com/7488 remove Spirv Precision Fixer
+            info.varyingIsOutput     = false;
+            info.useRelaxedPrecision = false;
         }
         else
         {
@@ -1296,8 +1297,9 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
             ShaderInterfaceVariableInfo &info = mVariableInfoMap.getMutable(
                 mergedVarying.backShaderStage, ShaderVariableType::Varying,
                 mergedVarying.backShader->mappedName);
-            info.varyingIsInput      = true;
-            info.useRelaxedPrecision = true;
+            // anglebug.com/7488 remove Spirv Precision Fixer
+            info.varyingIsInput      = false;
+            info.useRelaxedPrecision = false;
         }
     }
 }
