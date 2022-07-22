@@ -16,6 +16,23 @@
       "message": "3767535: Automatically enable early_fragment_tests when PLS is declared | https://chromium-review.googlesource.com/c/angle/angle/+/3767535",
       "revId": "aa7e6751ab8eaa5619b63b10c2dd8a70eed9aaa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "852a8975_3513fd0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-22T13:23:37Z",
+      "side": 1,
+      "message": "The new tests fail on Pixel 6\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1193/overview\nPlease skip.",
+      "revId": "aa7e6751ab8eaa5619b63b10c2dd8a70eed9aaa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
