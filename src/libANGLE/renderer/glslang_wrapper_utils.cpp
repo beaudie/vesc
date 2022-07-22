@@ -1775,11 +1775,12 @@ void SpirvVaryingPrecisionFixer::visitVariable(const ShaderInterfaceVariableInfo
                                                spv::StorageClass storageClass,
                                                spirv::Blob *blobOut)
 {
-    if (info.useRelaxedPrecision && info.activeStages[shaderType] && !mFixedVaryingId[id].valid())
-    {
-        mFixedVaryingId[id]     = SpirvTransformerBase::GetNewId(blobOut);
-        mFixedVaryingTypeId[id] = typeId;
-    }
+    //    if (info.useRelaxedPrecision && info.activeStages[shaderType] &&
+    //    !mFixedVaryingId[id].valid())
+    //    {
+    //        mFixedVaryingId[id]     = SpirvTransformerBase::GetNewId(blobOut);
+    //        mFixedVaryingTypeId[id] = typeId;
+    //    }
 }
 
 TransformationState SpirvVaryingPrecisionFixer::transformVariable(
@@ -1789,15 +1790,15 @@ TransformationState SpirvVaryingPrecisionFixer::transformVariable(
     spv::StorageClass storageClass,
     spirv::Blob *blobOut)
 {
-    if (info.useRelaxedPrecision &&
-        (storageClass == spv::StorageClassOutput || storageClass == spv::StorageClassInput))
-    {
-        // Change existing OpVariable to use fixedVaryingId
-        ASSERT(mFixedVaryingId[id].valid());
-        spirv::WriteVariable(blobOut, typeId, mFixedVaryingId[id], storageClass, nullptr);
-
-        return TransformationState::Transformed;
-    }
+    //    if (info.useRelaxedPrecision &&
+    //        (storageClass == spv::StorageClassOutput || storageClass == spv::StorageClassInput))
+    //    {
+    //        // Change existing OpVariable to use fixedVaryingId
+    //        ASSERT(mFixedVaryingId[id].valid());
+    //        spirv::WriteVariable(blobOut, typeId, mFixedVaryingId[id], storageClass, nullptr);
+    //
+    //        return TransformationState::Transformed;
+    //    }
     return TransformationState::Unchanged;
 }
 
@@ -1814,26 +1815,26 @@ void SpirvVaryingPrecisionFixer::writeInputPreamble(
     // Copy from corrected varyings to temp global variables with original precision.
     for (uint32_t idIndex = spirv::kMinValidId; idIndex < variableInfoById.size(); idIndex++)
     {
-        const spirv::IdRef id(idIndex);
-        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
-        if (info && info->useRelaxedPrecision && info->activeStages[shaderType] &&
-            info->varyingIsInput)
-        {
-            // This is an input varying, need to cast the mediump value that came from
-            // the previous stage into a highp value that the code wants to work with.
-            ASSERT(mFixedVaryingTypeId[id].valid());
-
-            // Build OpLoad instruction to load the mediump value into a temporary
-            const spirv::IdRef tempVar(SpirvTransformerBase::GetNewId(blobOut));
-            const spirv::IdRef tempVarType(mTypePointerTypeId[mFixedVaryingTypeId[id]]);
-            ASSERT(tempVarType.valid());
-
-            spirv::WriteLoad(blobOut, tempVarType, tempVar, mFixedVaryingId[id], nullptr);
-
-            // Build OpStore instruction to cast the mediump value to highp for use in
-            // the function
-            spirv::WriteStore(blobOut, id, tempVar, nullptr);
-        }
+        //        const spirv::IdRef id(idIndex);
+        //        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
+        //        if (info && info->useRelaxedPrecision && info->activeStages[shaderType] &&
+        //            info->varyingIsInput)
+        //        {
+        //            // This is an input varying, need to cast the mediump value that came from
+        //            // the previous stage into a highp value that the code wants to work with.
+        //            ASSERT(mFixedVaryingTypeId[id].valid());
+        //
+        //            // Build OpLoad instruction to load the mediump value into a temporary
+        //            const spirv::IdRef tempVar(SpirvTransformerBase::GetNewId(blobOut));
+        //            const spirv::IdRef tempVarType(mTypePointerTypeId[mFixedVaryingTypeId[id]]);
+        //            ASSERT(tempVarType.valid());
+        //
+        //            spirv::WriteLoad(blobOut, tempVarType, tempVar, mFixedVaryingId[id], nullptr);
+        //
+        //            // Build OpStore instruction to cast the mediump value to highp for use in
+        //            // the function
+        //            spirv::WriteStore(blobOut, id, tempVar, nullptr);
+        //        }
     }
 }
 
@@ -1864,23 +1865,23 @@ void SpirvVaryingPrecisionFixer::writeOutputPrologue(
     // Copy from temp global variables with original precision to corrected varyings.
     for (uint32_t idIndex = spirv::kMinValidId; idIndex < variableInfoById.size(); idIndex++)
     {
-        const spirv::IdRef id(idIndex);
-        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
-        if (info && info->useRelaxedPrecision && info->activeStages[shaderType] &&
-            info->varyingIsOutput)
-        {
-            ASSERT(mFixedVaryingTypeId[id].valid());
-
-            // Build OpLoad instruction to load the highp value into a temporary
-            const spirv::IdRef tempVar(SpirvTransformerBase::GetNewId(blobOut));
-            const spirv::IdRef tempVarType(mTypePointerTypeId[mFixedVaryingTypeId[id]]);
-            ASSERT(tempVarType.valid());
-
-            spirv::WriteLoad(blobOut, tempVarType, tempVar, id, nullptr);
-
-            // Build OpStore instruction to cast the highp value to mediump for output
-            spirv::WriteStore(blobOut, mFixedVaryingId[id], tempVar, nullptr);
-        }
+        //        const spirv::IdRef id(idIndex);
+        //        const ShaderInterfaceVariableInfo *info = variableInfoById[id];
+        //        if (info && info->useRelaxedPrecision && info->activeStages[shaderType] &&
+        //            info->varyingIsOutput)
+        //        {
+        //            ASSERT(mFixedVaryingTypeId[id].valid());
+        //
+        //            // Build OpLoad instruction to load the highp value into a temporary
+        //            const spirv::IdRef tempVar(SpirvTransformerBase::GetNewId(blobOut));
+        //            const spirv::IdRef tempVarType(mTypePointerTypeId[mFixedVaryingTypeId[id]]);
+        //            ASSERT(tempVarType.valid());
+        //
+        //            spirv::WriteLoad(blobOut, tempVarType, tempVar, id, nullptr);
+        //
+        //            // Build OpStore instruction to cast the highp value to mediump for output
+        //            spirv::WriteStore(blobOut, mFixedVaryingId[id], tempVar, nullptr);
+        //        }
     }
 }
 
@@ -3667,12 +3668,12 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
         case spv::DecorationNoPerspective:
         case spv::DecorationCentroid:
         case spv::DecorationSample:
-            if (info->useRelaxedPrecision)
-            {
-                // Change the id to replacement variable
-                spirv::WriteDecorate(mSpirvBlobOut, id, decoration, decorationValues);
-                return TransformationState::Transformed;
-            }
+            //            if (info->useRelaxedPrecision)
+            //            {
+            //                // Change the id to replacement variable
+            //                spirv::WriteDecorate(mSpirvBlobOut, id, decoration, decorationValues);
+            //                return TransformationState::Transformed;
+            //            }
             break;
         case spv::DecorationBlock:
             // If this is the Block decoration of a shader I/O block, add the transform feedback
@@ -3709,10 +3710,10 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
 
     // If any, the replacement variable is always reduced precision so add that decoration to
     // fixedVaryingId.
-    if (info->useRelaxedPrecision)
-    {
-        mVaryingPrecisionFixer.addDecorate(id, mSpirvBlobOut);
-    }
+    //    if (info->useRelaxedPrecision)
+    //    {
+    //        mVaryingPrecisionFixer.addDecorate(id, mSpirvBlobOut);
+    //    }
 
     // Add component decoration, if any.
     if (info->component != ShaderInterfaceVariableInfo::kInvalid)
@@ -3949,7 +3950,8 @@ TransformationState SpirvTransformer::transformAccessChain(const uint32_t *instr
         return TransformationState::Unchanged;
     }
 
-    if (info->activeStages[mOptions.shaderType] && !info->useRelaxedPrecision)
+    // if (info->activeStages[mOptions.shaderType] && !info->useRelaxedPrecision)
+    if (info->activeStages[mOptions.shaderType] && true)
     {
         return TransformationState::Unchanged;
     }
