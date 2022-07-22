@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2594ff63_d8c92e7b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-22T01:05:01Z",
+      "side": 1,
+      "message": "can we rename the temp_file to another name that tells what the file\u0027s purpose is?",
+      "revId": "a93a3d616c3902c52506eec75b8b693655507bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e90b54_0d0b9768",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-22T01:05:01Z",
+      "side": 1,
+      "message": "Are we supposed to pass \"angle_end2end_test_expectation.txt\" for the temp_file? If yes should we rename the `isolated-script-test-output` to `end2end-test-expectations` ?",
+      "revId": "a93a3d616c3902c52506eec75b8b693655507bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
