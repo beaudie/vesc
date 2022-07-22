@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b98fac6_2917d6df",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-07-22T19:35:40Z",
+      "side": 1,
+      "message": "Here\u0027s what I had in mind: https://chromium-review.googlesource.com/c/angle/angle/+/3780588\n\nThis also fixes https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7520 which I noticed along the way (D3D11_BIND_UNORDERED_ACCESS was being set unconditionally in ES \u003e\u003d 3.1).",
+      "parentUuid": "c348cded_55f26016",
+      "range": {
+        "startLine": 622,
+        "startChar": 26,
+        "endLine": 622,
+        "endChar": 40
+      },
+      "revId": "b2580d14d88176f5ffbf6e9b8a8c71c5c1189e07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad5ed0d1_f2cca90f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
         "patchSetId": 10
