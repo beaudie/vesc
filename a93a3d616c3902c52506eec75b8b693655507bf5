@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "779841b9_a3965f5b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-22T15:00:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2594ff63_d8c92e7b",
+      "revId": "a93a3d616c3902c52506eec75b8b693655507bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95e90b54_0d0b9768",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-22T01:05:01Z",
       "side": 1,
       "message": "Are we supposed to pass \"angle_end2end_test_expectation.txt\" for the temp_file? If yes should we rename the `isolated-script-test-output` to `end2end-test-expectations` ?",
+      "revId": "a93a3d616c3902c52506eec75b8b693655507bf5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29ef5887_fa551852",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-22T15:00:07Z",
+      "side": 1,
+      "message": "`--isolated-script-test-output` is the weird name that Chromium infra calls the results json file. Actually, we maintain an equivalent `--results-file` flag so I switched to that to reduce confusion\nhttps://crsrc.org/c/third_party/angle/src/tests/test_utils/runner/README.md;drc\u003de1bc8de3e9d54db9a27e192499d3ce4409e6ebeb;l\u003d32",
+      "parentUuid": "95e90b54_0d0b9768",
       "revId": "a93a3d616c3902c52506eec75b8b693655507bf5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
