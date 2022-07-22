@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9421dd5_0f9c2063",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-22T02:08:05Z",
+      "side": 1,
+      "message": "Instead of this hack, I suggest making a different call for this path. Something like `init` for when the pool is new, and something else (`restore`?) for this case. In the latter, you wouldn\u0027t destroy the cache and avoid this problem.",
+      "range": {
+        "startLine": 3464,
+        "startChar": 0,
+        "endLine": 3465,
+        "endChar": 91
+      },
+      "revId": "9da5d5c22f24cec62dc955604b92066ee6f01afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
