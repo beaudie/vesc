@@ -22,6 +22,30 @@
       },
       "revId": "9da5d5c22f24cec62dc955604b92066ee6f01afc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c2dbdff_2764b740",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-22T16:51:10Z",
+      "side": 1,
+      "message": "You have to destroy cache, since the descriptorSet will be repurposed. Basically in this code path, the pool still have valid cache, but we decided to evict them, which means you will destroy cache. Right now we are also destroying the existing VkDescriptorPool and create a new one (due to maxSet may increase). So the other way is just destroy the DescriptorPoolHelper and create a new one.",
+      "parentUuid": "b9421dd5_0f9c2063",
+      "range": {
+        "startLine": 3464,
+        "startChar": 0,
+        "endLine": 3465,
+        "endChar": 91
+      },
+      "revId": "9da5d5c22f24cec62dc955604b92066ee6f01afc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
