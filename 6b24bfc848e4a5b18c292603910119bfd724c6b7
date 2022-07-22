@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd0afca_2464cd5a",
+        "filename": "src/libANGLE/renderer/gl/wgl/DisplayWGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2022-07-22T17:15:28Z",
+      "side": 1,
+      "message": "FYI this was git cl format",
+      "revId": "6b24bfc848e4a5b18c292603910119bfd724c6b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
