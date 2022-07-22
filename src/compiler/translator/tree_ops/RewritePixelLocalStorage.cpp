@@ -47,19 +47,35 @@ constexpr static TBasicType DataTypeOfPLSType(TBasicType plsType)
     }
 }
 
-constexpr static TBasicType Image2DTypeOfPLSType(TBasicType plsType)
+constexpr static TBasicType DataTypeOfImageType(TBasicType imageType)
 {
-    switch (plsType)
+    switch (imageType)
     {
-        case EbtPixelLocalANGLE:
-            return EbtImage2D;
-        case EbtIPixelLocalANGLE:
-            return EbtIImage2D;
-        case EbtUPixelLocalANGLE:
-            return EbtUImage2D;
+        case EbtImage2D:
+            return EbtFloat;
+        case EbtIImage2D:
+            return EbtInt;
+        case EbtUImage2D:
+            return EbtUInt;
         default:
             UNREACHABLE();
             return EbtVoid;
+    }
+}
+
+// GLES and D3D only allow r32f/r32i/r32ui images to have read/write access. When outputting to
+// these languages, we have to pack all PLS formats into r32* images.
+constexpr static bool ShaderLanguageNeedsR32Packing(ShShaderOutput shaderOutput)
+{
+    switch (shaderOutput)
+    {
+        case ShShaderOutput::SH_ESSL_OUTPUT:
+        case ShShaderOutput::SH_HLSL_3_0_OUTPUT:
+        case ShShaderOutput::SH_HLSL_4_1_OUTPUT:
+        case ShShaderOutput::SH_HLSL_4_0_FL9_3_OUTPUT:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -201,41 +217,11 @@ class RewriteToImagesTraverser : public TIntermTraverser
             insertStatementInParentBlock(CreateTempDeclarationNode(mGlobalPixelCoord));
         }
 
-        PLSImages &pls = insertNullPLSImages(plsSymbol);
-        TLayoutImageInternalFormat format =
-            plsSymbol->getType().getLayoutQualifier().imageInternalFormat;
-        if (mCompiler->getOutputType() == ShShaderOutput::SH_ESSL_OUTPUT &&
-            format != TLayoutImageInternalFormat::EiifR32F &&
-            format != TLayoutImageInternalFormat::EiifR32I &&
-            format != TLayoutImageInternalFormat::EiifR32UI)
-        {
-            // ES 3.1 requires image formats other than r32f/r32i/r32ui to be either readonly or
-            // writeonly. To work around this, we create two aliases of the same image: one readonly
-            // and one writeonly.
-            //
-            // TODO(anglebug.com/7279): Maybe we could manually pack 4-byte formats into GL_R32UI
-            // instead of aliasing them. We could also walk the tree first and see which image is
-            // used how. If the image is never loaded, no need to generate the readonly binding for
-            // example.
-            //
-            // First insert a readonly image2D directly before the PLS declaration.
-            pls.image2DForLoading = createPLSImage(plsSymbol, ImageAccess::ReadOnly);
-            insertStatementInParentBlock(
-                new TIntermDeclaration({new TIntermSymbol(pls.image2DForLoading)}));
-
-            // Replace the PLS declaration with a writeonly image2D.
-            pls.image2DForStoring = createPLSImage(plsSymbol, ImageAccess::WriteOnly);
-            queueReplacement(new TIntermDeclaration({new TIntermSymbol(pls.image2DForStoring)}),
-                             OriginalNode::IS_DROPPED);
-        }
-        else
-        {
-            // Replace the PLS declaration with a single readwrite image2D.
-            TVariable *readWriteImage = createPLSImage(plsSymbol, ImageAccess::ReadWrite);
-            queueReplacement(new TIntermDeclaration({new TIntermSymbol(readWriteImage)}),
-                             OriginalNode::IS_DROPPED);
-            pls.image2DForLoading = pls.image2DForStoring = readWriteImage;
-        }
+        // Replace the PLS declaration with an image2D.
+        TVariable *image2D = createPLSImage(plsSymbol);
+        insertNewPLSImage(plsSymbol, image2D);
+        queueReplacement(new TIntermDeclaration({new TIntermSymbol(image2D)}),
+                         OriginalNode::IS_DROPPED);
 
         return false;
     }
@@ -250,18 +236,18 @@ class RewriteToImagesTraverser : public TIntermTraverser
         const TIntermSequence &args = *aggregate->getSequence();
         ASSERT(args.size() >= 1);
         TIntermSymbol *plsSymbol = args[0]->getAsSymbolNode();
-        const PLSImages &pls     = findPLSImages(plsSymbol);
+        TVariable *image2D       = findPLSImage(plsSymbol);
         ASSERT(mGlobalPixelCoord);
 
         // Rewrite pixelLocalLoadANGLE -> imageLoad.
         if (aggregate->getOp() == EOpPixelLocalLoadANGLE)
         {
             // Replace the pixelLocalLoadANGLE with imageLoad.
-            queueReplacement(mNodeBuilder->createBuiltInFunctionCall(
-                                 "imageLoad", {new TIntermSymbol(pls.image2DForLoading),
-                                               new TIntermSymbol(mGlobalPixelCoord)}),
-                             OriginalNode::IS_DROPPED);
-
+            TIntermTyped *pls;
+            pls = mNodeBuilder->createBuiltInFunctionCall(
+                "imageLoad", {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord)});
+            pls = unpackImageDataIfNecessary(pls, plsSymbol, image2D);
+            queueReplacement(pls, OriginalNode::IS_DROPPED);
             return false;  // No need to recurse since this node is being dropped.
         }
 
@@ -296,11 +282,11 @@ class RewriteToImagesTraverser : public TIntermTraverser
                 {mNodeBuilder->createBuiltInFunctionCall("memoryBarrierImage")});  // After.
 
             // Rewrite the pixelLocalStoreANGLE with imageStore.
-            queueReplacement(mNodeBuilder->createBuiltInFunctionCall(
-                                 "imageStore", {new TIntermSymbol(pls.image2DForStoring),
-                                                new TIntermSymbol(mGlobalPixelCoord),
-                                                new TIntermSymbol(valueVar)}),
-                             OriginalNode::IS_DROPPED);
+            queueReplacement(
+                mNodeBuilder->createBuiltInFunctionCall(
+                    "imageStore", {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord),
+                                   packPLSDataIfNecessary(valueVar, plsSymbol, image2D)}),
+                OriginalNode::IS_DROPPED);
 
             return false;  // No need to recurse since this node is being dropped.
         }
@@ -311,31 +297,21 @@ class RewriteToImagesTraverser : public TIntermTraverser
     TVariable *globalPixelCoord() const { return mGlobalPixelCoord; }
 
   private:
-    // Internal implementation of an opaque 'gpixelLocalANGLE' handle. Since ES 3.1 requires most
-    // image formats to be either readonly or writeonly, we have to make two separate images that
-    // alias the same binding.
-    struct PLSImages
-    {
-        TVariable *image2DForLoading = nullptr;
-        TVariable *image2DForStoring = nullptr;
-    };
-
-    // Adds a null 'PLSImages' entry to the map for the given symbol. An entry must not already
-    // exist in the map for this symbol.
-    PLSImages &insertNullPLSImages(TIntermSymbol *plsSymbol)
+    // Sets the given image2D as the backing storage for the plsSymbol's binding point. An entry
+    // must not already exist in the map for this binding point.
+    void insertNewPLSImage(TIntermSymbol *plsSymbol, TVariable *image2D)
     {
         ASSERT(plsSymbol);
         ASSERT(IsPixelLocal(plsSymbol->getBasicType()));
         int binding = plsSymbol->getType().getLayoutQualifier().binding;
         ASSERT(binding >= 0);
-        auto result = mPLSImages.insert({binding, PLSImages()});
-        ASSERT(result.second);  // Ensure PLSImages didn't already exist for this symbol.
-        return result.first->second;
+        auto result = mPLSImages.insert({binding, image2D});
+        ASSERT(result.second);  // Ensure an image didn't already exist for this symbol.
     }
 
-    // Looks up the PLSImages for the given symbol. An entry must already exist in the map for this
-    // symbol.
-    PLSImages &findPLSImages(TIntermSymbol *plsSymbol)
+    // Looks up the image2D backing storage for the given plsSymbol's binding point. An entry must
+    // already exist in the map for this binding point.
+    TVariable *findPLSImage(TIntermSymbol *plsSymbol)
     {
         ASSERT(plsSymbol);
         ASSERT(IsPixelLocal(plsSymbol->getBasicType()));
@@ -346,41 +322,203 @@ class RewriteToImagesTraverser : public TIntermTraverser
         return iter->second;
     }
 
-    enum class ImageAccess
-    {
-        ReadOnly,
-        WriteOnly,
-        ReadWrite
-    };
-
-    // Creates a 'gimage2D' that implements a pixel local storage handle.
-    TVariable *createPLSImage(const TIntermSymbol *plsSymbol, ImageAccess access)
+    // Creates an image2D that implements a pixel local storage handle.
+    TVariable *createPLSImage(const TIntermSymbol *plsSymbol)
     {
         ASSERT(plsSymbol);
         ASSERT(IsPixelLocal(plsSymbol->getBasicType()));
 
-        TMemoryQualifier memoryQualifier;
-        memoryQualifier.coherent          = true;
-        memoryQualifier.restrictQualifier = access == ImageAccess::ReadWrite;
-        memoryQualifier.volatileQualifier = access != ImageAccess::ReadWrite;
-        memoryQualifier.readonly          = access == ImageAccess::ReadOnly;
-        memoryQualifier.writeonly         = access == ImageAccess::WriteOnly;
-
         TType *imageType = new TType(plsSymbol->getType());
-        imageType->setBasicType(Image2DTypeOfPLSType(plsSymbol->getBasicType()));
+
+        TLayoutQualifier layoutQualifier = imageType->getLayoutQualifier();
+        switch (layoutQualifier.imageInternalFormat)
+        {
+            case TLayoutImageInternalFormat::EiifRGBA8:
+                if (ShaderLanguageNeedsR32Packing(mCompiler->getOutputType()))
+                {
+                    layoutQualifier.imageInternalFormat = EiifR32UI;
+                    imageType->setPrecision(EbpHigh);
+                    imageType->setBasicType(EbtUImage2D);
+                }
+                else
+                {
+                    imageType->setBasicType(EbtImage2D);
+                }
+                break;
+            case TLayoutImageInternalFormat::EiifRGBA8I:
+                if (ShaderLanguageNeedsR32Packing(mCompiler->getOutputType()))
+                {
+                    layoutQualifier.imageInternalFormat = EiifR32I;
+                    imageType->setPrecision(EbpHigh);
+                }
+                imageType->setBasicType(EbtIImage2D);
+                break;
+            case TLayoutImageInternalFormat::EiifRGBA8UI:
+                if (ShaderLanguageNeedsR32Packing(mCompiler->getOutputType()))
+                {
+                    layoutQualifier.imageInternalFormat = EiifR32UI;
+                    imageType->setPrecision(EbpHigh);
+                }
+                imageType->setBasicType(EbtUImage2D);
+                break;
+            case TLayoutImageInternalFormat::EiifR32F:
+                imageType->setBasicType(EbtImage2D);
+                break;
+            case TLayoutImageInternalFormat::EiifR32UI:
+                imageType->setBasicType(EbtUImage2D);
+                break;
+            default:
+                UNREACHABLE();
+        }
+        imageType->setLayoutQualifier(layoutQualifier);
+
+        TMemoryQualifier memoryQualifier{};
+        memoryQualifier.coherent          = true;
+        memoryQualifier.restrictQualifier = true;
+        memoryQualifier.volatileQualifier = false;
+        // TODO(anglebug.com/7279): Maybe we could walk the tree first and see which image is used
+        // how. If the image is never loaded, no need to generate the readonly binding for example.
+        memoryQualifier.readonly  = false;
+        memoryQualifier.writeonly = false;
         imageType->setMemoryQualifier(memoryQualifier);
 
         std::string name = "_pls";
         name.append(plsSymbol->getName().data());
-        if (access == ImageAccess::ReadOnly)
-        {
-            name.append("_R");
-        }
-        else if (access == ImageAccess::WriteOnly)
-        {
-            name.append("_W");
-        }
         return new TVariable(mSymbolTable, ImmutableString(name), imageType, SymbolType::BuiltIn);
+    }
+
+    // Unpacks the raw PLS data if the output shader language needs r32* packing (for GLES and D3D).
+    TIntermTyped *unpackImageDataIfNecessary(TIntermTyped *data,
+                                             TIntermSymbol *plsSymbol,
+                                             TVariable *image2D)
+    {
+        TLayoutImageInternalFormat plsFormat =
+            plsSymbol->getType().getLayoutQualifier().imageInternalFormat;
+        TLayoutImageInternalFormat imageFormat =
+            image2D->getType().getLayoutQualifier().imageInternalFormat;
+        if (plsFormat == imageFormat)
+        {
+            return data;  // This PLS storage isn't packed.
+        }
+        switch (plsFormat)
+        {
+            case EiifRGBA8:
+                // Unpack and normalize r,g,b,a from a single 32-bit unsigned int:
+                //
+                //     unpackUnorm4x8(data.r)
+                //
+                data = mNodeBuilder->createBuiltInFunctionCall("unpackUnorm4x8",
+                                                               {CreateSwizzle(data, 0)});
+                break;
+            case EiifRGBA8I:
+            case EiifRGBA8UI:
+            {
+                constexpr unsigned shifts[] = {24, 16, 8, 0};
+                // Unpack r,g,b,a form a single (signed or unsigned) 32-bit int. Shift left, then
+                // right, to preserve the sign for ints. (highp integers are exactly 32-bit, two's
+                // compliment.)
+                //
+                //     data.rrrr << uvec4(24, 16, 8, 0) >> 24u
+                //
+                data = CreateSwizzle(data, 0, 0, 0, 0);
+                data = new TIntermBinary(EOpBitShiftLeft, data, CreateUVecNode(shifts, 4, EbpHigh));
+                data = new TIntermBinary(EOpBitShiftRight, data, CreateUIntNode(24));
+                break;
+            }
+            default:
+                UNREACHABLE();
+        }
+        return data;
+    }
+
+    // Packs the PLS to raw data if the output shader language needs r32* packing (for GLES and
+    // D3D).
+    TIntermTyped *packPLSDataIfNecessary(TVariable *plsVar,
+                                         TIntermSymbol *plsSymbol,
+                                         TVariable *image2D)
+    {
+        TLayoutImageInternalFormat plsFormat =
+            plsSymbol->getType().getLayoutQualifier().imageInternalFormat;
+        TLayoutImageInternalFormat imageFormat =
+            image2D->getType().getLayoutQualifier().imageInternalFormat;
+        TIntermTyped *packedExpr = new TIntermSymbol(plsVar);
+        if (plsFormat == imageFormat)
+        {
+            return packedExpr;  // This PLS storage isn't packed.
+        }
+        switch (plsFormat)
+        {
+            case EiifRGBA8:
+            {
+                // anglebug.com/7523: unpackUnorm4x8 doesn't work on mediump vec4 on Pixel 4.
+                // Use an intermediate highp vec4.
+                //
+                // It's safe to inject a variable here because it happens right before
+                // pixelLocalStoreANGLE, which returns type void. (See visitAggregate.)
+                TType *highpType              = new TType(EbtFloat, EbpHigh, EvqTemporary, 4);
+                TVariable *workaroundHighpVar = CreateTempVariable(mSymbolTable, highpType);
+                insertStatementInParentBlock(
+                    CreateTempInitDeclarationNode(workaroundHighpVar, packedExpr));
+                packedExpr = new TIntermSymbol(workaroundHighpVar);
+
+                // Denormalize and pack r,g,b,a into a single 32-bit unsigned int:
+                //
+                //     packUnorm4x8(workaroundHighpVar)
+                //
+                packedExpr = mNodeBuilder->createBuiltInFunctionCall("packUnorm4x8", {packedExpr});
+                break;
+            }
+            case EiifRGBA8I:
+            case EiifRGBA8UI:
+            {
+                TIntermTyped *const accessPLSVar = packedExpr;
+                ASSERT(accessPLSVar->getAsSymbolNode());
+                TIntermTyped *newPLSValue;
+                if (plsFormat == EiifRGBA8I)
+                {
+                    // Clamp r,g,b,a to their min/max 8-bit values and mask off extra sign bits
+                    // beyond 8.
+                    //
+                    //     plsVar = clamp(plsVar, -128, 127) & 0xff
+                    //
+                    newPLSValue = mNodeBuilder->createBuiltInFunctionCall(
+                        "clamp", {accessPLSVar, CreateIntNode(-128), CreateIntNode(127)});
+                    newPLSValue =
+                        new TIntermBinary(EOpBitwiseAnd, newPLSValue, CreateIntNode(0xff));
+                }
+                else
+                {
+                    ASSERT(plsFormat == EiifRGBA8UI);
+                    // Clamp r,g,b,a to their min/max 8-bit values:
+                    //
+                    //     plsVar = clamp(plsVar, 0, 255)
+                    //
+                    newPLSValue = mNodeBuilder->createBuiltInFunctionCall(
+                        "clamp", {accessPLSVar, CreateUIntNode(0), CreateUIntNode(255)});
+                }
+                insertStatementInParentBlock(CreateTempAssignmentNode(plsVar, newPLSValue));
+                // Pack r,g,b,a into a single 32-bit (signed or unsigned) int:
+                //
+                //     r | (g << 8) | (b << 16) | (a << 24)
+                //
+                auto shiftComponent = [=](int componentIdx) {
+                    return new TIntermBinary(EOpBitShiftLeft,
+                                             CreateSwizzle(accessPLSVar, componentIdx),
+                                             CreateUIntNode(componentIdx * 8));
+                };
+                packedExpr = CreateSwizzle(accessPLSVar, 0);
+                packedExpr = new TIntermBinary(EOpBitwiseOr, packedExpr, shiftComponent(1));
+                packedExpr = new TIntermBinary(EOpBitwiseOr, packedExpr, shiftComponent(2));
+                packedExpr = new TIntermBinary(EOpBitwiseOr, packedExpr, shiftComponent(3));
+                break;
+            }
+            default:
+                UNREACHABLE();
+        }
+        // Convert the packed data to a {u,i}vec4 for imageStore.
+        TType imageStoreType(DataTypeOfImageType(image2D->getType().getBasicType()), 4);
+        packedExpr = NodeBuilder::CreateConstructor(imageStoreType, {packedExpr});
+        return packedExpr;
     }
 
     const TCompiler *const mCompiler;
@@ -389,8 +527,8 @@ class RewriteToImagesTraverser : public TIntermTraverser
     // Stores the shader invocation's pixel coordinate as "ivec2(floor(gl_FragCoord.xy))".
     TVariable *mGlobalPixelCoord = nullptr;
 
-    // Maps PLS variables to their gimage2D aliases.
-    angle::HashMap<int, PLSImages> mPLSImages;
+    // Maps PLS variables to their image2D backing storage.
+    angle::HashMap<int, TVariable *> mPLSImages;
 };
 
 }  // anonymous namespace
