@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30b153f6_bed05575",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-22T17:50:01Z",
+      "side": 1,
+      "message": "Quick thought -- could it be interesting to verify the GLSL pack/unpack functions here that will commonly be used with an r32ui image?\n\n```\nmediump vec4 color \u003d unpackUnorm4x8(imageLoad(uImage, pos).r);\ncolor \u003d color.barg;\nimageStore(uImage, pos, packUnorm4x8(color));\n```",
+      "revId": "70ad44a311a02fdf837f2c478f5ed8c6f3631312",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
