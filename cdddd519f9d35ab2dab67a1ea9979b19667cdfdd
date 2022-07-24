@@ -56,6 +56,30 @@
       },
       "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "048bf604_c5c83b81",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-24T01:33:23Z",
+      "side": 1,
+      "message": "Removed the alpha mode check, thanks!",
+      "parentUuid": "5512c029_6bb8f418",
+      "range": {
+        "startLine": 643,
+        "startChar": 11,
+        "endLine": 643,
+        "endChar": 85
+      },
+      "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
