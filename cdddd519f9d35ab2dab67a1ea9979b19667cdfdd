@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5899cd2a_651a8ffb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-24T04:04:21Z",
+      "side": 1,
+      "message": "There were some image diffs, but I went through them all, and of those where I could visually perceive the difference, the new image looked better to me.",
+      "parentUuid": "d138fd32_4f1f6ded",
+      "revId": "cdddd519f9d35ab2dab67a1ea9979b19667cdfdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5512c029_6bb8f418",
