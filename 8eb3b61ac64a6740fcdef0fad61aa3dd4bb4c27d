@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b090323b_72e1d1c1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2100,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-24T01:58:48Z",
+      "side": 1,
+      "message": "Good catch, thanks!",
+      "parentUuid": "d3617685_976450bc",
+      "revId": "8eb3b61ac64a6740fcdef0fad61aa3dd4bb4c27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d807f28_0c1a6fd7",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-07-21T18:09:00Z",
       "side": 1,
       "message": "nit: Should the comments here be changed to Semaphore Objects?",
+      "revId": "8eb3b61ac64a6740fcdef0fad61aa3dd4bb4c27d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63b5e939_23eefa94",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-24T01:58:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d807f28_0c1a6fd7",
       "revId": "8eb3b61ac64a6740fcdef0fad61aa3dd4bb4c27d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
