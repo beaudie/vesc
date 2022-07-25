@@ -39,6 +39,30 @@
       },
       "revId": "5220f1a3e7fc524292a253c27d2d0d3eed5f2aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f6a48f_394be07f",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-25T17:59:26Z",
+      "side": 1,
+      "message": "Didn\u0027t seem to work:\n\nError: //main.star:276:54: got \u0027**\u0027, want primary expression\n\nI\u0027ll land it like this, not the worst technical debt.",
+      "parentUuid": "71ad1883_7ab5db7b",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 50
+      },
+      "revId": "5220f1a3e7fc524292a253c27d2d0d3eed5f2aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
