@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22b0cfbf_90f0a70e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3349,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-25T23:03:22Z",
+      "side": 1,
+      "message": "Should we remove this if condition and the code inside given the other CL https://chromium-review.googlesource.com/c/angle/angle/+/3785290/ that removes the bindEmptyForUnusedDescriptorSets feature?",
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0e99b37_940808e8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
