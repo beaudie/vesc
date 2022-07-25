@@ -67,6 +67,42 @@
       "message": "I noticed a comment here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/test_utils/angle_test_instantiate_apple.mm;l\u003d19;bpv\u003d1;bpt\u003d1?q\u003dIsMetalDisplayAvailable\u0026ss\u003dchromium%2Fchromium%2Fsrc\n\nIt says this code is duplicated with IsMetalDisplayAvailable, so I assume it might need to be updated to match these changes, or tests will run on Metal that aren\u0027t supposed to.",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8661cc40_88103aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-25T22:15:42Z",
+      "side": 1,
+      "message": "Thanks very much for finding that - that\u0027s why the tests are failing on the NVIDIA MacBook Pros. Fixing this up now.",
+      "parentUuid": "50d66e5a_8b9ae137",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb35c8ab_eb7551bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-25T22:15:42Z",
+      "side": 1,
+      "message": "Correct. The Metal backend is not working correctly on this older hardware - it\u0027s probably implicitly relying on features introduced in later GPU families. In order to stem the customer bugs we have to disable it.\n\nDetermination of the OpenGL vs. Metal backend is a policy decision made in calling code, for example in Chromium:\nhttps://source.chromium.org/chromium/chromium/src/+/main:ui/gl/gl_display.cc;l\u003d833;drc\u003d9bed89be6d7a7e7a0f379444511c6c77acf8c601;bpv\u003d0;bpt\u003d1",
+      "parentUuid": "688ae8d6_5532fa99",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
