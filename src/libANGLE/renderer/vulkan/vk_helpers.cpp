@@ -559,7 +559,9 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
 VkPipelineStageFlags GetImageLayoutSrcStageMask(Context *context,
                                                 const ImageMemoryBarrierData &transition)
 {
-    return transition.srcStageMask & context->getRenderer()->getSupportedVulkanPipelineStageMask();
+    return transition.srcStageMask &
+           context->getRenderer()
+               ->getSupportedVulkanPipelineStageMask();  // use this for push constant flags
 }
 
 VkPipelineStageFlags GetImageLayoutDstStageMask(Context *context,
