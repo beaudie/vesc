@@ -50,6 +50,23 @@
       "message": "This change would make Metal backend completely unavailable on older devices, even via manual selection, right? Could we make it never-selected-by-default there instead?",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d66e5a_8b9ae137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-07-25T15:02:13Z",
+      "side": 1,
+      "message": "I noticed a comment here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/test_utils/angle_test_instantiate_apple.mm;l\u003d19;bpv\u003d1;bpt\u003d1?q\u003dIsMetalDisplayAvailable\u0026ss\u003dchromium%2Fchromium%2Fsrc\n\nIt says this code is duplicated with IsMetalDisplayAvailable, so I assume it might need to be updated to match these changes, or tests will run on Metal that aren\u0027t supposed to.",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
