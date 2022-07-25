@@ -16,6 +16,23 @@
       "message": "Geoff, Jamie: PTAL.\n\nThis is a variant of https://chromium-review.googlesource.com/c/angle/angle/+/3763072 which combines the bind flags into a single struct (to avoid anonymous bools). It also fixes https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7520 which I noticed along the way.",
       "revId": "b5256dab908ee5b12899b4fcda41b7164dd1c602",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb35ed3_1cb16b13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-07-25T19:15:18Z",
+      "side": 1,
+      "message": "Geoff: friendly ping. :)",
+      "revId": "b5256dab908ee5b12899b4fcda41b7164dd1c602",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
