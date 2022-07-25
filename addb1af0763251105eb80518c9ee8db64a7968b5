@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab9ec962_af88fa95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-25T14:54:40Z",
+      "side": 1,
+      "message": "Hey Yuxin - follow up to the Reset CL, fixing issues found with more testing.",
+      "revId": "addb1af0763251105eb80518c9ee8db64a7968b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
