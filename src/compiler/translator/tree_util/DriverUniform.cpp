@@ -66,6 +66,7 @@ bool DriverUniform::addComputeDriverUniformsToShader(TIntermBlock *root, TSymbol
     // Define a driver uniform block "ANGLEUniformBlock" with instance name "ANGLEUniforms".
     TLayoutQualifier layoutQualifier = TLayoutQualifier::Create();
     layoutQualifier.blockStorage     = EbsStd140;
+    layoutQualifier.pushConstant     = true;
 
     mDriverUniforms = DeclareInterfaceBlock(root, symbolTable, driverFieldList, EvqUniform,
                                             layoutQualifier, TMemoryQualifier::Create(), 0,
