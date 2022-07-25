@@ -1215,22 +1215,27 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         contextVk, texturesSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Texture]));
 
     // Driver uniforms
-    vk::DescriptorSetLayoutDesc driverUniformsSetDesc =
-        contextVk->getDriverUniformsDescriptorSetDesc();
-    ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
-        contextVk, driverUniformsSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Internal]));
+    //    vk::DescriptorSetLayoutDesc driverUniformsSetDesc =  // remove
+    //        contextVk->getDriverUniformsDescriptorSetDesc();
+    //    ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
+    //        contextVk, driverUniformsSetDesc,
+    //        &mDescriptorSetLayouts[DescriptorSetIndex::Internal]));
 
-    // Create pipeline layout with these 4 descriptor sets.
+    // Create pipeline layout with these 3 descriptor sets.
     vk::PipelineLayoutDesc pipelineLayoutDesc;
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::UniformsAndXfb,
                                                  uniformsAndXfbSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::ShaderResource,
                                                  resourcesSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Texture, texturesSetDesc);
-    pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
-                                                 driverUniformsSetDesc);
-    pipelineLayoutDesc.updatePushConstantRange(
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, 32);  // Get size?
+    //    pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
+    //                                                 driverUniformsSetDesc);  // remove
+
+    // Driver uniforms as push constants
+    uint32_t pushConstantSize = contextVk->getDriverUniformSize();
+    VkShaderStageFlags pushConstantStageMask =
+        contextVk->getSupportedShaderStageFlags();  // Better?
+    pipelineLayoutDesc.updatePushConstantRange(pushConstantStageMask, 0, pushConstantSize);
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
