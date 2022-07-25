@@ -89,6 +89,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d66a40e1_a0700d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-07-25T17:29:11Z",
+      "side": 1,
+      "message": "No risks as this new path isn\u0027t used anywhere.\nBut we should just note somewhere (spec? code comment?) that this is undefined behavior if the user has two of the same GPUs, we will pick arbitrarily.",
+      "parentUuid": "59097818_2d877936",
+      "revId": "4c9c7caa3f1c763438e8a2675efaf43f9589a75b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "53da3ce2_abb4faac",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 2
