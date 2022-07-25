@@ -31,8 +31,8 @@ namespace spv
 
 // Enable this for debug logging of pre-transform SPIR-V:
 #if !defined(ANGLE_DEBUG_SPIRV_GENERATION)
-#    define ANGLE_DEBUG_SPIRV_GENERATION 1  // Temp
-#endif                                      // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
+#    define ANGLE_DEBUG_SPIRV_GENERATION 0
+#endif  // !defined(ANGLE_DEBUG_SPIRV_GENERATION)
 
 namespace sh
 {

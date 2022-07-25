@@ -645,6 +645,12 @@ bool BlendModeSupportsDither(const gl::State &state, size_t colorIndex)
            state.getBlendStateExt().getDstColorIndexed(colorIndex) == GL_ONE_MINUS_SRC_ALPHA;
 }
 
+bool shouldUseGraphicsDriverUniformsExtended(const ContextVk *contextVk)
+{
+    return contextVk->getFeatures().basicGLLineRasterization.enabled ||
+           contextVk->getFeatures().emulateTransformFeedback.enabled;
+}
+
 }  // anonymous namespace
 
 void ContextVk::flushDescriptorSetUpdates()
@@ -6102,24 +6108,13 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                                                            DirtyBits dirtyBitMask)
 {
     // Allocate a new region in the dynamic buffer.
-    const bool useGraphicsDriverUniformsExtended = getFeatures().basicGLLineRasterization.enabled ||
-                                                   getFeatures().emulateTransformFeedback.enabled;
     uint8_t *ptr;
     bool newBuffer;
-    GraphicsDriverUniforms *driverUniforms;
-    size_t driverUniformSize;
-
-    if (useGraphicsDriverUniformsExtended)
-    {
-        driverUniformSize = sizeof(GraphicsDriverUniformsExtended);
-    }
-    else
-    {
-        driverUniformSize = sizeof(GraphicsDriverUniforms);
-    }
+    GraphicsDriverUniforms driverUniforms;
+    uint32_t driverUniformSize = getDriverUniformSize();
 
     ANGLE_TRY(allocateDriverUniforms(driverUniformSize, &mDriverUniforms[PipelineType::Graphics],
-                                     &ptr, &newBuffer));
+                                     &ptr, &newBuffer));  // remove
 
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
 
@@ -6163,10 +6158,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     const bool invertViewport =
         isViewportFlipEnabledForDrawFBO() && getFeatures().supportsNegativeViewport.enabled;
 
-    if (useGraphicsDriverUniformsExtended)
+    if (shouldUseGraphicsDriverUniformsExtended(this))
     {
-        GraphicsDriverUniformsExtended *driverUniformsExt =
-            reinterpret_cast<GraphicsDriverUniformsExtended *>(ptr);
+        GraphicsDriverUniformsExtended *driverUniformsExt = {};
         memset(driverUniformsExt, 0, sizeof(*driverUniformsExt));
 
         gl::Rectangle glViewport = mState.getViewport();
@@ -6191,11 +6185,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         driverUniformsExt->xfbVerticesPerInstance =
             static_cast<int32_t>(mXfbVertexCountPerInstance);
 
-        driverUniforms = &driverUniformsExt->common;
-    }
-    else
-    {
-        driverUniforms = reinterpret_cast<GraphicsDriverUniforms *>(ptr);
+        driverUniforms = driverUniformsExt->common;
     }
 
     const float depthRangeNear = mState.getNearPlane();
@@ -6237,7 +6227,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         transformDepth << sh::vk::kDriverUniformsMiscTransformDepthOffset;
 
     // Copy and flush to the device.
-    *driverUniforms = {
+    driverUniforms = {
         {},
         {depthRangeNear, depthRangeFar},
         renderArea,
@@ -6248,19 +6238,19 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
 
     if (mState.hasValidAtomicCounterBuffer())
     {
-        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
-                                                     driverUniforms->acbBufferOffsets.size());
+        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms.acbBufferOffsets.data(),
+                                                     driverUniforms.acbBufferOffsets.size());
     }
 
     // Update push_constant driver uniforms
     ProgramExecutableVk *executableVk = getExecutable();
-    mRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(),
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(*driverUniforms),
-        driverUniforms);
+    mRenderPassCommands->getCommandBuffer().pushConstants(executableVk->getPipelineLayout(),
+                                                          getSupportedShaderStageFlags(), 0,
+                                                          driverUniformSize, &driverUniforms);
 
     return updateDriverUniformsDescriptorSet(mRenderPassCommands, newBuffer, driverUniformSize,
                                              PipelineType::Graphics);
+    //    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyComputeDriverUniforms()
@@ -6272,30 +6262,32 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms()
                                      &mDriverUniforms[PipelineType::Compute], &ptr, &newBuffer));
 
     // Copy and flush to the device.
-    ComputeDriverUniforms *driverUniforms = reinterpret_cast<ComputeDriverUniforms *>(ptr);
-    *driverUniforms                       = {};
+    ComputeDriverUniforms driverUniforms;
+    driverUniforms             = {};
+    uint32_t driverUniformSize = getDriverUniformSize();
 
     if (mState.hasValidAtomicCounterBuffer())
     {
-        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
-                                                     driverUniforms->acbBufferOffsets.size());
+        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms.acbBufferOffsets.data(),
+                                                     driverUniforms.acbBufferOffsets.size());
     }
 
     // Update push_constant driver uniforms
     ProgramExecutableVk *executableVk = getExecutable();
     mOutsideRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(),
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(*driverUniforms),
-        driverUniforms);
+        executableVk->getPipelineLayout(), getSupportedShaderStageFlags(), 0, driverUniformSize,
+        &driverUniforms);
 
     return updateDriverUniformsDescriptorSet(mOutsideRenderPassCommands, newBuffer,
                                              sizeof(ComputeDriverUniforms), PipelineType::Compute);
+    //    return angle::Result::Continue;
 }
 
 template <typename CommandBufferHelperT>
-void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *commandBufferHelper,
-                                                     VkPipelineBindPoint bindPoint,
-                                                     DriverUniformsDescriptorSet *driverUniforms)
+void ContextVk::handleDirtyDriverUniformsBindingImpl(
+    CommandBufferHelperT *commandBufferHelper,
+    VkPipelineBindPoint bindPoint,
+    DriverUniformsDescriptorSet *driverUniforms)  // remove
 {
     // The descriptor pool that this descriptor set was allocated from needs to be retained when the
     // descriptor set is used in a new command. Since the descriptor pools are specific to each
@@ -6314,7 +6306,7 @@ void ContextVk::handleDirtyDriverUniformsBindingImpl(CommandBufferHelperT *comma
         &driverUniforms->descriptorSet, 1, &dynamicOffset);
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
+angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(  // remove?
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
@@ -6324,7 +6316,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniformsBinding(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding()
+angle::Result ContextVk::handleDirtyComputeDriverUniformsBinding()  // remove?
 {
     // Bind the driver descriptor set.
     handleDirtyDriverUniformsBindingImpl(mOutsideRenderPassCommands, VK_PIPELINE_BIND_POINT_COMPUTE,
@@ -6342,14 +6334,15 @@ angle::Result ContextVk::allocateDriverUniforms(size_t driverUniformsSize,
     // into share group's mResourceUseList which will ensure they get tagged with queue serial
     // number before moving them into the free list.
     ANGLE_TRY(driverUniforms->dynamicBuffer.allocate(this, driverUniformsSize,
-                                                     &driverUniforms->currentBuffer, newBufferOut));
+                                                     &driverUniforms->currentBuffer,
+                                                     newBufferOut));  // remove dyamic buffer?
 
     *ptrOut = driverUniforms->currentBuffer->getMappedMemory();
 
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::updateDriverUniformsDescriptorSet(
+angle::Result ContextVk::updateDriverUniformsDescriptorSet(  // can be removed
     vk::CommandBufferHelperCommon *commandBufferHelper,
     bool newBuffer,
     size_t driverUniformsSize,
@@ -6652,12 +6645,13 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
         memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
         memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
 
-        const VkPipelineStageFlags supportedShaderStages =
+        const VkPipelineStageFlags
+            supportedShaderStages =  //  (these for push constants, but the shader stage versions!)
             (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
              VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
              VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
              VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT) &
+             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT) &  // use this for compute
             mRenderer->getSupportedVulkanPipelineStageMask();
         const VkPipelineStageFlags bufferWriteStages =
             VK_PIPELINE_STAGE_TRANSFER_BIT | supportedShaderStages |
@@ -7250,6 +7244,52 @@ bool ContextVk::shouldConvertUint8VkIndexType(gl::DrawElementsType glIndexType) 
 {
     return (glIndexType == gl::DrawElementsType::UnsignedByte &&
             !mRenderer->getFeatures().supportsIndexTypeUint8.enabled);
+}
+
+uint32_t ContextVk::getDriverUniformSize() const
+{
+    if (shouldUseGraphicsDriverUniformsExtended(this))
+    {
+        return sizeof(GraphicsDriverUniformsExtended);
+    }
+    else
+    {
+        return sizeof(GraphicsDriverUniforms);
+    }
+}
+
+VkShaderStageFlags ContextVk::getSupportedShaderStageFlags()
+{
+    const VkPipelineStageFlags supportedPipelineStageShaderFlags =
+        mRenderer->getSupportedVulkanPipelineStageMask();
+    VkShaderStageFlags supportedShaderFlags = 0;
+
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_VERTEX_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_VERTEX_BIT;
+    }
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+    }
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+    }
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
+    }
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_FRAGMENT_BIT;
+    }
+    if (supportedPipelineStageShaderFlags & VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT)
+    {
+        supportedShaderFlags |= VK_SHADER_STAGE_COMPUTE_BIT;
+    }
+
+    return supportedShaderFlags;
 }
 
 angle::Result ContextVk::submitOutsideRenderPassCommandsImpl()

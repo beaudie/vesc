@@ -683,6 +683,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool isRobustResourceInitEnabled() const;
 
+    uint32_t getDriverUniformSize() const;
+    VkShaderStageFlags getSupportedShaderStageFlags();
+
     // Queries that begin and end automatically with render pass start and end
     angle::Result beginRenderPassQuery(QueryVk *queryVk);
     angle::Result endRenderPassQuery(QueryVk *queryVk);
@@ -936,7 +939,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         ContextVk::*)(DirtyBits::Iterator *dirtyBitsIterator, DirtyBits dirtyBitMask);
     using ComputeDirtyBitHandler = angle::Result (ContextVk::*)();
 
-    struct DriverUniformsDescriptorSet
+    struct DriverUniformsDescriptorSet  // Remove?
     {
         DriverUniformsDescriptorSet();
         ~DriverUniformsDescriptorSet();
