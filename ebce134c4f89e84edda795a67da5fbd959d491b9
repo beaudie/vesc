@@ -405,6 +405,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4f3c9ad_3e50104b",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-25T16:29:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "50738007_a70c1b8e",
+      "range": {
+        "startLine": 103,
+        "startChar": 22,
+        "endLine": 103,
+        "endChar": 42
+      },
+      "revId": "ebce134c4f89e84edda795a67da5fbd959d491b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "792d5828_3956ae0d",
