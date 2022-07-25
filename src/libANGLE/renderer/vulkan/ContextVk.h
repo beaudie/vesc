@@ -683,6 +683,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool isRobustResourceInitEnabled() const;
 
+    uint32_t getDriverUniformSize() const;
+    VkShaderStageFlags getSupportedShaderStageFlags();
+
     // Queries that begin and end automatically with render pass start and end
     angle::Result beginRenderPassQuery(QueryVk *queryVk);
     angle::Result endRenderPassQuery(QueryVk *queryVk);
@@ -936,7 +939,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         ContextVk::*)(DirtyBits::Iterator *dirtyBitsIterator, DirtyBits dirtyBitMask);
     using ComputeDirtyBitHandler = angle::Result (ContextVk::*)();
 
-    struct DriverUniformsDescriptorSet
+    struct DriverUniformsDescriptorSet  // Remove?
     {
         DriverUniformsDescriptorSet();
         ~DriverUniformsDescriptorSet();
@@ -944,7 +947,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         void init(RendererVk *rendererVk);
         void destroy(RendererVk *rendererVk);
 
-        vk::DynamicBuffer dynamicBuffer;
+        //        vk::DynamicBuffer dynamicBuffer;
         VkDescriptorSet descriptorSet;
         vk::BufferHelper *currentBuffer;
         vk::BindingPointer<vk::DescriptorSetLayout> descriptorSetLayout;
@@ -1329,7 +1332,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
     // Note that this implementation would need to change in shared resource scenarios. Likely
     // we'd instead share a single set of pools between the share groups.
-    angle::PackedEnumMap<PipelineType, vk::DynamicDescriptorPool> mDriverUniformsDescriptorPools;
+    //    angle::PackedEnumMap<PipelineType, vk::DynamicDescriptorPool>
+    //    mDriverUniformsDescriptorPools;
     gl::QueryTypeMap<vk::DynamicQueryPool> mQueryPools;
 
     // Queries that need to be closed and reopened with the render pass:
@@ -1396,7 +1400,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Whether this context should do seamful cube map sampling emulation.
     bool mEmulateSeamfulCubeMapSampling;
 
-    angle::PackedEnumMap<PipelineType, DriverUniformsDescriptorSet> mDriverUniforms;
+    //    angle::PackedEnumMap<PipelineType, DriverUniformsDescriptorSet> mDriverUniforms;
 
     // This info is used in the descriptor update step.
     gl::ActiveTextureArray<TextureVk *> mActiveTextures;
