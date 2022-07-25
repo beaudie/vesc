@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d16cf17_72092e42",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T20:28:05Z",
+      "side": 1,
+      "message": "I believe the correct way to apply this workaround is to mark \"unpackUnorm4x8\" as emulated for Pixel 4, and do this there. Is that right?",
+      "revId": "4f970481b15ca8fb35cbea5de8a0f67e98c02485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "866918da_9951e628",
         "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
         "patchSetId": 18
@@ -14,6 +31,30 @@
       "writtenOn": "2022-07-25T20:07:17Z",
       "side": 1,
       "message": "nit: this is the same as `CreateIndexNode`. It\u0027s fine to use that, even if the name is not perfect.",
+      "range": {
+        "startLine": 162,
+        "startChar": 22,
+        "endLine": 162,
+        "endChar": 35
+      },
+      "revId": "4f970481b15ca8fb35cbea5de8a0f67e98c02485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2041947_43b4d6df",
+        "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T20:28:05Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "866918da_9951e628",
       "range": {
         "startLine": 162,
         "startChar": 22,
