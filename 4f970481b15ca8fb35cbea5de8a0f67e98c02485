@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57c0043d_0c021b31",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T20:45:20Z",
+      "side": 1,
+      "message": "Not sure what you mean by \"mark as emulated\", but the problem you\u0027re facing here I believe is that you are asking the built-in to be looked up in the input shader\u0027s version, but you are actually fine with whatever the _output_ version supports.\n\nFor example, if the input shader is `#version 100 es`, but the output is `#version 450`, the shader itself doesn\u0027t have access to many built-ins, but ANGLE can pretty much insert whatever built-ins it wants. Makes sense?\n\nThings like this is part of the reason I don\u0027t like the wrappers in mNodeBuilder.",
+      "parentUuid": "7d16cf17_72092e42",
+      "revId": "4f970481b15ca8fb35cbea5de8a0f67e98c02485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "866918da_9951e628",
         "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
         "patchSetId": 18
