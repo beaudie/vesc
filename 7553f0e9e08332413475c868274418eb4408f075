@@ -16,6 +16,24 @@
       "message": "Cool, good to know if this is not needed. Is there any tests suppression needs to be removed?",
       "revId": "7553f0e9e08332413475c868274418eb4408f075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "090c9b6a_a7e447b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T21:00:36Z",
+      "side": 1,
+      "message": "No, the workaround successfully worked around the (now non-existing) problem.",
+      "parentUuid": "d1e3e1ef_383cb018",
+      "revId": "7553f0e9e08332413475c868274418eb4408f075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
