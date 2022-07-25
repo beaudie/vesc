@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ac55535_e1cb41d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T22:45:05Z",
+      "side": 1,
+      "message": "Thank you for all the huge reviews! I know I\u0027m blasting out a lot",
+      "parentUuid": "8a84c891_a7796345",
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73058d82_8b52d49b",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 30
@@ -84,6 +102,30 @@
       "writtenOn": "2022-07-25T17:30:34Z",
       "side": 1,
       "message": "Instead, use only one flag, like `SH_GENERATE_COHERENT_PIXEL_LOCAL_STORAGE` or something along those lines. Then, use an enum in `ShBuiltInResources` that selects which method to use. As you add coherency to other backends, that enum can grow as you wish.",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 80
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cf0e074_0b8f1c88",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T22:45:05Z",
+      "side": 1,
+      "message": "Ok, so making sure I follow correctly:\n\n- Add the enum to both Caps and ShBuiltinResources\n- renderergl_utils.cpp et. al. set the enum value in Caps\n- Compiler::Compiler copies the enum value from Caps to ShBuiltInResources",
+      "parentUuid": "cb62ea1a_67cb4336",
       "range": {
         "startLine": 359,
         "startChar": 0,
@@ -176,6 +218,30 @@
       "writtenOn": "2022-07-25T20:36:44Z",
       "side": 1,
       "message": "If you\u0027re calling a built-in, you should need this. What was the real problem?",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 25
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e1051db_7d811c42",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T22:45:05Z",
+      "side": 1,
+      "message": "Ok, circling back to here:\n\nThe problem is that `mSymbolTable` has a spec of `SH_GLES3_1_SPEC`, but `beginInvocationInterlockNV()` is a desktop GLSL function, requiring a spec of `SH_GL_CORE_SPEC` and `#version 430`.\n\nIs it possible to look up a desktop function on an ES symbol table? If I need a different symbol table, is there a way to find it from here?",
+      "parentUuid": "83efb225_a131f77c",
       "range": {
         "startLine": 153,
         "startChar": 12,
