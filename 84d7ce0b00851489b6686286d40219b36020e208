@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6381a0a1_f1855262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T20:14:31Z",
+      "side": 1,
+      "message": "\u003e What benefit does the coherent version of the extension give to the application?\n\nThe main disadvantage of the noncoherent version is that a single draw call cannot have overlapping triangles. So it\u0027s good for things like simple compositing operations, but not for more complex geometry. The application can also quickly become throttled on draw calls if it\u0027s always having to break things up and insert barriers.\n\nThe \"G-buffer\" lighting example in https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_pixel_local_storage.txt probably needs the coherent version, for example, since you can\u0027t realistically expect none of your triangles to touch the same pixel in a 3d scene.\n\n\u003e If the developer has to have a fallback for when only the noncoherent version is supported, why not use that all the time?\n\n1) I think we can get coherency on virtually all tilers, and tilers are the most likely to be resource limited and suffer in performance from a fallback approach. So applications that really care about performance on mobile will be happy to use the coherent version, and write a fallback code path for completeness.\n\n2) It would be good to get some data, but my hope is that we can get coherency on 95%+ of non-tilers on the internet. INTEL_fragment_shader_ordering (also implemented by AMD) is from 2013, NV_fragment_shader_interlock is from 2015, and D3D 11.3 shipped with rasterizer order views in 2015. I think virtually all GPUs made in the past 5-7 years can get coherency. So applications that really care about performance on modern GPUs will be happy to use the coherent version with a fallback for old devices that are slow anyway.",
+      "parentUuid": "e8f9cc4c_ed139ed7",
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "73058d82_8b52d49b",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 30
