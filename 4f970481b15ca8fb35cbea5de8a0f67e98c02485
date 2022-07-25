@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47e5f8ff_e169f1e8",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-25T21:21:31Z",
+      "side": 1,
+      "message": "Got it, so you think anglebug.com/7523 is not a bug?\n\n```\n  mediump vec4 rgba \u003d vec4(1,1,0,0);\n  highp uint packed \u003d packUnorm4x8(rgba);\n```\n\nIn other words, the above should not be expected to correctly unpack rgba into a 32-bit uint? I\u0027m happy to just keep this as is if so 😊\n\nFrom your previous comment:\n\n\u003e but the problem you\u0027re facing here I believe is that you are asking the built-in to be looked up in the input shader\u0027s version, but you are actually fine with whatever the _output_ version supports.\n\nGot it, yes, that makes sense! So the shaderVersion argument there is an int. Is that expected to map to ShShaderOutput? So:\n\n```\nCreateBuiltInFunctionCallNode(..., compiler-\u003egetOutputType());\n```\n\n?",
+      "parentUuid": "c3ed674f_c34409b9",
+      "revId": "4f970481b15ca8fb35cbea5de8a0f67e98c02485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "866918da_9951e628",
         "filename": "src/compiler/translator/tree_util/IntermNode_util.cpp",
         "patchSetId": 18
