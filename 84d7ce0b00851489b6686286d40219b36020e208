@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f9cc4c_ed139ed7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T17:30:34Z",
+      "side": 1,
+      "message": "Before I dive deep in reviewing this, I have a high level question. What benefit does the coherent version of the extension give to the application? I\u0027m genuinely curious.\n\nIf the developer has to have a fallback for when only the noncoherent version is supported, why not use that all the time?",
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73058d82_8b52d49b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T17:30:34Z",
+      "side": 1,
+      "message": "nit: increment this!",
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb62ea1a_67cb4336",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T17:30:34Z",
+      "side": 1,
+      "message": "Instead, use only one flag, like `SH_GENERATE_COHERENT_PIXEL_LOCAL_STORAGE` or something along those lines. Then, use an enum in `ShBuiltInResources` that selects which method to use. As you add coherency to other backends, that enum can grow as you wish.",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 80
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "450368e0_a4067939",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T17:30:34Z",
+      "side": 1,
+      "message": "`ShBuiltInResources` is really not the right place for this stuff, but we\u0027ve already messed that up with the metal stuff. So in the very least, please add whatever you need to the _end_ of this struct.\n\nAlso, like I said use an enum instead that chooses the method.",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 38
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ace071_ecc1f267",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-25T17:30:34Z",
+      "side": 1,
+      "message": "You should need this; if the backend is passing in which coherency method to use (including none), you shouldn\u0027t need to compile anything out with the preprocessor.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
