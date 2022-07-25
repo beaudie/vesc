@@ -683,6 +683,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool isRobustResourceInitEnabled() const;
 
+    uint32_t getDriverUniformSize() const;
+
     // Queries that begin and end automatically with render pass start and end
     angle::Result beginRenderPassQuery(QueryVk *queryVk);
     angle::Result endRenderPassQuery(QueryVk *queryVk);

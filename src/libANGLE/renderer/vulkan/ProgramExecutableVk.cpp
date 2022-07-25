@@ -1215,12 +1215,12 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         contextVk, texturesSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Texture]));
 
     // Driver uniforms
-    vk::DescriptorSetLayoutDesc driverUniformsSetDesc =
+    vk::DescriptorSetLayoutDesc driverUniformsSetDesc =  // remove
         contextVk->getDriverUniformsDescriptorSetDesc();
     ANGLE_TRY(contextVk->getDescriptorSetLayoutCache().getDescriptorSetLayout(
         contextVk, driverUniformsSetDesc, &mDescriptorSetLayouts[DescriptorSetIndex::Internal]));
 
-    // Create pipeline layout with these 4 descriptor sets.
+    // Create pipeline layout with these 3 descriptor sets.
     vk::PipelineLayoutDesc pipelineLayoutDesc;
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::UniformsAndXfb,
                                                  uniformsAndXfbSetDesc);
@@ -1228,9 +1228,15 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
                                                  resourcesSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Texture, texturesSetDesc);
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Internal,
-                                                 driverUniformsSetDesc);
-    pipelineLayoutDesc.updatePushConstantRange(
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, 32);  // Get size?
+                                                 driverUniformsSetDesc);  // remove
+
+    // Driver uniforms as push constants
+    uint32_t pushConstantSize = contextVk->getDriverUniformSize();
+    VkShaderStageFlags pushConstantStageMask =
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT |
+        VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT |
+        VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;  // & SupportedFlags
+    pipelineLayoutDesc.updatePushConstantRange(pushConstantStageMask, 0, pushConstantSize);
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
