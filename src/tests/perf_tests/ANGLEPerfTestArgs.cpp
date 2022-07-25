@@ -19,6 +19,7 @@ int gMaxStepsPerformed         = 0;
 bool gEnableTrace              = false;
 const char *gTraceFile         = "ANGLETrace.json";
 const char *gScreenShotDir     = nullptr;
+bool gSaveScreenshots          = false;
 int gScreenShotFrame           = 1;
 bool gVerboseLogging           = false;
 double gCalibrationTimeSeconds = 1.0;
@@ -49,8 +50,7 @@ int ReadIntArgument(const char *arg)
     return value;
 }
 
-// The same as --screenshot-dir, but used by Chrome tests.
-constexpr char kRenderTestDirArg[] = "--render-test-output-dir=";
+constexpr char kRenderTestOutputDir[] = "--render-test-output-dir=";
 }  // namespace
 
 using namespace angle;
@@ -103,10 +103,9 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
             // Skip an additional argument.
             argIndex++;
         }
-        else if (strcmp("--screenshot-dir", argv[argIndex]) == 0 && argIndex < *argc - 1)
+        else if (strcmp("--save-screenshots", argv[argIndex]) == 0)
         {
-            gScreenShotDir = argv[argIndex + 1];
-            argIndex++;
+            gSaveScreenshots = true;
         }
         else if (strcmp("--screenshot-frame", argv[argIndex]) == 0 && argIndex < *argc - 1)
         {
@@ -134,9 +133,9 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         {
             gWarmupLoops = 0;
         }
-        else if (strncmp(kRenderTestDirArg, argv[argIndex], strlen(kRenderTestDirArg)) == 0)
+        else if (strncmp(kRenderTestOutputDir, argv[argIndex], strlen(kRenderTestOutputDir)) == 0)
         {
-            gScreenShotDir = argv[argIndex] + strlen(kRenderTestDirArg);
+            gScreenShotDir = argv[argIndex] + strlen(kRenderTestOutputDir);
         }
         else if (strcmp("--calibration-time", argv[argIndex]) == 0)
         {
