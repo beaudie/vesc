@@ -32,15 +32,19 @@ TOutputVulkanGLSL::TOutputVulkanGLSL(TCompiler *compiler,
 
 void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
 {
-    const TType &type = symbol->getType();
+    const TType &type                       = symbol->getType();
+    const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
 
-    bool needsSetBinding = IsSampler(type.getBasicType()) ||
-                           (type.isInterfaceBlock() && (type.getQualifier() == EvqUniform ||
-                                                        type.getQualifier() == EvqBuffer)) ||
-                           IsImage(type.getBasicType()) || IsSubpassInputType(type.getBasicType());
-    bool needsLocation = type.getQualifier() == EvqAttribute ||
-                         type.getQualifier() == EvqVertexIn ||
-                         type.getQualifier() == EvqFragmentOut || IsVarying(type.getQualifier());
+    bool isPushConstant = layoutQualifier.pushConstant;
+    bool needsSetBinding =
+        IsSampler(type.getBasicType()) ||
+        (type.isInterfaceBlock() && !isPushConstant &&
+         (type.getQualifier() == EvqUniform || type.getQualifier() == EvqBuffer)) ||
+        IsImage(type.getBasicType()) || IsSubpassInputType(type.getBasicType());
+    bool needsLocation =
+        !isPushConstant &&
+        (type.getQualifier() == EvqAttribute || type.getQualifier() == EvqVertexIn ||
+         type.getQualifier() == EvqFragmentOut || IsVarying(type.getQualifier()));
     bool needsInputAttachmentIndex = IsSubpassInputType(type.getBasicType());
     bool needsSpecConstId          = type.getQualifier() == EvqSpecConst;
 
@@ -50,8 +54,7 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
         return;
     }
 
-    TInfoSinkBase &out                      = objSink();
-    const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
+    TInfoSinkBase &out = objSink();
 
     // This isn't super clean, but it gets the job done.
     // See corresponding code in glslang_wrapper_utils.cpp.
@@ -74,7 +77,7 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
             storage = EbsStd140;
         }
 
-        if (interfaceBlock->blockStorage() != EbsUnspecified)
+        if (!isPushConstant && interfaceBlock->blockStorage() != EbsUnspecified)
         {
             blockStorage = getBlockStorageString(storage);
         }
@@ -88,6 +91,12 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
     const char *kCommaSeparator = ", ";
     const char *separator       = "";
     out << "layout(";
+
+    // If it is a push constant, specify it.
+    if (isPushConstant)
+    {
+        out << "push_constant";
+    }
 
     // If the resource declaration is about input attachment, need to specify input_attachment_index
     if (needsInputAttachmentIndex)
