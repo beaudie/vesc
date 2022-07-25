@@ -33,6 +33,24 @@
       "message": "Drive by",
       "revId": "e2d08f5bdbc6f8c218cf0e3da5d8385e3017ad34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6738c887_701d005f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-25T20:56:04Z",
+      "side": 1,
+      "message": "Apologize that I didn\u0027t see it earlier. Thanks Shabi for unblocking the change.",
+      "parentUuid": "bcc55f86_a897c827",
+      "revId": "e2d08f5bdbc6f8c218cf0e3da5d8385e3017ad34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
