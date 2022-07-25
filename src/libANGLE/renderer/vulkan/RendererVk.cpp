@@ -2751,7 +2751,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Track the set of supported pipeline stages.  This is used when issuing image layout
     // transitions that cover many stages (such as AllGraphicsReadOnly) to mask out unsupported
     // stages, which avoids enumerating every possible combination of stages in the layouts.
-    VkPipelineStageFlags unsupportedStages = 0;
+    VkPipelineStageFlags unsupportedStages = 0;  // Add shader stage flags here instead of ContextVk
     if (!mPhysicalDeviceFeatures.tessellationShader)
     {
         unsupportedStages |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
