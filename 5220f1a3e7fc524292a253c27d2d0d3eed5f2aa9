@@ -16,6 +16,29 @@
       "message": "PTAL. Not sure if there\u0027s a more idiomatic way of duplicating a dictionary?",
       "revId": "5220f1a3e7fc524292a253c27d2d0d3eed5f2aa9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ad1883_7ab5db7b",
+        "filename": "infra/config/main.star",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-25T16:38:14Z",
+      "side": 1,
+      "message": "I\u0027m not good at Python either, but googling seems to suggest something like:\nci_properties \u003d {\"sheriff_rotations\":\"angle\", **properties}",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 284,
+        "endChar": 50
+      },
+      "revId": "5220f1a3e7fc524292a253c27d2d0d3eed5f2aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
