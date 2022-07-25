@@ -2,13 +2,10 @@
 
 As an ANGLE Sheriff. Your job is to:
 
- 1. Keep the [ANGLE Try Waterfall](https://ci.chromium.org/p/chromium/g/tryserver.chromium.angle/builders) in good
-    working order.
+ 1. Keep the [ANGLE Standalone](https://ci.chromium.org/p/angle/g/ci/console) and [ANGLE/Chromium](https://ci.chromium.org/p/chromium/g/chromium.angle/console) waterfalls green.
+ 1. Ensure developers have reliable pre-commit testing via the [ANGLE Standalone](https://ci.chromium.org/ui/p/angle/g/try/builders) [ANGLE/Chromium](https://ci.chromium.org/p/chromium/g/tryserver.chromium.angle/builders) try waterfalls.
  1. Control and monitor the [ANGLE auto-rollers](#the-auto-rollers).
- 1. Keep the [ANGLE Standalone Testers](README.md) in good working order.
- 1. Keep the [SwANGLE Try Waterfall](https://luci-milo.appspot.com/p/chromium/g/tryserver.chromium.swangle/builders) in good
-    working order.
- 1. Monitor and respond to ANGLE's [Perf alerts](https://groups.google.com/u/0/a/chromium.org/g/angle-perf-alerts)
+ 1. **Note: currently not working** Monitor and respond to ANGLE's [Perf alerts](https://groups.google.com/u/0/a/chromium.org/g/angle-perf-alerts)
 
 If you're not an ANGLE team member, you can contact us on the public ANGLE project
 [Google group](https://groups.google.com/forum/#!forum/angleproject).
@@ -25,7 +22,7 @@ extension for inspecting bot builds. It'll save you a lot of time.
 
 [wrangler schedule]: https://rotations.corp.google.com/rotation/5080504293392384
 
-## Task 1: Monitor ANGLE CI and Try Testers
+## Task: Monitor ANGLE CI and Try Testers
 
 Your first job is to keep the ANGLE builders green and unblocked.
 
@@ -34,36 +31,42 @@ There are two consoles for ANGLE continuous integration builders:
  1. Standalone ANGLE: https://ci.chromium.org/p/angle/g/ci/console
  1. Chromium + ANGLE integration: https://ci.chromium.org/p/chromium/g/chromium.angle/console
 
-We expect these waterfalls to be perfectly green at all times. As of writing
-several builders are red or flaky. Part of your job as wrangler is to
-eliminate all sources of breaks and flakiness. We can fix flakiness by
-suppressing tests that are not worth fixing, reverting problematic CLs, or
-finding other solutions.
+The best way to track ANGLE build failures is via [Sheriff-o-matic][ANGLESoM].
+Bookmark the link and check it regularly during your shift.
 
-When you encounter red builds or flakiness, please [file an ANGLE bug](http://anglebug.com/new)
+[ANGLESoM]: https://sheriff-o-matic.appspot.com/angle
+
+We expect these waterfalls to be as "green" as possible. As a wrangler
+please help clean out any failures by finding and reverting problematic CLs,
+suppressing flaky tests that can't be fixed, or finding other solutions. We
+aim to have zero failing builds, so follow the campsite rule and leave the
+waterfall cleaner than when you started your shift.
+
+When you encounter red builds or flakiness, [file an ANGLE bug](http://anglebug.com/new)
 and set the label: `Hotlist-Wrangler` ([search for existing bugs][WranglerBugs]).
 
-[WranglerBugs]:https://bugs.chromium.org/p/angleproject/issues/list?q=Hotlist%3DWrangler&can=2
+[WranglerBugs]: https://bugs.chromium.org/p/angleproject/issues/list?q=Hotlist%3DWrangler&can=2
+
+See more detailed instructions on ANGLE testing by following [this link](README.md).
 
 In addition to the CI builders, we have a console for try jobs on the ANGLE CV (change verifier):
 
  * https://ci.chromium.org/ui/p/angle/g/try/builders
 
-Some failures are expected on this waterfall as developers test WIP changes.
-Please watch for persistent sources of flakiness and failure and take action
-as appropriate by filing bugs, reverting CLs, or taking other action.
+Failures are intended on this waterfall as developers test WIP changes.
+You must act on any persistent flakiness or failure that causes developer drag
+by filing bugs, reverting CLs, or taking other action as with the CI waterfall.
 
-If you find a point of failure that is unrelated to ANGLE, please [file a
-Chromium bug](http://crbug.com/new). Set the bug label
-`Hotlist-PixelWrangler`. Ensure you cc the current ANGLE and Chrome GPU
+If you find a failure that is unrelated to ANGLE, [file a Chromium bug](http://crbug.com/new).
+Set the bug label `Hotlist-PixelWrangler`. Ensure you cc the current ANGLE and Chrome GPU
 wranglers, which you can find by consulting
 [build.chromium.org](https://ci.chromium.org/p/chromium/g/main/console).
 For more information see [Filing Chromium Bug Reports](#filing-chromium-bug-reports) below.
 
-Also follow [Chromium bugs in the `Internals>GPU>ANGLE` component][ChromiumANGLEBugs]
+You can optionally follow [Chromium bugs in the `Internals>GPU>ANGLE` component][ChromiumANGLEBugs]
 to be alerted to reports of ANGLE-related breakage in Chrome.
 
-[ChromiumANGLEBugs]:https://bugs.chromium.org/p/chromium/issues/list?q=component%3AInternals%3EGPU%3EANGLE&can=2
+[ChromiumANGLEBugs]: https://bugs.chromium.org/p/chromium/issues/list?q=component%3AInternals%3EGPU%3EANGLE&can=2
 
 **NOTE: When all builds seem to be purple or otherwise broken:**
 
@@ -99,7 +102,7 @@ the ANGLE project.
 
 ## <a name="the-auto-rollers"></a>Task 3: The Auto-Rollers
 
-The [ANGLE auto-roller](https://autoroll.skia.org/r/angle-chromium-autoroll) automatically updates
+The [ANGLE into Chrome auto-roller](https://autoroll.skia.org/r/angle-chromium-autoroll) automatically updates
 Chrome with the latest ANGLE changes.
 
  1. **Roller health**: You will be cc'ed on all rolls. Please check failed rolls to verify there is no blocking
@@ -154,11 +157,7 @@ To handle failures on these bots:
    should fail afterwards, but if the bad roll manages to reland,
    stop the [autoroller](https://autoroll.skia.org/r/swiftshader-chromium-autoroll) as well.
 
-## Task 4: ANGLE Standalone Testing
-
-See more detailed instructions on by following [this link](README.md).
-
-## Task 5: Monitor and respond to ANGLE's perf alerts
+## Task: Monitor and respond to ANGLE's perf alerts
 
 Any large regressions should be triaged with a new ANGLE bug linked to any suspected CLs that may
 have caused performance to regress. If it's a known/expected regression, the bug can be closed as
