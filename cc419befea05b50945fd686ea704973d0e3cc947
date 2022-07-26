@@ -136,6 +136,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdce5ac0_d9288208",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-26T19:12:26Z",
+      "side": 1,
+      "message": "In PS15, I made allocateDescriptorSet the helper func you are asking for.",
+      "parentUuid": "ed543411_bf82df54",
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f3794f9_92dabf4e",
