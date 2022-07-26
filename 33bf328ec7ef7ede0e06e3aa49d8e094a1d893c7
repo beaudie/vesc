@@ -140,6 +140,24 @@
       "parentUuid": "6915c0f3_c0fb0ff4",
       "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec8e6e7a_a7ab1869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T15:15:04Z",
+      "side": 1,
+      "message": "FYI, we can set expectations for QUADROP400 for example, so there is support for detecting the GPU. If by any chance the driver version could also be queried, we could add an expectation condition for the exact mesa version.",
+      "parentUuid": "731b545d_56233608",
+      "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
