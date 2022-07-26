@@ -122,6 +122,24 @@
       "parentUuid": "84ce6738_61a303b8",
       "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "731b545d_56233608",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-26T15:07:51Z",
+      "side": 1,
+      "message": "This location sounds good.\nI\u0027ve looked a bit more into it, and I think filter file is something Chrome-specific, that gtest doesn\u0027t support natively.\nSo, we\u0027ll need to add support in TestSuite.cpp if we want to use it.\nChrome names the flag `--test-launcher-filter-file`\n\nSo, maybe it would be comparatively not so hard to add something like MESA_21_3_8 to expectations.",
+      "parentUuid": "6915c0f3_c0fb0ff4",
+      "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
