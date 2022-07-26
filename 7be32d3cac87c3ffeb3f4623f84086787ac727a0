@@ -175,6 +175,24 @@
       "parentUuid": "72a18b38_7067bdcf",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49dc839c_5feb0cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1408173
+      },
+      "writtenOn": "2022-07-26T19:22:59Z",
+      "side": 1,
+      "message": "Just to be clear, I\u0027m fine with nuking Metal if you are ready to be done with it, but this was only affecting us on a single test, and we can easily disable the test which was affected. I filed the bug so that you will be aware of the issue. It doesn\u0027t happen unpredictably.",
+      "parentUuid": "86b5d2b5_d33957bb",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
