@@ -86,6 +86,24 @@
       "message": "If push comes to sho",
       "revId": "f0154185c7a6fbde09229336699c7d7fb551385b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "801c5710_4a105120",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-26T21:13:55Z",
+      "side": 1,
+      "message": "ve, our target device strictly speaking doesn\u0027t need this to do the right thing in the hw, so it\u0027ll be fine if we don\u0027t get the SPIRV validation updated in time.",
+      "parentUuid": "2e4ed932_1e0392af",
+      "revId": "f0154185c7a6fbde09229336699c7d7fb551385b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c19981fb_31e399f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-26T21:13:55Z",
+      "side": 1,
+      "message": "Added CL before this to cover the YUV feature in Vk altogether, along with a new ShaderLang.h entry controlling whether the decoration is sent.",
+      "revId": "e8a4f19cde03ce273d19d13c4366e4531b4f02f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
