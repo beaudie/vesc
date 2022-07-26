@@ -33,6 +33,24 @@
       "message": "Looks like spirv headers are needed anyway for the shader compile tests to pass. I\u0027d like to account for it in validate, but then it uses a separate repo. Perhaps we should have a change in spirv tools based on the draft spec or something?",
       "revId": "f0154185c7a6fbde09229336699c7d7fb551385b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61962e7c_00a79b92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T18:49:03Z",
+      "side": 1,
+      "message": "Kind of hard to do that when the extension is not yet released. We could skip the tests, if there are not too many of them, but there is actually a more general problem here.\n\nThe thing is, even if the extension is released, the device may not support it. You shouldn\u0027t be adding this decoration if the device doesn\u0027t support the extension, so you\u0027d have to have an ANGLE feature that checks for the existence of the extension, then that\u0027s used to set a compiler flag in `ShaderLang.h`, then that flag is used to know if this Decoration can be added or not.\n\nOnce you have that, the tests should pass because the bots naturally don\u0027t support the extension.",
+      "parentUuid": "00718c0d_43a9bb54",
+      "revId": "f0154185c7a6fbde09229336699c7d7fb551385b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
