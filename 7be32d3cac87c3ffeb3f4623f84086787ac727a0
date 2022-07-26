@@ -157,6 +157,24 @@
       "parentUuid": "eb35c8ab_eb7551bf",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b5d2b5_d33957bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-26T18:48:23Z",
+      "side": 1,
+      "message": "The customer encountering the 30-second GPU hangs and incorrect rendering in their automated testing lab is Skia. I aim to address this in the most expedient way possible; the Skia team has agreed with the idea that the Metal backend will be unsupported on this older hardware. We may decide to invest additional engineering later to enable OpenGL ES 2.0 on the Metal backend on this older hardware, so for the moment we won\u0027t remove code in response. At the moment this would be an unknown amount of engineering investment and we have higher priority issues to address in order to ship the Metal backend in Chromium on current macOS hardware.",
+      "parentUuid": "72a18b38_7067bdcf",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
