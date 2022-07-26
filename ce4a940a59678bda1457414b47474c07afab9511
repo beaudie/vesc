@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fed46a_5812385a",
+        "filename": "src/common/android_util.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-07-26T00:32:51Z",
+      "side": 1,
+      "message": "make this `VERBOSE` is also fine with me.",
+      "range": {
+        "startLine": 270,
+        "startChar": 12,
+        "endLine": 270,
+        "endChar": 16
+      },
+      "revId": "ce4a940a59678bda1457414b47474c07afab9511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
