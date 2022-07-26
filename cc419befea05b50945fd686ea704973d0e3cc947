@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da36c02c_d8728fd2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-26T18:48:20Z",
+      "side": 1,
+      "message": "I dont have specific numbers on this, but adding logs in that aded piece of code shows that asphalt_9 is hitting that ~3 times per race.",
+      "parentUuid": "3d7cd5bf_659d278e",
+      "range": {
+        "startLine": 17,
+        "startChar": 23,
+        "endLine": 17,
+        "endChar": 69
+      },
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22b0cfbf_90f0a70e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
@@ -37,6 +61,24 @@
       "writtenOn": "2022-07-25T23:03:22Z",
       "side": 1,
       "message": "Should we remove this if condition and the code inside given the other CL https://chromium-review.googlesource.com/c/angle/angle/+/3785290/ that removes the bindEmptyForUnusedDescriptorSets feature?",
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79bf6a5a_e54e2785",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3349,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-26T18:48:20Z",
+      "side": 1,
+      "message": "Removed now after rebase.",
+      "parentUuid": "22b0cfbf_90f0a70e",
       "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76ec5c1a_fb7cca4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-26T18:48:20Z",
+      "side": 1,
+      "message": "Instead of a separate function, make it a `do{} while(false)` block to achieve the same thing without extra function.",
+      "parentUuid": "f0e99b37_940808e8",
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f3794f9_92dabf4e",
@@ -71,6 +131,30 @@
       "writtenOn": "2022-07-25T19:33:16Z",
       "side": 1,
       "message": "I added this workaround for Nexus5X. Removing here: https://chromium-review.googlesource.com/c/angle/angle/+/3785290\n\nIf Pixel4 is not affected, you can stop logging this around 😊",
+      "range": {
+        "startLine": 284,
+        "startChar": 51,
+        "endLine": 284,
+        "endChar": 83
+      },
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb653ed_7d0c6651",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-26T18:48:20Z",
+      "side": 1,
+      "message": "Thanks for removing this workaround.",
+      "parentUuid": "0f3794f9_92dabf4e",
       "range": {
         "startLine": 284,
         "startChar": 51,
