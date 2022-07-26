@@ -33,6 +33,24 @@
       "message": "Per the bug, you run these tests in Debug.\nIs it possible to add DEBUG to the skip?\nNot sure if ANGLE supports it, but WebGL does, so should be possible to implement.\n\nI feel bad suppressing tests that otherwise pass on the bots, since this prevents us from catching regressions.\nAs an alternative, I would suggest using gtest filter when running locally.\nAlso, gtest supports filter file, and you can add one to our repo, so everyone can use it.",
       "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25796b4_6c68570d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T13:48:31Z",
+      "side": 1,
+      "message": "Why are you running ANGLE/GL tests Cody?",
+      "parentUuid": "86c7934b_15f8e7b3",
+      "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
