@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c40cbf9_80c46ff4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-26T19:07:34Z",
+      "side": 1,
+      "message": "LGTM. \n\nI went back and forth a bit on the best way to do this. On Windows we have a similar fallback of D3D11-\u003eD3D9 and that\u0027s split into a couple places: Chrome can force D3D9 by checking various driver info and ANGLE can explicitly fail D3D11 initialization based on missing system updates that it needs to run.\n\nI think this falls into the later category: The Metal backend can\u0027t run on this system due to missing support in ANGLE so ANGLE should make the decision to fail initialization.",
+      "revId": "89ed22638c46eefc48413465ecf43944a791e434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fa9adda_532f14e4",
