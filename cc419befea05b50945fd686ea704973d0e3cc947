@@ -120,6 +120,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed543411_bf82df54",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T18:52:30Z",
+      "side": 1,
+      "message": "I still recommend a helper function. That makes the code more readable because it also gives this piece of code a meaningful name.\n\n`do{} while(false)` with `break`s is just `goto`s (which have their place, but this code is not it)",
+      "parentUuid": "76ec5c1a_fb7cca4f",
+      "revId": "cc419befea05b50945fd686ea704973d0e3cc947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0f3794f9_92dabf4e",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 12
