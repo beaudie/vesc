@@ -139,6 +139,24 @@
       "parentUuid": "0b9ccfb8_b758854c",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a18b38_7067bdcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-07-26T08:53:32Z",
+      "side": 1,
+      "message": "Historically, ANGLE Metal backend had lots of guards and switches around different hardware and software caps, e.g., Mac vs MacCatalyst, different OS and SDK versions, etc. If the intention here is to drop NVIDIA and old Intel GPU Macs altogether, lots of legacy code would become unused and should be removed as well.\n\nOn the other hand, running end2end tests on NVIDIA/Metal is still useful because newer platforms are more tolerable to invalid Metal usage in some cases.\n\nIf all customers that experience bugs use ANGLE only through Chromium/WebKit, the calling code should make the decision to not use Metal on old hardware.",
+      "parentUuid": "eb35c8ab_eb7551bf",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
