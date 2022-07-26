@@ -16,6 +16,29 @@
       "message": "Not sure why it is enough for the ETC1 emulation to be disabled on only `mSupportedExtensions`. But in my tests for ASTC, it is also required to disable the extension on `mState.mExtensions` if we want to override it being exposed as enabled.",
       "revId": "64cb42d717fbc452990ff6d45cc5d8b7841dd174",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a6b0a63_532d7204",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4041,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-26T17:34:38Z",
+      "side": 1,
+      "message": "nit: usually we do if !defined(..) style so we can chain together things more easily in the future as they come up.",
+      "range": {
+        "startLine": 4041,
+        "startChar": 0,
+        "endLine": 4041,
+        "endChar": 25
+      },
+      "revId": "64cb42d717fbc452990ff6d45cc5d8b7841dd174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
