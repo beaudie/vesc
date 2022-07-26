@@ -16,6 +16,29 @@
       "message": "Let\u0027s see whether this passes the CQ.\n\nQuyen: FYI. Any comments welcome.\n",
       "revId": "89ed22638c46eefc48413465ecf43944a791e434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fa9adda_532f14e4",
+        "filename": "src/common/apple_platform_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-07-26T07:38:02Z",
+      "side": 1,
+      "message": "nit: I think putting metal specific prefix (`ANGLE_MTL`) in this file would be weird since this is supposed to be generic apple platform header.\nProbably we should change it to `ANGLE_APPLE` and then in metal backend, creating these macros:\n```\n#define ANGLE_MTL_RETAIN ANGLE_APPLE_RETAIN\n#define ANGLE_MTL_RELEASE ANGLE_APPLE_RELEASE\n...\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 33
+      },
+      "revId": "89ed22638c46eefc48413465ecf43944a791e434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
