@@ -71,11 +71,6 @@ TEST(TestUtils, Sleep)
 #    define MAYBE_RunApp DISABLED_RunApp
 #    define MAYBE_RunAppAsync DISABLED_RunAppAsync
 #    define MAYBE_RunAppAsyncRedirectStderrToStdout DISABLED_RunAppAsyncRedirectStderrToStdout
-// TODO: fuchsia support. http://anglebug.com/3161
-#elif defined(ANGLE_PLATFORM_FUCHSIA)
-#    define MAYBE_RunApp DISABLED_RunApp
-#    define MAYBE_RunAppAsync DISABLED_RunAppAsync
-#    define MAYBE_RunAppAsyncRedirectStderrToStdout DISABLED_RunAppAsyncRedirectStderrToStdout
 #else
 #    define MAYBE_RunApp RunApp
 #    define MAYBE_RunAppAsync RunAppAsync
@@ -86,7 +81,9 @@ TEST(TestUtils, Sleep)
 TEST(TestUtils, MAYBE_RunApp)
 {
     std::string testExecutableName = angle::TestSuite::GetInstance()->getTestExecutableName();
-    std::string executablePath     = angle::StripFilenameFromPath(testExecutableName);
+    printf("test exe name: %s\n", testExecutableName.c_str());
+
+    std::string executablePath = angle::StripFilenameFromPath(testExecutableName);
 
     EXPECT_NE(executablePath, "");
     executablePath += "/";
