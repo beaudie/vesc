@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "18d32ba1_7fdfd5cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T01:54:31Z",
+      "side": 1,
+      "message": "LGTM. IIRC Frank already has a similar change",
+      "revId": "ce4a940a59678bda1457414b47474c07afab9511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "32fed46a_5812385a",
         "filename": "src/common/android_util.cpp",
         "patchSetId": 1
