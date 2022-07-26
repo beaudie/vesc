@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c7934b_15f8e7b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-26T05:44:02Z",
+      "side": 1,
+      "message": "Hey Yuly, I need these skips to be able to pass back to back runs on our gLinux laptops.  Let me know if I should take a different approach (i.e. checking driver version or something).",
+      "revId": "33bf328ec7ef7ede0e06e3aa49d8e094a1d893c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
