@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec414a93_70015d64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-07-26T13:58:34Z",
+      "side": 1,
+      "message": "Sorry for the inconvenience by not checking properly.\nBefore uploading the patchset, I checked the build through the linux machine.\n(I used mac before 😭 and current_os was not linux)\nCan I ask for one more dry-run?",
+      "revId": "7398651ec5232984f68851c52cae4c13b073b411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
