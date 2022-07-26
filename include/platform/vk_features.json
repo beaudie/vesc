@@ -901,6 +901,13 @@
             "description": [
                 "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion"
             ]
+        },
+        {
+            "name": "yuv_target",
+            "category": "Features",
+            "description": [
+                "Enables GL_EXT_YUV_target (rendering to external/YUV attachments) via VK_EXT_yuv_target and VK_ANDROID_render_to_external_format, if extensions present"
+            ]
         }
     ]
 }
