@@ -70,11 +70,6 @@ TEST(TestUtils, Sleep)
 #    define MAYBE_RunApp DISABLED_RunApp
 #    define MAYBE_RunAppAsync DISABLED_RunAppAsync
 #    define MAYBE_RunAppAsyncRedirectStderrToStdout DISABLED_RunAppAsyncRedirectStderrToStdout
-// TODO: fuchsia support. http://anglebug.com/3161
-#elif defined(ANGLE_PLATFORM_FUCHSIA)
-#    define MAYBE_RunApp DISABLED_RunApp
-#    define MAYBE_RunAppAsync DISABLED_RunAppAsync
-#    define MAYBE_RunAppAsyncRedirectStderrToStdout DISABLED_RunAppAsyncRedirectStderrToStdout
 #else
 #    define MAYBE_RunApp RunApp
 #    define MAYBE_RunAppAsync RunAppAsync

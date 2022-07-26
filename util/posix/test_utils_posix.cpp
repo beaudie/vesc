@@ -26,9 +26,13 @@
 #include "common/platform.h"
 #include "common/system_utils.h"
 
-#if !defined(ANGLE_PLATFORM_FUCHSIA)
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+#    include <lib/fdio/spawn.h>
+#    include <lib/zx/job.h>
+#    include <zircon/status.h>
+#else
 #    include <sys/resource.h>
-#endif
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
 
 #if defined(ANGLE_PLATFORM_MACOS)
 #    include <crt_externs.h>
@@ -124,12 +128,12 @@ class PosixProcess : public Process
         {
             if (pipe(mStdoutPipe.fds) != 0)
             {
-                std::cerr << "Error calling pipe: " << errno << "\n";
+                std::cout << "Error calling pipe: " << errno << "\n";
                 return;
             }
             if (fcntl(mStdoutPipe.fds[0], F_SETFL, O_NONBLOCK) == -1)
             {
-                std::cerr << "Error calling fcntl: " << errno << "\n";
+                std::cout << "Error calling fcntl: " << errno << "\n";
                 return;
             }
         }
@@ -137,12 +141,12 @@ class PosixProcess : public Process
         {
             if (pipe(mStderrPipe.fds) != 0)
             {
-                std::cerr << "Error calling pipe: " << errno << "\n";
+                std::cout << "Error calling pipe: " << errno << "\n";
                 return;
             }
             if (fcntl(mStderrPipe.fds[0], F_SETFL, O_NONBLOCK) == -1)
             {
-                std::cerr << "Error calling fcntl: " << errno << "\n";
+                std::cout << "Error calling fcntl: " << errno << "\n";
                 return;
             }
         }
@@ -150,6 +154,7 @@ class PosixProcess : public Process
         mPID = fork();
         if (mPID < 0)
         {
+            std::cout << "Error calling fork: " << errno << "\n";
             return;
         }
 
@@ -206,7 +211,7 @@ class PosixProcess : public Process
             args.push_back(nullptr);
 
             execv(commandLineArgs[0], args.data());
-            std::cerr << "Error calling evecv: " << errno;
+            std::cout << "Error calling evecv: " << errno;
             _exit(errno);
         }
         // Parent continues execution.
@@ -255,7 +260,7 @@ class PosixProcess : public Process
 
         if (returnedPID == -1 && errno != ECHILD)
         {
-            std::cerr << "Error calling waitpid: " << ::strerror(errno) << "\n";
+            std::cout << "Error calling waitpid: " << ::strerror(errno) << "\n";
             return true;
         }
 
@@ -320,6 +325,107 @@ class PosixProcess : public Process
     int mExitCode = 0;
     pid_t mPID    = -1;
 };
+
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+class ProcessImpl : public Process
+{
+  public:
+    ProcessImpl(const std::vector<const char *> &commandLineArgs,
+                ProcessOutputCapture captureOutput)
+    {
+        if (commandLineArgs.empty())
+        {
+            return;
+        }
+
+        // Chrome clones the clock and library services, so we do that too.
+        uint32_t spawnFlags = FDIO_SPAWN_DEFAULT_LDSVC | FDIO_SPAWN_CLONE_UTC_CLOCK;
+
+        // Ensure the child has the same environment variables.
+        spawnFlags |= FDIO_SPAWN_CLONE_ENVIRON;
+
+        zx::unowned_job job = zx::job::default_job();
+        ASSERT(job->is_valid());
+
+        std::vector<const char *> args = commandLineArgs;
+        args.push_back(nullptr);
+
+        char errorMessage[FDIO_SPAWN_ERR_MSG_MAX_LENGTH];
+        zx_status_t status =
+            fdio_spawn_etc(job->get(), spawnFlags, commandLineArgs[0], args.data(), nullptr, 0,
+                           nullptr, mProcessHandle.reset_and_get_address(), errorMessage);
+
+        if (status != ZX_OK)
+        {
+            std::cout << zx_status_get_string(status) << " - fdio_spawn: " << errorMessage << "\n";
+            return;
+        }
+
+        mStarted = true;
+    }
+
+    ~ProcessImpl() override
+    {
+        if (mProcessHandle)
+        {
+            mProcessHandle.reset();
+        }
+    }
+
+    bool started() override { return mStarted; }
+
+    bool finish() override
+    {
+        if (!mStarted)
+        {
+            return false;
+        }
+
+        if (mFinished)
+        {
+            return true;
+        }
+
+        zx_status_t status =
+            zx_object_wait_one(mProcessHandle.get(), ZX_TASK_TERMINATED, ZX_TIME_INFINITE, nullptr);
+        if (status != ZX_OK)
+        {
+            std::cout << zx_status_get_string(status) << " - zx_object_wait_one\n";
+            return false;
+        }
+
+        zx_info_process_t procInfo;
+        status =
+            mProcessHandle.get_info(ZX_INFO_PROCESS, &procInfo, sizeof(procInfo), nullptr, nullptr);
+
+        if (status != ZX_OK)
+        {
+            std::cout << zx_status_get_string(status) << " - zx_object_get_info\n";
+            return false;
+        }
+
+        mExitCode = static_cast<int>(procInfo.return_code);
+
+        mFinished = true;
+        return true;
+    }
+
+    bool finished() override { return mFinished; }
+
+    int getExitCode() override { return mExitCode; }
+
+    bool kill() override { return false; }
+
+  private:
+    bool mStarted  = false;
+    bool mFinished = false;
+    int mExitCode  = 0;
+    zx::process mProcessHandle;
+};
+#else
+using ProcessImpl = PoxixProcess;
+#endif  // defined(ANGLE_PLATFORM_FUCHSIA)
+
 }  // anonymous namespace
 
 void Sleep(unsigned int milliseconds)
@@ -399,7 +505,7 @@ bool DeleteSystemFile(const char *path)
 
 Process *LaunchProcess(const std::vector<const char *> &args, ProcessOutputCapture captureOutput)
 {
-    return new PosixProcess(args, captureOutput);
+    return new ProcessImpl(args, captureOutput);
 }
 
 int NumberOfProcessors()
