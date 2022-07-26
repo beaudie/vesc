@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "804b75fe_56a93146",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-26T14:39:55Z",
+      "side": 1,
+      "message": "This works on Android, here\u0027s how we use it:\n```\nadb shell mkdir -p /sdcard/chromium_tests_root/third_party/angle/screenshots\n\nout/AndroidDebug/angle_perftests --screenshot-dir /sdcard/chromium_tests_root/third_party/angle/screenshots\n\nadb pull /sdcard/chromium_tests_root/third_party/angle/screenshots\n```\n\nThe destination directory can be changed to any spot writable by the application.  If I have root, I usually write all output to:\n`/data/data/$PACKAGE_NAME/angle_capture`\n\nDo we need to change this if it already works?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f1f51df_45d1c324",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-26T14:39:55Z",
+      "side": 1,
+      "message": "Doesn\u0027t switching to this tie us to old scripts we are trying to move away from?\n\nIf not, I\u0027m okay making a change (requires an extra parameter and we\u0027ll need to update all our local docs and scripts), but it will break any other users of the current options.\n\nAlternatively, we could keep the `--screenshot-dir` option, but add the `--save-screenshots` option.  If the former isn\u0027t supplied, screenshots are written to `--render-test-output-dir`.  If only the former is supplied, `--save-screenshots` defaults to on.\n\nThe logic becomes:\n```\nsave-screenshots  screenshot-dir  RESULT\nOFF               OFF             No screenshots\nOFF                ON             Screenshots to screenshot-dir\n ON               OFF             Screenshots to render-test-..\n ON                ON             Screenshots to screenshot-dir\n```",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
