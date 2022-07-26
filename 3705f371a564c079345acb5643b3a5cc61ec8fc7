@@ -22,6 +22,30 @@
       },
       "revId": "3705f371a564c079345acb5643b3a5cc61ec8fc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bd0bee5_ac2d394c",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-26T19:10:49Z",
+      "side": 1,
+      "message": "This comes from the X11 display factory:\n\nhttps://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS/+/refs/heads/upstream/master/framework/platform/lnx/X11/tcuLnxX11EglDisplayFactory.cpp#189\n\nNot sure why the original dEQP authors went with that name. Changing it would require a moderately disruptive upstream patch.",
+      "parentUuid": "e819bdc6_4fe9903f",
+      "range": {
+        "startLine": 105,
+        "startChar": 6,
+        "endLine": 105,
+        "endChar": 12
+      },
+      "revId": "3705f371a564c079345acb5643b3a5cc61ec8fc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
