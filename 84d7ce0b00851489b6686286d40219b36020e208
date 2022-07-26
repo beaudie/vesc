@@ -138,6 +138,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21d3452b_24249f08",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T01:51:41Z",
+      "side": 1,
+      "message": "I was going to say that in `ShaderGL::compile` you choose the enum based on the ANGLE features, but I see what you mean now. Yes, direct-to-metal has already set the precedence here, so you can continue that way (exactly as you described). I\u0027ll find a way to clean things up soon though, neither ShBuiltinResources nor Caps are really the place to add these stuff.\n\nBy the way, you actually wouldn\u0027t need a flag here at all, because one entry in the enum should be `NonCoherent`.",
+      "parentUuid": "6cf0e074_0b8f1c88",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 80
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "450368e0_a4067939",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 30
@@ -242,6 +266,30 @@
       "side": 1,
       "message": "Ok, circling back to here:\n\nThe problem is that `mSymbolTable` has a spec of `SH_GLES3_1_SPEC`, but `beginInvocationInterlockNV()` is a desktop GLSL function, requiring a spec of `SH_GL_CORE_SPEC` and `#version 430`.\n\nIs it possible to look up a desktop function on an ES symbol table? If I need a different symbol table, is there a way to find it from here?",
       "parentUuid": "83efb225_a131f77c",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 25
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f941b71b_9e8d0dc4",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-26T01:51:41Z",
+      "side": 1,
+      "message": "Hmm... we\u0027d need to find a way to make that work. First of all, no you can\u0027t use desktop GLSL built-ins because we don\u0027t necessarily build ANGLE with desktop GLSL support. The problem is that SymbolTable is really there to support the input rather than output, and we had mostly managed to get by without needing anything special for output.\n\nMostly. There is actually precedence here that you can follow. See how `subpassLoad` is defined in `builtin_function_declarations.txt`. I ended up adding a new made-up GLSL version (`ESSL_VULKAN_BUILTINS`) to this file, which is defined as `kESSLVulkanOnly` in the code. This is a large value that makes sure input shaders can never find these symbols. Then in the code I can request to find this symbol given the `kESSLVulkanOnly` version.\n\nSo, you could similarly introduce a new `ESSL_DESKTOP_GLSL_BUILTINS` such that those builtins are exposed to ESSL, then similarly to `DriverUniform::getFlipXY`, choose either `kESSLDesktopGLSLOnly` or `430`.",
+      "parentUuid": "9e1051db_7d811c42",
       "range": {
         "startLine": 153,
         "startChar": 12,
