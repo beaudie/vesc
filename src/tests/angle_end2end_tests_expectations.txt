@@ -92,6 +92,20 @@
 1252169 LINUX AMD OPENGL : ComputeShaderTest.BufferImageBufferMapWrite/* = SKIP
 6585 LINUX AMD VULKAN : EXTBlendFuncExtendedDrawTest.FragData/* = SKIP
 7300 LINUX INTEL OPENGL : ComputeShaderTest.DrawDispatchImageReadDraw/* = SKIP
+7528 LINUX INTEL OPENGL : AtomicCounterBufferTest31.AtomicCounterReadCompute/* = SKIP
+7528 LINUX INTEL OPENGL : GLSLTest_ES31.StructAndArrayEqualOperator/* = SKIP
+7528 LINUX INTEL OPENGL : MipmapTestES31.GenerateMipmapWithDraw/* = SKIP
+7528 LINUX INTEL OPENGL : WEBGLVideoTextureTest.VerifySamplerVideoWEBGL/* = SKIP
+7528 LINUX INTEL OPENGL : WEBGLVideoTextureTest.VerifySamplerVideoWEBGLAsParameter/* = SKIP
+7528 LINUX INTEL OPENGL : WEBGLVideoTextureTest.VerifyStateManagerKnowsBindingVideoImage/* = SKIP
+7528 LINUX INTEL OPENGL : VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/* = SKIP
+7528 LINUX INTEL OPENGL : VulkanExternalImageTest.ShouldDrawOpaqueFdWithSemaphores/* = SKIP
+7528 LINUX INTEL OPENGL : VulkanExternalImageTest.WaitSemaphoresRetainsContentOpaqueFd/* = SKIP
+7528 LINUX INTEL OPENGL : Texture2DTest.TexStorageWithPBO/* = SKIP
+7528 LINUX INTEL VULKAN : TransformFeedbackTest.TransformFeedbackQueryPausedDrawThenResume/* = SKIP
+7528 LINUX INTEL VULKAN : MultiDrawTest.CanCompile/ES2_Vulkan* = SKIP
+7528 LINUX INTEL VULKAN : CopyTextureVariationsTest.CopyTexture/ES2_Vulkan* = SKIP
+
 
 // Nvidia
 6115 NVIDIA OPENGL : GLSLTestLoops.DoWhileContinue/* = SKIP
