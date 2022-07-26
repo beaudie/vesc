@@ -117,6 +117,30 @@
       },
       "revId": "88872618fc0f6642b08a81d7de8d1528edb9be0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ec05a68_33bf7235",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1792,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-07-26T17:53:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d994be9c_ab23c11a",
+      "range": {
+        "startLine": 1792,
+        "startChar": 15,
+        "endLine": 1792,
+        "endChar": 34
+      },
+      "revId": "88872618fc0f6642b08a81d7de8d1528edb9be0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
