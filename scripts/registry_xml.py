@@ -138,6 +138,7 @@ gles_requestable_extensions = [
     "GL_EXT_texture_type_2_10_10_10_REV",
     "GL_EXT_unpack_subimage",
     "GL_EXT_YUV_target",
+    "GL_EXT_YUV_target_spirv_layout_decoration",
     "GL_IMG_texture_compression_pvrtc",
     "GL_IMG_texture_compression_pvrtc2",
     "GL_KHR_parallel_shader_compile",

@@ -397,6 +397,12 @@ struct ShBuiltInResources
     int EXT_multisampled_render_to_texture;
     int EXT_multisampled_render_to_texture2;
     int EXT_YUV_target;
+    // BUG: b/223456677 Needed in order for
+    // EXTYUVTargetTest.CompileSucceedsWithExtensionAndPragmaOnVulkan
+    // Distinguish between Vulkan impls that don't really support
+    // EXT_YUV_target and only do so for that one test, versus Vulkan impls
+    // that actually support EXT_YUV_target (and thus also pass a decoration)
+    int EXT_YUV_target_spirv_layout_decoration;
     int EXT_geometry_shader;
     int OES_geometry_shader;
     int OES_shader_io_blocks;

@@ -1287,6 +1287,7 @@ void TCompiler::setResourceString()
         << ":OVR_multiview2:" << mResources.OVR_multiview2
         << ":OVR_multiview:" << mResources.OVR_multiview
         << ":EXT_YUV_target:" << mResources.EXT_YUV_target
+        << ":EXT_YUV_target_vk:" << mResources.EXT_YUV_target
         << ":EXT_geometry_shader:" << mResources.EXT_geometry_shader
         << ":OES_geometry_shader:" << mResources.OES_geometry_shader
         << ":OES_shader_io_blocks:" << mResources.OES_shader_io_blocks

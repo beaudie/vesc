@@ -182,6 +182,7 @@ using data from registry_xml.py and gl.xml.
 | [GL_OES_vertex_type_10_10_10_2](https://khronos.org/registry/OpenGL/extensions/OES/OES_vertex_type_10_10_10_2.txt) | &#x2714; | &#x2714; | &#x2714; | &#x2714; | &#x2714; | &#x2714; | &#x2714; |
 | [GL_WEBGL_video_texture](https://khronos.org/registry/OpenGL/extensions/WEBGL/WEBGL_video_texture.txt) |  |  |  |  |  |  |  |
 | [GL_EXT_YUV_target](https://khronos.org/registry/OpenGL/extensions/EXT/EXT_YUV_target.txt) |  |  |  |  |  |  |  |
+| [GL_EXT_YUV_target_spirv_layout_decoration](https://khronos.org/registry/OpenGL/extensions/EXT/EXT_YUV_target_spirv_layout_decoration.txt) |  |  |  |  |  |  |  |
 
 ## ANGLE unofficial extension support
 

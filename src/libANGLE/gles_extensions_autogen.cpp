@@ -198,6 +198,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_vertex_type_10_10_10_2"] = enableableExtension(&Extensions::vertexType1010102OES);
         map["GL_WEBGL_video_texture"] = enableableExtension(&Extensions::videoTextureWEBGL);
         map["GL_EXT_YUV_target"] = enableableExtension(&Extensions::YUVTargetEXT);
+        map["GL_EXT_YUV_target_spirv_layout_decoration"] = enableableExtension(&Extensions::YUVTargetSpirvLayoutDecorationEXT);
 
         // ANGLE unofficial extension strings
         // ----------------------------------

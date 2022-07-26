@@ -551,6 +551,9 @@ struct Extensions
     // GL_EXT_YUV_target
     bool YUVTargetEXT = false;
 
+    // GL_EXT_YUV_target_spirv_layout_decoration
+    bool YUVTargetSpirvLayoutDecorationEXT = false;
+
     // ANGLE unofficial extensions
     // ---------------------------
 

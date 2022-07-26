@@ -1746,6 +1746,9 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     const bool needsInputAttachmentIndex = IsSubpassInputType(type.getBasicType());
     const bool needsBlendIndex =
         type.getQualifier() == EvqFragmentOut && layoutQualifier.index >= 0;
+    const bool needsYuvDecorate =
+        mCompiler->getResources().EXT_YUV_target_spirv_layout_decoration != 0 &&
+        type.getQualifier() == EvqFragmentOut && layoutQualifier.yuv;
 
     // If the resource declaration requires set & binding, add the DescriptorSet and Binding
     // decorations.
@@ -1779,6 +1782,14 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     if (needsBlendIndex)
     {
         spirv::WriteDecorate(&mSpirvDecorations, variableId, spv::DecorationIndex,
+                             {spirv::LiteralInteger(layoutQualifier.index)});
+    }
+
+    if (needsYuvDecorate)
+    {
+        // WIP in spec
+        const spv::Decoration yuvDecorate = static_cast<spv::Decoration>(6088);
+        spirv::WriteDecorate(&mSpirvDecorations, variableId, yuvDecorate,
                              {spirv::LiteralInteger(layoutQualifier.index)});
     }
 
