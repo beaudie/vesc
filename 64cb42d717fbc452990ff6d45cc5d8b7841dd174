@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07fd18b3_eb5de0c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-07-26T17:23:18Z",
+      "side": 1,
+      "message": "Not sure why it is enough for the ETC1 emulation to be disabled on only `mSupportedExtensions`. But in my tests for ASTC, it is also required to disable the extension on `mState.mExtensions` if we want to override it being exposed as enabled.",
+      "revId": "64cb42d717fbc452990ff6d45cc5d8b7841dd174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
