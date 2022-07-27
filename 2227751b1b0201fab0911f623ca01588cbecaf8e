@@ -16,6 +16,24 @@
       "message": "Hi, Geoff, is this log useful, if not can we remove it? thanks.",
       "revId": "2227751b1b0201fab0911f623ca01588cbecaf8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a63c31d7_65b462d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-27T21:10:19Z",
+      "side": 1,
+      "message": "I think we should keep the message but cap the number of times it prints.  We refer to this logcat entry often.",
+      "parentUuid": "991371d4_3a5db51e",
+      "revId": "2227751b1b0201fab0911f623ca01588cbecaf8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
