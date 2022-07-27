@@ -375,7 +375,7 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    const bool bufferSizeChanged              = size != static_cast<size_t>(mState.getSize());
+    bool bufferSizeChanged                    = size != mBuffer.getSize();
     const bool inUseAndRespecifiedWithoutData = (data == nullptr && isCurrentlyInUse(contextVk));
 
     // The entire buffer is being respecified, possibly with null data.
@@ -389,6 +389,7 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         ANGLE_TRY(GetMemoryTypeIndex(contextVk, size, memoryPropertyFlags, &mMemoryTypeIndex));
 
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
+        bufferSizeChanged = true;
     }
 
     if (data)
@@ -955,19 +956,15 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
     if (isCurrentlyInUse(contextVk))
     {
         // If storage has just been redefined, don't go down acquireAndUpdate code path. There is no
-        // reason you acquire another new buffer right after redefined. And if we do go into
-        // acquireAndUpdate, you will also run int correctness bug that mState.getSize() has not
-        // been updated with new size and you will acquire a new buffer with wrong size. This could
-        // happen if the buffer memory is DEVICE_LOCAL and
-        // renderer->getFeatures().allocateNonZeroMemory.enabled is true. In this case we will issue
+        // reason to acquire another new buffer right again. In this case we will issue
         // a copyToBuffer immediately after allocation and isCurrentlyInUse will be true.
         // If BufferVk does not have any valid data, which means there is no data needs to be copied
         // from old buffer to new buffer when we acquire a new buffer, we also favor
         // acquireAndUpdate over stagedUpdate. This could happen when app calls glBufferData with
         // same size and we will try to reuse the existing buffer storage.
         if (!isExternalBuffer() && updateType != BufferUpdateType::StorageRedefined &&
-            (!mHasValidData || ShouldAllocateNewMemoryForUpdate(
-                                   contextVk, size, static_cast<size_t>(mState.getSize()))))
+            (!mHasValidData ||
+             ShouldAllocateNewMemoryForUpdate(contextVk, size, mBuffer.getSize())))
         {
             ANGLE_TRY(acquireAndUpdate(contextVk, data, size, offset, updateType));
         }

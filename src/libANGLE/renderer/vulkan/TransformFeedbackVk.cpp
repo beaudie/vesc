@@ -271,8 +271,7 @@ void TransformFeedbackVk::onSubjectStateChange(angle::SubjectIndex index,
         ASSERT(bufferVk->isBufferValid());
         mBufferHelpers[index] = &bufferVk->getBuffer();
         mBufferOffsets[index] = binding.getOffset() + mBufferHelpers[index]->getOffset();
-        mBufferSizes[index]   = std::min<VkDeviceSize>(gl::GetBoundBufferAvailableSize(binding),
-                                                     mBufferHelpers[index]->getSize());
+        mBufferSizes[index]   = gl::GetBoundBufferAvailableSize(binding);
         mBufferObserverBindings[index].bind(bufferVk);
         mBufferHandles[index] = mBufferHelpers[index]->getBuffer().getHandle();
     }

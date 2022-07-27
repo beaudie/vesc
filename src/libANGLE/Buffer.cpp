@@ -138,6 +138,12 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         dataForImpl = scratchBuffer->data();
     }
 
+    mIndexRangeCache.clear();
+    mState.mUsage                = usage;
+    mState.mSize                 = size;
+    mState.mImmutable            = (usage == BufferUsage::InvalidEnum);
+    mState.mStorageExtUsageFlags = flags;
+
     if (mImpl->setDataWithUsageFlags(context, target, nullptr, dataForImpl, size, usage, flags) ==
         angle::Result::Stop)
     {
@@ -152,12 +158,6 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     }
 
     bool wholeBuffer = size == mState.mSize;
-
-    mIndexRangeCache.clear();
-    mState.mUsage                = usage;
-    mState.mSize                 = size;
-    mState.mImmutable            = (usage == BufferUsage::InvalidEnum);
-    mState.mStorageExtUsageFlags = flags;
 
     // Notify when storage changes.
     if (wholeBuffer)
