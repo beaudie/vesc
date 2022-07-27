@@ -47,6 +47,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "951717f1_3ade610c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T14:43:46Z",
+      "side": 1,
+      "message": "Replied on the other thread.",
+      "parentUuid": "4ac0170d_4b0fcc5c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "799342dc_6629b8b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T14:43:46Z",
+      "side": 1,
+      "message": "Well.. yeah, I guess it depends on the definition of \"works\"\nWhat I had in mind was compatibility with other flags such as `--isolated-script-test-output`. That flag takes a local, not a device directory, and then is sync\u0027d by the wrappers.\n`--render-test-output-dir` works the same way\n\n`--screenshot-dir` means local directory on other platforms and device directory on Android, unlike the args above. So it can at the very least be confusing.\n\nIs there a reason you would prefer to `adb pull` instead of having this supported by the scripts?",
+      "parentUuid": "804b75fe_56a93146",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f1f51df_45d1c324",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-07-26T14:39:55Z",
       "side": 1,
       "message": "Doesn\u0027t switching to this tie us to old scripts we are trying to move away from?\n\nIf not, I\u0027m okay making a change (requires an extra parameter and we\u0027ll need to update all our local docs and scripts), but it will break any other users of the current options.\n\nAlternatively, we could keep the `--screenshot-dir` option, but add the `--save-screenshots` option.  If the former isn\u0027t supplied, screenshots are written to `--render-test-output-dir`.  If only the former is supplied, `--save-screenshots` defaults to on.\n\nThe logic becomes:\n```\nsave-screenshots  screenshot-dir  RESULT\nOFF               OFF             No screenshots\nOFF                ON             Screenshots to screenshot-dir\n ON               OFF             Screenshots to render-test-..\n ON                ON             Screenshots to screenshot-dir\n```",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57fe641d_18d4135b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T14:43:46Z",
+      "side": 1,
+      "message": "\u003e Doesn\u0027t switching to this tie us to old scripts we are trying to move away from?\n\nOur scripts already support `--render-test-output-dir` and it\u0027s just a matter of an adb pull anyways\nhttps://crsrc.org/c/third_party/angle/src/tests/py_utils/android_helper.py;drc\u003db7bd08080eae29404afc1440038a198268f11d92;l\u003d325\n\n\u003e will break any other users of the current options.\nI was wondering if many people actually use `--screenshot-dir`.. there\u0027s always the trade off between keeping legacy as is and improving consistency so sometimes breaking users is the lesser evil (not saying it\u0027s necessarily the case here though)",
+      "parentUuid": "1f1f51df_45d1c324",
       "range": {
         "startLine": 15,
         "startChar": 0,
