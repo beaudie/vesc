@@ -260,6 +260,30 @@
       },
       "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a55b802_c6e3e61c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T17:09:18Z",
+      "side": 1,
+      "message": "\u003e Is the real problem you\u0027re trying to fix is that ANGLE generates screenshots when you don\u0027t want it to?\n\nThe original problem that I was solving was that, yes. Then I found another problem, `--screenshot-dir` vs `--render-test-output-dir` confusion in the readme which led to this proposal.\n\n`--isolated-out-dir` and `--test-artifacts-dir` are passed as is to the Android runner, so they would mean device dir not local dir (unlike `--render-test-output-dir`)\n\nA slightly differently spelled `--isolated-outdir` (as spelled here https://crsrc.org/c/third_party/angle/src/tests/test_utils/runner/TestSuite.cpp;drc\u003dfa377995b81fa004eae7e39ea7fd97ffd983991b;l\u003d49) seems to be lost from args in test app altogether. Not sure what that one is supposed to do, maybe passing info to the runner rather than the test app.\n\nAlso, TestSuite conflates `--isolated-outdir` and `--render-test-output-dir` into `mTestArtifactDirectory`\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/test_utils/runner/TestSuite.cpp;drc\u003dfa377995b81fa004eae7e39ea7fd97ffd983991b;l\u003d1321-1322\nNot sure if that\u0027s what you meant instead of `--test-artifacts-dir`, the references I can find `--test-artifacts-dir` all seem to be webrtc specific.",
+      "parentUuid": "3a4b428c_399cf706",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
