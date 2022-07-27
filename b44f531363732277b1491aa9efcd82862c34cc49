@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ebe1fe4_0ef2575e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-27T17:01:59Z",
+      "side": 1,
+      "message": "What if the following call sequence:\nglBeginXFB\ndraw1\nbreakRP but does not trigger queueSubmit \n(i.e, end up with ContextVk::flushCommandsAndEndRenderPassImpl but skips line 7071 flushImpl)\ndraw2\nglEndXFB.\n\nbreakRP will clear the transform feedback buffer pointers. Before your CL, the buffers gets setup again when RP starts with draw2. After your CL, how is buffers gets setup again in draw2? ",
+      "revId": "b44f531363732277b1491aa9efcd82862c34cc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
