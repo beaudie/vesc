@@ -1961,8 +1961,13 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
                 ANGLE_TRY(updateColorAttachment(context, colorIndexGL));
 
-                shouldUpdateColorMaskAndBlend = true;
-                shouldUpdateLayerCount        = true;
+                // Window system framebuffer only have one color attachment and its property should
+                // never change unless via DIRTY_BIT_DRAW_BUFFERS bit.
+                if (!isSystemFramebuffer())
+                {
+                    shouldUpdateColorMaskAndBlend = true;
+                    shouldUpdateLayerCount        = true;
+                }
                 dirtyColorAttachments.set(colorIndexGL);
 
                 break;

@@ -228,6 +228,8 @@ class FramebufferVk : public FramebufferImpl
                      vk::FramebufferHelper &&newFramebuffer);
     void resetCache(ContextVk *contextVk);
 
+    bool isSystemFramebuffer() const { return mBackbuffer != nullptr; }
+
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
