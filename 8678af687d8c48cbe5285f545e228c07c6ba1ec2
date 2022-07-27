@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e804937_ae812ccb",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1116524
+      },
+      "writtenOn": "2022-07-27T19:16:12Z",
+      "side": 1,
+      "message": "Maybe you also need FDIO_SPAWN_CLONE_NAMESPACE? I\u0027m not sure.",
+      "range": {
+        "startLine": 345,
+        "startChar": 22,
+        "endLine": 345,
+        "endChar": 46
+      },
+      "revId": "8678af687d8c48cbe5285f545e228c07c6ba1ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "918080fb_4f5cbe18",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1116524
+      },
+      "writtenOn": "2022-07-27T19:16:12Z",
+      "side": 1,
+      "message": "This is unnecessary. Also this will not kill the child process, it is merely going to destroy the handle to the process that you own here.",
+      "range": {
+        "startLine": 369,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 0
+      },
+      "revId": "8678af687d8c48cbe5285f545e228c07c6ba1ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa20dd11_e8dd7eef",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 1116524
+      },
+      "writtenOn": "2022-07-27T19:16:12Z",
+      "side": 1,
+      "message": "You can call `mProcessHandle.wait_one()`",
+      "range": {
+        "startLine": 390,
+        "startChar": 12,
+        "endLine": 390,
+        "endChar": 30
+      },
+      "revId": "8678af687d8c48cbe5285f545e228c07c6ba1ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b65cb61_ed1778cd",
+        "filename": "util/posix/test_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1116524
+      },
+      "writtenOn": "2022-07-27T19:16:12Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 399,
+        "startChar": 12,
+        "endLine": 399,
+        "endChar": 26
+      },
+      "revId": "8678af687d8c48cbe5285f545e228c07c6ba1ec2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
