@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4313eda_eb5c0eb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-27T20:02:41Z",
+      "side": 1,
+      "message": "Maybe you can chat me offline - if there\u0027s a flag gating this feature, then it could mean testing complications as flags often do. If there\u0027s two shared objects, it means we could include different code in different places, and have different (smaller) code that ships with Chrome. The (potential) issue isn\u0027t the size of code in the build but the size of code we ship.\n\nFor instance, we had to cut out desktop GL code from the translator because it increased the binary size too much on Android.",
+      "parentUuid": "0a9bc354_e74ac13f",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
