@@ -212,6 +212,30 @@
       },
       "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3e1c8ad_0307c8e2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T16:26:24Z",
+      "side": 1,
+      "message": "\u003e Will getting off of Chrome\u0027s test_runner.py solve any of this confusion/complexity?\n\nI don\u0027t think so. Android\u0027s test execution model is fundamentally different from other platforms so we have local vs device path and have to handle it one way or another. Chrome infra expects `--isolated-script-test-output` and `--render-test-output-dir` to be local directories, not device directories, so that would still need to be handled somewhere.\n\nThe same applies to `--custom-dir-flag` which could mean \"where the test is running\" (\"device dir\") or \"where the script is running\" (local dir), and so we end up with a special case for Android again where those two are different entities. Except that there is no special handling for custom flags built into Android runner.\n\n\u003e I actually have hundreds of documents and scripts that use this flag\n\nFair enough, I\u0027ll just try to clarify it as much as I can then and find a way to turn screenshots off, will try `--screenshot-dir` enabling `--save-screenshots` as you suggested.",
+      "parentUuid": "06d0dd18_3cc57108",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
