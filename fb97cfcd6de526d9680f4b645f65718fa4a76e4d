@@ -46,6 +46,29 @@
       },
       "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2491ba62_f8a9f137",
+        "filename": "scripts/gen_proc_table.py",
+        "patchSetId": 29
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 0,
+      "message": "Is the wgl code disappearing? It would be good to maintain it.",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 85
+      },
+      "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

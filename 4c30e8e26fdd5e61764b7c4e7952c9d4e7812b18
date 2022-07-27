@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b7e7bac_a002dc7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "Looks good overall!",
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46e354c3_88b8d3fa",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "nit: put this comment right above the code that does it.",
+      "range": {
+        "startLine": 1007,
+        "startChar": 4,
+        "endLine": 1007,
+        "endChar": 93
+      },
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f52d168_83a01090",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "Let\u0027s put this whole switch-statement into an if-statement:\n\n```\nif (gles)\n{\n    // Old switch\n}\nelse if (gl)\n{\n    // validate it has matching bits, no version check needed.\n}\n```",
+      "range": {
+        "startLine": 1194,
+        "startChar": 0,
+        "endLine": 1207,
+        "endChar": 18
+      },
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "815beba9_c5876dc6",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 29
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "I think we should call this `gl46` unless the 46 tests include testing for all gl versions and the tests have the correct version checking.",
+      "range": {
+        "startLine": 1585,
+        "startChar": 24,
+        "endLine": 1585,
+        "endChar": 26
+      },
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf886c0b_da18b39e",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "undef GL_CTS_DIR too.",
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3da1e06_38294a3a",
+        "filename": "src/tests/deqp_support/glcTestPackageEntry_override.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "This can be removed.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 0
+      },
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a05382c_1fbcd40d",
+        "filename": "src/tests/deqp_support/glcTestPackageEntry_override.cpp",
+        "patchSetId": 29
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "nit: undo these changes. The fewer diffs we have from upstream the better.",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 65
+      },
+      "revId": "4c30e8e26fdd5e61764b7c4e7952c9d4e7812b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

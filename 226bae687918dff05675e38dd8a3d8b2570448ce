@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa28f0ed_4609abf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "Happy to chat about this too. I think a big perk of merging them is that it allows creating a GLES and GL context simultaneously with the same EGL/WGL implementation.\n\nWe could either enable the desktop GL entry points by default and then disable them in Chrome and roll_aosp.sh or disable by default and enable them in the angle waterfall only.\n\nIt would be also good to measure the cost of this flag now. Before it only changed the symbol table and I\u0027m curious about the additional cost of the entry points.",
+      "parentUuid": "a4313eda_eb5c0eb5",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
@@ -237,6 +255,30 @@
       "side": 1,
       "message": "Since we haven\u0027t really focused in on a specific version yet for desktop GL, I\u0027ve been using 4.6 throughout since generally I see that as the \"default\" goal for our support of desktop GL. I\u0027m not sure why it was 3.3 so I changed it to 4.6 to be consistent with the rest of this CL.",
       "parentUuid": "28c0efdb_4376f9cd",
+      "range": {
+        "startLine": 24,
+        "startChar": 69,
+        "endLine": 24,
+        "endChar": 79
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a8869c_bb0d95b3",
+        "filename": "samples/hello_triangle_gl/HelloTriangleGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "This sample itself uses very simple GL features so we should limit it to a fairly low GL version. It probably runs on 2.0. 3.3 is a good baseline I think, many modern GL applications treat it as the minimum spec due to a lot of older Apple devices being stuck there.",
+      "parentUuid": "691c7aa8_c640466f",
       "range": {
         "startLine": 24,
         "startChar": 69,
@@ -519,6 +561,30 @@
       "side": 1,
       "message": "Oops, sorry for all the commented out code. My thinking here is that we want it to be compatibility by default right now. We haven\u0027t zeroed in on any specific GL version/profile that we are aiming for yet, so I figured we just enable everything possible and go for the highest version possible, 4.6. Therefore we know where we stand with respect to compatibility if we decide we want to go in that direction.",
       "parentUuid": "6b3ee419_3399b106",
+      "range": {
+        "startLine": 1871,
+        "startChar": 0,
+        "endLine": 1873,
+        "endChar": 50
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93f6fa4_4ead8319",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1873,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-27T23:32:57Z",
+      "side": 1,
+      "message": "This should just return `mState.getProfileMask()`, we\u0027re already parsing it from the context creation attributes.",
+      "parentUuid": "260dd0fc_2e809769",
       "range": {
         "startLine": 1871,
         "startChar": 0,
