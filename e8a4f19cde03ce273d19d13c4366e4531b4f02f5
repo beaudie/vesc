@@ -16,6 +16,57 @@
       "message": "Added CL before this to cover the YUV feature in Vk altogether, along with a new ShaderLang.h entry controlling whether the decoration is sent.",
       "revId": "e8a4f19cde03ce273d19d13c4366e4531b4f02f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35de87f8_bb0c394c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:51:49Z",
+      "side": 1,
+      "message": "Need to increment this",
+      "revId": "e8a4f19cde03ce273d19d13c4366e4531b4f02f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64a0023a_c3ccdf8c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:51:49Z",
+      "side": 1,
+      "message": "Instead, add a `ShCompileOptions` flag above, for example take bit 47 (look for `Note: bit 47 is unused`). It could be named like `SH_ADD_VULKAN_YUV_....`",
+      "revId": "e8a4f19cde03ce273d19d13c4366e4531b4f02f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c34c6e_c73fe8af",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:51:49Z",
+      "side": 1,
+      "message": "Let\u0027s get rid of this made up extension. The compile flag (which the test doesn\u0027t provide) should be sufficient.",
+      "revId": "e8a4f19cde03ce273d19d13c4366e4531b4f02f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
