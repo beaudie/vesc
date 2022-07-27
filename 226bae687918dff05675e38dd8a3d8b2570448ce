@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05916983_02bb3912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-27T18:05:17Z",
+      "side": 1,
+      "message": "Drive-by: probably should keep these out of the main build to minimize binary size for Chrome (at least Chrome, maybe other would care).",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
