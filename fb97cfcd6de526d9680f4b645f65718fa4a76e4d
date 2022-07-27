@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54d8c60e_6f164bb1",
+        "filename": "samples/sample_util/SampleApplication.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-27T18:48:40Z",
+      "side": 0,
+      "message": "No need to remove the 3.3 enum, they can both be present.",
+      "range": {
+        "startLine": 130,
+        "startChar": 25,
+        "endLine": 130,
+        "endChar": 35
+      },
+      "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
