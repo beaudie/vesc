@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9ac949b_f56d1469",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:04:53Z",
+      "side": 1,
+      "message": "I\u0027ll fix up the resolvable ones and resolve them after that.",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
@@ -112,6 +129,30 @@
       "writtenOn": "2022-07-27T18:48:40Z",
       "side": 1,
       "message": "Maybe add a comment that says this is identical to HelloTriangle, except for this key difference.\n\nAlso, is there a reason you bumped it to 4.6 instead of 3.3?",
+      "range": {
+        "startLine": 24,
+        "startChar": 69,
+        "endLine": 24,
+        "endChar": 79
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "691c7aa8_c640466f",
+        "filename": "samples/hello_triangle_gl/HelloTriangleGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:04:53Z",
+      "side": 1,
+      "message": "Since we haven\u0027t really focused in on a specific version yet for desktop GL, I\u0027ve been using 4.6 throughout since generally I see that as the \"default\" goal for our support of desktop GL. I\u0027m not sure why it was 3.3 so I changed it to 4.6 to be consistent with the rest of this CL.",
+      "parentUuid": "28c0efdb_4376f9cd",
       "range": {
         "startLine": 24,
         "startChar": 69,
@@ -216,6 +257,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b88674aa_2cad7625",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:04:53Z",
+      "side": 1,
+      "message": "Ok, let\u0027s make a bug for this. In this case, the comment should just be removed though, since we got windows working.",
+      "parentUuid": "7c6f0ad4_f27ad1a0",
+      "range": {
+        "startLine": 2909,
+        "startChar": 13,
+        "endLine": 2909,
+        "endChar": 17
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a8615c1_59bc4c52",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 28
@@ -250,6 +315,30 @@
       "writtenOn": "2022-07-27T18:48:40Z",
       "side": 1,
       "message": "We should be able to check a bit of state here and return the right enum.  Might need to add a new helper.",
+      "range": {
+        "startLine": 1871,
+        "startChar": 0,
+        "endLine": 1873,
+        "endChar": 50
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "260dd0fc_2e809769",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1873,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:04:53Z",
+      "side": 1,
+      "message": "Oops, sorry for all the commented out code. My thinking here is that we want it to be compatibility by default right now. We haven\u0027t zeroed in on any specific GL version/profile that we are aiming for yet, so I figured we just enable everything possible and go for the highest version possible, 4.6. Therefore we know where we stand with respect to compatibility if we decide we want to go in that direction.",
+      "parentUuid": "6b3ee419_3399b106",
       "range": {
         "startLine": 1871,
         "startChar": 0,
