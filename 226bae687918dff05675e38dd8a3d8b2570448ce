@@ -111,6 +111,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3815b0_ca46be45",
+        "filename": "BUILD.gn",
+        "patchSetId": 28
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baf098ea_02cba6bc",
+      "range": {
+        "startLine": 1328,
+        "startChar": 0,
+        "endLine": 1336,
+        "endChar": 2
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ee0ef8c_49a68ae5",
@@ -124,6 +148,30 @@
       "writtenOn": "2022-07-27T18:48:40Z",
       "side": 1,
       "message": "Go ahead and update this date",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f96c430a_b64d4cd3",
+        "filename": "samples/hello_triangle_gl/HelloTriangleGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ee0ef8c_49a68ae5",
       "range": {
         "startLine": 2,
         "startChar": 13,
@@ -204,6 +252,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c6ece7_07bf3c05",
+        "filename": "scripts/gen_proc_table.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ac0d172_e06b8a8e",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "156ec71b_8a3e968e",
@@ -227,6 +299,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de2d4173_64f75efe",
+        "filename": "scripts/gen_proc_table.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "156ec71b_8a3e968e",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 179,
+        "endChar": 26
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26b79828_2f7d03e1",
@@ -240,6 +336,30 @@
       "writtenOn": "2022-07-27T18:48:40Z",
       "side": 1,
       "message": "Remove?",
+      "range": {
+        "startLine": 2703,
+        "startChar": 0,
+        "endLine": 2704,
+        "endChar": 50
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51da3588_5064ce98",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 2704,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26b79828_2f7d03e1",
       "range": {
         "startLine": 2703,
         "startChar": 0,
@@ -320,6 +440,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6bd70ca_43c1564c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a8615c1_59bc4c52",
+      "range": {
+        "startLine": 3177,
+        "startChar": 0,
+        "endLine": 3180,
+        "endChar": 68
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b3ee419_3399b106",
@@ -380,6 +524,30 @@
       "writtenOn": "2022-07-27T18:48:40Z",
       "side": 1,
       "message": "Worth renaming this to `GLES_CTS_DIR` and make `GL_CTS_DIR` point to `external/openglcts/data/mustpass/gl`",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 22
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e275354_77d251d7",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-27T19:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "394abdf1_8ce868cd",
       "range": {
         "startLine": 61,
         "startChar": 8,
