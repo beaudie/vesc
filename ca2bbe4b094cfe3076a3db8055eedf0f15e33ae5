@@ -95,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c560d1_5ffb3512",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T19:57:12Z",
+      "side": 1,
+      "message": "\u003e If the former isn\u0027t supplied, screenshots are written to  --render-test-output-dir .  If only the former is supplied,  --save-screenshots  defaults to on.\n\nSo I did this, thanks Cody. PTAL. README.md is now a mess, of course :]",
+      "parentUuid": "799342dc_6629b8b7",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f1f51df_45d1c324",
@@ -300,6 +324,30 @@
       "side": 1,
       "message": "OK, I was just wondering if there\u0027s a better way to specify \"I want this to be my test artifacts directory\" in a way that doesn\u0027t trigger getting screenshots.",
       "parentUuid": "4a55b802_c6e3e61c",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "264a036c_608d5e40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T19:57:12Z",
+      "side": 1,
+      "message": "Yeah I\u0027m not sure there is another way; note that --render-test-output-dir *is* the \"rendering artifacts\" directory https://crsrc.org/c/build/android/test_runner.py;drc\u003d7369e42247b7d39d3a29521700dcb39582400463;l\u003d388",
+      "parentUuid": "add42789_66ea7b71",
       "range": {
         "startLine": 15,
         "startChar": 0,
