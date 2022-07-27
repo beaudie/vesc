@@ -162,6 +162,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d21b54fc_5d3e7995",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-27T22:28:24Z",
+      "side": 1,
+      "message": "Sounds good. Any preference on where to define the enum? I\u0027m not finding a shared header included by Caps.h and ShaderLang.h both.",
+      "parentUuid": "21d3452b_24249f08",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 80
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "450368e0_a4067939",
         "filename": "include/GLSLANG/ShaderLang.h",
         "patchSetId": 30
@@ -173,6 +197,30 @@
       "writtenOn": "2022-07-25T17:30:34Z",
       "side": 1,
       "message": "`ShBuiltInResources` is really not the right place for this stuff, but we\u0027ve already messed that up with the metal stuff. So in the very least, please add whatever you need to the _end_ of this struct.\n\nAlso, like I said use an enum instead that chooses the method.",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 38
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057155ba_9d44aa5f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-27T22:28:24Z",
+      "side": 1,
+      "message": "These are referenced by auto generated code since the built-in functions are defined as depending on these extensions.\n\nIf we instead make up a GLSL version for these functions, then we don\u0027t have to define them as dependent on these extensions anymore and can delete these. Would you prefer to do it that way?",
+      "parentUuid": "450368e0_a4067939",
       "range": {
         "startLine": 447,
         "startChar": 0,
