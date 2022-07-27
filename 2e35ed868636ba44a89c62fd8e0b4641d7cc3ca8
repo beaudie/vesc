@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60519450_fb3f1742",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-27T17:45:08Z",
+      "side": 1,
+      "message": "Sorry I missed this earlier",
+      "parentUuid": "3fd10506_2d7d2110",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 33
+      },
+      "revId": "2e35ed868636ba44a89c62fd8e0b4641d7cc3ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a3d92c5_89e7dc58",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-07-27T01:57:26Z",
       "side": 1,
       "message": "Should be able to remove this whole function!",
+      "range": {
+        "startLine": 1265,
+        "startChar": 26,
+        "endLine": 1265,
+        "endChar": 50
+      },
+      "revId": "2e35ed868636ba44a89c62fd8e0b4641d7cc3ca8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1b947e8_9c6eb55c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-27T17:45:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a3d92c5_89e7dc58",
       "range": {
         "startLine": 1265,
         "startChar": 26,
