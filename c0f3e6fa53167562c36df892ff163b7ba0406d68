@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d56d128_fcb5dd50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:45:39Z",
+      "side": 1,
+      "message": "At some point you\u0027d need to put the WIP Vulkan defines (as generated from the WIP vk.xml) in an ANGLE header), and hook up the logic of searching for the extension, enabling its feature, etc.",
+      "revId": "c0f3e6fa53167562c36df892ff163b7ba0406d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7c2a66c_1832774f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:45:39Z",
+      "side": 1,
+      "message": "nit: typically named as `supports_\u003cVK extension_name\u003e`, so `supports_yuv_target` here.",
+      "range": {
+        "startLine": 906,
+        "startChar": 21,
+        "endLine": 906,
+        "endChar": 31
+      },
+      "revId": "c0f3e6fa53167562c36df892ff163b7ba0406d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "123f08db_001cec07",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-27T01:45:39Z",
+      "side": 1,
+      "message": "nit: we don\u0027t make features for the purpose of providing something the API does too, like whether GL_EXT_YUV_target is exposed. Instead, this feature should be about whether _Vulkan_ supports the VK extension. The GL extension is derived from that (even if it\u0027s 1-to-1).\n\nSo I\u0027d expect this to read: `VkDevice supports VK_EXT_... extension`",
+      "range": {
+        "startLine": 909,
+        "startChar": 0,
+        "endLine": 909,
+        "endChar": 168
+      },
+      "revId": "c0f3e6fa53167562c36df892ff163b7ba0406d68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
