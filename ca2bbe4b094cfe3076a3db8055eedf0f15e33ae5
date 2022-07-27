@@ -140,6 +140,30 @@
       },
       "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acb5112a_768912b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-07-27T15:04:23Z",
+      "side": 1,
+      "message": "(also note how readme says that `--render-test-output-dir\u003ddir` is equivalent to `--screenshot-dir dir` which isn\u0027t true on Android as in the first case it\u0027s a local dir and in the second case it\u0027s a device dir)",
+      "parentUuid": "57fe641d_18d4135b",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
