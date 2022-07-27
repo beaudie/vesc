@@ -188,6 +188,30 @@
       },
       "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06d0dd18_3cc57108",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-07-27T16:19:50Z",
+      "side": 1,
+      "message": "\u003e I was wondering if many people actually use  --screenshot-dir\nI actually have hundreds of documents and scripts that use this flag (I like to maintain copy/pasteable instructions for folks to use).\n\nIt is also intuitive to understand what the flag does, and it pairs well with `--screenshot-frame`.\n\nI don\u0027t know whether downstream users are using it, but I\u0027ve pointed a number of partners to our public documentation.  Changes like this invalidate email and chat discussions we\u0027ve had explaining how to use it, so I\u0027d prefer not to break it.",
+      "parentUuid": "b6b45a5c_3075b423",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "ca2bbe4b094cfe3076a3db8055eedf0f15e33ae5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
