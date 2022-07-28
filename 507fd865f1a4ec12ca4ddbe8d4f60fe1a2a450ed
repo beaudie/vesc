@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b7b8a96_cfd80486",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 31
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "What do you think about sharing the fake version number, and making it more generic?",
+      "revId": "507fd865f1a4ec12ca4ddbe8d4f60fe1a2a450ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "520a5436_11a7e420",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73058d82_8b52d49b",
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb62ea1a_67cb4336",
@@ -184,6 +202,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf58ab3_74814a72",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d21b54fc_5d3e7995",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 80
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "450368e0_a4067939",
@@ -233,6 +275,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2fcc83f_43ddee8b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "What do you think about just leaving them out (so we can\u0027t expose these extensions to a desktop GLSL frontend), and only making them available as they are in this CL, as the fake essl version version?",
+      "parentUuid": "057155ba_9d44aa5f",
+      "range": {
+        "startLine": 447,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 38
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87ace071_ecc1f267",
         "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
         "patchSetId": 30
@@ -244,6 +310,30 @@
       "writtenOn": "2022-07-25T17:30:34Z",
       "side": 1,
       "message": "You should need this; if the backend is passing in which coherency method to use (including none), you shouldn\u0027t need to compile anything out with the preprocessor.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c47c511_19caddc2",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87ace071_ecc1f267",
       "range": {
         "startLine": 18,
         "startChar": 0,
@@ -267,6 +357,30 @@
       "writtenOn": "2022-07-25T20:36:44Z",
       "side": 1,
       "message": "nit: at the risk of being super annoying here: I\u0027d call this PLSHelper. NodeBuilder is a bit too generic (hurts `grep` if every transformation started using something like this).\n\nThat said, I\u0027d avoid adding most of these wrappers, especially the oneliners. It\u0027s easier for searching if the original helper (like `TIntermAggregate::CreateConstructor` for example) is used directly.",
+      "range": {
+        "startLine": 67,
+        "startChar": 6,
+        "endLine": 67,
+        "endChar": 17
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03777fd4_1668b873",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "Done. Took it out and added \"CreateBuiltInFunctionCallNode\" overloads that allow the code to define the argument list inline. Do those look ok? I can take them out if it\u0027s too much 😊",
+      "parentUuid": "f8af13d7_fcf2ceba",
       "range": {
         "startLine": 67,
         "startChar": 6,
@@ -338,6 +452,30 @@
       "side": 1,
       "message": "Hmm... we\u0027d need to find a way to make that work. First of all, no you can\u0027t use desktop GLSL built-ins because we don\u0027t necessarily build ANGLE with desktop GLSL support. The problem is that SymbolTable is really there to support the input rather than output, and we had mostly managed to get by without needing anything special for output.\n\nMostly. There is actually precedence here that you can follow. See how `subpassLoad` is defined in `builtin_function_declarations.txt`. I ended up adding a new made-up GLSL version (`ESSL_VULKAN_BUILTINS`) to this file, which is defined as `kESSLVulkanOnly` in the code. This is a large value that makes sure input shaders can never find these symbols. Then in the code I can request to find this symbol given the `kESSLVulkanOnly` version.\n\nSo, you could similarly introduce a new `ESSL_DESKTOP_GLSL_BUILTINS` such that those builtins are exposed to ESSL, then similarly to `DriverUniform::getFlipXY`, choose either `kESSLDesktopGLSLOnly` or `430`.",
       "parentUuid": "9e1051db_7d811c42",
+      "range": {
+        "startLine": 153,
+        "startChar": 12,
+        "endLine": 153,
+        "endChar": 25
+      },
+      "revId": "84d7ce0b00851489b6686286d40219b36020e208",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e501be18_aa305522",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T00:58:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f941b71b_9e8d0dc4",
       "range": {
         "startLine": 153,
         "startChar": 12,
