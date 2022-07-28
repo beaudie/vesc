@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e45990be_443e1737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-28T15:06:05Z",
+      "side": 1,
+      "message": "PTAL Yuly. See comments in the attached issue for more details.",
+      "revId": "ef926b6793f5e578eb4246294e0b6329bd15440b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
