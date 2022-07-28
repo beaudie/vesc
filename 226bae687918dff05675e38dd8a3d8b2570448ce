@@ -124,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3c40a51_c2f3557b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-28T14:44:14Z",
+      "side": 1,
+      "message": "Cool, maybe someone could schedule a meeting. Do you mean having a single context do both GL and GLES, or having two contexts interop in the same process? For former seems a bit hard because of validation. I think for the latter, you could have that work with the current design (shim entry points that forward to a single point of origin). The other main reason to keep the design we have now is that it\u0027s what most apps expect. If you wanted to ship this somewhere, it would be nice to not have every app or platform have to adapt to special behaviour for ANGLE.\n\nI think the main motivation for this CL is to simplify the loading of the entry points in dEQP? I can also potentially help with that.",
+      "parentUuid": "aa28f0ed_4609abf1",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
