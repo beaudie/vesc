@@ -572,6 +572,11 @@ GPUTestConfig::GPUTestConfig(bool isSwiftShader)
     mConditions[kConditionASan]  = IsASan();
     mConditions[kConditionTSan]  = IsTSan();
     mConditions[kConditionUBSan] = IsUBSan();
+#if defined(ANGLE_ENABLE_SHARE_CONTEXT_LOCK)
+    mConditions[kConditionNoThreadSafe] = false;
+#else
+    mConditions[kConditionNoThreadSafe] = true;
+#endif
 }
 
 // If the constructor is passed an API, load those conditions as well

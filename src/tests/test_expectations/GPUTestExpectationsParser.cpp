@@ -90,6 +90,8 @@ enum Token
     kConfigASan,
     kConfigTSan,
     kConfigUBSan,
+    // Threading
+    kConfigNoThreadSafe,
     // expectation
     kExpectationPass,
     kExpectationFail,
@@ -194,6 +196,7 @@ constexpr TokenInfo kTokenData[kNumberOfTokens] = {
     {"asan", GPUTestConfig::kConditionASan},
     {"tsan", GPUTestConfig::kConditionTSan},
     {"ubsan", GPUTestConfig::kConditionUBSan},
+    {"nothreadsafe", GPUTestConfig::kConditionNoThreadSafe},
     {"pass", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestPass},
     {"fail", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFail},
     {"flaky", GPUTestConfig::kConditionNone, GPUTestExpectationsParser::kGpuTestFlaky},
@@ -514,6 +517,7 @@ bool GPUTestExpectationsParser::parseLine(const GPUTestConfig *config,
             case kConfigASan:
             case kConfigTSan:
             case kConfigUBSan:
+            case kConfigNoThreadSafe:
                 // MODIFIERS, check each condition and add accordingly.
                 if (stage != kLineParserConfigs && stage != kLineParserBugID)
                 {
