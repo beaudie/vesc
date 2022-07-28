@@ -78,6 +78,7 @@ struct GPUTestConfig
         kConditionASan,
         kConditionTSan,
         kConditionUBSan,
+        kConditionNotThreadSafe,
 
         kNumberOfConditions,
     };
