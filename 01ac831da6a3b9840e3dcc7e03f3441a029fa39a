@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64965ebd_fee5c4e2",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-28T18:34:25Z",
+      "side": 1,
+      "message": "Given this is an implementation detail (looks like Metal started this), it shouldn\u0027t be in Caps.\n\nThe best place to put this is in a new struct (maybe `CompilerArguments`?) in CompilerImpl.h and have a virtual method in rx::CompilerImpl that returns this struct. gl::Compiler can then get this struct from its `mImplementation`.",
+      "range": {
+        "startLine": 394,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 100
+      },
+      "revId": "01ac831da6a3b9840e3dcc7e03f3441a029fa39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
