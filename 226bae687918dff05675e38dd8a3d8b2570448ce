@@ -142,6 +142,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1e3ebd4_c75419c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-28T15:33:18Z",
+      "side": 1,
+      "message": "It would allow a single EGL/WGL display to create GL and GLES contexts.  I would guess that resource sharing would be disallowed by the specs though.\n\nThe goal is exactly that, libGL would shim everything to libGLESv2 the same way that libEGL does. We then have a single .so with all the actual implementation and apps can load the desktop GL so\u0027s by their expected name.\n\nIf ANGLE was ever installed a system driver on Linux, we could also symlink libGLESv2 to libGL to save the cost of the shim layer.\n\nThis refactor was needed for a few test suites. Previously now it wasn\u0027t possible to load desktop GL entry points from EGL which is what dEQP currently uses. Also needed for our end2end tests to load desktop GL functions without having to choose different shared objects to load based on the test API.\n\nCody/Eddie: Could you add Jamie and I to your next desktop GL sync?",
+      "parentUuid": "b3c40a51_c2f3557b",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
