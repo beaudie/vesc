@@ -22,6 +22,30 @@
       },
       "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0f76c4_612f2f5b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T18:47:08Z",
+      "side": 1,
+      "message": "Looks like 4 bits:\n\nDIRTY_BIT_COMPUTE_SRV_STATE\nDIRTY_BIT_COMPUTE_UAV_STATE\nDIRTY_BIT_TEXTURE_AND_SAMPLER_STATE\nDIRTY_BIT_DRIVER_UNIFORMS",
+      "parentUuid": "f3fc8c3b_6f386dea",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
