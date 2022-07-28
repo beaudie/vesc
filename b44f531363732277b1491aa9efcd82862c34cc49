@@ -16,6 +16,24 @@
       "message": "What if the following call sequence:\nglBeginXFB\ndraw1\nbreakRP but does not trigger queueSubmit \n(i.e, end up with ContextVk::flushCommandsAndEndRenderPassImpl but skips line 7071 flushImpl)\ndraw2\nglEndXFB.\n\nbreakRP will clear the transform feedback buffer pointers. Before your CL, the buffers gets setup again when RP starts with draw2. After your CL, how is buffers gets setup again in draw2? ",
       "revId": "b44f531363732277b1491aa9efcd82862c34cc49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01cbd213_7bcb8d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-28T01:28:51Z",
+      "side": 1,
+      "message": "The new `populateTransformFeedbackBufferSet` calls in `handleDirtyGraphicsTransformFeedbackBuffers*` do exactly that. Because draw 2 starts a new RP, the xfb buffers dirty bit will be set and the buffers set up again.\n\nThat scenario is already tested in `TransformFeedbackTest.SpanMultipleRenderPasses` and other tests.",
+      "parentUuid": "2ebe1fe4_0ef2575e",
+      "revId": "b44f531363732277b1491aa9efcd82862c34cc49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
