@@ -1821,6 +1821,19 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         limitations->squarePvrtc1 = true;
     }
+
+    // Check if the driver clamps constant blend color
+    if (getAdrenoNumber(functions))
+    {
+        float color[4];
+        functions->blendColor(2.0, 0.0, 0.0, 0.0);
+        functions->getFloatv(GL_BLEND_COLOR, color);
+        if (color[0] == 1.0)
+        {
+            limitations->noUnclampedBlendColor = true;
+        }
+        functions->blendColor(0.0, 0.0, 0.0, 0.0);
+    }
 }
 
 bool GetSystemInfoVendorIDAndDeviceID(const FunctionsGL *functions,
