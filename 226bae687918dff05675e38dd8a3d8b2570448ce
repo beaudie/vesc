@@ -160,6 +160,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc021930_961769ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-07-28T15:45:23Z",
+      "side": 1,
+      "message": "\u003e If ANGLE was ever installed a system driver on Linux, we could also symlink libGLESv2 to libGL to save the cost of the shim layer.\n\nThe shim layer doesn\u0027t impact runtime performance in most (if not all) cases. Apps get their entry points from GetProcAddress or equivalent, which skip the shim, rather than static linking something. (By virtue of using GLEW or other loading libraries that people use these days).\n\nRegarding the symlink - exposing non-spec entry points differs from what Mesa, which has clean separate shims with only spec EPs. From my memory, they have two modes - very thin shims that call into a libMesa, or a fully duplicated set of libraries. So this would make ANGLE a bit less clean in our implementation, although I\u0027m not sure if it could cause any compatibility issues.\n\nAnyway I\u0027m sympathetic to just doing the easy fix here so I\u0027ll approve.",
+      "parentUuid": "a1e3ebd4_c75419c1",
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf098ea_02cba6bc",
