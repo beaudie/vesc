@@ -69,6 +69,30 @@
       },
       "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "544dd30c_bdc629a4",
+        "filename": "scripts/gen_proc_table.py",
+        "patchSetId": 29
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 0,
+      "message": "Yes, that was the plan, since apparently libGLESv2 does not need it and libGLESv2 is now becoming our libGL. \n\nI don\u0027t think it would be too difficult to add this to the build again, there are just a couple of design decisions to be made. Do we add another GN flag, orthogonal to `angle_enable_gl_desktop_frontend`, to enable the WGL entry points? Something like `angle_expose_wgl_entry_points`? This would work, but as Jamie mentioned in another comment, adding another GN flag can make it difficult to maintain test coverage. On the other hand, we don\u0027t want to change how libGLESv2 already works on windows so we probably shouldn\u0027t include the WGL entry points by default.\n\nFor actually seeing if this works, we could edit the SampleApplication harness to use WGL on windows, which it already does but only when using the native driver instead of ANGLE.",
+      "parentUuid": "2491ba62_f8a9f137",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 85
+      },
+      "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

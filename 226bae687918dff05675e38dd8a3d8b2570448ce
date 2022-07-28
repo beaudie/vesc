@@ -361,6 +361,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "058b6496_44242e4f",
+        "filename": "samples/hello_triangle_gl/HelloTriangleGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7a8869c_bb0d95b3",
+      "range": {
+        "startLine": 24,
+        "startChar": 69,
+        "endLine": 24,
+        "endChar": 79
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db12a47f_91bf209d",
+        "filename": "samples/hello_triangle_gl/HelloTriangleGL.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "691c7aa8_c640466f",
+      "range": {
+        "startLine": 24,
+        "startChar": 69,
+        "endLine": 24,
+        "endChar": 79
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ac0d172_e06b8a8e",
@@ -549,6 +597,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1181c2fb_20cf48a3",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b88674aa_2cad7625",
+      "range": {
+        "startLine": 2909,
+        "startChar": 13,
+        "endLine": 2909,
+        "endChar": 17
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c73102ad_b63088d7",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 28
+      },
+      "lineNbr": 2909,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b88674aa_2cad7625",
+      "range": {
+        "startLine": 2909,
+        "startChar": 13,
+        "endLine": 2909,
+        "endChar": 17
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a8615c1_59bc4c52",
@@ -657,6 +753,54 @@
       "side": 1,
       "message": "This should just return `mState.getProfileMask()`, we\u0027re already parsing it from the context creation attributes.",
       "parentUuid": "260dd0fc_2e809769",
+      "range": {
+        "startLine": 1871,
+        "startChar": 0,
+        "endLine": 1873,
+        "endChar": 50
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a4446aa_402fcf2c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1873,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e93f6fa4_4ead8319",
+      "range": {
+        "startLine": 1871,
+        "startChar": 0,
+        "endLine": 1873,
+        "endChar": 50
+      },
+      "revId": "226bae687918dff05675e38dd8a3d8b2570448ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c48b7864_4eeeb6e7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1873,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-28T18:12:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e93f6fa4_4ead8319",
       "range": {
         "startLine": 1871,
         "startChar": 0,
