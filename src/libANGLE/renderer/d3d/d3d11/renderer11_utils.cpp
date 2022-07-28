@@ -1713,6 +1713,10 @@ void GenerateCaps(ID3D11Device *device,
     // GL_OES_texture_buffer
     extensions->textureBufferOES = extensions->textureBufferEXT;
 
+    // ANGLE_shader_pixel_local_storage.
+    extensions->shaderPixelLocalStorageANGLE = true;  // How to detect UAV support???
+    caps->pixelLocalStorageType              = ShPixelLocalStorageType::R32Image2D;
+
     // D3D11 Feature Level 10_0+ uses SV_IsFrontFace in HLSL to emulate gl_FrontFacing.
     // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace, and has no equivalent, so can't
     // support gl_FrontFacing.

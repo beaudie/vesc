@@ -2377,7 +2377,13 @@ angle::Result StateManager11::updateState(const gl::Context *context,
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop, except
     // DIRTY_BIT_COMPUTE_SRVUAV_STATE dirty bit.
-    ASSERT((mInternalDirtyBits & mGraphicsDirtyBitsMask).none());
+    // ASSERT((mInternalDirtyBits & mGraphicsDirtyBitsMask).none());
+    if (!(mInternalDirtyBits & mGraphicsDirtyBitsMask).none())
+    {
+        (void)updateState(context, mode, firstVertex, vertexOrIndexCount, indexTypeOrInvalid,
+                          indices, instanceCount, baseVertex, baseInstance, promoteDynamic);
+        ASSERT((mInternalDirtyBits & mGraphicsDirtyBitsMask).none());
+    }
 
     return angle::Result::Continue;
 }
