@@ -22,6 +22,30 @@
       },
       "revId": "01ac831da6a3b9840e3dcc7e03f3441a029fa39a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284c54ee_060a05e8",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-07-28T20:19:48Z",
+      "side": 1,
+      "message": "Thanks for the feedback Geoff. How\u0027s this? (I thought of the name \"BackendFeatures\", but am open to whatever.)",
+      "parentUuid": "64965ebd_fee5c4e2",
+      "range": {
+        "startLine": 394,
+        "startChar": 0,
+        "endLine": 395,
+        "endChar": 100
+      },
+      "revId": "01ac831da6a3b9840e3dcc7e03f3441a029fa39a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
