@@ -2305,7 +2305,6 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     }
 
     auto dirtyBitsCopy = mInternalDirtyBits & mGraphicsDirtyBitsMask;
-    mInternalDirtyBits &= ~mGraphicsDirtyBitsMask;
 
     for (auto iter = dirtyBitsCopy.begin(), end = dirtyBitsCopy.end(); iter != end; ++iter)
     {
@@ -2332,7 +2331,6 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                 ANGLE_TRY(syncDepthStencilState(context));
                 break;
             case DIRTY_BIT_GRAPHICS_SRV_STATE:
-                iter.resetLaterBit(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
                 ANGLE_TRY(syncTextures(context));
                 break;
             case DIRTY_BIT_GRAPHICS_UAV_STATE:
@@ -2373,6 +2371,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
                 UNREACHABLE();
                 break;
         }
+        mInternalDirtyBits.reset(*iter);
     }
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop, except
