@@ -112,6 +112,10 @@ class TCompiler : public TShHandleBase
     TInfoSink &getInfoSink() { return mInfoSink; }
 
     bool isEarlyFragmentTestsSpecified() const { return mEarlyFragmentTestsSpecified; }
+
+    bool isPixelInterlockOrderedSpecified() const { return mPixelInterlockOrderedSpecified; }
+    void specifyPixelInterlockOrdered() { mPixelInterlockOrderedSpecified = true; }
+
     bool enablesPerSampleShading() const { return mEnablesPerSampleShading; }
     SpecConstUsageBits getSpecConstUsageBits() const { return mSpecConstUsageBits; }
 
@@ -319,6 +323,10 @@ class TCompiler : public TShHandleBase
 
     // fragment shader early fragment tests
     bool mEarlyFragmentTestsSpecified;
+
+    // Specifies a global layout(pixel_interlock_ordered) on "in".
+    // Only valid with ARB_fragment_shader_interlock or NV_fragment_shader_interlock.
+    bool mPixelInterlockOrderedSpecified = false;
 
     // Whether per-sample shading is enabled by the shader.  In OpenGL, this keyword should
     // implicitly trigger per-sample shading without the API enabling it.

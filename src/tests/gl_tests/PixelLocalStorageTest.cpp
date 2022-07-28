@@ -1912,6 +1912,11 @@ TEST_P(PixelLocalStorageTest, EarlyFragmentTests)
 // Check that if the "_coherent" extension is advertised, PLS operations are ordered and coherent.
 TEST_P(PixelLocalStorageTest, Coherency)
 {
+    printf("GL_VENDOR=%s\n", glGetString(GL_VENDOR));
+    printf("GL_RENDERER=%s\n", glGetString(GL_RENDERER));
+    printf("GL_VERSION=%s\n", glGetString(GL_VERSION));
+    fflush(stdout);
+
     // We could run this test with barriers and non-coherent, but it takes an extremely long time.
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
 

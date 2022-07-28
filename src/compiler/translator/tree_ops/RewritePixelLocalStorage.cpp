@@ -55,6 +55,8 @@ constexpr static TBasicType Image2DTypeOfPLSType(TBasicType plsType)
 
 // Delimits the beginning of a per-pixel critical section. Makes pixel local storage coherent.
 //
+// Specifies a global layout(pixel_interlock_ordered) on "in" if using the NV or ARB extensions.
+//
 // Either: GL_NV_fragment_shader_interlock,
 //         GL_INTEL_fragment_shader_ordering
 //         GL_ARB_fragment_shader_interlock,
@@ -63,12 +65,14 @@ static TIntermNode *CreateBuiltInInterlockBeginCall(TCompiler *compiler, TSymbol
     switch (compiler->getResources().FragmentSynchronizationType)
     {
         case ShFragmentSynchronizationType::FragmentInterlockNV:
+            compiler->specifyPixelInterlockOrdered();
             return CreateBuiltInFunctionCallNode("beginInvocationInterlockNV", {}, symbolTable,
                                                  kESSLInternalBackendBuiltIns);
         case ShFragmentSynchronizationType::FragmentOrderingINTEL:
             return CreateBuiltInFunctionCallNode("beginFragmentShaderOrderingINTEL", {},
                                                  symbolTable, kESSLInternalBackendBuiltIns);
         case ShFragmentSynchronizationType::FragmentInterlockARB:
+            compiler->specifyPixelInterlockOrdered();
             return CreateBuiltInFunctionCallNode("beginInvocationInterlockARB", {}, symbolTable,
                                                  kESSLInternalBackendBuiltIns);
         default:

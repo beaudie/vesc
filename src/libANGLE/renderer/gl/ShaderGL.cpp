@@ -177,6 +177,11 @@ void ShaderGL::compileAndCheckShader(const char *source)
 
 void ShaderGL::compileShader(const char *source)
 {
+    if (strstr(source, "_pls"))
+    {
+        printf("<PLSShader>\n\n\n%s\n\n\n</PLSShader>\n", source);
+        fflush(stdout);
+    }
     const FunctionsGL *functions = mRenderer->getFunctions();
     functions->shaderSource(mShaderID, 1, &source, nullptr);
     functions->compileShader(mShaderID);

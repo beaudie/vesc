@@ -1522,7 +1522,12 @@ void GenerateCaps(const FunctionsGL *functions,
     {
         // Prefer vendor-specific extensions first. The PixelLocalStorageTest.Coherency test doesn't
         // always pass on Intel when we use the ARB extension.
-        if (features.supportsFragmentShaderInterlockNV.enabled)
+        if (features.supportsFragmentShaderInterlockARB.enabled)
+        {
+            caps->fragmentSynchronizationType = ShFragmentSynchronizationType::FragmentInterlockARB;
+            extensions->shaderPixelLocalStorageCoherentANGLE = true;
+        }
+        else if (features.supportsFragmentShaderInterlockNV.enabled)
         {
             caps->fragmentSynchronizationType = ShFragmentSynchronizationType::FragmentInterlockNV;
             extensions->shaderPixelLocalStorageCoherentANGLE = true;
@@ -1531,11 +1536,6 @@ void GenerateCaps(const FunctionsGL *functions,
         {
             caps->fragmentSynchronizationType =
                 ShFragmentSynchronizationType::FragmentOrderingINTEL;
-            extensions->shaderPixelLocalStorageCoherentANGLE = true;
-        }
-        else if (features.supportsFragmentShaderInterlockARB.enabled)
-        {
-            caps->fragmentSynchronizationType = ShFragmentSynchronizationType::FragmentInterlockARB;
             extensions->shaderPixelLocalStorageCoherentANGLE = true;
         }
     }

@@ -1426,9 +1426,22 @@ bool NeedsToWriteLayoutQualifier(const TType &type)
 
 void EmitEarlyFragmentTestsGLSL(const TCompiler &compiler, TInfoSinkBase &sink)
 {
-    if (compiler.isEarlyFragmentTestsSpecified())
+    if (compiler.isEarlyFragmentTestsSpecified() || compiler.isPixelInterlockOrderedSpecified())
     {
-        sink << "layout (early_fragment_tests) in;\n";
+        sink << "layout (";
+        if (compiler.isEarlyFragmentTestsSpecified())
+        {
+            sink << "early_fragment_tests";
+        }
+        if (compiler.isPixelInterlockOrderedSpecified())
+        {
+            if (compiler.isEarlyFragmentTestsSpecified())
+            {
+                sink << ", ";
+            }
+            sink << "pixel_interlock_ordered";
+        }
+        sink << ") in;\n";
     }
 }
 

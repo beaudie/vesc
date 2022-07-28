@@ -374,6 +374,17 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
     {
         sink << "#extension " << ext << " : require\n";
     }
+
+#if defined(ANGLE_ENABLE_ASSERTS)
+    if (isPixelInterlockOrderedSpecified())
+    {
+        // If the transformed shader declares pixel_interlock_ordered, it must also call one of the
+        // fragment interlock functions.
+        const auto &ext = extensionGLSL.getRequiredExtensions();
+        ASSERT(ext.find("GL_ARB_fragment_shader_interlock") != ext.end() ||
+               ext.find("GL_NV_fragment_shader_interlock") != ext.end());
+    }
+#endif
 }
 
 void TranslatorGLSL::conditionallyOutputInvariantDeclaration(const char *builtinVaryingName)
