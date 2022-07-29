@@ -274,13 +274,6 @@ bool IOSurfaceSurfaceVkMac::ValidateAttributes(const DisplayVk *displayVk,
         return false;
     }
 
-    void *pointer          = IOSurfaceGetBaseAddressOfPlane(ioSurface, plane);
-    VkDeviceSize alignment = renderer->getMinImportedHostPointerAlignment();
-    if (reinterpret_cast<size_t>(pointer) % alignment != 0)
-    {
-        return false;
-    }
-
     return true;
 }
 
