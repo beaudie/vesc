@@ -34,6 +34,46 @@
       "parentUuid": "53c37f6c_c61a73e5",
       "revId": "1c8dedce0970e842df2b2d3718c085ae688b3125",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a45857_76d114a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:06:21Z",
+      "side": 1,
+      "message": "This change LGTM code-wise.\nI agree with Shabi that Chrome requesting this behavior via an extension is better than a compile-time decision.",
+      "revId": "1c8dedce0970e842df2b2d3718c085ae688b3125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d76abc58_7d1cf4f3",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:06:21Z",
+      "side": 1,
+      "message": "Not related to this CL, but in connection to Shabi\u0027s suggestion, I would rather have \"disable\" and not \"enable\".\n\nI.e. phrase it so that it would be understood that thread safety is the default behavior, and for Chromium we\u0027re using a dangerous tweak to improve performance.",
+      "range": {
+        "startLine": 67,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 33
+      },
+      "revId": "1c8dedce0970e842df2b2d3718c085ae688b3125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
