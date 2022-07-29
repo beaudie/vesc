@@ -873,11 +873,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
         // TODO: http://anglebug.com/4731 This extension is missing on older Intel drivers.
         addExtensionPrerequisite("GL_OES_EGL_image_external");
-
-        if (IsWindows() && IsIntel())
-        {
-            skipTest("http://anglebug.com/6568 Flaky on Intel/windows");
-        }
     }
 
     if (traceNameIs("brawl_stars"))
@@ -1160,11 +1155,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
 
-        if (IsNVIDIA() && mParams->isVulkan())
-        {
-            skipTest("http://anglebug.com/7496 Nondeterministic noise between runs");
-        }
-
         if ((IsLinux() && IsIntel()) && mParams->isVulkan())
         {
             skipTest("TODO: http://anglebug.com/6029 Crashes on Linux Intel Vulkan");
@@ -1194,14 +1184,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("sakura_school_simulator"))
-    {
-        if (IsWindows() && IsIntel())
-        {
-            skipTest("http://anglebug.com/6294 Flaky on Intel");
-        }
-    }
-
     if (traceNameIs("scrabble_go"))
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
@@ -1210,10 +1192,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     if (traceNameIs("world_of_kings"))
     {
         addExtensionPrerequisite("GL_OES_EGL_image_external");
-        if (IsWindows() && IsIntel())
-        {
-            skipTest("http://anglebug.com/6372 Flaky on Intel");
-        }
     }
 
     if (traceNameIs("nier_reincarnation"))
@@ -1235,11 +1213,9 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
 
-        if (IsIntel())
+        if (IsIntel() && IsLinux())
         {
-            skipTest(
-                "http://anglebug.com/6548 nondeterministic on Intel+Windows. Crashes on Linux "
-                "Intel");
+            skipTest("http://anglebug.com/6548 Crashes on Linux Intel");
         }
     }
 
