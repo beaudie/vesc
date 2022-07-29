@@ -87,6 +87,24 @@
       "parentUuid": "9238300c_3ab745f8",
       "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe488e95_31ae46f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-07-29T20:04:26Z",
+      "side": 1,
+      "message": "looks like when read the framebuffer (glReadPixels) , angle will insert vkCmdResolveImage read the data from msas buffer, so neither the single buffer or preserved not work. this path not optimized?",
+      "parentUuid": "4fb05ec6_91f853bd",
+      "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
