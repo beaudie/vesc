@@ -201,6 +201,63 @@ TEST_P(MultisampleTest, Triangle)
     }
 }
 
+class MultisampleTestSingleBuffer : public ANGLETest<>
+{
+  protected:
+    MultisampleTestSingleBuffer()
+    {
+        setWindowWidth(kWindowWidth);
+        setWindowHeight(kWindowHeight);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+        setConfigStencilBits(8);
+        setSamples(4);
+        setMultisampleEnabled(true);
+        setSingleBuffer(true);
+    }
+    void prepareVertexBuffer(GLBuffer &vertexBuffer,
+                             const Vector3 *vertices,
+                             size_t vertexCount,
+                             GLint positionLocation)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(*vertices) * vertexCount, vertices, GL_STATIC_DRAW);
+        glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glEnableVertexAttribArray(positionLocation);
+    }
+
+  protected:
+    static constexpr int kWindowWidth  = 8;
+    static constexpr int kWindowHeight = 8;
+};
+
+// Test default framebuffer multisample resolve path.
+TEST_P(MultisampleTestSingleBuffer, InvalidateDefaultMsaaFrameBuffer)
+{
+    ANGLE_SKIP_TEST_IF(!isVulkanRenderer() || IsPixel4());
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    GLenum attachment = GL_COLOR;
+    glInvalidateFramebuffer(GL_DRAW_FRAMEBUFFER, 1, &attachment);
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    glUseProgram(program);
+    const GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+
+    GLBuffer vertexBuffer;
+    const Vector3 vertices[3] = {{-1.0f, -1.0f, 0.0f}, {-1.0f, 1.0f, 0.0f}, {1.0f, -1.0f, 0.0f}};
+    prepareVertexBuffer(vertexBuffer, vertices, 3, positionLocation);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    ASSERT_GL_NO_ERROR();
+    swapBuffers();
+    // Top-left pixels should be all red.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
 // Test polygon rendering on a multisampled surface. And rendering is interrupted by a compute pass
 // that converts the index buffer. Make sure the rendering's multisample result is preserved after
 // interruption.
@@ -1002,6 +1059,7 @@ ANGLE_INSTANTIATE_TEST_ES3_AND_ES31_AND(MultisampleTestES3,
                                         ES3_VULKAN().enable(Feature::EmulatedPrerotation180),
                                         ES3_VULKAN().enable(Feature::EmulatedPrerotation270));
 
+ANGLE_INSTANTIATE_TEST_ES3(MultisampleTestSingleBuffer);
 ANGLE_INSTANTIATE_TEST_ES3_AND(MultisampleResolveTest,
                                ES3_VULKAN().enable(Feature::EmulatedPrerotation90),
                                ES3_VULKAN().enable(Feature::EmulatedPrerotation180),

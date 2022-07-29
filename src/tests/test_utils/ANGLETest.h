@@ -476,6 +476,7 @@ class ANGLETestBase
     void setSamples(EGLint samples);
     void setDebugEnabled(bool enabled);
     void setNoErrorEnabled(bool enabled);
+    void setSingleBuffer(bool enabled);
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
     void setExtensionsEnabled(bool extensionsEnabled);
     void setRobustAccess(bool enabled);
