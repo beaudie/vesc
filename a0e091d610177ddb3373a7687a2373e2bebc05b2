@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d167aabc_0a8c52fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T01:34:08Z",
+      "side": 1,
+      "message": "Did this actually have a measurable impact?",
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e5db6a_5f7b12f6",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2093,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T01:34:08Z",
+      "side": 1,
+      "message": "nit: redundant `only`.",
+      "range": {
+        "startLine": 2093,
+        "startChar": 72,
+        "endLine": 2093,
+        "endChar": 76
+      },
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42960ebf_8788f3c2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T01:34:08Z",
+      "side": 1,
+      "message": "There is already `mState.isDefault()`, you don\u0027t need this function.",
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
