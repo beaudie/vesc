@@ -162,6 +162,11 @@ class TestSuite
 
     const std::string &getTestExecutableName() const { return mTestExecutableName; }
 
+    // Called to update test results.
+    void setCurrentTest(const TestIdentifier &id);
+    void processCurrentTestResult(TestResultType resultType);
+    void endTests();
+
   private:
     bool parseSingleArg(const char *argument);
     bool launchChildTestProcess(uint32_t batchId, const std::vector<TestIdentifier> &testsInBatch);
@@ -203,14 +208,13 @@ class TestSuite
     int mFailureCount;
     bool mModifiedPreferredDevice;
     std::vector<std::string> mChildProcessArgs;
+    std::vector<TestIdentifier> mRegisteredTests;
     std::map<TestIdentifier, FileLine> mTestFileLines;
     std::vector<ProcessInfo> mCurrentProcesses;
     std::thread mWatchdogThread;
     HistogramWriter mHistogramWriter;
     std::string mTestArtifactDirectory;
     GPUTestExpectationsParser mTestExpectationsParser;
-
-    class TestEventListener;
 };
 
 std::string ReplaceDashesWithQuestionMark(std::string dashesString);

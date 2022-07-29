@@ -20,15 +20,20 @@
 #include <fstream>
 #include <unordered_map>
 
-#include <gtest/gtest.h>
 #include <rapidjson/document.h>
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>
 
+// TODO(anglebug.com/####): Specialize in each test.
+// #define ANGLE_USE_GOOGLETEST
+
+#if defined(ANGLE_USE_GOOGLETEST)
 // We directly call into a function to register the parameterized tests. This saves spinning up
 // a subprocess with a new gtest filter.
-#include <gtest/../../src/gtest-internal-inl.h>
+#    include <gtest/../../src/gtest-internal-inl.h>
+#    include <gtest/gtest.h>
+#endif  // defined(ANGLE_USE_GOOGLETEST)
 
 namespace js = rapidjson;
 
@@ -394,42 +399,56 @@ void WriteHistogramJson(const HistogramWriter &histogramWriter, const std::strin
     }
 }
 
-void UpdateCurrentTestResult(const testing::TestResult &resultIn, TestResults *resultsOut)
+#if defined(ANGLE_USE_GOOGLETEST)
+TestResultType GetGoogleTestResultType(const testing::TestResult &resultIn)
 {
-    TestResult &resultOut = resultsOut->results[resultsOut->currentTest];
-
     // Note: Crashes and Timeouts are detected by the crash handler and a watchdog thread.
     if (resultIn.Skipped())
     {
-        resultOut.type = TestResultType::Skip;
+        return TestResultType::Skip;
     }
     else if (resultIn.Failed())
     {
-        resultOut.type = TestResultType::Fail;
+        return TestResultType::Fail;
     }
     else
     {
-        resultOut.type = TestResultType::Pass;
+        return TestResultType::Pass;
     }
-
-    resultOut.elapsedTimeSeconds.back() = resultsOut->currentTestTimer.getElapsedWallClockTime();
 }
 
-TestIdentifier GetTestIdentifier(const testing::TestInfo &testInfo)
+TestIdentifier GetGoogleTestIdentifier(const testing::TestInfo &testInfo)
 {
     return {testInfo.test_suite_name(), testInfo.name()};
 }
 
-bool IsTestDisabled(const testing::TestInfo &testInfo)
+class GoogleTestEventListener : public testing::EmptyTestEventListener
 {
-    return ::strstr(testInfo.name(), "DISABLED_") == testInfo.name();
-}
+  public:
+    // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
+    GoogleTestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
 
-using TestIdentifierFilter = std::function<bool(const TestIdentifier &id)>;
+    void OnTestStart(const testing::TestInfo &testInfo) override
+    {
+        mTestSuite->setCurrentTest(GetGoogleTestIdentifier(testInfo));
+    }
 
-std::vector<TestIdentifier> FilterTests(std::map<TestIdentifier, FileLine> *fileLinesOut,
-                                        TestIdentifierFilter filter,
-                                        bool alsoRunDisabledTests)
+    void OnTestEnd(const testing::TestInfo &testInfo) override
+    {
+        TestResultType resultType = GetGoogleTestResultType(*testInfo.result());
+        mTestSuite->processCurrentTestResult(resultType);
+    }
+
+    void OnTestProgramEnd(const testing::UnitTest &testProgramInfo) override
+    {
+        mTestSuite->endTests();
+    }
+
+  private:
+    TestSuite *mTestSuite;
+};
+
+std::vector<TestIdentifier> GetGoogleTestsList(std::map<TestIdentifier, FileLine> *fileLinesOut)
 {
     std::vector<TestIdentifier> tests;
 
@@ -440,30 +459,182 @@ std::vector<TestIdentifier> FilterTests(std::map<TestIdentifier, FileLine> *file
         for (int testIndex = 0; testIndex < testSuite.total_test_count(); ++testIndex)
         {
             const testing::TestInfo &testInfo = *testSuite.GetTestInfo(testIndex);
-            TestIdentifier id                 = GetTestIdentifier(testInfo);
-            if (filter(id) && (!IsTestDisabled(testInfo) || alsoRunDisabledTests))
-            {
-                tests.emplace_back(id);
+            TestIdentifier id                 = GetGoogleTestIdentifier(testInfo);
+            tests.emplace_back(id);
 
-                if (fileLinesOut)
-                {
-                    (*fileLinesOut)[id] = {testInfo.file(), testInfo.line()};
-                }
+            if (fileLinesOut)
+            {
+                (*fileLinesOut)[id] = {testInfo.file(), testInfo.line()};
             }
         }
     }
 
     return tests;
 }
+#endif  // ANGLE_USE_GOOGLETEST
 
-std::vector<TestIdentifier> GetFilteredTests(std::map<TestIdentifier, FileLine> *fileLinesOut,
+bool IsTestDisabled(const char *testName)
+{
+    return ::strstr(testName, "DISABLED_") == testName;
+}
+
+// Source:
+// https://github.com/google/googletest/blob/7735334a46da480a749945c0f645155d90d73855/googletest/src/gtest.cc#L833
+//
+// Returns true if and only if the user-specified filter matches the test
+// suite name and the test name.
+static const char kUniversalFilter[] = "*";
+
+// Returns true if and only if the wildcard pattern matches the string. Each
+// pattern consists of regular characters, single-character wildcards (?), and
+// multi-character wildcards (*).
+//
+// This function implements a linear-time string globbing algorithm based on
+// https://research.swtch.com/glob.
+static bool PatternMatchesString(const std::string &nameStr,
+                                 const char *pattern,
+                                 const char *patternEnd)
+{
+    const char *name            = nameStr.c_str();
+    const char *const nameBegin = name;
+    const char *const nameEnd   = name + nameStr.size();
+
+    const char *patternNext = pattern;
+    const char *nameNext    = name;
+
+    while (pattern < patternEnd || name < nameEnd)
+    {
+        if (pattern < patternEnd)
+        {
+            switch (*pattern)
+            {
+                default:  // Match an ordinary character.
+                    if (name < nameEnd && *name == *pattern)
+                    {
+                        ++pattern;
+                        ++name;
+                        continue;
+                    }
+                    break;
+                case '?':  // Match any single character.
+                    if (name < nameEnd)
+                    {
+                        ++pattern;
+                        ++name;
+                        continue;
+                    }
+                    break;
+                case '*':
+                    // Match zero or more characters. Start by skipping over the wildcard
+                    // and matching zero characters from name. If that fails, restart and
+                    // match one more character than the last attempt.
+                    patternNext = pattern;
+                    nameNext    = name + 1;
+                    ++pattern;
+                    continue;
+            }
+        }
+        // Failed to match a character. Restart if possible.
+        if (nameBegin < nameNext && nameNext <= nameEnd)
+        {
+            pattern = patternNext;
+            name    = nameNext;
+            continue;
+        }
+        return false;
+    }
+    return true;
+}
+
+bool MatchesFilter(const std::string &nameStr, const char *filter)
+{
+    // The filter is a list of patterns separated by colons (:).
+    const char *pattern = filter;
+    while (true)
+    {
+        // Find the bounds of this pattern.
+        const char *const nextSep    = strchr(pattern, ':');
+        const char *const patternEnd = nextSep != nullptr ? nextSep : pattern + strlen(pattern);
+
+        // Check if this pattern matches name_str.
+        if (PatternMatchesString(nameStr, pattern, patternEnd))
+        {
+            return true;
+        }
+
+        // Give up on this pattern. However, if we found a pattern separator (:),
+        // advance to the next pattern (skipping over the separator) and restart.
+        if (nextSep == nullptr)
+        {
+            return false;
+        }
+        pattern = nextSep + 1;
+    }
+}
+
+bool FilterMatchesTest(const std::string &testSuiteName,
+                       const std::string &testName,
+                       const std::string &filterString)
+{
+    const std::string &fullName = testSuiteName + "." + testName.c_str();
+
+    // Split --gtest_filter at '-', if there is one, to separate into
+    // positive filter and negative filter portions
+    std::string str        = filterString;
+    const char *const p    = str.c_str();
+    const char *const dash = strchr(p, '-');
+    std::string positive;
+    std::string negative;
+    if (dash == nullptr)
+    {
+        positive = str.c_str();  // Whole string is a positive filter
+        negative = "";
+    }
+    else
+    {
+        positive = std::string(p, dash);   // Everything up to the dash
+        negative = std::string(dash + 1);  // Everything after the dash
+        if (positive.empty())
+        {
+            // Treat '-test1' as the same as '*-test1'
+            positive = kUniversalFilter;
+        }
+    }
+
+    // A filter is a colon-separated list of patterns.  It matches a
+    // test if any pattern in it matches the test.
+    return (MatchesFilter(fullName, positive.c_str()) &&
+            !MatchesFilter(fullName, negative.c_str()));
+}
+
+using TestIdentifierFilter = std::function<bool(const TestIdentifier &id)>;
+
+std::vector<TestIdentifier> FilterTests(const std::vector<TestIdentifier> &testsIn,
+                                        TestIdentifierFilter filter,
+                                        bool alsoRunDisabledTests)
+{
+    std::vector<TestIdentifier> testsOut;
+
+    for (const TestIdentifier &id : testsIn)
+    {
+        if (filter(id) && (!IsTestDisabled(id.testName.c_str()) || alsoRunDisabledTests))
+        {
+            testsOut.emplace_back(id);
+        }
+    }
+
+    return testsOut;
+}
+
+std::vector<TestIdentifier> GetFilteredTests(const std::vector<TestIdentifier> &testsIn,
+                                             const std::string &filterString,
                                              bool alsoRunDisabledTests)
 {
-    TestIdentifierFilter gtestIDFilter = [](const TestIdentifier &id) {
-        return testing::internal::UnitTestOptions::FilterMatchesTest(id.testSuiteName, id.testName);
+    TestIdentifierFilter gtestIDFilter = [filterString](const TestIdentifier &id) {
+        return FilterMatchesTest(id.testSuiteName, id.testName, filterString);
     };
 
-    return FilterTests(fileLinesOut, gtestIDFilter, alsoRunDisabledTests);
+    return FilterTests(testsIn, gtestIDFilter, alsoRunDisabledTests);
 }
 
 std::vector<TestIdentifier> GetShardTests(const std::vector<TestIdentifier> &allTests,
@@ -956,39 +1127,6 @@ ProcessInfo::ProcessInfo(ProcessInfo &&other)
     *this = std::move(other);
 }
 
-class TestSuite::TestEventListener : public testing::EmptyTestEventListener
-{
-  public:
-    // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
-    TestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
-
-    void OnTestStart(const testing::TestInfo &testInfo) override
-    {
-        std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
-        mTestSuite->mTestResults.currentTest = GetTestIdentifier(testInfo);
-        mTestSuite->mTestResults.currentTestTimer.start();
-    }
-
-    void OnTestEnd(const testing::TestInfo &testInfo) override
-    {
-        std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
-        mTestSuite->mTestResults.currentTestTimer.stop();
-        const testing::TestResult &resultIn = *testInfo.result();
-        UpdateCurrentTestResult(resultIn, &mTestSuite->mTestResults);
-        mTestSuite->mTestResults.currentTest = TestIdentifier();
-    }
-
-    void OnTestProgramEnd(const testing::UnitTest &testProgramInfo) override
-    {
-        std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
-        mTestSuite->mTestResults.allDone = true;
-        mTestSuite->writeOutputFiles(false);
-    }
-
-  private:
-    TestSuite *mTestSuite;
-};
-
 TestSuite::TestSuite(int *argc, char **argv) : TestSuite(argc, argv, []() {}) {}
 
 TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTestsCallback)
@@ -1024,7 +1162,7 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
     angle::InitMetalFileAPIHooking(*argc, argv);
 #endif
 
-#if defined(ANGLE_PLATFORM_WINDOWS)
+#if defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_GOOGLETEST)
     testing::GTEST_FLAG(catch_exceptions) = false;
 #endif
 
@@ -1192,6 +1330,7 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
         AddArg(argc, argv, mFilterString.c_str());
     }
 
+#if defined(ANGLE_USE_GOOGLETEST)
     // Call into gtest internals to force parameterized test name registration.
     testing::internal::UnitTestImpl *impl = testing::internal::GetUnitTestImpl();
     impl->RegisterParameterizedTests();
@@ -1199,7 +1338,11 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
     // Initialize internal GoogleTest filter arguments so we can call "FilterMatchesTest".
     testing::internal::ParseGoogleTestFlagsOnly(argc, argv);
 
-    std::vector<TestIdentifier> testSet = GetFilteredTests(&mTestFileLines, alsoRunDisabledTests);
+    mRegisteredTests = GetGoogleTestsList(&mTestFileLines);
+#endif  // ANGLE_USE_GOOGLETEST
+
+    std::vector<TestIdentifier> testSet =
+        GetFilteredTests(mRegisteredTests, mFilterString, alsoRunDisabledTests);
 
     if (mShardCount == 0)
     {
@@ -1261,7 +1404,9 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
         }
     }
 
+#if defined(ANGLE_USE_GOOGLETEST)
     testing::InitGoogleTest(argc, argv);
+#endif  // defined(ANGLE_USE_GOOGLETEST)
 
     mTotalResultCount = testSet.size();
 
@@ -1280,8 +1425,10 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
 
     if (!mBotMode)
     {
+#if defined(ANGLE_USE_GOOGLETEST)
         testing::TestEventListeners &listeners = testing::UnitTest::GetInstance()->listeners();
-        listeners.Append(new TestEventListener(this));
+        listeners.Append(new GoogleTestEventListener(this));
+#endif  // ANGLE_USE_GOOGLETEST
 
         for (const TestIdentifier &id : testSet)
         {
@@ -1677,7 +1824,12 @@ int TestSuite::run()
             startWatchdog();
         }
 
+#if defined(ANGLE_USE_GOOGLETEST)
         int retVal = RUN_ALL_TESTS();
+#else
+        // TODO(anglebug.com/####): Implement.
+        int retVal = 0;
+#endif  // defined(ANGLE_USE_GOOGLETEST)
         {
             std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
             mTestResults.allDone = true;
@@ -2022,6 +2174,29 @@ void TestSuite::writeOutputFiles(bool interrupted)
     {
         WriteHistogramJson(mHistogramWriter, mHistogramJsonFile);
     }
+}
+
+void TestSuite::setCurrentTest(const TestIdentifier &id)
+{
+    std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
+    mTestResults.currentTest = id;
+    mTestResults.currentTestTimer.start();
+}
+
+void TestSuite::processCurrentTestResult(TestResultType resultType)
+{
+    std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
+    mTestResults.currentTestTimer.stop();
+    TestResult &resultOut               = mTestResults.results[mTestResults.currentTest];
+    resultOut.elapsedTimeSeconds.back() = mTestResults.currentTestTimer.getElapsedWallClockTime();
+    mTestResults.currentTest            = TestIdentifier();
+}
+
+void TestSuite::endTests()
+{
+    std::lock_guard<std::mutex> guard(mTestResults.currentTestMutex);
+    mTestResults.allDone = true;
+    writeOutputFiles(false);
 }
 
 const char *TestResultTypeToString(TestResultType type)
