@@ -16,6 +16,23 @@
       "message": "hi all,\nplease help to review the changes.\n\nthanks\n\nhailin ",
       "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "132cdad8_006dd2a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T16:47:29Z",
+      "side": 1,
+      "message": "LGTM. But could you also upload your test for this?",
+      "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
