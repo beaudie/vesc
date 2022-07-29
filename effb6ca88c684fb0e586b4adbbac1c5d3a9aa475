@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a845405e_4f166e80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T01:54:28Z",
+      "side": 1,
+      "message": "Now isn\u0027t that much better? 😊",
+      "revId": "effb6ca88c684fb0e586b4adbbac1c5d3a9aa475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
