@@ -46,6 +46,10 @@ DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
 DEFAULT_GOLD_INSTANCE = 'angle'
 
+# Inexact matching arguments
+MAX_DIFFERENT_PIXELS = 20
+PIXEL_DELTA_THRESHOLD = 10
+
 # Test expectations
 FAIL = 'FAIL'
 PASS = 'PASS'
@@ -199,7 +203,7 @@ def output_diff_local_files(gold_session, image_name):
 
 
 def upload_test_result_to_skia_gold(args, gold_session_manager, gold_session, gold_properties,
-                                    screenshot_dir, image_name, artifacts):
+                                    screenshot_dir, image_name, artifacts, inexact_matching_args):
     """Compares the given image using Skia Gold and uploads the result.
 
     No uploading is done if the test is being run in local run mode. Compares
@@ -214,6 +218,7 @@ def upload_test_result_to_skia_gold(args, gold_session_manager, gold_session, go
       screenshot_dir: directory where the test stores screenshots.
       image_name: the name of the image being checked.
       artifacts: dictionary of JSON artifacts to pass to the result merger.
+      inexact_matching_args: array of extra arguments or None.
     """
 
     use_luci = not (gold_properties.local_pixel_tests or gold_properties.no_luci_auth)
@@ -226,7 +231,10 @@ def upload_test_result_to_skia_gold(args, gold_session_manager, gold_session, go
         raise Exception('Screenshot not found: ' + png_file_name)
 
     status, error = gold_session.RunComparison(
-        name=image_name, png_file=png_file_name, use_luci=use_luci)
+        name=image_name,
+        png_file=png_file_name,
+        use_luci=use_luci,
+        inexact_matching_args=inexact_matching_args)
 
     artifact_name = os.path.basename(png_file_name)
     artifacts[artifact_name] = [artifact_name]
@@ -282,6 +290,21 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
 
     if angle_test_util.IsAndroid() and args.test_suite == DEFAULT_TEST_SUITE:
         android_helper.RunSmokeTest()
+
+    # Apply inexact matching only on Intel. On SwiftShader and Pixel 4, images seem stable.
+    inexact_matching_args = None
+    if 'Intel' in keys['driver_vendor']:
+        inexact_matching_args = [
+            '--add-test-optional-key',
+            'fuzzy_max_different_pixels:' + str(MAX_DIFFERENT_PIXELS),
+            '--add-test-optional-key',
+            'fuzzy_max_pixel_delta_threshold:' + str(PIXEL_DELTA_THRESHOLD),
+        ]
+
+    if _use_adb(args.test_suite):
+        android_helper.PrepareTestSuite(args.test_suite)
+        if args.test_suite == DEFAULT_TEST_SUITE:
+            android_helper.RunSmokeTest()
 
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
         gold_properties = angle_skia_gold_properties.ANGLESkiaGoldProperties(args)
@@ -345,7 +368,8 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                             result = upload_test_result_to_skia_gold(args, gold_session_manager,
                                                                      gold_session, gold_properties,
                                                                      screenshot_dir, trace,
-                                                                     artifacts)
+                                                                     artifacts,
+                                                                     inexact_matching_args)
                     else:
                         result = batch_result
 
