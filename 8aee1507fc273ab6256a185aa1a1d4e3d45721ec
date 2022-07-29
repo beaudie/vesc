@@ -16,6 +16,46 @@
       "message": "PTAL Cody / Brian.\n\nBrian: since these tests have been running without inexact matching in other configs, will Gold pick up the new tests as (inexactly) matching new goldens? Or do we need to land this first before the inexact matching kicks in? Not sure if the parameters are tuned correctly, as we don\u0027t have a record of flaky goldens to go on.",
       "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4ffb39_903030e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T21:04:14Z",
+      "side": 1,
+      "message": "Drive by question",
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74012959_d3ecbd37",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T21:04:14Z",
+      "side": 1,
+      "message": "Is that 10 difference in pixel values, like (100, 0, 0, 1) would match (110, 0, 0, 1)? Isn\u0027t that a bit too much?",
+      "range": {
+        "startLine": 59,
+        "startChar": 24,
+        "endLine": 59,
+        "endChar": 26
+      },
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
