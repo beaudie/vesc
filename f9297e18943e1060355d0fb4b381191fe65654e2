@@ -1,0 +1,256 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6651c8fc_248134b3",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "nit: I\u0027d add `\u0026\u0026 !pushConstant` here, though not a bug currently.",
+      "range": {
+        "startLine": 1358,
+        "startChar": 9,
+        "endLine": 1358,
+        "endChar": 16
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d633dae1_465a4e8c",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Suggest `ASSERT(type.getInterfaceBlock() !\u003d nullptr);` here.",
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fc405a7_4907d460",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6006,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Instead, please move this inside `writeInterfaceVariableDecorations`. For now, `needsSetBinding` would add `\u0026\u0026 !pushConstant`. Later, we may have to add decorations due to push constants offset.",
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8353feff_e2d82e27",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Is this necessary? None of the qualifiers below should have been tagged with push constants",
+      "range": {
+        "startLine": 45,
+        "startChar": 8,
+        "endLine": 45,
+        "endChar": 26
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b9a96f_bc57960b",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "nit: move up to line `64`.",
+      "range": {
+        "startLine": 80,
+        "startChar": 12,
+        "endLine": 80,
+        "endChar": 33
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "668d910e_c757872f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Nice, I had been meaning to point this out. Do you happen to know if any tests failed without this? Just want to make sure someone doesn\u0027t accidentally remove it.",
+      "range": {
+        "startLine": 746,
+        "startChar": 8,
+        "endLine": 746,
+        "endChar": 33
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a2002da_18cef678",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "nit: a little less verbose:\n\n```\nif (executable !\u003d nullptr \u0026\u0026 executable-\u003ehasUniformBuffers())\n{\n    mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);\n}\n```\n\nSame for compute below",
+      "range": {
+        "startLine": 5707,
+        "startChar": 0,
+        "endLine": 5716,
+        "endChar": 5
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dcc0dc1_3a8944e6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6083,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "No need for `new`. Just put this on the stack!",
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4df19858_3859e803",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6171,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "No need for compute, these are graphics uniforms",
+      "range": {
+        "startLine": 6171,
+        "startChar": 69,
+        "endLine": 6171,
+        "endChar": 96
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a379c7_c618343a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Again, no need for `new`",
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef12b671_6d319e04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 6195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "No need for graphics stages",
+      "range": {
+        "startLine": 6195,
+        "startChar": 8,
+        "endLine": 6195,
+        "endChar": 67
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b7bdf5_9cc79aa6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T20:57:22Z",
+      "side": 1,
+      "message": "Use this instead to know which one to use:\n\n```\nconst bool isCompute \u003d glExecutable.hasLinkedShaderStage(gl::ShaderType::Compute);\n```\n\nThen set the size and stages based on compute vs graphics.",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 94
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
