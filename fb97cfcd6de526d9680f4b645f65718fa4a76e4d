@@ -93,6 +93,30 @@
       },
       "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c8770a_d58c8721",
+        "filename": "scripts/gen_proc_table.py",
+        "patchSetId": 29
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-29T15:59:17Z",
+      "side": 0,
+      "message": "Ack.\n\nI think the best end state is that they\u0027re gated behind a `angle_expose_wgl_entry_points` which defaults to the same value as `angle_enable_gl_desktop_frontend` on Windows.",
+      "parentUuid": "544dd30c_bdc629a4",
+      "range": {
+        "startLine": 211,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 85
+      },
+      "revId": "fb97cfcd6de526d9680f4b645f65718fa4a76e4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
