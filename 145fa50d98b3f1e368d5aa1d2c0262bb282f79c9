@@ -51,6 +51,24 @@
       "parentUuid": "132cdad8_006dd2a7",
       "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9238300c_3ab745f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T17:23:29Z",
+      "side": 1,
+      "message": "There is `swapBuffers();` \nI guess the problem is you can\u0027t read out front buffer. Is there a buffer content preserve bits that you can use and then swap again read out back buffer? Or Would it reproduce in single buffer mode?",
+      "parentUuid": "6e3143ea_7f2d96d1",
+      "revId": "145fa50d98b3f1e368d5aa1d2c0262bb282f79c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
