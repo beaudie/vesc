@@ -46,6 +46,30 @@
       },
       "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c34a23c5_bd521e16",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-29T16:07:59Z",
+      "side": 1,
+      "message": "Ok, then I would debug and put a breakpoint when some of those dirty bits are set (places like https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp;l\u003d1652) and see what\u0027s causing it. \n\nIt may mean that you need to update the DirtyBitType enum in StateManager11 to reorder the bits.",
+      "parentUuid": "3e0f76c4_612f2f5b",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
