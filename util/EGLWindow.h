@@ -50,6 +50,7 @@ struct ANGLE_UTIL_EXPORT ConfigParameters
     bool multisample;
     bool debug;
     bool noError;
+    bool singleBuffer;
     Optional<bool> extensionsEnabled;
     bool bindGeneratesResource;
     bool clientArraysEnabled;
