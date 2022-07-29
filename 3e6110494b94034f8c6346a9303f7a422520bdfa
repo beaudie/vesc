@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a07108_44164fef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-29T16:04:36Z",
+      "side": 1,
+      "message": "Design looks good. Didn\u0027t review the compiler parts though.",
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47c5b510_1c16a085",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-29T16:04:36Z",
+      "side": 1,
+      "message": "I like `BackendFeatures` but let\u0027s scope it to `CompilerBackendFeatures`.",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "194f256b_17155a48",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-07-29T16:04:36Z",
+      "side": 1,
+      "message": "Instead of a protected member, I\u0027d just eat the cost of returning by value (only one member) for a cleaner design.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
