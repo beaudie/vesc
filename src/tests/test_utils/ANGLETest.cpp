@@ -1382,6 +1382,11 @@ void ANGLETestBase::setMultisampleEnabled(bool enabled)
     mFixture->configParams.multisample = enabled;
 }
 
+void ANGLETestBase::setSingleBuffer(bool enabled)
+{
+    mFixture->configParams.singleBuffer = enabled;
+}
+
 void ANGLETestBase::setSamples(EGLint samples)
 {
     mFixture->configParams.samples = samples;
