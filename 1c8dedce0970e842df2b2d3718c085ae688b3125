@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53c37f6c_c61a73e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T02:03:22Z",
+      "side": 1,
+      "message": "I see that we had introduced `angle_enable_share_context_lock` previously and that your recent change made that conditional to !chrome. But given the complications that led to this change, I wonder if we should make that a dynamic decision instead.\n\nWhat if we remove that build flag, and instead add a front-end feature that controls shared-context locking? The lock is taken here:\n\n```\nANGLE_INLINE std::unique_lock\u003cangle::GlobalMutex\u003e GetContextLock(Context *context)\n{\n#    if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)\n    auto lock \u003d std::unique_lock\u003cangle::GlobalMutex\u003e(egl::GetGlobalMutex());\n\n    DirtyContextIfNeeded(context);\n    return lock;\n#    else\n    return context-\u003eisShared() ? std::unique_lock\u003cangle::GlobalMutex\u003e(egl::GetGlobalMutex())\n                               : std::unique_lock\u003cangle::GlobalMutex\u003e();\n#    endif\n}\n```\n\nIt sounds to me that changing `context-\u003eisShared()` to `context-\u003eneedsSharedLock()` which is implemented as `isShared() \u0026\u0026 getFrontendFeatures().enableShareContextLock.enabled` would do the trick.\n\nThen the tests continue to work as-is, and Chrome can simply toggle this feature to disable locking.",
+      "revId": "1c8dedce0970e842df2b2d3718c085ae688b3125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
