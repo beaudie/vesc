@@ -16,6 +16,24 @@
       "message": "We don\u0027t update the descriptorSetAllocations perf counters anymore, because the descriptorSet allocated here will be immediately put in the garbage list?",
       "revId": "5db09e9b98a3bda64154df12c7efd34608b8cbd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abb10c36_6d5163cd",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3670,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T23:20:42Z",
+      "side": 0,
+      "message": "right, and gets reused. This only affects statistics. I removed it mainly because this one is adding big noise to the cache statistics. The cache statistics is mostly concerning about hit/miss and how many are allocated. But the descriptorSet from this UtilsVk function never cached. And because it is always allocated, you see this descriptorSetAllocations grow big and wondering there is cache leak somewhere, and turns out it is from UtilsVk and has nothing to do with cache.",
+      "parentUuid": "7a2d006e_f987cd09",
+      "revId": "5db09e9b98a3bda64154df12c7efd34608b8cbd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
