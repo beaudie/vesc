@@ -88,6 +88,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7370b85_e25a6a0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-29T17:49:54Z",
+      "side": 1,
+      "message": "Just a small comment to help get the merge conflict resolved a little faster.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c19db615_22a5d115",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-07-29T17:49:54Z",
+      "side": 1,
+      "message": "This will need to be moved to `include/platform/frontend_features.json` since this file is now generated via script.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b2c64e8_3a30b3bd",
