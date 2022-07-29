@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f94ef865_4ef21cc0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T21:09:33Z",
+      "side": 1,
+      "message": "I\u0027ll get back to review the test later.",
+      "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "058bf39f_3554c80f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-07-29T21:09:33Z",
+      "side": 1,
+      "message": "Oops! Could you please add a regression test for this? (this could be a separate change too)",
+      "range": {
+        "startLine": 2241,
+        "startChar": 64,
+        "endLine": 2241,
+        "endChar": 65
+      },
+      "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
