@@ -52,6 +52,23 @@
       "parentUuid": "ec3e8ead_a108c90b",
       "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18589b86_871a51c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T16:33:49Z",
+      "side": 1,
+      "message": "Can we get momentum on this? This is not just help game launch time, but also draw time. Some games (line asphalt_9) are compiling shaders at frame draw time.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
