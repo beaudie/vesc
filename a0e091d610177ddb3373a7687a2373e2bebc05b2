@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51272f3a_91215d5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T17:18:09Z",
+      "side": 1,
+      "message": "Since this is per frame cost, I dont think it will have much impact for overall app trace. I spot this in gdb and seeing it goes through all depth/stencil code for no good reason, that is how I noticed.",
+      "parentUuid": "d167aabc_0a8c52fc",
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75e5db6a_5f7b12f6",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea435025_af185b8c",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2093,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T17:18:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75e5db6a_5f7b12f6",
+      "range": {
+        "startLine": 2093,
+        "startChar": 72,
+        "endLine": 2093,
+        "endChar": 76
+      },
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42960ebf_8788f3c2",
@@ -54,6 +96,24 @@
       "writtenOn": "2022-07-29T01:34:08Z",
       "side": 1,
       "message": "There is already `mState.isDefault()`, you don\u0027t need this function.",
+      "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e76f092e_a47e0a97",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-07-29T17:18:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42960ebf_8788f3c2",
       "revId": "a0e091d610177ddb3373a7687a2373e2bebc05b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
