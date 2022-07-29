@@ -54,6 +54,10 @@ DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
 DEFAULT_GOLD_INSTANCE = 'angle'
 
+# Inexact matching arguments
+MAX_DIFFERENT_PIXELS = 20
+PIXEL_DELTA_THRESHOLD = 10
+
 # Filters out stuff like: " I   72.572s run_tests_on_device(96071FFAZ00096) "
 ANDROID_LOGGING_PREFIX = r'I +\d+.\d+s \w+\(\w+\)  '
 ANDROID_BEGIN_SYSTEM_INFO = '>>ScopedMainEntryLogger'
@@ -256,8 +260,18 @@ def upload_test_result_to_skia_gold(args, gold_session_manager, gold_session, go
     if not os.path.isfile(png_file_name):
         raise Exception('Screenshot not found: ' + png_file_name)
 
+    inexact_matching_args = [
+        '--add-test-optional-key',
+        'fuzzy_max_different_pixels:' + str(MAX_DIFFERENT_PIXELS),
+        '--add-test-optional-key',
+        'fuzzy_max_pixel_delta_threshold:' + str(PIXEL_DELTA_THRESHOLD),
+    ]
+
     status, error = gold_session.RunComparison(
-        name=image_name, png_file=png_file_name, use_luci=use_luci)
+        name=image_name,
+        png_file=png_file_name,
+        use_luci=use_luci,
+        inexact_matching_args=inexact_matching_args)
 
     artifact_name = os.path.basename(png_file_name)
     artifacts[artifact_name] = [artifact_name]
