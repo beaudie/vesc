@@ -11,6 +11,7 @@
 #include "common/PackedEnums.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
+#include "libANGLE/capture/gl_enum_utils.h"
 #include "tests/perf_tests/ANGLEPerfTest.h"
 #include "tests/perf_tests/ANGLEPerfTestArgs.h"
 #include "tests/perf_tests/DrawCallPerfParams.h"
@@ -1035,8 +1036,9 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("cookie_run_kingdom"))
     {
-        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
+        // addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
+        // addExtensionPrerequisite("GL_OES_EGL_image_external");
+        addIntegerPrerequisite(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, 30);
     }
 
     if (traceNameIs("genshin_impact"))
