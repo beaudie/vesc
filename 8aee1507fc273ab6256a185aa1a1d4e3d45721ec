@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7536cd5f_ca8c7aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2022-07-29T22:02:36Z",
+      "side": 1,
+      "message": "Inexact matching won\u0027t kick in until there\u0027s data for a test on a particular config on ToT. New images produced by a CL aren\u0027t available for inexact matching, so if the test hasn\u0027t been run before on ToT, there will be no data for inexact matching to use.",
+      "parentUuid": "9e2a3140_1ee64bb9",
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74012959_d3ecbd37",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-07-29T21:04:14Z",
       "side": 1,
       "message": "Is that 10 difference in pixel values, like (100, 0, 0, 1) would match (110, 0, 0, 1)? Isn\u0027t that a bit too much?",
+      "range": {
+        "startLine": 59,
+        "startChar": 24,
+        "endLine": 59,
+        "endChar": 26
+      },
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ad856d_c878f730",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2022-07-29T22:02:36Z",
+      "side": 1,
+      "message": "Correct, although it\u0027s the sum of deltas. So for example, (100, 0, 0, 1) would match (110, 0, 0, 1), but (110, 1, 0, 1) would fail.",
+      "parentUuid": "74012959_d3ecbd37",
       "range": {
         "startLine": 59,
         "startChar": 24,
