@@ -16,6 +16,98 @@
       "message": "PTAL at these documentation updates.",
       "revId": "1fca3fb929c2c5e341cdc6fa33f316eeb629df4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eadea9d_275dda44",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:25:58Z",
+      "side": 1,
+      "message": "Try",
+      "range": {
+        "startLine": 7,
+        "startChar": 72,
+        "endLine": 7,
+        "endChar": 74
+      },
+      "revId": "1fca3fb929c2c5e341cdc6fa33f316eeb629df4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4abc673_b1204167",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:25:58Z",
+      "side": 1,
+      "message": "Also, I usually get notifications about ANGLE rolls responsible for Chromium Perf regressions in my shifts, so triage those, too.",
+      "range": {
+        "startLine": 9,
+        "startChar": 60,
+        "endLine": 9,
+        "endChar": 67
+      },
+      "revId": "1fca3fb929c2c5e341cdc6fa33f316eeb629df4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2942058a_adc13441",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:25:58Z",
+      "side": 1,
+      "message": "Try",
+      "range": {
+        "startLine": 14,
+        "startChar": 14,
+        "endLine": 14,
+        "endChar": 16
+      },
+      "revId": "1fca3fb929c2c5e341cdc6fa33f316eeb629df4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ec3f7c6_ea3e9ff5",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-07-29T18:25:58Z",
+      "side": 1,
+      "message": "I\u0027ve recently added a header to BUILD.gn instead.\nhttps://github.com/KhronosGroup/Vulkan-Loader/pull/968\nI think this is preferable, no?",
+      "range": {
+        "startLine": 151,
+        "startChar": 1,
+        "endLine": 151,
+        "endChar": 17
+      },
+      "revId": "1fca3fb929c2c5e341cdc6fa33f316eeb629df4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
