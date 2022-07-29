@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a2d006e_f987cd09",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3670,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-07-29T17:53:55Z",
+      "side": 0,
+      "message": "We don\u0027t update the descriptorSetAllocations perf counters anymore, because the descriptorSet allocated here will be immediately put in the garbage list?",
+      "revId": "5db09e9b98a3bda64154df12c7efd34608b8cbd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
