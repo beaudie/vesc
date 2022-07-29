@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a84b48_40e446e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-07-29T02:53:09Z",
+      "side": 1,
+      "message": "lgtm\n\nThis is small enough and I understand the semantics well enough that I think it\u0027s warranted to directly +2 it.\n",
+      "revId": "9d27513e6bbfa57e199090a3db03fdda55449dd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
