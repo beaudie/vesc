@@ -33,6 +33,7 @@ ConfigParameters::ConfigParameters()
       multisample(false),
       debug(false),
       noError(false),
+      singleBuffer(false),
       bindGeneratesResource(true),
       clientArraysEnabled(true),
       robustAccess(false),
@@ -392,6 +393,12 @@ GLWindowResult EGLWindow::initializeSurface(OSWindow *osWindow,
     {
         surfaceAttributes.push_back(EGL_SWAP_INTERVAL_ANGLE);
         surfaceAttributes.push_back(mConfigParams.swapInterval);
+    }
+
+    if (mConfigParams.singleBuffer)
+    {
+        surfaceAttributes.push_back(EGL_RENDER_BUFFER);
+        surfaceAttributes.push_back(EGL_SINGLE_BUFFER);
     }
 
     surfaceAttributes.push_back(EGL_NONE);
