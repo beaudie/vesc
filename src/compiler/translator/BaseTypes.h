@@ -1364,8 +1364,7 @@ struct TLayoutQualifier
                invocations == 0 && maxVertices == -1 && vertices == 0 &&
                tesPrimitiveType == EtetUndefined && tesVertexSpacingType == EtetUndefined &&
                tesOrderingType == EtetUndefined && tesPointType == EtetUndefined && index == -1 &&
-               inputAttachmentIndex == -1 && noncoherent == false &&
-               !advancedBlendEquations.any() && !pushConstant;
+               inputAttachmentIndex == -1 && noncoherent == false && !advancedBlendEquations.any();
     }
 
     bool isCombinationValid() const

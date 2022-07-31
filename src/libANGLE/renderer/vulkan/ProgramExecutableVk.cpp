@@ -347,8 +347,7 @@ ProgramExecutableVk::ProgramExecutableVk()
     : mNumDefaultUniformDescriptors(0),
       mImmutableSamplersMaxDescriptorCount(1),
       mUniformBufferDescriptorType(VK_DESCRIPTOR_TYPE_MAX_ENUM),
-      mDynamicUniformDescriptorOffsets{},
-      mShaderStageFlags(0)
+      mDynamicUniformDescriptorOffsets{}
 {
     for (std::shared_ptr<DefaultUniformBlock> &defaultBlock : mDefaultUniformBlocks)
     {
@@ -373,7 +372,6 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
 
     mDescriptorSets.fill(VK_NULL_HANDLE);
     mNumDefaultUniformDescriptors = 0;
-    mShaderStageFlags             = 0;
 
     for (vk::RefCountedDescriptorPoolBinding &binding : mDescriptorPoolBindings)
     {
@@ -1227,34 +1225,11 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     // Set up driver uniforms as push constants. The size and shader stages used for them are set
     // based on the pipeline type, which is determined by checking the linked shader stages. We can
     // then create the pipeline layout using the push constant range.
-    //    bool hasCompute  = glExecutable.hasLinkedShaderStage(gl::ShaderType::Compute);
-    //    bool hasGraphics = false;
-    //    for (gl::ShaderType shaderType : linkedShaderStages)
-    //    {
-    //        if (shaderType != gl::ShaderType::Compute)
-    //        {
-    //            hasGraphics = true;
-    //            break;
-    //        }
-    //    }
-
-    //    if (hasGraphics)
-    //    {
-    //        mShaderStageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS &
-    //                             contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask();
-    //    }
-    //    else
-    //    {
-    //        mShaderStageFlags |= VK_SHADER_STAGE_COMPUTE_BIT;
-    //    }
-
-    //    PipelineType pipelineType = (hasGraphics) ? PipelineType::Graphics :
-    //    PipelineType::Compute;
-    mShaderStageFlags = contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask() |
-                        VK_SHADER_STAGE_COMPUTE_BIT;
-    PipelineType pipelineType = PipelineType::Graphics;
-    uint32_t pushConstantSize = contextVk->getDriverUniformSize(pipelineType);
-    pipelineLayoutDesc.updatePushConstantRange(mShaderStageFlags, 0, pushConstantSize);
+    uint32_t pushConstantSize = contextVk->getDriverUniformSize(PipelineType::Graphics);
+    VkShaderStageFlags pushConstantStageMask =
+        contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask() |
+        VK_SHADER_STAGE_COMPUTE_BIT;
+    pipelineLayoutDesc.updatePushConstantRange(pushConstantStageMask, 0, pushConstantSize);
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));

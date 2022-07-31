@@ -1735,11 +1735,10 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
     const bool isVarying                    = IsVarying(type.getQualifier());
     const bool needsSetBinding =
-        !layoutQualifier.pushConstant &&
-        (IsSampler(type.getBasicType()) ||
-         (type.isInterfaceBlock() &&
-          (type.getQualifier() == EvqUniform || type.getQualifier() == EvqBuffer)) ||
-         IsImage(type.getBasicType()) || IsSubpassInputType(type.getBasicType()));
+        IsSampler(type.getBasicType()) ||
+        (type.isInterfaceBlock() &&
+         (type.getQualifier() == EvqUniform || type.getQualifier() == EvqBuffer)) ||
+        IsImage(type.getBasicType()) || IsSubpassInputType(type.getBasicType());
     const bool needsLocation = type.getQualifier() == EvqAttribute ||
                                type.getQualifier() == EvqVertexIn ||
                                type.getQualifier() == EvqFragmentOut || isVarying;
