@@ -41,9 +41,10 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
         (type.isInterfaceBlock() && !needsPushConstant &&
          (type.getQualifier() == EvqUniform || type.getQualifier() == EvqBuffer)) ||
         IsImage(type.getBasicType()) || IsSubpassInputType(type.getBasicType());
-    bool needsLocation = type.getQualifier() == EvqAttribute ||
-                         type.getQualifier() == EvqVertexIn ||
-                         type.getQualifier() == EvqFragmentOut || IsVarying(type.getQualifier());
+    bool needsLocation =
+        !needsPushConstant &&
+        (type.getQualifier() == EvqAttribute || type.getQualifier() == EvqVertexIn ||
+         type.getQualifier() == EvqFragmentOut || IsVarying(type.getQualifier()));
     bool needsInputAttachmentIndex = IsSubpassInputType(type.getBasicType());
     bool needsSpecConstId          = type.getQualifier() == EvqSpecConst;
 
@@ -60,7 +61,7 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
     const char *blockStorage  = nullptr;
     const char *matrixPacking = nullptr;
 
-    if (!needsPushConstant && type.isInterfaceBlock())
+    if (type.isInterfaceBlock())
     {
         const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
         TLayoutBlockStorage storage           = interfaceBlock->blockStorage();
@@ -76,7 +77,7 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermSymbol *symbol)
             storage = EbsStd140;
         }
 
-        if (interfaceBlock->blockStorage() != EbsUnspecified)
+        if (!needsPushConstant && interfaceBlock->blockStorage() != EbsUnspecified)
         {
             blockStorage = getBlockStorageString(storage);
         }
