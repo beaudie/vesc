@@ -33,6 +33,23 @@
       "message": "Good change Charlie!",
       "revId": "18e77765a0c3e44ef9d5395a1910c08c4ea777fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e3af72_c5e5a0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-01T20:26:19Z",
+      "side": 1,
+      "message": "Thanks folks for review.",
+      "revId": "18e77765a0c3e44ef9d5395a1910c08c4ea777fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
