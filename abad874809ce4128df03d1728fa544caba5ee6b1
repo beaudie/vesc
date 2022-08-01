@@ -86,6 +86,30 @@
       },
       "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f718797c_0d3fb051",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-08-01T17:28:42Z",
+      "side": 1,
+      "message": "the problem is when call EXPECT_PIXEL_COLOR_EQ, it will glReadPixels. I saw on the there is new vkResolveImage command to the resolve. no matter the msaa surface resolve already nor not. We may need to read it from gdi. as shabi mentioned on the chat.",
+      "parentUuid": "dc09b635_22bed0b6",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 15
+      },
+      "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
