@@ -22,6 +22,30 @@
       },
       "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7de71cb_6186a8f2",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-01T13:24:34Z",
+      "side": 0,
+      "message": "It would be \"possible\" - if you wanted to do it by trace, we would need an expectations file and a format that could specify flaky or something like that. I think if you tried to describe the risk here: a trace creeps in that is slightly flaky when it shouldn\u0027t be, you\u0027ll quickly realize it\u0027s not something that\u0027s a big risk. If a trace is slightly flaky, we\u0027d just suppress it and move on, we wouldn\u0027t ever debug it to see why it\u0027s flaky. And IIRC I haven\u0027t seen any case where we\u0027d have a regression where a test becomes flaky because of a bad change. What I\u0027d suggest is that the cost/benefit of enabling inexact matching is heavily skewed towards benefit. We could potentially limit it to only some configs, like !Android, but even that I don\u0027t really see a real reason for, as if a trace ever had slight flaky pixels on Android we\u0027d still want to run it, and probably wouldn\u0027t debug why it\u0027s slightly non-deterministic.",
+      "parentUuid": "71683d29_ab72339e",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

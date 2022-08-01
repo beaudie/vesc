@@ -98,6 +98,30 @@
       },
       "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4354b4ca_c0888904",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-01T13:24:34Z",
+      "side": 1,
+      "message": "Thanks Brian, I just picked 10 after seeing Chrome was using much higher values. We can tinker with it after it lands to see what the best value is.",
+      "parentUuid": "f8ad856d_c878f730",
+      "range": {
+        "startLine": 59,
+        "startChar": 24,
+        "endLine": 59,
+        "endChar": 26
+      },
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
