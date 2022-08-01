@@ -16,6 +16,29 @@
       "message": "PS3: Just in case caps generation happens in-flight, backup-restore the current blend color.",
       "revId": "042698774ebd2556c5462cbbb63d13d5b8e75ac8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b81f4717_ea0d0c33",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-01T14:51:34Z",
+      "side": 1,
+      "message": "Maybe we just do this everywhere? The cost of the check is pretty low.\n\nIf we do keep it as qualcomm only, small suggestion to use `IsQualcomm(GetVendorID(functions))` instead for readability.",
+      "range": {
+        "startLine": 1826,
+        "startChar": 4,
+        "endLine": 1826,
+        "endChar": 35
+      },
+      "revId": "042698774ebd2556c5462cbbb63d13d5b8e75ac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
