@@ -1227,6 +1227,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     // Set up driver uniforms as push constants. The size and shader stages used for them are set
     // based on the pipeline type, which is determined by checking the linked shader stages. We can
     // then create the pipeline layout using the push constant range.
+    bool hasCompute  = glExecutable.hasLinkedShaderStage(gl::ShaderType::Compute);
     bool hasGraphics = false;
     for (gl::ShaderType shaderType : linkedShaderStages)
     {
@@ -1242,7 +1243,10 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         mShaderStageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS &
                              contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask();
     }
-    mShaderStageFlags |= VK_SHADER_STAGE_COMPUTE_BIT;
+    if (hasCompute)
+    {
+        mShaderStageFlags |= VK_SHADER_STAGE_COMPUTE_BIT;
+    }
 
     PipelineType pipelineType = (hasGraphics) ? PipelineType::Graphics : PipelineType::Compute;
     uint32_t pushConstantSize = contextVk->getDriverUniformSize(pipelineType);
