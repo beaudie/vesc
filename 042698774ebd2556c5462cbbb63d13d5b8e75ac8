@@ -39,6 +39,30 @@
       },
       "revId": "042698774ebd2556c5462cbbb63d13d5b8e75ac8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad1b023a_0a578026",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-08-01T22:42:21Z",
+      "side": 1,
+      "message": "Done.\n\nAs it\u0027s a functional divergence from the spec, I\u0027d prefer to limit the check to affected devices, hoping that the driver bug will be fixed someday. Confirmed that the bug is not present on Arm Mali GPUs.",
+      "parentUuid": "b81f4717_ea0d0c33",
+      "range": {
+        "startLine": 1826,
+        "startChar": 4,
+        "endLine": 1826,
+        "endChar": 35
+      },
+      "revId": "042698774ebd2556c5462cbbb63d13d5b8e75ac8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
