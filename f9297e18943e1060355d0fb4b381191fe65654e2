@@ -515,6 +515,30 @@
       },
       "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67a5a093_53a750ab",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-01T00:12:40Z",
+      "side": 1,
+      "message": "18 tests (mostly ClearTest) are failing on Windows/Intel GPU after the stage masks were changed from using the graphics and compute bits combined into using them based on the pipeline type (in `ProgramExecutableVk`). Updated them so the graphics pipeline also uses the compute bit, but the compute pipeline only uses the compute bit.",
+      "parentUuid": "a894554f_c4d716f2",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 94
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
