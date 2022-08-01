@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "352b0e05_92ce652d",
+        "filename": "src/libANGLE/renderer/FormatID_autogen.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-01T21:24:29Z",
+      "side": 1,
+      "message": "nit: maybe add to the last instead of middle? Shouldn\u0027t have any functional difference, but just in case there is any hard coded number or just for the sake of people\u0027s memory that someone recognize 1 as D16, for example.",
+      "range": {
+        "startLine": 21,
+        "startChar": 4,
+        "endLine": 21,
+        "endChar": 12
+      },
+      "revId": "bc3b932347c297fda7eb4a488a6cd2691b90a225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
