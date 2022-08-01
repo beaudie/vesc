@@ -16,6 +16,24 @@
       "message": "I like the idea of separating external format from none. so this CL looks good to me. But I can\u0027t find the spec for VK_ANDROID_render_to_external_format, google it also did not show anything. Do you have link to share? \n",
       "revId": "cf75b13525bd23c6b3ddb6fc1858c44c70c88ad5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71fbe091_3521346b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-08-01T17:26:42Z",
+      "side": 1,
+      "message": "Hi Charlie, the spec isn\u0027t ready yet, sorry. You can probably ask Chris for more info on it",
+      "parentUuid": "0a489ffc_9fa6b74f",
+      "revId": "cf75b13525bd23c6b3ddb6fc1858c44c70c88ad5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
