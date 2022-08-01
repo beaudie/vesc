@@ -110,6 +110,30 @@
       },
       "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfdab2a7_ae524e4a",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-01T23:17:09Z",
+      "side": 1,
+      "message": "Here is one idea: Look at EGLLockSurface3Test.cpp\nTEST_P(EGLLockSurface3Test, WindowSurfaceReadTest)\n\nYou can modify that test to create enable MSAA and then use eglLockSurfaceKHR to read out. I think it should expose the bug you discovered.",
+      "parentUuid": "f718797c_0d3fb051",
+      "range": {
+        "startLine": 254,
+        "startChar": 4,
+        "endLine": 254,
+        "endChar": 15
+      },
+      "revId": "abad874809ce4128df03d1728fa544caba5ee6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
