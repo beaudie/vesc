@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71683d29_ab72339e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-01T02:31:29Z",
+      "side": 0,
+      "message": "Would it be possible to enable inexact matching just for traces known to be nondeterminsic?  I\u0027m leery of unexpected changes creeping in.  We expect consistent pixels, these are exceptions.",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
