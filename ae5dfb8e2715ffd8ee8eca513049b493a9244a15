@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83adc6ed_6b00647e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-01T16:17:35Z",
+      "side": 1,
+      "message": "Just a small CL from this bug that I got around to implementing.",
+      "revId": "ae5dfb8e2715ffd8ee8eca513049b493a9244a15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
