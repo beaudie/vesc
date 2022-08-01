@@ -46,6 +46,30 @@
       },
       "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd33cb35_bdc40015",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-01T13:44:46Z",
+      "side": 0,
+      "message": "I\u0027m not worried about new flakiness being introduced, I\u0027m worried about real bugs that creep in that only change pixel results slightly (and consistently).  I\u0027ve seen traces (in previous jobs) where the differences were very small, but the bug was real.\n\nIs the driving motivator here that you want to be able to run these traces locally without modifying the replayer source?  We\u0027ve discussed adding a \"--force-run\" flag that would ignore all the skips.",
+      "parentUuid": "c7de71cb_6186a8f2",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
