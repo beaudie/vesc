@@ -79,6 +79,7 @@ angle::Result EGLImageD3D::copyToLocalRendertarget(const gl::Context *context)
     RenderTargetD3D *curRenderTarget = nullptr;
     ANGLE_TRY(getRenderTarget(context, &curRenderTarget));
 
+    std::unique_lock lock(mState.targetsLock);
     // Invalidate FBOs with this Image attached. Only currently applies to D3D11.
     for (egl::ImageSibling *target : mState.targets)
     {
