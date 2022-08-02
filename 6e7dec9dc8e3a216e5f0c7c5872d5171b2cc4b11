@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ca864d_06bd604a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-02T23:35:12Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3806252/1..2 contains the build fix for the iOS Simulator bot. Verified locally by building angle_end2end_tests with args.gn configured for the simulator environment.\n",
+      "revId": "6e7dec9dc8e3a216e5f0c7c5872d5171b2cc4b11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
