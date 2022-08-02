@@ -70,6 +70,30 @@
       },
       "revId": "1353f1191dea47359442703c3ef3a1525499a289",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "317b70c4_0f8ff18d",
+        "filename": "scripts/run_gtest_angle_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-02T20:44:18Z",
+      "side": 0,
+      "message": "Yup, seems to be working! Thanks for the high-confidence bump :)",
+      "parentUuid": "354b9262_7ab71e85",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 20
+      },
+      "revId": "1353f1191dea47359442703c3ef3a1525499a289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
