@@ -46,6 +46,30 @@
       },
       "revId": "1353f1191dea47359442703c3ef3a1525499a289",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "354b9262_7ab71e85",
+        "filename": "scripts/run_gtest_angle_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-02T18:18:50Z",
+      "side": 0,
+      "message": "I am 99.999% sure whatever you saw about compile targets didn\u0027t involve this script. If you can dig out the context, I can help confirm if it\u0027s related. (We do use compile targets in the builds, and AFAIK it has nothing to do with these scripts. I\u0027ve started omitting this stuff from new scripts, so worth spending the 5 mins to confirm it)",
+      "parentUuid": "df10d7d4_6bd5ed7a",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 20
+      },
+      "revId": "1353f1191dea47359442703c3ef3a1525499a289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
