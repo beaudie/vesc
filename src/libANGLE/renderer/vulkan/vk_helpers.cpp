@@ -5550,6 +5550,9 @@ angle::Result ImageHelper::initMemory(Context *context,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
     ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
+#if defined(ANGLE_MEM_ALLOC_DEBUG_MODE)
+    WARN() << "Add image memory alloc here, unless it is already allocated.";
+#endif
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
     RendererVk *renderer = context->getRenderer();

@@ -101,6 +101,10 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     allocInfo.allocationSize       = memoryRequirements.size;
 
     ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
+#if defined(ANGLE_MEM_ALLOC_DEBUG_MODE)
+    WARN() << "Memory allocated in " << ANGLE_FUNCTION << " for Object "
+           << deviceMemoryOut->getHandle() << ": " << allocInfo.allocationSize;
+#endif
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
     // invalid values ensures our testing doesn't assume zero-initialized memory.
@@ -725,6 +729,9 @@ void GarbageObject::destroy(RendererVk *renderer)
             break;
         case HandleType::DeviceMemory:
             vkFreeMemory(device, (VkDeviceMemory)mHandle, nullptr);
+#if defined(ANGLE_MEM_ALLOC_DEBUG_MODE)
+            WARN() << "Memory deallocated from Object " << (VkDeviceMemory)mHandle;
+#endif
             break;
         case HandleType::Buffer:
             vkDestroyBuffer(device, (VkBuffer)mHandle, nullptr);

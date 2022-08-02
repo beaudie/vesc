@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/vulkan/Suballocation.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#define ANGLE_MEM_ALLOC_DEBUG_MODE
 
 #include <functional>
 
