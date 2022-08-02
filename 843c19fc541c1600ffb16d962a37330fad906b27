@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "206bcec2_ed060796",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-02T20:00:20Z",
+      "side": 1,
+      "message": "This approach could be built upon to narrow the skips to include trace name.  I think allowing fuzzy results on a case by case basis is the safest way to go.  Would you be okay gating this even further?  I could do it as a follow up if you\u0027d like to be done with this CL for now.",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 77
+      },
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

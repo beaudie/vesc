@@ -118,6 +118,30 @@
       },
       "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f1a13a9_add28bc0",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-02T20:00:20Z",
+      "side": 0,
+      "message": "Hey Jamie, I\u0027m more comfortable isolating it to target platforms, for sure.\n\nFor those following along at home, Jamie and I spoke about this yesterday. I then forgot to hit Send on this drafted reply.\n\n(begin drafted reply below):\n\n\u003e Can you link to such a prior instance so I can figure out if there\u0027s a solution?\n\nUnfortunately no, this was closed source work on the Intel driver.  They have a large number of traces they run.  I do remember is was a Serious Sam title though. :)\n\nAmirali did point me to a bug yesterday where he was only off by a bit in the trace tests.  I believe the fuzz factor would have allowed it to get through:\n\n * Updated CL (on top of the original CL) with the failure: https://crrev.com/c/3787239/23\n\n * Skia: https://angle-gold.skia.org/search?issue\u003d3787239\u0026crs\u003dgerrit\u0026patchsets\u003d23\u0026corpus\u003dangle",
+      "parentUuid": "73b3bb6f_2f83a0a5",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
