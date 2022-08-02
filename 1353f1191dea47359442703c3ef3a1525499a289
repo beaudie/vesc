@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e78571ae_d6bb5bf0",
+        "filename": "scripts/run_gtest_angle_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-02T18:09:41Z",
+      "side": 0,
+      "message": "nit: I think you can just ditch the script test stuff, this predated the isolated script stuff.",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 20
+      },
+      "revId": "1353f1191dea47359442703c3ef3a1525499a289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
