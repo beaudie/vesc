@@ -70,6 +70,47 @@
       },
       "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e547a197_866c48f6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-08-02T15:09:32Z",
+      "side": 1,
+      "message": "Note that some Dawn tests started firing this assert after my ANGLE change: https://bugs.chromium.org/p/dawn/issues/detail?id\u003d1503\n\nSo the problem is likely orthogonal to this CL. Patches welcome, though. :)",
+      "parentUuid": "c34a23c5_bd521e16",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f26c14af_4993b3c1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-08-02T15:09:32Z",
+      "side": 1,
+      "message": "I think we can count on pixel and compute UAV support on the D3D11 backend, at least for the non-coherent version of this stuff (vertex UAVs require D3D11.1, but I assume that\u0027s not relevant here).",
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
