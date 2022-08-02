@@ -22,6 +22,30 @@
       },
       "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af6b301d_5ff4fca0",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-02T20:07:51Z",
+      "side": 1,
+      "message": "My intuitive thinking is that it\u0027s not worth spending our time on, as it wouldn\u0027t provide much safety. We don\u0027t really need to maintain NV and Intel at all, let alone for small pixel differences. That being said I\u0027m happy if you are happy to unblock this CL.\n\nLonger term it would be nice to move to an expectations format like we do for the other tests.",
+      "parentUuid": "206bcec2_ed060796",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 77
+      },
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
