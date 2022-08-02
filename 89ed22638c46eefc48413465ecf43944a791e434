@@ -80,6 +80,30 @@
       },
       "revId": "89ed22638c46eefc48413465ecf43944a791e434",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bc6a253_ca27488a",
+        "filename": "src/common/apple_platform_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-02T02:32:59Z",
+      "side": 1,
+      "message": "Thanks Quyen for your suggestion. Refactored these macros.",
+      "parentUuid": "9496e012_cfeab770",
+      "range": {
+        "startLine": 74,
+        "startChar": 12,
+        "endLine": 74,
+        "endChar": 33
+      },
+      "revId": "89ed22638c46eefc48413465ecf43944a791e434",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
