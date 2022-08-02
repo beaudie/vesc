@@ -39,6 +39,30 @@
       },
       "revId": "6347fef8e8f629ba0d49ed88a3184e1977f85613",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "494ff62f_858398e1",
+        "filename": "src/tests/egl_tests/EGLLockSurface3Test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-08-02T19:41:54Z",
+      "side": 1,
+      "message": "I want to call the eglswapbuffer to trigger the full present path. otherwise the code  path may have some difference if only call lock.",
+      "parentUuid": "c8783133_1320d756",
+      "range": {
+        "startLine": 572,
+        "startChar": 46,
+        "endLine": 572,
+        "endChar": 63
+      },
+      "revId": "6347fef8e8f629ba0d49ed88a3184e1977f85613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
