@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04d13bda_d7121bf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-02T20:18:41Z",
+      "side": 1,
+      "message": "Not even sure if I\u0027ll be able to land this, given how gold works.",
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "206bcec2_ed060796",
