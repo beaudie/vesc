@@ -3,8 +3,15 @@
 # found in the LICENSE file.
 
 import datetime
+import json
 import importlib
 import logging
+import sys
+
+import angle_path_util
+
+angle_path_util.AddDepsDirToPath('testing/scripts')
+import common
 
 
 class LogFormatter(logging.Formatter):
@@ -17,7 +24,7 @@ class LogFormatter(logging.Formatter):
         return datetime.datetime.fromtimestamp(record.created).strftime('%H:%M:%S.%fZ')
 
 
-def setupLogging(level):
+def SetupLogging(level):
     # Reload to reset if it was already setup by a library
     importlib.reload(logging)
 
@@ -27,3 +34,45 @@ def setupLogging(level):
     handler = logging.StreamHandler()
     handler.setFormatter(LogFormatter())
     logger.addHandler(handler)
+
+
+def IsWindows():
+    return sys.platform == 'cygwin' or sys.platform.startswith('win')
+
+
+def ExecutablePathInCurrentDir(binary):
+    if IsWindows():
+        return '.\\%s.exe' % binary
+    else:
+        return './%s' % binary
+
+
+def HasGtestShardsAndIndex(env):
+    if 'GTEST_TOTAL_SHARDS' in env and int(env['GTEST_TOTAL_SHARDS']) != 1:
+        if 'GTEST_SHARD_INDEX' not in env:
+            logging.error('Sharding params must be specified together.')
+            sys.exit(1)
+        return True
+
+    return False
+
+
+def PopGtestShardsAndIndex(env):
+    return int(env.pop('GTEST_TOTAL_SHARDS')), int(env.pop('GTEST_SHARD_INDEX'))
+
+
+def MinimalScriptTest(main):
+    # Conform minimally to the protocol defined by ScriptTest.
+
+    # This is not really a "script test" so does not need to manually add
+    # any additional compile targets.
+    def compile_targets(args):
+        json.dump([], args.output)
+
+    if 'compile_targets' in sys.argv:
+        funcs = {
+            'run': None,
+            'compile_targets': compile_targets,
+        }
+        sys.exit(common.run_script(sys.argv[1:], funcs))
+    sys.exit(main())
