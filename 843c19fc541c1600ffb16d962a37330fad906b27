@@ -46,6 +46,30 @@
       },
       "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e59c539_756f3e5b",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-02T20:11:28Z",
+      "side": 1,
+      "message": "It is worth the time, people rely on ANGLE\u0027s CI to provide the highest quality driver we can.  But I can do it as a follow up, this is no problem.  Thank you for exploring ways to skip it in a more isolated fashion.",
+      "parentUuid": "af6b301d_5ff4fca0",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 77
+      },
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
