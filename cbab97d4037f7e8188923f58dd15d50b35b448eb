@@ -94,6 +94,30 @@
       },
       "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e2e2c82_ef956af9",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-02T18:32:07Z",
+      "side": 0,
+      "message": "Hey Cody, I updated this to only apply to Intel and NVIDIA configs. Won\u0027t be easy to fully test until after it lands. Can I convince you to unblock this? There is already existing flakiness on the and CI \u0026 CV because of Intel non-determinism in PubG Mobule traces, maybe in other traces too.",
+      "parentUuid": "73b3bb6f_2f83a0a5",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
