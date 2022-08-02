@@ -193,6 +193,24 @@
       "parentUuid": "86b5d2b5_d33957bb",
       "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f38117d_0d6768fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-02T02:35:44Z",
+      "side": 1,
+      "message": "Thanks John - it seems likely the Metal backend is using multisample resolution capabilities that were only added in Mac GPU Family 2 or the iOS Apple Family 3, so until we have time to diagnose and fix this, it\u0027s best to avoid other developers tripping over the same bug. Have confirmed with Apple that they\u0027re comfortable making this change in ANGLE.",
+      "parentUuid": "49dc839c_5feb0cd9",
+      "revId": "7be32d3cac87c3ffeb3f4623f84086787ac727a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
