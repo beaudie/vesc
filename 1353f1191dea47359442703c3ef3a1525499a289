@@ -22,6 +22,30 @@
       },
       "revId": "1353f1191dea47359442703c3ef3a1525499a289",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df10d7d4_6bd5ed7a",
+        "filename": "scripts/run_gtest_angle_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-02T18:14:53Z",
+      "side": 0,
+      "message": "I think I bumped into something about `compile_targets` the other day, I\u0027ll leave it be for now.",
+      "parentUuid": "e78571ae_d6bb5bf0",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 20
+      },
+      "revId": "1353f1191dea47359442703c3ef3a1525499a289",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
