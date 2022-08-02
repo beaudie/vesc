@@ -16,6 +16,23 @@
       "message": "From looking and chatting with Geoff, It looks like Geoff recently rolled VMA in the Chromium repository (https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator).  This is much newer than what ANGLE is currently using, and is fairly close to top-of-tree.  This CL simply changes ANGLE\u0027s DEPS file to use that version of VMA.  We can talk more about this in Wednesday\u0027s SCRUM.",
       "revId": "f51041edea6ad3d7a6df54a10b37904d38946926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f28a972_92b9ae68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-02T22:03:45Z",
+      "side": 1,
+      "message": "I understand better that Android just needs one fix to `BUILD.gn`.",
+      "revId": "f51041edea6ad3d7a6df54a10b37904d38946926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
