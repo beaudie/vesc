@@ -536,6 +536,7 @@ if (angle_standalone || build_with_chromium) {
           "$angle_root/src/tests:native_test_java",
           "$angle_root/src/tests:native_test_support_android",
         ]
+        android_test_runner_script = "angle_test_runner.py"
       }
       if (is_ios) {
         # We use a special main function on iOS to initialize UIKit before the normal main runs.
