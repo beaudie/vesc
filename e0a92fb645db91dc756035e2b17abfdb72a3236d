@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3b43ae_a03ac4c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-03T21:59:18Z",
+      "side": 1,
+      "message": "Surely, I will collect some results from the traces.",
+      "parentUuid": "b78b1463_b0ecf11d",
+      "revId": "e0a92fb645db91dc756035e2b17abfdb72a3236d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9c0c3e91_c0c9dcfd",

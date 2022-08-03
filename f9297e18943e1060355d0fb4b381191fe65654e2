@@ -587,6 +587,30 @@
       },
       "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f26d41_9f587101",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-03T21:59:18Z",
+      "side": 1,
+      "message": "I see. Updated the push constant shader stages to supported graphics and compute bits combined. The same flags are used for both `handle*DriverUniforms` functions.",
+      "parentUuid": "6ad09e00_840c20de",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 94
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
