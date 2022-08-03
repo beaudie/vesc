@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "90d98b8f_caefe9b2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T16:39:29Z",
+      "side": 1,
+      "message": "The *complex* change is mostly deleting code 😊\n\nI have no data though, it\u0027s something to be measured once the change is complete. There would likely be some minor CPU perf and memory improvements (because there is no driver uniform buffer management anymore). But more importantly this opens up the door for further improvements:\n\n- Each word of driver uniforms can be updated separately, so every change wouldn\u0027t require recalculating all the driver uniforms, and updates could be smaller\n- Input attachments can be moved out of the program resources desc set and managed by the context instead of the program, and basically set only exactly once per render pass.",
+      "parentUuid": "eed9b950_79a17894",
+      "revId": "e0a92fb645db91dc756035e2b17abfdb72a3236d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9c0c3e91_c0c9dcfd",
