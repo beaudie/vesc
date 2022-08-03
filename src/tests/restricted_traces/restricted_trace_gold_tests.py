@@ -316,19 +316,33 @@ def _get_gtest_filter_for_batch(args, batch):
     expanded = ['%s%s' % (prefix, trace) for trace in batch]
     return '--gtest_filter=%s' % ':'.join(expanded)
 
+# Build the list of traces we want to skip due to differences run to run
+nondeterministic_traces = [('Intel', 'Windows', 'cod_mobile'),
+                           ('Intel', 'Windows', 'sakura_school_simulator'),
+                           ('Intel', 'Windows', 'world_of_kings'),
+                           ('Intel', 'Windows', 'pokemon_unite'),
+                           ('Nvidia', 'Windows', 'genshin_impact')]
+
+
+def _ensure_skipped_trace_names_valid(traces):
+    # Walk through the list of traces above and ensure the names are valid
+    for vendor_name, os_name, trace_name in nondeterministic_traces:
+        if not trace_name in traces:
+            logging.error(
+                'Attempting to skip invalid trace name %s. Please update nondeterministic_traces' %
+                trace_name)
+            sys.exit(1)
+
+
+def _trace_is_nondeterministic(trace, keys):
+    return (keys['driver_vendor'], keys['os'], trace) in nondeterministic_traces
+
 
 def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
-    # Apply inexact matching only on Intel or NVIDIA. On SwiftShader and Pixel 4, images seem stable.
-    inexact_matching_args = None
-    if 'Intel' in keys['driver_vendor'] or 'NVIDIA' in keys['driver_vendor']:
-        inexact_matching_args = [
-            '--add-test-optional-key',
-            'fuzzy_max_different_pixels:' + str(MAX_DIFFERENT_PIXELS),
-            '--add-test-optional-key',
-            'fuzzy_max_pixel_delta_threshold:' + str(PIXEL_DELTA_THRESHOLD),
-        ]
+    # Verify the list of traces we are skipping is valid
+    _ensure_skipped_trace_names_valid(traces)
 
     if _use_adb(args.test_suite):
         android_helper.PrepareTestSuite(args.test_suite)
@@ -396,6 +410,21 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                                 result = SKIP
                             else:
                                 logging.debug('upload test result: %s' % trace)
+
+                                # Apply inexact matching only on traces on platforms known to give nondeterministic results
+                                inexact_matching_args = None
+                                if _trace_is_nondeterministic(trace, keys):
+                                    logging.info(
+                                        'Using fuzzy compare for test %s because it nondeterministic on the target platform %s %s'
+                                        % (trace, keys['driver_vendor'], keys['os']))
+                                    inexact_matching_args = [
+                                        '--add-test-optional-key',
+                                        'fuzzy_max_different_pixels:' + str(MAX_DIFFERENT_PIXELS),
+                                        '--add-test-optional-key',
+                                        'fuzzy_max_pixel_delta_threshold:' +
+                                        str(PIXEL_DELTA_THRESHOLD),
+                                    ]
+
                                 result = upload_test_result_to_skia_gold(
                                     args, gold_session_manager, gold_session, gold_properties,
                                     screenshot_dir, trace, artifacts, inexact_matching_args)
