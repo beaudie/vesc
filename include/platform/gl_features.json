@@ -635,6 +635,14 @@
                 "Imagination devices generate INVALID_ENUM when setting the texture border color."
             ],
             "issue": "https://anglebug.com/7405"
+        },
+        {
+            "name": "emulate_bgra_renderbuffers_with_rgba",
+            "category": "Workarounds",
+            "description": [
+                "There is inconsistant support for BGRA renderbuffers in OpenGL ES drivers. Emulate these formats with RGBA."
+            ],
+            "issue": ""
         }
     ]
 }

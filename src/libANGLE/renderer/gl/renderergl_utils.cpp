@@ -2250,6 +2250,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     // https://anglebug.com/7405
     ANGLE_FEATURE_CONDITION(features, disableTextureClampToBorder, isImagination);
+
+    // b/240075426
+    ANGLE_FEATURE_CONDITION(features, emulateBgraRenderbuffersWithRgba,
+                            functions->standard == STANDARD_GL_ES);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
