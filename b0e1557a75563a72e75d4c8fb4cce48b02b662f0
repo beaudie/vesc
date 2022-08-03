@@ -54,6 +54,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96c65501_2a07e32b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-03T17:27:11Z",
+      "side": 1,
+      "message": "Agree with Shabi\u0027s comments. Looks good otherwise, we may need to expand this mutex to more functions over time.",
+      "revId": "b0e1557a75563a72e75d4c8fb4cce48b02b662f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e4c529c_7a615710",
