@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7212197_72ffb877",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-03T20:02:09Z",
+      "side": 1,
+      "message": "PTAL. Feel free to CQ+2 either of you despite the fact I added two reviewers. The change is quite small.",
+      "revId": "b54ea6053fddffadf959efe0bc7619d69b370d61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
