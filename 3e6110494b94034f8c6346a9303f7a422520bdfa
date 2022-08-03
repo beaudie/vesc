@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fe2fb7a_2f25f784",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "841289f9_04939149",
+      "range": {
+        "startLine": 359,
+        "startChar": 8,
+        "endLine": 359,
+        "endChar": 96
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b56708c_f8a446d1",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-03T14:40:50Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 366,
+        "startChar": 12,
+        "endLine": 366,
+        "endChar": 97
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fc3cb47_1bf475e8",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b56708c_f8a446d1",
       "range": {
         "startLine": 366,
         "startChar": 12,
@@ -118,6 +166,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "47c5b510_1c16a085",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d4c96fe_2a4246d2",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e27e10c4_493d0c5a",
       "range": {
         "startLine": 20,
         "startChar": 7,
@@ -201,6 +273,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01d2b4fe_63470a85",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "I had to make a new CompilerImpl.cpp file to hold the function body, in order to meet the chromium style guidelines. Does this look good?",
+      "parentUuid": "ee027eab_ffb58c3c",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "745c28b0_672028f4",
         "filename": "src/libANGLE/renderer/gl/CompilerGL.h",
         "patchSetId": 36
@@ -212,6 +308,30 @@
       "writtenOn": "2022-08-03T14:40:50Z",
       "side": 1,
       "message": "nit: just pass in `ContextGL *` as the only argument and retrieve these as needed.",
+      "range": {
+        "startLine": 31,
+        "startChar": 15,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f40b794_a8951f67",
+        "filename": "src/libANGLE/renderer/gl/CompilerGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "745c28b0_672028f4",
       "range": {
         "startLine": 31,
         "startChar": 15,
@@ -245,6 +365,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2865ad3_3d59f939",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "It wasn\u0027t failing. The new \"Coherency\" test just needs an integer format, and this one could be converted to float, so I thought it would be nice to have tests for ordering in both integer and floating point formats.",
+      "parentUuid": "bc8ff3cf_2e023da5",
+      "range": {
+        "startLine": 1331,
+        "startChar": 22,
+        "endLine": 1331,
+        "endChar": 26
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cbca707_31b07436",
@@ -258,6 +402,30 @@
       "writtenOn": "2022-08-03T14:40:50Z",
       "side": 1,
       "message": "The functions are unused, so they may get pruned early. How about adding a second output just so you can make calls to these in `main`?",
+      "range": {
+        "startLine": 1924,
+        "startChar": 0,
+        "endLine": 1928,
+        "endChar": 52
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d439fea_46241581",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T21:41:23Z",
+      "side": 1,
+      "message": "Done. I left 3 as-is, to make sure the compiler calls the backend function and not these ones. The other 2 I added a second output for and called from main.",
+      "parentUuid": "8cbca707_31b07436",
       "range": {
         "startLine": 1924,
         "startChar": 0,
