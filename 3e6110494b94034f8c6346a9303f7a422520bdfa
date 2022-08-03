@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b038eca_7d17ba1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "LGTM! Sorry for the delays",
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841289f9_04939149",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "nit: please avoid `if (x \u003d y)`. Just pull it out: `x \u003d y; if (x)`.",
+      "range": {
+        "startLine": 359,
+        "startChar": 8,
+        "endLine": 359,
+        "endChar": 96
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b56708c_f8a446d1",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 366,
+        "startChar": 12,
+        "endLine": 366,
+        "endChar": 97
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47c5b510_1c16a085",
@@ -131,6 +194,75 @@
         "startChar": 0,
         "endLine": 38,
         "endChar": 37
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "745c28b0_672028f4",
+        "filename": "src/libANGLE/renderer/gl/CompilerGL.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "nit: just pass in `ContextGL *` as the only argument and retrieve these as needed.",
+      "range": {
+        "startLine": 31,
+        "startChar": 15,
+        "endLine": 31,
+        "endChar": 85
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc8ff3cf_2e023da5",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "Why the change in format? If r32ui failed for some implementation reason, it would be good to have the test around (and skipped) so it can eventually be enabled and fixed.\n\nIf it\u0027s just a matter of simplifying code, never mind this comment!",
+      "range": {
+        "startLine": 1331,
+        "startChar": 22,
+        "endLine": 1331,
+        "endChar": 26
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cbca707_31b07436",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1928,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T14:40:50Z",
+      "side": 1,
+      "message": "The functions are unused, so they may get pruned early. How about adding a second output just so you can make calls to these in `main`?",
+      "range": {
+        "startLine": 1924,
+        "startChar": 0,
+        "endLine": 1928,
+        "endChar": 52
       },
       "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
