@@ -826,6 +826,26 @@ config("angle_backend_config") {
   }
 }
 
+if (is_android) {
+  config("labelLayer_config") {
+    include_dirs = [
+      "include",
+      "src",
+    ]
+    defines = []
+  }
+
+  angle_shared_library("liblabel_layer") {
+    output_name = "liblabel_layer"
+
+    libs = [ "log" ]
+
+    configs += [ ":labelLayer_config" ]
+
+    sources = [ "src/labelLayer/labelLayer.cpp" ]
+  }
+}
+
 config("libANGLE_config") {
   cflags = []
   defines = []
