@@ -118,6 +118,30 @@
       },
       "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "075973c4_f7d1e192",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T15:59:33Z",
+      "side": 1,
+      "message": "```\nTo skip this, below can be the another point. But I didn\u0027t tested it yet.\n3979     // Use finalLayout instead of extra barrier for layout change to present\n3980     if (colorImage !\u003d nullptr)\n3981     {\n3982         mRenderPassCommands-\u003esetImageOptimizeForPresent(colorImage);\n3983     }\n```\n\nUtilsVk also has this logic. I think it\u0027s best if you skip the layout change right when it happens, inside `RenderPassCommandBufferHelper::finalizeColorImageLayout`:\n\n```\n    if (mImageOptimizeForPresent \u003d\u003d image)\n    {\n        ASSERT(packedAttachmentIndex \u003d\u003d kAttachmentIndexZero);\n        // Use finalLayout instead of extra barrier for layout change to present\n        mImageOptimizeForPresent-\u003esetCurrentImageLayout(ImageLayout::Present);\n        // TODO(syoussefi):  We currently don\u0027t store the layout of the resolve attachments, so once\n        // multisampled backbuffers are optimized to use resolve attachments, this information needs\n        // to be stored somewhere.  http://anglebug.com/7150\n        SetBitField(mAttachmentOps[packedAttachmentIndex].finalLayout,\n                    mImageOptimizeForPresent-\u003egetCurrentImageLayout());\n        mImageOptimizeForPresent \u003d nullptr;\n    }\n```\n\nYou\u0027d need an ANGLE feature (if there isn\u0027t something similar already), like `queueSupportsPresentation`, and the above `if` would become `\u0026\u0026 context-\u003egetRenderer()-\u003egetFeatures().queueSupportsPresentation.enabled`.",
+      "parentUuid": "528383df_e77595df",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
