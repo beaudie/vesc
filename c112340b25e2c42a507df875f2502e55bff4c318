@@ -94,6 +94,30 @@
       },
       "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "528383df_e77595df",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-08-03T09:28:11Z",
+      "side": 1,
+      "message": "Thank you Sungyong Choi for your explanation.\n\nThe second approach looks more sensible to be as we would still take advantage of DepthStencil storeOp DONT_CARE and multisample image resolve optimizations.\n\nPlease, let me know if this works for you.",
+      "parentUuid": "639e27a7_a83124bb",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
