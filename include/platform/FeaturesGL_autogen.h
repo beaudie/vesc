@@ -461,6 +461,12 @@ struct FeaturesGL : FeatureSetBase
         "disableTextureClampToBorder", FeatureCategory::OpenGLWorkarounds,
         "Imagination devices generate INVALID_ENUM when setting the texture border color.",
         &members, "https://anglebug.com/7405"};
+
+    FeatureInfo emulateBgraRenderbuffersWithRgba = {
+        "emulateBgraRenderbuffersWithRgba", FeatureCategory::OpenGLWorkarounds,
+        "There is inconsistant support for BGRA renderbuffers in OpenGL ES drivers. Emulate these "
+        "formats with RGBA.",
+        &members, ""};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

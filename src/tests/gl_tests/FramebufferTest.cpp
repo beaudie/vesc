@@ -232,6 +232,14 @@ TEST_P(FramebufferFormatsTest, RGBA8)
     testTextureFormat(GL_RGBA8_OES, 8, 8, 8, 8);
 }
 
+// Test that BGRA8 can be used as a renderbuffer format
+TEST_P(FramebufferFormatsTest, RenderbufferMultisample_BGRA)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
+
+    testRenderbufferMultisampleFormat(2, GL_BGRA8_EXT, GL_COLOR_ATTACHMENT0);
+}
+
 TEST_P(FramebufferFormatsTest, RenderbufferMultisample_DEPTH16)
 {
     testRenderbufferMultisampleFormat(2, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT16);
@@ -372,6 +380,30 @@ TEST_P(FramebufferFormatsTest, RGB565Renderbuffer)
     GLRenderbuffer rbo;
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB565, 1, 1);
+
+    GLFramebuffer completeFBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, completeFBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rbo);
+
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    ASSERT_GL_NO_ERROR();
+
+    glClearColor(1, 0, 0, 0.5f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
+// Test that a renderbuffer with BGRA8 format works as expected. This test is intended for some
+// back-end having no support for native BGRA8 renderbuffer and thus having to emulate using RGBA
+// format.
+TEST_P(FramebufferFormatsTest, BGRA8Renderbuffer)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_BGRA8_EXT, 1, 1);
 
     GLFramebuffer completeFBO;
     glBindFramebuffer(GL_FRAMEBUFFER, completeFBO);
