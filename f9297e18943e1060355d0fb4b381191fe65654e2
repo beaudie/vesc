@@ -259,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9acc30_6c5859c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T03:02:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff47eb5f_ce94888b",
+      "range": {
+        "startLine": 746,
+        "startChar": 8,
+        "endLine": 746,
+        "endChar": 33
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a2002da_18cef678",
@@ -531,6 +555,30 @@
       "side": 1,
       "message": "18 tests (mostly ClearTest) are failing on Windows/Intel GPU after the stage masks were changed from using the graphics and compute bits combined into using them based on the pipeline type (in `ProgramExecutableVk`). Updated them so the graphics pipeline also uses the compute bit, but the compute pipeline only uses the compute bit.",
       "parentUuid": "a894554f_c4d716f2",
+      "range": {
+        "startLine": 1225,
+        "startChar": 0,
+        "endLine": 1226,
+        "endChar": 94
+      },
+      "revId": "f9297e18943e1060355d0fb4b381191fe65654e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ad09e00_840c20de",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T03:02:24Z",
+      "side": 1,
+      "message": "This is an oddity of GL program pipelines, which can include but graphics and compute stages. I thought you always have one really usable, but looking into it now I think I understand the complication.\n\nIn that case, let\u0027s keep it simple and go back to what you had; just put both graphics and compute for the push constant stages.\n\nIn `ContextVk::handleDirty*DriverUniforms`, you can also use the push constants for both stages if necessary; there won\u0027t be any confusion due to the separation of graphics and compute by the render pass boundaries.",
+      "parentUuid": "67a5a093_53a750ab",
       "range": {
         "startLine": 1225,
         "startChar": 0,
