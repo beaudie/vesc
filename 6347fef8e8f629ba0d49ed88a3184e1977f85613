@@ -80,6 +80,24 @@
       "message": "Would `setMutableRenderBuffer` work instead? You may not need the changes to ANGLETest.* and EGLWindow.* in that case.",
       "revId": "6347fef8e8f629ba0d49ed88a3184e1977f85613",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1a064a1_1ff33531",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-08-03T18:37:41Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "269ae66e_00af95dd",
+      "revId": "6347fef8e8f629ba0d49ed88a3184e1977f85613",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
