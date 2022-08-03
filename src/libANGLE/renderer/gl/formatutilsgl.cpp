@@ -489,7 +489,8 @@ static const gl::InternalFormat &EmulateLUMA(const gl::InternalFormat &internalF
 
 static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
                                       const angle::FeaturesGL &features,
-                                      const gl::InternalFormat &internalFormat)
+                                      const gl::InternalFormat &internalFormat,
+                                      bool renderbuffer)
 {
     GLenum result = internalFormat.internalFormat;
 
@@ -606,14 +607,20 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             {
                 // Best-effort attempt to provide as many bits as possible.
                 result = GL_DEPTH_COMPONENT24;
-                // Note: could also consider promoting GL_DEPTH_COMPONENT / GL_UNSIGNED_SHORT to a
-                // higher precision.
+                // Note: could also consider promoting GL_DEPTH_COMPONENT / GL_UNSIGNED_SHORT to
+                // a higher precision.
             }
             else
             {
                 result = internalFormat.sizedInternalFormat;
             }
         }
+    }
+
+    if (renderbuffer && features.emulateBgraRenderbuffersWithRgba.enabled &&
+        internalFormat.sizedInternalFormat == GL_BGRA8_EXT)
+    {
+        result = GL_RGBA8;
     }
 
     return result;
@@ -797,7 +804,7 @@ TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
 {
     TexImageFormat result;
     result.internalFormat = GetNativeInternalFormat(
-        functions, features, gl::GetInternalFormatInfo(internalFormat, type));
+        functions, features, gl::GetInternalFormatInfo(internalFormat, type), false);
     result.format = GetNativeFormat(functions, features, format, type);
     result.type   = GetNativeType(functions, features, format, type);
     return result;
@@ -839,7 +846,7 @@ CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL *functions,
 {
     CopyTexImageImageFormat result;
     result.internalFormat = GetNativeInternalFormat(
-        functions, features, gl::GetInternalFormatInfo(internalFormat, framebufferType));
+        functions, features, gl::GetInternalFormatInfo(internalFormat, framebufferType), false);
     return result;
 }
 
@@ -857,7 +864,8 @@ TexStorageFormat GetTexStorageFormat(const FunctionsGL *functions,
     }
     else
     {
-        result.internalFormat = GetNativeInternalFormat(functions, features, sizedFormatInfo);
+        result.internalFormat =
+            GetNativeInternalFormat(functions, features, sizedFormatInfo, false);
     }
 
     return result;
@@ -868,8 +876,8 @@ RenderbufferFormat GetRenderbufferFormat(const FunctionsGL *functions,
                                          GLenum internalFormat)
 {
     RenderbufferFormat result;
-    result.internalFormat = GetNativeInternalFormat(functions, features,
-                                                    gl::GetSizedInternalFormatInfo(internalFormat));
+    result.internalFormat = GetNativeInternalFormat(
+        functions, features, gl::GetSizedInternalFormatInfo(internalFormat), true);
     return result;
 }
 ReadPixelsFormat GetReadPixelsFormat(const FunctionsGL *functions,

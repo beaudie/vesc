@@ -1293,11 +1293,7 @@ TEST_P(BlitFramebufferANGLETest, BlitPartialDepthStencil)
 TEST_P(BlitFramebufferANGLETest, BlitMRT)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
-
-    if (!IsGLExtensionEnabled("GL_EXT_draw_buffers"))
-    {
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_draw_buffers"));
 
     GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT};
 
@@ -1346,12 +1342,8 @@ TEST_P(BlitFramebufferANGLETest, BlitMRT)
 TEST_P(BlitFramebufferANGLETest, MultisampledRGBAToRGBA)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
-
-    if (!checkExtension("GL_ANGLE_framebuffer_multisample"))
-        return;
-
-    if (!checkExtension("GL_OES_rgb8_rgba8"))
-        return;
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_multisample"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_rgb8_rgba8"));
 
     multisampleTestHelper(mRGBAMultisampledFBO, mRGBAFBO);
 }
@@ -1359,15 +1351,9 @@ TEST_P(BlitFramebufferANGLETest, MultisampledRGBAToRGBA)
 TEST_P(BlitFramebufferANGLETest, MultisampledRGBAToBGRA)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
-
-    if (!checkExtension("GL_ANGLE_framebuffer_multisample"))
-        return;
-
-    if (!checkExtension("GL_OES_rgb8_rgba8"))
-        return;
-
-    if (!checkExtension("GL_EXT_texture_format_BGRA8888"))
-        return;
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_multisample"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_rgb8_rgba8"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
 
     multisampleTestHelper(mRGBAMultisampledFBO, mBGRAFBO);
 }
@@ -1375,15 +1361,9 @@ TEST_P(BlitFramebufferANGLETest, MultisampledRGBAToBGRA)
 TEST_P(BlitFramebufferANGLETest, MultisampledBGRAToRGBA)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
-
-    if (!checkExtension("GL_ANGLE_framebuffer_multisample"))
-        return;
-
-    if (!checkExtension("GL_OES_rgb8_rgba8"))
-        return;
-
-    if (!checkExtension("GL_EXT_texture_format_BGRA8888"))
-        return;
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_multisample"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_rgb8_rgba8"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
 
     multisampleTestHelper(mBGRAMultisampledFBO, mRGBAFBO);
 }
@@ -1391,15 +1371,9 @@ TEST_P(BlitFramebufferANGLETest, MultisampledBGRAToRGBA)
 TEST_P(BlitFramebufferANGLETest, MultisampledBGRAToBGRA)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_blit"));
-
-    if (!checkExtension("GL_ANGLE_framebuffer_multisample"))
-        return;
-
-    if (!checkExtension("GL_OES_rgb8_rgba8"))
-        return;
-
-    if (!checkExtension("GL_EXT_texture_format_BGRA8888"))
-        return;
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_framebuffer_multisample"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_rgb8_rgba8"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"));
 
     multisampleTestHelper(mBGRAMultisampledFBO, mBGRAFBO);
 }

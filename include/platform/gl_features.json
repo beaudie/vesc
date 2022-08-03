@@ -659,6 +659,14 @@
                 "GL context supports ARB_fragment_shader_interlock extension"
             ],
             "issue": "http://anglebug.com/7279"
+        },
+        {
+            "name": "emulate_bgra_renderbuffers_with_rgba",
+            "category": "Workarounds",
+            "description": [
+                "There is inconsistant support for BGRA renderbuffers in OpenGL ES drivers. Emulate these formats with RGBA."
+            ],
+            "issue": "b/240075426"
         }
     ]
 }
