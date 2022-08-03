@@ -489,7 +489,8 @@ static const gl::InternalFormat &EmulateLUMA(const gl::InternalFormat &internalF
 
 static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
                                       const angle::FeaturesGL &features,
-                                      const gl::InternalFormat &internalFormat)
+                                      const gl::InternalFormat &internalFormat,
+                                      bool renderbuffer)
 {
     GLenum result = internalFormat.internalFormat;
 
@@ -546,76 +547,85 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             result = GL_RGB10_A2;
         }
     }
-    else if (functions->isAtLeastGLES(gl::Version(3, 0)))
+    else
     {
-        if (internalFormat.componentType == GL_FLOAT)
+        if (functions->isAtLeastGLES(gl::Version(3, 0)))
         {
-            if (!internalFormat.isLUMA())
+            if (internalFormat.componentType == GL_FLOAT)
             {
-                // Use sized internal formats for floating point textures.  Extensions such as
-                // EXT_color_buffer_float require the sized formats to be renderable.
-                result = internalFormat.sizedInternalFormat;
-            }
-            else if ((internalFormat.type == GL_FLOAT &&
-                      !functions->hasGLESExtension("GL_OES_texture_float")) ||
-                     (internalFormat.type == GL_HALF_FLOAT_OES &&
-                      !functions->hasGLESExtension("GL_OES_texture_half_float")))
-            {
-                // The legacy luminance/alpha formats from OES_texture_float are emulated with R/RG
-                // textures.
-                if (IsLUMAFormat(internalFormat.format))
+                if (!internalFormat.isLUMA())
                 {
-                    result = EmulateLUMA(internalFormat).sizedInternalFormat;
+                    // Use sized internal formats for floating point textures.  Extensions such as
+                    // EXT_color_buffer_float require the sized formats to be renderable.
+                    result = internalFormat.sizedInternalFormat;
+                }
+                else if ((internalFormat.type == GL_FLOAT &&
+                          !functions->hasGLESExtension("GL_OES_texture_float")) ||
+                         (internalFormat.type == GL_HALF_FLOAT_OES &&
+                          !functions->hasGLESExtension("GL_OES_texture_half_float")))
+                {
+                    // The legacy luminance/alpha formats from OES_texture_float are emulated with
+                    // R/RG textures.
+                    if (IsLUMAFormat(internalFormat.format))
+                    {
+                        result = EmulateLUMA(internalFormat).sizedInternalFormat;
+                    }
                 }
             }
-        }
-        else if (internalFormat.format == GL_RED_EXT || internalFormat.format == GL_RG_EXT)
-        {
-            // Workaround Adreno driver not supporting unsized EXT_texture_rg formats
-            result = internalFormat.sizedInternalFormat;
-        }
-        else if (internalFormat.colorEncoding == GL_SRGB)
-        {
-            if (features.unsizedSRGBReadPixelsDoesntTransform.enabled)
+            else if (internalFormat.format == GL_RED_EXT || internalFormat.format == GL_RG_EXT)
             {
-                // Work around some Adreno driver bugs that don't read back SRGB data correctly when
-                // it's in unsized SRGB texture formats.
+                // Workaround Adreno driver not supporting unsized EXT_texture_rg formats
                 result = internalFormat.sizedInternalFormat;
             }
-            else if (!functions->hasGLESExtension("GL_EXT_sRGB"))
+            else if (internalFormat.colorEncoding == GL_SRGB)
             {
-                // Unsized sRGB internal formats are unlikely to be supported by the
-                // driver. Transform them to sized internal formats.
-                if (internalFormat.internalFormat == GL_SRGB ||
-                    internalFormat.internalFormat == GL_SRGB_ALPHA_EXT)
+                if (features.unsizedSRGBReadPixelsDoesntTransform.enabled)
+                {
+                    // Work around some Adreno driver bugs that don't read back SRGB data correctly
+                    // when it's in unsized SRGB texture formats.
+                    result = internalFormat.sizedInternalFormat;
+                }
+                else if (!functions->hasGLESExtension("GL_EXT_sRGB"))
+                {
+                    // Unsized sRGB internal formats are unlikely to be supported by the
+                    // driver. Transform them to sized internal formats.
+                    if (internalFormat.internalFormat == GL_SRGB ||
+                        internalFormat.internalFormat == GL_SRGB_ALPHA_EXT)
+                    {
+                        result = internalFormat.sizedInternalFormat;
+                    }
+                }
+            }
+            else if ((internalFormat.internalFormat == GL_DEPTH_COMPONENT ||
+                      internalFormat.internalFormat == GL_DEPTH_STENCIL) &&
+                     !functions->hasGLESExtension("GL_OES_depth_texture"))
+            {
+                // Use ES 3.0 sized internal formats for depth/stencil textures when the driver
+                // doesn't advertise GL_OES_depth_texture, since it's likely the driver will reject
+                // unsized internal formats.
+                if (internalFormat.internalFormat == GL_DEPTH_COMPONENT &&
+                    internalFormat.type == GL_UNSIGNED_INT &&
+                    !functions->hasGLESExtension("GL_OES_depth32"))
+                {
+                    // Best-effort attempt to provide as many bits as possible.
+                    result = GL_DEPTH_COMPONENT24;
+                    // Note: could also consider promoting GL_DEPTH_COMPONENT / GL_UNSIGNED_SHORT to
+                    // a higher precision.
+                }
+                else
                 {
                     result = internalFormat.sizedInternalFormat;
                 }
             }
         }
-        else if ((internalFormat.internalFormat == GL_DEPTH_COMPONENT ||
-                  internalFormat.internalFormat == GL_DEPTH_STENCIL) &&
-                 !functions->hasGLESExtension("GL_OES_depth_texture"))
+
+        // EXT_texture_format_BGRA8888 adds the unsized BGRA_EXT as a renderbuffer format instead of
+        // the sized version added in EXT_texture_storage.
+        if (renderbuffer && internalFormat.sizedInternalFormat == GL_BGRA8_EXT)
         {
-            // Use ES 3.0 sized internal formats for depth/stencil textures when the driver doesn't
-            // advertise GL_OES_depth_texture, since it's likely the driver will reject unsized
-            // internal formats.
-            if (internalFormat.internalFormat == GL_DEPTH_COMPONENT &&
-                internalFormat.type == GL_UNSIGNED_INT &&
-                !functions->hasGLESExtension("GL_OES_depth32"))
-            {
-                // Best-effort attempt to provide as many bits as possible.
-                result = GL_DEPTH_COMPONENT24;
-                // Note: could also consider promoting GL_DEPTH_COMPONENT / GL_UNSIGNED_SHORT to a
-                // higher precision.
-            }
-            else
-            {
-                result = internalFormat.sizedInternalFormat;
-            }
+            result = GL_BGRA_EXT;
         }
     }
-
     return result;
 }
 
@@ -797,7 +807,7 @@ TexImageFormat GetTexImageFormat(const FunctionsGL *functions,
 {
     TexImageFormat result;
     result.internalFormat = GetNativeInternalFormat(
-        functions, features, gl::GetInternalFormatInfo(internalFormat, type));
+        functions, features, gl::GetInternalFormatInfo(internalFormat, type), false);
     result.format = GetNativeFormat(functions, features, format, type);
     result.type   = GetNativeType(functions, features, format, type);
     return result;
@@ -839,7 +849,7 @@ CopyTexImageImageFormat GetCopyTexImageImageFormat(const FunctionsGL *functions,
 {
     CopyTexImageImageFormat result;
     result.internalFormat = GetNativeInternalFormat(
-        functions, features, gl::GetInternalFormatInfo(internalFormat, framebufferType));
+        functions, features, gl::GetInternalFormatInfo(internalFormat, framebufferType), false);
     return result;
 }
 
@@ -857,7 +867,8 @@ TexStorageFormat GetTexStorageFormat(const FunctionsGL *functions,
     }
     else
     {
-        result.internalFormat = GetNativeInternalFormat(functions, features, sizedFormatInfo);
+        result.internalFormat =
+            GetNativeInternalFormat(functions, features, sizedFormatInfo, false);
     }
 
     return result;
@@ -868,8 +879,8 @@ RenderbufferFormat GetRenderbufferFormat(const FunctionsGL *functions,
                                          GLenum internalFormat)
 {
     RenderbufferFormat result;
-    result.internalFormat = GetNativeInternalFormat(functions, features,
-                                                    gl::GetSizedInternalFormatInfo(internalFormat));
+    result.internalFormat = GetNativeInternalFormat(
+        functions, features, gl::GetSizedInternalFormatInfo(internalFormat), true);
     return result;
 }
 ReadPixelsFormat GetReadPixelsFormat(const FunctionsGL *functions,
