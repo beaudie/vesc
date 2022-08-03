@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eed9b950_79a17894",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-03T14:53:00Z",
+      "side": 1,
+      "message": "can you annotate here some info about what metrics this somewhat complex change improves? I believe Shabi had some data on this but I didn\u0027t see it here or in the linked issue.",
+      "revId": "e0a92fb645db91dc756035e2b17abfdb72a3236d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c0c3e91_c0c9dcfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-03T14:53:00Z",
+      "side": 1,
+      "message": "Quickly looked it over and didn\u0027t see anything, defer the detailed review to Shabi.",
+      "revId": "e0a92fb645db91dc756035e2b17abfdb72a3236d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
