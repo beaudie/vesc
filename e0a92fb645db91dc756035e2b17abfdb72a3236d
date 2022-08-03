@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b78b1463_b0ecf11d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T16:56:47Z",
+      "side": 1,
+      "message": "For sure, no optimization change would land before its impact is measured.",
+      "parentUuid": "23750380_85ea04df",
+      "revId": "e0a92fb645db91dc756035e2b17abfdb72a3236d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9c0c3e91_c0c9dcfd",
