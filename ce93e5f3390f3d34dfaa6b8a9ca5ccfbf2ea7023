@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e9bc6bc_06532ab4",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T22:20:33Z",
+      "side": 1,
+      "message": "Done -- made it applicable for the new code",
+      "parentUuid": "7311bc28_53ee3167",
+      "range": {
+        "startLine": 311,
+        "startChar": 1,
+        "endLine": 313,
+        "endChar": 19
+      },
+      "revId": "ce93e5f3390f3d34dfaa6b8a9ca5ccfbf2ea7023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cfc16b7c_75c0f13f",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-08-03T15:01:16Z",
       "side": 1,
       "message": "This seems suspicious, why do all the `lowp`s need to be changed to `mediump`?",
+      "range": {
+        "startLine": 755,
+        "startChar": 33,
+        "endLine": 755,
+        "endChar": 40
+      },
+      "revId": "ce93e5f3390f3d34dfaa6b8a9ca5ccfbf2ea7023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49da17a1_b6dbcf72",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-03T22:20:33Z",
+      "side": 1,
+      "message": "I panicked when I saw packUnorm4x8 takes a mediump vec4. But, I just double-checked the spec and verified that lowp does have enough precision to represent these formats, so I moved it back.",
+      "parentUuid": "cfc16b7c_75c0f13f",
       "range": {
         "startLine": 755,
         "startChar": 33,
