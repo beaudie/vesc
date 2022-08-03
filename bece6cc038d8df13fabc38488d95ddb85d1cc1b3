@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be402af_47113360",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1250067
+      },
+      "writtenOn": "2022-08-03T16:26:29Z",
+      "side": 1,
+      "message": "I know this cl is just for my benefit but btw, this path needs to be starting from some kind of root like // or something. otherwise the path will be relative to where each angle_test target is defined",
+      "revId": "bece6cc038d8df13fabc38488d95ddb85d1cc1b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
