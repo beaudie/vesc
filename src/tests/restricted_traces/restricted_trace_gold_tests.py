@@ -36,8 +36,6 @@ from skia_gold import angle_skia_gold_session_manager
 
 angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
-import test_env
-import xvfb
 
 
 ANGLE_PERFTESTS = 'angle_perftests'
@@ -116,24 +114,14 @@ def add_skia_gold_args(parser):
         'pre-authenticated. Meant for testing locally instead of on the bots.')
 
 
-def run_wrapper(test_suite, cmd_args, args, env, stdoutfile):
-    if android_helper.IsAndroid():
-        return android_helper.RunTests(test_suite, cmd_args, stdoutfile)[0]
-
-    cmd = [angle_test_util.ExecutablePathInCurrentDir(test_suite)] + cmd_args
-
-    if args.xvfb:
-        return xvfb.run_executable(cmd, env, stdoutfile=stdoutfile)
-    else:
-        return test_env.run_command_with_output(cmd, env=env, stdoutfile=stdoutfile)
-
-
 def run_angle_system_info_test(sysinfo_args, args, env):
     with temporary_dir() as temp_dir:
         tempfile_path = os.path.join(temp_dir, 'stdout')
         sysinfo_args += ['--render-test-output-dir=' + temp_dir]
 
-        if run_wrapper('angle_system_info_test', sysinfo_args, args, env, tempfile_path):
+        result, _ = angle_test_util.RunTestSuite(
+            'angle_system_info_test', sysinfo_args, env, use_xvfb=args.xvfb)
+        if result != 0:
             raise Exception('Error getting system info.')
 
         with open(os.path.join(temp_dir, 'angle_system_info.json')) as f:
@@ -349,11 +337,9 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                         '--render-test-output-dir=%s' % screenshot_dir,
                         '--save-screenshots',
                     ] + extra_flags
-                    batch_result = PASS if run_wrapper(args.test_suite, cmd_args, args, env,
-                                                       tempfile_path) == 0 else FAIL
-
-                    with open(tempfile_path) as f:
-                        test_output = f.read() + '\n'
+                    result, test_output = angle_test_util.RunTestSuite(
+                        args.test_suite, cmd_args, env, use_xvfb=args.xvfb)
+                    batch_result = PASS if result == 0 else FAIL
 
                     next_batch = []
                     for trace in batch:
@@ -362,7 +348,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                         if batch_result == PASS:
                             test_prefix = SWIFTSHADER_TEST_PREFIX if args.swiftshader else DEFAULT_TEST_PREFIX
                             trace_skipped_notice = '[  SKIPPED ] ' + test_prefix + trace + '\n'
-                            if trace_skipped_notice in test_output:
+                            if trace_skipped_notice in (test_output + '\n'):
                                 result = SKIP
                             else:
                                 logging.debug('upload test result: %s' % trace)
