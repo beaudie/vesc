@@ -476,6 +476,12 @@ struct FeaturesGL : FeatureSetBase
         "supportsFragmentShaderInterlockARB", FeatureCategory::OpenGLFeatures,
         "GL context supports ARB_fragment_shader_interlock extension", &members,
         "http://anglebug.com/7279"};
+
+    FeatureInfo emulateBgraRenderbuffersWithRgba = {
+        "emulateBgraRenderbuffersWithRgba", FeatureCategory::OpenGLWorkarounds,
+        "There is inconsistant support for BGRA renderbuffers in OpenGL ES drivers. Emulate these "
+        "formats with RGBA.",
+        &members, "b/240075426"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

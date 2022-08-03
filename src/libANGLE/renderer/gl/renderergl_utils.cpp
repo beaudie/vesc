@@ -2267,6 +2267,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderInterlockARB,
                             functions->isAtLeastGL(gl::Version(4, 5)) &&
                                 functions->hasGLExtension("GL_ARB_fragment_shader_interlock"));
+
+    // b/240075426
+    ANGLE_FEATURE_CONDITION(features, emulateBgraRenderbuffersWithRgba, true);
+    //                           functions->standard == STANDARD_GL_ES);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
