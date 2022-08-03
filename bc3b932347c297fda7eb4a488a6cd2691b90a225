@@ -22,6 +22,23 @@
       },
       "revId": "bc3b932347c297fda7eb4a488a6cd2691b90a225",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01f2981b_1b9deca8",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T15:27:27Z",
+      "side": 1,
+      "message": "nit: Can you merge this into this CL while you\u0027re at it? https://chromium-review.googlesource.com/c/angle/angle/+/2983560\n\nAlso, as Charlie said would be good to put EXTERNAL after D/S at least. Currently D/S formats take 3 bits, which this change pushes to 4. We don\u0027t actually need that packing anymore though, so it\u0027s not a big deal, but I might one day revert https://chromium-review.googlesource.com/c/angle/angle/+/2966218 if we can get rid of some emulation paths",
+      "revId": "bc3b932347c297fda7eb4a488a6cd2691b90a225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
