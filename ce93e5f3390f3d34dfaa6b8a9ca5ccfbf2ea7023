@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9087208_604fb8a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T15:01:16Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "ce93e5f3390f3d34dfaa6b8a9ca5ccfbf2ea7023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7311bc28_53ee3167",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T15:01:16Z",
+      "side": 1,
+      "message": "Comment no longer applies",
+      "range": {
+        "startLine": 311,
+        "startChar": 1,
+        "endLine": 313,
+        "endChar": 19
+      },
+      "revId": "ce93e5f3390f3d34dfaa6b8a9ca5ccfbf2ea7023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfc16b7c_75c0f13f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-03T15:01:16Z",
+      "side": 1,
+      "message": "This seems suspicious, why do all the `lowp`s need to be changed to `mediump`?",
+      "range": {
+        "startLine": 755,
+        "startChar": 33,
+        "endLine": 755,
+        "endChar": 40
+      },
+      "revId": "ce93e5f3390f3d34dfaa6b8a9ca5ccfbf2ea7023",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
