@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1dea8b7_24009f61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2022-08-03T16:21:36Z",
+      "side": 1,
+      "message": "That\u0027s probably the simplest solution. The Chromium tests have the option of setting a grace period that automatically expires, within which failures are ignored, specifically to address cases like this. They\u0027re added to the test definitions like this https://source.chromium.org/chromium/chromium/src/+/main:content/test/gpu/gpu_tests/pixel_test_pages.py;l\u003d515 and used here https://source.chromium.org/chromium/chromium/src/+/main:content/test/gpu/gpu_tests/skia_gold_integration_test_base.py;l\u003d345 and here https://source.chromium.org/chromium/chromium/src/+/main:content/test/gpu/gpu_tests/skia_gold_integration_test_base.py;l\u003d450\n\nAdding something like that for ANGLE is the better solution, but if you need to get this in ASAP, forcing it in will work as long as you follow up quickly.",
+      "parentUuid": "ea84da83_4e01c436",
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "206bcec2_ed060796",
