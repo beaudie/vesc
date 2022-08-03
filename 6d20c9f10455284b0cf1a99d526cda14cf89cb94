@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb15ece_540b6144",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-03T17:16:08Z",
+      "side": 1,
+      "message": "nit: would call these gl46_test_expectations to match master",
+      "range": {
+        "startLine": 100,
+        "startChar": 5,
+        "endLine": 100,
+        "endChar": 30
+      },
+      "revId": "6d20c9f10455284b0cf1a99d526cda14cf89cb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
