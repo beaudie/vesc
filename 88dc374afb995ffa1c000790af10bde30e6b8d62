@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac2c416_e5dcf229",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-04T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d0e097f_1fa8b34b",
+      "range": {
+        "startLine": 476,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 56
+      },
+      "revId": "88dc374afb995ffa1c000790af10bde30e6b8d62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a37cdfd_ac969fe8",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-04T20:47:59Z",
       "side": 1,
       "message": "can you assign these to \u003d {}? That should zero-init them.",
+      "range": {
+        "startLine": 812,
+        "startChar": 0,
+        "endLine": 813,
+        "endChar": 56
+      },
+      "revId": "88dc374afb995ffa1c000790af10bde30e6b8d62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbd54468_620c10e6",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-04T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a37cdfd_ac969fe8",
       "range": {
         "startLine": 812,
         "startChar": 0,
