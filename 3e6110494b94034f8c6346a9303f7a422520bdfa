@@ -297,6 +297,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "366c074f_82b2230b",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-04T01:47:02Z",
+      "side": 1,
+      "message": "Not a big deal, but FWIW, you could also put the implementation outside the class but inside the header (see `RenderbufferImpl::getMemorySize` for a random example)",
+      "parentUuid": "01d2b4fe_63470a85",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "745c28b0_672028f4",
         "filename": "src/libANGLE/renderer/gl/CompilerGL.h",
         "patchSetId": 36
@@ -379,6 +403,30 @@
       "side": 1,
       "message": "It wasn\u0027t failing. The new \"Coherency\" test just needs an integer format, and this one could be converted to float, so I thought it would be nice to have tests for ordering in both integer and floating point formats.",
       "parentUuid": "bc8ff3cf_2e023da5",
+      "range": {
+        "startLine": 1331,
+        "startChar": 22,
+        "endLine": 1331,
+        "endChar": 26
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7294985_b1f51a1f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 36
+      },
+      "lineNbr": 1331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-04T01:47:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f2865ad3_3d59f939",
       "range": {
         "startLine": 1331,
         "startChar": 22,
