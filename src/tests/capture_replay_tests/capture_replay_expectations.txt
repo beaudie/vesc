@@ -162,3 +162,14 @@
 7483 : MultisampleTestES3.ResolveToFBO/* = SKIP_FOR_CAPTURE
 
 6723 : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP_FOR_CAPTURE
+
+# No support yet for Capture/Replay of External Textures using other attribs
+7570 : ImageTest.MipLevels/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.Source2DTarget2D_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.Source2DTargetExternal_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.SourceCubeTarget2D_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.SourceCubeTargetExternal_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.SourceRenderbufferTargetTexture_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.SourceRenderbufferTargetTextureExternal_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.ValidationGLEGLImage_Colorspace/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
+7570 : ImageTest.ValidationImageBase/ES2_Vulkan_SwiftShader* = SKIP_FOR_CAPTURE
