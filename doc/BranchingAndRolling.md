@@ -19,7 +19,7 @@ the Chromium roll into ANGLE. All of the ANGLE-related autorollers are
 documented in the [ANGLE Wrangling
 documentation](../infra/ANGLEWrangling.md#the-auto-rollers).
 
-## Manually rolling DEPS
+## Manually rolling Chromium's DEPS on ANGLE
 
 Chromium's dependency on third-party projects is tracked in [the Chromium
 repository's src/DEPS file](http://src.chromium.org/viewvc/chrome/trunk/src/DEPS). To update the ANGLE
@@ -41,6 +41,34 @@ page. Alternatively, you can navigate to
 `https://chromium.googlesource.com/angle/angle/+/<branch name>/` --
 including the terminating forward slash. (e.g.
 `https://chromium.googlesource.com/angle/angle/+/main/`)
+
+## Manually rolling ANGLE's DEPS on Vulkan Memory Allocator (VMA)
+
+ANGLE and other Google projects (e.g. Skia, Chrome) use the open-source [Vulkan Memory Allocator][vma-upstream] (VMA)
+library.  These projects do not directly use the [upstream Vulkan Memory Allocator][vma-upstream] repository.
+Instead, a [Chromium-local repository][vma-chrome] is used, which contains Google-local changes and fixes (e.g. changes
+to `BUILD.gn`).  ANGLE's `DEPS` file points to a git SHA-1 revision within the Chromium-local repository.
+
+The [Chromium-local repository][vma-chrome] repository contains the following key branches:
+
+- `main` is manually curated by Google, with a combination of upstream and Google-local changes
+- `upstream/master` is automatically mirrored with the contents of the [upstream VMA][vma-upstream] repository
+
+Manual rolls of the `main` branch may require coordination with other Google projects.
+
+Manual rolls of which SHA-1 revision ANGLE's `DEPS` file points to is done by:
+
+- Navigate to the `external/angle` directory
+- Check out the `main` branch
+- Use `git log` to select the desired Git revision
+- Edit the ANGLE `DEPS` file to have the desired revision
+- create, upload, and land a CL with this change
+
+[vma-upstream]: https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+[vma-chrome]: https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+
+Note: When ANGLE is AutoRolled to the Android AOSP source tree, Google-local
+changes to the VMA `BUILD.gn` file will be converted to the ANGLE `Android.bp` file.
 
 ## Branching ANGLE
 
