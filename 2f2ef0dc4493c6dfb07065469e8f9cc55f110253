@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f45bbc2f_d074a836",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-04T02:05:09Z",
+      "side": 1,
+      "message": "LGTM. Let us know when you have some before/after comparisons.",
+      "revId": "2f2ef0dc4493c6dfb07065469e8f9cc55f110253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90a88316_30742dba",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-04T02:05:09Z",
+      "side": 1,
+      "message": "nit: In practice we ended up always doing this:\n\n```\n(VK_SHADER_STAGE_ALL_GRAPHICS \u0026\n         getRenderer()-\u003egetSupportedVulkanGraphicsShaderStageMask()) |\n        VK_SHADER_STAGE_COMPUTE_BIT;\n```\n\nSo we might as well produce that here, such that `getSupportedVulkanShaderStageMask()` (no `Graphics`) would just return all valid graphics stages + compute already. Then you can pass that directly to push constant stages.",
+      "revId": "2f2ef0dc4493c6dfb07065469e8f9cc55f110253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
