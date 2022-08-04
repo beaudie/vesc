@@ -343,6 +343,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b82b7474_3fac7d8d",
+        "filename": "src/libANGLE/renderer/CompilerImpl.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-04T14:00:42Z",
+      "side": 1,
+      "message": "(marking resolved)",
+      "parentUuid": "d4e037d0_9611cdeb",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "3e6110494b94034f8c6346a9303f7a422520bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "745c28b0_672028f4",
