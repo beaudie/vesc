@@ -32,6 +32,7 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/capture/capture_egl.h"
 #include "libANGLE/capture/capture_gles_1_0_autogen.h"
 #include "libANGLE/capture/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_0_autogen.h"
@@ -43,6 +44,7 @@
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
+#include "libANGLE/validationEGL.h"
 #include "third_party/ceval/ceval.h"
 
 #define USE_SYSTEM_ZLIB
@@ -2887,6 +2889,17 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
         return;
     }
 
+    if (index.getType() == gl::TextureType::External)
+    {
+        Capture(setupCalls,
+                CaptureTexImage2D(*replayState, true, gl::TextureTarget::_2D, index.getLevelIndex(),
+                                  format.internalFormat, desc.size.width, desc.size.height, 0,
+                                  format.format, format.type, data));
+
+        // For external textures, we're done
+        return;
+    }
+
     bool is3D =
         (index.getType() == gl::TextureType::_3D || index.getType() == gl::TextureType::_2DArray ||
          index.getType() == gl::TextureType::CubeMapArray);
@@ -3272,7 +3285,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                                         ResourceTracker *resourceTracker,
                                         gl::State &replayState)
 {
-
+    INFO() << "FAYE Debug CaptureShareGroupMidExecutionSetup";
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
     const gl::State &apiState              = context->getState();
 
@@ -3394,8 +3407,12 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
 
     for (const auto &textureIter : textures)
     {
+        INFO() << "FAYE Debug textures > 0";
         gl::TextureID id     = {textureIter.first};
         gl::Texture *texture = textureIter.second;
+
+        // create a staging GL_TEXTURE_2D texture to create the eglImage with
+        gl::TextureID dummyId = {static_cast<GLuint>(32)};
 
         if (id.value == 0)
         {
@@ -3552,6 +3569,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
             }
         }
 
+        INFO() << "FAYE about to iterate thru the levels and layers of texture";
+
         // Iterate texture levels and layers.
         gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
             texture->getType(), 0, texture->getMipmapMaxLevel() + 1, gl::ImageIndex::kEntireLevel,
@@ -3559,6 +3578,11 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
         while (imageIter.hasNext())
         {
             gl::ImageIndex index = imageIter.next();
+            INFO();
+            INFO() << "FAYE : index.getType() = " << index.getType();
+            INFO() << "FAYE : index.getLevelIndex() = " << index.getLevelIndex();
+            INFO() << "FAYE : index.getLayerIndex() = " << index.getLayerIndex();
+            INFO() << "FAYE : index.getLayerCount() = " << index.getLayerCount();
 
             const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
 
@@ -3574,7 +3598,8 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                                   index.getType() == gl::TextureType::_2DArray ||
                                   index.getType() == gl::TextureType::Buffer ||
                                   index.getType() == gl::TextureType::CubeMap ||
-                                  index.getType() == gl::TextureType::CubeMapArray);
+                                  index.getType() == gl::TextureType::CubeMapArray ||
+                                  index.getType() == gl::TextureType::External);
 
             // Check for supported textures
             if (!supportedType)
@@ -3591,6 +3616,72 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                 {
                     CaptureTextureContents(calls, &replayState, texture, index, desc, 0, 0);
                 }
+                continue;
+            }
+
+            if (texture->getType() == gl::TextureType::External)
+            {
+                std::vector<CallCapture> *stagingTextureCall = texGenCalls[0];
+                Capture(stagingTextureCall, CaptureGenTextures(replayState, true, 1, &dummyId));
+                MaybeCaptureUpdateResourceIDs(context, resourceTracker, stagingTextureCall);
+                Capture(stagingTextureCall,
+                        CaptureBindTexture(replayState, true, gl::TextureType::_2D, dummyId));
+                Capture(stagingTextureCall,
+                        CaptureTexParameteri(replayState, true, gl::TextureType::_2D, 10241, 9728));
+                Capture(stagingTextureCall,
+                        CaptureTexParameteri(replayState, true, gl::TextureType::_2D, 10240, 9728));
+
+                angle::MemoryBuffer data;
+
+                const gl::Extents extents(desc.size.width, desc.size.height, desc.size.depth);
+
+                gl::PixelPackState packState;
+                packState.alignment = 1;
+
+                GLenum getFormat = format.format;
+                GLenum getType   = format.type;
+
+                const gl::PixelUnpackState &unpack = apiState.getUnpackState();
+
+                GLuint endByte = 0;
+                bool unpackSize =
+                    format.computePackUnpackEndByte(getType, extents, unpack, true, &endByte);
+                ASSERT(unpackSize);
+
+                bool result = data.resize(endByte);
+                ASSERT(result);
+
+                (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                           index.getLevelIndex(), getFormat, getType, data.data());
+
+                INFO() << "FAYE Debug FrameCapture.cpp: texture->getTexImage(): getFormat: "
+                       << getFormat << " getType: " << getType << " texture: " << texture;
+
+                for (std::vector<CallCapture> *calls : texSetupCalls)
+                {
+                    CaptureTextureContents(calls, &replayState, texture, index, desc,
+                                           static_cast<GLuint>(data.size()), data.data());
+                }
+
+                constexpr EGLint attribs[] = {
+                    EGL_IMAGE_PRESERVED,
+                    EGL_TRUE,
+                    EGL_NONE,
+                };
+                const egl::AttributeMap &attrib_listPacked =
+                    egl::PackParam<const egl::AttributeMap &>(attribs);
+                attrib_listPacked.initializeWithoutValidation();
+
+                // Create the image on demand
+                egl::Image *image = nullptr;
+                Capture(setupCalls,
+                        CaptureEGLCreateImage(context, EGL_GL_TEXTURE_2D_KHR,
+                                              reinterpret_cast<EGLClientBuffer>(dummyId.value),
+                                              attrib_listPacked, image));
+
+                // Then create the texture
+                Capture(setupCalls, CaptureEGLImageTargetTexture2DOES(replayState, true,
+                                                                      gl::TextureType::_2D, image));
                 continue;
             }
 
@@ -3636,6 +3727,9 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
                     (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
                                                index.getLevelIndex(), getFormat, getType,
                                                data.data());
+
+                    INFO() << "FAYE Debug FrameCapture.cpp: texture->getTexImage(): getFormat: "
+                           << getFormat << " getType: " << getType << " texture: " << texture;
                 }
 
                 for (std::vector<CallCapture> *calls : texSetupCalls)
@@ -5156,6 +5250,8 @@ FrameCaptureShared::FrameCaptureShared()
         }
     }
 
+    INFO() << "FAYE debug FrameCaptureShared constructor mFrameIndex: " << this << " "
+           << mFrameIndex;
     if (mFrameIndex == mCaptureStartFrame)
     {
         // Capture is starting from the first frame, so set the capture active to ensure all GLES
@@ -6931,8 +7027,10 @@ void FrameCaptureShared::checkForCaptureTrigger()
     // avoid polling if the feature is not enabled, but not entirely intuitive to set
     // a value to zero when you want to trigger it.
     uint32_t captureTrigger = atoi(captureTriggerStr.c_str());
+    //    INFO() << "FAYE: checkForCaptureTrigger() called and changed to: " << captureTrigger;
     if (captureTrigger != mCaptureTrigger)
     {
+        //        INFO() << "FAYE: mCaptureTrigger = " << mCaptureTrigger;
         // Start mid-execution capture for the current frame
         mCaptureStartFrame = mFrameIndex + 1;
 
@@ -6960,6 +7058,7 @@ void FrameCaptureShared::scanSetupCalls(const gl::Context *context,
 
 void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
 {
+    INFO() << "FAYE: runMidExecutionCapture() called";
     mMidExecutionCaptureActive = true;
 
     // Make sure all pending work for every Context in the share group has completed so all data
@@ -7053,8 +7152,12 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
     checkForCaptureTrigger();
 
     // Check for MEC. Done after checkForCaptureTrigger(), since that can modify mCaptureStartFrame.
+    INFO() << "FAYE mFrameIndex: " << this << " " << mFrameIndex
+           << " mCaptureStartFrame: " << mCaptureStartFrame;
     if (mFrameIndex < mCaptureStartFrame)
     {
+        // keep incrementing frameIndex until u hit the one right before mCaptureStartFrame
+        // then run midExecutionCapture(context)
         if (mFrameIndex == mCaptureStartFrame - 1)
         {
             runMidExecutionCapture(context);
@@ -7101,6 +7204,9 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         SaveBinaryData(mCompression, mOutDirectory, kSharedContextId, mCaptureLabel, mBinaryData);
         mBinaryData.clear();
         mWroteIndexFile = true;
+
+        // Reset and prepare for another capture.
+        mCaptureTrigger = 100;
     }
 
     reset();
