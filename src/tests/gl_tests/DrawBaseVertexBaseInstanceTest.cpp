@@ -477,9 +477,9 @@ void main()
     std::array<GLfloat, kCountX> mInstancedArrayColorId;
     // Used for regular draw calls without base vertex base instance
     std::vector<GLushort> mRegularIndices;
-    GLint mPositionLoc;
-    GLuint mInstanceIDLoc;
-    GLuint mInstanceColorIDLoc;
+    GLint mPositionLoc         = 0;
+    GLuint mInstanceIDLoc      = 0;
+    GLuint mInstanceColorIDLoc = 0;
 };
 
 using DrawBaseInstanceTestParams = std::
@@ -813,9 +813,9 @@ void main()
     std::array<GLfloat, kCountX> mInstancedArrayColorId;
     // Used for regular draw calls without base vertex base instance
     std::vector<GLushort> mRegularIndices;
-    GLint mPositionLoc;
-    GLuint mInstanceIDLoc;
-    GLuint mInstanceColorIDLoc;
+    GLint mPositionLoc         = 0;
+    GLuint mInstanceIDLoc      = 0;
+    GLuint mInstanceColorIDLoc = 0;
 };
 
 // Tests that compile a program with the extension succeeds
