@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47d845cf_0f819fdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-04T18:32:21Z",
+      "side": 1,
+      "message": "This captures some of what I learned, and is a start to documenting this so that others can proceed if we\u0027re not around.  I decided to put the info in the file that talks about rolling.  I\u0027m flexible about the contents and location.",
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
