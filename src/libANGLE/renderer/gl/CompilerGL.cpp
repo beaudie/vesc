@@ -101,7 +101,7 @@ CompilerGL::CompilerGL(const ContextGL *context)
             ASSERT(context->getFunctions()->isAtLeastGL(gl::Version(4, 3)));
             ASSERT(mTranslatorOutputType >= SH_GLSL_430_CORE_OUTPUT);
             mBackendFeatures.fragmentSynchronizationType =
-                ShFragmentSynchronizationType::FragmentShaderInterlock_NV_GL;
+                ShFragmentSynchronizationType::FragmentShaderInterlock_NV_GLSL;
         }
         else if (features.supportsFragmentShaderOrderingINTEL.enabled)
         {
@@ -110,7 +110,7 @@ CompilerGL::CompilerGL(const ContextGL *context)
             ASSERT(context->getFunctions()->isAtLeastGL(gl::Version(4, 4)));
             ASSERT(mTranslatorOutputType >= SH_GLSL_440_CORE_OUTPUT);
             mBackendFeatures.fragmentSynchronizationType =
-                ShFragmentSynchronizationType::FragmentShaderOrdering_INTEL_GL;
+                ShFragmentSynchronizationType::FragmentShaderOrdering_INTEL_GLSL;
         }
         else
         {
@@ -120,7 +120,7 @@ CompilerGL::CompilerGL(const ContextGL *context)
             ASSERT(context->getFunctions()->isAtLeastGL(gl::Version(4, 5)));
             ASSERT(mTranslatorOutputType >= SH_GLSL_450_CORE_OUTPUT);
             mBackendFeatures.fragmentSynchronizationType =
-                ShFragmentSynchronizationType::FragmentShaderInterlock_ARB_GL;
+                ShFragmentSynchronizationType::FragmentShaderInterlock_ARB_GLSL;
         }
     }
 }
