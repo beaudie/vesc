@@ -237,6 +237,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::SupportsFragmentShaderInterlockARB, "supportsFragmentShaderInterlockARB"},
     {Feature::SupportsFragmentShaderInterlockNV, "supportsFragmentShaderInterlockNV"},
     {Feature::SupportsFragmentShaderOrderingINTEL, "supportsFragmentShaderOrderingINTEL"},
+    {Feature::SupportsFragmentShaderPixelInterlock, "supportsFragmentShaderPixelInterlock"},
     {Feature::SupportsFragmentShadingRate, "supportsFragmentShadingRate"},
     {Feature::SupportsGeometryStreamsCapability, "supportsGeometryStreamsCapability"},
     {Feature::SupportsGGPFrameToken, "supportsGGPFrameToken"},
