@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3384db70_38442384",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T19:28:02Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6d77f20aacddf6b302e6ef9b8852e366d3a1c11b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1a48da_e8a47206",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T19:28:02Z",
+      "side": 1,
+      "message": "Trivial: Center? (could be done later)",
+      "range": {
+        "startLine": 344,
+        "startChar": 48,
+        "endLine": 344,
+        "endChar": 60
+      },
+      "revId": "6d77f20aacddf6b302e6ef9b8852e366d3a1c11b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
