@@ -683,11 +683,6 @@
 3032 D3D11 : GLSLTest_ES31.AliasedLoadStore/* = SKIP
 7398 OpenGL : GLSLTest_ES31.AliasedLoadStore/* = SKIP
 
-// image2D handles do not work as function arguments.
-7484 D3D11 : GLSLTest_ES31.*Image2DAsFunctionArg/* = SKIP
-7484 OpenGL : GLSLTest_ES31.*Image2DAsFunctionArg/* = SKIP
-7484 GLES : GLSLTest_ES31.*Image2DAsFunctionArg/* = SKIP
-
 // Flaky hangs on Linux SwANGLE
 7419 SWIFTSHADER : MultithreadingTestES3.CreateFramebufferFetchBeforeRenderPass/* = SKIP
 7419 WIN SWIFTSHADER : MultithreadingTestES3.CreateFramebufferFetchMidRenderPass/* = SKIP
