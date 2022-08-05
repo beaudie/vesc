@@ -15,6 +15,9 @@ import sys
 # ANGLE uses SPIR-V 1.0 currently, so there's no reason to generate code for newer instructions.
 SPIRV_GRAMMAR_FILE = '../../../third_party/vulkan-deps/spirv-headers/src/include/spirv/1.0/spirv.core.grammar.json'
 
+# Cherry pick some extra extensions from here that aren't in SPIR-V 1.0.
+SPIRV_EXTRA_EXTENSIONS_FILE = '../../../third_party/vulkan-deps/spirv-headers/src/include/spirv/unified1/spirv.core.grammar.json'
+
 # The script has two sets of outputs, a header and source file for SPIR-V code generation, and a
 # header and source file for SPIR-V parsing.
 SPIRV_BUILDER_FILE = 'spirv_instruction_builder'
@@ -176,12 +179,20 @@ class Writer:
         self.path_prefix = os.path.dirname(os.path.realpath(__file__)) + os.path.sep
         self.grammar = load_grammar(self.path_prefix + SPIRV_GRAMMAR_FILE)
 
+        # We need some extra extensions that aren't in SPIR-V 1.0. Cherry pick them into our grammar.
+        extra_extension_names = {'SPV_EXT_fragment_shader_interlock'}
+        extra_extensions_grammar = load_grammar(self.path_prefix + SPIRV_EXTRA_EXTENSIONS_FILE)
+        self.grammar['instructions'] += [
+            i for i in extra_extensions_grammar['instructions']
+            if 'extensions' in i and set(i['extensions']) & extra_extension_names
+        ]
+
         # If an instruction has a parameter of these types, the instruction is ignored
         self.unsupported_kinds = set(['LiteralSpecConstantOpInteger'])
         # If an instruction requires a capability of these kinds, the instruction is ignored
         self.unsupported_capabilities = set(['Kernel', 'Addresses'])
         # If an instruction requires an extension other than these, the instruction is ignored
-        self.supported_extensions = set([])
+        self.supported_extensions = set([]) | extra_extension_names
         # List of bit masks.  These have 'Mask' added to their typename in SPIR-V headers.
         self.bit_mask_types = set([])
 

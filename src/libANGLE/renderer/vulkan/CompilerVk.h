@@ -14,15 +14,20 @@
 
 namespace rx
 {
+class ContextVk;
 
 class CompilerVk : public CompilerImpl
 {
   public:
-    CompilerVk();
+    CompilerVk(const ContextVk *);
     ~CompilerVk() override;
 
     // TODO(jmadill): Expose translator built-in resources init method.
     ShShaderOutput getTranslatorOutputType() const override;
+    CompilerBackendFeatures getBackendFeatures() const override;
+
+  private:
+    CompilerBackendFeatures mBackendFeatures;
 };
 
 }  // namespace rx

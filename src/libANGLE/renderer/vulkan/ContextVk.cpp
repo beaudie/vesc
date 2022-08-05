@@ -5290,7 +5290,7 @@ const gl::Limitations &ContextVk::getNativeLimitations() const
 
 CompilerImpl *ContextVk::createCompiler()
 {
-    return new CompilerVk();
+    return new CompilerVk(this);
 }
 
 ShaderImpl *ContextVk::createShader(const gl::ShaderState &state)
