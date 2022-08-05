@@ -55,9 +55,9 @@ constexpr static TBasicType Image2DTypeOfPLSType(TBasicType plsType)
 
 // Delimits the beginning of a per-pixel critical section. Makes pixel local storage coherent.
 //
-// Either: GL_NV_fragment_shader_interlock,
+// Either: GL_NV_fragment_shader_interlock
 //         GL_INTEL_fragment_shader_ordering
-//         GL_ARB_fragment_shader_interlock,
+//         GL_ARB_fragment_shader_interlock (also implemented via SPV_EXT_fragment_shader_interlock)
 static TIntermNode *CreateBuiltInInterlockBeginCall(TCompiler *compiler, TSymbolTable &symbolTable)
 {
     switch (compiler->getResources().FragmentSynchronizationType)
@@ -78,8 +78,10 @@ static TIntermNode *CreateBuiltInInterlockBeginCall(TCompiler *compiler, TSymbol
 
 // Delimits the end of a per-pixel critical section. Makes pixel local storage coherent.
 //
-// Either: GL_ARB_fragment_shader_interlock or GL_NV_fragment_shader_interlock.
-// GL_INTEL_fragment_shader_ordering doesn't have an "end()" call.
+// Either: GL_NV_fragment_shader_interlock
+//         GL_ARB_fragment_shader_interlock (also implemented via SPV_EXT_fragment_shader_interlock)
+//
+// GL_INTEL_fragment_shader_ordering doesn't have an "end()" delimiter.
 static TIntermNode *CreateBuiltInInterlockEndCall(TCompiler *compiler, TSymbolTable &symbolTable)
 {
     switch (compiler->getResources().FragmentSynchronizationType)

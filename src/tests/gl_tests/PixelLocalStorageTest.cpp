@@ -1386,7 +1386,8 @@ TEST_P(PixelLocalStorageTest, ForgetBarrier)
 
     // Vulkan generates rightful "SYNC-HAZARD-READ_AFTER_WRITE" validation errors when we omit the
     // barrier.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    ANGLE_SKIP_TEST_IF(IsVulkan() &&
+                       !IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
 
     // Now forget to insert the barrier and ensure our nondeterminism still falls within predictable
     // constraints.
@@ -1473,6 +1474,14 @@ TEST_P(PixelLocalStorageTest, MemorylessStorage)
     void main()
     {
         pixelLocalStoreANGLE(framebuffer, vec4(1) - pixelLocalLoadANGLE(memoryless));
+
+        // This works around a false positive of SYNC-HAZARD-READ_AFTER_WRITE when using
+        // VK_EXT_fragment_shader_interlock:
+        //
+        //     https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/4387
+        //
+        if (gl_FragCoord.xy == vec2(-3.14))
+            pixelLocalStoreANGLE(memoryless, vec4(3.14));
     })");
 
     drawBoxes(pls, {{FULLSCREEN}});
@@ -1640,6 +1649,14 @@ TEST_P(PixelLocalStorageTest, LoadOnly)
     void main()
     {
         pixelLocalStoreANGLE(tex, pixelLocalLoadANGLE(tex) + pixelLocalLoadANGLE(memoryless));
+
+        // This works around a false positive of SYNC-HAZARD-READ_AFTER_WRITE when using
+        // VK_EXT_fragment_shader_interlock:
+        //
+        //     https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/4387
+        //
+        if (gl_FragCoord.xy == vec2(-3.14))
+            pixelLocalStoreANGLE(memoryless, vec4(3.14));
     })");
     drawBoxes(pls, {{FULLSCREEN}});
 
@@ -2022,7 +2039,12 @@ ANGLE_INSTANTIATE_TEST(
     ES31_VULKAN().enable(Feature::EmulatePixelLocalStorage).enable(Feature::AsyncCommandQueue),
     ES31_VULKAN_SWIFTSHADER()
         .enable(Feature::EmulatePixelLocalStorage)
-        .enable(Feature::AsyncCommandQueue));
+        .enable(Feature::AsyncCommandQueue),
+    // The coherent version of the extension relies on ARB_fragment_shader_interlock. Ensure it
+    // works on Vulkan GLSL.
+    ES31_VULKAN()
+        .enable(Feature::EmulatePixelLocalStorage)
+        .enable(Feature::GenerateSPIRVThroughGlslang));
 
 class PixelLocalStorageCompilerTest : public ANGLETest<>
 {

@@ -5806,6 +5806,29 @@ bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
             UNIMPLEMENTED();
             break;
 
+        case EOpBeginInvocationInterlockARB:
+        case EOpEndInvocationInterlockARB:
+        {
+            // SPV_EXT_fragment_shader_interlock is spec'd as providing support for
+            // GL_ARB_fragment_shader_interlock.
+            //
+            // Set up a "pixel_interlock_ordered" execution mode, as that is the default
+            // interlocked execution mode in GLSL, and we don't currently expose an option to change
+            // that.
+            mBuilder.addExtension(SPIRVExtensions::FragmentShaderInterlockARB);
+            mBuilder.addCapability(spv::CapabilityFragmentShaderPixelInterlockEXT);
+            mBuilder.addExecutionMode(spv::ExecutionMode::ExecutionModePixelInterlockOrderedEXT);
+            // ANGLE generates instruction builders for SPIR-V 1.0 currently, but
+            // SPV_EXT_fragment_shader_interlock is written against version 1.4.
+            // Generate the interlock instruction manually.
+            spv::Op interlockOp           = node->getOp() == EOpBeginInvocationInterlockARB
+                                                ? spv::OpBeginInvocationInterlockEXT
+                                                : spv::OpEndInvocationInterlockEXT;
+            uint32_t interlockInstruction = (1 << 16) /*Length == 1*/ | interlockOp;
+            mBuilder.getSpirvCurrentFunctionBlock()->push_back(interlockInstruction);
+            break;
+        }
+
         default:
             result = visitOperator(node, resultTypeId);
             break;
