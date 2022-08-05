@@ -40,6 +40,7 @@ enum class Feature
     AsyncCommandQueue,
     Avoid1BitAlphaTextureFormats,
     BasicGLLineRasterization,
+    BgraRenderbuffersNotSupported,
     BindTransformFeedbackBufferBeforeBindBufferRange,
     BottomLeftOriginPresentRegionRectangles,
     BresenhamLineRasterization,

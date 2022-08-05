@@ -1842,6 +1842,11 @@ void GenerateCaps(const FunctionsGL *functions,
         // Restore previous state
         functions->blendColor(oldColor[0], oldColor[1], oldColor[2], oldColor[3]);
     }
+
+    if (features.bgraRenderbuffersNotSupported.enabled)
+    {
+        extensions->textureFormatBGRA8888EXT = false;
+    }
 }
 
 bool GetSystemInfoVendorIDAndDeviceID(const FunctionsGL *functions,
@@ -2267,6 +2272,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderInterlockARB,
                             functions->isAtLeastGL(gl::Version(4, 5)) &&
                                 functions->hasGLExtension("GL_ARB_fragment_shader_interlock"));
+
+    ANGLE_FEATURE_CONDITION(features, bgraRenderbuffersNotSupported, IsChromeOS());
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

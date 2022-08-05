@@ -659,6 +659,14 @@
                 "GL context supports ARB_fragment_shader_interlock extension"
             ],
             "issue": "http://anglebug.com/7279"
+        },
+        {
+            "name": "bgra_renderbuffers_not_supported",
+            "category": "Features",
+            "description": [
+                "BGRA renderbuffers are not supported despite GL_EXT_texture_format_BGRA8888 being exposed."
+            ],
+            "issue": "b/240075426"
         }
     ]
 }
