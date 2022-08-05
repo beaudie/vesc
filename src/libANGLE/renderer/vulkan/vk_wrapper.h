@@ -1767,6 +1767,7 @@ ANGLE_INLINE VkResult Pipeline::initGraphics(VkDevice device,
                                              const VkGraphicsPipelineCreateInfo &createInfo,
                                              const PipelineCache &pipelineCacheVk)
 {
+    INFO() << "Yuxin Debug Pipeline::initGraphics";
     ASSERT(!valid());
     return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
                                      &mHandle);

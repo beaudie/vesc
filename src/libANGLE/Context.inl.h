@@ -139,6 +139,7 @@ ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
                                         DrawElementsType type,
                                         const void *indices)
 {
+    INFO() << "Yuxin Debug: Context::drawElements";
     // No-op if count draws no primitives for given mode
     if (noopDraw(mode, count))
     {

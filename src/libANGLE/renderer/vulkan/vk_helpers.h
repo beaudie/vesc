@@ -2927,6 +2927,7 @@ class ShaderProgramHelper : angle::NonCopyable
         ANGLE_TRY(renderPassCache->getCompatibleRenderPass(
             contextVk, pipelineDesc.getRenderPassDesc(), &compatibleRenderPass));
 
+        INFO() << "Yuxin Debug getGraphicsPipeline";
         return mGraphicsPipelines.getPipeline(
             contextVk, pipelineCache, *compatibleRenderPass, pipelineLayout,
             activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask, mShaders,

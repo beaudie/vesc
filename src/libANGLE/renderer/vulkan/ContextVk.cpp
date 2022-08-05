@@ -1110,9 +1110,6 @@ angle::Result ContextVk::initialize()
             vk::kDefaultTransformFeedbackQueryPoolSize));
     }
 
-    // The primitives generated query is provided through the Vulkan pipeline statistics query if
-    // supported.  TODO: If VK_EXT_primitives_generated_query is supported, use that instead.
-    // http://anglebug.com/5430
     if (getFeatures().supportsPipelineStatisticsQuery.enabled)
     {
         ANGLE_TRY(mQueryPools[gl::QueryType::PrimitivesGenerated].init(
@@ -1288,6 +1285,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    const void *indices,
                                    DirtyBits dirtyBitMask)
 {
+    INFO() << "Yuxin Debug ContextVk::setupDraw()";
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
@@ -1296,6 +1294,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
     }
 
+    INFO() << "Yuxin Debug ContextVk::finished updateTopology()";
     // Must be called before the command buffer is started. Can call finish.
     VertexArrayVk *vertexArrayVk = getVertexArray();
     if (vertexArrayVk->getStreamingVertexAttribsMask().any())
@@ -1326,6 +1325,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         invalidateGraphicsDriverUniforms();
     }
 
+    INFO() << "Yuxin Debug ContextVk::finished updating transform feedback";
+
     DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyBitMask;
 
     if (dirtyBits.none())
@@ -1338,9 +1339,12 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     for (DirtyBits::Iterator dirtyBitIter = dirtyBits.begin(); dirtyBitIter != dirtyBits.end();
          ++dirtyBitIter)
     {
+        INFO() << "Yuxin Debug dirtyBitIter: ";
         ASSERT(mGraphicsDirtyBitHandlers[*dirtyBitIter]);
         ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[*dirtyBitIter])(&dirtyBitIter, dirtyBitMask));
     }
+
+    INFO() << "Yuxin Debug ContextVk::finished flushing dirty bits";
 
     mGraphicsDirtyBits &= ~dirtyBitMask;
 
@@ -1794,6 +1798,7 @@ angle::Result ContextVk::handleDirtyEventLogImpl(CommandBufferT *commandBuffer)
 angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *dirtyBitsIterator,
                                                            DirtyBits dirtyBitMask)
 {
+    INFO() << "Yuxin Debug ContextVk::handleDirtyGraphicsDefaultAttribs";
     ASSERT(mDirtyDefaultAttribsMask.any());
 
     VertexArrayVk *vertexArrayVk = getVertexArray();
@@ -1809,6 +1814,7 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(DirtyBits::Iterator *
 angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *dirtyBitsIterator,
                                                          DirtyBits dirtyBitMask)
 {
+    INFO() << "Yuxin Debug handleDirtyGraphicsPipelineDesc";
     const VkPipeline previousPipeline = mCurrentGraphicsPipeline
                                             ? mCurrentGraphicsPipeline->getPipeline().getHandle()
                                             : VK_NULL_HANDLE;
@@ -1823,21 +1829,26 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
     if (!mCurrentGraphicsPipeline)
     {
+        INFO() << "Yuxin Debug handleDirtyGraphicsPipelineDesc !mCurrentGraphicsPipeline";
         const vk::GraphicsPipelineDesc *descPtr;
 
         // The desc's specialization constant depends on program's
         // specConstUsageBits. We need to update it if program has changed.
         SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
+        INFO() << "Yuxin Debug getCurrentProgramSpecConstUsageBits()";
         updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
+        INFO() << "Yuxin Debug updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits)";
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(executableVk->getGraphicsPipeline(
             this, mCurrentDrawMode, &pipelineCache, PipelineSource::Draw, *mGraphicsPipelineDesc,
             glExecutable, &descPtr, &mCurrentGraphicsPipeline));
+        INFO() << "Yuxin Debug getGraphicsPipeline";
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
     {
+        INFO() << "Yuxin Debug handleDirtyGraphicsPipelineDesc mGraphicsPipelineTransition.any()";
         ASSERT(mCurrentGraphicsPipeline->valid());
         if (!mCurrentGraphicsPipeline->findTransition(
                 mGraphicsPipelineTransition, *mGraphicsPipelineDesc, &mCurrentGraphicsPipeline))
@@ -1856,8 +1867,9 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         mGraphicsPipelineTransition.reset();
     }
     // Update the queue serial for the pipeline object.
-    ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
 
+    ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
+    INFO() << "Yuxin Debug handleDirtyGraphicsPipelineDesc mRenderPassCommands->retainResource()";
     mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
@@ -1875,6 +1887,8 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // feedback counter buffer.
     if (mRenderPassCommands->started() && mRenderPassCommands->isTransformFeedbackActiveUnpaused())
     {
+        INFO()
+            << "Yuxin Debug handleDirtyGraphicsPipelineDesc mRenderPassCommands->retainResource()";
         ANGLE_TRY(flushDirtyGraphicsRenderPass(
             dirtyBitsIterator, dirtyBitMask, RenderPassClosureReason::PipelineBindWhileXfbActive));
 
@@ -1883,7 +1897,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
     // The pipeline needs to rebind because it's changed.
     dirtyBitsIterator->setLaterBit(DIRTY_BIT_PIPELINE_BINDING);
-
+    INFO() << "Yuxin Debug finished handleDirtyGraphicsPipelineDesc";
     return angle::Result::Continue;
 }
 
@@ -3560,6 +3574,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       const void *indices)
 {
+    INFO() << "Yuxin Debug ContextVk::drawElements";
     if (mode == gl::PrimitiveMode::LineLoop)
     {
         uint32_t indexCount;
@@ -3568,8 +3583,11 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
     }
     else
     {
+        INFO() << "Yuxin Debug ContextVk setupIndexedDraw";
         ANGLE_TRY(setupIndexedDraw(context, mode, count, 1, type, indices));
+        INFO() << "Yuxin Debug prior to mRenderPassCommandBuffer->drawIndexed";
         mRenderPassCommandBuffer->drawIndexed(count);
+        INFO() << "Yuxin Debug after to mRenderPassCommandBuffer->drawIndexed";
     }
 
     return angle::Result::Continue;

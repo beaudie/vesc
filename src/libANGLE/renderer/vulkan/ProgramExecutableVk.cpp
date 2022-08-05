@@ -1018,6 +1018,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
 {
+    INFO() << "Yuxin Debug ProgramExecutableVk::getGraphicsPipelineImpl()";
     ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex));
 
     ProgramInfo &programInfo                  = getGraphicsProgramInfo(transformOptions);
@@ -1029,6 +1030,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
 
     for (gl::ShaderType shaderType : linkedShaderStages)
     {
+        INFO() << "Yuxin Debug initGraphicsShaderProgram on shader type: " << shaderType;
         ANGLE_TRY(initGraphicsShaderProgram(
             contextVk, shaderType, shaderType == lastPreFragmentStage, isTransformFeedbackProgram,
             transformOptions, &programInfo, mVariableInfoMap));
@@ -1052,6 +1054,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
     const gl::DrawBufferMask shaderOutMask = glExecutable.getActiveOutputVariablesMask();
     gl::DrawBufferMask missingOutputsMask  = ~shaderOutMask & framebufferMask;
 
+    INFO() << "Yuxin Debug getGraphicsPipeline";
     return shaderProgram->getGraphicsPipeline(
         contextVk, &contextVk->getRenderPassCache(), pipelineCache, getPipelineLayout(), source,
         desc, activeAttribLocations, glExecutable.getAttributesTypeMask(), missingOutputsMask,

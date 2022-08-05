@@ -1554,6 +1554,104 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Verify that graphics pipeline can be created successfully when there is a precision mismatch
+// between TCS output and TES input
+TEST_P(ProgramPipelineTest31, TessellationInternalDifferentPrecision)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    std::stringstream vertexShader;
+    vertexShader << R"(#version 310 es
+in highp vec4 pos;
+in float in0;
+
+out mediump float tc_in;
+void main()
+{
+  tc_in = in0;
+  gl_Position = pos;
+})";
+
+    std::stringstream tessellationControlShader;
+    tessellationControlShader << R"(#version 310 es
+#extension GL_EXT_tessellation_shader : require
+layout (vertices=3) out;
+
+in mediump float tc_in[];
+out highp float tc_out[];
+void main()
+{
+    tc_out[gl_InvocationID] = tc_in[gl_InvocationID];
+    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+    gl_TessLevelInner[0] = 2.0;
+    gl_TessLevelInner[1] = 2.0;
+    gl_TessLevelOuter[0] = 2.0;
+    gl_TessLevelOuter[1] = 2.0;
+    gl_TessLevelOuter[2] = 2.0;
+    gl_TessLevelOuter[3] = 2.0;
+})";
+
+    std::stringstream tessellationEvaluationShader;
+    tessellationEvaluationShader << R"(#version 310 es
+#extension GL_EXT_tessellation_shader : require
+layout (triangles) in;
+
+in lowp float tc_out[];
+out mediump float te_out;
+void main()
+{
+    te_out = tc_out[2];
+    gl_Position = gl_TessCoord[0] * gl_in[0].gl_Position + gl_TessCoord[1] * gl_in[1].gl_Position + gl_TessCoord[2] * gl_in[2].gl_Position;
+
+}
+)";
+
+    std::stringstream fragmentShader;
+    fragmentShader << R"(#version 310 es
+precision mediump float;
+bool isOk (float a, float b, float eps)
+{
+    return (abs(a-b) <= (eps*abs(b) + eps));
+}
+layout(location = 0) out mediump vec4 fragColor;
+uniform float ref_out0;
+float out0;
+
+in mediump float te_out;
+void main()
+{
+    out0 = te_out;
+    bool RES = isOk(out0, ref_out0, 0.05);
+    fragColor = vec4(RES, RES, RES, 1.0);
+}
+)";
+    GLuint program = CompileProgramWithTESS(
+        vertexShader.str().c_str(), tessellationControlShader.str().c_str(),
+        tessellationEvaluationShader.str().c_str(), fragmentShader.str().c_str());
+    ASSERT_NE(0u, program);
+    glUseProgram(program);
+
+    std::array<Vector4, 6> triangleVertices = {
+        Vector4(-1.0f, 1.0f, 1.0f, 1.0f), Vector4(-1.0f, -1.0f, 1.0f, 1.0f),
+        Vector4(1.0f, -1.0f, 1.0f, 1.0f), Vector4(1.0f, -1.0f, 1.0f, 1.0f),
+        Vector4(-1.0f, 1.0f, 1.0f, 1.0f), Vector4(1.0f, 1.0f, 1.0f, 1.0f)};
+    GLint posLocation = glGetAttribLocation(program, "pos");
+    glVertexAttribPointer(posLocation, 4, GL_FLOAT, GL_FALSE, 0, triangleVertices.data());
+    glEnableVertexAttribArray(posLocation);
+
+    std::array<float, 6> triangletcin0 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    GLint tcin0Location                = glGetAttribLocation(program, "in0");
+    glVertexAttribPointer(tcin0Location, 1, GL_FLOAT, GL_FALSE, 0, triangletcin0.data());
+    glEnableVertexAttribArray(tcin0Location);
+
+    GLint refOutLocation = glGetUniformLocation(program, "ref_out0");
+    glUniform1f(refOutLocation, 1.0f);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glDeleteProgram(program);
+}
+
 class ProgramPipelineTest32 : public ProgramPipelineTest
 {
   protected:

@@ -1994,6 +1994,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         }
 
         mCacheStats.missAndIncrementSize();
+        INFO() << "Yuxin Debug insertPipeline";
         return insertPipeline(contextVk, pipelineCache, compatibleRenderPass, pipelineLayout,
                               activeAttribLocationsMask, programAttribsTypeMask, missingOutputsMask,
                               shaders, specConsts, source, desc, descPtrOut, pipelineOut);

@@ -2712,6 +2712,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     Pipeline *pipelineOut,
     CacheLookUpFeedback *feedbackOut) const
 {
+    INFO() << "Yuxin Debug GraphicsPipelineDesc::initializePipeline";
     angle::FixedVector<VkPipelineShaderStageCreateInfo, 5> shaderStages;
     VkPipelineVertexInputStateCreateInfo vertexInputState     = {};
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyState = {};
@@ -5754,6 +5755,7 @@ angle::Result PipelineCacheAccess::createGraphicsPipeline(
     const VkGraphicsPipelineCreateInfo &createInfo,
     vk::Pipeline *pipelineOut)
 {
+    INFO() << "Yuxin Debug PipelineCacheAccess::createGraphicsPipeline()";
     std::unique_lock<std::mutex> lock = getLock();
 
     ANGLE_VK_TRY(context,
