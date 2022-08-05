@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3645c07_70ac385d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-05T17:24:54Z",
+      "side": 1,
+      "message": "Nice finding, Shabi! Looking at the code, the PipelineHelper object is individually tracked (it added into RP commands at contextVk.cpp line 1861). My understanding of ContextVk::mCurrentGarbage is for objects that are not individually tracked so that we uses context\u0027s next submission for the queueSerial. The real bug here appears to me is that we should not add PipelineHelper into ContextVk::mCurrentGarbage in the first place. Instead, it should just add into RendererVk\u0027s garbage list (see DescriptorPoolHelper::release function for an example). The problem with ContextVk::mCurrentGarbage is that it ignores PipelineHelper\u0027s mUse, which means the exact bug you described here.",
+      "revId": "d18716080bc910116750759d2e8aa031ece9e61c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
