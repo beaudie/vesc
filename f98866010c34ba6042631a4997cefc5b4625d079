@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bae2ebdf_95ac4317",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:29:13Z",
+      "side": 1,
+      "message": "typo: *** you could run into a problem where the last call in texGenCalls/textureSetupCalls is NOT of external texture type.",
+      "parentUuid": "642eb901_c8f9853e",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c30ad944_e48e1b7b",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
