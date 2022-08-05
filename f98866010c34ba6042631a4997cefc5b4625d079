@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d5002bc_b0efc0fc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T23:20:55Z",
+      "side": 1,
+      "message": "I am thinking we can keep track of the last texture ID used before we populate glGenTextures for the dummy texture, and use lastTextureID+1 for the dummy texture. I \"think\" we can delete the dummy texture after we created the eglImage using it as the EGLClientBuffer source. So the populated call would be:\n\n```\n// dummy texture\nglGenTextures(1, reinterpret_cast\u003cGLuint *\u003e(gReadBuffer));\nUpdateTextureID(lastTextureID+1, 0);\nglBindTexture(GL_TEXTURE_2D, gTextureMap[lastTextureID+1]);\nglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 9728);\nglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 9728);\nglTexImage2D(GL_TEXTURE_2D, ...);\n\n// create the eglImage using the dummy texture as the EGLClientBuffer\ngEGLImageMap[0ul] \u003d eglCreateImage(static_cast\u003cEGLContext\u003e(gContextMap[0]), static_cast\u003cEGLContext\u003e(gContextMap[1]), 12465, GetClientBuffer(12465, hexformat(lastTextureID+1)), reinterpret_cast\u003cGLint64 *\u003e(\u0026gBinaryData[176]));\nglEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, gEGLImageMap[reinterpret_cast\u003cuintptr_t\u003e(0ul)]);\n\n// Delete the dummy texture\nconst GLuint deleteTextures[] \u003d {gTextureMap[lastTextureID+1]}; \nglDeleteTextures(1, deleteTextures);\n``` \n\nI am still reading the spec on whether the deletion of the dummy texture will impact the eglImage: https://registry.khronos.org/EGL/extensions/KHR/EGL_KHR_image_base.txt. Maybe @Jamie or @Cody knows.\n\nIf we have another texture to process after the external texture, whose id stored in textureManager is lastTextureID+1, we can safely use the lastTextureID+1 entry for that texture, as the dummy texture is no longer using that entry in the gTextureMap.",
+      "parentUuid": "a5ab3a3d_1d908df3",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "642eb901_c8f9853e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
