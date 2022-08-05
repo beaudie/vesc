@@ -63,6 +63,30 @@
       },
       "revId": "6d77f20aacddf6b302e6ef9b8852e366d3a1c11b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "630c33ae_12f7e5c5",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T19:40:04Z",
+      "side": 1,
+      "message": "Oh, I see that the alignment is intentional. Thanks for the info.",
+      "parentUuid": "d578af6c_72ba5fba",
+      "range": {
+        "startLine": 344,
+        "startChar": 48,
+        "endLine": 344,
+        "endChar": 60
+      },
+      "revId": "6d77f20aacddf6b302e6ef9b8852e366d3a1c11b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
