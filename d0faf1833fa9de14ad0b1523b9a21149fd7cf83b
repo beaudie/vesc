@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9df6a0d9_3c33548e",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-05T21:54:30Z",
+      "side": 1,
+      "message": "I\u0027m surprised the tests were passing before if these weren\u0027t getting applied. Do they normally get applied somewhere else?\n\nThe tests fail in _coherent mode if I don\u0027t add `spv::DecorationCoherent` here.\n\nShould I also be applying these to storage blocks?",
+      "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
