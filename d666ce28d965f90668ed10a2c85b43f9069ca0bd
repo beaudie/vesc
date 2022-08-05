@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d3a4005_24bcad93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-05T15:28:16Z",
+      "side": 1,
+      "message": "Didn\u0027t look closely but please ensure the same behaviour gets preserved for each test.",
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4cc3f9_f968b175",
+        "filename": "gni/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-05T15:28:16Z",
+      "side": 1,
+      "message": "just confirming - you call this file on non-android? Might be worth splitting off a little check function and hiding the bulk of the android code from non-android.",
+      "range": {
+        "startLine": 487,
+        "startChar": 47,
+        "endLine": 487,
+        "endChar": 61
+      },
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fdb1d8a_9b51b509",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-05T15:28:16Z",
+      "side": 1,
+      "message": "can you append the extra flags here? I was just going to make a change to do that, might be easier if you fold it into yours so I don\u0027t have to process a conflict.",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 17
+      },
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
