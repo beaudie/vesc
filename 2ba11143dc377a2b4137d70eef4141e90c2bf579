@@ -22,6 +22,30 @@
       },
       "revId": "2ba11143dc377a2b4137d70eef4141e90c2bf579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77681a33_d6184bfd",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8754,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-05T21:19:04Z",
+      "side": 1,
+      "message": "Removed some unnecessary state setting, and added some comments",
+      "parentUuid": "1314a694_fad048ef",
+      "range": {
+        "startLine": 8754,
+        "startChar": 0,
+        "endLine": 8754,
+        "endChar": 0
+      },
+      "revId": "2ba11143dc377a2b4137d70eef4141e90c2bf579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
