@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9f90f0b_3961f0a1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T17:57:43Z",
+      "side": 1,
+      "message": "Split the change. The encapsulation part is moved to the next CL.",
+      "parentUuid": "5d779439_4651fdde",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 41
+      },
+      "revId": "7f099a973bd72e90ebae3accc3bf69271529ecfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe934faa_8e836418",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc25cf2_fcdd63b5",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T17:57:43Z",
+      "side": 1,
+      "message": "Renamed to `TextureUpload`.",
+      "parentUuid": "fe934faa_8e836418",
+      "range": {
+        "startLine": 27,
+        "startChar": 6,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "7f099a973bd72e90ebae3accc3bf69271529ecfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cba1916_121a1d96",
@@ -60,6 +108,24 @@
       "writtenOn": "2022-08-05T02:11:37Z",
       "side": 1,
       "message": "Unused",
+      "revId": "7f099a973bd72e90ebae3accc3bf69271529ecfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "951f1d3c_0221c99c",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-05T17:57:43Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "4cba1916_121a1d96",
       "revId": "7f099a973bd72e90ebae3accc3bf69271529ecfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
