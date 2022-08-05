@@ -16,6 +16,46 @@
       "message": "PTAL, thanks.",
       "revId": "4ab65331631596d5ec06509728e964b3826ffdc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc60b2d1_0986e1ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1540912
+      },
+      "writtenOn": "2022-08-05T16:28:44Z",
+      "side": 1,
+      "message": "LGTM. Minor comment.",
+      "revId": "4ab65331631596d5ec06509728e964b3826ffdc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f9c0771_393acd3f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1540912
+      },
+      "writtenOn": "2022-08-05T16:28:44Z",
+      "side": 1,
+      "message": "Is not clear what this refers to now, since jit_capabilities.test-cmx was removed.",
+      "range": {
+        "startLine": 288,
+        "startChar": 48,
+        "endLine": 288,
+        "endChar": 64
+      },
+      "revId": "4ab65331631596d5ec06509728e964b3826ffdc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
