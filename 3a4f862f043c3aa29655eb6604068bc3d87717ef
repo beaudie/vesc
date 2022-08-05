@@ -22,6 +22,30 @@
       },
       "revId": "3a4f862f043c3aa29655eb6604068bc3d87717ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5df7b5_f1cd6b94",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-05T18:39:14Z",
+      "side": 0,
+      "message": "Addressed in new CL.",
+      "parentUuid": "1944d309_f7ff2689",
+      "range": {
+        "startLine": 314,
+        "startChar": 21,
+        "endLine": 314,
+        "endChar": 26
+      },
+      "revId": "3a4f862f043c3aa29655eb6604068bc3d87717ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

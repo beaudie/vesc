@@ -105,6 +105,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a6e9a2c_b40fe2ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-05T18:39:14Z",
+      "side": 1,
+      "message": "Here\u0027s the fork of this CL that I\u0027ve been working on: https://chromium-review.googlesource.com/c/angle/angle/+/3808235 ",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c19db615_22a5d115",
@@ -118,6 +135,24 @@
       "writtenOn": "2022-07-29T17:49:54Z",
       "side": 1,
       "message": "This will need to be moved to `include/platform/frontend_features.json` since this file is now generated via script.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be0cc059_3bf99595",
+        "filename": "include/platform/FrontendFeatures.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-05T18:39:14Z",
+      "side": 1,
+      "message": "Addressed in the new CL.",
+      "parentUuid": "c19db615_22a5d115",
       "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -158,6 +193,24 @@
       "writtenOn": "2022-07-29T17:08:38Z",
       "side": 1,
       "message": "You don\u0027t need this function. Just use mMemoryShaderCache in Shader.cpp line 324. This API expose the mMemoryShaderCache which otherwise would be private data member.",
+      "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1b7eae2_b23789e5",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-05T18:39:14Z",
+      "side": 1,
+      "message": "Addressed in the new CL.",
+      "parentUuid": "55322144_4ec2fd74",
       "revId": "dbc9860d43817aef04d3050df620a609bebca80f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
