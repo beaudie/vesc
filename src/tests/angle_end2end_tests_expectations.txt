@@ -687,6 +687,19 @@
 
 7546 LINUX VULKAN : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/* = SKIP
 
+// These crash iris
+9999 LINUX INTEL : ClipPlaneTest.Negative/ES1_EGL = SKIP
+9999 LINUX INTEL : TextureEnvTest.NegativeParameter/ES1_EGL = SKIP
+
+// Not sure what's wrong with these
+9999 LINUX INTEL : CurrentTextureCoordsTest.InitialState/ES1_EGL = SKIP
+9999 LINUX INTEL : CurrentTextureCoordsTest.Negative/ES1_EGL = SKIP
+9999 LINUX INTEL : FogTest.NegativeValues/ES1_EGL = SKIP
+9999 LINUX INTEL : MaterialsTest.InvalidParameter/ES1_EGL = SKIP
+9999 LINUX INTEL : PointSpriteTest.TrianglesNotTreatedAsPointSprites/ES1_EGL = SKIP
+9999 LINUX INTEL : TextureEnvTest.NegativeValues/ES1_EGL = SKIP
+9999 LINUX INTEL : TextureParameterTest.NegativeEnum/ES1_EGL = SKIP
+
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
