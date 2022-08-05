@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "672db1d4_ff6a800e",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-05T19:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b31b3c0b_e02b09c3",
+      "range": {
+        "startLine": 22,
+        "startChar": 20,
+        "endLine": 22,
+        "endChar": 44
+      },
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d5c5005_5048077a",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-08-05T17:57:51Z",
       "side": 1,
       "message": "Suggestion: \"Rolling Vulkan Memory Allocator (VMA)\"",
+      "range": {
+        "startLine": 45,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 65
+      },
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06eb2be8_6e1687d4",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-05T19:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d5c5005_5048077a",
       "range": {
         "startLine": 45,
         "startChar": 3,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d68dd45_a694a495",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-05T19:32:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "149643a3_c2f47e14",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 86
+      },
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cf3c166_300bbc3c",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-08-05T17:57:51Z",
       "side": 1,
       "message": "This part is essentially the same as the above section and probably doesn\u0027t need to be included here. You may want to edit the above section if it\u0027s not clear enough.\n\nAll of our DEPS live in googlesource, either because that\u0027s where they are developed or they are mirrored the same way VMA is (with an upstream/* branch).\n\nVMA is a special dep in a couple ways:\n - It has quite a few of our own patches on top of the upstream.\n - It\u0027s used as a dep by a bunch of projects (Chrome, Skia, Dawn?, ANGLE) and the build process of some of those needs to support a single VMA version when building multiple projects. For example Chrome builds itself, skia and angle with a single copy of VMA so sometimes all those projects need to be updated to the new VMA version at once to roll.",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34b57936_e0f7a7d5",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-05T19:32:53Z",
+      "side": 1,
+      "message": "Makse sense.  I did a lot of changes as a result (e.g. to genericize the above section, note that all external repos are mirrored within Google, discuss coordination with Chrome).",
+      "parentUuid": "7cf3c166_300bbc3c",
       "range": {
         "startLine": 59,
         "startChar": 1,
