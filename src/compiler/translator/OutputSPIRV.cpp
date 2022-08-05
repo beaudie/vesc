@@ -5806,6 +5806,29 @@ bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
             UNIMPLEMENTED();
             break;
 
+        case EOpBeginInvocationInterlockARB:
+        case EOpEndInvocationInterlockARB:
+        {
+            // SPV_EXT_fragment_shader_interlock is spec'd as providing support for
+            // GL_ARB_fragment_shader_interlock.
+            //
+            // Set up a "pixel_interlock_ordered" execution mode, as that is the default
+            // interlocked execution mode in GLSL, and we don't currently expose an option to change
+            // that.
+            mBuilder.addCapability(spv::CapabilityFragmentShaderPixelInterlockEXT);
+            mBuilder.addExtension(SPIRVExtensions::FragmentShaderInterlockEXT);
+            mBuilder.addExecutionMode(spv::ExecutionMode::ExecutionModePixelInterlockOrderedEXT);
+            // ANGLE generates instruction builders for SPIR-V 1.0 currently, but
+            // SPV_EXT_fragment_shader_interlock is written against version 1.4.
+            // Generate the interlock instruction manually.
+            spv::Op interlockOp           = node->getOp() == EOpBeginInvocationInterlockARB
+                                                ? spv::OpBeginInvocationInterlockEXT
+                                                : spv::OpEndInvocationInterlockEXT;
+            uint32_t interlockInstruction = (1 << 16) /*Length == 1*/ | interlockOp;
+            mBuilder.getSpirvCurrentFunctionBlock()->push_back(interlockInstruction);
+            break;
+        }
+
         default:
             result = visitOperator(node, resultTypeId);
             break;
@@ -5938,6 +5961,31 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     {
         // Apply the Invariant decoration to output variables if specified or if globally enabled.
         decorations.push_back(spv::DecorationInvariant);
+    }
+    if (type.isImage())
+    {
+        // Apply the declared memory qualifiers to images.
+        TMemoryQualifier memoryQualifier = type.getMemoryQualifier();
+        if (memoryQualifier.coherent)
+        {
+            decorations.push_back(spv::DecorationCoherent);
+        }
+        if (memoryQualifier.volatileQualifier)
+        {
+            decorations.push_back(spv::DecorationVolatile);
+        }
+        if (memoryQualifier.restrictQualifier)
+        {
+            decorations.push_back(spv::DecorationRestrict);
+        }
+        if (memoryQualifier.readonly)
+        {
+            decorations.push_back(spv::DecorationNonWritable);
+        }
+        if (memoryQualifier.writeonly)
+        {
+            decorations.push_back(spv::DecorationNonReadable);
+        }
     }
 
     const spirv::IdRef variableId = mBuilder.declareVariable(
