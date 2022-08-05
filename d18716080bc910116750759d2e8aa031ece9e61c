@@ -34,6 +34,24 @@
       "parentUuid": "d3645c07_70ac385d",
       "revId": "d18716080bc910116750759d2e8aa031ece9e61c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "623d29c1_d742133e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-05T18:06:58Z",
+      "side": 1,
+      "message": "The downside with your suggestion is that object will not gets deleted until next submission. If someone delete program and not submit for long time (some frameworks do that), then you are stuck with that object for long time. But like you said, we may have other bugs with missing retain calls right now. Before that gets fixed, I am fine with this fix. But I do think longer term fix should be move to individually tracked instead of depend on unrelated submission to clean things up.\n \n\u003e ...staged buffers for texture data upload)\nThat does not go through mCurrentGarbage, so we are fine here.",
+      "parentUuid": "d5e12963_df6c02e3",
+      "revId": "d18716080bc910116750759d2e8aa031ece9e61c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
