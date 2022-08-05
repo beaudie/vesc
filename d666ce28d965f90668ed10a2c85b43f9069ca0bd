@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a05af47_a502635a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-05T16:04:06Z",
+      "side": 1,
+      "message": "OK - a lot of the time it can affect developers and not obviously affect the bots, so maybe try experimenting a bit locally to see at least of the run_perf_tests script is affected. I use that one often.",
+      "parentUuid": "28d01c70_1873773f",
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a4cc3f9_f968b175",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "`angle_test_util.RunTestSuite()` calls into `android_helper.RunTests()` on Android. Unless we `import android_helper` conditionally, we need both files here merely due to the imports.\n\nThere might be a way to split this in cleaner way so that other tests don\u0027t necessarily depend on \"android_helper\" but the difficulty is in that we\u0027re using the suite name to determine whether this is Android which creates some awkwardness in both the way the code is organized and the API (`.Initialize(suite_name)`).\n\nI could turn it into something like `angle_test_util.Initialize(suite_name)` but this wouldn\u0027t get rid of the dependency on `android_helper.py` here, just would avoid `import android_helper` and `android_helper.Initialize()` on non-Android (but angle_test_util would still depend on it). Does that work or you\u0027d like to see it rearranged differently?",
       "parentUuid": "8a4cc3f9_f968b175",
+      "range": {
+        "startLine": 487,
+        "startChar": 47,
+        "endLine": 487,
+        "endChar": 61
+      },
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad803108_6573bb04",
+        "filename": "gni/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-05T16:04:06Z",
+      "side": 1,
+      "message": "Just a thought, not high priority.",
+      "parentUuid": "1235f289_b41c4a46",
       "range": {
         "startLine": 487,
         "startChar": 47,
