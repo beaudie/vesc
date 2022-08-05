@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d826645d_ce614534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T14:35:17Z",
+      "side": 1,
+      "message": "Thanks Amirali!",
+      "revId": "b1c2e10614b9a984ba14ecef6218cc1292be9f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "316465f3_a4072d1c",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-08-04T00:05:53Z",
       "side": 1,
       "message": "No longer used",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 14
+      },
+      "revId": "b1c2e10614b9a984ba14ecef6218cc1292be9f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d4617d_e4a2e829",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T14:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "316465f3_a4072d1c",
       "range": {
         "startLine": 108,
         "startChar": 0,
@@ -47,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f3808c0_2b1708c5",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T14:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a95d408_a9c6ba27",
+      "range": {
+        "startLine": 115,
+        "startChar": 8,
+        "endLine": 115,
+        "endChar": 22
+      },
+      "revId": "b1c2e10614b9a984ba14ecef6218cc1292be9f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a6f5bcb_35d9b7ba",
@@ -60,6 +125,30 @@
       "writtenOn": "2022-08-04T00:05:53Z",
       "side": 1,
       "message": "May be removed?",
+      "range": {
+        "startLine": 319,
+        "startChar": 45,
+        "endLine": 319,
+        "endChar": 61
+      },
+      "revId": "b1c2e10614b9a984ba14ecef6218cc1292be9f78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2cf9be9_1165f46a",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T14:35:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a6f5bcb_35d9b7ba",
       "range": {
         "startLine": 319,
         "startChar": 45,
