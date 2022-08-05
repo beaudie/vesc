@@ -16,6 +16,24 @@
       "message": "Geoff, how do you feel about adding this one to Caps? I hope to add a frontend implementation that uses EXT_shader_framebuffer_fetch soon, so the frontend code will need to know which type of PLS to implement.",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f78777f_c50ec7c3",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-05T13:30:13Z",
+      "side": 1,
+      "message": "I think for this, add it FrontendFeatures. A bool like `emulatePixelLocalStorageWithFramebufferFetch`. The Caps members are meant to be pulled from the tables in the GLES spec so I prefer not to use it for this.",
+      "parentUuid": "318830f5_e3569e04",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
