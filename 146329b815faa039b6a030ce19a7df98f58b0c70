@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793b6019_ffc3af7e",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-05T22:18:40Z",
+      "side": 0,
+      "message": "This actually has to be skipped because of that d3d11 dirty bits bug. Is there an ANGLE bug I can reference for that?",
+      "revId": "146329b815faa039b6a030ce19a7df98f58b0c70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
