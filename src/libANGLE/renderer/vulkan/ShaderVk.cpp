@@ -104,6 +104,18 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         options->precisionSafeDivision = true;
     }
 
+    if (contextVk->getExtensions().shaderPixelLocalStorageCoherentANGLE)
+    {
+        ASSERT(contextVk->getFeatures().supportsFragmentShaderPixelInterlock.enabled);
+        // Set our fragment synchronization type to GL_ARB_fragment_shader_interlock.
+        //
+        // This is what we need for Vulkan GLSL, and VK_EXT_fragment_shader_interlock /
+        // SPV_EXT_fragment_shader_interlock are both spec'd as providing support for
+        // GL_ARB_fragment_shader_interlock.
+        options->pls.fragmentSynchronizationType =
+            ShFragmentSynchronizationType::FragmentShaderInterlock_ARB_GL;
+    }
+
     return compileImpl(context, compilerInstance, mState.getSource(), options);
 }
 
