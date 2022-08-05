@@ -501,6 +501,16 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "SYNC_FRAGMENT_SHADER_UNIFORM_READ, "
         "command: vkCmdPipelineBarrier",
     },
+    // The validation layers don't properly account for VK_EXT_fragment_shader_interlock, which
+    // gives synchronization guarantees without the need for an image barrier. Suppress these
+    // syncval errors globally until it's fixed.
+    // https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/4387
+    {"SYNC-HAZARD-READ_AFTER_WRITE",
+     "type: VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, "
+     "imageLayout: VK_IMAGE_LAYOUT_GENERAL",
+     "Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
+     "prior_usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_WRITE, "
+     "write_barriers: 0"},
 
 };
 
@@ -1961,6 +1971,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mFragmentShadingRateFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR;
 
+    mFragmentShaderInterlockFeatures = {};
+    mFragmentShaderInterlockFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -2118,6 +2132,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mFragmentShadingRateFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_FRAGMENT_SHADER_INTERLOCK_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mFragmentShaderInterlockFeatures);
+    }
+
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
@@ -2150,6 +2169,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mExtendedDynamicStateFeatures.pNext              = nullptr;
     mExtendedDynamicState2Features.pNext             = nullptr;
     mFragmentShadingRateFeatures.pNext               = nullptr;
+    mFragmentShaderInterlockFeatures.pNext           = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -2628,6 +2648,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mFragmentShadingRateFeatures);
+    }
+
+    if (getFeatures().supportsFragmentShaderPixelInterlock.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_FRAGMENT_SHADER_INTERLOCK_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mFragmentShaderInterlockFeatures);
     }
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
@@ -3648,6 +3674,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
                             canSupportFragmentShadingRate(deviceExtensionNames));
+
+    // We can use the interlock to support GL_ANGLE_shader_pixel_local_storage_coherent.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsFragmentShaderPixelInterlock,
+        mFragmentShaderInterlockFeatures.fragmentShaderPixelInterlock == VK_TRUE);
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
