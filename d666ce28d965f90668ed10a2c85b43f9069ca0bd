@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d6a4a0d_99106828",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T16:18:46Z",
+      "side": 1,
+      "message": "I did run some tests locally but I can\u0027t possibly test (or even know) the combinations of flags people are using.\nIf we want to make sure these don\u0027t get broken we should some kind of tests. Otherwise, I think we have to accept the risk things would get broken from time to time so that we can move forward and reduce code rot. I\u0027m happy to do follow up fixes or rollback/rollforward though.",
+      "parentUuid": "0a05af47_a502635a",
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a4cc3f9_f968b175",
@@ -115,6 +133,30 @@
       "side": 1,
       "message": "Just a thought, not high priority.",
       "parentUuid": "1235f289_b41c4a46",
+      "range": {
+        "startLine": 487,
+        "startChar": 47,
+        "endLine": 487,
+        "endChar": 61
+      },
+      "revId": "d666ce28d965f90668ed10a2c85b43f9069ca0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "980db1f7_6f615b0a",
+        "filename": "gni/angle.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-05T16:18:46Z",
+      "side": 1,
+      "message": "Okay so I wrapped into `angle_test_util.Initialize()` and `angle_test_util.IsAndroid()` to make the API look less weird, but kept implementation as is by calling into `android_helper` from those functions as even if I did it cleaner it wouldn\u0027t have avoided the gni dependency anyways.",
+      "parentUuid": "ad803108_6573bb04",
       "range": {
         "startLine": 487,
         "startChar": 47,
