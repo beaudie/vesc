@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ab3a3d_1d908df3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "Let\u0027s come up with a solution to create dummyTextures without hard-coding the texture ID, and also not colliding with the ID that the app uses.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "642eb901_c8f9853e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "I think we should place the `glGenTextures`, `UpdateTextureID` `glTexParameteri`,`glBindTextures` for the dummy texture together with the `glTexImage2D` for the dummy texture. More specifically, we should place these calls for the dummy texture together:\n\nglGenTextures(...);\nUpdateTextureID(...);\nglBindTexture(GL_TEXTURE_2D, ...);\nglTexParameteri(GL_TEXTURE_2D, ...)\nglTexImage2D(GL_TEXTURE_2D, ...);\n\nOtherwise, you could run into a problem where the last call in texGenCall/textureSetupCalls is of external texture type, and you are binding another texture to the GL_TEXTURE_2D target, later when you insert the call `glTexImage2D(GL_TEXTURE_2D, ...)`, it will be populating data for the last texture that is bound to GL_TEXTURE_2D target, not populating for the dummy texture. In short, we should make sure we bind dummy texture to `GL_TEXTURE_2D`, before we call `glTexImage2D` on the dummy texture.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c30ad944_e48e1b7b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "Let\u0027s try to combine this if condition with `if (context-\u003egetExtensions().getImageANGLE)` below.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a4c5145_676f9d8b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3689,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "should we use `gl::TextureType::External` instead?",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ed0752a_c62ffa47",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5529,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "We should mention that to run this test with the right capture setting, make sure to set these environment variables:\n\nLinux:\nexport ANGLE_CAPTURE_FRAME_START\u003d2\nexport ANGLE_CAPTURE_FRAME_END\u003d2\nexport ANGLE_CAPTURE_LABEL\u003dexternal_textures\nexport ANGLE_CAPTURE_OUT_DIR\u003d[PATH_TO_ANGLE]/src/tests/restricted_traces/external_textures/\n\nAndroid:\nadb shell setprop debug.angle.capture.frame_start 2\nadb shell setprop debug.angle.capture.frame_end 2\nadb shell setprop debug.angle.capture.label external_textures\nadb shell setprop debug.angle.capture.out_dir /data/data/externaltextures/angle_capture",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e23c811_5644ec85",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "the comment should be updated to:\n\n\"calls On EndFrame(), with MidExecutionSetup to restore external texture targetTexture1 above.\"",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af5f8d08_4b537980",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5582,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "the comment should be changed to:\n\n\"draw using the eglImage texture targetTexture1 created in frame 1\"",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f27ba9f_10cd3c1b",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5621,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-05T22:23:24Z",
+      "side": 1,
+      "message": "Let\u0027s update the comment to:\n\n// swap buffer - calls OnEndFrame() that saves the gl calls creating the external texture targetTexture2. We use this as a reference to check the gl calls we restore for targetTexture1 in MidExecutionSetup.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
