@@ -73,31 +73,18 @@ class JsonSerializer : public angle::NonCopyable
         addValue(name, rapidjson::Value(v));
     }
 
-    template <typename T>
-    void addVector(const std::string &name, const std::vector<T> &value)
+    template <typename Vector>
+    void addVector(const std::string &name, const Vector &value)
     {
         rapidjson::Value arr(rapidjson::kArrayType);
         arr.SetArray();
 
-        for (typename StoreAs<T>::Type v : value)
+        for (typename StoreAs<typename Vector::value_type>::Type v : value)
         {
             arr.PushBack(v, mAllocator);
         }
 
         addValue(name, std::move(arr));
-    }
-
-    template <typename T>
-    void addVectorAsHash(const std::string &name, const std::vector<T> &value)
-    {
-        if (!value.empty())
-        {
-            addBlob(name, reinterpret_cast<const uint8_t *>(&value[0]), value.size() * sizeof(T));
-        }
-        else
-        {
-            addCString(name, "null");
-        }
     }
 
     void addVectorOfStrings(const std::string &name, const std::vector<std::string> &value);
