@@ -88,6 +88,24 @@
       "parentUuid": "53692cda_a02e16da",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917203be_479d0a71",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-06T06:36:51Z",
+      "side": 1,
+      "message": "I haven\u0027t even built this yet, but here\u0027s a sneak peek of what the interface clean up would look like: https://chromium-review.googlesource.com/c/angle/angle/+/3812562",
+      "parentUuid": "53692cda_a02e16da",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
