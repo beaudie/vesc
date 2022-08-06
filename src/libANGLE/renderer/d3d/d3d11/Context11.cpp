@@ -11,6 +11,7 @@
 
 #include "common/entry_points_enum_autogen.h"
 #include "common/string_utils.h"
+#include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/MemoryProgramCache.h"
@@ -839,8 +840,11 @@ gl::Caps Context11::getNativeCaps() const
     if (mState.getClientVersion() >= gl::ES_3_1 &&
         mRenderer->getRenderer11DeviceCaps().featureLevel == D3D_FEATURE_LEVEL_11_0)
     {
-        caps.maxDrawBuffers      = caps.maxCombinedShaderOutputResources;
-        caps.maxColorAttachments = caps.maxCombinedShaderOutputResources;
+        caps.maxDrawBuffers = std::min(caps.maxCombinedShaderOutputResources,
+                                       static_cast<GLint>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS));
+        caps.maxColorAttachments =
+            std::min(caps.maxCombinedShaderOutputResources,
+                     static_cast<GLint>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS));
     }
 
     return caps;

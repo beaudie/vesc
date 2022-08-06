@@ -932,6 +932,9 @@ using AttachmentVector = angle::FixedVector<T, IMPLEMENTATION_MAX_FRAMEBUFFER_AT
 using AttachmentsMask = angle::BitSet<IMPLEMENTATION_MAX_FRAMEBUFFER_ATTACHMENTS>;
 
 template <typename T>
+using ColorAttachmentsVector = angle::FixedVector<T, IMPLEMENTATION_MAX_COLOR_ATTACHMENTS>;
+
+template <typename T>
 using DrawBuffersArray = std::array<T, IMPLEMENTATION_MAX_DRAW_BUFFERS>;
 
 template <typename T>

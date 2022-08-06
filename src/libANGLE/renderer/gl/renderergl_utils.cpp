@@ -18,6 +18,7 @@
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -728,7 +729,9 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->isAtLeastGLES(gl::Version(3, 0)))
     {
         caps->maxRenderbufferSize = QuerySingleGLInt(functions, GL_MAX_RENDERBUFFER_SIZE);
-        caps->maxColorAttachments = QuerySingleGLInt(functions, GL_MAX_COLOR_ATTACHMENTS);
+        caps->maxColorAttachments =
+            std::min(QuerySingleGLInt(functions, GL_MAX_COLOR_ATTACHMENTS),
+                     static_cast<GLint>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS));
     }
     else if (functions->isAtLeastGLES(gl::Version(2, 0)))
     {
@@ -746,7 +749,8 @@ void GenerateCaps(const FunctionsGL *functions,
         functions->isAtLeastGLES(gl::Version(3, 0)) ||
         functions->hasGLESExtension("GL_EXT_draw_buffers"))
     {
-        caps->maxDrawBuffers = QuerySingleGLInt(functions, GL_MAX_DRAW_BUFFERS);
+        caps->maxDrawBuffers = std::min(QuerySingleGLInt(functions, GL_MAX_DRAW_BUFFERS),
+                                        static_cast<GLint>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS));
     }
     else
     {
