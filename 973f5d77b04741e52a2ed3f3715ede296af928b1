@@ -70,6 +70,24 @@
       "parentUuid": "1dfc11f8_5934db77",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e09878e1_64bb8ca2",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-06T04:37:57Z",
+      "side": 1,
+      "message": "That will be so awesome! Thank you 🙌\n\nAnd yeah, totally. Let\u0027s just hard-code the R32 packing to ES and D3D for now. We can formalize it more once the interface is more solid.",
+      "parentUuid": "53692cda_a02e16da",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
