@@ -14,6 +14,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/Buffer.h"
+#include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/Program.h"
@@ -1447,8 +1448,11 @@ void GenerateCaps(ID3D11Device *device,
 
     // Maximum draw buffers and color attachments are the same, max color attachments could
     // eventually be increased to 16
-    caps->maxDrawBuffers      = GetMaximumSimultaneousRenderTargets(featureLevel);
-    caps->maxColorAttachments = GetMaximumSimultaneousRenderTargets(featureLevel);
+    caps->maxDrawBuffers = std::min(GetMaximumSimultaneousRenderTargets(featureLevel),
+                                    static_cast<int>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS));
+    caps->maxColorAttachments =
+        std::min(GetMaximumSimultaneousRenderTargets(featureLevel),
+                 static_cast<int>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS));
 
     // D3D11 has the same limit for viewport width and height
     caps->maxViewportWidth  = GetMaximumViewportSize(featureLevel);
