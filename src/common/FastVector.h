@@ -491,39 +491,72 @@ template <class Key, class Value, size_t N>
 class FlatUnorderedMap final
 {
   public:
-    using Pair = std::pair<Key, Value>;
+    using Pair           = std::pair<Key, Value>;
+    using Storage        = FastVector<Pair, N>;
+    using iterator       = typename Storage::iterator;
+    using const_iterator = typename Storage::const_iterator;
 
     FlatUnorderedMap() {}
     ~FlatUnorderedMap() {}
 
-    void insert(Key key, Value value)
+    iterator begin() { return mData.begin(); }
+    const_iterator begin() const { return mData.begin(); }
+    iterator end() { return mData.end(); }
+    const_iterator end() const { return mData.end(); }
+
+    iterator find(const Key &key)
+    {
+        for (auto it = mData.begin(); it != mData.end(); ++it)
+        {
+            if (it->first == key)
+            {
+                return it;
+            }
+        }
+        return mData.end();
+    }
+
+    const_iterator find(const Key &key) const
+    {
+        for (auto it = mData.begin(); it != mData.end(); ++it)
+        {
+            if (it->first == key)
+            {
+                return it;
+            }
+        }
+        return mData.end();
+    }
+
+    Value &operator[](const Key &key)
+    {
+        iterator it = find(key);
+        if (it != end())
+        {
+            return it->second;
+        }
+
+        mData.push_back(Pair(key, {}));
+        return mData.back().second;
+    }
+
+    void insert(const Key &key, Value value)
     {
         ASSERT(!contains(key));
         mData.push_back(Pair(key, value));
     }
 
-    bool contains(Key key) const
-    {
-        for (size_t index = 0; index < mData.size(); ++index)
-        {
-            if (mData[index].first == key)
-                return true;
-        }
-        return false;
-    }
+    bool contains(const Key &key) const { return find(key) != end(); }
 
     void clear() { mData.clear(); }
 
-    bool get(Key key, Value *value) const
+    bool get(const Key &key, Value *value) const
     {
-        for (size_t index = 0; index < mData.size(); ++index)
+        auto it = find(key);
+        if (it != end())
         {
-            const Pair &item = mData[index];
-            if (item.first == key)
-            {
-                *value = item.second;
-                return true;
-            }
+            *value = it->second;
+            return true;
         }
         return false;
     }
