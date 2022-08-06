@@ -52,6 +52,24 @@
       "parentUuid": "4f78777f_c50ec7c3",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53692cda_a02e16da",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-06T01:56:00Z",
+      "side": 1,
+      "message": "In truth, the backends should be able to just set the enum, and the front-end shouldn\u0027t need to know about it. Perhaps a front-end future purely for the purpose of letting the front-end do the emulation (vs not).\n\nThings are getting too messy here, so I\u0027m gonna just go ahead and clean the interface up a little bit. In the meantime, you could get away with a front-end feature, right?",
+      "parentUuid": "1dfc11f8_5934db77",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
