@@ -122,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1c7589c_16dab346",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5529,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-06T00:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ed0752a_c62ffa47",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e23c811_5644ec85",
@@ -135,6 +153,24 @@
       "writtenOn": "2022-08-05T22:23:24Z",
       "side": 1,
       "message": "the comment should be updated to:\n\n\"calls On EndFrame(), with MidExecutionSetup to restore external texture targetTexture1 above.\"",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cb90a91_d1a82883",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5576,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-06T00:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e23c811_5644ec85",
       "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "387d80b9_a1401db9",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5582,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-06T00:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af5f8d08_4b537980",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f27ba9f_10cd3c1b",
@@ -169,6 +223,24 @@
       "writtenOn": "2022-08-05T22:23:24Z",
       "side": 1,
       "message": "Let\u0027s update the comment to:\n\n// swap buffer - calls OnEndFrame() that saves the gl calls creating the external texture targetTexture2. We use this as a reference to check the gl calls we restore for targetTexture1 in MidExecutionSetup.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc76cd0_55f88641",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5621,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-06T00:21:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f27ba9f_10cd3c1b",
       "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
