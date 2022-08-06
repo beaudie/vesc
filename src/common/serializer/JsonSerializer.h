@@ -87,6 +87,20 @@ class JsonSerializer : public angle::NonCopyable
         addValue(name, std::move(arr));
     }
 
+    template <typename T, size_t N>
+    void addVector(const std::string &name, const angle::FixedVector<T, N> &value)
+    {
+        rapidjson::Value arr(rapidjson::kArrayType);
+        arr.SetArray();
+
+        for (typename StoreAs<T>::Type v : value)
+        {
+            arr.PushBack(v, mAllocator);
+        }
+
+        addValue(name, std::move(arr));
+    }
+
     template <typename T>
     void addVectorAsHash(const std::string &name, const std::vector<T> &value)
     {

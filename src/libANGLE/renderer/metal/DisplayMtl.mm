@@ -12,6 +12,7 @@
 #include "common/apple_platform_utils.h"
 #include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo.h"
+#include "libANGLE/Constants.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
@@ -730,11 +731,23 @@ void DisplayMtl::ensureCapsInitialized() const
 
     if (supportsEitherGPUFamily(2, 1) && !mFeatures.limitMaxDrawBuffersForTesting.enabled)
     {
+        static_assert(
+            static_cast<uint32_t>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS) >= mtl::kMaxRenderTargets,
+            "");
+        static_assert(static_cast<uint32_t>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS) >=
+                          mtl::kMaxRenderTargets,
+                      "");
         mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargets;
         mNativeCaps.maxColorAttachments = mtl::kMaxRenderTargets;
     }
     else
     {
+        static_assert(static_cast<uint32_t>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS) >=
+                          mtl::kMaxRenderTargetsOlderGPUFamilies,
+                      "");
+        static_assert(static_cast<uint32_t>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS) >=
+                          mtl::kMaxRenderTargetsOlderGPUFamilies,
+                      "");
         mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargetsOlderGPUFamilies;
         mNativeCaps.maxColorAttachments = mtl::kMaxRenderTargetsOlderGPUFamilies;
     }

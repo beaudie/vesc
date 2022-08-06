@@ -9,11 +9,13 @@
 
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
+#include <algorithm>
 #include <type_traits>
 
 #include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
+#include "libANGLE/Constants.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
@@ -592,12 +594,17 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.maxDrawBuffers =
         std::min(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
+    mNativeCaps.maxDrawBuffers       = std::min(mNativeCaps.maxDrawBuffers,
+                                                static_cast<GLint>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS));
     mNativeCaps.maxFramebufferWidth  = LimitToInt(limitsVk.maxFramebufferWidth);
     mNativeCaps.maxFramebufferHeight = LimitToInt(limitsVk.maxFramebufferHeight);
     mNativeCaps.maxColorAttachments  = LimitToInt(limitsVk.maxColorAttachments);
-    mNativeCaps.maxViewportWidth     = LimitToInt(limitsVk.maxViewportDimensions[0]);
-    mNativeCaps.maxViewportHeight    = LimitToInt(limitsVk.maxViewportDimensions[1]);
-    mNativeCaps.maxSampleMaskWords   = LimitToInt(limitsVk.maxSampleMaskWords);
+    mNativeCaps.maxColorAttachments =
+        std::min(mNativeCaps.maxColorAttachments,
+                 static_cast<GLint>(gl::IMPLEMENTATION_MAX_COLOR_ATTACHMENTS));
+    mNativeCaps.maxViewportWidth   = LimitToInt(limitsVk.maxViewportDimensions[0]);
+    mNativeCaps.maxViewportHeight  = LimitToInt(limitsVk.maxViewportDimensions[1]);
+    mNativeCaps.maxSampleMaskWords = LimitToInt(limitsVk.maxSampleMaskWords);
     mNativeCaps.maxColorTextureSamples =
         vk_gl::GetMaxSampleCount(limitsVk.sampledImageColorSampleCounts);
     mNativeCaps.maxDepthTextureSamples =
