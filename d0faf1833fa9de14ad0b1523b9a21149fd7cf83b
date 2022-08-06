@@ -16,6 +16,24 @@
       "message": "I\u0027m surprised the tests were passing before if these weren\u0027t getting applied. Do they normally get applied somewhere else?\n\nThe tests fail in _coherent mode if I don\u0027t add `spv::DecorationCoherent` here.\n\nShould I also be applying these to storage blocks?",
       "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1749c29_9f6b7e33",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-06T03:20:02Z",
+      "side": 1,
+      "message": "Oh wow, how did that happen? Could you please make this a standalone change? Would be nice if you could devise a non-PLS test that would also fail without them. I get how NonReadable, NonWritable and Restrict wouldn\u0027t matter (well, other than for performance), but I\u0027m equally surprised that volatile and coherent missing didn\u0027t trigger any CTS bugs on any platforms 😮\n\nCouple other points:\n\n- You probably don\u0027t need the type check here; if these memory qualifiers don\u0027t apply to a type, they won\u0027t be specified and all the `if`s would be false. If they are wrongly applied, we should add validation for it in ValidateAST and fix the bug. In other words, you shouldn\u0027t need to specifically think about images and ssbos, just let it apply to whatever it can.\n- FYI, you can run tests with this env var `ANGLE_FEATURE_OVERRIDES_ENABLED\u003dgenerateSPIRVThroughGlslang` to make SPIR-V generation be done by glslang instead of ANGLE. This feature is on its way out, but there is still time! The reason I mention it is that you can take the SPIR-V that glslang generates and the SPIR-V that ANGLE generates and compare them with `spirv-diff` (a new-ish tool that\u0027s part of SPIR-V Tools, you\u0027d need to build it from source). Then you can easily tell if ANGLE is missing anything else.",
+      "parentUuid": "9df6a0d9_3c33548e",
+      "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
