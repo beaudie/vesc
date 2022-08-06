@@ -21,7 +21,7 @@ class TSymbolTable;
 [[nodiscard]] bool RewritePixelLocalStorageToImages(TCompiler *compiler,
                                                     TIntermBlock *root,
                                                     TSymbolTable &symbolTable,
-                                                    ShCompileOptions compileOptions,
+                                                    const ShCompileOptions &compileOptions,
                                                     int shaderVersion);
 
 }  // namespace sh

@@ -338,7 +338,7 @@ class RewriteToImagesTraverser : public TIntermTraverser
 bool RewritePixelLocalStorageToImages(TCompiler *compiler,
                                       TIntermBlock *root,
                                       TSymbolTable &symbolTable,
-                                      ShCompileOptions compileOptions,
+                                      const ShCompileOptions &compileOptions,
                                       int shaderVersion)
 {
     // If any functions take PLS arguments, monomorphize the functions by removing said parameters

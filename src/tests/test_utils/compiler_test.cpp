@@ -65,7 +65,7 @@ bool compileTestShader(GLenum type,
                        ShShaderOutput output,
                        const std::string &shaderString,
                        ShBuiltInResources *resources,
-                       ShCompileOptions compileOptions,
+                       const ShCompileOptions &compileOptions,
                        std::string *translatedCode,
                        std::string *infoLog)
 {
@@ -78,9 +78,10 @@ bool compileTestShader(GLenum type,
 
     const char *shaderStrings[] = {shaderString.c_str()};
 
-    bool compilationSuccess =
-        translator->compile(shaderStrings, 1, SH_OBJECT_CODE | compileOptions);
-    TInfoSink &infoSink = translator->getInfoSink();
+    ShCompileOptions options = compileOptions;
+    options.objectCode       = true;
+    bool compilationSuccess  = translator->compile(shaderStrings, 1, options);
+    TInfoSink &infoSink      = translator->getInfoSink();
     if (translatedCode)
     {
         *translatedCode = infoSink.obj.isBinary() ? kBinaryBlob : infoSink.obj.c_str();
@@ -97,7 +98,7 @@ bool compileTestShader(GLenum type,
                        ShShaderSpec spec,
                        ShShaderOutput output,
                        const std::string &shaderString,
-                       ShCompileOptions compileOptions,
+                       const ShCompileOptions &compileOptions,
                        std::string *translatedCode,
                        std::string *infoLog)
 {
@@ -109,13 +110,18 @@ bool compileTestShader(GLenum type,
 }
 
 MatchOutputCodeTest::MatchOutputCodeTest(GLenum shaderType,
-                                         ShCompileOptions defaultCompileOptions,
+                                         const ShCompileOptions &defaultCompileOptions,
                                          ShShaderOutput outputType)
-    : mShaderType(shaderType), mDefaultCompileOptions(defaultCompileOptions)
+    : mShaderType(shaderType), mDefaultCompileOptions{}
 {
     sh::InitBuiltInResources(&mResources);
     mResources.FragmentPrecisionHigh = 1;
     mOutputCode[outputType]          = std::string();
+}
+
+void MatchOutputCodeTest::setDefaultCompileOptions(const ShCompileOptions &defaultCompileOptions)
+{
+    mDefaultCompileOptions = defaultCompileOptions;
 }
 
 void MatchOutputCodeTest::addOutputType(const ShShaderOutput outputType)
@@ -134,7 +140,7 @@ void MatchOutputCodeTest::compile(const std::string &shaderString)
 }
 
 void MatchOutputCodeTest::compile(const std::string &shaderString,
-                                  const ShCompileOptions compileOptions)
+                                  const ShCompileOptions &compileOptions)
 {
     std::string infoLog;
     for (auto &code : mOutputCode)
@@ -150,7 +156,7 @@ void MatchOutputCodeTest::compile(const std::string &shaderString,
 
 bool MatchOutputCodeTest::compileWithSettings(ShShaderOutput output,
                                               const std::string &shaderString,
-                                              const ShCompileOptions compileOptions,
+                                              const ShCompileOptions &compileOptions,
                                               std::string *translatedCode,
                                               std::string *infoLog)
 {
