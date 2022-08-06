@@ -299,7 +299,7 @@ class SPIRVBuilder : angle::NonCopyable
 {
   public:
     SPIRVBuilder(TCompiler *compiler,
-                 ShCompileOptions compileOptions,
+                 const ShCompileOptions &compileOptions,
                  ShHashFunction64 hashFunction,
                  NameMap &nameMap);
 
@@ -459,7 +459,7 @@ class SPIRVBuilder : angle::NonCopyable
     void writeSourceExtensions(spirv::Blob *blob);
 
     [[maybe_unused]] TCompiler *mCompiler;
-    ShCompileOptions mCompileOptions;
+    const ShCompileOptions &mCompileOptions;
     gl::ShaderType mShaderType;
 
     // Capabilities the shader is using.  Accumulated as the instructions are generated.  The Shader
