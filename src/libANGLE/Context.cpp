@@ -4126,9 +4126,11 @@ void Context::initCaps()
         mState.mExtensions.shaderNoperspectiveInterpolationNV = false;
 
         // NVIDIA's Vulkan driver only supports 4 draw buffers
+        // TODO: addjust IMPLEMENTATION_MAX_DRAW_BUFFERS to 4?
         constexpr GLint maxDrawBuffers = 4;
         INFO() << "Limiting draw buffer count to " << maxDrawBuffers;
         ANGLE_LIMIT_CAP(mState.mCaps.maxDrawBuffers, maxDrawBuffers);
+        ANGLE_LIMIT_CAP(mState.mCaps.maxColorAttachments, IMPLEMENTATION_MAX_COLOR_ATTACHMENTS);
 
         // Unity based applications are sending down GL streams with undefined behavior.
         // Disabling EGL_KHR_create_context_no_error (which enables a new EGL attrib) prevents that,
