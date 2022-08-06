@@ -9,10 +9,11 @@
 
 #include "common/PackedEnums.h"
 
+#include "common/FastVector.h"
+
 #include <EGL/egl.h>
 
 #include <functional>
-#include <map>
 #include <vector>
 
 namespace egl
@@ -27,6 +28,8 @@ using AttributeValidationFunc =
 class AttributeMap final
 {
   public:
+    using Map = angle::FlatUnorderedMap<EGLAttrib, EGLAttrib, 8>;
+
     AttributeMap();
     AttributeMap(const AttributeMap &other);
     AttributeMap &operator=(const AttributeMap &other);
@@ -58,7 +61,7 @@ class AttributeMap final
     bool isEmpty() const;
     std::vector<EGLint> toIntVector() const;
 
-    typedef std::map<EGLAttrib, EGLAttrib>::const_iterator const_iterator;
+    typedef Map::const_iterator const_iterator;
 
     const_iterator begin() const;
     const_iterator end() const;
@@ -76,13 +79,13 @@ class AttributeMap final
   private:
     bool isValidated() const;
 
-    const std::map<EGLAttrib, EGLAttrib> &attribs() const
+    const Map &attribs() const
     {
         ASSERT(isValidated());
         return mValidatedAttributes;
     }
 
-    std::map<EGLAttrib, EGLAttrib> &attribs()
+    Map &attribs()
     {
         ASSERT(isValidated());
         return mValidatedAttributes;
@@ -90,7 +93,7 @@ class AttributeMap final
 
     mutable const EGLint *mIntPointer       = nullptr;
     mutable const EGLAttrib *mAttribPointer = nullptr;
-    mutable std::map<EGLAttrib, EGLAttrib> mValidatedAttributes;
+    mutable Map mValidatedAttributes;
 };
 }  // namespace egl
 
