@@ -31,14 +31,14 @@ bool AttributeMap::contains(EGLAttrib key) const
 
 EGLAttrib AttributeMap::get(EGLAttrib key) const
 {
-    auto iter = attribs().find(key);
+    const_iterator iter = attribs().find(key);
     ASSERT(iter != attribs().end());
     return iter->second;
 }
 
 EGLAttrib AttributeMap::get(EGLAttrib key, EGLAttrib defaultValue) const
 {
-    auto iter = attribs().find(key);
+    const_iterator iter = attribs().find(key);
     return (iter != attribs().end()) ? iter->second : defaultValue;
 }
 
