@@ -730,11 +730,17 @@ void DisplayMtl::ensureCapsInitialized() const
 
     if (supportsEitherGPUFamily(2, 1) && !mFeatures.limitMaxDrawBuffersForTesting.enabled)
     {
+        static_assert(IMPLEMENTATION_MAX_DRAW_BUFFERS >= mtl::kMaxRenderTargets, "");
+        static_assert(IMPLEMENTATION_MAX_COLOR_ATTACHMENTS >= mtl::kMaxRenderTargets, "");
         mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargets;
         mNativeCaps.maxColorAttachments = mtl::kMaxRenderTargets;
     }
     else
     {
+        static_assert(IMPLEMENTATION_MAX_DRAW_BUFFERS >= mtl::kMaxRenderTargetsOlderGPUFamilies,
+                      "");
+        static_assert(
+            IMPLEMENTATION_MAX_COLOR_ATTACHMENTS >= mtl::kMaxRenderTargetsOlderGPUFamilies, "");
         mNativeCaps.maxDrawBuffers      = mtl::kMaxRenderTargetsOlderGPUFamilies;
         mNativeCaps.maxColorAttachments = mtl::kMaxRenderTargetsOlderGPUFamilies;
     }
