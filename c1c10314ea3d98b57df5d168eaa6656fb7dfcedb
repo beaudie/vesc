@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d668a273_e0bdaf32",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-06T06:38:42Z",
+      "side": 1,
+      "message": "What happened, is this no longer necessary?",
+      "revId": "c1c10314ea3d98b57df5d168eaa6656fb7dfcedb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
