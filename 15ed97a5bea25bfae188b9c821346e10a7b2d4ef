@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74993eb9_a2b874be",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-07T20:40:28Z",
+      "side": 1,
+      "message": "It workarounds clang compiling errors. ANGLE uses `auto it \u003d attributes.begin;` like code in many places, it causes warnings like:`auto* should be used`. Without it, we have to change all `auto` to `auto*` or `AttributeMap::const_iterator` in many places.",
+      "parentUuid": "47fd2eab_c015d061",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "15ed97a5bea25bfae188b9c821346e10a7b2d4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7722984_e9c202df",
         "filename": "src/libANGLE/AttributeMap.h",
         "patchSetId": 8
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-07T20:15:23Z",
       "side": 1,
       "message": "Might as well initialize it with something a bit bigger? Like 4 or 8?",
+      "range": {
+        "startLine": 30,
+        "startChar": 62,
+        "endLine": 30,
+        "endChar": 63
+      },
+      "revId": "15ed97a5bea25bfae188b9c821346e10a7b2d4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2a18b7b_e378a903",
+        "filename": "src/libANGLE/AttributeMap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-07T20:40:28Z",
+      "side": 1,
+      "message": "I checked chrome code, chrome could use up to 14 attributes for the attribute map. But they are for creating context, surface, image or choosing config. Chrome only triggers those cases several times per GPU process lifespan. so we don\u0027t need to optimize for them. In the other hand, chrome creates several fence per frame. I checked the code, it only needs 1 or 2 attribute. So I picked 2 at here, If we only consider chrome, it is the best choice.",
+      "parentUuid": "b7722984_e9c202df",
       "range": {
         "startLine": 30,
         "startChar": 62,
