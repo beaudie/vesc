@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "129019c2_09abf915",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-07T14:40:37Z",
+      "side": 1,
+      "message": "Nice work Faye!  Some feedback on the changes you have so far.",
+      "revId": "2ffb7c2535f481b114faae500113f9b96ae56063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76657677_e76ab064",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3414,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-07T14:40:37Z",
+      "side": 1,
+      "message": "Rather than dummy, can we call these staging textures?",
+      "range": {
+        "startLine": 3414,
+        "startChar": 20,
+        "endLine": 3414,
+        "endChar": 26
+      },
+      "revId": "2ffb7c2535f481b114faae500113f9b96ae56063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

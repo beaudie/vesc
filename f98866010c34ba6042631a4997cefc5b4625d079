@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9947b21e_788da483",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-07T14:40:37Z",
+      "side": 1,
+      "message": "I believe we can use the same method employed by shader population, where we track the highest ID used by the app, and then we use IDs higher than that (which is safe).  See the following:\n```\ngl::ShaderProgramID tempShaderStartID \u003d {resourceTracker-\u003egetMaxShaderPrograms()};\n```\nYou will need to add a function called `onTextureAccess` similar to `onShaderProgramAccess`.\n\nAs to whether the staging image can immediately be deleted, I think the answer is yes, but haven\u0027t found hard evidence.  Give it a try, we can back it out if it becomes clear we need to preserve it.",
+      "parentUuid": "1d5002bc_b0efc0fc",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "642eb901_c8f9853e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
@@ -73,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60f5f75b_874d45a5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3437,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-07T14:40:37Z",
+      "side": 1,
+      "message": "Right, we can\u0027t have back to back BindTexture calls or it changes which texture subsequent calls apply to.\n\nWith this code it looks like you are trying to create a staging texture that matches the original texture, including all its parameters.  I don\u0027t know if we need that level of duplication.  I think we can simplify this by hard coding the parameters of the staging texture.\n\nIf it turns out we need to apply all the same parameters to each texture, we\u0027ll need to move this block of code to a helper and apply the full sequence to the new staging texture, i.e. everything including `BindTexture` down to `GL_TEXTURE_MAX_LEVEL` would move into a helper.\n\nThere may end up being a subset of parameters that we want to duplicate between the staging and real texture, but let\u0027s defer that for now.",
+      "parentUuid": "bae2ebdf_95ac4317",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c30ad944_e48e1b7b",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
@@ -84,6 +120,24 @@
       "writtenOn": "2022-08-05T22:23:24Z",
       "side": 1,
       "message": "Let\u0027s try to combine this if condition with `if (context-\u003egetExtensions().getImageANGLE)` below.",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f5f2cc5_c8eacc7c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-07T14:40:37Z",
+      "side": 1,
+      "message": "+1, okay to prototype like this, but looks like there is a decent amount of code shared.",
+      "parentUuid": "c30ad944_e48e1b7b",
       "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
