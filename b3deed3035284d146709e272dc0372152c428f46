@@ -16,6 +16,74 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "b3deed3035284d146709e272dc0372152c428f46",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e650b541_56e53676",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-07T02:16:10Z",
+      "side": 1,
+      "message": "@Geoff, a question for you",
+      "revId": "b3deed3035284d146709e272dc0372152c428f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a863bdb2_837342a7",
+        "filename": "src/common/serializer/JsonSerializer.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-07T02:16:10Z",
+      "side": 1,
+      "message": "Instead, you can change the above to:\n\n```\ntemplate \u003ctypename Vector\u003e\nvoid addVector(const std::string \u0026name, const Vector \u0026value)\n```\n\nAnd where you need `T`, you could use `typename Vector::value_type`",
+      "revId": "b3deed3035284d146709e272dc0372152c428f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "784fbe31_2c15b0ae",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-07T02:16:10Z",
+      "side": 1,
+      "message": "We have generally been coding under the assumption that draw buffer count \u003d\u003d color attachment count. For example, there is no support for the case where color attachment count \u003e draw buffer count in the Vulkan backend.\n\nIMO, it would be ok if you didn\u0027t add this constant, and use `DrawBuffersVector` everywhere. However, let\u0027s see if Geoff has insights on the frontend / other backends I might not have.",
+      "revId": "b3deed3035284d146709e272dc0372152c428f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dea754a1_4a6e09d0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Context11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-07T02:16:10Z",
+      "side": 1,
+      "message": "Instead, add these to the frontend. See the `ANGLE_LIMIT_CAP` calls in `Context::initCaps`",
+      "revId": "b3deed3035284d146709e272dc0372152c428f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
