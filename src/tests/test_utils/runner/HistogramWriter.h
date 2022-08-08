@@ -37,13 +37,15 @@ class HistogramWriter
     void getAsJSON(rapidjson::Document *doc) const;
 
   private:
-#if defined(ANGLE_HAS_HISTOGRAMS)
     std::map<std::string, std::unique_ptr<catapult::HistogramBuilder>> mHistograms;
-#endif  // defined(ANGLE_HAS_HISTOGRAMS)
 };
+
+}  // namespace angle
 
 // Define a stub implementation when histograms are compiled out.
 #if !defined(ANGLE_HAS_HISTOGRAMS)
+namespace angle
+{
 inline HistogramWriter::HistogramWriter()  = default;
 inline HistogramWriter::~HistogramWriter() = default;
 inline void HistogramWriter::addSample(const std::string &measurement,
@@ -52,8 +54,13 @@ inline void HistogramWriter::addSample(const std::string &measurement,
                                        const std::string &units)
 {}
 inline void HistogramWriter::getAsJSON(rapidjson::Document *doc) const {}
-#endif  // !defined(ANGLE_HAS_HISTOGRAMS)
-
 }  // namespace angle
+
+namespace catapult
+{
+class HistogramBuilder
+{};
+}  // namespace catapult
+#endif  // !defined(ANGLE_HAS_HISTOGRAMS)
 
 #endif  // ANGLE_TESTS_TEST_UTILS_HISTOGRAM_WRITER_H_
