@@ -39,6 +39,29 @@
       },
       "revId": "2ffb7c2535f481b114faae500113f9b96ae56063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4732a274_2e112f93",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3675,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-08T15:20:01Z",
+      "side": 1,
+      "message": "If we go with this hard coded attribute list, we\u0027ll want to assert that any call to `eglCreateImage` before MEC uses only this combination.  We can do that by adding a section to `maybeCapturePreCallUpdates` that simply reads the attribs provided, throws an `UNREACHABLE` if they don\u0027t match the expectation here.\n\nWhen that fires later, it will be an indicator to whoever is trying to trace will need to add that support.",
+      "range": {
+        "startLine": 3671,
+        "startChar": 0,
+        "endLine": 3675,
+        "endChar": 18
+      },
+      "revId": "2ffb7c2535f481b114faae500113f9b96ae56063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
