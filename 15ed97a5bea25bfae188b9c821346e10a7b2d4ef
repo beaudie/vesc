@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e19b728d_de91870c",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-08T02:35:24Z",
+      "side": 1,
+      "message": "There are many places like below\n`\nfor (auto it \u003d attribs.begin(); it !\u003d attribs.end(); ++it) {\n ...\n}\n`\nUsing auto is very convenient here. in the other hand, using AttributeMap::const_iterator is not only inconvenient (programer has to find out the type (AttributeMap) of attribs, and know it has the const_iterator type defined in the class), but also it doesn\u0027t have benefit for not using `auto` for those cases. BTW, the clang compile error message is not very helpful as well. It just recommends you to use `auto *`\n```\n    for (auto attribIter \u003d attribs.begin(); attribIter !\u003d attribs.end(); attribIter++)\n         ^~~~\n         auto*\n1 error generated.\n```. So I feel it is better to have this helper class.\n\nBTW, c++ provides a iterator wrap as well, but it is not defined in the spec, so it is not safe to use it.",
+      "parentUuid": "a14dfea0_18eedcbf",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 14
+      },
+      "revId": "15ed97a5bea25bfae188b9c821346e10a7b2d4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7722984_e9c202df",
         "filename": "src/libANGLE/AttributeMap.h",
         "patchSetId": 8
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Ok, for Chrome 2 makes sense. But ANGLE has other uses too. That said, I\u0027m not terribly familiar with EGL, so I don\u0027t know offhand what would be a typical number.\n\n2 is fine for now.",
       "parentUuid": "b2a18b7b_e378a903",
+      "range": {
+        "startLine": 30,
+        "startChar": 62,
+        "endLine": 30,
+        "endChar": 63
+      },
+      "revId": "15ed97a5bea25bfae188b9c821346e10a7b2d4ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f59705a4_67c26b3a",
+        "filename": "src/libANGLE/AttributeMap.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-08T02:35:24Z",
+      "side": 1,
+      "message": "I guess we can adjust it later, if we find other cases show up in the profile.",
+      "parentUuid": "ee0f58da_ff10f69b",
       "range": {
         "startLine": 30,
         "startChar": 62,
