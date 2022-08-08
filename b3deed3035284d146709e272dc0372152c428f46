@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "940fbe40_4452bf3d",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-08T13:12:51Z",
+      "side": 1,
+      "message": "Given that GLES requires the draw buffer values are always in order and not duplicated, I don\u0027t think it ever makes sense to have these caps different.",
+      "parentUuid": "482944c6_f500adfe",
+      "revId": "b3deed3035284d146709e272dc0372152c428f46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dea754a1_4a6e09d0",
