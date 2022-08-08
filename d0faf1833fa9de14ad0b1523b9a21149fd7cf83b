@@ -34,6 +34,24 @@
       "parentUuid": "9df6a0d9_3c33548e",
       "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b787b2a_41d9c9f9",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-08T17:21:47Z",
+      "side": 1,
+      "message": "Derp, good point. We can just apply the memory qualifier decorations without any ifs:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3818162",
+      "parentUuid": "e1749c29_9f6b7e33",
+      "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
