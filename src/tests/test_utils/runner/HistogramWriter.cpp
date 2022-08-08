@@ -12,10 +12,6 @@
 
 #include <rapidjson/document.h>
 
-#if !defined(ANGLE_HAS_HISTOGRAMS)
-#    error "Must have histograms enabled"
-#endif  // !defined(ANGLE_HAS_HISTOGRAMS)
-
 ANGLE_DISABLE_EXTRA_SEMI_WARNING
 ANGLE_DISABLE_EXTRA_SEMI_STMT_WARNING
 ANGLE_DISABLE_DESTRUCTOR_OVERRIDE_WARNING
