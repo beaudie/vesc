@@ -16,6 +16,41 @@
       "message": "Beautiful. Chrome also uses the translator directly in the validating command decoder so this may need to be updated there as well.\n\nFirefox also uses our translator directly. cc kelsey.gilbert@mozilla.com when you\u0027re ready to have it reviewed so they know.",
       "revId": "f766502bc5834bf0613f9d34578838fa76d42a7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b341c3d1_1318b404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-08T17:30:44Z",
+      "side": 1,
+      "message": "I already fixed Chrome (otherwise chrome bots failed). Will let Kelsey know",
+      "parentUuid": "88add266_90295a0a",
+      "revId": "f766502bc5834bf0613f9d34578838fa76d42a7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09832acd_21cb2922",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-08T17:30:44Z",
+      "side": 1,
+      "message": "FYI Kelsey, ANGLE translator\u0027s interface is changing",
+      "revId": "f766502bc5834bf0613f9d34578838fa76d42a7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
