@@ -90,17 +90,11 @@ struct GraphicsDriverUniforms
 static_assert(sizeof(GraphicsDriverUniforms) % (sizeof(uint32_t) * 4) == 0,
               "GraphicsDriverUniforms should be 16bytes aligned");
 
-// Only used under the following conditions:
-//
-// - Bresenham line rasterization is not supported, or
-// - Transform feedback is emulated
-//
+// Only used when transform feedback is emulated.
 struct GraphicsDriverUniformsExtended
 {
     GraphicsDriverUniforms common;
-
-    // Only used with bresenham line rasterization emulation
-    std::array<float, 4> viewport;
+    int32_t paddingTemp[4];  // Fix?
 
     // Only used with transform feedback emulation
     std::array<int32_t, 4> xfbBufferOffsets;
@@ -646,8 +640,7 @@ bool BlendModeSupportsDither(const gl::State &state, size_t colorIndex)
 
 bool shouldUseGraphicsDriverUniformsExtended(const ContextVk *contextVk)
 {
-    return contextVk->getFeatures().basicGLLineRasterization.enabled ||
-           contextVk->getFeatures().emulateTransformFeedback.enabled;
+    return contextVk->getFeatures().emulateTransformFeedback.enabled;
 }
 
 }  // anonymous namespace
@@ -4341,10 +4334,6 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     // Ensure viewport is within Vulkan requirements
     vk::ClampViewport(&mViewport);
 
-    if (getFeatures().basicGLLineRasterization.enabled)
-    {
-        invalidateGraphicsDriverUniforms();
-    }
     mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_VIEWPORT);
 }
 
@@ -6088,17 +6077,6 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     GraphicsDriverUniformsExtended driverUniformsExt = {};
     if (shouldUseGraphicsDriverUniformsExtended(this))
     {
-        gl::Rectangle glViewport = mState.getViewport();
-        if (isRotatedAspectRatioForDrawFBO())
-        {
-            // The surface is rotated 90/270 degrees.  This changes the aspect ratio of the surface.
-            std::swap(glViewport.x, glViewport.y);
-            std::swap(glViewport.width, glViewport.height);
-        }
-        driverUniformsExt.viewport = {
-            static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
-            static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
-
         if (mState.isTransformFeedbackActiveUnpaused())
         {
             TransformFeedbackVk *transformFeedbackVk =
