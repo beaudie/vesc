@@ -71,6 +71,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab4e37d2_75914b29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-08-08T03:53:28Z",
+      "side": 1,
+      "message": "Thanks Geoff. Sorry for the late response. \nGenerally speaking, we are just trying to implement a timestamp behind a flag, so we can test the timestamp info for TensorflowJS WebGL. It\u0027s best this solution works everywhere, but if it only works for TensorfowJS, it\u0027s also OK for US. Do you have any other suggestion for how to get the timestamp information for Tensorflow WebGL?",
+      "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eea8478e_8b894e28",
@@ -84,6 +101,24 @@
       "writtenOn": "2022-07-21T20:55:15Z",
       "side": 1,
       "message": "I want to make sure I understand the architecture here. There is a per-renderer D3D11_QUERY_TIMESTAMP_DISJOINT query that is started here in initializeDisjointQuery when a timer query is started and then `mDisjointQuery` is checked for disjoints then cleared.\n\nWhy not hold `mDisjointQuery` in the Query11? One renderer can have multiple contexts making queries so it\u0027s possible for timestamp queries to come from multiple contexts before any of them check the results.",
+      "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f65973d0_ffdc68bf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-08-08T03:53:28Z",
+      "side": 1,
+      "message": "Hi Geoff,\nThe expected timestamp behavior is as below:\n\ndisjoint::Begin(First queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ntimestamp::End(queryCounter)\ndisjoint::End(queryResolve)\n\nHowever, in chromium, unlike queryCounter, queryResolve is not a Command buffer cmd, it is implicitly done by GLES2DecoderPassthroughImpl at flush time, and flush may happen at any time, for example, below calls may possible start queryResolve by calling GLES2DecoderPassthroughImpl::ProcessQueries(https://source.chromium.org/chromium/chromium/src/+/main:gpu/command_buffer/service/gles2_cmd_decoder_passthrough.cc;l\u003d2661):\nGLES2DecoderPassthroughImpl::QueryCounterEXT\nGLES2DecoderPassthroughImpl::MakeCurrent\nGLES2DecoderPassthroughImpl::ProcessPendingQueries\nGLES2DecoderPassthroughImpl::DoFinish\nGLES2DecoderPassthroughImpl::DoFlush\n\nSo, the possible way(I can think of) to guarantee the expected behavior is avoiding queryResolve at GLES2DecoderPassthroughImpl::ProcessQueries and let user do it manually, such as implement cmds like\ngles2::cmds::GetQueryObjectui64vEXT, gles2::cmds::GetQueryObjectuivEXT, and ensure GLES2Implementation::GetQueryObjectivEXT send these commands when being called.\nWDYT?\n\nAs to the multi context, our TensorflowJS case only runs with a single canva(context). So we think multi context is not necesary.",
+      "parentUuid": "eea8478e_8b894e28",
       "revId": "4f8ea5f5f0818fc8d68e1f00fd1de6b8bcef0796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

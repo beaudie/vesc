@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7f723ab2_380dcaf4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1139801
+      },
+      "writtenOn": "2022-08-08T03:53:28Z",
+      "side": 1,
+      "message": "In our TensorflowJS case, it will run a very short time (usually no more than a second), we only test this inside a single frame.\n\nInsert a disjoint is windows D3D 11 requirements, our design should meet these requirements.",
+      "parentUuid": "b0cfe12a_c243a4f1",
+      "revId": "b1dfad40a868bdadaf7079395eea98dc5558c46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0efe5eba_7be42cf3",
         "filename": "src/tests/gl_tests/TimerQueriesTest.cpp",
         "patchSetId": 2
