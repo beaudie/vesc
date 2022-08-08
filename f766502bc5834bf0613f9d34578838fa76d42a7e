@@ -51,6 +51,23 @@
       "message": "FYI Kelsey, ANGLE translator\u0027s interface is changing",
       "revId": "f766502bc5834bf0613f9d34578838fa76d42a7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1752d204_ed6c0ba8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-08T23:30:27Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "f766502bc5834bf0613f9d34578838fa76d42a7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
