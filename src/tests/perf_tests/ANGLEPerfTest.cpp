@@ -272,6 +272,7 @@ ANGLEPerfTest::~ANGLEPerfTest() {}
 
 void ANGLEPerfTest::run()
 {
+    INFO() << "======= running test: \"" << mName << "\"";
     if (mSkipTest)
     {
         GTEST_SKIP() << mSkipTestReason;
