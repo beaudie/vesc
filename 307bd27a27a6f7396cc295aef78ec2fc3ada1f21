@@ -16,6 +16,23 @@
       "message": "ynovikov@: please send to the CQ if it lgty. thanks.",
       "revId": "307bd27a27a6f7396cc295aef78ec2fc3ada1f21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fe9aa0_bb10b2ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178124
+      },
+      "writtenOn": "2022-08-08T17:20:29Z",
+      "side": 1,
+      "message": "geofflang@: could you take a look? feel free to send to the CQ if it lgty. thanks.",
+      "revId": "307bd27a27a6f7396cc295aef78ec2fc3ada1f21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
