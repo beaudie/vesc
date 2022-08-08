@@ -221,6 +221,30 @@
       },
       "revId": "6622ba902be4341887aa59abff333874aea7ad09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bf5ef04_62e245f1",
+        "filename": "doc/BranchingAndRolling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-08T13:06:36Z",
+      "side": 1,
+      "message": "Looks great! Thanks for updating these docs.",
+      "parentUuid": "34b57936_e0f7a7d5",
+      "range": {
+        "startLine": 59,
+        "startChar": 1,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "6622ba902be4341887aa59abff333874aea7ad09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
