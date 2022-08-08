@@ -870,17 +870,11 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxCombinedShaderOutputResources =
         LimitToInt(maxPerStageResources - kReservedPerStageBindingCount);
 
-    // Reserve 1 extra varying for ANGLEPosition when GLLineRasterization is enabled
-    constexpr GLint kReservedVaryingComponentsForGLLineRasterization = 4;
     // Reserve 1 extra varying for transform feedback capture of gl_Position.
     constexpr GLint kReservedVaryingComponentsForTransformFeedbackExtension = 4;
 
     GLint reservedVaryingComponentCount = 0;
 
-    if (getFeatures().basicGLLineRasterization.enabled)
-    {
-        reservedVaryingComponentCount += kReservedVaryingComponentsForGLLineRasterization;
-    }
     if (getFeatures().supportsTransformFeedbackExtension.enabled &&
         (!getFeatures().supportsDepthClipControl.enabled ||
          getFeatures().enablePreRotateSurfaces.enabled ||
@@ -992,7 +986,7 @@ void RendererVk::ensureCapsInitialized() const
 
     // Geometry shaders are required for ES 3.2.
     // We don't support GS when we are emulating line raster due to the tricky position varying.
-    if (mPhysicalDeviceFeatures.geometryShader && !mFeatures.basicGLLineRasterization.enabled)
+    if (mPhysicalDeviceFeatures.geometryShader)  // remove?
     {
         // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
         bool geometryShader = mFeatures.supportsTransformFeedbackExtension.enabled &&
@@ -1023,7 +1017,7 @@ void RendererVk::ensureCapsInitialized() const
     }
 
     // We don't support TS when we are emulating line raster due to the tricky position varying.
-    if (mPhysicalDeviceFeatures.tessellationShader && !mFeatures.basicGLLineRasterization.enabled)
+    if (mPhysicalDeviceFeatures.tessellationShader)  // remove?
     {
         constexpr uint32_t kReservedTessellationDefaultUniformBindingCount = 2;
 
