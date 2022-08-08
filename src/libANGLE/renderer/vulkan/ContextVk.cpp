@@ -90,11 +90,7 @@ struct GraphicsDriverUniforms
 static_assert(sizeof(GraphicsDriverUniforms) % (sizeof(uint32_t) * 4) == 0,
               "GraphicsDriverUniforms should be 16bytes aligned");
 
-// Only used under the following conditions:
-//
-// - Bresenham line rasterization is not supported, or
-// - Transform feedback is emulated
-//
+// Only used when transform feedback is emulated.
 struct GraphicsDriverUniformsExtended
 {
     GraphicsDriverUniforms common;
@@ -646,8 +642,7 @@ bool BlendModeSupportsDither(const gl::State &state, size_t colorIndex)
 
 bool shouldUseGraphicsDriverUniformsExtended(const ContextVk *contextVk)
 {
-    return contextVk->getFeatures().basicGLLineRasterization.enabled ||
-           contextVk->getFeatures().emulateTransformFeedback.enabled;
+    return contextVk->getFeatures().emulateTransformFeedback.enabled;
 }
 
 }  // anonymous namespace
@@ -4341,10 +4336,6 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
     // Ensure viewport is within Vulkan requirements
     vk::ClampViewport(&mViewport);
 
-    if (getFeatures().basicGLLineRasterization.enabled)
-    {
-        invalidateGraphicsDriverUniforms();
-    }
     mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_VIEWPORT);
 }
 
