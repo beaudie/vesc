@@ -106,6 +106,24 @@
       "parentUuid": "53692cda_a02e16da",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b51b8149_3e196301",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-08T17:24:52Z",
+      "side": 1,
+      "message": "That change looks awesome, thank you for fixing this! It\u0027s nice to not be worried about running out of space anymore 😊",
+      "parentUuid": "917203be_479d0a71",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
