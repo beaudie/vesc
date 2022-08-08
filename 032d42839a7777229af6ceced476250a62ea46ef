@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c71b362b_f04862c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-08T17:18:14Z",
+      "side": 1,
+      "message": "Unfortunately, I haven\u0027t been able to find a test that repros this without coherent pixel local storage. The PLS tests were my best attempt at breaking image load/stores, and none of them reproed, and I just spent some time trying to make a tests that breaks it using atomics without success.\n\nLuckily, the PLS tests that use SPV_EXT_fragment_shader_interlock *do* break without this change, so once that lands, we will have a repro on the bots that verifies the memory qualifiers work (or at least the \"coherent\" one).",
+      "revId": "032d42839a7777229af6ceced476250a62ea46ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
