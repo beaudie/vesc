@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6492eafb_4645f3d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-08T16:52:46Z",
+      "side": 1,
+      "message": "The downside here is that if you are only updating small fraction of big buffer with subData, acquire-and-update will end up have to copy almost entire buffer instead of staged update will only copy what have changed. This is especially true for desktop GPUs where renderpass breakage does not matter much. For ARM, there is also possibility that the renderpass is going to be break anyway due to other reasons, and this will be unnecessarily adding the large data copy here.\n\nMy suggestion is at least you should add the feature flag here to only apply for GPUs where renderpass matters (or you can just use preferCPUForBufferSubData which is set true for ARM). And also check this on ARM devices to see if we are unnecessraily incurring big data due to this without actually saving us renderpass breakage, or are we actually helping on ARM or not.\n\nOr alternatively, you stage the small update first and apply this optimization until staged update is going to be flushed. At the time you are going to flush staged update, check to see if flushing the staged update would actually break renderpass or not and chose to do create a new buffer to avoid breake the renderpass. This model is a bit more complex but has less chance to make wrong decisions. But it also has extra copy as well, so check app traces to see if we are actually run into this in real app and what is the size of update versus size of buffer to see if it worth it or not.",
+      "range": {
+        "startLine": 19,
+        "startChar": 35,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
