@@ -34,6 +34,24 @@
       "parentUuid": "4393fa87_7beb9114",
       "revId": "6dbc304fd352e32b6a2dbaaf8922bde07517d38a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f32da4_1333cc63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-08-08T18:16:54Z",
+      "side": 1,
+      "message": "Done (caching only one external format)",
+      "parentUuid": "f732f406_3801fe1d",
+      "revId": "6dbc304fd352e32b6a2dbaaf8922bde07517d38a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
