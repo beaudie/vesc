@@ -98,6 +98,8 @@ proto::UnitAndDirection StringToUnitAndDirection(const std::string &str)
 }
 }  // namespace
 
+bool HistogramWriter::mHasHistograms = true;
+
 HistogramWriter::HistogramWriter() = default;
 
 HistogramWriter::~HistogramWriter() = default;

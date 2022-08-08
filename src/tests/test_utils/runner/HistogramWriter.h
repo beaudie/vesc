@@ -40,6 +40,7 @@ class HistogramWriter
 #if defined(ANGLE_HAS_HISTOGRAMS)
     std::map<std::string, std::unique_ptr<catapult::HistogramBuilder>> mHistograms;
 #endif  // defined(ANGLE_HAS_HISTOGRAMS)
+    static bool mHasHistograms;
 };
 
 // Define a stub implementation when histograms are compiled out.
@@ -52,6 +53,9 @@ inline void HistogramWriter::addSample(const std::string &measurement,
                                        const std::string &units)
 {}
 inline void HistogramWriter::getAsJSON(rapidjson::Document *doc) const {}
+
+// triggers "ld.lld: error: duplicate symbol" if defines are inconsistent
+bool HistogramWriter::mHasHistograms = false;
 #endif  // !defined(ANGLE_HAS_HISTOGRAMS)
 
 }  // namespace angle
