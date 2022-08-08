@@ -52,6 +52,24 @@
       "parentUuid": "e1749c29_9f6b7e33",
       "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e45433_c27ecf7f",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5965,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-08T20:37:46Z",
+      "side": 1,
+      "message": "Done\n\nAlso, thanks for pointing out generateSPIRVThroughGlslang. I added another test config to make sure the interlock still works when we go through ARB/GLSL.",
+      "parentUuid": "3b787b2a_41d9c9f9",
+      "revId": "d0faf1833fa9de14ad0b1523b9a21149fd7cf83b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
