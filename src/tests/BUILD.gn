@@ -376,7 +376,10 @@ template("angle_perftests_common") {
       "$angle_root/third_party/rapidjson:rapidjson",
       "${invoker.test_utils}",
     ]
-    public_configs += [ "${angle_root}:libANGLE_config" ]
+    public_configs += [
+      "${angle_root}:libANGLE_config",
+      "$angle_root/src/tests:angle_maybe_has_histograms",
+    ]
   }
 }
 

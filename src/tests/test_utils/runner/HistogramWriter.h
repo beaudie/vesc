@@ -52,6 +52,12 @@ inline void HistogramWriter::addSample(const std::string &measurement,
                                        const std::string &units)
 {}
 inline void HistogramWriter::getAsJSON(rapidjson::Document *doc) const {}
+
+// triggers "ld.lld: error: duplicate symbol" if defines are inconsistent
+bool AngleHasHistograms()
+{
+    return false;
+}
 #endif  // !defined(ANGLE_HAS_HISTOGRAMS)
 
 }  // namespace angle
