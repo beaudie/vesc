@@ -9,6 +9,7 @@
 
 #include "ANGLEPerfTest.h"
 
+#include <android/log.h>
 #include "ANGLEPerfTestArgs.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -272,6 +273,7 @@ ANGLEPerfTest::~ANGLEPerfTest() {}
 
 void ANGLEPerfTest::run()
 {
+    __android_log_print(ANDROID_LOG_INFO, "ANGLE", "running test: %s", mName.c_str());
     if (mSkipTest)
     {
         GTEST_SKIP() << mSkipTestReason;
