@@ -3725,6 +3725,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Only enable it on integrations without EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID passthrough.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceContinuousRefreshOnSharedPresent, false);
 
+    // Force to fallback to emulation for ASTC/ETC2/EAC textures for bad Vulkan implementation.
+    // Disabled by default.
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceEmulationAstcLdr, false);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceEmulationEtc2, false);
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

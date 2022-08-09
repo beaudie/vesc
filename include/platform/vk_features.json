@@ -925,6 +925,20 @@
                 "corresponding dynamic state malfunction in the presence of discard or alpha to coverage"
             ],
             "issue": "http://anglebug.com/7556"
+	},
+        {
+            "name": "force_emulation_astc_ldr",
+            "category": "Features",
+            "description": [
+                "Force to use ANGLE emulation for ASTC LDR textures."
+            ]
+        },
+        {
+            "name": "force_emulation_etc2",
+            "category": "Features",
+            "description": [
+                "Force to use ANGLE emulation for EAC/ETC2 textures."
+            ]
         }
     ]
 }
