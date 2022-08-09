@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92a4598d_fec9dbc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-09T01:09:11Z",
+      "side": 1,
+      "message": "I still think we should just limit our support to 8 external formats and implement a external format allocator for predefined EXTERNAL0 to EXTERNAL7 and fail if exceeds. That way, you do not need all of these code that passes external formats around in all the functions. It will be much simpler.\n\nBut other than that, this looks ok to me.",
+      "revId": "1aef12172d92c72a10742af80f656593ea11852d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
