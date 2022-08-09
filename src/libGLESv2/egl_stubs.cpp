@@ -544,8 +544,21 @@ const char *QueryString(Thread *thread, Display *display, EGLint name)
     switch (name)
     {
         case EGL_CLIENT_APIS:
-            result = "OpenGL_ES";
+        {
+            std::vector<const Config *> displayConfigs = display->getConfigs(AttributeMap());
+            ASSERT(displayConfigs.size() > 0);
+            // If Desktop GL is available it should be advertised in every config, so we just check
+            // the first one.
+            if (displayConfigs[0]->renderableType | EGL_OPENGL_BIT)
+            {
+                result = "OpenGL_ES OpenGL";
+            }
+            else
+            {
+                result = "OpenGL_ES";
+            }
             break;
+        }
         case EGL_EXTENSIONS:
             if (display == EGL_NO_DISPLAY)
             {
