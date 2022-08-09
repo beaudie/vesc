@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dd2e5e4_8ef8638c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:50:21Z",
+      "side": 1,
+      "message": "Done. This is now also conditional to `preferCPUForBufferSubData`. Like I said, this is not hit by any trace, so the optimizations remains to be theoretical at the moment.\n\nI only really did it because a buggy other CL exposed it.",
+      "parentUuid": "992cccf3_442f410c",
+      "range": {
+        "startLine": 19,
+        "startChar": 35,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4aa6b3b_d35ca007",
@@ -85,6 +109,30 @@
       "writtenOn": "2022-08-08T22:58:59Z",
       "side": 1,
       "message": "I wonder if a constant could also be used here",
+      "range": {
+        "startLine": 4865,
+        "startChar": 51,
+        "endLine": 4865,
+        "endChar": 80
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "510519bb_1cf09c6d",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4865,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:50:21Z",
+      "side": 1,
+      "message": "You\u0027re right it can, this was copy-pasted from somewhere else.",
+      "parentUuid": "a4aa6b3b_d35ca007",
       "range": {
         "startLine": 4865,
         "startChar": 51,
@@ -118,6 +166,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba95d407_9b2dd140",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4876,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:50:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a46f0620_02b74b9b",
+      "range": {
+        "startLine": 4876,
+        "startChar": 0,
+        "endLine": 4876,
+        "endChar": 19
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2ba4cdb_2c945977",
@@ -131,6 +203,30 @@
       "writtenOn": "2022-08-08T22:58:59Z",
       "side": 1,
       "message": "nit: Same format for all?",
+      "range": {
+        "startLine": 4882,
+        "startChar": 24,
+        "endLine": 4882,
+        "endChar": 38
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5369b80a_2c6541b1",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:50:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2ba4cdb_2c945977",
       "range": {
         "startLine": 4882,
         "startChar": 24,
