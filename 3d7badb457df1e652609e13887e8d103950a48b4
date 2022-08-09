@@ -16,6 +16,23 @@
       "message": "Help Shabi check in his change that VK_EXT_primitives_generated_query extension to perform glBeginQuery and glEndQuery. This extension works even if the transform feedback is inactive.",
       "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b382197e_34081fa7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-09T01:06:10Z",
+      "side": 1,
+      "message": "Nice!\n\none question: is this new code path tested in CI? I am asking because if this is something supported only on ARM, then CI is not testing it, we will need some kind manual testing on ARM.",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
