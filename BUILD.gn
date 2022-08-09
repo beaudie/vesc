@@ -1478,6 +1478,10 @@ angle_shared_library("libEGL") {
     deps += [ ":angle_version" ]
   }
 
+  if (angle_enable_gl_desktop_frontend) {
+    defines += [ "ANGLE_ENABLE_GL_DESKTOP_FRONTEND" ]
+  }
+
   public_deps = [ ":includes" ]
 
   data_deps = [ ":libGLESv2" ]
