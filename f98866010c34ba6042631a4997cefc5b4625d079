@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85a8e135_275cb14c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3415,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-09T00:57:58Z",
+      "side": 1,
+      "message": "Can we just use `mMaxAccessedResourceIDs[ResourceIDType::Texture]`? It is updated in `maybeCapturePreCallUpdates()`, which is called for every capture call the app issues. e.g. if the app has created 3 textures when we trigger the capture, the `mMaxAccessedResourceIDs[ResourceIDType::Texture]` should store 3 (or 2)., then we can use `mMaxAccessedResourceIDs[ResourceIDType::Texture]+1` for the dummy texture. If we do this, we have to make sure we call glDeleteTextures on the dummy texture, otherwise if the app creates new textures in the frames after, it will use a texture ID that is collide with the dummy texture ID.",
+      "parentUuid": "9947b21e_788da483",
+      "revId": "f98866010c34ba6042631a4997cefc5b4625d079",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "642eb901_c8f9853e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
