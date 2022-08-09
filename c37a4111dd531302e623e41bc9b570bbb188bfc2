@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "768fb4f3_21bd38b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-09T23:23:53Z",
+      "side": 1,
+      "message": "nit: suggests changing it to:\nAdding angle_perftests test case names in logcat",
+      "revId": "c37a4111dd531302e623e41bc9b570bbb188bfc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
