@@ -1223,13 +1223,12 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
     pipelineLayoutDesc.updateDescriptorSetLayout(DescriptorSetIndex::Texture, texturesSetDesc);
 
     // Set up driver uniforms as push constants. The size is set for a graphics pipeline, as there
-    // are more driver uniforms for a graphics pipeline than there are for a compute pipeline. As
-    // for the shader stages, both graphics and compute stages are used.
-    VkShaderStageFlags pushConstantShaderStageFlags =
-        contextVk->getRenderer()->getSupportedVulkanShaderStageMask();
-
+    // are more driver uniforms for a graphics pipeline than there are for a compute pipeline.
     uint32_t pushConstantSize = contextVk->getDriverUniformSize(PipelineType::Graphics);
-    pipelineLayoutDesc.updatePushConstantRange(pushConstantShaderStageFlags, 0, pushConstantSize);
+    VkShaderStageFlags pushConstantStageMask =
+        contextVk->getRenderer()->getSupportedVulkanGraphicsShaderStageMask() |
+        VK_SHADER_STAGE_COMPUTE_BIT;
+    pipelineLayoutDesc.updatePushConstantRange(pushConstantStageMask, 0, pushConstantSize);
 
     ANGLE_TRY(contextVk->getPipelineLayoutCache().getPipelineLayout(
         contextVk, pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));

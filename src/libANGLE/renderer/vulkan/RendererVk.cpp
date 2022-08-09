@@ -1222,7 +1222,7 @@ RendererVk::RendererVk()
       mValidationMessageCount(0),
       mCommandProcessor(this),
       mSupportedVulkanPipelineStageMask(0),
-      mSupportedVulkanShaderStageMask(0)
+      mSupportedVulkanGraphicsShaderStageMask(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -2753,8 +2753,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // transitions that cover many stages (such as AllGraphicsReadOnly) to mask out unsupported
     // stages, which avoids enumerating every possible combination of stages in the layouts.
     VkPipelineStageFlags unsupportedStages = 0;
-    mSupportedVulkanShaderStageMask =
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT | VK_SHADER_STAGE_COMPUTE_BIT;
+    mSupportedVulkanGraphicsShaderStageMask =
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
     if (!mPhysicalDeviceFeatures.tessellationShader)
     {
         unsupportedStages |= VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
@@ -2762,7 +2762,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
     else
     {
-        mSupportedVulkanShaderStageMask |=
+        mSupportedVulkanGraphicsShaderStageMask |=
             VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT | VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
     }
     if (!mPhysicalDeviceFeatures.geometryShader)
@@ -2771,7 +2771,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
     else
     {
-        mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
+        mSupportedVulkanGraphicsShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
