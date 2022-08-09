@@ -51,6 +51,24 @@
       "parentUuid": "b382197e_34081fa7",
       "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6b448a4_3eb8b226",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T01:53:05Z",
+      "side": 1,
+      "message": "Not tested in CI. It needs very recent drivers.\n\nI was about to say that SwiftShader architecture doesn\u0027t make support for it easy, but I may be wrong. It might actually be trivial. I\u0027ll poke them to see if it could be done.",
+      "parentUuid": "9435eda4_91602d70",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
