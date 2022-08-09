@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "370066a9_7c3dcbf2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T22:26:34Z",
+      "side": 1,
+      "message": "Ok I think I\u0027ve come up with a good compromise. I put a cap on how big the buffer can be. If the buffer itself is not too big (I put 1KB randomly), then I think it\u0027s not controversial that duplication is better than render pass break.\n\nWith that in place, I can (and have) also put a perf warning when render pass is broken even though it could have been avoided.",
+      "parentUuid": "5e604ea6_fbc04bea",
+      "range": {
+        "startLine": 19,
+        "startChar": 35,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4aa6b3b_d35ca007",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 1
