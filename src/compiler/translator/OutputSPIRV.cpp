@@ -6026,7 +6026,10 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     }
 
     // Write DescriptorSet, Binding, Location etc decorations if necessary.
-    mBuilder.writeInterfaceVariableDecorations(type, variableId);
+    if (!type.getLayoutQualifier().pushConstant)
+    {
+        mBuilder.writeInterfaceVariableDecorations(type, variableId);
+    }
 
     // Remember the id of the variable for future look up.  For interface blocks, also remember the
     // id of the interface block.

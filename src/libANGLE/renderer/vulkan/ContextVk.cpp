@@ -6085,7 +6085,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
         isViewportFlipEnabledForDrawFBO() && getFeatures().supportsNegativeViewport.enabled;
 
     // Create the extended driver uniform, and populate the extended data fields if necessary.
-    GraphicsDriverUniformsExtended driverUniformsExt = {};
+    auto *driverUniformsExt = new GraphicsDriverUniformsExtended;
     if (shouldUseGraphicsDriverUniformsExtended(this))
     {
         gl::Rectangle glViewport = mState.getViewport();
@@ -6095,7 +6095,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
             std::swap(glViewport.x, glViewport.y);
             std::swap(glViewport.width, glViewport.height);
         }
-        driverUniformsExt.viewport = {
+        driverUniformsExt->viewport = {
             static_cast<float>(glViewport.x), static_cast<float>(glViewport.y),
             static_cast<float>(glViewport.width), static_cast<float>(glViewport.height)};
 
@@ -6104,14 +6104,15 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
             TransformFeedbackVk *transformFeedbackVk =
                 vk::GetImpl(mState.getCurrentTransformFeedback());
             transformFeedbackVk->getBufferOffsets(this, mXfbBaseVertex,
-                                                  driverUniformsExt.xfbBufferOffsets.data(),
-                                                  driverUniformsExt.xfbBufferOffsets.size());
+                                                  driverUniformsExt->xfbBufferOffsets.data(),
+                                                  driverUniformsExt->xfbBufferOffsets.size());
         }
-        driverUniformsExt.xfbVerticesPerInstance = static_cast<int32_t>(mXfbVertexCountPerInstance);
+        driverUniformsExt->xfbVerticesPerInstance =
+            static_cast<int32_t>(mXfbVertexCountPerInstance);
     }
 
     // Create the driver uniform object that will be used as push constant argument.
-    GraphicsDriverUniforms *driverUniforms = &driverUniformsExt.common;
+    GraphicsDriverUniforms *driverUniforms = &driverUniformsExt->common;
     uint32_t driverUniformSize             = getDriverUniformSize(PipelineType::Graphics);
 
     const float depthRangeNear = mState.getNearPlane();
@@ -6168,33 +6169,38 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
                                                      driverUniforms->acbBufferOffsets.size());
     }
 
-    // Update push constant driver uniforms.
+    // Update push_constant driver uniforms
     ProgramExecutableVk *executableVk = getExecutable();
     mRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(), getRenderer()->getSupportedVulkanShaderStageMask(), 0,
+        executableVk->getPipelineLayout(),
+        getRenderer()->getSupportedVulkanGraphicsShaderStageMask() | VK_SHADER_STAGE_COMPUTE_BIT, 0,
         driverUniformSize, driverUniforms);
 
+    delete driverUniformsExt;
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyComputeDriverUniforms()
 {
     // Create the driver uniform object that will be used as push constant argument.
-    ComputeDriverUniforms driverUniforms = {};
-    uint32_t driverUniformSize           = getDriverUniformSize(PipelineType::Compute);
+    auto *driverUniforms       = new ComputeDriverUniforms;
+    *driverUniforms            = {};
+    uint32_t driverUniformSize = getDriverUniformSize(PipelineType::Compute);
 
     if (mState.hasValidAtomicCounterBuffer())
     {
-        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms.acbBufferOffsets.data(),
-                                                     driverUniforms.acbBufferOffsets.size());
+        writeAtomicCounterBufferDriverUniformOffsets(driverUniforms->acbBufferOffsets.data(),
+                                                     driverUniforms->acbBufferOffsets.size());
     }
 
-    // Update push constant driver uniforms.
+    // Update push constant driver uniforms
     ProgramExecutableVk *executableVk = getExecutable();
     mOutsideRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(), getRenderer()->getSupportedVulkanShaderStageMask(), 0,
-        driverUniformSize, &driverUniforms);
+        executableVk->getPipelineLayout(),
+        getRenderer()->getSupportedVulkanGraphicsShaderStageMask() | VK_SHADER_STAGE_COMPUTE_BIT, 0,
+        driverUniformSize, driverUniforms);
 
+    delete driverUniforms;
     return angle::Result::Continue;
 }
 
