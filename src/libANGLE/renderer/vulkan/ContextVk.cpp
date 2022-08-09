@@ -6170,9 +6170,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
 
     // Update push constant driver uniforms.
     ProgramExecutableVk *executableVk = getExecutable();
-    mRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(), getRenderer()->getSupportedVulkanShaderStageMask(), 0,
-        driverUniformSize, driverUniforms);
+    mRenderPassCommands->getCommandBuffer().pushConstants(executableVk->getPipelineLayout(),
+                                                          executableVk->getShaderStageFlags(), 0,
+                                                          driverUniformSize, driverUniforms);
 
     return angle::Result::Continue;
 }
@@ -6192,7 +6192,7 @@ angle::Result ContextVk::handleDirtyComputeDriverUniforms()
     // Update push constant driver uniforms.
     ProgramExecutableVk *executableVk = getExecutable();
     mOutsideRenderPassCommands->getCommandBuffer().pushConstants(
-        executableVk->getPipelineLayout(), getRenderer()->getSupportedVulkanShaderStageMask(), 0,
+        executableVk->getPipelineLayout(), executableVk->getShaderStageFlags(), 0,
         driverUniformSize, &driverUniforms);
 
     return angle::Result::Continue;

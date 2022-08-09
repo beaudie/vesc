@@ -540,9 +540,9 @@ class RendererVk : angle::NonCopyable
         return mSupportedVulkanPipelineStageMask;
     }
 
-    VkShaderStageFlags getSupportedVulkanShaderStageMask() const
+    VkShaderStageFlags getSupportedVulkanGraphicsShaderStageMask() const
     {
-        return mSupportedVulkanShaderStageMask;
+        return mSupportedVulkanGraphicsShaderStageMask;
     }
 
     angle::Result getFormatDescriptorCountForVkFormat(ContextVk *contextVk,
@@ -843,7 +843,7 @@ class RendererVk : angle::NonCopyable
     // Note that this mask can have bits set that don't correspond to valid stages, so it's strictly
     // only useful for masking out unsupported stages in an otherwise valid set of stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
-    VkShaderStageFlags mSupportedVulkanShaderStageMask;
+    VkShaderStageFlags mSupportedVulkanGraphicsShaderStageMask;
 
     // Use thread pool to compress cache data.
     std::shared_ptr<rx::WaitableCompressEvent> mCompressEvent;
