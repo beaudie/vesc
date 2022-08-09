@@ -153,6 +153,11 @@ def get_skia_gold_keys(args, env):
         sysinfo_args.append('--swiftshader')
 
     if angle_test_util.IsAndroid():
+        # just testing
+        import subprocess
+        tt_output = subprocess.check_output(
+            [angle_test_util.ExecutablePathInCurrentDir('angle_system_info_test')] + sysinfo_args)
+        print('angle_system_info_test output: ', tt_output)
         json_data = android_helper.AngleSystemInfo(sysinfo_args)
         logging.info(json_data)
     else:
