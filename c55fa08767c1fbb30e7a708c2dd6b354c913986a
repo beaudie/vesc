@@ -83,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40df0cc3_85ac313c",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-09T17:17:50Z",
+      "side": 1,
+      "message": "`resolveCompile` is called 30 times throughout `Shader.cpp` for various getters and setters, whereas the analogous `Program::resolveLink(Context*)` is only called twice in `Program.cpp`. Having `Context*` be passed as a parameter to all of these member functions seems to me like a use case for a `Context*`/`Context\u0026` member variable instead. This could perhaps be stored in `mCompilingState` and initialized with the parameter passed to `Shader::compile(Context*)`. This way, we keep this handle local to the compiling process.\n\nI am ok with passing a `Context*` to all of these member functions if you are, just wanted to suggest this alternative before starting on that.",
+      "parentUuid": "6147c90b_e1c1e56d",
+      "range": {
+        "startLine": 635,
+        "startChar": 19,
+        "endLine": 635,
+        "endChar": 37
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f28b747f_722b0a68",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 14
