@@ -33,6 +33,161 @@
       "message": "No perceptible performance impact on Genshin either with this change",
       "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c01fca2_fc0e9d6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "Wow, I honestly expected you would just return to static state for stencil, but this LGTM, if expansive.  Just some clarifying comments and questions.",
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e10e0676_4ce5287e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4639,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "I paused seeing a vendor called out in ContextVK.cpp instead of RendererVk.cpp, but probably okay to explain this workaround as much as possible.",
+      "range": {
+        "startLine": 4639,
+        "startChar": 7,
+        "endLine": 4639,
+        "endChar": 13
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d004f69_021b8cf0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "Does this need to remain at the bottom of this block, or okay for lines following? (future looking question)",
+      "range": {
+        "startLine": 4686,
+        "startChar": 0,
+        "endLine": 4686,
+        "endChar": 39
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10abd44b_c55fcd3e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4755,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "Same here, do we need to make sure this always follows updateAlphaToCoverageEnable?",
+      "range": {
+        "startLine": 4755,
+        "startChar": 16,
+        "endLine": 4755,
+        "endChar": 44
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1190ef27_53a15b3e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "Can you rephrase this?  Maybe \"is conditionally set to non-zero\"",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1286,
+        "endChar": 62
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bbd0665_a32e9e6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "This value could use a comment or a descriptive constant.",
+      "range": {
+        "startLine": 269,
+        "startChar": 50,
+        "endLine": 269,
+        "endChar": 55
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38ba156a_0fc90d9b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-09T19:45:14Z",
+      "side": 1,
+      "message": "Kind of weird to stick this in with Dither (which is permanent), but I don\u0027t have any reason not to.",
+      "range": {
+        "startLine": 471,
+        "startChar": 7,
+        "endLine": 471,
+        "endChar": 34
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
