@@ -16,6 +16,47 @@
       "message": "I still think we should just limit our support to 8 external formats and implement a external format allocator for predefined EXTERNAL0 to EXTERNAL7 and fail if exceeds. That way, you do not need all of these code that passes external formats around in all the functions. It will be much simpler.\n\nBut other than that, this looks ok to me.",
       "revId": "1aef12172d92c72a10742af80f656593ea11852d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "337d7fdc_5a1f67e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:31:17Z",
+      "side": 1,
+      "message": "+1, really hating this special format passed around\n\nI like the take 8 and ASSERT if failed (better check with partners if they have more than 8 and adjust accordingly) for now. Eventually, that can be fixed such that if the 8 formats overflow, you could \"clear all caches\" and change the mapping to get things going.",
+      "parentUuid": "92a4598d_fec9dbc8",
+      "revId": "1aef12172d92c72a10742af80f656593ea11852d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c636103_2af7de60",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T04:31:17Z",
+      "side": 1,
+      "message": "Style note: we don\u0027t do this. If you have to, you can do:\n\n```\nconstexpr type kThisValueYouArePassing \u003d value;\nfunc(..., kThisValueYouArePassing, ...);\n```\n\nSo you wouldn\u0027t need to add a comment to clarify a meaningless 0. If the value is used in many places, it can go in a header, like vk_utils.h",
+      "range": {
+        "startLine": 2169,
+        "startChar": 70,
+        "endLine": 2169,
+        "endChar": 98
+      },
+      "revId": "1aef12172d92c72a10742af80f656593ea11852d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
