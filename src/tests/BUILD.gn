@@ -147,12 +147,17 @@ angle_common_test_utils("angle_common_test_utils_static") {
 # We use this in the restricted trace tests to load driver info.
 angle_test("angle_system_info_test") {
   sources = [ "angle_system_info_tests_main.cpp" ]
+  data = [ "$angle_root/src/tests/angle_android_test_runner.py" ]
   deps = [
     "$angle_root:angle_gpu_info_util",
     "$angle_root:libEGL_static",
     "$angle_root:libGLESv2_static",
     "$angle_root/util:angle_util_static",
   ]
+  if (is_android) {
+    android_test_runner_script =
+        "$angle_root/src/tests/angle_android_test_runner.py"
+  }
 }
 
 angle_test("angle_unittests") {
