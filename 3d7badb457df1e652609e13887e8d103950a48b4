@@ -158,6 +158,24 @@
       "parentUuid": "c1e02516_7858b418",
       "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c89cf357_74a9dfed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-09T22:34:24Z",
+      "side": 1,
+      "message": "I ran these tests (https://paste.googleplex.com/5506456307630080) locally on 2 ARM devices I have. These are the tests that hit the asserts I added in `ContextVk::endRenderPassQuery()`: https://crrev.com/c/3821641.\n\nNone of the tests start to break after this CL. But since the arm device doesn\u0027t have the extension VK_EXT_primitives_generated_query enabled, the code path added in this CL are not executed when I ran the tests locally.",
+      "parentUuid": "e8b15d34_22e21926",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
