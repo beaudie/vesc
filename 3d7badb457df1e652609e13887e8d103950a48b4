@@ -104,6 +104,24 @@
       "parentUuid": "d6b448a4_3eb8b226",
       "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ad69ed0_e68c150f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-09T17:53:07Z",
+      "side": 1,
+      "message": "I \"think\" since Pixel6 doesn\u0027t support the `VK_EXT_primitives_generated_query` extension, the new code path added won\u0027t be ran. Some tests in ANGLE that use OpenGL\u0027s primitives generated query feature are also marked as failed in the expectation files. \n\nI will do the steps Charlie suggested above to check if there are any tests in ANGLE that are not marked as skipped / failed, and run them on pixel devices to ensure they are all good. But as far as I know, the pixel devices I have locally don\u0027t have the extension `VK_EXT_primitives_generated_query` enabled, so they will still be using the old code path.",
+      "parentUuid": "13450a44_634430c7",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
