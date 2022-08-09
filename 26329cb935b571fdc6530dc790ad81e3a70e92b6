@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da1f1bbf_3ab8c5e3",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-09T20:14:59Z",
+      "side": 1,
+      "message": "Hmm, not clear what this was for.\nThis breaks `--list-tests --gtest_filter\u003dfilter_matching_something` behavior as turns it into just `--list-tests`.\nWas this added because `--list-tests --gtest_filter\u003dfilter_not_matching_anything` breaks android runner? (it assumes it failed to list tests)\n\nContext: https://anglebug.com/7508#c4",
+      "range": {
+        "startLine": 1116,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 54
+      },
+      "revId": "26329cb935b571fdc6530dc790ad81e3a70e92b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
