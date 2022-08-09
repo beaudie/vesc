@@ -59,7 +59,7 @@
     'angle_goma_android_arm_debug_bot': ['angle', 'opencl', 'traces', 'goma', 'android', 'arm', 'debug'],
     'angle_goma_android_arm_release_bot': ['angle', 'opencl', 'traces', 'goma', 'android', 'arm', 'release'],
     'angle_goma_android_perf_bot': ['angle', 'traces', 'goma', 'android', 'arm64', 'perf'],
-    'angle_goma_debug_bot': ['angle', 'opencl', 'traces', 'goma', 'debug'],
+    'angle_goma_debug_bot': ['angle', 'opencl', 'traces', 'goma', 'debug', 'desktop'],
     'angle_goma_perf_bot': ['angle', 'traces', 'goma', 'perf'],
     'angle_goma_release_bot': ['angle', 'opencl', 'traces', 'goma', 'release'],
     'angle_goma_x86_debug_bot': ['angle', 'opencl', 'traces', 'goma', 'x86', 'debug'],
@@ -94,6 +94,9 @@
     },
     'debug': {
       'gn_args': 'is_debug=true',
+    },
+    'desktop': {
+      'gn_args': 'angle_enable_gl_desktop_frontend=true',
     },
     'goma': {
       'gn_args': 'use_goma=true',
