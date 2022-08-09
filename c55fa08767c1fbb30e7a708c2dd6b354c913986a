@@ -1,0 +1,244 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19bba115_3418112d",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Please move the compression / decompression to BlobCache, so both this and MemoryProgramCache could share this code (instead of duplicating it).",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7895949_9f27dc97",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "While you\u0027re at it, could you please change this to use `ANGLE_PERF_WARNING`? It would take care of outputting N times and stop repeating. You can adjust `MemoryProgramCache` to use the same. Then get rid of `mIssuedWarnings` and `kWarningLimit`.\n\nThis would also fix the race condition with access to `mIssuedWarnings`",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5d82ad_f030ffb3",
+        "filename": "src/libANGLE/MemoryShaderCache.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "`mutex` unncessary, `BlobCache` is self-protecting.",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6147c90b_e1c1e56d",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "This shouldn\u0027t need to be cached in `Shader`. It seems to me the reason is that `resolveCompile` is not passed in the `Context` (from which this can be retrieved).\n\nI realize it\u0027s some manual work, but could you please instead (in a separate CL before this) pipe in `Context` to `resolveCompile` from wherever called, and their callers, and their callers, etc? Then you can retrieve this from `Context` directly.\n\nSee how `Program::resolveLinkImpl` looks like",
+      "range": {
+        "startLine": 635,
+        "startChar": 19,
+        "endLine": 635,
+        "endChar": 37
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28b747f_722b0a68",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Again, please use `ANGLE_PERF_WARNING`. Modify `Program.cpp` where this is copied from to do the same.",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d0cb62d_eaf305ad",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Please at least add a test for each shader type. In each test, try to make sure every state being serialized has some non-zero value, ideally different from any other serialized value. It might help to duplicate the test multiple times and focus on a subset of state in each.\n\nLike the test would save/reload a compute shader with 1 uniform, 2 uniform blocks, 3 SSBOs, etc.",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9964f2b2_781d75a7",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Compute shaders don\u0027t have attributes",
+      "range": {
+        "startLine": 939,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 13
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a408ff_9efd32b9",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Fragment shaders don\u0027t have attributes",
+      "range": {
+        "startLine": 977,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 13
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce63a1c5_35590780",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Again `ANGLE_PERF_WARNING`. Most if not all of the cache-related warnings here and in Program.cpp should be turned to `ANGLE_PERF_WARNING`, could you please take care of that?\n\nWhen in doubt between WARN and ANGLE_PERF_WARNING, ask yourself these:\n\n- When issued, is it only to warn about performance?\n- Is it useful for users to see the warning every time it happens? Or do they get the idea after it\u0027s logged a couple times?\n\nIf both yes, then `ANGLE_PERF_WARNING`.",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db745001_2e7862ea",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "This is used only in `Shader.cpp`, so please move it there. And instead of `#define`, put `constexpr uint32_t kShaderCacheIdentifier \u003d ...` in the anonymous namespace at the top of the file.\n\nAlso, nit: unnecessary parentheses are unnecessary",
+      "range": {
+        "startLine": 32,
+        "startChar": 32,
+        "endLine": 32,
+        "endChar": 44
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a12c387d_707e2a74",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Same with these; move to `Shader.cpp` and put in anonymous namespace",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2149f02c_46b2b069",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 9895,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T15:27:51Z",
+      "side": 1,
+      "message": "Sounds like a bug that needs fixing. How does it fail with ASAN? What\u0027s the associated anglebug.com issue?\n\nActually can you just delete this and `treatPlatformWarningsAsErrors`? There are no callers otherwise, and it doesn\u0027t make sense that out of so many tests, only one enables this (and the implementation is also only doing it on Windows 8+). It looks like something that was supposed to be cleaned up but was missed.",
+      "range": {
+        "startLine": 9895,
+        "startChar": 7,
+        "endLine": 9895,
+        "endChar": 51
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
