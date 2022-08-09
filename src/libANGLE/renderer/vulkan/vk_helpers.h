@@ -2216,6 +2216,8 @@ class ImageHelper final : public Resource, public angle::Subject
         mYcbcrConversionDesc.update(rendererVk, externalFormat, conversionModel, colorRange,
                                     xChromaOffset, yChromaOffset, chromaFilter, components,
                                     intendedFormatID);
+        // Map external format to mActualFormatID
+        mActualFormatID = rendererVk->mapExternalFormatToFormatID(externalFormat);
     }
 
     // Used by framebuffer and render pass functions to decide loadOps and invalidate/un-invalidate

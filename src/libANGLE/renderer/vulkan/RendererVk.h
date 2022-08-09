@@ -850,6 +850,10 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+
+  public:
+    angle::FormatID mapExternalFormatToFormatID(uint64_t externalFormat);
+    angle::FixedVector<uint64_t, 8> mExternalFormatMapping = {0};
 };
 
 }  // namespace rx

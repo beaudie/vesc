@@ -4656,6 +4656,38 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     return std::min(heapSize / 64, mPreferredLargeHeapBlockSize);
 }
 
+angle::FormatID RendererVk::mapExternalFormatToFormatID(uint64_t externalFormat)
+{
+    // Search for known external formats
+    for (int i = 0; i < mExternalFormatMapping.size(); i++)
+    {
+        if (mExternalFormatMapping[i] == externalFormat)
+        {
+            return FormatID::EXTERNAL0 + i;
+        }
+    }
+
+    // Add a new external format if we still have room
+    if (mExternalFormatMapping.size() < mExternalFormatMapping.max_size())
+    {
+        mExternalFormatMapping, push_back(externalFormat);
+        return FormatID::EXTERNAL0 + mExternalFormatMapping.size() - 1;
+    }
+
+    // Fail or evict
+#if 1
+    // fail
+    UNREACHABLKE();
+#else
+    // evict. For now evict everything and bump the version number so that each context can rebuild
+    // the cache. for all contexts, walk the renderpass cache and remove any entry contains any of
+    // the external formats. Or move the mRenderpassCache from ContextVk to RendererVk and make life
+    // much simpler.
+    mRenderPassCache.evictEntriesContains(mExternalFormatMapping);
+    mExternalFormatMapping.fill(0);
+#endif
+}
+
 namespace vk
 {
 MemoryReport::MemoryReport()
