@@ -3773,6 +3773,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     {
         mFeatures.asyncCommandQueue.enabled = false;
     }
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceEmulationAstcLdr, true);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceEmulationEtc2, true);
 }
 
 void RendererVk::appBasedFeatureOverrides(DisplayVk *display,
