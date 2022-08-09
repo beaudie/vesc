@@ -69,6 +69,41 @@
       "parentUuid": "9435eda4_91602d70",
       "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce5fe784_8381d970",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-09T16:50:24Z",
+      "side": 1,
+      "message": "+1 for now. will +2 once yuxin can confirm the local test passes. ",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13450a44_634430c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-09T16:50:24Z",
+      "side": 1,
+      "message": "Thanks Shabi for confirmation and follow up. For this CL, I think we can land as long as yuxin tested it locally on ARM devices. The way I am thinking is add an abort call in the code path that uses OpenGL\u0027s primitives generated query feature and then run through bots to come up with a list of tests that uses the feature. Then run these tests with this CL on pixel devices to ensure they are all good. Or whatever other ways you can ensure it actually works. Mean time we should follow through with SwiftShader to see if we can have them implement this ext. Sounds good?",
+      "parentUuid": "d6b448a4_3eb8b226",
+      "revId": "3d7badb457df1e652609e13887e8d103950a48b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
