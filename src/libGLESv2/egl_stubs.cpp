@@ -544,7 +544,11 @@ const char *QueryString(Thread *thread, Display *display, EGLint name)
     switch (name)
     {
         case EGL_CLIENT_APIS:
+#if defined(ANGLE_ENABLE_GL_DESKTOP_FRONTEND)
+            result = "OpenGL_ES OpenGL";
+#else
             result = "OpenGL_ES";
+#endif
             break;
         case EGL_EXTENSIONS:
             if (display == EGL_NO_DISPLAY)

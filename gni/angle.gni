@@ -30,10 +30,10 @@ declare_args() {
 }
 
 declare_args() {
-  # Expose WGL entry points by default when using Desktop GL on Windows
-  angle_expose_wgl_entry_points = angle_enable_gl_desktop_frontend && is_win
+  # Expose WGL entry points, which is necessary for running windows desktop GL applications against ANGLE.
+  angle_expose_wgl_entry_points = false
 
-  # Expose GLX entry points by default when using Desktop GL on Linux
+  # Expose GLX entry points by default when using Desktop GL on Linux.
   angle_expose_glx_entry_points = angle_enable_gl_desktop_frontend && is_linux
 }
 
