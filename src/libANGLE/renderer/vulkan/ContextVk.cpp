@@ -5950,6 +5950,10 @@ angle::Result ContextVk::releaseTextures(const gl::Context *context,
 
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
+    if (queryType == gl::QueryType::PrimitivesGenerated)
+    {
+        ASSERT(false);
+    }
     ASSERT(queryType == gl::QueryType::AnySamples ||
            queryType == gl::QueryType::AnySamplesConservative ||
            queryType == gl::QueryType::PrimitivesGenerated ||
@@ -7114,6 +7118,10 @@ angle::Result ContextVk::beginRenderPassQuery(QueryVk *queryVk)
 angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 {
     gl::QueryType type = queryVk->getType();
+    if (type == gl::QueryType::PrimitivesGenerated)
+    {
+        ASSERT(false);
+    }
 
     // Emit debug-util markers before calling the query command.
     ANGLE_TRY(handleGraphicsEventLog(rx::GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd));
