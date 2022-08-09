@@ -694,6 +694,20 @@ struct FeaturesVk : FeatureSetBase
         "Work around a driver bug where 0 in stencil write mask static state would make the"
         "corresponding dynamic state malfunction in the presence of discard or alpha to coverage",
         &members, "http://anglebug.com/7556"};
+
+    FeatureInfo forceEmulationAstcLdr = {
+        "forceEmulationAstcLdr",
+        FeatureCategory::VulkanFeatures,
+        "Force to use ANGLE emulation for ASTC LDR textures.",
+        &members,
+    };
+
+    FeatureInfo forceEmulationEtc2 = {
+        "forceEmulationEtc2",
+        FeatureCategory::VulkanFeatures,
+        "Force to use ANGLE emulation for EAC/ETC2 textures.",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
