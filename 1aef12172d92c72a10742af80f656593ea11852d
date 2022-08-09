@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33ed7018_1acd7d5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-08-09T14:51:39Z",
+      "side": 1,
+      "message": "If it\u0027s the special format being passed around that you don\u0027t like, well, IMO it\u0027s more complicated having to deal with a data field somewhere else mapping external format ids. When it fails it\u0027s much harder to debug (dealing with the current state of the format mapping, evicting it, edge cases around 8 (for which there will be anyway as the set of YUV formats only grows)). You also get potentially different code paths every time you run a single app as there\u0027s no protocol over which real external format gets mapped to what format ID in what order.\n\nVersus the current patch set where it\u0027s directly specified, runs the same way every time and more likely to show up in the debugger? I agree it _cosmetically_ looks bad but I prefer extra function arguments (which can be later packed into a struct anyways) over more functional complexity",
+      "parentUuid": "337d7fdc_5a1f67e3",
+      "revId": "1aef12172d92c72a10742af80f656593ea11852d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c636103_2af7de60",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
