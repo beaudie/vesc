@@ -105,6 +105,11 @@ egl::Error DisplayImpl::validatePixmap(const egl::Config *config,
     return egl::EglBadDisplay() << "DisplayImpl::valdiatePixmap unimplemented.";
 }
 
+Optional<gl::Version> DisplayImpl::getMaxSupportedDesktopVersion() const
+{
+    return Optional<gl::Version>::Invalid();
+}
+
 const egl::Caps &DisplayImpl::getCaps() const
 {
     if (!mCapsInitialized)
