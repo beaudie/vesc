@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e604ea6_fbc04bea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-09T16:44:56Z",
+      "side": 1,
+      "message": "Thanks Shabi for gathering data on app traces. I am still a bit concerned that even for ARM, this optimization may turns out to be negative. If some body called glBufferSubData to update small data on a large buffer, the extra cost of copying the entire buffer could out weight the saving of renderpass break, as well as extra memory usage. So the answer really is \"all depends\". My suggestion is we delay this CL, or, since you are already at this, maybe just add a performance warning for a potential improvement we can do in case we run into it in the future? (Sorry for a bit negative on this).",
+      "parentUuid": "5dd2e5e4_8ef8638c",
+      "range": {
+        "startLine": 19,
+        "startChar": 35,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4aa6b3b_d35ca007",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 1
