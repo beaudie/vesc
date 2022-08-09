@@ -118,6 +118,8 @@ enum class Feature
     ForceD16TexFilter,
     ForceD24S8AsUnsupported,
     ForceDepthAttachmentInitOnClear,
+    ForceEmulationAstcLdr,
+    ForceEmulationEtc2,
     ForceFallbackFormat,
     ForceFragmentShaderPrecisionHighpToMediump,
     ForceGlErrorChecking,
