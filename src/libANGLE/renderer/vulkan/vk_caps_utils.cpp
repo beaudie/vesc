@@ -301,7 +301,8 @@ void RendererVk::ensureCapsInitialized() const
     // When ETC2/EAC formats are natively supported, enable ANGLE-specific extension string to
     // expose them to WebGL. In other case, mark potentially-available ETC1 extension as emulated.
     if ((mPhysicalDeviceFeatures.textureCompressionETC2 == VK_TRUE) &&
-        gl::DetermineCompressedTextureETCSupport(mNativeTextureCaps))
+        gl::DetermineCompressedTextureETCSupport(mNativeTextureCaps) &&
+        !mFeatures.forceEmulationEtc2.enabled)
     {
         mNativeExtensions.compressedTextureEtcANGLE = true;
     }
@@ -312,7 +313,8 @@ void RendererVk::ensureCapsInitialized() const
 
     // When ASTC formats are not natively supported
     // mark potentially-available ASTC extension as emulated.
-    if (mPhysicalDeviceFeatures.textureCompressionASTC_LDR == VK_FALSE)
+    if (mPhysicalDeviceFeatures.textureCompressionASTC_LDR == VK_FALSE ||
+        mFeatures.forceEmulationAstcLdr.enabled)
     {
         mNativeLimitations.emulatedAstc = true;
     }

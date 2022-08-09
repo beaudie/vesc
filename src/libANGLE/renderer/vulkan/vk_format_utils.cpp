@@ -140,7 +140,6 @@ Format::Format()
 
 void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo)
 {
-    size_t skip                 = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
     SupportTest testFunction    = HasNonRenderableTextureFormatSupport;
     const angle::Format &format = angle::Format::Get(info[0].format);
     if (format.isInt() || (format.isFloat() && format.redBits >= 32))
@@ -150,6 +149,14 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
         // it's enabled by the extension OES_texture_float_linear, which is
         // enabled automatically by examining format capabilities.
         testFunction = HasNonFilterableTextureFormatSupport;
+    }
+    const auto &features = renderer->getFeatures();
+    size_t skip          = 0;
+    if (features.forceFallbackFormat.enabled ||
+        (gl::IsASTC2DFormat(format.glInternalFormat) && features.forceEmulationAstcLdr.enabled) ||
+        (gl::IsETC2EACFormat(format.glInternalFormat) && features.forceEmulationEtc2.enabled))
+    {
+        skip = 1;
     }
 
     int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);

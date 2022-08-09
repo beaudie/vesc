@@ -670,6 +670,20 @@ struct FeaturesVk : FeatureSetBase
         "VkDevice supports VK_ANDROID_render_to_external_format and VK_EXT_ycbcr_attachment",
         &members,
     };
+
+    FeatureInfo forceEmulationAstcLdr = {
+        "forceEmulationAstcLdr",
+        FeatureCategory::VulkanFeatures,
+        "Force to use ANGLE emulation for ASTC LDR textures.",
+        &members,
+    };
+
+    FeatureInfo forceEmulationEtc2 = {
+        "forceEmulationEtc2",
+        FeatureCategory::VulkanFeatures,
+        "Force to use ANGLE emulation for EAC/ETC2 textures.",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
