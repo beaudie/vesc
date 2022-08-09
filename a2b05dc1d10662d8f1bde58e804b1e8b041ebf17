@@ -16,6 +16,23 @@
       "message": "Verified that it fixes the minimap in Genshin Impact",
       "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01fa3fc5_bebfa9c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T19:22:10Z",
+      "side": 1,
+      "message": "No perceptible performance impact on Genshin either with this change",
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
