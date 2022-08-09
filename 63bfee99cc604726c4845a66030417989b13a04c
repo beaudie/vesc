@@ -16,6 +16,24 @@
       "message": "Is it possible this is actually our bug? Does the ANGLE Vulkan backend notice we don\u0027t store to the image from the shader, and then bind it with a different usage that doesn\u0027t work for the validation layers?",
       "revId": "63bfee99cc604726c4845a66030417989b13a04c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2afdce4_8ca2e3fb",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-09T16:41:30Z",
+      "side": 1,
+      "message": "That does look like a VVL bug, though obviously a hard thing for them to implement. Instead of adding the workaround, please add a suppression for this syncval error to `kSkippedSyncvalMessages`. It\u0027s not great, but we\u0027ll deal with it when we finally get around to burning down that list.\n\n\u003e Does the ANGLE Vulkan backend notice we don\u0027t store to the image from the shader\n\nNope!",
+      "parentUuid": "31993e34_6ebbd0bb",
+      "revId": "63bfee99cc604726c4845a66030417989b13a04c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
