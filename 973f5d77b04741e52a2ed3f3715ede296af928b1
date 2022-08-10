@@ -124,6 +124,24 @@
       "parentUuid": "917203be_479d0a71",
       "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65ea8e4_46e3a03b",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-10T06:27:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b51b8149_3e196301",
+      "revId": "973f5d77b04741e52a2ed3f3715ede296af928b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

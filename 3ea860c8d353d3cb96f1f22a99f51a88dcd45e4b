@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a611e41b_2c68f4f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-10T06:27:27Z",
+      "side": 1,
+      "message": "I think all the comments are resolved and this is now rebased on Shabi\u0027s cleanup of ShaderLang.h. Are we getting ready to land?",
+      "revId": "3ea860c8d353d3cb96f1f22a99f51a88dcd45e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
