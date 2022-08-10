@@ -4791,6 +4791,7 @@ bool SkipCall(EntryPoint entryPoint)
         case EntryPoint::GLInsertEventMarkerEXT:
         case EntryPoint::GLLabelObjectEXT:
         case EntryPoint::GLObjectLabelKHR:
+        case EntryPoint::GLObjectLabel:
         case EntryPoint::GLObjectPtrLabelKHR:
         case EntryPoint::GLPopDebugGroupKHR:
         case EntryPoint::GLPopGroupMarkerEXT:
