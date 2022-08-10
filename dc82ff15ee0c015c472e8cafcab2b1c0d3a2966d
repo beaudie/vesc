@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7cc83af_35b66eb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T15:59:24Z",
+      "side": 1,
+      "message": "Please follow up.",
+      "revId": "dc82ff15ee0c015c472e8cafcab2b1c0d3a2966d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39b314ad_ed68ae9a",
+        "filename": "src/tests/test_utils/runner/HistogramWriter.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T15:59:24Z",
+      "side": 1,
+      "message": "update",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 41
+      },
+      "revId": "dc82ff15ee0c015c472e8cafcab2b1c0d3a2966d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b6d04e3_1c5bc855",
+        "filename": "src/tests/test_utils/runner/HistogramWriter.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T15:59:24Z",
+      "side": 1,
+      "message": "fix, endif, too",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 33
+      },
+      "revId": "dc82ff15ee0c015c472e8cafcab2b1c0d3a2966d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b82ed4f_00384a6c",
+        "filename": "src/tests/test_utils/runner/HistogramWriter.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T15:59:24Z",
+      "side": 1,
+      "message": "fix, endif, too",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 34
+      },
+      "revId": "dc82ff15ee0c015c472e8cafcab2b1c0d3a2966d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
