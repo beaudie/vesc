@@ -16,6 +16,24 @@
       "message": "Can we get a green run first?\nLooks like some tests need to be skipped, e.g. https://angle-gold.skia.org/detail?test\u003dgenshin_impact\u0026digest\u003d6567e559004ab26689d690d7f5a97b59\u0026changelist_id\u003d3819844\u0026crs\u003dgerrit doesn\u0027t look good.",
       "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd86c0f8_edd4f284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-10T13:32:53Z",
+      "side": 1,
+      "message": "For whatever reason, I need to go through and approve all the goldens again.  Not sure why Skia Gold has forgotten about them.\n\nThat genshin_impact bug in particular is about to be fixed with http://crrev/c/3821367 so we should run again after that.",
+      "parentUuid": "96f81ec6_3d1b42d6",
+      "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
