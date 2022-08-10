@@ -16,6 +16,23 @@
       "message": "PTAL. To address the angle_white_box_tests failures on https://ci.chromium.org/p/chromium/builders/ci/ios-angle-intel",
       "revId": "1503845fe3541c44f19ed412d6d682bdb2c08707",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a71b2dd8_c2dc19db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T11:23:47Z",
+      "side": 1,
+      "message": "Thanks!\nI still need to figure out what\u0027s wrong with end2end on iOS",
+      "revId": "1503845fe3541c44f19ed412d6d682bdb2c08707",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
