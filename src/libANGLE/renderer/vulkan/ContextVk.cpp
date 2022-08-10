@@ -6146,6 +6146,7 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     }
 
     // Update push constant driver uniforms.
+    // Test
     ProgramExecutableVk *executableVk = getExecutable();
     mRenderPassCommands->getCommandBuffer().pushConstants(
         executableVk->getPipelineLayout(), getRenderer()->getSupportedVulkanShaderStageMask(), 0,
