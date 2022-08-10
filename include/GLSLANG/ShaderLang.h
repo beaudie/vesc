@@ -83,7 +83,8 @@ enum ShShaderOutput
 // Instructs the compiler which fragment synchronization method to use, if any.
 enum class ShFragmentSynchronizationType
 {
-    None,
+    NoSynchronization,
+
     FragmentShaderInterlock_NV_GL,
     FragmentShaderOrdering_INTEL_GL,
     FragmentShaderInterlock_ARB_GL,
