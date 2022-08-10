@@ -52,6 +52,24 @@
       "parentUuid": "b07490fa_6d6ddef5",
       "revId": "861149c7ace5f21c88148ce90120a2690c467557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff3b887e_66e7ab02",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-08-10T15:56:46Z",
+      "side": 1,
+      "message": "Scratch that - it looks like the include chain is entirely within ANGLE:\n\n[54/4131] compile ../../third_party/externals/angle2/src/libANGLE/Context_gl.cpp\nFAILED: obj/third_party/externals/angle2/src/libANGLE/libANGLE_base.Context_gl.o \nclang++ -MD -MF obj/third_party/externals/angle2/src/libANGLE/libANGLE_base.Context_gl.o.d -DANGLE_GENERATE_SHADER_DEBUG_INFO -DANGLE_VMA_VERSION\u003d2003000 -DANGLE_IS_LINUX -DANGLE_ENABLE_SHARE_CONTEXT_LOCK\u003d1 -DANGLE_USE_VULKAN_DISPLAY -DANGLE_USE_X11 -DANGLE_VULKAN_DISPLAY_MODE_SIMPLE -DANGLE_ENABLE_DEBUG_ANNOTATIONS -DLIBANGLE_IMPLEMENTATION -DANGLE_USE_X11 -DANGLE_ENABLE_OPENGL -DANGLE_ENABLE_GL_DESKTOP_BACKEND -DANGLE_ENABLE_OPENGL_NULL -DANGLE_ENABLE_NULL -DANGLE_ENABLE_OPENGL -DANGLE_ENABLE_GL_DESKTOP_BACKEND -DANGLE_ENABLE_OPENGL_NULL -I../../third_party/externals/angle2/include -I../../third_party/externals/angle2/src -I../../third_party/externals/angle2/src/third_party/khronos -I../../third_party/externals/angle2/src/common/third_party/base -I../../third_party/externals/angle2/include -I../../third_party/externals/angle2/include -I../../third_party/externals/angle2/src -I../../third_party/externals/angle2/include -I../../third_party/externals/angle2/src/third_party/khronos -I../../third_party/zlib/google -I../../third_party/externals/angle2/include -I../../third_party/externals/angle2/src -Wno-attributes -fstrict-aliasing -fPIC -fvisibility\u003dhidden -g -fno-limit-debug-info -Wexit-time-destructors -Wglobal-constructors -w -Wbad-function-cast -Wconditional-uninitialized -Wextra-semi-stmt -Wfloat-conversion -Winconsistent-missing-destructor-override -Wmissing-field-initializers -Wnewline-eof -Wnon-virtual-dtor -Wredundant-parens -Wreturn-std-move -Wshadow -Wshadow-field -Wtautological-type-limit-compare -Wundefined-reinterpret-cast -Wunneeded-internal-declaration -Wunused-but-set-variable -Wsuggest-destructor-override -Wsuggest-override -Wparentheses -Wrange-loop-analysis -Wstrict-prototypes -Wunreachable-code-aggressive -Wshorten-64-to-32 -isystem /home/brianosman/skia/third_party/externals/zlib/google -isystem /home/brianosman/skia/third_party/externals/zlib -std\u003dc++17 -fvisibility-inlines-hidden -fno-exceptions -fno-rtti -c ../../third_party/externals/angle2/src/libANGLE/Context_gl.cpp -o obj/third_party/externals/angle2/src/libANGLE/libANGLE_base.Context_gl.o\n\nIn file included from ../../third_party/externals/angle2/src/libANGLE/Context_gl.cpp:10:\nIn file included from ../../third_party/externals/angle2/src/libANGLE/Context.h:19:\nIn file included from ../../third_party/externals/angle2/src/common/PackedEnums.h:12:\nIn file included from ../../third_party/externals/angle2/src/common/PackedEGLEnums_autogen.h:15:\nIn file included from ../../third_party/externals/angle2/include/EGL/egl.h:20:\nIn file included from ../../third_party/externals/angle2/include/EGL/eglplatform.h:121:\nIn file included from /usr/include/X11/Xlib.h:44:\n/usr/include/X11/X.h:6:2: error: foo\n#error foo",
+      "parentUuid": "f55fb71a_bbd0dffc",
+      "revId": "861149c7ace5f21c88148ce90120a2690c467557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
