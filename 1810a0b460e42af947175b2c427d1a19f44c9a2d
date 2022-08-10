@@ -52,6 +52,24 @@
       "parentUuid": "cd03baf2_97685de9",
       "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21593f90_67f50e60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-10T21:45:05Z",
+      "side": 1,
+      "message": "Right, so it could be that something was going wrong with `run_perf_tests.py` but now that script is no longer using the Android test runner - although I\u0027m not sure what could have been going wrong there previously either. I did poke at local runs with Android test runner but I just can\u0027t find clues about why --gtest_filter would need to be removed as the combinations I can think of seem to work normally.\n\nHow about going ahead with this an I\u0027ll take all the blame in case this breaks anything? :)  (we know this can only break Android though)",
+      "parentUuid": "04d8110b_a4bc1364",
+      "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
