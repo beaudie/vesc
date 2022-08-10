@@ -34,6 +34,24 @@
       "parentUuid": "018e4168_b7bcf927",
       "revId": "861149c7ace5f21c88148ce90120a2690c467557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f55fb71a_bbd0dffc",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-08-10T15:09:56Z",
+      "side": 1,
+      "message": "Right. It looks like we do limit our X includes (we have some in our test app framework\u0027s window-context code), but we also have some in \"our\" vulkan.h. I\u0027m guessing that\u0027s the issue (?), because the failure is happening when compiling ANGLE translation units, not Skia ones.",
+      "parentUuid": "b07490fa_6d6ddef5",
+      "revId": "861149c7ace5f21c88148ce90120a2690c467557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
