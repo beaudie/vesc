@@ -34,6 +34,24 @@
       "parentUuid": "4adc08f1_5590d60c",
       "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d8110b_a4bc1364",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2022-08-10T16:28:07Z",
+      "side": 1,
+      "message": "Hey Roman, I don\u0027t have the ability to really confirm until I get back. My recollection is vague but the issue you commented on seemed to indicate it was a problem particular to using the run_perf_tests.py script on Android. So check the behaviour of the android test bot with the perftests (and you can also try in a local environment).",
+      "parentUuid": "cd03baf2_97685de9",
+      "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
