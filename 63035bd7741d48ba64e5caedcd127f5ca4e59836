@@ -52,6 +52,24 @@
       "parentUuid": "fd86c0f8_edd4f284",
       "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03d5ef50_607151c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T16:05:46Z",
+      "side": 1,
+      "message": "I think it\u0027s a cold cache problem?\nLooks like both tasks download 12GB (huh!?!? I thought you\u0027ve fixed that, and used to be 6GB),\nbut the first task reports:\n```\nInputs (downloaded)\t503 items; 12 GB\nInputs (cached)\t\t5456 items; 558 MB\n```\n\nvs the second task:\n```\nInputs (downloaded)\t11 items; 414 MB\nInputs (cached)\t\t5948 items; 12 GB\n```",
+      "parentUuid": "5fa3341a_54342170",
+      "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
