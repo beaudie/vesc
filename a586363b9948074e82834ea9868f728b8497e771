@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "712623c9_08e6a7d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T03:27:27Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "a586363b9948074e82834ea9868f728b8497e771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7b9076_07424de6",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T03:27:27Z",
+      "side": 1,
+      "message": "Not just Vulkan GLSL though, you\u0027d need it for SPIR-V too, right? It doesn\u0027t seem to me that going through Vulkan GLSL or directly generating SPIR-V should matter here?",
+      "range": {
+        "startLine": 112,
+        "startChar": 11,
+        "endLine": 112,
+        "endChar": 47
+      },
+      "revId": "a586363b9948074e82834ea9868f728b8497e771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
