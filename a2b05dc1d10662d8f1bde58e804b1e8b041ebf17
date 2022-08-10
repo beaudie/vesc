@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f6f7ff9_fbaa2f76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "This keeps the state dynamic when !discard, so hopefully it doesn\u0027t affect most shaders. More importantly, the static state added now is 1 bit instead of 8.",
+      "parentUuid": "2c01fca2_fc0e9d6e",
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dde0b8bd_3d5172b9",
@@ -65,6 +83,30 @@
       "writtenOn": "2022-08-09T21:52:48Z",
       "side": 1,
       "message": "nit: should this be quoted?",
+      "range": {
+        "startLine": 736,
+        "startChar": 52,
+        "endLine": 736,
+        "endChar": 60
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2852aa70_02025274",
+        "filename": "src/compiler/translator/ParseContext.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dde0b8bd_3d5172b9",
       "range": {
         "startLine": 736,
         "startChar": 52,
@@ -122,6 +164,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec67163_078bd0c9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Reworded\n\n\u003e That begs the question about when to enable/disable this feature.\n\nAll workaround features are necessarily bound to some driver version range. So far, we\u0027ve rarely bothered defining that range, but at some point we should get that sorted out.",
+      "parentUuid": "9440fe93_1f55c0a5",
+      "range": {
+        "startLine": 4639,
+        "startChar": 7,
+        "endLine": 4639,
+        "endChar": 13
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d004f69_021b8cf0",
@@ -145,6 +211,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "609857cf_5c1988db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Could be anywhere above or below. I put it in this block so it wouldn\u0027t bother when a compute shader is bound.",
+      "parentUuid": "5d004f69_021b8cf0",
+      "range": {
+        "startLine": 4686,
+        "startChar": 0,
+        "endLine": 4686,
+        "endChar": 39
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10abd44b_c55fcd3e",
@@ -158,6 +248,30 @@
       "writtenOn": "2022-08-09T19:45:14Z",
       "side": 1,
       "message": "Same here, do we need to make sure this always follows updateAlphaToCoverageEnable?",
+      "range": {
+        "startLine": 4755,
+        "startChar": 16,
+        "endLine": 4755,
+        "endChar": 44
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bf606ee_00c998eb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Nope, order doesn\u0027t matter.",
+      "parentUuid": "10abd44b_c55fcd3e",
       "range": {
         "startLine": 4755,
         "startChar": 16,
@@ -215,6 +329,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "507ea49a_0579112f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Reworded",
+      "parentUuid": "b1d7cd08_1ebc235c",
+      "range": {
+        "startLine": 1286,
+        "startChar": 27,
+        "endLine": 1286,
+        "endChar": 62
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92c82503_939f4d57",
@@ -228,6 +366,30 @@
       "writtenOn": "2022-08-09T21:52:48Z",
       "side": 1,
       "message": "Thinking out loud: IIUC Arm will fix this bug in the future.  I\u0027m not sure which Android release that will be.  At that point, we\u0027ll want to enable the feature for older drivers and disable for newer drivers.  Perhaps you should leave a comment about that.",
+      "range": {
+        "startLine": 3677,
+        "startChar": 79,
+        "endLine": 3677,
+        "endChar": 84
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83c5c803_e2e33125",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3677,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Ack. Per the other comment, it\u0027s an implicit fact that every driver workaround should be limited to the affected driver version range.",
+      "parentUuid": "92c82503_939f4d57",
       "range": {
         "startLine": 3677,
         "startChar": 79,
@@ -261,6 +423,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ebd34d8_41447ee7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bbd0665_a32e9e6f",
+      "range": {
+        "startLine": 269,
+        "startChar": 50,
+        "endLine": 269,
+        "endChar": 55
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38ba156a_0fc90d9b",
@@ -274,6 +460,30 @@
       "writtenOn": "2022-08-09T19:45:14Z",
       "side": 1,
       "message": "Kind of weird to stick this in with Dither (which is permanent), but I don\u0027t have any reason not to.",
+      "range": {
+        "startLine": 471,
+        "startChar": 7,
+        "endLine": 471,
+        "endChar": 34
+      },
+      "revId": "a2b05dc1d10662d8f1bde58e804b1e8b041ebf17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "244982d0_ab0dd0e6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T02:03:24Z",
+      "side": 1,
+      "message": "Ack. The graphics pipeline desc is super packed, so there are a lot of examples like this, where few bits of this and that are bunched together.",
+      "parentUuid": "38ba156a_0fc90d9b",
       "range": {
         "startLine": 471,
         "startChar": 7,
