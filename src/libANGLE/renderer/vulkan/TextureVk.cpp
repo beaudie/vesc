@@ -532,6 +532,13 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
 {
     ASSERT(mImage);
 
+    // For EGLImages we should never stage the update since staged update is subject to thread
+    // racing bugs when two textures in different share groups are accessed at same time.
+    if (!mOwnsImage)
+    {
+        return false;
+    }
+
     // If we do not have storage yet, there is impossible to immediately do the copy, so just
     // stage it. Note that immutable texture will have a valid storage.
     if (!mImage->valid())
@@ -548,7 +555,7 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
     // During the process of format change, mImage's format may become stale. In that case, we
     // should always stage the update and let caller properly release mImage and initExternal and
     // flush the update.
-    if (imageHasActualImageFormat(dstImageFormatID))
+    if (mImage->getActualFormatID() != actualFormatID)
     {
         return true;
     }
@@ -3696,12 +3703,6 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
     *updateResultOut = TextureUpdateResult::ImageRespecified;
 
     return refreshImageViews(contextVk);
-}
-
-// Return true if image's format does not match the actual format
-bool TextureVk::imageHasActualImageFormat(angle::FormatID actualFormatID) const
-{
-    return mImage && (mImage->getActualFormatID() != actualFormatID);
 }
 
 void TextureVk::stageSelfAsSubresourceUpdates(ContextVk *contextVk)
