@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f31f4646_dbb05e74",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T18:18:16Z",
+      "side": 1,
+      "message": "Yeah this seems stale. Chrome does support EGL_ANDROID_blob_cache. Could you please open a new issue regarding this clean up and update the comment to point to that?",
+      "revId": "5d286cea5d4753940a0740332cc504a41f140df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4eb704f_02d7cdeb",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T18:18:16Z",
+      "side": 1,
+      "message": "nit: `kShaderCacheIdentifier`\n\nAlso, no need for `std::` behind `uint32_t`.",
+      "range": {
+        "startLine": 35,
+        "startChar": 24,
+        "endLine": 35,
+        "endChar": 47
+      },
+      "revId": "5d286cea5d4753940a0740332cc504a41f140df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d5c8e2_c78f791d",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T18:18:16Z",
+      "side": 1,
+      "message": "If you want to do it right, take a look at VulkanPerformanceCounterTest.cpp. See how it queries the ANGLE features and adjusts tests results accordingly. Not blocking you on this though.\n\nMy idea is to make that more generic, and automatically do it in the test fixture as soon as the display is initialized, but until then feel free to just duplicate that code. If you feel like following up with the clean solution, let me know and I\u0027ll help you 😊",
+      "revId": "5d286cea5d4753940a0740332cc504a41f140df6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
