@@ -4355,8 +4355,9 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
     // arguments of type clampf.
     ASSERT(nearPlane >= 0.0f && nearPlane <= 1.0f);
     ASSERT(farPlane >= 0.0f && farPlane <= 1.0f);
-    mViewport.minDepth = nearPlane;
-    mViewport.maxDepth = farPlane;
+    uint32_t precision = 1e6;
+    mViewport.minDepth = std::floor(nearPlane * precision) / precision;
+    mViewport.maxDepth = std::floor(farPlane * precision) / precision;
 
     invalidateGraphicsDriverUniforms();
     mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_VIEWPORT);
