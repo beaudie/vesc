@@ -70,6 +70,24 @@
       "parentUuid": "f55fb71a_bbd0dffc",
       "revId": "861149c7ace5f21c88148ce90120a2690c467557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e65c4de_ca7fb90f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-10T16:16:30Z",
+      "side": 1,
+      "message": "Hi Brian!\n\nYikes 😬\n\nRenamed here https://chromium-review.googlesource.com/c/angle/angle/+/3824717\n\nDoes that fix things for you?",
+      "parentUuid": "ff3b887e_66e7ab02",
+      "revId": "861149c7ace5f21c88148ce90120a2690c467557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
