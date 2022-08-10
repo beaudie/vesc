@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa8d7b26_7fab2d2e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Please add a comment mentioning that the generated `glTexImage2D()` call is for the staging texture.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d54ec226_8a8140a2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Let\u0027s add a const modifier to the param: `const PackedEnumMap\u003cResourceIDType, uint32_t\u003e \u0026maxAccessedResourceIDs`, as we do not want to modify this PackedEnumMap within this function.\n\nAlso we tend to only name class members with prefix \"m\". Let\u0027s just name the function parameter `maxAccessedResourceIDs`.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81408a32_c4784421",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Please remove all the debug logs before you submit the change.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "717bbe45_0df67e2c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3626,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "I think we can just use `setupCalls` (the one that passed into the function), instead of creating another local variable. The `stagingTexCall` is a little bit confusing, as it is supposed to be a pointer to an array of gl calls we use for setup for replay, and we are just adding the staging texture calls to the array.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82dd2fc7_56487498",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Let\u0027s replace these values with the #define values:\n```\nCaptureTexParameteri(replayState, true, gl::TextureType::_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);\n```",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "050dee11_566dc29e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "I think we only need to add the `glTexImage2D()` for the staging texture in the `setupCalls`. So let\u0027s remove the for loop, and just do this:\n```\nCaptureTextureContents(setupCalls, \u0026replayState, texture, index, desc,\n                                           static_cast\u003cGLuint\u003e(data.size()), data.data());\n```",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10d95621_dd1294cf",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3681,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Let\u0027s update the comment to: \n\n// then pass the eglImage to the texture that is bound to GL_TEXTURE_EXTERNAL_OES target",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d164671_45ddc8ad",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3682,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "I think we should use the for loop to append the call to both setupCalls and textureRestoreCalls, based on how other texture content calls are captured.\n\n```\nfor (std::vector\u003cCallCapture\u003e *calls : texSetupCalls)\n{\n    Capture(setupCalls, CaptureEGLImageTargetTexture2DOES...);\n}\n```",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c62db33f_a16bd52b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7190,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Please remove this experiment/learning comments.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa6afc8_1e1f1c93",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7239,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-10T00:32:05Z",
+      "side": 1,
+      "message": "Please remove this comments and the line below.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
