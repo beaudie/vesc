@@ -16,6 +16,24 @@
       "message": "This is actually causing Skia\u0027s ANGLE-on-GL-on-Linux build to fail. X11.h contains:\n    #define None 0L /* universal null resource or null atom */\n\nhttps://logs.chromium.org/logs/skia/5c9fdc64d23d8611/+/steps/ninja/0/stdout",
       "revId": "861149c7ace5f21c88148ce90120a2690c467557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b07490fa_6d6ddef5",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T14:57:01Z",
+      "side": 1,
+      "message": "That\u0027s an annoyance we sometimes see. ShaderLang.h is too public to hope to avoid it, so yeah we should rename it.\n\nThat said, I\u0027d also suggest Skia try to contain the X11 header include to just one or a handful of files that make X11 calls, to avoid things like this.",
+      "parentUuid": "018e4168_b7bcf927",
+      "revId": "861149c7ace5f21c88148ce90120a2690c467557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
