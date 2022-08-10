@@ -70,6 +70,41 @@
       "parentUuid": "04d8110b_a4bc1364",
       "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f6327de_b3478239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2022-08-10T22:14:27Z",
+      "side": 1,
+      "message": "Good point about the bots switching script. I think all the situations where we use --list-tests now use your runner, so LGTM.",
+      "parentUuid": "21593f90_67f50e60",
+      "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39a7025_f7a46369",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2022-08-10T22:14:27Z",
+      "side": 1,
+      "message": "LGTM, please use Cody or another reviewer to approve.",
+      "revId": "1810a0b460e42af947175b2c427d1a19f44c9a2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
