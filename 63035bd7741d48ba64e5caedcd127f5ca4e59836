@@ -70,6 +70,24 @@
       "parentUuid": "5fa3341a_54342170",
       "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c5f8ae1_fec8b6c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-10T17:48:29Z",
+      "side": 1,
+      "message": "Ah, right! Should catch up and get cached later on then.\nRe: size - yeah, it keeps getting bigger\n```\n% du -sh src/tests/restricted_traces\n13G\tsrc/tests/restricted_traces\n```\n\nI synced past https://crrev.com/c/3821367 and running tests again. Might also hit some caches this time.",
+      "parentUuid": "03d5ef50_607151c8",
+      "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
