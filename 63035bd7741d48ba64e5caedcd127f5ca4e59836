@@ -34,6 +34,24 @@
       "parentUuid": "96f81ec6_3d1b42d6",
       "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa3341a_54342170",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-10T15:54:32Z",
+      "side": 1,
+      "message": "I\u0027ll rebase and run the test again after that CL goes in.\n\n@Yuly, also would you know what this step does and why it takes so much longer on Pixel 6?\n\n[I2022-08-09T15:15:06.991521Z 25272 0 download.go:506] finished DownloadFiles api call, took 7m43.952624348s\n(https://chromium-swarm.appspot.com/task?id\u003d5c9bf6a1f61f4e10)\n\nvs\n\n[I2022-08-10T15:06:26.189917Z 31945 0 download.go:506] finished DownloadFiles api call, took 3.154042818s\n(https://chromium-swarm.appspot.com/task?id\u003d5ca11c3d167bb310)",
+      "parentUuid": "fd86c0f8_edd4f284",
+      "revId": "63035bd7741d48ba64e5caedcd127f5ca4e59836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
