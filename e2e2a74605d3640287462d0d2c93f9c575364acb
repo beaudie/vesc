@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "602e52d5_b2a73f51",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T11:13:15Z",
+      "side": 1,
+      "message": "I don\u0027t think the prefix is needed if this is in the same .gn file.\n\n(Also the {} in the line above look inconsistent with the rest of the file)",
+      "range": {
+        "startLine": 381,
+        "startChar": 7,
+        "endLine": 381,
+        "endChar": 29
+      },
+      "revId": "e2e2a74605d3640287462d0d2c93f9c575364acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1a68f22_a224cc19",
+        "filename": "src/tests/test_utils/runner/HistogramWriter.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-10T11:13:15Z",
+      "side": 1,
+      "message": "You mean from this header included in multiple compilation units?\n\nThis looks hacky to me.\nHow about requiring that ANGLE_HAS_HISTOGRAMS is always defined in this header,\nand then, instead of checking \"#if defined\", check if the value is 0 or 1.\n(I know it doesn\u0027t do the same thing, but it would require each compilation unit to define explicitly whether it has histograms, instead of the current silent error).\n\nAlso, what if you have 2 compilation units that don\u0027t have histograms? I think the symbol will also get defined twice?",
+      "range": {
+        "startLine": 57,
+        "startChar": 61,
+        "endLine": 57,
+        "endChar": 73
+      },
+      "revId": "e2e2a74605d3640287462d0d2c93f9c575364acb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
