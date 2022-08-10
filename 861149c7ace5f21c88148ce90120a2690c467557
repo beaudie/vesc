@@ -88,6 +88,24 @@
       "parentUuid": "ff3b887e_66e7ab02",
       "revId": "861149c7ace5f21c88148ce90120a2690c467557",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0d2fd94_dd2a226b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T16:17:22Z",
+      "side": 1,
+      "message": "Weird that we don\u0027t get this build failure ourselves 😕",
+      "parentUuid": "ff3b887e_66e7ab02",
+      "revId": "861149c7ace5f21c88148ce90120a2690c467557",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
