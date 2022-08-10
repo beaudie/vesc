@@ -39,6 +39,30 @@
       },
       "revId": "4b4c1a7d4c738e84fbadc7ea49c1ccb07605a3c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a2f5b8_7092604e",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5828,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-10T02:42:38Z",
+      "side": 1,
+      "message": "Took a stab a auto generating. How\u0027s gen_spirv_builder_and_parser.py?",
+      "parentUuid": "6168ca57_12b38152",
+      "range": {
+        "startLine": 5821,
+        "startChar": 0,
+        "endLine": 5828,
+        "endChar": 85
+      },
+      "revId": "4b4c1a7d4c738e84fbadc7ea49c1ccb07605a3c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
