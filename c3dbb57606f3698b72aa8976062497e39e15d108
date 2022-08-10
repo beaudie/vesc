@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b6b66eb_5a4dcc13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-10T16:14:45Z",
+      "side": 1,
+      "message": "Is there a more specific bug we can reference?",
+      "revId": "c3dbb57606f3698b72aa8976062497e39e15d108",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
