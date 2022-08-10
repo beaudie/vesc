@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "071d6c35_1db4b75e",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-10T18:03:35Z",
+      "side": 1,
+      "message": "Done. I could not refactor `MemoryProgramCache::putProgram` because of the TODO in that function regarding http://anglebug.com/2516. Something might be wrong here, since that issue has been marked closed as `Fixed`.",
+      "parentUuid": "19bba115_3418112d",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7895949_9f27dc97",
@@ -186,6 +204,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3236238c_ebd55c30",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-10T18:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9964f2b2_781d75a7",
+      "range": {
+        "startLine": 939,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 13
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6a408ff_9efd32b9",
@@ -199,6 +241,30 @@
       "writtenOn": "2022-08-09T15:27:51Z",
       "side": 1,
       "message": "Fragment shaders don\u0027t have attributes",
+      "range": {
+        "startLine": 977,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 13
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c9babc_d1d1c841",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-10T18:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6a408ff_9efd32b9",
       "range": {
         "startLine": 977,
         "startChar": 0,
@@ -249,6 +315,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe3704b_e1226aec",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-10T18:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db745001_2e7862ea",
+      "range": {
+        "startLine": 32,
+        "startChar": 32,
+        "endLine": 32,
+        "endChar": 44
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a12c387d_707e2a74",
@@ -262,6 +352,24 @@
       "writtenOn": "2022-08-09T15:27:51Z",
       "side": 1,
       "message": "Same with these; move to `Shader.cpp` and put in anonymous namespace",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6519cbcd_7c0331e7",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-10T18:03:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a12c387d_707e2a74",
       "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
