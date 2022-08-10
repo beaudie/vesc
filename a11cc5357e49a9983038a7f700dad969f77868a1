@@ -108,6 +108,30 @@
       },
       "revId": "a11cc5357e49a9983038a7f700dad969f77868a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6b1de4d_004f2126",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-10T21:26:22Z",
+      "side": 1,
+      "message": "err, `^([-+])` instead of `(^[-+])`, either works but the former makes more sense",
+      "parentUuid": "74ef3486_1e1a3287",
+      "range": {
+        "startLine": 452,
+        "startChar": 0,
+        "endLine": 468,
+        "endChar": 57
+      },
+      "revId": "a11cc5357e49a9983038a7f700dad969f77868a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
