@@ -63,6 +63,30 @@
       },
       "revId": "c3dbb57606f3698b72aa8976062497e39e15d108",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56f7d63f_e06a2fa1",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-10T17:24:43Z",
+      "side": 1,
+      "message": "Actually I\u0027m sorry we even have to do this manually. You know what, I kept thinking there\u0027s no good way to make this version be automatic, but I think it\u0027s pretty easy to at least turn this nag into a presubmit error.",
+      "parentUuid": "3f45524c_51b4552f",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "c3dbb57606f3698b72aa8976062497e39e15d108",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
