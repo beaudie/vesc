@@ -4364,6 +4364,7 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
     // arguments of type clampf.
     ASSERT(nearPlane >= 0.0f && nearPlane <= 1.0f);
     ASSERT(farPlane >= 0.0f && farPlane <= 1.0f);
+    // float precision    = 1e8;
     mViewport.minDepth = nearPlane;
     mViewport.maxDepth = farPlane;
 
