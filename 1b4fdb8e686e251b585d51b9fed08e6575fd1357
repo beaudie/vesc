@@ -144,6 +144,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93a5482_8df18a05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-10T00:09:08Z",
+      "side": 1,
+      "message": "I have less issue with that.",
+      "parentUuid": "370066a9_7c3dcbf2",
+      "range": {
+        "startLine": 19,
+        "startChar": 35,
+        "endLine": 20,
+        "endChar": 22
+      },
+      "revId": "1b4fdb8e686e251b585d51b9fed08e6575fd1357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4aa6b3b_d35ca007",
