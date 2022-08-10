@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d86bc60_1acf665f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2892,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa8d7b26_7fab2d2e",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d54ec226_8a8140a2",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-10T00:32:05Z",
       "side": 1,
       "message": "Let\u0027s add a const modifier to the param: `const PackedEnumMap\u003cResourceIDType, uint32_t\u003e \u0026maxAccessedResourceIDs`, as we do not want to modify this PackedEnumMap within this function.\n\nAlso we tend to only name class members with prefix \"m\". Let\u0027s just name the function parameter `maxAccessedResourceIDs`.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1afcb2a2_d1ec4cc5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3288,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d54ec226_8a8140a2",
       "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a56d1a4_b8aef72b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3626,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "717bbe45_0df67e2c",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82dd2fc7_56487498",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-08-10T00:32:05Z",
       "side": 1,
       "message": "Let\u0027s replace these values with the #define values:\n```\nCaptureTexParameteri(replayState, true, gl::TextureType::_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);\n```",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d091ec4_1edd580b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3632,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82dd2fc7_56487498",
       "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53fe3818_8c1e59d6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "050dee11_566dc29e",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10d95621_dd1294cf",
@@ -116,6 +206,24 @@
       "writtenOn": "2022-08-10T00:32:05Z",
       "side": 1,
       "message": "Let\u0027s update the comment to: \n\n// then pass the eglImage to the texture that is bound to GL_TEXTURE_EXTERNAL_OES target",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "547669b5_8883372e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3681,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10d95621_dd1294cf",
       "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1969c8d3_58b57008",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3682,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d164671_45ddc8ad",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c62db33f_a16bd52b",
@@ -154,6 +280,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e1b370_4033d1ef",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7190,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c62db33f_a16bd52b",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffa6afc8_1e1f1c93",
@@ -167,6 +311,24 @@
       "writtenOn": "2022-08-10T00:32:05Z",
       "side": 1,
       "message": "Please remove this comments and the line below.",
+      "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7676554_615223fb",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7239,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-10T01:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffa6afc8_1e1f1c93",
       "revId": "a3ac6c95adb67000c797f22aba9f35d4527de127",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
