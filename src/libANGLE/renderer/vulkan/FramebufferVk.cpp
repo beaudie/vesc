@@ -354,7 +354,8 @@ void FramebufferVk::insertCache(ContextVk *contextVk,
                                 vk::FramebufferHelper &&newFramebuffer)
 {
     // Add it into per share group cache
-    contextVk->getShareGroup()->getFramebufferCache().insert(desc, std::move(newFramebuffer));
+    contextVk->getShareGroup()->getFramebufferCache().insert(contextVk, desc,
+                                                             std::move(newFramebuffer));
 
     // Create a refcounted cache key object and have each attachment keep a refcount to it so that
     // it can be destroyed promptly if those attachments change.
@@ -2134,7 +2135,11 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         return angle::Result::Continue;
     }
     // No current FB, so now check for previously cached Framebuffer
-    if (contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
+    // Do not go in if imageless is disabled. Put assert in.
+    bool supportsImagelessFramebuffer =
+        contextVk->getFeatures().supportsImagelessFramebuffer.enabled;
+    if (!supportsImagelessFramebuffer &&
+        contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
                                                               mCurrentFramebuffer))
     {
         ASSERT(mCurrentFramebuffer.valid());
@@ -2235,8 +2240,44 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         framebufferInfo.layers = std::max(mCurrentFramebufferDesc.getLayerCount(), 1u);
     }
 
+    // Create new framebuffer.
     vk::FramebufferHelper newFramebuffer;
-    ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+
+    // Get the format and flag values from the image object, which can be acquired from the render
+    // target
+    auto *image = &colorRenderTargets[0]
+                       ->getImageForRenderPass();  // Better way? Crashes for the perftest trace!
+    if (supportsImagelessFramebuffer)
+    {
+        VkFramebufferAttachmentImageInfo framebufferAttachmentImageInfo = {};
+        framebufferAttachmentImageInfo.sType  = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO;
+        framebufferAttachmentImageInfo.pNext  = nullptr;
+        framebufferAttachmentImageInfo.width  = framebufferInfo.width;
+        framebufferAttachmentImageInfo.height = framebufferInfo.height;
+        framebufferAttachmentImageInfo.layerCount      = framebufferInfo.layers;
+        framebufferAttachmentImageInfo.flags           = image->getCreateFlags();
+        framebufferAttachmentImageInfo.usage           = image->getUsage();
+        framebufferAttachmentImageInfo.viewFormatCount = image->getViewFormatCount();
+        framebufferAttachmentImageInfo.pViewFormats    = image->getViewFormats();
+
+        VkFramebufferAttachmentsCreateInfo framebufferAttachmentCreateInfo = {};
+        framebufferAttachmentCreateInfo.sType =
+            VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO;
+        framebufferAttachmentCreateInfo.pNext                    = nullptr;
+        framebufferAttachmentCreateInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
+        framebufferAttachmentCreateInfo.pAttachmentImageInfos    = &framebufferAttachmentImageInfo;
+
+        framebufferInfo.flags |= VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT;
+        framebufferInfo.pAttachments = nullptr;  // remove?
+        framebufferInfo.pNext        = &framebufferAttachmentCreateInfo;
+
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+    }
+    else
+    {
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+    }  // set the imageviews in SurfaceVk.cpp, close to the multisample work. Then use them for the
+       // renderpass stuff.
 
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());

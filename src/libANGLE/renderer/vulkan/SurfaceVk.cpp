@@ -1350,14 +1350,14 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.flags = mState.hasProtectedContent() ? VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR : 0;
     swapchainInfo.surface         = mSurface;
     swapchainInfo.minImageCount   = mMinImageCount;
-    swapchainInfo.imageFormat     = vk::GetVkFormatFromFormatID(actualFormatID);
+    swapchainInfo.imageFormat     = vk::GetVkFormatFromFormatID(actualFormatID);  // use it?
     swapchainInfo.imageColorSpace = MapEglColorSpaceToVkColorSpace(
         static_cast<EGLenum>(mState.attributes.get(EGL_GL_COLORSPACE, EGL_NONE)));
     // Note: Vulkan doesn't allow 0-width/height swapchains.
     swapchainInfo.imageExtent.width     = std::max(rotatedExtents.width, 1);
     swapchainInfo.imageExtent.height    = std::max(rotatedExtents.height, 1);
     swapchainInfo.imageArrayLayers      = 1;
-    swapchainInfo.imageUsage            = imageUsageFlags;
+    swapchainInfo.imageUsage            = imageUsageFlags;  // use it?
     swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
     swapchainInfo.queueFamilyIndexCount = 0;
     swapchainInfo.pQueueFamilyIndices   = nullptr;
@@ -1366,6 +1366,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.presentMode = vk::ConvertPresentModeToVkPresentMode(mDesiredSwapchainPresentMode);
     swapchainInfo.clipped     = VK_TRUE;
     swapchainInfo.oldSwapchain = lastSwapchain;
+
+    mFormat = actualFormatID;
 
     if (isSharedPresentModeDesired())
     {
@@ -2318,6 +2320,9 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     VkFramebufferCreateInfo framebufferInfo = {};
     uint32_t attachmentCount                = mDepthStencilImage.valid() ? 2u : 1u;
 
+    VkImageUsageFlags imageUsageFlags = kSurfaceVkImageUsageFlags;
+    imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
     const gl::Extents rotatedExtents      = mColorRenderTarget.getRotatedExtents();
     std::array<VkImageView, 3> imageViews = {};
 
@@ -2326,6 +2331,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
         const vk::ImageView *imageView = nullptr;
         ANGLE_TRY(mDepthStencilRenderTarget.getImageView(contextVk, &imageView));
         imageViews[1] = imageView->getHandle();
+        imageUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
     }
 
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
@@ -2337,6 +2343,45 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
     framebufferInfo.layers          = 1;
 
+    bool supportsImagelessFramebuffer =
+        contextVk->getFeatures().supportsImagelessFramebuffer.enabled;
+    VkFramebufferAttachmentImageInfo framebufferAttachmentImageInfo    = {};
+    VkFramebufferAttachmentsCreateInfo framebufferAttachmentCreateInfo = {};
+
+    // Temp: Format
+    std::array<VkFormat, 2> imageListFormatsStorage;
+
+    const angle::Format &actualFormat = angle::Format::Get(mFormat);
+    angle::FormatID additionalFormat =
+        actualFormat.isSRGB ? ConvertToLinear(mFormat) : ConvertToSRGB(mFormat);
+    imageListFormatsStorage[0] = vk::GetVkFormatFromFormatID(mFormat);
+    imageListFormatsStorage[1] = vk::GetVkFormatFromFormatID(additionalFormat);
+
+    // Temp: End of format
+
+    if (supportsImagelessFramebuffer)
+    {
+        framebufferAttachmentImageInfo.sType  = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO;
+        framebufferAttachmentImageInfo.pNext  = nullptr;
+        framebufferAttachmentImageInfo.width  = framebufferInfo.width;
+        framebufferAttachmentImageInfo.height = framebufferInfo.height;
+        framebufferAttachmentImageInfo.layerCount      = framebufferInfo.layers;
+        framebufferAttachmentImageInfo.flags           = 0;  // temp
+        framebufferAttachmentImageInfo.usage           = imageUsageFlags;
+        framebufferAttachmentImageInfo.viewFormatCount = imageListFormatsStorage.size();
+        framebufferAttachmentImageInfo.pViewFormats    = imageListFormatsStorage.data();
+
+        framebufferAttachmentCreateInfo.sType =
+            VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO;
+        framebufferAttachmentCreateInfo.pNext                    = nullptr;
+        framebufferAttachmentCreateInfo.attachmentImageInfoCount = framebufferInfo.attachmentCount;
+        framebufferAttachmentCreateInfo.pAttachmentImageInfos    = &framebufferAttachmentImageInfo;
+
+        framebufferInfo.flags |= VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT;
+        framebufferInfo.pAttachments = nullptr;  // remove?
+        framebufferInfo.pNext        = &framebufferAttachmentCreateInfo;
+    }
+
     if (isMultiSampled())
     {
         const vk::ImageView *imageView = nullptr;
@@ -2346,6 +2391,11 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
         if (swapchainResolveMode == SwapchainResolveMode::Enabled)
         {
             framebufferInfo.attachmentCount = attachmentCount + 1;
+            if (supportsImagelessFramebuffer)
+            {
+                framebufferAttachmentCreateInfo.attachmentImageInfoCount =
+                    framebufferInfo.attachmentCount;
+            }
 
             for (SwapchainImage &swapchainImage : mSwapchainImages)
             {
@@ -2387,6 +2437,9 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
             }
         }
     }
+
+    // Imageless framebuffer additions
+    contextVk->setImageViewAndAttachmentCount(imageViews.data(), attachmentCount);
 
     ASSERT(currentFramebuffer.valid());
     *framebufferOut = &currentFramebuffer;

@@ -1387,6 +1387,17 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    void setImageViewAndAttachmentCount(VkImageView *imageView, uint32_t attachmentCount)
+    {
+        ASSERT(attachmentCount <= mImageViews.size());
+        mRenderPassAttachmentCount = attachmentCount;
+        // std::copy(mImageViews.begin(), mImageViews.begin() + attachmentCount, imageView);
+        for (uint32_t i = 0; i < attachmentCount; i++)
+        {
+            mImageViews[i] = *(imageView + i);
+        }
+    }
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
@@ -1463,6 +1474,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     RenderPassAttachment mStencilAttachment;
     RenderPassAttachment mStencilResolveAttachment;
+
+    gl::AttachmentArray<VkImageView> mImageViews;
+    uint32_t mRenderPassAttachmentCount;
 
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
@@ -2247,6 +2261,10 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    // Imageless framebuffer additions
+    uint32_t getViewFormatCount() { return mViewFormatCount; }
+    const VkFormat *getViewFormats() { return mViewFormats; };
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2524,6 +2542,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // Cached properties.
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+
+    // Imageless framebuffer additions
+    uint32_t mViewFormatCount;
+    const VkFormat *mViewFormats;
 
     std::vector<std::vector<SubresourceUpdate>> mSubresourceUpdates;
     VkDeviceSize mTotalStagedBufferUpdateSize;

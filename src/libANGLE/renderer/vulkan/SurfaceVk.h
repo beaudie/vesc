@@ -301,6 +301,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     bool hasStagedUpdates() const;
 
+    angle::FormatID getFormat() const { return mFormat; }
+
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
@@ -441,6 +443,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // Actual format
+    angle::FormatID mFormat;
 };
 
 }  // namespace rx

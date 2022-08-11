@@ -648,6 +648,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return *mRenderPassCommands;
     }
 
+    void setImageViewAndAttachmentCount(VkImageView *imageView, uint32_t attachmentCount)
+    {
+        mRenderPassCommands->setImageViewAndAttachmentCount(imageView, attachmentCount);
+    }
+
     // TODO(https://anglebug.com/4968): Support multiple open render passes.
     void restoreFinishedRenderPass(vk::Framebuffer *framebuffer);
 
