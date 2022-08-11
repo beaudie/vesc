@@ -774,15 +774,20 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
         // Certain Shader Models (4_0+ and 3_0) allow reading from dx_Position in the pixel shader.
         // Other Shader Models (4_0_level_9_3 and 2_x) don't support this, so we emulate it using
         // dx_ViewCoords.
+        // DComp usually gives us an offset at (0, 0), but this is not always the case. It is
+        // valid for DComp to give us an offset into the texture atlas. In that scenario, we
+        // need to offset gl_FragCoord using dx_FragCoordOffset to point to the correct location
+        // of the pixel.
         if (shaderModel >= 4 && mRenderer->getShaderModelSuffix() == "")
         {
-            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x;\n"
-                          << "    gl_FragCoord.y = input.dx_Position.y;\n";
+            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x - dx_FragCoordOffset.x;\n"
+                          << "    gl_FragCoord.y = input.dx_Position.y - dx_FragCoordOffset.y;\n";
         }
         else if (shaderModel == 3)
         {
-            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x + 0.5;\n"
-                          << "    gl_FragCoord.y = input.dx_Position.y + 0.5;\n";
+            pixelPrologue
+                << "    gl_FragCoord.x = input.dx_Position.x + 0.5 - dx_FragCoordOffset.x;\n"
+                << "    gl_FragCoord.y = input.dx_Position.y + 0.5 - dx_FragCoordOffset.y;\n";
         }
         else
         {
@@ -790,9 +795,9 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
             // Renderer::setViewport()
             pixelPrologue
                 << "    gl_FragCoord.x = (input.gl_FragCoord.x * rhw) * dx_ViewCoords.x + "
-                   "dx_ViewCoords.z;\n"
+                   "dx_ViewCoords.z - dx_FragCoordOffset.x;\n"
                 << "    gl_FragCoord.y = (input.gl_FragCoord.y * rhw) * dx_ViewCoords.y + "
-                   "dx_ViewCoords.w;\n";
+                   "dx_ViewCoords.w - dx_FragCoordOffset.y;\n";
         }
 
         if (programMetadata.usesViewScale())
