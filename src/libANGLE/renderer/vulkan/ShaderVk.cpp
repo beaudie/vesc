@@ -33,14 +33,20 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         // Extra initialization in spirv shader may affect performance.
         options->initializeUninitializedLocals = true;
 
-        // WebGL shaders may contain OOB array accesses which in turn cause undefined behavior,
-        // which may result in security issues. See https://crbug.com/1189110.
-        options->clampIndirectArrayBounds = true;
-
         if (mState.getShaderType() != gl::ShaderType::Compute)
         {
             options->initOutputVariables = true;
         }
+    }
+
+    // robustBufferAccess on Vulkan doesn't support bound check on shader local variables
+    // but the GL_EXT_robustness does support.
+    // Enable the flag clampIndirectArrayBounds to ensure out of bounds local variable writes in
+    // shaders are protected when the context is created with mRobustAccess == true && vulkan
+    // backend supports robustBufferAccess
+    if (context->getExtensions().robustBufferAccessBehaviorKHR)
+    {
+        options->clampIndirectArrayBounds = true;
     }
 
     if (contextVk->getFeatures().clampPointSize.enabled)
