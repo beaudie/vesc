@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e113010d_1002d999",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-11T17:24:21Z",
+      "side": 1,
+      "message": "LGTM with one nit",
+      "revId": "d73e0db2fbb203a2311e34a1f632198a93d36864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1231f4_6825d69e",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-11T17:24:21Z",
+      "side": 1,
+      "message": "Probably goes away in the next commit, but you can use `ANGLE_UNUSED_VARIABLE`",
+      "range": {
+        "startLine": 417,
+        "startChar": 46,
+        "endLine": 417,
+        "endChar": 53
+      },
+      "revId": "d73e0db2fbb203a2311e34a1f632198a93d36864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
