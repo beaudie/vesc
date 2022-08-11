@@ -39,7 +39,9 @@ namespace rx
 namespace
 {
 
-void GetDefaultInputLayoutFromShader(gl::Shader *vertexShader, gl::InputLayout *inputLayoutOut)
+void GetDefaultInputLayoutFromShader(gl::Context *context,
+                                     gl::Shader *vertexShader,
+                                     gl::InputLayout *inputLayoutOut)
 {
     inputLayoutOut->clear();
 
@@ -48,7 +50,7 @@ void GetDefaultInputLayoutFromShader(gl::Shader *vertexShader, gl::InputLayout *
         return;
     }
 
-    for (const sh::ShaderVariable &shaderAttr : vertexShader->getActiveAttributes())
+    for (const sh::ShaderVariable &shaderAttr : vertexShader->getActiveAttributes(context))
     {
         if (shaderAttr.type != GL_NONE)
         {
@@ -170,25 +172,26 @@ bool HasFlatInterpolationVarying(const std::vector<sh::ShaderVariable> &varyings
     return false;
 }
 
-bool FindFlatInterpolationVaryingPerShader(gl::Shader *shader)
+bool FindFlatInterpolationVaryingPerShader(const gl::Context *context, gl::Shader *shader)
 {
     ASSERT(shader);
     switch (shader->getType())
     {
         case gl::ShaderType::Vertex:
-            return HasFlatInterpolationVarying(shader->getOutputVaryings());
+            return HasFlatInterpolationVarying(shader->getOutputVaryings(context));
         case gl::ShaderType::Fragment:
-            return HasFlatInterpolationVarying(shader->getInputVaryings());
+            return HasFlatInterpolationVarying(shader->getInputVaryings(context));
         case gl::ShaderType::Geometry:
-            return HasFlatInterpolationVarying(shader->getInputVaryings()) ||
-                   HasFlatInterpolationVarying(shader->getOutputVaryings());
+            return HasFlatInterpolationVarying(shader->getInputVaryings(context)) ||
+                   HasFlatInterpolationVarying(shader->getOutputVaryings(context));
         default:
             UNREACHABLE();
             return false;
     }
 }
 
-bool FindFlatInterpolationVarying(const gl::ShaderMap<gl::Shader *> &shaders)
+bool FindFlatInterpolationVarying(const gl::Context *context,
+                                  const gl::ShaderMap<gl::Shader *> &shaders)
 {
     for (gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
     {
@@ -198,7 +201,7 @@ bool FindFlatInterpolationVarying(const gl::ShaderMap<gl::Shader *> &shaders)
             continue;
         }
 
-        if (FindFlatInterpolationVaryingPerShader(shader))
+        if (FindFlatInterpolationVaryingPerShader(context, shader))
         {
             return true;
         }
@@ -1698,9 +1701,9 @@ class ProgramD3D::GetVertexExecutableTask : public ProgramD3D::GetExecutableTask
     }
 };
 
-void ProgramD3D::updateCachedInputLayoutFromShader()
+void ProgramD3D::updateCachedInputLayoutFromShader(const gl::Context *context)
 {
-    GetDefaultInputLayoutFromShader(mState.getAttachedShader(gl::ShaderType::Vertex),
+    GetDefaultInputLayoutFromShader(context, mState.getAttachedShader(gl::ShaderType::Vertex),
                                     &mCachedInputLayout);
     VertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
     updateCachedVertexExecutableIndex();
@@ -1999,6 +2002,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileComputeExecutable(const gl::Contex
 }
 
 angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
+    const gl::Context *glContext,
     d3d::Context *context,
     ShaderExecutableD3D **outExecutable,
     gl::InfoLog *infoLog)
@@ -2012,7 +2016,7 @@ angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
     }
 
     std::string computeHLSL =
-        mState.getAttachedShader(gl::ShaderType::Compute)->getTranslatedSource();
+        mState.getAttachedShader(gl::ShaderType::Compute)->getTranslatedSource(glContext);
 
     std::string finalComputeHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
         *this, mState, gl::ShaderType::Compute, computeHLSL,
@@ -2066,9 +2070,9 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
 
-        linkResources(resources);
+        linkResources(context, resources);
 
-        for (const sh::ShaderVariable &uniform : computeShader->getUniforms())
+        for (const sh::ShaderVariable &uniform : computeShader->getUniforms(context))
         {
             if (gl::IsImageType(uniform.type) && gl::IsImage2DType(uniform.type))
             {
@@ -2076,7 +2080,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
             }
         }
 
-        defineUniformsAndAssignRegisters();
+        defineUniformsAndAssignRegisters(context);
 
         return compileComputeExecutable(context, infoLog);
     }
@@ -2119,7 +2123,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                                        stream.str().c_str());
                 }
 
-                for (const sh::ShaderVariable &uniform : shader->getUniforms())
+                for (const sh::ShaderVariable &uniform : shader->getUniforms(context))
                 {
                     if (gl::IsImageType(uniform.type) && gl::IsImage2DType(uniform.type))
                     {
@@ -2145,8 +2149,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         ProgramD3DMetadata metadata(mRenderer, shadersD3D, context->getClientType());
         BuiltinVaryingsD3D builtins(metadata, varyingPacking);
 
-        mDynamicHLSL->generateShaderLinkHLSL(context->getCaps(), mState, metadata, varyingPacking,
-                                             builtins, &mShaderHLSL);
+        mDynamicHLSL->generateShaderLinkHLSL(context, context->getCaps(), mState, metadata,
+                                             varyingPacking, builtins, &mShaderHLSL);
 
         const ShaderD3D *vertexShader = shadersD3D[gl::ShaderType::Vertex];
         mUsesPointSize                = vertexShader && vertexShader->usesPointSize();
@@ -2157,7 +2161,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         mHasANGLEMultiviewEnabled = metadata.hasANGLEMultiviewEnabled();
 
         // Cache if we use flat shading
-        mUsesFlatInterpolation = FindFlatInterpolationVarying(mState.getAttachedShaders());
+        mUsesFlatInterpolation = FindFlatInterpolationVarying(context, mState.getAttachedShaders());
 
         if (mRenderer->getMajorShaderModel() >= 4)
         {
@@ -2166,17 +2170,17 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                 metadata.canSelectViewInVertexShader());
         }
 
-        initAttribLocationsToD3DSemantic();
+        initAttribLocationsToD3DSemantic(context);
 
-        defineUniformsAndAssignRegisters();
+        defineUniformsAndAssignRegisters(context);
 
         gatherTransformFeedbackVaryings(varyingPacking, builtins[gl::ShaderType::Vertex]);
 
-        linkResources(resources);
+        linkResources(context, resources);
 
         if (mState.getAttachedShader(gl::ShaderType::Vertex))
         {
-            updateCachedInputLayoutFromShader();
+            updateCachedInputLayoutFromShader(context);
         }
 
         return compileProgramExecutables(context, infoLog);
@@ -2189,7 +2193,7 @@ GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLo
     return GL_TRUE;
 }
 
-void ProgramD3D::initializeShaderStorageBlocks()
+void ProgramD3D::initializeShaderStorageBlocks(const gl::Context *context)
 {
     if (mState.getShaderStorageBlocks().empty())
     {
@@ -2233,7 +2237,7 @@ void ProgramD3D::initializeShaderStorageBlocks()
             continue;
         }
         ShaderD3D *shaderD3D = SafeGetImplAs<ShaderD3D>(shader);
-        for (const sh::InterfaceBlock &ssbo : shader->getShaderStorageBlocks())
+        for (const sh::InterfaceBlock &ssbo : shader->getShaderStorageBlocks(context))
         {
             if (!ssbo.active)
             {
@@ -2581,7 +2585,7 @@ void ProgramD3D::setUniform4uiv(GLint location, GLsizei count, const GLuint *v)
     setUniformInternal(location, count, v, GL_UNSIGNED_INT_VEC4);
 }
 
-void ProgramD3D::defineUniformsAndAssignRegisters()
+void ProgramD3D::defineUniformsAndAssignRegisters(const gl::Context *context)
 {
     D3DUniformMap uniformMap;
 
@@ -2591,7 +2595,7 @@ void ProgramD3D::defineUniformsAndAssignRegisters()
         gl::Shader *shader = mState.getAttachedShader(shaderType);
         if (shader)
         {
-            for (const sh::ShaderVariable &uniform : shader->getUniforms())
+            for (const sh::ShaderVariable &uniform : shader->getUniforms(context))
             {
                 if (uniform.active)
                 {
@@ -3096,7 +3100,7 @@ unsigned int ProgramD3D::issueSerial()
     return mCurrentSerial++;
 }
 
-void ProgramD3D::initAttribLocationsToD3DSemantic()
+void ProgramD3D::initAttribLocationsToD3DSemantic(const gl::Context *context)
 {
     gl::Shader *vertexShader = mState.getAttachedShader(gl::ShaderType::Vertex);
     if (!vertexShader)
@@ -3106,7 +3110,7 @@ void ProgramD3D::initAttribLocationsToD3DSemantic()
 
     // Init semantic index
     int semanticIndex = 0;
-    for (const sh::ShaderVariable &attribute : vertexShader->getActiveAttributes())
+    for (const sh::ShaderVariable &attribute : vertexShader->getActiveAttributes(context))
     {
         int regCount    = gl::VariableRegisterCount(attribute.type);
         GLuint location = mState.getAttributeLocation(attribute.name);
@@ -3377,15 +3381,16 @@ void ProgramD3D::updateCachedComputeExecutableIndex()
     }
 }
 
-void ProgramD3D::linkResources(const gl::ProgramLinkedResources &resources)
+void ProgramD3D::linkResources(const gl::Context *context,
+                               const gl::ProgramLinkedResources &resources)
 {
     HLSLBlockLayoutEncoderFactory hlslEncoderFactory;
     gl::ProgramLinkedResourcesLinker linker(&hlslEncoderFactory);
 
-    linker.linkResources(mState, resources);
+    linker.linkResources(context, mState, resources);
 
     initializeUniformBlocks();
-    initializeShaderStorageBlocks();
+    initializeShaderStorageBlocks(context);
 }
 
 }  // namespace rx

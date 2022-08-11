@@ -133,7 +133,7 @@ struct D3DVarying final
                unsigned int componentCountIn,
                unsigned int outputSlotIn);
 
-    D3DVarying(const D3DVarying &) = default;
+    D3DVarying(const D3DVarying &)            = default;
     D3DVarying &operator=(const D3DVarying &) = default;
 
     std::string semanticName;
@@ -519,20 +519,20 @@ class ProgramD3D : public ProgramImpl
     D3DUniform *getD3DUniformFromLocation(GLint location);
     const D3DUniform *getD3DUniformFromLocation(GLint location) const;
 
-    void initAttribLocationsToD3DSemantic();
+    void initAttribLocationsToD3DSemantic(const gl::Context *context);
 
     void reset();
     void initializeUniformBlocks();
-    void initializeShaderStorageBlocks();
+    void initializeShaderStorageBlocks(const gl::Context *context);
 
-    void updateCachedInputLayoutFromShader();
+    void updateCachedInputLayoutFromShader(const gl::Context *context);
     void updateCachedOutputLayoutFromShader();
     void updateCachedImage2DBindLayoutFromShader(gl::ShaderType shaderType);
     void updateCachedVertexExecutableIndex();
     void updateCachedPixelExecutableIndex();
     void updateCachedComputeExecutableIndex();
 
-    void linkResources(const gl::ProgramLinkedResources &resources);
+    void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
 
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;
