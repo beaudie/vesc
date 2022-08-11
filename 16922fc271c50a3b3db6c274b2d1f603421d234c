@@ -267,6 +267,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fae59b6e_faf72bc7",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-11T19:20:47Z",
+      "side": 1,
+      "message": "One more point for #3: if we miss one and have to add it later, it\u0027s backward compatible to just update the spec to allow more at any time.\n\nIf we instead go the route of banning specific commands, then it is not backward compatible to update the spec to ban more in the future.",
+      "parentUuid": "06f305c0_cf837450",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d066b4b2_ab5c2ebc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
