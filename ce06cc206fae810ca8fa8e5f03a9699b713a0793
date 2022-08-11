@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f6197a6_5883952e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2022-08-11T17:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a5ff3b7_7aa90dd2",
+      "revId": "ce06cc206fae810ca8fa8e5f03a9699b713a0793",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b69675b_7104419a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-07-28T02:06:19Z",
       "side": 1,
       "message": "nit: as a matter of consistency, please send in `renderer` as the first argument, the function itself can call `renderer-\u003egetFeatures()`.",
+      "revId": "ce06cc206fae810ca8fa8e5f03a9699b713a0793",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cde2817_96f8300a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1068,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2022-08-11T17:35:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b69675b_7104419a",
       "revId": "ce06cc206fae810ca8fa8e5f03a9699b713a0793",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
