@@ -50,6 +50,24 @@
       "message": "Thanks Charlie!  LGTM",
       "revId": "7169b3b4ae482a258fe4e75728e27750137f3a7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e12f884_ef29bc8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-11T16:58:05Z",
+      "side": 1,
+      "message": "The problem is that form code I am reading, this appears to be not possible. We should already return false in this call. And a few month back, I was trying to write a test and failed to reproduce the thing I worried. This is mostly try to be defensive here given we have a non-reproducible crash in android. We can see if this makes any difference or not. Maybe I can add some assertion here as well.",
+      "parentUuid": "b0273d17_2e2eb437",
+      "revId": "7169b3b4ae482a258fe4e75728e27750137f3a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
