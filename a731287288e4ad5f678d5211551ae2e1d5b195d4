@@ -33,6 +33,24 @@
       "message": "So, was the program cache entirely disabled by accident? Wouldn\u0027t UMA histograms show this? IIRC, after switching to using Blob Cache, Chrome doesn\u0027t even use this extension, does it?\n\nAnyway, please add a test!",
       "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41a05fa8_d9306bcb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-11T11:19:45Z",
+      "side": 1,
+      "message": "shader program cache is enabled by default. Because the bug, we can not disable it with setting EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE to EGL_FALSE while creating egl context. \n\nBTW, I am thinking to disable the cache for chromium, since chromium manages shader cache by itself. the cache in ANGLE causes memory regression, and maybe performance regression as well.\n\nTest added. Done",
+      "parentUuid": "06def136_9e57bb2c",
+      "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
