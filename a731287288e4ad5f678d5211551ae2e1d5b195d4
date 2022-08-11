@@ -69,6 +69,24 @@
       "parentUuid": "41a05fa8_d9306bcb",
       "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4b1bf0_109786f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-11T16:53:04Z",
+      "side": 1,
+      "message": "What\u0027s the blob cache? could you please point me to related code?\n\nChrome uses skia which caches shader program [1]. I think it will keep the program in the cache and keep it alive until it is purged. skia also read the binary from GL driver, and store them in hard drive, so it can be used when for the next run.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/skia/src/gpu/ganesh/gl/GrGLGpuProgramCache.cpp;l\u003d91?q\u003dProgramCache::findOrCreateProgramImpl\u0026ss\u003dchromium",
+      "parentUuid": "65bd2a89_56dfea26",
+      "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
