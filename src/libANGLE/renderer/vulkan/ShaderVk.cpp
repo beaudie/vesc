@@ -43,6 +43,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         }
     }
 
+    if (context->isRobustnessEnabled())
+    {
+        options->clampIndirectArrayBounds = true;
+    }
+
     if (contextVk->getFeatures().clampPointSize.enabled)
     {
         options->clampPointSize = true;
