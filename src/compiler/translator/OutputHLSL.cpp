@@ -378,11 +378,18 @@ OutputHLSL::OutputHLSL(sh::GLenum shaderType,
 
     if (mOutputType == SH_HLSL_3_0_OUTPUT)
     {
-        // Fragment shaders need dx_DepthRange, dx_ViewCoords and dx_DepthFront.
+        // Fragment shaders need dx_DepthRange, dx_ViewCoords, dx_DepthFront,
+        // and dx_FragCoordOffset.
         // Vertex shaders need a slightly different set: dx_DepthRange, dx_ViewCoords and
         // dx_ViewAdjust.
-        // In both cases total 3 uniform registers need to be reserved.
-        mResourcesHLSL->reserveUniformRegisters(3);
+        if (mShaderType == GL_VERTEX_SHADER)
+        {
+            mResourcesHLSL->reserveUniformRegisters(3);
+        }
+        else
+        {
+            mResourcesHLSL->reserveUniformRegisters(4);
+        }
     }
 
     // Reserve registers for the default uniform block and driver constants
@@ -832,6 +839,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
             if (mUsesFragCoord)
             {
                 out << "    float4 dx_ViewCoords : packoffset(c1);\n";
+                out << "    float2 dx_FragCoordOffset : packoffset(c3);\n";
             }
 
             if (mUsesFragCoord || mUsesFrontFacing)
@@ -843,14 +851,14 @@ void OutputHLSL::header(TInfoSinkBase &out,
             {
                 // dx_ViewScale is only used in the fragment shader to correct
                 // the value for glFragCoord if necessary
-                out << "    float2 dx_ViewScale : packoffset(c3);\n";
+                out << "    float2 dx_ViewScale : packoffset(c3.z);\n";
             }
 
             if (mHasMultiviewExtensionEnabled)
             {
                 // We have to add a value which we can use to keep track of which multi-view code
                 // path is to be selected in the GS.
-                out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
+                out << "    float multiviewSelectViewportIndex : packoffset(c4.x);\n";
             }
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
@@ -884,6 +892,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
             if (mUsesFragCoord || mUsesFrontFacing)
             {
                 out << "uniform float3 dx_DepthFront : register(c2);\n";
+                out << "uniform float2 dx_FragCoordOffset : register(c3);\n";
             }
         }
 
