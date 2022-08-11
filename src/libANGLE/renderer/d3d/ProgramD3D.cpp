@@ -2066,7 +2066,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
 
-        linkResources(resources);
+        linkResources(context, resources);
 
         for (const sh::ShaderVariable &uniform : computeShader->getUniforms())
         {
@@ -2172,7 +2172,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         gatherTransformFeedbackVaryings(varyingPacking, builtins[gl::ShaderType::Vertex]);
 
-        linkResources(resources);
+        linkResources(context, resources);
 
         if (mState.getAttachedShader(gl::ShaderType::Vertex))
         {
@@ -3377,12 +3377,13 @@ void ProgramD3D::updateCachedComputeExecutableIndex()
     }
 }
 
-void ProgramD3D::linkResources(const gl::ProgramLinkedResources &resources)
+void ProgramD3D::linkResources(const gl::Context *context,
+                               const gl::ProgramLinkedResources &resources)
 {
     HLSLBlockLayoutEncoderFactory hlslEncoderFactory;
     gl::ProgramLinkedResourcesLinker linker(&hlslEncoderFactory);
 
-    linker.linkResources(mState, resources);
+    linker.linkResources(context, mState, resources);
 
     initializeUniformBlocks();
     initializeShaderStorageBlocks();
