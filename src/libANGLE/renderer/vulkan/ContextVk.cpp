@@ -1206,7 +1206,6 @@ angle::Result ContextVk::finish(const gl::Context *context)
     {
         ANGLE_TRY(finishImpl(RenderPassClosureReason::GLFinish));
     }
-
     syncObjectPerfCounters(mRenderer->getCommandQueuePerfCounters());
     return angle::Result::Continue;
 }
