@@ -51,6 +51,24 @@
       "parentUuid": "06def136_9e57bb2c",
       "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65bd2a89_56dfea26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T16:40:17Z",
+      "side": 1,
+      "message": "Got it.\n\n\u003e BTW, I am thinking to disable the cache for chromium, since chromium manages shader cache by itself. the cache in ANGLE causes memory regression, and maybe performance regression as well.\n\nIIRC, ANGLE uses the blob cache if present, and only if not, it would cache the programs in its own memory. Since Chromium provides a blob cache, ANGLE shouldn\u0027t be caching anything itself.\n\nI imagine by \"chromium manages shader cache by itself\" you are talking about the same blob cache I\u0027m talking about. In that case, ANGLE shouldn\u0027t be doing anything more than put blobs in Chromium\u0027s blob cache.",
+      "parentUuid": "41a05fa8_d9306bcb",
+      "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
