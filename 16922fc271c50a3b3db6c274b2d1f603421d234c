@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "881a87d5_e86d19ae",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:33:39Z",
+      "side": 1,
+      "message": "Ah you added more, scratch the above, and use these 6 enums instead: 0x96E0 through 0x96E5",
+      "parentUuid": "8c4d0013_ea6dff90",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a619a96a_c2afbc50",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
