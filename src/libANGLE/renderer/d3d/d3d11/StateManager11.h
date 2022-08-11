@@ -73,7 +73,7 @@ class ShaderConstants11 : angle::NonCopyable
               clipControlOrigin{-1.0f},
               clipControlZeroToOne{.0f},
               firstVertex{0},
-              padding{.0f, .0f}
+              dcompOffset{.0f}
         {}
 
         float depthRange[4];
@@ -93,8 +93,7 @@ class ShaderConstants11 : angle::NonCopyable
 
         uint32_t firstVertex;
 
-        // Added here to manually pad the struct to 16 byte boundary
-        float padding[2];
+        float dcompOffset[2];
     };
     static_assert(sizeof(Vertex) % 16u == 0,
                   "D3D11 constant buffers must be multiples of 16 bytes");

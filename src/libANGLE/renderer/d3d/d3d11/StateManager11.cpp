@@ -538,6 +538,9 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
 
     mVertex.viewScale[0] = mPixel.viewScale[0];
     mVertex.viewScale[1] = mPixel.viewScale[1];
+
+    mVertex.dcompOffset[0] = dxViewport.TopLeftX / dxViewport.Width;
+    mVertex.dcompOffset[1] = dxViewport.TopLeftY / dxViewport.Height;
 }
 
 // Update the ShaderConstants with a new first vertex and return whether the update dirties them.

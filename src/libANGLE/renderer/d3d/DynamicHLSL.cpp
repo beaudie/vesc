@@ -656,7 +656,10 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
 
     if (vertexBuiltins.glFragCoord.enabled)
     {
-        vertexGenerateOutput << "    output.gl_FragCoord = gl_Position;\n";
+        vertexGenerateOutput << "    output.gl_FragCoord.x = gl_Position.x + dx_DcompOffset.x;\n";
+        vertexGenerateOutput << "    output.gl_FragCoord.y = gl_Position.y + dx_DcompOffset.y;\n";
+        vertexGenerateOutput << "    output.gl_FragCoord.z = gl_Position.z;\n";
+        vertexGenerateOutput << "    output.gl_FragCoord.w = gl_Position.w;\n";
     }
 
     const auto &registerInfos = varyingPacking.getRegisterList();
@@ -770,29 +773,31 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
     {
         pixelPrologue << "    float rhw = 1.0 / input.gl_FragCoord.w;\n";
 
+        pixelPrologue << "    gl_FragCoord = input.gl_FragCoord;\n";
+
         // Certain Shader Models (4_0+ and 3_0) allow reading from dx_Position in the pixel shader.
         // Other Shader Models (4_0_level_9_3 and 2_x) don't support this, so we emulate it using
         // dx_ViewCoords.
-        if (shaderModel >= 4 && mRenderer->getShaderModelSuffix() == "")
-        {
-            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x;\n"
-                          << "    gl_FragCoord.y = input.dx_Position.y;\n";
-        }
-        else if (shaderModel == 3)
-        {
-            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x + 0.5;\n"
-                          << "    gl_FragCoord.y = input.dx_Position.y + 0.5;\n";
-        }
-        else
-        {
-            // dx_ViewCoords contains the viewport width/2, height/2, center.x and center.y. See
-            // Renderer::setViewport()
-            pixelPrologue
-                << "    gl_FragCoord.x = (input.gl_FragCoord.x * rhw) * dx_ViewCoords.x + "
-                   "dx_ViewCoords.z;\n"
-                << "    gl_FragCoord.y = (input.gl_FragCoord.y * rhw) * dx_ViewCoords.y + "
-                   "dx_ViewCoords.w;\n";
-        }
+        // if (shaderModel >= 4 && mRenderer->getShaderModelSuffix() == "")
+        // {
+        //     pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x;\n"
+        //                   << "    gl_FragCoord.y = input.dx_Position.y;\n";
+        // }
+        // else if (shaderModel == 3)
+        // {
+        //     pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x + 0.5;\n"
+        //                   << "    gl_FragCoord.y = input.dx_Position.y + 0.5;\n";
+        // }
+        // else
+        // {
+        //     // dx_ViewCoords contains the viewport width/2, height/2, center.x and center.y. See
+        //     // Renderer::setViewport()
+        //     pixelPrologue
+        //         << "    gl_FragCoord.x = (input.gl_FragCoord.x * rhw) * dx_ViewCoords.x + "
+        //            "dx_ViewCoords.z;\n"
+        //         << "    gl_FragCoord.y = (input.gl_FragCoord.y * rhw) * dx_ViewCoords.y + "
+        //            "dx_ViewCoords.w;\n";
+        // }
 
         if (programMetadata.usesViewScale())
         {
