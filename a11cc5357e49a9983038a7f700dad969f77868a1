@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "570861e5_05308f34",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-11T17:17:43Z",
+      "side": 1,
+      "message": "I don\u0027t think that\u0027s the case but SG to keep for consistency with other places in the file.",
+      "parentUuid": "6accaddd_99691383",
+      "range": {
+        "startLine": 435,
+        "startChar": 38,
+        "endLine": 435,
+        "endChar": 40
+      },
+      "revId": "a11cc5357e49a9983038a7f700dad969f77868a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd58a2d7_7977bf6d",
