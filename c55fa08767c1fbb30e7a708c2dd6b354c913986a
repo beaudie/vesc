@@ -78,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fbfde7d0_6db71fdf",
+        "filename": "src/libANGLE/MemoryShaderCache.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-11T16:01:17Z",
+      "side": 1,
+      "message": "The `MemoryProgramCache` actually does use a mutex, although it is stored in `Display` as `mProgramCacheMutex`. After looking at the BlobCache implementation, it appears that the `mBlobCacheMutex` variable is only used in the `BlobCache::putApplication` function, which is only used by the vkPipeline cache in `RendererVk.cpp`. \n\nDo we want to make ANGLE\u0027s BlobCache actually thread-safe by locking the mutex in the normal `BlobCache::get` and `BlobCache::put` functions as well? It seems a little misleading that the mutex is only used in the `putApplication` function.\n\nAlso, I assume that the `ANGLE_PERF_WARNING`/histogram macros aren\u0027t thread-safe, and these are used in the Program and Shader caches. \n\nFinally, it is good to note that the actual BlobCache provided by the android platform is NOT thread-safe: https://cs.android.com/android/platform/superproject/+/master:frameworks/native/opengl/libs/EGL/BlobCache.h",
+      "parentUuid": "5f5d82ad_f030ffb3",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6147c90b_e1c1e56d",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 14
