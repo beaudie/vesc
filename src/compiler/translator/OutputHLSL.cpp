@@ -990,6 +990,8 @@ void OutputHLSL::header(TInfoSinkBase &out,
                 out << "    uint dx_VertexID : packoffset(c4.y);\n";
             }
 
+            out << "    float2 dx_FragCoordOffset : packoffset(c4.z);\n";
+
             out << "};\n"
                    "\n";
         }
