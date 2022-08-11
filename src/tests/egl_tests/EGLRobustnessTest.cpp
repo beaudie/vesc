@@ -115,6 +115,24 @@ class EGLRobustnessTest : public ANGLETest<>
         ASSERT_NE(nullptr, strstr(extensionString, "GL_ANGLE_instanced_arrays"));
     }
 
+    void createRobustContext()
+    {
+        const EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION,
+                                         3,
+                                         EGL_CONTEXT_MINOR_VERSION_KHR,
+                                         0,
+                                         EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT,
+                                         EGL_TRUE,
+                                         EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT,
+                                         EGL_LOSE_CONTEXT_ON_RESET,
+                                         EGL_NONE};
+        mContext = eglCreateContext(mDisplay, mConfig, EGL_NO_CONTEXT, contextAttribs);
+        ASSERT_NE(EGL_NO_CONTEXT, mContext);
+
+        eglMakeCurrent(mDisplay, mWindow, mWindow, mContext);
+        ASSERT_EGL_SUCCESS();
+    }
+
     void forceContextReset()
     {
         // Cause a GPU reset by drawing 100,000,000 fullscreen quads
@@ -222,9 +240,92 @@ TEST_P(EGLRobustnessTest, DISABLED_ResettingDisplayWorks)
     ASSERT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR);
 }
 
+// Test to reproduce the crash when running
+// dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.writes.uniform_block.fragment
+// on Pixel 6
+TEST_P(EGLRobustnessTest, ContextResetOnFragmentShader)
+{
+    ANGLE_SKIP_TEST_IF(!mInitialized);
+
+    createRobustContext();
+
+    constexpr char kVS[] = R"(#version 310 es
+    in highp vec4 a_position;
+    void main(void) {
+        gl_Position = a_position;
+    })";
+
+    constexpr char kFS[] = R"(#version 310 es
+layout(location = 0) out highp vec4 fragColor;
+uniform highp int u_index;
+layout(std140, binding = 0) uniform Block
+{
+    highp float color_out[4];
+} ub_in[3];
+
+void main (void)
+{
+    highp vec4 color = vec4(0.0f);
+    color[u_index] = ub_in[0].color_out[0];
+    fragColor = color;
+}
+)";
+    GLuint program       = CompileProgram(kVS, kFS);
+    glUseProgram(program);
+    GLint indexLocation = glGetUniformLocation(program, "u_index");
+    GLint index         = -1;
+    glUniform1i(indexLocation, index);
+
+    const GLfloat coords[] = {-1.0f, -1.0f, +1.0f, -1.0f, +1.0f, +1.0f, -1.0f, +1.0f};
+
+    GLint coordLocation = glGetAttribLocation(program, "a_position");
+    GLuint coordBuffer;
+    glGenBuffers(1, &coordBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, coordBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(coordLocation);
+    glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    std::vector<angle::Vector4> refValues(3, angle::Vector4(0.0f, 1.0f, 1.0f, 1.0f));
+    std::vector<GLuint> buffers(3, 0);
+    glGenBuffers(3, &buffers[0]);
+
+    for (int bufNdx = 0; bufNdx < 3; ++bufNdx)
+    {
+        glBindBuffer(GL_UNIFORM_BUFFER, buffers[bufNdx]);
+        glBufferData(GL_UNIFORM_BUFFER, sizeof(angle::Vector4), &(refValues[bufNdx]),
+                     GL_STATIC_DRAW);
+        glBindBufferBase(GL_UNIFORM_BUFFER, bufNdx, buffers[bufNdx]);
+    }
+
+    GLuint indices[] = {0, 1, 2, 2, 3, 0};
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+    // Reset Context
+    glDisableVertexAttribArray(coordLocation);
+    coordLocation = 0;
+
+    glDeleteBuffers(1, &coordBuffer);
+
+    glDeleteBuffers(3, &buffers[0]);
+    buffers.clear();
+
+    glUseProgram(0);
+
+    glFinish();
+
+    GLint resetStatus;
+    resetStatus = glGetGraphicsResetStatus();
+    ASSERT_TRUE(resetStatus == GL_GUILTY_CONTEXT_RESET);
+    GLint error;
+    error = glGetError();
+    ASSERT_TRUE(error != GL_NO_ERROR);
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLRobustnessTest);
 ANGLE_INSTANTIATE_TEST(EGLRobustnessTest,
                        WithNoFixture(ES2_VULKAN()),
                        WithNoFixture(ES2_D3D9()),
                        WithNoFixture(ES2_D3D11()),
-                       WithNoFixture(ES2_OPENGL()));
+                       WithNoFixture(ES2_OPENGL()),
+                       WithNoFixture(ES31_VULKAN()));

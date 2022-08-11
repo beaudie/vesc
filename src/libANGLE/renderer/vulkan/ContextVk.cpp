@@ -1200,14 +1200,17 @@ angle::Result ContextVk::finish(const gl::Context *context)
     if (mRenderer->getFeatures().swapbuffersOnFlushOrFinishWithSingleBuffer.enabled &&
         (mCurrentWindowSurface != nullptr) && mCurrentWindowSurface->isSharedPresentMode())
     {
+        INFO() << "Yuxin Debug currentWindowSurface->onSharedPresentContextFlush";
         ANGLE_TRY(mCurrentWindowSurface->onSharedPresentContextFlush(context));
     }
     else
     {
+        INFO() << "Yuxin Debug finishImpl(RenderPassClosureReason::GLFinish)";
         ANGLE_TRY(finishImpl(RenderPassClosureReason::GLFinish));
     }
-
+    INFO() << "syncObjectPerfCounters";
     syncObjectPerfCounters(mRenderer->getCommandQueuePerfCounters());
+    INFO() << "ContextVk::finish()";
     return angle::Result::Continue;
 }
 
