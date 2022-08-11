@@ -775,8 +775,11 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
         // dx_ViewCoords.
         if (shaderModel >= 4 && mRenderer->getShaderModelSuffix() == "")
         {
-            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x;\n"
-                          << "    gl_FragCoord.y = input.dx_Position.y;\n";
+            // DComp usually gives us an offset at (0, 0), but this is not always the case. It is
+            // valid for DComp to give us an offset into the texture atlas. In that scenario, we
+            // we need to offset gl_FragCoord to point to the correct location of the pixel.
+            pixelPrologue << "    gl_FragCoord.x = input.dx_Position.x - dx_FragCoordOffset.x;\n"
+                          << "    gl_FragCoord.y = input.dx_Position.y - dx_FragCoordOffset.y;\n";
         }
         else if (shaderModel == 3)
         {

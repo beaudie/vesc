@@ -830,6 +830,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
             if (mUsesFragCoord)
             {
                 out << "    float4 dx_ViewCoords : packoffset(c1);\n";
+                out << "    float2 dx_FragCoordOffset : packoffset(c3.z);\n";
             }
 
             if (mUsesFragCoord || mUsesFrontFacing)
@@ -848,7 +849,7 @@ void OutputHLSL::header(TInfoSinkBase &out,
             {
                 // We have to add a value which we can use to keep track of which multi-view code
                 // path is to be selected in the GS.
-                out << "    float multiviewSelectViewportIndex : packoffset(c3.z);\n";
+                out << "    float multiviewSelectViewportIndex : packoffset(c4);\n";
             }
 
             if (mOutputType == SH_HLSL_4_1_OUTPUT)
