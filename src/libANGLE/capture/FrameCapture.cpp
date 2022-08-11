@@ -3383,6 +3383,7 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
     // Set a unpack alignment of 1. Otherwise, computeRowPitch() will compute the wrong value,
     // leading to a crash in memcpy() when capturing the texture contents.
     gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
+    GLint savedUnpackAlignment               = currentUnpackState.alignment;
     if (currentUnpackState.alignment != 1)
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
@@ -3875,6 +3876,12 @@ void CaptureShareGroupMidExecutionSetup(const gl::Context *context,
         CaptureFenceSyncResetCalls(context, replayState, resourceTracker, syncID, sync);
         resourceTracker->getStartingFenceSyncs().insert(syncID);
     }
+
+    if (savedUnpackAlignment != currentUnpackState.alignment)
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
+        currentUnpackState.alignment = savedUnpackAlignment;
+    }
 }
 
 void CaptureMidExecutionSetup(const gl::Context *context,
@@ -4008,6 +4015,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // Set a unpack alignment of 1. Otherwise, computeRowPitch() will compute the wrong value,
     // leading to a crash in memcpy() when capturing the texture contents.
     gl::PixelUnpackState &currentUnpackState = replayState.getUnpackState();
+    GLint savedUnpackAlignment               = currentUnpackState.alignment;
     if (currentUnpackState.alignment != 1)
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
@@ -4770,6 +4778,12 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     if (validationEnabled)
     {
         CaptureValidateSerializedState(context, setupCalls);
+    }
+
+    if (savedUnpackAlignment != currentUnpackState.alignment)
+    {
+        cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
+        currentUnpackState.alignment = savedUnpackAlignment;
     }
 }
 
