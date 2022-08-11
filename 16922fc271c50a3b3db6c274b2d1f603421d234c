@@ -16,6 +16,138 @@
       "message": "Still looks good to me.\n\nAdding Alexey too, he may be interested.",
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c4d0013_ea6dff90",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "Allocated 4 enums for you from 0x96BB through 0x96BE",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a619a96a_c2afbc50",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "\u003e Memoryless pixel local storage planes may also be\n\u003e initialized with historic data rendered into other\n\u003e memoryless planes by the same application.\n\nThis pretty much sounds like \"undefined\"",
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c183bbbf_a9b1ab95",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "It seems like the GL ext doesn\u0027t make this guarantee (because it doesn\u0027t have an \"endPLS\" call). It says:\n\n\u003e The contents of the pixel local storage persist until color data is flushed to the framebuffer\n\nwhich leaves it open when and where the render pass breaks. If you look at `RenderPassClosureReason` in the Vulkan backend, you\u0027ll see there are more reasons than listed here. For example:\n\n- Some cases with transform feedback restart\n- Timer queries\n- GenerateMipmap() and texture copy on the CPU due to restrictions, where the textures are not necessarily those that are used for PLS\n\nSome cases are not obvious, for example, we may break the render pass in `BufferVk::setDataImpl` if `stagedUpdate` is called; basically everywhere we have an `ANGLE_VK_PERF_WARNING` that warns about render pass break or GPU stall.\n\nI see two solutions:\n\n1. Meticulously exclude more things; for example transform feedback entirely, queries other than occlusion, basically at least every reason we may break the render pass for in Vulkan.\n2. Add an option where any of the operations that are still permitted could return an error if the render pass is broken.\n\nThe former is probably hard to make bullet-proof. The latter makes it harder for the devs, as some render pass breaks can happen only on some hardware. Maybe a mix of both? Try your best for 1, and leave 2 as backup?\n\nNote that for the Vulkan backend it\u0027s actually not an impossible problem, if the render pass breaks, use STORE_OP_STORE + LOAD_OP_LOAD to continue on to the next render pass. It works, but the lazily-allocated memory used for the memoryless attachments are now actually allocated.\n\nI\u0027m a little worried about what happens when you use the GL ext too (which doesn\u0027t let you for example implement 2 as there\u0027s no feedback IIUC)",
+      "range": {
+        "startLine": 316,
+        "startChar": 14,
+        "endLine": 316,
+        "endChar": 45
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fcf799e_6416a197",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "\"tiled memory\" is not formally defined, and isn\u0027t universal either. The GL ext calls this \"flushed to the framebuffer\", which is vague too, but at least less tied to TBR parlance.",
+      "range": {
+        "startLine": 322,
+        "startChar": 65,
+        "endLine": 323,
+        "endChar": 26
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1407be8_f47b93ce",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "Based on the long comment above, my suggestion is to ban these entirely. Ideally the render pass would have nothing but:\n\n- Bind program\n- Bind textures/buffers\n- Draws\n- Occlusion queries\n\nEvery data upload, copy, whatever should be done before the pass.",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d066b4b2_ab5c2ebc",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-11T18:32:23Z",
+      "side": 1,
+      "message": "Can you make this guarantee when implemented on top of native GL extensions?",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
