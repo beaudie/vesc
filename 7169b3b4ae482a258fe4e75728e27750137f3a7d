@@ -16,6 +16,23 @@
       "message": "Drive by: Please add a test for this, TSAN should be able to catch the race.\n\nYou probably know, but just in case, we have facilities for this in the tests, see `RunLockStepThreads`. It should be fairly easy to set up the situation you\u0027ve described, then have the two threads simultaneously (as far as TSAN is concerned) draw using the texture.",
       "revId": "7169b3b4ae482a258fe4e75728e27750137f3a7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e53e6c84_30f4be44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-11T15:48:42Z",
+      "side": 1,
+      "message": "LGTM. Good catch.",
+      "revId": "7169b3b4ae482a258fe4e75728e27750137f3a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
