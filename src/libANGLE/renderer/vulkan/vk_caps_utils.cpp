@@ -351,8 +351,9 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.copyTexture3dANGLE            = true;
     mNativeExtensions.copyCompressedTextureCHROMIUM = true;
     mNativeExtensions.debugMarkerEXT                = true;
-    mNativeExtensions.robustnessEXT                 = !IsARM(mPhysicalDeviceProperties.vendorID);
-    mNativeExtensions.discardFramebufferEXT         = true;
+    // mNativeExtensions.robustnessEXT                 = !IsARM(mPhysicalDeviceProperties.vendorID);
+    mNativeExtensions.robustnessEXT         = true;
+    mNativeExtensions.discardFramebufferEXT = true;
     mNativeExtensions.textureBorderClampOES = getFeatures().supportsCustomBorderColor.enabled;
     mNativeExtensions.textureBorderClampEXT = getFeatures().supportsCustomBorderColor.enabled;
     // Enable EXT_texture_type_2_10_10_10_REV
