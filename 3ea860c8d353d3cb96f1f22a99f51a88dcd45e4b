@@ -67,6 +67,24 @@
       "message": "r32i?",
       "revId": "3ea860c8d353d3cb96f1f22a99f51a88dcd45e4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef415309_67d6ae76",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 29
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-11T16:08:42Z",
+      "side": 1,
+      "message": "I ask the same question when I read https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_pixel_local_storage.txt 😊\n\nAdded a note.",
+      "parentUuid": "2ea1a687_4bb09084",
+      "revId": "3ea860c8d353d3cb96f1f22a99f51a88dcd45e4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
