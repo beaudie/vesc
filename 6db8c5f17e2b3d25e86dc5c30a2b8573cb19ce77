@@ -39,6 +39,30 @@
       },
       "revId": "6db8c5f17e2b3d25e86dc5c30a2b8573cb19ce77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b184f8a_63b70904",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-12T17:52:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fca568b9_6d02182a",
+      "range": {
+        "startLine": 76,
+        "startChar": 37,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "6db8c5f17e2b3d25e86dc5c30a2b8573cb19ce77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
