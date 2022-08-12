@@ -1986,6 +1986,7 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
         else if (mProgramPipeline.get())
         {
             mExecutable = &mProgramPipeline->getExecutable();
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_OR_PPO);
         }
 
         // Note that rendering is undefined if glUseProgram(0) is called. But ANGLE will generate
@@ -2046,6 +2047,7 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
         if (mProgramPipeline.get())
         {
             mExecutable = &mProgramPipeline->getExecutable();
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_OR_PPO);
         }
         else
         {
@@ -3467,12 +3469,19 @@ angle::Result State::syncVertexArray(const Context *context, Command command)
     return mVertexArray->syncState(context);
 }
 
-angle::Result State::syncProgram(const Context *context, Command command)
+angle::Result State::syncProgramOrPpo(const Context *context, Command command)
 {
-    // There may not be a program if the calling application only uses program pipelines.
+    // If both a Program and a ProgramPipeline are bound, the Program will
+    // always override the ProgramPipeline.
     if (mProgram)
     {
+        // If a Program is bound, sync the Program.
         return mProgram->syncState(context);
+    }
+    else if (mProgramPipeline.get())
+    {
+        // If a ProgramPipeline is bound, ensure it is linked.
+        mProgramPipeline->resolveLink(context);
     }
     return angle::Result::Continue;
 }
@@ -3503,7 +3512,7 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
             localSet.set(DIRTY_OBJECT_SAMPLERS);
             break;
         case GL_PROGRAM:
-            localSet.set(DIRTY_OBJECT_PROGRAM);
+            localSet.set(DIRTY_OBJECT_PROGRAM_OR_PPO);
             break;
     }
 
@@ -3528,7 +3537,7 @@ void State::setObjectDirty(GLenum target)
             mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case GL_PROGRAM:
-            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_OR_PPO);
             break;
         default:
             break;
@@ -3554,7 +3563,7 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
 
     if (program->hasAnyDirtyBit())
     {
-        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_OR_PPO);
     }
 
     // Set any bound textures.
