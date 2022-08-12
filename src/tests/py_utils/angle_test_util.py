@@ -37,6 +37,12 @@ class LogFormatter(logging.Formatter):
         # Drop date as these scripts are short lived
         return datetime.datetime.fromtimestamp(record.created).strftime('%H:%M:%S.%fZ')
 
+    def format(self, record):
+        if hasattr(record, 'no_format') and record.no_format:
+            return record.getMessage()
+        else:
+            return logging.Formatter.format(self, record)
+
 
 def SetupLogging(level):
     # Reload to reset if it was already setup by a library
@@ -93,12 +99,16 @@ def run_command_with_output(argv, stdoutfile, env=None, cwd=None, log=True):
         test_env.forward_signals([process])
         while process.poll() is None:
             if log:
-                sys.stdout.write(reader.read().decode('utf-8'))
+                data = reader.read().decode('utf-8')
+                if data:
+                    logging.info(data, extra={'no_format': True})
             # This sleep is needed for signal propagation. See the
             # wait_with_signals() docstring.
             time.sleep(0.1)
         if log:
-            sys.stdout.write(reader.read().decode('utf-8'))
+            data = reader.read().decode('utf-8')
+            if data:
+                logging.info(data, extra={'no_format': True})
         return process.returncode
 
 
