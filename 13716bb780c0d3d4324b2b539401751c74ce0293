@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddb7a6fd_896cf8fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-08-12T19:02:16Z",
+      "side": 1,
+      "message": "Hi Charlie, thanks for clarifying.  Now I replaced ```INFO()``` with ```__android_log_print()```, and my local test based on Cody\u0027s doc(https://docs.google.com/document/d/1W3E7e-YcR5noim_poM0f7Dc0W8AdQDbJ2tFSPXgjpH0/edit?resourcekey\u003d0-VmGDLI3x0q4-sdpQ0n8GSA#bookmark\u003did.d3ihbn25056q) now has the test names in logcat.",
+      "parentUuid": "6ee9a8b5_af8391a5",
+      "revId": "13716bb780c0d3d4324b2b539401751c74ce0293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a593a033_e0ea709d",
@@ -67,6 +85,30 @@
       "writtenOn": "2022-08-11T18:35:25Z",
       "side": 1,
       "message": "This only output with debug build. I think you may need to use actual calls (not sure we have any macro that is not skipped in release build other than ERR, which is not good either)",
+      "range": {
+        "startLine": 275,
+        "startChar": 4,
+        "endLine": 275,
+        "endChar": 10
+      },
+      "revId": "13716bb780c0d3d4324b2b539401751c74ce0293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea3bfef5_d2388748",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-08-12T19:02:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a593a033_e0ea709d",
       "range": {
         "startLine": 275,
         "startChar": 4,
