@@ -1494,13 +1494,18 @@ struct TMemoryQualifier
     bool restrictQualifier;
     bool volatileQualifier;
 
+    // This qualifier is not visible to the application, but used internally to
+    // create D3D Rasterizer Order Views (ROVs).
+    bool rasterOrdered;
+
   private:
     explicit constexpr TMemoryQualifier(int /*placeholder*/)
         : readonly(false),
           writeonly(false),
           coherent(false),
           restrictQualifier(false),
-          volatileQualifier(false)
+          volatileQualifier(false),
+          rasterOrdered(false)
     {}
 };
 
