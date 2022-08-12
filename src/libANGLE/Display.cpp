@@ -739,7 +739,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
             return nullptr;
         }
 
-#if defined(ANGLE_PLATFORM_ANDROID)
+#if defined(ANGLE_USE_ANDROID_TLS_SLOT)
         angle::gUseAndroidOpenGLTlsSlot = displayType == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE;
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 
