@@ -317,8 +317,10 @@ class RewriteToImagesTraverser : public TIntermTraverser
         memoryQualifier.volatileQualifier = false;
         // TODO(anglebug.com/7279): Maybe we could walk the tree first and see which PLS is used
         // how. If the PLS is never loaded, we could add a writeonly qualifier, for example.
-        memoryQualifier.readonly  = false;
-        memoryQualifier.writeonly = false;
+        memoryQualifier.readonly      = false;
+        memoryQualifier.writeonly     = false;
+        memoryQualifier.rasterOrdered = mCompileOptions->pls.fragmentSynchronizationType ==
+                                        ShFragmentSynchronizationType::RasterizerOrderViews_D3D;
         imageType->setMemoryQualifier(memoryQualifier);
 
         const TVariable &plsVar = plsSymbol->variable();

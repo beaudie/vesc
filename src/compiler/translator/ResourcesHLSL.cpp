@@ -416,6 +416,14 @@ void ResourcesHLSL::outputHLSLImageUniformGroup(TInfoSinkBase &out,
         return;
     }
 
+#if defined(ANGLE_ENABLE_ASSERTS)
+    for (const TVariable *imageVar : group)
+    {
+        // ROVs should all be written out in DynamicImage2DHLSL.cpp.
+        ASSERT(!imageVar->getType().getMemoryQualifier().rasterOrdered);
+    }
+#endif
+
     unsigned int groupRegisterCount = 0;
     outputHLSLImageUniformIndices(out, group, *groupTextureRegisterIndex, &groupRegisterCount);
 
