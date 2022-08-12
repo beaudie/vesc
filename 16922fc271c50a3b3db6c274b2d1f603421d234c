@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5efb27c4_4216de61",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T02:47:30Z",
+      "side": 1,
+      "message": "We have 15 more enums allocated to ANGLE that are still unused. If you intend to use more, let me know in advance and we can request more enums from Khronos.",
+      "parentUuid": "74897c6a_714af366",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a619a96a_c2afbc50",
@@ -120,6 +144,24 @@
       "side": 1,
       "message": "Yeah I\u0027m on the fence for this one. Should we just spec it as ZERO or KEEP? The only wrinkle is that KEEP is technically not valid for memoryless planes, but if the implementation has a shader image it\u0027s obvious what it would mean in that case",
       "parentUuid": "a619a96a_c2afbc50",
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "091f3c0d_9e12c118",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T02:47:30Z",
+      "side": 1,
+      "message": "For memoryless, `KEEP` doesn\u0027t make sense, so it sounds like it should always be `ZERO`. On TBR this is free, but unfortunately not when backed with shader images.\n\nHow about this: call the values undefined here. Then in the WebGL version of this spec, say its `ZERO`. WebGL typically pays extra cost to avoid undefined values, and this would be one example of that.\n\nYou\u0027re probably familiar, but there is the robust resource init extension that basically makes all buffers and textures 0 initialized; this feels like a similar situation. (so when I say WebGL above, it really means robust resource init)",
+      "parentUuid": "3090bbec_763d08fc",
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -291,6 +333,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "410b06b5_81e0f64a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T02:47:30Z",
+      "side": 1,
+      "message": "\u003e Is this an option #3 to the possible solutions to preventing render pass splits? Make a small list of allowed functions while PLS is active, and ban everything else?\n\nYes actually. After all, that\u0027s how it is in Vulkan too, right? You have very specific commands that can be recorded inside a render pass.\n\nWith GL it\u0027s a little more complicated, because some commands translate in part to outside render pass commands and in part to inside render pass commands, like implicit barrier before RP + actual command inside RP. The issue with transform feedback that I mentioned is actually like that; restarting transform feedback in a render pass requires a barrier on the counter buffers if on top of VK_EXT_transform_feedback, so we have to break the render pass (although this particular case could be optimized in ANGLE, but it isn\u0027t right now). Another transform feedback issue is capture then use as VAO that needs render pass break.\n\nI think going with an allowlist instead of denylist is good. Just note that I actually missed all the state-setting functions (`glScissor`, `glEnable(WHATEVER)` etc), so the allowlist is not that short.\n\nThat said, state setting functions are also not entirely innocent. For example, dithering-done-in-hardware is a render pass flag on TBR hardware; a WIP Vulkan extension for dithering makes it such that a change in dither state would break the render pass. Another example is if the depth attachment is also bound as a texture, so a read-only feedback loop is established (spec is vague, and some benchmarks do this), then after a while it\u0027s unbound as a texture and depth write is enabled, at which point we have to break the render pass.\n\nAdmittedly situations such as this would be rare, but you might consider option 2 as a way of at least giving feedback to the application/developer that they hit a land mine.",
+      "parentUuid": "fae59b6e_faf72bc7",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d066b4b2_ab5c2ebc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -326,6 +392,30 @@
       "side": 1,
       "message": "Nope 😬\n\nThe best we can do is assume that must be what happens and make a conformance test that verifies it (which we have)\n\nThis obviously is not a real guarantee, but it\u0027s the best we can do if we want to expose this extension in WebGL\n\nThe alternative, which I would certainly be open to, is to only expose the coherent extension in WebGL",
       "parentUuid": "d066b4b2_ab5c2ebc",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20621521_5d8e1c69",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T02:47:30Z",
+      "side": 1,
+      "message": "I think you would have to make this ubiquitous, otherwise it\u0027d be either developers complaining that the ext they want is not usable, or users complaining that the WebGL content doesn\u0027t work on their platform. So let\u0027s try to get incoherent supported as best we can.\n\nI think we would actually need some guarantees from the vendors themselves here. @Ken, how would WebGL feel about this? Some optimal implementations (like on top of a GL extension) don\u0027t guarantee that garbage produced in this case is not your bank password, but in reality that\u0027s probably true. Would WebGL be content with a verbal confirmation from the vendors that undefined value here means racy, but derived only from the rendering results? Should we push for an update to the GL extensions themselves to provide this guarantee?",
+      "parentUuid": "e61c18e0_9f310d5e",
       "range": {
         "startLine": 392,
         "startChar": 27,
