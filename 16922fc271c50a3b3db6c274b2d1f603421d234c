@@ -544,6 +544,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea696ce_3c5b75cd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T18:27:22Z",
+      "side": 1,
+      "message": "Opened an issue with GL to get the above guarantee to include render passes, which I believe should resolve this for WebGL: https://gitlab.khronos.org/opengl/API/-/issues/168",
+      "parentUuid": "0d567bc4_8b8963ef",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
