@@ -640,6 +640,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d31df83b_afac51b2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-12T22:44:18Z",
+      "side": 1,
+      "message": "Exactly.\n\nIn modern APIS, ANGLE can just set up the render pass with a clear op.\n\nOtherwise it can generally glClear the backing texture.\n\nBut for EXT_shader_pixel_local_storage specifically, it isn\u0027t always easy. If the application specifies ZERO, ANGLE can call \"glClearColor(0); glClear()\". Otherwise, it will have to do what you suggested, which is issuing a fullscreen draw that draws the clear value into every pixel. This probably isn\u0027t as bad as it sounds, but still it\u0027s why the spec recommends using ZERO for your loadop.",
+      "parentUuid": "dd7cc267_931a80cd",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
