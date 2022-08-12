@@ -87,6 +87,24 @@
       "parentUuid": "65bd2a89_56dfea26",
       "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf906a0_6b157903",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T01:45:06Z",
+      "side": 1,
+      "message": "`BlobCache.cpp` in ANGLE. That uses callbacks that store the program binaries automatically in `PassthroughProgramCache` in Chromium. If Skia is using glProgramBinary to get the same data out and cache it itself, then yes it does make sense to disable ANGLE\u0027s autocaching.\n\nNote that when the BlobCache (from EGL_ANDROID_blob_cache) callbacks are not set, ANGLE falls back to an in-memory cache (`MemoryProgramCache`), which is controlled by `EGL_ANGLE_program_cache_control` (including disabling it by setting the cache size to 0).\n\nI probably should have deleted `EGL_ANGLE_program_cache_control` when I connected `BlobCache` to `PassthroughProgramCache`, but I forget why it wasn\u0027t done. Definitely talk with Geoff first though, he knows the ANGLE/Chromium connection much better.",
+      "parentUuid": "7b4b1bf0_109786f5",
+      "revId": "a731287288e4ad5f678d5211551ae2e1d5b195d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
