@@ -16,6 +16,29 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "6db8c5f17e2b3d25e86dc5c30a2b8573cb19ce77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fca568b9_6d02182a",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T16:55:42Z",
+      "side": 1,
+      "message": "I forgot to mention this before, but as a matter of consistency, please use named values for these constants (would appreciate if you did this for the submitted changes too). Like:\n\n```\nstatic constexpr size_t kImageSourcesSetSize \u003d 2;\nangle::FlatUnorderedSet\u003cImage *, kImageSourcesSetSize\u003e mSourcesOf;\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 37,
+        "endLine": 76,
+        "endChar": 38
+      },
+      "revId": "6db8c5f17e2b3d25e86dc5c30a2b8573cb19ce77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
