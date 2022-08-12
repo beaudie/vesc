@@ -16,6 +16,24 @@
       "message": "When I run capture_replay for ImageTest.MipLevels/ES3_Vulkan_SwiftShader on linux, the I end up at this UNREACHABLE. reconstructedAttribs[0] \u003d\u003d 0x30BC (EGL_GL_TEXTURE_LEVEL),  reconstructedAttribs[0] \u003d\u003d 0 and  reconstructedAttribs[2]  \u003d\u003d 0x3038 (EGL_NONE). When I remove this check, the test passes again.",
       "revId": "0f01190ab34e5f7d8236f63d7cadb77bc3778937",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17bda8f7_d61fad76",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 6563,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-12T17:32:19Z",
+      "side": 1,
+      "message": "We put this here as a safety valve, because we\u0027re hard coding the attribs in MEC.  The real fix is to track the attributes submitted, then look them up during MEC, which will be queued up soon.  From the apps I\u0027ve tested so far, this is a common attribute selection.\n\nI do think we should guard this with an \"isCaptureActive()\" check.  We don\u0027t need to assert these are supported attribs if we\u0027re already capturing.  We just want to bail out if MEC will be trying to recreate these later.",
+      "parentUuid": "d94d2b47_4e5cd01a",
+      "revId": "0f01190ab34e5f7d8236f63d7cadb77bc3778937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
