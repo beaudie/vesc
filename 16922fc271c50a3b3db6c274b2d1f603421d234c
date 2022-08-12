@@ -472,6 +472,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71ef1f46_f905a9d9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-12T17:01:01Z",
+      "side": 1,
+      "message": "A bit more concretely - I think we could ship non-coherent PLS for WebGL with a verbal statement from GPU vendors about the behavior of the extension on their hardware, and also think we should follow up to codify behaviors in the extension specifications.",
+      "parentUuid": "c3ffcddb_17780dcf",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
