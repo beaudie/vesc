@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94d2b47_4e5cd01a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 6563,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-08-12T09:06:33Z",
+      "side": 1,
+      "message": "When I run capture_replay for ImageTest.MipLevels/ES3_Vulkan_SwiftShader on linux, the I end up at this UNREACHABLE. reconstructedAttribs[0] \u003d\u003d 0x30BC (EGL_GL_TEXTURE_LEVEL),  reconstructedAttribs[0] \u003d\u003d 0 and  reconstructedAttribs[2]  \u003d\u003d 0x3038 (EGL_NONE). When I remove this check, the test passes again.",
+      "revId": "0f01190ab34e5f7d8236f63d7cadb77bc3778937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
