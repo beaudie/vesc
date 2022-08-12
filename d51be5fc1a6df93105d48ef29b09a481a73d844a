@@ -51,6 +51,24 @@
       "parentUuid": "ab8a8904_b4274f78",
       "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f9127e_b18d2343",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-12T23:55:10Z",
+      "side": 1,
+      "message": "In the GLES 3.1 spec dated November 3, 2016, table 20.47 \"Implementation Dependent Aggregate Shader Limits\", p. 406, GL_MAX_IMAGE_UNITS has a minimum value of 4. Is this the limit you\u0027re thinking of?",
+      "parentUuid": "d6ab960d_1fd24956",
+      "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
