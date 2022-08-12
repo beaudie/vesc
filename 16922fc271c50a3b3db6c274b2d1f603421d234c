@@ -568,6 +568,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5707c28_6346afe6",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-12T19:53:05Z",
+      "side": 1,
+      "message": "Just to clarify: EXT_shader_pixel_local_storage and EXT_shader_framebuffer_fetch are both coherent, so this paragraph does not apply to them. As long as we clear to 0 at the beginning, the application can\u0027t hit these race conditions because barriers aren\u0027t required in coherent PLS.\n\n\u003e I could imagine that memoryless PLS could really pick up semi-arbitrary GPU register content.\n\n\u003e Perhaps we could suggest to the GL/GLES working group that a dependency be added from the pixel-local-storage and framebuffer-fetch extensions to the GL_KHR_robustness extension?\n\nSince these extensions are coherent, as long as *we* clear the tile during BeginPixelLocalStorageANGLE() I don\u0027t think the spec allows for the possibility of undefined values does it? (Except for the flush scenario in EXT_pls.)\n\n\u003e Ah actually it seems like the authors of EXT_pixel_local_storage have thought about this.\n\nThe note about undefined values in the EXT_pls spec is regarding what happens after operations that flush to the framebuffer, like glFinish(). Not race conditions. I hope we can work around those by making a very strict allowlist while PLS is active, and running that list past the authors of the extension to make 100% certain our allowlist can\u0027t ever cause a flush 🤞 (lofy, I know)\n\n\u003e Then the condition to use the GL extension or use the image-based emulation would have  \u0026\u0026 isWebGL()  somewhere.\n\nWhich GL extension were you referring to here? Image-based emulation itself is pretty racy unless we support ANGLE_pls_coherent and synchronize them.\n\nPotential implementations that note on race conditions applies to:\n* Shader images without synchronization\n* Subpass loads without rasterizer order guarantees\n* EXT_shader_framebuffer_fetch_noncoherent\n* NV_texture_barrier\n* We could make this extension work literally everywhere by having a final fallback that actually reads the framebuffer in PixelLocalStorageBarrierANGLE. We probably wouldn\u0027t want to do that though unless we added a rectangle argument to the barrier command.\n\nI think all the other implementations we\u0027ve talked about are automatically coherent.",
+      "parentUuid": "aea696ce_3c5b75cd",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
