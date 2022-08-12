@@ -37,6 +37,12 @@ class LogFormatter(logging.Formatter):
         # Drop date as these scripts are short lived
         return datetime.datetime.fromtimestamp(record.created).strftime('%H:%M:%S.%fZ')
 
+    def format(self, record):
+        if hasattr(record, 'disable_format') and record.disable_format:
+            return record.getMessage()
+        else:
+            return logging.Formatter.format(self, record)
+
 
 def SetupLogging(level):
     # Reload to reset if it was already setup by a library
@@ -89,16 +95,21 @@ def run_command_with_output(argv, stdoutfile, env=None, cwd=None, log=True):
     assert stdoutfile
     with io.open(stdoutfile, 'wb') as writer, \
           io.open(stdoutfile, 'rb') as reader:
+
+        def maybe_log():
+            if log:
+                data = reader.read().decode('utf-8')
+                if data:
+                    logging.info(data, extra={'disable_format': True})
+
         process = _popen(argv, env=env, cwd=cwd, stdout=writer, stderr=subprocess.STDOUT)
         test_env.forward_signals([process])
         while process.poll() is None:
-            if log:
-                sys.stdout.write(reader.read().decode('utf-8'))
+            maybe_log()
             # This sleep is needed for signal propagation. See the
             # wait_with_signals() docstring.
             time.sleep(0.1)
-        if log:
-            sys.stdout.write(reader.read().decode('utf-8'))
+        maybe_log()
         return process.returncode
 
 
