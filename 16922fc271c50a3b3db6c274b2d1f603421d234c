@@ -448,6 +448,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3ffcddb_17780dcf",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-12T16:34:34Z",
+      "side": 1,
+      "message": "From the standpoint of WebGL\u0027s security, it\u0027s fine if the strongest guarantee that can be made about the undefined values is that they\u0027re racy, but that they don\u0027t come from other rendering contexts. In other words, we wouldn\u0027t be able to write a conformance test for them, but they wouldn\u0027t allow cross-domain information leakage.\n\nYes, it would be best to update the native GL/GLES extensions with a statement regarding this.\n\nI could imagine that memoryless PLS could really pick up semi-arbitrary GPU register content. Since Chrome and ANGLE virtualize GLES contexts, it\u0027s not clear to me we\u0027d actually be able to take advantage of a statement about PLS information being scoped to a specific rendering context.\n\nPerhaps we could suggest to the GL/GLES working group that a dependency be added from the pixel-local-storage and framebuffer-fetch extensions to the GL_KHR_robustness extension? If robust buffer access is enabled for a rendering context, there are stronger guarantees about the contents of tile memory? We don\u0027t want to tank performance.\n\nPlease offer more suggestions.",
+      "parentUuid": "4a25d18e_d6c8dab0",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
