@@ -354,6 +354,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de2e8d09_223c9602",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-12T14:31:00Z",
+      "side": 1,
+      "message": "Do we want to convert the `ERR()` calls as well to `ANGLE_PERF_WARNING`? They also arguably fit this criteria, since a failure in caching does not necessarily break functionality. I also see that `ERR()` does not seem to be used in the vkPipeline cache code in `RendererVk.cpp`.",
+      "parentUuid": "ce63a1c5_35590780",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db745001_2e7862ea",
         "filename": "src/libANGLE/Shader.h",
         "patchSetId": 14
