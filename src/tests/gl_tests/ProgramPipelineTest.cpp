@@ -439,6 +439,48 @@ void main()
     glDeleteProgram(fragProg);
 }
 
+// Test glUseProgramStages with repeated calls to glUseProgramStages with the same programs.
+TEST_P(ProgramPipelineTest31, RepeatedCallToUseProgramStagesWithSamePrograms)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Create two separable program objects from a
+    // single source string respectively (vertSrc and fragSrc)
+    const GLchar *vertString = essl31_shaders::vs::Simple();
+    const GLchar *fragString = R"(#version 310 es
+precision highp float;
+uniform float redColorIn;
+uniform float greenColorIn;
+out vec4 my_FragColor;
+void main()
+{
+    my_FragColor = vec4(redColorIn, greenColorIn, 0.0, 1.0);
+})";
+
+    bindProgramPipeline(vertString, fragString);
+
+    // Set the output color to red
+    GLint location = glGetUniformLocation(mFragProg, "redColorIn");
+    glActiveShaderProgram(mPipeline, mFragProg);
+    glUniform1f(location, 1.0);
+    location = glGetUniformLocation(mFragProg, "greenColorIn");
+    glActiveShaderProgram(mPipeline, mFragProg);
+    glUniform1f(location, 0.0);
+
+    // These following calls to glUseProgramStages should not cause a re-link.
+    glUseProgramStages(mPipeline, GL_VERTEX_SHADER_BIT, mVertProg);
+    EXPECT_GL_NO_ERROR();
+    glUseProgramStages(mPipeline, GL_FRAGMENT_SHADER_BIT, mFragProg);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuadWithPPO("a_position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glDeleteProgram(mVertProg);
+    glDeleteProgram(mFragProg);
+}
+
 // Test glUseProgramStages
 TEST_P(ProgramPipelineTest31, UseCreateShaderProgramv)
 {

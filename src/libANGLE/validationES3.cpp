@@ -3073,6 +3073,15 @@ bool ValidateBeginTransformFeedback(const Context *context,
         }
     }
 
+    // It is possible that a bound program pipeline hasn't been linked yet, do that before
+    // validating xfb state.
+    ProgramPipeline *programPipieline = context->getState().getProgramPipeline();
+    if (programPipieline && programPipieline->link(context) != angle::Result::Continue)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kProgramPipelineLinkFailed);
+        return false;
+    }
+
     const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
     if (!programExecutable)
     {
