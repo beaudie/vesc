@@ -368,6 +368,18 @@ class State : angle::NonCopyable
     // If both a Program and a ProgramPipeline are bound, the Program will
     // always override the ProgramPipeline.
     ProgramExecutable *getProgramExecutable() const { return mExecutable; }
+    ProgramExecutable *getLinkedProgramExecutable(const Context *context) const
+    {
+        if (mProgram)
+        {
+            mProgram->resolveLink(context);
+        }
+        else if (mProgramPipeline.get())
+        {
+            mProgramPipeline->resolveLink(context);
+        }
+        return mExecutable;
+    }
 
     // Program binding manipulation
     angle::Result setProgram(const Context *context, Program *newProgram);
@@ -388,6 +400,15 @@ class State : angle::NonCopyable
     }
 
     ProgramPipeline *getProgramPipeline() const { return mProgramPipeline.get(); }
+
+    ProgramPipeline *getLinkedProgramPipeline(const Context *context) const
+    {
+        if (mProgramPipeline.get())
+        {
+            mProgramPipeline->resolveLink(context);
+        }
+        return mProgramPipeline.get();
+    }
 
     // Transform feedback object (not buffer) binding manipulation
     void setTransformFeedbackBinding(const Context *context, TransformFeedback *transformFeedback);
@@ -713,7 +734,7 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_TEXTURES,  // Top-level dirty bit. Also see mDirtyTextures.
         DIRTY_OBJECT_IMAGES,    // Top-level dirty bit. Also see mDirtyImages.
         DIRTY_OBJECT_SAMPLERS,  // Top-level dirty bit. Also see mDirtySamplers.
-        DIRTY_OBJECT_PROGRAM,
+        DIRTY_OBJECT_PROGRAM_OR_PPO,
         DIRTY_OBJECT_UNKNOWN,
         DIRTY_OBJECT_MAX = DIRTY_OBJECT_UNKNOWN,
     };
@@ -939,7 +960,7 @@ class State : angle::NonCopyable
     angle::Result syncTextures(const Context *context, Command command);
     angle::Result syncImages(const Context *context, Command command);
     angle::Result syncSamplers(const Context *context, Command command);
-    angle::Result syncProgram(const Context *context, Command command);
+    angle::Result syncProgramOrPpo(const Context *context, Command command);
 
     using DirtyObjectHandler = angle::Result (State::*)(const Context *context, Command command);
 
@@ -947,7 +968,7 @@ class State : angle::NonCopyable
         &State::syncActiveTextures,  &State::syncTexturesInit,    &State::syncImagesInit,
         &State::syncReadAttachments, &State::syncDrawAttachments, &State::syncReadFramebuffer,
         &State::syncDrawFramebuffer, &State::syncVertexArray,     &State::syncTextures,
-        &State::syncImages,          &State::syncSamplers,        &State::syncProgram};
+        &State::syncImages,          &State::syncSamplers,        &State::syncProgramOrPpo};
 
     // Robust init must happen before Framebuffer init for the Vulkan back-end.
     static_assert(DIRTY_OBJECT_ACTIVE_TEXTURES < DIRTY_OBJECT_TEXTURES_INIT, "init order");
@@ -967,7 +988,7 @@ class State : angle::NonCopyable
     static_assert(DIRTY_OBJECT_TEXTURES == 8, "check DIRTY_OBJECT_TEXTURES index");
     static_assert(DIRTY_OBJECT_IMAGES == 9, "check DIRTY_OBJECT_IMAGES index");
     static_assert(DIRTY_OBJECT_SAMPLERS == 10, "check DIRTY_OBJECT_SAMPLERS index");
-    static_assert(DIRTY_OBJECT_PROGRAM == 11, "check DIRTY_OBJECT_PROGRAM index");
+    static_assert(DIRTY_OBJECT_PROGRAM_OR_PPO == 11, "check DIRTY_OBJECT_PROGRAM index");
 
     // Dispatch table for buffer update functions.
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;

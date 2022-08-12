@@ -688,7 +688,7 @@ void Context::initializeDefaultResources()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
-    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_OR_PPO);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
 
@@ -739,7 +739,7 @@ void Context::initializeDefaultResources()
     mComputeDirtyBits.set(State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
-    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
+    mComputeDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM_OR_PPO);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_IMAGES);
     mComputeDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
 
@@ -1417,7 +1417,7 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
 
     ASSERT(programPipeline);
     ANGLE_CONTEXT_TRY(programPipeline->useProgramStages(this, stages, shaderProgram));
-    mState.mDirtyBits.set(State::DirtyBitType::DIRTY_BIT_PROGRAM_EXECUTABLE);
+    mState.mDirtyObjects.set(State::DirtyObjectType::DIRTY_OBJECT_PROGRAM_OR_PPO);
 }
 
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
@@ -1434,10 +1434,6 @@ void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
     ProgramPipeline *pipeline = mState.mProgramPipelineManager->checkProgramPipelineAllocation(
         mImplementation.get(), pipelineHandle);
     ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
-    if (pipeline && pipeline->isLinked())
-    {
-        ANGLE_CONTEXT_TRY(mState.onProgramPipelineExecutableChange(this));
-    }
     mStateCache.onProgramExecutableChange(this);
     mProgramPipelineObserverBinding.bind(pipeline);
 }
