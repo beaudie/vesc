@@ -520,6 +520,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d567bc4_8b8963ef",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T18:11:35Z",
+      "side": 1,
+      "message": "Ah actually it seems like the authors of EXT_pixel_local_storage have thought about this. I found this issue on the spec:\n\n```\n     (14) What does \u0027undefined\u0027 mean for a pixel local storage variable\n          or a color value?\n\n        RESOLVED.\n\n        It simply means that the value has no well-defined meaning to an\n        application. It does _not_ mean that the value is random nor that it\n        could have been leaked from other contexts or processes.\n```\n\nBut that\u0027s probably not enough for WebGL, because all pages are rendered through the same context, but their contents still shouldn\u0027t leak. Right?",
+      "parentUuid": "00475da3_0d3f9ae4",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
