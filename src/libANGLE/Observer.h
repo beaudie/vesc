@@ -138,6 +138,7 @@ class Subject : NonCopyable
 class ObserverBinding final : public ObserverBindingBase
 {
   public:
+    ObserverBinding();
     ObserverBinding(ObserverInterface *observer, SubjectIndex index);
     ~ObserverBinding() override;
     ObserverBinding(const ObserverBinding &other);

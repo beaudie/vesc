@@ -58,6 +58,8 @@ void Subject::resetObservers()
 }
 
 // ObserverBinding implementation.
+ObserverBinding::ObserverBinding() : ObserverBindingBase(nullptr, 0), mSubject(nullptr) {}
+
 ObserverBinding::ObserverBinding(ObserverInterface *observer, SubjectIndex index)
     : ObserverBindingBase(observer, index), mSubject(nullptr)
 {
