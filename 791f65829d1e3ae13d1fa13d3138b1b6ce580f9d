@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "272173f2_5a45679b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2386,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-12T06:29:04Z",
+      "side": 1,
+      "message": "This fixes it!",
+      "parentUuid": "5d9310fa_90e32a3f",
+      "range": {
+        "startLine": 2381,
+        "startChar": 0,
+        "endLine": 2386,
+        "endChar": 5
+      },
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f26c14af_4993b3c1",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 1
@@ -133,6 +157,24 @@
       "writtenOn": "2022-08-02T15:09:32Z",
       "side": 1,
       "message": "I think we can count on pixel and compute UAV support on the D3D11 backend, at least for the non-coherent version of this stuff (vertex UAVs require D3D11.1, but I assume that\u0027s not relevant here).",
+      "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14b1edd_1b80811d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-12T06:29:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f26c14af_4993b3c1",
       "revId": "791f65829d1e3ae13d1fa13d3138b1b6ce580f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
