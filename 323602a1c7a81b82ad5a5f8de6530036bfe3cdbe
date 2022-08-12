@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9acfe018_e9440639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T03:10:06Z",
+      "side": 1,
+      "message": "Triggered a run on the P6 bots. LGTM (going to +2, too simple for two reviewers), but we\u0027ll have to wait to see if that bot turns green",
+      "revId": "323602a1c7a81b82ad5a5f8de6530036bfe3cdbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
