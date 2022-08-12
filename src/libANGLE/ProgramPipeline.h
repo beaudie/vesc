@@ -46,7 +46,7 @@ class ProgramPipelineState final : angle::NonCopyable
 
     void activeShaderProgram(Program *shaderProgram);
     void useProgramStages(const Context *context,
-                          GLbitfield stages,
+                          const gl::ShaderBitSet &shaderTypes,
                           Program *shaderProgram,
                           std::vector<angle::ObserverBinding> *programObserverBindings);
 
@@ -125,7 +125,19 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
 
     void resetIsLinked() { mState.mIsLinked = false; }
     angle::Result link(const gl::Context *context);
-    bool linkVaryings(InfoLog &infoLog) const;
+
+    // Ensure program pipeline is linked. Inlined to make sure its overhead is as low as possible.
+    void resolveLink(const Context *context)
+    {
+        if (mState.mIsLinked)
+        {
+            // Already linked, nothing to do.
+            return;
+        }
+
+        (void)link(context);
+    }
+
     void validate(const gl::Context *context);
     GLboolean isValid() const { return mState.isValid(); }
     bool isLinked() const { return mState.mIsLinked; }
@@ -134,6 +146,7 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
   private:
+    bool linkVaryings(InfoLog &infoLog) const;
     void updateLinkedShaderStages();
     void updateExecutableAttributes();
     void updateTransformFeedbackMembers();
