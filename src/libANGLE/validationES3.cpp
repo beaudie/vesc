@@ -3073,7 +3073,8 @@ bool ValidateBeginTransformFeedback(const Context *context,
         }
     }
 
-    const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
+    const ProgramExecutable *programExecutable =
+        context->getState().getLinkedProgramExecutable(context);
     if (!programExecutable)
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kProgramNotBound);
@@ -4394,8 +4395,8 @@ bool ValidateResumeTransformFeedback(const Context *context, angle::EntryPoint e
         return false;
     }
 
-    if (!ValidateProgramExecutableXFBBuffersPresent(context,
-                                                    context->getState().getProgramExecutable()))
+    if (!ValidateProgramExecutableXFBBuffersPresent(
+            context, context->getState().getLinkedProgramExecutable(context)))
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kTransformFeedbackBufferMissing);
         return false;
