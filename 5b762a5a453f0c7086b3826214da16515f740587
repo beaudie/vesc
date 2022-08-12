@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6794f0c7_bc278e51",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2022-08-12T02:46:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef2118fc_f5144877",
+      "range": {
+        "startLine": 993,
+        "startChar": 31,
+        "endLine": 993,
+        "endChar": 45
+      },
+      "revId": "5b762a5a453f0c7086b3826214da16515f740587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6be9da7_c8c563a7",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-11T16:57:33Z",
       "side": 1,
       "message": "We need to pass the actual offset from the framebuffer into this function.",
+      "range": {
+        "startLine": 542,
+        "startChar": 29,
+        "endLine": 542,
+        "endChar": 67
+      },
+      "revId": "5b762a5a453f0c7086b3826214da16515f740587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3046fb25_afbbe2a3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2022-08-12T02:46:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6be9da7_c8c563a7",
       "range": {
         "startLine": 542,
         "startChar": 29,
