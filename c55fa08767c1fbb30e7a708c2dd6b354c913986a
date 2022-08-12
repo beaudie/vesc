@@ -183,6 +183,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "975bac53_768e574d",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-12T14:20:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "615e4e66_8665e532",
+      "range": {
+        "startLine": 635,
+        "startChar": 19,
+        "endLine": 635,
+        "endChar": 37
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f28b747f_722b0a68",
