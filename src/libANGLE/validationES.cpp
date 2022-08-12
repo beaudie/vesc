@@ -4234,7 +4234,8 @@ const char *ValidateDrawStates(const Context *context)
                 return errorMsg;
             }
 
-            if (!programPipeline->isLinked())
+            bool linkResult = programPipeline->link(context) == angle::Result::Continue;
+            if (!linkResult)
             {
                 return kProgramPipelineLinkFailed;
             }

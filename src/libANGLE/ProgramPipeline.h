@@ -46,7 +46,7 @@ class ProgramPipelineState final : angle::NonCopyable
 
     void activeShaderProgram(Program *shaderProgram);
     void useProgramStages(const Context *context,
-                          GLbitfield stages,
+                          const gl::ShaderBitSet &shaderTypes,
                           Program *shaderProgram,
                           std::vector<angle::ObserverBinding> *programObserverBindings);
 
