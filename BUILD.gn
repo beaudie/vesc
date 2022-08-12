@@ -67,6 +67,9 @@ declare_args() {
   # angle_deqp_tests contains threading related tests.
   angle_enable_share_context_lock =
       !build_with_chromium || build_angle_deqp_tests
+
+  # Use Android TLS slot to store current context.
+  angle_use_android_tls_slot = is_android && !build_with_chromium
 }
 
 if (angle_build_all) {
@@ -142,6 +145,10 @@ config("internal_config") {
 
   if (angle_enable_share_context_lock) {
     defines += [ "ANGLE_ENABLE_SHARE_CONTEXT_LOCK=1" ]
+  }
+
+  if (angle_use_android_tls_slot) {
+    defines += [ "ANGLE_USE_ANDROID_TLS_SLOT=1" ]
   }
 
   # Enables debug/trace-related functionality, including logging every GLES/EGL API command to the
