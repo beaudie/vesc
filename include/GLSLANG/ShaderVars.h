@@ -215,6 +215,7 @@ struct ShaderVariable
     int offset;
     bool readonly;
     bool writeonly;
+    bool rasterOrdered;
 
     // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
     bool isFragmentInOut;

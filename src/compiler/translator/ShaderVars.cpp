@@ -46,6 +46,7 @@ ShaderVariable::ShaderVariable(GLenum typeIn)
       offset(-1),
       readonly(false),
       writeonly(false),
+      rasterOrdered(false),
       isFragmentInOut(false),
       index(-1),
       yuv(false),
@@ -84,6 +85,7 @@ ShaderVariable::ShaderVariable(const ShaderVariable &other)
       offset(other.offset),
       readonly(other.readonly),
       writeonly(other.writeonly),
+      rasterOrdered(other.rasterOrdered),
       isFragmentInOut(other.isFragmentInOut),
       index(other.index),
       yuv(other.yuv),
@@ -116,6 +118,7 @@ ShaderVariable &ShaderVariable::operator=(const ShaderVariable &other)
     offset                        = other.offset;
     readonly                      = other.readonly;
     writeonly                     = other.writeonly;
+    rasterOrdered                 = other.rasterOrdered;
     isFragmentInOut               = other.isFragmentInOut;
     index                         = other.index;
     yuv                           = other.yuv;
@@ -137,10 +140,11 @@ bool ShaderVariable::operator==(const ShaderVariable &other) const
         isRowMajorLayout != other.isRowMajorLayout || location != other.location ||
         hasImplicitLocation != other.hasImplicitLocation || binding != other.binding ||
         imageUnitFormat != other.imageUnitFormat || offset != other.offset ||
-        readonly != other.readonly || writeonly != other.writeonly || index != other.index ||
-        yuv != other.yuv || interpolation != other.interpolation ||
-        isInvariant != other.isInvariant || isShaderIOBlock != other.isShaderIOBlock ||
-        isPatch != other.isPatch || texelFetchStaticUse != other.texelFetchStaticUse ||
+        readonly != other.readonly || writeonly != other.writeonly ||
+        rasterOrdered != other.rasterOrdered || index != other.index || yuv != other.yuv ||
+        interpolation != other.interpolation || isInvariant != other.isInvariant ||
+        isShaderIOBlock != other.isShaderIOBlock || isPatch != other.isPatch ||
+        texelFetchStaticUse != other.texelFetchStaticUse ||
         isFragmentInOut != other.isFragmentInOut)
     {
         return false;
@@ -427,6 +431,10 @@ bool ShaderVariable::isSameUniformAtLinkTime(const ShaderVariable &other) const
         return false;
     }
     if (readonly != other.readonly || writeonly != other.writeonly)
+    {
+        return false;
+    }
+    if (rasterOrdered != other.rasterOrdered)
     {
         return false;
     }
