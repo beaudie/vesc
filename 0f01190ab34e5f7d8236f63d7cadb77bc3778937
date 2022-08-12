@@ -34,6 +34,24 @@
       "parentUuid": "d94d2b47_4e5cd01a",
       "revId": "0f01190ab34e5f7d8236f63d7cadb77bc3778937",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83250b8e_c4ff348b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 6563,
+      "author": {
+        "id": 1544099
+      },
+      "writtenOn": "2022-08-12T18:14:15Z",
+      "side": 1,
+      "message": "I filed a bug about the lack of support for all other attrib types here: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7570\n\nAdding an IsCaptureActive() check sounds like a good idea, I\u0027ll go ahead and pop one in 👍",
+      "parentUuid": "17bda8f7_d61fad76",
+      "revId": "0f01190ab34e5f7d8236f63d7cadb77bc3778937",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
