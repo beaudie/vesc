@@ -496,6 +496,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00475da3_0d3f9ae4",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T17:14:34Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ll follow up on that to see what we can do with the GL spec.\n\n\u003e I could imagine that memoryless PLS could really pick up semi-arbitrary GPU register content.\n\nIf you\u0027re talking about _clearing_ the memoryless plane (in accordance with robust `ANGLE_robust_resource_initialization`), that\u0027s mostly achievable (when backed by storage image, or in Vulkan), but we\u0027d have to get the vendors to agree on a \"LOAD_OP_CLEAR\" semantics in the GL spec.\n\nFor overlapping writes in non-coherent PLS, I don\u0027t actually imagine memoryless PLS picking up any data other than what\u0027s on the tile. If the tile is cleared on load, there should be no leakage. Again, needs the vendors to agree to do that.",
+      "parentUuid": "71ef1f46_f905a9d9",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
