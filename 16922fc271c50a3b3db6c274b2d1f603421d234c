@@ -616,6 +616,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd7cc267_931a80cd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-12T22:25:55Z",
+      "side": 1,
+      "message": "\u003e Since these extensions are coherent, as long as *we* clear the tile during BeginPixelLocalStorageANGLE() I don\u0027t think the spec allows for the possibility of undefined values does it? (Except for the flush scenario in EXT_pls.)\n\nHow would ANGLE clear the tile? Would it have to draw a quad in order to run a special shader clearing out the pixel local storage attachments?",
+      "parentUuid": "a5707c28_6346afe6",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
