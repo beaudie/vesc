@@ -208,12 +208,34 @@ angle::Result ProgramPipeline::useProgramStages(const Context *context,
                                                 GLbitfield stages,
                                                 Program *shaderProgram)
 {
+    bool needToUpdatePipelineState = false;
+    for (size_t singleShaderBit : angle::BitSet16<16>(static_cast<uint16_t>(stages)))
+    {
+        // Cast back to a bit after the iterator returns an index.
+        ShaderType shaderType = GetShaderTypeFromBitfield(angle::Bit<size_t>(singleShaderBit));
+        if (shaderType == ShaderType::InvalidEnum)
+        {
+            break;
+        }
+
+        if (mState.getShaderProgram(shaderType) != shaderProgram ||
+            (shaderProgram && shaderProgram->hasAnyDirtyBit()))
+        {
+            needToUpdatePipelineState = true;
+        }
+    }
+
+    if (!needToUpdatePipelineState)
+    {
+        return angle::Result::Continue;
+    }
+
     mState.useProgramStages(context, stages, shaderProgram, &mProgramObserverBindings);
     updateLinkedShaderStages();
 
     mState.mIsLinked = false;
 
-    return link(context);
+    return angle::Result::Continue;
 }
 
 void ProgramPipeline::updateLinkedShaderStages()
