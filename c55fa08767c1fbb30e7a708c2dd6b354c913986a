@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61f4a16b_789941b5",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-12T15:22:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7895949_9f27dc97",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 9
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f5d82ad_f030ffb3",
@@ -108,6 +132,24 @@
       "side": 1,
       "message": "Ah thanks for finding this out. Could you please make a survey of how `mProgramCacheMutex` is used? At a cursory glance, it seems like the mutex could be moved to the blob cache. There\u0027s the matter of `platform-\u003ecacheProgram` (for which you added the recent TODO) that might need extra `mutex`-ing, likely by using the same mutex as the blob cache\u0027s.\n\n---\n\nI\u0027m surprised to hear that Android\u0027s blob cache is not thread-safe. The EGL_ANDROID_blob_cache says (https://registry.khronos.org/EGL/extensions/ANDROID/EGL_ANDROID_blob_cache.txt):\n\n\u003e Concurrent calls to these functions from different threads is also allowed.\n\nThat said, I looked at Chromium\u0027s blob cache, and it _also_ looks not thread-safe. So we need a lock anyway.\n\n---\n\n`ANGLE_PERF_WARNING` is thread-safe (I know, because it initially wasn\u0027t: https://chromium-review.googlesource.com/c/angle/angle/+/2415184). The histogram macros do look unsafe; are they guarded by the mutex right now? If so, you could add a separate mutex for them instead.",
       "parentUuid": "fbfde7d0_6db71fdf",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1cc2eed_7251f2ff",
+        "filename": "src/libANGLE/MemoryShaderCache.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-12T15:22:49Z",
+      "side": 1,
+      "message": "`mProgramCacheMutex` is only used in `Program.cpp` to lock the get/put methods of `MemoryProgramCache`. The `ANGLE_HISTOGRAM_*` macros in `MemoryShaderCache` are not currently guarded properly by a mutex.\n\nHow does this sound as a summary of the changes?\n* Properly lock `BlobCache::mBlobCacheMutex` such that the `BlobCache` operations are thread-safe.\n* Add a member function `std::mutex\u0026 BlobCache::getMutex()` that we can use to guard the `platform-\u003ecacheProgram` operation in `MemoryProgramCache.cpp`.\n* Add mutex member variables to `MemoryShaderCache` and `MemoryProgramCache` and use them to guard the `ANGLE_HISTOGRAM*` functions.",
+      "parentUuid": "dee9a5d1_7cf1c737",
       "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -220,6 +262,24 @@
       "writtenOn": "2022-08-09T15:27:51Z",
       "side": 1,
       "message": "Again, please use `ANGLE_PERF_WARNING`. Modify `Program.cpp` where this is copied from to do the same.",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec61a92_9bd4a9dd",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-12T15:22:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28b747f_722b0a68",
       "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
