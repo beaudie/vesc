@@ -424,6 +424,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a25d18e_d6c8dab0",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T02:53:37Z",
+      "side": 1,
+      "message": "In the worst case, we can have:\n\n- Non-coherent PLS produces undefined value, and\n- Non-coherent PLS produces incorrect values on WebGL\n\nThen the condition to use the GL extension or use the image-based emulation would have `\u0026\u0026 isWebGL()` somewhere. I.e. the GL platforms that can\u0027t support coherent would fall back to image-based instead of using the GL extension so would be less optimal, but \"safe\"",
+      "parentUuid": "20621521_5d8e1c69",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
