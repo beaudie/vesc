@@ -664,6 +664,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42e2b82b_4b615ebe",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-12T23:52:01Z",
+      "side": 1,
+      "message": "\u003e Otherwise it can generally glClear the backing texture.\n\nOK. It wasn\u0027t clear to me that that would work. The situation I was thinking of is that you have valid contents in the framebuffer already, want to preserve and blend over them, are using a memoryless PLS attachment, and the only way to initialize the PLS contents would be to run a special render to zero out just the PLS planes and do nothing (KEEP semantics) to the other attachments. It\u0027s possible I\u0027m not understanding the API semantics.\n\nLet\u0027s focus on Shabi\u0027s concerns if they aren\u0027t addressed already.",
+      "parentUuid": "d31df83b_afac51b2",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
