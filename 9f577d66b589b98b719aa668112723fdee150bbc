@@ -16,6 +16,40 @@
       "message": "Hi Geoff, PTAL Thanks.",
       "revId": "9f577d66b589b98b719aa668112723fdee150bbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82d3553e_706865f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T17:51:23Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "9f577d66b589b98b719aa668112723fdee150bbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8e2c99_68a21834",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T17:51:23Z",
+      "side": 1,
+      "message": "Suggest making `ANGLE_USE_ANDROID_TLS_SLOT` conditional to Android itself (You can put an assert for example in the gn file), then only do `#if defined(ANGLE_USE_ANDROID_TLS_SLOT)` everywhere.\n\nAvoids duplicating the condition expression",
+      "revId": "9f577d66b589b98b719aa668112723fdee150bbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
