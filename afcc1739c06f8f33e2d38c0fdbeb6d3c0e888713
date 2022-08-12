@@ -16,6 +16,23 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "afcc1739c06f8f33e2d38c0fdbeb6d3c0e888713",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecdeca62_40530c8d",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-12T17:03:24Z",
+      "side": 1,
+      "message": "Might be worthwhile to experiment with making this class `angle::NonCopyable` and implement move operators instead. Could be another microoptimization.",
+      "revId": "afcc1739c06f8f33e2d38c0fdbeb6d3c0e888713",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
