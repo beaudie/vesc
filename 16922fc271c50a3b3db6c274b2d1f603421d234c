@@ -688,6 +688,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6c8d22_a6f110d9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T00:14:21Z",
+      "side": 1,
+      "message": "I see.\n\nBeginPixelLocalStorageANGLE only takes load ops for PLS planes, so any color attachments on the framebuffer are unaffected (KEEP semantics, since we\u0027re GL).\n\nEXT_shader_pixel_local_storage doesn\u0027t support rendering to color attachments while PLS is active anyway, so this scenario doesn\u0027t apply there, and all the other implementations can easily clear PLS attachments without affecting the rest of the framebuffer.",
+      "parentUuid": "42e2b82b_4b615ebe",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

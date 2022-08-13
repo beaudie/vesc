@@ -69,6 +69,24 @@
       "parentUuid": "d6ab960d_1fd24956",
       "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9513ae71_cdf2073e",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T00:14:21Z",
+      "side": 1,
+      "message": "Thank you! Yes, that\u0027s what we needed. So since it\u0027s 4, we either need to allow the max to be 0, or else change the semantics to:\n\n    MAX_COMBINED_IMAGE_UNITS_AND_PLS_PLANES_ANGLE",
+      "parentUuid": "d0f9127e_b18d2343",
+      "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
