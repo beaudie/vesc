@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd6c3ece_3dbe6e5f",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T02:16:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79d26805_74b64949",
+      "revId": "63dccbf71e44499f27002beb72cc262e3306c058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "755978f2_21972ac1",
