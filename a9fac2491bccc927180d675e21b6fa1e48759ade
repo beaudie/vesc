@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4317e758_03bb7ec1",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-13T01:45:56Z",
+      "side": 0,
+      "message": "hmm, on a second thought maybe sys.stdout should be overridden in SetupLogging instead, will have a look into this",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 27
+      },
+      "revId": "a9fac2491bccc927180d675e21b6fa1e48759ade",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
