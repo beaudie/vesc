@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79d26805_74b64949",
+        "filename": "src/compiler/translator/ResourcesHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-13T01:47:16Z",
+      "side": 1,
+      "message": "Please avoid a define like this. You have two options:\n\n- Just drop it, and assume the empty loop is optimized away\n- Create a helper function in the anonymous namespace above that does `for () { if (rasterOrdered) return true; } return false;` and then call `ASSERT(!IsAnyRasterOrdered())`.\n\nWe typically do the latter.",
+      "revId": "63dccbf71e44499f27002beb72cc262e3306c058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "755978f2_21972ac1",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 1
