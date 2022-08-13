@@ -16,6 +16,24 @@
       "message": "Will this break existing serialized files? Is there a version number I need to bump?",
       "revId": "63dccbf71e44499f27002beb72cc262e3306c058",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "042cd256_273af8d5",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-13T01:42:59Z",
+      "side": 1,
+      "message": "No it won\u0027t. The ANGLE\u0027s git hash is serialized too, which acts as the version number.",
+      "parentUuid": "755978f2_21972ac1",
+      "revId": "63dccbf71e44499f27002beb72cc262e3306c058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
