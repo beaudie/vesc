@@ -760,6 +760,30 @@
       },
       "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb161ce7_4cb08820",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T04:40:26Z",
+      "side": 1,
+      "message": "\u003e GL_EXT_pixel_local_storage\n\nGot it, following.\n\nThat would be unfortunate to lose EXT_pls since it\u0027s our only route to fast, coherent support on a big chunk of devices worldwide. Hopefully we can work with the vendors and make it bulletproof.\n\n\u003e Could you check again which of those options actually don\u0027t have a no-leak guarantee? \n\nThe rest all have a no-leak guarantee as long as we clear things up front. EXT_pls is the only one with an iffy \"you might randomly lose your data\" clause.\n\n\u003e I didn\u0027t quite understand how that helps here. If you issue one self-overlapping draw call, there\u0027s nothing PLSBarrier can do about that.\n\nIt\u0027s probably worse than you\u0027re expecting:\n\n* PLS keeps two copies of the data\n* pixelLocalLoadANGLE() calls texelFetch() on the copy\n* pixelLocalStoreANGLE() renders to the original\n* PLSBarrier() calls CopyTexSubImage2D on every active PLS plane to update the copy texture\n\nMaybe helpful in some cases since, since that would be the app\u0027s only fallback anyway. Maybe just bad since it would only be a performance landmine. But it would get the extension up to 100% coverage.",
+      "parentUuid": "21601b6d_7469c046",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -105,6 +105,24 @@
       "parentUuid": "9513ae71_cdf2073e",
       "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f4ee78d_ded4b996",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T04:40:26Z",
+      "side": 1,
+      "message": "No objection here if that\u0027s the route we take.\n\nSince the extension is written against the 3.0 spec, there may be no reason to mention images at all.",
+      "parentUuid": "1c8ecbb6_2d764344",
+      "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
