@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "755978f2_21972ac1",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-13T00:29:29Z",
+      "side": 1,
+      "message": "Will this break existing serialized files? Is there a version number I need to bump?",
+      "revId": "63dccbf71e44499f27002beb72cc262e3306c058",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
