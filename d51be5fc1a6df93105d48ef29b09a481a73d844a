@@ -87,6 +87,24 @@
       "parentUuid": "d0f9127e_b18d2343",
       "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c8ecbb6_2d764344",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-13T01:42:06Z",
+      "side": 1,
+      "message": "Or disallow shader images when PLS is active. Especially for WebGL, that\u0027s a given anyway.",
+      "parentUuid": "9513ae71_cdf2073e",
+      "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

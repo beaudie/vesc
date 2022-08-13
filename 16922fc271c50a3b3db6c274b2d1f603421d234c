@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc240998_fc9d01d8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-13T01:42:06Z",
+      "side": 1,
+      "message": "0x96E6 and 0x96E7 (we have this range up to ...F for now)",
+      "parentUuid": "71beb8dd_15f58001",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a619a96a_c2afbc50",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -704,6 +728,30 @@
       "side": 1,
       "message": "I see.\n\nBeginPixelLocalStorageANGLE only takes load ops for PLS planes, so any color attachments on the framebuffer are unaffected (KEEP semantics, since we\u0027re GL).\n\nEXT_shader_pixel_local_storage doesn\u0027t support rendering to color attachments while PLS is active anyway, so this scenario doesn\u0027t apply there, and all the other implementations can easily clear PLS attachments without affecting the rest of the framebuffer.",
       "parentUuid": "42e2b82b_4b615ebe",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21601b6d_7469c046",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-13T01:42:06Z",
+      "side": 1,
+      "message": "\u003e Which GL extension were you referring to here?\n\nGL_EXT_pixel_local_storage\n\n\u003e Potential implementations that note on race conditions applies to:\n\nRace conditions are ok, so \"Shader images without synchronization\" is not an issue. We want to avoid the \"undefined\" value per spec, or rather turn that into \"undefined, but not leaked from elsewhere\". Could you check again which of those options actually don\u0027t have a no-leak guarantee? I could potentially bring them all up with the GL workgroup and see if we can sort them out.\n\n\u003e We could make this extension work literally everywhere by having a final fallback that actually reads the framebuffer in PixelLocalStorageBarrierANGLE. We probably wouldn\u0027t want to do that though unless we added a rectangle argument to the barrier command.\n\nI didn\u0027t quite understand how that helps here. If you issue one self-overlapping draw call, there\u0027s nothing PLSBarrier can do about that.",
+      "parentUuid": "1e6c8d22_a6f110d9",
       "range": {
         "startLine": 392,
         "startChar": 27,
