@@ -123,6 +123,24 @@
       "parentUuid": "1c8ecbb6_2d764344",
       "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e971c6d9_7b74ada4",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-14T01:32:21Z",
+      "side": 1,
+      "message": "Probably a good idea to still mention that, so we won\u0027t leave interaction with GLES3.1 undefined. Not sure what the usual way of specifying that is though, like you\u0027d be basically saying \"here\u0027s the diff with GLES3.0, but if it were GLES3.1 by the way this and that\".",
+      "parentUuid": "4f4ee78d_ded4b996",
+      "revId": "d51be5fc1a6df93105d48ef29b09a481a73d844a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
