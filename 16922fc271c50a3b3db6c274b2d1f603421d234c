@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c50b5e1_7202a81b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "I just realized we will probably have to add getters for pls state, so it probably couldn\u0027t hurt to allocate more",
+      "parentUuid": "fc240998_fc9d01d8",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a619a96a_c2afbc50",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -216,6 +240,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e5b9de6_4a27d329",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "That ought to work. One question though:\n\nWould WebGL allow for possibly initializing it with data rendered previously into that same memoryless plane? Or is that sill too unpredictable?",
+      "parentUuid": "091f3c0d_9e12c118",
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c183bbbf_a9b1ab95",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -263,6 +305,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06d3f8cc_589537fb",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "Updated to an allowlist",
+      "parentUuid": "065ecb3e_b973948f",
+      "range": {
+        "startLine": 316,
+        "startChar": 14,
+        "endLine": 316,
+        "endChar": 45
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fcf799e_6416a197",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -298,6 +364,30 @@
       "side": 1,
       "message": "Changed the wording to match the GL ext",
       "parentUuid": "6fcf799e_6416a197",
+      "range": {
+        "startLine": 322,
+        "startChar": 65,
+        "endLine": 323,
+        "endChar": 26
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9d26b4_553ca568",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78a5cd8f_b8a2c48a",
       "range": {
         "startLine": 322,
         "startChar": 65,
@@ -393,6 +483,30 @@
       "side": 1,
       "message": "\u003e Is this an option #3 to the possible solutions to preventing render pass splits? Make a small list of allowed functions while PLS is active, and ban everything else?\n\nYes actually. After all, that\u0027s how it is in Vulkan too, right? You have very specific commands that can be recorded inside a render pass.\n\nWith GL it\u0027s a little more complicated, because some commands translate in part to outside render pass commands and in part to inside render pass commands, like implicit barrier before RP + actual command inside RP. The issue with transform feedback that I mentioned is actually like that; restarting transform feedback in a render pass requires a barrier on the counter buffers if on top of VK_EXT_transform_feedback, so we have to break the render pass (although this particular case could be optimized in ANGLE, but it isn\u0027t right now). Another transform feedback issue is capture then use as VAO that needs render pass break.\n\nI think going with an allowlist instead of denylist is good. Just note that I actually missed all the state-setting functions (`glScissor`, `glEnable(WHATEVER)` etc), so the allowlist is not that short.\n\nThat said, state setting functions are also not entirely innocent. For example, dithering-done-in-hardware is a render pass flag on TBR hardware; a WIP Vulkan extension for dithering makes it such that a change in dither state would break the render pass. Another example is if the depth attachment is also bound as a texture, so a read-only feedback loop is established (spec is vague, and some benchmarks do this), then after a while it\u0027s unbound as a texture and depth write is enabled, at which point we have to break the render pass.\n\nAdmittedly situations such as this would be rare, but you might consider option 2 as a way of at least giving feedback to the application/developer that they hit a land mine.",
       "parentUuid": "fae59b6e_faf72bc7",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05fa3423_f811e3a9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "Updated to an allowlist",
+      "parentUuid": "410b06b5_81e0f64a",
       "range": {
         "startLine": 330,
         "startChar": 56,
@@ -800,6 +914,30 @@
       "side": 1,
       "message": "Yeesh, let\u0027s hope it doesn\u0027t come to that.",
       "parentUuid": "bb161ce7_4cb08820",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db4e5713_231c54a2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-15T22:44:38Z",
+      "side": 1,
+      "message": "This seemed like a good conversation to capture in the \"Issues\" section, so I moved it down there.",
+      "parentUuid": "c7d8bc18_3c93cd2b",
       "range": {
         "startLine": 392,
         "startChar": 27,
