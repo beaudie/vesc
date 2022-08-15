@@ -22,6 +22,30 @@
       },
       "revId": "a9fac2491bccc927180d675e21b6fa1e48759ade",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "102fb1d7_72ceed96",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-15T13:02:45Z",
+      "side": 0,
+      "message": "Ah, it\u0027s the other way around, logging handler wasn\u0027t right. Updated.",
+      "parentUuid": "4317e758_03bb7ec1",
+      "range": {
+        "startLine": 96,
+        "startChar": 16,
+        "endLine": 96,
+        "endChar": 27
+      },
+      "revId": "a9fac2491bccc927180d675e21b6fa1e48759ade",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
