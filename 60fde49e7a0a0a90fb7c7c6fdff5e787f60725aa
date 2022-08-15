@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7580208_869970bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-08-15T08:07:40Z",
+      "side": 1,
+      "message": "This is a simple test that should pass if the capture/replay script is run with the MEC, by setting the parameter --mec to e.g. 3 or 4.  ",
+      "revId": "60fde49e7a0a0a90fb7c7c6fdff5e787f60725aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
