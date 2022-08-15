@@ -144,10 +144,13 @@ std::vector<std::string> Extensions::getStrings() const
 {
     std::vector<std::string> extensionStrings;
 
+    std::cout << "====== this->EGLImageExternalEssl3OES: " << this->EGLImageExternalEssl3OES
+              << "\n";
     for (const auto &extensionInfo : GetExtensionInfoMap())
     {
         if (this->*(extensionInfo.second.ExtensionsMember))
         {
+            std::cout << "===== adding string: " << extensionInfo.first << "\n";
             extensionStrings.push_back(extensionInfo.first);
         }
     }

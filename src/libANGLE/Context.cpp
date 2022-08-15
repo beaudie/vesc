@@ -3396,8 +3396,13 @@ void Context::initExtensionStrings()
     };
 
     mExtensionStrings.clear();
+    std::cout
+        << "================ in initExtensionStrings(), getExtensions().EGLImageExternalEssl3OES: "
+        << this->getExtensions().EGLImageExternalEssl3OES << "\n";
     for (const auto &extensionString : mState.mExtensions.getStrings())
     {
+        std::cout << "================ in initExtensionStrings(), extensionString: "
+                  << extensionString << "\n";
         mExtensionStrings.push_back(MakeStaticString(extensionString));
     }
     mExtensionString = mergeExtensionStrings(mExtensionStrings);

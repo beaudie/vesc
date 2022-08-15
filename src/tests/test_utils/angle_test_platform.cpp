@@ -5,9 +5,9 @@
 
 #include "angle_test_platform.h"
 
+#include <iostream>
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
-
 #if defined(ANGLE_PLATFORM_WINDOWS)
 #    include <VersionHelpers.h>
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
@@ -115,8 +115,13 @@ bool IsEGLDisplayExtensionEnabled(EGLDisplay display, const std::string &extName
 
 bool IsGLExtensionEnabled(const std::string &extName)
 {
-    return CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
-                                extName);
+    auto exts = glGetString(GL_EXTENSIONS);
+    if (extName == "EGLImageExternalEssl3OES")
+    {
+        std::cout << "================ extName: " << extName << "\n";
+        std::cout << "================ exts: " << exts << "\n";
+    }
+    return CheckExtensionExists(reinterpret_cast<const char *>(exts), extName);
 }
 
 bool IsGLExtensionRequestable(const std::string &extName)
