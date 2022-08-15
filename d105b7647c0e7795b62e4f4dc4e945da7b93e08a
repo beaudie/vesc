@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3fe04cac_7697fc01",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-15T23:35:40Z",
+      "side": 1,
+      "message": "\u003e it\u0027s only the context set that is problematic but all other resource sets (images etc) are ok to be clear\u0027d right away?\n\nyes as long as you also mean -\u003e \"cleared rightaway\" !\u003d \"call delete on the pointer\"\nsince another active context can still be using that object.\n\n\u003e Do you mean that surfaceSet objects cannot be destroyed here?\n\nsurfaceSet objects are invalid but does not mean we can call delete on the pointers just yet\n\n\u003e Now let\u0027s say thread  A  calls  eglReleaseThread  which calls  destroyInvalidEglObjects  which unconditionally destroys objects from  mInvalidSurfaceSet . What changed about  assumption 1  here?\n\u003e ...\n\u003e but we got to that point because *one* thread called  eglReleaseThread , not all of them, right?\n\nanswer to both lies in the fact that `destroySurfaceImpl` is a ref counted destroy, and in your example usecase, the refCount wont be 0 when `eglReleaseThread` is called since that surface is still current on thread `B`\n\n\u003e There is no scenario where objects are moved into  mInvalidContextSet  by one call and then destroyed by another call.  mInvalidContextSet  is always either empty or objects are immediately destroyed within the same  Display.terminate  call\n\n(Note that i messed up my `git cl upload` and patchset13 is not the right patch, and i will be using patchset12 for all references below) if you look at line 1160 we will return if `contextsStillCurrent` was not empty and when that happens `mInvalidContextSet` will contain all non-current contexts and could be non-empty after returning from a terminate call",
+      "parentUuid": "690ab3e9_bf8cfcbe",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
