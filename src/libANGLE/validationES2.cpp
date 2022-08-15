@@ -3237,6 +3237,23 @@ bool ValidateCopyTextureCHROMIUM(const Context *context,
         return false;
     }
 
+    const InternalFormat &destInternalFormatInfo = GetInternalFormatInfo(internalFormat, destType);
+    std::cout << "======== internalFormat: 0x" << std::hex << internalFormat << "\n";
+    std::cout << "======== destType: 0x" << std::hex << destType << "\n";
+    std::cout << "======== sourceType: 0x" << std::hex << sourceType << "\n";
+    std::cout << "======== destInternalFormatInfo.isInt(): " << destInternalFormatInfo.isInt()
+              << "\n";
+    std::cout << "======== context->getExtensions().EGLImageExternalEssl3OES: "
+              << context->getExtensions().EGLImageExternalEssl3OES << "\n";
+    if (sourceType == TextureType::External && destInternalFormatInfo.isInt() &&
+        !context->getExtensions().EGLImageExternalEssl3OES)
+    {
+        std::cout << "=============== error: " << kANGLECopyTextureMissingRequiredExtension << "\n";
+        context->validationError(entryPoint, GL_INVALID_OPERATION,
+                                 kANGLECopyTextureMissingRequiredExtension);
+        return false;
+    }
+
     if (!IsValidCopyTextureDestinationTarget(context, dest->getType(), destTarget))
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidDestinationTextureType);
@@ -3385,6 +3402,14 @@ bool ValidateCopySubTextureCHROMIUM(const Context *context,
     if (!IsValidCopySubTextureDestionationInternalFormat(destFormat.internalFormat))
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidFormatCombination);
+        return false;
+    }
+
+    if (sourceType == TextureType::External && destFormat.isInt() &&
+        !context->getExtensions().EGLImageExternalEssl3OES)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION,
+                                 kANGLECopyTextureMissingRequiredExtension);
         return false;
     }
 
