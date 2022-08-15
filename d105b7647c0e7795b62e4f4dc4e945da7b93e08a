@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "690ab3e9_bf8cfcbe",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-15T22:09:55Z",
+      "side": 1,
+      "message": "No worries about delays! You already resolved the issue causing crash, so this is more of a long-term improvement as I\u0027m not aware of active issues. Thanks for all the info helping me get through this.\n\n\u003e it turned out to be more troublesome in that the other thread with the context still active expected display state\u0027s context set to contain that context in some methods and would otherwise crash\n\nVery good to know, thanks! So just to confirm, it\u0027s only the context set that is problematic but all other resource sets (images etc) are ok to be clear\u0027d right away?\n\n\u003e This is why only objects that are confirmed to be inactive are moved to invalid set and the clean up of remaining objects happens during thread destruction since we are guaranteed that those objects are no longer in use and is safe to delete\n\nSorry, I still don\u0027t understand this part.\n\nLet\u0027s say there are two threads `A` and `B`, both having active contexts on the same display.\n\n`A` calls `Display.terminate` which 1) moves `surfaceSet` contents into `mInvalidSurfaceSet` and 2) goes through the contexts and notices that `B` is still using a context so it leaves `contextSet` intact and returns (line 1145) without getting to `destroyInvalidEglObjects` (line 1164).\n\n\u003e it would be incorrect to assume the objects can be destroyed\n\nDo you mean that `surfaceSet` objects cannot be destroyed here? Note that `contextSet` objects are out of scope here because they were left intact and `mInvalidContextSet` remains empty. So let\u0027s say a `surfaceSet` object cannot be destroyed here because they might still be in use by thread `B` (`assumption 1`) but we do move them into `mInvalidSurfaceSet` here.\n\nNow let\u0027s say thread `A` calls `eglReleaseThread` which calls `destroyInvalidEglObjects` which unconditionally destroys objects from `mInvalidSurfaceSet`. What changed about `assumption 1` here? Can\u0027t thread `B` still be using those objects making them unsafe to delete? You said \"during thread destruction since we are guaranteed that those objects are no longer in use and is safe to delete\", but we got to that point because *one* thread called `eglReleaseThread`, not all of them, right?\n\n---\n\nIf by \"objects\" you were referring to `contextSet` objects and not `surfaceSet` objects, then please note that `mInvalidContextSet` is only non-empty between line 1152 (`mInvalidContextSet \u003d invalidContextSet`) and line 1164 (`destroyInvalidEglObjects`) on the same thread. There is no scenario where objects are moved into `mInvalidContextSet` by one call and then destroyed by another call. `mInvalidContextSet` is always either empty or objects are immediately destroyed within the same `Display.terminate` call. This is why I don\u0027t understand why `mInvalidContextSet` is even part of class state - it is always empty when a call into ANGLE returns. If you disagree, could you describe a scenario where this is not the case?",
+      "parentUuid": "4b00bb2f_855f7494",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
