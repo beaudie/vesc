@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b00bb2f_855f7494",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-15T16:45:08Z",
+      "side": 1,
+      "message": "apologies for the delay, i was out sick for a couple of weeks\n\n\u003e This part of the spec suggests that contexts are no longer valid immediately after the call\n\nthat is the correct interpretation\n\n\u003e then shouldn\u0027t *all* contexts be moved to some kind of \"invalid\" set regardless of whether or not ref count reached zero?\n\nthat was my intent when working on angleproject:6798 but it turned out to be more troublesome in that the other thread with the context still active expected display state\u0027s context set to contain that context in some methods and would otherwise crash\n\n\u003e My understanding is that if the display is initialized again, those objects are not supposed to become valid again\n\ngiven angle returns pointers as EGL objects, irrespective of which set we put the invalid context in we will never return the same pointer/address before free\u0027ing the context object. The only incorrect thing with ToT is if app called a get attrib on a context after calling terminate we would still treat it as a valid context instead of returning EGL_BAD_CONTEXT.\n\n\u003e these contexts may still be used by some threads and that\u0027s okay but rendering behavior is undefined as long as the app doesn\u0027t crash\n\nnew commands cannot be submitted since per spec the context is invalid (so we need to fail validation) but already submitted commands prior to `eglTerminate` must complete correctly without issues\n\n\u003e I don\u0027t understand why that test is problematic. It seems to do a proper cleanup on each thread. In that case, we should be able to release thread-specific resources in  eglReleaseThread .. do you know what was the root cause there?\n\n`eglTerminate` + `eglReleaseThread` combo will do the correct cleanup with ANGLE after bug 6798 was fixed, wasnt the case before since the surface would never be cleaned up since it is still actively being used when `eglTerminate` gets called\n\n\u003e eglReleaseThread  does not check for any ref counts so it will just destroy objects unconditionally.\n\ncorrect\n\n\u003e Why is the destroy operation postponed until  eglReleaseThread then?\n\nunless we want to perform a `glFinish` on all active threads (which is not possible since we do not know the state of each active thread) it would be incorrect to assume the objects can be destroyed. This is why only objects that are confirmed to be inactive are moved to invalid set and the clean up of remaining objects happens during thread destruction since we are guaranteed that those objects are no longer in use and is safe to delete\n\n\u003e so what is special about  eglReleaseThread  being called by some thread?\n\nthere is nothing special about `eglReleaseThread` ANGLE makes it special by treating it as a boundary condition to try and free resources (which is what i meant when i said angle is doing more than what spec allows for in `eglReleaseThread`). Ideally we can land my change and return back `eglReleaseThread` to its non-special state\n\ni hope this provided some clarity",
+      "parentUuid": "63c1a2ba_fd4b6107",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
