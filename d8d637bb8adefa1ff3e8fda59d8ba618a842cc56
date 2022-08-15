@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "d8d637bb8adefa1ff3e8fda59d8ba618a842cc56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deb043d8_199cecf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-15T17:26:50Z",
+      "side": 1,
+      "message": "Hey Mohan! Thanks for the optimization, but can you give us some context? There\u0027s a tradeoff here. If link happens at glUseProgramStages, it\u0027ll be done early (but perhaps redundantly). If it\u0027s done at draw time, you get hitching. Is there a way to keep linking at glUseProgramStages somehow yet avoid the redundancy? Like keep whatever was linked between stages A and B on first call, and only do the link between B and C on the second call?",
+      "revId": "d8d637bb8adefa1ff3e8fda59d8ba618a842cc56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
