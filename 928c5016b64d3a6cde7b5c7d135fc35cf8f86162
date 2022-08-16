@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5c7fc99_cb8cfcf8",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-16T14:41:33Z",
+      "side": 1,
+      "message": "Fails on Pixel 6:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1303/overview",
+      "range": {
+        "startLine": 673,
+        "startChar": 37,
+        "endLine": 673,
+        "endChar": 98
+      },
+      "revId": "928c5016b64d3a6cde7b5c7d135fc35cf8f86162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
