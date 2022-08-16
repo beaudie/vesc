@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f1778ca_4ae61afa",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T20:46:53Z",
+      "side": 1,
+      "message": "I\u0027d actually rather not support these.\n\nSince PLS uniforms can\u0027t be changed by the ES API, can we just not expose them as uniforms at all?\n\n(The reason they can\u0027t be changed is because it would require a recompile on some implementations, and I\u0027d really prefer to keep it as is, where we never have to recompile.)",
+      "range": {
+        "startLine": 166,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 71
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c591a56_2611ccda",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T20:46:53Z",
+      "side": 1,
+      "message": "Do you know how this behaves for attachments when you delete the texture while it is still bound to the framebuffer? The spec states that nothing happens if the framebuffer isn\u0027t bound, but I also don\u0027t see what it says should happen if you then query the bound texture.",
+      "range": {
+        "startLine": 651,
+        "startChar": 76,
+        "endLine": 652,
+        "endChar": 44
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
