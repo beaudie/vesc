@@ -716,6 +716,13 @@ struct FeaturesVk : FeatureSetBase
         "supportsTimestampSurfaceAttribute", FeatureCategory::VulkanFeatures,
         "Platform supports setting frame timestamp surface attribute", &members,
         "https://anglebug.com/7489"};
+
+    FeatureInfo supportsPresentation = {
+        "supportsPresentation",
+        FeatureCategory::VulkanFeatures,
+        "VkDisplay supports presentation through a present family queue",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
