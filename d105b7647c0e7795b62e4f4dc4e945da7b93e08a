@@ -211,6 +211,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e92cb682_3b336195",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-16T18:03:16Z",
+      "side": 1,
+      "message": "\u003e i assume you meant \"on objects we move into  mInvalidSurfaceSet \"\noops, correct\n\n\u003e the hope is that by the time releasethread is called the thread has no intent of making any more calls including  eglGetError  and hence serves as a good boundary condition to check for possibly freeing resources\n\nMakes sense! Some comments noting these details would be great for future reference - thank you!",
+      "parentUuid": "5e9fc22c_7d009588",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
@@ -222,6 +246,24 @@
       "writtenOn": "2022-07-20T11:49:33Z",
       "side": 1,
       "message": "we can be a bit more aggressive and do this as well -\n```\n if (!noActiveThreads)\n {\n     destroyInvalidEglObjects();\n }\n```",
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d167598f_71bd5796",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-16T18:03:16Z",
+      "side": 1,
+      "message": "If we do this then it should probably go inside `::terminate` as `destroyInvalidEglObjects()` is already called in there - but only conditionally on no context being active - so modifying this condition is probably where this would fit.\n\nSkipping this for now SG too.",
+      "parentUuid": "95e0935d_cd537b93",
       "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
