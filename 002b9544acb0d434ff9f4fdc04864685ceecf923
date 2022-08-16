@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfc590c8_0bc8d2cf",
+        "filename": "src/libANGLE/renderer/vulkan/mac/DisplayVkMac.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2022-08-16T14:59:26Z",
+      "side": 0,
+      "message": "This dates back to the original implementation, where the IOSurface memory was used directly inside an external memory buffer (https://chromium-review.googlesource.com/c/angle/angle/+/1965434).\n\nThis is no longer the case, the IOSurface memory is now copied, as it was unable to reliably meet the Vulkan driver\u0027s alignment requirements.",
+      "revId": "002b9544acb0d434ff9f4fdc04864685ceecf923",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
