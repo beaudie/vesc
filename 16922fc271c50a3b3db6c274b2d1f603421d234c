@@ -376,6 +376,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b4a2e38_c82fc039",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T16:03:19Z",
+      "side": 1,
+      "message": "Actually captured this one in the Issues section too.",
+      "parentUuid": "21ae278b_1511008f",
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c183bbbf_a9b1ab95",
