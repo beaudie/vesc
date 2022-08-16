@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce9d5b6_46ea5af1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T17:19:18Z",
+      "side": 1,
+      "message": "Verified locally with an implementation in SwiftShader that it works. Unfortunately, the SwiftShader implementation cannot be submitted because this ext depends on the transform feedback extension that SwiftShader doesn\u0027t support.",
+      "revId": "6c327d2b59151c010c032396715cbe0f2bfeeeb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
