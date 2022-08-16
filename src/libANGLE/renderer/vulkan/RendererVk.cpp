@@ -3827,6 +3827,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             IsAndroid() && ExtensionFound(VK_GOOGLE_DISPLAY_TIMING_EXTENSION_NAME,
                                                           deviceExtensionNames));
 
+    // GBM does not have a VkSurface hence it does not support presentation through a Vulkan queue.
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPresentation, !displayVk->isGBM());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid
