@@ -18,6 +18,12 @@ VK_DEFINE_HANDLE(VmaPool)
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VmaVirtualAllocation)
 VK_DEFINE_HANDLE(VmaVirtualBlock)
 
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+#    define ANGLE_MEM_LOG() ANGLE_LOG(INFO)
+#else
+#    define ANGLE_MEM_LOG() ANGLE_LAZY_STREAM(ANGLE_LOG_STREAM(INFO), 0)
+#endif
+
 namespace vma
 {
 typedef VkFlags VirtualBlockCreateFlags;
