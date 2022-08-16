@@ -211,6 +211,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e9541fd_1374e582",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T15:44:39Z",
+      "side": 1,
+      "message": "I added all the remaining ones I\u0027ve been able to think of, so now the list is complete to the best of my knowledge. I\u0027ll try and find some time today to add the spec language for the rest of these enums.",
+      "parentUuid": "58804361_f0b3d188",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a619a96a_c2afbc50",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -334,6 +358,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ae278b_1511008f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T15:44:39Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll mark this resolved for now",
+      "parentUuid": "0a5f1b65_6907477b",
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c183bbbf_a9b1ab95",
@@ -395,6 +437,30 @@
       "side": 1,
       "message": "Updated to an allowlist",
       "parentUuid": "065ecb3e_b973948f",
+      "range": {
+        "startLine": 316,
+        "startChar": 14,
+        "endLine": 316,
+        "endChar": 45
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e2b741f_4ffc816c",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T15:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06d3f8cc_589537fb",
       "range": {
         "startLine": 316,
         "startChar": 14,
@@ -1136,6 +1202,30 @@
       "side": 1,
       "message": "This seemed like a good conversation to capture in the \"Issues\" section, so I moved it down there.",
       "parentUuid": "c7d8bc18_3c93cd2b",
+      "range": {
+        "startLine": 392,
+        "startChar": 27,
+        "endLine": 393,
+        "endChar": 11
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0e3660a_2cac99c9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T15:44:39Z",
+      "side": 1,
+      "message": "Marking done since it\u0027s in the Issues section now",
+      "parentUuid": "db4e5713_231c54a2",
       "range": {
         "startLine": 392,
         "startChar": 27,
