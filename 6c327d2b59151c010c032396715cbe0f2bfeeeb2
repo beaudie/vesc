@@ -16,6 +16,23 @@
       "message": "Verified locally with an implementation in SwiftShader that it works. Unfortunately, the SwiftShader implementation cannot be submitted because this ext depends on the transform feedback extension that SwiftShader doesn\u0027t support.",
       "revId": "6c327d2b59151c010c032396715cbe0f2bfeeeb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844d6c7a_d6231b67",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3608,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-16T19:12:19Z",
+      "side": 1,
+      "message": "nit: should we remove this commented out code/link angleproject:5539 to the commit message?",
+      "revId": "6c327d2b59151c010c032396715cbe0f2bfeeeb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
