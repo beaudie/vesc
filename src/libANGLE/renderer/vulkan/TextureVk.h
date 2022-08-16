@@ -648,6 +648,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     gl::LevelIndex mCurrentBaseLevel;
     gl::LevelIndex mCurrentMaxLevel;
 
+    // Added for previous texture flushing
+    uint32_t mLastMaxLevel;
+
     // Cached subresource indexes.
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSRGBDecode;
     vk::ImageOrBufferViewSubresourceSerial mCachedImageViewSubresourceSerialSkipDecode;

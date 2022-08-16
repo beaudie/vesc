@@ -467,7 +467,8 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
 
     // Before we initialize the full mip chain, we make sure that the base mip level and at least
     // one other level after (1 for simplicity) are defined and have appropriate values.
-    if (mState.getImageDescs().size() < 2)
+    // For cubemaps, we also flush if we only have the first level.
+    if (mState.getType() != gl::TextureType::CubeMap && mState.getImageDescs().size() < 2)
     {
         return false;
     }
@@ -475,7 +476,8 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
     gl::TextureTarget textureTarget = (mState.getType() == gl::TextureType::CubeMap)
                                           ? gl::kCubeMapTextureTargetMin
                                           : gl::TextureTypeToTarget(mState.getType(), 0);
-    if (!isMipImageDescDefined(textureTarget, 0) || !isMipImageDescDefined(textureTarget, 1))
+    if (!isMipImageDescDefined(textureTarget, 0) ||
+        (mState.getType() != gl::TextureType::CubeMap && !isMipImageDescDefined(textureTarget, 1)))
     {
         return false;
     }
@@ -489,6 +491,7 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
                                       ? (mState.getImageDescs().size() / 6)
                                       : mState.getImageDescs().size();
 
+    mLastMaxLevel = 1;
     for (size_t image = 1; image < maxImageMipLevels; image++)
     {
         gl::ImageDesc mipImageDesc = mState.getImageDesc(textureTarget, image);
@@ -522,6 +525,7 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
         {
             return false;
         }
+        mLastMaxLevel = static_cast<uint32_t>(image + 1);
     }
 
     return true;
@@ -3316,6 +3320,7 @@ uint32_t TextureVk::getMipLevelCount(ImageMipLevels mipLevels) const
         // Returns all mipmap levels from base to max regardless if an image has been specified or
         // not.
         case ImageMipLevels::FullMipChain:
+            return (mLastMaxLevel > 1) ? (getMaxLevelCount() - mState.getEffectiveBaseLevel()) : 1;
         case ImageMipLevels::FullMipChainForGenerateMipmap:
             return getMaxLevelCount() - mState.getEffectiveBaseLevel();
 
