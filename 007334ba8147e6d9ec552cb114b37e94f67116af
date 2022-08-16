@@ -81,6 +81,30 @@
       },
       "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95220114_9578d142",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-16T23:37:41Z",
+      "side": 1,
+      "message": "How about something like this:\n\nline ~1143: `size_t n \u003d mState.contextSet.size() + mInvalidContextSet.size()`\nline ~1174: `assert(mState.contextSet.size() + mInvalidContextSet.size() \u003d\u003d n)`\n\nthat would validate that no contexts are \"lost\" but could be moved between sets, and would cover the `mState.contextSet` modification on line 1173 as well.",
+      "parentUuid": "983f13e0_585b506a",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 96
+      },
+      "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
