@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6938aa40_675c4aa7",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-16T16:18:45Z",
+      "side": 1,
+      "message": "\u003e patchset13 is not the right patch\nUgh, this added to confusion. This part of the codes in patchset 12 makes more sense. Could you re-upload the latest version you intend to commit?\n\n\u003e answer to both lies in the fact that  destroySurfaceImpl  is a ref counted destroy\nAha! I was definitely missing that part. However, in this case it is still not clear to me why can\u0027t we call `destroySurfaceImpl` on objects we move into `mInvalidContextSet` right away and postponing this call until `eglReleaseThread` is called instead. Is this because ref counters are likely going to be decreased by that time? Could you add a comment to the code clarifying the reason?\n\nAlso, quoting you from earlier\n\u003e it turned out to be more troublesome in that the other thread with the context still active expected display state\u0027s context set to contain that context in some methods and would otherwise crash\ncould you add this comment to the code in some form somewhere, maybe at the point where objects are being moved between sets, so that it\u0027s more clear why this is being done?",
+      "parentUuid": "3fe04cac_7697fc01",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
