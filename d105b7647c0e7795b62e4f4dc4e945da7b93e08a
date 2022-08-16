@@ -233,6 +233,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0746d6c4_876c8dda",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-16T22:41:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e92cb682_3b336195",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95e0935d_cd537b93",
@@ -264,6 +288,24 @@
       "side": 1,
       "message": "If we do this then it should probably go inside `::terminate` as `destroyInvalidEglObjects()` is already called in there - but only conditionally on no context being active - so modifying this condition is probably where this would fit.\n\nSkipping this for now SG too.",
       "parentUuid": "95e0935d_cd537b93",
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22846a0c_81983350",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-16T22:41:01Z",
+      "side": 1,
+      "message": "\u003e it should probably go inside ::terminate\n\nAck\n\n\u003e Skipping this for now SG too\n\nskipping for now until we have a usecase that benefits from this",
+      "parentUuid": "d167598f_71bd5796",
       "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
