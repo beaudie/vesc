@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "435b858a_b4a072e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-16T15:38:34Z",
+      "side": 1,
+      "message": "Oops, improved :]",
+      "parentUuid": "6848412b_47c31637",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "6410febc44a2c36c9bbfc820cd6cf89f3a87dfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1f23b265_bec46c6e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
