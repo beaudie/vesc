@@ -941,6 +941,13 @@
                 "corresponding dynamic state malfunction in the presence of discard or alpha to coverage"
             ],
             "issue": "http://anglebug.com/7556"
+        },
+        {
+            "name": "supports_presentation",
+            "category": "Features",
+            "description": [
+                "VkDisplay supports presentation through a present family queue"
+            ]
         }
     ]
 }

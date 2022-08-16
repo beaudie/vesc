@@ -3807,6 +3807,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Only enable it on integrations without EGL_FRONT_BUFFER_AUTO_REFRESH_ANDROID passthrough.
     ANGLE_FEATURE_CONDITION(&mFeatures, forceContinuousRefreshOnSharedPresent, false);
 
+    // GBM does not have a VkSurface hance it does not support presentation through a Vulkan queue.
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPresentation, !displayVk->isGBM());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

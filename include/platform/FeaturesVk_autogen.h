@@ -699,6 +699,13 @@ struct FeaturesVk : FeatureSetBase
         "Work around a driver bug where 0 in stencil write mask static state would make the"
         "corresponding dynamic state malfunction in the presence of discard or alpha to coverage",
         &members, "http://anglebug.com/7556"};
+
+    FeatureInfo supportsPresentation = {
+        "supportsPresentation",
+        FeatureCategory::VulkanFeatures,
+        "VkDisplay supports presentation through a present family queue",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
