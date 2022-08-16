@@ -10,6 +10,15 @@
 
 from __future__ import print_function
 
+import sys
+
+# Swarming switched to running merge scripts with vpython3 we're not ready for yet.
+if __name__ == '__main__' and sys.version_info.major == 3:
+    print('Spawning vpython from python3')
+    import os
+    import subprocess
+    sys.exit(subprocess.call(['vpython', os.path.realpath(__file__)] + sys.argv[1:]))
+
 import argparse
 import collections
 import json
@@ -21,6 +30,8 @@ import sys
 import tempfile
 import time
 import uuid
+
+raise Exception('test')
 
 logging.basicConfig(
     level=logging.INFO,
