@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebd8b85e_485955c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-16T00:34:13Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "07aeacf511d1376f5212ce0d7b67904bbb6dd360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0b785e_84dc8aa8",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-16T00:34:13Z",
+      "side": 1,
+      "message": "Suggestion: `_read_sample_histogram()`?",
+      "range": {
+        "startLine": 186,
+        "startChar": 4,
+        "endLine": 186,
+        "endChar": 19
+      },
+      "revId": "07aeacf511d1376f5212ce0d7b67904bbb6dd360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4be29d34_a2ba1e3d",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-16T00:34:13Z",
+      "side": 1,
+      "message": "nit: Refactor `len(wall_times)`?",
+      "range": {
+        "startLine": 207,
+        "startChar": 7,
+        "endLine": 207,
+        "endChar": 22
+      },
+      "revId": "07aeacf511d1376f5212ce0d7b67904bbb6dd360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59074007_37845091",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-16T00:34:13Z",
+      "side": 1,
+      "message": "nit: Should we define `num_tests` as `len(tests)`? Since it is being used a few times in this scope?",
+      "range": {
+        "startLine": 292,
+        "startChar": 28,
+        "endLine": 292,
+        "endChar": 38
+      },
+      "revId": "07aeacf511d1376f5212ce0d7b67904bbb6dd360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
