@@ -123,6 +123,24 @@
       "parentUuid": "3dc20a6c_8b581845",
       "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15552e95_1516cb66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T03:37:44Z",
+      "side": 1,
+      "message": "I\u0027m glad it\u0027s 100 now in https://chromium-review.googlesource.com/c/chromium/src/+/3820323\n\nObviously your suggestions about being time-based and smart about the type of command would be better, but 100 is way better than 20. It might be tolerable enough as long as we can get dump/restore hooks to the backend.\n\nWe can do this same thing in Vulkan with VK_ARM_rasterization_order_attachment_access and transient attachments, or Metal with raster order groups and memoryless attachments, in which case I think we would need dump/restore hooks there as well.",
+      "parentUuid": "0725d76b_a06db20a",
+      "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
