@@ -87,6 +87,24 @@
       "parentUuid": "40155d65_d9df9e2b",
       "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dc20a6c_8b581845",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T02:54:26Z",
+      "side": 1,
+      "message": "Sounds like it based on the EXT spec. I was thinking of the horrible performance on mobile on Vulkan, but this is actually a blocker for GL probably. Feel free to point that out in the issue so we don\u0027t lose it.\n\nMy hope is that Chrome completes the move to Skia Vulkan/whatever, so only WebGL uses ANGLE, at which point we can probably just stop doing that. Otherwise, at least I hope we can convince them to stop the context switch while PLS is active, but that\u0027s assuming the Chrome UI has a way to not freeze.",
+      "parentUuid": "422b0fc3_153beb7e",
+      "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
