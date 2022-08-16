@@ -51,6 +51,23 @@
       "parentUuid": "deb043d8_199cecf1",
       "revId": "d8d637bb8adefa1ff3e8fda59d8ba618a842cc56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55782d99_c268019b",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T18:11:53Z",
+      "side": 1,
+      "message": "Shouldn\u0027t call link in validation. Validation may be disabled by the app",
+      "revId": "d8d637bb8adefa1ff3e8fda59d8ba618a842cc56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
