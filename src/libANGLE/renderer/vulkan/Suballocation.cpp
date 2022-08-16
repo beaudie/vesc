@@ -127,6 +127,8 @@ void BufferBlock::unmap(const VkDevice device)
 void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
 {
     std::lock_guard<ConditionalMutex> lock(mVirtualBlockMutex);
+    ANGLE_MEM_LOG() << "[SUBDEALLOC] Deallocating; Handle " << mVirtualBlock.getHandle()
+                    << "; Offset: " << offset;
     mVirtualBlock.free(allocation, offset);
 }
 

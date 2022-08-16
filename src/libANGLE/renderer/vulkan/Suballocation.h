@@ -233,7 +233,19 @@ ANGLE_INLINE VkResult BufferBlock::allocate(VkDeviceSize size,
 {
     std::lock_guard<ConditionalMutex> lock(mVirtualBlockMutex);
     mCountRemainsEmpty = 0;
-    return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+    VkResult result    = mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+
+    if (result == VK_SUCCESS)
+    {
+        ANGLE_MEM_LOG() << "[SUBALLOC] Allocating block; Handle " << mVirtualBlock.getHandle()
+                        << "; Offset: " << *offsetOut << " Size: " << size;
+    }
+    else
+    {
+        ANGLE_MEM_LOG() << "[SUBALLOC_DEVICE_OOM] Handle " << mVirtualBlock.getHandle()
+                        << "; Offset: " << *offsetOut << "; Size: " << size;
+    }
+    return result;
 }
 
 // BufferSuballocation implementation.
