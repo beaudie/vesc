@@ -141,6 +141,24 @@
       "parentUuid": "0725d76b_a06db20a",
       "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc070828_7361b62d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T14:11:27Z",
+      "side": 1,
+      "message": "Virtual I believe. Also, 100 is 100 GL commands, not draws, which still feels so little! Worse, it\u0027s divide by N (N \u003d 20 or 100) with no consideration of render pass boundaries. So even if your PLS pass has two commands in it, it may very well be cut in two.\n\nFor Vulkan it\u0027s all easy as you mentioned, lazy-allocated memory will end up making an allocation and the bandwidth is wasted writing to / reading from it. If you can have such a hook set up for dump/restore, it would work identically, yes it would be a solution.\n\nSad situation IMO",
+      "parentUuid": "15552e95_1516cb66",
+      "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

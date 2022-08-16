@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5980a77e_e94fcaa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T14:11:27Z",
+      "side": 1,
+      "message": "Should be good based on the comments, but please give me a bit to go over the spec again before +2",
+      "revId": "cdc252382dbd4bef4c6bbe7051ad914a9c055240",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "58804361_f0b3d188",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T14:11:27Z",
+      "side": 1,
+      "message": "Just let me know how many! I added a note so hopefully no one allocates from that range in the meantime (not that this happens often!)",
+      "parentUuid": "5c50b5e1_7202a81b",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 155,
+        "endChar": 73
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a619a96a_c2afbc50",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -657,6 +681,30 @@
       "side": 1,
       "message": "ClearBuffer* couldn\u0027t be used to clear PLS. It would just clear your application defined color attachments. And since the color attachments used for PLS are GL_NONE from the app\u0027s perspective, attempting to clear them would just give you the no-op behavior defined in the spec:\n\n  \"If the value of GL_DRAW_BUFFERi is GL_NONE, the command has no effect.\"\n  \nThe spec currently doesn\u0027t provide a way of clearing PLS other than a load operation",
       "parentUuid": "9f1e8005_8ddb0b9d",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d1c601c_d5c7cb99",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T14:11:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bb7de5c5_1974619c",
       "range": {
         "startLine": 330,
         "startChar": 56,
