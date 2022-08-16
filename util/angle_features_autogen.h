@@ -250,6 +250,7 @@ enum class Feature
     SupportsPipelineCreationFeedback,
     SupportsPipelineRobustness,
     SupportsPipelineStatisticsQuery,
+    SupportsPresentation,
     SupportsPrimitivesGeneratedQuery,
     SupportsPrimitiveTopologyListRestart,
     SupportsProtectedMemory,
