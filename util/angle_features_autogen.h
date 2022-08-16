@@ -246,6 +246,7 @@ enum class Feature
     SupportsPipelineCreationCacheControl,
     SupportsPipelineCreationFeedback,
     SupportsPipelineStatisticsQuery,
+    SupportsPresentation,
     SupportsPrimitivesGeneratedQuery,
     SupportsPrimitiveTopologyListRestart,
     SupportsProtectedMemory,
