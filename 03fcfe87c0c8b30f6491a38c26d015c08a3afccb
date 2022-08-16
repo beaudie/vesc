@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd51d97_1c34b309",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-16T14:44:14Z",
+      "side": 1,
+      "message": "I\u0027ve triaged 4 more diffs in https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-exp-test/61/overview, I think this is good to go.",
+      "revId": "03fcfe87c0c8b30f6491a38c26d015c08a3afccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
