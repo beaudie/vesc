@@ -967,6 +967,13 @@
                 "Platform supports setting frame timestamp surface attribute"
             ],
             "issue": "https://anglebug.com/7489"
+        },
+        {
+            "name": "supports_presentation",
+            "category": "Features",
+            "description": [
+                "VkDisplay supports presentation through a present family queue"
+            ]
         }
     ]
 }
