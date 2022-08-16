@@ -726,6 +726,7 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
       mStartFrame(0),
       mEndFrame(0)
 {
+    // test
     if (!mParams->traceInfo.initialized)
     {
         failTest("Failed to load trace json.");
