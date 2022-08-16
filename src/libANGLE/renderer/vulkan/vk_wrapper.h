@@ -1470,6 +1470,7 @@ ANGLE_INLINE void DeviceMemory::destroy(VkDevice device)
 {
     if (valid())
     {
+        ANGLE_MEM_LOG() << "[DEALLOC] DeviceMemory deallocated; Handle " << mHandle;
         vkFreeMemory(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
@@ -1643,6 +1644,7 @@ ANGLE_INLINE void Buffer::destroy(VkDevice device)
     if (valid())
     {
         vkDestroyBuffer(device, mHandle, nullptr);
+        ANGLE_MEM_LOG() << "[DEALLOC] Buffer deallocated; Handle " << mHandle;
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1650,7 +1652,10 @@ ANGLE_INLINE void Buffer::destroy(VkDevice device)
 ANGLE_INLINE VkResult Buffer::init(VkDevice device, const VkBufferCreateInfo &createInfo)
 {
     ASSERT(!valid());
-    return vkCreateBuffer(device, &createInfo, nullptr, &mHandle);
+    VkResult result = vkCreateBuffer(device, &createInfo, nullptr, &mHandle);
+    ANGLE_MEM_LOG() << "[ALLOC] Buffer created; Handle " << mHandle
+                    << "; Size: " << createInfo.size;
+    return result;
 }
 
 ANGLE_INLINE VkResult Buffer::bindMemory(VkDevice device,
@@ -1991,6 +1996,7 @@ ANGLE_INLINE void VirtualBlock::destroy(VkDevice device)
     if (valid())
     {
         vma::DestroyVirtualBlock(mHandle);
+        ANGLE_MEM_LOG() << "[DEALLOC] Virtual block deallocated; Handle " << mHandle;
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1999,7 +2005,9 @@ ANGLE_INLINE VkResult VirtualBlock::init(VkDevice device,
                                          vma::VirtualBlockCreateFlags flags,
                                          VkDeviceSize size)
 {
-    return vma::CreateVirtualBlock(size, flags, &mHandle);
+    VkResult result = vma::CreateVirtualBlock(size, flags, &mHandle);
+    ANGLE_MEM_LOG() << "[ALLOC] Virtual block created; Handle " << mHandle << "; Size: " << size;
+    return result;
 }
 
 ANGLE_INLINE VkResult VirtualBlock::allocate(VkDeviceSize size,

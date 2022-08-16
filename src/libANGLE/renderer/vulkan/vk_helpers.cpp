@@ -2978,9 +2978,12 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
+
+    ANGLE_MEM_LOG() << "Allocating buffer memory (" << ANGLE_FUNCTION << ")...";
     ANGLE_TRY(AllocateBufferMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut, nullptr,
                                    &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= mSize);
+    ANGLE_MEM_LOG() << "Buffer memory allocated.";
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
@@ -3038,9 +3041,12 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         DeviceScoped<DeviceMemory> deviceMemory(context->getDevice());
         VkMemoryPropertyFlags memoryPropertyFlagsOut;
         VkDeviceSize sizeOut;
+
+        ANGLE_MEM_LOG() << "Allocating buffer memory (" << ANGLE_FUNCTION << ")...";
         ANGLE_TRY(AllocateBufferMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut,
                                        nullptr, &buffer.get(), &deviceMemory.get(), &sizeOut));
         ASSERT(sizeOut >= alignedSize);
+        ANGLE_MEM_LOG() << "Buffer memory allocated.";
 
         suballocation->initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
                                             memoryPropertyFlagsOut, alignedSize);
@@ -4426,9 +4432,12 @@ angle::Result BufferHelper::init(Context *context,
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
+
+    ANGLE_MEM_LOG() << "Allocating buffer memory (" << ANGLE_FUNCTION << ")...";
     ANGLE_TRY(AllocateBufferMemory(context, requiredFlags, &memoryPropertyFlagsOut, nullptr,
                                    &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= createInfo->size);
+    ANGLE_MEM_LOG() << "Buffer memory allocated.";
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
                                         memoryPropertyFlagsOut, requestedCreateInfo.size);
@@ -5576,8 +5585,11 @@ angle::Result ImageHelper::initMemory(Context *context,
     {
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
+
+    ANGLE_MEM_LOG() << "Allocating image memory (" << ANGLE_FUNCTION << ")...";
     ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
+    ANGLE_MEM_LOG() << "Image memory allocated.";
 
     RendererVk *renderer = context->getRenderer();
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -5620,9 +5632,11 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     {
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
+        ANGLE_MEM_LOG() << "Allocating image memory (" << ANGLE_FUNCTION << ")...";
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, flags, memoryRequirements, extraAllocationInfo[memoryPlane],
             bindImagePlaneMemoryInfoPtr, &mImage, &mDeviceMemory));
+        ANGLE_MEM_LOG() << "Image memory allocated.";
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 

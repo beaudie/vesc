@@ -111,6 +111,28 @@ void BufferBlock::initWithoutVirtualBlock(Context *context,
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 }
 
+VkResult BufferBlock::allocate(VkDeviceSize size,
+                               VkDeviceSize alignment,
+                               VmaVirtualAllocation *allocationOut,
+                               VkDeviceSize *offsetOut)
+{
+    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    mCountRemainsEmpty = 0;
+    VkResult result    = mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+
+    if (result == VK_SUCCESS)
+    {
+        ANGLE_MEM_LOG() << "[SUBALLOC] Allocating block; Handle " << mVirtualBlock.getHandle()
+                        << "; Offset: " << *offsetOut << " Size: " << size;
+    }
+    else
+    {
+        ANGLE_MEM_LOG() << "[SUBALLOC_DEVICE_OOM] Handle " << mVirtualBlock.getHandle()
+                        << "; Offset: " << *offsetOut << "; Size: " << size;
+    }
+    return result;
+}
+
 VkResult BufferBlock::map(const VkDevice device)
 {
     ASSERT(mMappedMemory == nullptr);
@@ -126,6 +148,8 @@ void BufferBlock::unmap(const VkDevice device)
 void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    ANGLE_MEM_LOG() << "[SUBDEALLOC] Deallocating block; Handle " << mVirtualBlock.getHandle()
+                    << "; Offset: " << offset;
     mVirtualBlock.free(allocation, offset);
 }
 

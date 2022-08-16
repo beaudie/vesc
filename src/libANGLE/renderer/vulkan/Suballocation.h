@@ -224,16 +224,6 @@ ANGLE_INLINE uint8_t *BufferBlock::getMappedMemory() const
     return mMappedMemory;
 }
 
-ANGLE_INLINE VkResult BufferBlock::allocate(VkDeviceSize size,
-                                            VkDeviceSize alignment,
-                                            VmaVirtualAllocation *allocationOut,
-                                            VkDeviceSize *offsetOut)
-{
-    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
-    mCountRemainsEmpty = 0;
-    return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
-}
-
 // BufferSuballocation implementation.
 ANGLE_INLINE BufferSuballocation::BufferSuballocation()
     : mBufferBlock(nullptr), mAllocation(VK_NULL_HANDLE), mOffset(0), mSize(0)

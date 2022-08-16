@@ -16,6 +16,9 @@ declare_args() {
 
   # Enable Vulkan GPU trace event capability
   angle_enable_vulkan_gpu_trace_events = false
+
+  # Enable memory allocation/deallocation logging
+  angle_enable_memory_alloc_logging = false
 }
 
 declare_args() {
@@ -260,6 +263,9 @@ config("angle_vulkan_backend_config") {
   }
   if (angle_enable_vulkan_validation_layers) {
     defines += [ "ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS" ]
+  }
+  if (angle_enable_memory_alloc_logging) {
+    defines += [ "ANGLE_ENABLE_MEMORY_ALLOC_LOGGING" ]
   }
 }
 
