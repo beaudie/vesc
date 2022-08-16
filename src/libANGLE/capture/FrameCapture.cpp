@@ -1754,6 +1754,21 @@ void CaptureUpdateUniformLocations(const gl::Program *program, std::vector<CallC
     }
 }
 
+void CaptureUpdateAttributeLocations(const gl::Program *program, std::vector<CallCapture> *callsOut)
+{
+    const gl::ProgramBindings &attributeBindings      = program->getAttributeBindings();
+    const std::vector<sh::ShaderVariable> &attributes = program->getAttributes();
+
+    // Implement this like CaptureUpdateUniformLocations
+
+    // ParamCapture nameParam("name", ParamType::TGLcharConstPointer);
+    // CaptureString(name.c_str(), &nameParam);
+    // params.addParam(std::move(nameParam));
+    // params.addValueParam("location", ParamType::TGLint, location);
+    // params.addValueParam("count", ParamType::TGLint, static_cast<GLint>(count));
+    // callsOut->emplace_back("UpdateAttributeLocation", std::move(params));
+}
+
 void CaptureValidateSerializedState(const gl::Context *context, std::vector<CallCapture> *callsOut)
 {
     INFO() << "Capturing validation checkpoint at position " << callsOut->size();

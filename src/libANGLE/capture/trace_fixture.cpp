@@ -70,9 +70,11 @@ void LoadBinaryData(const char *fileName)
 
 ValidateSerializedStateCallback gValidateSerializedStateCallback;
 std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
+std::unordered_map<GLuint, std::vector<GLint>> gInternalAttributeLocationsMap;
 }  // namespace
 
 GLint **gUniformLocations;
+GLint **gAttributeLocations;
 BlockIndexesMap gUniformBlockIndexes;
 GLuint gCurrentProgram = 0;
 
@@ -95,6 +97,27 @@ void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLi
 void DeleteUniformLocations(GLuint program)
 {
     // No-op. We leave uniform locations around so deleted current programs can still use them.
+}
+
+void UpdateAttributeLocation(GLuint program, const char *name, GLint location, GLint count)
+{
+    std::vector<GLint> &programAttributeLocations = gInternalAttributeLocationsMap[program];
+    if (static_cast<GLint>(programAttributeLocations.size()) < location + count)
+    {
+        programAttributeLocations.resize(location + count, 0);
+    }
+    for (GLint arrayIndex = 0; arrayIndex < count; ++arrayIndex)
+    {
+        GLuint mappedProgramID = gShaderProgramMap[program];
+        programAttributeLocations[location + arrayIndex] =
+            glGetAttribLocation(mappedProgramID, name) + arrayIndex;
+    }
+    gAttributeLocations[program] = programAttributeLocations.data();
+}
+
+void DeleteAttributeLocations(GLuint program)
+{
+    // No-op. We leave attribute locations around so deleted current programs can still use them.
 }
 
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
@@ -189,6 +212,9 @@ void InitializeReplay(const char *binaryDataFileName,
 
     gUniformLocations = new GLint *[maxShaderProgram + 1];
     memset(gUniformLocations, 0, sizeof(GLint *) * (maxShaderProgram + 1));
+
+    gAttributeLocations = new GLint *[maxShaderProgram + 1];
+    memset(gAttributeLocations, 0, sizeof(GLint *) * (maxShaderProgram + 1));
 }
 
 void FinishReplay()
