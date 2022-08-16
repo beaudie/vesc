@@ -465,10 +465,9 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
         return false;
     }
 
-    // Before we initialize the full mip chain, we make sure that the base mip level and at least
-    // one other level after (1 for simplicity) are defined and have appropriate values.
-    // For cubemaps, we also flush if we only have the first level.
-    if (mState.getType() != gl::TextureType::CubeMap && mState.getImageDescs().size() < 2)
+    // Before we initialize the full mip chain, we make sure that the base mip level is defined and
+    // has appropriate values.
+    if (mState.getImageDescs().size() < 1)
     {
         return false;
     }
@@ -476,8 +475,7 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
     gl::TextureTarget textureTarget = (mState.getType() == gl::TextureType::CubeMap)
                                           ? gl::kCubeMapTextureTargetMin
                                           : gl::TextureTypeToTarget(mState.getType(), 0);
-    if (!isMipImageDescDefined(textureTarget, 0) ||
-        (mState.getType() != gl::TextureType::CubeMap && !isMipImageDescDefined(textureTarget, 1)))
+    if (!isMipImageDescDefined(textureTarget, 0))
     {
         return false;
     }
