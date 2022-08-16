@@ -22,6 +22,30 @@
       },
       "revId": "928c5016b64d3a6cde7b5c7d135fc35cf8f86162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dec8e5ed_ece163ba",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-16T15:03:58Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ll investigate it",
+      "parentUuid": "b5c7fc99_cb8cfcf8",
+      "range": {
+        "startLine": 673,
+        "startChar": 37,
+        "endLine": 673,
+        "endChar": 98
+      },
+      "revId": "928c5016b64d3a6cde7b5c7d135fc35cf8f86162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
