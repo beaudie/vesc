@@ -34,6 +34,24 @@
       "parentUuid": "9acfe018_e9440639",
       "revId": "323602a1c7a81b82ad5a5f8de6530036bfe3cdbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d31326d_24e93ae4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-16T18:45:32Z",
+      "side": 1,
+      "message": "The unit test  `https://crrev.com/c/3828441/5/src/tests/egl_tests/EGLRobustnessTest.cpp` that replicates what the deqp test does indeed failed on Pixel6 with the same \"invalid write access --\u003e context reset --\u003e context loss\" error chain. \n\nI have sent an email asking ARM on their update on the `GL_EXT_Robustness` support:  https://anglebug.com/4823.",
+      "parentUuid": "22acde22_0f720707",
+      "revId": "323602a1c7a81b82ad5a5f8de6530036bfe3cdbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
