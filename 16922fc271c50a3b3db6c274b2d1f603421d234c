@@ -799,6 +799,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ef7f0c2_2669b276",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T16:08:59Z",
+      "side": 1,
+      "message": "One more though about glClear:\n\nSince we don\u0027t allow changing the draw buffers, glClear can only clear everything at once, and only to the same color. If you have an integer attachment, this would be undefined behavior I believe. So it probably does make sense to direct people to glClearBuffer",
+      "parentUuid": "9d1c601c_d5c7cb99",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d066b4b2_ab5c2ebc",
