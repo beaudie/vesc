@@ -561,6 +561,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "843f0629_0f1d1b59",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T02:43:13Z",
+      "side": 1,
+      "message": "We could support it, but glClear affects all active draw buffers, some of which may be PLS. We could support glClear by temporarily turning off the PLS draw buffers and turning them back on, but I wondered if that might potentially break up a render pass?",
+      "parentUuid": "479ae110_296f0f4c",
+      "range": {
+        "startLine": 330,
+        "startChar": 56,
+        "endLine": 331,
+        "endChar": 76
+      },
+      "revId": "16922fc271c50a3b3db6c274b2d1f603421d234c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d066b4b2_ab5c2ebc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
