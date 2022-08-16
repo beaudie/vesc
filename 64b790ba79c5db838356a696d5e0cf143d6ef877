@@ -33,6 +33,24 @@
       "message": "Chris, are you aware of this in the GL ext?\n\n\u003e If a shader writes to any user-defined fragment output, the pixel local\n\u003e storage values for that fragment are lost, and their values in subsequent\n\u003e shader invocations are undefined.\n\u003e \n\u003e Similarly, if a shader writes to pixel local storage blocks, the value of\n\u003e the framebuffer pixel covered by that fragment becomes undefined.\"\n\nI heard from ARM that they actually let PLS and color attachments overlap in tile memory, so writing one destroys the other. I didn\u0027t notice such a thing in the ANGLE spec.\n\n---\n\nOn the subject of security-related guarantees, that means that the PLS data could be initialized by color attachment data if not clear (and in a potentially garbage way, because the format/layout may not exactly match the color attachments)",
       "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c6f273_10d55999",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-16T02:37:03Z",
+      "side": 1,
+      "message": "Yes, that\u0027s why the spec allows MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE to be zero. The idea is for an implementation using EXT_shader_pixel_local_storage to make that zero, disallowing color attachments entirely.\n\n    Note that MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE may be zero, in which\n    case the application cannot render to fragment shader outputs while pixel\n    local storage is active. This capability is not supported by\n    EXT_shader_pixel_local_storage.",
+      "parentUuid": "d5302706_9ad045d8",
+      "revId": "64b790ba79c5db838356a696d5e0cf143d6ef877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
