@@ -187,6 +187,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e9fc22c_7d009588",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-16T17:32:21Z",
+      "side": 1,
+      "message": "\u003e Could you re-upload the latest version you intend to commit?\n\ndone\n\n\u003e why can\u0027t we call destroySurfaceImpl  on objects we move into mInvalidContextSet  right away\n\ni assume you meant \"on objects we move into `mInvalidSurfaceSet`\"\n\n\u003e Is this because ref counters are likely going to be decreased by that time?\n\n\"likely going to be decreased by that time?\u0027 - indeed. the spec says this -\n\n `eglReleaseThread` returns the EGL to its state at thread initialization,\n  releasing all per-thread state including the error status returned by eglGetError\n\nthe hope is that by the time releasethread is called the thread has no intent of making any more calls including `eglGetError` and hence serves as a good boundary condition to check for possibly freeing resources\n\n\u003e Could you add a comment to the code clarifying the reason?\n\nwill do\n\n\u003e could you add this comment to the code ... so that it\u0027s more clear why this is being done?\n\nwill do",
+      "parentUuid": "6938aa40_675c4aa7",
+      "range": {
+        "startLine": 1151,
+        "startChar": 7,
+        "endLine": 1151,
+        "endChar": 43
+      },
+      "revId": "d105b7647c0e7795b62e4f4dc4e945da7b93e08a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95e0935d_cd537b93",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 12
