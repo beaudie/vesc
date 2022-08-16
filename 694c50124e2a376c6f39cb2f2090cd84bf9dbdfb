@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b56e33e1_b6877f5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1419957
+      },
+      "writtenOn": "2022-08-16T17:55:24Z",
+      "side": 1,
+      "message": "https://chromium.googlesource.com/angle/angle",
+      "revId": "694c50124e2a376c6f39cb2f2090cd84bf9dbdfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79e6e476_dcc04a9d",
+        "filename": "src/libANGLE/capture/capture_gles_3_2_params.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1419957
+      },
+      "writtenOn": "2022-08-16T17:55:24Z",
+      "side": 1,
+      "message": "70d7700fc1c3446b71f34a86fc01fc8222807295",
+      "revId": "694c50124e2a376c6f39cb2f2090cd84bf9dbdfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
