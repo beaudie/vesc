@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd61e85_6abb509d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-17T21:35:04Z",
+      "side": 1,
+      "message": "Sorry for lack of tests on this one. We would need to be able to mock a GL driver with a limited feature set. Good news is that now the dirty bit check is based on the frontend version which we do have coverage for.",
+      "revId": "f12763ac0958b0b9db7d71dcf6f4adfd22842530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
