@@ -50,8 +50,6 @@ class OffscreenSurfaceVk : public SurfaceVk
     egl::Error initialize(const egl::Display *display) override;
     void destroy(const egl::Display *display) override;
 
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
                              EGLint x,
@@ -87,6 +85,9 @@ class OffscreenSurfaceVk : public SurfaceVk
                            EGLint *bufferPitchOut) override;
     egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
     EGLint origin() const override;
+
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
   protected:
     struct AttachmentImage final : angle::NonCopyable
@@ -207,8 +208,6 @@ class WindowSurfaceVk : public SurfaceVk
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &state) override;
     egl::Error prepareSwap(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context,
@@ -296,6 +295,9 @@ class WindowSurfaceVk : public SurfaceVk
                            EGLint *bufferPitchOut) override;
     egl::Error unlockSurface(const egl::Display *display, bool preservePixels) override;
     EGLint origin() const override;
+
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
     angle::Result onSharedPresentContextFlush(const gl::Context *context);
 
