@@ -236,8 +236,8 @@ bool IsRenderPassStartedAndTransitionsImageLayout(
     return renderPassCommands.started() && renderPassCommands.isImageWithLayoutTransition(image);
 }
 
-SurfaceRotation DetermineSurfaceRotation(gl::Framebuffer *framebuffer,
-                                         WindowSurfaceVk *windowSurface)
+SurfaceRotation DetermineSurfaceRotation(const gl::Framebuffer *framebuffer,
+                                         const WindowSurfaceVk *windowSurface)
 {
     if (windowSurface && framebuffer->isDefault())
     {
@@ -4212,6 +4212,18 @@ SurfaceRotation ContextVk::getRotationReadFramebuffer() const
     return mCurrentRotationReadFramebuffer;
 }
 
+SurfaceRotation ContextVk::getSurfaceRotationImpl(const gl::Framebuffer *framebuffer,
+                                                  const egl::Surface *surface)
+{
+    SurfaceRotation surfaceRotation = SurfaceRotation::Identity;
+    if (surface && surface->getType() == EGL_WINDOW_BIT)
+    {
+        const WindowSurfaceVk *windowSurface = GetImplAs<WindowSurfaceVk>(surface);
+        surfaceRotation                      = DetermineSurfaceRotation(framebuffer, windowSurface);
+    }
+    return surfaceRotation;
+}
+
 void ContextVk::updateColorMasks()
 {
     const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
@@ -4936,7 +4948,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING:
                 updateFlipViewportReadFramebuffer(context->getState());
-                updateSurfaceRotationReadFramebuffer(glState);
+                updateSurfaceRotationReadFramebuffer(glState, context->getCurrentReadSurface());
                 break;
             case gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
@@ -4957,7 +4969,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
 
                 drawFramebufferVk->setReadOnlyDepthFeedbackLoopMode(false);
                 updateFlipViewportDrawFramebuffer(glState);
-                updateSurfaceRotationDrawFramebuffer(glState);
+                updateSurfaceRotationDrawFramebuffer(glState, context->getCurrentDrawSurface());
                 SpecConstUsageBits usageBits = getCurrentProgramSpecConstUsageBits();
                 updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
                 updateViewport(drawFramebufferVk, glState.getViewport(), glState.getNearPlane(),
@@ -5182,7 +5194,8 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     mRenderer->reloadVolkIfNeeded();
 
     // Flip viewports if the user did not request that the surface is flipped.
-    egl::Surface *drawSurface = context->getCurrentDrawSurface();
+    const egl::Surface *drawSurface = context->getCurrentDrawSurface();
+    const egl::Surface *readSurface = context->getCurrentReadSurface();
     mFlipYForCurrentSurface =
         drawSurface != nullptr &&
         !IsMaskFlagSet(drawSurface->getOrientation(), EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE);
@@ -5199,8 +5212,8 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     const gl::State &glState = context->getState();
     updateFlipViewportDrawFramebuffer(glState);
     updateFlipViewportReadFramebuffer(glState);
-    updateSurfaceRotationDrawFramebuffer(glState);
-    updateSurfaceRotationReadFramebuffer(glState);
+    updateSurfaceRotationDrawFramebuffer(glState, drawSurface);
+    updateSurfaceRotationReadFramebuffer(glState, readSurface);
 
     invalidateDriverUniforms();
     if (!getFeatures().preferDriverUniformOverSpecConst.enabled)
@@ -5285,18 +5298,18 @@ void ContextVk::updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageB
     }
 }
 
-void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState)
+void ContextVk::updateSurfaceRotationDrawFramebuffer(const gl::State &glState,
+                                                     const egl::Surface *currentDrawSurface)
 {
-    gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mCurrentRotationDrawFramebuffer =
-        DetermineSurfaceRotation(drawFramebuffer, mCurrentWindowSurface);
+        getSurfaceRotationImpl(glState.getDrawFramebuffer(), currentDrawSurface);
 }
 
-void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState)
+void ContextVk::updateSurfaceRotationReadFramebuffer(const gl::State &glState,
+                                                     const egl::Surface *currentReadSurface)
 {
-    gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mCurrentRotationReadFramebuffer =
-        DetermineSurfaceRotation(readFramebuffer, mCurrentWindowSurface);
+        getSurfaceRotationImpl(glState.getReadFramebuffer(), currentReadSurface);
 }
 
 gl::Caps ContextVk::getNativeCaps() const
