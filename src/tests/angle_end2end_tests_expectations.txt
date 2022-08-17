@@ -708,6 +708,13 @@
 
 7546 LINUX VULKAN : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/* = SKIP
 
+// Blits with pre-rotated surfaces have issues
+7581 ANDROID GLES : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP
+7581 MAC OPENGL : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP
+7581 MAC METAL : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP
+7581 WIN GLES : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP
+7581 WIN OPENGL : FramebufferTest_ES3.BlitWithDifferentPreRotations/* = SKIP
+
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
