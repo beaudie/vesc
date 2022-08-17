@@ -190,7 +190,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::bindTexImage(const gl::Context *contex
 
     ID3D11Texture2D *colorBuffer = nullptr;
     HRESULT result               = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                                           reinterpret_cast<void **>(&colorBuffer));
+                                                         reinterpret_cast<void **>(&colorBuffer));
     if (FAILED(result))
     {
         return egl::EglBadAlloc() << "Failed to query texture from swap chain, "
@@ -296,7 +296,7 @@ FramebufferImpl *DXGISwapChainWindowSurfaceWGL::createDefaultFramebuffer(
         }
     }
 
-    return new FramebufferGL(data, framebufferID, true, false);
+    return new FramebufferGL(data, framebufferID, false);
 }
 
 HDC DXGISwapChainWindowSurfaceWGL::getDC() const
@@ -424,7 +424,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
 
     IDXGIFactory2 *dxgiFactory2 = nullptr;
     HRESULT result              = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2),
-                                                 reinterpret_cast<void **>(&dxgiFactory2));
+                                                              reinterpret_cast<void **>(&dxgiFactory2));
     if (SUCCEEDED(result))
     {
         ASSERT(dxgiFactory2 != nullptr);
@@ -490,7 +490,7 @@ egl::Error DXGISwapChainWindowSurfaceWGL::createSwapChain()
 
     ID3D11Texture2D *colorBuffer = nullptr;
     result                       = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
-                                   reinterpret_cast<void **>(&colorBuffer));
+                                                         reinterpret_cast<void **>(&colorBuffer));
     if (FAILED(result))
     {
         return egl::EglBadAlloc() << "Failed to query texture from swap chain, "

@@ -141,12 +141,6 @@ egl::Error SurfaceD3D::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *SurfaceD3D::createDefaultFramebuffer(const gl::Context *context,
-                                                      const gl::FramebufferState &data)
-{
-    return mRenderer->createDefaultFramebuffer(data);
-}
-
 egl::Error SurfaceD3D::bindTexImage(const gl::Context *, gl::Texture *, EGLint)
 {
     return egl::NoError();

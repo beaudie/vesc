@@ -23,7 +23,7 @@ class StateManagerGL;
 class FramebufferGL : public FramebufferImpl
 {
   public:
-    FramebufferGL(const gl::FramebufferState &data, GLuint id, bool isDefault, bool emulatedAlpha);
+    FramebufferGL(const gl::FramebufferState &data, GLuint id, bool emulatedAlpha);
     ~FramebufferGL() override;
 
     void destroy(const gl::Context *context) override;
@@ -134,10 +134,7 @@ class FramebufferGL : public FramebufferImpl
                                 gl::Rectangle *newDestArea);
 
     GLuint mFramebufferID;
-    bool mIsDefault;
-
     bool mHasEmulatedAlphaAttachment;
-
     gl::DrawBufferMask mAppliedEnabledDrawBuffers;
 };
 }  // namespace rx
