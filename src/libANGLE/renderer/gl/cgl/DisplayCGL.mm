@@ -36,7 +36,7 @@ const char *kDefaultOpenGLDylibName =
     "/System/Library/Frameworks/OpenGL.framework/Libraries/libGL.dylib";
 const char *kFallbackOpenGLDylibName = "GL";
 
-}
+}  // namespace
 
 namespace rx
 {
@@ -356,7 +356,7 @@ SurfaceImpl *DisplayCGL::createPbufferFromClientBuffer(const egl::SurfaceState &
 {
     ASSERT(buftype == EGL_IOSURFACE_ANGLE);
 
-    return new IOSurfaceSurfaceCGL(state, mContext, clientBuffer, attribs);
+    return new IOSurfaceSurfaceCGL(state, getRenderer(), mContext, clientBuffer, attribs);
 }
 
 SurfaceImpl *DisplayCGL::createPixmapSurface(const egl::SurfaceState &state,
