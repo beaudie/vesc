@@ -46,6 +46,30 @@
       },
       "revId": "8787cbdfd33493f2f835dce2b56471567cb76ad4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e83fc125_21d9853a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-17T16:21:08Z",
+      "side": 1,
+      "message": "You can have a config file for \"analyze\" step, e.g. https://source.chromium.org/chromium/chromium/src/+/main:testing/buildbot/trybot_analyze_config.json\nHowever, if you add an exclusion there, it will trigger all test suites on changes to this file, so it\u0027s not ideal. Also, I am not sure how to configure it for \"angle\" recipe.",
+      "parentUuid": "167b9643_9287fd8d",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "8787cbdfd33493f2f835dce2b56471567cb76ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
