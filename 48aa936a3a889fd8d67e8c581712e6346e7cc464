@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77cbb09d_afe6afc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T18:01:22Z",
+      "side": 1,
+      "message": "FYI win-angle-chromium-x64-try (and maybe others later) breakage is probably a side effect of some infra changes https://crrev.com/c/3835164 I\u0027ll need to take care of",
+      "revId": "48aa936a3a889fd8d67e8c581712e6346e7cc464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9fb758e_bdaf8b11",
