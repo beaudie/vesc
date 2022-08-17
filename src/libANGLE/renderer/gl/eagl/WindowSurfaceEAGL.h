@@ -91,8 +91,8 @@ class WindowSurfaceEAGL : public SurfaceGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &state) override;
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
   private:
     SwapLayerEAGL *mSwapLayer;
@@ -105,6 +105,7 @@ class WindowSurfaceEAGL : public SurfaceGL
     StateManagerGL *mStateManager;
 
     GLuint mDSRenderbuffer;
+    GLuint mFramebufferID;
 };
 
 }  // namespace rx

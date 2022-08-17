@@ -52,6 +52,8 @@ class PbufferSurfaceEAGL : public SurfaceGL
 
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
   private:
     unsigned mWidth;
@@ -64,6 +66,7 @@ class PbufferSurfaceEAGL : public SurfaceGL
 
     GLuint mColorRenderbuffer;
     GLuint mDSRenderbuffer;
+    GLuint mFramebufferID;
 };
 
 }  // namespace rx

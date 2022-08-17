@@ -141,15 +141,6 @@ egl::Error SurfaceMtl::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *SurfaceMtl::createDefaultFramebuffer(const gl::Context *context,
-                                                      const gl::FramebufferState &state)
-{
-    ContextMtl *contextMtl = mtl::GetImpl(context);
-    auto fbo = new FramebufferMtl(state, contextMtl, /* flipY */ false, /* backbuffer */ nullptr);
-
-    return fbo;
-}
-
 egl::Error SurfaceMtl::makeCurrent(const gl::Context *context)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
@@ -340,6 +331,10 @@ angle::Result SurfaceMtl::getAttachmentRenderTarget(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+void SurfaceMtl::attachToFramebuffer(FramebufferImpl *framebuffer) {}
+
+void SurfaceMtl::detachFromFramebuffer(FramebufferImpl *framebuffer) {}
+
 angle::Result SurfaceMtl::ensureCompanionTexturesSizeCorrect(const gl::Context *context,
                                                              const gl::Extents &size)
 {
@@ -487,15 +482,6 @@ egl::Error WindowSurfaceMtl::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *WindowSurfaceMtl::createDefaultFramebuffer(const gl::Context *context,
-                                                            const gl::FramebufferState &state)
-{
-    ContextMtl *contextMtl = mtl::GetImpl(context);
-    auto fbo = new FramebufferMtl(state, contextMtl, /* flipY */ true, /* backbuffer */ this);
-
-    return fbo;
-}
-
 egl::Error WindowSurfaceMtl::swap(const gl::Context *context)
 {
     ANGLE_TO_EGL_TRY(swapImpl(context));
@@ -544,6 +530,20 @@ angle::Result WindowSurfaceMtl::getAttachmentRenderTarget(const gl::Context *con
     ANGLE_TRY(ensureCompanionTexturesSizeCorrect(context));
 
     return SurfaceMtl::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
+}
+
+void WindowSurfaceMtl::attachToFramebuffer(FramebufferImpl *framebuffer)
+{
+    FramebufferMtl *framebufferMtl = static_cast<FramebufferMtl *>(framebuffer);
+    ASSERT(!framebufferMtl->getBackbuffer());
+    framebufferMtl->setBackbuffer(this);
+}
+
+void WindowSurfaceMtl::detachFromFramebuffer(FramebufferImpl *framebuffer)
+{
+    FramebufferMtl *framebufferMtl = static_cast<FramebufferMtl *>(framebuffer);
+    ASSERT(framebufferMtl->getBackbuffer() == this);
+    framebufferMtl->setBackbuffer(nullptr);
 }
 
 angle::Result WindowSurfaceMtl::ensureCurrentDrawableObtained(const gl::Context *context)
