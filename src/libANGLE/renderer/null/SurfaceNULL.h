@@ -22,8 +22,6 @@ class SurfaceNULL : public SurfaceImpl
     ~SurfaceNULL() override;
 
     egl::Error initialize(const egl::Display *display) override;
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
                              EGLint x,
@@ -49,6 +47,9 @@ class SurfaceNULL : public SurfaceImpl
     angle::Result initializeContents(const gl::Context *context,
                                      GLenum binding,
                                      const gl::ImageIndex &imageIndex) override;
+
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 };
 
 }  // namespace rx
