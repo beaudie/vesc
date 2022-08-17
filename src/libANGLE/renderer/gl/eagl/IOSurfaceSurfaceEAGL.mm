@@ -72,12 +72,17 @@ int FindIOSurfaceFormatIndex(GLenum internalFormat, GLenum type)
 }  // anonymous namespace
 
 IOSurfaceSurfaceEAGL::IOSurfaceSurfaceEAGL(const egl::SurfaceState &state,
+                                           RendererGL *renderer,
                                            EAGLContextObj cglContext,
                                            EGLClientBuffer buffer,
                                            const egl::AttributeMap &attribs)
     : SurfaceGL(state),
+      mFunctions(renderer->getFunctions()),
+      mStateManager(renderer->getStateManager()),
       mEAGLContext(cglContext),
       mIOSurface(nullptr),
+      mFramebufferID(0),
+      mTextureId(0),
       mWidth(0),
       mHeight(0),
       mPlane(0),
@@ -123,6 +128,13 @@ IOSurfaceSurfaceEAGL::IOSurfaceSurfaceEAGL(const egl::SurfaceState &state,
 
 IOSurfaceSurfaceEAGL::~IOSurfaceSurfaceEAGL()
 {
+    if (!mFramebufferID)
+    {
+        mStateManager->deleteFramebuffer(mFramebufferID);
+        mFramebufferID = 0;
+        mStateManager->deleteTexture(mTextureID);
+        mTextureID = 0;
+    }
     if (mIOSurface != nullptr)
     {
         CFRelease(mIOSurface);
@@ -350,51 +362,6 @@ class IOSurfaceFramebuffer : public FramebufferGL
     GLuint mTextureId;
 };
 
-FramebufferImpl *IOSurfaceSurfaceEAGL::createDefaultFramebuffer(const gl::Context *context,
-                                                                const gl::FramebufferState &state)
-{
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
-
-    GLuint texture = 0;
-    functions->genTextures(1, &texture);
-    stateManager->bindTexture(gl::TextureType::_2D, texture);
-
-#    if !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
-    const auto &format = kIOSurfaceFormats[mFormatIndex];
-
-    if (![mEAGLContext texImageIOSurface:mIOSurface
-                                  target:GL_TEXTURE_2D
-                          internalFormat:format.nativeInternalFormat
-                                   width:mWidth
-                                  height:mHeight
-                                  format:format.nativeFormat
-                                    type:format.nativeType
-                                   plane:mPlane])
-    {
-        ERR() << "[EAGLContext texImageIOSurface] failed";
-        return nullptr;
-    }
-#    else   // !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
-    ERR() << "IOSurfaces with OpenGL ES not supported on iOS Simulator";
-#    endif  // !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
-
-    if (IsError(initializeAlphaChannel(context, texture)))
-    {
-        ERR() << "Failed to initialize IOSurface alpha channel.";
-        return nullptr;
-    }
-
-    GLuint framebuffer = 0;
-    functions->genFramebuffers(1, &framebuffer);
-    stateManager->bindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    stateManager->bindTexture(gl::TextureType::_2D, texture);
-    functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture,
-                                    0);
-
-    return new IOSurfaceFramebuffer(state, framebuffer, texture, true, hasEmulatedAlphaChannel());
-}
-
 angle::Result IOSurfaceSurfaceEAGL::initializeAlphaChannel(const gl::Context *context,
                                                            GLuint texture)
 {
@@ -414,6 +381,64 @@ bool IOSurfaceSurfaceEAGL::hasEmulatedAlphaChannel() const
 {
     const auto &format = kIOSurfaceFormats[mFormatIndex];
     return format.internalFormat == GL_RGB;
+}
+
+egl::Error IOSurfaceSurfaceEAGL::attachToFramebuffer(const gl::Context *context,
+                                                     FramebufferImpl *framebuffer)
+{
+    FramebufferGL *framebufferGL = static_cast<framebufferGL>(framebuffer);
+    ASSERT(framebufferGL->getFramebufferID() == 0);
+    if (mFramebufferID == 0)
+    {
+        GLuint textureID = 0;
+        mFunctions->genTextures(1, &textureID);
+        mStateManager->bindTexture(gl::TextureType::_2D, textureID);
+
+#    if !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
+        const auto &format = kIOSurfaceFormats[mFormatIndex];
+
+        if (![mEAGLContext texImageIOSurface:mIOSurface
+                                      target:GL_TEXTURE_2D
+                              internalFormat:format.nativeInternalFormat
+                                       width:mWidth
+                                      height:mHeight
+                                      format:format.nativeFormat
+                                        type:format.nativeType
+                                       plane:mPlane])
+        {
+            return egl::EglContextLost() << "[EAGLContext texImageIOSurface] failed";
+        }
+#    else   // !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
+        ERR() << "IOSurfaces with OpenGL ES not supported on iOS Simulator";
+#    endif  // !defined(ANGLE_PLATFORM_IOS_SIMULATOR)
+
+        if (IsError(initializeAlphaChannel(context, textureID)))
+        {
+            return egl::EglContextLost() << "Failed to initialize IOSurface alpha channel.";
+        }
+
+        GLuint framebufferID = 0;
+        mFunctions->genFramebuffers(1, &framebufferID);
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+        mStateManager->bindTexture(gl::TextureType::_2D, textureID);
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                         textureID, 0);
+        mFramebufferID = framebufferID;
+        mTextureID     = textureID;
+    }
+    framebufferGL->setFramebufferID(mFramebufferID);
+    // TODO set hasEmulatedAlphaChannel() to framebufferGL;
+
+    return egl::NoError();
+}
+
+egl::Error IOSurfaceSurfaceEAGL::detachFromFramebuffer(const gl::Context *context,
+                                                       FramebufferImpl *framebuffer)
+{
+    FramebufferGL *framebufferGL = static_cast<framebufferGL>(framebuffer);
+    ASSERT(framebufferGL->getFramebufferID() == mFramebufferID);
+    framebufferGL->setFramebufferID(0);
+    return egl::NoError();
 }
 
 #    if defined(ANGLE_PLATFORM_IOS_SIMULATOR)

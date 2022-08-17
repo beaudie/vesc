@@ -28,10 +28,15 @@ egl::Error SurfaceGbm::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *SurfaceGbm::createDefaultFramebuffer(const gl::Context *context,
-                                                      const gl::FramebufferState &state)
+egl::Error SurfaceGbm::attachToFramebuffer(const gl::Context *context, FramebufferImpl *framebuffer)
 {
-    return mBuffer->framebufferGL(context, state);
+    return mBuffer->attachToFramebuffer(context, static_cast<FramebufferGL *>(framebuffer));
+}
+
+egl::Error SurfaceGbm::detachFromFramebuffer(const gl::Context *context,
+                                             FramebufferImpl *framebuffer)
+{
+    return mBuffer->detachFromFramebuffer(context, static_cast<FramebufferGL *>(framebuffer));
 }
 
 egl::Error SurfaceGbm::makeCurrent(const gl::Context *context)
@@ -96,5 +101,16 @@ EGLint SurfaceGbm::isPostSubBufferSupported() const
 EGLint SurfaceGbm::getSwapBehavior() const
 {
     return EGL_BUFFER_PRESERVED;
+}
+
+egl::Error SurfaceGbm::attachToFramebuffer(const gl::Context *context, FramebufferImpl *framebuffer)
+{
+    return mBuffer->attachToFramebuffer();
+}
+
+egl::Error SurfaceGbm::detachFromFramebuffer(const gl::Context *context,
+                                             FramebufferImpl *framebuffer)
+{
+    return mBuffer->detachFromFramebuffer();
 }
 }  // namespace rx
