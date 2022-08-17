@@ -129,6 +129,30 @@
       },
       "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c819173_e66864b4",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-17T03:46:18Z",
+      "side": 1,
+      "message": "No, `n` wouldn\u0027t become unused. In no-assert builds, the condition is specified in something like `true ? 0 : (condition)` so it\u0027s never run, but the compiler sees the expression nevertheless.",
+      "parentUuid": "6d4faa79_81075667",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 96
+      },
+      "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
