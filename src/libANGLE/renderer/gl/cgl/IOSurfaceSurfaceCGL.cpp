@@ -273,7 +273,7 @@ class IOSurfaceFramebuffer : public FramebufferGL
                          GLuint textureId,
                          bool isDefault,
                          bool emulatedAlpha)
-        : FramebufferGL(data, id, isDefault, emulatedAlpha), mTextureId(textureId)
+        : FramebufferGL(data, id, emulatedAlpha), mTextureId(textureId)
     {}
     void destroy(const gl::Context *context) override
     {
