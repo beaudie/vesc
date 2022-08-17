@@ -22,6 +22,30 @@
       },
       "revId": "8787cbdfd33493f2f835dce2b56471567cb76ad4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "167b9643_9287fd8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T16:00:13Z",
+      "side": 1,
+      "message": "Good suggestion, updated, but what I actually meant by that remark was that it seems odd (could be just me?) to have this as a data dependency so maybe there is some other way I\u0027m just not aware of.",
+      "parentUuid": "30c7d24b_aeb6e2e9",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "8787cbdfd33493f2f835dce2b56471567cb76ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
