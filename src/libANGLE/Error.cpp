@@ -29,11 +29,17 @@ namespace egl
 
 Error::Error(EGLint errorCode, std::string &&message)
     : mCode(errorCode), mID(errorCode), mMessage(EmplaceErrorString(std::move(message)))
-{}
+{
+    if (mCode == 1286)
+        abort();
+}
 
 Error::Error(EGLint errorCode, EGLint id, std::string &&message)
     : mCode(errorCode), mID(id), mMessage(EmplaceErrorString(std::move(message)))
-{}
+{
+    if (mCode == 1286)
+        abort();
+}
 
 void Error::createMessageString() const
 {
