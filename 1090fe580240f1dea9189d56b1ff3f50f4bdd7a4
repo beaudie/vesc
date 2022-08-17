@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06f55775_2014fd70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2022-08-17T09:59:40Z",
+      "side": 1,
+      "message": "Change is ready for review, please queue CQ tryjobs",
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
