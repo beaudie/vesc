@@ -29,20 +29,27 @@ PbufferSurfaceCGL::PbufferSurfaceCGL(const egl::SurfaceState &state,
       mHeight(height),
       mFunctions(renderer->getFunctions()),
       mStateManager(renderer->getStateManager()),
+      mFramebuffer(0),
       mColorRenderbuffer(0),
       mDSRenderbuffer(0)
 {}
 
 PbufferSurfaceCGL::~PbufferSurfaceCGL()
 {
+    if (mFramebuffer != 0)
+    {
+        mStateManager->deleteFramebuffer(mFramebuffer);
+        mFramebuffer = 0;
+    }
+
     if (mColorRenderbuffer != 0)
     {
-        mFunctions->deleteRenderbuffers(1, &mColorRenderbuffer);
+        mStateManager->deleteRenderbuffer(mColorRenderbuffer);
         mColorRenderbuffer = 0;
     }
     if (mDSRenderbuffer != 0)
     {
-        mFunctions->deleteRenderbuffers(1, &mDSRenderbuffer);
+        mStateManager->deleteRenderbuffer(mDSRenderbuffer);
         mDSRenderbuffer = 0;
     }
 }
@@ -136,7 +143,33 @@ FramebufferImpl *PbufferSurfaceCGL::createDefaultFramebuffer(const gl::Context *
     functions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                                        mDSRenderbuffer);
 
-    return new FramebufferGL(state, framebuffer, true, false);
+    return new FramebufferGL(state, framebuffer, false);
+}
+
+void PbufferSurfaceCGL::attachToFramebuffer(FramebufferImpl *framebuffer)
+{
+    FramebufferGL *framebufferGL = static_cast<FramebufferGL>(framebuffer);
+    ASSERT(framebufferGL->getFramebufferID() == 0);
+
+    if (mFramebufer == 0)
+    {
+        GLuint framebufferID = 0;
+        mFunctions->genFramebuffers(1, &framebufferID);
+        mStateManager->bindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+        mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                            mColorRenderbuffer);
+        mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
+                                            GL_RENDERBUFFER, mDSRenderbuffer);
+        mFramebuffer = framebufferID;
+    }
+    framebufferGL->setFramebufferID(mFramebuffer);
+}
+
+void PbufferSurfaceCGL::detachFromFramebuffer(FramebufferImpl *framebuffer)
+{
+    FramebufferGL *framebufferGL = static_cast<framebufferGL>(framebuffer);
+    ASSERT(framebufferGL->getFramebufferID() == mFramebuffer);
+    framebufferGL->setFramebufferID(0);
 }
 
 }  // namespace rx

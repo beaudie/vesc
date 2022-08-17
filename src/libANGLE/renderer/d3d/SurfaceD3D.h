@@ -30,8 +30,6 @@ class SurfaceD3D : public SurfaceImpl
     void releaseSwapChain();
 
     egl::Error initialize(const egl::Display *display) override;
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &state) override;
 
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
@@ -73,6 +71,9 @@ class SurfaceD3D : public SurfaceImpl
                                      const gl::ImageIndex &imageIndex) override;
 
     const angle::Format *getD3DTextureColorFormat() const override;
+
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
   protected:
     SurfaceD3D(const egl::SurfaceState &state,
