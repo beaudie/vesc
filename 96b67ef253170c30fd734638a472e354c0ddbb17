@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cb83f75_0f86abff",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4787,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-08-17T23:04:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b290797_62c31869",
+      "range": {
+        "startLine": 4787,
+        "startChar": 27,
+        "endLine": 4787,
+        "endChar": 41
+      },
+      "revId": "96b67ef253170c30fd734638a472e354c0ddbb17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab2ce594_becfc72c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-10T16:43:27Z",
       "side": 1,
       "message": "Move this up one line to preserve alphabetical order.",
+      "range": {
+        "startLine": 4794,
+        "startChar": 25,
+        "endLine": 4794,
+        "endChar": 38
+      },
+      "revId": "96b67ef253170c30fd734638a472e354c0ddbb17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7494def6_3a4c4fba",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4794,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-08-17T23:04:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab2ce594_becfc72c",
       "range": {
         "startLine": 4794,
         "startChar": 25,
