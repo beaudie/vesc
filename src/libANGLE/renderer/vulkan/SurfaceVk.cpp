@@ -571,15 +571,6 @@ void OffscreenSurfaceVk::destroy(const egl::Display *display)
     SurfaceVk::destroy(display);
 }
 
-FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
-                                                              const gl::FramebufferState &state)
-{
-    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
-
-    // Use a user FBO for an offscreen RT.
-    return FramebufferVk::CreateUserFBO(renderer, state);
-}
-
 egl::Error OffscreenSurfaceVk::swap(const gl::Context *context)
 {
     return egl::NoError();
@@ -713,6 +704,10 @@ EGLint OffscreenSurfaceVk::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
 }
+
+void OffscreenSurfaceVk::attachToFramebuffer(FramebufferImpl *framebuffer) {}
+
+void OffscreenSurfaceVk::detachFromFramebuffer(FramebufferImpl *framebuffer) {}
 
 namespace impl
 {
@@ -1642,13 +1637,6 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     }
 
     mSwapchainImages.clear();
-}
-
-FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
-                                                           const gl::FramebufferState &state)
-{
-    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
-    return FramebufferVk::CreateDefaultFBO(renderer, state, this);
 }
 
 egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
@@ -2630,6 +2618,18 @@ egl::Error WindowSurfaceVk::unlockSurface(const egl::Display *display, bool pres
 EGLint WindowSurfaceVk::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
+}
+
+void WindowSurfaceVk::attachToFramebuffer(FramebufferImpl *framebuffer) {
+    FramebufferVk* framebufferVk = static_cast<FramebufferVk*>(framebuffer);
+    ASSERT(!framebufferVk->getBackbuffer());
+    framebufferVk->setBackbuffer(this);
+}
+
+void WindowSurfaceVk::detachFromFramebuffer(FramebufferImpl *framebuffer) {
+    FramebufferVk* framebufferVk = static_cast<FramebufferVk*>(framebuffer);
+    ASSERT(framebufferVk->getBackbuffer() == this);
+    framebufferVk->setBackbuffer(nullptr);
 }
 
 }  // namespace rx

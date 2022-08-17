@@ -313,7 +313,7 @@ GLuint DisplayGbm::Buffer::createGLFB(const gl::Context *context)
 FramebufferGL *DisplayGbm::Buffer::framebufferGL(const gl::Context *context,
                                                  const gl::FramebufferState &state)
 {
-    return new FramebufferGL(state, createGLFB(context), true, false);
+    return new FramebufferGL(state, createGLFB(context), false);
 }
 
 void DisplayGbm::Buffer::present(const gl::Context *context)

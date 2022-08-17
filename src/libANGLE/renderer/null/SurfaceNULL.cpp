@@ -25,12 +25,6 @@ egl::Error SurfaceNULL::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
-FramebufferImpl *SurfaceNULL::createDefaultFramebuffer(const gl::Context *context,
-                                                       const gl::FramebufferState &state)
-{
-    return new FramebufferNULL(state);
-}
-
 egl::Error SurfaceNULL::swap(const gl::Context *context)
 {
     return egl::NoError();
@@ -105,5 +99,9 @@ angle::Result SurfaceNULL::initializeContents(const gl::Context *context,
 {
     return angle::Result::Continue;
 }
+
+void SurfaceNULL::attachToFramebuffer(FramebufferImpl *framebuffer) {}
+
+void SurfaceNULL::detachFromFramebuffer(FramebufferImpl *framebuffer) {}
 
 }  // namespace rx
