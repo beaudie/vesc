@@ -99,6 +99,24 @@
       "parentUuid": "f752bef0_6901b7d1",
       "revId": "6410febc44a2c36c9bbfc820cd6cf89f3a87dfac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcbd6aa2_df3ddd33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T14:15:49Z",
+      "side": 1,
+      "message": "+cc @Ben, lmk if there is interest in upstreaming this. I previously sent https://crrev.com/c/3831058 your way but that was incomplete.\n\nFWIW I think test_env is currently not doing the right thing as it\u0027s 1) likely swallowing signals outside of subprocess execution as handlers are not restored and 2) doesn\u0027t interrupt execution of the main process when non-zero exit codes from the subprocess are tolerated (if this is ever a case in test_env uses.. but given https://crbug.com/1346781 I wouldn\u0027t be surprised). So I think test_env.forward_signals doesn\u0027t actually obey \"the dance\" [1] in certain scenarios.\n\n[1] https://crsrc.org/c/testing/test_env.py;drc\u003d3fade1f647d4dc195095434b4f28ed173ee61f2b;l\u003d281",
+      "parentUuid": "8c114336_d77c956c",
+      "revId": "6410febc44a2c36c9bbfc820cd6cf89f3a87dfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
