@@ -177,6 +177,30 @@
       },
       "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8681bccc_0596d806",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T14:48:56Z",
+      "side": 1,
+      "message": "Re: assert implementation, see the comment here for some MSVC shenanigans:\nhttps://crsrc.org/c/third_party/angle/src/common/debug.h;drc\u003d919763526922918b32f50637c597f78956657f13;l\u003d325-344\nhopefully this should become a no-op in optimized builds without causing unused variable issues but if does cause troubles maybe just `#ifdef ANGLE_ENABLE_ASSERTS` it out with a comment for now and I\u0027ll have a look later.",
+      "parentUuid": "67e0858c_0492b88a",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 96
+      },
+      "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
