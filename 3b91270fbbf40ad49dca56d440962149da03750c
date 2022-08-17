@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a7d5492_76ba6e7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T17:59:10Z",
+      "side": 1,
+      "message": "uh, I think this broke things post submit, because tests on this CL were actually no-op :S\n\nSaw this on an unrelated presubmit:\n\nE2022-08-17T10:53:38.920058-07:00 7632 0 client.go:1829] [unzip 41/73] Failed to install infra/python/wheels/opencv_python/windows-amd64_cp38_cp38: read C:\\b\\s\\cipd_cache\\cache\\instances\\XklS5LNo2zR8eeG_mL-76EwBS9vtL23qm7pjx3m9G78C: Data error (cyclic redundancy check).\n[E2022-08-17T10:53:43.132573-07:00 7632 0 annotate.go:273] original error: failed to update the deployment\n\ngoroutine 1:\n#0 go.chromium.org/luci/cipd/client/cipd/client.go:148 - cipd.init()\n#1 runtime/proc.go:6498 - runtime.doInit()\n#2 runtime/proc.go:6475 - runtime.doInit()\n#3 runtime/proc.go:6475 - runtime.doInit()\n#4 runtime/proc.go:6475 - runtime.doInit()\n#5 runtime/proc.go:238 - runtime.main()\n  annotation #0:\n    reason: failed to create new VirtualEnv\n  annotation #1:\n    reason: failed to download packages\n  annotation #2:\n    reason: failed to download packages\n  annotation #3:\n    reason: failed to install CIPD packages\n",
+      "revId": "3b91270fbbf40ad49dca56d440962149da03750c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
