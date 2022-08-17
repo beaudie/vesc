@@ -576,15 +576,6 @@ void OffscreenSurfaceVk::destroy(const egl::Display *display)
     SurfaceVk::destroy(display);
 }
 
-FramebufferImpl *OffscreenSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
-                                                              const gl::FramebufferState &state)
-{
-    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
-
-    // Use a user FBO for an offscreen RT.
-    return FramebufferVk::CreateUserFBO(renderer, state);
-}
-
 egl::Error OffscreenSurfaceVk::swap(const gl::Context *context)
 {
     return egl::NoError();
@@ -717,6 +708,18 @@ egl::Error OffscreenSurfaceVk::unlockSurface(const egl::Display *display, bool p
 EGLint OffscreenSurfaceVk::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
+}
+
+egl::Error OffscreenSurfaceVk::attachToFramebuffer(const gl::Context *context,
+                                                   FramebufferImpl *framebuffer)
+{
+    return egl::NoError();
+}
+
+egl::Error OffscreenSurfaceVk::detachFromFramebuffer(const gl::Context *context,
+                                                     FramebufferImpl *framebuffer)
+{
+    return egl::NoError();
 }
 
 namespace impl
@@ -1646,13 +1649,6 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     }
 
     mSwapchainImages.clear();
-}
-
-FramebufferImpl *WindowSurfaceVk::createDefaultFramebuffer(const gl::Context *context,
-                                                           const gl::FramebufferState &state)
-{
-    RendererVk *renderer = vk::GetImpl(context)->getRenderer();
-    return FramebufferVk::CreateDefaultFBO(renderer, state, this);
 }
 
 egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
@@ -2634,6 +2630,24 @@ egl::Error WindowSurfaceVk::unlockSurface(const egl::Display *display, bool pres
 EGLint WindowSurfaceVk::origin() const
 {
     return EGL_UPPER_LEFT_KHR;
+}
+
+egl::Error WindowSurfaceVk::attachToFramebuffer(const gl::Context *context,
+                                                FramebufferImpl *framebuffer)
+{
+    FramebufferVk *framebufferVk = static_cast<FramebufferVk *>(framebuffer);
+    ASSERT(!framebufferVk->getBackbuffer());
+    framebufferVk->setBackbuffer(this);
+    return egl::NoError();
+}
+
+egl::Error WindowSurfaceVk::detachFromFramebuffer(const gl::Context *context,
+                                                  FramebufferImpl *framebuffer)
+{
+    FramebufferVk *framebufferVk = static_cast<FramebufferVk *>(framebuffer);
+    ASSERT(framebufferVk->getBackbuffer() == this);
+    framebufferVk->setBackbuffer(nullptr);
+    return egl::NoError();
 }
 
 }  // namespace rx
