@@ -64,12 +64,11 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
-                                              const gl::FramebufferState &data) override;
-
     HDC getDC() const override;
-
     const angle::Format *getD3DTextureColorFormat() const override;
+
+    void attachToFramebuffer(FramebufferImpl *framebuffer) override;
+    void detachFromFramebuffer(FramebufferImpl *framebuffer) override;
 
   private:
     EGLenum mBuftype;
@@ -96,6 +95,7 @@ class D3DTextureSurfaceWGL : public SurfaceWGL
     HANDLE mBoundObjectTextureHandle;
     HANDLE mBoundObjectRenderbufferHandle;
 
+    GLuint mFramebufferID;
     GLuint mColorRenderbufferID;
     GLuint mDepthStencilRenderbufferID;
 };

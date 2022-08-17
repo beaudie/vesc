@@ -789,6 +789,18 @@ bool FramebufferState::isBoundAsDrawFramebuffer(const Context *context) const
 
 const FramebufferID Framebuffer::kDefaultDrawFramebufferHandle = {0};
 
+Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
+    : mState(context->getShareGroup()->generateFramebufferSerial()),
+      mImpl(factory->createFramebuffer(mState)),
+      mCachedStatus(FramebufferStatus::Incomplete(GL_FRAMEBUFFER_UNDEFINED_OES,
+                                                  err::kFramebufferIncompleteSurfaceless)),
+      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
+      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+{
+    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
+    SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
+}
+
 Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory, FramebufferID id)
     : mState(context->getCaps(), id, context->getShareGroup()->generateFramebufferSerial()),
       mImpl(factory->createFramebuffer(mState)),
@@ -811,22 +823,48 @@ Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory, Fra
     }
 }
 
-Framebuffer::Framebuffer(const Context *context, egl::Surface *surface, egl::Surface *readSurface)
-    : mState(context->getShareGroup()->generateFramebufferSerial()),
-      mImpl(surface->getImplementation()->createDefaultFramebuffer(context, mState)),
-      mCachedStatus(FramebufferStatus::Complete()),
-      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+Framebuffer::~Framebuffer()
 {
-    ASSERT(mImpl != nullptr);
+    SafeDelete(mImpl);
+}
 
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
+void Framebuffer::onDestroy(const Context *context)
+{
+    if (isDefault())
+    {
+        unsetSurfaces(context);
+    }
+
+    for (auto &attachment : mState.mColorAttachments)
+    {
+        attachment.detach(context, mState.mFramebufferSerial);
+    }
+    mState.mDepthAttachment.detach(context, mState.mFramebufferSerial);
+    mState.mStencilAttachment.detach(context, mState.mFramebufferSerial);
+    mState.mWebGLDepthAttachment.detach(context, mState.mFramebufferSerial);
+    mState.mWebGLStencilAttachment.detach(context, mState.mFramebufferSerial);
+    mState.mWebGLDepthStencilAttachment.detach(context, mState.mFramebufferSerial);
+
+    mImpl->destroy(context);
+}
+
+void Framebuffer::setSurfaces(const Context *context,
+                              egl::Surface *surface,
+                              egl::Surface *readSurface)
+{
+    // This has to be a default framebuffer.
+    ASSERT(isDefault());
+    ASSERT(mDirtyColorAttachmentBindings.size() == 1);
+    ASSERT(mDirtyColorAttachmentBindings[0].getSubjectIndex() == DIRTY_BIT_COLOR_ATTACHMENT_0);
+
+    ASSERT(!mState.mColorAttachments[0].isAttached());
+    ASSERT(!mState.mDepthAttachment.isAttached());
+    ASSERT(!mState.mStencilAttachment.isAttached());
+
     setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), surface,
                       FramebufferAttachment::kDefaultNumViews,
                       FramebufferAttachment::kDefaultBaseViewIndex, false,
                       FramebufferAttachment::kDefaultRenderToTextureSamples);
-
-    setReadSurface(context, readSurface);
 
     if (surface->getConfig()->depthSize > 0)
     {
@@ -843,58 +881,27 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface, egl::Sur
                           FramebufferAttachment::kDefaultBaseViewIndex, false,
                           FramebufferAttachment::kDefaultRenderToTextureSamples);
     }
-    SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
 
     mState.mSurfaceTextureOffset = surface->getTextureOffset();
 
     // Ensure the backend has a chance to synchronize its content for a new backbuffer.
     mDirtyBits.set(DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
-}
-
-Framebuffer::Framebuffer(const Context *context,
-                         rx::GLImplFactory *factory,
-                         egl::Surface *readSurface)
-    : mState(context->getShareGroup()->generateFramebufferSerial()),
-      mImpl(factory->createFramebuffer(mState)),
-      mCachedStatus(FramebufferStatus::Incomplete(GL_FRAMEBUFFER_UNDEFINED_OES,
-                                                  err::kFramebufferIncompleteSurfaceless)),
-      mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
-{
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
-    SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
 
     setReadSurface(context, readSurface);
-}
 
-Framebuffer::~Framebuffer()
-{
-    SafeDelete(mImpl);
-}
-
-void Framebuffer::onDestroy(const Context *context)
-{
-    if (isDefault())
-    {
-        mState.mDefaultFramebufferReadAttachment.detach(context, mState.mFramebufferSerial);
-        mState.mDefaultFramebufferReadAttachmentInitialized = false;
-    }
-
-    for (auto &attachment : mState.mColorAttachments)
-    {
-        attachment.detach(context, mState.mFramebufferSerial);
-    }
-    mState.mDepthAttachment.detach(context, mState.mFramebufferSerial);
-    mState.mStencilAttachment.detach(context, mState.mFramebufferSerial);
-    mState.mWebGLDepthAttachment.detach(context, mState.mFramebufferSerial);
-    mState.mWebGLStencilAttachment.detach(context, mState.mFramebufferSerial);
-    mState.mWebGLDepthStencilAttachment.detach(context, mState.mFramebufferSerial);
-
-    mImpl->destroy(context);
+    surface->getImplementation()->attachToFramebuffer(mImpl);
 }
 
 void Framebuffer::setReadSurface(const Context *context, egl::Surface *readSurface)
 {
+    // This has to be a default framebuffer.
+    ASSERT(isDefault());
+    ASSERT(mDirtyColorAttachmentBindings.size() == 1);
+    ASSERT(mDirtyColorAttachmentBindings[0].getSubjectIndex() == DIRTY_BIT_COLOR_ATTACHMENT_0);
+
+    // Read surface is not attached.
+    ASSERT(!mState.mDefaultFramebufferReadAttachment.isAttached());
+
     // updateAttachment() without mState.mResourceNeedsInit.set()
     mState.mDefaultFramebufferReadAttachment.attach(
         context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), readSurface,
@@ -904,6 +911,32 @@ void Framebuffer::setReadSurface(const Context *context, egl::Surface *readSurfa
     if (context->getClientVersion() >= ES_3_0)
     {
         mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
+    }
+}
+
+void Framebuffer::unsetSurfaces(const Context *context)
+{
+    // This has to be a default framebuffer.
+    ASSERT(isDefault());
+    ASSERT(mDirtyColorAttachmentBindings.size() == 1);
+    ASSERT(mDirtyColorAttachmentBindings[0].getSubjectIndex() == DIRTY_BIT_COLOR_ATTACHMENT_0);
+
+    if (mState.mColorAttachments[0].isAttached())
+    {
+        const egl::Surface *surface = mState.mColorAttachments[0].getSurface();
+        mState.mColorAttachments[0].detach(context, mState.mFramebufferSerial);
+        mState.mDefaultFramebufferReadAttachment.detach(context, mState.mFramebufferSerial);
+        mState.mDefaultFramebufferReadAttachmentInitialized = false;
+        mState.mDepthAttachment.detach(context, mState.mFramebufferSerial);
+        mState.mStencilAttachment.detach(context, mState.mFramebufferSerial);
+        surface->getImplementation()->detachFromFramebuffer(mImpl);
+    }
+    else
+    {
+        ASSERT(!mState.mDefaultFramebufferReadAttachment.isAttached());
+        ASSERT(!mState.mDefaultFramebufferReadAttachmentInitialized);
+        ASSERT(!mState.mDepthAttachment.isAttached());
+        ASSERT(!mState.mStencilAttachment.isAttached());
     }
 }
 
