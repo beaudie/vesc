@@ -34,6 +34,24 @@
       "parentUuid": "2a7d5492_76ba6e7b",
       "revId": "3b91270fbbf40ad49dca56d440962149da03750c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0af334e_f3acb722",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-17T18:26:08Z",
+      "side": 1,
+      "message": "\u003e tests on this CL were actually no-op\nNow, .vpython* files would be nice to have in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/trybot_analyze_config.json",
+      "parentUuid": "5e280eda_b8877bde",
+      "revId": "3b91270fbbf40ad49dca56d440962149da03750c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
