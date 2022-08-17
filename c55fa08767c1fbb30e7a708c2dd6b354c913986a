@@ -319,6 +319,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40afa23_1a91b558",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-17T18:52:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d0cb62d_eaf305ad",
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9964f2b2_781d75a7",
@@ -579,6 +597,30 @@
       "writtenOn": "2022-08-09T15:27:51Z",
       "side": 1,
       "message": "Sounds like a bug that needs fixing. How does it fail with ASAN? What\u0027s the associated anglebug.com issue?\n\nActually can you just delete this and `treatPlatformWarningsAsErrors`? There are no callers otherwise, and it doesn\u0027t make sense that out of so many tests, only one enables this (and the implementation is also only doing it on Windows 8+). It looks like something that was supposed to be cleaned up but was missed.",
+      "range": {
+        "startLine": 9895,
+        "startChar": 7,
+        "endLine": 9895,
+        "endChar": 51
+      },
+      "revId": "c55fa08767c1fbb30e7a708c2dd6b354c913986a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4328d94_75d9941f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 9895,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-17T18:52:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2149f02c_46b2b069",
       "range": {
         "startLine": 9895,
         "startChar": 7,
