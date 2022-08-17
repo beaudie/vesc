@@ -26,7 +26,6 @@
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
-#include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/Program.h"
@@ -499,7 +498,8 @@ Context::Context(egl::Display *display,
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
-      mIsDestroyed(false)
+      mIsDestroyed(false),
+      mDefaultFramebuffer(this, mImplementation.get())
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
@@ -9423,7 +9423,7 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     ASSERT(mCurrentDrawSurface == nullptr);
     ASSERT(mCurrentReadSurface == nullptr);
 
-    UniqueFramebufferPointer newDefaultFramebuffer;
+    // UniqueFramebufferPointer newDefaultFramebuffer;
 
     mCurrentDrawSurface = drawSurface;
     mCurrentReadSurface = readSurface;
@@ -9431,13 +9431,17 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     if (drawSurface != nullptr)
     {
         ANGLE_TRY(drawSurface->makeCurrent(this));
-        newDefaultFramebuffer = {new Framebuffer(this, drawSurface, readSurface), this};
+        // newDefaultFramebuffer = {new Framebuffer(this, mImplementation.get()), this};
+        // newDefaultFramebuffer->setSurfaces(this, drawSurface, readSurface);
+        mDefaultFramebuffer.setSurfaces(this, drawSurface, readSurface);
     }
     else
     {
-        newDefaultFramebuffer = {new Framebuffer(this, mImplementation.get(), readSurface), this};
+        // newDefaultFramebuffer = {new Framebuffer(this, mImplementation.get()), this};
+        // newDefaultFramebuffer->setReadSurface(this, readSurface);
+        mDefaultFramebuffer.setReadSurface(this, readSurface);
     }
-    ASSERT(newDefaultFramebuffer);
+    // ASSERT(newDefaultFramebuffer);
 
     if (readSurface && (drawSurface != readSurface))
     {
@@ -9446,15 +9450,16 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
-    Framebuffer *framebuffer = newDefaultFramebuffer.get();
-    mState.mFramebufferManager->setDefaultFramebuffer(newDefaultFramebuffer.release());
+    // Framebuffer *framebuffer = newDefaultFramebuffer.get();
+    // mState.mFramebufferManager->setDefaultFramebuffer(newDefaultFramebuffer.release());
+    mState.mFramebufferManager->setDefaultFramebuffer(&mDefaultFramebuffer);
     if (mState.getDrawFramebuffer() == nullptr)
     {
-        bindDrawFramebuffer(framebuffer->id());
+        bindDrawFramebuffer(mDefaultFramebuffer.id());
     }
     if (mState.getReadFramebuffer() == nullptr)
     {
-        bindReadFramebuffer(framebuffer->id());
+        bindReadFramebuffer(mDefaultFramebuffer.id());
     }
 
     return egl::NoError();
@@ -9462,17 +9467,17 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
 
 egl::Error Context::unsetDefaultFramebuffer()
 {
-    gl::Framebuffer *defaultFramebuffer =
+    Framebuffer *defaultFramebuffer =
         mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
 
     // Remove the default framebuffer
-    if (mState.getReadFramebuffer() == defaultFramebuffer)
+    if (defaultFramebuffer == mState.getReadFramebuffer())
     {
         mState.setReadFramebufferBinding(nullptr);
         mReadFramebufferObserverBinding.bind(nullptr);
     }
 
-    if (mState.getDrawFramebuffer() == defaultFramebuffer)
+    if (defaultFramebuffer == mState.getDrawFramebuffer())
     {
         mState.setDrawFramebufferBinding(nullptr);
         mDrawFramebufferObserverBinding.bind(nullptr);
@@ -9480,8 +9485,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 
     if (defaultFramebuffer)
     {
-        defaultFramebuffer->onDestroy(this);
-        delete defaultFramebuffer;
+        defaultFramebuffer->unsetSurfaces(this);
     }
 
     mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
