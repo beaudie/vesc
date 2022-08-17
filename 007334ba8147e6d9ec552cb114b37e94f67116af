@@ -201,6 +201,30 @@
       },
       "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4b6e694_d3966cbd",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-17T17:10:37Z",
+      "side": 1,
+      "message": "@Mohan, no the ASSERT is not expected to add any overhead in non-assert builds. If it does, it\u0027d be something we would need to systematically fix. As Roman pointed out, it\u0027s just MSVC that sucks, which is typical and also irrelevant to us.",
+      "parentUuid": "8681bccc_0596d806",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 96
+      },
+      "revId": "007334ba8147e6d9ec552cb114b37e94f67116af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
