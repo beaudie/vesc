@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30c7d24b_aeb6e2e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-17T15:55:47Z",
+      "side": 1,
+      "message": "I\u0027d phrase it as:\n\"analyze step doesn\u0027t trigger angle_perftests on changes to process_angle_perf_results.py\"",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 52
+      },
+      "revId": "8787cbdfd33493f2f835dce2b56471567cb76ad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
