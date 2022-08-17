@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "48aa936a3a889fd8d67e8c581712e6346e7cc464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9fb758e_bdaf8b11",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-17T17:57:02Z",
+      "side": 1,
+      "message": "Could you move this below `mState.contextSet` assignment and check that instead of `contextsStillCurrent instead`?\n\nThis way we would be comparing `mState.contextSet.size() + mInvalidContextSet.size()` in both cases which I think makes most sense and validates the entire transformation.\n\nPersonally I\u0027d also just inline `contextSetSizeAfterInvalidation` as you have a comment that clarifies what that assert means anyways and it\u0027s quite unlikely we\u0027ll ever fail this assert.",
+      "range": {
+        "startLine": 1171,
+        "startChar": 3,
+        "endLine": 1173,
+        "endChar": 80
+      },
+      "revId": "48aa936a3a889fd8d67e8c581712e6346e7cc464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
