@@ -33,6 +33,24 @@
       "message": "You know what\u0027s coming; could you please add a test? 😊",
       "revId": "529104595f8aedfdb308a0c441ea1ae4d284be26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c923fe5e_4db907cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-18T16:19:01Z",
+      "side": 1,
+      "message": "this applies to surfaces with pre-rotation. is there a way to initialize a window or even programmatically rotate a window through angle harness?",
+      "parentUuid": "0b5bde11_3e5dae7d",
+      "revId": "529104595f8aedfdb308a0c441ea1ae4d284be26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
