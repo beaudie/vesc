@@ -22,6 +22,30 @@
       },
       "revId": "65b90188a4cb0378c68ad1973cc9ce51fb5ca90e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf64e4d_2b45358b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "It\u0027s perfect. Imagination said that they *do* support PLS2, so the fallback should technically never be necessary, but good to have around IMO nevertheless.",
+      "parentUuid": "87f3f612_19483611",
+      "range": {
+        "startLine": 856,
+        "startChar": 6,
+        "endLine": 862,
+        "endChar": 0
+      },
+      "revId": "65b90188a4cb0378c68ad1973cc9ce51fb5ca90e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

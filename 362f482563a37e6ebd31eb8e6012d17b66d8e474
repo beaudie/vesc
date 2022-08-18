@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8927c271_53cc6227",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "`render pass, context or ...`",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 250,
+        "endChar": 66
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2edef90c_cfbf1686",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "nit: remove `and unmeaningful`. Just undefined is enough.",
+      "range": {
+        "startLine": 646,
+        "startChar": 59,
+        "endLine": 646,
+        "endChar": 76
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

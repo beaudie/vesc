@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9be16821_78d75665",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "Ack, that\u0027s what I get for not knowing GLES 😄",
+      "parentUuid": "561f3d69_568dccf8",
+      "range": {
+        "startLine": 265,
+        "startChar": 54,
+        "endLine": 265,
+        "endChar": 64
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd5005d9_d12688c8",
@@ -243,6 +267,30 @@
       "side": 1,
       "message": "Under an implementation that uses EXT_shader_framebuffer_fetch:\n\n`MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE` and `MAX_COMBINED_DRAW_BUFFERS_AND_PLS_PLANES_ANGLE` go into effect when `BeginPixelLocalStorageANGLE()` is called, so we can\u0027t attach any PLS textures to the underlying framebuffer until that call is issued.\n\nFurthermore, the \"Whole Framebuffer Completeness\" section of the spec has a really unfortunate paragraph:\n\n\"Although the GL defines a wide variety of internal formats for framebuffer attachable images, such as texture images and renderbuffer images, some implementations may not support rendering to particular combinations of internal formats. If the combination of formats of the images attached to a framebuffer object are not supported by the implementation, then the framebuffer is not complete under the clause labeled FRAMEBUFFER_UNSUPPORTED.\"\n\nSo basically, \"set up all your attachments per the spec, then cross your fingers and hope the driver accepts it\"",
       "parentUuid": "cd5005d9_d12688c8",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 39
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa83dc1_ba3a0c40",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "\u003e set up all your attachments per the spec, then cross your fingers and hope the driver accepts it\n\nWell yes, that\u0027s the idea; I was hoping one could setup all the attachments (PLS or not) and immediately know if the framebuffer is complete.\n\n\u003e Under an implementation that uses EXT_shader_framebuffer_fetch\n\nbut ok, I\u0027ll take your word for it.",
+      "parentUuid": "f0541d67_737822aa",
       "range": {
         "startLine": 405,
         "startChar": 4,
@@ -514,6 +562,24 @@
       "side": 1,
       "message": "Awesome!! 🎉\n\nThank you for reaching out to them. It looks like we can use the extension then?\n\nI tried to capture your comments in the Issues section, but made some pretty big assumptions. Does that look right?",
       "parentUuid": "c25bda45_c1f382b4",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7580d00_53fd4f6a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T19:53:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf67ab78_c798f8db",
       "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
