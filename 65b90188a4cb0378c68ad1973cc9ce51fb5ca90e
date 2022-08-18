@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87f3f612_19483611",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "This isn\u0027t quite what you said, but do you think it\u0027s accurate?",
+      "range": {
+        "startLine": 856,
+        "startChar": 6,
+        "endLine": 862,
+        "endChar": 0
+      },
+      "revId": "65b90188a4cb0378c68ad1973cc9ce51fb5ca90e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

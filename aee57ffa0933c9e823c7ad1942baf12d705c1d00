@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93c2d8fc_c36d809a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Good catch",
+      "parentUuid": "438b7216_76a9f9fe",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f1778ca_4ae61afa",
@@ -82,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84ea8edd_7b77de79",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Done. Thanks for allocating that range",
+      "parentUuid": "fe64ecac_a6851038",
+      "range": {
+        "startLine": 166,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 71
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1a747fa_b55d927b",
@@ -99,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd3769d_7fc1779b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1a747fa_b55d927b",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "094c311b_7d3b47e0",
@@ -112,6 +172,30 @@
       "writtenOn": "2022-08-18T02:58:16Z",
       "side": 1,
       "message": "Suggest requiring this be explicitly done (and validating it). Saves headache when a dev accidentally specifies `ZERO, DISABLE, ZERO` and wonder why the third one got `DISABLED`.",
+      "range": {
+        "startLine": 265,
+        "startChar": 54,
+        "endLine": 265,
+        "endChar": 64
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "561f3d69_568dccf8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "These are the same semantics as glDrawbuffers:\n\n\"The draw buffer used for user defined outputs assigned to locations greater than or equal to n is implicitly set to GL_NONE.\"\n\nSince MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE is variable, if we required a load op for every plane, the application would have to pad a variable-length array with DISABLED_ANGLE, which sounds like it could be a hassle.\n\nAlso, the value of \u003cplanes\u003e is what currently determines how many fragment outputs and/or textures are left over for the shader (due to the new limits of GL_MAX_COMBINED_*_AND_PLS_PLANES_ANGLE). I\u0027m open to discuss other ways these might work, but we would need to re-think it if we took out the \u003cplanes\u003e argument.",
+      "parentUuid": "094c311b_7d3b47e0",
       "range": {
         "startLine": 265,
         "startChar": 54,
@@ -147,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0541d67_737822aa",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Under an implementation that uses EXT_shader_framebuffer_fetch:\n\n`MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE` and `MAX_COMBINED_DRAW_BUFFERS_AND_PLS_PLANES_ANGLE` go into effect when `BeginPixelLocalStorageANGLE()` is called, so we can\u0027t attach any PLS textures to the underlying framebuffer until that call is issued.\n\nFurthermore, the \"Whole Framebuffer Completeness\" section of the spec has a really unfortunate paragraph:\n\n\"Although the GL defines a wide variety of internal formats for framebuffer attachable images, such as texture images and renderbuffer images, some implementations may not support rendering to particular combinations of internal formats. If the combination of formats of the images attached to a framebuffer object are not supported by the implementation, then the framebuffer is not complete under the clause labeled FRAMEBUFFER_UNSUPPORTED.\"\n\nSo basically, \"set up all your attachments per the spec, then cross your fingers and hope the driver accepts it\"",
+      "parentUuid": "cd5005d9_d12688c8",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 39
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f37c8e2d_6715dffc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 16
@@ -158,6 +266,30 @@
       "writtenOn": "2022-08-18T02:58:16Z",
       "side": 1,
       "message": "nit: s/loads/accesses (otherwise write-after-write is not covered)",
+      "range": {
+        "startLine": 429,
+        "startChar": 22,
+        "endLine": 429,
+        "endChar": 27
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af7d9dc2_bc95df6b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Another good catch",
+      "parentUuid": "f37c8e2d_6715dffc",
       "range": {
         "startLine": 429,
         "startChar": 22,
@@ -191,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "edafb9e0_7cb7a48e",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Done. Thanks for clarifying that spec!",
+      "parentUuid": "10e0f0b2_78ef9ffb",
+      "range": {
+        "startLine": 434,
+        "startChar": 4,
+        "endLine": 434,
+        "endChar": 11
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ef31cf4_963455a2",
@@ -204,6 +360,30 @@
       "writtenOn": "2022-08-18T02:58:16Z",
       "side": 1,
       "message": "super nit: s/like/such as",
+      "range": {
+        "startLine": 511,
+        "startChar": 17,
+        "endLine": 511,
+        "endChar": 21
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b369d48c_ab2414a9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Love it!",
+      "parentUuid": "3ef31cf4_963455a2",
       "range": {
         "startLine": 511,
         "startChar": 17,
@@ -261,6 +441,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6959379_e3288c5e",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Yeah, the equivalent non-PLS would be:\n\n```\nglBindFramebuffer(GL_FRAMEBUFFER, fbo);\nglFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);\nglBindFramebuffer(GL_FRAMEBUFFER, 0);  // Unbind fbo so tex doesn\u0027t get detached.\nglDeleteTextures(1, \u0026tex);\nglBindFramebuffer(GL_FRAMEBUFFER, fbo);  // Rebind fbo\nglGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME, \u0026texQuery);\n```\n\n`tex` is deleted, but specifically called out as *not* detached from `fbo`. So what is `texQuery`?\n\nI ran the experiment on my NVIDIA and got back the old \"tex\" name from the query, even if it had been deleted, and even if I had gotten that same name back again from glGenTextures for a new texture.\n\nI just went ahead and added a note making it undefined in this case.",
+      "parentUuid": "584df54d_9d4368b9",
+      "range": {
+        "startLine": 651,
+        "startChar": 76,
+        "endLine": 652,
+        "endChar": 44
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "664d2146_6bfbba36",
@@ -292,6 +496,24 @@
       "side": 1,
       "message": "Actually I just saw the Imagination cannot guarantee this with EXT_shader_pixel_local_storage, and you might get left-over data from a previous render pass. However, they said that they do support EXT_shader_pixel_local_storage2, which lets you clear the PLS planes with `ClearPixelLocalStorageuiEXT`.\n\nSo, this is something to pay attention to (i.e. use EXT_pls2 over EXT_pls if available).",
       "parentUuid": "664d2146_6bfbba36",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf67ab78_c798f8db",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T08:09:10Z",
+      "side": 1,
+      "message": "Awesome!! 🎉\n\nThank you for reaching out to them. It looks like we can use the extension then?\n\nI tried to capture your comments in the Issues section, but made some pretty big assumptions. Does that look right?",
+      "parentUuid": "c25bda45_c1f382b4",
       "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
