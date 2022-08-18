@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b150c97_0a3d762f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T03:12:23Z",
+      "side": 0,
+      "message": "Since we already have this for draw, how about also caching `mCurrentReadWindowSurface` for symmetry and use the cached value?\n\nNo big difference though",
+      "range": {
+        "startLine": 5292,
+        "startChar": 50,
+        "endLine": 5292,
+        "endChar": 71
+      },
+      "revId": "7a87e90d03be02a532ebe18d6956db849d52e6c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
