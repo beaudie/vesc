@@ -276,6 +276,24 @@
       "message": "I have confirmation now that all mobile vendors guarantee there\u0027s no data leak from outside the render pass. There can be data leaked from normal framebuffer attachments to PLS planes, but said attachments themselves are not shared between webgl contexts, so should be no problem.\n\nI\u0027ll be adjusting the EXT spec shortly to mention this.",
       "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25bda45_c1f382b4",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T03:23:48Z",
+      "side": 1,
+      "message": "Actually I just saw the Imagination cannot guarantee this with EXT_shader_pixel_local_storage, and you might get left-over data from a previous render pass. However, they said that they do support EXT_shader_pixel_local_storage2, which lets you clear the PLS planes with `ClearPixelLocalStorageuiEXT`.\n\nSo, this is something to pay attention to (i.e. use EXT_pls2 over EXT_pls if available).",
+      "parentUuid": "664d2146_6bfbba36",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
