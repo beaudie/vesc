@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3198913_471ad7fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-18T01:00:15Z",
+      "side": 1,
+      "message": "Can we have a test for the CL to ensure the code is protected from future changes?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 45
+      },
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0019a9e_23f3b626",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-18T01:00:15Z",
+      "side": 1,
+      "message": "Nit: 1269749 is a Chromium bug, not an ANGLE bug. This needs to be chromium:1269749.",
+      "range": {
+        "startLine": 15,
+        "startChar": 5,
+        "endLine": 15,
+        "endChar": 25
+      },
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "06f55775_2014fd70",
@@ -14,6 +60,75 @@
       "writtenOn": "2022-08-17T09:59:40Z",
       "side": 1,
       "message": "Change is ready for review, please queue CQ tryjobs",
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd4c1f86_48236eda",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-18T01:00:15Z",
+      "side": 1,
+      "message": "Nit: double \u0027we\u0027.",
+      "range": {
+        "startLine": 779,
+        "startChar": 94,
+        "endLine": 779,
+        "endChar": 96
+      },
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16f3f063_d3c921f9",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-18T01:00:15Z",
+      "side": 1,
+      "message": "Why aren\u0027t we offsetting gl_FragCoord here and in the following else clauses?",
+      "range": {
+        "startLine": 786,
+        "startChar": 51,
+        "endLine": 786,
+        "endChar": 70
+      },
+      "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e394eca2_ed8ccdac",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-18T01:00:15Z",
+      "side": 1,
+      "message": "Nit: The name `glOffset` seems generic. Can we rename to glFragCoordOffset?",
+      "range": {
+        "startLine": 488,
+        "startChar": 59,
+        "endLine": 488,
+        "endChar": 67
+      },
       "revId": "1090fe580240f1dea9189d56b1ff3f50f4bdd7a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
