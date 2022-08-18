@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5553dc3_30b60387",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "A handful of nits!",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "438b7216_76a9f9fe",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "nit: reorder the enums so they are consecutive?",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f1778ca_4ae61afa",
@@ -26,6 +60,162 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe64ecac_a6851038",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "SGTM. I updated the allocation to this enum range: 0x96E0-0x96EA",
+      "parentUuid": "6f1778ca_4ae61afa",
+      "range": {
+        "startLine": 166,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 71
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1a747fa_b55d927b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "How about calling this undefined for now? For example, ARM said the values could be reinterpreted bits of normal color attachment values.\n\nKnowing that old data may still be there is not useful to developers.",
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "094c311b_7d3b47e0",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "Suggest requiring this be explicitly done (and validating it). Saves headache when a dev accidentally specifies `ZERO, DISABLE, ZERO` and wonder why the third one got `DISABLED`.",
+      "range": {
+        "startLine": 265,
+        "startChar": 54,
+        "endLine": 265,
+        "endChar": 64
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd5005d9_d12688c8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "Is `after` really necessary? When attachments need to be added, shouldn\u0027t `Framebuffer*PixelLocalStorageANGLE` be enough to do that? Under which implementation would completeness only be determined after `BeginPixelLocalStorageANGLE`?",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 39
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37c8e2d_6715dffc",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "nit: s/loads/accesses (otherwise write-after-write is not covered)",
+      "range": {
+        "startLine": 429,
+        "startChar": 22,
+        "endLine": 429,
+        "endChar": 27
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10e0f0b2_78ef9ffb",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "nit: we can unify the wording the EXT here by saying \"render pass, context, or other processes\".\n\nI\u0027ll be adding \"render pass\" to the EXT soon :)",
+      "range": {
+        "startLine": 434,
+        "startChar": 4,
+        "endLine": 434,
+        "endChar": 11
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef31cf4_963455a2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "super nit: s/like/such as",
+      "range": {
+        "startLine": 511,
+        "startChar": 17,
+        "endLine": 511,
+        "endChar": 21
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c591a56_2611ccda",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 16
@@ -43,6 +233,47 @@
         "endLine": 652,
         "endChar": 44
       },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "584df54d_9d4368b9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "Good question. It never hurts to add a test, see what happens! Is there an equivalent non-PLS query? Could experiment with that and model after it.",
+      "parentUuid": "0c591a56_2611ccda",
+      "range": {
+        "startLine": 651,
+        "startChar": 76,
+        "endLine": 652,
+        "endChar": 44
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "664d2146_6bfbba36",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-18T02:58:16Z",
+      "side": 1,
+      "message": "I have confirmation now that all mobile vendors guarantee there\u0027s no data leak from outside the render pass. There can be data leaked from normal framebuffer attachments to PLS planes, but said attachments themselves are not shared between webgl contexts, so should be no problem.\n\nI\u0027ll be adjusting the EXT spec shortly to mention this.",
       "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
