@@ -9431,17 +9431,12 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     if (drawSurface != nullptr)
     {
         ANGLE_TRY(drawSurface->makeCurrent(this));
-        // newDefaultFramebuffer = {new Framebuffer(this, mImplementation.get()), this};
-        // newDefaultFramebuffer->setSurfaces(this, drawSurface, readSurface);
         mDefaultFramebuffer.setSurfaces(this, drawSurface, readSurface);
     }
     else
     {
-        // newDefaultFramebuffer = {new Framebuffer(this, mImplementation.get()), this};
-        // newDefaultFramebuffer->setReadSurface(this, readSurface);
         mDefaultFramebuffer.setReadSurface(this, readSurface);
     }
-    // ASSERT(newDefaultFramebuffer);
 
     if (readSurface && (drawSurface != readSurface))
     {
@@ -9450,8 +9445,6 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
-    // Framebuffer *framebuffer = newDefaultFramebuffer.get();
-    // mState.mFramebufferManager->setDefaultFramebuffer(newDefaultFramebuffer.release());
     mState.mFramebufferManager->setDefaultFramebuffer(&mDefaultFramebuffer);
     if (mState.getDrawFramebuffer() == nullptr)
     {
@@ -9470,25 +9463,20 @@ egl::Error Context::unsetDefaultFramebuffer()
     Framebuffer *defaultFramebuffer =
         mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
 
-    // Remove the default framebuffer
-    if (defaultFramebuffer == mState.getReadFramebuffer())
-    {
-        mState.setReadFramebufferBinding(nullptr);
-        mReadFramebufferObserverBinding.bind(nullptr);
-    }
-
-    if (defaultFramebuffer == mState.getDrawFramebuffer())
-    {
-        mState.setDrawFramebufferBinding(nullptr);
-        mDrawFramebufferObserverBinding.bind(nullptr);
-    }
-
     if (defaultFramebuffer)
     {
-        defaultFramebuffer->unsetSurfaces(this);
-    }
+        // Remove the default framebuffer
+        ASSERT(defaultFramebuffer == mState.getReadFramebuffer());
+        mState.setReadFramebufferBinding(nullptr);
+        mReadFramebufferObserverBinding.bind(nullptr);
 
-    mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
+        ASSERT(defaultFramebuffer == mState.getDrawFramebuffer());
+        mState.setDrawFramebufferBinding(nullptr);
+        mDrawFramebufferObserverBinding.bind(nullptr);
+
+        defaultFramebuffer->unsetSurfaces(this);
+        mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
+    }
 
     // Always unset the current surface, even if setIsCurrent fails.
     egl::Surface *drawSurface = mCurrentDrawSurface;
