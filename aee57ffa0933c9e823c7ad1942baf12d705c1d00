@@ -301,6 +301,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9389d4e_e2edf67b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 16
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T20:22:47Z",
+      "side": 1,
+      "message": "Ok, got it.\n\nYeah, outside of BeginPLS/EndPLS, the app owns the final N color attachments, and CheckFramebufferStatus should be based on whatever the app has attached (or not) to them.\n\nInside BeginPLS, our impl now owns the final N color attachments, and has textures attached representing the PLS planes, so CheckFramebufferStatus should now be based on what *we* have attached to those final N color attachments.",
+      "parentUuid": "5fa83dc1_ba3a0c40",
+      "range": {
+        "startLine": 405,
+        "startChar": 4,
+        "endLine": 405,
+        "endChar": 39
+      },
+      "revId": "aee57ffa0933c9e823c7ad1942baf12d705c1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f37c8e2d_6715dffc",

@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "751d15e6_facec964",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T20:22:47Z",
+      "side": 1,
+      "message": "In this particular case, it\u0027s acceptable for the contents to be leaked from a previous render pass in the same context though, right? Or do we want to be more restrictive?\n\nIn the strictest sense, \"KEEP\" might be leaked from a previous render pass in the same context.",
+      "parentUuid": "8927c271_53cc6227",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 250,
+        "endChar": 66
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2edef90c_cfbf1686",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 19
@@ -37,6 +61,30 @@
       "writtenOn": "2022-08-18T19:53:10Z",
       "side": 1,
       "message": "nit: remove `and unmeaningful`. Just undefined is enough.",
+      "range": {
+        "startLine": 646,
+        "startChar": 59,
+        "endLine": 646,
+        "endChar": 76
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44483ca3_8e2fef0a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-18T20:22:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2edef90c_cfbf1686",
       "range": {
         "startLine": 646,
         "startChar": 59,
