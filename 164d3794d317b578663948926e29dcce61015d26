@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a05587a9_0fe4e8b8",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-19T04:16:31Z",
+      "side": 1,
+      "message": "why do we only increment the submission count in this test, but not in other tests that also check the submissionCommandsCount, e.g.SubmittingOutsideCommandBufferDoesNotBreakRenderPass? Is it because the renderpass was not closed in that test case?",
+      "revId": "164d3794d317b578663948926e29dcce61015d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
