@@ -34,6 +34,24 @@
       "parentUuid": "a05587a9_0fe4e8b8",
       "revId": "164d3794d317b578663948926e29dcce61015d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04e5e534_75570b45",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-19T17:25:11Z",
+      "side": 1,
+      "message": "For the \"pixel readback adds an image-\u003ebuffer copy and makes another submission.\", do we increment submitCommandsCount for this one at line 768 above?\n\nAnd then if the preferSUbmitAtFBOBoundary feature is enabled, \"the render pass is closed for pixel readback\" increments one more submitCommandsCount at line 774. \n\nIs my understanding correct?",
+      "parentUuid": "5390f6b0_61b3b48b",
+      "revId": "164d3794d317b578663948926e29dcce61015d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
