@@ -2183,10 +2183,14 @@ BlitCommandEncoder &BlitCommandEncoder::synchronizeResource(Buffer *buffer)
     }
 
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
-    // Only MacOS has separated storage for resource on CPU and GPU and needs explicit
-    // synchronization
-    cmdBuffer().setReadDependency(buffer);
-    [get() synchronizeResource:buffer->get()];
+    if (buffer->get().storageMode == MTLStorageModeManaged)
+    {
+        // Only MacOS has separated storage for resource on CPU and GPU and needs explicit
+        // synchronization
+        cmdBuffer().setReadDependency(buffer);
+
+        [get() synchronizeResource:buffer->get()];
+    }
 #endif
     return *this;
 }
