@@ -1663,6 +1663,11 @@ void ContextMtl::endRenderEncoding(mtl::RenderCommandEncoder *encoder)
         disableActiveOcclusionQueryInRenderPass();
     }
 
+    if (mBlitEncoder.valid())
+    {
+        mBlitEncoder.endEncoding();
+    }
+
     encoder->endEncoding();
 
     // Resolve visibility results
@@ -2725,7 +2730,8 @@ angle::Result ContextMtl::copyTextureSliceLevelToWorkBuffer(
     // Expand the buffer if it is not big enough.
     if (!mWorkBuffer || mWorkBuffer->size() < sizeInBytes)
     {
-        ANGLE_TRY(mtl::Buffer::MakeBuffer(this, sizeInBytes, nullptr, &mWorkBuffer));
+        ANGLE_TRY(mtl::Buffer::MakeBufferWithSharedMemOpt(this, true, sizeInBytes, nullptr,
+                                                          &mWorkBuffer));
     }
 
     gl::Rectangle region(0, 0, width, height);
