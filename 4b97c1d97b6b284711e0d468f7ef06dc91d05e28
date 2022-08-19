@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac37e6dd_92d7e353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-19T15:54:21Z",
+      "side": 1,
+      "message": "This one I\u0027d like Shabi to review the compiler changes if possible. I\u0027m not sure about the architecture of storing raster order view information in the compiler frontend.",
+      "revId": "4b97c1d97b6b284711e0d468f7ef06dc91d05e28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
