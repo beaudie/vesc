@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f514e218_580a3987",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-19T21:45:06Z",
+      "side": 1,
+      "message": "Would this string be printed as a tuple in `temporary_file()`?",
+      "range": {
+        "startLine": 227,
+        "startChar": 8,
+        "endLine": 227,
+        "endChar": 58
+      },
+      "revId": "291a78f3d97b038a2b5e0668ddc4d0a789af46d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
