@@ -681,11 +681,9 @@ struct FeaturesVk : FeatureSetBase
         "http://anglebug.com/7553"};
 
     FeatureInfo preferLinearFilterForYUV = {
-        "preferLinearFilterForYUV",
-        FeatureCategory::VulkanFeatures,
-        "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion",
-        &members,
-    };
+        "preferLinearFilterForYUV", FeatureCategory::VulkanFeatures,
+        "Prefer to use VK_FILTER_LINEAR for VkSamplerYcbcrConversion", &members,
+        "https://anglebug.com/7382"};
 
     FeatureInfo supportsYuvTarget = {
         "supportsYuvTarget",
@@ -699,6 +697,11 @@ struct FeaturesVk : FeatureSetBase
         "Work around a driver bug where 0 in stencil write mask static state would make the"
         "corresponding dynamic state malfunction in the presence of discard or alpha to coverage",
         &members, "http://anglebug.com/7556"};
+
+    FeatureInfo supportsTimestampSurfaceAttribute = {
+        "supportsTimestampSurfaceAttribute", FeatureCategory::VulkanFeatures,
+        "Platform supports setting frame timestamp surface attribute", &members,
+        "https://anglebug.com/7489"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
