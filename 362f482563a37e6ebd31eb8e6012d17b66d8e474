@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a8a3e47_c46c4922",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-19T08:43:39Z",
+      "side": 1,
+      "message": "I think we\u0027re on the same page, and I had a couple more thoughts --\n\n\u003e leaks between render passes with framebuffers that don\u0027t share any attachments is impossible\n\nMaybe I\u0027m getting too far out there, but does this matter? Maybe our implementation reuses the same internal scratch texture for memoryless pixel local storage on different framebuffers, but in the same context. Is that theoretically ok?\n\nIn the interest of keeping it simple, I\u0027m wondering if the wording \"not leaked from another context\" alone is enough, since that already covers render passes in another context?\n\nEither way, I\u0027m not too picky about the wording, and clearing is fine on a tiler. I\u0027m just seeing if we can avoid clearing a texture in the shader image implementation of memoryless pixel local storage. That would mean leaving the data from a previous pixel local storage render pass to that same plane, which may be understood as being leaked from another render pass.\n\n\u003e If WebGL contexts can share textures, then that would be a mess!\n\n 😬",
+      "parentUuid": "2c3230bb_ccea8ab6",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 250,
+        "endChar": 66
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2edef90c_cfbf1686",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 19
