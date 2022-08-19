@@ -152,7 +152,8 @@ bool IsValidCopyTextureDestinationFormatType(const Context *context,
 {
     if (!IsValidCopyTextureDestinationInternalFormatEnum(internalFormat))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+        context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                  internalFormat);
         return false;
     }
 
@@ -165,7 +166,8 @@ bool IsValidCopyTextureDestinationFormatType(const Context *context,
     const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
     if (!internalFormatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+        context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                  internalFormat);
         return false;
     }
 
@@ -969,14 +971,16 @@ bool ValidateES2TexImageParametersBase(const Context *context,
 
         if (!internalFormatInfo.compressed)
         {
-            context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat,
+                                      internalformat);
             return false;
         }
 
         if (!internalFormatInfo.textureSupport(context->getClientVersion(),
                                                context->getExtensions()))
         {
-            context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat,
+                                      internalformat);
             return false;
         }
 
@@ -992,7 +996,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
             if (IsETC1Format(actualInternalFormat) &&
                 !context->getExtensions().compressedETC1RGB8SubTextureEXT)
             {
-                context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+                context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                          internalformat);
                 return false;
             }
 
@@ -1498,7 +1503,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                     break;
                 default:
                     // Compressed formats are not valid internal formats for glTexImage*D
-                    context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidInternalFormat);
+                    context->validationErrorF(entryPoint, GL_INVALID_VALUE, kInvalidInternalFormat,
+                                              internalformat);
                     return false;
             }
         }
@@ -3203,7 +3209,8 @@ bool ValidateCopyTextureCHROMIUM(const Context *context,
 
     if (!IsValidCopyTextureSourceTarget(context, source->getType()))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+        context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                  internalFormat);
         return false;
     }
 
@@ -3221,7 +3228,8 @@ bool ValidateCopyTextureCHROMIUM(const Context *context,
     GLsizei sourceHeight = static_cast<GLsizei>(source->getHeight(sourceTarget, sourceLevel));
     if (sourceWidth == 0 || sourceHeight == 0)
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+        context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                  internalFormat);
         return false;
     }
 
@@ -3354,7 +3362,8 @@ bool ValidateCopySubTextureCHROMIUM(const Context *context,
     const Format &sourceFormat = source->getFormat(sourceTarget, sourceLevel);
     if (!IsValidCopySubTextureSourceInternalFormat(sourceFormat.info->internalFormat))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat);
+        context->validationErrorF(entryPoint, GL_INVALID_OPERATION, kInvalidInternalFormat,
+                                  sourceFormat.info->internalFormat);
         return false;
     }
 
