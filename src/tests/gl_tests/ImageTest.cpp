@@ -83,6 +83,7 @@ constexpr EGLint kNativeClientBufferAttribs_RGBA8_Renderbuffer[] = {
     EGL_NONE};
 // Color data in linear and sRGB colorspace
 // 2D texture data
+// GLubyte kWhite[] = {0xff, 0xff, 0xff, 0xff};
 GLubyte kLinearColor[] = {132, 55, 219, 255};
 GLubyte kSrgbColor[]   = {59, 10, 180, 255};
 // 3D texture data
@@ -178,7 +179,7 @@ class ImageTest : public ANGLETest<>
             "\n"
             "void main()\n"
             "{\n"
-            "    gl_FragColor = texture2D(tex, texcoord);\n"
+            "    gl_FragColor = texture2D(tex, texcoord * 2.0);\n"
             "}\n";
         constexpr char kTexture2DArrayFS[] =
             "#version 300 es\n"
@@ -650,6 +651,8 @@ class ImageTest : public ANGLETest<>
         kAHBUsageGPUFramebuffer    = 1 << 1,
         kAHBUsageGPUCubeMap        = 1 << 2,
         kAHBUsageGPUMipMapComplete = 1 << 3,
+        kAHBUsageCamera            = 1 << 4,
+        kAHBUsageCpuRead           = 1 << 5,
     };
 
     constexpr static uint32_t kDefaultAHBUsage = kAHBUsageGPUSampledImage | kAHBUsageGPUFramebuffer;
@@ -685,6 +688,16 @@ class ImageTest : public ANGLETest<>
         if ((usage & kAHBUsageGPUMipMapComplete) != 0)
         {
             aHardwareBufferDescription.usage |= AHARDWAREBUFFER_USAGE_GPU_MIPMAP_COMPLETE;
+        }
+        if ((usage & kAHBUsageCamera) != 0)
+        {
+            // USAGE_CAMERA_MASK
+            aHardwareBufferDescription.usage |= (6UL << 16);
+        }
+        if ((usage & kAHBUsageCpuRead) != 0)
+        {
+            // USAGE_CAMERA_MASK
+            aHardwareBufferDescription.usage |= 0xfUL;
         }
         aHardwareBufferDescription.stride = 0;
         aHardwareBufferDescription.rfu0   = 0;
@@ -3430,6 +3443,96 @@ TEST_P(ImageTestES3, RGBXAHBImportPreservesData)
     destroyAndroidHardwareBuffer(ahb);
 }
 
+// Test sampling from AHB image by creating a sibling of the image using the full stride
+// instead of the actual width.
+TEST_P(ImageTestES3, AHBFullStrideSampling)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    int kNumTrials = 10;
+    std::vector<AHardwareBuffer *> ahbs;
+    std::vector<EGLImage> images;
+    std::vector<size_t> widths_to_test = {
+        1, 2, 3, 4, 5, 8, 11, 16, 17, 19, 100, 101, 102, 200, 201, 202,
+    };
+    for (auto width : widths_to_test)
+    {
+        printf("Testing width %zu\n", width);
+        constexpr size_t height = 1508;
+        GLubyte *data           = new GLubyte[width * height * 4];
+        for (int i = 0; i < kNumTrials; ++i)
+        {
+            printf("Trial %d of %d\n", i, kNumTrials);
+            // Create the Image
+            AHardwareBuffer *ahb;
+            EGLImageKHR ahbImage;
+
+            memset(data, 0xff, width * height * 4);
+            AHBPlaneData plane0Data = {
+                data,
+                4,
+            };
+            std::vector<AHBPlaneData> planeData;
+            planeData.push_back(plane0Data);
+            createEGLImageAndroidHardwareBufferSource(
+                width, height, 1, 0x38,
+                kAHBUsageGPUSampledImage | kAHBUsageCpuRead | kAHBUsageCamera, kDefaultAttribs,
+                planeData, &ahb, &ahbImage);
+            AHardwareBuffer_Desc desc;
+            AHardwareBuffer_describe(ahb, &desc);
+            void *mappedMemory = nullptr;
+            int res            = AHardwareBuffer_lock(ahb, 0xFUL, -1, nullptr, &mappedMemory);
+            (void)res;
+
+            printf("%s: desc: w %u h %u stride %u mappedMemory %p\n", __func__, desc.width,
+                   desc.height, desc.stride, mappedMemory);
+
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            // Create a target texture from the image
+            GLuint ahbTexture;
+            glGenTextures(1, &ahbTexture);
+            glBindTexture(GL_TEXTURE_2D, ahbTexture);
+            glEGLImageTargetTexStorageEXT(GL_TEXTURE_2D, ahbImage, nullptr);
+
+            // GLTexture ahbTexture;
+            // createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+            glUseProgram(mTextureProgram);
+            glBindTexture(GL_TEXTURE_2D, ahbTexture);
+            glUniform1i(mTextureUniformLocation, 0);
+            drawQuad(mTextureProgram, "position", 0.5f);
+
+            printf("Checking last pixel past last row\n");
+
+            std::vector<uint8_t> readback(desc.stride * desc.height * 4);
+            glReadPixels(0, 0, desc.width, desc.height, GL_RGBA, GL_UNSIGNED_BYTE, readback.data());
+            printf("Done with readPixels\n");
+
+            // verifyResults2D(ahbTexture, kWhite);
+            // verifyResultAHB(ahb, planeData);
+            //
+            // Clean up
+            ahbs.push_back(ahb);
+            images.push_back(ahbImage);
+            AHardwareBuffer_unlock(ahb, nullptr);
+        }
+
+        delete[] data;
+    }
+
+    for (auto ahbImage : images)
+    {
+        eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    }
+    for (auto ahb : ahbs)
+    {
+        destroyAndroidHardwareBuffer(ahb);
+    }
+}
 // Test that RGBX data are preserved when importing from AHB.  Tests interaction of emulated channel
 // being cleared with no GPU_FRAMEBUFFER usage specified.
 TEST_P(ImageTestES3, RGBXAHBImportNoFramebufferUsage)

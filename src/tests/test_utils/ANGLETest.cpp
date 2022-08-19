@@ -62,7 +62,8 @@ void TestPlatform_logError(PlatformMethods *platform, const char *errorMessage)
     if (testPlatformContext->ignoreMessages)
         return;
 
-    GTEST_NONFATAL_FAILURE_(errorMessage);
+    printf("%s\n", errorMessage);
+    // GTEST_NONFATAL_FAILURE_(errorMessage);
 
     PrintStackBacktrace();
 }

@@ -245,6 +245,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
 
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
+    AHardwareBuffer_Desc ahbDescription;
+    functions.describe(hardwareBuffer, &ahbDescription);
+    ANGLE_LOG(ERR) << "Ahb with w/h " << mSize.width << " " << mSize.height << " and stride "
+                   << ahbDescription.stride;
+    ANGLE_LOG(ERR) << "Setting width to stride on purpose to cause a crash";
+    mSize.width = ahbDescription.stride;
 
     functions.acquire(hardwareBuffer);
     VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties;
@@ -271,7 +277,6 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     // Query AHB description and do the following -
     // 1. Derive VkImageTiling mode based on AHB usage flags
     // 2. Map AHB usage flags to VkImageUsageFlags
-    AHardwareBuffer_Desc ahbDescription;
     functions.describe(hardwareBuffer, &ahbDescription);
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(ahbDescription);
     VkImageUsageFlags usage = AhbDescUsageToVkImageUsage(ahbDescription, isDepthOrStencilFormat);
@@ -310,6 +315,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     const uint32_t layerCount = mSize.depth;
     vkExtents.depth           = 1;
 
+    ANGLE_LOG(ERR) << "Extents: " << vkExtents.width << " " << vkExtents.height;
     mImage = new vk::ImageHelper();
 
     // disable robust init for this external image.
