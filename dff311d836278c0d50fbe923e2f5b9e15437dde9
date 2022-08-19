@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb4ec4a9_2d117e0c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-19T23:10:00Z",
+      "side": 1,
+      "message": "lgtm\n\nThanks Kimmo for upstreaming this. It\u0027s small enough that I\u0027m +2\u0027ing it directly and CQ\u0027ing it.\n",
+      "revId": "dff311d836278c0d50fbe923e2f5b9e15437dde9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
