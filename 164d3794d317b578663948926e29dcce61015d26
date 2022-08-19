@@ -16,6 +16,24 @@
       "message": "why do we only increment the submission count in this test, but not in other tests that also check the submissionCommandsCount, e.g.SubmittingOutsideCommandBufferDoesNotBreakRenderPass? Is it because the renderpass was not closed in that test case?",
       "revId": "164d3794d317b578663948926e29dcce61015d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5390f6b0_61b3b48b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-19T16:44:00Z",
+      "side": 1,
+      "message": "The difference here is `EXPECT_PIXEL_COLOR_EQ`. In the other test, the render pass is not actually closed at the time render pass count is verified, so no submission is made either. In this case, the render pass is closed for pixel readback, which may or may not make a submission, then the pixel readback adds an image-\u003ebuffer copy and makes another submission.",
+      "parentUuid": "a05587a9_0fe4e8b8",
+      "revId": "164d3794d317b578663948926e29dcce61015d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
