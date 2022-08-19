@@ -13,6 +13,7 @@
 #include "common/PackedEnums.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/DisplayImpl.h"
+#include "libANGLE/renderer/metal/mtl_buffer_manager.h"
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
 #include "libANGLE/renderer/metal/mtl_context_device.h"
 #include "libANGLE/renderer/metal/mtl_format_utils.h"
@@ -138,6 +139,7 @@ class DisplayMtl : public DisplayImpl
     const mtl::FormatTable &getFormatTable() const { return mFormatTable; }
     mtl::RenderUtils &getUtils() { return mUtils; }
     mtl::StateCache &getStateCache() { return mStateCache; }
+    mtl::BufferManager &getBufferManager() { return mBufferManager; }
     uint32_t getMaxColorTargetBits() { return mMaxColorTargetBits; }
 
     id<MTLLibrary> getDefaultShadersLib();
@@ -188,6 +190,7 @@ class DisplayMtl : public DisplayImpl
     mutable mtl::FormatTable mFormatTable;
     mtl::StateCache mStateCache;
     mtl::RenderUtils mUtils;
+    mtl::BufferManager mBufferManager;
 
     // Built-in Shaders
     std::shared_ptr<DefaultShaderAsyncInfoMtl> mDefaultShadersAsyncInfo;

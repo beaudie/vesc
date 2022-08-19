@@ -966,7 +966,6 @@ angle::Result Buffer::resetWithSharedMemOpt(ContextMtl *context,
     {
         options |= MTLResourceStorageModeShared;
     }
-
     return resetWithResOpt(context, options, size, data);
 }
 

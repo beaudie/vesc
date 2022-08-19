@@ -368,6 +368,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
     // Will end current command encoder and start new blit command encoder. Unless a blit comamnd
     // encoder is already started.
     mtl::BlitCommandEncoder *getBlitCommandEncoder();
+    mtl::BlitCommandEncoder *getBlitCommandEncoderWithoutEndingRenderPass();
 
     // Will end current command encoder and start new compute command encoder. Unless a compute
     // command encoder is already started.
