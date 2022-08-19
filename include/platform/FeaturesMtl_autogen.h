@@ -227,6 +227,22 @@ struct FeaturesMtl : FeatureSetBase
         "preemptivelyStartProvokingVertexCommandBuffer", FeatureCategory::MetalFeatures,
         "AMD Metal Drivers appear to have a bug this works around", &members,
         "http://anglebug.com/7635"};
+
+    FeatureInfo alwaysUseStagedBufferUpdates = {
+        "alwaysUseStagedBufferUpdates", FeatureCategory::MetalFeatures,
+        "Always update buffers by copying the data to a staging buffer and then blitting it to the "
+        "actual buffer",
+        &members, "http://anglebug.com/7544"};
+
+    FeatureInfo alwaysUseManagedStorageModeForBuffers = {
+        "alwaysUseManagedStorageModeForBuffers", FeatureCategory::MetalFeatures,
+        "Metal buffers can be managed, shared, or private. Sometimes Managed is fastest", &members,
+        "http://anglebug.com/7544"};
+
+    FeatureInfo alwaysUseSharedStorageModeForBuffers = {
+        "alwaysUseSharedStorageModeForBuffers", FeatureCategory::MetalFeatures,
+        "Metal buffers can be managed, shared, or private. Sometimes Storage is fastest", &members,
+        "http://anglebug.com/7544"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;

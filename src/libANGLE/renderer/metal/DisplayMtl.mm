@@ -1143,6 +1143,15 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), preemptivelyStartProvokingVertexCommandBuffer, isAMD());
 
+    ANGLE_FEATURE_CONDITION((&mFeatures), alwaysUseStagedBufferUpdates, isAMD());
+    ANGLE_FEATURE_CONDITION((&mFeatures), alwaysUseManagedStorageModeForBuffers, isAMD());
+
+    ANGLE_FEATURE_CONDITION((&mFeatures), alwaysUseSharedStorageModeForBuffers, isIntel());
+
+    // At least one of these must not be set.
+    ASSERT(!mFeatures.alwaysUseManagedStorageModeForBuffers.enabled ||
+           !mFeatures.alwaysUseSharedStorageModeForBuffers.enabled);
+
     bool defaultDirectToMetal = true;
 
     ANGLE_FEATURE_CONDITION((&mFeatures), directMetalGeneration, defaultDirectToMetal);

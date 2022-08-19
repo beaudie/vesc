@@ -145,6 +145,7 @@ void ProvokingVertexHelper::ensureCommandBufferReady()
     if (!mCommandBuffer.ready())
     {
         mCommandBuffer.restart();
+        mCommandBuffer.get().label = [NSString stringWithFormat:@"ProvokingVertexCmdBuf"];
     }
     ASSERT(mCommandBuffer.ready());
 }
