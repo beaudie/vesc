@@ -129,6 +129,11 @@ void ProvokingVertexHelper::commitPreconditionCommandBuffer(ContextMtl *contextM
     mIndexBuffers.releaseInFlightBuffers(contextMtl);
 }
 
+bool ProvokingVertexHelper::isCommandEncoderStarted()
+{
+    return mCurrentEncoder.valid();
+}
+
 mtl::ComputeCommandEncoder *ProvokingVertexHelper::getComputeCommandEncoder()
 {
     if (mCurrentEncoder.valid())
@@ -145,6 +150,7 @@ void ProvokingVertexHelper::ensureCommandBufferReady()
     if (!mCommandBuffer.ready())
     {
         mCommandBuffer.restart();
+        mCommandBuffer.get().label = [NSString stringWithFormat:@"ProvokingVertexCmdBuf"];
     }
     ASSERT(mCommandBuffer.ready());
 }

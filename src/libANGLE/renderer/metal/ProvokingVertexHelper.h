@@ -52,6 +52,7 @@ class ProvokingVertexHelper : public mtl::ProvokingVertexCacheSpecializeShaderFa
     void ensureCommandBufferReady();
     void onDestroy(ContextMtl *context);
     mtl::ComputeCommandEncoder *getComputeCommandEncoder();
+    bool isCommandEncoderStarted();
 
   private:
     id<MTLLibrary> mProvokingVertexLibrary;

@@ -1659,6 +1659,11 @@ void ContextMtl::endRenderEncoding(mtl::RenderCommandEncoder *encoder)
         disableActiveOcclusionQueryInRenderPass();
     }
 
+    if (mBlitEncoder.valid())
+    {
+        mBlitEncoder.endEncoding();
+    }
+
     encoder->endEncoding();
 
     // Resolve visibility results
@@ -1846,6 +1851,15 @@ mtl::RenderCommandEncoder *ContextMtl::getRenderTargetCommandEncoder(
     return getRenderTargetCommandEncoderWithClear(renderTarget, Optional<MTLClearColor>());
 }
 
+mtl::BlitCommandEncoder *ContextMtl::getBlitCommandEncoderWithoutEndingRenderPass()
+{
+    if (mBlitEncoder.valid())
+    {
+        return &mBlitEncoder;
+    }
+    return &mBlitEncoder.restart();
+}
+
 mtl::BlitCommandEncoder *ContextMtl::getBlitCommandEncoder()
 {
     if (mBlitEncoder.valid())
@@ -1875,7 +1889,7 @@ mtl::ComputeCommandEncoder *ContextMtl::getComputeCommandEncoder()
 
 mtl::ComputeCommandEncoder *ContextMtl::getIndexPreprocessingCommandEncoder()
 {
-    return mProvokingVertexHelper.getComputeCommandEncoder();
+    return getComputeCommandEncoder();
 }
 
 void ContextMtl::ensureCommandBufferReady()
@@ -2697,7 +2711,8 @@ angle::Result ContextMtl::copyTextureSliceLevelToWorkBuffer(
     // Expand the buffer if it is not big enough.
     if (!mWorkBuffer || mWorkBuffer->size() < sizeInBytes)
     {
-        ANGLE_TRY(mtl::Buffer::MakeBuffer(this, sizeInBytes, nullptr, &mWorkBuffer));
+        ANGLE_TRY(mtl::Buffer::MakeBufferWithSharedMemOpt(this, true, sizeInBytes, nullptr,
+                                                          &mWorkBuffer));
     }
 
     gl::Rectangle region(0, 0, width, height);
