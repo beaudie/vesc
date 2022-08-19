@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01045d7f_aa09a0ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-19T21:47:12Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79bf4403_4b5ba105",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-19T21:47:12Z",
+      "side": 1,
+      "message": "Perhaps \"building ANGLE inside a Chromium checkout\" instead of \"building for Chrome development\" would be clearer. Also \"see these instructions instead\" rather than \"see this\", because we shouldn\u0027t follow these instructions - in particular running \"fetch angle\".",
+      "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
