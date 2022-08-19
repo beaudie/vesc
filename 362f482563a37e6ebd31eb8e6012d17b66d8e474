@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c3230bb_ccea8ab6",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-19T01:47:16Z",
+      "side": 1,
+      "message": "\u003e In this particular case, it\u0027s acceptable for the contents to be leaked from a previous render pass in the same context though, right?\n\nNo? Wouldn\u0027t that mean one WebGL context\u0027s data would leak to another? Their rendering is interleaved on the same backend context, right?\n\nBut based on your KEEP comment, I think I understand what the concern is. We don\u0027t want to entirely ban leaks between render passes, just leaks between render passes of different framebuffers (or rather, their attachments). Assuming textures, renderbuffers and framebuffers are unique to each WebGL context, then leaks between render passes of the same WebGL context are fine (enforced with the wording that leaks between render passes with framebuffers that don\u0027t share any attachments is impossible).\n\nIf WebGL contexts can share textures, then that would be a mess!",
+      "parentUuid": "751d15e6_facec964",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 250,
+        "endChar": 66
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2edef90c_cfbf1686",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 19
