@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a8e26c1_b65ec59f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-19T15:45:24Z",
+      "side": 1,
+      "message": "\u003e In the interest of keeping it simple, I\u0027m wondering if the wording \"not leaked from another context\" alone is enough, since that already covers render passes in another context?\n\nSo when contexts are virtualized, Chrome thinks it has many contexts, but in reality there is one context running everything. There is no _other_ context, so we can only talk about render passes when dealing with leaks. That said:\n\n\u003e Maybe I\u0027m getting too far out there, but does this matter? Maybe our implementation reuses the same internal scratch texture for memoryless pixel local storage on different framebuffers, but in the same context. Is that theoretically ok?\n\nI think not, because one WebGL context\u0027s render results should not be visible to another WebGL context (again, remember that they are all running over the same _real_ GL context). I don\u0027t believe we can allow reuse of the scratch texture between framebuffers. In other words, anything necessary to support memoryless planes must be owned by the framebuffer.\n\n\u003e I\u0027m just seeing if we can avoid clearing a texture in the shader image implementation of memoryless pixel local storage.\n\nWe definitely can. As long as the shader image is owned by the framebuffer. Of course, it\u0027ll need to be cleared once because of robust-resource-init, but can be freely used by that framebuffer afterwards. Like I said, leaks between render passes of the same framebuffer are ok, because (I\u0027m presuming) WebGL resources aren\u0027t shared between pages.",
+      "parentUuid": "9a8a3e47_c46c4922",
+      "range": {
+        "startLine": 250,
+        "startChar": 65,
+        "endLine": 250,
+        "endChar": 66
+      },
+      "revId": "362f482563a37e6ebd31eb8e6012d17b66d8e474",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2edef90c_cfbf1686",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 19
