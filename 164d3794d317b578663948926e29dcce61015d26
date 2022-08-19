@@ -52,6 +52,24 @@
       "parentUuid": "5390f6b0_61b3b48b",
       "revId": "164d3794d317b578663948926e29dcce61015d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a96ee15b_d0c69269",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-19T18:50:18Z",
+      "side": 1,
+      "message": "Yes, and yes!",
+      "parentUuid": "04e5e534_75570b45",
+      "revId": "164d3794d317b578663948926e29dcce61015d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
