@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "965e65f3_ded93c35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-19T03:15:05Z",
+      "side": 1,
+      "message": "Trying the bot that previously failed here: https://chromium-review.googlesource.com/c/chromium/src/+/3839083",
+      "revId": "45a84a8901e495bf5c1d4a51810c56e7500e7344",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
