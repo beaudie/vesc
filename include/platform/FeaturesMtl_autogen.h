@@ -222,6 +222,22 @@ struct FeaturesMtl : FeatureSetBase
         "limitMaxColorTargetBitsForTesting", FeatureCategory::MetalFeatures,
         "Metal iOS has a limit on the number of color target bits per pixel.", &members,
         "http://anglebug.com/7280"};
+
+    FeatureInfo alwaysUseStagedBufferUpdates = {
+        "alwaysUseStagedBufferUpdates", FeatureCategory::MetalFeatures,
+        "Always update buffers by copying the data to a staging buffer and then blitting it to the "
+        "actual buffer",
+        &members, "http://anglebug.com/7544"};
+
+    FeatureInfo alwaysUseManagedStorageModeForBuffers = {
+        "alwaysUseManagedStorageModeForBuffers", FeatureCategory::MetalFeatures,
+        "Metal buffers can be managed, shared, or private. Sometimes Managed is fastest", &members,
+        "http://anglebug.com/7544"};
+
+    FeatureInfo alwaysUseSharedStorageModeForBuffers = {
+        "alwaysUseSharedStorageModeForBuffers", FeatureCategory::MetalFeatures,
+        "Metal buffers can be managed, shared, or private. Sometimes Storage is fastest", &members,
+        "http://anglebug.com/7544"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
