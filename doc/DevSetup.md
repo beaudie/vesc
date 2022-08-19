@@ -10,6 +10,8 @@ ANGLE uses git for version control. Helpful documentation can be found at [http:
 
 ### Required First Setup (do this first)
 
+Note: If you are building for Chrome development [see this](https://chromium.googlesource.com/angle/angle/+/HEAD/doc/BuildingAngleForChromiumDevelopment.md).
+
 Required on all platforms:
 
  * [Python 3](https://www.python.org/downloads/) must be available in your path.
