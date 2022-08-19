@@ -560,7 +560,8 @@ bool ValidateES2CopyTexImageParameters(const Context *context,
                 }
                 break;
             default:
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                          internalformat);
                 return false;
         }
     }
@@ -1039,7 +1040,7 @@ bool ValidateES2TexImageParametersBase(const Context *context,
             case GL_UNSIGNED_INT_2_10_10_10_REV_EXT:
                 if (!context->getExtensions().textureType2101010REVEXT)
                 {
-                    context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                    context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, type);
                     return false;
                 }
                 break;
@@ -1072,7 +1073,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
             case GL_RG:
                 if (!context->getExtensions().textureRgEXT)
                 {
-                    context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                    context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                              format);
                     return false;
                 }
                 switch (type)
@@ -1082,8 +1084,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                     case GL_FLOAT:
                         if (!context->getExtensions().textureFloatOES)
                         {
-                            context->validationError(entryPoint, GL_INVALID_ENUM,
-                                                     kEnumNotSupported);
+                            context->validationErrorF(entryPoint, GL_INVALID_ENUM,
+                                                      kEnumNotSupported, type);
                             return false;
                         }
                         break;
@@ -1091,8 +1093,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                         if (!context->getExtensions().textureFloatOES &&
                             !context->getExtensions().textureHalfFloatOES)
                         {
-                            context->validationError(entryPoint, GL_INVALID_ENUM,
-                                                     kEnumNotSupported);
+                            context->validationErrorF(entryPoint, GL_INVALID_ENUM,
+                                                      kEnumNotSupported, type);
                             return false;
                         }
                         break;
@@ -1100,8 +1102,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                     case GL_UNSIGNED_SHORT:
                         if (!context->getExtensions().textureNorm16EXT)
                         {
-                            context->validationError(entryPoint, GL_INVALID_ENUM,
-                                                     kEnumNotSupported);
+                            context->validationErrorF(entryPoint, GL_INVALID_ENUM,
+                                                      kEnumNotSupported, type);
                             return false;
                         }
                         break;
@@ -1163,7 +1165,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
             case GL_BGRA_EXT:
                 if (!context->getExtensions().textureFormatBGRA8888EXT)
                 {
-                    context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                    context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                              format);
                     return false;
                 }
                 switch (type)
@@ -1180,7 +1183,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
             case GL_SRGB_ALPHA_EXT:
                 if (!context->getExtensions().sRGBEXT)
                 {
-                    context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                    context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                              format);
                     return false;
                 }
                 switch (type)
@@ -1236,7 +1240,7 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                 }
                 break;
             default:
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, format);
                 return false;
         }
 
@@ -1249,7 +1253,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                        context->getExtensions().depthTextureCubeMapOES) &&
                       context->getExtensions().depthTextureOES))
                 {
-                    context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                    context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                              format);
                     return false;
                 }
 
@@ -1433,7 +1438,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                 case GL_SRGB_ALPHA_EXT:
                     if (!context->getExtensions().sRGBEXT)
                     {
-                        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                                  internalformat);
                         return false;
                     }
                     break;
@@ -1441,7 +1447,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                 case GL_RGB10_A2_EXT:
                     if (!context->getExtensions().textureType2101010REVEXT)
                     {
-                        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                                  internalformat);
                         return false;
                     }
 
@@ -1484,7 +1491,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
                 case GL_RGBA16_SNORM_EXT:
                     if (!context->getExtensions().textureNorm16EXT)
                     {
-                        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                                  internalformat);
                         return false;
                     }
                     break;
@@ -1499,7 +1507,7 @@ bool ValidateES2TexImageParametersBase(const Context *context,
         {
             if (!context->getExtensions().textureFloatOES)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, type);
                 return false;
             }
         }
@@ -1507,7 +1515,7 @@ bool ValidateES2TexImageParametersBase(const Context *context,
         {
             if (!context->getExtensions().textureHalfFloatOES)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, type);
                 return false;
             }
         }
@@ -1654,7 +1662,8 @@ bool ValidateES2TexStorageParametersBase(const Context *context,
             }
             break;
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported,
+                                      ToGLenum(target));
             return false;
     }
 
@@ -2401,7 +2410,7 @@ bool ValidateGetPointervKHR(const Context *context,
             break;
 
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, pname);
             return false;
     }
 
@@ -4201,7 +4210,7 @@ bool ValidateDepthFunc(const Context *context, angle::EntryPoint entryPoint, GLe
             break;
 
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, func);
             return false;
     }
 
@@ -4284,7 +4293,7 @@ bool ValidateFrontFace(const Context *context, angle::EntryPoint entryPoint, GLe
         case GL_CCW:
             break;
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, mode);
             return false;
     }
 
@@ -4608,7 +4617,7 @@ bool ValidateHint(const Context *context, angle::EntryPoint entryPoint, GLenum t
             break;
 
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, mode);
             return false;
     }
 
@@ -4620,7 +4629,7 @@ bool ValidateHint(const Context *context, angle::EntryPoint entryPoint, GLenum t
         case GL_TEXTURE_FILTERING_HINT_CHROMIUM:
             if (!context->getExtensions().textureFilteringHintCHROMIUM)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, target);
                 return false;
             }
             break;
@@ -4629,7 +4638,7 @@ bool ValidateHint(const Context *context, angle::EntryPoint entryPoint, GLenum t
             if (context->getClientVersion() < ES_3_0 &&
                 !context->getExtensions().standardDerivativesOES)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, target);
                 return false;
             }
             break;
@@ -4640,13 +4649,13 @@ bool ValidateHint(const Context *context, angle::EntryPoint entryPoint, GLenum t
         case GL_FOG_HINT:
             if (context->getClientMajorVersion() >= 2)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, target);
                 return false;
             }
             break;
 
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, target);
             return false;
     }
 
@@ -4752,7 +4761,7 @@ bool ValidatePixelStorei(const Context *context,
         case GL_PACK_REVERSE_ROW_ORDER_ANGLE:
             if (!context->getExtensions().packReverseRowOrderANGLE)
             {
-                context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, pname);
             }
             break;
 
@@ -4767,7 +4776,7 @@ bool ValidatePixelStorei(const Context *context,
             break;
 
         default:
-            context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+            context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, pname);
             return false;
     }
 
@@ -5326,7 +5335,7 @@ bool ValidateDisable(const Context *context, angle::EntryPoint entryPoint, GLenu
 {
     if (!ValidCap(context, cap, false))
     {
-        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, cap);
         return false;
     }
 
@@ -5337,7 +5346,7 @@ bool ValidateEnable(const Context *context, angle::EntryPoint entryPoint, GLenum
 {
     if (!ValidCap(context, cap, false))
     {
-        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, cap);
         return false;
     }
 
@@ -5739,7 +5748,7 @@ bool ValidateIsEnabled(const Context *context, angle::EntryPoint entryPoint, GLe
 {
     if (!ValidCap(context, cap, true))
     {
-        context->validationError(entryPoint, GL_INVALID_ENUM, kEnumNotSupported);
+        context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, cap);
         return false;
     }
 
