@@ -16,6 +16,23 @@
       "message": "PTAL - Ian",
       "revId": "4e48e10a0dd8cef409f76ea315e56038d3a7a892",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d677a5e_e3deacb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-20T01:30:06Z",
+      "side": 1,
+      "message": "looks like some flakiness with blobcache -\n```\n[ RUN      ] MultithreadingTest.MultiContextDrawWithSwapBuffers/ES3_Vulkan\n../../src/tests/test_utils/ANGLETest.cpp:65: Failure\nBlobCache.cpp:90 (DecompressBlobCacheData): Failed to decompress data: -3\n\nangle::PrintStackBacktrace() at crash_handler_posix.cpp:495\nangle::(anonymous namespace)::TestPlatform_logError(angle::PlatformMethods*, char const*) at ANGLETest.cpp:68\nangle::LoggingAnnotator::logMessage(gl::LogMessage const\u0026) const at LoggingAnnotator.cpp:?\ngl::LogMessage::~LogMessage() at debug.cpp:198\negl::DecompressBlobCacheData(unsigned char const*, unsigned long, angle::MemoryBuffer*) at BlobCache.cpp:?\negl::BlobCache::getAndDecompress(angle::ScratchBuffer*, std::Cr::array\u003cunsigned char, 20ul\u003e const\u0026, angle::MemoryBuffer*) at BlobCache.cpp:?\ngl::MemoryShaderCache::getShader(gl::Context const*, gl::Shader*, std::Cr::array\u003cunsigned char, 20ul\u003e*) at MemoryShaderCache.cpp:?\ngl::Shader::compile(gl::Context const*) at Shader.cpp:413\nisShared at Context.h:545\nCompileShader(unsigned int, char const*) at shader_utils.cpp:159\n(anonymous namespace)::CompileProgramInternal(char const*, char const*, char const*, char const*, char const*, std::Cr::function\u003cvoid (unsigned int)\u003e const\u0026) at shader_utils.cpp:26\nCompileProgram(char const*, char const*) at shader_utils.cpp:284\nmakeRaster at gl_raii.h:184\nangle::MultithreadingTest::runMultithreadedGLTest(std::Cr::function\u003cvoid (void*, unsigned long)\u003e, unsigned long)::{lambda()#1}::operator()() const at MultithreadingTest.cpp:96\nreset at unique_ptr.h:307\nstart_thread at pthread_create.c:463\nclone at clone.S:97\nERR: BlobCache.cpp:90 (DecompressBlobCacheData): Failed to decompress data: -3\n```",
+      "revId": "4e48e10a0dd8cef409f76ea315e56038d3a7a892",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
