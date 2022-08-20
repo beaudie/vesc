@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be17d8fb_c6c642d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1538447
+      },
+      "writtenOn": "2022-08-20T00:34:14Z",
+      "side": 1,
+      "message": "https://cex.io/mobile",
+      "revId": "d25c9d7f5bb02ec22e6b9f519e69dc84c4bb2150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
