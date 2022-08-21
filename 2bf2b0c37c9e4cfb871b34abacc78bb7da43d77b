@@ -33,6 +33,24 @@
       "message": "Perhaps \"building ANGLE inside a Chromium checkout\" instead of \"building for Chrome development\" would be clearer. Also \"see these instructions instead\" rather than \"see this\", because we shouldn\u0027t follow these instructions - in particular running \"fetch angle\".",
       "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "280a8ef9_8ab641d1",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-21T21:13:21Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "79bf4403_4b5ba105",
+      "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
