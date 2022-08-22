@@ -196,6 +196,7 @@ libangle_includes = [
   "include/GLES3/gl32.h",
   "include/KHR/khrplatform.h",
   "include/WGL/wgl.h",
+  "include/GLX/glxext.h",
   "include/platform/Feature.h",
   "include/platform/FeaturesD3D_autogen.h",
   "include/platform/FeaturesGL_autogen.h",
