@@ -33,6 +33,24 @@
       "message": "This will basically be true, this is practically true everywhere. What happened to checking if the context itself is created with robustness?",
       "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16500412_bad95faf",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-22T17:22:28Z",
+      "side": 1,
+      "message": "Isn\u0027t this condition true only if the context is created with robustness, and the backend supports it? https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.cpp;l\u003d3766.\n\nIf the context is created with robustness but the backend doesn\u0027t support, should we let the program crash with OOB write since the  backend is not supposed to support robustness?",
+      "parentUuid": "4fd21b67_427d35e1",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
