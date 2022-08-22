@@ -70,6 +70,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "789b2a59_99ac30ba",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-22T21:59:06Z",
+      "side": 1,
+      "message": "e.g. My previous attempt to force `forceFallbackFormat` when RGBX8 AHB still maps to `GL_RGB8`, that enables the below load function for frontend/internal `GL_RGB8` format \u003d\u003e actual `RGBA8`.\n```\n    \"R8G8B8A8_UNORM\": {\n      \"GL_UNSIGNED_BYTE\": \"LoadToNative3To4\u003cGLubyte, 0xFF\u003e\"\n```\n\nThat\u0027s also why I think frontend `GL_RGB8` + internal `GL_RGBX8_ANGLE` + actual `RGBX8` is intended to use\n```\n    \"R8G8B8X8_UNORM\": {\n      \"GL_UNSIGNED_BYTE\": \"LoadToNative3To4\u003cGLubyte, 0xFF\u003e\"\n    },\n```\n(PS: it\u0027s also `RGBA8` used as actual here due to Vulkan)\n\nI gave your suggestion a try, and that didn\u0027t work, which matched what those functions do. Unless I missed another layer of data conversion at further frontend between `GL_RGB8` \u003c\u003d\u003e `GL_RGBX8_ANGLE`, since I\u0027m not that familiar with angle.",
+      "parentUuid": "f8a6d19a_68b2a77c",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
