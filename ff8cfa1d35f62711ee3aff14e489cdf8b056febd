@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ec780a4_e114d80f",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-22T18:55:21Z",
+      "side": 1,
+      "message": "I think chrome always requests both, one isn\u0027t implied from the other in ANGLE\u0027s code though.",
+      "parentUuid": "388e5d27_b38455a3",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fd21b67_427d35e1",
         "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
         "patchSetId": 10
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "Isn\u0027t this condition true only if the context is created with robustness, and the backend supports it? https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Context.cpp;l\u003d3766.\n\nIf the context is created with robustness but the backend doesn\u0027t support, should we let the program crash with OOB write since the  backend is not supposed to support robustness?",
       "parentUuid": "4fd21b67_427d35e1",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43c93da9_0a33622c",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-22T18:55:21Z",
+      "side": 1,
+      "message": "KHR_robust_buffer_access_behavior is specifically for accessing vertex data outside of bounds (for example drawing with an index buffer that references a vertex too large for the vertex buffer).\n\nIn this case, we want to check if the client requested a robust context using GL_EXT_robustness. `Context::isResetNotificationEnabled` is the way to check that I believe.",
+      "parentUuid": "16500412_bad95faf",
       "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
