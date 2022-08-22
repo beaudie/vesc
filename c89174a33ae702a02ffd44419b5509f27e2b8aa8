@@ -46,6 +46,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a6d19a_68b2a77c",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-22T21:44:48Z",
+      "side": 1,
+      "message": "(sorry, false click cuts my comment)\n\nwhich is reflected in `ImageHelper::CalculateBufferInfo`, and the `R8G8B8X8_UNORM`/`R8G8B8A8_UNORM` suggests the actual backing storage and either can ensure a match against `AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM`.\n\n(I was tracing the upload path to `ImageHelper::stageSubresourceUpdateImpl`, but maybe something else is deeply broken since `GL_RGBX8_ANGLE` doesn\u0027t quite match your expectation?)",
+      "parentUuid": "d30911a2_b9817079",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
