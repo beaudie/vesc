@@ -94,6 +94,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aabd7f37_cfdca119",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T22:13:05Z",
+      "side": 1,
+      "message": "Something\u0027s definitely wrong, but I don\u0027t know where. See the `GL_BGRX8_ANGLEX` case above for example, this should be very similar to that, one way or another.\n\nActually this table is always a headache to read. Looking again, it looks like the source is defined by the outer format and inner type, and the internal format is the middle one, for example:\n\n```\n  \"GL_LUMINANCE_ALPHA\": {\n    \"R32G32B32A32_FLOAT\": {\n      \"GL_FLOAT\": \"LoadLA32FToRGBA32F\"\n    }\n  },\n```\n\nso input LUMA + GL_FLOAT is loaded into RGBA32 :/\n\nIn that case, maybe what we need is something like this?\n\n```\n  \"GL_RGB\" : {\n    \"R8G8B8X8_UNORM\": {\n      \"GL_UNSIGNED_BYTE\": \"LoadToNative3To4\u003cGLubyte, 0xFF\u003e\"\n    },\n  },\n```\n\nBut I also can\u0027t make sense of the code right now. I see this:\n\n```\nangle::Result ImageHelper::stageSubresourceUpdateImpl(...,\n                                                      const gl::InternalFormat \u0026formatInfo,\n                                                      GLenum type,\n                                                      const uint8_t *pixels,\n                                                      const Format \u0026vkFormat,\n                                                      ...)\n```\n\nFrom what I can make, `formatInfo` and `type` are what\u0027s passed to `glTexSubImage2D`, i.e. they declare the format of data in the `pixels` buffer. `vkFormat` on the other hand is the existing format of the image. Can you tell me what these values are in the test?\n\nWhat I thought is the input is that `formatInfo` is RGB, type is UNSIGNED_BYTE, and `vkFormat` is RGBX.\n\nNow the code then does this:\n\n```\n    LoadImageFunctionInfo loadFunctionInfo \u003d vkFormat.getTextureLoadFunction(access, type);\n```\n\nand looking at what `getTextureLoadFunction` returns, it\u0027s about converting the data from the intended format of the image to its actual format. For example, LUMA to RG, or in this case, RGBX to RGBA. It has nothing to do with the _input_ data format! It seems to me that this is fundamentally broken, why is the `pixels` format not part of the equation?",
+      "parentUuid": "f8a6d19a_68b2a77c",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
