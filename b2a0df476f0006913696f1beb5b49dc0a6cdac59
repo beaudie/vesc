@@ -51,6 +51,24 @@
       "parentUuid": "0a334250_e2b679b5",
       "revId": "b2a0df476f0006913696f1beb5b49dc0a6cdac59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7307094_e82a1c22",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-22T17:25:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fb08f3d_cc733e63",
+      "revId": "b2a0df476f0006913696f1beb5b49dc0a6cdac59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
