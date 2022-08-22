@@ -118,6 +118,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dec02ac3_30860e51",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T22:13:58Z",
+      "side": 1,
+      "message": "I\u0027ll need to think about this. If it\u0027s possible for you, do you think you could add an end2end test to ANGLE to reproduce this? That would help a lot. That would go in `ImageTest.cpp`",
+      "parentUuid": "aabd7f37_cfdca119",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
