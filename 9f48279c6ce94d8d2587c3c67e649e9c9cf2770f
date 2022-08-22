@@ -16,6 +16,24 @@
       "message": "nit: No need to keep the old condition in comment, since it\u0027s trivial",
       "revId": "9f48279c6ce94d8d2587c3c67e649e9c9cf2770f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af5cc39_3596ca99",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3929,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-22T20:45:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a398f6e_71dca104",
+      "revId": "9f48279c6ce94d8d2587c3c67e649e9c9cf2770f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
