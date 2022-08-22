@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cffb7f35_0f03f132",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-22T22:06:40Z",
+      "side": 1,
+      "message": "Thank you Geoff. I kept the flag set code since `isWebGL()` doesn\u0027t necessarily mean robust access.",
+      "parentUuid": "7ec780a4_e114d80f",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fd21b67_427d35e1",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "KHR_robust_buffer_access_behavior is specifically for accessing vertex data outside of bounds (for example drawing with an index buffer that references a vertex too large for the vertex buffer).\n\nIn this case, we want to check if the client requested a robust context using GL_EXT_robustness. `Context::isResetNotificationEnabled` is the way to check that I believe.",
       "parentUuid": "16500412_bad95faf",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfc26976_ef50519e",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-22T22:06:40Z",
+      "side": 1,
+      "message": "I was wondering what is the difference between `KHR_robust_buffer_access_behavior` and `GL_EXT_robustness`. Thank you the explanation!\n\nUsing `Context::isResetNotificationEnabled` will cause this newly added test fail on Pixel6: https://chromium-review.googlesource.com/c/angle/angle/+/3828441/13/src/tests/egl_tests/EGLRobustnessTest.cpp#352. When we set the `EGL_CONTEXT_OPENGL_RESET_NOTIFICATION_STRATEGY_EXT` attribute with value `EGL_NO_RESET_NOTIFICATION_EXT`, `Context::isResetNotificationEnabled()` is no longer true.\n\nI used `context-\u003egetExtensions().robustnessEXT` as the check method, is that correct?",
+      "parentUuid": "43c93da9_0a33622c",
       "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
