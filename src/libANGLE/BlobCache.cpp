@@ -77,7 +77,7 @@ bool DecompressBlobCacheData(const uint8_t *compressedData,
     // Allocate enough memory.
     if (!uncompressedData->resize(uncompressedSize))
     {
-        ERR() << "Failed to allocate memory for decompression";
+        // ERR() << "Failed to allocate memory for decompression";
         return false;
     }
 
@@ -87,7 +87,7 @@ bool DecompressBlobCacheData(const uint8_t *compressedData,
 
     if (zResult != Z_OK)
     {
-        ERR() << "Failed to decompress data: " << zResult << "\n";
+        // ERR() << "Failed to decompress data: " << zResult << "\n";
         return false;
     }
 
