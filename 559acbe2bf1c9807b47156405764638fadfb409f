@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1640929c_b82de2c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-22T21:06:31Z",
+      "side": 1,
+      "message": "Thanks much for catching and fixing this regression.\n\nlgtm+2\n",
+      "revId": "559acbe2bf1c9807b47156405764638fadfb409f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
