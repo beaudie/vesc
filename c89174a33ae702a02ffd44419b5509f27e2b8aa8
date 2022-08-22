@@ -190,6 +190,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e32c3c_df0e73bf",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-22T23:33:55Z",
+      "side": 1,
+      "message": "nope...`ImageHelper::stageSubresourceUpdateFromFramebuffer`\u0027s usage of load function reads about right to me. I need to take some time to understand the issue a bit more.",
+      "parentUuid": "52eb717e_b28c4aa8",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
