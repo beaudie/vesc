@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae2d5f4_9be75174",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-08-22T18:21:31Z",
+      "side": 1,
+      "message": "nit: There is another similar error `Message: Attempt to use resource over contexts without enabling context sharing. App must pass a share_context to eglCreateContext() to share resources.`",
+      "range": {
+        "startLine": 65,
+        "startChar": 5,
+        "endLine": 65,
+        "endChar": 20
+      },
+      "revId": "d94df26bca35f52a12ce1cdcaa59f9dd57bc544a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
