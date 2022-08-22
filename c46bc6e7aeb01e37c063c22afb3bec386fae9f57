@@ -51,6 +51,41 @@
       "parentUuid": "ab3f6ffd_31316ac5",
       "revId": "c46bc6e7aeb01e37c063c22afb3bec386fae9f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c46affe3_7448d452",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T21:17:15Z",
+      "side": 1,
+      "message": "Shouldn\u0027t be related, there\u0027s flakiness with a recent change we are reverting.",
+      "parentUuid": "c89b75f9_be72ca7c",
+      "revId": "c46bc6e7aeb01e37c063c22afb3bec386fae9f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b5c68ec_8f67fd66",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T21:17:15Z",
+      "side": 1,
+      "message": "Please open a bug for this. The test itself is not doing anything pre-rotation related, and that itself should be transparent to the application (this test). The test is just doing surface blits, so whatever\u0027s failing, it\u0027s not pre-rotation related.\n\nPre-rotation testing is done in Vulkan in the sense that the test suite is instantiated with `.enable(Feature::EmulatedPrerotation*)` only for Vulkan (i.e. on other platforms, it runs, but there\u0027s no rotation involved)",
+      "revId": "c46bc6e7aeb01e37c063c22afb3bec386fae9f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
