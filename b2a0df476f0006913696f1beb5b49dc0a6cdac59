@@ -16,6 +16,23 @@
       "message": "looks like some flakiness with EGLProgramCacheControlTest",
       "revId": "b2a0df476f0006913696f1beb5b49dc0a6cdac59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a334250_e2b679b5",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T16:48:49Z",
+      "side": 1,
+      "message": "Pre-rotation tests are only done on Vulkan. Something else must have been wrong.",
+      "revId": "b2a0df476f0006913696f1beb5b49dc0a6cdac59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
