@@ -61,6 +61,9 @@ const char *kIgnoredErrors[] = {
     "FreeAllocationOnTimestamp - Reference to buffer created from "
     "different context without a share list. Application failed to pass "
     "share_context to eglCreateContext. Results are undefined.",
+    // http://crbug.com/1348684
+    "UpdateTimestamp - Reference to buffer created from different context without a share list. "
+    "Application failed to pass share_context to eglCreateContext. Results are undefined.",
 };
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
 
