@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20903edf_603dbaa0",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T20:59:16Z",
+      "side": 1,
+      "message": "nit: Just `angle::BitSet(stages)`, doesn\u0027t that work?",
+      "range": {
+        "startLine": 209,
+        "startChar": 38,
+        "endLine": 209,
+        "endChar": 88
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e826d1_9c748b7b",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T20:59:16Z",
+      "side": 1,
+      "message": "This is not \"inlined to reduce overhead\" 😄\n\nSuggest removing this out of `link()` and put it here:\n\n```\nif (mState.mIsLinked)\n{\n    return angle::Result::Continue;\n}\nlink(context);\n```\n\nInside `link()`, you can `ASSERT(!mState.mIsLinked);`.",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "308db6c1_fee86058",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T20:59:16Z",
+      "side": 1,
+      "message": "Can we make `link` return `void`? The warning is not gaining us conformance; and there is `mState.mIsLinked` to actually give error to the app if it starts to use the pipeline.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5ff0dd8_2dd46422",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T20:59:16Z",
+      "side": 1,
+      "message": "`DIRTY_OBJECT_PROGRAM_OR_PPO` is perhaps conflating the two unnecessarily. When the binding changes, we shouldn\u0027t need to attempt to actually process the program or pipeline.\n\nFor one, I\u0027d suggest a separate `DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT`. Also, it\u0027d be good to set this object dirty when the PPO actually changes. How about setting the new dirty object bit in `onProgramPipelineExecutableChange`?",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6733f5c7_c80128af",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-22T20:59:16Z",
+      "side": 1,
+      "message": "From what I can make, this is only called due to `glUniformBlockBinding`. Technically we should have the program notify its observers about a change etc, such that `onProgramPipelineExecutableChange` is called. This may already happen actually (maybe through `angle::SubjectMessage::ProgramRelinked` instead), not sure.\n\nA test would make sure there are no bugs.",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
