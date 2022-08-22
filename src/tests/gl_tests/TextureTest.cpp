@@ -6760,6 +6760,105 @@ TEST_P(Texture2DTestES31PPO, SingleTextureMultipleSamplers)
     EXPECT_PIXEL_NEAR(0, 0, 128, 0, 0, 255, 2);
 }
 
+TEST_P(Texture2DTestES31PPO, MyTex)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    constexpr char kVS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec2 position;\n"
+        "out vec2 texCoord;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(position, 0, 1);\n"
+        "    texCoord = position * 0.5 + vec2(0.5);\n"
+        "}";
+
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec2 texCoord;\n"
+        "uniform sampler2D tex1;\n"
+        "uniform sampler2D tex2;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    color = texture(tex1, texCoord) + 0.5 * texture(tex2, texCoord); \n"
+        "}";
+
+    constexpr char kFS2[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "in vec2 texCoord;\n"
+        "uniform sampler2D tex2;\n"  // order of tex1 and tex2 swapped
+        "uniform sampler2D tex1;\n"
+        "out vec4 color;\n"
+        "void main()\n"
+        "{\n"
+        "    color = texture(tex1, texCoord) + 0.5 * texture(tex2, texCoord); \n"
+        "}";
+
+    bindProgramPipeline(kVS, kFS);
+
+    std::array<GLint, 2> texLocations = {
+        {glGetUniformLocation(mFragProg, "tex1"), glGetUniformLocation(mFragProg, "tex2")}};
+    printf("tex1=%d\n", glGetUniformLocation(mFragProg, "tex1"));
+    printf("tex2=%d\n", glGetUniformLocation(mFragProg, "tex2"));
+
+    GLSampler samplers[2];
+
+    glActiveShaderProgram(mPipeline, mFragProg);
+    for (GLint i = 0; i < 2; ++i)
+    {
+        ASSERT_NE(-1, texLocations[i]);
+        glUniform1i(texLocations[i], i);
+
+        glBindSampler(i, samplers[i]);
+        glSamplerParameteri(samplers[i], GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glSamplerParameteri(samplers[i], GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    }
+
+    constexpr int kSize                 = 16;
+    std::array<Vector3, 6> quadVertices = ANGLETestBase::GetQuadVertices();
+
+    std::vector<GLColor> redColors(kSize * kSize, GLColor::red);
+    GLTexture tex;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 redColors.data());
+
+    std::vector<GLColor> blueColors(kSize * kSize, GLColor::blue);
+    GLTexture tex2;
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, tex2);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 blueColors.data());
+
+    ASSERT_GL_NO_ERROR();
+
+    ppoDrawQuad(quadVertices, "position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    // red + half blue
+    EXPECT_PIXEL_NEAR(0, 0, 255, 0, 128, 255, 2);
+
+    bindProgramPipeline(kVS, kFS2);
+
+    glActiveShaderProgram(mPipeline, mFragProg);
+    glUniform1i(glGetUniformLocation(mFragProg, "tex1"), 0);
+    printf("tex1=%d\n", glGetUniformLocation(mFragProg, "tex1"));
+    glUniform1i(glGetUniformLocation(mFragProg, "tex2"), 1);
+    printf("tex2=%d\n", glGetUniformLocation(mFragProg, "tex2"));
+
+    ASSERT_GL_NO_ERROR();
+
+    ppoDrawQuad(quadVertices, "position", 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    // expect the same result as only bindings were swapped
+    EXPECT_PIXEL_NEAR(0, 0, 255, 0, 128, 255, 2);
+}
+
 // Use a sampler in a uniform struct.
 TEST_P(SamplerInStructTest, SamplerInStruct)
 {
