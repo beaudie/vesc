@@ -4956,7 +4956,7 @@ void UpdatePreCacheActiveTextures(const std::vector<gl::SamplerBinding> &sampler
                        sizeof(uint32_t));
             }
 
-            desc->updateInfoDesc(static_cast<uint32_t>(textureIndex), infoDesc);
+            desc->updateInfoDesc(static_cast<uint32_t>(samplerIndex), infoDesc);
         }
     }
 }
