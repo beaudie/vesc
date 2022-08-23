@@ -116,6 +116,7 @@ void BlobCache::put(const BlobCache::Key &key, angle::MemoryBuffer &&value)
     }
     else
     {
+        std::scoped_lock<std::mutex> lock(mBlobCacheMutex);
         populate(key, std::move(value), CacheSource::Memory);
     }
 }
@@ -147,7 +148,6 @@ void BlobCache::putApplication(const BlobCache::Key &key, const angle::MemoryBuf
 
 void BlobCache::populate(const BlobCache::Key &key, angle::MemoryBuffer &&value, CacheSource source)
 {
-    std::scoped_lock<std::mutex> lock(mBlobCacheMutex);
     CacheEntry newEntry;
     newEntry.first  = std::move(value);
     newEntry.second = source;
@@ -239,7 +239,10 @@ BlobCache::GetAndDecompressResult BlobCache::getAndDecompress(
         return GetAndDecompressResult::NotFound;
     }
 
-    if (!DecompressBlobCacheData(compressedValue.data(), compressedSize, uncompressedValueOut))
+    // This needs to be locked because `DecompressBlobCacheData` is reading shared memory from
+    // `compressedValue.data()`.
+    if (std::lock_guard<std::mutex> lock(mBlobCacheMutex);
+        !DecompressBlobCacheData(compressedValue.data(), compressedSize, uncompressedValueOut))
     {
         return GetAndDecompressResult::DecompressFailure;
     }
