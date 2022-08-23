@@ -3850,8 +3850,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsFragmentShaderPixelInterlock,
         mFragmentShaderInterlockFeatures.fragmentShaderPixelInterlock == VK_TRUE);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsImagelessFramebuffer,
-                            mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE);
+    // Currently, using imageless framebuffers fails on Swiftshader when overwriting an existing
+    // framebuffer attachment, i.e., if it is not null. (b/248611054)
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsImagelessFramebuffer,
+        mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE && !isSwiftShader);
 
     // The VK_PIPELINE_ROBUSTNESS_BUFFER_BEHAVIOR_ROBUST_BUFFER_ACCESS_EXT behavior is used by
     // ANGLE, which requires the robustBufferAccess feature to be available.
