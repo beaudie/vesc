@@ -238,6 +238,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f836bfd3_7b5152a4",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:11:34Z",
+      "side": 1,
+      "message": "I was thinking about it, and I think I know why this was never broken before; `glTexSubImage2D` only allows combinations of format/type that match the internal format. So we only ever need to look at the intended-\u003eactual format conversion, basically because the input data is already in the intended format (at least channel-count-wise)\n\nHowever, this assumption is being broken by AHB here, and the test is providing RGB data to an RGBX image (i.e. not the same number of channels). I realize AHB had no choice but to expect GL_RGB8 in `glTexSubImage2D` because there\u0027s no GL_RGBX8.\n\nSo your change is fine. I was worried about other non-AHB users of RGBX8_ANGLE, but I don\u0027t believe there are any that actually upload texture data. So, let\u0027s codify this in the ANGLE extension. Could you please add this text to `ANGLE_rgbx_internal_format.txt` (after `glReadPixels`):\n\n```\nglTexSubImage* will accept the following format+type combinations:\n    1. format \u003d GL_RGB, type \u003d GL_UNSIGNED_BYTE\n```\n\nI feel like `glReadPixels` should have also accepted `GL_RGB` instead of `GL_RGBX8_ANGLE` as is written in the spec now, but changing that needs some coordination with Chrome",
+      "parentUuid": "118796f3_2c1d50c6",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
