@@ -1633,6 +1633,10 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     }
 
     mCurrentSubpass = 0;
+
+    // Reset the image views used for imageless framebuffer (if any)
+    std::fill(mImageViews.begin(), mImageViews.end(), VK_NULL_HANDLE);
+
     return initializeCommandBuffer(context);
 }
 
@@ -2086,7 +2090,7 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayoutAndLoadStore(
 
 angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     ContextVk *contextVk,
-    const Framebuffer &framebuffer,
+    const MaybeImagelessFramebuffer &framebuffer,
     const gl::Rectangle &renderArea,
     const RenderPassDesc &renderPassDesc,
     const AttachmentOpsArray &renderPassAttachmentOps,
@@ -2102,7 +2106,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mAttachmentOps               = renderPassAttachmentOps;
     mDepthStencilAttachmentIndex = depthStencilAttachmentIndex;
     mColorAttachmentsCount       = colorAttachmentCount;
-    mFramebuffer.setHandle(framebuffer.getHandle());
+    mFramebuffer.copyFromFramebuffer(framebuffer);
     mRenderArea       = renderArea;
     mClearValues      = clearValues;
     mRenderPassSerial = rpSerial;
@@ -2118,7 +2122,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPassCommandBuffer(Contex
 {
     VkCommandBufferInheritanceInfo inheritanceInfo = {};
     ANGLE_TRY(RenderPassCommandBuffer::InitializeRenderPassInheritanceInfo(
-        contextVk, mFramebuffer, mRenderPassDesc, &inheritanceInfo));
+        contextVk, mFramebuffer.getFramebuffer(), mRenderPassDesc, &inheritanceInfo));
     inheritanceInfo.subpass = mCurrentSubpass;
 
     return getCommandBuffer().begin(contextVk, inheritanceInfo);
@@ -2276,7 +2280,6 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     executeBarriers(context->getRenderer()->getFeatures(), primary);
 
     ASSERT(renderPass != nullptr);
-
     VkRenderPassBeginInfo beginInfo    = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     beginInfo.renderPass               = renderPass->getHandle();
@@ -2287,6 +2290,18 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
     beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
     beginInfo.pClearValues             = mClearValues.data();
+
+    // With imageless framebuffers, the attachments should be also added to beginInfo.
+    VkRenderPassAttachmentBeginInfoKHR rpAttachmentBeginInfo = {};
+    if (mFramebuffer.isImageless())
+    {
+        rpAttachmentBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
+        rpAttachmentBeginInfo.attachmentCount =
+            static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
+        rpAttachmentBeginInfo.pAttachments = mFramebuffer.getImageViews().data();
+
+        AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
+    }
 
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =
@@ -2308,12 +2323,13 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     return reset(context);
 }
 
-void RenderPassCommandBufferHelper::updateRenderPassForResolve(ContextVk *contextVk,
-                                                               Framebuffer *newFramebuffer,
-                                                               const RenderPassDesc &renderPassDesc)
+void RenderPassCommandBufferHelper::updateRenderPassForResolve(
+    ContextVk *contextVk,
+    MaybeImagelessFramebuffer &newFramebuffer,
+    const RenderPassDesc &renderPassDesc)
 {
-    ASSERT(newFramebuffer);
-    mFramebuffer.setHandle(newFramebuffer->getHandle());
+    ASSERT(newFramebuffer.getHandle());
+    mFramebuffer.copyFromFramebuffer(newFramebuffer);
     mRenderPassDesc = renderPassDesc;
 }
 
@@ -4957,6 +4973,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mFirstAllocatedLevel(other.mFirstAllocatedLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
+      mViewFormats(other.mViewFormats),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
       mTotalStagedBufferUpdateSize(other.mTotalStagedBufferUpdateSize),
       mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue)),
@@ -4993,6 +5010,8 @@ void ImageHelper::resetCachedProperties()
     mLayerCount                  = 0;
     mLevelCount                  = 0;
     mTotalStagedBufferUpdateSize = 0;
+    //    std::fill(mViewFormats.begin(), mViewFormats.end(), VK_FORMAT_UNDEFINED);
+    memset(&mViewFormats, VK_FORMAT_UNDEFINED, sizeof(mViewFormats));
     mYcbcrConversionDesc.reset();
     mCurrentSingleClearValue.reset();
     mRenderPassUsageFlags.reset();
@@ -5254,6 +5273,9 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
 
+    // Find the image formats in pNext chain in imageInfo.
+    deriveImageViewFormatFromCreateInfoPNext(imageInfo, mViewFormats);
+
     mVkImageCreateInfo               = imageInfo;
     mVkImageCreateInfo.pNext         = nullptr;
     mVkImageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -5305,6 +5327,33 @@ const void *ImageHelper::DeriveCreateInfoPNext(
     }
 
     return pNext;
+}
+
+void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &imageInfo,
+                                                           ImageFormats &formatOut)
+{
+    const VkBaseInStructure *pNextChain =
+        reinterpret_cast<const VkBaseInStructure *>(imageInfo.pNext);
+    while (pNextChain != nullptr &&
+           pNextChain->sType != VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR)
+    {
+        pNextChain = pNextChain->pNext;
+    }
+
+    if (pNextChain != nullptr)
+    {
+        const VkImageFormatListCreateInfoKHR *imageFormatCreateInfo =
+            reinterpret_cast<const VkImageFormatListCreateInfoKHR *>(pNextChain);
+
+        for (uint32_t i = 0; i < imageFormatCreateInfo->viewFormatCount; i++)
+        {
+            formatOut[i] = *(imageFormatCreateInfo->pViewFormats + i);
+        }
+    }
+    else
+    {
+        formatOut[0] = imageInfo.format;
+    }
 }
 
 void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
