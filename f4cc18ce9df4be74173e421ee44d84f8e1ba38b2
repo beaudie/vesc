@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d283fc78_74cc35c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-23T15:05:46Z",
+      "side": 1,
+      "message": "I don\u0027t really like doing work that\u0027s not needed, but it looks like these helpers are only used for testing, so we have some flexibility.",
+      "revId": "f4cc18ce9df4be74173e421ee44d84f8e1ba38b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
