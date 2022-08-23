@@ -94,6 +94,30 @@
       },
       "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "486d9aa2_82d7d0df",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4950,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-23T15:47:45Z",
+      "side": 1,
+      "message": "Uh, if I revert `UpdatePreCacheActiveTextures` to what it was before this CL my test also fails, so yeah my \"fix\" is just a coincidence.. I\u0027ll need to find out what `mDescriptorInfos` indexes are actually supposed to mean as now I\u0027m just blindly guessing.",
+      "parentUuid": "00a1ed03_04da26f4",
+      "range": {
+        "startLine": 4950,
+        "startChar": 55,
+        "endLine": 4950,
+        "endChar": 67
+      },
+      "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
