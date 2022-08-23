@@ -15,6 +15,7 @@
 #include "common/angle_version_info.h"
 #include "common/utilities.h"
 #include "libANGLE/BinaryStream.h"
+#include "libANGLE/Compiler.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Uniform.h"
@@ -54,25 +55,41 @@ HashStream &operator<<(HashStream &stream, const Shader *shader)
     return stream;
 }
 
-void ComputeHash(const Context *context, const Shader *shader, egl::BlobCache::Key *hashOut)
+HashStream &operator<<(HashStream &stream, const ShCompileOptions &compileOptions)
+{
+    // Serialize the raw bytes of the ShCompileOptions struct.
+    stream << std::string(reinterpret_cast<const char *>(&compileOptions),
+                          sizeof(ShCompileOptions));
+    return stream;
+}
+
+HashStream &operator<<(HashStream &stream, const ShBuiltInResources &builtInResources)
+{
+    // Serialize the raw bytes of the ShBuiltInResources struct.
+    stream << std::string(reinterpret_cast<const char *>(&builtInResources),
+                          sizeof(ShBuiltInResources));
+    return stream;
+}
+
+void ComputeHash(const Context *context,
+                 const Shader *shader,
+                 const ShCompileOptions &compileOptions,
+                 const ShCompilerInstance &compilerInstance,
+                 egl::BlobCache::Key *hashOut)
 {
     // Compute the shader hash. Start with the shader hashes and resource strings.
     HashStream hashStream;
     hashStream << shader;
 
-    // Add some ANGLE metadata and Context properties, such as version and back-end.
-    hashStream << angle::GetANGLECommitHash() << context->getClientMajorVersion()
-               << context->getClientMinorVersion() << context->getString(GL_RENDERER);
+    // Include the commit hash
+    hashStream << angle::GetANGLECommitHash();
 
-    // Shaders must be recompiled if these extensions have been toggled, so we include them in the
-    // key.
-    const std::string shaderTextureLodEXTTag =
-        (context->getExtensions().shaderTextureLodEXT) ? "EXT_shader_texture_lod" : "";
-    const std::string fragDepthEXTTag =
-        (context->getExtensions().fragDepthEXT) ? "EXT_frag_depth" : "";
-    const std::string oesStarndardDerivativesTag =
-        (context->getExtensions().standardDerivativesOES) ? "OES_standard_derivatives" : "";
-    hashStream << shaderTextureLodEXTTag << fragDepthEXTTag << oesStarndardDerivativesTag;
+    // Include the shader spec
+    hashStream << Compiler::SelectShaderSpec(context->getState());
+
+    // Include the options used for compilation as well as information about the compiler.
+    hashStream << compileOptions << compilerInstance.getShaderOutputType()
+               << compilerInstance.getBuiltInResources();
 
     // Call the secure SHA hashing function.
     const std::string &shaderKey = hashStream.str();
@@ -87,6 +104,8 @@ MemoryShaderCache::~MemoryShaderCache() {}
 
 angle::Result MemoryShaderCache::getShader(const Context *context,
                                            Shader *shader,
+                                           const ShCompileOptions &compileOptions,
+                                           const ShCompilerInstance &compilerInstance,
                                            egl::BlobCache::Key *hashOut)
 {
     // If caching is effectively disabled, don't bother calculating the hash.
@@ -95,7 +114,7 @@ angle::Result MemoryShaderCache::getShader(const Context *context,
         return angle::Result::Incomplete;
     }
 
-    ComputeHash(context, shader, hashOut);
+    ComputeHash(context, shader, compileOptions, compilerInstance, hashOut);
 
     angle::MemoryBuffer uncompressedData;
     switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), *hashOut, &uncompressedData))
