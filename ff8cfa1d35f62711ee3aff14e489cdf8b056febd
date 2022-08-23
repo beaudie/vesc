@@ -141,6 +141,24 @@
       "parentUuid": "bfc26976_ef50519e",
       "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ab7eb36_c9e8c52b",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:24:33Z",
+      "side": 1,
+      "message": "`mRobustAccess` sounds right to me, it\u0027s derived from `EGL_CONTEXT_OPENGL_ROBUST_ACCESS`.",
+      "parentUuid": "14306655_edbd4985",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
