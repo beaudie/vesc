@@ -46,6 +46,30 @@
       },
       "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc4aecc7_9d4bb6a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4950,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-23T14:56:10Z",
+      "side": 1,
+      "message": "yup, my CL fixes the app and also this test I made:\nhttps://paste.googleplex.com/6080756584546304\n(I have little idea what I\u0027m doing though)\n\n\u003e updateInfoDesc  doesn\u0027t care about the order in which indices are processed.\nRight, I just don\u0027t know the meaning of the index in `mDescriptorInfos` and what it is supposed to match later down the road. Is this supposed to be the texture index or something else that used to match the texture index before this CL and is no longer the case?",
+      "parentUuid": "e4c0e2d8_e71c40f6",
+      "range": {
+        "startLine": 4950,
+        "startChar": 55,
+        "endLine": 4950,
+        "endChar": 67
+      },
+      "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
