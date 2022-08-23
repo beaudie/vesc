@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1624e37_550b4736",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2022-08-23T01:50:41Z",
+      "side": 1,
+      "message": "Nit: Since this comment applies to all three of the else clauses, consider pulling out before the first if and add a comment that it refers to dx_FragCoordOffset.",
+      "range": {
+        "startLine": 779,
+        "startChar": 12,
+        "endLine": 781,
+        "endChar": 89
+      },
+      "revId": "286a8ff90c76a8c8611e9aa19e86bb37d65fc9fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
