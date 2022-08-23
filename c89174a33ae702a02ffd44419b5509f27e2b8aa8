@@ -214,6 +214,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118796f3_2c1d50c6",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-23T00:09:59Z",
+      "side": 1,
+      "message": "Hi Shahbaz, one thing I\u0027d like to point out again is:\n```\n    /**\n     * 32 bits per pixel, 8 bits per channel format where alpha values are\n     * ignored (always opaque).\n     * Corresponding formats:\n     *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM\n     *   OpenGL ES: GL_RGB8\n     */\n    AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM           \u003d 2,\n```\n\nAdding another load function for `GL_RGB8` doesn\u0027t make any sense to me. If we agree on intenral format being `GL_RGB8`, that will lead to 24bit VkFormat being the storage, which won\u0027t match the RGBX AHB storage intended to be imported as `VK_FORMAT_R8G8B8A8_UNORM` per spec.\n\nAngle picks the internal format best reflecting the frontend `GL_RGB8` and the acutal `VK_FORMAT_R8G8B8A8_UNORM`, which should be `GL_RGBX8_ANGLE` per your early suggestion.\n\nPer this angle extension at `extensions/ANGLE_rgbx_internal_format.txt`:\n\u003e This extension introduces a sized internal RGBX format. This is a 32-bit representation of the 24-bit RGB format, with the Alpha channel ignored.\n\nI reviewed the early patches for this angle internal format: crrev/c/3296625 and crrev/c/3312367, and fixing the load function of `GL_RGBX8_ANGLE` to \"treating GL_RGBX8_ANGLE being GL_RGB8\" seems intended, and aligns with this change.\n\nWhat I\u0027m sure about is the test variants:\n```\nGpuColorOutputCpuRead\nCpuWriteColorGpuRead\nGpuSampledImageCanBeSampled\n```\nnow all pass for RGBX AHB, which at least proves that {readback, exteranl tex import, tex upload} all work.\n\nI\u0027ll try convering them to angle e2e.\n\nPs: `GL_BGRX8_ANGLEX` could be broken or not but I can\u0027t tell since there\u0027s no such code path existed with Vulkan backend. So I\u0027ll leave that to angle side.",
+      "parentUuid": "a2e32c3c_df0e73bf",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
