@@ -617,7 +617,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return flushOutsideRenderPassCommands();
     }
 
-    angle::Result beginNewRenderPass(const vk::Framebuffer &framebuffer,
+    angle::Result beginNewRenderPass(const vk::OptionalImageFramebuffer &framebuffer,
                                      const gl::Rectangle &renderArea,
                                      const vk::RenderPassDesc &renderPassDesc,
                                      const vk::AttachmentOpsArray &renderPassAttachmentOps,
@@ -633,10 +633,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mRenderPassCommandBuffer && mRenderPassCommands->started();
     }
 
-    bool hasStartedRenderPassWithFramebuffer(vk::Framebuffer *framebuffer)
+    bool hasStartedRenderPassWithFramebuffer(vk::OptionalImageFramebuffer &framebuffer)
     {
         return hasStartedRenderPass() &&
-               mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle();
+               mRenderPassCommands->getFramebufferHandle() ==
+                   framebuffer.getFramebuffer().getHandle() &&
+               mRenderPassCommands->usesImagelessFramebuffer() == framebuffer.isImageless();
     }
 
     bool hasStartedRenderPassWithCommands() const
@@ -651,7 +653,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     // TODO(https://anglebug.com/4968): Support multiple open render passes.
-    void restoreFinishedRenderPass(vk::Framebuffer *framebuffer);
+    void restoreFinishedRenderPass(vk::OptionalImageFramebuffer &framebuffer);
 
     uint32_t getCurrentSubpassIndex() const;
     uint32_t getCurrentViewCount() const;

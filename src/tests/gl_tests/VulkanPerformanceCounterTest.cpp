@@ -149,6 +149,7 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
           mStoreOpNoneSupport(ANGLEFeature::Unknown),
           mMutableMipmapTextureUpload(ANGLEFeature::Unknown),
           mPreferDrawOverClearAttachments(ANGLEFeature::Unknown),
+          mSupportsImagelessFramebuffer(ANGLEFeature::Unknown),
           mSupportsPipelineCreationFeedback(ANGLEFeature::Unknown),
           mWarmUpPipelineCacheAtLink(ANGLEFeature::Unknown),
           mPreferCPUForBufferSubData(ANGLEFeature::Unknown),
@@ -223,6 +224,11 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
             {
                 mPreferDrawOverClearAttachments = isSupported;
             }
+            else if (strcmp(featureName, GetFeatureName(Feature::SupportsImagelessFramebuffer)) ==
+                     0)
+            {
+                mSupportsImagelessFramebuffer = isSupported;
+            }
             else if (strcmp(featureName,
                             GetFeatureName(Feature::SupportsPipelineCreationFeedback)) == 0)
             {
@@ -253,6 +259,7 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
         ASSERT_NE(mStoreOpNoneSupport, ANGLEFeature::Unknown);
         ASSERT_NE(mMutableMipmapTextureUpload, ANGLEFeature::Unknown);
         ASSERT_NE(mPreferDrawOverClearAttachments, ANGLEFeature::Unknown);
+        ASSERT_NE(mSupportsImagelessFramebuffer, ANGLEFeature::Unknown);
         ASSERT_NE(mSupportsPipelineCreationFeedback, ANGLEFeature::Unknown);
         ASSERT_NE(mWarmUpPipelineCacheAtLink, ANGLEFeature::Unknown);
         ASSERT_NE(mPreferCPUForBufferSubData, ANGLEFeature::Unknown);
@@ -452,6 +459,7 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
     ANGLEFeature mStoreOpNoneSupport;
     ANGLEFeature mMutableMipmapTextureUpload;
     ANGLEFeature mPreferDrawOverClearAttachments;
+    ANGLEFeature mSupportsImagelessFramebuffer;
     ANGLEFeature mSupportsPipelineCreationFeedback;
     ANGLEFeature mWarmUpPipelineCacheAtLink;
     ANGLEFeature mPreferCPUForBufferSubData;
@@ -6426,6 +6434,7 @@ void main() {
 // Test modifying texture size and render to it does not cause VkFramebuffer cache explode
 TEST_P(VulkanPerformanceCounterTest, ResizeFBOAttachedTexture)
 {
+    initANGLEFeatures();
     ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
 
     int32_t framebufferCacheSizeBefore = getPerfCounters().framebufferCacheSize;
@@ -6454,15 +6463,18 @@ TEST_P(VulkanPerformanceCounterTest, ResizeFBOAttachedTexture)
     }
     int32_t framebufferCacheSizeAfter    = getPerfCounters().framebufferCacheSize;
     int32_t framebufferCacheSizeIncrease = framebufferCacheSizeAfter - framebufferCacheSizeBefore;
+    int32_t expectedFramebufferCacheSizeIncrease =
+        (mSupportsImagelessFramebuffer == ANGLEFeature::Supported) ? 0 : 1;
     printf("\tframebufferCacheCountIncrease:%u\n", framebufferCacheSizeIncrease);
     // We should not cache obsolete VkImages. Only current VkImage should be cached.
-    EXPECT_EQ(framebufferCacheSizeIncrease, 1);
+    EXPECT_EQ(framebufferCacheSizeIncrease, expectedFramebufferCacheSizeIncrease);
 }
 
 // Test calling glTexParameteri(GL_TEXTURE_SWIZZLE_*) on a texture that attached to FBO with the
 // same value did not cause VkFramebuffer cache explode
 TEST_P(VulkanPerformanceCounterTest, SetTextureSwizzleWithSameValueOnFBOAttachedTexture)
 {
+    initANGLEFeatures();
     ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
     ANGLE_GL_PROGRAM(textureProgram, essl1_shaders::vs::Texture2D(),
                      essl1_shaders::fs::Texture2D());
@@ -6511,14 +6523,17 @@ TEST_P(VulkanPerformanceCounterTest, SetTextureSwizzleWithSameValueOnFBOAttached
     ASSERT_GL_NO_ERROR();
     int32_t framebufferCacheSizeAfter    = getPerfCounters().framebufferCacheSize;
     int32_t framebufferCacheSizeIncrease = framebufferCacheSizeAfter - framebufferCacheSizeBefore;
+    int32_t expectedFramebufferCacheSizeIncrease =
+        (mSupportsImagelessFramebuffer == ANGLEFeature::Supported) ? 0 : 1;
     // This should not cause frame buffer cache increase.
-    EXPECT_EQ(framebufferCacheSizeIncrease, 1);
+    EXPECT_EQ(framebufferCacheSizeIncrease, expectedFramebufferCacheSizeIncrease);
 }
 
 // Test calling glTexParameteri(GL_TEXTURE_SWIZZLE_*) on a texture that attached to FBO with
 // different value did not cause VkFramebuffer cache explode
 TEST_P(VulkanPerformanceCounterTest, SetTextureSwizzleWithDifferentValueOnFBOAttachedTexture)
 {
+    initANGLEFeatures();
     ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
     ANGLE_GL_PROGRAM(textureProgram, essl1_shaders::vs::Texture2D(),
                      essl1_shaders::fs::Texture2D());
@@ -6582,8 +6597,10 @@ TEST_P(VulkanPerformanceCounterTest, SetTextureSwizzleWithDifferentValueOnFBOAtt
     ASSERT_GL_NO_ERROR();
     int32_t framebufferCacheSizeAfter    = getPerfCounters().framebufferCacheSize;
     int32_t framebufferCacheSizeIncrease = framebufferCacheSizeAfter - framebufferCacheSizeBefore;
+    int32_t expectedFramebufferCacheSizeIncrease =
+        (mSupportsImagelessFramebuffer == ANGLEFeature::Supported) ? 0 : 1;
     // This should not cause frame buffer cache increase.
-    EXPECT_EQ(framebufferCacheSizeIncrease, 1);
+    EXPECT_EQ(framebufferCacheSizeIncrease, expectedFramebufferCacheSizeIncrease);
 }
 
 void VulkanPerformanceCounterTest::saveAndReloadBinary(GLProgram *original, GLProgram *reloaded)
