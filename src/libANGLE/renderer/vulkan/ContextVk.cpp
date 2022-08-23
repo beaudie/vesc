@@ -3956,8 +3956,8 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
                                                              &resolveImageView));
         vk::Framebuffer *newFramebuffer                      = nullptr;
         constexpr SwapchainResolveMode kSwapchainResolveMode = SwapchainResolveMode::Enabled;
-        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, resolveImageView,
-                                                    kSwapchainResolveMode));
+        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, colorImage,
+                                                    resolveImageView, kSwapchainResolveMode));
 
         commandBufferHelper.updateRenderPassForResolve(this, newFramebuffer,
                                                        drawFramebufferVk->getRenderPassDesc());
