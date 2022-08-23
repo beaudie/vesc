@@ -287,8 +287,6 @@ void main() {
 // properly.
 TEST_P(EGLBlobCacheTest, ShaderCacheFunctional)
 {
-    // TODO(eddiehatfield): re-enable when BlobCache test flakes are resolved.
-    ANGLE_SKIP_TEST_IF(true);
     ANGLE_SKIP_TEST_IF(!IsVulkan());
 
     EGLDisplay display = getEGLWindow()->getDisplay();
@@ -347,8 +345,6 @@ void main()
 // the cache. We then perform a draw call and test the result to ensure nothing was corrupted.
 TEST_P(EGLBlobCacheTest, ThreadSafety)
 {
-    // TODO(eddiehatfield): re-enable when BlobCache test flakes are resolved.
-    ANGLE_SKIP_TEST_IF(true);
     ANGLE_SKIP_TEST_IF(!IsVulkan());
 
     EGLDisplay display = getEGLWindow()->getDisplay();
@@ -360,13 +356,16 @@ TEST_P(EGLBlobCacheTest, ThreadSafety)
     auto thread = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
-        ANGLE_GL_PROGRAM(unusedProgramTemp, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+        ANGLE_GL_PROGRAM(unusedProgramTemp1, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+
+        // Insert a new entry into the cache unique to this thread.
+        std::stringstream ss;
+        ss << essl1_shaders::vs::Simple() << "//" << std::this_thread::get_id();
+        std::string newEntryVSSource = ss.str().c_str();
+        ANGLE_GL_PROGRAM(unusedProgramTemp2, newEntryVSSource.c_str(), essl1_shaders::fs::Red());
     };
 
-    std::array<LockStepThreadFunc, 2> threadFuncs = {
-        thread,
-        thread,
-    };
+    std::vector<LockStepThreadFunc> threadFuncs(32, thread);
 
     gLastCacheOpResult = CacheOpResult::ValueNotSet;
 
