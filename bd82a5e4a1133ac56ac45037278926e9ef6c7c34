@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e38f3ef_382df3da",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4950,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-23T14:29:32Z",
+      "side": 1,
+      "message": "This appears to have introduced a bug as `textureIndex` used to be sequential and now it can go in a different order (1,2,0 on the bug) causing scrambled bindings http://b/242887117#comment5\nShould this be something like https://crrev.com/c/3846051/3 instead?",
+      "range": {
+        "startLine": 4950,
+        "startChar": 55,
+        "endLine": 4950,
+        "endChar": 67
+      },
+      "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
