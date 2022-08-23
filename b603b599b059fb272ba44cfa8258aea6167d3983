@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c89bf2d1_8e4b5380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:16:55Z",
+      "side": 1,
+      "message": "Thanks for this change!  Sorry to take so long to review it!\n\nA few minor things.  Please respond before landing.",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da6ea8a1_fff596f1",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:16:55Z",
+      "side": 1,
+      "message": "Please explain how it\u0027s narrowed.",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a354bc7_76aa4f31",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:16:55Z",
+      "side": 1,
+      "message": "nit: Since `vkGetPastPresentationTimingGOOGLE` returns a VkResult, this should be within the `ANGLE_VK_TRY` macro.",
+      "range": {
+        "startLine": 1407,
+        "startChar": 8,
+        "endLine": 1407,
+        "endChar": 41
+      },
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26f65bc0_6747fb92",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:16:55Z",
+      "side": 1,
+      "message": "I don\u0027t think this is used.  It also doesn\u0027t do anything.  Can we delete it?",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6712081_06cf637f",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:16:55Z",
+      "side": 1,
+      "message": "Is this a logical-OR, or should it be a logical-AND?",
+      "range": {
+        "startLine": 1662,
+        "startChar": 83,
+        "endLine": 1662,
+        "endChar": 85
+      },
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
