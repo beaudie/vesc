@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57008d66_d2686473",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-08-23T10:45:20Z",
+      "side": 1,
+      "message": "This is currently required for tracing ALL GLES1 applications using MEC.\n\nMEC currently always captures the default vertex array object, which will always emit a `glBindVertexArrayOES(gVertexArrayMap[0]);` in the trace\u0027s setup function, regardless if the `GL_OES_vertex_array_object` extension is used in the application.",
+      "revId": "4131bda767717f13aa86dd91480f49e59e377d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
