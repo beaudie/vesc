@@ -16,6 +16,23 @@
       "message": "Looks like all the comments are resolved now 🎉\n\nI\u0027ll let it sit in case anyone has any last minute feedback, but otherwise I\u0027ll let it ride the +2 in",
       "revId": "a90f6b9d29d1e0e73c7ec21f2abd3f00f6f40eff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cc08a7e_0b447077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-23T01:50:44Z",
+      "side": 1,
+      "message": "Great discussion on the security aspects. Still lgtm.\n",
+      "revId": "a90f6b9d29d1e0e73c7ec21f2abd3f00f6f40eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
