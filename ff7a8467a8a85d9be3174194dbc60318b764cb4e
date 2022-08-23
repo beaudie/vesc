@@ -33,6 +33,24 @@
       "message": "Can these suppressions be removed now?\n\n```\n2330 : dEQP-EGL.functional.robustness.create_context.no_reset_notification \u003d SKIP\n2330 : dEQP-EGL.functional.robustness.create_context.lose_context_on_reset \u003d SKIP\n2330 : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.index_buffer_out_of_bounds \u003d SKIP\n2330 : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.vertex_buffer_out_of_bounds \u003d SKIP\n```\n",
       "revId": "ff7a8467a8a85d9be3174194dbc60318b764cb4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8bc183d_ba97dce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-23T23:08:55Z",
+      "side": 1,
+      "message": "Looks like they no longer fail. I removed them.",
+      "parentUuid": "b34fc7f8_ed28c70a",
+      "revId": "ff7a8467a8a85d9be3174194dbc60318b764cb4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -159,6 +159,24 @@
       "parentUuid": "14306655_edbd4985",
       "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c16504a_9686260f",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-23T23:08:55Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "9ab7eb36_c9e8c52b",
+      "revId": "ff8cfa1d35f62711ee3aff14e489cdf8b056febd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
