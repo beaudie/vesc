@@ -39,6 +39,12 @@ class Compiler final : public RefCountObjectNoID
     void putInstance(ShCompilerInstance &&instance);
     ShShaderOutput getShaderOutputType() const { return mOutputType; }
 
+    static ShShaderSpec SelectShaderSpec(GLint majorVersion,
+                                         GLint minorVersion,
+                                         bool isWebGL,
+                                         EGLenum clientType,
+                                         EGLint profileMask);
+
   private:
     ~Compiler() override;
     std::unique_ptr<rx::CompilerImpl> mImplementation;
@@ -61,7 +67,7 @@ class ShCompilerInstance final : public angle::NonCopyable
 
     ShHandle getHandle();
     ShaderType getShaderType() const;
-    const std::string &getBuiltinResourcesString();
+    const std::string &getBuiltinResourcesString() const;
     ShShaderOutput getShaderOutputType() const;
 
   private:
