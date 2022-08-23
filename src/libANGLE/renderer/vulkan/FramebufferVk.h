@@ -122,7 +122,8 @@ class FramebufferVk : public FramebufferImpl
         vk::ImageOrBufferViewSubresourceSerial resolveImageViewSerial);
 
     angle::Result getFramebuffer(ContextVk *contextVk,
-                                 vk::Framebuffer **framebufferOut,
+                                 vk::OptionalImageFramebuffer *framebufferOut,
+                                 vk::ImageHelper *resolveImageIn,
                                  const vk::ImageView *resolveImageViewIn,
                                  const SwapchainResolveMode swapchainResolveMode);
 
@@ -144,6 +145,30 @@ class FramebufferVk : public FramebufferImpl
     WindowSurfaceVk *getBackbuffer() const { return mBackbuffer; }
 
     void releaseCurrentFramebuffer(ContextVk *contextVk);
+
+    struct FramebufferAttachmentEmbeddedInfo
+    {
+        FramebufferAttachmentEmbeddedInfo(vk::ImageHelper *image,
+                                          uint32_t layerCount,
+                                          uint32_t level)
+            : image(image), layerCount(layerCount), level(level)
+        {}
+        vk::ImageHelper *image;
+        uint32_t layerCount;
+        uint32_t level;
+    };
+
+    angle::Result getAttachmentsAndImagesFromRenderTargets(
+        ContextVk *contextVk,
+        const vk::ImageView *resolveImageViewIn,
+        vk::ImageHelper *resolveImageIn,
+        std::vector<VkImageView> &attachments,
+        std::vector<FramebufferAttachmentEmbeddedInfo> &attachmentEmbeddedInfo);
+
+  private:
+    FramebufferVk(RendererVk *renderer,
+                  const gl::FramebufferState &state,
+                  WindowSurfaceVk *backbuffer);
 
   private:
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.
@@ -234,7 +259,10 @@ class FramebufferVk : public FramebufferImpl
     // contain the mask to apply to the alpha channel when drawing.
     gl::DrawBufferMask mEmulatedAlphaAttachmentMask;
 
+    // mCurrentFramebufferDesc is used to detect framebuffer changes using its serials. Therefore,
+    // it must be maintained even when using the imageless framebuffer extension.
     vk::FramebufferDesc mCurrentFramebufferDesc;
+
     // The framebuffer cache actually owns the Framebuffer object and manages its lifetime. We just
     // store the current VkFramebuffer handle here that associated with mCurrentFramebufferDesc.
     vk::Framebuffer mCurrentFramebuffer;
