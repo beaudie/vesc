@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cbf1ac5_2f172892",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-23T16:56:32Z",
+      "side": 1,
+      "message": "ANGLE doesn\u0027t have branch CQ, I think you need to hit Submit in the right-up menu.",
+      "revId": "097991c19cc6e7a728e25d392cc902424aac631f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
