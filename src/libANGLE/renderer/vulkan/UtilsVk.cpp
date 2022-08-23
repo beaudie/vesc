@@ -2043,8 +2043,9 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.height          = renderArea.y + renderArea.height;
     framebufferInfo.layers          = 1;
 
-    vk::Framebuffer framebuffer;
-    ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));
+    vk::MaybeImagelessFramebuffer framebuffer = {};
+    ANGLE_VK_TRY(contextVk,
+                 framebuffer.getFramebuffer().init(contextVk->getDevice(), framebufferInfo));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray clearValues;
@@ -2060,7 +2061,7 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                             vk::kAttachmentIndexInvalid, clearValues,
                                             commandBufferOut, &renderPassSerial));
 
-    contextVk->addGarbage(&framebuffer);
+    contextVk->addGarbage(&framebuffer.getFramebuffer());
 
     return angle::Result::Continue;
 }
@@ -2071,12 +2072,12 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
-    const gl::Rectangle &scissoredRenderArea = params.clearArea;
-    vk::Framebuffer *currentFramebuffer      = nullptr;
+    const gl::Rectangle &scissoredRenderArea         = params.clearArea;
+    vk::MaybeImagelessFramebuffer currentFramebuffer = {};
     vk::RenderPassCommandBuffer *commandBuffer;
 
     // Start a new render pass if not already started
-    ANGLE_TRY(framebuffer->getFramebuffer(contextVk, &currentFramebuffer, nullptr,
+    ANGLE_TRY(framebuffer->getFramebuffer(contextVk, &currentFramebuffer, nullptr, nullptr,
                                           SwapchainResolveMode::Disabled));
     if (contextVk->hasStartedRenderPassWithSerial(framebuffer->getLastRenderPassSerial()))
     {
