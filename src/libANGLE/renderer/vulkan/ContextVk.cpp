@@ -3954,10 +3954,10 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
         ANGLE_TRY(colorImageView->getLevelLayerDrawImageView(this, *colorImage, vk::LevelIndex(0),
                                                              0, gl::SrgbWriteControlMode::Default,
                                                              &resolveImageView));
-        vk::Framebuffer *newFramebuffer                      = nullptr;
+        vk::OptionalImageFramebuffer newFramebuffer          = {};
         constexpr SwapchainResolveMode kSwapchainResolveMode = SwapchainResolveMode::Enabled;
-        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, resolveImageView,
-                                                    kSwapchainResolveMode));
+        ANGLE_TRY(drawFramebufferVk->getFramebuffer(this, &newFramebuffer, colorImage,
+                                                    resolveImageView, kSwapchainResolveMode));
 
         commandBufferHelper.updateRenderPassForResolve(this, newFramebuffer,
                                                        drawFramebufferVk->getRenderPassDesc());
@@ -6722,7 +6722,7 @@ angle::Result ContextVk::onImageReleaseToExternal(const vk::ImageHelper &image)
 }
 
 angle::Result ContextVk::beginNewRenderPass(
-    const vk::Framebuffer &framebuffer,
+    const vk::OptionalImageFramebuffer &framebuffer,
     const gl::Rectangle &renderArea,
     const vk::RenderPassDesc &renderPassDesc,
     const vk::AttachmentOpsArray &renderPassAttachmentOps,
@@ -6775,7 +6775,7 @@ angle::Result ContextVk::startNextSubpass()
     return mRenderPassCommands->nextSubpass(this, &mRenderPassCommandBuffer);
 }
 
-void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
+void ContextVk::restoreFinishedRenderPass(vk::OptionalImageFramebuffer &framebuffer)
 {
     if (mRenderPassCommandBuffer != nullptr)
     {
@@ -6784,7 +6784,8 @@ void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
     }
 
     if (mRenderPassCommands->started() &&
-        mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle())
+        mRenderPassCommands->getFramebufferHandle() == framebuffer.framebuffer->getHandle() &&
+        mRenderPassCommands->usesImagelessFramebuffer() == framebuffer.imageless)
     {
         // There is already a render pass open for this framebuffer, so just restore the
         // pointer rather than starting a whole new render pass. One possible path here

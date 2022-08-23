@@ -346,7 +346,8 @@ FramebufferVk::~FramebufferVk() = default;
 
 void FramebufferVk::destroy(const gl::Context *context)
 {
-    mCurrentFramebuffer.release();
+    ContextVk *contextVk = vk::GetImpl(context);
+    mCurrentFramebuffer.destroy(contextVk->getDevice());
 }
 
 void FramebufferVk::insertCache(ContextVk *contextVk,
@@ -354,7 +355,8 @@ void FramebufferVk::insertCache(ContextVk *contextVk,
                                 vk::FramebufferHelper &&newFramebuffer)
 {
     // Add it into per share group cache
-    contextVk->getShareGroup()->getFramebufferCache().insert(desc, std::move(newFramebuffer));
+    contextVk->getShareGroup()->getFramebufferCache().insert(contextVk, desc,
+                                                             std::move(newFramebuffer));
 
     // Create a refcounted cache key object and have each attachment keep a refcount to it so that
     // it can be destroyed promptly if those attachments change.
@@ -523,8 +525,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     {
         // If a render pass is open with commands, it must be for this framebuffer.  Otherwise,
         // either FramebufferVk::syncState() or ContextVk::syncState() would have closed it.
-        vk::Framebuffer *currentFramebuffer = nullptr;
-        ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr,
+        vk::OptionalImageFramebuffer currentFramebuffer = {};
+        ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr, nullptr,
                                  SwapchainResolveMode::Disabled));
         ASSERT(contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer));
 
@@ -1236,9 +1238,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             // already done and whose data is already flushed from the tile (in a tile-based
             // renderer), so there's no chance for the resolve attachment to take advantage of the
             // data already being present in the tile.
-            vk::Framebuffer *srcVkFramebuffer = nullptr;
+            vk::OptionalImageFramebuffer srcVkFramebuffer = {};
             ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &srcVkFramebuffer, nullptr,
-                                                       SwapchainResolveMode::Disabled));
+                                                       nullptr, SwapchainResolveMode::Disabled));
 
             // TODO(https://anglebug.com/4968): Support multiple open render passes so we can remove
             //  this hack to 'restore' the finished render pass.
@@ -1476,9 +1478,10 @@ angle::Result FramebufferVk::resolveColorWithSubpass(ContextVk *contextVk,
     RenderTargetVk *drawRenderTarget      = mRenderTargetCache.getColors()[drawColorIndexGL];
     const vk::ImageView *resolveImageView = nullptr;
     ANGLE_TRY(drawRenderTarget->getImageView(contextVk, &resolveImageView));
-    vk::Framebuffer *newSrcFramebuffer = nullptr;
-    ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, resolveImageView,
-                                               SwapchainResolveMode::Disabled));
+    vk::ImageHelper *resolveImage                  = &drawRenderTarget->getImageForRenderPass();
+    vk::OptionalImageFramebuffer newSrcFramebuffer = {};
+    ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &newSrcFramebuffer, resolveImage,
+                                               resolveImageView, SwapchainResolveMode::Disabled));
     // 2. Update the RenderPassCommandBufferHelper with the new framebuffer and render pass
     vk::RenderPassCommandBufferHelper &commandBufferHelper =
         contextVk->getStartedRenderPassCommands();
@@ -1681,9 +1684,9 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     //- Bind FBO 2, draw
     //- Bind FBO 1, invalidate D/S
     // to invalidate the D/S of FBO 2 since it would be the currently active renderpass.
-    vk::Framebuffer *currentFramebuffer = nullptr;
-    ANGLE_TRY(
-        getFramebuffer(contextVk, &currentFramebuffer, nullptr, SwapchainResolveMode::Disabled));
+    vk::OptionalImageFramebuffer currentFramebuffer = {};
+    ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr, nullptr,
+                             SwapchainResolveMode::Disabled));
 
     if (contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
     {
@@ -2121,45 +2124,13 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
     mRenderPassDesc.setWriteControlMode(mCurrentFramebufferDesc.getWriteControlMode());
 }
 
-angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
-                                            vk::Framebuffer **framebufferOut,
-                                            const vk::ImageView *resolveImageViewIn,
-                                            const SwapchainResolveMode swapchainResolveMode)
+angle::Result FramebufferVk::getAttachmentsAndImagesFromRenderTargets(
+    ContextVk *contextVk,
+    const vk::ImageView *resolveImageViewIn,
+    vk::ImageHelper *resolveImageIn,
+    std::vector<VkImageView> &attachments,
+    std::vector<vk::ImageHelper *> &images)
 {
-    ASSERT(mCurrentFramebufferDesc.hasFramebufferFetch() == mRenderPassDesc.hasFramebufferFetch());
-    // First return a presently valid Framebuffer
-    if (mCurrentFramebuffer.valid())
-    {
-        *framebufferOut = &mCurrentFramebuffer;
-        return angle::Result::Continue;
-    }
-    // No current FB, so now check for previously cached Framebuffer
-    if (contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
-                                                              mCurrentFramebuffer))
-    {
-        ASSERT(mCurrentFramebuffer.valid());
-        *framebufferOut = &mCurrentFramebuffer;
-        return angle::Result::Continue;
-    }
-
-    vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
-
-    // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
-    if (mBackbuffer)
-    {
-        return mBackbuffer->getCurrentFramebuffer(
-            contextVk,
-            mRenderPassDesc.hasFramebufferFetch() ? FramebufferFetchMode::Enabled
-                                                  : FramebufferFetchMode::Disabled,
-            *compatibleRenderPass, swapchainResolveMode, framebufferOut);
-    }
-
-    // Gather VkImageViews over all FBO attachments, also size of attached region.
-    std::vector<VkImageView> attachments;
-    gl::Extents attachmentsSize = mState.getExtents();
-    ASSERT(attachmentsSize.width != 0 && attachmentsSize.height != 0);
-
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
@@ -2172,6 +2143,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
             contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
 
         attachments.push_back(imageView->getHandle());
+        images.push_back(&colorRenderTarget->getImageForRenderPass());
     }
 
     // Depth/stencil attachment.
@@ -2182,16 +2154,19 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
 
         attachments.push_back(imageView->getHandle());
+        images.push_back(&depthStencilRenderTarget->getImageForRenderPass());
     }
 
     // Color resolve attachments.
     if (resolveImageViewIn)
     {
         ASSERT(!HasResolveAttachment(colorRenderTargets, mState.getEnabledDrawBuffers()));
+        ASSERT(resolveImageIn);
 
         // Need to use the passed in ImageView for the resolve attachment, since it came from
         // another Framebuffer.
         attachments.push_back(resolveImageViewIn->getHandle());
+        images.push_back(resolveImageIn);
     }
     else
     {
@@ -2207,6 +2182,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
                 ANGLE_TRY(colorRenderTarget->getResolveImageView(contextVk, &resolveImageView));
 
                 attachments.push_back(resolveImageView->getHandle());
+                images.push_back(&colorRenderTarget->getResolveImageForRenderPass());
             }
         }
     }
@@ -2218,37 +2194,148 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         ANGLE_TRY(depthStencilRenderTarget->getResolveImageView(contextVk, &imageView));
 
         attachments.push_back(imageView->getHandle());
+        images.push_back(&depthStencilRenderTarget->getResolveImageForRenderPass());
     }
 
-    VkFramebufferCreateInfo framebufferInfo = {};
+    ASSERT(attachments.size() == images.size());
 
-    framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
-    framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-    framebufferInfo.pAttachments    = attachments.data();
-    framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
-    framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.height);
-    framebufferInfo.layers          = 1;
+    return angle::Result::Continue;
+}
+
+angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
+                                            vk::OptionalImageFramebuffer *framebufferOut,
+                                            vk::ImageHelper *resolveImageIn,
+                                            const vk::ImageView *resolveImageViewIn,
+                                            const SwapchainResolveMode swapchainResolveMode)
+{
+    ASSERT(mCurrentFramebufferDesc.hasFramebufferFetch() == mRenderPassDesc.hasFramebufferFetch());
+
+    // When using imageless framebuffers, the framebuffer cache is not utilized.
+    bool supportsImagelessFramebuffer =
+        contextVk->getFeatures().supportsImagelessFramebuffer.enabled;
+
+    // First return a presently valid Framebuffer
+    if (mCurrentFramebuffer.valid())
+    {
+        // With imageless framebuffers, the image views used for the beginning of the render pass
+        // should be updated.
+        framebufferOut->imageless = supportsImagelessFramebuffer;
+        if (supportsImagelessFramebuffer)
+        {
+            std::vector<VkImageView> attachments;
+            std::vector<vk::ImageHelper *> images;
+            ANGLE_TRY(getAttachmentsAndImagesFromRenderTargets(
+                contextVk, resolveImageViewIn, resolveImageIn, attachments, images));
+            contextVk->updateRenderPassImageViews(attachments);
+        }
+
+        framebufferOut->framebuffer = &mCurrentFramebuffer;
+        return angle::Result::Continue;
+    }
+
+    // No current FB, so now check for previously cached Framebuffer.
+    if (!supportsImagelessFramebuffer &&
+        contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
+                                                              mCurrentFramebuffer))
+    {
+        ASSERT(mCurrentFramebuffer.valid());
+        framebufferOut->framebuffer = &mCurrentFramebuffer;
+        return angle::Result::Continue;
+    }
+
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
+
+    // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
+    if (mBackbuffer)
+    {
+        return mBackbuffer->getCurrentFramebuffer(
+            contextVk,
+            mRenderPassDesc.hasFramebufferFetch() ? FramebufferFetchMode::Enabled
+                                                  : FramebufferFetchMode::Disabled,
+            *compatibleRenderPass, swapchainResolveMode, &framebufferOut->framebuffer);
+    }
+
+    // Gather VkImageViews over all FBO attachments, also size of attached region.
+    std::vector<VkImageView> attachments;
+    std::vector<vk::ImageHelper *> images;
+    gl::Extents attachmentsSize = mState.getExtents();
+    ASSERT(attachmentsSize.width != 0 && attachmentsSize.height != 0);
+    ANGLE_TRY(getAttachmentsAndImagesFromRenderTargets(contextVk, resolveImageViewIn,
+                                                       resolveImageIn, attachments, images));
+
+    // Create new framebuffer.
+    vk::FramebufferHelper newFramebuffer;
+
+    VkFramebufferCreateInfo framebufferInfo = {};
+    framebufferInfo.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.flags                   = 0;
+    framebufferInfo.renderPass              = compatibleRenderPass->getHandle();
+    framebufferInfo.attachmentCount         = static_cast<uint32_t>(attachments.size());
+    framebufferInfo.pAttachments            = attachments.data();
+    framebufferInfo.width                   = static_cast<uint32_t>(attachmentsSize.width);
+    framebufferInfo.height                  = static_cast<uint32_t>(attachmentsSize.height);
+    framebufferInfo.layers                  = 1;
     if (!mCurrentFramebufferDesc.isMultiview())
     {
         framebufferInfo.layers = std::max(mCurrentFramebufferDesc.getLayerCount(), 1u);
     }
 
-    vk::FramebufferHelper newFramebuffer;
-    ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
-
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
+    if (!supportsImagelessFramebuffer)
+    {
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+        insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
 
-    bool result = contextVk->getShareGroup()->getFramebufferCache().get(
-        contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
-    ASSERT(result);
+        bool result = contextVk->getShareGroup()->getFramebufferCache().get(
+            contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
+        ASSERT(result);
+    }
+    else
+    {
+        // For imageless framebuffers, attachment image and create info objects should be defined
+        // when creating the new framebuffer.
+        std::vector<VkFramebufferAttachmentImageInfoKHR> fbAttachmentImageInfoArray;
+
+        for (auto const &image : images)
+        {
+            VkFramebufferAttachmentImageInfoKHR fbAttachmentImageInfo = {};
+            fbAttachmentImageInfo.sType  = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+            fbAttachmentImageInfo.width  = static_cast<uint32_t>(attachmentsSize.width);
+            fbAttachmentImageInfo.height = static_cast<uint32_t>(attachmentsSize.height);
+            fbAttachmentImageInfo.layerCount = 1;
+            fbAttachmentImageInfo.flags      = image->getCreateFlags();
+            fbAttachmentImageInfo.usage      = image->getUsage();
+            fbAttachmentImageInfo.viewFormatCount =
+                static_cast<uint32_t>(image->getViewFormats().max_size());
+            fbAttachmentImageInfo.pViewFormats = image->getViewFormats().data();
+
+            fbAttachmentImageInfoArray.push_back(fbAttachmentImageInfo);
+        }
+
+        VkFramebufferAttachmentsCreateInfoKHR fbAttachmentsCreateInfo = {};
+        fbAttachmentsCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
+        fbAttachmentsCreateInfo.attachmentImageInfoCount =
+            static_cast<uint32_t>(fbAttachmentImageInfoArray.size());
+        fbAttachmentsCreateInfo.pAttachmentImageInfos = fbAttachmentImageInfoArray.data();
+
+        framebufferInfo.flags |= VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR;
+        framebufferInfo.pAttachments = nullptr;
+        framebufferInfo.pNext        = &fbAttachmentsCreateInfo;
+
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+        mCurrentFramebuffer.setHandle(newFramebuffer.getFramebuffer().release());
+        framebufferOut->imageless = true;
+
+        // Update the image views to be used to begin the render pass.
+        contextVk->updateRenderPassImageViews(attachments);
+    }
+
     ASSERT(mCurrentFramebuffer.valid());
 
-    *framebufferOut = &mCurrentFramebuffer;
+    framebufferOut->framebuffer = &mCurrentFramebuffer;
     return angle::Result::Continue;
 }
 
@@ -2805,8 +2892,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         mCurrentFramebufferDesc.updateUnresolveMask(MakeUnresolveAttachmentMask(mRenderPassDesc));
     }
 
-    vk::Framebuffer *framebuffer = nullptr;
-    ANGLE_TRY(getFramebuffer(contextVk, &framebuffer, nullptr, SwapchainResolveMode::Disabled));
+    vk::OptionalImageFramebuffer framebuffer = {};
+    ANGLE_TRY(
+        getFramebuffer(contextVk, &framebuffer, nullptr, nullptr, SwapchainResolveMode::Disabled));
 
     // If deferred clears were used in the render pass, expand the render area to the whole
     // framebuffer.
@@ -2817,7 +2905,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
-        *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
+        framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
         depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
