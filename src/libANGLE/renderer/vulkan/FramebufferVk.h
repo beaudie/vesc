@@ -149,6 +149,11 @@ class FramebufferVk : public FramebufferImpl
 
     void removeColorResolveAttachment(uint32_t colorIndexGL);
 
+    angle::Result getAttachmentsAndImages(ContextVk *contextVk,
+                                          const vk::ImageView *resolveImageViewIn,
+                                          std::vector<VkImageView> &attachments,
+                                          std::vector<vk::ImageHelper *> &images);
+
   private:
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,

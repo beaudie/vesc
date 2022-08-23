@@ -354,7 +354,8 @@ void FramebufferVk::insertCache(ContextVk *contextVk,
                                 vk::FramebufferHelper &&newFramebuffer)
 {
     // Add it into per share group cache
-    contextVk->getShareGroup()->getFramebufferCache().insert(desc, std::move(newFramebuffer));
+    contextVk->getShareGroup()->getFramebufferCache().insert(contextVk, desc,
+                                                             std::move(newFramebuffer));
 
     // Create a refcounted cache key object and have each attachment keep a refcount to it so that
     // it can be destroyed promptly if those attachments change.
@@ -2121,6 +2122,79 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
     mRenderPassDesc.setWriteControlMode(mCurrentFramebufferDesc.getWriteControlMode());
 }
 
+angle::Result FramebufferVk::getAttachmentsAndImages(ContextVk *contextVk,
+                                                     const vk::ImageView *resolveImageViewIn,
+                                                     std::vector<VkImageView> &attachments,
+                                                     std::vector<vk::ImageHelper *> &images)
+{
+    // Color attachments.
+    const auto &colorRenderTargets = mRenderTargetCache.getColors();
+    for (size_t colorIndexGL : mState.getColorAttachmentsMask())
+    {
+        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+        ASSERT(colorRenderTarget);
+
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
+            contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
+
+        attachments.push_back(imageView->getHandle());
+        images.push_back(&colorRenderTarget->getImageForRenderPass());
+    }
+
+    // Depth/stencil attachment.
+    RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
+    if (depthStencilRenderTarget)
+    {
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
+
+        attachments.push_back(imageView->getHandle());
+        images.push_back(&depthStencilRenderTarget->getImageForRenderPass());
+    }
+
+    // Color resolve attachments.
+    if (resolveImageViewIn)
+    {
+        ASSERT(!HasResolveAttachment(colorRenderTargets, mState.getEnabledDrawBuffers()));
+
+        // Need to use the passed in ImageView for the resolve attachment, since it came from
+        // another Framebuffer.
+        attachments.push_back(resolveImageViewIn->getHandle());
+        // images.push_back();  // TODO: Update args?
+    }
+    else
+    {
+        // This Framebuffer owns all of the ImageViews, including its own resolve ImageViews.
+        for (size_t colorIndexGL : mState.getColorAttachmentsMask())
+        {
+            RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
+            ASSERT(colorRenderTarget);
+
+            if (colorRenderTarget->hasResolveAttachment())
+            {
+                const vk::ImageView *resolveImageView = nullptr;
+                ANGLE_TRY(colorRenderTarget->getResolveImageView(contextVk, &resolveImageView));
+
+                attachments.push_back(resolveImageView->getHandle());
+                images.push_back(&colorRenderTarget->getResolveImageForRenderPass());
+            }
+        }
+    }
+
+    // Depth/stencil resolve attachment.
+    if (depthStencilRenderTarget && depthStencilRenderTarget->hasResolveAttachment())
+    {
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(depthStencilRenderTarget->getResolveImageView(contextVk, &imageView));
+
+        attachments.push_back(imageView->getHandle());
+        images.push_back(&depthStencilRenderTarget->getResolveImageForRenderPass());
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
                                             vk::Framebuffer **framebufferOut,
                                             const vk::ImageView *resolveImageViewIn,
@@ -2133,8 +2207,15 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
         *framebufferOut = &mCurrentFramebuffer;
         return angle::Result::Continue;
     }
+
+    // When using imageless framebuffers, the framebuffer cache is not utilized. However, attachment
+    // image and create info objects should be defined for the new framebuffer.
+    bool supportsImagelessFramebuffer =
+        contextVk->getFeatures().supportsImagelessFramebuffer.enabled;
+
     // No current FB, so now check for previously cached Framebuffer
-    if (contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
+    if (!supportsImagelessFramebuffer &&
+        contextVk->getShareGroup()->getFramebufferCache().get(contextVk, mCurrentFramebufferDesc,
                                                               mCurrentFramebuffer))
     {
         ASSERT(mCurrentFramebuffer.valid());
@@ -2157,95 +2238,77 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
     // Gather VkImageViews over all FBO attachments, also size of attached region.
     std::vector<VkImageView> attachments;
+    std::vector<vk::ImageHelper *> images;
     gl::Extents attachmentsSize = mState.getExtents();
     ASSERT(attachmentsSize.width != 0 && attachmentsSize.height != 0);
+    ANGLE_TRY(getAttachmentsAndImages(contextVk, resolveImageViewIn, attachments, images));
 
-    // Color attachments.
-    const auto &colorRenderTargets = mRenderTargetCache.getColors();
-    for (size_t colorIndexGL : mState.getColorAttachmentsMask())
-    {
-        RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
-        ASSERT(colorRenderTarget);
-
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
-            contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
-
-        attachments.push_back(imageView->getHandle());
-    }
-
-    // Depth/stencil attachment.
-    RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
-    if (depthStencilRenderTarget)
-    {
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(depthStencilRenderTarget->getImageView(contextVk, &imageView));
-
-        attachments.push_back(imageView->getHandle());
-    }
-
-    // Color resolve attachments.
-    if (resolveImageViewIn)
-    {
-        ASSERT(!HasResolveAttachment(colorRenderTargets, mState.getEnabledDrawBuffers()));
-
-        // Need to use the passed in ImageView for the resolve attachment, since it came from
-        // another Framebuffer.
-        attachments.push_back(resolveImageViewIn->getHandle());
-    }
-    else
-    {
-        // This Framebuffer owns all of the ImageViews, including its own resolve ImageViews.
-        for (size_t colorIndexGL : mState.getColorAttachmentsMask())
-        {
-            RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
-            ASSERT(colorRenderTarget);
-
-            if (colorRenderTarget->hasResolveAttachment())
-            {
-                const vk::ImageView *resolveImageView = nullptr;
-                ANGLE_TRY(colorRenderTarget->getResolveImageView(contextVk, &resolveImageView));
-
-                attachments.push_back(resolveImageView->getHandle());
-            }
-        }
-    }
-
-    // Depth/stencil resolve attachment.
-    if (depthStencilRenderTarget && depthStencilRenderTarget->hasResolveAttachment())
-    {
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(depthStencilRenderTarget->getResolveImageView(contextVk, &imageView));
-
-        attachments.push_back(imageView->getHandle());
-    }
+    // Create new framebuffer.
+    vk::FramebufferHelper newFramebuffer;
 
     VkFramebufferCreateInfo framebufferInfo = {};
-
-    framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-    framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
-    framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-    framebufferInfo.pAttachments    = attachments.data();
-    framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
-    framebufferInfo.height          = static_cast<uint32_t>(attachmentsSize.height);
-    framebufferInfo.layers          = 1;
+    framebufferInfo.sType                   = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+    framebufferInfo.flags                   = 0;
+    framebufferInfo.renderPass              = compatibleRenderPass->getHandle();
+    framebufferInfo.attachmentCount         = static_cast<uint32_t>(attachments.size());
+    framebufferInfo.pAttachments            = attachments.data();
+    framebufferInfo.width                   = static_cast<uint32_t>(attachmentsSize.width);
+    framebufferInfo.height                  = static_cast<uint32_t>(attachmentsSize.height);
+    framebufferInfo.layers                  = 1;
     if (!mCurrentFramebufferDesc.isMultiview())
     {
         framebufferInfo.layers = std::max(mCurrentFramebufferDesc.getLayerCount(), 1u);
     }
 
-    vk::FramebufferHelper newFramebuffer;
-    ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
-
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
+    if (!supportsImagelessFramebuffer)
+    {
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+        insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
 
-    bool result = contextVk->getShareGroup()->getFramebufferCache().get(
-        contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
-    ASSERT(result);
+        bool result = contextVk->getShareGroup()->getFramebufferCache().get(
+            contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
+        ASSERT(result);
+    }
+    else
+    {
+        ASSERT(attachments.size() == images.size());
+        std::vector<VkFramebufferAttachmentImageInfoKHR> fbAttachmentImageInfoArray;
+
+        for (auto image : images)
+        {
+            VkFramebufferAttachmentImageInfoKHR fbAttachmentImageInfo = {};
+            fbAttachmentImageInfo.sType  = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+            fbAttachmentImageInfo.width  = image->getExtents().width;
+            fbAttachmentImageInfo.height = image->getExtents().height;
+            fbAttachmentImageInfo.layerCount = image->getLayerCount();
+            fbAttachmentImageInfo.flags      = image->getCreateFlags();
+            fbAttachmentImageInfo.usage      = image->getUsage();
+            fbAttachmentImageInfo.viewFormatCount =
+                static_cast<uint32_t>(image->getViewFormats().max_size());
+            fbAttachmentImageInfo.pViewFormats = image->getViewFormats().data();
+
+            fbAttachmentImageInfoArray.push_back(fbAttachmentImageInfo);
+        }
+
+        VkFramebufferAttachmentsCreateInfoKHR fbAttachmentsCreateInfo = {};
+        fbAttachmentsCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR;
+        fbAttachmentsCreateInfo.attachmentImageInfoCount =
+            static_cast<uint32_t>(fbAttachmentImageInfoArray.size());
+        fbAttachmentsCreateInfo.pAttachmentImageInfos = fbAttachmentImageInfoArray.data();
+
+        mRenderPassDesc.updateImageless(true);
+        framebufferInfo.flags |= VK_FRAMEBUFFER_CREATE_IMAGELESS_BIT;
+        framebufferInfo.pAttachments = nullptr;
+        framebufferInfo.pNext        = &fbAttachmentsCreateInfo;
+
+        ANGLE_TRY(newFramebuffer.init(contextVk, framebufferInfo));
+        contextVk->setImageViews(attachments);
+        mCurrentFramebuffer.setHandle(newFramebuffer.getFramebuffer().release());
+    }
+
     ASSERT(mCurrentFramebuffer.valid());
 
     *framebufferOut = &mCurrentFramebuffer;
@@ -2803,6 +2866,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         mCurrentFramebuffer.release();
 
         mCurrentFramebufferDesc.updateUnresolveMask(MakeUnresolveAttachmentMask(mRenderPassDesc));
+    }
+
+    if (contextVk->getRenderer()->getFeatures().supportsImagelessFramebuffer.enabled)
+    {
+        // Release the framebuffer if imageless framebuffers are being used in order to make sure
+        // the framebuffer size matches the render area size.
+        mCurrentFramebuffer.release();
     }
 
     vk::Framebuffer *framebuffer = nullptr;
