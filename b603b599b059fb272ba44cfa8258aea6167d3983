@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77f596b1_e7b6b4d4",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-23T21:24:01Z",
+      "side": 1,
+      "message": "the following sentence provides how the narrowing is done -\n\n and only allows for toggling the EGL_TIMESTAMPS_ANDROID attribute of a surface.\n \nis there other verbiage you would prefer? or would it be better to say -\n\n by only allowing for toggling the EGL_TIMESTAMPS_ANDROID attribute of a surface.",
+      "parentUuid": "da6ea8a1_fff596f1",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a354bc7_76aa4f31",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 19
@@ -77,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49d11543_35db7353",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-23T21:24:01Z",
+      "side": 1,
+      "message": "without this i we get an error due to `SurfaceImpl::setTimestampsEnabled`",
+      "parentUuid": "26f65bc0_6747fb92",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6712081_06cf637f",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 19
@@ -88,6 +124,30 @@
       "writtenOn": "2022-08-23T21:16:55Z",
       "side": 1,
       "message": "Is this a logical-OR, or should it be a logical-AND?",
+      "range": {
+        "startLine": 1662,
+        "startChar": 83,
+        "endLine": 1662,
+        "endChar": 85
+      },
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b89d3326_30ae9e0d",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-23T21:24:01Z",
+      "side": 1,
+      "message": "intended to be `||`. The test can run if either of the following condition is true -\n1. `EGL_ANDROID_get_frame_timestamps` is supported (on Android with GLES backend)\n2. `EGL_ANGLE_timestamp_surface_attribute` is supported (on Android with Vulkan backend)",
+      "parentUuid": "d6712081_06cf637f",
       "range": {
         "startLine": 1662,
         "startChar": 83,
