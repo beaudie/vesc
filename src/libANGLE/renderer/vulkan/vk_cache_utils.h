@@ -215,6 +215,9 @@ class alignas(4) RenderPassDesc final
     void updateRenderToTexture(bool isRenderToTexture) { mIsRenderToTexture = isRenderToTexture; }
     bool isRenderToTexture() const { return mIsRenderToTexture; }
 
+    bool isImageless() const { return mIsImageless; }
+    void updateImageless(bool isImageless) { mIsImageless = isImageless; }
+
     angle::FormatID operator[](size_t index) const
     {
         ASSERT(index < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
@@ -240,8 +243,11 @@ class alignas(4) RenderPassDesc final
     uint8_t mUnresolveDepth : 1;
     uint8_t mUnresolveStencil : 1;
 
+    // Imageless framebuffer
+    uint8_t mIsImageless : 1;
+
     // Available space for expansion.
-    uint8_t mPadding1 : 2;
+    uint8_t mPadding1 : 1;
     uint8_t mPadding2;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
@@ -1860,7 +1866,9 @@ class FramebufferCache final : angle::NonCopyable
     void destroy(RendererVk *rendererVk);
 
     bool get(ContextVk *contextVk, const vk::FramebufferDesc &desc, vk::Framebuffer &framebuffer);
-    void insert(const vk::FramebufferDesc &desc, vk::FramebufferHelper &&framebufferHelper);
+    void insert(ContextVk *contextVk,
+                const vk::FramebufferDesc &desc,
+                vk::FramebufferHelper &&framebufferHelper);
     void erase(ContextVk *contextVk, const vk::FramebufferDesc &desc);
 
     size_t getSize() const { return mPayload.size(); }

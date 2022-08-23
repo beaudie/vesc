@@ -2728,7 +2728,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     if (getFeatures().supportsImagelessFramebuffer.enabled)
     {
-        mEnabledDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+        mEnabledDeviceExtensions.push_back(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mImagelessFramebufferFeatures);
     }
 
@@ -3784,6 +3784,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsImagelessFramebuffer,
                             mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE);
+    ASSERT(mFeatures.supportsImagelessFramebuffer.enabled);
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
