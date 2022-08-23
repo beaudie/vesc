@@ -262,6 +262,30 @@
       },
       "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f372be9_08000252",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-23T06:17:12Z",
+      "side": 1,
+      "message": "Thanks for confirming! Updated.\n\nFor the end2end test, I found there actually existed plenty of RGBXAHB tests, however, the upload and verification are only for top left corner. I sent a follow up CL for updating `RGBXAHBImportThenUpload` to upload to the right side and the test will fail as expected without this fix.",
+      "parentUuid": "f836bfd3_7b5152a4",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 5
+      },
+      "revId": "c89174a33ae702a02ffd44419b5509f27e2b8aa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
