@@ -401,6 +401,8 @@ TEST_P(EGLMultiContextTest, RepeatedEglInitAndTerminate)
 // even after thread A is destroyed.
 TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
 {
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
     // Release all resources in parent thread
     getEGLWindow()->destroyGL();
 
