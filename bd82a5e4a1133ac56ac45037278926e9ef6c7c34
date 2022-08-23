@@ -22,6 +22,30 @@
       },
       "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c0e2d8_e71c40f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4950,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T14:48:59Z",
+      "side": 1,
+      "message": "`updateInfoDesc` doesn\u0027t care about the order in which indices are processed.\n\n```\n    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc \u0026infoDesc)\n    {\n        mDescriptorInfos[infoDescIndex] \u003d infoDesc;\n    }\n```\n\nIf your CL actually fixed anything, then it means that `textureIndex` now means something other than what it did prior to this change. But this change has `activeTextures.test(textureIndex)`, so if the meaning of `textureIndex` has changed, there\u0027s something more that\u0027s broken.\n\nSo, did that CL really fix the app? Also, please add a regression test to make debugging this easier.",
+      "parentUuid": "9e38f3ef_382df3da",
+      "range": {
+        "startLine": 4950,
+        "startChar": 55,
+        "endLine": 4950,
+        "endChar": 67
+      },
+      "revId": "bd82a5e4a1133ac56ac45037278926e9ef6c7c34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
