@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7361feab_fd423992",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-23T21:57:27Z",
+      "side": 1,
+      "message": "without the new extension the validation code in `validationEGL.cpp` errors out on all platforms that do not support `EGL_ANDROID_get_frame_timestamps`\n\nInitially i had a kludgy way of using just feature, see PS1 here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/3753396/1/src/libANGLE/validationEGL.cpp\n\nbut shabi suggested it would be cleaner to create an extension and check for that instead of checking for feature in validation code",
+      "parentUuid": "d5f80abc_bb22a345",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a354bc7_76aa4f31",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 19
