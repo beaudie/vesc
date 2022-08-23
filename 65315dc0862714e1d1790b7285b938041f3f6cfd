@@ -1,0 +1,198 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5f878d_6dc405f4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Suggest refactoring this to a helper, later you can call it when you really need the views (at RP start time)",
+      "range": {
+        "startLine": 2163,
+        "startChar": 0,
+        "endLine": 2226,
+        "endChar": 5
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f54bed_c236c4cf",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Only done for one image, but should be done for all images. The algorithm would be very similar to the helper function suggested above.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473f32e8_04e7da8d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Oops",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58c97ffc_b0c14e5c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Could you stash the changes in SurfaceVk.cpp away? Let\u0027s keep the Surface framebuffers !imageless for now. The framebuffers are static and few, but if there\u0027s any benefit to imageless, we\u0027ll look into it once the rest of the work is done. Same with UtilsVk framebuffers.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a19df369_28214b74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Redundant, `\u003d {}` above does this.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b413d69_afd76aa7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Yes, technically. Though practically doesn\u0027t matter, the non-KHR version is alias of it. Still, we could technically support older Vulkan header versions.",
+      "range": {
+        "startLine": 2293,
+        "startChar": 76,
+        "endLine": 2293,
+        "endChar": 84
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed8bc3d_32bb39b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Can\u0027t cache the pointer directly, the struct lives on the stack. Need to copy into an array. Use `ImageListFormats`, or better yet define an `angle::FixedVector` similar to `ImageListFormats` and use that. Then you also wouldn\u0027t need two getters for the format list, but can return the format list fixed-vector directly.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de19f61c_f7a260f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Please put in helper.",
+      "range": {
+        "startLine": 5304,
+        "startChar": 0,
+        "endLine": 5319,
+        "endChar": 5
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856ec0e6_54f2bb39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "Actually use `FramebufferAttachmentArray` instead. `gl::AttachmentArray` doesn\u0027t leave room for resolve attachments.",
+      "range": {
+        "startLine": 1478,
+        "startChar": 8,
+        "endLine": 1478,
+        "endChar": 23
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12b3dc50_27585f43",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:39:33Z",
+      "side": 1,
+      "message": "You should be able to get the count from `mRenderPassDesc`.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
