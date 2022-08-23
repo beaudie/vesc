@@ -24,50 +24,6 @@ namespace
 // To know when to call sh::Initialize and sh::Finalize.
 size_t gActiveCompilers = 0;
 
-ShShaderSpec SelectShaderSpec(GLint majorVersion,
-                              GLint minorVersion,
-                              bool isWebGL,
-                              EGLenum clientType,
-                              EGLint profileMask)
-{
-    // For Desktop GL
-    if (clientType == EGL_OPENGL_API)
-    {
-        if ((profileMask & EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT) != 0)
-        {
-            return SH_GL_CORE_SPEC;
-        }
-        else
-        {
-            return SH_GL_COMPATIBILITY_SPEC;
-        }
-    }
-
-    if (majorVersion >= 3)
-    {
-        switch (minorVersion)
-        {
-            case 2:
-                ASSERT(!isWebGL);
-                return SH_GLES3_2_SPEC;
-            case 1:
-                return isWebGL ? SH_WEBGL3_SPEC : SH_GLES3_1_SPEC;
-            case 0:
-                return isWebGL ? SH_WEBGL2_SPEC : SH_GLES3_SPEC;
-            default:
-                UNREACHABLE();
-        }
-    }
-
-    // GLES1 emulation: Use GLES3 shader spec.
-    if (!isWebGL && majorVersion == 1)
-    {
-        return SH_GLES3_SPEC;
-    }
-
-    return isWebGL ? SH_WEBGL_SPEC : SH_GLES2_SPEC;
-}
-
 }  // anonymous namespace
 
 Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Display *display)
@@ -352,6 +308,50 @@ void Compiler::putInstance(ShCompilerInstance &&instance)
     }
 }
 
+ShShaderSpec Compiler::SelectShaderSpec(GLint majorVersion,
+                                        GLint minorVersion,
+                                        bool isWebGL,
+                                        EGLenum clientType,
+                                        EGLint profileMask)
+{
+    // For Desktop GL
+    if (clientType == EGL_OPENGL_API)
+    {
+        if ((profileMask & EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT) != 0)
+        {
+            return SH_GL_CORE_SPEC;
+        }
+        else
+        {
+            return SH_GL_COMPATIBILITY_SPEC;
+        }
+    }
+
+    if (majorVersion >= 3)
+    {
+        switch (minorVersion)
+        {
+            case 2:
+                ASSERT(!isWebGL);
+                return SH_GLES3_2_SPEC;
+            case 1:
+                return isWebGL ? SH_WEBGL3_SPEC : SH_GLES3_1_SPEC;
+            case 0:
+                return isWebGL ? SH_WEBGL2_SPEC : SH_GLES3_SPEC;
+            default:
+                UNREACHABLE();
+        }
+    }
+
+    // GLES1 emulation: Use GLES3 shader spec.
+    if (!isWebGL && majorVersion == 1)
+    {
+        return SH_GLES3_SPEC;
+    }
+
+    return isWebGL ? SH_WEBGL_SPEC : SH_GLES2_SPEC;
+}
+
 ShCompilerInstance::ShCompilerInstance() : mHandle(nullptr) {}
 
 ShCompilerInstance::ShCompilerInstance(ShHandle handle,
@@ -399,7 +399,7 @@ ShaderType ShCompilerInstance::getShaderType() const
     return mShaderType;
 }
 
-const std::string &ShCompilerInstance::getBuiltinResourcesString()
+const std::string &ShCompilerInstance::getBuiltinResourcesString() const
 {
     return sh::GetBuiltInResourcesString(mHandle);
 }
