@@ -1387,6 +1387,16 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    void updateImageViews(std::vector<VkImageView> &imageViews)
+    {
+        ASSERT(imageViews.size() <= mImageViews.size());
+
+        for (uint32_t i = 0; i < imageViews.size(); i++)
+        {
+            mImageViews[i] = imageViews[i];
+        }
+    }
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
@@ -1463,6 +1473,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     RenderPassAttachment mStencilAttachment;
     RenderPassAttachment mStencilResolveAttachment;
+
+    FramebufferAttachmentArray<VkImageView> mImageViews;
 
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
@@ -1767,6 +1779,12 @@ class ImageHelper final : public Resource, public angle::Subject
         VkImageFormatListCreateInfoKHR *imageFormatListInfoStorage,
         ImageListFormats *imageListFormatsStorage,
         VkImageCreateFlags *createFlagsOut);
+
+    // Helper for initExternal and users to extract the view formats of the image from the pNext
+    // chain in VkImageCreateInfo.
+    template <size_t N>
+    void deriveImageFormatFromCreateInfoPNext(VkImageCreateInfo &imageInfo,
+                                              angle::FixedVector<VkFormat, N> &formatOut);
 
     // Release the underlining VkImage object for garbage collection.
     void releaseImage(RendererVk *renderer);
@@ -2247,6 +2265,10 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    // Image formats used for the creation of imageless framebuffers.
+    using ImageFormats = angle::FixedVector<VkFormat, kImageListFormatCount>;
+    ImageFormats &getViewFormats() { return mViewFormats; }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2524,6 +2546,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // Cached properties.
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+
+    // Image formats used for imageless framebuffers.
+    ImageFormats mViewFormats;
 
     std::vector<std::vector<SubresourceUpdate>> mSubresourceUpdates;
     VkDeviceSize mTotalStagedBufferUpdateSize;
