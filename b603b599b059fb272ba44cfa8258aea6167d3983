@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "706ea9e7_9220aa48",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T23:02:37Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "parentUuid": "e947ce68_612d03a5",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a354bc7_76aa4f31",
