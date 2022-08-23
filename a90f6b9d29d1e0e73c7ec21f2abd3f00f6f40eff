@@ -33,6 +33,24 @@
       "message": "Great discussion on the security aspects. Still lgtm.\n",
       "revId": "a90f6b9d29d1e0e73c7ec21f2abd3f00f6f40eff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "860b6971_f3b93dfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-23T02:42:42Z",
+      "side": 1,
+      "message": "Let\u0027s land it! It\u0027s in very good shape IMO, but we can always adjust it as you\u0027ll invariably discover issues in implementation ;)",
+      "parentUuid": "527afe4f_84a64a64",
+      "revId": "a90f6b9d29d1e0e73c7ec21f2abd3f00f6f40eff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
