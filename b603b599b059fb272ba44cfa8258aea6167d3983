@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3015624f_a6483ed4",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T22:09:04Z",
+      "side": 1,
+      "message": "Thanks for the explanation!\n\nLet me rephrase what I think this extension is doing then.  It\u0027s saying that ANGLE\u0027s EGL implementation will mostly rely on the Android EGL loader to implement the `EGL_ANDROID_get_frame_timestamps` extension, with the exception that ANGLE\u0027s EGL implementation will cache `EGL_TIMESTAMPS_ANDROID` state.  Correct?",
+      "parentUuid": "cf1f43c2_cbf08e04",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a354bc7_76aa4f31",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 19
