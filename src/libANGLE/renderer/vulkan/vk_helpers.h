@@ -1237,6 +1237,35 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBuffer mCommandBuffer;
 };
 
+struct OptionalImageFramebuffer  // Convert to class?
+{
+    OptionalImageFramebuffer() : imageless(false) {}
+    ~OptionalImageFramebuffer() { framebuffer.release(); }
+    void updateImageViews(const OptionalImageFramebuffer &other)
+    {
+        ASSERT(imageViews.size() == other.imageViews.size());
+
+        for (uint32_t i = 0; i < imageViews.size(); i++)
+        {
+            imageViews[i] = other.imageViews[i];
+        }
+    }
+
+    void updateImageViews(std::vector<VkImageView> &updatedImageViews)
+    {
+        ASSERT(imageViews.size() >= updatedImageViews.size());
+
+        for (uint32_t i = 0; i < updatedImageViews.size(); i++)
+        {
+            imageViews[i] = updatedImageViews[i];
+        }
+    }
+
+    FramebufferAttachmentArray<VkImageView> imageViews;
+    Framebuffer framebuffer;
+    bool imageless;
+};
+
 class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 {
   public:
@@ -1293,7 +1322,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void finalizeImageLayout(Context *context, const ImageHelper *image);
 
     angle::Result beginRenderPass(ContextVk *contextVk,
-                                  const Framebuffer &framebuffer,
+                                  const OptionalImageFramebuffer &framebuffer,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
                                   const AttachmentOpsArray &renderPassAttachmentOps,
@@ -1340,6 +1369,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool isTransformFeedbackStarted() const { return mValidTransformFeedbackBufferCount > 0; }
     bool isTransformFeedbackActiveUnpaused() const { return mIsTransformFeedbackActiveUnpaused; }
 
+    bool usesImagelessFramebuffer() { return mFramebuffer.imageless; }
+
     uint32_t getAndResetCounter()
     {
         uint32_t count = mCounter;
@@ -1347,7 +1378,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         return count;
     }
 
-    VkFramebuffer getFramebufferHandle() const { return mFramebuffer.getHandle(); }
+    VkFramebuffer getFramebufferHandle() const { return mFramebuffer.framebuffer.getHandle(); }
 
     void onColorAccess(PackedAttachmentIndex packedAttachmentIndex, ResourceAccess access);
     void onDepthAccess(ResourceAccess access);
@@ -1362,7 +1393,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool hasAnyStencilAccess() { return mStencilAttachment.hasAnyAccess(); }
 
     void updateRenderPassForResolve(ContextVk *contextVk,
-                                    Framebuffer *newFramebuffer,
+                                    OptionalImageFramebuffer &newFramebuffer,
                                     const RenderPassDesc &renderPassDesc);
 
     bool hasDepthStencilWriteOrClear() const
@@ -1429,7 +1460,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     uint32_t mCounter;
     RenderPassDesc mRenderPassDesc;
     AttachmentOpsArray mAttachmentOps;
-    Framebuffer mFramebuffer;
+    OptionalImageFramebuffer mFramebuffer;
     gl::Rectangle mRenderArea;
     PackedClearValuesArray mClearValues;
     bool mRenderPassStarted;
@@ -1463,6 +1494,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     RenderPassAttachment mStencilAttachment;
     RenderPassAttachment mStencilResolveAttachment;
+
+    FramebufferAttachmentArray<VkImageView> mImageViews;
 
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
@@ -1767,6 +1800,15 @@ class ImageHelper final : public Resource, public angle::Subject
         VkImageFormatListCreateInfoKHR *imageFormatListInfoStorage,
         ImageListFormats *imageListFormatsStorage,
         VkImageCreateFlags *createFlagsOut);
+
+    // Image formats used for the creation of imageless framebuffers.
+    using ImageFormats = angle::FixedVector<VkFormat, kImageListFormatCount>;
+    ImageFormats &getViewFormats() { return mViewFormats; }
+
+    // Helper for initExternal and users to extract the view formats of the image from the pNext
+    // chain in VkImageCreateInfo.
+    void deriveImageFormatFromCreateInfoPNext(VkImageCreateInfo &imageInfo,
+                                              ImageFormats &formatOut);
 
     // Release the underlining VkImage object for garbage collection.
     void releaseImage(RendererVk *renderer);
@@ -2540,6 +2582,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // Cached properties.
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+
+    // Image formats used for imageless framebuffers.
+    ImageFormats mViewFormats;
 
     std::vector<std::vector<SubresourceUpdate>> mSubresourceUpdates;
     VkDeviceSize mTotalStagedBufferUpdateSize;
