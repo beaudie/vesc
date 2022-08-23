@@ -2728,7 +2728,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     if (getFeatures().supportsImagelessFramebuffer.enabled)
     {
-        mEnabledDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+        mEnabledDeviceExtensions.push_back(VK_KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mImagelessFramebufferFeatures);
     }
 
@@ -3782,8 +3782,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsFragmentShaderPixelInterlock,
         mFragmentShaderInterlockFeatures.fragmentShaderPixelInterlock == VK_TRUE);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsImagelessFramebuffer,
-                            mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE);
+    // http://anglebug.com/7553
+    // Currently, using imageless framebuffers fails on Swiftshader when overwriting an existing
+    // framebuffer attachment, i.e., if it is not null.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsImagelessFramebuffer,
+        mImagelessFramebufferFeatures.imagelessFramebuffer == VK_TRUE && !isSwiftShader);
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
