@@ -193,6 +193,12 @@ enum class SwapchainResolveMode
     Enabled,
 };
 
+enum class BypassImageViewUpdate
+{
+    Disabled,
+    Enabled
+};
+
 class WindowSurfaceVk : public SurfaceVk
 {
   public:
@@ -258,7 +264,7 @@ class WindowSurfaceVk : public SurfaceVk
                                         FramebufferFetchMode fetchMode,
                                         const vk::RenderPass &compatibleRenderPass,
                                         const SwapchainResolveMode swapchainResolveMode,
-                                        vk::Framebuffer **framebufferOut);
+                                        vk::OptionalImageFramebuffer *framebufferOut);
 
     const vk::Semaphore *getAndResetAcquireImageSemaphore();
 

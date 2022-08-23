@@ -2320,7 +2320,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     FramebufferFetchMode fetchMode,
     const vk::RenderPass &compatibleRenderPass,
     const SwapchainResolveMode swapchainResolveMode,
-    vk::Framebuffer **framebufferOut)
+    vk::OptionalImageFramebuffer *framebufferOut)
 {
     // FramebufferVk dirty-bit processing should ensure that a new image was acquired.
     ASSERT(!mNeedToAcquireNextSwapchainImage);
@@ -2332,7 +2332,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     if (currentFramebuffer.valid())
     {
         // Validation layers should detect if the render pass is really compatible.
-        *framebufferOut = &currentFramebuffer;
+        framebufferOut->framebuffer.setHandle(currentFramebuffer.getHandle());
         return angle::Result::Continue;
     }
 
@@ -2410,7 +2410,7 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     }
 
     ASSERT(currentFramebuffer.valid());
-    *framebufferOut = &currentFramebuffer;
+    framebufferOut->framebuffer.setHandle(currentFramebuffer.getHandle());
     return angle::Result::Continue;
 }
 
