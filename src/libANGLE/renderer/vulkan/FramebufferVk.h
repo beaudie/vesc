@@ -132,6 +132,7 @@ class FramebufferVk : public FramebufferImpl
 
     angle::Result getFramebuffer(ContextVk *contextVk,
                                  vk::Framebuffer **framebufferOut,
+                                 vk::ImageHelper *resolveImageIn,
                                  const vk::ImageView *resolveImageViewIn,
                                  const SwapchainResolveMode swapchainResolveMode);
 
@@ -148,6 +149,12 @@ class FramebufferVk : public FramebufferImpl
     void switchToFramebufferFetchMode(ContextVk *contextVk, bool hasFramebufferFetch);
 
     void removeColorResolveAttachment(uint32_t colorIndexGL);
+
+    angle::Result getAttachmentsAndImages(ContextVk *contextVk,
+                                          const vk::ImageView *resolveImageViewIn,
+                                          vk::ImageHelper *resolveImageIn,
+                                          std::vector<VkImageView> &attachments,
+                                          std::vector<vk::ImageHelper *> &images);
 
   private:
     FramebufferVk(RendererVk *renderer,
