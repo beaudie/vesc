@@ -771,6 +771,8 @@ TEST_P(EGLContextSharingTest, DeleteReaderOfSharedTexture)
 // Test that an inactive but alive thread doesn't prevent memory cleanup.
 TEST_P(EGLContextSharingTestNoFixture, InactiveThreadDoesntPreventCleanup)
 {
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
     EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(),
                           EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, GetParam().getDeviceType(),
                           EGL_NONE};
