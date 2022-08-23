@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5f80abc_bb22a345",
+        "filename": "extensions/EGL_ANGLE_timestamp_surface_attribute.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:51:39Z",
+      "side": 1,
+      "message": "Perhaps I\u0027m missing something, but I\u0027m wondering if we need this sentence.  In fact, do we need the extension (as opposed to just the feature flag)?  I\u0027ll explain.\n\nI\u0027ve looked at the EGL spec, the `EGL_ANDROID_get_frame_timestamps` spec, and the code.  The `EGL_ANDROID_get_frame_timestamps` spec defines that `EGL_TIMESTAMPS_ANDROID` is for `eglSurfaceAttrib`.  This CL doesn\u0027t do anything new to restrict the use of `EGL_TIMESTAMPS_ANDROID`.  This CL definitely fixes the problem w.r.t. recreating the swapchain.  However, I don\u0027t see any restriction of the ``",
+      "parentUuid": "77f596b1_e7b6b4d4",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a354bc7_76aa4f31",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 19
@@ -111,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48b6fc4b_6d09c7a5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:51:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "49d11543_35db7353",
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6712081_06cf637f",
@@ -148,6 +184,30 @@
       "side": 1,
       "message": "intended to be `||`. The test can run if either of the following condition is true -\n1. `EGL_ANDROID_get_frame_timestamps` is supported (on Android with GLES backend)\n2. `EGL_ANGLE_timestamp_surface_attribute` is supported (on Android with Vulkan backend)",
       "parentUuid": "d6712081_06cf637f",
+      "range": {
+        "startLine": 1662,
+        "startChar": 83,
+        "endLine": 1662,
+        "endChar": 85
+      },
+      "revId": "b603b599b059fb272ba44cfa8258aea6167d3983",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09795d93_000fea5f",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-08-23T21:51:39Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b89d3326_30ae9e0d",
       "range": {
         "startLine": 1662,
         "startChar": 83,
