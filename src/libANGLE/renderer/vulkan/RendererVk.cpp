@@ -3929,7 +3929,8 @@ void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) c
     // https://issuetracker.google.com/issues/220069903
     ANGLE_FEATURE_CONDITION(features, forceGlErrorChecking, (IsAndroid() && isSwiftShader));
 
-    // TODO(eddiehatfield): re-enable this when the BlobCache test flakes are resolved.
+    // TODO(http://anglebug.com/7036): Re-enable the shader caching feature when the shader key hash
+    // includes the contents of the arguments to ConstructCompiler() and Compile().
     ANGLE_FEATURE_CONDITION(features, cacheCompiledShader, false);
 }
 
