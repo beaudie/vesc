@@ -16,6 +16,24 @@
       "message": "ANGLE doesn\u0027t have branch CQ, I think you need to hit Submit in the right-up menu.",
       "revId": "097991c19cc6e7a728e25d392cc902424aac631f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d46ed0ca_cd6ecadb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-23T17:32:07Z",
+      "side": 1,
+      "message": "Thanks Yuly for info.",
+      "parentUuid": "1cbf1ac5_2f172892",
+      "revId": "097991c19cc6e7a728e25d392cc902424aac631f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
