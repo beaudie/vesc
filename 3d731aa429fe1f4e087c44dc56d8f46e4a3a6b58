@@ -51,6 +51,24 @@
       "message": "Rubber Stamper doesn\u0027t automatically CQ CLs, it just gives them Code Review.\nCould you please remove your -1, in case I\u0027ll actually want to land this?\nI\u0027ll start a dry run to see if I also need to revert the test modification in\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3849462",
       "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64209507_bfbf204e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-24T19:10:43Z",
+      "side": 1,
+      "message": "The test will be broken if you revert this. However, the test is legit. The load function change ensures proper texture uploading 3 channel frontend to 4 channel backing storage.\n\nI noticed that webgl integrated this angle ext half a year ago https://chromium-review.googlesource.com/c/chromium/src/+/3311985. The original usage looks sane to me, but there might be bugs on the frontend usage of it. I suspect webgl mis-use this format for 4 channel frontend format.",
+      "parentUuid": "6de8ca57_626b3810",
+      "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
