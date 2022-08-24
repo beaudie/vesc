@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8be4c08_c8889ad5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-24T14:52:58Z",
+      "side": 1,
+      "message": "The change looks correct but some test failures need investigating.\n\nHopefully we aren\u0027t running out of uniforms.",
+      "revId": "c9c47cb03e0f6fe2a6f7e0efdf5d5a357d79ccea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9db697a_a6549a1a",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-24T14:52:58Z",
+      "side": 1,
+      "message": "It\u0027s a single float, can it be `c3.w`?",
+      "range": {
+        "startLine": 859,
+        "startChar": 28,
+        "endLine": 859,
+        "endChar": 33
+      },
+      "revId": "c9c47cb03e0f6fe2a6f7e0efdf5d5a357d79ccea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
