@@ -464,6 +464,9 @@ class EGLSingleBufferTest : public ANGLETest<>
 class EGLAndroidAutoRefreshTest : public EGLSingleBufferTest
 {};
 
+class EGLColorspaceTest : public EGLSurfaceTest
+{};
+
 // Test clearing and checking the color is correct
 TEST_P(EGLFloatSurfaceTest, Clearing)
 {

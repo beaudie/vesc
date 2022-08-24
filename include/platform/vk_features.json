@@ -967,6 +967,14 @@
                 "Platform supports setting frame timestamp surface attribute"
             ],
             "issue": "https://anglebug.com/7489"
+        },
+        {
+            "name": "egl_colorspace_attribute_passthrough",
+            "category": "Features",
+            "description": [
+                "Support passthrough of EGL colorspace attribute values"
+            ],
+            "issue": "https://anglebug.com/7319"
         }
     ]
 }
