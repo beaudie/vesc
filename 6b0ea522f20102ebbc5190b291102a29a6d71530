@@ -16,6 +16,29 @@
       "message": "Android crash seems unrelated, happens with other CLs as well.",
       "revId": "6b0ea522f20102ebbc5190b291102a29a6d71530",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85cc21b0_ced404d4",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-24T14:41:47Z",
+      "side": 1,
+      "message": "nit: small comment explaining why this format is special.",
+      "range": {
+        "startLine": 341,
+        "startChar": 0,
+        "endLine": 343,
+        "endChar": 65
+      },
+      "revId": "6b0ea522f20102ebbc5190b291102a29a6d71530",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
