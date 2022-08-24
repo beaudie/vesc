@@ -227,4 +227,11 @@ std::string StripFilenameFromPath(const std::string &path)
     size_t lastPathSepLoc = path.find_last_of("\\/");
     return (lastPathSepLoc != std::string::npos) ? path.substr(0, lastPathSepLoc) : "";
 }
+
+uint64_t GetCurrentThreadSerial()
+{
+    static std::atomic<uint64_t> globalSerial(0);
+    static thread_local uint64_t threadSerial(globalSerial++);
+    return threadSerial;
+}
 }  // namespace angle
