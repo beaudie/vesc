@@ -69,6 +69,24 @@
       "parentUuid": "80378090_47738544",
       "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f9a9e4_da3d2450",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2022-08-24T21:00:57Z",
+      "side": 1,
+      "message": "That\u0027s much appreciated, BTW! With luck, we can re-enable those Dawn tests.",
+      "parentUuid": "ac053013_13f79010",
+      "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
