@@ -51,6 +51,24 @@
       "parentUuid": "1789a21a_b1eb3b6d",
       "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac053013_13f79010",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-24T20:38:31Z",
+      "side": 1,
+      "message": "Unfortunately not. It appears that updating earlier state makes later state dirty, so we can\u0027t clear dirty bits until after their preceding state has been updated.\n\nAnd in that case it seems like just checking bits on `dirtyBitsCopy` might be dangerous, but the later assert will still fire if something goes awry.\n\nAlso note that this ought fix other bugs as well, like https://bugs.chromium.org/p/dawn/issues/detail?id\u003d1503 and https://chromium-review.googlesource.com/c/angle/angle/+/3813050",
+      "parentUuid": "80378090_47738544",
+      "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
