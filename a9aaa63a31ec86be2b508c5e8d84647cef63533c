@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3faf32_055c287e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T23:41:12Z",
+      "side": 1,
+      "message": "\u003e Patch Set 13:\n\u003e \n\u003e Gold has detected about 1 new digest(s) on patchset 13.\n\u003e \n\u003e Please triage them at https://angle-gold.skia.org/cl/gerrit/3851161.\n\nYou can ignore that Skia Gold failure, it occurs when swiftshader tests are run on a system that has too small of a display.",
+      "revId": "a9aaa63a31ec86be2b508c5e8d84647cef63533c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bd84235_48d6b20d",
