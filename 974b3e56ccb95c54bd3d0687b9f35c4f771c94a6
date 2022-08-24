@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "75a8cb90_ec5e4d0a",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-08-24T08:43:41Z",
+      "side": 1,
+      "message": "I had this initially like that but added these 4 exceptions since `ToGLenum(AlphaTestFunc::InvalidEnum)` will trigger an assertion, as it is not mappable to a GL enum. This is the reason I added the `kEnumInvalid` error string, that does not take a value argument.",
+      "parentUuid": "f4538b8f_7d8bcca2",
+      "range": {
+        "startLine": 37,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "883fa2be_8f277379",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
