@@ -22,6 +22,30 @@
       },
       "revId": "286a8ff90c76a8c8611e9aa19e86bb37d65fc9fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e218539d_8f563adf",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 781,
+      "author": {
+        "id": 1265568
+      },
+      "writtenOn": "2022-08-24T01:02:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1624e37_550b4736",
+      "range": {
+        "startLine": 779,
+        "startChar": 12,
+        "endLine": 781,
+        "endChar": 89
+      },
+      "revId": "286a8ff90c76a8c8611e9aa19e86bb37d65fc9fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
