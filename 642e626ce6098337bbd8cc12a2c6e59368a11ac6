@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6555e116_745c82a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-24T02:01:54Z",
+      "side": 1,
+      "message": "LGTM, but we should really get the rest of the compilation parameters hashed in too. Sooner or later that\u0027s gonna show up as a security bug in Chrome. It might be better to leave the feature disabled until that\u0027s done.",
+      "revId": "642e626ce6098337bbd8cc12a2c6e59368a11ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae7524d_3f336771",
+        "filename": "src/libANGLE/BlobCache.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-24T02:01:54Z",
+      "side": 1,
+      "message": "nit: please avoid complex statements like this inside the `if` scope. This is perfectly fine here:\n\n```\n{\n    std::scoped_lock\u003cstd::mutex\u003e lock(mBlobCacheMutex);\n    if (!DecompressBlobCacheData(...))\n        return ...\n}\n```",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 245,
+        "endChar": 94
+      },
+      "revId": "642e626ce6098337bbd8cc12a2c6e59368a11ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
