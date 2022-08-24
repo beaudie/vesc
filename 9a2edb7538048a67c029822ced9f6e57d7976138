@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c505af9e_1813c48e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:18:06Z",
+      "side": 1,
+      "message": "Nice addition to improve ANGLE\u0027s usefulness.  Thanks!",
+      "revId": "9a2edb7538048a67c029822ced9f6e57d7976138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
