@@ -33,6 +33,24 @@
       "message": "I\u0027d like Jamie to take a look to see if this is correct.",
       "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80378090_47738544",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-24T19:33:22Z",
+      "side": 1,
+      "message": "I\u0027m curious as to the motivation. Can you achieve the same effect without needing to manually reset each bit? The above masking call would be faster for higher bit counts, by a small margin.\n\nThe code does look correct to me this way.",
+      "parentUuid": "1789a21a_b1eb3b6d",
+      "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
