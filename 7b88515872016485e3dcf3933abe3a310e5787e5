@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20faca2e_7646701c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-24T17:09:13Z",
+      "side": 1,
+      "message": "I have disabled the shader cache and skipped the shader cache EGBlobCacheTest. I have also left comments about when it should be re-enabled in RendererVk.cpp and in the commit message.",
+      "revId": "7b88515872016485e3dcf3933abe3a310e5787e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
