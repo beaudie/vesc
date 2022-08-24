@@ -716,6 +716,11 @@ struct FeaturesVk : FeatureSetBase
         "supportsTimestampSurfaceAttribute", FeatureCategory::VulkanFeatures,
         "Platform supports setting frame timestamp surface attribute", &members,
         "https://anglebug.com/7489"};
+
+    FeatureInfo eglColorspaceAttributePassthrough = {
+        "eglColorspaceAttributePassthrough", FeatureCategory::VulkanFeatures,
+        "Support passthrough of EGL colorspace attribute values", &members,
+        "https://anglebug.com/7319"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

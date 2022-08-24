@@ -80,6 +80,7 @@ enum class Feature
     DontRelinkProgramsInParallel,
     DontUseLoopsToInitializeVariables,
     DoWhileGLSLCausesGPUHang,
+    EglColorspaceAttributePassthrough,
     EmulateAbsIntFunction,
     EmulateAdvancedBlendEquations,
     EmulateAtan2Float,
