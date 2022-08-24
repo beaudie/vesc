@@ -16,6 +16,24 @@
       "message": "Not landing yet, I\u0027ll check if this fixes https://luci-milo.appspot.com/p/chromium/builders/ci/Android%20FYI%20Release%20%28Pixel%206%29/2707 first",
       "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7198a9ad_3fd72bc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-24T18:41:33Z",
+      "side": 1,
+      "message": "Then please ensure it\u0027s not auto landed by Rubber Stamper.",
+      "parentUuid": "32e02c61_2011daf9",
+      "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
