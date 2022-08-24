@@ -16,6 +16,24 @@
       "message": "A maybe better alternative for this patch would be to not emit the `glBindVertexArray` at all on GLES1 contexts, which was introduced with `fd89020c25f51a1e70b8a4d8c0ea633516dcecbe`, since it makes all GLES1 traces captured with MEC depend on `GL_OES_vertex_array_object`, even if the extension is not used otherwise. This for example has issues on native drivers like Mesa, which seemingly don\u0027t support the extension on GLES1.",
       "revId": "cc68e100815fc027730a84f3333450b42b8d54c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58859fc8_533a58e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:15:19Z",
+      "side": 1,
+      "message": "Yes, let\u0027s do that as a follow up.  I\u0027ll take a look.  That CL is when reset for VertexArray was introduced, but apparently added something to all Setup as well.",
+      "parentUuid": "fe509e60_7b951715",
+      "revId": "cc68e100815fc027730a84f3333450b42b8d54c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
