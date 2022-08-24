@@ -166,6 +166,30 @@
       },
       "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae2325ba_fa84f7be",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1812,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-08-24T10:42:08Z",
+      "side": 1,
+      "message": "Cool! I submitted a new CL for this: https://chromium-review.googlesource.com/c/angle/angle/+/3853598",
+      "parentUuid": "075973c4_f7d1e192",
+      "range": {
+        "startLine": 1812,
+        "startChar": 4,
+        "endLine": 1812,
+        "endChar": 35
+      },
+      "revId": "c112340b25e2c42a507df875f2502e55bff4c318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
