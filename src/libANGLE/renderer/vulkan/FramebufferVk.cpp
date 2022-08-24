@@ -2627,6 +2627,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     kUninitializedClearValue);
         }
+
         renderPassAttachmentOps.setStencilOps(colorIndexVk, vk::RenderPassLoadOp::DontCare,
                                               vk::RenderPassStoreOp::DontCare);
 
@@ -2696,10 +2697,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // there is no resolve/unresolve and the image data is never stored/loaded.
         if (depthStencilRenderTarget->isImageTransient())
         {
+            INFO() << "Yuxin Debug depth store op is: DontCare";
             depthStoreOp = vk::RenderPassStoreOp::DontCare;
 
             if (canExportStencil || depthStencilRenderTarget->isEntirelyTransient())
             {
+                INFO() << "Yuxin Debug stencil store op is: DontCare";
                 stencilStoreOp = vk::RenderPassStoreOp::DontCare;
             }
         }
@@ -2738,11 +2741,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // limitations, use DONT_CARE for load/store. The same logic for depth follows.
         if (format.stencilBits == 0)
         {
+            INFO() << "Yuxin Debug stencil store op is DontCare";
             stencilLoadOp  = vk::RenderPassLoadOp::DontCare;
             stencilStoreOp = vk::RenderPassStoreOp::DontCare;
         }
         if (format.depthBits == 0)
         {
+            INFO() << "Yuxin Debug depth store op is DontCare";
             depthLoadOp  = vk::RenderPassLoadOp::DontCare;
             depthStoreOp = vk::RenderPassStoreOp::DontCare;
         }

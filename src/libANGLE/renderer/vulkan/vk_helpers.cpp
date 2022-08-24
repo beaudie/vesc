@@ -1147,6 +1147,7 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
     const bool notLoaded = *loadOp == RenderPassLoadOp::DontCare && !hasUnresolveAttachment;
     if (isInvalidated(currentCmdCount) || (notLoaded && mAccess != ResourceAccess::Write))
     {
+        INFO() << "Yuxin Debug storeOp is DontCare";
         *storeOp          = RenderPassStoreOp::DontCare;
         *isInvalidatedOut = true;
     }
@@ -2011,9 +2012,11 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     bool isDepthInvalidated   = false;
     bool isStencilInvalidated = false;
 
+    INFO() << "Yuxin Debug finalize depth attachment load store";
     mDepthAttachment.finalizeLoadStore(context, currentCmdCount,
                                        mRenderPassDesc.hasDepthUnresolveAttachment(), &depthLoadOp,
                                        &depthStoreOp, &isDepthInvalidated);
+    INFO() << "Yuxin Debug finalize stencil attachment load store";
     mStencilAttachment.finalizeLoadStore(context, currentCmdCount,
                                          mRenderPassDesc.hasStencilUnresolveAttachment(),
                                          &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
@@ -2061,6 +2064,10 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     SetBitField(dsOps.storeOp, depthStoreOp);
     SetBitField(dsOps.stencilLoadOp, stencilLoadOp);
     SetBitField(dsOps.stencilStoreOp, stencilStoreOp);
+    INFO() << "Yuxin Debug: depthLoadOp: " << static_cast<uint>(depthLoadOp)
+           << " depthStoreOp: " << static_cast<uint>(depthStoreOp)
+           << " stencilLoadOp: " << static_cast<uint>(stencilLoadOp)
+           << " stencilStoreOp: " << static_cast<uint>(stencilStoreOp);
 }
 
 void RenderPassCommandBufferHelper::finalizeColorImageLayoutAndLoadStore(

@@ -544,22 +544,22 @@
 7583 PIXEL6 VULKAN : GLSLTest_ES31.ShaderCacheTessellationControlWithSSBO/* = SKIP
 7583 PIXEL6 VULKAN : GLSLTest_ES31.ShaderCacheTessellationEvalWithSSBO/* = SKIP
 7583 PIXEL6 VULKAN : GLSLTest_ES31.ShaderCacheVertexWithSSBO/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidate/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateAndClear/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDetachModifyTexAttachDrawWithBlend/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableDraw/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableDrawEnable/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableEnableDraw/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDraw/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawAndDeleteRenderbuffer/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnable/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnableInvalidate/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnableInvalidateDraw/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateSub/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DisableDrawInvalidateEnable/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DisableInvalidateDraw/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.ReadOnlyDepthBufferLayout/* = SKIP
-7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.SubmittingOutsideCommandBufferDoesNotCollectRenderPassGarbage/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidate/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateAndClear/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDetachModifyTexAttachDrawWithBlend/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableDraw/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableDrawEnable/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDisableEnableDraw/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDraw/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawAndDeleteRenderbuffer/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnable/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnableInvalidate/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateDrawDisableEnableInvalidateDraw/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DepthStencilInvalidateSub/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DisableDrawInvalidateEnable/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.DisableInvalidateDraw/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.ReadOnlyDepthBufferLayout/* = SKIP
+// 7583 PIXEL6 VULKAN : VulkanPerformanceCounterTest.SubmittingOutsideCommandBufferDoesNotCollectRenderPassGarbage/* = SKIP
 
 // ARM drivers cannot support xfb emulation because they lack support for the
 // vertexPipelineStoresAndAtomics Vulkan feature.  The tests that force-enable this feature are
