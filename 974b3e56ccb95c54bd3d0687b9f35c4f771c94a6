@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca5b5602_3804975d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:28:07Z",
+      "side": 1,
+      "message": "LGTM, might be able to remove `kEnumInvalid` if you can cast some of the packed enums. +2\u0027ing for timezone friendly review.",
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4538b8f_7d8bcca2",
+        "filename": "src/libANGLE/validationES1.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:28:07Z",
+      "side": 1,
+      "message": "Can you use `ToGLenum(AlphaTestFunc from)` to write this out?",
+      "range": {
+        "startLine": 37,
+        "startChar": 12,
+        "endLine": 37,
+        "endChar": 16
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883fa2be_8f277379",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:28:07Z",
+      "side": 1,
+      "message": "Same here, can we write this out using `GLenum ToGLenum(TextureType from)`?",
+      "range": {
+        "startLine": 1671,
+        "startChar": 0,
+        "endLine": 1671,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be6662cd_ce16ca62",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:28:07Z",
+      "side": 1,
+      "message": "Same here: `ToGLenum(TextureType from)`",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e9d2984_c5202b15",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2271,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-24T04:28:07Z",
+      "side": 1,
+      "message": "If the pattern holds, can use `ToGLenum(BufferBinding from)` here",
+      "range": {
+        "startLine": 2271,
+        "startChar": 0,
+        "endLine": 2271,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
