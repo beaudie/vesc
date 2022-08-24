@@ -34,6 +34,23 @@
       "parentUuid": "32e02c61_2011daf9",
       "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6de8ca57_626b3810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-24T19:02:47Z",
+      "side": 1,
+      "message": "Rubber Stamper doesn\u0027t automatically CQ CLs, it just gives them Code Review.\nCould you please remove your -1, in case I\u0027ll actually want to land this?\nI\u0027ll start a dry run to see if I also need to revert the test modification in\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3849462",
+      "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
