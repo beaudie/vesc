@@ -409,6 +409,7 @@ TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
                           EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, GetParam().getDeviceType(),
                           EGL_NONE};
 
+    WARN() << "qwe 111";
     std::thread threadA = std::thread([&]() {
         dpy = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE,
                                        reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
@@ -429,7 +430,10 @@ TEST_P(EGLMultiContextTest, ReuseUnterminatedDisplay)
         ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
 
         EXPECT_TRUE(createContext(dpy, config, &ctx));
-        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, srf, srf, ctx));
+        WARN() << "qwe eglMakeCurrent B";
+        auto rr = eglMakeCurrent(dpy, srf, srf, ctx);
+        WARN() << "qwe rr " << rr;
+        EXPECT_EGL_TRUE(rr);
 
         // Clear and read back to make sure thread uses context.
         glClearColor(1.0, 0.0, 0.0, 1.0);

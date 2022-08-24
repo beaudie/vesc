@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
 #include "common/debug.h"
+#include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
@@ -253,6 +254,7 @@ egl::Error DisplayEGL::initialize(egl::Display *display)
 
     void *eglHandle =
         reinterpret_cast<void *>(mDisplayAttributes.get(EGL_PLATFORM_ANGLE_EGL_HANDLE_ANGLE, 0));
+    WARN() << "qwe init eglHandle=" << eglHandle << " getEGLPath " << getEGLPath();
     ANGLE_TRY(mEGL->initialize(display->getNativeDisplayId(), getEGLPath(), eglHandle));
 
     gl::Version eglVersion(mEGL->majorVersion, mEGL->minorVersion);
@@ -542,7 +544,9 @@ ContextImpl *DisplayEGL::createContext(const gl::State &state,
 
     RobustnessVideoMemoryPurgeStatus robustnessVideoMemoryPurgeStatus =
         GetRobustnessVideoMemoryPurge(attribs);
-    return new ContextEGL(state, errorSet, renderer, robustnessVideoMemoryPurgeStatus);
+    auto p = new ContextEGL(state, errorSet, renderer, robustnessVideoMemoryPurgeStatus);
+    WARN() << "qwe EGL createContext " << p;
+    return p;
 }
 
 template <typename T>
@@ -715,18 +719,31 @@ egl::Error DisplayEGL::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 egl::Error DisplayEGL::makeCurrent(egl::Display *display,
                                    egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
-    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
+    WARN() << "qwe DisplayEGL::makeCurrent context=" << context;
+    CurrentNativeContext &currentContext =
+        mCurrentNativeContexts[angle::GetCurrentThreadUniqueId()];
+
+    long tid = syscall(__NR_gettid);
+    WARN() << "qwe currentContext[" << angle::GetCurrentThreadUniqueId()
+           << "] surface=" << currentContext.surface << " context " << currentContext.context
+           << " this_thread::get_id=" << std::this_thread::get_id()
+           << " pthread_self()=" << pthread_self() << " gettid " << tid;
 
     EGLSurface newSurface = EGL_NO_SURFACE;
     if (drawSurface)
     {
         SurfaceEGL *drawSurfaceEGL = GetImplAs<SurfaceEGL>(drawSurface);
         newSurface                 = drawSurfaceEGL->getSurface();
+        WARN() << "qwe newSurface " << newSurface;
     }
 
     EGLContext newContext = EGL_NO_CONTEXT;
@@ -734,10 +751,12 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
     {
         ContextEGL *contextEGL = GetImplAs<ContextEGL>(context);
         newContext             = contextEGL->getContext();
+        WARN() << "qwe newContext " << newContext;
     }
 
     if (currentContext.isExternalContext || (context && context->isExternal()))
     {
+        WARN() << "qwe EXTERNAL";
         ASSERT(currentContext.surface == EGL_NO_SURFACE);
         if (!currentContext.isExternalContext)
         {
@@ -773,11 +792,14 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
 
         // Do not need to call eglMakeCurrent(), since we don't support switching EGLSurface for
         // external context.
-        return DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
+        auto res = DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
+        WARN() << "qwe mc2 " << display << " " << res;
+        return res;
     }
 
     if (newSurface != currentContext.surface || newContext != currentContext.context)
     {
+        WARN() << "qwe mEGL->makeCurrent newSurface=" << newSurface << " newContext=" << newContext;
         if (mEGL->makeCurrent(newSurface, newContext) == EGL_FALSE)
         {
             return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
@@ -786,7 +808,9 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
         currentContext.context = newContext;
     }
 
-    return DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
+    egl::Error res = DisplayGL::makeCurrent(display, drawSurface, readSurface, context);
+    WARN() << "qwe mc " << display << " " << res;
+    return res;
 }
 
 gl::Version DisplayEGL::getMaxSupportedESVersion() const
@@ -940,11 +964,15 @@ egl::Error DisplayEGL::createRenderer(EGLContext shareContext,
     else
     {
         ANGLE_TRY(initializeContext(shareContext, mDisplayAttributes, &context, &attribs));
+        WARN() << "qwe initializeContext " << context << ", makeCurrent now";
         if (mEGL->makeCurrent(mMockPbuffer, context) == EGL_FALSE)
         {
             return egl::EglNotInitialized()
                    << "eglMakeCurrent failed with " << egl::Error(mEGL->getError());
         }
+        // egl::Thread *thread = egl::GetCurrentThread();
+        // thread->setCurrent(context);
+        // WARN() << "qwe makeCurrent returned";
     }
 
     std::unique_ptr<FunctionsGL> functionsGL(mEGL->makeFunctionsGL());
@@ -953,15 +981,20 @@ egl::Error DisplayEGL::createRenderer(EGLContext shareContext,
     outRenderer->reset(new RendererEGL(std::move(functionsGL), mDisplayAttributes, this, context,
                                        attribs, isExternalContext));
 
-    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
+    CurrentNativeContext &currentContext =
+        mCurrentNativeContexts[angle::GetCurrentThreadUniqueId()];
+    WARN() << "qwe createRenderer currentContext surface=" << currentContext.surface << " context "
+           << currentContext.context;
     if (makeNewContextCurrent)
     {
+        WARN() << "qwe currentContext.surface mock! " << mMockPbuffer;
         currentContext.surface = mMockPbuffer;
         currentContext.context = context;
     }
     else if (!isExternalContext)
     {
         // Reset the current context back to the previous state
+        WARN() << "qwe currentContext.surface reset!";
         if (mEGL->makeCurrent(currentContext.surface, currentContext.context) == EGL_FALSE)
         {
             return egl::EglNotInitialized()
