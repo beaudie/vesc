@@ -16,6 +16,46 @@
       "message": "Shabi do you know this area at all? I\u0027m pretty unfamiliar with this.",
       "revId": "c58e8af13a1fb5a56c54c67a026636d249d3b799",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db7014d7_231ac827",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-24T21:21:47Z",
+      "side": 1,
+      "message": "Why not just look through the queues and see if there are any present queues?",
+      "range": {
+        "startLine": 3831,
+        "startChar": 61,
+        "endLine": 3831,
+        "endChar": 81
+      },
+      "revId": "c58e8af13a1fb5a56c54c67a026636d249d3b799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "700cadf3_64945c83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-24T21:21:47Z",
+      "side": 1,
+      "message": "nit: instead, please change `ContextVk::optimizeRenderPassForPresent` so that it doesn\u0027t call `setImageOptimizeForPresent`.\n\nAlso, this is not the only way PRESENT_SRC may be set. In `WindowSurfaceVk::present`, you\u0027d also need to put this condition around:\n\n```\nimage.image.recordReadBarrier(contextVk, VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,\n                              commandBuffer);\n```",
+      "revId": "c58e8af13a1fb5a56c54c67a026636d249d3b799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
