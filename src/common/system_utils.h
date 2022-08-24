@@ -52,6 +52,8 @@ double GetCurrentSystemTime();
 // Get CPU time for current process in seconds.
 double GetCurrentProcessCpuTime();
 
+uint64_t GetCurrentThreadSerial();
+
 // Run an application and get the output.  Gets a nullptr-terminated set of args to execute the
 // application with, and returns the stdout and stderr outputs as well as the exit code.
 //
