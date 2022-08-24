@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/gl/egl/DisplayEGL.h"
 
 #include "common/debug.h"
+#include "common/system_utils.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
@@ -720,7 +721,7 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
                                    egl::Surface *readSurface,
                                    gl::Context *context)
 {
-    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
+    CurrentNativeContext &currentContext = mCurrentNativeContexts[angle::GetCurrentThreadSerial()];
 
     EGLSurface newSurface = EGL_NO_SURFACE;
     if (drawSurface)
@@ -953,7 +954,7 @@ egl::Error DisplayEGL::createRenderer(EGLContext shareContext,
     outRenderer->reset(new RendererEGL(std::move(functionsGL), mDisplayAttributes, this, context,
                                        attribs, isExternalContext));
 
-    CurrentNativeContext &currentContext = mCurrentNativeContexts[std::this_thread::get_id()];
+    CurrentNativeContext &currentContext = mCurrentNativeContexts[angle::GetCurrentThreadSerial()];
     if (makeNewContextCurrent)
     {
         currentContext.surface = mMockPbuffer;
