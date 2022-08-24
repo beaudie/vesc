@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "14c53431_39d98013",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-24T21:17:45Z",
+      "side": 1,
+      "message": "You\u0027d need to pass in the resolve image as well as the view in now. View would be used when !imageless, image properties when imageless.",
+      "parentUuid": "9d741aa3_4263482a",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "473f32e8_04e7da8d",
