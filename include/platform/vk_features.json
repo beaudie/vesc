@@ -967,6 +967,14 @@
                 "Platform supports setting frame timestamp surface attribute"
             ],
             "issue": "https://anglebug.com/7489"
+        },
+        {
+            "name": "supports_rasterization_order_attachment_access",
+            "category": "Features",
+            "description": [
+                "VkDevice supports VK_EXT_rasterization_order_attachment_access extension"
+            ],
+            "issue": "https://anglebug.com/7604"
         }
     ]
 }

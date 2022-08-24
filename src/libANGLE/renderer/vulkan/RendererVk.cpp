@@ -684,9 +684,12 @@ DebugMessageReport ShouldReportDebugMessage(RendererVk *renderer,
             continue;
         }
 
-        // If the error is due to exposing coherent framebuffer fetch, but framebuffer fetch has not
-        // been used by the application, report it.
-        if (msg.isDueToNonConformantCoherentFramebufferFetch && !isFramebufferFetchUsed)
+        // If the error is due to exposing coherent framebuffer fetch (without
+        // VK_EXT_rasterization_order_attachment_access), but framebuffer fetch has not been used by
+        // the application, report it.
+        if (msg.isDueToNonConformantCoherentFramebufferFetch &&
+            (!isFramebufferFetchUsed ||
+             renderer->getFeatures().supportsRasterizationOrderAttachmentAccess.enabled))
         {
             return DebugMessageReport::Print;
         }
@@ -2005,6 +2008,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mImagelessFramebufferFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR;
 
+    mRasterizationOrderAttachmentAccessFeatures = {};
+    mRasterizationOrderAttachmentAccessFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_FEATURES_EXT;
+
     if (!vkGetPhysicalDeviceProperties2KHR || !vkGetPhysicalDeviceFeatures2KHR)
     {
         return;
@@ -2182,42 +2189,49 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mImagelessFramebufferFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_EXTENSION_NAME,
+                       deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mRasterizationOrderAttachmentAccessFeatures);
+    }
+
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
     // Clean up pNext chains
-    mLineRasterizationFeatures.pNext                 = nullptr;
-    mMemoryReportFeatures.pNext                      = nullptr;
-    mProvokingVertexFeatures.pNext                   = nullptr;
-    mVertexAttributeDivisorFeatures.pNext            = nullptr;
-    mVertexAttributeDivisorProperties.pNext          = nullptr;
-    mTransformFeedbackFeatures.pNext                 = nullptr;
-    mIndexTypeUint8Features.pNext                    = nullptr;
-    mSubgroupProperties.pNext                        = nullptr;
-    mSubgroupExtendedTypesFeatures.pNext             = nullptr;
-    mExternalMemoryHostProperties.pNext              = nullptr;
-    mCustomBorderColorFeatures.pNext                 = nullptr;
-    mShaderFloat16Int8Features.pNext                 = nullptr;
-    mDepthStencilResolveProperties.pNext             = nullptr;
-    mMultisampledRenderToSingleSampledFeatures.pNext = nullptr;
-    mImage2dViewOf3dFeatures.pNext                   = nullptr;
-    mMultiviewFeatures.pNext                         = nullptr;
-    mMultiviewProperties.pNext                       = nullptr;
-    mDriverProperties.pNext                          = nullptr;
-    mSamplerYcbcrConversionFeatures.pNext            = nullptr;
-    mProtectedMemoryFeatures.pNext                   = nullptr;
-    mProtectedMemoryProperties.pNext                 = nullptr;
-    mHostQueryResetFeatures.pNext                    = nullptr;
-    mDepthClipControlFeatures.pNext                  = nullptr;
-    mPrimitivesGeneratedQueryFeatures.pNext          = nullptr;
-    mPrimitiveTopologyListRestartFeatures.pNext      = nullptr;
-    mBlendOperationAdvancedFeatures.pNext            = nullptr;
-    mPipelineCreationCacheControlFeatures.pNext      = nullptr;
-    mExtendedDynamicStateFeatures.pNext              = nullptr;
-    mExtendedDynamicState2Features.pNext             = nullptr;
-    mFragmentShadingRateFeatures.pNext               = nullptr;
-    mFragmentShaderInterlockFeatures.pNext           = nullptr;
-    mImagelessFramebufferFeatures.pNext              = nullptr;
+    mLineRasterizationFeatures.pNext                  = nullptr;
+    mMemoryReportFeatures.pNext                       = nullptr;
+    mProvokingVertexFeatures.pNext                    = nullptr;
+    mVertexAttributeDivisorFeatures.pNext             = nullptr;
+    mVertexAttributeDivisorProperties.pNext           = nullptr;
+    mTransformFeedbackFeatures.pNext                  = nullptr;
+    mIndexTypeUint8Features.pNext                     = nullptr;
+    mSubgroupProperties.pNext                         = nullptr;
+    mSubgroupExtendedTypesFeatures.pNext              = nullptr;
+    mExternalMemoryHostProperties.pNext               = nullptr;
+    mCustomBorderColorFeatures.pNext                  = nullptr;
+    mShaderFloat16Int8Features.pNext                  = nullptr;
+    mDepthStencilResolveProperties.pNext              = nullptr;
+    mMultisampledRenderToSingleSampledFeatures.pNext  = nullptr;
+    mImage2dViewOf3dFeatures.pNext                    = nullptr;
+    mMultiviewFeatures.pNext                          = nullptr;
+    mMultiviewProperties.pNext                        = nullptr;
+    mDriverProperties.pNext                           = nullptr;
+    mSamplerYcbcrConversionFeatures.pNext             = nullptr;
+    mProtectedMemoryFeatures.pNext                    = nullptr;
+    mProtectedMemoryProperties.pNext                  = nullptr;
+    mHostQueryResetFeatures.pNext                     = nullptr;
+    mDepthClipControlFeatures.pNext                   = nullptr;
+    mPrimitivesGeneratedQueryFeatures.pNext           = nullptr;
+    mPrimitiveTopologyListRestartFeatures.pNext       = nullptr;
+    mBlendOperationAdvancedFeatures.pNext             = nullptr;
+    mPipelineCreationCacheControlFeatures.pNext       = nullptr;
+    mExtendedDynamicStateFeatures.pNext               = nullptr;
+    mExtendedDynamicState2Features.pNext              = nullptr;
+    mFragmentShadingRateFeatures.pNext                = nullptr;
+    mFragmentShaderInterlockFeatures.pNext            = nullptr;
+    mImagelessFramebufferFeatures.pNext               = nullptr;
+    mRasterizationOrderAttachmentAccessFeatures.pNext = nullptr;
 }
 
 angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex)
@@ -2730,6 +2744,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mImagelessFramebufferFeatures);
+    }
+
+    if (getFeatures().supportsRasterizationOrderAttachmentAccess.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(
+            VK_EXT_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mRasterizationOrderAttachmentAccessFeatures);
     }
 
     mCurrentQueueFamilyIndex = queueFamilyIndex;
@@ -3694,11 +3715,17 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // natively anyway.
     ANGLE_FEATURE_CONDITION(&mFeatures, overrideSurfaceFormatRGB8ToRGBA8, true);
 
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsRasterizationOrderAttachmentAccess,
+        mRasterizationOrderAttachmentAccessFeatures.rasterizationOrderColorAttachmentAccess ==
+            VK_TRUE);
+
     // http://anglebug.com/6872
     // On ARM hardware, framebuffer-fetch-like behavior on Vulkan is already coherent, so we can
     // expose the coherent version of the GL extension despite unofficial Vulkan support.
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsShaderFramebufferFetch,
-                            (IsAndroid() && isARM) || isSwiftShader);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsShaderFramebufferFetch,
+        (IsAndroid() && isARM) || mFeatures.supportsRasterizationOrderAttachmentAccess.enabled);
 
     // Important games are not checking supported extensions properly, and are confusing the
     // GL_EXT_shader_framebuffer_fetch_non_coherent as the GL_EXT_shader_framebuffer_fetch
