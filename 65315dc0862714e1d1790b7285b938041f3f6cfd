@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "377bfd4a_51de3459",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c5f878d_6dc405f4",
+      "range": {
+        "startLine": 2163,
+        "startChar": 0,
+        "endLine": 2226,
+        "endChar": 5
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "34f54bed_c236c4cf",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-08-23T02:39:33Z",
       "side": 1,
       "message": "Only done for one image, but should be done for all images. The algorithm would be very similar to the helper function suggested above.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d741aa3_4263482a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2249,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Updated so we get images from the color and depth render targets. Also moved to the helper function. Which image should be used in the case of `resolveImageViewIn`?",
+      "parentUuid": "34f54bed_c236c4cf",
       "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43128160_a8323fc5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "58c97ffc_b0c14e5c",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a19df369_28214b74",
@@ -88,6 +148,24 @@
       "writtenOn": "2022-08-23T02:39:33Z",
       "side": 1,
       "message": "Redundant, `\u003d {}` above does this.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d728bf1_32fa1bbf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2287,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a19df369_28214b74",
       "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -115,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3fac0b7_1f35e4be",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2293,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "I see. Switched to KHR for now.",
+      "parentUuid": "1b413d69_afd76aa7",
+      "range": {
+        "startLine": 2293,
+        "startChar": 76,
+        "endLine": 2293,
+        "endChar": 84
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ed8bc3d_32bb39b0",
@@ -132,6 +234,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36bc9d22_3638b34b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5318,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "I see. Thanks.",
+      "parentUuid": "7ed8bc3d_32bb39b0",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de19f61c_f7a260f8",
@@ -145,6 +265,30 @@
       "writtenOn": "2022-08-23T02:39:33Z",
       "side": 1,
       "message": "Please put in helper.",
+      "range": {
+        "startLine": 5304,
+        "startChar": 0,
+        "endLine": 5319,
+        "endChar": 5
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "441724ef_d04f23f2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5319,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de19f61c_f7a260f8",
       "range": {
         "startLine": 5304,
         "startChar": 0,
@@ -178,6 +322,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4c3672_f93979ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "856ec0e6_54f2bb39",
+      "range": {
+        "startLine": 1478,
+        "startChar": 8,
+        "endLine": 1478,
+        "endChar": 23
+      },
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12b3dc50_27585f43",
@@ -191,6 +359,24 @@
       "writtenOn": "2022-08-23T02:39:33Z",
       "side": 1,
       "message": "You should be able to get the count from `mRenderPassDesc`.",
+      "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2413048a_6eb2e8a3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 1479,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-24T05:07:50Z",
+      "side": 1,
+      "message": "Replaced with the attachment count in `mRenderPassDesc`",
+      "parentUuid": "12b3dc50_27585f43",
       "revId": "65315dc0862714e1d1790b7285b938041f3f6cfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
