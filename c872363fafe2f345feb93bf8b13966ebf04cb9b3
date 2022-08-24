@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a1cd62f_d4318696",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-24T17:36:44Z",
+      "side": 1,
+      "message": "PTAL Jonah/Shabi. Geoff FYI.",
+      "revId": "c872363fafe2f345feb93bf8b13966ebf04cb9b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
