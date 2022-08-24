@@ -355,6 +355,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->timestampSurfaceAttributeANGLE =
         getRenderer()->getFeatures().supportsTimestampSurfaceAttribute.enabled;
+
+    outExtensions->eglColorspaceAttributePassthrough =
+        outExtensions->glColorspace &&
+        getRenderer()->getFeatures().eglColorspaceAttributePassthrough.enabled;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
