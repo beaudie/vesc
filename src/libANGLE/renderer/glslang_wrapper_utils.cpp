@@ -3452,6 +3452,7 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
         case spv::DecorationSample:
             if (info->useRelaxedPrecision)
             {
+                ASSERT(false);
                 // Change the id to replacement variable
                 spirv::WriteDecorate(mSpirvBlobOut, id, decoration, decorationValues);
                 return TransformationState::Transformed;
