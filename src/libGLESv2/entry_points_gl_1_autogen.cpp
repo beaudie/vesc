@@ -5978,7 +5978,7 @@ void GL_APIENTRY GL_CompressedTexSubImage1D(GLenum target,
           "context = %d, target = %s, level = %d, xoffset = %d, width = %d, format = %s, imageSize "
           "= %d, data = 0x%016" PRIxPTR "",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset, width,
-          GLenumToString(GLenumGroup::PixelFormat, format), imageSize, (uintptr_t)data);
+          GLenumToString(GLenumGroup::InternalFormat, format), imageSize, (uintptr_t)data);
 
     if (context)
     {

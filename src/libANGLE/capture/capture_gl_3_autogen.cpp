@@ -30,7 +30,7 @@ CallCapture CaptureBeginConditionalRender(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("id", ParamType::TGLuint, id);
-    paramBuffer.addEnumParam("mode", GLenumGroup::TypeEnum, ParamType::TGLenum, mode);
+    paramBuffer.addEnumParam("mode", GLenumGroup::ConditionalRenderMode, ParamType::TGLenum, mode);
 
     return CallCapture(angle::EntryPoint::GLBeginConditionalRender, std::move(paramBuffer));
 }

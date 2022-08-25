@@ -128,14 +128,14 @@ CallCapture CaptureCopyImageSubData(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("srcName", ParamType::TGLuint, srcName);
-    paramBuffer.addEnumParam("srcTarget", GLenumGroup::CopyBufferSubDataTarget, ParamType::TGLenum,
+    paramBuffer.addEnumParam("srcTarget", GLenumGroup::CopyImageSubDataTarget, ParamType::TGLenum,
                              srcTarget);
     paramBuffer.addValueParam("srcLevel", ParamType::TGLint, srcLevel);
     paramBuffer.addValueParam("srcX", ParamType::TGLint, srcX);
     paramBuffer.addValueParam("srcY", ParamType::TGLint, srcY);
     paramBuffer.addValueParam("srcZ", ParamType::TGLint, srcZ);
     paramBuffer.addValueParam("dstName", ParamType::TGLuint, dstName);
-    paramBuffer.addEnumParam("dstTarget", GLenumGroup::CopyBufferSubDataTarget, ParamType::TGLenum,
+    paramBuffer.addEnumParam("dstTarget", GLenumGroup::CopyImageSubDataTarget, ParamType::TGLenum,
                              dstTarget);
     paramBuffer.addValueParam("dstLevel", ParamType::TGLint, dstLevel);
     paramBuffer.addValueParam("dstX", ParamType::TGLint, dstX);
@@ -545,7 +545,7 @@ CallCapture CaptureGetObjectLabel(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("identifier", GLenumGroup::DefaultGroup, ParamType::TGLenum,
+    paramBuffer.addEnumParam("identifier", GLenumGroup::ObjectIdentifier, ParamType::TGLenum,
                              identifier);
     paramBuffer.addValueParam("name", ParamType::TGLuint, name);
     paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
@@ -679,7 +679,7 @@ CallCapture CaptureGetSamplerParameterIiv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -708,7 +708,7 @@ CallCapture CaptureGetSamplerParameterIuiv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1111,7 +1111,7 @@ CallCapture CaptureSamplerParameterIiv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1141,7 +1141,7 @@ CallCapture CaptureSamplerParameterIuiv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1171,7 +1171,7 @@ CallCapture CaptureTexBuffer(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
 
@@ -1189,7 +1189,7 @@ CallCapture CaptureTexBufferRange(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLintptr, offset);
@@ -1272,7 +1272,7 @@ CallCapture CaptureTexStorage3DMultisample(const State &glState,
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
     paramBuffer.addValueParam("samples", ParamType::TGLsizei, samples);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
