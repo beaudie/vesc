@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c10e24bc_aded9862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T04:24:23Z",
+      "side": 1,
+      "message": "Pending VVL fixes:\n\n- https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/4466\n- syncval support for this extension seems to be missing",
+      "revId": "a83a023d53c484506a4be5ab013f229728530119",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
