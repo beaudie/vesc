@@ -70,7 +70,7 @@ constexpr int kDefaultBatchTimeout = 300;
 constexpr int kDefaultTestTimeout  = 120;
 constexpr int kDefaultBatchTimeout = 700;
 #endif
-constexpr int kSlowTestTimeoutScale  = 3;
+constexpr int kSlowTestTimeoutScale  = 6;
 constexpr int kDefaultBatchSize      = 256;
 constexpr double kIdleMessageTimeout = 15.0;
 constexpr int kDefaultMaxProcesses   = 16;
