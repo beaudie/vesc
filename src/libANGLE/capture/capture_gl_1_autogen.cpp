@@ -4841,7 +4841,7 @@ CallCapture CaptureCompressedTexSubImage1D(const State &glState,
     paramBuffer.addValueParam("level", ParamType::TGLint, level);
     paramBuffer.addValueParam("xoffset", ParamType::TGLint, xoffset);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
-    paramBuffer.addEnumParam("format", GLenumGroup::PixelFormat, ParamType::TGLenum, format);
+    paramBuffer.addEnumParam("format", GLenumGroup::InternalFormat, ParamType::TGLenum, format);
     paramBuffer.addValueParam("imageSize", ParamType::TGLsizei, imageSize);
 
     if (isCallValid)
@@ -5838,7 +5838,7 @@ CallCapture CapturePointParameteri(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::ALLBigGLEnums, ParamType::TGLenum, pname);
     paramBuffer.addValueParam("param", ParamType::TGLint, param);
 
     return CallCapture(angle::EntryPoint::GLPointParameteri, std::move(paramBuffer));
@@ -5851,7 +5851,7 @@ CallCapture CapturePointParameteriv(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::ALLBigGLEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {

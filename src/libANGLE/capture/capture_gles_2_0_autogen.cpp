@@ -410,7 +410,7 @@ CallCapture CaptureCompressedTexSubImage2D(const State &glState,
     paramBuffer.addValueParam("yoffset", ParamType::TGLint, yoffset);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
-    paramBuffer.addEnumParam("format", GLenumGroup::PixelFormat, ParamType::TGLenum, format);
+    paramBuffer.addEnumParam("format", GLenumGroup::InternalFormat, ParamType::TGLenum, format);
     paramBuffer.addValueParam("imageSize", ParamType::TGLsizei, imageSize);
 
     if (isCallValid)
@@ -1251,7 +1251,7 @@ CallCapture CaptureGetBufferParameteriv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1813,7 +1813,7 @@ CallCapture CaptureGetVertexAttribPointerv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1843,7 +1843,7 @@ CallCapture CaptureGetVertexAttribfv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1872,7 +1872,7 @@ CallCapture CaptureGetVertexAttribiv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -2152,7 +2152,7 @@ CallCapture CaptureShaderBinary(const State &glState,
                                 bool isCallValid,
                                 GLsizei count,
                                 const ShaderProgramID *shadersPacked,
-                                GLenum binaryformat,
+                                GLenum binaryFormat,
                                 const void *binary,
                                 GLsizei length)
 {
@@ -2165,7 +2165,7 @@ CallCapture CaptureShaderBinary(const State &glState,
         ParamCapture shadersPackedParam("shadersPacked", ParamType::TShaderProgramIDConstPointer);
         InitParamValue(ParamType::TShaderProgramIDConstPointer, shadersPacked,
                        &shadersPackedParam.value);
-        CaptureShaderBinary_shadersPacked(glState, isCallValid, count, shadersPacked, binaryformat,
+        CaptureShaderBinary_shadersPacked(glState, isCallValid, count, shadersPacked, binaryFormat,
                                           binary, length, &shadersPackedParam);
         paramBuffer.addParam(std::move(shadersPackedParam));
     }
@@ -2177,14 +2177,14 @@ CallCapture CaptureShaderBinary(const State &glState,
         paramBuffer.addParam(std::move(shadersPackedParam));
     }
 
-    paramBuffer.addEnumParam("binaryformat", GLenumGroup::DefaultGroup, ParamType::TGLenum,
-                             binaryformat);
+    paramBuffer.addEnumParam("binaryFormat", GLenumGroup::ShaderBinaryFormat, ParamType::TGLenum,
+                             binaryFormat);
 
     if (isCallValid)
     {
         ParamCapture binaryParam("binary", ParamType::TvoidConstPointer);
         InitParamValue(ParamType::TvoidConstPointer, binary, &binaryParam.value);
-        CaptureShaderBinary_binary(glState, isCallValid, count, shadersPacked, binaryformat, binary,
+        CaptureShaderBinary_binary(glState, isCallValid, count, shadersPacked, binaryFormat, binary,
                                    length, &binaryParam);
         paramBuffer.addParam(std::move(binaryParam));
     }

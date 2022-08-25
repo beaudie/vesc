@@ -338,7 +338,7 @@ CallCapture CaptureCompressedTexSubImage3D(const State &glState,
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
-    paramBuffer.addEnumParam("format", GLenumGroup::PixelFormat, ParamType::TGLenum, format);
+    paramBuffer.addEnumParam("format", GLenumGroup::InternalFormat, ParamType::TGLenum, format);
     paramBuffer.addValueParam("imageSize", ParamType::TGLsizei, imageSize);
 
     if (isCallValid)
@@ -671,7 +671,8 @@ CallCapture CaptureFenceSync(const State &glState,
 
     paramBuffer.addEnumParam("condition", GLenumGroup::SyncCondition, ParamType::TGLenum,
                              condition);
-    paramBuffer.addEnumParam("flags", GLenumGroup::DefaultGroup, ParamType::TGLbitfield, flags);
+    paramBuffer.addEnumParam("flags", GLenumGroup::SyncBehaviorFlags, ParamType::TGLbitfield,
+                             flags);
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLsync);
     InitParamValue(ParamType::TGLsync, returnValue, &returnValueCapture.value);
@@ -965,7 +966,7 @@ CallCapture CaptureGetBufferParameteri64v(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -995,7 +996,7 @@ CallCapture CaptureGetBufferPointerv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::AllGLESEnums, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1056,7 +1057,7 @@ CallCapture CaptureGetInteger64i_v(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("target", GLenumGroup::TypeEnum, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("target", GLenumGroup::GetPName, ParamType::TGLenum, target);
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
 
     if (isCallValid)
@@ -1112,7 +1113,7 @@ CallCapture CaptureGetIntegeri_v(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("target", GLenumGroup::TypeEnum, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("target", GLenumGroup::GetPName, ParamType::TGLenum, target);
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
 
     if (isCallValid)
@@ -1137,7 +1138,7 @@ CallCapture CaptureGetInternalformativ(const State &glState,
                                        GLenum target,
                                        GLenum internalformat,
                                        GLenum pname,
-                                       GLsizei bufSize,
+                                       GLsizei count,
                                        GLint *params)
 {
     ParamBuffer paramBuffer;
@@ -1146,14 +1147,14 @@ CallCapture CaptureGetInternalformativ(const State &glState,
     paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addEnumParam("pname", GLenumGroup::InternalFormatPName, ParamType::TGLenum, pname);
-    paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
+    paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
 
     if (isCallValid)
     {
         ParamCapture paramsParam("params", ParamType::TGLintPointer);
         InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
         CaptureGetInternalformativ_params(glState, isCallValid, target, internalformat, pname,
-                                          bufSize, params, &paramsParam);
+                                          count, params, &paramsParam);
         paramBuffer.addParam(std::move(paramsParam));
     }
     else
@@ -1297,7 +1298,7 @@ CallCapture CaptureGetSamplerParameterfv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterF, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1327,7 +1328,7 @@ CallCapture CaptureGetSamplerParameteriv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1369,7 +1370,7 @@ CallCapture CaptureGetSynciv(const State &glState,
                              bool isCallValid,
                              GLsync sync,
                              GLenum pname,
-                             GLsizei bufSize,
+                             GLsizei count,
                              GLsizei *length,
                              GLint *values)
 {
@@ -1377,13 +1378,13 @@ CallCapture CaptureGetSynciv(const State &glState,
 
     paramBuffer.addValueParam("sync", ParamType::TGLsync, sync);
     paramBuffer.addEnumParam("pname", GLenumGroup::SyncParameterName, ParamType::TGLenum, pname);
-    paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
+    paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
 
     if (isCallValid)
     {
         ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
         InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-        CaptureGetSynciv_length(glState, isCallValid, sync, pname, bufSize, length, values,
+        CaptureGetSynciv_length(glState, isCallValid, sync, pname, count, length, values,
                                 &lengthParam);
         paramBuffer.addParam(std::move(lengthParam));
     }
@@ -1399,7 +1400,7 @@ CallCapture CaptureGetSynciv(const State &glState,
     {
         ParamCapture valuesParam("values", ParamType::TGLintPointer);
         InitParamValue(ParamType::TGLintPointer, values, &valuesParam.value);
-        CaptureGetSynciv_values(glState, isCallValid, sync, pname, bufSize, length, values,
+        CaptureGetSynciv_values(glState, isCallValid, sync, pname, count, length, values,
                                 &valuesParam);
         paramBuffer.addParam(std::move(valuesParam));
     }
@@ -1705,7 +1706,7 @@ CallCapture CaptureInvalidateSubFramebuffer(const State &glState,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("target", GLenumGroup::DefaultGroup, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("target", GLenumGroup::FramebufferTarget, ParamType::TGLenum, target);
     paramBuffer.addValueParam("numAttachments", ParamType::TGLsizei, numAttachments);
 
     if (isCallValid)
@@ -1826,7 +1827,7 @@ CallCapture CaptureMapBufferRange(const State &glState,
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLintptr, offset);
     paramBuffer.addValueParam("length", ParamType::TGLsizeiptr, length);
-    paramBuffer.addEnumParam("access", GLenumGroup::BufferAccessMask, ParamType::TGLbitfield,
+    paramBuffer.addEnumParam("access", GLenumGroup::MapBufferAccessMask, ParamType::TGLbitfield,
                              access);
 
     ParamCapture returnValueCapture("returnValue", ParamType::TvoidPointer);
@@ -1853,7 +1854,7 @@ CallCapture CaptureProgramBinary(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("programPacked", ParamType::TShaderProgramID, programPacked);
-    paramBuffer.addEnumParam("binaryFormat", GLenumGroup::DefaultGroup, ParamType::TGLenum,
+    paramBuffer.addEnumParam("binaryFormat", GLenumGroup::AllGLESEnums, ParamType::TGLenum,
                              binaryFormat);
 
     if (isCallValid)
@@ -1938,7 +1939,7 @@ CallCapture CaptureSamplerParameterf(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterF, ParamType::TGLenum, pname);
     paramBuffer.addValueParam("param", ParamType::TGLfloat, param);
 
     return CallCapture(angle::EntryPoint::GLSamplerParameterf, std::move(paramBuffer));
@@ -1953,7 +1954,7 @@ CallCapture CaptureSamplerParameterfv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterF, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -1983,7 +1984,7 @@ CallCapture CaptureSamplerParameteri(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
     paramBuffer.addValueParam("param", ParamType::TGLint, param);
 
     return CallCapture(angle::EntryPoint::GLSamplerParameteri, std::move(paramBuffer));
@@ -1998,7 +1999,7 @@ CallCapture CaptureSamplerParameteriv(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("samplerPacked", ParamType::TSamplerID, samplerPacked);
-    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterName, ParamType::TGLenum, pname);
+    paramBuffer.addEnumParam("pname", GLenumGroup::SamplerParameterI, ParamType::TGLenum, pname);
 
     if (isCallValid)
     {
@@ -2075,7 +2076,7 @@ CallCapture CaptureTexStorage2D(const State &glState,
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
     paramBuffer.addValueParam("levels", ParamType::TGLsizei, levels);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
@@ -2096,7 +2097,7 @@ CallCapture CaptureTexStorage3D(const State &glState,
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
     paramBuffer.addValueParam("levels", ParamType::TGLsizei, levels);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
@@ -2180,8 +2181,8 @@ CallCapture CaptureTransformFeedbackVaryings(const State &glState,
         paramBuffer.addParam(std::move(varyingsParam));
     }
 
-    paramBuffer.addEnumParam("bufferMode", GLenumGroup::DefaultGroup, ParamType::TGLenum,
-                             bufferMode);
+    paramBuffer.addEnumParam("bufferMode", GLenumGroup::TransformFeedbackBufferMode,
+                             ParamType::TGLenum, bufferMode);
 
     return CallCapture(angle::EntryPoint::GLTransformFeedbackVaryings, std::move(paramBuffer));
 }
@@ -2738,7 +2739,8 @@ CallCapture CaptureWaitSync(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("sync", ParamType::TGLsync, sync);
-    paramBuffer.addEnumParam("flags", GLenumGroup::DefaultGroup, ParamType::TGLbitfield, flags);
+    paramBuffer.addEnumParam("flags", GLenumGroup::SyncBehaviorFlags, ParamType::TGLbitfield,
+                             flags);
     paramBuffer.addValueParam("timeout", ParamType::TGLuint64, timeout);
 
     return CallCapture(angle::EntryPoint::GLWaitSync, std::move(paramBuffer));

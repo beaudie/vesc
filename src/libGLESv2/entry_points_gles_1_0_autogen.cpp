@@ -1452,7 +1452,7 @@ void GL_APIENTRY GL_PointParameterf(GLenum pname, GLfloat param)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameterf, "context = %d, pname = %s, param = %f", CID(context),
-          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), param);
 
     if (context)
     {
@@ -1477,7 +1477,7 @@ void GL_APIENTRY GL_PointParameterfv(GLenum pname, const GLfloat *params)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameterfv, "context = %d, pname = %s, params = 0x%016" PRIxPTR "",
-          CID(context), GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          CID(context), GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -1502,7 +1502,7 @@ void GL_APIENTRY GL_PointParameterx(GLenum pname, GLfixed param)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameterx, "context = %d, pname = %s, param = 0x%X", CID(context),
-          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), param);
 
     if (context)
     {
@@ -1527,7 +1527,7 @@ void GL_APIENTRY GL_PointParameterxv(GLenum pname, const GLfixed *params)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameterxv, "context = %d, pname = %s, params = 0x%016" PRIxPTR "",
-          CID(context), GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          CID(context), GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)params);
 
     if (context)
     {

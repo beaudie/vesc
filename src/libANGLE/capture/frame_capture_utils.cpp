@@ -368,7 +368,7 @@ Result SerializeFramebufferState(const gl::Context *context,
             GroupScope dsAttachmentgroup(json, "DepthStencilAttachment");
             ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                      *framebuffer->getDepthStencilAttachment(),
-                                                     gl::GLenumGroup::DefaultGroup));
+                                                     gl::GLenumGroup::AllGLESEnums));
         }
         else
         {
@@ -384,7 +384,7 @@ Result SerializeFramebufferState(const gl::Context *context,
                 GroupScope stencilAttachmengroup(json, "StencilAttachment");
                 ANGLE_TRY(SerializeFramebufferAttachment(context, json, scratchBuffer, framebuffer,
                                                          *framebuffer->getStencilAttachment(),
-                                                         gl::GLenumGroup::DefaultGroup));
+                                                         gl::GLenumGroup::AllGLESEnums));
             }
         }
     }

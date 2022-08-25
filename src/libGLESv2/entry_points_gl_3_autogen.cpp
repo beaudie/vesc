@@ -35,7 +35,7 @@ void GL_APIENTRY GL_BeginConditionalRender(GLuint id, GLenum mode)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLBeginConditionalRender, "context = %d, id = %u, mode = %s", CID(context), id,
-          GLenumToString(GLenumGroup::TypeEnum, mode));
+          GLenumToString(GLenumGroup::ConditionalRenderMode, mode));
 
     if (context)
     {
@@ -86,8 +86,8 @@ void GL_APIENTRY GL_ClampColor(GLenum target, GLenum clamp)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLClampColor, "context = %d, target = %s, clamp = %s", CID(context),
-          GLenumToString(GLenumGroup::DefaultGroup, target),
-          GLenumToString(GLenumGroup::DefaultGroup, clamp));
+          GLenumToString(GLenumGroup::ALLBigGLEnums, target),
+          GLenumToString(GLenumGroup::ALLBigGLEnums, clamp));
 
     if (context)
     {
@@ -1258,7 +1258,7 @@ void GL_APIENTRY GL_QueryCounter(GLuint id, GLenum target)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLQueryCounter, "context = %d, id = %u, target = %s", CID(context), id,
-          GLenumToString(GLenumGroup::QueryTarget, target));
+          GLenumToString(GLenumGroup::QueryCounterTarget, target));
 
     if (context)
     {

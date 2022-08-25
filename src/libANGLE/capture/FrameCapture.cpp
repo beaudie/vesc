@@ -4973,16 +4973,16 @@ struct ParamValueTrait<gl::TextureID>
 
 }  // namespace
 
-ParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup) {}
+ParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::AllGLESEnums) {}
 
 ParamCapture::ParamCapture(const char *nameIn, ParamType typeIn)
-    : name(nameIn), type(typeIn), enumGroup(gl::GLenumGroup::DefaultGroup)
+    : name(nameIn), type(typeIn), enumGroup(gl::GLenumGroup::AllGLESEnums)
 {}
 
 ParamCapture::~ParamCapture() = default;
 
 ParamCapture::ParamCapture(ParamCapture &&other)
-    : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::DefaultGroup)
+    : type(ParamType::TGLenum), enumGroup(gl::GLenumGroup::AllGLESEnums)
 {
     *this = std::move(other);
 }

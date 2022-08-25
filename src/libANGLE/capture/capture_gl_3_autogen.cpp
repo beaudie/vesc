@@ -30,7 +30,7 @@ CallCapture CaptureBeginConditionalRender(const State &glState,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("id", ParamType::TGLuint, id);
-    paramBuffer.addEnumParam("mode", GLenumGroup::TypeEnum, ParamType::TGLenum, mode);
+    paramBuffer.addEnumParam("mode", GLenumGroup::ConditionalRenderMode, ParamType::TGLenum, mode);
 
     return CallCapture(angle::EntryPoint::GLBeginConditionalRender, std::move(paramBuffer));
 }
@@ -69,8 +69,8 @@ CallCapture CaptureClampColor(const State &glState, bool isCallValid, GLenum tar
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addEnumParam("target", GLenumGroup::DefaultGroup, ParamType::TGLenum, target);
-    paramBuffer.addEnumParam("clamp", GLenumGroup::DefaultGroup, ParamType::TGLenum, clamp);
+    paramBuffer.addEnumParam("target", GLenumGroup::ALLBigGLEnums, ParamType::TGLenum, target);
+    paramBuffer.addEnumParam("clamp", GLenumGroup::ALLBigGLEnums, ParamType::TGLenum, clamp);
 
     return CallCapture(angle::EntryPoint::GLClampColor, std::move(paramBuffer));
 }

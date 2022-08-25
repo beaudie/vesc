@@ -154,7 +154,7 @@ angle::CallCapture CaptureEGLCreateImage(const gl::Context *context,
         paramBuffer.addValueParam("context", angle::ParamType::TEGLContext, EGL_NO_CONTEXT);
     }
 
-    paramBuffer.addEnumParam("target", gl::GLenumGroup::DefaultGroup, angle::ParamType::TEGLenum,
+    paramBuffer.addEnumParam("target", gl::GLenumGroup::AllGLESEnums, angle::ParamType::TEGLenum,
                              target);
 
     angle::ParamCapture paramsClientBuffer("buffer", angle::ParamType::TEGLClientBuffer);

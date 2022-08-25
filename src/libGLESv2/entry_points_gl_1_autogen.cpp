@@ -5978,7 +5978,7 @@ void GL_APIENTRY GL_CompressedTexSubImage1D(GLenum target,
           "context = %d, target = %s, level = %d, xoffset = %d, width = %d, format = %s, imageSize "
           "= %d, data = 0x%016" PRIxPTR "",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset, width,
-          GLenumToString(GLenumGroup::PixelFormat, format), imageSize, (uintptr_t)data);
+          GLenumToString(GLenumGroup::InternalFormat, format), imageSize, (uintptr_t)data);
 
     if (context)
     {
@@ -7055,7 +7055,7 @@ void GL_APIENTRY GL_PointParameteri(GLenum pname, GLint param)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameteri, "context = %d, pname = %s, param = %d", CID(context),
-          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
+          GLenumToString(GLenumGroup::ALLBigGLEnums, pname), param);
 
     if (context)
     {
@@ -7079,7 +7079,7 @@ void GL_APIENTRY GL_PointParameteriv(GLenum pname, const GLint *params)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLPointParameteriv, "context = %d, pname = %s, params = 0x%016" PRIxPTR "",
-          CID(context), GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          CID(context), GLenumToString(GLenumGroup::ALLBigGLEnums, pname), (uintptr_t)params);
 
     if (context)
     {

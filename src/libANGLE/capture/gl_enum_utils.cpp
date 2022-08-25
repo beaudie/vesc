@@ -41,10 +41,10 @@ void OutputGLenumString(std::ostream &out, GLenumGroup enumGroup, unsigned int v
         return;
     }
 
-    if (enumGroup != GLenumGroup::DefaultGroup)
+    if (enumGroup != GLenumGroup::AllGLESEnums)
     {
         // Retry with the "Default" group
-        enumStr = GLenumToString(GLenumGroup::DefaultGroup, value);
+        enumStr = GLenumToString(GLenumGroup::AllGLESEnums, value);
         if (enumStr != kUnknownGLenumString)
         {
             out << enumStr;

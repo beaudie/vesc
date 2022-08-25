@@ -616,7 +616,7 @@ void GL_APIENTRY GL_CompressedTexSubImage2D(GLenum target,
           "context = %d, target = %s, level = %d, xoffset = %d, yoffset = %d, width = %d, height = "
           "%d, format = %s, imageSize = %d, data = 0x%016" PRIxPTR "",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), level, xoffset, yoffset,
-          width, height, GLenumToString(GLenumGroup::PixelFormat, format), imageSize,
+          width, height, GLenumToString(GLenumGroup::InternalFormat, format), imageSize,
           (uintptr_t)data);
 
     if (context)
@@ -1621,7 +1621,7 @@ void GL_APIENTRY GL_GetBufferParameteriv(GLenum target, GLenum pname, GLint *par
     EVENT(context, GLGetBufferParameteriv,
           "context = %d, target = %s, pname = %s, params = 0x%016" PRIxPTR "", CID(context),
           GLenumToString(GLenumGroup::BufferTargetARB, target),
-          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -2131,7 +2131,7 @@ void GL_APIENTRY GL_GetVertexAttribPointerv(GLuint index, GLenum pname, void **p
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetVertexAttribPointerv,
           "context = %d, index = %u, pname = %s, pointer = 0x%016" PRIxPTR "", CID(context), index,
-          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)pointer);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)pointer);
 
     if (context)
     {
@@ -2157,7 +2157,7 @@ void GL_APIENTRY GL_GetVertexAttribfv(GLuint index, GLenum pname, GLfloat *param
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetVertexAttribfv,
           "context = %d, index = %u, pname = %s, params = 0x%016" PRIxPTR "", CID(context), index,
-          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -2183,7 +2183,7 @@ void GL_APIENTRY GL_GetVertexAttribiv(GLuint index, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetVertexAttribiv,
           "context = %d, index = %u, pname = %s, params = 0x%016" PRIxPTR "", CID(context), index,
-          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
+          GLenumToString(GLenumGroup::AllGLESEnums, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -2674,16 +2674,16 @@ void GL_APIENTRY GL_Scissor(GLint x, GLint y, GLsizei width, GLsizei height)
 
 void GL_APIENTRY GL_ShaderBinary(GLsizei count,
                                  const GLuint *shaders,
-                                 GLenum binaryformat,
+                                 GLenum binaryFormat,
                                  const void *binary,
                                  GLsizei length)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLShaderBinary,
           "context = %d, count = %d, shaders = 0x%016" PRIxPTR
-          ", binaryformat = %s, binary = 0x%016" PRIxPTR ", length = %d",
+          ", binaryFormat = %s, binary = 0x%016" PRIxPTR ", length = %d",
           CID(context), count, (uintptr_t)shaders,
-          GLenumToString(GLenumGroup::DefaultGroup, binaryformat), (uintptr_t)binary, length);
+          GLenumToString(GLenumGroup::ShaderBinaryFormat, binaryFormat), (uintptr_t)binary, length);
 
     if (context)
     {
@@ -2691,12 +2691,12 @@ void GL_APIENTRY GL_ShaderBinary(GLsizei count,
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateShaderBinary(context, angle::EntryPoint::GLShaderBinary, count,
-                                                 shadersPacked, binaryformat, binary, length));
+                                                 shadersPacked, binaryFormat, binary, length));
         if (isCallValid)
         {
-            context->shaderBinary(count, shadersPacked, binaryformat, binary, length);
+            context->shaderBinary(count, shadersPacked, binaryFormat, binary, length);
         }
-        ANGLE_CAPTURE_GL(ShaderBinary, isCallValid, context, count, shadersPacked, binaryformat,
+        ANGLE_CAPTURE_GL(ShaderBinary, isCallValid, context, count, shadersPacked, binaryFormat,
                          binary, length);
     }
     else
