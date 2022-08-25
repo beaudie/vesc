@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2a4008_b88a907f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-08-25T14:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "883fa2be_8f277379",
+      "range": {
+        "startLine": 1671,
+        "startChar": 0,
+        "endLine": 1671,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be6662cd_ce16ca62",
@@ -135,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63cceacb_3c8d61f5",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-08-25T14:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be6662cd_ce16ca62",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e9d2984_c5202b15",
@@ -148,6 +196,30 @@
       "writtenOn": "2022-08-24T04:28:07Z",
       "side": 1,
       "message": "If the pattern holds, can use `ToGLenum(BufferBinding from)` here",
+      "range": {
+        "startLine": 2271,
+        "startChar": 0,
+        "endLine": 2271,
+        "endChar": 80
+      },
+      "revId": "974b3e56ccb95c54bd3d0687b9f35c4f771c94a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d5e8cd9_a01efc4b",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2271,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-08-25T14:18:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e9d2984_c5202b15",
       "range": {
         "startLine": 2271,
         "startChar": 0,
