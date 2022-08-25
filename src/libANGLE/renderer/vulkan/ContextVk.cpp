@@ -334,7 +334,9 @@ vk::ResourceAccess GetDepthAccess(const gl::DepthStencilState &dsState,
                    : vk::ResourceAccess::ReadOnly;
     }
 
-    return vk::ResourceAccess::ReadWrite;
+    return (dsState.depthFunc == GL_ALWAYS || dsState.depthFunc == GL_NEVER)
+               ? vk::ResourceAccess::WriteOnly
+               : vk::ResourceAccess::ReadWrite;
 }
 
 vk::ResourceAccess GetStencilAccess(const gl::DepthStencilState &dsState,
