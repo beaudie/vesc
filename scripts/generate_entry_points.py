@@ -526,11 +526,11 @@ TEMPLATE_CAPTURE_HEADER = """\
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// capture_gles_{annotation_lower}_autogen.h:
+// capture_{annotation_lower}_autogen.h:
 //   Capture functions for the OpenGL ES {comment} entry points.
 
-#ifndef LIBANGLE_CAPTURE_GLES_{annotation_upper}_AUTOGEN_H_
-#define LIBANGLE_CAPTURE_GLES_{annotation_upper}_AUTOGEN_H_
+#ifndef LIBANGLE_CAPTURE_{annotation_upper}_AUTOGEN_H_
+#define LIBANGLE_CAPTURE_{annotation_upper}_AUTOGEN_H_
 
 #include "common/PackedEnums.h"
 #include "libANGLE/capture/FrameCapture.h"
@@ -540,7 +540,7 @@ namespace gl
 {prototypes}
 }}  // namespace gl
 
-#endif  // LIBANGLE_CAPTURE_GLES_{annotation_upper}_AUTOGEN_H_
+#endif  // LIBANGLE_CAPTURE_{annotation_upper}_AUTOGEN_H_
 """
 
 TEMPLATE_CAPTURE_SOURCE = """\
@@ -551,10 +551,10 @@ TEMPLATE_CAPTURE_SOURCE = """\
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// capture_gles_{annotation_with_dash}_autogen.cpp:
+// capture_{annotation_with_dash}_autogen.cpp:
 //   Capture functions for the OpenGL ES {comment} entry points.
 
-#include "libANGLE/capture/capture_gles_{annotation_with_dash}_autogen.h"
+#include "libANGLE/capture/capture_{annotation_with_dash}_autogen.h"
 
 #include "libANGLE/Context.h"
 #include "libANGLE/capture/FrameCapture.h"
@@ -858,6 +858,7 @@ TEMPLATE_DESKTOP_GL_SOURCE_INCLUDES = """\
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/capture/gl_enum_utils.h"
+#include "libANGLE/capture/capture_gl_{}_autogen.h"
 #include "libANGLE/validationEGL.h"
 #include "libANGLE/validationES.h"
 #include "libANGLE/validationES1.h"
@@ -2110,7 +2111,7 @@ def write_capture_header(annotation, comment, protos, capture_pointer_funcs):
         prototypes="\n".join(["\n// Method Captures\n"] + protos + ["\n// Parameter Captures\n"] +
                              capture_pointer_funcs))
 
-    path = path_to(os.path.join("libANGLE", "capture"), "capture_gles_%s_autogen.h" % annotation)
+    path = path_to(os.path.join("libANGLE", "capture"), "capture_%s_autogen.h" % annotation)
 
     with open(path, "w") as out:
         out.write(content)
@@ -2127,7 +2128,7 @@ def write_capture_source(annotation_with_dash, annotation_no_dash, comment, capt
         capture_methods="\n".join(capture_methods))
 
     path = path_to(
-        os.path.join("libANGLE", "capture"), "capture_gles_%s_autogen.cpp" % annotation_with_dash)
+        os.path.join("libANGLE", "capture"), "capture_%s_autogen.cpp" % annotation_with_dash)
 
     with open(path, "w") as out:
         out.write(content)
@@ -2813,8 +2814,10 @@ def main():
         write_gl_validation_header(validation_annotation, "ES %s" % comment, eps.validation_protos,
                                    "gl.xml and gl_angle_ext.xml")
 
-        write_capture_header(version, comment, eps.capture_protos, eps.capture_pointer_funcs)
-        write_capture_source(version, validation_annotation, comment, eps.capture_methods)
+        write_capture_header('gles_' + version, comment, eps.capture_protos,
+                             eps.capture_pointer_funcs)
+        write_capture_source('gles_' + version, validation_annotation, comment,
+                             eps.capture_methods)
 
     # After we finish with the main entry points, we process the extensions.
     extension_decls = ["extern \"C\" {"]
@@ -2898,7 +2901,9 @@ def main():
         ver_decls = ["extern \"C\" {"]
         ver_defs = ["extern \"C\" {"]
         validation_protos = []
-
+        capture_protos = []
+        capture_pointer_funcs = []
+        capture_defs = []
 
         for _, minor_version in filter(is_major, registry_xml.DESKTOP_GL_VERSIONS):
             version = "{}_{}".format(major_version, minor_version)
@@ -2929,6 +2934,9 @@ def main():
             libgles_ep_defs += [cpp_comment] + eps.export_defs
             libgl_ep_exports += [def_comment] + get_exports(all_libgl_commands)
             validation_protos += [cpp_comment] + eps.validation_protos
+            capture_protos += [cpp_comment] + eps.capture_protos
+            capture_pointer_funcs += [cpp_comment] + eps.capture_pointer_funcs
+            capture_defs += [cpp_comment] + eps.capture_methods
             ver_decls += [cpp_comment] + eps.decls
             ver_defs += [cpp_comment] + eps.defs
 
@@ -2938,13 +2946,18 @@ def main():
         name = "Desktop GL %s.x" % major_version
 
         source_includes = TEMPLATE_DESKTOP_GL_SOURCE_INCLUDES.format(annotation.lower(),
-                                                                     major_version)
+                                                                     major_version, major_version)
 
         # Entry point files
         write_file(annotation, name, TEMPLATE_ENTRY_POINT_HEADER, "\n".join(ver_decls), "h",
                    DESKTOP_GL_HEADER_INCLUDES, "libGLESv2", "gl.xml")
         write_file(annotation, name, TEMPLATE_ENTRY_POINT_SOURCE, "\n".join(ver_defs), "cpp",
                    source_includes, "libGLESv2", "gl.xml")
+
+        # Capture files
+        write_capture_header(annotation.lower(), name, capture_protos, capture_pointer_funcs)
+        write_capture_source(annotation.lower(), 'GL' + str(major_version) + '_autogen', name,
+                             capture_defs)
 
         # Validation files
         write_gl_validation_header("GL%s" % major_version, name, validation_protos, "gl.xml")
@@ -3172,8 +3185,8 @@ def main():
 
     write_gl_validation_header("ESEXT", "ES extension", ext_validation_protos,
                                "gl.xml and gl_angle_ext.xml")
-    write_capture_header("ext", "extension", ext_capture_protos, ext_capture_pointer_funcs)
-    write_capture_source("ext", "ESEXT", "extension", ext_capture_methods)
+    write_capture_header("gles_ext", "extension", ext_capture_protos, ext_capture_pointer_funcs)
+    write_capture_source("gles_ext", "ESEXT", "extension", ext_capture_methods)
 
     write_context_api_decls(glesdecls, "gles")
     write_context_api_decls(desktop_gl_decls, "gl")
