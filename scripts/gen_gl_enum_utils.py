@@ -95,10 +95,12 @@ exclude_gl_enums = {
 exclude_gl_enum_groups = {'SpecialNumbers'}
 
 
-def dump_value_to_string_mapping(gl_enum_in_groups, exporting_enums):
+def dump_value_to_string_mapping(gl_enum_in_groups):
     exporting_groups = list()
     for group_name, inner_mapping in gl_enum_in_groups.items():
-        string_value_pairs = list(filter(lambda x: x[0] in exporting_enums, inner_mapping.items()))
+        # Convert to pairs and strip out-of-range values.
+        string_value_pairs = list(
+            filter(lambda x: x[1] >= 0 and x[1] <= 0xFFFFFFFFF, inner_mapping.items()))
         if not string_value_pairs:
             continue
 
@@ -136,53 +138,48 @@ def dump_value_to_string_mapping(gl_enum_in_groups, exporting_enums):
 def main(header_output_path, source_output_path):
     xml = registry_xml.RegistryXML('gl.xml', 'gl_angle_ext.xml')
 
-    # build a map from GLenum name to its value
-    all_gl_enums = dict()
+    # Compute a list of all GLES enums.
+    gles_enums = set()
+    for feature in xml.root.findall('feature'):
+        if feature.attrib['api'] in ['gles1', 'gles2']:
+            for require in feature.findall('require'):
+                if 'api' not in require.attrib or 'gles' in require.attrib['api']:
+                    for enum in require.findall('enum'):
+                        gles_enums.add(enum.attrib['name'])
+    for extensions in xml.root.findall('extensions'):
+        for extension in extensions.findall('extension'):
+            if 'gles' in extension.attrib['supported']:
+                for require in extension.findall('require'):
+                    if 'api' not in require.attrib or 'gles' in require.attrib['api']:
+                        for enum in require.findall('enum'):
+                            gles_enums.add(enum.attrib['name'])
+
+    # Build a map from GLenum name to its value
+    gl_enum_in_groups = dict()
+
+    # Add all enums to a default group
+    default_enums = dict()
+    default_group_name = registry_xml.default_enum_group_name
+    gl_enum_in_groups[default_group_name] = default_enums
+
     for enums_node in xml.root.findall('enums'):
         for enum in enums_node.findall('enum'):
-            name = enum.attrib['name']
-            value = int(enum.attrib['value'], base=16)
-            all_gl_enums[name] = value
+            enum_name = enum.attrib['name']
+            enum_value = int(enum.attrib['value'], base=16)
 
-    # Parse groups of GLenums to build a {group, name} -> value mapping.
-    gl_enum_in_groups = dict()
-    enums_has_group = set()
-    for enums_group_node in xml.root.findall('groups/group'):
-        group_name = enums_group_node.attrib['name']
-        if group_name in exclude_gl_enum_groups:
-            continue
+            # Add the enum only if it's in GLES 1 or 2.
+            # Note: we will need a better solution here to support desktop or "big" GL.
+            if enum_name in gles_enums:
+                default_enums[enum_name] = enum_value
+                if 'group' in enum.attrib:
+                    for enum_group in enum.attrib['group'].split(','):
+                        if enum_group in exclude_gl_enum_groups:
+                            continue
 
-        if group_name not in gl_enum_in_groups:
-            gl_enum_in_groups[group_name] = dict()
+                        if enum_group not in gl_enum_in_groups:
+                            gl_enum_in_groups[enum_group] = dict()
 
-        for enum_node in enums_group_node.findall('enum'):
-            enum_name = enum_node.attrib['name']
-            enums_has_group.add(enum_name)
-            gl_enum_in_groups[group_name][enum_name] = all_gl_enums[enum_name]
-
-    # Find relevant GLenums according to enabled APIs and extensions.
-    exporting_enums = set()
-    # export all the apis
-    xpath = "./feature[@api='gles2']/require/enum"
-    for enum_tag in xml.root.findall(xpath):
-        enum_name = enum_tag.attrib['name']
-        if enum_name not in exclude_gl_enums:
-            exporting_enums.add(enum_name)
-
-    for extension in registry_xml.supported_extensions:
-        xpath = "./extensions/extension[@name='%s']/require/enum" % extension
-        for enum_tag in xml.root.findall(xpath):
-            enum_name = enum_tag.attrib['name']
-            if enum_name not in exclude_gl_enums:
-                exporting_enums.add(enum_name)
-
-    # For enums that do not have a group, add them to a default group
-    default_group_name = registry_xml.default_enum_group_name
-    gl_enum_in_groups[default_group_name] = dict()
-    default_group = gl_enum_in_groups[default_group_name]
-    for enum_name in exporting_enums:
-        if enum_name not in enums_has_group:
-            default_group[enum_name] = all_gl_enums[enum_name]
+                        gl_enum_in_groups[enum_group][enum_name] = enum_value
 
     # Write GLenum groups into the header file.
     header_content = template_gl_enums_header.format(
@@ -195,8 +192,7 @@ def main(header_output_path, source_output_path):
         f.write(header_content)
 
     # Write mapping to source file
-    gl_enums_value_to_string_table = dump_value_to_string_mapping(gl_enum_in_groups,
-                                                                  exporting_enums)
+    gl_enums_value_to_string_table = dump_value_to_string_mapping(gl_enum_in_groups)
     source_content = template_gl_enums_source.format(
         script_name=os.path.basename(sys.argv[0]),
         data_source_name="gl.xml and gl_angle_ext.xml",
@@ -212,7 +208,7 @@ def main(header_output_path, source_output_path):
 
 if __name__ == '__main__':
     inputs = [
-        'gl.xml',
+        '../third_party/OpenGL-Registry/src/xml/gl.xml',
         'gl_angle_ext.xml',
         'registry_xml.py',
     ]
