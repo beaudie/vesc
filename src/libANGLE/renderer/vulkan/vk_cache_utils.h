@@ -94,15 +94,17 @@ enum ResourceAccess
 {
     Unused,
     ReadOnly,
-    Write,
+    WriteOnly,
+    ReadWrite,
 };
 
 inline void UpdateAccess(ResourceAccess *oldAccess, ResourceAccess newAccess)
 {
-    if (newAccess > *oldAccess)
-    {
-        *oldAccess = newAccess;
-    }
+    *oldAccess = static_cast<ResourceAccess>(ToUnderlying(newAccess) | ToUnderlying(*oldAccess));
+}
+inline bool HasResourceWriteAccess(ResourceAccess access)
+{
+    return ToUnderlying(access) >= ResourceAccess::WriteOnly;
 }
 
 enum class RenderPassLoadOp
