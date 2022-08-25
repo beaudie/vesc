@@ -87,6 +87,24 @@
       "parentUuid": "ac053013_13f79010",
       "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36ac68a6_018925c1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-25T19:51:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "00f9a9e4_da3d2450",
+      "revId": "6e90a236ad0b228af7cdda7daccb70388ac40ad7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
