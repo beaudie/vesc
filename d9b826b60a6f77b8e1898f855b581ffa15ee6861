@@ -16,6 +16,40 @@
       "message": "the *ios-angle-try-intel* might be a broken test? according to http://b/240161464",
       "revId": "d9b826b60a6f77b8e1898f855b581ffa15ee6861",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28510b6c_8ffdf680",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-25T21:31:54Z",
+      "side": 1,
+      "message": "nit: I would recommend changing the comment to:\nOES_EGL_image_external extension is required to use TEXTURE_EXTERNAL_OES as the texture target.",
+      "revId": "d9b826b60a6f77b8e1898f855b581ffa15ee6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c86df4_b434f393",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2675,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-25T21:31:54Z",
+      "side": 1,
+      "message": "nit: same as above.",
+      "revId": "d9b826b60a6f77b8e1898f855b581ffa15ee6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
