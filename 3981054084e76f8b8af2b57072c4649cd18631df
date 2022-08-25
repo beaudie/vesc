@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edc80068_054b107c",
+        "filename": "extensions/EGL_ANGLE_colorspace_attribute_passthrough.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T03:45:02Z",
+      "side": 1,
+      "message": "nit: `in order`",
+      "range": {
+        "startLine": 54,
+        "startChar": 15,
+        "endLine": 54,
+        "endChar": 22
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f507454_36fb26c3",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T03:45:02Z",
+      "side": 1,
+      "message": "Please suffix with `ANGLE` (it\u0027s newer practice, some older extensions above don\u0027t have a suffix)",
+      "range": {
+        "startLine": 612,
+        "startChar": 42,
+        "endLine": 612,
+        "endChar": 43
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31ef731d_58ce3965",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T03:45:02Z",
+      "side": 1,
+      "message": "nit: Suggest something like `CreateSurface`",
+      "range": {
+        "startLine": 548,
+        "startChar": 30,
+        "endLine": 548,
+        "endChar": 54
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
