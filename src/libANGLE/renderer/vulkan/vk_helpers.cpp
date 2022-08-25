@@ -1225,6 +1225,13 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
             }
         }
     }
+
+    if (mAccess == ResourceAccess::WriteOnly && *loadOp == RenderPassLoadOp::Load)
+    {
+        // If render pass is not use the data, do not load them.
+        *loadOp = RenderPassLoadOp::DontCare;
+        ASSERT(*storeOp != RenderPassStoreOp::None);
+    }
 }
 
 void RenderPassAttachment::restoreContent()
