@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c39f628_2c08ffa8",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T20:11:05Z",
+      "side": 1,
+      "message": "FYI, I bundled this with other features here so we conflict less: https://chromium-review.googlesource.com/c/angle/angle/+/3856646",
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f507454_36fb26c3",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 2
