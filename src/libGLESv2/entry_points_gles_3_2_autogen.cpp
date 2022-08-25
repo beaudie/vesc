@@ -196,9 +196,9 @@ void GL_APIENTRY GL_CopyImageSubData(GLuint srcName,
           "context = %d, srcName = %u, srcTarget = %s, srcLevel = %d, srcX = %d, srcY = %d, srcZ = "
           "%d, dstName = %u, dstTarget = %s, dstLevel = %d, dstX = %d, dstY = %d, dstZ = %d, "
           "srcWidth = %d, srcHeight = %d, srcDepth = %d",
-          CID(context), srcName, GLenumToString(GLenumGroup::CopyBufferSubDataTarget, srcTarget),
+          CID(context), srcName, GLenumToString(GLenumGroup::CopyImageSubDataTarget, srcTarget),
           srcLevel, srcX, srcY, srcZ, dstName,
-          GLenumToString(GLenumGroup::CopyBufferSubDataTarget, dstTarget), dstLevel, dstX, dstY,
+          GLenumToString(GLenumGroup::CopyImageSubDataTarget, dstTarget), dstLevel, dstX, dstY,
           dstZ, srcWidth, srcHeight, srcDepth);
 
     if (context)
@@ -595,7 +595,7 @@ GL_GetObjectLabel(GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *leng
     EVENT(context, GLGetObjectLabel,
           "context = %d, identifier = %s, name = %u, bufSize = %d, length = 0x%016" PRIxPTR
           ", label = 0x%016" PRIxPTR "",
-          CID(context), GLenumToString(GLenumGroup::DefaultGroup, identifier), name, bufSize,
+          CID(context), GLenumToString(GLenumGroup::ObjectIdentifier, identifier), name, bufSize,
           (uintptr_t)length, (uintptr_t)label);
 
     if (context)
@@ -676,7 +676,7 @@ void GL_APIENTRY GL_GetSamplerParameterIiv(GLuint sampler, GLenum pname, GLint *
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetSamplerParameterIiv,
           "context = %d, sampler = %u, pname = %s, params = 0x%016" PRIxPTR "", CID(context),
-          sampler, GLenumToString(GLenumGroup::SamplerParameterName, pname), (uintptr_t)params);
+          sampler, GLenumToString(GLenumGroup::SamplerParameterI, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -704,7 +704,7 @@ void GL_APIENTRY GL_GetSamplerParameterIuiv(GLuint sampler, GLenum pname, GLuint
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetSamplerParameterIuiv,
           "context = %d, sampler = %u, pname = %s, params = 0x%016" PRIxPTR "", CID(context),
-          sampler, GLenumToString(GLenumGroup::SamplerParameterName, pname), (uintptr_t)params);
+          sampler, GLenumToString(GLenumGroup::SamplerParameterI, pname), (uintptr_t)params);
 
     if (context)
     {
@@ -1119,7 +1119,7 @@ void GL_APIENTRY GL_SamplerParameterIiv(GLuint sampler, GLenum pname, const GLin
     Context *context = GetValidGlobalContext();
     EVENT(context, GLSamplerParameterIiv,
           "context = %d, sampler = %u, pname = %s, param = 0x%016" PRIxPTR "", CID(context),
-          sampler, GLenumToString(GLenumGroup::SamplerParameterName, pname), (uintptr_t)param);
+          sampler, GLenumToString(GLenumGroup::SamplerParameterI, pname), (uintptr_t)param);
 
     if (context)
     {
@@ -1146,7 +1146,7 @@ void GL_APIENTRY GL_SamplerParameterIuiv(GLuint sampler, GLenum pname, const GLu
     Context *context = GetValidGlobalContext();
     EVENT(context, GLSamplerParameterIuiv,
           "context = %d, sampler = %u, pname = %s, param = 0x%016" PRIxPTR "", CID(context),
-          sampler, GLenumToString(GLenumGroup::SamplerParameterName, pname), (uintptr_t)param);
+          sampler, GLenumToString(GLenumGroup::SamplerParameterI, pname), (uintptr_t)param);
 
     if (context)
     {
@@ -1173,7 +1173,7 @@ void GL_APIENTRY GL_TexBuffer(GLenum target, GLenum internalformat, GLuint buffe
     Context *context = GetValidGlobalContext();
     EVENT(context, GLTexBuffer, "context = %d, target = %s, internalformat = %s, buffer = %u",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
-          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer);
+          GLenumToString(GLenumGroup::SizedInternalFormat, internalformat), buffer);
 
     if (context)
     {
@@ -1206,7 +1206,7 @@ void GL_APIENTRY GL_TexBufferRange(GLenum target,
     EVENT(context, GLTexBufferRange,
           "context = %d, target = %s, internalformat = %s, buffer = %u, offset = %llu, size = %llu",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target),
-          GLenumToString(GLenumGroup::InternalFormat, internalformat), buffer,
+          GLenumToString(GLenumGroup::SizedInternalFormat, internalformat), buffer,
           static_cast<unsigned long long>(offset), static_cast<unsigned long long>(size));
 
     if (context)
@@ -1298,7 +1298,7 @@ void GL_APIENTRY GL_TexStorage3DMultisample(GLenum target,
           "context = %d, target = %s, samples = %d, internalformat = %s, width = %d, height = %d, "
           "depth = %d, fixedsamplelocations = %s",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), samples,
-          GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height, depth,
+          GLenumToString(GLenumGroup::SizedInternalFormat, internalformat), width, height, depth,
           GLbooleanToString(fixedsamplelocations));
 
     if (context)
