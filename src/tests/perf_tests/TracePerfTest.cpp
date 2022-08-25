@@ -756,7 +756,7 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         addExtensionPrerequisite("GL_EXT_color_buffer_float");
 
         // TODO: http://anglebug.com/4731 This extension is missing on older Intel drivers.
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
+        //addExtensionPrerequisite("GL_OES_EGL_image_external");
 
         if (IsWindows() && IsIntel())
         {
@@ -802,7 +802,7 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("saint_seiya_awakening"))
     {
-        addExtensionPrerequisite("GL_EXT_shadow_samplers");
+        //addExtensionPrerequisite("GL_EXT_shadow_samplers");
 
         if (IsLinux() && IsIntel() && mParams->isVulkan())
         {

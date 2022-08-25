@@ -18,6 +18,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 
 from gen_restricted_traces import read_json as read_json
 
@@ -238,6 +239,53 @@ def validate_traces(args, traces):
     return EXIT_SUCCESS
 
 
+def get_min_reqs(args, traces):
+    #restore_traces(args, traces)
+    run_autoninja(args)
+
+    failures = []
+    extensions = []
+    additional_env = {}
+    first = True
+    for trace in fnmatch.filter(traces, args.traces):
+        json_data = load_trace_json(trace)
+        num_frames = get_num_frames(json_data)
+        max_steps = min(args.limit, num_frames) if args.limit else num_frames
+
+        if first:
+            # On the first run, get this device's requestable extensions
+            with tempfile.NamedTemporaryFile() as tmp:
+                additional_args = ["--print-extensions-to-file", tmp.name]
+                tmp.close()
+                run_test_suite(args, trace, max_steps, additional_args, additional_env)
+                with open(tmp.name) as f:
+                    for line in f:
+                        extensions.append(line.strip())
+            first = False
+        try:
+            run_test_suite(args, trace, max_steps, [], additional_env)
+        except:
+            # Skip traces with failures
+            continue
+
+        requiredExtensions = []
+        for i in range(len(extensions)):
+            additional_args = []
+            otherExtensions = requiredExtensions + extensions[i+1:]
+            for ext in otherExtensions:
+                additional_args.append("--request-ext")
+                additional_args.append(ext)
+            try:
+                run_test_suite(args, trace, max_steps, additional_args, additional_env)
+            except:
+                requiredExtensions.append(extensions[i])
+
+        print(requiredExtensions)
+        break
+
+    return EXIT_SUCCESS
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
@@ -311,6 +359,14 @@ def main():
     validate_parser.add_argument(
         '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
 
+    get_min_reqs_parser = subparsers.add_parser(
+        'get_min_reqs', help='Finds the minimum required extensions for a trace to successfully run.')
+    get_min_reqs_parser.add_argument('gn_path', help='GN build path')
+    get_min_reqs_parser.add_argument(
+        '--traces', help='Traces to get minimum requirements for. Supports fnmatch expressions.', default='*')
+    get_min_reqs_parser.add_argument(
+        '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
+
     args, extra_flags = parser.parse_known_args()
 
     logging.basicConfig(level=args.log.upper())
@@ -329,6 +385,8 @@ def main():
         return upgrade_traces(args, traces)
     elif args.command == 'validate':
         return validate_traces(args, traces)
+    elif args.command == 'get_min_reqs':
+        return get_min_reqs(args, traces)
     else:
         logging.fatal('Unknown command: %s' % args.command)
         return EXIT_FAILURE
