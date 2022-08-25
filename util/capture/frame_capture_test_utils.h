@@ -167,6 +167,7 @@ struct TraceInfo
     bool isBindGeneratesResourcesEnabled;
     bool isWebGLCompatibilityEnabled;
     bool isRobustResourceInitEnabled;
+    std::vector<std::string> requiredExtensions;
 };
 
 bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut);

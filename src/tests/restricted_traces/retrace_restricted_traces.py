@@ -14,12 +14,14 @@ import fnmatch
 import json
 import logging
 import os
+import pathlib
 import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 
-from gen_restricted_traces import read_json as read_json
+from gen_restricted_traces import read_json as read_json, write_json as write_json
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
@@ -31,12 +33,19 @@ EXIT_FAILURE = 1
 
 
 def get_trace_json_path(trace):
-    return os.path.join(get_script_dir(), trace, f'{trace}.json')
+    s = pathlib.Path(get_script_dir()) / trace / f'{trace}.json'
+    print(f'get_trace_json_path: {s}, trace: {trace}, get_script_dir(): {get_script_dir()}')
+    return s.as_posix()
 
 
 def load_trace_json(trace):
     json_file_name = get_trace_json_path(trace)
     return read_json(json_file_name)
+
+
+def save_trace_json(trace, data):
+    json_file_name = get_trace_json_path(trace)
+    return write_json(json_file_name, data)
 
 
 def get_context(trace):
@@ -46,7 +55,7 @@ def get_context(trace):
 
 
 def get_script_dir():
-    return os.path.dirname(sys.argv[0])
+    return pathlib.Path(os.path.dirname(sys.argv[0])).as_posix()
 
 
 def context_header(trace, trace_path):
@@ -62,6 +71,17 @@ def src_trace_path(trace):
 def get_num_frames(json_data):
     metadata = json_data['TraceMetadata']
     return metadata['FrameEnd'] - metadata['FrameStart'] + 1
+
+
+def get_gles_version(json_data):
+    metadata = json_data['TraceMetadata']
+    return (metadata['ContextClientMajorVersion'], metadata['ContextClientMinorVersion'])
+
+
+def set_gles_version(json_data, version):
+    metadata = json_data['TraceMetadata']
+    metadata['ContextClientMajorVersion'] = version[0]
+    metadata['ContextClientMinorVersion'] = version[1]
 
 
 def path_contains_header(path):
@@ -238,6 +258,84 @@ def validate_traces(args, traces):
     return EXIT_SUCCESS
 
 
+def get_min_reqs(args, traces):
+    #restore_traces(args, traces)
+    run_autoninja(args)
+
+    failures = []
+    extensions = []
+    additional_env = {}
+    default_args = ["--no-warmup"]
+
+    for trace in fnmatch.filter(traces, args.traces):
+        json_data = load_trace_json(trace)
+        num_frames = get_num_frames(json_data)
+        max_steps = min(args.limit, num_frames) if args.limit else num_frames
+        try:
+            run_test_suite(args, trace, max_steps, default_args, additional_env)
+        except subprocess.CalledProcessError as error:
+            # Skip traces with failures
+            continue
+
+        # Run through the GLES versions until a trace runs successfully
+        originalVersion = get_gles_version(json_data)
+        glesVersions = [(1, 0), (1, 1), (2, 0), (3, 0), (3, 1), (3, 2)]
+        minVersion = None
+        for version in glesVersions:
+            set_gles_version(json_data, version)
+            save_trace_json(trace, json_data)
+            try:
+                run_test_suite(args, trace, max_steps, default_args, additional_env)
+            except subprocess.CalledProcessError as error:
+                continue
+            finally:
+                # Try to ensure that the original GLES version is not lost if an
+                # unknown exception occurs such as a keyboard interrupt
+                set_gles_version(json_data, originalVersion)
+                save_trace_json(trace, json_data)
+            minVersion = version
+            break
+
+        if minVersion is not None:
+            print(f"Found minimum GLES version for {trace}: {minVersion[0]}.{minVersion[1]}")
+            set_gles_version(json_data, minVersion)
+            save_trace_json(trace, json_data)
+        else:
+            print("Failed to find minimum GLES version. Reverting and quitting")
+            set_gles_version(json_data, originalVersion)
+            save_trace_json(trace, json_data)
+            return EXIT_FAILURE
+            
+        # Get the list of requestable extensions 
+        with tempfile.NamedTemporaryFile() as tmp:
+            # Some OSes will not allow a file to be written to by multiple
+            # processes. So close the temp file we just made before running the
+            # test suite.
+            tmp.close()
+            additional_args = ["--print-extensions-to-file", tmp.name]
+            run_test_suite(args, trace, max_steps, additional_args, additional_env)
+            with open(tmp.name) as f:
+                for line in f:
+                    extensions.append(line.strip())
+
+        requiredExtensions = []
+        for i in range(len(extensions)):
+            additional_args = default_args.copy()
+            otherExtensions = requiredExtensions + extensions[i+1:]
+            for ext in otherExtensions:
+                additional_args.append("--request-ext")
+                additional_args.append(ext)
+            try:
+                run_test_suite(args, trace, max_steps, additional_args, additional_env)
+            except subprocess.CalledProcessError as error:
+                requiredExtensions.append(extensions[i])
+
+        json_data['RequiredExtensions'] = requiredExtensions
+        save_trace_json(trace, json_data)
+
+    return EXIT_SUCCESS
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
@@ -311,6 +409,14 @@ def main():
     validate_parser.add_argument(
         '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
 
+    get_min_reqs_parser = subparsers.add_parser(
+        'get_min_reqs', help='Finds the minimum required extensions for a trace to successfully run.')
+    get_min_reqs_parser.add_argument('gn_path', help='GN build path')
+    get_min_reqs_parser.add_argument(
+        '--traces', help='Traces to get minimum requirements for. Supports fnmatch expressions.', default='*')
+    get_min_reqs_parser.add_argument(
+        '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
+
     args, extra_flags = parser.parse_known_args()
 
     logging.basicConfig(level=args.log.upper())
@@ -329,6 +435,8 @@ def main():
         return upgrade_traces(args, traces)
     elif args.command == 'validate':
         return validate_traces(args, traces)
+    elif args.command == 'get_min_reqs':
+        return get_min_reqs(args, traces)
     else:
         logging.fatal('Unknown command: %s' % args.command)
         return EXIT_FAILURE

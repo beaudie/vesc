@@ -11,6 +11,7 @@
 #define TESTS_PERF_TESTS_ANGLE_PERF_TEST_ARGS_H_
 
 #include "common/Optional.h"
+#include <vector>
 
 namespace angle
 {
@@ -34,6 +35,9 @@ extern bool gRetraceMode;
 extern bool gMinimizeGPUWork;
 extern bool gTraceTestValidation;
 extern const char *gPerfCounters;
+extern const char *gPrintExtensionsToFile;
+extern std::vector<const char *> *gRequestedExtensions;
+
 
 inline bool OneFrame()
 {

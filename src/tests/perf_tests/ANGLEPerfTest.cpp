@@ -490,6 +490,14 @@ void ANGLEPerfTest::processResults()
                                                          static_cast<double>(sum), "count");
         }
     }
+
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        std::ostringstream errS;
+        errS << "Failing test because of GL error:\n" << err << "\n";
+        failTest(errS.str());
+    }
 }
 
 void ANGLEPerfTest::processClockResult(const char *metric, double resultSeconds)
@@ -836,11 +844,14 @@ void ANGLERenderTest::SetUp()
     mConfigParams.colorSpace  = mTestParams.colorSpace;
     mConfigParams.multisample = mTestParams.multisample;
     mConfigParams.samples     = mTestParams.samples;
+    if (gPrintExtensionsToFile != nullptr || gRequestedExtensions != nullptr)
+    {
+        mConfigParams.extensionsEnabled = false;
+    }
     if (mTestParams.surfaceType != SurfaceType::WindowWithVSync)
     {
         mConfigParams.swapInterval = 0;
     }
-
     GLWindowResult res = mGLWindow->initializeGLWithResult(
         mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods, mConfigParams);
     switch (res)
@@ -853,6 +864,40 @@ void ANGLERenderTest::SetUp()
             return;
         default:
             break;
+    }
+    
+    if (gPrintExtensionsToFile)
+    {
+        std::ofstream fout(gPrintExtensionsToFile);
+        if (fout.is_open())
+        {
+            int numExtensions = 0;
+            glGetIntegerv(GL_NUM_REQUESTABLE_EXTENSIONS_ANGLE, &numExtensions);
+            for (int ext = 0; ext < numExtensions; ext++)
+            {
+                fout << glGetStringi(GL_REQUESTABLE_EXTENSIONS_ANGLE, ext) << std::endl;
+            }
+            fout.close();
+            std::stringstream failStr;
+            failStr << "Wrote out to file: " << gPrintExtensionsToFile;
+            skipTest(failStr.str());
+            return;
+        }
+        else
+        {
+            std::stringstream failStr;
+            failStr << "Failed to open file: " << gPrintExtensionsToFile;
+            failTest(failStr.str());
+            return;
+        }
+    }
+
+    if (gRequestedExtensions != nullptr)
+    {
+        for (const char *ext : *gRequestedExtensions)
+        {
+            glRequestExtensionANGLE(ext);
+        }
     }
 
     // Disable vsync (if not done by the window init).

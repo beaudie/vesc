@@ -45,8 +45,15 @@ def reject_duplicate_keys(pairs):
 
 
 def read_json(json_file):
+    print(f"read_json: {json_file}")
     with open(json_file) as map_file:
         return json.loads(map_file.read(), object_pairs_hook=reject_duplicate_keys)
+
+
+def write_json(json_file, data):
+    print(f"write_json: {json_file}, data")
+    with open(json_file, 'w') as map_file:
+        json.dump(data, map_file, indent=4, sort_keys=True)
 
 
 def update_deps(trace_pairs):
