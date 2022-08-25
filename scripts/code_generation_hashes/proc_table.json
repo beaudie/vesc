@@ -4,9 +4,9 @@
   "scripts/gen_proc_table.py":
     "101d1ce8880be0c061c05c20420d92f5",
   "scripts/gl.xml":
-    "4fbb3be5950ac486b9da7c830dff0dfe",
+    "69b306d60bb730b142e5816cab8e39ee",
   "scripts/gl_angle_ext.xml":
-    "37eebedc1153cd9d208efa469a10a7b2",
+    "07ce630bceb8d419943bfc8064e247b3",
   "scripts/registry_xml.py":
     "4d162936baeb7e803561559e11b7fd89",
   "src/libGLESv2/proc_table_cl_autogen.cpp":
@@ -26,5 +26,5 @@
   "third_party/OpenGL-Registry/src/xml/glx.xml":
     "94f3eee4b076801d117804eb466714b7",
   "third_party/OpenGL-Registry/src/xml/wgl.xml":
-    "b674e6e4ae71067341985e93b410b5f1"
+    "eae784bf4d1b983a42af5671b140b7c4"
 }

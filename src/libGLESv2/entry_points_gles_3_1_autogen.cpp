@@ -651,33 +651,32 @@ void GL_APIENTRY GL_GetProgramResourceiv(GLuint program,
                                          GLuint index,
                                          GLsizei propCount,
                                          const GLenum *props,
-                                         GLsizei bufSize,
+                                         GLsizei count,
                                          GLsizei *length,
                                          GLint *params)
 {
     Context *context = GetValidGlobalContext();
     EVENT(context, GLGetProgramResourceiv,
           "context = %d, program = %u, programInterface = %s, index = %u, propCount = %d, props = "
-          "0x%016" PRIxPTR ", bufSize = %d, length = 0x%016" PRIxPTR ", params = 0x%016" PRIxPTR "",
+          "0x%016" PRIxPTR ", count = %d, length = 0x%016" PRIxPTR ", params = 0x%016" PRIxPTR "",
           CID(context), program, GLenumToString(GLenumGroup::ProgramInterface, programInterface),
-          index, propCount, (uintptr_t)props, bufSize, (uintptr_t)length, (uintptr_t)params);
+          index, propCount, (uintptr_t)props, count, (uintptr_t)length, (uintptr_t)params);
 
     if (context)
     {
         ShaderProgramID programPacked = PackParam<ShaderProgramID>(program);
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetProgramResourceiv(context, angle::EntryPoint::GLGetProgramResourceiv,
-                                          programPacked, programInterface, index, propCount, props,
-                                          bufSize, length, params));
+        bool isCallValid = (context->skipValidation() ||
+                            ValidateGetProgramResourceiv(
+                                context, angle::EntryPoint::GLGetProgramResourceiv, programPacked,
+                                programInterface, index, propCount, props, count, length, params));
         if (isCallValid)
         {
             context->getProgramResourceiv(programPacked, programInterface, index, propCount, props,
-                                          bufSize, length, params);
+                                          count, length, params);
         }
         ANGLE_CAPTURE_GL(GetProgramResourceiv, isCallValid, context, programPacked,
-                         programInterface, index, propCount, props, bufSize, length, params);
+                         programInterface, index, propCount, props, count, length, params);
     }
     else
     {
@@ -1903,7 +1902,7 @@ void GL_APIENTRY GL_TexStorage2DMultisample(GLenum target,
           "context = %d, target = %s, samples = %d, internalformat = %s, width = %d, height = %d, "
           "fixedsamplelocations = %s",
           CID(context), GLenumToString(GLenumGroup::TextureTarget, target), samples,
-          GLenumToString(GLenumGroup::InternalFormat, internalformat), width, height,
+          GLenumToString(GLenumGroup::SizedInternalFormat, internalformat), width, height,
           GLbooleanToString(fixedsamplelocations));
 
     if (context)
@@ -2017,7 +2016,7 @@ void GL_APIENTRY GL_VertexAttribFormat(GLuint attribindex,
     EVENT(context, GLVertexAttribFormat,
           "context = %d, attribindex = %u, size = %d, type = %s, normalized = %s, relativeoffset = "
           "%u",
-          CID(context), attribindex, size, GLenumToString(GLenumGroup::DefaultGroup, type),
+          CID(context), attribindex, size, GLenumToString(GLenumGroup::VertexAttribType, type),
           GLbooleanToString(normalized), relativeoffset);
 
     if (context)
@@ -2049,7 +2048,7 @@ void GL_APIENTRY GL_VertexAttribIFormat(GLuint attribindex,
     Context *context = GetValidGlobalContext();
     EVENT(context, GLVertexAttribIFormat,
           "context = %d, attribindex = %u, size = %d, type = %s, relativeoffset = %u", CID(context),
-          attribindex, size, GLenumToString(GLenumGroup::DefaultGroup, type), relativeoffset);
+          attribindex, size, GLenumToString(GLenumGroup::VertexAttribIType, type), relativeoffset);
 
     if (context)
     {
