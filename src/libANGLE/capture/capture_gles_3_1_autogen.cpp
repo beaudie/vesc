@@ -608,7 +608,7 @@ CallCapture CaptureGetProgramResourceiv(const State &glState,
                                         GLuint index,
                                         GLsizei propCount,
                                         const GLenum *props,
-                                        GLsizei bufSize,
+                                        GLsizei count,
                                         GLsizei *length,
                                         GLint *params)
 {
@@ -625,7 +625,7 @@ CallCapture CaptureGetProgramResourceiv(const State &glState,
         ParamCapture propsParam("props", ParamType::TGLenumConstPointer);
         InitParamValue(ParamType::TGLenumConstPointer, props, &propsParam.value);
         CaptureGetProgramResourceiv_props(glState, isCallValid, programPacked, programInterface,
-                                          index, propCount, props, bufSize, length, params,
+                                          index, propCount, props, count, length, params,
                                           &propsParam);
         paramBuffer.addParam(std::move(propsParam));
     }
@@ -637,14 +637,14 @@ CallCapture CaptureGetProgramResourceiv(const State &glState,
         paramBuffer.addParam(std::move(propsParam));
     }
 
-    paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
+    paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
 
     if (isCallValid)
     {
         ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
         InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
         CaptureGetProgramResourceiv_length(glState, isCallValid, programPacked, programInterface,
-                                           index, propCount, props, bufSize, length, params,
+                                           index, propCount, props, count, length, params,
                                            &lengthParam);
         paramBuffer.addParam(std::move(lengthParam));
     }
@@ -661,7 +661,7 @@ CallCapture CaptureGetProgramResourceiv(const State &glState,
         ParamCapture paramsParam("params", ParamType::TGLintPointer);
         InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
         CaptureGetProgramResourceiv_params(glState, isCallValid, programPacked, programInterface,
-                                           index, propCount, props, bufSize, length, params,
+                                           index, propCount, props, count, length, params,
                                            &paramsParam);
         paramBuffer.addParam(std::move(paramsParam));
     }
@@ -1708,7 +1708,7 @@ CallCapture CaptureTexStorage2DMultisample(const State &glState,
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
     paramBuffer.addValueParam("samples", ParamType::TGLsizei, samples);
-    paramBuffer.addEnumParam("internalformat", GLenumGroup::InternalFormat, ParamType::TGLenum,
+    paramBuffer.addEnumParam("internalformat", GLenumGroup::SizedInternalFormat, ParamType::TGLenum,
                              internalformat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
