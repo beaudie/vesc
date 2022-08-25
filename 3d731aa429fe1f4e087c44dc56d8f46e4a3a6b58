@@ -104,6 +104,23 @@
       "message": "Stamp in case Yuly lands. I don\u0027t know what is broken in which waterfall so Yuly and Yiwei please work it out before making changes.",
       "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0cb03f_7b053e91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2022-08-25T00:14:10Z",
+      "side": 1,
+      "message": "FYI, tests passed on https://ci.chromium.org/ui/p/chromium/builders/try/gpu-fyi-try-android-pixel-6-64/100/overview.",
+      "revId": "3d731aa429fe1f4e087c44dc56d8f46e4a3a6b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
