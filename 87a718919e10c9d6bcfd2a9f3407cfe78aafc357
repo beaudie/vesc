@@ -16,6 +16,69 @@
       "message": "LGTM! Letting Shabi provide +2",
       "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2a393c_81c6f818",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T20:06:36Z",
+      "side": 1,
+      "message": "I\u0027m fairly certain there\u0027s padding in this struct. I didn\u0027t memset it before, because it wasn\u0027t used in a hash, but it is now. You could consider adding a constructor to it, implemented in `ShaderLang.cpp`, that memsets it to 0.",
+      "range": {
+        "startLine": 60,
+        "startChar": 38,
+        "endLine": 60,
+        "endChar": 54
+      },
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d27d83d8_39ff241f",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T20:06:36Z",
+      "side": 1,
+      "message": "Can you implement a hash for this directly so we don\u0027t rely on `getBuiltinResourcesString()`? That function may not be complete, and could be deleted with Chrome\u0027s validating command buffer (IIRC as the only user). It\u0027ll also be faster to hash the byte representation.",
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccfb7643_89b6b722",
+        "filename": "src/libANGLE/MemoryShaderCache.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-25T20:06:36Z",
+      "side": 1,
+      "message": "nit: pass in a reference instead",
+      "range": {
+        "startLine": 42,
+        "startChar": 51,
+        "endLine": 42,
+        "endChar": 52
+      },
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
