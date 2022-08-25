@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9f0184c_651c21a9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3831,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-08-25T09:50:25Z",
+      "side": 1,
+      "message": "I am encountering some difficulties to implement this here. We would need to create a surface first, and then, for each available queue, we would need to check whether it supports presentation for such a surface:\n```\nvkGetPhysicalDeviceSurfaceSupportKHR(device, queueFamilyIndex, surface, \u0026presentSupport);\n```\nI guess that at this point of the execution, we do not know which surface users will want to create, or if they will even want to create one.",
+      "parentUuid": "db7014d7_231ac827",
+      "range": {
+        "startLine": 3831,
+        "startChar": 61,
+        "endLine": 3831,
+        "endChar": 81
+      },
+      "revId": "c58e8af13a1fb5a56c54c67a026636d249d3b799",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "700cadf3_64945c83",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
