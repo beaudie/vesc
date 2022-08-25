@@ -30,6 +30,7 @@ bool gEnableAllTraceTests      = false;
 bool gRetraceMode              = false;
 bool gMinimizeGPUWork          = false;
 bool gTraceTestValidation      = false;
+bool gGetRequiredExtensions    = false;
 const char *gPerfCounters      = nullptr;
 
 // Default to three warmup loops. There's no science to this. More than two loops was experimentally
@@ -188,6 +189,11 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         {
             gPerfCounters = argv[argIndex + 1];
             argIndex++;
+        }
+        else if (strcmp("--get-required-extensions", argv[argIndex]) == 0)
+        {
+            // Runs the test multiple times with different extensions disabled until it finds the minimal set.
+            gGetRequiredExtensions = true;
         }
     }
 }

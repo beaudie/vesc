@@ -490,6 +490,14 @@ void ANGLEPerfTest::processResults()
                                                          static_cast<double>(sum), "count");
         }
     }
+
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        std::ostringstream errS;
+        errS << "Failing test because of GL error:\n" << err << "\n";
+        failTest(errS.str());
+    }
 }
 
 void ANGLEPerfTest::processClockResult(const char *metric, double resultSeconds)
@@ -853,6 +861,22 @@ void ANGLERenderTest::SetUp()
             return;
         default:
             break;
+    }
+    
+    int numExtensions = 0;
+    glGetIntegerv(GL_NUM_REQUESTABLE_EXTENSIONS_ANGLE, &numExtensions);
+    for (int i = 0; i < numExtensions; i++)
+    {
+        const GLubyte *ext = glGetStringi(GL_REQUESTABLE_EXTENSIONS_ANGLE, i);
+        std::cout << "Extension " << i << ": " << ext
+                  << std::endl;
+    }
+
+    glRequestExtensionANGLE("GL_EXT_geometry_shader");
+    GLenum err;
+    if ((err = glGetError()) != GL_NO_ERROR) {
+        failTest("Failed to request extension :(");
+        return;
     }
 
     // Disable vsync (if not done by the window init).
