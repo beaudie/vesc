@@ -16,6 +16,24 @@
       "message": "Why is this the only extension removed?",
       "revId": "ab9fddb7867c078b3ca6dd207c056c8665977bbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21e12582_5ff54e88",
+        "filename": "scripts/egl_angle_ext.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-08-25T16:20:31Z",
+      "side": 0,
+      "message": "Answered in CL description, oops",
+      "parentUuid": "a74a1eea_b030c3e4",
+      "revId": "ab9fddb7867c078b3ca6dd207c056c8665977bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
