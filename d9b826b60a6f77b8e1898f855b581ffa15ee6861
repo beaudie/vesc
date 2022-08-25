@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d596a7_ccf2b8b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-25T21:44:14Z",
+      "side": 1,
+      "message": "I think http://b/240161464 is pointing at a different issue.\n\nAccording to the this link https://ci.chromium.org/ui/p/chromium/g/tryserver.chromium.angle/builders, the test has been failing with this error: `Xcode 13.0 or higher is required.`since long time ago. I do not see this test being ran in other landed CLs, so I don\u0027t think you need to run this test to submit your CL.\n\nYou can click the `CQ Dry Run` button to check all the presubmit tests status.",
+      "parentUuid": "6a326d8c_2f9a1ebc",
+      "revId": "d9b826b60a6f77b8e1898f855b581ffa15ee6861",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28510b6c_8ffdf680",
