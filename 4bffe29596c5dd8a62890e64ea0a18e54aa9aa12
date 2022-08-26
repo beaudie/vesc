@@ -56,6 +56,30 @@
       },
       "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52df0cd4_3e1365b4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-26T22:29:03Z",
+      "side": 1,
+      "message": "It is being used to configure the render pass begin info object in `flushToPrimary()` to be compatible with the framebuffer. Currently we only create imageless framebuffers in `FramebufferVk::getFramebuffer()`. Framebuffers from `WindowSurfaceVk::getCurrentFramebuffer()` and `UtilsVk::startRenderPass()` remain the same.",
+      "parentUuid": "e7d8bb40_a1f91fd4",
+      "range": {
+        "startLine": 2295,
+        "startChar": 24,
+        "endLine": 2295,
+        "endChar": 39
+      },
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
