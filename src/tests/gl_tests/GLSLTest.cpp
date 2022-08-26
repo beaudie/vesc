@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "common/vulkan/vk_headers.h"
 #include "test_utils/gl_raii.h"
 #include "util/shader_utils.h"
 
@@ -13,7 +14,6 @@ using namespace angle;
 
 namespace
 {
-
 class GLSLTest : public ANGLETest<>
 {
   protected:
@@ -16249,6 +16249,11 @@ void main()
 TEST_P(GLSLTest_ES31, ShaderCacheVertexWithSSBO)
 {
     ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Check that GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS is at least 1.
+    GLint maxVertexShaderStorageBlocks;
+    glGetIntegerv(GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS, &maxVertexShaderStorageBlocks);
+    ANGLE_SKIP_TEST_IF(!(maxVertexShaderStorageBlocks >= 1));
     constexpr char kVS[] = R"(#version 310 es
 
 precision mediump float;
