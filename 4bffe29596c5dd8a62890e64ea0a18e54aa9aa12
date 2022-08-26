@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecff29ef_e0e84d30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-26T22:54:34Z",
+      "side": 1,
+      "message": "Unfortunately that won\u0027t work so easily. What gets used to create the imageless framebuffer needs to be part of the key, which means width, height, per-image usage flags, per-image create flags, etc.\n\nSo the \"ImagelessFramebufferDesc\" would look quite different from the one we have now. My suggestion to Amirali was to start without a cache, and we\u0027ll measure the CPU perf and decide if we should add a cache. I suspect you are right and that a cache is still good.\n\nBut actually there\u0027s an even more important reason to keep `FramebufferDesc` as-is. We currently detect framebuffer changes based on that. In `syncState`:\n\n```\n    // No-op redundant changes to prevent closing the RenderPass.\n    if (mCurrentFramebufferDesc \u003d\u003d priorFramebufferDesc)\n    {\n        return angle::Result::Continue;\n    }\n    ...\n    ANGLE_TRY(contextVk-\u003eflushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferChange));\n    ...\n    // Deactivate Framebuffer\n    mCurrentFramebuffer.release();\n```\n\nIf we don\u0027t set `FramebufferDesc::mSerials`, that whole piece of code would be broken.\n\nAmirali, could you please add tests like this?\n\n- Create an FBO and attach texture 1 to it\n- Draw\n- Attach texture 2 (implicitly detaching texture 1)\n- Draw\n\nThe difference between texture 1 and texture 2 would be (each in a separate test):\n\n- Width\n- Height\n- Usage flags\n- Create flags\n- Format\n\nTo get images with different flags, we\u0027d need to find a way to make that happen. One example is to use texture 2 in a compute shader first, so it gets the STORAGE usage bit.",
+      "parentUuid": "0853da92_4e2644a0",
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7d8bb40_a1f91fd4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 12
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "It is being used to configure the render pass begin info object in `flushToPrimary()` to be compatible with the framebuffer. Currently we only create imageless framebuffers in `FramebufferVk::getFramebuffer()`. Framebuffers from `WindowSurfaceVk::getCurrentFramebuffer()` and `UtilsVk::startRenderPass()` remain the same.",
       "parentUuid": "e7d8bb40_a1f91fd4",
+      "range": {
+        "startLine": 2295,
+        "startChar": 24,
+        "endLine": 2295,
+        "endChar": 39
+      },
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d66660_5eed9847",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-26T22:54:34Z",
+      "side": 1,
+      "message": "You should just store a flag in `RenderPassCommandBufferHelper` for that",
+      "parentUuid": "52df0cd4_3e1365b4",
       "range": {
         "startLine": 2295,
         "startChar": 24,
