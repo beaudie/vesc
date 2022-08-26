@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32249938_787fc954",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-26T21:57:36Z",
+      "side": 1,
+      "message": "All bots are red. Will check  again once bots green.",
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d8bb40_a1f91fd4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2295,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-26T21:57:36Z",
+      "side": 1,
+      "message": "supportsImagelessFramebuffer is static, it wont change at run time. why we need to bake this into mRenderPassDesc? I don\u0027t think you need to modify mRenderPassDesc, or is there reason for it that I missed?",
+      "range": {
+        "startLine": 2295,
+        "startChar": 24,
+        "endLine": 2295,
+        "endChar": 39
+      },
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
