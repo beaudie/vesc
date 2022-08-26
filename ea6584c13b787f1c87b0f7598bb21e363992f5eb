@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ecd58a7_e486a664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-26T06:36:33Z",
+      "side": 1,
+      "message": "The bug in question from before is fixed so this CL is ready to land now if we want it",
+      "revId": "ea6584c13b787f1c87b0f7598bb21e363992f5eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
