@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "865ce34e_dbdbef69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-26T18:37:58Z",
+      "side": 1,
+      "message": "That came together fast.  Nice work Eddie!  One question, but changes LGTM.",
+      "revId": "e86c88342578249ce1c51ddda8e7b01685053cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f7c9f58_693229b5",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-26T18:37:58Z",
+      "side": 1,
+      "message": "What does `major_version` twice do here?",
+      "range": {
+        "startLine": 2957,
+        "startChar": 69,
+        "endLine": 2957,
+        "endChar": 97
+      },
+      "revId": "e86c88342578249ce1c51ddda8e7b01685053cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
