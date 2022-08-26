@@ -22,6 +22,30 @@
       },
       "revId": "a44a2fff1ebcce9804776bea1b3c1f4524e62470",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe8f9d72_af415e87",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16264,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-26T21:42:25Z",
+      "side": 1,
+      "message": "Got it, thank you!",
+      "parentUuid": "6a188c1b_af9c511e",
+      "range": {
+        "startLine": 16253,
+        "startChar": 0,
+        "endLine": 16264,
+        "endChar": 84
+      },
+      "revId": "a44a2fff1ebcce9804776bea1b3c1f4524e62470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
