@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0853da92_4e2644a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-26T22:13:22Z",
+      "side": 1,
+      "message": "One thought for the design. I think the easier and cleaner way here actually is still keep the framebufferCache, but never update the FramebufferDesc::mSerials. That way all framebuffers with different images are going to have cache hit thus significantly reduce the cache size. The benefit of this approach are 1) you still get the cache for VkFramebuffers even with imageless, for example if app uses one FBO but changes attachment all the time, you might still get some cpu overhead benefit. and 2) more importantly, the code divergence between two code path are going to be much reduced. Only a few places you need to check imageless feature and skip the call to update serial. In future when all VK drivers support imageless, we can remove the code path completely.",
+      "revId": "4bffe29596c5dd8a62890e64ea0a18e54aa9aa12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7d8bb40_a1f91fd4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 12
