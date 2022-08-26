@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 
+#include "common/vulkan/vk_headers.h"
 #include "test_utils/gl_raii.h"
 #include "util/shader_utils.h"
 
@@ -13,7 +14,6 @@ using namespace angle;
 
 namespace
 {
-
 class GLSLTest : public ANGLETest<>
 {
   protected:
@@ -16249,6 +16249,20 @@ void main()
 TEST_P(GLSLTest_ES31, ShaderCacheVertexWithSSBO)
 {
     ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Check that vulkan device supports VkPhysicalDeviceFeatures vertexPipelineStoresAndAtomics
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay display = window->getDisplay();
+    EGLAttrib result   = 0;
+    EXPECT_EGL_TRUE(eglQueryDisplayAttribEXT(display, EGL_DEVICE_EXT, &result));
+    EGLDeviceEXT device = reinterpret_cast<EGLDeviceEXT>(result);
+    EXPECT_NE(EGL_NO_DEVICE_EXT, device);
+    EXPECT_EGL_TRUE(eglQueryDeviceAttribEXT(device, EGL_VULKAN_FEATURES_ANGLE, &result));
+    const VkPhysicalDeviceFeatures2KHR *enabledFeatures =
+        reinterpret_cast<const VkPhysicalDeviceFeatures2KHR *>(result);
+    EXPECT_NE(enabledFeatures, nullptr);
+    ANGLE_SKIP_TEST_IF(!(enabledFeatures->features.vertexPipelineStoresAndAtomics));
+
     constexpr char kVS[] = R"(#version 310 es
 
 precision mediump float;

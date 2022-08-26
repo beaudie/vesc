@@ -25,7 +25,9 @@ GLuint CompileProgramInternal(const char *vsSource,
 {
     GLuint program = glCreateProgram();
 
+    INFO() << "Yuxin Debug Compile Vertex Shader";
     GLuint vs = CompileShader(GL_VERTEX_SHADER, vsSource);
+    INFO() << "Yuxin Debug Compile Fragment Shader";
     GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
 
     if (vs == 0 || fs == 0)
@@ -48,6 +50,7 @@ GLuint CompileProgramInternal(const char *vsSource,
 
     if (strlen(tcsSource) > 0)
     {
+        INFO() << "Yuxin Debug compile tessellation control shader";
         tcs = CompileShader(GL_TESS_CONTROL_SHADER_EXT, tcsSource);
         if (tcs == 0)
         {
@@ -63,6 +66,7 @@ GLuint CompileProgramInternal(const char *vsSource,
 
     if (strlen(tesSource) > 0)
     {
+        INFO() << "Yuxin Debug compile tessellation evaluation shader";
         tes = CompileShader(GL_TESS_EVALUATION_SHADER_EXT, tesSource);
         if (tes == 0)
         {
@@ -79,6 +83,7 @@ GLuint CompileProgramInternal(const char *vsSource,
 
     if (strlen(gsSource) > 0)
     {
+        INFO() << "Yuxin Debug compile geometry shader";
         gs = CompileShader(GL_GEOMETRY_SHADER_EXT, gsSource);
         if (gs == 0)
         {
@@ -99,6 +104,7 @@ GLuint CompileProgramInternal(const char *vsSource,
         preLinkCallback(program);
     }
 
+    INFO() << "Yuxin Debug link program";
     glLinkProgram(program);
 
     return CheckLinkStatusAndReturnProgram(program, true);
