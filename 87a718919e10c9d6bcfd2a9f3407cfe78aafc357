@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a7c9a4d_ef8540b5",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-26T14:24:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2a393c_81c6f818",
+      "range": {
+        "startLine": 60,
+        "startChar": 38,
+        "endLine": 60,
+        "endChar": 54
+      },
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d27d83d8_39ff241f",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a58fac1_32c46469",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-26T14:24:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d27d83d8_39ff241f",
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ccfb7643_89b6b722",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-08-25T20:06:36Z",
       "side": 1,
       "message": "nit: pass in a reference instead",
+      "range": {
+        "startLine": 42,
+        "startChar": 51,
+        "endLine": 42,
+        "endChar": 52
+      },
+      "revId": "87a718919e10c9d6bcfd2a9f3407cfe78aafc357",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7418a58_c54d3111",
+        "filename": "src/libANGLE/MemoryShaderCache.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-26T14:24:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccfb7643_89b6b722",
       "range": {
         "startLine": 42,
         "startChar": 51,
