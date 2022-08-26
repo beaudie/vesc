@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c75530a_5bc09ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-26T14:54:46Z",
+      "side": 1,
+      "message": "Can you ensure the extension spec has the right text, that the enum is accepted by Get*?",
+      "revId": "7270796d780b5db49b7228144e3ac7eaeb5e36a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
