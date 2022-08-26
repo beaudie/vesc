@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8bb9e2_22ff0e98",
+        "filename": "src/libANGLE/Compiler.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-26T21:42:16Z",
+      "side": 1,
+      "message": "Not a great fan of recalculating this, it\u0027s a lot of instructions and there\u0027s always the risk of mismatch. Why not add a `GetBuiltInResources(const ShHandle handle)` to the compiler to return the built-in resources passed to it to use for hashing?",
+      "revId": "69439c14936e202c592d6532a747a64c98555483",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
