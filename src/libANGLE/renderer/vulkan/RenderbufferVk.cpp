@@ -85,7 +85,8 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
 
     const bool isRenderToTexture = mode == gl::MultisamplingMode::MultisampledRenderToTexture;
     const bool hasRenderToTextureEXT =
-        renderer->getFeatures().supportsMultisampledRenderToSingleSampled.enabled;
+        renderer->getFeatures().supportsMultisampledRenderToSingleSampled.enabled ||
+        renderer->getFeatures().supportsMultisampledRenderToSingleSampledGOOGLEX.enabled;
 
     // Transfer and sampled usage are used for various utilities such as readback or blit.
     VkImageUsageFlags usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
