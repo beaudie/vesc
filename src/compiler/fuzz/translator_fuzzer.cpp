@@ -68,11 +68,23 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     {
         return 0;
     }
+    auto headerData = data;
 
-    uint32_t type            = *reinterpret_cast<const uint32_t *>(data);
-    uint32_t spec            = *reinterpret_cast<const uint32_t *>(data + 4);
-    uint32_t output          = *reinterpret_cast<const uint32_t *>(data + 8);
-    ShCompileOptions options = *reinterpret_cast<const ShCompileOptions *>(data + 12);
+    uint32_t type;
+    memcpy(&type, headerData, sizeof(type));
+    headerData += sizeof(type);
+    uint32_t spec;
+    memcpy(&spec, headerData, sizeof(spec));
+    headerData += sizeof(spec);
+    uint32_t output;
+    memcpy(&output, headerData, sizeof(output));
+    headerData += sizeof(output);
+    ShCompileOptions options{};
+    memcpy(&options, headerData, offsetof(ShCompileOptions, metal));
+    headerData += 32;
+    memcpy(&options.metal, headerData, sizeof(options.metal));
+    headerData += 32;
+    memcpy(&options.pls, headerData, sizeof(options.pls));
 
     if (type != GL_FRAGMENT_SHADER && type != GL_VERTEX_SHADER)
     {

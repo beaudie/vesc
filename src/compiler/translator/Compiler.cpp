@@ -56,6 +56,12 @@
 #include "compiler/translator/tree_util/ReplaceShadowingVariables.h"
 #include "compiler/translator/util.h"
 
+#define ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT "corpus/"
+#if defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
+#    include "common/hash_utils.h"
+#    include "common/mathutil.h"
+#endif
+
 namespace sh
 {
 
@@ -104,30 +110,49 @@ void DumpFuzzerCase(char const *const *shaderStrings,
                     uint32_t type,
                     uint32_t spec,
                     uint32_t output,
-                    uint64_t options)
+                    const ShCompileOptions &options)
 {
-    static int fileIndex = 0;
+    size_t kHeaderSize    = 128;
+    size_t contentsLength = kHeaderSize + 1;  // Extra: header + nul terminator.
+    for (size_t i = 0; i < numStrings; i++)
+    {
+        contentsLength += strlen(shaderStrings[i]);
+    }
+    std::vector<char> contents(rx::roundUp<size_t>(contentsLength, 4), 0);
+    char *data = &contents[0];
+    memcpy(data, &type, sizeof(type));
+    data += sizeof(type);
+    memcpy(data, &spec, sizeof(spec));
+    data += sizeof(spec);
+    memcpy(data, &output, sizeof(output));
+    data += sizeof(output);
+    memcpy(data, &options, offsetof(ShCompileOptions, metal));
+    data += 32;
+    static_assert(offsetof(ShCompileOptions, metal) <= 32);
+    memcpy(data, &options.metal, sizeof(options.metal));
+    data += 32;
+    static_assert(sizeof(options.metal) <= 32);
+    memcpy(data, &options.pls, sizeof(options.pls));
+    data += 32;
+    static_assert(sizeof(options.pls) <= 32);
+    ASSERT(data - contents.data() <= static_cast<ptrdiff_t>(kHeaderSize));
+    data = &contents[0] + kHeaderSize;
+    for (size_t i = 0; i < numStrings; i++)
+    {
+        auto length = strlen(shaderStrings[i]);
+        memcpy(data, shaderStrings[i], length);
+        data += length;
+    }
+    auto hash = angle::ComputeGenericHash(contents.data(), contents.size());
 
     std::ostringstream o = sh::InitializeStream<std::ostringstream>();
-    o << "corpus/" << fileIndex++ << ".sample";
+    o << ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT << std::hex << std::setw(16) << std::setfill('0') << hash
+      << ".sample";
     std::string s = o.str();
 
     // Must match the input format of the fuzzer
     FILE *f = fopen(s.c_str(), "w");
-    fwrite(&type, sizeof(type), 1, f);
-    fwrite(&spec, sizeof(spec), 1, f);
-    fwrite(&output, sizeof(output), 1, f);
-    fwrite(&options, sizeof(options), 1, f);
-
-    char zero[128 - 20] = {0};
-    fwrite(&zero, 128 - 20, 1, f);
-
-    for (size_t i = 0; i < numStrings; i++)
-    {
-        fwrite(shaderStrings[i], sizeof(char), strlen(shaderStrings[i]), f);
-    }
-    fwrite(&zero, 1, 1, f);
-
+    fwrite(contents.data(), sizeof(char), contentsLength, f);
     fclose(f);
 }
 #endif  // defined(ANGLE_ENABLE_FUZZER_CORPUS_OUTPUT)
