@@ -1325,7 +1325,7 @@ void TracePerfTest::initializeBenchmark()
 
     mStartFrame = traceInfo.frameStart;
     mEndFrame   = traceInfo.frameEnd;
-    mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData);
+    mTraceLibrary->setBinaryDataDecompressCallback(DecompressBinaryData, DeleteBinaryData);
 
     mTraceLibrary->setValidateSerializedStateCallback(ValidateSerializedState);
 
