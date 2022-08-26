@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c592ce4_1d75570b",
+        "filename": "extensions/EGL_ANGLE_colorspace_attribute_passthrough.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-26T18:15:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fcca0c1_8f56be29",
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edc80068_054b107c",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-08-25T03:45:02Z",
       "side": 1,
       "message": "nit: `in order`",
+      "range": {
+        "startLine": 54,
+        "startChar": 15,
+        "endLine": 54,
+        "endChar": 22
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b513e22b_f14427b3",
+        "filename": "extensions/EGL_ANGLE_colorspace_attribute_passthrough.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-26T18:15:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edc80068_054b107c",
       "range": {
         "startLine": 54,
         "startChar": 15,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d272d7f_dbebecc3",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-26T18:15:12Z",
+      "side": 1,
+      "message": "thanks shabi, going forward we probably need to handle features like how we handle entry points. separate change that can be merged quick and have the \"core\" change in a separate CL",
+      "parentUuid": "4c39f628_2c08ffa8",
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4f507454_36fb26c3",
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ab8825_3d96e9df",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-26T18:15:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f507454_36fb26c3",
+      "range": {
+        "startLine": 612,
+        "startChar": 42,
+        "endLine": 612,
+        "endChar": 43
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31ef731d_58ce3965",
@@ -111,6 +195,30 @@
       "writtenOn": "2022-08-25T03:45:02Z",
       "side": 1,
       "message": "nit: Suggest something like `CreateSurface`",
+      "range": {
+        "startLine": 548,
+        "startChar": 30,
+        "endLine": 548,
+        "endChar": 54
+      },
+      "revId": "3981054084e76f8b8af2b57072c4649cd18631df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e9d59d8_1fc82927",
+        "filename": "src/tests/gl_tests/PbufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-26T18:15:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31ef731d_58ce3965",
       "range": {
         "startLine": 548,
         "startChar": 30,
