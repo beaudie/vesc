@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a188c1b_af9c511e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-26T21:24:04Z",
+      "side": 1,
+      "message": "end2end tests are not supposed to look at ANGLE internals. Technically, we should be able to run end2end tests on any driver. We have whitebox tests for those that do need to look inside ANGLE.\n\nGL provides all the information we\u0027d need here though. If an application wants to use SSBOs in OpenGL, they\u0027d have to query that. That\u0027s done by querying `GL_MAX_VERTEX_SHADER_STORAGE_BLOCKS` (grep under `gl_tests` and you\u0027ll see how).",
+      "range": {
+        "startLine": 16253,
+        "startChar": 0,
+        "endLine": 16264,
+        "endChar": 84
+      },
+      "revId": "a44a2fff1ebcce9804776bea1b3c1f4524e62470",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
