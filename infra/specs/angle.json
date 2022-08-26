@@ -408,7 +408,7 @@
       {
         "args": [
           "angle_end2end_tests",
-          "--gtest_filter=-*Vulkan_SwiftShader*",
+          "--gtest_filter=EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan_AsyncCommandQueue:ComputeShaderTest.ImageLoadMipmapSlice/ES3_1_OpenGLES:CopyTexImageTest.CopyTexSubImageFromCubeMap/ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers",
           "--shard-timeout=180",
           "-v",
           "--render-test-output-dir=${ISOLATED_OUTDIR}"
@@ -1055,7 +1055,7 @@
       {
         "args": [
           "angle_end2end_tests",
-          "--gtest_filter=-*Vulkan_SwiftShader*",
+          "--gtest_filter=EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan_AsyncCommandQueue:ComputeShaderTest.ImageLoadMipmapSlice/ES3_1_OpenGLES:CopyTexImageTest.CopyTexSubImageFromCubeMap/ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers",
           "--bot-mode",
           "--max-processes=4"
         ],
@@ -1704,7 +1704,7 @@
       {
         "args": [
           "angle_end2end_tests",
-          "--gtest_filter=-*Vulkan_SwiftShader*",
+          "--gtest_filter=EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan_AsyncCommandQueue:ComputeShaderTest.ImageLoadMipmapSlice/ES3_1_OpenGLES:CopyTexImageTest.CopyTexSubImageFromCubeMap/ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers",
           "--bot-mode",
           "--max-processes=4"
         ],
@@ -4089,7 +4089,7 @@
       {
         "args": [
           "angle_end2end_tests",
-          "--gtest_filter=-*Vulkan_SwiftShader*",
+          "--gtest_filter=EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan_AsyncCommandQueue:ComputeShaderTest.ImageLoadMipmapSlice/ES3_1_OpenGLES:CopyTexImageTest.CopyTexSubImageFromCubeMap/ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers",
           "--bot-mode",
           "--max-processes=1"
         ],
@@ -4844,7 +4844,7 @@
       {
         "args": [
           "angle_end2end_tests",
-          "--gtest_filter=-*Vulkan_SwiftShader*",
+          "--gtest_filter=EGLMultiContextTest.ReuseUnterminatedDisplay/ES3_1_Vulkan_AsyncCommandQueue:ComputeShaderTest.ImageLoadMipmapSlice/ES3_1_OpenGLES:CopyTexImageTest.CopyTexSubImageFromCubeMap/ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers",
           "--bot-mode"
         ],
         "merge": {
