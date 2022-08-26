@@ -39,6 +39,30 @@
       },
       "revId": "e86c88342578249ce1c51ddda8e7b01685053cab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd9aada7_ad0ceaaf",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-26T18:48:21Z",
+      "side": 1,
+      "message": "Just because we need it twice in the format string. I can change some things around to reduce that duplication.",
+      "parentUuid": "1f7c9f58_693229b5",
+      "range": {
+        "startLine": 2957,
+        "startChar": 69,
+        "endLine": 2957,
+        "endChar": 97
+      },
+      "revId": "e86c88342578249ce1c51ddda8e7b01685053cab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
