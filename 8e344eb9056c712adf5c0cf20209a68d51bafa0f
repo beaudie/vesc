@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd62e973_824cddee",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-26T21:41:52Z",
+      "side": 1,
+      "message": "This should be removed now.",
+      "range": {
+        "startLine": 9,
+        "startChar": 24,
+        "endLine": 9,
+        "endChar": 34
+      },
+      "revId": "8e344eb9056c712adf5c0cf20209a68d51bafa0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5d55f66_d72dfea9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 16256,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-26T21:41:52Z",
+      "side": 1,
+      "message": "nit, can be simplified to maxVertexShaderStorageBlocks\u003d\u003d0",
+      "range": {
+        "startLine": 16256,
+        "startChar": 23,
+        "endLine": 16256,
+        "endChar": 59
+      },
+      "revId": "8e344eb9056c712adf5c0cf20209a68d51bafa0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
