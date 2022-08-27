@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9518e453_e037b2dc",
+        "filename": "src/libANGLE/MemoryShaderCache.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-27T00:57:21Z",
+      "side": 1,
+      "message": "One last thing: Have you verified that this really works? If there is a `\u0027\\0\u0027` in the middle, does it confuse `std::string` or `HashStream`?",
+      "range": {
+        "startLine": 61,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 51
+      },
+      "revId": "af07273672a029889ad3e4a9121e062523ed4816",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
