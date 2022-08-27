@@ -1717,31 +1717,15 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
-angle::Result WindowSurfaceVk::computePresentOutOfDate(vk::Context *context,
-                                                       VkResult result,
-                                                       bool *presentOutOfDate)
+angle::Result WindowSurfaceVk::computePresentOutOfDate(VkResult result, bool *presentOutOfDate)
 {
     // If OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
-    // continuing.
-    // If VK_SUBOPTIMAL_KHR is returned it's because the device orientation changed and we should
-    // recreate the swapchain with a new window orientation.
-    if (context->getRenderer()->getFeatures().enablePreRotateSurfaces.enabled)
+    // continuing.  We do the same when VK_SUBOPTIMAL_KHR is returned to avoid visual degradation
+    // and handle device rotation / screen resize.
+    *presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR;
+    if (!*presentOutOfDate)
     {
-        // Also check for VK_SUBOPTIMAL_KHR.
-        *presentOutOfDate = ((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR));
-        if (!*presentOutOfDate)
-        {
-            ANGLE_VK_TRY(context, result);
-        }
-    }
-    else
-    {
-        // We aren't quite ready for that so just ignore for now.
-        *presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
-        if (!*presentOutOfDate && result != VK_SUBOPTIMAL_KHR)
-        {
-            ANGLE_VK_TRY(context, result);
-        }
+        ANGLE_VK_TRY(context, result);
     }
     return angle::Result::Continue;
 }
@@ -1915,7 +1899,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // Set FrameNumber for the presented image.
     mSwapchainImages[mCurrentSwapchainImageIndex].mFrameNumber = mFrameCount++;
 
-    ANGLE_TRY(computePresentOutOfDate(contextVk, result, presentOutOfDate));
+    ANGLE_TRY(computePresentOutOfDate(result, presentOutOfDate));
 
     contextVk->resetPerFramePerfCounters();
 
@@ -1996,7 +1980,7 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
         // Now that we have the result from the last present need to determine if it's out of date
         // or not.
-        ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
+        ANGLE_TRY(computePresentOutOfDate(result, &presentOutOfDate));
     }
 
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
