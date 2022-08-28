@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67c861d3_46c626d1",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-28T03:28:34Z",
+      "side": 1,
+      "message": "Please remove this sort of specific check. end2end tests are not supposed to check for ANGLE internals. If the spec says \"blah blah should generate GL_INVALID_OPERATION\", it\u0027s enough to just check `EXPECT_GL_ERROR(GL_INVALID_OPERATION)`.\n\nThen you can remove the dependency to `angle_root:libANGLE_headers`",
+      "revId": "e1a0ce50a8be2e1a24d784b8755c24f3edb15980",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
