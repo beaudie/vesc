@@ -34,6 +34,24 @@
       "parentUuid": "2e5b4acb_e92ba295",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b96bbc0_8d631bf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-28T13:44:26Z",
+      "side": 1,
+      "message": "forgot to earlier but here is the code that actually updates image state based on colorspace -\u003e https://cs.android.com/android/platform/superproject/+/master:external/angle/src/libANGLE/Image.cpp;l\u003d505",
+      "parentUuid": "3f1e58aa_95427922",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
