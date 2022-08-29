@@ -34,6 +34,24 @@
       "parentUuid": "ce6bc569_a3bf13b4",
       "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c26e53b4_0fa9021c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-08-29T14:52:03Z",
+      "side": 1,
+      "message": "\u003e I believe it won\u0027t fix the delete issue for all the existing traces without a re-trace\nCould you elaborate on this? I am missing why this requires a re-trace.",
+      "parentUuid": "7cc41b94_efc44868",
+      "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
