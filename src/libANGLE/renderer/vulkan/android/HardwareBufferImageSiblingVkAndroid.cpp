@@ -242,9 +242,6 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     // force to 1.
     mSize.depth = mSize.depth > 256 ? 1 : mSize.depth;
 
-    GLenum internalFormat = angle::android::NativePixelFormatToGLInternalFormat(pixelFormat);
-    mFormat               = gl::Format(internalFormat);
-
     struct AHardwareBuffer *hardwareBuffer =
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
 
@@ -266,10 +263,19 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     externalFormat.sType                   = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
     externalFormat.externalFormat          = 0;
 
-    const vk::Format &vkFormat         = renderer->getFormat(internalFormat);
+    // Instead of guessing the corresponding GL format via NativePixelFormatToGLInternalFormat,
+    // use bufferFormatProperties.format directly.
+    const vk::Format &vkFormat =
+        renderer->getFormat(vk::GetFormatIDFromVkFormat(bufferFormatProperties.format));
     const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
     const angle::Format &imageFormat   = vkFormat.getActualRenderableImageFormat();
     bool isDepthOrStencilFormat        = imageFormat.hasDepthOrStencilBits();
+    mFormat                            = gl::Format(vkFormat.getIntendedGLFormat());
+    bool isExternal                    = bufferFormatProperties.format == VK_FORMAT_UNDEFINED;
+    bool externalRenderTargetSupported = false;  // TODO: VK_EXT_ycbcr_attachment Extension query
+    bool externalTexturingSupported =
+        true;  // Can assume based on us getting here already. The supportsYUVSamplerConversion
+               // check below should serve as a backup otherwise.
 
     // Query AHB description and do the following -
     // 1. Derive VkImageTiling mode based on AHB usage flags
@@ -279,7 +285,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(ahbDescription);
     VkImageUsageFlags usage = AhbDescUsageToVkImageUsage(ahbDescription, isDepthOrStencilFormat);
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (isExternal)
     {
         ANGLE_VK_CHECK(displayVk, bufferFormatProperties.externalFormat != 0, VK_ERROR_UNKNOWN);
         externalFormat.externalFormat = bufferFormatProperties.externalFormat;
@@ -287,7 +293,10 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         // VkImageCreateInfo struct: If the pNext chain includes a VkExternalFormatANDROID structure
         // whose externalFormat member is not 0, usage must not include any usages except
         // VK_IMAGE_USAGE_SAMPLED_BIT
-        usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+        if (!externalRenderTargetSupported)
+        {
+            usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+        }
 
         // If the pNext chain includes a VkExternalFormatANDROID structure whose externalFormat
         // member is not 0, tiling must be VK_IMAGE_TILING_OPTIMAL
@@ -320,8 +329,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     mImage->setTilingMode(imageTilingMode);
     VkImageCreateFlags imageCreateFlags = AhbDescUsageToVkImageCreateFlags(ahbDescription);
 
-    const vk::Format &format =
-        bufferFormatProperties.format == VK_FORMAT_UNDEFINED ? externalVkFormat : vkFormat;
+    const vk::Format &format          = isExternal ? externalVkFormat : vkFormat;
     const gl::TextureType textureType = AhbDescUsageToTextureType(ahbDescription, layerCount);
 
     VkImageFormatListCreateInfoKHR imageFormatListInfoStorage;
@@ -356,7 +364,7 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT |
         (hasProtectedContent() ? VK_MEMORY_PROPERTY_PROTECTED_BIT : 0);
 
-    if (bufferFormatProperties.format == VK_FORMAT_UNDEFINED)
+    if (isExternal)
     {
         // Note from Vulkan spec: Since GL_OES_EGL_image_external does not require the same sampling
         // and conversion calculations as Vulkan does, achieving identical results between APIs may
@@ -372,6 +380,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             bufferFormatProperties.suggestedXChromaOffset,
             bufferFormatProperties.suggestedYChromaOffset, vk::kDefaultYCbCrChromaFilter,
             bufferFormatProperties.samplerYcbcrConversionComponents, angle::FormatID::NONE);
+        // This may not actually mean the format is YUV. But the rest of ANGLE makes this
+        // assumption and needs this member variable.
         mYUV = true;
     }
 
@@ -379,17 +389,29 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                                          externalMemoryRequirements, 1, &dedicatedAllocInfoPtr,
                                          VK_QUEUE_FAMILY_FOREIGN_EXT, flags));
 
-    constexpr uint32_t kColorRenderableRequiredBits        = VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
-    constexpr uint32_t kDepthStencilRenderableRequiredBits = VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
-    mRenderable = renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
-                                                      kColorRenderableRequiredBits) ||
-                  renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
-                                                      kDepthStencilRenderableRequiredBits);
-
-    constexpr uint32_t kTextureableRequiredBits =
-        VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
-    mTextureable = renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
-                                                       kTextureableRequiredBits);
+    if (isExternal)
+    {
+        // External format means that we are working with VK_FORMAT_UNDEFINED,
+        // so hasImageFormatFeatureBits will assert. Set these based on
+        // presence of extensions or assumption.
+        mRenderable  = externalRenderTargetSupported;
+        mTextureable = externalTexturingSupported;
+    }
+    else
+    {
+        constexpr uint32_t kColorRenderableRequiredBits = VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+        constexpr uint32_t kDepthStencilRenderableRequiredBits =
+            VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+        mRenderable =
+            renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
+                                                kColorRenderableRequiredBits) ||
+            renderer->hasImageFormatFeatureBits(vkFormat.getActualRenderableImageFormatID(),
+                                                kDepthStencilRenderableRequiredBits);
+        constexpr uint32_t kTextureableRequiredBits =
+            VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+        mTextureable = renderer->hasImageFormatFeatureBits(
+            vkFormat.getActualRenderableImageFormatID(), kTextureableRequiredBits);
+    }
 
     return angle::Result::Continue;
 }
