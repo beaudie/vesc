@@ -16,6 +16,24 @@
       "message": "So the issue with this patch is I believe it won\u0027t fix the delete issue for all the existing traces without a re-trace. How about designing a solution that doesn\u0027t need a full re-trace to get the fix?\n\nHere\u0027s one way:\n\nIf the decompress callback is non-nullptr, do not delete it in the fixture (mirroring do-not-allocate-it). Instead keep the pointer in the replay harness and delete it there on a subsequent call to decompress (mirroring existing behaviour, but in the same module).\n\nWDYT?",
       "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cc41b94_efc44868",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-29T14:50:19Z",
+      "side": 1,
+      "message": "Also this design avoids the need for a new callback and API.",
+      "parentUuid": "ce6bc569_a3bf13b4",
+      "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
