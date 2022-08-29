@@ -88,6 +88,23 @@
       "parentUuid": "bc638675_c8b577f3",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2e216d2_1d8e56d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-29T18:54:32Z",
+      "side": 1,
+      "message": "Restore this disablement CL since the conversion part was regressed even further out of what can be bisected (older angle doesn\u0027t build even after gclient sync and some manual fix).",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
