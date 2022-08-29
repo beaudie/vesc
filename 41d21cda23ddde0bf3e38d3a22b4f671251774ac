@@ -176,6 +176,24 @@
       "parentUuid": "0dc3da79_ba882874",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c72f5b_036318e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-29T23:17:01Z",
+      "side": 1,
+      "message": "\u003e I think the proper fix should be revise the format check to ignore sRGB bit difference. Then figure out why linear sampler is been used instead of sRGB?\n\nI\u0027d prefer that if you guys have bandwidth in the short term ; ) and Jason\u0027s end2end test for this is well written: https://chromium-review.googlesource.com/c/angle/angle/+/3276713\n\nIf bandwidth doesnot permit, let\u0027s better disable it for now. I don\u0027t think other system integrators are relying on the broken behavior since the VR needs here is also around AHB interop. If system integrators have downstream patches to fix it, then it\u0027s up to them to enable it on the downstream side.",
+      "parentUuid": "81ca04f7_8419087f",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
