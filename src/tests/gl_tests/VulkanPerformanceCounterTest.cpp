@@ -6901,7 +6901,23 @@ TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
 
     glDrawArrays(GL_POINTS, 0, 6);
 
+    const int w = getWindowWidth();
+    const int h = getWindowHeight();
+
     // Break the render pass
+    {
+        std::vector<GLColor> actualColors(w * h);
+        glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, actualColors.data());
+        printf("Size: %d %d\n", w, h);
+        for (int j = 0; j < h; j++)
+        {
+            for (int i = 0; i < w; i++)
+            {
+                printf("%02x ", actualColors[j * w + i].R);
+            }
+            printf("\n");
+        }
+    }
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 
     // End transform feedback after the render pass is closed
@@ -6923,9 +6939,6 @@ TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(drawRed);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    const int w = getWindowWidth();
-    const int h = getWindowHeight();
 
     EXPECT_PIXEL_RECT_EQ(0, 0, w, h / 4, GLColor::black);
     EXPECT_PIXEL_RECT_EQ(0, 3 * h / 4, w, h / 4, GLColor::black);
