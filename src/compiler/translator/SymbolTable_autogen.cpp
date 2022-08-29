@@ -8120,7 +8120,7 @@ constexpr const TFunction texture2D_00I10B(
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2D,
-    false);
+    true);
 constexpr const TFunction texture2DProj_00I20B(
     BuiltInId::texture2DProj_Sampler2D1_Float3,
     BuiltInName::texture2DProj,
@@ -8129,7 +8129,7 @@ constexpr const TFunction texture2DProj_00I20B(
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2DProj,
-    false);
+    true);
 constexpr const TFunction texture2DProj_00I30B(
     BuiltInId::texture2DProj_Sampler2D1_Float4,
     BuiltInName::texture2DProj,
@@ -8138,7 +8138,7 @@ constexpr const TFunction texture2DProj_00I30B(
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2DProj,
-    false);
+    true);
 constexpr const TFunction textureCube_00K20B(
     BuiltInId::textureCube_SamplerCube1_Float3,
     BuiltInName::textureCube,
@@ -8147,7 +8147,7 @@ constexpr const TFunction textureCube_00K20B(
     2,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTextureCube,
-    false);
+    true);
 constexpr const TFunction texture1D_00g00B(
     BuiltInId::texture1D_Sampler1D1_Float1,
     BuiltInName::texture1D,
@@ -8357,7 +8357,7 @@ constexpr const TFunction texture2D_00I10B00B(
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2DBias,
-    false);
+    true);
 constexpr const TFunction texture2DProj_00I20B00B(
     BuiltInId::texture2DProj_Sampler2D1_Float3_Float1,
     BuiltInName::texture2DProj,
@@ -8366,7 +8366,7 @@ constexpr const TFunction texture2DProj_00I20B00B(
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2DProjBias,
-    false);
+    true);
 constexpr const TFunction texture2DProj_00I30B00B(
     BuiltInId::texture2DProj_Sampler2D1_Float4_Float1,
     BuiltInName::texture2DProj,
@@ -8375,7 +8375,7 @@ constexpr const TFunction texture2DProj_00I30B00B(
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTexture2DProjBias,
-    false);
+    true);
 constexpr const TFunction textureCube_00K20B00B(
     BuiltInId::textureCube_SamplerCube1_Float3_Float1,
     BuiltInName::textureCube,
@@ -8384,7 +8384,7 @@ constexpr const TFunction textureCube_00K20B00B(
     3,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpTextureCubeBias,
-    false);
+    true);
 constexpr const TFunction texture3D_00J20B00B(
     BuiltInId::texture3D_Sampler3D1_Float3_Float1,
     BuiltInName::texture3D,
@@ -26546,7 +26546,7 @@ constexpr const TFunction pixelLocalLoadANGLE_01g(
     1,
     StaticType::Get<EbtFloat, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpPixelLocalLoadANGLE,
-    false);
+    true);
 constexpr const TFunction pixelLocalLoadANGLE_01h(
     BuiltInId::pixelLocalLoadANGLE_IPixelLocalANGLE1,
     BuiltInName::pixelLocalLoadANGLE,
@@ -26555,7 +26555,7 @@ constexpr const TFunction pixelLocalLoadANGLE_01h(
     1,
     StaticType::Get<EbtInt, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpPixelLocalLoadANGLE,
-    false);
+    true);
 constexpr const TFunction pixelLocalLoadANGLE_01i(
     BuiltInId::pixelLocalLoadANGLE_UPixelLocalANGLE1,
     BuiltInName::pixelLocalLoadANGLE,
@@ -26564,7 +26564,7 @@ constexpr const TFunction pixelLocalLoadANGLE_01i(
     1,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpPixelLocalLoadANGLE,
-    false);
+    true);
 constexpr const TFunction pixelLocalStoreANGLE_01g30B(
     BuiltInId::pixelLocalStoreANGLE_PixelLocalANGLE1_Float4,
     BuiltInName::pixelLocalStoreANGLE,
