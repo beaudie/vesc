@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc45a645_0e0c7d6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-08-29T18:05:59Z",
+      "side": 1,
+      "message": "Updated to remove the message checking in the test.",
+      "revId": "90929d7b9bd7bf29b0f6e2586cf61745113cb3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
