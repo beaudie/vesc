@@ -140,6 +140,24 @@
       "parentUuid": "d9fe9ff6_8a87f782",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dc3da79_ba882874",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-29T22:49:24Z",
+      "side": 1,
+      "message": "This is not a required extension except on VR devices. Not even hwui makes it mandatory yet. Not on popular titles either. We\u0027ll find out if there\u0027re app compat issues.\n\n\u003e What is the expected real fix for this issue? Are we expecting a vk spec revision?\n\nNo, angle regressed it. Nothing needs to be done at Vulkan spec level. The mutable bit is set, and the list of mutable view formats are correct for the AHB backed external image. As long as the the correct sRGB data gets transfered to the image, and then sampled with the image view created with the sRGB format, the rendered result will be correct.\n\nFrom Mohan, that works initially, but later regressed.\n\n\u003e My reading of the bug is that sRGB is really a view parameter, it does not affect actual image storage (for most of GUPs except earlier intel GPU)?\n\nYes. The external image sibiling Android part looks correct.\n\n\u003e If the data upload is the sole issue here, the fix could be just we drop SRGB bit from format when check format compatibility for texture upload. (i.e., allow data copy of RGB to sRGB and vice verse, basically treat them as if they are the same)\n\nCould have other issue since reverting your CL mentioned in the bug would end up sampling the sRGB texture data as linear data (I suspect the false image view gets created or picked here, but I haven\u0027t gotten time to verify yet.).",
+      "parentUuid": "d9fe9ff6_8a87f782",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
