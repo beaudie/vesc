@@ -2016,30 +2016,36 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
 
     // No-op redundant changes to prevent closing the RenderPass.
-    if (mCurrentFramebufferDesc == priorFramebufferDesc)
+    if (mCurrentFramebufferDesc != priorFramebufferDesc)
     {
-        return angle::Result::Continue;
+        if (command != gl::Command::Blit)
+        {
+            // Don't end the render pass when handling a blit to resolve, since we may be able to
+            // optimize that path which requires modifying the current render pass.
+            // We're deferring the resolve check to FramebufferVk::blit(), since if the read buffer
+            // is multisampled-render-to-texture, then srcFramebuffer->getSamples(context) gives >
+            // 1, but there's no resolve happening as the read buffer's single sampled image will be
+            // used as blit src. FramebufferVk::blit() will handle those details for us.
+            ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass(
+                RenderPassClosureReason::FramebufferChange));
+        }
+
+        updateRenderPassDesc(contextVk);
+
+        // Deactivate Framebuffer
+        mCurrentFramebuffer.release();
+
+        // Notify the ContextVk to update the pipeline desc.
+        ANGLE_TRY(contextVk->onFramebufferChange(this, command));
     }
 
-    if (command != gl::Command::Blit)
+    // Don't allow queries to save deferred clears, to ensure deferred clears get flushed.
+    if (command == gl::Command::Query && deferClears)
     {
-        // Don't end the render pass when handling a blit to resolve, since we may be able to
-        // optimize that path which requires modifying the current render pass.
-        // We're deferring the resolve check to FramebufferVk::blit(), since if the read buffer is
-        // multisampled-render-to-texture, then srcFramebuffer->getSamples(context) gives > 1, but
-        // there's no resolve happening as the read buffer's single sampled image will be used as
-        // blit src. FramebufferVk::blit() will handle those details for us.
-        ANGLE_TRY(
-            contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferChange));
+        ANGLE_TRY(flushDeferredClears(contextVk));
     }
 
-    updateRenderPassDesc(contextVk);
-
-    // Deactivate Framebuffer
-    mCurrentFramebuffer.release();
-
-    // Notify the ContextVk to update the pipeline desc.
-    return contextVk->onFramebufferChange(this, command);
+    return angle::Result::Continue;
 }
 
 void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
@@ -2449,7 +2455,7 @@ void FramebufferVk::clearWithCommand(ContextVk *contextVk, const gl::Rectangle &
             {
                 // Skip this attachment, so we can use a renderpass loadOp to clear it instead.
                 // Note that if loadOp=Clear was already used for this color attachment, it will be
-                // overriden by the new clear, which is valid because the attachment wasn't used in
+                // overridden by the new clear, which is valid because the attachment wasn't used in
                 // between.
                 ++colorIndexVk;
                 continue;

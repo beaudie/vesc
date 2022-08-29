@@ -40,6 +40,7 @@ enum class Command
     Draw,
     GenerateMipmap,
     Invalidate,
+    Query,
     ReadPixels,
     TexImage,
     Other
