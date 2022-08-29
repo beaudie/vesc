@@ -122,6 +122,24 @@
       "message": "With the extension disabled, will it cause real apps to fail to run or just cts (no real app depend on the extension yet)?\n\n\nWhat is the expected real fix for this issue? Are we expecting a vk spec revision? ",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e147292d_f08f390f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-29T22:47:14Z",
+      "side": 1,
+      "message": "My reading of the bug is that sRGB is really a view parameter, it does not affect actual image storage (for most of GUPs except earlier intel GPU)?\n\nIf the data upload is the sole issue here, the fix could be just we drop SRGB bit from format when check format compatibility for texture upload. (i.e., allow data copy of RGB to sRGB and vice verse, basically treat them as if they are the same)",
+      "parentUuid": "d9fe9ff6_8a87f782",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
