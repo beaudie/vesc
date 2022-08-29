@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "433bfd83_8c2707ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-29T15:10:55Z",
+      "side": 1,
+      "message": "Can you preface this with \"Capture/Replay:\"?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 55
+      },
+      "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ce6bc569_a3bf13b4",
@@ -86,6 +109,23 @@
       "side": 1,
       "message": "Ok thanks! I thought I was missing something.\n\n\u003e Instead keep the pointer in the replay harness and delete it there on a subsequent call to decompress (mirroring existing behaviour, but in the same module).\nDoesn\u0027t this make the other side kind of weird? DecompressBinaryData is currently a pure function so all state is managed in the fixture. With your suggestion, DecompressBinaryData is going to have to store a singleton global state and will invalidate previously allocated pointer which is definitely not something I would expect from a function with this name.\n\nOne more alternative would be extracting GetGzipUncompressedSize into a separate api like GetDecompressBinaryDataSize() and always using new[] in the module, relying on FinishReplay to clean up. Gets rid of the delete callback if that\u0027s something you dislike about this CL, although is an api change of sorts (but why is changing this inter-module api an issue?)",
       "parentUuid": "81fc7493_3410eed0",
+      "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4d5b789_f1cd8a4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-08-29T15:10:55Z",
+      "side": 1,
+      "message": "Nice fix Roman!  Let\u0027s get this in, can follow up if there are further refinements to be made.",
       "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
