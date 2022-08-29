@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c07b06e2_2b79b63b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-08-29T14:25:47Z",
+      "side": 1,
+      "message": "Note",
+      "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73a2d7ce_fabef716",
@@ -48,6 +65,23 @@
       "writtenOn": "2022-08-29T14:11:42Z",
       "side": 1,
       "message": "Note: This could be changed to be a switch and use GBM_FORMAT_* defines from gbm.h - but gbm.h will need to be included and this wrapped in a #ifdef ANGLE_USES_GBM",
+      "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22977357_ef881492",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-08-29T14:25:47Z",
+      "side": 1,
+      "message": "Note: ANGLE_USES_GBM is probably not being set as needed.\nCurrently located: angle/src/libANGLE/renderer/gl/BUILD.gn\nAntonio is going to create a patch to fix this.",
       "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
