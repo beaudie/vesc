@@ -460,6 +460,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                bool *imageResolved);
 
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
+    FramebufferVk *getDrawFramebuffer() const;
 
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
@@ -654,7 +655,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void restoreFinishedRenderPass(vk::Framebuffer *framebuffer);
 
     uint32_t getCurrentSubpassIndex() const;
-    uint32_t getCurrentViewCount() const;
 
     egl::ContextPriority getContextPriority() const override { return mContextPriority; }
     angle::Result startRenderPass(gl::Rectangle renderArea,
@@ -1222,7 +1222,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void initIndexTypeMap();
 
     VertexArrayVk *getVertexArray() const;
-    FramebufferVk *getDrawFramebuffer() const;
     ProgramVk *getProgram() const;
     ProgramPipelineVk *getProgramPipeline() const;
 
@@ -1295,6 +1294,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateGraphicsPipelineDescWithSpecConstUsageBits(SpecConstUsageBits usageBits);
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
+    VkDependencyFlags getLocalDependencyFlags() const;
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
