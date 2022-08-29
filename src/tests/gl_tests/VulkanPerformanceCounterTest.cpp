@@ -6863,6 +6863,15 @@ TEST_P(VulkanPerformanceCounterTest, FenceThenSwapBuffers)
     compareDepthOpCounters(getPerfCounters(), expected);
 }
 
+char cc(const GLColor c)
+{
+    if (c == GLColor::red)
+        return 'R';
+    if (c == GLColor::black)
+        return ' ';
+    return '?';
+}
+
 // Verify that ending transform feedback after a render pass is closed, doesn't cause the following
 // render pass to close when the transform feedback buffer is used.
 TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
@@ -6901,7 +6910,29 @@ TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
 
     glDrawArrays(GL_POINTS, 0, 6);
 
+    const int w = getWindowWidth();
+    const int h = getWindowHeight();
+
     // Break the render pass
+    {
+        std::stringstream ss;
+        std::vector<GLColor> actualColors(w * h);
+        glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, actualColors.data());
+        ss << "Size: " << w << ", " << h << "\n";
+        for (int j = 0; j < h; j++)
+        {
+            for (int i = 0; i < w; i++)
+            {
+                ss << cc(actualColors[j * w + i]);
+            }
+            ss << "\n";
+        }
+        EXPECT_STREQ(ss.str().c_str(),
+                     "Size: 16, 16\n                \n                \n                \n         "
+                     "       \n   R       R    \n                \n                \n              "
+                     "  \n                \n                \n                \n                \n "
+                     "  R       R    \n                \n                \n                \n");
+    }
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 
     // End transform feedback after the render pass is closed
@@ -6923,9 +6954,6 @@ TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(drawRed);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    const int w = getWindowWidth();
-    const int h = getWindowHeight();
 
     EXPECT_PIXEL_RECT_EQ(0, 0, w, h / 4, GLColor::black);
     EXPECT_PIXEL_RECT_EQ(0, 3 * h / 4, w, h / 4, GLColor::black);
