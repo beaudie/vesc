@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f746cd93_fce406e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-29T14:38:11Z",
+      "side": 1,
+      "message": "Couple of general comments:\n1. I\u0027d prefer if there was a new class for the serialized data, so that serialization / deserialization code was in one file and not in 2 totally unreladed files like it is now.\n2. Are the size of the produced file and the speed of reading / writing to it important? If not, I\u0027d prefer some generic approach to serialization, like JSON, instead of custom code. One problem that you code has is in\n    memcpy(data, \u0026options, offsetof(ShCompileOptions, metal));\n    memcpy(\u0026options, headerData, offsetof(ShCompileOptions, metal));\nI\u0027m not sure it\u0027s guaranteed that this code will always read back what was written, because of padding, alignment, big/little endian, which can change from one build on ANGLE to another.",
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b8d6cf9_f8196506",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-29T14:38:11Z",
+      "side": 1,
+      "message": "Is this a leftover from testing?\nDoesn\u0027t seem like it\u0027s intentional, otherwise I don\u0027t understand all the \"#if defined\" below.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 51
+      },
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bec60a3_cc508715",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-29T14:38:11Z",
+      "side": 1,
+      "message": "It looks to me like this can also be made into static_assert, since you know how many bytes you are going to write in advance.\nAlso, makes sense to check this before actually writing the bytes beyond the length of \"contents\".",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 74
+      },
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d71fa4_28ad1946",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-29T14:38:11Z",
+      "side": 1,
+      "message": "ANGLE_FUZZER_CORPUS_OUTPUT_DIR seems to be a better name for this",
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
