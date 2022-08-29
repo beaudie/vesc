@@ -16,6 +16,138 @@
       "message": "Hi Geoff, PTAL. Thanks",
       "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5691772a_e4088e18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "LGTM. Adding Jamie too since it\u0027s an architectural/performance change.",
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f5344de_8354393a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9430,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 9430,
+        "startChar": 3,
+        "endLine": 9430,
+        "endChar": 54
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b993760c_f95708c8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9457,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "I have a feeling this is unnecessary now (including the same code in `Context::unsetDefaultFramebuffer`). It can be done in the initialize step only.",
+      "range": {
+        "startLine": 9450,
+        "startChar": 0,
+        "endLine": 9457,
+        "endChar": 5
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e83d93a4_ae1452d3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9480,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "(ref) (think this can be removed.)",
+      "range": {
+        "startLine": 9469,
+        "startChar": 0,
+        "endLine": 9480,
+        "endChar": 9
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce9dbaaf_c81da6cd",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "Ideally this will be a pointer type that is allocated in `Context::initializeDefaultResources` and deleted in `Context::onDestroy` so that the lifetime matches the other resources like default textures.",
+      "range": {
+        "startLine": 862,
+        "startChar": 4,
+        "endLine": 862,
+        "endChar": 15
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b589bba1_41b7d9b5",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-29T20:21:56Z",
+      "side": 1,
+      "message": "nit: It\u0027s not a big deal but if you end up changing these methods again, I would suggest:\n\n - return an angle::result since it\u0027s an internal call.\n - pass the gl::Framebuffer object. We have helpers like: `GetImplAs\u003cFramebufferVk\u003e(framebuffer)`",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 79
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
