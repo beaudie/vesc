@@ -11,6 +11,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 
@@ -125,8 +126,10 @@ angle::Result QueryVk::allocateQuery(ContextVk *contextVk)
     if (IsRenderPassQuery(contextVk, mType))
     {
         ASSERT(contextVk->hasStartedRenderPass());
-        queryCount = std::max(contextVk->getCurrentViewCount(), 1u);
+        queryCount = contextVk->getState().getDrawFramebuffer()->getNumViews();
     }
+
+    ASSERT(queryCount >= 1);
 
     return contextVk->getQueryPool(mType)->allocateQuery(contextVk, &mQueryHelper.get(),
                                                          queryCount);
@@ -258,6 +261,13 @@ angle::Result QueryVk::setupBegin(ContextVk *contextVk)
         // If this is a transform feedback query, see if the other transform feedback query is
         // already active.
         QueryVk *shareQuery = GetShareQuery(contextVk, mType);
+
+        // Ensure we don't keep deferred clears during beginQuery.
+        FramebufferVk *drawFramebufferVk = contextVk->getDrawFramebuffer();
+        if (!contextVk->hasStartedRenderPass() && drawFramebufferVk->hasDeferredClears())
+        {
+            ANGLE_TRY(drawFramebufferVk->flushDeferredClears(contextVk));
+        }
 
         // If so, make the other query stash its results and continue with a new query helper.
         if (contextVk->hasStartedRenderPass())

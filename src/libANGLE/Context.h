@@ -824,6 +824,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     State::DirtyObjects mCopyImageDirtyObjects;
     State::DirtyBits mReadInvalidateDirtyBits;
     State::DirtyBits mDrawInvalidateDirtyBits;
+    State::DirtyObjects mBeginQueryDirtyObjects;
+    State::DirtyBits mBeginQueryDirtyBits;
 
     // Binding to container objects that use dependent state updates.
     angle::ObserverBinding mVertexArrayObserverBinding;

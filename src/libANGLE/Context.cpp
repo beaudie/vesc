@@ -751,6 +751,9 @@ void Context::initializeDefaultResources()
     mReadInvalidateDirtyBits.set(State::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
     mDrawInvalidateDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
+    mBeginQueryDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+    mBeginQueryDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+
     mOverlay.init();
 }
 
@@ -1443,6 +1446,9 @@ void Context::beginQuery(QueryType target, QueryID query)
 {
     Query *queryObject = getOrCreateQuery(query, target);
     ASSERT(queryObject);
+
+    // Sync framebuffer (needed for multiview queries in some backends i.e. Vulkan)
+    ANGLE_CONTEXT_TRY(syncState(mBeginQueryDirtyBits, mBeginQueryDirtyObjects, Command::Other));
 
     // begin query
     ANGLE_CONTEXT_TRY(queryObject->begin(this));

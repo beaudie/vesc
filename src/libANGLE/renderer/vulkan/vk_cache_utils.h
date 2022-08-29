@@ -1499,6 +1499,7 @@ class FramebufferDesc
     size_t hash() const;
 
     bool operator==(const FramebufferDesc &other) const;
+    bool operator!=(const FramebufferDesc &other) const { return !(*this == other); }
 
     uint32_t attachmentCount() const;
 

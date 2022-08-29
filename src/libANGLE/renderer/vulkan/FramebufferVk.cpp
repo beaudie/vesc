@@ -2433,7 +2433,7 @@ void FramebufferVk::clearWithCommand(ContextVk *contextVk, const gl::Rectangle &
             {
                 // Skip this attachment, so we can use a renderpass loadOp to clear it instead.
                 // Note that if loadOp=Clear was already used for this color attachment, it will be
-                // overriden by the new clear, which is valid because the attachment wasn't used in
+                // overridden by the new clear, which is valid because the attachment wasn't used in
                 // between.
                 ++colorIndexVk;
                 continue;
