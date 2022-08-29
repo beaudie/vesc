@@ -16,6 +16,40 @@
       "message": "Required for extension EGL_KHR_platform_gbm",
       "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8220245_5b0e2ce6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-08-29T14:11:42Z",
+      "side": 1,
+      "message": "Comment/Alternative",
+      "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73a2d7ce_fabef716",
+        "filename": "src/common/linux/dma_buf_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-08-29T14:11:42Z",
+      "side": 1,
+      "message": "Note: This could be changed to be a switch and use GBM_FORMAT_* defines from gbm.h - but gbm.h will need to be included and this wrapped in a #ifdef ANGLE_USES_GBM",
+      "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
