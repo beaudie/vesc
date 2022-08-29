@@ -603,16 +603,6 @@ constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPas
      "Temporary render pass used for overlay draw closed"},
 }};
 
-VkDependencyFlags GetLocalDependencyFlags(ContextVk *contextVk)
-{
-    VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
-    if (contextVk->getCurrentViewCount() > 0)
-    {
-        dependencyFlags |= VK_DEPENDENCY_VIEW_LOCAL_BIT;
-    }
-    return dependencyFlags;
-}
-
 void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &graph)
 {
     std::ostream &out = std::cout;
@@ -2163,7 +2153,7 @@ angle::Result ContextVk::handleDirtyGraphicsFramebufferFetchBarrier(
 
     mRenderPassCommandBuffer->pipelineBarrier(
         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-        GetLocalDependencyFlags(this), 1, &memoryBarrier, 0, nullptr, 0, nullptr);
+        getLocalDependencyFlags(), 1, &memoryBarrier, 0, nullptr, 0, nullptr);
 
     return angle::Result::Continue;
 }
@@ -2178,7 +2168,7 @@ angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *di
 
     mRenderPassCommandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                               VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                              GetLocalDependencyFlags(this), 1, &memoryBarrier, 0,
+                                              getLocalDependencyFlags(), 1, &memoryBarrier, 0,
                                               nullptr, 0, nullptr);
 
     return angle::Result::Continue;
@@ -6801,10 +6791,17 @@ uint32_t ContextVk::getCurrentSubpassIndex() const
     return mGraphicsPipelineDesc->getSubpass();
 }
 
-uint32_t ContextVk::getCurrentViewCount() const
+VkDependencyFlags ContextVk::getLocalDependencyFlags() const
 {
-    FramebufferVk *drawFBO = vk::GetImpl(mState.getDrawFramebuffer());
-    return drawFBO->getRenderPassDesc().viewCount();
+    FramebufferVk *drawFBO    = vk::GetImpl(mState.getDrawFramebuffer());
+    uint32_t currentViewCount = drawFBO->getRenderPassDesc().viewCount();
+
+    VkDependencyFlags dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+    if (currentViewCount > 0)
+    {
+        dependencyFlags |= VK_DEPENDENCY_VIEW_LOCAL_BIT;
+    }
+    return dependencyFlags;
 }
 
 angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit,

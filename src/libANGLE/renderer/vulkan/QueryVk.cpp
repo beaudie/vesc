@@ -125,8 +125,10 @@ angle::Result QueryVk::allocateQuery(ContextVk *contextVk)
     if (IsRenderPassQuery(contextVk, mType))
     {
         ASSERT(contextVk->hasStartedRenderPass());
-        queryCount = std::max(contextVk->getCurrentViewCount(), 1u);
+        queryCount = contextVk->getState().getDrawFramebuffer()->getNumViews();
     }
+
+    ASSERT(queryCount >= 1);
 
     return contextVk->getQueryPool(mType)->allocateQuery(contextVk, &mQueryHelper.get(),
                                                          queryCount);
