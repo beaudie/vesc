@@ -52,6 +52,24 @@
       "parentUuid": "7cc41b94_efc44868",
       "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81fc7493_3410eed0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-29T14:55:28Z",
+      "side": 1,
+      "message": "My bad, I was confused and all the new methods are in the fixture, not the trace. \n\nSo the remaining issue is that it adds a new API and callback. Definitely not a deal breaker. I do think it\u0027s nicer the way I proposed - mirrors the prior code \u0026 requires fewer interface points.\n\nLGTM to get this unblocked",
+      "parentUuid": "c26e53b4_0fa9021c",
+      "revId": "ed1828509e6b2b8808b875ff5f10d5b5354ee796",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
