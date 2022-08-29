@@ -109,7 +109,6 @@ enum class Feature
     ExpandIntegerPowExpressions,
     ExplicitlyEnablePerSampleShading,
     ExposeNonConformantExtensionsAndVersions,
-    ExtraBufferLoggingAndChecking,
     FinishDoesNotCauseQueriesToBeAvailable,
     FlushAfterEndingTransformFeedback,
     FlushBeforeDeleteTextureIfCopiedTo,
