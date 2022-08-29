@@ -16,6 +16,23 @@
       "message": "Updated to remove the message checking in the test.",
       "revId": "90929d7b9bd7bf29b0f6e2586cf61745113cb3ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460c6cba_16727e23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-29T19:19:05Z",
+      "side": 1,
+      "message": "Ship it!",
+      "revId": "90929d7b9bd7bf29b0f6e2586cf61745113cb3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
