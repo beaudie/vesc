@@ -158,6 +158,24 @@
       "parentUuid": "d9fe9ff6_8a87f782",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81ca04f7_8419087f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-29T22:58:46Z",
+      "side": 1,
+      "message": "I though VR usage is one of the motivations for some of the CLs originated from @Mohan. Mohan can clarify if this is required for their customer or not.\n\nI think the proper fix should be revise the format check to ignore sRGB bit difference. Then figure out why linear sampler is been used instead of sRGB?",
+      "parentUuid": "0dc3da79_ba882874",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
