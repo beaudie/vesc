@@ -50,6 +50,24 @@
       "message": "Also +ynovikov@ - did the gpu.fyi tryjobs test this ANGLE CL properly? I\u0027m not 100% sure what the current status is of running Chromium trybots against ANGLE CLs.\n",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9338081f_acc194a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-08-30T18:34:46Z",
+      "side": 1,
+      "message": "No, gpu_fyi_try_* bots can\u0027t test ANGLE CLs.\nWe have these trybots instead https://luci-milo.appspot.com/ui/p/chromium/g/tryserver.chromium.angle/builders\nhttps://luci-milo.appspot.com/p/chromium/builders/try/mac-angle-chromium-try should give a good coverage for this. Although, it doesn\u0027t run on M1.",
+      "parentUuid": "b8d7b5f1_2c7cb7fd",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
