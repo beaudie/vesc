@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bdd40b4_0e736a2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-30T20:29:39Z",
+      "side": 1,
+      "message": "defer to geoff for sign off.",
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f5344de_8354393a",
@@ -117,6 +134,30 @@
       "writtenOn": "2022-08-29T20:21:56Z",
       "side": 1,
       "message": "Ideally this will be a pointer type that is allocated in `Context::initializeDefaultResources` and deleted in `Context::onDestroy` so that the lifetime matches the other resources like default textures.",
+      "range": {
+        "startLine": 862,
+        "startChar": 4,
+        "endLine": 862,
+        "endChar": 15
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c163f1_f4be2eec",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-08-30T20:29:39Z",
+      "side": 1,
+      "message": "What about making this live as the zero entry in the framebuffer map?",
+      "parentUuid": "ce9dbaaf_c81da6cd",
       "range": {
         "startLine": 862,
         "startChar": 4,
