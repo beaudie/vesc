@@ -194,6 +194,24 @@
       "parentUuid": "81ca04f7_8419087f",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a32b72ee_3f9832c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-08-30T13:00:03Z",
+      "side": 1,
+      "message": "we reverted https://chromium-review.googlesource.com/c/angle/angle/+/3141030 internally and that allows the test to pass, though we are a bit behind upstream so subsequent changes may have broken things again. It is a required extension for VR and IIRC, some protected video playback usecases",
+      "parentUuid": "74c72f5b_036318e0",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
