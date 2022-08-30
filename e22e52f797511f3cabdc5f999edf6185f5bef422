@@ -16,6 +16,24 @@
       "message": "At least one bug is that when `mBackbuffer` (i.e. it\u0027s the framebuffer of the surface), then we\u0027re not using imageless. How about calling this `useImagelessFramebuffer` which gets initialized as `supportsImagelessFramebuffer.enabled \u0026\u0026 mBackbuffer \u003d\u003d nullptr`?",
       "revId": "e22e52f797511f3cabdc5f999edf6185f5bef422",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9fac8d0_94d2f19c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-08-30T23:30:54Z",
+      "side": 1,
+      "message": "Do we use the cache when `mBackbuffer` is valid? The asserts in the cache functions check if the imageless extension is not used.",
+      "parentUuid": "58028e4e_e8974d5f",
+      "revId": "e22e52f797511f3cabdc5f999edf6185f5bef422",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
