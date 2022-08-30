@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86f9941a_d6755efa",
+        "filename": "src/libANGLE/renderer/driver_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T19:25:53Z",
+      "side": 1,
+      "message": "nit: `angle::BitMask(10)`",
+      "range": {
+        "startLine": 316,
+        "startChar": 43,
+        "endLine": 316,
+        "endChar": 56
+      },
+      "revId": "8c5698aa09b180f626fe9c1c2e44fdf7ab2cb8cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
