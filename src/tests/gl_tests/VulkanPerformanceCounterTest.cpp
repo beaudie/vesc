@@ -290,80 +290,70 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
     //
     // For the sake of validation, it's unknown if NONE is turned into LOAD/STORE or DONT_CARE.  So
     // validation allows variations there.
-    void compareOpLoadAndNone(uint64_t expectedLoads,
-                              uint64_t actualLoads,
-                              uint64_t expectedNones,
-                              uint64_t actualNones)
-    {
-        if (mLoadOpNoneSupport == ANGLEFeature::Supported)
-        {
-            EXPECT_EQ(expectedLoads, actualLoads);
-            EXPECT_EQ(expectedNones, actualNones);
-        }
-        else
-        {
-            EXPECT_EQ(actualNones, 0u);
-            EXPECT_LE(expectedLoads, actualLoads);
-            EXPECT_GE(expectedLoads + expectedNones, actualLoads);
-        }
+#define compareOpLoadAndNone(expectedLoads, actualLoads, expectedNones, actualNones) \
+    {                                                                                \
+        if (mLoadOpNoneSupport == ANGLEFeature::Supported)                           \
+        {                                                                            \
+            EXPECT_EQ(expectedLoads, actualLoads);                                   \
+            EXPECT_EQ(expectedNones, actualNones);                                   \
+        }                                                                            \
+        else                                                                         \
+        {                                                                            \
+            EXPECT_EQ(actualNones, 0u);                                              \
+            EXPECT_LE(expectedLoads, actualLoads);                                   \
+            EXPECT_GE(expectedLoads + expectedNones, actualLoads);                   \
+        }                                                                            \
     }
-    void compareOpStoreAndNone(uint64_t expectedStores,
-                               uint64_t actualStores,
-                               uint64_t expectedNones,
-                               uint64_t actualNones)
-    {
-        if (mStoreOpNoneSupport == ANGLEFeature::Supported &&
-            mLoadOpNoneSupport == ANGLEFeature::Supported)
-        {
-            EXPECT_EQ(expectedStores, actualStores);
-            EXPECT_EQ(expectedNones, actualNones);
-        }
-        else
-        {
-            if (mStoreOpNoneSupport != ANGLEFeature::Supported)
-            {
-                EXPECT_EQ(actualNones, 0u);
-            }
-            EXPECT_LE(expectedStores, actualStores);
-            EXPECT_GE(expectedStores + expectedNones, actualStores + actualNones);
-        }
+#define compareOpStoreAndNone(expectedStores, actualStores, expectedNones, actualNones) \
+    {                                                                                   \
+        if (mStoreOpNoneSupport == ANGLEFeature::Supported &&                           \
+            mLoadOpNoneSupport == ANGLEFeature::Supported)                              \
+        {                                                                               \
+            EXPECT_EQ(expectedStores, actualStores);                                    \
+            EXPECT_EQ(expectedNones, actualNones);                                      \
+        }                                                                               \
+        else                                                                            \
+        {                                                                               \
+            if (mStoreOpNoneSupport != ANGLEFeature::Supported)                         \
+            {                                                                           \
+                EXPECT_EQ(actualNones, 0u);                                             \
+            }                                                                           \
+            EXPECT_LE(expectedStores, actualStores);                                    \
+            EXPECT_GE(expectedStores + expectedNones, actualStores + actualNones);      \
+        }                                                                               \
     }
 
-    void compareDepthOpCounters(const angle::VulkanPerfCounters &counters,
-                                const angle::VulkanPerfCounters &expected)
-    {
-        EXPECT_EQ(expected.depthLoadOpClears, counters.depthLoadOpClears);
-        compareOpLoadAndNone(expected.depthLoadOpLoads, counters.depthLoadOpLoads,
-                             expected.depthLoadOpNones, counters.depthLoadOpNones);
-        compareOpStoreAndNone(expected.depthStoreOpStores, counters.depthStoreOpStores,
-                              expected.depthStoreOpNones, counters.depthStoreOpNones);
+#define compareDepthOpCounters(counters, expected)                                      \
+    {                                                                                   \
+        EXPECT_EQ(expected.depthLoadOpClears, counters.depthLoadOpClears);              \
+        compareOpLoadAndNone(expected.depthLoadOpLoads, counters.depthLoadOpLoads,      \
+                             expected.depthLoadOpNones, counters.depthLoadOpNones);     \
+        compareOpStoreAndNone(expected.depthStoreOpStores, counters.depthStoreOpStores, \
+                              expected.depthStoreOpNones, counters.depthStoreOpNones);  \
     }
 
-    void compareStencilOpCounters(const angle::VulkanPerfCounters &counters,
-                                  const angle::VulkanPerfCounters &expected)
-    {
-        EXPECT_EQ(expected.stencilLoadOpClears, counters.stencilLoadOpClears);
-        compareOpLoadAndNone(expected.stencilLoadOpLoads, counters.stencilLoadOpLoads,
-                             expected.stencilLoadOpNones, counters.stencilLoadOpNones);
-        compareOpStoreAndNone(expected.stencilStoreOpStores, counters.stencilStoreOpStores,
-                              expected.stencilStoreOpNones, counters.stencilStoreOpNones);
+#define compareStencilOpCounters(counters, expected)                                        \
+    {                                                                                       \
+        EXPECT_EQ(expected.stencilLoadOpClears, counters.stencilLoadOpClears);              \
+        compareOpLoadAndNone(expected.stencilLoadOpLoads, counters.stencilLoadOpLoads,      \
+                             expected.stencilLoadOpNones, counters.stencilLoadOpNones);     \
+        compareOpStoreAndNone(expected.stencilStoreOpStores, counters.stencilStoreOpStores, \
+                              expected.stencilStoreOpNones, counters.stencilStoreOpNones);  \
     }
 
-    void compareDepthStencilOpCounters(const angle::VulkanPerfCounters &counters,
-                                       const angle::VulkanPerfCounters &expected)
-    {
-        compareDepthOpCounters(counters, expected);
-        compareStencilOpCounters(counters, expected);
+#define compareDepthStencilOpCounters(counters, expected) \
+    {                                                     \
+        compareDepthOpCounters(counters, expected);       \
+        compareStencilOpCounters(counters, expected);     \
     }
 
-    void compareColorOpCounters(const angle::VulkanPerfCounters &counters,
-                                const angle::VulkanPerfCounters &expected)
-    {
-        EXPECT_EQ(expected.colorLoadOpClears, counters.colorLoadOpClears);
-        compareOpLoadAndNone(expected.colorLoadOpLoads, counters.colorLoadOpLoads,
-                             expected.colorLoadOpNones, counters.colorLoadOpNones);
-        compareOpStoreAndNone(expected.colorStoreOpStores, counters.colorStoreOpStores,
-                              expected.colorStoreOpNones, counters.colorStoreOpNones);
+#define compareColorOpCounters(counters, expected)                                      \
+    {                                                                                   \
+        EXPECT_EQ(expected.colorLoadOpClears, counters.colorLoadOpClears);              \
+        compareOpLoadAndNone(expected.colorLoadOpLoads, counters.colorLoadOpLoads,      \
+                             expected.colorLoadOpNones, counters.colorLoadOpNones);     \
+        compareOpStoreAndNone(expected.colorStoreOpStores, counters.colorStoreOpStores, \
+                              expected.colorStoreOpNones, counters.colorStoreOpNones);  \
     }
 
     void setAndIncrementDepthStencilLoadCountersForOpsTest(
@@ -376,11 +366,10 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
         expected->stencilLoadOpLoads = counters.stencilLoadOpLoads + incrementalStencilLoadOpLoads;
     }
 
-    void compareDepthStencilLoadOpCounters(const angle::VulkanPerfCounters &counters,
-                                           const angle::VulkanPerfCounters &expected)
-    {
-        EXPECT_EQ(expected.depthLoadOpLoads, counters.depthLoadOpLoads);
-        EXPECT_EQ(expected.stencilLoadOpLoads, counters.stencilLoadOpLoads);
+#define compareDepthStencilLoadOpCounters(counters, expected)                \
+    {                                                                        \
+        EXPECT_EQ(expected.depthLoadOpLoads, counters.depthLoadOpLoads);     \
+        EXPECT_EQ(expected.stencilLoadOpLoads, counters.stencilLoadOpLoads); \
     }
 
     void setExpectedCountersForUnresolveResolveTest(const angle::VulkanPerfCounters &counters,
