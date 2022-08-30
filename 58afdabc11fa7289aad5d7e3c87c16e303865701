@@ -33,6 +33,23 @@
       "message": "lgtm\n\nThe only reason I can think of why this wouldn\u0027t work is IOSurface interactions - if for some reason Chrome or WebKit are relying on the command buffer reaching the GPU before handing an IOSurface to Core Animation. I\u0027d hope that the tests would cover this, but it might show up as flickering and the tests might not catch regressions. Anyway, let\u0027s proceed with this and test thorougly with Canary.\n",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d7b5f1_2c7cb7fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-30T18:24:40Z",
+      "side": 1,
+      "message": "Also +ynovikov@ - did the gpu.fyi tryjobs test this ANGLE CL properly? I\u0027m not 100% sure what the current status is of running Chromium trybots against ANGLE CLs.\n",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
