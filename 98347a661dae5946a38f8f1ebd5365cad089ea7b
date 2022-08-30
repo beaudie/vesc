@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d27cb704_d0588364",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-30T18:33:14Z",
+      "side": 1,
+      "message": "nit: update the comment to include dsState.depthFunc \u003d\u003d GL_NEVER.",
+      "revId": "98347a661dae5946a38f8f1ebd5365cad089ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
