@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c0ac293_73e3ebaa",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-08-30T16:06:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3655fef8_c34c3e09",
+      "range": {
+        "startLine": 278,
+        "startChar": 49,
+        "endLine": 278,
+        "endChar": 97
+      },
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "949136fa_be2a1f18",
@@ -89,6 +113,24 @@
       "side": 1,
       "message": "|usage| will implicitly contain a bunch of bits besides sampling if the ahb was originally created for render target usage---the purpose of `usage \u003d VK_IMAGE_USAGE_SAMPLED_BIT` is actually to clear all other bits",
       "parentUuid": "949136fa_be2a1f18",
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1be04a_71297a24",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1175714
+      },
+      "writtenOn": "2022-08-30T16:06:09Z",
+      "side": 1,
+      "message": "Done (added comment)",
+      "parentUuid": "a33338d8_b9f89a05",
       "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
