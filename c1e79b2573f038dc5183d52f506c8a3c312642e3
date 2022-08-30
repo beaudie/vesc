@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ec1c2f_08cc2be3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aec2bdd6_3d2ac55f",
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2798473_c5fe84c1",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23898775_26298cc0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2798473_c5fe84c1",
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8bab725_ff5f2e65",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-08-30T07:07:18Z",
       "side": 1,
       "message": "Or `(ToUnderlying(access) \u0026 ResourceAccess::WriteOnly) !\u003d 0` following the above logic.",
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54bd4315_58704bc1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8bab725_ff5f2e65",
       "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4da7b11b_464bb765",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4a1b0db_a5fe1862",
+      "range": {
+        "startLine": 1231,
+        "startChar": 0,
+        "endLine": 1239,
+        "endChar": 9
+      },
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1fe67bda_aa68ea3f",
@@ -109,6 +187,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec6b28f_e879584b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3047,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "We will be using loadOP DontCare instead of None following Shabi\u0027s comment.",
+      "parentUuid": "1fe67bda_aa68ea3f",
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a3ca834_9c2d658a",
@@ -122,6 +218,24 @@
       "writtenOn": "2022-08-30T01:44:39Z",
       "side": 1,
       "message": "same as above: should the LoadNones counter for depth attachment be incremented by 1?",
+      "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b22e13ab_8db7fcb1",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3082,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:17:45Z",
+      "side": 1,
+      "message": "The loadOp here is DontCare instead of None.",
+      "parentUuid": "3a3ca834_9c2d658a",
       "revId": "c1e79b2573f038dc5183d52f506c8a3c312642e3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
