@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a79d0b8_67587e57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T20:45:18Z",
+      "side": 1,
+      "message": "Exactly. There is separate optimization CL. We also need to do similar optimizations for stencil.",
+      "parentUuid": "209d0249_dc8c210c",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e78c84a_6b6668bd",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-08-30T06:54:07Z",
       "side": 1,
       "message": "Could you please add a check around this to make sure that `store` is done for this render pass?",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afa0ab04_d1bedf1b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2917,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T20:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e78c84a_6b6668bd",
       "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4db844f0_bc3a27f0",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2936,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T20:45:18Z",
+      "side": 1,
+      "message": "That is the above test DepthFuncALWAYSWithDepthMaskDisabledShouldNotLoadStore is doing. This test is created mainly because one of shadowgun_legends renderpass doing exact this and we were previously doing loadOp_LOAD instead of LoadOp_CLEAR.",
+      "parentUuid": "ab8951c4_a017e323",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa279bd_d4171dbb",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 3
@@ -65,6 +119,30 @@
       "writtenOn": "2022-08-30T06:54:07Z",
       "side": 1,
       "message": "0",
+      "range": {
+        "startLine": 2957,
+        "startChar": 84,
+        "endLine": 2957,
+        "endChar": 85
+      },
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16dc3c78_eb36921b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T20:45:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfa279bd_d4171dbb",
       "range": {
         "startLine": 2957,
         "startChar": 84,
