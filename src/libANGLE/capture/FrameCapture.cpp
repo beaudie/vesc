@@ -4046,10 +4046,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             // Populate the vertex array
             for (std::vector<CallCapture> *calls : vertexArraySetupCalls)
             {
-                // Bind the vertexArray and populate it
-                Capture(calls, vertexArrayFuncs.bindVertexArray(replayState, true, vertexArrayID));
-                boundVertexArrayID = vertexArrayID;
-
+                // Bind the vertexArray (unless default) and populate it
+                if (vertexArrayID.value != 0)
+                {
+                    Capture(calls,
+                            vertexArrayFuncs.bindVertexArray(replayState, true, vertexArrayID));
+                    boundVertexArrayID = vertexArrayID;
+                }
                 CaptureVertexArrayState(calls, context, vertexArray, &replayState);
             }
         }
