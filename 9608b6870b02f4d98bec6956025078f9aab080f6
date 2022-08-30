@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90d5fa12_650c4373",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T07:16:25Z",
+      "side": 1,
+      "message": "LGTM! Are tests impossible until the ext lands?",
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3655fef8_c34c3e09",
@@ -37,6 +54,23 @@
         "endLine": 278,
         "endChar": 97
       },
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949136fa_be2a1f18",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T07:16:25Z",
+      "side": 1,
+      "message": "Is this from the unreleased spec? Why shouldn\u0027t renderable formats be samplable too?",
       "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
