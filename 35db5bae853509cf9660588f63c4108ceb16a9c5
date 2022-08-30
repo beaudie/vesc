@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b72024d_9ae8e787",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-08-30T13:59:21Z",
+      "side": 1,
+      "message": "\u003e I\u0027d prefer if there was a new class for the serialized data, so that serialization / deserialization code was in one file and not in 2 totally unreladed files like it is now.\n\nDone.\n\n\u003e  Are the size of the produced file and the speed of reading / writing to it important? If not, I\u0027d prefer some generic approach to serialization, like JSON, instead of custom code. \n\nYes, it\u0027s important that the serialisation is fast and does not contain branches or logic at all. The fuzzing engine generates the content. So we don\u0027t want to fuzz the format parsing, we want to fuzz the shader parsing.\n\n\n\u003e I\u0027m not sure it\u0027s guaranteed that this code will always read back what was written, because of padding, alignment, big/little endian, which can change from one build on ANGLE to another.\n\nI don\u0027t think the listed properties change frequently in a given compiler for a given platform.\n\nThe corpus (and fuzzing) is compiler, platform dependent. Note, it was like this before this patch, too.",
+      "parentUuid": "f746cd93_fce406e8",
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b8d6cf9_f8196506",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-08-29T14:38:11Z",
       "side": 1,
       "message": "Is this a leftover from testing?\nDoesn\u0027t seem like it\u0027s intentional, otherwise I don\u0027t understand all the \"#if defined\" below.",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 51
+      },
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4802b8_9193ac5a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-08-30T13:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b8d6cf9_f8196506",
       "range": {
         "startLine": 59,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "747ff19d_4590fe69",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-08-30T13:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bec60a3_cc508715",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 74
+      },
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4d71fa4_28ad1946",
@@ -94,6 +160,24 @@
       "writtenOn": "2022-08-29T14:38:11Z",
       "side": 1,
       "message": "ANGLE_FUZZER_CORPUS_OUTPUT_DIR seems to be a better name for this",
+      "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a996cb2d_2395b962",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-08-30T13:59:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d71fa4_28ad1946",
       "revId": "35db5bae853509cf9660588f63c4108ceb16a9c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
