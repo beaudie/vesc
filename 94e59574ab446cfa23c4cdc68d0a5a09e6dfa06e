@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47bc5baa_ab61e1a1",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:31:14Z",
+      "side": 1,
+      "message": "The tests are failing because FramebufferVk::syncState expects that any function that may call syncState would also make sure that deferred clears are flushed.\n\nWe could this sync hopefully, see my other comment.",
+      "revId": "94e59574ab446cfa23c4cdc68d0a5a09e6dfa06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "096ca7a3_f0fbd112",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:31:14Z",
+      "side": 1,
+      "message": "Since this information is available from the front-end, might as well always use the front-end information everywhere, i.e. in `ContextVk::getCurrentViewCount()`. Then there\u0027s no need to make any of the rest of these changes?",
+      "range": {
+        "startLine": 128,
+        "startChar": 21,
+        "endLine": 128,
+        "endChar": 78
+      },
+      "revId": "94e59574ab446cfa23c4cdc68d0a5a09e6dfa06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "443d8b42_671615af",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:31:14Z",
+      "side": 1,
+      "message": "The masked clear is used to effectively start a render pass. I believe using a normal draw call here would have also reproduced this. Might make the test slightly simpler to reason about.",
+      "revId": "94e59574ab446cfa23c4cdc68d0a5a09e6dfa06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
