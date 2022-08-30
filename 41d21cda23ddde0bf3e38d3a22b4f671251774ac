@@ -212,6 +212,24 @@
       "parentUuid": "74c72f5b_036318e0",
       "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94e99a49_ed81dedf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T16:07:31Z",
+      "side": 1,
+      "message": "Thanks. I think we can disable the extension for now since you are behind upstream anyway. We should have a real fix this sooner.",
+      "parentUuid": "a32b72ee_3f9832c9",
+      "revId": "41d21cda23ddde0bf3e38d3a22b4f671251774ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
