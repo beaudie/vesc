@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d404058_65a90cc1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T00:46:37Z",
+      "side": 1,
+      "message": "Nice. This looks right fix to me.",
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3655fef8_c34c3e09",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T00:46:37Z",
+      "side": 1,
+      "message": "nit: move comment above the line. Same for line 280.",
+      "range": {
+        "startLine": 278,
+        "startChar": 49,
+        "endLine": 278,
+        "endChar": 97
+      },
+      "revId": "9608b6870b02f4d98bec6956025078f9aab080f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
