@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "209d0249_dc8c210c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:54:07Z",
+      "side": 1,
+      "message": "In this case, if `dsState.depthFunc \u003d\u003d GL_NEVER`, it can still be considered `Unused`, right? Could be a follow up potentially.",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e78c84a_6b6668bd",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2917,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:54:07Z",
+      "side": 1,
+      "message": "Could you please add a check around this to make sure that `store` is done for this render pass?",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8951c4_a017e323",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2936,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:54:07Z",
+      "side": 1,
+      "message": "Please add a variant with draw instead of clear too, behavior should be the same.",
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa279bd_d4171dbb",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-30T06:54:07Z",
+      "side": 1,
+      "message": "0",
+      "range": {
+        "startLine": 2957,
+        "startChar": 84,
+        "endLine": 2957,
+        "endChar": 85
+      },
+      "revId": "3887256da309c8734da38faae5a9b6502dfcedc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
