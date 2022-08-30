@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3bd0533_90abc3b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-30T23:35:18Z",
+      "side": 1,
+      "message": "Per Shabi\u0027s feedback on other CL, this CL is contains only the enum renaming part.",
+      "revId": "ced7215881b17e9aa1a2c7fc788eb25633b7fd4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
