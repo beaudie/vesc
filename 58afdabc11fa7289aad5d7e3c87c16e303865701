@@ -16,6 +16,23 @@
       "message": "I\u0027m not sure why this was \"WaitForScheduled\" vs just \"NoWait\".",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e6f55f7_e388966d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-30T18:23:02Z",
+      "side": 1,
+      "message": "lgtm\n\nThe only reason I can think of why this wouldn\u0027t work is IOSurface interactions - if for some reason Chrome or WebKit are relying on the command buffer reaching the GPU before handing an IOSurface to Core Animation. I\u0027d hope that the tests would cover this, but it might show up as flickering and the tests might not catch regressions. Anyway, let\u0027s proceed with this and test thorougly with Canary.\n",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
