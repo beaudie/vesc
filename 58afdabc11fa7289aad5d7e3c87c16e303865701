@@ -104,6 +104,23 @@
       "parentUuid": "fb7aba24_db2a5877",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84ee721d_37b623a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2022-08-30T21:49:35Z",
+      "side": 1,
+      "message": "-[MTLCommandBuffer waitUntilScheduled] has the same as glFlush with respect to IOSurfaces.\n\nAll work that has been waitUntilScheduled will be completed before an IOSurface is used by any subsequent commands.\n\nThose commands can be\n- sending the IOSurface to a CALayer for display\n- locking the IOSurface for CPU access (e.g, one copy canvas capture)\n\nSo this is likely to break those things. We\u0027d need to add a \"flush but for real\" command, and insert it in the appropriate places for this.",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
