@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b0a01fba_8e41f12b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T19:05:33Z",
+      "side": 1,
+      "message": "Thinking this over, I don\u0027t think `access \u003d\u003d WriteOnly` is enough for this. I\u0027m not sure if we can at all do this.\n\nExample (please add this test):\n\n- Pre-initialize depth to whatever\n- Set depth to GL_ALWAYS, not masked\n- Draw a triangle covering only half of the framebuffer (diagonally)\n- Break render pass\n- Verify depth in the other half of the framebuffer is untouched\n\nThe render pass will cover the whole framebuffer. Access will be WriteOnly. However, half of the depth attachment is not covered by any draw calls, and its contents must be retained. Changing loadOp to DONT_CARE will destroy the contents of that half.\n\nIn that scenario, storeOp should be STORE, so loadOp has no choice but be LOAD. I don\u0027t think we can correctly track the area covered by all the draw calls either :/",
+      "revId": "cd9cd1a9200733434e1f9f9bd916c72e1ea4995a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f83ae49_f675a2f0",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
