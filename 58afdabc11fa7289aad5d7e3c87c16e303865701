@@ -139,6 +139,24 @@
       "parentUuid": "84ee721d_37b623a2",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b24ccf2_cff751d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-08-31T01:44:37Z",
+      "side": 1,
+      "message": "I think Chromium\u0027s GL_COMMANDS_ISSUED_CHROMIUM queries could be appropriate places to insert [waitUntilScheduled]",
+      "parentUuid": "07f4fc55_48f4bccc",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
