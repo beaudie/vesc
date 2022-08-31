@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97d766df_7afd3346",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T20:51:25Z",
+      "side": 1,
+      "message": "If this is really important, it sounds to me like a combination of ANGLE\u0027s knowledge and TBR drivers\u0027 post-binning information could make this optimization happen.\n\nLike imagine if based on WriteOnly usage we could set load op to LOAD_IF_NOT_FULLSCREEN, and the driver would switch to DONT_CARE for tiles that after binning are determined to be fully-covered.\n\nThe thing is, the Vulkan driver would have a hard time determining this, but we already track rasterizer discard, color mask etc, so we have the necessary information.",
+      "parentUuid": "b430a779_467ba739",
+      "revId": "cd9cd1a9200733434e1f9f9bd916c72e1ea4995a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f83ae49_f675a2f0",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
