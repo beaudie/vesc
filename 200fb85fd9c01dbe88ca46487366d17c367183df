@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "225a1021_87ca0e72",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T19:31:51Z",
+      "side": 1,
+      "message": "No need to set this, it\u0027s false by default. We\u0027ve generally let these test-only features just be initialized by the test harness.",
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be4d848f_3e955095",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T19:31:51Z",
+      "side": 1,
+      "message": "This is going to be error-prone, it\u0027s easy to forget to check this when checking `shaderPixelLocalStorageCoherentANGLE` elsewhere.\n\nMy suggestion is to just make `shaderPixelLocalStorageCoherentANGLE` conditional to (not) this feature, and avoid adding this where the extension is used.\n\n(same for other backends, no need for front-end to override it anymore (could `ASSERT` instead))",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
