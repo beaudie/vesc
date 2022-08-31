@@ -63,6 +63,30 @@
       },
       "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0592989_0ae62f86",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-31T21:11:54Z",
+      "side": 1,
+      "message": "I would put this string in the display itself as a member. After Display::initialize you can get the max client version of gl and build the string.",
+      "parentUuid": "421d2142_7395f484",
+      "range": {
+        "startLine": 547,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 45
+      },
+      "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
