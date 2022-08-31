@@ -229,6 +229,24 @@
       "parentUuid": "8b9f96d2_2d280ca0",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ebd6c98_b9977bb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-08-31T18:57:17Z",
+      "side": 1,
+      "message": "There are several places in the code related to IOSurfaces that do their own `waitUntiScheduled`.\n\nhttps://source.chromium.org/search?q\u003dwaitUntilScheduled\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc:third_party%2Fangle%2F\n\nAre you sure the one in ContextMTL::flush is needed? When I tried removing those other ones things broke but removing this one I saw nothing break. I get that could just be luck.\n\nDo you know of a test or webpage on a certain device I can run that will show the issue? Running with this change locally youtube and meet both seem to work. What else can I check?",
+      "parentUuid": "96105d36_025ef574",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
