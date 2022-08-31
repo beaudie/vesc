@@ -260,6 +260,8 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
                       const char *function,
                       unsigned int line) override;
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override;
+
   private:
     angle::Result drawElementsImpl(const gl::Context *context,
                                    gl::PrimitiveMode mode,
