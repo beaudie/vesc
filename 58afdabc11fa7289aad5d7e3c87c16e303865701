@@ -211,6 +211,24 @@
       "parentUuid": "7dc5d98b_fd02de56",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96105d36_025ef574",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2022-08-31T13:59:18Z",
+      "side": 1,
+      "message": "On macOS, glFlush does a lot more than the spec says that it should do. It is, in effect, a waitUntilScheduled.\n\n\u003e Roughly where in Chromium\u0027s code base would we need to change to \"flush but for real\"? We could specify a new ANGLE extension. \n\nThat\u0027s the scary thing. We\u0027ve always done more glFlushes than we need, and so we\u0027ve never needed to worry about making sure that we do the ones that we we need to do. That\u0027s a long winded way of saying \"I\u0027m not completely sure\". But I think we should fix this now.\n\n\u003e We could specify a new ANGLE extension.\n\nI think that\u0027s the way to go. We\u0027ve been doing excessive flushing for too long.\n\nFor ensuring correctness for compositing, I think we only need to add one call, and it should be before we make any calls to ScheduleOverlayPlanes.\n\nFor one copy canvas capture, we already do a wait (at least in this instance [0], we\u0027d want to double check the rest), so that might have us covered.\n\nThe one other thing to consider is multiple GPUs. I worked through an example of this in [1], and found that nothing short of waitUntilScheduled works to ensure cross-GPU synchronization of an IOSurface\u0027s contents. Maybe that can be implemented in the bowels of SharedImage(?).\n\n[0] https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/graphics/web_graphics_context_3d_video_frame_pool.cc;l\u003d181;drc\u003ddb6f1567b8caa6dacdd0d46b2a7ac60c5b5ddc82\n\n[1] https://github.com/ccameron-chromium/test-programs/blob/main/mtl-layer-share-drawable.mm",
+      "parentUuid": "8b9f96d2_2d280ca0",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
