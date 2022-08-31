@@ -170,6 +170,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9375cc4_7293076a",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-08-31T15:12:34Z",
+      "side": 1,
+      "message": "Yea we may not even need to track it as a member variable.",
+      "parentUuid": "61c163f1_f4be2eec",
+      "range": {
+        "startLine": 862,
+        "startChar": 4,
+        "endLine": 862,
+        "endChar": 15
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b589bba1_41b7d9b5",
         "filename": "src/libANGLE/renderer/SurfaceImpl.h",
         "patchSetId": 18
