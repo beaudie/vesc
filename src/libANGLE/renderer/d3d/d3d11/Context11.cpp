@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/MemoryProgramCache.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/renderer/OverlayImpl.h"
 #include "libANGLE/renderer/d3d/CompilerD3D.h"
 #include "libANGLE/renderer/d3d/RenderbufferD3D.h"
@@ -1039,5 +1040,12 @@ void Context11::handleResult(HRESULT hr,
     errorStream << ": " << message;
 
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+}
+
+std::unique_ptr<gl::PixelLocalStorage> Context11::makePixelLocalStorage(gl::Context *ctx)
+{
+    // Read/write UAVs only support "r32*" images.
+    return gl::PixelLocalStorage::MakeImageLoadStore(
+        ctx, gl::PixelLocalStorage::ImageFormatting::R32Packed);
 }
 }  // namespace rx
