@@ -97,6 +97,11 @@ struct FrontendFeatures : FeatureSetBase
         "Emulate ANGLE_shader_pixel_local_storage using shader images", &members,
         "http://anglebug.com/7279"};
 
+    FeatureInfo disableCoherentPixelLocalStorage = {
+        "disableCoherentPixelLocalStorage", FeatureCategory::FrontendFeatures,
+        "Disable ANGLE_shader_pixel_local_storage_coherent for testing", &members,
+        "http://anglebug.com/7279"};
+
     FeatureInfo cacheCompiledShader = {"cacheCompiledShader", FeatureCategory::FrontendFeatures,
                                        "Enable to cache compiled shaders", &members,
                                        "http://anglebug.com/7036"};

@@ -116,6 +116,14 @@
             "issue": "http://anglebug.com/7279"
         },
         {
+            "name": "disable_coherent_pixel_local_storage",
+            "category": "Features",
+            "description": [
+                "Disable ANGLE_shader_pixel_local_storage_coherent for testing"
+            ],
+            "issue": "http://anglebug.com/7279"
+        },
+        {
             "name": "cache_compiled_shader",
             "category": "Features",
             "description": [

@@ -286,7 +286,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderD3D::compile(const gl::Context *cont
     {
         options->initializeBuiltinsForInstancedMultiview = true;
     }
-    if (extensions.shaderPixelLocalStorageCoherentANGLE)
+    if (extensions.shaderPixelLocalStorageCoherentANGLE &&
+        !context->getFrontendFeatures().disableCoherentPixelLocalStorage.enabled)
     {
         options->pls.fragmentSynchronizationType =
             ShFragmentSynchronizationType::RasterizerOrderViews_D3D;

@@ -61,6 +61,7 @@ enum class Feature
     DisableAnisotropicFiltering,
     DisableB5G6R5Support,
     DisableBlendFuncExtended,
+    DisableCoherentPixelLocalStorage,
     DisableDrawBuffersIndexed,
     DisableFifoPresentMode,
     DisableFlippingBlitWithCommand,

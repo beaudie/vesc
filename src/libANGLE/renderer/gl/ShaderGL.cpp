@@ -15,6 +15,7 @@
 #include "libANGLE/renderer/gl/RendererGL.h"
 #include "libANGLE/trace.h"
 #include "platform/FeaturesGL_autogen.h"
+#include "platform/FrontendFeatures_autogen.h"
 
 #include <iostream>
 
@@ -375,7 +376,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         options->passHighpToPackUnormSnormBuiltins = true;
     }
 
-    if (mRenderer->getNativeExtensions().shaderPixelLocalStorageCoherentANGLE)
+    if (mRenderer->getNativeExtensions().shaderPixelLocalStorageCoherentANGLE &&
+        !context->getFrontendFeatures().disableCoherentPixelLocalStorage.enabled)
     {
         const ShShaderOutput translatorOutputType = GetShaderOutputType(GetFunctionsGL(context));
 

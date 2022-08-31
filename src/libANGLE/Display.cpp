@@ -2192,6 +2192,7 @@ void Display::initializeFrontendFeatures()
 
     // Disabled by default until work on the extension is complete - anglebug.com/7279.
     ANGLE_FEATURE_CONDITION(&mFrontendFeatures, emulatePixelLocalStorage, false);
+    ANGLE_FEATURE_CONDITION(&mFrontendFeatures, disableCoherentPixelLocalStorage, false);
 
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
 

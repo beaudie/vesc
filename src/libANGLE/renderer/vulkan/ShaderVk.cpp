@@ -13,6 +13,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "platform/FeaturesVk_autogen.h"
+#include "platform/FrontendFeatures_autogen.h"
 
 namespace rx
 {
@@ -113,7 +114,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         options->precisionSafeDivision = true;
     }
 
-    if (contextVk->getExtensions().shaderPixelLocalStorageCoherentANGLE)
+    if (contextVk->getExtensions().shaderPixelLocalStorageCoherentANGLE &&
+        !context->getFrontendFeatures().disableCoherentPixelLocalStorage.enabled)
     {
         ASSERT(contextVk->getFeatures().supportsFragmentShaderPixelInterlock.enabled);
         // GL_ARB_fragment_shader_interlock compiles to SPV_EXT_fragment_shader_interlock in both
