@@ -12,6 +12,7 @@
 #include "common/debug.h"
 
 #include "libANGLE/Context.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/renderer/OverlayImpl.h"
 #include "libANGLE/renderer/null/BufferNULL.h"
 #include "libANGLE/renderer/null/CompilerNULL.h"
@@ -526,5 +527,11 @@ void ContextNULL::handleError(GLenum errorCode,
     std::stringstream errorStream;
     errorStream << "Internal NULL back-end error: " << message << ".";
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
+}
+
+std::unique_ptr<gl::PixelLocalStorage> ContextNULL::makePixelLocalStorage(gl::Context *ctx)
+{
+    return gl::PixelLocalStorage::MakeImageLoadStore(
+        ctx, gl::PixelLocalStorage::ImageFormatting::Native);
 }
 }  // namespace rx
