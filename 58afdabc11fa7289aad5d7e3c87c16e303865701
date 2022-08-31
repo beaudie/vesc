@@ -121,6 +121,24 @@
       "message": "-[MTLCommandBuffer waitUntilScheduled] has the same as glFlush with respect to IOSurfaces.\n\nAll work that has been waitUntilScheduled will be completed before an IOSurface is used by any subsequent commands.\n\nThose commands can be\n- sending the IOSurface to a CALayer for display\n- locking the IOSurface for CPU access (e.g, one copy canvas capture)\n\nSo this is likely to break those things. We\u0027d need to add a \"flush but for real\" command, and insert it in the appropriate places for this.",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07f4fc55_48f4bccc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-08-31T00:08:54Z",
+      "side": 1,
+      "message": "Thanks very much for your insight Chris. Roughly where in Chromium\u0027s code base would we need to change to \"flush but for real\"? We could specify a new ANGLE extension. Or, can you think of other ways we could heuristically bypass the current too-expensive flush primitive?",
+      "parentUuid": "84ee721d_37b623a2",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
