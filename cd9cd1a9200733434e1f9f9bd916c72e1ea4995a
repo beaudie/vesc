@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "122b9e36_98e56764",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-31T20:57:18Z",
+      "side": 1,
+      "message": "I believe the actual usage in shadowgun_legends is the first CL (depthFunc_Always \u0026\u0026 maskOff), so as long as the first CL lands, we should be good. We will see if there is real usage for writeOnly or not, my bet is not.",
+      "parentUuid": "97d766df_7afd3346",
+      "revId": "cd9cd1a9200733434e1f9f9bd916c72e1ea4995a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f83ae49_f675a2f0",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
