@@ -193,6 +193,24 @@
       "parentUuid": "53f8ed8d_462876c2",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b9f96d2_2d280ca0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-08-31T13:39:18Z",
+      "side": 1,
+      "message": "I think the main question is why Metal backend had to wait until the committed command buffer is scheduled during a glFlush() call. Is there any test case or Webkit\u0027s scenario that depends on this wait?\n\nPutting IOSurface\u0027s coherent accesses asides, afaik OpenGL doesn\u0027t have any expectations that glFlush() has to wait until the flushed commands are scheduled or not. The purpose of this function is just sending the queued up commands to the driver. And from this CL\u0027s discovery, removing the wait did improve the performance in some scenarios that uses a lot of \"glFlush\" such as Motionmark \"Leaves\" benchmark.",
+      "parentUuid": "7dc5d98b_fd02de56",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
