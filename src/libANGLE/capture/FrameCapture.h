@@ -634,6 +634,7 @@ class FrameCaptureShared final : angle::NonCopyable
     void setCaptureInactive() { mCaptureActive = false; }
     bool isCaptureActive() { return mCaptureActive; }
     bool usesMidExecutionCapture() { return mCaptureStartFrame > 1; }
+    bool shouldStartCapture() const;
 
     gl::ContextID getWindowSurfaceContextID() const { return mWindowSurfaceContextID; }
 
@@ -683,9 +684,7 @@ class FrameCaptureShared final : angle::NonCopyable
   private:
     void writeJSON(const gl::Context *context);
     void writeCppReplayIndexFiles(const gl::Context *context, bool writeResetContextCall);
-    void writeMainContextCppReplay(const gl::Context *context,
-                                   const std::vector<CallCapture> &setupCalls,
-                                   StateResetHelper &StateResetHelper);
+    void writeMainContextCppReplay(const gl::Context *context);
 
     void captureClientArraySnapshot(const gl::Context *context,
                                     size_t vertexCount,
@@ -723,10 +722,14 @@ class FrameCaptureShared final : angle::NonCopyable
                                std::vector<CallCapture> &outCalls);
     void updateResourceCountsFromParamCapture(const ParamCapture &param, ResourceIDType idType);
     void updateResourceCountsFromCallCapture(const CallCapture &call);
+    void updateCurrentFBOAndDrawCounters(EntryPoint entryPoint);
 
     void runMidExecutionCapture(gl::Context *context);
+    void writeReplayFiles(const gl::Context *context);
 
     void scanSetupCalls(std::vector<CallCapture> &setupCalls);
+
+    bool shouldStartMidExecutionCapture() const;
 
     std::vector<CallCapture> mFrameCalls;
     gl::ContextID mLastContextId;
@@ -744,6 +747,14 @@ class FrameCaptureShared final : angle::NonCopyable
     uint32_t mFrameIndex;
     uint32_t mCaptureStartFrame;
     uint32_t mCaptureEndFrame;
+    uint32_t mCaptureStartBindFBO;
+    uint32_t mCaptureEndBindFBO;
+    uint32_t mCaptureStartDraw;
+    uint32_t mCaptureEndDraw;
+    uint32_t mCurrentBindFBO;
+    uint32_t mCurrentDrawCall;
+    // Offset into mFrameCalls where the replay starts.
+    uint32_t mReplayFunctionCallOffset;
     bool mIsFirstFrame   = true;
     bool mWroteIndexFile = false;
     SurfaceParamsMap mDrawSurfaceParams;

@@ -62,6 +62,12 @@ Some simple environment variables control frame capture:
        ```
  * `ANGLE_CAPTURE_SERIALIZE_STATE`:
    * Set to `1` to enable GL state serialization. Default is `0`.
+ * `ANGLE_CAPTURE_BIND_FBO_START` and `ANGLE_CAPTURE_BIND_FBO_END`:
+   * These allow you to capture calls within a single frame, between a count `glBindFramebuffer` calls.
+   * Example: `ANGLE_CAPTURE_BIND_FBO_START=5 ANGLE_CAPTURE_BIND_FBO_END=8` will capture all GL calls beweeen the 5th and 8th `glBindFramebuffer` calls.
+ * `ANGLE_CAPTURE_DRAW_START` and `ANGLE_CAPTURE_DRAW_END`:
+   * These allow you to capture calls within a single frame, between a count of `glDraw` calls.
+   * Example: `ANGLE_CAPTURE_DRAW_START=5 ANGLE_CAPTURE_DRAW_END=8` will capture all GL calls beweeen the 5th and 8th `glDraw` calls.
 
 A good way to test out the capture is to use environment variables in conjunction with the sample
 template. For example:
