@@ -157,6 +157,24 @@
       "parentUuid": "07f4fc55_48f4bccc",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f8ed8d_462876c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-08-31T02:11:23Z",
+      "side": 1,
+      "message": "GLImageBacking\u0027s GLTextureImageRepresentationBeginAccess/GLTextureImageRepresentationEndAccess could also be appropriate places to insert [waitUntilScheduled]\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:gpu/command_buffer/service/shared_image/gl_image_backing.cc;drc\u003d5ffea9162c8890390f2565bf3db2bce0c31a3b40;l\u003d681\nhttps://source.chromium.org/chromium/chromium/src/+/main:gpu/command_buffer/service/shared_image/gl_image_backing.cc;drc\u003d5ffea9162c8890390f2565bf3db2bce0c31a3b40;l\u003d693",
+      "parentUuid": "9b24ccf2_cff751d7",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
