@@ -17,6 +17,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
@@ -825,6 +826,7 @@ Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory, Fra
 
 Framebuffer::~Framebuffer()
 {
+    ASSERT(!mPixelLocalStorage);  // Call detachPixelLocalStorage() first!
     SafeDelete(mImpl);
 }
 
@@ -2704,4 +2706,14 @@ bool Framebuffer::partialBufferClearNeedsInit(const Context *context, GLenum buf
             return false;
     }
 }
+
+PixelLocalStorage &Framebuffer::getPixelLocalStorage(Context *ctx)
+{
+    if (!mPixelLocalStorage)
+    {
+        mPixelLocalStorage = ctx->getImplementation()->makePixelLocalStorage(ctx);
+    }
+    return *mPixelLocalStorage.get();
+}
+
 }  // namespace gl

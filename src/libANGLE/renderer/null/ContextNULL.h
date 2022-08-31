@@ -261,6 +261,8 @@ class ContextNULL : public ContextImpl
                      const char *function,
                      unsigned int line);
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override;
+
   private:
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;
