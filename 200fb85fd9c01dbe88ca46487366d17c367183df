@@ -39,6 +39,30 @@
       },
       "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08e3625_31180b34",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-31T21:14:14Z",
+      "side": 1,
+      "message": "\u003e This is going to be error-prone\n\nYes, agreed. I like your suggestion.\n\n\u003e My suggestion is to just make `shaderPixelLocalStorageCoherentANGLE` conditional to (not) this feature\n\nHow would you recommend doing that? In `RendererVk::ensureCapsInitialized()` I don\u0027t have access to the FrontendFeatures (that I know of). Can I get them, or is there somewhere else I can clear out the extension support based on this frontend feature?",
+      "parentUuid": "be4d848f_3e955095",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
