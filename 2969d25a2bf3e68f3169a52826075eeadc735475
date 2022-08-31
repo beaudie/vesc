@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24dc519a_b887b2a2",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-31T22:54:39Z",
+      "side": 1,
+      "message": "This is also failing on native OpenGLES driver on pixel. I am wondering this is test bug? The source data we provided at line 3542 is actually a linear format data, since format/type is GL_RGBA, GL_UNSIGNED_BYTE. The data should convert to sRGB during subImage call, and you won\u0027t expect it to be kRed50Linear here. You willneed to provide kRed50Linear data in line 3542 and then you will expect here to be linear since verifyResults will draw a quad using this texture. Right?",
+      "range": {
+        "startLine": 3545,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 46
+      },
+      "revId": "2969d25a2bf3e68f3169a52826075eeadc735475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
