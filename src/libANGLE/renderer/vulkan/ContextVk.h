@@ -774,6 +774,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // RenderpassCommands if exists, or outsideRenderPassCommands)
     void retainResource(vk::Resource *resource);
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
