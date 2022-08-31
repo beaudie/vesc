@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a28e3fb7_c499d3dd",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T19:52:50Z",
+      "side": 1,
+      "message": "This should be `\u0026`. Also, we explicitly cast to bool: `if ((a \u0026 b) !\u003d 0)`",
+      "range": {
+        "startLine": 552,
+        "startChar": 16,
+        "endLine": 552,
+        "endChar": 66
+      },
+      "revId": "93beb6263643e9a6e85a5f73841cf20a1d3b5ec9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
