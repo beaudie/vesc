@@ -11,6 +11,7 @@
 
 #include "common/entry_points_enum_autogen.h"
 #include "common/string_utils.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/renderer/OverlayImpl.h"
 #include "libANGLE/renderer/d3d/CompilerD3D.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
@@ -520,5 +521,11 @@ void Context9::handleResult(HRESULT hr,
     errorStream << "Internal D3D9 error: " << gl::FmtHR(hr) << ": " << message;
 
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+}
+
+std::unique_ptr<gl::PixelLocalStorage> Context9::makePixelLocalStorage(gl::Context *)
+{
+    UNREACHABLE();  // D3D9 never reports support for pixel local storage.
+    return nullptr;
 }
 }  // namespace rx

@@ -845,6 +845,36 @@ bool ValidateImportSemaphoreZirconHandleANGLE(const Context *context,
                                               HandleType handleTypePacked,
                                               GLuint handle);
 
+// GL_ANGLE_shader_pixel_local_storage
+bool ValidateFramebufferMemorylessPixelLocalStorageANGLE(const Context *context,
+                                                         angle::EntryPoint entryPoint,
+                                                         GLint plane,
+                                                         GLenum internalformat);
+bool ValidateFramebufferTexturePixelLocalStorageANGLE(const Context *context,
+                                                      angle::EntryPoint entryPoint,
+                                                      GLint plane,
+                                                      TextureID backingtexturePacked,
+                                                      GLint level,
+                                                      GLint layer);
+bool ValidateFramebufferPixelLocalClearValuefvANGLE(const Context *context,
+                                                    angle::EntryPoint entryPoint,
+                                                    GLint plane,
+                                                    const GLfloat *value);
+bool ValidateFramebufferPixelLocalClearValueivANGLE(const Context *context,
+                                                    angle::EntryPoint entryPoint,
+                                                    GLint plane,
+                                                    const GLint *value);
+bool ValidateFramebufferPixelLocalClearValueuivANGLE(const Context *context,
+                                                     angle::EntryPoint entryPoint,
+                                                     GLint plane,
+                                                     const GLuint *value);
+bool ValidateBeginPixelLocalStorageANGLE(const Context *context,
+                                         angle::EntryPoint entryPoint,
+                                         GLsizei planes,
+                                         const GLenum *loadops);
+bool ValidateEndPixelLocalStorageANGLE(const Context *context, angle::EntryPoint entryPoint);
+bool ValidatePixelLocalStorageBarrierANGLE(const Context *context, angle::EntryPoint entryPoint);
+
 // GL_ANGLE_texture_compression_dxt3
 
 // GL_ANGLE_texture_compression_dxt5
