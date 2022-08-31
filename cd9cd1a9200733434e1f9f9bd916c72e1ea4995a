@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f83ae49_f675a2f0",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3055,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-08-31T18:24:11Z",
+      "side": 1,
+      "message": "I think we need to add the mDisallowMixedDepthStencilLoadOpNoneAndLoad check here, too, to make the test pass on Pixel 6.",
+      "revId": "cd9cd1a9200733434e1f9f9bd916c72e1ea4995a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
