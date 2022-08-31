@@ -386,6 +386,12 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                                     uint32_t layerIndex);
     const mtl::BufferRef &getWorkBuffer() const { return mWorkBuffer; }
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override
+    {
+        UNREACHABLE();  // Metal doesn't support pixel local storage yet.
+        return nullptr;
+    }
+
   private:
     void ensureCommandBufferReady();
     angle::Result ensureIncompleteTexturesCreated(const gl::Context *context);
