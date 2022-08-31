@@ -28,6 +28,7 @@
 #include "libANGLE/Fence.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/MemoryObject.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramPipeline.h"
 #include "libANGLE/Query.h"
@@ -1127,14 +1128,26 @@ void Context::loseContext(GraphicsResetStatus current, GraphicsResetStatus other
     markContextLost(current);
 }
 
-void Context::deleteFramebuffer(FramebufferID framebuffer)
+void Context::deleteFramebuffer(FramebufferID framebufferID)
 {
-    if (mState.mFramebufferManager->getFramebuffer(framebuffer))
+    // We are responsible for deleting the GL objects from the Framebuffer's pixel local storage.
+    std::unique_ptr<PixelLocalStorage> plsToDelete;
+
+    Framebuffer *framebuffer = mState.mFramebufferManager->getFramebuffer(framebufferID);
+    if (framebuffer)
     {
-        detachFramebuffer(framebuffer);
+        plsToDelete = framebuffer->detachPixelLocalStorage();
+        detachFramebuffer(framebufferID);
     }
 
-    mState.mFramebufferManager->deleteObject(this, framebuffer);
+    mState.mFramebufferManager->deleteObject(this, framebufferID);
+
+    // Delete the pixel local storage GL objects after the framebuffer, in order to avoid any
+    // potential trickyness with orphaning.
+    if (plsToDelete)
+    {
+        plsToDelete->deleteContextObjects(this);
+    }
 }
 
 void Context::deleteFencesNV(GLsizei n, const FenceNVID *fences)
@@ -2251,6 +2264,17 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
             *params = mState.mClipControlDepth;
             break;
 
+        // ANGLE_shader_pixel_local_storage
+        case GL_MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE:
+            *params = mState.mCaps.maxPixelLocalStoragePlanes;
+            break;
+        case GL_MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE:
+            *params = mState.mCaps.maxColorAttachmentsWithActivePLS;
+            break;
+        case GL_MAX_COMBINED_DRAW_BUFFERS_AND_PLS_PLANES_ANGLE:
+            *params = mState.mCaps.maxCombinedDrawBuffersAndPLSPlanes;
+            break;
+
         default:
             ANGLE_CONTEXT_TRY(mState.getIntegerv(this, pname, params));
             break;
@@ -2335,7 +2359,7 @@ void Context::getIntegeri_v(GLenum target, GLuint index, GLint *data)
                 *data = mState.mCaps.maxComputeWorkGroupSize[index];
                 break;
             default:
-                mState.getIntegeri_v(target, index, data);
+                mState.getIntegeri_v(this, target, index, data);
         }
     }
     else
@@ -4199,6 +4223,20 @@ void Context::initCaps()
         mState.mCaps.shaderBinaryFormats.clear();
         mState.mCaps.programBinaryFormats.clear();
         mMemoryProgramCache = nullptr;
+    }
+
+    if (mSupportedExtensions.shaderPixelLocalStorageANGLE)
+    {
+        // TODO(anglebug.com/7279): These limits are specific to shader images. They will need to be
+        // updated once we have other implementations.
+        mState.mCaps.maxPixelLocalStoragePlanes =
+            mState.mCaps.maxShaderImageUniforms[ShaderType::Fragment];
+        ANGLE_LIMIT_CAP(mState.mCaps.maxPixelLocalStoragePlanes,
+                        IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
+        mState.mCaps.maxColorAttachmentsWithActivePLS = mState.mCaps.maxColorAttachments;
+        mState.mCaps.maxCombinedDrawBuffersAndPLSPlanes =
+            std::min(mState.mCaps.maxDrawBuffers + mState.mCaps.maxPixelLocalStoragePlanes,
+                     mState.mCaps.maxCombinedShaderOutputResources);
     }
 
 #undef ANGLE_LIMIT_CAP
@@ -9075,6 +9113,104 @@ void Context::importSemaphoreZirconHandle(SemaphoreID semaphore,
     ANGLE_CONTEXT_TRY(semaphoreObject->importZirconHandle(this, handleType, handle));
 }
 
+void Context::framebufferMemorylessPixelLocalStorage(GLint plane, GLenum internalformat)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    if (internalformat == GL_NONE)
+    {
+        pls.deinitialize(this, plane);
+    }
+    else
+    {
+        pls.setMemoryless(this, plane, internalformat);
+    }
+}
+
+void Context::framebufferTexturePixelLocalStorage(GLint plane,
+                                                  TextureID backingtexture,
+                                                  GLint level,
+                                                  GLint layer)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    if (backingtexture.value == 0)
+    {
+        pls.deinitialize(this, plane);
+    }
+    else
+    {
+        Texture *tex = getTexture(backingtexture);
+        ASSERT(tex);  // Validation guarantees this.
+        pls.setTextureBacked(this, plane, tex, level, layer);
+    }
+}
+
+void Context::framebufferPixelLocalClearValuefv(GLint plane, const GLfloat *value)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.setClearValuef(plane, value);
+}
+
+void Context::framebufferPixelLocalClearValueiv(GLint plane, const GLint *value)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.setClearValuei(plane, value);
+}
+
+void Context::framebufferPixelLocalClearValueuiv(GLint plane, const GLuint *value)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.setClearValueui(plane, value);
+}
+
+void Context::beginPixelLocalStorage(GLsizei planes, const GLenum *loadops)
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.begin(this, planes, loadops);
+    mState.setPixelLocalStorageActive(true);
+}
+
+void Context::endPixelLocalStorage()
+{
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.end(this);
+    mState.setPixelLocalStorageActive(false);
+}
+
+void Context::pixelLocalStorageBarrier()
+{
+    if (getExtensions().shaderPixelLocalStorageCoherentANGLE)
+    {
+        return;
+    }
+
+    Framebuffer *framebuffer = mState.getDrawFramebuffer();
+    ASSERT(framebuffer);
+    PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
+
+    pls.barrier(this);
+}
+
 void Context::eGLImageTargetTexStorage(GLenum target, GLeglImageOES image, const GLint *attrib_list)
 {
     Texture *texture        = getTextureByType(FromGLenum<TextureType>(target));
@@ -9169,6 +9305,20 @@ bool Context::getIndexedQueryParameterInfo(GLenum target,
                 *numParams = 4;
                 return true;
             }
+        }
+    }
+
+    if (mSupportedExtensions.shaderPixelLocalStorageANGLE)
+    {
+        switch (target)
+        {
+            case GL_PIXEL_LOCAL_FORMAT_ANGLE:
+            case GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE:
+            case GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE:
+            case GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE:
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
         }
     }
 
