@@ -39,6 +39,30 @@
       },
       "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "421d2142_7395f484",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-08-31T17:51:07Z",
+      "side": 1,
+      "message": "I addressed this in my latest patchset, lmk what you think.",
+      "parentUuid": "69b1a1e3_2e68b294",
+      "range": {
+        "startLine": 547,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 45
+      },
+      "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
