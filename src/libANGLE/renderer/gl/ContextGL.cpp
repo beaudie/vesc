@@ -11,6 +11,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/renderer/OverlayImpl.h"
 #include "libANGLE/renderer/gl/BufferGL.h"
 #include "libANGLE/renderer/gl/CompilerGL.h"
@@ -1003,6 +1004,15 @@ void ContextGL::flushIfNecessaryBeforeDeleteTextures()
 void ContextGL::markWorkSubmitted()
 {
     mRenderer->markWorkSubmitted();
+}
+
+std::unique_ptr<gl::PixelLocalStorage> ContextGL::makePixelLocalStorage(gl::Context *ctx)
+{
+    // OpenGL ES only allows read/write access to "r32*" images.
+    auto imageFormatting = getFunctions()->standard == StandardGL::STANDARD_GL_ES
+                               ? gl::PixelLocalStorage::ImageFormatting::R32Packed
+                               : gl::PixelLocalStorage::ImageFormatting::Native;
+    return gl::PixelLocalStorage::MakeImageLoadStore(ctx, imageFormatting);
 }
 
 }  // namespace rx

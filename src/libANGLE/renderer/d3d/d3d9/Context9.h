@@ -253,6 +253,12 @@ class Context9 : public ContextD3D
                       const char *function,
                       unsigned int line) override;
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override
+    {
+        UNREACHABLE();  // D3D9 never reports support for pixel local storage.
+        return nullptr;
+    }
+
   private:
     Renderer9 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;

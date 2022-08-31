@@ -21,6 +21,7 @@ namespace gl
 class ErrorSet;
 class MemoryProgramCache;
 class Path;
+class PixelLocalStorage;
 class Semaphore;
 struct Workarounds;
 }  // namespace gl
@@ -261,6 +262,9 @@ class ContextImpl : public GLImplFactory
 
     // AMD_performance_monitor
     virtual const angle::PerfMonitorCounterGroups &getPerfMonitorCounters();
+
+    // ANGLE_shader_pixel_local_storage
+    virtual std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) = 0;
 
   protected:
     const gl::State &mState;
