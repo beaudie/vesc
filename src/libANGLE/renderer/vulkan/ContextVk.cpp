@@ -14,6 +14,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
@@ -7789,5 +7790,11 @@ void ContextVk::resetPerFramePerfCounters()
     mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::Texture).resetDescriptorCacheStats();
     mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::ShaderResource)
         .resetDescriptorCacheStats();
+}
+
+std::unique_ptr<gl::PixelLocalStorage> ContextVk::makePixelLocalStorage(gl::Context *ctx)
+{
+    return gl::PixelLocalStorage::MakeImageLoadStore(
+        ctx, gl::PixelLocalStorage::ImageFormatting::Native);
 }
 }  // namespace rx

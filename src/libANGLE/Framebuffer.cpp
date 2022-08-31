@@ -17,6 +17,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
@@ -828,6 +829,11 @@ Framebuffer::~Framebuffer()
     SafeDelete(mImpl);
 }
 
+std::unique_ptr<PixelLocalStorage> Framebuffer::detachPixelLocalStorage()
+{
+    return std::move(mPixelLocalStorage);
+}
+
 void Framebuffer::onDestroy(const Context *context)
 {
     if (isDefault())
@@ -844,6 +850,17 @@ void Framebuffer::onDestroy(const Context *context)
     mState.mWebGLDepthAttachment.detach(context, mState.mFramebufferSerial);
     mState.mWebGLStencilAttachment.detach(context, mState.mFramebufferSerial);
     mState.mWebGLDepthStencilAttachment.detach(context, mState.mFramebufferSerial);
+
+    if (mPixelLocalStorage)
+    {
+        // If the context's ref count is zero, we know it's in a teardown phase and
+        // mPixelLocalStorage can just let go of its GL objects. Otherwise, the Context should have
+        // called detachPixelLocalStorage and deleteContextObjects before reaching this point.
+        if (context->getRefCount() == 0)
+        {
+            mPixelLocalStorage->onContextTeardown(context);
+        }
+    }
 
     mImpl->destroy(context);
 }
@@ -2704,4 +2721,14 @@ bool Framebuffer::partialBufferClearNeedsInit(const Context *context, GLenum buf
             return false;
     }
 }
+
+PixelLocalStorage &Framebuffer::getPixelLocalStorage(Context *ctx)
+{
+    if (!mPixelLocalStorage)
+    {
+        mPixelLocalStorage = ctx->getImplementation()->makePixelLocalStorage(ctx);
+    }
+    return *mPixelLocalStorage.get();
+}
+
 }  // namespace gl
