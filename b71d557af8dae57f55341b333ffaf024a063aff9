@@ -16,6 +16,24 @@
       "message": "When I ran the newly added tests on Pixel6 device locally, the tests failed with counter mismatch error. I am triggering the bot to verify.",
       "revId": "b71d557af8dae57f55341b333ffaf024a063aff9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da2d20fb_98d6b042",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-31T17:11:29Z",
+      "side": 1,
+      "message": "Thanks Yuxin for trying it. It is because of the bug workaround we did for ARM. I just added a check of this bug workaround in the test and adjust the expectation accordingly.",
+      "parentUuid": "1172de7c_fd2e6eb3",
+      "revId": "b71d557af8dae57f55341b333ffaf024a063aff9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
