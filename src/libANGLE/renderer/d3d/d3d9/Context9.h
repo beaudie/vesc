@@ -253,6 +253,8 @@ class Context9 : public ContextD3D
                       const char *function,
                       unsigned int line) override;
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override;
+
   private:
     Renderer9 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;
