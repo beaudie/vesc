@@ -63,6 +63,10 @@ constexpr char kEnabledVarName[]        = "ANGLE_CAPTURE_ENABLED";
 constexpr char kOutDirectoryVarName[]   = "ANGLE_CAPTURE_OUT_DIR";
 constexpr char kFrameStartVarName[]     = "ANGLE_CAPTURE_FRAME_START";
 constexpr char kFrameEndVarName[]       = "ANGLE_CAPTURE_FRAME_END";
+constexpr char kBindFBOStartVarName[]   = "ANGLE_CAPTURE_BIND_FBO_START";
+constexpr char kBindFBOEndVarName[]     = "ANGLE_CAPTURE_BIND_FBO_END";
+constexpr char kDrawStartVarName[]      = "ANGLE_CAPTURE_DRAW_START";
+constexpr char kDrawEndVarName[]        = "ANGLE_CAPTURE_DRAW_END";
 constexpr char kTriggerVarName[]        = "ANGLE_CAPTURE_TRIGGER";
 constexpr char kCaptureLabelVarName[]   = "ANGLE_CAPTURE_LABEL";
 constexpr char kCompressionVarName[]    = "ANGLE_CAPTURE_COMPRESSION";
@@ -86,6 +90,10 @@ constexpr char kAndroidEnabled[]        = "debug.angle.capture.enabled";
 constexpr char kAndroidOutDir[]         = "debug.angle.capture.out_dir";
 constexpr char kAndroidFrameStart[]     = "debug.angle.capture.frame_start";
 constexpr char kAndroidFrameEnd[]       = "debug.angle.capture.frame_end";
+constexpr char kAndroidBindFBOStart[]   = "debug.angle.capture.bind_fbo_start";
+constexpr char kAndroidBindFBOEnd[]     = "debug.angle.capture.bind_fbo_end";
+constexpr char kAndroidDrawStart[]      = "debug.angle.capture.draw_start";
+constexpr char kAndroidDrawEnd[]        = "debug.angle.capture.draw_end";
 constexpr char kAndroidTrigger[]        = "debug.angle.capture.trigger";
 constexpr char kAndroidCaptureLabel[]   = "debug.angle.capture.label";
 constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
@@ -1511,13 +1519,14 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
                                      uint32_t frameIndex,
                                      std::vector<uint8_t> *binaryData,
                                      const std::vector<CallCapture> &calls,
+                                     uint32_t startCallIndex,
                                      std::stringstream &header,
                                      std::stringstream &out)
 {
     int callCount = 0;
     int partCount = 0;
 
-    if (calls.size() > kFunctionSizeLimit)
+    if ((static_cast<uint32_t>(calls.size()) - startCallIndex) > kFunctionSizeLimit)
     {
         out << "void " << FmtFunction(replayFunc, contextID, frameIndex, ++partCount) << "\n";
     }
@@ -1528,8 +1537,9 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
 
     out << "{\n";
 
-    for (const CallCapture &call : calls)
+    for (auto iter = calls.begin() + startCallIndex; iter != calls.end(); ++iter)
     {
+        const CallCapture &call = *iter;
         if (!call.isActive)
         {
             // Don't write setup calls for inactive resources
@@ -1609,7 +1619,7 @@ void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
         std::string proto = protoStream.str();
 
         WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Setup, replayWriter, frameIndex,
-                                        binaryData, setupCalls, headerStream, bodyStream);
+                                        binaryData, setupCalls, 0, headerStream, bodyStream);
 
         replayWriter.addPrivateFunction(proto, headerStream, bodyStream);
     }
@@ -1650,7 +1660,7 @@ void WriteShareGroupCppSetupReplay(ReplayWriter &replayWriter,
         std::string proto = protoStream.str();
 
         WriteCppReplayFunctionWithParts(kSharedContextId, ReplayFunc::Setup, replayWriter,
-                                        frameIndex, binaryData, setupCalls, headerStream,
+                                        frameIndex, binaryData, setupCalls, 0, headerStream,
                                         bodyStream);
 
         replayWriter.addPrivateFunction(proto, headerStream, bodyStream);
@@ -5149,6 +5159,13 @@ FrameCaptureShared::FrameCaptureShared()
       mFrameIndex(1),
       mCaptureStartFrame(1),
       mCaptureEndFrame(0),
+      mCaptureStartBindFBO(0),
+      mCaptureEndBindFBO(std::numeric_limits<uint32_t>::max()),
+      mCaptureStartDraw(0),
+      mCaptureEndDraw(std::numeric_limits<uint32_t>::max()),
+      mCurrentBindFBO(0),
+      mCurrentDrawCall(0),
+      mStartFrameCallIndex(0),
       mClientArraySizes{},
       mReadBufferSize(0),
       mHasResourceType{},
@@ -5201,6 +5218,34 @@ FrameCaptureShared::FrameCaptureShared()
     if (!endFromEnv.empty())
     {
         mCaptureEndFrame = atoi(endFromEnv.c_str());
+    }
+
+    std::string bindFBOStartFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kBindFBOStartVarName, kAndroidBindFBOStart);
+    if (!bindFBOStartFromEnv.empty())
+    {
+        mCaptureStartBindFBO = atoi(bindFBOStartFromEnv.c_str());
+    }
+
+    std::string bindFBOEndFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kBindFBOEndVarName, kAndroidBindFBOEnd);
+    if (!bindFBOEndFromEnv.empty())
+    {
+        mCaptureEndBindFBO = atoi(bindFBOEndFromEnv.c_str());
+    }
+
+    std::string drawStartFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kDrawStartVarName, kAndroidDrawStart);
+    if (!drawStartFromEnv.empty())
+    {
+        mCaptureStartDraw = atoi(drawStartFromEnv.c_str());
+    }
+
+    std::string drawEndFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kDrawEndVarName, kAndroidDrawEnd);
+    if (!drawEndFromEnv.empty())
+    {
+        mCaptureEndDraw = atoi(drawEndFromEnv.c_str());
     }
 
     std::string captureTriggerFromEnv =
@@ -5272,7 +5317,7 @@ FrameCaptureShared::FrameCaptureShared()
         }
     }
 
-    if (mFrameIndex == mCaptureStartFrame)
+    if (shouldStartCapture())
     {
         // Capture is starting from the first frame, so set the capture active to ensure all GLES
         // commands issued are handled correctly by maybeCapturePreCallUpdates() and
@@ -5286,6 +5331,12 @@ FrameCaptureShared::FrameCaptureShared()
     }
 
     mReplayWriter.setCaptureLabel(mCaptureLabel);
+}
+
+bool FrameCaptureShared::shouldStartCapture() const
+{
+    return mFrameIndex == mCaptureStartFrame && mCurrentBindFBO == mCaptureStartBindFBO &&
+           mCurrentDrawCall == mCaptureStartDraw;
 }
 
 FrameCaptureShared::~FrameCaptureShared() = default;
@@ -6753,6 +6804,29 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
         return;
     }
 
+    if (inCall.entryPoint == EntryPoint::GLBindFramebuffer ||
+        inCall.entryPoint == EntryPoint::GLBindFramebufferOES)
+    {
+        mCurrentBindFBO++;
+        mCurrentDrawCall = 0;
+    }
+    else if (IsDrawEntryPoint(inCall.entryPoint))
+    {
+        mCurrentDrawCall++;
+    }
+
+    if (!isCaptureActive() && shouldStartCapture())
+    {
+        runMidExecutionCapture(context);
+        mStartFrameCallIndex = static_cast<uint32_t>(mFrameCalls.size());
+    }
+    else if (isCaptureActive() && mCurrentBindFBO > mCaptureEndBindFBO)
+    {
+        // For bind FBO calls, we want to stop capture right before the next bind.
+        writeReplayFiles(context);
+        setCaptureInactive();
+    }
+
     if (isCallValid)
     {
         // If the context ID has changed, then we need to inject an eglMakeCurrent() call. Only do
@@ -6820,6 +6894,13 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
     {
         INFO() << "FrameCapture: Not capturing invalid call to "
                << GetEntryPointName(inCall.entryPoint);
+    }
+
+    // For draw calls, we want to stop capture right after the specified last draw call.
+    if (isCaptureActive() && mCurrentDrawCall >= mCaptureEndDraw)
+    {
+        writeReplayFiles(context);
+        setCaptureInactive();
     }
 }
 
@@ -7116,6 +7197,7 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
 {
     // Set the capture active to ensure all GLES commands issued by the next frame are
     // handled correctly by maybeCapturePreCallUpdates() and maybeCapturePostCallUpdates().
+    ASSERT(!isCaptureActive());
     setCaptureActive();
 
     // Make sure all pending work for every Context in the share group has completed so all data
@@ -7183,8 +7265,6 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         return;
     }
 
-    FrameCapture *frameCapture = context->getFrameCapture();
-
     // Count resource IDs. This is also done on every frame. It could probably be done by
     // checking the GL state instead of the calls.
     for (const CallCapture &call : mFrameCalls)
@@ -7209,19 +7289,27 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
     // Check for MEC. Done after checkForCaptureTrigger(), since that can modify mCaptureStartFrame.
     if (mFrameIndex < mCaptureStartFrame)
     {
-        if (mFrameIndex == mCaptureStartFrame - 1)
+        if (mFrameIndex == mCaptureStartFrame - 1 && mCaptureStartBindFBO == 0 &&
+            mCaptureStartDraw == 0)
         {
             // Trigger MEC.
             runMidExecutionCapture(context);
         }
-        mFrameIndex++;
-        reset();
-        return;
     }
+    else if (isCaptureActive())
+    {
+        // Write out capture.
+        writeReplayFiles(context);
+    }
+    mFrameIndex++;
+    reset();
+}
 
+void FrameCaptureShared::writeReplayFiles(const gl::Context *context)
+{
     ASSERT(isCaptureActive());
 
-    if (!mFrameCalls.empty())
+    if ((static_cast<uint32_t>(mFrameCalls.size()) - mStartFrameCallIndex) > 0)
     {
         mActiveFrameIndices.push_back(getReplayFrameIndex());
     }
@@ -7237,8 +7325,7 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         CaptureValidateSerializedState(context, &mFrameCalls);
     }
 
-    writeMainContextCppReplay(context, frameCapture->getSetupCalls(),
-                              frameCapture->getStateResetHelper());
+    writeMainContextCppReplay(context);
 
     if (mFrameIndex == mCaptureEndFrame)
     {
@@ -7253,9 +7340,6 @@ void FrameCaptureShared::onEndFrame(const gl::Context *context)
         mBinaryData.clear();
         mWroteIndexFile = true;
     }
-
-    reset();
-    mFrameIndex++;
 }
 
 void FrameCaptureShared::onDestroyContext(const gl::Context *context)
@@ -7733,11 +7817,13 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     writeJSON(context);
 }
 
-void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
-                                                   const std::vector<CallCapture> &setupCalls,
-                                                   const StateResetHelper &stateResetHelper)
+void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context)
 {
     ASSERT(mWindowSurfaceContextID == context->id());
+
+    FrameCapture *frameCapture                 = context->getFrameCapture();
+    const std::vector<CallCapture> &setupCalls = frameCapture->getSetupCalls();
+    const StateResetHelper &stateResetHelper   = frameCapture->getStateResetHelper();
 
     {
         std::stringstream header;
@@ -7763,7 +7849,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             std::string proto = protoStream.str();
 
             WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Setup, mReplayWriter,
-                                            frameIndex, &mBinaryData, setupCalls, headerStream,
+                                            frameIndex, &mBinaryData, setupCalls, 0, headerStream,
                                             bodyStream);
 
             mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
@@ -7968,7 +8054,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         mReplayWriter.addPublicFunction(resetProtoStream.str(), resetHeaderStream, resetBodyStream);
     }
 
-    if (!mFrameCalls.empty())
+    if ((static_cast<uint32_t>(mFrameCalls.size()) - mStartFrameCallIndex) > 0)
     {
         std::stringstream protoStream;
         protoStream << "void " << FmtReplayFunction(context->id(), frameIndex);
@@ -7978,8 +8064,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         std::stringstream bodyStream;
 
         WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Replay, mReplayWriter,
-                                        frameIndex, &mBinaryData, mFrameCalls, headerStream,
-                                        bodyStream);
+                                        frameIndex, &mBinaryData, mFrameCalls, mStartFrameCallIndex,
+                                        headerStream, bodyStream);
 
         mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
     }
@@ -8027,6 +8113,8 @@ void FrameCaptureShared::reset()
 {
     mFrameCalls.clear();
     mClientVertexArrayMap.fill(-1);
+    mCurrentBindFBO  = 0;
+    mCurrentDrawCall = 0;
 
     // Do not reset replay-specific settings like the maximum read buffer size, client array sizes,
     // or the 'has seen' type map. We could refine this into per-frame and per-capture maximums if
