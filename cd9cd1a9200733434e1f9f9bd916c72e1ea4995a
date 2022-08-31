@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b430a779_467ba739",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-31T20:41:32Z",
+      "side": 1,
+      "message": "I think you are right. We can\u0027t really optimize for writeOnly case. I bet the deqp tests failure is due to this.",
+      "parentUuid": "b0a01fba_8e41f12b",
+      "revId": "cd9cd1a9200733434e1f9f9bd916c72e1ea4995a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f83ae49_f675a2f0",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 9
