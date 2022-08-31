@@ -285,6 +285,8 @@ class ContextGL : public ContextImpl
 
     const gl::Debug &getDebug() const { return mState.getDebug(); }
 
+    std::unique_ptr<gl::PixelLocalStorage> makePixelLocalStorage(gl::Context *) override;
+
   private:
     angle::Result setDrawArraysState(const gl::Context *context,
                                      GLint first,
