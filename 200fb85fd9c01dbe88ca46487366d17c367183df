@@ -87,6 +87,30 @@
       },
       "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65d251eb_a0816d78",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-08-31T23:13:13Z",
+      "side": 1,
+      "message": "Ok, so I can get to the FrontendFeatures in Vulkan and D3D, but in OpenGL it\u0027s looking extremely complicated and not very doable as-is.\n\nA backend feature sounds like the better idea anyway. Is there a way to add backend feature overrides to ANGLE_INSTANTIATE_TEST? Do any tests do this right now?",
+      "parentUuid": "defa8ef9_600a0470",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
