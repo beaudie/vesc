@@ -16,6 +16,24 @@
       "message": "We need to check mDisallowMixedDepthStencilLoadOpNoneAndLoad, same as https://chromium-review.googlesource.com/c/angle/angle/+/3858692/9/src/tests/gl_tests/VulkanPerformanceCounterTest.cpp#3088, to make the test pass on Pixel 6.\n\nOr we can skip the test on Pixel 6 for now. Once the ARM has fixed the bug, we will move the workaround code and the skip line in the expectaion.txt file.",
       "revId": "562130acbdc4106aeee313c61afb971ad0fece4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7248072_c6b3f1c2",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2902,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-08-31T20:36:15Z",
+      "side": 1,
+      "message": "Thanks for catching this. I added the check for the test as well. We can remove it once the workaround is removed.",
+      "parentUuid": "860ec0d6_813e756f",
+      "revId": "562130acbdc4106aeee313c61afb971ad0fece4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
