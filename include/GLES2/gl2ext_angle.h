@@ -582,6 +582,38 @@ GL_APICALL void GL_APIENTRY glReleaseTexturesANGLE(GLuint numTexture, const GLui
 #define GL_ROBUST_FRAGMENT_SHADER_OUTPUT_ANGLE 0x96B9
 #endif /* GL_ANGLE_robust_fragment_shader_output */
 
+#ifndef GL_ANGLE_shader_pixel_local_storage
+#define GL_ANGLE_shader_pixel_local_storage 1
+#define GL_MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE 0x96E0
+#define GL_MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PLS_ANGLE 0x96E1
+#define GL_MAX_COMBINED_DRAW_BUFFERS_AND_PLS_PLANES_ANGLE 0x96E2
+#define GL_PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE 0x96E3
+#define GL_CLEAR_ANGLE 0x96E4
+#define GL_DISABLE_ANGLE 0x96E5
+#define GL_PIXEL_LOCAL_FORMAT_ANGLE 0x96E6
+#define GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE 0x96E7
+#define GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE 0x96E8
+#define GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE 0x96E9
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERMEMORYLESSPIXELLOCALSTORAGEANGLEPROC) (GLint plane, GLenum internalformat);
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERTEXTUREPIXELLOCALSTORAGEANGLEPROC) (GLint plane, GLuint backingtexture, GLint level, GLint layer);
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERPIXELLOCALCLEARVALUEFVANGLEPROC) (GLint plane, const GLfloat value[4]);
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERPIXELLOCALCLEARVALUEIVANGLEPROC) (GLint plane, const GLint value[4]);
+typedef void (GL_APIENTRYP PFNGLFRAMEBUFFERPIXELLOCALCLEARVALUEUIVANGLEPROC) (GLint plane, const GLuint value[4]);
+typedef void (GL_APIENTRYP PFNGLBEGINPIXELLOCALSTORAGEANGLEPROC) (GLsizei planes, const GLenum loadops[]);
+typedef void (GL_APIENTRYP PFNGLENDPIXELLOCALSTORAGEANGLEPROC) ();
+typedef void (GL_APIENTRYP PFNGLPIXELLOCALSTORAGEBARRIERANGLEPROC) ();
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glFramebufferMemorylessPixelLocalStorageANGLE (GLint plane, GLenum internalformat);
+GL_APICALL void GL_APIENTRY glFramebufferTexturePixelLocalStorageANGLE (GLint plane, GLuint backingtexture, GLint level, GLint layer);
+GL_APICALL void GL_APIENTRY glFramebufferPixelLocalClearValuefvANGLE (GLint plane, const GLfloat value[4]);
+GL_APICALL void GL_APIENTRY glFramebufferPixelLocalClearValueivANGLE (GLint plane, const GLint value[4]);
+GL_APICALL void GL_APIENTRY glFramebufferPixelLocalClearValueuivANGLE (GLint plane, const GLuint value[4]);
+GL_APICALL void GL_APIENTRY glBeginPixelLocalStorageANGLE (GLsizei planes, const GLenum loadops[]);
+GL_APICALL void GL_APIENTRY glEndPixelLocalStorageANGLE ();
+GL_APICALL void GL_APIENTRY glPixelLocalStorageBarrierANGLE ();
+#endif
+#endif /* GL_ANGLE_shader_pixel_local_storage */
+
 // clang-format on
 
 #ifndef GL_ANGLE_yuv_internal_format
