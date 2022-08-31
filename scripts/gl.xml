@@ -485,8 +485,8 @@ typedef unsigned int GLhandleARB;
     <enums namespace="GL" group="SpecialNumbers" vendor="ARB" comment="Tokens whose numeric value is intrinsically meaningful">
         <enum value="0" name="GL_FALSE" group="SpecialNumbers,Boolean,VertexShaderWriteMaskEXT,ClampColorModeARB"/>
         <enum value="0" name="GL_NO_ERROR" group="SpecialNumbers,GraphicsResetStatus,ErrorCode"/>
-        <enum value="0" name="GL_ZERO" group="SpecialNumbers,TextureSwizzle,StencilOp,BlendingFactor,FragmentShaderGenericSourceATI"/>
-        <enum value="0" name="GL_NONE" group="SpecialNumbers,FragmentShaderValueRepATI,FragmentShaderDestModMaskATI,FragmentShaderDestMaskATI,SyncBehaviorFlags,TextureCompareMode,PathColorFormat,CombinerBiasNV,CombinerScaleNV,DrawBufferMode,PixelTexGenModeSGIX,ReadBufferMode,ColorBuffer,PathGenMode,PathTransformType,PathFontStyle"/>
+        <enum value="0" name="GL_ZERO" group="SpecialNumbers,TextureSwizzle,StencilOp,BlendingFactor,FragmentShaderGenericSourceATI,PixelLocalLoadOpANGLE"/>
+        <enum value="0" name="GL_NONE" group="SpecialNumbers,FragmentShaderValueRepATI,FragmentShaderDestModMaskATI,FragmentShaderDestMaskATI,SyncBehaviorFlags,TextureCompareMode,PathColorFormat,CombinerBiasNV,CombinerScaleNV,DrawBufferMode,PixelTexGenModeSGIX,ReadBufferMode,ColorBuffer,PathGenMode,PathTransformType,PathFontStyle,PixelLocalInternalFormatANGLE"/>
         <enum value="0" name="GL_NONE_OES" group="SpecialNumbers,ReadBufferMode,DrawBufferMode"/>
         <enum value="1" name="GL_TRUE" group="SpecialNumbers,Boolean,VertexShaderWriteMaskEXT,ClampColorModeARB"/>
         <enum value="1" name="GL_ONE" group="SpecialNumbers,TextureSwizzle,BlendingFactor,FragmentShaderGenericSourceATI"/>
@@ -897,7 +897,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x1005" name="GL_TEXTURE_BORDER" group="TextureParameterName,GetTextureParameter"/>
         <enum value="0x1006" name="GL_TEXTURE_TARGET"/>
             <unused start="0x1007" end="0x10FF" comment="Unused for GetTextureParameter"/>
-        <enum value="0x1100" name="GL_DONT_CARE" group="DebugSeverity,HintMode,DebugSource,DebugType"/>
+        <enum value="0x1100" name="GL_DONT_CARE" group="DebugSeverity,HintMode,DebugSource,DebugType,PixelLocalLoadOpANGLE"/>
         <enum value="0x1101" name="GL_FASTEST" group="HintMode"/>
         <enum value="0x1102" name="GL_NICEST" group="HintMode"/>
             <unused start="0x1103" end="0x11FF" comment="Unused for HintMode"/>
@@ -1013,7 +1013,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x1D00" name="GL_FLAT" group="ShadingModel"/>
         <enum value="0x1D01" name="GL_SMOOTH" group="ShadingModel"/>
             <unused start="0x1D02" end="0x1DFF" comment="Unused for ShadingModel"/>
-        <enum value="0x1E00" name="GL_KEEP" group="StencilOp"/>
+        <enum value="0x1E00" name="GL_KEEP" group="StencilOp,PixelLocalLoadOpANGLE"/>
         <enum value="0x1E01" name="GL_REPLACE" group="StencilOp,LightEnvModeSGIX"/>
         <enum value="0x1E02" name="GL_INCR" group="StencilOp"/>
         <enum value="0x1E03" name="GL_DECR" group="StencilOp"/>
@@ -1321,7 +1321,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x8057" name="GL_RGB5_A1" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8057" name="GL_RGB5_A1_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8057" name="GL_RGB5_A1_OES" group="InternalFormat,SizedInternalFormat"/>
-        <enum value="0x8058" name="GL_RGBA8" group="InternalFormat,SizedInternalFormat"/>
+        <enum value="0x8058" name="GL_RGBA8" group="InternalFormat,SizedInternalFormat,PixelLocalInternalFormatANGLE"/>
         <enum value="0x8058" name="GL_RGBA8_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8058" name="GL_RGBA8_OES" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8059" name="GL_RGB10_A2" group="InternalFormat,SizedInternalFormat"/>
@@ -1954,7 +1954,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x822C" name="GL_RG16_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x822D" name="GL_R16F" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x822D" name="GL_R16F_EXT" group="InternalFormat,SizedInternalFormat"/>
-        <enum value="0x822E" name="GL_R32F" group="InternalFormat,SizedInternalFormat"/>
+        <enum value="0x822E" name="GL_R32F" group="InternalFormat,SizedInternalFormat,PixelLocalInternalFormatANGLE"/>
         <enum value="0x822E" name="GL_R32F_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x822F" name="GL_RG16F" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x822F" name="GL_RG16F_EXT" group="InternalFormat,SizedInternalFormat"/>
@@ -1965,7 +1965,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x8233" name="GL_R16I" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8234" name="GL_R16UI" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8235" name="GL_R32I" group="InternalFormat,SizedInternalFormat"/>
-        <enum value="0x8236" name="GL_R32UI" group="InternalFormat,SizedInternalFormat"/>
+        <enum value="0x8236" name="GL_R32UI" group="InternalFormat,SizedInternalFormat,PixelLocalInternalFormatANGLE"/>
         <enum value="0x8237" name="GL_RG8I" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8238" name="GL_RG8UI" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8239" name="GL_RG16I" group="InternalFormat,SizedInternalFormat"/>
@@ -5039,7 +5039,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x8D79" name="GL_INTENSITY16UI_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D7A" name="GL_LUMINANCE16UI_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D7B" name="GL_LUMINANCE_ALPHA16UI_EXT" group="InternalFormat,SizedInternalFormat"/>
-        <enum value="0x8D7C" name="GL_RGBA8UI" group="InternalFormat,SizedInternalFormat"/>
+        <enum value="0x8D7C" name="GL_RGBA8UI" group="InternalFormat,SizedInternalFormat,PixelLocalInternalFormatANGLE"/>
         <enum value="0x8D7C" name="GL_RGBA8UI_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D7D" name="GL_RGB8UI" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D7D" name="GL_RGB8UI_EXT" group="InternalFormat,SizedInternalFormat"/>
@@ -5063,7 +5063,7 @@ typedef unsigned int GLhandleARB;
         <enum value="0x8D8B" name="GL_INTENSITY16I_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D8C" name="GL_LUMINANCE16I_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D8D" name="GL_LUMINANCE_ALPHA16I_EXT" group="InternalFormat,SizedInternalFormat"/>
-        <enum value="0x8D8E" name="GL_RGBA8I" group="InternalFormat,SizedInternalFormat"/>
+        <enum value="0x8D8E" name="GL_RGBA8I" group="InternalFormat,SizedInternalFormat,PixelLocalInternalFormatANGLE"/>
         <enum value="0x8D8E" name="GL_RGBA8I_EXT" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D8F" name="GL_RGB8I" group="InternalFormat,SizedInternalFormat"/>
         <enum value="0x8D8F" name="GL_RGB8I_EXT" group="InternalFormat,SizedInternalFormat"/>
@@ -6946,8 +6946,8 @@ typedef unsigned int GLhandleARB;
         <enum value="0x96DF" name="GL_FRAGMENT_SHADING_RATE_ATTACHMENT_WITH_DEFAULT_FRAMEBUFFER_SUPPORTED_EXT" group="GetPName"/>
     </enums>
 
-    <enums namespace="GL" start="0x96E0" end="0x96EF" vendor="ANGLE" comment="Reserved for Ken Russell - ANGLE (via github pull request)">
-            <unused start="0x96E0" end="0x96EF" vendor="ANGLE"/>
+    <enums namespace="GL" start="0x96ED" end="0x96EF" vendor="ANGLE" comment="Reserved for Ken Russell - ANGLE (via github pull request)">
+            <unused start="0x96ED" end="0x96EF" vendor="ANGLE"/>
     </enums>
 
 <!-- Enums reservable for future use. To reserve a new range, allocate one
