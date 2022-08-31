@@ -22,6 +22,30 @@
       },
       "revId": "2969d25a2bf3e68f3169a52826075eeadc735475",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45da6194_819d58e7",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-08-31T23:13:15Z",
+      "side": 1,
+      "message": "`AHardwareBufferNativeTests` are passing with ANGLE on below:\n- Venus on Intel (ANV)\n- QC Pixel4a\n- Venus on ARM (mali r32 with my fix)\n\nBelow 2 tests are failing for all of above dimensions.\n```\nImageTestES3.RGBAAHBUploadDataColorspace/ES3_OpenGLES\nImageTestES3.RGBXAHBUploadDataColorspace/ES3_OpenGLES\n```\nI suspect angle has some issue with its gl backend.\n\nPs: `createEGLImageAndroidHardwareBufferSource` is the one takes the colorspace attrib to create the EGLImage with the client AHB. `glTexSubImage2D` usage looks correct to me, along with the expectation on 3545.",
+      "parentUuid": "24dc519a_b887b2a2",
+      "range": {
+        "startLine": 3545,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 46
+      },
+      "revId": "2969d25a2bf3e68f3169a52826075eeadc735475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
