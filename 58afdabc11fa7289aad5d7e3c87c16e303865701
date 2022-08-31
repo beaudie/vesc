@@ -247,6 +247,24 @@
       "parentUuid": "96105d36_025ef574",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16b7bb7_26d3b132",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-08-31T19:00:03Z",
+      "side": 1,
+      "message": "\u003e Is there any test case or Webkit\u0027s scenario that depends on this wait?\n\nAll rendering depends on this wait. The rendering is happening to IOSurface and then glFlushed.\nThen the rendering results is observed from the IOSurface, but without OpenGL.\n\nThis works with the native OpenGL driver, and I don\u0027t understand why would it not work in ANGLE implemented OpenGL driver.\n\nI think all EGL external surface access and other actions document the cases which \"cause flush\".\n\nIf I understand correctly, the purpose of those is to ensure that the external observability of the effects of the OpenGL rendering is deterministic.\nSo at least how I see them, these impose the semantics of glFlush relative to the primitives EGL on a particular platform offers.\n\nIn other words: if you bring in EGL primitives to modify external resources, you have to bring in the primitives to synchronise the resources. If we are talking about \"adding an extension to implement this primitive\", then would it not mean that all these 20 years of EGL that primitive was lacking? And since this does not sound plausible, it has to be interpreted as always being there, in form of glFlush.\n\n\u003e And from this CL\u0027s discovery, removing the wait did improve the performance in some scenarios that uses a lot of \"glFlush\" such as Motionmark \"Leaves\" benchmark.\n\nReplacing glFlush with no-op is obviously going to improve performance. This in itself does not provide a proof of anything. The root cause might be numerous things, such as Metal ANGLE not scheduling work to GPU as aggressively as OpenGL driver.",
+      "parentUuid": "96105d36_025ef574",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
