@@ -63,6 +63,30 @@
       },
       "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "defa8ef9_600a0470",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-08-31T21:20:13Z",
+      "side": 1,
+      "message": "You can get the frontend features from `mDisplay`. Hopefully similarly accessible in other backends.\n\nAt the same time, if the feature is used to get the _backend_ to not expose an extension, it\u0027s technically a backend feature not a frontend one. So you could also consider adding one feature per backend.\n\nI\u0027m good with either solution",
+      "parentUuid": "c08e3625_31180b34",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
