@@ -16,6 +16,24 @@
       "message": "Nice job Eddie. Can you describe why you chose to split libGL (opengl32) into two libraries? It\u0027s a bit of a mystery here.",
       "revId": "f77ca4ff974fe7e1575a42b7108b63c35ebbd3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "507da343_78ff3cf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-01T14:41:54Z",
+      "side": 1,
+      "message": ".. in the issue description that is, to document this if we need to revisit the design.",
+      "parentUuid": "e38f910c_84593afa",
+      "revId": "f77ca4ff974fe7e1575a42b7108b63c35ebbd3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
