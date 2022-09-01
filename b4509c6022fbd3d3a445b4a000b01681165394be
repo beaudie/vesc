@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "799713c4_8ef8dd0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-01T16:37:11Z",
+      "side": 1,
+      "message": "LGTM, tough the change is still WIP",
+      "revId": "b4509c6022fbd3d3a445b4a000b01681165394be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54daad89_faa6eebd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-01T16:37:11Z",
+      "side": 1,
+      "message": "FYI, in this change: https://chromium-review.googlesource.com/c/angle/angle/+/3827644/16/src/libANGLE/renderer/vulkan/vk_helpers.h#2560\n\nThe format list passed when creating the image (through `VkImageFormatListCreateInfoKHR`) is cached in the image. This is necessary for imageless framebuffers support, but it sounds like you could do a look up in the same array? I.e. if the format is any in that format list, copy is good?\n\nNot a blocking request, just wondering.",
+      "revId": "b4509c6022fbd3d3a445b4a000b01681165394be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
