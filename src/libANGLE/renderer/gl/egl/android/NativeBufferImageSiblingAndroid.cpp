@@ -12,8 +12,9 @@
 
 namespace rx
 {
-NativeBufferImageSiblingAndroid::NativeBufferImageSiblingAndroid(EGLClientBuffer buffer)
-    : mBuffer(buffer), mFormat(GL_NONE), mYUV(false)
+NativeBufferImageSiblingAndroid::NativeBufferImageSiblingAndroid(EGLClientBuffer buffer,
+                                                                 const egl::AttributeMap &attribs)
+    : mBuffer(buffer), mFormat(GL_NONE), mYUV(false), mAttribs(attribs)
 {}
 
 NativeBufferImageSiblingAndroid::~NativeBufferImageSiblingAndroid() {}
@@ -70,6 +71,16 @@ size_t NativeBufferImageSiblingAndroid::getSamples() const
 EGLClientBuffer NativeBufferImageSiblingAndroid::getBuffer() const
 {
     return mBuffer;
+}
+
+void NativeBufferImageSiblingAndroid::getImageCreationAttributes(
+    std::vector<EGLint> *outAttributes) const
+{
+    if (mAttribs.contains(EGL_GL_COLORSPACE_KHR))
+    {
+        outAttributes->push_back(EGL_GL_COLORSPACE_KHR);
+        outAttributes->push_back(mAttribs.getAsInt(EGL_GL_COLORSPACE_KHR));
+    }
 }
 
 }  // namespace rx
