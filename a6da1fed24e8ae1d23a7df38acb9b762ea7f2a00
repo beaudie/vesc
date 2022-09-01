@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb30cce0_7c0b4840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-01T17:46:25Z",
+      "side": 1,
+      "message": "Nice - I wasn\u0027t aware we had these classes.  We can probably migrate some things from FrameCapture.cpp.",
+      "revId": "a6da1fed24e8ae1d23a7df38acb9b762ea7f2a00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
