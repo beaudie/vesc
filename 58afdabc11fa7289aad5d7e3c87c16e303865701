@@ -354,6 +354,24 @@
       "message": "(possibly breaking threading)\n\nI think someone mentioned this on the thread before, but, IMO, we should:\n\nMake glFlush for ANGLE-metal do exactly what glFlush claims it does -- ensure that commands will be executed -- and not all of the off-spec IOSurface stuff. This is something like MTLCommandBuffer::commit.\n\nAdd a new extension for ANGLE-metal that is something like glFlushIOSurfaceChangesANGLE (or a better name), which makes us do MTLCommandBuffer::waitUntilScheduled. (Also note that there is MTLCommandBuffer::addScheduledHandler, which may allow us to do this without blocking threads, etc).\n\nThen ensure that Chrome\u0027s IOSurface synchronization makes these calls as needed. There are only a few such places.\n\nThat said, I\u0027m unfamiliar with the internals of ANGLE, so this suggestion may be off of the mark.",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6e54f96_58671c35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-01T18:21:29Z",
+      "side": 1,
+      "message": "So I opened an issue for this https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7626 and will update this CL to point to it.\n\nPlease comment there. In particular, do we need `glFlushIOSurfaceChangesANGLE` or do we just need to fix some other standard things. See that issue",
+      "parentUuid": "3b74208d_3ef20d8a",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
