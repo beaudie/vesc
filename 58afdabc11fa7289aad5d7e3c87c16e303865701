@@ -319,6 +319,24 @@
       "parentUuid": "9ac6aece_6f672711",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90346726_409e0711",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-01T02:53:34Z",
+      "side": 1,
+      "message": "\u003e For one copy canvas capture, we already do a wait (at least in this instance [0], we\u0027d want to double check the rest), so that might have us covered.\n\nFYI, after latest changes, we no longer wait for `media::CopyRGBATextureToVideoFrame` to complete (via `GL_COMMANDS_COMPLETED_CHROMIUM` query) before locking IOSurface. It has been changed to wait for `GL_COMMANDS_ISSUED_CHROMIUM` query instead to improve performance. So if we decide to move forward with this CL, we will have to insert [waitUntilScheduled] in this function as well (or maybe insert [waitUntilScheduled] whenever a `GL_COMMANDS_ISSUED_CHROMIUM` query is made):\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/graphics/web_graphics_context_3d_video_frame_pool.cc;drc\u003d692d2f1430d2a65bb1c0519f8efcc928889b10a6;l\u003d154",
+      "parentUuid": "102810f9_4717f238",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
