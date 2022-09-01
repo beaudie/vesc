@@ -4712,6 +4712,14 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
             onColorAccessChange();
         }
 
+        // Update the DIRTY_BIT_COLOR_ACCESS dirty bit if feature
+        // permanentlySwitchToFramebufferFetchMode is enabled, and current
+        // program uses framebufferfetch.
+        if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled && hasFramebufferFetch)
+        {
+            onColorAccessChange();
+        }
+
         updateStencilWriteWorkaround();
     }
 
