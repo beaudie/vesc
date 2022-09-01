@@ -273,8 +273,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
     const angle::Format &imageFormat   = vkFormat.getActualRenderableImageFormat();
     bool isDepthOrStencilFormat        = imageFormat.hasDepthOrStencilBits();
-    mFormat                            = gl::Format(vkFormat.getIntendedGLFormat());
     bool isExternal                    = bufferFormatProperties.format == VK_FORMAT_UNDEFINED;
+    mFormat = isExternal ? gl::Format(GL_RGB8) : gl::Format(vkFormat.getIntendedGLFormat());
 
     // TODO (b/223456677): VK_EXT_ycbcr_attachment Extension query
     bool externalRenderTargetSupported = false;
