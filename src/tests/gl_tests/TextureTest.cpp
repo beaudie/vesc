@@ -214,6 +214,11 @@ void main()
 
     void testSetUp() override
     {
+        // Tests with this workaround enabled are flaky on win/intel.
+        // https://anglebug.com/7624
+        ANGLE_SKIP_TEST_IF(GetParam().isEnabled(Feature::EmulateCopyTexImage2DFromRenderbuffers) &&
+                           IsWindows() && IsIntel());
+
         TexCoordDrawTest::testSetUp();
         mTexture2D = create2DTexture();
 
