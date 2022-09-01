@@ -111,6 +111,30 @@
       },
       "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4952452_0e40eefb",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-01T01:33:06Z",
+      "side": 1,
+      "message": "\u003e Is there a way to add backend feature overrides to ANGLE_INSTANTIATE_TEST?\n\nYeap. The features are all pooled together in the enum, overrides don\u0027t distinguish between frontend and backend features.\n\nYou\u0027d have to give the features different names though to avoid clash (sorry)",
+      "parentUuid": "65d251eb_a0816d78",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
