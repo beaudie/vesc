@@ -7005,6 +7005,10 @@ TEST_P(VulkanPerformanceCounterTest, FenceThenSwapBuffers)
 // render pass to close when the transform feedback buffer is used.
 TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
 {
+    // Flaky on Win/Swiftshader
+    // http://anglebug.com/7625
+    ANGLE_SKIP_TEST_IF(IsSwiftshaderDevice() && IsWindows());
+
     // There should be two render passes; one for the transform feedback draw, one for the other two
     // draw calls.
     uint64_t expectedRenderPassCount = getPerfCounters().renderPasses + 2;
