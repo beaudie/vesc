@@ -265,6 +265,24 @@
       "parentUuid": "96105d36_025ef574",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac6aece_6f672711",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-01T01:11:43Z",
+      "side": 1,
+      "message": "glFlush has never guaranteed these things AFAIK. Only glFinish (and or other sync primitives). 20 years of EGL says nothing about glFlush that I know of. Unless things have changed. It\u0027s certainly been a few years but last time I read the spec on various sychronizations, the relevant specs only said glFinish guarantees sync.\n\nFor example appendix D.3.1 of the OpenGL ES 3.0 spec says glFinish or glWaitSync are required to sychronize shared objects across contexts.\n\nThe EGL spec only mentions implicit flushes at a glance.",
+      "parentUuid": "f16b7bb7_26d3b132",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
