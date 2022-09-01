@@ -283,6 +283,24 @@
       "parentUuid": "f16b7bb7_26d3b132",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a31099_389fd78a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-01T01:36:45Z",
+      "side": 1,
+      "message": "FWIW, we also delay flush in the Vulkan backend, but we only do that when in the middle of a render pass (and defer it to when the render pass closes for other reasons).\n\nThis is mentioned in the GLES spec, in a footnote:\n\n\u003e Historically, use of Flush has had negative performance implications for some implementations, and subsequently it does not universally operate as described here. One exception to this is when  the default framebuffer is bound, and it is single-buffered; in this case, flush behaves as expected. Other references to the flush operation in the specification, such as that in section 4.1.2, will behave as expected. Waiting on a fence sync object with SYNC_FLUSH_COMMANDS_BIT is thus recommended as a way to perform a guaranteed flush.",
+      "parentUuid": "9ac6aece_6f672711",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
