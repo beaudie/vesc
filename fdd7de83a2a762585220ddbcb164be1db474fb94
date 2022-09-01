@@ -33,6 +33,24 @@
       "message": "Or just loop over the attribs and pass all of them?",
       "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f127075a_e050631f",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-01T21:08:54Z",
+      "side": 1,
+      "message": "There is test failure with that, and I decided to make pointed fix here instead of keep digging on the failure.",
+      "parentUuid": "4a4c116b_bab68506",
+      "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
