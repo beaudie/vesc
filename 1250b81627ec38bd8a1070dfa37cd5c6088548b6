@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4e60ba5_a4254371",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-01T19:35:40Z",
+      "side": 1,
+      "message": "Thanks Jonah!\n\nFYI, \"Rubber Stamper\" would have also done 😊",
+      "revId": "1250b81627ec38bd8a1070dfa37cd5c6088548b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
