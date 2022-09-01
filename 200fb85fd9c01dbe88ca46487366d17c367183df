@@ -135,6 +135,30 @@
       },
       "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a189e055_0273502a",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-01T05:59:13Z",
+      "side": 1,
+      "message": "\u003e The features are all pooled together in the enum\n\nOh nice! Then I\u0027m making this a lot more complicated than it should be. The only one that doesn\u0027t already have a backend feature is D3D.",
+      "parentUuid": "f4952452_0e40eefb",
+      "range": {
+        "startLine": 118,
+        "startChar": 40,
+        "endLine": 118,
+        "endChar": 72
+      },
+      "revId": "200fb85fd9c01dbe88ca46487366d17c367183df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
