@@ -46,6 +46,30 @@
       },
       "revId": "2969d25a2bf3e68f3169a52826075eeadc735475",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51e0c24d_1d20121e",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-01T00:03:39Z",
+      "side": 1,
+      "message": "Yea, I think the OpenGLES probablyt is due to we dropped the color space attribute when calling into OpenGLES.\n\nCould you try fix the following fix to see if it fixes your bug?\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3864050",
+      "parentUuid": "45da6194_819d58e7",
+      "range": {
+        "startLine": 3545,
+        "startChar": 0,
+        "endLine": 3545,
+        "endChar": 46
+      },
+      "revId": "2969d25a2bf3e68f3169a52826075eeadc735475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
