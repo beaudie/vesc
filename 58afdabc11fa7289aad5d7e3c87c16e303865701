@@ -301,6 +301,24 @@
       "parentUuid": "9ac6aece_6f672711",
       "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "102810f9_4717f238",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-01T02:07:47Z",
+      "side": 1,
+      "message": "\u003e glFlush has never guaranteed these things AFAIK. Only glFinish (and or other sync primitives)\n\nYeah, I agree glFlush was never mentioned to do any synchronization in the spec. Removing [waitUntilScheduled] is not the same as replacing glFlush with no-op. It still flushes the pending command buffer to commit it to the command queue. Only this time it won\u0027t wait until the command buffer is actually sent to the GPU.\n\nEven if you want IOSurface to see the prior GL commands, doing synchronization every time in glFlush is still a waste for other use cases that don\u0027t need it. And for IOSurface\u0027s coherent access, there are still sync primitives to be used such as EGLSync and GL_EXT_semaphore extension https://registry.khronos.org/OpenGL/extensions/EXT/EXT_external_objects.txt. The latter is specifically designed for external resources.\n\nOpenGL driver can make IOSurface see \"flush\"ed commands, however afaik, the driver knows a lot more information than ANGLE does. When \"IOSurfaceLock\" is called, it could just issue a \"waitUntilScheduled\" on flushed commands or use a sync primitive internally (fwiw, we only need to \"waitUntilScheduled\" on the last command buffer because the order of scheduling is guaranteed by Metal).\nANGLE cannot do the same because it doesn\u0027t know when IOSurface is locked, unless we could hook \"IOSurfaceLock\" function or related things.",
+      "parentUuid": "9ac6aece_6f672711",
+      "revId": "58afdabc11fa7289aad5d7e3c87c16e303865701",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
