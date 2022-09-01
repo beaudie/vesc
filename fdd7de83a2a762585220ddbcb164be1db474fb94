@@ -51,6 +51,24 @@
       "parentUuid": "4a4c116b_bab68506",
       "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e40209_66ba1820",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-09-01T23:22:55Z",
+      "side": 1,
+      "message": "Or just `bool mSRGB`? since others seem to fit into the generic image attrib state tracking.",
+      "parentUuid": "f127075a_e050631f",
+      "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
