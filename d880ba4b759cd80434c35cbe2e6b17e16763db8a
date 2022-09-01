@@ -39,6 +39,30 @@
       },
       "revId": "d880ba4b759cd80434c35cbe2e6b17e16763db8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44fd22ed_0781e483",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4050,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-01T00:03:15Z",
+      "side": 1,
+      "message": "Done.  Note that I moved setting of boundVertexArrayID outside of the for loop that places calls in Setup and Restore.",
+      "parentUuid": "f964e91c_a41d92f6",
+      "range": {
+        "startLine": 4050,
+        "startChar": 43,
+        "endLine": 4050,
+        "endChar": 44
+      },
+      "revId": "d880ba4b759cd80434c35cbe2e6b17e16763db8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
