@@ -16,6 +16,23 @@
       "message": "Probably also fixes https://b.corp.google.com/issues/244522531",
       "revId": "9ee1ffb355fd3ef70f2635c07e1748042bce06cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c108a9b_9feb588a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-02T21:34:10Z",
+      "side": 1,
+      "message": "We should fall back to `NativePixelFormatToGLInternalFormat` when `bufferFormatProperties.format` is UNDEFINED instead.",
+      "revId": "9ee1ffb355fd3ef70f2635c07e1748042bce06cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
