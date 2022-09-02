@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17c541e5_04a6e73b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-09-02T01:12:59Z",
+      "side": 1,
+      "message": "Still LGTM!\n\n(I\u0027m unable to +2)",
+      "revId": "7668130d79a3a5bf82b1551b4e6ff66588c72dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
