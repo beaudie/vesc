@@ -2149,7 +2149,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=swiftshader",
           "--bot-mode",
-          "--xvfb"
+          "--xvfb",
+          "--batch-size=1"
         ],
         "merge": {
           "args": [],
@@ -2169,7 +2170,7 @@
           "hard_timeout": 900,
           "io_timeout": 900,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 8
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -2645,7 +2646,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=swiftshader",
           "--bot-mode",
-          "--xvfb"
+          "--xvfb",
+          "--batch-size=1"
         ],
         "merge": {
           "args": [],
@@ -2665,7 +2667,7 @@
           "hard_timeout": 900,
           "io_timeout": 900,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 8
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -3349,7 +3351,8 @@
           "angle_deqp_gles3_tests",
           "--use-angle=swiftshader",
           "--bot-mode",
-          "--xvfb"
+          "--xvfb",
+          "--batch-size=1"
         ],
         "merge": {
           "args": [],
@@ -3369,7 +3372,7 @@
           "hard_timeout": 900,
           "io_timeout": 900,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 8
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -5324,7 +5327,7 @@
           "hard_timeout": 900,
           "io_timeout": 900,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 8
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
@@ -5866,7 +5869,7 @@
           "hard_timeout": 900,
           "io_timeout": 900,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 4
+          "shards": 8
         },
         "test": "angle_deqp_gles3_tests",
         "test_id_prefix": "ninja://src/tests:angle_deqp_gles3_tests/",
