@@ -227,6 +227,14 @@
                 "Metal iOS has a limit on the number of color target bits per pixel."
             ],
             "issue": "http://anglebug.com/7280"
+        },
+        {
+            "name": "unpack_last_row_separately_for_padding_inclusion",
+            "category": "Workarounds",
+            "description": [
+                "When uploading textures from an unpack buffer, some drivers count an extra row padding"
+            ],
+            "issue": "http://anglebug.com/7573"
         }
     ]
 }

@@ -222,6 +222,11 @@ struct FeaturesMtl : FeatureSetBase
         "limitMaxColorTargetBitsForTesting", FeatureCategory::MetalFeatures,
         "Metal iOS has a limit on the number of color target bits per pixel.", &members,
         "http://anglebug.com/7280"};
+
+    FeatureInfo unpackLastRowSeparatelyForPaddingInclusion = {
+        "unpackLastRowSeparatelyForPaddingInclusion", FeatureCategory::MetalWorkarounds,
+        "When uploading textures from an unpack buffer, some drivers count an extra row padding",
+        &members, "http://anglebug.com/7573"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
