@@ -16,6 +16,23 @@
       "message": "lgtm+2\n\nThis seems small and readily testable so I\u0027m +2\u0027ing it directly. Please ping me on chat when requesting my review; this was buried underneath a pile of other email. Thanks.\n",
       "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc02c5a8_9f050ee7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-02T21:27:27Z",
+      "side": 1,
+      "message": "CQ\u0027ing this for you.\n",
+      "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
