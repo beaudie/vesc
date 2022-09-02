@@ -33,6 +33,23 @@
       "message": "CQ\u0027ing this for you.\n",
       "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a86c53d_1900d093",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-02T23:03:37Z",
+      "side": 1,
+      "message": "It seems plausible that the failure of deqp/functional/gles3/primitiverestart/00.html in:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/12742/overview\n\nis related to this change.\n",
+      "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
