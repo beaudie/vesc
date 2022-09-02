@@ -87,6 +87,30 @@
       },
       "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b45054dc_7b391986",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1546684
+      },
+      "writtenOn": "2022-09-02T16:56:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0592989_0ae62f86",
+      "range": {
+        "startLine": 547,
+        "startChar": 0,
+        "endLine": 547,
+        "endChar": 45
+      },
+      "revId": "f0ebe5cf23ede038157d77c6acb4e9cef831b311",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
