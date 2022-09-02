@@ -600,7 +600,8 @@ static constexpr uint32_t kScratchBufferLifetime = 64u;
 ShareGroup::ShareGroup(rx::EGLImplFactory *factory)
     : mRefCount(1),
       mImplementation(factory->createShareGroup()),
-      mFrameCaptureShared(new angle::FrameCaptureShared)
+      mFrameCaptureShared(new angle::FrameCaptureShared),
+      mRobustContextCount(0)
 {}
 
 void ShareGroup::finishAllContexts()
@@ -617,11 +618,22 @@ void ShareGroup::finishAllContexts()
 void ShareGroup::addSharedContext(gl::Context *context)
 {
     mContexts.insert(context);
+
+    if (context->isRobustnessEnabled())
+    {
+        ++mRobustContextCount;
+    }
 }
 
 void ShareGroup::removeSharedContext(gl::Context *context)
 {
     mContexts.erase(context);
+
+    if (context->isRobustnessEnabled())
+    {
+        ASSERT(mRobustContextCount > 0);
+        --mRobustContextCount;
+    }
 }
 
 ShareGroup::~ShareGroup()

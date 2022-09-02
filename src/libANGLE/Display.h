@@ -99,6 +99,8 @@ class ShareGroup final : angle::NonCopyable
 
     size_t getShareGroupContextCount() const { return mContexts.size(); }
 
+    bool hasAnyContextWithRobustness() const { return mRobustContextCount > 0; }
+
   protected:
     ~ShareGroup();
 
@@ -112,6 +114,11 @@ class ShareGroup final : angle::NonCopyable
 
     // The list of contexts within the share group
     ContextSet mContexts;
+
+    // The number of contexts in the share group that have robustness enabled.  If any context in
+    // the share group is robust, any program created in any context of the share group must have
+    // robustness enabled.  This is because programs are shared between the share group contexts.
+    size_t mRobustContextCount;
 };
 
 // Constant coded here as a reasonable limit.
