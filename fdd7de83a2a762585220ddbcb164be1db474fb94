@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1720117f_7b9a87fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-02T00:59:00Z",
+      "side": 1,
+      "message": "Needs +2 to land. Thanks.",
+      "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4a4c116b_bab68506",
         "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
         "patchSetId": 1
@@ -85,6 +102,24 @@
       "side": 1,
       "message": "Either will work. I sort of picked middle ground here so that if there is more than color space, it is easy to add.",
       "parentUuid": "22e40209_66ba1820",
+      "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1723101_dc20a5c8",
+        "filename": "src/libANGLE/renderer/gl/egl/android/NativeBufferImageSiblingAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-02T00:59:00Z",
+      "side": 1,
+      "message": "Changed to only remember the color space.",
+      "parentUuid": "781b5a1b_56895dce",
       "revId": "fdd7de83a2a762585220ddbcb164be1db474fb94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
