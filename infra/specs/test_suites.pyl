@@ -993,9 +993,10 @@
         ],
         'linux_args': [
           '--xvfb',
+          '--batch-size=1',
         ],
         'swarming': {
-          'shards': 4,
+          'shards': 8,
         },
         'use_isolated_scripts_api': True,
       },
