@@ -215,8 +215,13 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     ShareGroupImpl *createShareGroup() override;
 
+    bool isSurfaceFormatColorspacePairSupported(VkSurfaceKHR surface,
+                                                VkFormat format,
+                                                VkColorSpaceKHR colorspace) const;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
+    bool isConfigFormatSupported(VkFormat format) const;
 
   private:
     virtual SurfaceImpl *createWindowSurfaceVk(const egl::SurfaceState &state,
@@ -225,9 +230,15 @@ class DisplayVk : public DisplayImpl, public vk::Context
 
     virtual angle::Result waitNativeImpl();
 
+    bool isColorspaceSupported(VkColorSpaceKHR colorspace) const;
+    void initSupportedSurfaceFormatColorspaces();
+
     mutable angle::ScratchBuffer mScratchBuffer;
 
     vk::Error mSavedError;
+
+    // Map of supported colorspace and associated surface format set.
+    angle::HashMap<VkColorSpaceKHR, std::unordered_set<VkFormat>> mSupportedColorspaceFormatsMap;
 };
 
 }  // namespace rx
