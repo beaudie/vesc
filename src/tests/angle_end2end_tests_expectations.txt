@@ -706,3 +706,8 @@
 6261 : MultithreadingTest* = TIMEOUT
 // Please do not add expectations below this line,
 // so that TIMEOUT expectations above don't override more precise SKIP expectations
+
+// Renders incorrectly on ANGLE
+7598 VULKAN : FogBlendTest.ShadowEffect/* = SKIP
+7598 OpenGL : FogBlendTest.ShadowEffect/* = SKIP
+7598 GLES : FogBlendTest.ShadowEffect/* = SKIP
