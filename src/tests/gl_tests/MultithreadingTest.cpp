@@ -660,6 +660,11 @@ void MultithreadingTestES3::mainThreadDraw(bool useDraw)
 
     for (int iterations = 0; iterations < kNumIterations; ++iterations)
     {
+        // Do swap buffers before the actual draw, because on some platforms,
+        // swapping buffers would destroy the content of the framebuffer thus making
+        // glReadPixels() invalid
+        swapBuffers();
+
         for (int draws = 0; draws < kNumDraws;)
         {
             std::lock_guard<decltype(mMutex)> lock(mMutex);
@@ -694,7 +699,6 @@ void MultithreadingTestES3::mainThreadDraw(bool useDraw)
         }
 
         ASSERT_GL_NO_ERROR();
-        swapBuffers();
     }
 
     mExitThread = true;
@@ -1349,7 +1353,9 @@ ANGLE_INSTANTIATE_TEST(MultithreadingTest,
                        ES3_VULKAN(),
                        ES3_VULKAN_SWIFTSHADER(),
                        ES2_D3D11(),
-                       ES3_D3D11());
+                       ES3_D3D11(),
+                       ES2_METAL(),
+                       ES3_METAL());
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultithreadingTestES3);
 ANGLE_INSTANTIATE_TEST(MultithreadingTestES3,
@@ -1357,6 +1363,7 @@ ANGLE_INSTANTIATE_TEST(MultithreadingTestES3,
                        ES3_OPENGLES(),
                        ES3_VULKAN(),
                        ES3_VULKAN_SWIFTSHADER(),
-                       ES3_D3D11());
+                       ES3_D3D11(),
+                       ES3_METAL());
 
 }  // namespace angle

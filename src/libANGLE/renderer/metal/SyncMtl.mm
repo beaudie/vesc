@@ -16,6 +16,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"
+#include "libANGLE/renderer/metal/mtl_resources.h"
 
 namespace rx
 {
@@ -28,19 +29,25 @@ Sync::~Sync() {}
 
 void Sync::onDestroy()
 {
-    mMetalSharedEvent = nil;
-    mCv               = nullptr;
-    mLock             = nullptr;
+    mMetalSharedEvent     = nil;
+    mCv                   = nullptr;
+    mLock                 = nullptr;
+    mCmdBufferTrackingRef = nullptr;
 }
 
 angle::Result Sync::initialize(ContextMtl *contextMtl)
 {
-    ANGLE_MTL_OBJC_SCOPE { mMetalSharedEvent = contextMtl->getMetalDevice().newSharedEvent(); }
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        mMetalSharedEvent = contextMtl->getMetalDevice().newSharedEvent();
+    }
 
     mSetCounter = mMetalSharedEvent.get().signaledValue;
 
     mCv.reset(new std::condition_variable());
     mLock.reset(new std::mutex());
+
+    mCmdBufferTrackingRef.reset(new ResourceCommandBufferTracking());
     return angle::Result::Continue;
 }
 
@@ -54,10 +61,11 @@ angle::Result Sync::set(ContextMtl *contextMtl, GLenum condition, GLbitfield fla
     ASSERT(flags == 0);
 
     mSetCounter++;
-    contextMtl->queueEventSignal(mMetalSharedEvent, mSetCounter);
+    contextMtl->queueEventSignal(mMetalSharedEvent, mSetCounter, mCmdBufferTrackingRef);
     return angle::Result::Continue;
 }
-angle::Result Sync::clientWait(ContextMtl *contextMtl,
+angle::Result Sync::clientWait(DisplayMtl *displayMtl,
+                               ContextMtl *contextMtl,
                                bool flushCommands,
                                uint64_t timeout,
                                GLenum *outResult)
@@ -80,12 +88,14 @@ angle::Result Sync::clientWait(ContextMtl *contextMtl,
         return angle::Result::Continue;
     }
 
+    flushPendingContextsIfNeeded(contextMtl);
+
     // Create references to mutex and condition variable since they might be released in
     // onDestroy(), but the callback might still not be fired yet.
     std::shared_ptr<std::condition_variable> cvRef = mCv;
     std::shared_ptr<std::mutex> lockRef            = mLock;
     AutoObjCObj<MTLSharedEventListener> eventListener =
-        contextMtl->getDisplay()->getOrCreateSharedEventListener();
+        displayMtl->getOrCreateSharedEventListener();
     [mMetalSharedEvent.get() notifyListener:eventListener
                                     atValue:mSetCounter
                                       block:^(id<MTLSharedEvent> sharedEvent, uint64_t value) {
@@ -107,12 +117,46 @@ angle::Result Sync::clientWait(ContextMtl *contextMtl,
 }
 void Sync::serverWait(ContextMtl *contextMtl)
 {
+    flushPendingContextsIfNeeded(contextMtl);
     contextMtl->serverWaitEvent(mMetalSharedEvent, mSetCounter);
 }
 angle::Result Sync::getStatus(bool *signaled)
 {
     *signaled = mMetalSharedEvent.get().signaledValue >= mSetCounter;
     return angle::Result::Continue;
+}
+
+void Sync::flushPendingContextsIfNeeded(ContextMtl *contextMtl)
+{
+    if (!contextMtl)
+    {
+        // Don't do any flush if there is no current context.
+        // This can happen if Sync is EGLSync.
+        return;
+    }
+    // Flush any pending contexts (except current context) that are currently scheduled to signal
+    // this event.
+    angle::FastVector<ContextMtl *, 2> contextsToFlush;
+    for (ContextMtl *pendingCtx : mCmdBufferTrackingRef->pendingContexts)
+    {
+        // For current context, only flush if
+        // GL_SYNC_FLUSH_COMMANDS_BIT/EGL_SYNC_FLUSH_COMMANDS_BIT_KHR
+        // flag is specified.
+        if (pendingCtx == contextMtl)
+        {
+            continue;
+        }
+        // Only flush context in the same shared group as the current context.
+        if (pendingCtx->getState().getShareGroup() == contextMtl->getState().getShareGroup())
+        {
+            contextsToFlush.push_back(pendingCtx);
+        }
+    }
+
+    for (ContextMtl *pendingCtx : contextsToFlush)
+    {
+        pendingCtx->flushCommandBuffer(mtl::NoWait);
+    }
 }
 #endif  // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
 }  // namespace mtl
@@ -150,7 +194,7 @@ angle::Result FenceNVMtl::finish(const gl::Context *context)
     GLenum result;
     do
     {
-        ANGLE_TRY(mSync.clientWait(contextMtl, true, timeout, &result));
+        ANGLE_TRY(mSync.clientWait(contextMtl->getDisplay(), contextMtl, true, timeout, &result));
     } while (result == GL_TIMEOUT_EXPIRED);
 
     if (result == GL_WAIT_FAILED)
@@ -189,7 +233,7 @@ angle::Result SyncMtl::clientWait(const gl::Context *context,
 
     bool flush = (flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0;
 
-    return mSync.clientWait(contextMtl, flush, timeout, outResult);
+    return mSync.clientWait(contextMtl->getDisplay(), contextMtl, flush, timeout, outResult);
 }
 
 angle::Result SyncMtl::serverWait(const gl::Context *context, GLbitfield flags, GLuint64 timeout)
@@ -250,8 +294,10 @@ egl::Error EGLSyncMtl::clientWait(const egl::Display *display,
 
     bool flush = (flags & EGL_SYNC_FLUSH_COMMANDS_BIT_KHR) != 0;
     GLenum result;
-    ContextMtl *contextMtl = mtl::GetImpl(context);
-    if (IsError(mSync.clientWait(contextMtl, flush, static_cast<uint64_t>(timeout), &result)))
+    DisplayMtl *displayMtl = mtl::GetImpl(display);
+    ContextMtl *contextMtl = context ? mtl::GetImpl(context) : nullptr;
+    if (IsError(mSync.clientWait(displayMtl, contextMtl, flush, static_cast<uint64_t>(timeout),
+                                 &result)))
     {
         return egl::Error(EGL_BAD_ALLOC);
     }
@@ -309,4 +355,4 @@ egl::Error EGLSyncMtl::dupNativeFenceFD(const egl::Display *display, EGLint *res
     return egl::EglBadDisplay();
 }
 
-}
+}  // namespace rx
