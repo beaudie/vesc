@@ -1249,7 +1249,7 @@ bool ANGLETestBase::platformSupportsMultithreading() const
     return (mFixture && mFixture->eglWindow &&
             IsEGLDisplayExtensionEnabled(mFixture->eglWindow->getDisplay(),
                                          "EGL_ANGLE_context_virtualization")) ||
-           IsVulkan();
+           IsVulkan() || IsMetal();
 }
 
 void ANGLETestBase::checkD3D11SDKLayersMessages()

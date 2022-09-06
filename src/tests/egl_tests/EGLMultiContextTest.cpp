@@ -616,4 +616,4 @@ TEST_P(EGLMultiContextTest, ThreadBGetStatusBeforeThreadASyncFinish)
 }  // anonymous namespace
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLMultiContextTest);
-ANGLE_INSTANTIATE_TEST_ES31(EGLMultiContextTest);
+ANGLE_INSTANTIATE_TEST_ES31_AND(EGLMultiContextTest, ES3_METAL());
