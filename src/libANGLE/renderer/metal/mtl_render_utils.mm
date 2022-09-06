@@ -1237,8 +1237,7 @@ id<MTLDepthStencilState> ClearUtils::getClearDepthStencilState(const gl::Context
     if (!params.clearDepth.valid() && !params.clearStencil.valid())
     {
         // Doesn't clear depth nor stencil
-        return contextMtl->getDisplay()->getStateCache().getNullDepthStencilState(
-            contextMtl->getMetalDevice());
+        return contextMtl->getStateCache().getNullDepthStencilState(contextMtl->getMetalDevice());
     }
 
     DepthStencilDesc desc;
@@ -1263,8 +1262,7 @@ id<MTLDepthStencilState> ClearUtils::getClearDepthStencilState(const gl::Context
         desc.backFaceStencil.writeMask                  = contextMtl->getStencilMask();
     }
 
-    return contextMtl->getDisplay()->getStateCache().getDepthStencilState(
-        contextMtl->getMetalDevice(), desc);
+    return contextMtl->getStateCache().getDepthStencilState(contextMtl->getMetalDevice(), desc);
 }
 
 id<MTLRenderPipelineState> ClearUtils::getClearRenderPipelineState(const gl::Context *context,
@@ -1525,8 +1523,7 @@ angle::Result ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
     // Setup states
     cmdEncoder->setRenderPipelineState(renderPipelineState);
     cmdEncoder->setDepthStencilState(
-        contextMtl->getDisplay()->getStateCache().getNullDepthStencilState(
-            contextMtl->getMetalDevice()));
+        contextMtl->getStateCache().getNullDepthStencilState(contextMtl->getMetalDevice()));
 
     SetupCommonBlitWithDrawStates(context, cmdEncoder, params, true);
 
@@ -1535,9 +1532,9 @@ angle::Result ColorBlitUtils::setupColorBlitWithDraw(const gl::Context *context,
     samplerDesc.reset();
     samplerDesc.minFilter = samplerDesc.magFilter = GetFilter(params.filter);
 
-    cmdEncoder->setFragmentSamplerState(contextMtl->getDisplay()->getStateCache().getSamplerState(
-                                            contextMtl->getMetalDevice(), samplerDesc),
-                                        0, FLT_MAX, 0);
+    cmdEncoder->setFragmentSamplerState(
+        contextMtl->getStateCache().getSamplerState(contextMtl->getMetalDevice(), samplerDesc), 0,
+        FLT_MAX, 0);
     return angle::Result::Continue;
 }
 
@@ -1762,7 +1759,7 @@ angle::Result DepthStencilBlitUtils::setupDepthStencilBlitWithDraw(
         dsStateDesc.backFaceStencil.writeMask  = kStencilMaskAll;
     }
 
-    cmdEncoder->setDepthStencilState(contextMtl->getDisplay()->getStateCache().getDepthStencilState(
+    cmdEncoder->setDepthStencilState(contextMtl->getStateCache().getDepthStencilState(
         contextMtl->getMetalDevice(), dsStateDesc));
     return angle::Result::Continue;
 }
