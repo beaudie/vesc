@@ -382,7 +382,7 @@ vec4 doLighting(vec4 currentFragment)
 
     if (enable_color_material || enable_texture_2d[0] || enable_texture_cube_map[0])
     {
-        materialAmbientActual = currentFragment;
+        materialAmbientActual = vec4(0.0);
         materialDiffuseActual = currentFragment;
     }
 
