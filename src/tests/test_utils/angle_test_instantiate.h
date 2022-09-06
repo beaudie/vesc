@@ -121,7 +121,18 @@ struct CombinedPrintToStringParamName
     INSTANTIATE_TEST_SUITE_P(, testName, testing::ValuesIn(::angle::FilterTestParams(valuesin)), \
                              testing::PrintToStringParamName())
 
+#ifndef ANGLE_TEST_NATIVE_GLES
+
+#    define ANGLE_NATIVE_TEST_PLATFORMS_ES1
+
+#else
+
+#    define ANGLE_NATIVE_TEST_PLATFORMS_ES1 ES1_EGL(),
+
+#endif
+
 #define ANGLE_ALL_TEST_PLATFORMS_ES1                                                   \
+    ANGLE_NATIVE_TEST_PLATFORMS_ES1                                                    \
     ES1_D3D11(), ES1_OPENGL(), ES1_OPENGLES(), ES1_VULKAN(), ES1_VULKAN_SWIFTSHADER(), \
         ES1_VULKAN().enable(Feature::AsyncCommandQueue),                               \
         ES1_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue)
