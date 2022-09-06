@@ -76,10 +76,7 @@ Resource::Resource(Resource *other) : mUsageRef(other->mUsageRef)
 
 void Resource::reset()
 {
-    mUsageRef->cmdBufferQueueSerial = 0;
-    resetCPUReadMemDirty();
-    resetCPUReadMemNeedSync();
-    resetCPUReadMemSyncPending();
+    mUsageRef = std::make_shared<UsageRef>();
 }
 
 bool Resource::isBeingUsedByGPU(Context *context) const
@@ -92,15 +89,10 @@ bool Resource::hasPendingWorks(Context *context) const
     return context->cmdQueue().resourceHasPendingWorks(this);
 }
 
-void Resource::setUsedByCommandBufferWithQueueSerial(uint64_t serial, bool writing)
+void Resource::markWillBeWrittenByGPU()
 {
-    if (writing)
-    {
-        mUsageRef->cpuReadMemNeedSync = true;
-        mUsageRef->cpuReadMemDirty    = true;
-    }
-
-    mUsageRef->cmdBufferQueueSerial = std::max(mUsageRef->cmdBufferQueueSerial, serial);
+    mUsageRef->cpuReadMemNeedSync = true;
+    mUsageRef->cpuReadMemDirty    = true;
 }
 
 // Texture implemenetation
@@ -566,13 +558,7 @@ void Texture::replaceRegion(ContextMtl *context,
 
     syncContentIfNeeded(context);
 
-    // NOTE(hqle): what if multiple contexts on multiple threads are using this texture?
-    if (this->isBeingUsedByGPU(context))
-    {
-        context->flushCommandBuffer(mtl::NoWait);
-    }
-
-    cmdQueue.ensureResourceReadyForCPU(this);
+    cmdQueue.ensureResourceReadyForCPU(context, this);
 
     if (textureType() != MTLTextureType3D)
     {
@@ -601,13 +587,7 @@ void Texture::getBytes(ContextMtl *context,
 
     syncContentIfNeeded(context);
 
-    // NOTE(hqle): what if multiple contexts on multiple threads are using this texture?
-    if (this->isBeingUsedByGPU(context))
-    {
-        context->flushCommandBuffer(mtl::NoWait);
-    }
-
-    cmdQueue.ensureResourceReadyForCPU(this);
+    cmdQueue.ensureResourceReadyForCPU(context, this);
 
     [get() getBytes:dataOut
           bytesPerRow:bytesPerRow
@@ -1014,12 +994,7 @@ uint8_t *Buffer::mapWithOpt(ContextMtl *context, bool readonly, bool noSync)
 
         EnsureCPUMemWillBeSynced(context, this);
 
-        if (this->isBeingUsedByGPU(context))
-        {
-            context->flushCommandBuffer(mtl::NoWait);
-        }
-
-        cmdQueue.ensureResourceReadyForCPU(this);
+        cmdQueue.ensureResourceReadyForCPU(context, this);
         resetCPUReadMemSyncPending();
     }
 

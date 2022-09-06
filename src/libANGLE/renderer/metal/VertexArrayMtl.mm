@@ -905,7 +905,6 @@ angle::Result VertexArrayMtl::convertIndexBufferGPU(const gl::Context *glContext
                                                     IndexConversionBufferMtl *conversion)
 {
     ContextMtl *contextMtl = mtl::GetImpl(glContext);
-    DisplayMtl *display    = contextMtl->getDisplay();
 
     const size_t amount = GetIndexConvertedBufferSize(indexType, indexCount);
 
@@ -916,7 +915,7 @@ angle::Result VertexArrayMtl::convertIndexBufferGPU(const gl::Context *glContext
                                         &conversion->convertedOffset));
 
     // Do the conversion on GPU.
-    ANGLE_TRY(display->getUtils().convertIndexBufferGPU(
+    ANGLE_TRY(contextMtl->getUtils().convertIndexBufferGPU(
         contextMtl, {indexType, static_cast<uint32_t>(indexCount), idxBuffer->getCurrentBuffer(),
                      static_cast<uint32_t>(offset), conversion->convertedBuffer,
                      static_cast<uint32_t>(conversion->convertedOffset),
@@ -1112,7 +1111,7 @@ angle::Result VertexArrayMtl::convertVertexBufferGPU(const gl::Context *glContex
 
     params.vertexCount = static_cast<uint32_t>(numVertices);
 
-    mtl::RenderUtils &utils                  = contextMtl->getDisplay()->getUtils();
+    mtl::RenderUtils &utils                  = contextMtl->getUtils();
     mtl::RenderCommandEncoder *renderEncoder = contextMtl->getRenderCommandEncoder();
     if (renderEncoder && contextMtl->getDisplay()->getFeatures().hasExplicitMemBarrier.enabled)
     {
@@ -1151,4 +1150,4 @@ angle::Result VertexArrayMtl::convertVertexBufferGPU(const gl::Context *glContex
 
     return angle::Result::Continue;
 }
-}
+}  // namespace rx

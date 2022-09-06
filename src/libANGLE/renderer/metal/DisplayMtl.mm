@@ -108,9 +108,7 @@ struct DefaultShaderAsyncInfoMtl
     bool compiled = false;
 };
 
-DisplayMtl::DisplayMtl(const egl::DisplayState &state)
-    : DisplayImpl(state), mStateCache(mFeatures), mUtils(this)
-{}
+DisplayMtl::DisplayMtl(const egl::DisplayState &state) : DisplayImpl(state) {}
 
 DisplayMtl::~DisplayMtl() {}
 
@@ -155,13 +153,12 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
         ANGLE_TRY(mFormatTable.initialize(this));
         ANGLE_TRY(initializeShaderLibrary());
 
-        return mUtils.initialize();
+        return angle::Result::Continue;
     }
 }
 
 void DisplayMtl::terminate()
 {
-    mUtils.onDestroy();
     mCmdQueue.reset();
     mDefaultShadersAsyncInfo = nullptr;
     mMetalDevice             = nil;
@@ -1294,6 +1291,7 @@ bool DisplayMtl::isSimulator() const
 #if ANGLE_MTL_EVENT_AVAILABLE
 mtl::AutoObjCObj<MTLSharedEventListener> DisplayMtl::getOrCreateSharedEventListener()
 {
+    std::lock_guard<std::mutex> lg(mLock);
     if (!mSharedEventListener)
     {
         ANGLE_MTL_OBJC_SCOPE

@@ -517,8 +517,7 @@ angle::Result InitializeTextureContentsGPU(const gl::Context *context,
         clearParams.enabledBuffers.set(0);
         clearParams.clearArea = gl::Rectangle(0, 0, texture->widthAt0(), texture->heightAt0());
 
-        ANGLE_TRY(
-            contextMtl->getDisplay()->getUtils().clearWithDraw(context, encoder, clearParams));
+        ANGLE_TRY(contextMtl->getUtils().clearWithDraw(context, encoder, clearParams));
 
         // Restore texture's intended write mask
         texture->setColorWritableMask(oldMask);

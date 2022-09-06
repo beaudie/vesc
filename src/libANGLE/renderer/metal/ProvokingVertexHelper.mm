@@ -102,7 +102,7 @@ static inline gl::PrimitiveMode getNewPrimitiveMode(const uint fixIndexBufferKey
 ProvokingVertexHelper::ProvokingVertexHelper(ContextMtl *context,
                                              mtl::CommandQueue *commandQueue,
                                              DisplayMtl *display)
-    : mCommandBuffer(commandQueue),
+    : mCommandBuffer(commandQueue, context),
       mIndexBuffers(false),
       mPipelineCache(this),
       mCurrentEncoder(&mCommandBuffer)

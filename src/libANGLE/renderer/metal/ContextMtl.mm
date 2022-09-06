@@ -171,17 +171,16 @@ class LineLoopLastSegmentHelper
 
         if (indexTypeOrNone == gl::DrawElementsType::InvalidEnum)
         {
-            ANGLE_TRY(mContextMtl->getDisplay()->getUtils().generateLineLoopLastSegment(
+            ANGLE_TRY(mContextMtl->getUtils().generateLineLoopLastSegment(
                 mContextMtl, firstVertex, firstVertex + vertexOrIndexCount - 1,
                 mLineLoopIndexBuffer, 0));
         }
         else
         {
             ASSERT(firstVertex == 0);
-            ANGLE_TRY(
-                mContextMtl->getDisplay()->getUtils().generateLineLoopLastSegmentFromElementsArray(
-                    mContextMtl,
-                    {indexTypeOrNone, vertexOrIndexCount, indices, mLineLoopIndexBuffer, 0}));
+            ANGLE_TRY(mContextMtl->getUtils().generateLineLoopLastSegmentFromElementsArray(
+                mContextMtl,
+                {indexTypeOrNone, vertexOrIndexCount, indices, mLineLoopIndexBuffer, 0}));
         }
 
         ANGLE_TRY(indexBufferPool->commit(mContextMtl));
@@ -207,10 +206,12 @@ ContextMtl::ContextMtl(const gl::State &state,
                        DisplayMtl *display)
     : ContextImpl(state, errorSet),
       mtl::Context(display),
-      mCmdBuffer(&display->cmdQueue()),
+      mCmdBuffer(&display->cmdQueue(), this),
       mRenderEncoder(&mCmdBuffer, mOcclusionQueryPool),
       mBlitEncoder(&mCmdBuffer),
       mComputeEncoder(&mCmdBuffer),
+      mStateCache(display->getFeatures()),
+      mUtils(display),
       mDriverUniforms{},
       mProvokingVertexHelper(this, &display->cmdQueue(), display),
       mContextDevice(GetOwnershipIdentity(attribs))
@@ -220,6 +221,8 @@ ContextMtl::~ContextMtl() {}
 
 angle::Result ContextMtl::initialize()
 {
+    ANGLE_TRY(mUtils.initialize());
+
     for (mtl::BlendDesc &blendDesc : mBlendDescArray)
     {
         blendDesc.reset();
@@ -253,6 +256,8 @@ void ContextMtl::onDestroy(const gl::Context *context)
     mIncompleteTexturesInitialized = false;
     mProvokingVertexHelper.onDestroy(this);
     mDummyXFBRenderTexture = nullptr;
+
+    mUtils.onDestroy();
 
     mContextDevice.reset();
 }
@@ -312,7 +317,7 @@ angle::Result ContextMtl::drawTriFanArraysWithBaseVertex(const gl::Context *cont
         // Re-generate a new index buffer, which the first index will be zero.
         ANGLE_TRY(
             mtl::Buffer::MakeBuffer(this, indexBufferSize, nullptr, &mTriFanArraysIndexBuffer));
-        ANGLE_TRY(getDisplay()->getUtils().generateTriFanBufferFromArrays(
+        ANGLE_TRY(getUtils().generateTriFanBufferFromArrays(
             this, {0, static_cast<uint32_t>(count), mTriFanArraysIndexBuffer, 0}));
     }
 
@@ -341,7 +346,7 @@ angle::Result ContextMtl::drawTriFanArraysLegacy(const gl::Context *context,
     uint32_t genIndicesCount;
     ANGLE_TRY(AllocateTriangleFanBufferFromPool(this, count, &mTriFanIndexBuffer, &genIdxBuffer,
                                                 &genIdxBufferOffset, &genIndicesCount));
-    ANGLE_TRY(getDisplay()->getUtils().generateTriFanBufferFromArrays(
+    ANGLE_TRY(getUtils().generateTriFanBufferFromArrays(
         this, {static_cast<uint32_t>(first), static_cast<uint32_t>(count), genIdxBuffer,
                genIdxBufferOffset}));
 
@@ -407,7 +412,7 @@ angle::Result ContextMtl::drawLineLoopArrays(const gl::Context *context,
 
     ANGLE_TRY(AllocateBufferFromPool(this, genIndicesCount, &mLineLoopIndexBuffer, &genIdxBuffer,
                                      &genIdxBufferOffset));
-    ANGLE_TRY(getDisplay()->getUtils().generateLineLoopBufferFromArrays(
+    ANGLE_TRY(getUtils().generateLineLoopBufferFromArrays(
         this, {static_cast<uint32_t>(first), static_cast<uint32_t>(count), genIdxBuffer,
                genIdxBufferOffset}));
 
@@ -540,7 +545,7 @@ angle::Result ContextMtl::drawTriFanElements(const gl::Context *context,
         ANGLE_TRY(AllocateTriangleFanBufferFromPool(this, count, &mTriFanIndexBuffer, &genIdxBuffer,
                                                     &genIdxBufferOffset, &genIndicesCount));
 
-        ANGLE_TRY(getDisplay()->getUtils().generateTriFanBufferFromElementsArray(
+        ANGLE_TRY(getUtils().generateTriFanBufferFromElementsArray(
             this, {type, count, indices, genIdxBuffer, genIdxBufferOffset, primitiveRestart},
             &genIndicesCount));
 
@@ -617,7 +622,7 @@ angle::Result ContextMtl::drawLineLoopElements(const gl::Context *context,
         ANGLE_TRY(AllocateBufferFromPool(this, reservedIndices, &mLineLoopIndexBuffer,
                                          &genIdxBuffer, &genIdxBufferOffset));
 
-        ANGLE_TRY(getDisplay()->getUtils().generateLineLoopBufferFromElementsArray(
+        ANGLE_TRY(getUtils().generateLineLoopBufferFromElementsArray(
             this, {type, count, indices, genIdxBuffer, genIdxBufferOffset, primitiveRestart},
             &genIndicesCount));
 
@@ -2173,10 +2178,13 @@ void ContextMtl::onTransformFeedbackInactive(const gl::Context *context, Transfo
     endEncoding(true);
 }
 
-void ContextMtl::queueEventSignal(const mtl::SharedEventRef &event, uint64_t value)
+void ContextMtl::queueEventSignal(
+    const mtl::SharedEventRef &event,
+    uint64_t value,
+    const std::shared_ptr<mtl::ResourceCommandBufferTracking> &trackingRef)
 {
     ensureCommandBufferReady();
-    mCmdBuffer.queueEventSignal(event, value);
+    mCmdBuffer.queueEventSignal(event, value, trackingRef);
 }
 
 void ContextMtl::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value)
@@ -2576,7 +2584,7 @@ angle::Result ContextMtl::handleDirtyDepthStencilState(const gl::Context *contex
 
     // Apply depth stencil state
     mRenderEncoder.setDepthStencilState(
-        getDisplay()->getStateCache().getDepthStencilState(getMetalDevice(), dsDesc));
+        getStateCache().getDepthStencilState(getMetalDevice(), dsDesc));
 
     return angle::Result::Continue;
 }

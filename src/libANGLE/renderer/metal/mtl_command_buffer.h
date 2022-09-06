@@ -30,6 +30,9 @@
 
 namespace rx
 {
+
+class ContextMtl;
+
 namespace mtl
 {
 
@@ -54,11 +57,9 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     void finishAllCommands();
 
     // This method will ensure that every GPU command buffer using this resource will finish before
-    // returning. Note: this doesn't include the "in-progress" command buffer, i.e. the one hasn't
-    // been commmitted yet. It's the responsibility of caller to make sure that command buffer is
-    // commited/flushed first before calling this method.
-    void ensureResourceReadyForCPU(const ResourceRef &resource);
-    void ensureResourceReadyForCPU(Resource *resource);
+    // returning.
+    void ensureResourceReadyForCPU(ContextMtl *context, const ResourceRef &resource);
+    void ensureResourceReadyForCPU(ContextMtl *context, Resource *resource);
 
     // Check whether the resource is being used by any command buffer still running on GPU.
     // This must be called before attempting to read the content of resource on CPU side.
@@ -77,11 +78,12 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
         return *this;
     }
 
-    AutoObjCPtr<id<MTLCommandBuffer>> makeMetalCommandBuffer(uint64_t *queueSerialOut);
-    void onCommandBufferCommitted(id<MTLCommandBuffer> buf, uint64_t serial);
+    AutoObjCPtr<id<MTLCommandBuffer>> makeMetalCommandBuffer();
+    void commitCommandBuffer(id<MTLCommandBuffer> buf, uint64_t *queueSerialOut);
 
   private:
     void onCommandBufferCompleted(id<MTLCommandBuffer> buf, uint64_t serial);
+    void flushPendingWorks(ContextMtl *context, Resource *resource);
     using ParentClass = WrappedObject<id<MTLCommandQueue>>;
 
     struct CmdBufferQueueEntry
@@ -96,12 +98,13 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     std::atomic<uint64_t> mCompletedBufferSerial{0};
 
     mutable std::mutex mLock;
+    std::condition_variable mCv;
 };
 
 class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::NonCopyable
 {
   public:
-    CommandBuffer(CommandQueue *cmdQueue);
+    CommandBuffer(CommandQueue *cmdQueue, ContextMtl *context);
     ~CommandBuffer();
 
     // This method must be called so that command encoder can be used.
@@ -118,7 +121,9 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void setReadDependency(const ResourceRef &resource);
     void setReadDependency(Resource *resourcePtr);
 
-    void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
+    void queueEventSignal(const mtl::SharedEventRef &event,
+                          uint64_t value,
+                          const std::shared_ptr<ResourceCommandBufferTracking> &trackingRef);
     void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
 
     void insertDebugSign(const std::string &marker);
@@ -148,12 +153,15 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void pushDebugGroupImpl(const std::string &marker);
     void popDebugGroupImpl();
 
-    void setResourceUsedByCommandBuffer(const ResourceRef &resource);
+    void setResourceUsedByCommandBuffer(Resource *resource);
     void clearResourceListAndSize();
+    void trackResourceToBeUsed(id resourceID,
+                               const std::shared_ptr<ResourceCommandBufferTracking> &trackingRef);
 
     using ParentClass = WrappedObject<id<MTLCommandBuffer>>;
 
     CommandQueue &mCmdQueue;
+    ContextMtl *mOwnerContext;
 
     CommandEncoder *mActiveCommandEncoder = nullptr;
 
@@ -165,7 +173,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     std::vector<std::pair<mtl::SharedEventRef, uint64_t>> mPendingSignalEvents;
     std::vector<std::string> mDebugGroups;
 
-    std::unordered_set<id> mResourceList;
+    angle::HashMap<id, std::shared_ptr<ResourceCommandBufferTracking>> mResourceList;
     size_t mWorkingResourceSize = 0;
     bool mCommitted             = false;
 };
