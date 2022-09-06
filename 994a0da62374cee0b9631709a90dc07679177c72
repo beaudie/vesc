@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b40c505b_b0bdadae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-06T15:09:46Z",
+      "side": 1,
+      "message": "Lubosz, can you or Constantine check in ES1_EGL support?  Without it, I can\u0027t run this test on the native driver yet.",
+      "range": {
+        "startLine": 11,
+        "startChar": 63,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "994a0da62374cee0b9631709a90dc07679177c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d415cf6_7f5500d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-06T15:09:46Z",
+      "side": 1,
+      "message": "Nice!  Really happy to see GLES1 tests driven by app usage.",
+      "revId": "994a0da62374cee0b9631709a90dc07679177c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae4ecff_a4cdeef4",
+        "filename": "src/tests/gl_tests/gles1/FogTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-06T15:09:46Z",
+      "side": 1,
+      "message": "Can you tag this with a TODO with 7598?",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 44
+      },
+      "revId": "994a0da62374cee0b9631709a90dc07679177c72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
