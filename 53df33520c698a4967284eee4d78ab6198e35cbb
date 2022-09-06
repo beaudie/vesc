@@ -16,6 +16,47 @@
       "message": "Huh, similarly looking gold diffs on this CL.. so this isn\u0027t about xvfb or at least not the screen dimensions?.. :\\",
       "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3877c08f_215b65a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-06T23:11:12Z",
+      "side": 1,
+      "message": "Roman, I\u0027m not opposed to you landing it, although like you noticed, doesn\u0027t seem to fix the problem.",
+      "parentUuid": "ca4e4d0a_cd17244d",
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3812b94_6ce6d31c",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-06T23:11:12Z",
+      "side": 1,
+      "message": "How\u0027d you come up with 3120?",
+      "range": {
+        "startLine": 173,
+        "startChar": 67,
+        "endLine": 173,
+        "endChar": 79
+      },
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
