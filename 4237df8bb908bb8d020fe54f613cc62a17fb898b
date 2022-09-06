@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e60a96b0_e61e72d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-06T18:52:32Z",
+      "side": 1,
+      "message": "There are numerous MSRTT tests that will automatically pick up emulation, GOOGLEX, or EXT based on device support. Unfortunately we don\u0027t have any devices with support for the ext, so this is untested in CI.\n\nGOOGLEX is tested by Fuchsia on ANGLE rolls, EXT _will be_ similarly done by that team on a future driver update. I locally tested ANGLE\u0027s implementation + VVL on a bogus implementation on top of SwiftShader.",
+      "parentUuid": "573ef1a1_1a2eae72",
+      "revId": "4237df8bb908bb8d020fe54f613cc62a17fb898b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2781945_4e4a9606",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-06T18:02:18Z",
       "side": 1,
       "message": "What is the major difference between `VkMultisampledRenderToSingleSampledInfoEXT` and `VkMultisampledRenderToSingleSampledInfoGOOGLEX`?",
+      "revId": "4237df8bb908bb8d020fe54f613cc62a17fb898b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca8a2967_f5ba6bf3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-06T18:52:32Z",
+      "side": 1,
+      "message": "GOOGLEX is the WIP version we shipped on Fuchsia. The spec changed in the meantime. The visible difference here is that GOOGLEX has the resolve modes specified together with rasterization samples inside VkMSRTSS, while in EXT the rasterization samples is specified in VKMSRTSS, while the resolve modes are specified in VkSubpassDescriptionDepthStencilResolve.",
+      "parentUuid": "d2781945_4e4a9606",
       "revId": "4237df8bb908bb8d020fe54f613cc62a17fb898b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
