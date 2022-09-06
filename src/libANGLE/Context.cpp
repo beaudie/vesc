@@ -556,6 +556,9 @@ void Context::initializeDefaultResources()
     mState.initialize(this);
 
     mDefaultFramebuffer = std::make_unique<Framebuffer>(this, mImplementation.get());
+    mState.mFramebufferManager->setDefaultFramebuffer(mDefaultFramebuffer.get());
+    bindDrawFramebuffer(mDefaultFramebuffer->id());
+    bindReadFramebuffer(mDefaultFramebuffer->id());
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -778,6 +781,23 @@ egl::Error Context::onDestroy(const egl::Display *display)
     }
 
     ANGLE_TRY(unMakeCurrent(display));
+
+    ASSERT(mDefaultFramebuffer.get() ==
+           mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle));
+    if (mDefaultFramebuffer.get() == mState.getReadFramebuffer())
+    {
+        mState.setReadFramebufferBinding(nullptr);
+        mReadFramebufferObserverBinding.bind(nullptr);
+    }
+
+    if (mDefaultFramebuffer.get() == mState.getDrawFramebuffer())
+    {
+        mState.setDrawFramebufferBinding(nullptr);
+        mDrawFramebufferObserverBinding.bind(nullptr);
+    }
+
+    ANGLE_TRY(mDefaultFramebuffer->unsetSurfaces(this));
+    mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
 
     mDefaultFramebuffer->onDestroy(this);
     mDefaultFramebuffer.reset();
@@ -9479,44 +9499,12 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
         ANGLE_TRY(readSurface->makeCurrent(this));
     }
 
-    // Update default framebuffer, the binding of the previous default
-    // framebuffer (or lack of) will have a nullptr.
-    mState.mFramebufferManager->setDefaultFramebuffer(mDefaultFramebuffer.get());
-    if (mState.getDrawFramebuffer() == nullptr)
-    {
-        bindDrawFramebuffer(mDefaultFramebuffer->id());
-    }
-    if (mState.getReadFramebuffer() == nullptr)
-    {
-        bindReadFramebuffer(mDefaultFramebuffer->id());
-    }
-
     return egl::NoError();
 }
 
 egl::Error Context::unsetDefaultFramebuffer()
 {
-    Framebuffer *defaultFramebuffer =
-        mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
-
-    if (defaultFramebuffer)
-    {
-        // Remove the default framebuffer
-        if (defaultFramebuffer == mState.getReadFramebuffer())
-        {
-            mState.setReadFramebufferBinding(nullptr);
-            mReadFramebufferObserverBinding.bind(nullptr);
-        }
-
-        if (defaultFramebuffer == mState.getDrawFramebuffer())
-        {
-            mState.setDrawFramebufferBinding(nullptr);
-            mDrawFramebufferObserverBinding.bind(nullptr);
-        }
-
-        ANGLE_TRY(defaultFramebuffer->unsetSurfaces(this));
-        mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
-    }
+    ANGLE_TRY(mDefaultFramebuffer->unsetSurfaces(this));
 
     // Always unset the current surface, even if setIsCurrent fails.
     egl::Surface *drawSurface = mCurrentDrawSurface;
