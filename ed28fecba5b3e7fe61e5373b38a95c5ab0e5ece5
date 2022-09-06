@@ -68,6 +68,24 @@
       "parentUuid": "7a86c53d_1900d093",
       "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "206d9ffd_cdbeee25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-06T20:57:46Z",
+      "side": 1,
+      "message": "Unfortunately it looks like this destabilized the primitiverestart tests on the Mac AMD Retina bots: http://crbug.com/angleproject/7635 . Let\u0027s discuss more on that bug.",
+      "parentUuid": "1d4b769a_8bddafd9",
+      "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
