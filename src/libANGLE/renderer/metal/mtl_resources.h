@@ -48,7 +48,7 @@ struct ResourceCommandBufferTracking
     virtual ~ResourceCommandBufferTracking() = default;
 
     // The serial number of the last committed command buffer that is using this resource.
-    // This number is only updated when the command buffer is commit.
+    // This number is only updated when the command buffer is committed.
     uint64_t cmdBufferQueueSerial = 0;
 
     // List of contexts haven't submitted command buffers using the resource yet.
