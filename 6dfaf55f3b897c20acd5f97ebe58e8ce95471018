@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b047cb36_5c826fe0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-06T22:05:53Z",
+      "side": 1,
+      "message": "lgtm+2, CQ+2\n\nThanks for adding this Gregg. Shabi, hope it\u0027s OK with you that I +2\u0027d and CQ\u0027d this.\n",
+      "revId": "6dfaf55f3b897c20acd5f97ebe58e8ce95471018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
