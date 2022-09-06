@@ -768,6 +768,129 @@ TEST_P(EGLContextSharingTest, DeleteReaderOfSharedTexture)
     }
 }
 
+// Start XFB on one thread, do CPU read on another thread without flusing on the first thread.
+// - thread A:
+//    - Do XFB.
+//    - No glFlush.
+// - thread B:
+//    - wait for thread A to issue the XFB commands. But don't wait for its completion.
+//    - read the result of XFB buffer on CPU via glMapBuffer.
+//    - ANGLE should do implicit synchronization in this case without explicit fence sync objects.
+TEST_P(EGLContextSharingTest, StartXFBAndReadOnDifferentThreadNoFlush)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    // XFB require GLES 3.0+
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+
+    constexpr size_t kXfbBufferSize = 1 << 24;
+    constexpr float kDepthValue     = 0.6f;
+
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread0XFBIssued,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    GLuint xfbBuffer;
+
+    auto xfbStartThread = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Generate XFB buffer
+        GLuint transformFeedback;
+        glGenBuffers(1, &xfbBuffer);
+        glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfbBuffer);
+        glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, kXfbBufferSize, nullptr, GL_STATIC_DRAW);
+
+        glGenTransformFeedbacks(1, &transformFeedback);
+
+        // Shader program
+        GLuint program;
+        const std::vector<std::string> tfVaryings = {"gl_Position"};
+        program = CompileProgramWithTransformFeedback(essl1_shaders::vs::Simple(),
+                                                      essl1_shaders::fs::Red(), tfVaryings,
+                                                      GL_INTERLEAVED_ATTRIBS);
+        ASSERT_NE(0u, program);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+        EXPECT_GL_NO_ERROR();
+
+        // Issue a draw
+        glUseProgram(program);
+
+        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, xfbBuffer);
+        glBeginTransformFeedback(GL_TRIANGLES);
+        drawQuad(program, essl1_shaders::PositionAttrib(), kDepthValue);
+        glEndTransformFeedback();
+        ASSERT_GL_NO_ERROR();
+
+        // Wait for thread 1 to finish reading the XFB result.
+        threadSynchronization.nextStep(Step::Thread0XFBIssued);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+
+        // Clean up
+        glDeleteBuffers(1, &xfbBuffer);
+        glDeleteTransformFeedbacks(1, &transformFeedback);
+        glDeleteProgram(program);
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+    };
+
+    auto xfbReadThread = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Wait for thread 0 to issue the XFB draw calls.
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0XFBIssued));
+
+        // Test access to the XFB buffer on CPU without flusing the context on thread 0.
+        // Ensure that triangles were actually captured.
+        glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfbBuffer);
+        void *mappedBuffer =
+            glMapBufferRange(GL_TRANSFORM_FEEDBACK_BUFFER, 0, sizeof(float) * 24, GL_MAP_READ_BIT);
+        ASSERT_NE(nullptr, mappedBuffer);
+        const GLfloat expect[] = {
+            -1.0f, 1.0f,  kDepthValue, 1.0f, -1.0f, -1.0f, kDepthValue, 1.0f,
+            1.0f,  -1.0f, kDepthValue, 1.0f, -1.0f, 1.0f,  kDepthValue, 1.0f,
+            1.0f,  -1.0f, kDepthValue, 1.0f, 1.0f,  1.0f,  kDepthValue, 1.0f,
+        };
+
+        float *mappedFloats = static_cast<float *>(mappedBuffer);
+        for (uint32_t i = 0; i < 24; ++i)
+        {
+            EXPECT_EQ(mappedFloats[i], expect[i]);
+        }
+        glUnmapBuffer(GL_TRANSFORM_FEEDBACK_BUFFER);
+
+        EXPECT_GL_NO_ERROR();
+
+        // Clean up
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+        threadSynchronization.nextStep(Step::Finish);
+    };
+
+    std::array<LockStepThreadFunc, 2> threadFuncs = {
+        std::move(xfbStartThread),
+        std::move(xfbReadThread),
+    };
+
+    RunLockStepThreads(getEGLWindow(), threadFuncs.size(), threadFuncs.data());
+
+    ASSERT_NE(currentStep, Step::Abort);
+}
+
 // Test that an inactive but alive thread doesn't prevent memory cleanup.
 TEST_P(EGLContextSharingTestNoFixture, InactiveThreadDoesntPreventCleanup)
 {
@@ -1425,6 +1548,7 @@ ANGLE_INSTANTIATE_TEST(EGLContextSharingTest,
                        ES2_D3D11(),
                        ES3_D3D11(),
                        ES2_METAL(),
+                       ES3_METAL(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_VULKAN(),
@@ -1435,6 +1559,8 @@ ANGLE_INSTANTIATE_TEST(EGLContextSharingTestNoFixture,
                        WithNoFixture(ES3_OPENGLES()),
                        WithNoFixture(ES2_OPENGL()),
                        WithNoFixture(ES3_OPENGL()),
+                       WithNoFixture(ES2_METAL()),
+                       WithNoFixture(ES3_METAL()),
                        WithNoFixture(ES2_VULKAN()),
                        WithNoFixture(ES3_VULKAN()));
 

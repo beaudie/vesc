@@ -31,6 +31,8 @@ class ContextMtl;
 namespace mtl
 {
 
+struct ResourceCommandBufferTracking;
+
 // Common class to be used by both SyncImpl and EGLSyncImpl.
 // NOTE: SharedEvent is only declared on iOS 12.0+ or mac 10.14+
 #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
@@ -45,7 +47,8 @@ class Sync
     angle::Result initialize(ContextMtl *contextMtl);
 
     angle::Result set(ContextMtl *contextMtl, GLenum condition, GLbitfield flags);
-    angle::Result clientWait(ContextMtl *contextMtl,
+    angle::Result clientWait(DisplayMtl *display,
+                             ContextMtl *contextMtl,
                              bool flushCommands,
                              uint64_t timeout,
                              GLenum *outResult);
@@ -53,11 +56,15 @@ class Sync
     angle::Result getStatus(bool *signaled);
 
   private:
+    void flushPendingContextsIfNeeded(ContextMtl *contextMtl);
+
     SharedEventRef mMetalSharedEvent;
     uint64_t mSetCounter = 0;
 
     std::shared_ptr<std::condition_variable> mCv;
     std::shared_ptr<std::mutex> mLock;
+
+    std::shared_ptr<ResourceCommandBufferTracking> mCmdBufferTrackingRef;
 };
 #else   // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
 class Sync
@@ -75,7 +82,8 @@ class Sync
         UNREACHABLE();
         return angle::Result::Stop;
     }
-    angle::Result clientWait(ContextMtl *context,
+    angle::Result clientWait(DisplayMtl *display,
+                             ContextMtl *context,
                              bool flushCommands,
                              uint64_t timeout,
                              GLenum *outResult)

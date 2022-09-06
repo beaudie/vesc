@@ -16,8 +16,6 @@
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
 #include "libANGLE/renderer/metal/mtl_context_device.h"
 #include "libANGLE/renderer/metal/mtl_format_utils.h"
-#include "libANGLE/renderer/metal/mtl_render_utils.h"
-#include "libANGLE/renderer/metal/mtl_state_cache.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
 #include "platform/FeaturesMtl_autogen.h"
 
@@ -137,8 +135,6 @@ class DisplayMtl : public DisplayImpl
 
     mtl::CommandQueue &cmdQueue() { return mCmdQueue; }
     const mtl::FormatTable &getFormatTable() const { return mFormatTable; }
-    mtl::RenderUtils &getUtils() { return mUtils; }
-    mtl::StateCache &getStateCache() { return mStateCache; }
     uint32_t getMaxColorTargetBits() { return mMaxColorTargetBits; }
 
     id<MTLLibrary> getDefaultShadersLib();
@@ -187,8 +183,6 @@ class DisplayMtl : public DisplayImpl
     mtl::CommandQueue mCmdQueue;
 
     mutable mtl::FormatTable mFormatTable;
-    mtl::StateCache mStateCache;
-    mtl::RenderUtils mUtils;
 
     // Built-in Shaders
     std::shared_ptr<DefaultShaderAsyncInfoMtl> mDefaultShadersAsyncInfo;
@@ -204,6 +198,8 @@ class DisplayMtl : public DisplayImpl
     mutable uint32_t mMaxColorTargetBits = 0;
 
     angle::FeaturesMtl mFeatures;
+
+    std::mutex mLock;
 };
 
 }  // namespace rx
