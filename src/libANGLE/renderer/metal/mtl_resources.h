@@ -43,6 +43,17 @@ using TextureRef     = std::shared_ptr<Texture>;
 using TextureWeakRef = std::weak_ptr<Texture>;
 using BufferRef      = std::shared_ptr<Buffer>;
 using BufferWeakRef  = std::weak_ptr<Buffer>;
+struct ResourceCommandBufferTracking
+{
+    virtual ~ResourceCommandBufferTracking() = default;
+
+    // The serial number of the last committed command buffer that is using this resource.
+    // This number is only updated when the command buffer is committed.
+    uint64_t cmdBufferQueueSerial = 0;
+
+    // List of contexts haven't submitted command buffers using the resource yet.
+    angle::HashSet<ContextMtl *> pendingContexts;
+};
 
 class Resource : angle::NonCopyable
 {
@@ -55,9 +66,17 @@ class Resource : angle::NonCopyable
     // Checks whether the last command buffer that uses the given resource has been committed or not
     bool hasPendingWorks(Context *context) const;
 
-    void setUsedByCommandBufferWithQueueSerial(uint64_t serial, bool writing);
+    // Mark that the resource will be written by GPU
+    void markWillBeWrittenByGPU();
 
     uint64_t getCommandBufferQueueSerial() const { return mUsageRef->cmdBufferQueueSerial; }
+
+    std::shared_ptr<ResourceCommandBufferTracking> getCommandBufferTrackingSharedRef() const
+    {
+        return mUsageRef;
+    }
+
+    ResourceCommandBufferTracking *getCommandBufferTrackingRef() const { return mUsageRef.get(); }
 
     // Flag indicate whether we should synchronize the content to CPU after GPU changed this
     // resource's content.
@@ -82,11 +101,8 @@ class Resource : angle::NonCopyable
     void reset();
 
   private:
-    struct UsageRef
+    struct UsageRef : public ResourceCommandBufferTracking
     {
-        // The id of the last command buffer that is using this resource.
-        uint64_t cmdBufferQueueSerial = 0;
-
         // This flag means the resource was issued to be modified by GPU, if CPU wants to read
         // its content, explicit synchronization call must be invoked.
         bool cpuReadMemNeedSync = false;
@@ -99,7 +115,6 @@ class Resource : angle::NonCopyable
         // This flag is useful for BufferMtl to know whether it should update the shadow copy
         bool cpuReadMemDirty = false;
     };
-
     // One resource object might just be a view of another resource. For example, a texture 2d
     // object might be a view of one face of a cube texture object. Another example is one texture
     // object of size 2x2 might be a mipmap view of a texture object size 4x4. Thus, if one object

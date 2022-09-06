@@ -700,6 +700,9 @@
 
 7625 WIN SWIFTSHADER : VulkanPerformanceCounterTest.EndXfbAfterRenderPassClosed/* = SKIP
 
+// Multithreaded CPU read without glFlush doesn't work on Vulkan
+7636 VULKAN : EGLContextSharingTest.StartXFBAndReadOnDifferentThreadNoFlush/* = SKIP
+
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT

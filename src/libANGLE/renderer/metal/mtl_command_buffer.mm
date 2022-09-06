@@ -16,6 +16,7 @@
 #endif
 
 #include "common/debug.h"
+#include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/mtl_occlusion_query_pool.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 
@@ -460,37 +461,66 @@ void CommandQueue::finishAllCommands()
     }
 }
 
-void CommandQueue::ensureResourceReadyForCPU(const ResourceRef &resource)
+void CommandQueue::ensureResourceReadyForCPU(ContextMtl *context, const ResourceRef &resource)
 {
     if (!resource)
     {
         return;
     }
 
-    ensureResourceReadyForCPU(resource.get());
+    ensureResourceReadyForCPU(context, resource.get());
 }
 
-void CommandQueue::ensureResourceReadyForCPU(Resource *resource)
+void CommandQueue::ensureResourceReadyForCPU(ContextMtl *context, Resource *resource)
 {
-    mLock.lock();
-    while (isResourceBeingUsedByGPU(resource) && !mMetalCmdBuffers.empty())
+    flushPendingWorks(context, resource);
+
+    std::unique_lock<std::mutex> lk(mLock);
+    if (isResourceBeingUsedByGPU(resource))
     {
-        CmdBufferQueueEntry metalBufferEntry = mMetalCmdBuffers.front();
-        mMetalCmdBuffers.pop_front();
-        mLock.unlock();
+        // Since the command buffers in the list have strictly increasing serial numbers,
+        // we only have to wait on the first command buffer that has its
+        // serial >= resource's last used command buffer's serial
+        auto ite = std::lower_bound(
+            mMetalCmdBuffers.begin(), mMetalCmdBuffers.end(),
+            resource->getCommandBufferQueueSerial(),
+            [](const CmdBufferQueueEntry &lhs, uint64_t rhs) { return lhs.serial < rhs; });
+        if (ite != mMetalCmdBuffers.end())
+        {
+            ANGLE_MTL_LOG("Waiting for MTLCommandBuffer %llu:%p", ite->serial, ite->buffer.get());
 
-        ANGLE_MTL_LOG("Waiting for MTLCommandBuffer %llu:%p", metalBufferEntry.serial,
-                      metalBufferEntry.buffer.get());
-        [metalBufferEntry.buffer waitUntilCompleted];
-
-        mLock.lock();
+            // Wait for mCompletedBufferSerial flag being updated in onCommandBufferCompleted()
+            mCv.wait(lk, [this, serial = ite->serial] {
+                return mCompletedBufferSerial.load(std::memory_order_relaxed) >= serial;
+            });
+        }
     }
-    mLock.unlock();
 
-    // This can happen if the resource is read then write in the same command buffer.
-    // So it is the responsitibily of outer code to ensure the command buffer is commit before
-    // the resource can be read or written again
     ASSERT(!isResourceBeingUsedByGPU(resource));
+}
+
+void CommandQueue::flushPendingWorks(ContextMtl *context, Resource *resource)
+{
+    // Flush all pending works on the resource.
+    // Note that this has implied thread safety. Assume that all contexts that are using
+    // the resource belong to the same shared group thus will be protected by a shared mutex
+    // at front-end level.
+    angle::FastVector<ContextMtl *, 2> contextsToFlush;
+    for (ContextMtl *pendingCtx : resource->getCommandBufferTrackingRef()->pendingContexts)
+    {
+        // Only flush context in the same shared group as the current context.
+        if (pendingCtx->getState().getShareGroup() == context->getState().getShareGroup())
+        {
+            // delay the flushing until we know all contexts need to be flushed.
+            // This is because flushCommandBuffer() would alter the pendingContexts table.
+            contextsToFlush.push_back(pendingCtx);
+        }
+    }
+
+    for (ContextMtl *pendingCtx : contextsToFlush)
+    {
+        pendingCtx->flushCommandBuffer(mtl::NoWait);
+    }
 }
 
 bool CommandQueue::isResourceBeingUsedByGPU(const Resource *resource) const
@@ -501,7 +531,8 @@ bool CommandQueue::isResourceBeingUsedByGPU(const Resource *resource) const
     }
 
     return mCompletedBufferSerial.load(std::memory_order_relaxed) <
-           resource->getCommandBufferQueueSerial();
+               resource->getCommandBufferQueueSerial() ||
+           resourceHasPendingWorks(resource);
 }
 
 bool CommandQueue::resourceHasPendingWorks(const Resource *resource) const
@@ -511,45 +542,50 @@ bool CommandQueue::resourceHasPendingWorks(const Resource *resource) const
         return false;
     }
 
-    return mCommittedBufferSerial.load(std::memory_order_relaxed) <
-           resource->getCommandBufferQueueSerial();
+    return !resource->getCommandBufferTrackingRef()->pendingContexts.empty();
 }
 
-AutoObjCPtr<id<MTLCommandBuffer>> CommandQueue::makeMetalCommandBuffer(uint64_t *queueSerialOut)
+AutoObjCPtr<id<MTLCommandBuffer>> CommandQueue::makeMetalCommandBuffer()
 {
     ANGLE_MTL_OBJC_SCOPE
     {
         AutoObjCPtr<id<MTLCommandBuffer>> metalCmdBuffer = [get() commandBuffer];
 
-        std::lock_guard<std::mutex> lg(mLock);
-
-        uint64_t serial = mQueueSerialCounter++;
-
-        mMetalCmdBuffers.push_back({metalCmdBuffer, serial});
-
-        ANGLE_MTL_LOG("Created MTLCommandBuffer %llu:%p", serial, metalCmdBuffer.get());
-
-        [metalCmdBuffer addCompletedHandler:^(id<MTLCommandBuffer> buf) {
-          onCommandBufferCompleted(buf, serial);
-        }];
+        ANGLE_MTL_LOG("Created MTLCommandBuffer %p", metalCmdBuffer.get());
 
         ASSERT(metalCmdBuffer);
-
-        *queueSerialOut = serial;
 
         return metalCmdBuffer;
     }
 }
 
-void CommandQueue::onCommandBufferCommitted(id<MTLCommandBuffer> buf, uint64_t serial)
+void CommandQueue::commitCommandBuffer(id<MTLCommandBuffer> buf, uint64_t *queueSerialOut)
 {
     std::lock_guard<std::mutex> lg(mLock);
 
-    ANGLE_MTL_LOG("Committed MTLCommandBuffer %llu:%p", serial, buf);
+    AutoObjCPtr<id<MTLCommandBuffer>> metalCmdBuffer;
+    metalCmdBuffer.retainAssign(buf);
+
+    // Assign actual serial number to the command buffer
+    uint64_t serial = mQueueSerialCounter++;
+
+    mMetalCmdBuffers.push_back({metalCmdBuffer, serial});
+
+    [metalCmdBuffer.get() addCompletedHandler:^(id<MTLCommandBuffer> bufArg) {
+      onCommandBufferCompleted(bufArg, serial);
+    }];
+
+    *queueSerialOut = serial;
+
+    ANGLE_MTL_LOG(@"Committed MTLCommandBuffer %llu:%p", serial, buf);
 
     mCommittedBufferSerial.store(
         std::max(mCommittedBufferSerial.load(std::memory_order_relaxed), serial),
         std::memory_order_relaxed);
+
+    // Commit the command buffer
+    [buf enqueue];
+    [buf commit];
 }
 
 void CommandQueue::onCommandBufferCompleted(id<MTLCommandBuffer> buf, uint64_t serial)
@@ -577,10 +613,14 @@ void CommandQueue::onCommandBufferCompleted(id<MTLCommandBuffer> buf, uint64_t s
     mCompletedBufferSerial.store(
         std::max(mCompletedBufferSerial.load(std::memory_order_relaxed), serial),
         std::memory_order_relaxed);
+
+    mCv.notify_all();
 }
 
 // CommandBuffer implementation
-CommandBuffer::CommandBuffer(CommandQueue *cmdQueue) : mCmdQueue(*cmdQueue) {}
+CommandBuffer::CommandBuffer(CommandQueue *cmdQueue, ContextMtl *context)
+    : mCmdQueue(*cmdQueue), mOwnerContext(context)
+{}
 
 CommandBuffer::~CommandBuffer()
 {
@@ -597,9 +637,11 @@ bool CommandBuffer::ready() const
 
 void CommandBuffer::commit(CommandBufferFinishOperation operation)
 {
-    std::lock_guard<std::mutex> lg(mLock);
+    std::unique_lock<std::mutex> lg(mLock);
     if (commitImpl())
     {
+        lg.unlock();
+
         if (operation == WaitUntilScheduled)
         {
             [get() waitUntilScheduled];
@@ -616,31 +658,50 @@ void CommandBuffer::present(id<CAMetalDrawable> presentationDrawable)
     [get() presentDrawable:presentationDrawable];
 }
 
-void CommandBuffer::setResourceUsedByCommandBuffer(const ResourceRef &resource)
+void CommandBuffer::setResourceUsedByCommandBuffer(Resource *resource)
 {
-    if (resource)
+    if (resource && mResourceList.count(resource->getID()) == 0)
     {
-        auto result = mResourceList.insert(resource->getID());
-        // If we were able to add a unique Metal resource ID to the list, count it.
-        //
-        // Note that we store Metal IDs here, properly retained in non-ARC environments, rather than
-        // the ResourceRefs. There are some assumptions in TextureMtl in particular about weak refs
-        // to temporary textures being cleared out eagerly. Holding on to additional references here
-        // implies that that texture is still being used, and would require additional code to clear
-        // out temporary render targets upon texture redefinition.
-        if (result.second)
-        {
-            [resource->getID() ANGLE_MTL_RETAIN];
-            mWorkingResourceSize += resource->estimatedByteSize();
-        }
+        mWorkingResourceSize += resource->estimatedByteSize();
+        trackResourceToBeUsed(resource->getID(), resource->getCommandBufferTrackingSharedRef());
     }
+}
+
+void CommandBuffer::trackResourceToBeUsed(
+    id resourceID,
+    const std::shared_ptr<ResourceCommandBufferTracking> &trackingRef)
+{
+    // If we were able to add a unique Metal resource ID to the list, count it.
+    //
+    // Note that we store Metal IDs here, properly retained in non-ARC environments, rather than
+    // the ResourceRefs. There are some assumptions in TextureMtl in particular about weak refs
+    // to temporary textures being cleared out eagerly. Holding on to additional references here
+    // implies that that texture is still being used, and would require additional code to clear
+    // out temporary render targets upon texture redefinition.
+    [resourceID ANGLE_MTL_RETAIN];
+
+    // We also keep a reference to the resource's ResourceCommandBufferTracking in order
+    // to update its pending contexts list and Command Buffer's actual queue serial number which
+    // is only made available when the buffer is committed.
+    mResourceList[resourceID] = trackingRef;
+
+    trackingRef->pendingContexts.insert(mOwnerContext);
 }
 
 void CommandBuffer::clearResourceListAndSize()
 {
-    for (const id &metalID : mResourceList)
+    for (const auto &entry : mResourceList)
     {
-        [metalID ANGLE_MTL_RELEASE];
+        id resID                                                             = entry.first;
+        const std::shared_ptr<ResourceCommandBufferTracking> &resTrackingRef = entry.second;
+
+        resTrackingRef->pendingContexts.erase(mOwnerContext);
+        // Update resource's last command buffer's serial with the actual number.
+        // This number is only available when the command buffer is commited.
+        resTrackingRef->cmdBufferQueueSerial =
+            std::max(resTrackingRef->cmdBufferQueueSerial, mQueueSerial);
+
+        [resID ANGLE_MTL_RELEASE];
     }
     mResourceList.clear();
     mWorkingResourceSize = 0;
@@ -660,14 +721,13 @@ void CommandBuffer::setWriteDependency(const ResourceRef &resource)
         return;
     }
 
-    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, true);
-    setResourceUsedByCommandBuffer(resource);
+    resource->markWillBeWrittenByGPU();
+    setResourceUsedByCommandBuffer(resource.get());
 }
 
 void CommandBuffer::setReadDependency(const ResourceRef &resource)
 {
     setReadDependency(resource.get());
-    setResourceUsedByCommandBuffer(resource);
 }
 
 void CommandBuffer::setReadDependency(Resource *resource)
@@ -684,7 +744,7 @@ void CommandBuffer::setReadDependency(Resource *resource)
         return;
     }
 
-    resource->setUsedByCommandBufferWithQueueSerial(mQueueSerial, false);
+    setResourceUsedByCommandBuffer(resource);
 }
 
 bool CommandBuffer::needsFlushForDrawCallLimits() const
@@ -694,14 +754,12 @@ bool CommandBuffer::needsFlushForDrawCallLimits() const
 
 void CommandBuffer::restart()
 {
-    uint64_t serial                                  = 0;
-    AutoObjCPtr<id<MTLCommandBuffer>> metalCmdBuffer = mCmdQueue.makeMetalCommandBuffer(&serial);
+    AutoObjCPtr<id<MTLCommandBuffer>> metalCmdBuffer = mCmdQueue.makeMetalCommandBuffer();
 
     std::lock_guard<std::mutex> lg(mLock);
 
     set(metalCmdBuffer);
-    mQueueSerial = serial;
-    mCommitted   = false;
+    mCommitted = false;
 
     for (std::string &marker : mDebugGroups)
     {
@@ -755,11 +813,21 @@ void CommandBuffer::popDebugGroup()
     }
 }
 
-void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t value)
+void CommandBuffer::queueEventSignal(
+    const mtl::SharedEventRef &event,
+    uint64_t value,
+    const std::shared_ptr<ResourceCommandBufferTracking> &trackingRef)
 {
     std::lock_guard<std::mutex> lg(mLock);
 
     ASSERT(readyImpl());
+
+    if (mResourceList.count(event.get()) == 0)
+    {
+        // Track this event as if it is a resource to be used by this command buffer.
+        // This is used to flush pending contexts later when user issues a wait on this event.
+        trackResourceToBeUsed(event.get(), trackingRef);
+    }
 
     if (mActiveCommandEncoder && mActiveCommandEncoder->getType() == CommandEncoder::RENDER)
     {
@@ -842,12 +910,9 @@ bool CommandBuffer::commitImpl()
     // Encoding any pending event's signalling.
     setPendingEvents();
 
-    // Notify command queue
-    mCmdQueue.onCommandBufferCommitted(get(), mQueueSerial);
+    // Do the actual commit, and get the serial number.
+    mCmdQueue.commitCommandBuffer(get(), &mQueueSerial);
 
-    // Do the actual commit
-    [get() enqueue];
-    [get() commit];
     // Reset the working resource set.
     clearResourceListAndSize();
     mCommitted = true;
@@ -882,6 +947,7 @@ void CommandBuffer::setEventImpl(const mtl::SharedEventRef &event, uint64_t valu
     // event.
     forceEndingCurrentEncoder();
 
+    ANGLE_MTL_LOG("CommandBuffer %p signal event value %llu", get(), value);
     [get() encodeSignalEvent:event value:value];
 #else
     UNIMPLEMENTED();
@@ -898,6 +964,8 @@ void CommandBuffer::waitEventImpl(const mtl::SharedEventRef &event, uint64_t val
 
     // Encoding any pending event's signalling.
     setPendingEvents();
+
+    ANGLE_MTL_LOG("CommandBuffer %p waiting for event value %llu", get(), value);
 
     [get() encodeWaitForEvent:event value:value];
 #else

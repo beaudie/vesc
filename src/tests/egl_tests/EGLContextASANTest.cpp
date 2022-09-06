@@ -203,4 +203,6 @@ ANGLE_INSTANTIATE_TEST(EGLContextASANTest,
                        ES2_OPENGL(),
                        ES3_OPENGL(),
                        ES2_VULKAN(),
-                       ES3_VULKAN());
+                       ES3_VULKAN(),
+                       ES2_METAL(),
+                       ES3_METAL());
