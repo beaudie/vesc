@@ -121,17 +121,30 @@ struct CombinedPrintToStringParamName
     INSTANTIATE_TEST_SUITE_P(, testName, testing::ValuesIn(::angle::FilterTestParams(valuesin)), \
                              testing::PrintToStringParamName())
 
+#ifndef ANGLE_TEST_ENABLE_SYSTEM_EGL
+#    define MAYBE_ES1_EGL
+#    define MAYBE_ES2_EGL
+#    define MAYBE_ES3_EGL
+#else
+#    define MAYBE_ES1_EGL ES1_EGL(),
+#    define MAYBE_ES2_EGL ES2_EGL(),
+#    define MAYBE_ES3_EGL ES3_EGL(),
+#endif
+
 #define ANGLE_ALL_TEST_PLATFORMS_ES1                                                   \
+    MAYBE_ES1_EGL                                                                      \
     ES1_D3D11(), ES1_OPENGL(), ES1_OPENGLES(), ES1_VULKAN(), ES1_VULKAN_SWIFTSHADER(), \
         ES1_VULKAN().enable(Feature::AsyncCommandQueue),                               \
         ES1_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue)
 
 #define ANGLE_ALL_TEST_PLATFORMS_ES2                                                               \
+    MAYBE_ES2_EGL                                                                                  \
     ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES(), ES2_VULKAN(), ES2_VULKAN_SWIFTSHADER(), \
         ES2_METAL(), ES2_VULKAN().enable(Feature::AsyncCommandQueue),                              \
         ES2_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue)
 
 #define ANGLE_ALL_TEST_PLATFORMS_ES3                                                   \
+    MAYBE_ES3_EGL                                                                      \
     ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER(), \
         ES3_METAL(), ES3_VULKAN().enable(Feature::AsyncCommandQueue),                  \
         ES3_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue)
