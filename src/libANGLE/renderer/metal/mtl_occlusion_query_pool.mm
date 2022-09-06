@@ -118,7 +118,7 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
         return;
     }
 
-    RenderUtils &utils              = contextMtl->getDisplay()->getUtils();
+    RenderUtils &utils              = contextMtl->getUtils();
     BlitCommandEncoder *blitEncoder = nullptr;
     // Combine the values stored in the offsets allocated for first query
     if (mAllocatedQueries[0])
@@ -180,5 +180,5 @@ void OcclusionQueryPool::resolveVisibilityResults(ContextMtl *contextMtl)
     mAllocatedQueries.clear();
 }
 
-}
-}
+}  // namespace mtl
+}  // namespace rx
