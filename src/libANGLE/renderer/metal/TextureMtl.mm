@@ -816,8 +816,8 @@ angle::Result TextureMtl::ensureSamplerStateCreated(const gl::Context *context)
         samplerDesc.sAddressMode = MTLSamplerAddressModeClampToEdge;
         samplerDesc.tAddressMode = MTLSamplerAddressModeClampToEdge;
     }
-    mMetalSamplerState = contextMtl->getDisplay()->getStateCache().getSamplerState(
-        contextMtl->getMetalDevice(), samplerDesc);
+    mMetalSamplerState =
+        contextMtl->getStateCache().getSamplerState(contextMtl->getMetalDevice(), samplerDesc);
 
     return angle::Result::Continue;
 }
@@ -1298,8 +1298,8 @@ angle::Result TextureMtl::generateMipmap(const gl::Context *context)
         // http://anglebug.com/4921.
         // Use compute for 3D mipmap generation.
         ANGLE_TRY(ensureNativeLevelViewsCreated());
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().generateMipmapCS(contextMtl, mNativeTexture,
-                                                                        sRGB, &mNativeLevelViews));
+        ANGLE_TRY(contextMtl->getUtils().generateMipmapCS(contextMtl, mNativeTexture, sRGB,
+                                                          &mNativeLevelViews));
     }
     else if (!avoidGPUPath && caps.filterable && caps.colorRenderable)
     {
@@ -1902,7 +1902,7 @@ angle::Result TextureMtl::convertAndSetPerSliceSubImage(const gl::Context *conte
             // texture's slice or 3D texture's layer index.
             params.textureArea.z += slice;
 
-            ANGLE_TRY(contextMtl->getDisplay()->getUtils().unpackPixelsFromBufferToTexture(
+            ANGLE_TRY(contextMtl->getUtils().unpackPixelsFromBufferToTexture(
                 contextMtl, pixelsAngleFormat, params));
         }
     }  // if (unpackBuffer)
@@ -2132,7 +2132,6 @@ angle::Result TextureMtl::copySubImageWithDraw(const gl::Context *context,
                                                const RenderTargetMtl *colorReadRT)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    DisplayMtl *displayMtl = contextMtl->getDisplay();
 
     const RenderTargetMtl &imageRtt = getRenderTarget(index);
 
@@ -2155,7 +2154,7 @@ angle::Result TextureMtl::copySubImageWithDraw(const gl::Context *context,
     blitParams.srcYFlipped  = source->flipY();
     blitParams.dstLuminance = internalFormat.isLUMA();
 
-    return displayMtl->getUtils().blitColorWithDraw(
+    return contextMtl->getUtils().blitColorWithDraw(
         context, cmdEncoder, colorReadRT->getFormat()->actualAngleFormat(), blitParams);
 }
 
@@ -2273,7 +2272,6 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
                                                  const mtl::TextureRef &sourceTexture)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    DisplayMtl *displayMtl = contextMtl->getDisplay();
 
     mtl::TextureRef image = getImage(index);
     ASSERT(image && image->valid());
@@ -2305,7 +2303,7 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
     blitParams.unpackPremultiplyAlpha = unpackPremultiplyAlpha;
     blitParams.unpackUnmultiplyAlpha  = unpackUnmultiplyAlpha;
 
-    return displayMtl->getUtils().copyTextureWithDraw(context, cmdEncoder, sourceAngleFormat,
+    return contextMtl->getUtils().copyTextureWithDraw(context, cmdEncoder, sourceAngleFormat,
                                                       mFormat.actualAngleFormat(), blitParams);
 }
 

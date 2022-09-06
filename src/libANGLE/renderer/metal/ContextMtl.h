@@ -21,6 +21,7 @@
 #include "libANGLE/renderer/metal/mtl_command_buffer.h"
 #include "libANGLE/renderer/metal/mtl_context_device.h"
 #include "libANGLE/renderer/metal/mtl_occlusion_query_pool.h"
+#include "libANGLE/renderer/metal/mtl_render_utils.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_state_cache.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
@@ -310,7 +311,9 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void onTransformFeedbackInactive(const gl::Context *context, TransformFeedbackMtl *xfb);
 
     // Invoke by mtl::Sync
-    void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
+    void queueEventSignal(const mtl::SharedEventRef &event,
+                          uint64_t value,
+                          const std::shared_ptr<mtl::ResourceCommandBufferTracking> &trackingRef);
     void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
 
     const mtl::ClearColorValue &getClearColorValue() const;
@@ -330,6 +333,9 @@ class ContextMtl : public ContextImpl, public mtl::Context
     angle::Result getIncompleteTexture(const gl::Context *context,
                                        gl::TextureType type,
                                        gl::Texture **textureOut);
+
+    mtl::RenderUtils &getUtils() { return mUtils; }
+    mtl::StateCache &getStateCache() { return mStateCache; }
 
     // Recommended to call these methods to end encoding instead of invoking the encoder's
     // endEncoding() directly.
@@ -563,6 +569,11 @@ class ContextMtl : public ContextImpl, public mtl::Context
     mtl::RenderCommandEncoder mRenderEncoder;
     mtl::BlitCommandEncoder mBlitEncoder;
     mtl::ComputeCommandEncoder mComputeEncoder;
+
+    // Make this per-context instead of per-device. Making this per-device would require
+    // synchronization when multiple threads attempt to access state cache or render utilities.
+    mtl::StateCache mStateCache;
+    mtl::RenderUtils mUtils;
 
     // Cached back-end objects
     FramebufferMtl *mDrawFramebuffer = nullptr;
