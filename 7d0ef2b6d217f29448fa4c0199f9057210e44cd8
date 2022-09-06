@@ -16,6 +16,24 @@
       "message": "Maybe we could just add `gl_PointSize \u003d 1.0;` to `Simple` to avoid having to pick one or the other? nvm if that doesn\u0027t work, just a thought.",
       "revId": "7d0ef2b6d217f29448fa4c0199f9057210e44cd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "670135d9_12ebe389",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-06T20:31:54Z",
+      "side": 1,
+      "message": "That makes things complicated with desktop GL, there\u0027s a glPointSize() and I\u0027m worried setting it in the shader would override the API setting. I\u0027m not familiar though, I may be wrong.\n\nBut regardless, I do want to have some tests not set gl_PointSize for increased coverage of a SPIR-V transformation we have that would remove it from the list of vertex shader outputs.",
+      "parentUuid": "2b570f5a_6934bbaa",
+      "revId": "7d0ef2b6d217f29448fa4c0199f9057210e44cd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
