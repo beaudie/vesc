@@ -407,7 +407,7 @@ angle::Result SurfaceMtl::resolveColorTextureIfNeeded(const gl::Context *context
                                             mColorFormat);
         mtl::RenderCommandEncoder *encoder =
             contextMtl->getRenderTargetCommandEncoder(mColorManualResolveRenderTarget);
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitColorWithDraw(
+        ANGLE_TRY(contextMtl->getUtils().blitColorWithDraw(
             context, encoder, mColorFormat.actualAngleFormat(), mMSColorTexture));
         contextMtl->endEncoding(true);
         mColorManualResolveRenderTarget.reset();
