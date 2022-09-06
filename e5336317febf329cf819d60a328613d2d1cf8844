@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a26ff144_adf1ec73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "Nice stuff! Fairly minor comments about how to spec this and some nits.",
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289aa9b0_518748a5",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "What\u0027s the `id\u003c\u003e` part mean?",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd4529ad_c50400c5",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "I\u0027ll go ahead and mark these as allocated in our tracking.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 58
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c840d26_5abff201",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "Anything validation needed of values? Positive only? EGLAttrib is an intptr_t so no guarantee of 64 bits or full uint range. Also a description of the default behaviour when it\u0027s not specified.",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 54
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74d3cf3c_085caa84",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "I would rephrase this as `a valid MTLSharedEvent or NULL otherwise EGL_NO_SYNC_KHR is returned and and an EGL_BAD_ATTRIBUTE error is generated`. Can you also explain what happens when null is passed in?",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 78,
+        "endChar": 7
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25329864_aabaeaaf",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "We avoid default arguments whenever possible. It\u0027s saved us from a few bugs in the past.",
+      "range": {
+        "startLine": 54,
+        "startChar": 22,
+        "endLine": 55,
+        "endChar": 84
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f346683f_dcbb5497",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "The attribs are discarded after the fence is created so a const reference will become invalid. Instead, extract the items you need from the attribs in the constructor and store them as members.",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 38
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f3dd166_85a93eb0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "This is probably not necessary. It should be implied by exposing `EGL_KHR_fence_sync`. Maybe an assert instead?",
+      "range": {
+        "startLine": 1403,
+        "startChar": 0,
+        "endLine": 1413,
+        "endChar": 0
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5827c2a_c01972ab",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "nit: c++ style casts (possibly in a helper function)",
+      "range": {
+        "startLine": 62,
+        "startChar": 73,
+        "endLine": 62,
+        "endChar": 84
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9993603e_4c5affb5",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-06T17:20:53Z",
+      "side": 1,
+      "message": "oof, looks like gerrit can\u0027t parse this kind of number formatting.",
+      "range": {
+        "startLine": 131,
+        "startChar": 34,
+        "endLine": 131,
+        "endChar": 48
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
