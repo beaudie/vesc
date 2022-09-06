@@ -50,6 +50,24 @@
       "message": "It seems plausible that the failure of deqp/functional/gles3/primitiverestart/00.html in:\nhttps://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/12742/overview\n\nis related to this change.\n",
       "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d4b769a_8bddafd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-06T19:27:00Z",
+      "side": 1,
+      "message": "I agree it seems likely this change made that failure but, I tried on Intel and AMD locally and could not repeat it. All the dEQP primitive tests in both C++ and WebGL pass. Also the Provoking tests in end2end. Re-running the bot the test didn\u0027t fail again so for now I submitted it and it passed again (And committied). I can revert if you think that was not ok.",
+      "parentUuid": "7a86c53d_1900d093",
+      "revId": "ed28fecba5b3e7fe61e5373b38a95c5ab0e5ece5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
