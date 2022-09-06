@@ -169,7 +169,8 @@ def RunTestSuite(test_suite,
             runner_cmd += ['--isolated-script-test-output=%s' % results_path]
 
         if use_xvfb:
-            exit_code = xvfb.run_executable(runner_cmd, env, stdoutfile=stdout_path)
+            exit_code = xvfb.run_executable(
+                runner_cmd, env, stdoutfile=stdout_path, xvfb_whd='3120x3120x24')
         else:
             exit_code = run_command_with_output(
                 runner_cmd, env=env, stdoutfile=stdout_path, log=show_test_stdout)
