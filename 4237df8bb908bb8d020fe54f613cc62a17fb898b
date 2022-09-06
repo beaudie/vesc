@@ -16,6 +16,23 @@
       "message": "Verified with a bogus implementation on SwiftShader. Found a spec bug that\u0027s causing VVL to complain about it, but a fix is in progress: https://gitlab.khronos.org/vulkan/vulkan/-/merge_requests/5392\n\nUnfortunately this won\u0027t get CQ testing, but an upcoming driver change in Fuchsia will require this.",
       "revId": "4237df8bb908bb8d020fe54f613cc62a17fb898b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2781945_4e4a9606",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-06T18:02:18Z",
+      "side": 1,
+      "message": "What is the major difference between `VkMultisampledRenderToSingleSampledInfoEXT` and `VkMultisampledRenderToSingleSampledInfoGOOGLEX`?",
+      "revId": "4237df8bb908bb8d020fe54f613cc62a17fb898b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
