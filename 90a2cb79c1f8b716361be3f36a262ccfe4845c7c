@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e5aad3e_7926c88e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-06T15:22:21Z",
+      "side": 1,
+      "message": "Jamie, PTAL.\nGoing to land this after VVL rolls into Chrome (which can happen after ANGLE rolls into Chrome with the previous fix).",
+      "revId": "90a2cb79c1f8b716361be3f36a262ccfe4845c7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
