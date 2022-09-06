@@ -225,6 +225,14 @@ double ComputeMean(const std::vector<double> &values)
     double mean = sum / static_cast<double>(values.size());
     return mean;
 }
+
+std::string createMetricBasenameForPerfResultReporter(const std::string &name,
+                                                      const std::string &backend)
+{
+    std::string metricBasename = name + backend;
+    std::replace(metricBasename.begin(), metricBasename.end(), '/', '_');
+    return metricBasename;
+}
 }  // anonymous namespace
 
 TraceEvent::TraceEvent(char phaseIn,
@@ -262,7 +270,8 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     {
         mStory = mStory.substr(1);
     }
-    mReporter = std::make_unique<perf_test::PerfResultReporter>(mName + mBackend, mStory);
+    const std::string metricBasename = createMetricBasenameForPerfResultReporter(mName, mBackend);
+    mReporter = std::make_unique<perf_test::PerfResultReporter>(metricBasename, mStory);
     mReporter->RegisterImportantMetric(".wall_time", units);
     mReporter->RegisterImportantMetric(".cpu_time", units);
     mReporter->RegisterImportantMetric(".gpu_time", units);
