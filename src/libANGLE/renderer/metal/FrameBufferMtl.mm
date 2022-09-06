@@ -500,8 +500,8 @@ angle::Result FramebufferMtl::blitWithDraw(const gl::Context *context,
                 stencilOnlyBlitParams.dstPackedDepthStencilFormat =
                     mStencilRenderTarget->getFormat()->hasDepthAndStencilBits();
 
-                ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitStencilViaCopyBuffer(
-                    context, stencilOnlyBlitParams));
+                ANGLE_TRY(contextMtl->getUtils().blitStencilViaCopyBuffer(context,
+                                                                          stencilOnlyBlitParams));
 
                 // Prevent the stencil to be blitted with draw again
                 dsBlitParams.srcStencil = nullptr;
@@ -510,8 +510,8 @@ angle::Result FramebufferMtl::blitWithDraw(const gl::Context *context,
 
         // The actual blitting of depth and/or stencil
         renderEncoder = ensureRenderPassStarted(context);
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitDepthStencilWithDraw(
-            context, renderEncoder, dsBlitParams));
+        ANGLE_TRY(
+            contextMtl->getUtils().blitDepthStencilWithDraw(context, renderEncoder, dsBlitParams));
     }  // if (blitDepthBuffer || blitStencilBuffer)
     else
     {
@@ -535,7 +535,7 @@ angle::Result FramebufferMtl::blitWithDraw(const gl::Context *context,
         colorBlitParams.filter         = filter;
         colorBlitParams.dstLuminance   = srcColorRt->getFormat()->actualAngleFormat().isLUMA();
 
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().blitColorWithDraw(
+        ANGLE_TRY(contextMtl->getUtils().blitColorWithDraw(
             context, renderEncoder, srcColorRt->getFormat()->actualAngleFormat(), colorBlitParams));
     }
 
@@ -1255,14 +1255,13 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
                                             const mtl::ClearRectParams &clearOpts)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    DisplayMtl *display    = contextMtl->getDisplay();
 
     if (mRenderPassAttachmentsSameColorType)
     {
         // Start new render encoder if not already.
         mtl::RenderCommandEncoder *encoder = ensureRenderPassStarted(context, mRenderPassDesc);
 
-        return display->getUtils().clearWithDraw(context, encoder, clearOpts);
+        return contextMtl->getUtils().clearWithDraw(context, encoder, clearOpts);
     }
 
     // Not all attachments have the same color type.
@@ -1276,7 +1275,7 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
         dsOnlyDesc.numColorAttachments     = 0;
         mtl::RenderCommandEncoder *encoder = contextMtl->getRenderPassCommandEncoder(dsOnlyDesc);
 
-        ANGLE_TRY(display->getUtils().clearWithDraw(context, encoder, overrideClearOps));
+        ANGLE_TRY(contextMtl->getUtils().clearWithDraw(context, encoder, overrideClearOps));
     }
 
     // Clear the color attachment one by one.
@@ -1306,7 +1305,7 @@ angle::Result FramebufferMtl::clearWithDraw(const gl::Context *context,
 
         mtl::RenderCommandEncoder *encoder =
             contextMtl->getRenderTargetCommandEncoder(*renderTarget);
-        ANGLE_TRY(display->getUtils().clearWithDraw(context, encoder, overrideClearOps));
+        ANGLE_TRY(contextMtl->getUtils().clearWithDraw(context, encoder, overrideClearOps));
     }
 
     return angle::Result::Continue;
@@ -1722,7 +1721,7 @@ angle::Result FramebufferMtl::readPixelsToBuffer(const gl::Context *context,
         params.textureSliceOrDeph     = renderTarget->getLayerIndex();
         params.reverseTextureRowOrder = reverseRowOrder;
 
-        ANGLE_TRY(contextMtl->getDisplay()->getUtils().packPixelsFromTextureToBuffer(
+        ANGLE_TRY(contextMtl->getUtils().packPixelsFromTextureToBuffer(
             contextMtl, *actualDstAngleFormat, params));
     }
     else

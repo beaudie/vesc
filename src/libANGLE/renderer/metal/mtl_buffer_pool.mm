@@ -149,7 +149,7 @@ angle::Result BufferPool::allocateNewBuffer(ContextMtl *contextMtl)
         {
             contextMtl->flushCommandBuffer(mtl::NoWait);
             // Force the GPU to finish its rendering and make the old buffer available.
-            contextMtl->cmdQueue().ensureResourceReadyForCPU(mBufferFreeList.front());
+            contextMtl->cmdQueue().ensureResourceReadyForCPU(contextMtl, mBufferFreeList.front());
         }
 
         mBuffer = mBufferFreeList.front();
