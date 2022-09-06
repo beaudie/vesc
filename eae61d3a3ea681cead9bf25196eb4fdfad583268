@@ -16,6 +16,23 @@
       "message": "PTAL\n\nI\u0027m fairly certain this is Qualcomm-only. I haven\u0027t reproduced it anywhere else. Thanks for finding this Vasily, it\u0027s a real bug that we need to work around so that the draw isn\u0027t skipped.",
       "revId": "eae61d3a3ea681cead9bf25196eb4fdfad583268",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1217b31f_b1c4b024",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2022-09-06T17:05:39Z",
+      "side": 1,
+      "message": "lgtm, thanks for fixing it.",
+      "revId": "eae61d3a3ea681cead9bf25196eb4fdfad583268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
