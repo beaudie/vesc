@@ -140,7 +140,15 @@ class TracePerfTest : public ANGLERenderTest
         return static_cast<int>(frameCount());
     }
 
-    void TestBody() override { run(); }
+    void TestBody() override
+    {
+        printf("ANGLE: running test: %s\n", mParams->tracePerfName.c_str());
+#if defined(ANGLE_PLATFORM_ANDROID)
+        __android_log_print(ANDROID_LOG_INFO, "ANGLE", "running test: %s",
+                            mParams->tracePerfName.c_str());
+#endif
+        run();
+    }
 
     bool traceNameIs(const char *name) const
     {
@@ -722,7 +730,7 @@ bool FindRootTraceTestDataPath(char *testDataDirOut, size_t maxDataDirLen)
 }
 
 TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
-    : ANGLERenderTest("TracePerf_" + params->tracePerfName, *params.get(), "ms"),
+    : ANGLERenderTest("TracePerf", *params.get(), "ms"),
       mParams(std::move(params)),
       mStartFrame(0),
       mEndFrame(0)
