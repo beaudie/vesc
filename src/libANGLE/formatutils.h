@@ -232,6 +232,9 @@ struct InternalFormat
     GLuint compressedBlockHeight;
     GLuint compressedBlockDepth;
 
+    bool paletted;
+    GLuint paletteBits;
+
     GLenum format;
     GLenum type;
 
