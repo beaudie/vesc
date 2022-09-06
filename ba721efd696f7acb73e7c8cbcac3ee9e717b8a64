@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcd5259b_7f2df7e3",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-09-06T17:35:35Z",
+      "side": 0,
+      "message": "I\u0027m missing why you are deleting this code.  This code is run before any VkSurface\u0027s are created, and allows the EGL configs to be created that take into account all of the formats that the Vulkan loader supports.  It should also provide all of the colorspaces that are supported by the Vulkan loader.  IIRC both come from the Gralloc/driver code below the Vulkan loader.",
+      "revId": "ba721efd696f7acb73e7c8cbcac3ee9e717b8a64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
