@@ -980,6 +980,26 @@ void AddCompressedFormat(InternalFormatInfoMap *map,
     InsertFormatInfo(map, formatInfo);
 }
 
+void AddPalettedFormat(InternalFormatInfoMap *map, GLenum internalFormat, GLuint paletteBits)
+{
+    InternalFormat formatInfo;
+    formatInfo.internalFormat      = internalFormat;
+    formatInfo.sized               = true;
+    formatInfo.sizedInternalFormat = internalFormat;
+    formatInfo.pixelBytes          = 1;  // ???
+    formatInfo.componentCount      = 4;
+    formatInfo.format              = internalFormat;
+    formatInfo.type                = GL_UNSIGNED_BYTE;
+    formatInfo.componentType       = GL_UNSIGNED_NORMALIZED;
+    formatInfo.colorEncoding       = GL_LINEAR;
+    formatInfo.paletted            = true;
+    formatInfo.paletteBits         = paletteBits;
+    // TODO: support should be the same as in R8G8B8A8_UNORM
+    formatInfo.filterSupport = AlwaysSupported;
+
+    InsertFormatInfo(map, formatInfo);
+}
+
 void AddYUVFormat(InternalFormatInfoMap *map,
                   GLenum internalFormat,
                   bool sized,
@@ -1247,6 +1267,18 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddCompressedFormat(&map, GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT,   4,  4, 1, 128, 4, true,  RequireExt<&Extensions::textureCompressionBptcEXT>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT,   4,  4, 1, 128, 4, false, RequireExt<&Extensions::textureCompressionBptcEXT>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT, 4,  4, 1, 128, 4, false, RequireExt<&Extensions::textureCompressionBptcEXT>, AlwaysSupported, NeverSupported,      NeverSupported, NeverSupported);
+
+    // Paletted formats
+    AddPalettedFormat(&map, GL_PALETTE4_RGBA4_OES, 4);
+    AddPalettedFormat(&map, GL_PALETTE4_RGB5_A1_OES, 4);
+    AddPalettedFormat(&map, GL_PALETTE4_R5_G6_B5_OES, 4);
+    AddPalettedFormat(&map, GL_PALETTE4_RGBA8_OES, 4);
+    AddPalettedFormat(&map, GL_PALETTE4_RGB8_OES, 4);
+    AddPalettedFormat(&map, GL_PALETTE8_RGBA4_OES, 8);
+    AddPalettedFormat(&map, GL_PALETTE8_RGB5_A1_OES, 8);
+    AddPalettedFormat(&map, GL_PALETTE8_R5_G6_B5_OES, 8);
+    AddPalettedFormat(&map, GL_PALETTE8_RGBA8_OES, 8);
+    AddPalettedFormat(&map, GL_PALETTE8_RGB8_OES, 8);
 
     // From GL_IMG_texture_compression_pvrtc
     //                       | Internal format                       | W | H | D | BS |CC| SRGB | Texture supported                                 | Filterable     | Texture attachment | Renderbuffer  | Blend
@@ -1688,6 +1720,23 @@ bool InternalFormat::computeRowPitch(GLenum formatType,
         return computeCompressedImageSize(Extents(width, 1, 1), resultOut);
     }
 
+    if (paletted)
+    {
+        switch (paletteBits)
+        {
+            case 4:
+                // BUG: is this correct even if image width is odd?
+                *resultOut = (width + 1) / 2;
+                return true;
+            case 8:
+                *resultOut = width;
+                return true;
+            default:
+                UNREACHABLE();
+                return false;
+        }
+    }
+
     CheckedNumeric<GLuint> checkedWidth(rowLength > 0 ? rowLength : width);
     CheckedNumeric<GLuint> checkedRowBytes = checkedWidth * computePixelBytes(formatType);
 
@@ -1717,6 +1766,8 @@ bool InternalFormat::computeDepthPitch(GLsizei height,
     {
         rowCount = pixelsHeight;
     }
+
+    // BUG: is this necessary for paletted images?
 
     CheckedNumeric<GLuint> checkedRowPitch(rowPitch);
 

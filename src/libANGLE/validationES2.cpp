@@ -969,15 +969,15 @@ bool ValidateES2TexImageParametersBase(const Context *context,
 
         const InternalFormat &internalFormatInfo = GetSizedInternalFormatInfo(actualInternalFormat);
 
-        if (!internalFormatInfo.compressed)
+        if ((false) && !internalFormatInfo.compressed)
         {
             context->validationErrorF(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat,
                                       internalformat);
             return false;
         }
 
-        if (!internalFormatInfo.textureSupport(context->getClientVersion(),
-                                               context->getExtensions()))
+        if ((false) && !internalFormatInfo.textureSupport(context->getClientVersion(),
+                                                          context->getExtensions()))
         {
             context->validationErrorF(entryPoint, GL_INVALID_ENUM, kInvalidInternalFormat,
                                       internalformat);
@@ -1019,7 +1019,8 @@ bool ValidateES2TexImageParametersBase(const Context *context,
         }
         else
         {
-            if (!ValidCompressedImageSize(context, actualInternalFormat, level, width, height, 1))
+            if ((false) &&
+                !ValidCompressedImageSize(context, actualInternalFormat, level, width, height, 1))
             {
                 context->validationError(entryPoint, GL_INVALID_OPERATION,
                                          kInvalidCompressedImageSize);
@@ -2820,6 +2821,9 @@ bool ValidateCompressedTexImage2D(const Context *context,
     }
 
     const InternalFormat &formatInfo = GetSizedInternalFormatInfo(internalformat);
+
+    if ((true) /* paletted */)
+        return true;
 
     GLuint blockSize = 0;
     if (!formatInfo.computeCompressedImageSize(Extents(width, height, 1), &blockSize))
