@@ -16,6 +16,24 @@
       "message": "EGL_EXT_create_context_robustness has a bit about this:\n```\n    Add to the eglCreateContext context creation errors:\n\n    ...\n\n    * If the reset notification behavior of \u003cshare_context\u003e and the\n      newly created context are different then an EGL_BAD_MATCH error is\n      generated.\n```\n\nIs this something we need to handle? Looks like it should be invalid to mix robustness types in a share group. Maybe we\u0027re missing that validation.",
       "revId": "ecd0558488538ff6cd4abe7984edc5f30738cd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1967ee9_67c2131d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-06T18:44:19Z",
+      "side": 1,
+      "message": "I noticed that, but it seems like robustness and reset notification behavior are rather independent. In the tests I\u0027ve added, both contexts have the same reset notification behavior, but one is robust and the other isn\u0027t.",
+      "parentUuid": "b7680ae7_9924233a",
+      "revId": "ecd0558488538ff6cd4abe7984edc5f30738cd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
