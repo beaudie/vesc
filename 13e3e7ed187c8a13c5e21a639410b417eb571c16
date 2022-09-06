@@ -309,6 +309,30 @@
       },
       "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be906627_dfc1a81f",
+        "filename": "src/libANGLE/renderer/SurfaceImpl.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-06T16:46:28Z",
+      "side": 1,
+      "message": "Yeah the EGL part never got redone to angle::Result. My bad, turned out to be kinda hard, I got halfway at least twice. Most likely this should stay egl::Error.",
+      "parentUuid": "38cb5356_7e58c395",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 99,
+        "endChar": 79
+      },
+      "revId": "13e3e7ed187c8a13c5e21a639410b417eb571c16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
