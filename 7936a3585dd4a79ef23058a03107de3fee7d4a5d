@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "365f5b12_377f9e04",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-06T20:32:43Z",
+      "side": 1,
+      "message": "Will revert before submission",
+      "revId": "7936a3585dd4a79ef23058a03107de3fee7d4a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
