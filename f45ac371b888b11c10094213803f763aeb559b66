@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "928f2395_bb21704b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-07T16:36:21Z",
+      "side": 1,
+      "message": "already have `surfaceFormats` above -\n\n std::vector\u003cVkSurfaceFormatKHR\u003e surfaceFormats(surfaceFormatCount);\n \nwill change true block to `surfaceFormats2` instead",
+      "parentUuid": "2c1073db_7e04ac5b",
+      "range": {
+        "startLine": 79,
+        "startChar": 41,
+        "endLine": 79,
+        "endChar": 56
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80ec3db8_028784f8",
@@ -89,6 +113,30 @@
       "writtenOn": "2022-09-07T03:30:46Z",
       "side": 1,
       "message": "nit: define as `constexpr` outside if to deduplicate with true block.",
+      "range": {
+        "startLine": 80,
+        "startChar": 32,
+        "endLine": 82,
+        "endChar": 90
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18216394_8c05d29f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-07T16:36:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80ec3db8_028784f8",
       "range": {
         "startLine": 80,
         "startChar": 32,
@@ -122,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b07c7d_348bf16f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-07T16:36:21Z",
+      "side": 1,
+      "message": "indeed, done. Thanks",
+      "parentUuid": "79414de0_226e60f1",
+      "range": {
+        "startLine": 333,
+        "startChar": 16,
+        "endLine": 333,
+        "endChar": 74
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2640b506_125f276d",
@@ -135,6 +207,30 @@
       "writtenOn": "2022-09-07T03:30:46Z",
       "side": 1,
       "message": "nit: we also have `angle::HashSet` FWIW",
+      "range": {
+        "startLine": 241,
+        "startChar": 36,
+        "endLine": 241,
+        "endChar": 54
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15d8c494_de682c17",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-07T16:36:21Z",
+      "side": 1,
+      "message": "tried just replacing data type but ended up with a convoluted template related error message in `DisplayVk::isConfigFormatSupported` -\n```\n[19/51] CXX obj/src/libANGLE/renderer/vulkan/angle_vulkan_backend/DisplayVk.obj\nFAILED: obj/src/libANGLE/renderer/vulkan/angle_vulkan_backend/DisplayVk.obj\n..\\..\\third_party\\llvm-build\\Release+Asserts\\bin\\clang-cl.exe /c ../../src/libANGLE/renderer/vulkan/DisplayVk.cpp /Foobj/src/libANGLE/renderer/vulkan/angle_vulkan_backend/DisplayVk.obj /nologo /showIncludes:user \"-imsvc../../../../../../Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.32.31326/ATLMFC/include\" \"-imsvc../../../../../../Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.32.31326/include\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/NETFXSDK/4.8/include/um\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/10/include/10.0.20348.0/ucrt\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/10/include/10.0.20348.0/shared\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/10/include/10.0.20348.0/um\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/10/include/10.0.20348.0/winrt\" \"-imsvc../../../../../../Program Files (x86)/Windows Kits/10/include/10.0.20348.0/cppwinrt\" -DANGLE_ENABLE_VULKAN_VALIDATION_LAYERS_BY_DEFAULT -DUSE_AURA\u003d1 -D_HAS_NODISCARD -D_CRT_NONSTDC_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS \"-DCR_CLANG_REVISION\u003d\\\"llvmorg-16-init-3221-gce6989fd-1\\\"\" -DCOMPONENT_BUILD -D_LIBCPP_ENABLE_NODISCARD -DCR_LIBCXX_REVISION\u003d42e738f0a1928e8d70e27b96acb02cd23beefec8 -D_LIBCPP_NO_AUTO_LINK -D__STD_C -D_CRT_RAND_S -D_CRT_SECURE_NO_DEPRECATE -D_SCL_SECURE_NO_DEPRECATE -D_ATL_NO_OPENGL -D_WINDOWS -DCERT_CHAIN_PARA_HAS_EXTRA_FIELDS -DPSAPI_VERSION\u003d2 -DWIN32 -D_SECURE_ATL -DWINAPI_FAMILY\u003dWINAPI_FAMILY_DESKTOP_APP -DWIN32_LEAN_AND_MEAN -DNOMINMAX -D_UNICODE -DUNICODE -DNTDDI_VERSION\u003dNTDDI_WIN10_FE -D_WIN32_WINNT\u003d0x0A00 -DWINVER\u003d0x0A00 -D_DEBUG -DDYNAMIC_ANNOTATIONS_ENABLED\u003d1 -DANGLE_VMA_VERSION\u003d2003000 -DANGLE_IS_WIN -DANGLE_ENABLE_SHARE_CONTEXT_LOCK\u003d1 -DANGLE_HAS_ASTCENC -DANGLE_ENABLE_VULKAN -DANGLE_ENABLE_SWIFTSHADER -DANGLE_USE_CUSTOM_VULKAN_OUTSIDE_RENDER_PASS_CMD_BUFFERS\u003d1 -DANGLE_USE_CUSTOM_VULKAN_RENDER_PASS_CMD_BUFFERS\u003d1 -DANGLE_ENABLE_VULKAN_VALIDATION_LAYERS -DLIBANGLE_IMPLEMENTATION -DANGLE_ENABLE_OVERLAY\u003d1 -DANGLE_USE_ABSEIL -DABSL_ALLOCATOR_NOTHROW\u003d1 -DABSL_CONSUME_DLL -DANGLE_USE_CUSTOM_LIBVULKAN -DANGLE_SHARED_LIBVULKAN\u003d1 -DVK_USE_PLATFORM_WIN32_KHR -DANGLE_ENABLE_D3D11 -DANGLE_ENABLE_D3D11_COMPOSITOR_NATIVE_WINDOW -DANGLE_ENABLE_D3D9 -DANGLE_ENABLE_OPENGL -DANGLE_ENABLE_GL_DESKTOP_BACKEND -DANGLE_ENABLE_OPENGL_NULL -DANGLE_ENABLE_NULL -I../../buildtools/third_party/libc++ -I../../include -I../../src -I../../src/common/third_party/base -I../../third_party/abseil-cpp -I../../src/third_party/volk -I../../third_party/vulkan-deps/vulkan-headers/src/include -I../../third_party/zlib/google -I../../third_party/zlib -I../../src/third_party/khronos -I../../third_party/vulkan-deps/spirv-headers/src/include /W4 -Wimplicit-fallthrough -Wunreachable-code-aggressive -Wthread-safety -Wextra-semi /WX -Wno-missing-field-initializers -Wno-unused-parameter -Wloop-analysis -Wno-unneeded-internal-declaration -Wno-nonportable-include-path -Wenum-compare-conditional -Wno-psabi -Wno-ignored-pragma-optimize -Wno-deprecated-builtins -Wno-bitfield-constant-conversion -Wshadow -fno-delete-null-pointer-checks -fno-ident -fcolor-diagnostics -fmerge-all-constants -fcrash-diagnostics-dir\u003d../../tools/clang/crashreports -mllvm -instcombine-lower-dbg-declare\u003d0 /clang:-ffp-contract\u003doff -fcomplete-member-pointers /Gy /FS /bigobj /utf-8 /Zc:twoPhase -ffile-reproducible /Zc:sizedDealloc- /D__WRL_ENABLE_FUNCTION_STATICS__ -fmsc-version\u003d1916 /Zc:dllexportInlines- -m64 -msse3 /Brepro -Wno-builtin-macro-redefined -D__DATE__\u003d -D__TIME__\u003d -D__TIMESTAMP__\u003d -ffile-compilation-dir\u003d. -no-canonical-prefixes -ftrivial-auto-var-init\u003dpattern /Od /Ob0 /GF /Z7 -gcodeview-ghash -Xclang -fuse-ctor-homing /guard:cf,nochecks /MDd -Wheader-hygiene -Wstring-conversion -Wtautological-overlap-compare -Wexit-time-destructors -Wglobal-constructors /we4244 /we4312 /we4456 /we4458 /we4715 /we4800 /we4838 -Wbad-function-cast -Wconditional-uninitialized -Wextra-semi-stmt -Wfloat-conversion -Winconsistent-missing-destructor-override -Wmissing-field-initializers -Wnewline-eof -Wnon-virtual-dtor -Wredundant-parens -Wreturn-std-move -Wshadow -Wshadow-field -Wtautological-type-limit-compare -Wundefined-reinterpret-cast -Wunneeded-internal-declaration -Wunused-but-set-variable -Wsuggest-destructor-override -Wsuggest-override -Wparentheses -Wrange-loop-analysis -Wstrict-prototypes -Wunreachable-code-aggressive -Wshorten-64-to-32 /wd4530 -Wno-undefined-bool-conversion -Wno-tautological-undefined-compare /std:c++17 -Wno-trigraphs /TP /GR- -I../../buildtools/third_party/libc++/trunk/include /Fd\"obj/src/libANGLE/renderer/vulkan/angle_vulkan_backend_cc.pdb\"\nIn file included from ../../src/libANGLE/renderer/vulkan/DisplayVk.cpp:10:\nIn file included from ../../src\\libANGLE/renderer/vulkan/DisplayVk.h:13:\nIn file included from ../../src\\common/MemoryBuffer.h:11:\nIn file included from ../../src\\common/angleutils.h:15:\nIn file included from ../../third_party/abseil-cpp\\absl/container/flat_hash_map.h:38:\nIn file included from ../../third_party/abseil-cpp\\absl/algorithm/container.h:43:\nIn file included from ../../buildtools/third_party/libc++/trunk/include\\algorithm:1712:\nIn file included from ../../buildtools/third_party/libc++/trunk/include\\memory:867:\nIn file included from ../../buildtools/third_party/libc++/trunk/include\\__memory/compressed_pair.h:17:\n../../buildtools/third_party/libc++/trunk/include\\tuple(1776,7): error: no matching constructor for initialization of \u0027absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u0027\n      second(_VSTD::forward\u003c_Args2\u003e(_VSTD::get\u003c_I2\u003e(__second_args))...)\n      ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n../../buildtools/third_party/libc++/trunk/include\\__utility/pair.h(258,11): note: in instantiation of function template specialization \u0027std::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e::pair\u003cVkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e \u0026\u0026, 0ULL, 0ULL\u003e\u0027 requested here\n        : pair(__pc, __first_args, __second_args,\n          ^\n../../buildtools/third_party/libc++/trunk/include\\__memory/allocator.h(165,28): note: in instantiation of function template specialization \u0027std::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e::pair\u003cVkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e \u0026\u0026\u003e\u0027 requested here\n        ::new ((void*)__p) _Up(_VSTD::forward\u003c_Args\u003e(__args)...);\n                           ^\n../../buildtools/third_party/libc++/trunk/include\\__memory/allocator_traits.h(290,13): note: in instantiation of function template specialization \u0027std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e::construct\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, const std::piecewise_construct_t \u0026, std::tuple\u003cVkColorSpaceKHR \u0026\u003e, std::tuple\u003cstd::unordered_set\u003cVkFormat\u003e \u0026\u0026\u003e\u003e\u0027 requested here\n        __a.construct(__p, _VSTD::forward\u003c_Args\u003e(__args)...);\n            ^\n../../third_party/abseil-cpp\\absl/container/internal/container_memory.h(387,42): note: in instantiation of function template specialization \u0027std::allocator_traits\u003cstd::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::construct\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, const std::piecewise_construct_t \u0026, std::tuple\u003cVkColorSpaceKHR \u0026\u003e, std::tuple\u003cstd::unordered_set\u003cVkFormat\u003e \u0026\u0026\u003e, void\u003e\u0027 requested here\n      absl::allocator_traits\u003cAllocator\u003e::construct(*alloc, \u0026slot-\u003evalue,\n                                         ^\n../../third_party/abseil-cpp\\absl/container/flat_hash_map.h(569,18): note: in instantiation of function template specialization \u0027absl::container_internal::map_slot_policy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e::construct\u003cstd::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e, const std::piecewise_construct_t \u0026, std::tuple\u003cVkColorSpaceKHR \u0026\u003e, std::tuple\u003cstd::unordered_set\u003cVkFormat\u003e \u0026\u0026\u003e\u003e\u0027 requested here\n    slot_policy::construct(alloc, slot, std::forward\u003cArgs\u003e(args)...);\n                 ^\n../../third_party/abseil-cpp\\absl/container/internal/hash_policy_traits.h(94,13): note: (skipping 4 contexts in backtrace; use -ftemplate-backtrace-limit\u003d0 to see all)\n    Policy::construct(alloc, slot, std::forward\u003cArgs\u003e(args)...);\n            ^\n../../third_party/abseil-cpp\\absl/container/internal/container_memory.h(206,27): note: in instantiation of function template specialization \u0027absl::container_internal::memory_internal::DecomposePairImpl\u003cabsl::container_internal::raw_hash_set\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, absl::hash_internal::Hash\u003cVkColorSpaceKHR\u003e, std::equal_to\u003cVkColorSpaceKHR\u003e, std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::EmplaceDecomposable, VkColorSpaceKHR \u0026, std::tuple\u003cstd::unordered_set\u003cVkFormat\u003e \u0026\u0026\u003e\u003e\u0027 requested here\n  return memory_internal::DecomposePairImpl(\n                          ^\n../../third_party/abseil-cpp\\absl/container/flat_hash_map.h(587,38): note: in instantiation of function template specialization \u0027absl::container_internal::DecomposePair\u003cabsl::container_internal::raw_hash_set\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, absl::hash_internal::Hash\u003cVkColorSpaceKHR\u003e, std::equal_to\u003cVkColorSpaceKHR\u003e, std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::EmplaceDecomposable, VkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e\u003e\u0027 requested here\n    return absl::container_internal::DecomposePair(std::forward\u003cF\u003e(f),\n                                     ^\n../../third_party/abseil-cpp\\absl/container/internal/hash_policy_traits.h(170,15): note: in instantiation of function template specialization \u0027absl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e::apply\u003cabsl::container_internal::raw_hash_set\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, absl::hash_internal::Hash\u003cVkColorSpaceKHR\u003e, std::equal_to\u003cVkColorSpaceKHR\u003e, std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::EmplaceDecomposable, VkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e\u003e\u0027 requested here\n    return P::apply(std::forward\u003cF\u003e(f), std::forward\u003cTs\u003e(ts)...);\n              ^\n../../third_party/abseil-cpp\\absl/container/internal/raw_hash_set.h(1487,26): note: in instantiation of function template specialization \u0027absl::container_internal::hash_policy_traits\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e::apply\u003cabsl::container_internal::raw_hash_set\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, absl::hash_internal::Hash\u003cVkColorSpaceKHR\u003e, std::equal_to\u003cVkColorSpaceKHR\u003e, std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::EmplaceDecomposable, VkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e, absl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u0027 requested here\n    return PolicyTraits::apply(EmplaceDecomposable{*this},\n                         ^\n../../src/libANGLE/renderer/vulkan/DisplayVk.cpp(337,48): note: in instantiation of function template specialization \u0027absl::container_internal::raw_hash_set\u003cabsl::container_internal::FlatHashMapPolicy\u003cVkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e, absl::hash_internal::Hash\u003cVkColorSpaceKHR\u003e, std::equal_to\u003cVkColorSpaceKHR\u003e, std::allocator\u003cstd::pair\u003cconst VkColorSpaceKHR, absl::flat_hash_set\u003cVkFormat, absl::hash_internal::Hash\u003cVkFormat\u003e, std::equal_to\u003cVkFormat\u003e\u003e\u003e\u003e\u003e::emplace\u003cVkColorSpaceKHR \u0026, std::unordered_set\u003cVkFormat\u003e, 0\u003e\u0027 requested here\n                mSupportedColorspaceFormatsMap.emplace(colorspace,\n                                               ^\n...\n\n2 errors generated.\n[40/51] CXX obj/src/libANGLE/renderer/vulkan/angle_vulkan_backend/vk_helpers.obj\nninja: build stopped: subcommand failed.\n```\nopen to suggestions",
+      "parentUuid": "2640b506_125f276d",
       "range": {
         "startLine": 241,
         "startChar": 36,
