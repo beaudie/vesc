@@ -50,6 +50,24 @@
       "message": "Comparing to before the change, there are three more functions called: `invalidateGraphicsDriverUniforms()`, `invalidateCurrentGraphicsPipeline()`, `resetCurrentGraphicsPipeline()`. Which function helps preventing the transform feedback writing to the output after it is paused?",
       "revId": "7936a3585dd4a79ef23058a03107de3fee7d4a5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df388b8d_4dda57aa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5758,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T00:05:13Z",
+      "side": 1,
+      "message": "`invalidateGraphicsDriverUniforms` is unnecessary, but the graphics pipeline needs to be recreated on pause/resume.\n\nFYI, the emulation path resets driver uniforms every draw call while active (to update offsets), so one more on pause is no big deal. Basically only SwiftShader is affected where ANGLE will ship",
+      "parentUuid": "670f911f_75ca4024",
+      "revId": "7936a3585dd4a79ef23058a03107de3fee7d4a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
