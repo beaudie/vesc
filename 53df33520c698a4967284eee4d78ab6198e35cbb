@@ -189,6 +189,30 @@
       },
       "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b96bb5e_9f92f505",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-07T17:12:24Z",
+      "side": 1,
+      "message": "Updated, trying to keep it within 2 lines ~:}",
+      "parentUuid": "31a09d41_5ba43357",
+      "range": {
+        "startLine": 173,
+        "startChar": 67,
+        "endLine": 173,
+        "endChar": 79
+      },
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
