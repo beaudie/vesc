@@ -165,6 +165,30 @@
       },
       "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a09d41_5ba43357",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-07T16:34:10Z",
+      "side": 1,
+      "message": "Looks better, thanks! Could be enhanced with prose, but no biggy either way:\n```\n# Generate xvfb dimensions with the following:\n# % egrep \u0027Width|Height\u0027 src/tests/restricted_traces/*/*.json | awk \u0027{print $3 $2}\u0027 | sort -n\n```",
+      "parentUuid": "a6f6298c_c156adce",
+      "range": {
+        "startLine": 173,
+        "startChar": 67,
+        "endLine": 173,
+        "endChar": 79
+      },
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
