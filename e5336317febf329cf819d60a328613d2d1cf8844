@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3dc0205_baf40b03",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "id\u003c\u003e is Objective-C speak for a pointer to an object. MTLSharedEvent isn\u0027t a class, there\u0027s no `MTLSharedEvent*`, but `MTLSharedEvent` is a protocol that an `NSObject` can conform to. `MTLSharedEvent` is kinda like a C++ abstract base class, but more like a Rust trait.\n\nIn C, and id\u003c\u003e is just a `void*`.",
+      "parentUuid": "289aa9b0_518748a5",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 44,
+        "endChar": 18
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bd4529ad_c50400c5",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-06T17:20:53Z",
       "side": 1,
       "message": "I\u0027ll go ahead and mark these as allocated in our tracking.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 58
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0afaeb40_858cd22d",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bd4529ad_c50400c5",
       "range": {
         "startLine": 61,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a959e822_1c93bba9",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "MTLSharedEvent.signalValue is a uint64_t. If there\u0027s no way to guarantee passing a 64-bit value, is the only option to split the value into low and high 32-bit values?",
+      "parentUuid": "3c840d26_5abff201",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 54
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74d3cf3c_085caa84",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-09-06T17:20:53Z",
       "side": 1,
       "message": "I would rephrase this as `a valid MTLSharedEvent or NULL otherwise EGL_NO_SYNC_KHR is returned and and an EGL_BAD_ATTRIBUTE error is generated`. Can you also explain what happens when null is passed in?",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 78,
+        "endChar": 7
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f55c57a7_17a4ed92",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "👍\n\nI\u0027ll add an explanation for what happens when null is passed, which is that a MTLSharedEvent is allocated internally.\n\nTwo alternatives:\n1) Passing null should be an error, or\n2) Implement a function `eglDupMetalSharedEventANGLE(...)` which is the equivalent of `eglDupNativeFenceFDANDROID(...)`, that allows accessing the MTLSharedEvent used by ANGLE to implement EGLSync?",
+      "parentUuid": "74d3cf3c_085caa84",
       "range": {
         "startLine": 77,
         "startChar": 11,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e62c58a_19a2f712",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "25329864_aabaeaaf",
+      "range": {
+        "startLine": 54,
+        "startChar": 22,
+        "endLine": 55,
+        "endChar": 84
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f346683f_dcbb5497",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-09-06T17:20:53Z",
       "side": 1,
       "message": "The attribs are discarded after the fence is created so a const reference will become invalid. Instead, extract the items you need from the attribs in the constructor and store them as members.",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 38
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1e323d_38329195",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Then `EGLSyncVk` also needs a fix since it keeps a reference to its creation attributes.",
+      "parentUuid": "f346683f_dcbb5497",
       "range": {
         "startLine": 165,
         "startChar": 4,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c43129_8d81f247",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1413,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9f3dd166_85a93eb0",
+      "range": {
+        "startLine": 1403,
+        "startChar": 0,
+        "endLine": 1413,
+        "endChar": 0
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5827c2a_c01972ab",
@@ -202,6 +370,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2d3d57_6064597f",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f5827c2a_c01972ab",
+      "range": {
+        "startLine": 62,
+        "startChar": 73,
+        "endLine": 62,
+        "endChar": 84
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9993603e_4c5affb5",
@@ -215,6 +407,30 @@
       "writtenOn": "2022-09-06T17:20:53Z",
       "side": 1,
       "message": "oof, looks like gerrit can\u0027t parse this kind of number formatting.",
+      "range": {
+        "startLine": 131,
+        "startChar": 34,
+        "endLine": 131,
+        "endChar": 48
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "386376d5_ec8f793a",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-07T09:46:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9993603e_4c5affb5",
       "range": {
         "startLine": 131,
         "startChar": 34,
