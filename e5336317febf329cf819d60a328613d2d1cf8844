@@ -159,6 +159,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76af7f80_0207dd85",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-07T14:23:50Z",
+      "side": 1,
+      "message": "If you want to guarantee 64 bits, I think so, yes. I think it\u0027s also valid to accept that 32 bit builds are very rare, especially on Apple, and losing some range of values there is acceptable.",
+      "parentUuid": "a959e822_1c93bba9",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 54
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74d3cf3c_085caa84",
@@ -196,6 +220,30 @@
       "side": 1,
       "message": "👍\n\nI\u0027ll add an explanation for what happens when null is passed, which is that a MTLSharedEvent is allocated internally.\n\nTwo alternatives:\n1) Passing null should be an error, or\n2) Implement a function `eglDupMetalSharedEventANGLE(...)` which is the equivalent of `eglDupNativeFenceFDANDROID(...)`, that allows accessing the MTLSharedEvent used by ANGLE to implement EGLSync?",
       "parentUuid": "74d3cf3c_085caa84",
+      "range": {
+        "startLine": 77,
+        "startChar": 11,
+        "endLine": 78,
+        "endChar": 7
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b68d923f_4a9883ac",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-07T14:23:50Z",
+      "side": 1,
+      "message": "I think it probably makes sense to support the NULL use case. It gives us freedom to add a eglDupMetalSharedEventANGLE in the future even if there is no use case for it now. I could see it being useful to create the original fence in ANGLE and need to pass it somewhere else afterwards.",
+      "parentUuid": "f55c57a7_17a4ed92",
       "range": {
         "startLine": 77,
         "startChar": 11,
@@ -290,6 +338,30 @@
       "side": 1,
       "message": "Then `EGLSyncVk` also needs a fix since it keeps a reference to its creation attributes.",
       "parentUuid": "f346683f_dcbb5497",
+      "range": {
+        "startLine": 165,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 38
+      },
+      "revId": "e5336317febf329cf819d60a328613d2d1cf8844",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a0ff6d_7253d667",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-07T14:23:50Z",
+      "side": 1,
+      "message": "Yikes, yea. Fixed here https://chromium-review.googlesource.com/c/angle/angle/+/3876889",
+      "parentUuid": "be1e323d_38329195",
       "range": {
         "startLine": 165,
         "startChar": 4,
