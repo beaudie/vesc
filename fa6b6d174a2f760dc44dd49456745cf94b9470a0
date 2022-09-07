@@ -16,6 +16,24 @@
       "message": "Thanks Yuxin fixing this. I was also seeing this yesterday.",
       "revId": "fa6b6d174a2f760dc44dd49456745cf94b9470a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db6d01a_e6fd31e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-07T17:22:46Z",
+      "side": 1,
+      "message": "No problem :)\n\nChromium has just rolled the same vulkan-deps change, and we can now update all the error message to match with the new format and remove the temp workaround: https://crrev.com/c/3876224.",
+      "parentUuid": "ea121f3d_92a6e11b",
+      "revId": "fa6b6d174a2f760dc44dd49456745cf94b9470a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
