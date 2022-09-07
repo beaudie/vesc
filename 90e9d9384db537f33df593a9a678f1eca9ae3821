@@ -16,6 +16,23 @@
       "message": "PTAL!",
       "revId": "90e9d9384db537f33df593a9a678f1eca9ae3821",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4e4a95_3dd88fcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T18:39:03Z",
+      "side": 1,
+      "message": "Amirali is away this week",
+      "revId": "90e9d9384db537f33df593a9a678f1eca9ae3821",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
