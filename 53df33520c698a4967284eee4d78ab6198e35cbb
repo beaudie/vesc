@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c75146e_c9f92bfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-07T15:39:51Z",
+      "side": 1,
+      "message": "Then I guess it\u0027s a bug of not resetting the viewport from one test to another.\nProbably in Linux somewhere, if this doesn\u0027t happen on Windows?",
+      "parentUuid": "3877c08f_215b65a4",
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3812b94_6ce6d31c",
         "filename": "src/tests/py_utils/angle_test_util.py",
         "patchSetId": 2
