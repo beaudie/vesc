@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d00c2e2_0c8e12f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-07T16:55:54Z",
+      "side": 1,
+      "message": "Hi Geoff or Jamie, PTAL the reland CL.",
+      "revId": "8c61016b2b27b013511bc9b0b8abf72cc9b6ba55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
