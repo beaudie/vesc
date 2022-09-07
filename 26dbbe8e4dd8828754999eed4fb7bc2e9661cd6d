@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88bc4580_2b8ffd0d",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-07T15:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd90d3a3_9c9318d3",
+      "range": {
+        "startLine": 124,
+        "startChar": 1,
+        "endLine": 124,
+        "endChar": 8
+      },
+      "revId": "26dbbe8e4dd8828754999eed4fb7bc2e9661cd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1532c23b_01e5980e",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-07T14:05:35Z",
       "side": 1,
       "message": "nit: prefix all preprocessor defines in angle with ANGLE_",
+      "range": {
+        "startLine": 126,
+        "startChar": 12,
+        "endLine": 126,
+        "endChar": 25
+      },
+      "revId": "26dbbe8e4dd8828754999eed4fb7bc2e9661cd6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28182e39_a976d877",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-07T15:43:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1532c23b_01e5980e",
       "range": {
         "startLine": 126,
         "startChar": 12,
