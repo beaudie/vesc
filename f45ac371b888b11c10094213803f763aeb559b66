@@ -34,6 +34,115 @@
       "parentUuid": "f8c663b8_6e4d655b",
       "revId": "f45ac371b888b11c10094213803f763aeb559b66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a565c36d_7e92a7ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T03:30:46Z",
+      "side": 1,
+      "message": "Nice, thanks for hooking this up!",
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c1073db_7e04ac5b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T03:30:46Z",
+      "side": 1,
+      "message": "nit: `surfaceFormat` to be consistent with true block.",
+      "range": {
+        "startLine": 79,
+        "startChar": 41,
+        "endLine": 79,
+        "endChar": 56
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80ec3db8_028784f8",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T03:30:46Z",
+      "side": 1,
+      "message": "nit: define as `constexpr` outside if to deduplicate with true block.",
+      "range": {
+        "startLine": 80,
+        "startChar": 32,
+        "endLine": 82,
+        "endChar": 90
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79414de0_226e60f1",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T03:30:46Z",
+      "side": 1,
+      "message": "nit: You should be able to unconditionally do this. If `map[colorspace]` doesn\u0027t already exist, `operator[]` would automatically create it. At least that\u0027s the case for std data structures, but `angle::HashMap` should behave the same",
+      "range": {
+        "startLine": 333,
+        "startChar": 16,
+        "endLine": 333,
+        "endChar": 74
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2640b506_125f276d",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T03:30:46Z",
+      "side": 1,
+      "message": "nit: we also have `angle::HashSet` FWIW",
+      "range": {
+        "startLine": 241,
+        "startChar": 36,
+        "endLine": 241,
+        "endChar": 54
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
