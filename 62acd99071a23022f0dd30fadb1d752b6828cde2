@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d472ba6_2ea58e46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-07T17:17:23Z",
+      "side": 1,
+      "message": "Since https://chromium-review.googlesource.com/c/chromium/src/+/3874032 rolled into Chrome, we no longer need the duplication.",
+      "revId": "62acd99071a23022f0dd30fadb1d752b6828cde2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
