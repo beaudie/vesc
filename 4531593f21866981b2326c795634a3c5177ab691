@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c4df5f1_bf8fb0e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-07T20:03:25Z",
+      "side": 1,
+      "message": "Per updates on anglebug.com/7626 and in particular with Jonah\u0027s CL https://chromium-review.googlesource.com/c/chromium/src/+/3876649 , this should be OK to move forward. Jonah, would you like to review?\n",
+      "revId": "4531593f21866981b2326c795634a3c5177ab691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
