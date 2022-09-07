@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d43013bc_2cb59e28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-07T15:53:11Z",
+      "side": 1,
+      "message": "Yeah I\u0027ll poke at it a bit more. Doesn\u0027t seem to easily repro locally so might be something special about bots :S I\u0027ll still go ahead with this CL as it at least reduces the number of unknowns.",
+      "parentUuid": "7c75146e_c9f92bfc",
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3812b94_6ce6d31c",
@@ -67,6 +85,30 @@
       "writtenOn": "2022-09-06T23:11:12Z",
       "side": 1,
       "message": "How\u0027d you come up with 3120?",
+      "range": {
+        "startLine": 173,
+        "startChar": 67,
+        "endLine": 173,
+        "endChar": 79
+      },
+      "revId": "53df33520c698a4967284eee4d78ab6198e35cbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "626694e3_343ab4cb",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-07T15:53:11Z",
+      "side": 1,
+      "message": "It\u0027s in the CL description, any thoughts/suggestions?",
+      "parentUuid": "f3812b94_6ce6d31c",
       "range": {
         "startLine": 173,
         "startChar": 67,
