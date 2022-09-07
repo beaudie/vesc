@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "582be1da_7f72a18b",
+        "filename": "scripts/angle_android_codegen.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-07T15:45:06Z",
+      "side": 1,
+      "message": "Rather than insert android into these names, maybe we can move them to an `android` sub dir?  In the final Android.bp, it is easy to see this pattern:\n```\nangle_codegen {\n    name: \"libGLESv2_angle_codegen\",\n``` \nwhere the name just has the target prepended to the module.\n\nMaybe we just have to stick android in everywhere? like:\n```\nangle_android_codegen {\n    name: \"libGLESv2_angle_android_codegen\",\n```\nalthough that\u0027s a little crowded.\n\nOr maybe there is a way to have the name of the file differ from the package itself?  I didn\u0027t try that.",
+      "range": {
+        "startLine": 6,
+        "startChar": 14,
+        "endLine": 6,
+        "endChar": 22
+      },
+      "revId": "a994f3f37a31a565e5e36807753e1189fe2513ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
