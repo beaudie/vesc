@@ -22,6 +22,30 @@
       },
       "revId": "a994f3f37a31a565e5e36807753e1189fe2513ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "036453a7_106442f1",
+        "filename": "scripts/angle_android_codegen.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-07T16:10:48Z",
+      "side": 1,
+      "message": "I like having a common id like `angle_android_codegen`, makes it easy to find related places in codesearch. We can move things around later if we find a better way to structure it.\n\nI like your second suggestion. Changed to `_angle_android_codegen` by appending `_android_codegen`, `_angle` is added by `angle_libs_suffix`:\nhttps://crsrc.org/c/third_party/angle/gni/angle.gni;drc\u003d3960e63b1a9ce85658a9031c43d55efd85534525;l\u003d132",
+      "parentUuid": "582be1da_7f72a18b",
+      "range": {
+        "startLine": 6,
+        "startChar": 14,
+        "endLine": 6,
+        "endChar": 22
+      },
+      "revId": "a994f3f37a31a565e5e36807753e1189fe2513ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
