@@ -46,6 +46,30 @@
       },
       "revId": "af0c1a151d55678e34d50514441fee73a85016b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8de9d74_95ad7a60",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1515,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-07T23:58:09Z",
+      "side": 1,
+      "message": "looks like this is causing a bit of trouble, will make a split change for convenience",
+      "parentUuid": "d5a06c5c_ecde01e4",
+      "range": {
+        "startLine": 1512,
+        "startChar": 8,
+        "endLine": 1515,
+        "endChar": 9
+      },
+      "revId": "af0c1a151d55678e34d50514441fee73a85016b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
