@@ -239,6 +239,30 @@
       },
       "revId": "f45ac371b888b11c10094213803f763aeb559b66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8941a4ab_4f69c474",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-07T18:58:15Z",
+      "side": 1,
+      "message": "Ack, never mind it",
+      "parentUuid": "15d8c494_de682c17",
+      "range": {
+        "startLine": 241,
+        "startChar": 36,
+        "endLine": 241,
+        "endChar": 54
+      },
+      "revId": "f45ac371b888b11c10094213803f763aeb559b66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
