@@ -780,7 +780,7 @@ ANGLERenderTest::~ANGLERenderTest()
     GLWindowBase::Delete(&mGLWindow);
 }
 
-void ANGLERenderTest::addExtensionPrerequisite(const char *extensionName)
+void ANGLERenderTest::addExtensionPrerequisite(std::string extensionName)
 {
     mExtensionPrerequisites.push_back(extensionName);
 }
@@ -844,6 +844,11 @@ void ANGLERenderTest::SetUp()
         mConfigParams.swapInterval = 0;
     }
 
+    if (gPrintExtensionsToFile != nullptr || gRequestedExtensions != nullptr)
+    {
+        mConfigParams.extensionsEnabled = false;
+    }
+
     GLWindowResult res = mGLWindow->initializeGLWithResult(
         mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods, mConfigParams);
     switch (res)
@@ -856,6 +861,40 @@ void ANGLERenderTest::SetUp()
             return;
         default:
             break;
+    }
+
+    if (gPrintExtensionsToFile)
+    {
+        std::ofstream fout(gPrintExtensionsToFile);
+        if (fout.is_open())
+        {
+            int numExtensions = 0;
+            glGetIntegerv(GL_NUM_REQUESTABLE_EXTENSIONS_ANGLE, &numExtensions);
+            for (int ext = 0; ext < numExtensions; ext++)
+            {
+                fout << glGetStringi(GL_REQUESTABLE_EXTENSIONS_ANGLE, ext) << std::endl;
+            }
+            fout.close();
+            std::stringstream failStr;
+            failStr << "Wrote out to file: " << gPrintExtensionsToFile;
+            skipTest(failStr.str());
+            return;
+        }
+        else
+        {
+            std::stringstream failStr;
+            failStr << "Failed to open file: " << gPrintExtensionsToFile;
+            failTest(failStr.str());
+            return;
+        }
+    }
+
+    if (gRequestedExtensions != nullptr)
+    {
+        for (std::string ext : *gRequestedExtensions)
+        {
+            glRequestExtensionANGLE(ext.c_str());
+        }
     }
 
     // Disable vsync (if not done by the window init).
@@ -1214,7 +1253,7 @@ GLWindowBase *ANGLERenderTest::getGLWindow()
 
 void ANGLERenderTest::skipTestIfMissingExtensionPrerequisites()
 {
-    for (const char *extension : mExtensionPrerequisites)
+    for (std::string extension : mExtensionPrerequisites)
     {
         if (!CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
                                   extension))
