@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "454f1b79_05b99919",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-08T04:44:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0bc1de3b_080eb2b3",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2719c1c_fde09e20",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-09-08T01:20:56Z",
       "side": 1,
       "message": "Can a stronger assertion be made following this if a glFinish() is added? It would be nice to test that the sync object is signaled at some point.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae070b36_d68d4220",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-08T04:44:25Z",
+      "side": 1,
+      "message": "Sounds good.",
+      "parentUuid": "f2719c1c_fde09e20",
       "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ade17e9_b9f0f9db",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-08T04:44:25Z",
+      "side": 1,
+      "message": "👍 (This code is copied from the existing EGLSync tests. I\u0027ll change it to EXPECT_EQ)",
+      "parentUuid": "ca5ea195_aa34a517",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96d5be96_79dc3adc",
@@ -103,6 +157,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83c42e32_7c01741e",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-08T04:44:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "96d5be96_79dc3adc",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f16e97c_4b7a2954",
@@ -116,6 +188,24 @@
       "writtenOn": "2022-09-08T01:20:56Z",
       "side": 1,
       "message": "How about returning early if it is equal to EGL_NO_SYNC? It\u0027s not clear the operations after the if-block will work correctly if the sync object creation failed.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a306336e_9e348d6c",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-08T04:44:25Z",
+      "side": 1,
+      "message": "Once again, this is a port of the EGLSync test for EGL_ANDROID_native_fence_sync. I\u0027ve updated the test to early return if sync object creation fails.",
+      "parentUuid": "8f16e97c_4b7a2954",
       "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
