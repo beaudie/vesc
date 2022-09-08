@@ -169,6 +169,8 @@ constexpr const char *kSkippedMessages[] = {
     "UNASSIGNED-BestPractices-DrawState-ClearCmdBeforeDraw",
     "UNASSIGNED-BestPractices-vkCmdClearAttachments-clear-after-load",
     "UNASSIGNED-BestPractices-TransitionUndefinedToReadOnly",
+    // http://anglebug.com/7600
+    "UNASSIGNED-BestPractices-vkCmdBeginRenderPass-StoreOpDontCareThenLoadOpLoad",
     // http://anglebug.com/4928
     "VUID-vkMapMemory-memory-00683",
     // http://anglebug.com/5027
