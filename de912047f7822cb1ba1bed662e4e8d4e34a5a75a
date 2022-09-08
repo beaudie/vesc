@@ -16,6 +16,24 @@
       "message": "I\u0027m curious and probably out of my element here but ... the specs (GLES/EGL) seem to say the only things that guarantee changes in one context are seen in another are glFinish, vgFinish, eglWaitClient, eglWaitNative, and eglBindTextImage.\n\nIs it correct that this just magically works because platformSupportsMultithreading() returnss true or should there be some extension or other method here?",
       "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1321aeb_cb3c4a89",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-08T06:09:12Z",
+      "side": 1,
+      "message": "Sorry, I should be more clear with the test descriptions.\nThis test is about CPU read on another thread (via glMapBuffer*), it\u0027s not about GPU read on another thread such as rendering on one thread and sampling on another one.\n\nAFAIK, EGL spec only mentions using glFinish, vgFinish, eglWaitClient, eglWaitNative, and eglBindTextImage to synchronize between client API (GLES) and native APIs (e.g. Xlib, GDI, Metal, DX, CoreAnimation, etc) when they render to a same surface.\n\nFor multiple GLES contexts, it says there is no guarantee of rendering order between them. However, glMapBufferRange has implied synchronization unless `MAP_UNSYNCHRONIZED_BIT` is set.\n\nSection 2.10.3 of GLES 3.0 spec:\n\u003e If no error occurs, a pointer to the beginning of the mapped range is returned\n\u003e once all pending operations on that buffer have completed,",
+      "parentUuid": "a7a44efc_0e1ee59c",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
