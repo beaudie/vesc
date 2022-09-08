@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f38329b_e22060c5",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-08T06:32:03Z",
+      "side": 1,
+      "message": "So for ordinary sync object (created via glFenceSync or other methods without external shared event), it can only be set once? Since the signal value won\u0027t be increased anymore.\n\nI\u0027m not sure ANGLE has any extension to reset and set the sync object again without recreating a new one. If there is, I think this Sync class should be allowed to monotonically increase its signal value.",
+      "revId": "f951baee2d0dd5588e04d44e77b48829d2c134eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
