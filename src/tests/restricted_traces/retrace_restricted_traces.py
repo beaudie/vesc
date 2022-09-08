@@ -18,6 +18,7 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 
 from gen_restricted_traces import read_json as read_json, write_json as write_json
 
@@ -298,6 +299,33 @@ def get_min_reqs(args, traces):
             set_gles_version(json_data, original_version)
             save_trace_json(trace, json_data)
             return EXIT_FAILURE
+
+        # Get the list of requestable extensions
+        with tempfile.NamedTemporaryFile() as tmp:
+            # Some operating systems will not allow a file to be open for writing
+            # by multiple processes. So close the temp file we just made before
+            # running the test suite.
+            tmp.close()
+            additional_args = ["--print-extensions-to-file", tmp.name]
+            run_test_suite(args, trace, max_steps, additional_args, env)
+            with open(tmp.name) as f:
+                for line in f:
+                    extensions.append(line.strip())
+
+        required_extensions = []
+        for i in range(len(extensions)):
+            additional_args = default_args.copy()
+            other_extensions = required_extensions + extensions[i + 1:]
+            for ext in other_extensions:
+                additional_args += ['--request-ext', ext]
+
+            try:
+                run_test_suite(args, trace, max_steps, additional_args, env)
+            except subprocess.CalledProcessError as error:
+                required_extensions.append(extensions[i])
+
+        json_data['RequiredExtensions'] = required_extensions
+        save_trace_json(trace, json_data)
 
 
 def main():

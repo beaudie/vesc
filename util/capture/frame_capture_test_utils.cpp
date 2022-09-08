@@ -112,7 +112,22 @@ bool LoadTraceInfoFromJSON(const std::string &traceName,
         meta["IsBindGeneratesResourcesEnabled"].GetBool();
     traceInfoOut->isWebGLCompatibilityEnabled = meta["IsWebGLCompatibilityEnabled"].GetBool();
     traceInfoOut->isRobustResourceInitEnabled = meta["IsRobustResourceInitEnabled"].GetBool();
-    traceInfoOut->initialized                 = true;
+
+    if (doc.HasMember("RequiredExtensions"))
+    {
+        const rapidjson::Value &requiredExtensions = doc["RequiredExtensions"];
+        if (!requiredExtensions.IsArray())
+        {
+            return false;
+        }
+        for (rapidjson::SizeType i = 0; i < requiredExtensions.Size(); i++)
+        {
+            traceInfoOut->requiredExtensions.push_back(
+                std::string(requiredExtensions[i].GetString()));
+        }
+    }
+
+    traceInfoOut->initialized = true;
 
     return true;
 }
