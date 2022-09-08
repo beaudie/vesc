@@ -19,7 +19,7 @@ import stat
 import subprocess
 import sys
 
-from gen_restricted_traces import read_json as read_json
+from gen_restricted_traces import read_json as read_json, write_json as write_json
 
 DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
@@ -62,6 +62,22 @@ def src_trace_path(trace):
 def get_num_frames(json_data):
     metadata = json_data['TraceMetadata']
     return metadata['FrameEnd'] - metadata['FrameStart'] + 1
+
+
+def get_gles_version(json_data):
+    metadata = json_data['TraceMetadata']
+    return (metadata['ContextClientMajorVersion'], metadata['ContextClientMinorVersion'])
+
+
+def set_gles_version(json_data, version):
+    metadata = json_data['TraceMetadata']
+    metadata['ContextClientMajorVersion'] = version[0]
+    metadata['ContextClientMinorVersion'] = version[1]
+
+
+def save_trace_json(trace, data):
+    json_file_name = get_trace_json_path(trace)
+    return write_json(json_file_name, data)
 
 
 def path_contains_header(path):
@@ -238,6 +254,52 @@ def validate_traces(args, traces):
     return EXIT_SUCCESS
 
 
+def get_min_reqs(args, traces):
+    run_autoninja(args)
+
+    extensions = []
+    env = {}
+    default_args = ["--no-warmup"]
+
+    for trace in fnmatch.filter(traces, args.traces):
+        json_data = load_trace_json(trace)
+        num_frames = get_num_frames(json_data)
+        max_steps = min(args.limit, num_frames) if args.limit else num_frames
+        try:
+            run_test_suite(args, trace, max_steps, default_args, env)
+        except subprocess.CalledProcessError:
+            # Skip traces with failures
+            continue
+
+        original_version = get_gles_version(json_data)
+        gles_versions = [(1, 0), (1, 1), (2, 0), (3, 0), (3, 1), (3, 2)]
+        min_version = None
+        for version in gles_versions:
+            set_gles_version(json_data, version)
+            save_trace_json(trace, json_data)
+            try:
+                run_test_suite(args, trace, max_steps, default_args, env)
+            except subprocess.CalledProcessError as error:
+                continue
+            finally:
+                # Try to ensure that the original GLES version is not lost if an
+                # unknown exception occurs, such as a keyboard interrupt
+                set_gles_version(json_data, original_version)
+                save_trace_json(trace, json_data)
+            min_version = version
+            # Terminate on the first successful run
+            break
+
+        if min_version is not None:
+            set_gles_version(json_data, min_version)
+            save_trace_json(trace, json_data)
+        else:
+            print("Failed to find minimum GLES version. Reverting and quitting")
+            set_gles_version(json_data, original_version)
+            save_trace_json(trace, json_data)
+            return EXIT_FAILURE
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
@@ -311,6 +373,17 @@ def main():
     validate_parser.add_argument(
         '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
 
+    get_min_reqs_parser = subparsers.add_parser(
+        'get_min_reqs',
+        help='Finds the minimum required extensions for a trace to successfully run.')
+    get_min_reqs_parser.add_argument('gn_path', help='GN build path')
+    get_min_reqs_parser.add_argument(
+        '--traces',
+        help='Traces to get minimum requirements for. Supports fnmatch expressions.',
+        default='*')
+    get_min_reqs_parser.add_argument(
+        '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
+
     args, extra_flags = parser.parse_known_args()
 
     logging.basicConfig(level=args.log.upper())
@@ -329,6 +402,8 @@ def main():
         return upgrade_traces(args, traces)
     elif args.command == 'validate':
         return validate_traces(args, traces)
+    elif args.command == 'get_min_reqs':
+        return get_min_reqs(args, traces)
     else:
         logging.fatal('Unknown command: %s' % args.command)
         return EXIT_FAILURE
