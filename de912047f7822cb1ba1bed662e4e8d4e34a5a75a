@@ -34,6 +34,41 @@
       "parentUuid": "a7a44efc_0e1ee59c",
       "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1321b93d_8786bbd6",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-08T15:30:00Z",
+      "side": 1,
+      "message": "One thing that\u0027s a gray area is that GLES doesn\u0027t say if \"pending operations\" pertains to other contexts. Does the GLES spec even talk about share contexts, or is that entirely specified in EGL?\n\nI\u0027ve asked for clarification: https://gitlab.khronos.org/opengl/API/-/issues/171",
+      "parentUuid": "c1321aeb_cb3c4a89",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "961d331a_8c0ff217",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-08T15:30:00Z",
+      "side": 1,
+      "message": "nit: please use RAII types from gl_raii.h. GLTransformFeedback here for example.",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
