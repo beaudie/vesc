@@ -68,6 +68,23 @@
       "message": "Rethinking my response - probably would be better to just scope this to the Metal generator, but ideally your CI system would not need to run these scripts at build time.",
       "revId": "87992b3fbb41c609fb5303bc322e8f8771b8bb38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500f07dd_54f4d4bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T22:58:31Z",
+      "side": 1,
+      "message": "Understanding that the scripts were originally designed to be invoked ahead of time rather than at build time, and run from a specific cwd - this seems to make them more robust with few downsides.\n\nAssuming this change has been verified to work correctly in WebKit\u0027s build system - lgtm.\n",
+      "revId": "87992b3fbb41c609fb5303bc322e8f8771b8bb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
