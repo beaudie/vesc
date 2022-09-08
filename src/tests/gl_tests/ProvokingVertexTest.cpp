@@ -10,6 +10,8 @@
 //
 
 #include "test_utils/ANGLETest.h"
+#include "test_utils/gl_raii.h"
+#include "util/gles_loader_autogen.h"
 
 using namespace angle;
 
@@ -390,6 +392,95 @@ TEST_P(ProvokingVertexTest, ANGLEProvokingVertex)
 
         fnExpectId(0);
     }
+}
+
+// This test is mostly here to be able to debug the backend to see that
+// optimal paths are taken through the code.
+TEST_P(ProvokingVertexTest, DrawWithBothFlatAndInterpolatedVarying)
+{
+    constexpr char kFlatVS[] = R"(#version 300 es
+      layout(location = 0) in vec4 position;
+      layout(location = 1) in vec4 color;
+      flat out highp vec4 v_color;
+      void main() {
+        gl_Position = position;
+        v_color = color;
+      }
+    )";
+
+    constexpr char kFlatFS[] = R"(#version 300 es
+        precision highp float;
+        flat in highp vec4 v_color;
+        out vec4 fragColor;
+        void main() {
+          fragColor = v_color;
+        }
+    )";
+
+    constexpr char kVS[] = R"(#version 300 es
+      layout(location = 0) in vec4 position;
+      layout(location = 1) in vec4 color;
+      out vec4 v_color;
+      void main() {
+        gl_Position = position;
+        v_color = color;
+      }
+    )";
+
+    constexpr char kFS[] = R"(#version 300 es
+        precision highp float;
+        in vec4 v_color;
+        out vec4 fragColor;
+        void main() {
+          fragColor = v_color;
+        }
+    )";
+
+    GLProgram varyingProgram;
+    varyingProgram.makeRaster(kVS, kFS);
+    GLProgram flatProgram;
+    flatProgram.makeRaster(kFlatVS, kFlatFS);
+
+    constexpr GLuint posNdx   = 0;
+    constexpr GLuint colorNdx = 1;
+
+    static float positions[] = {
+        -1, -1, 1, -1, -1, 1,
+    };
+
+    static GLColor colors[] = {
+        GLColor::red,
+        GLColor::green,
+        GLColor::blue,
+    };
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLBuffer positionBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(posNdx);
+    glVertexAttribPointer(posNdx, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+    GLBuffer colorBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(colorNdx);
+    glVertexAttribPointer(colorNdx, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, nullptr);
+
+    glUseProgram(varyingProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUseProgram(flatProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUseProgram(varyingProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glUseProgram(flatProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    ASSERT_GL_NO_ERROR();
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ProvokingVertexTest);
