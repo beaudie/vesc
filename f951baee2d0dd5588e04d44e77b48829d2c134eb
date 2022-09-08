@@ -16,6 +16,23 @@
       "message": "So for ordinary sync object (created via glFenceSync or other methods without external shared event), it can only be set once? Since the signal value won\u0027t be increased anymore.\n\nI\u0027m not sure ANGLE has any extension to reset and set the sync object again without recreating a new one. If there is, I think this Sync class should be allowed to monotonically increase its signal value.",
       "revId": "f951baee2d0dd5588e04d44e77b48829d2c134eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e175a3_77ba5246",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-08T06:48:37Z",
+      "side": 1,
+      "message": "Correct me if I\u0027m wrong, but doesn\u0027t this make `mSignalValue` always valid even if EGLSync is not created from external shared event? e.g. `type\u003dEGL_SYNC_FENCE_KHR`\n\nThus the code at line 60 will make this sync object already signalled the moment it is created, instead of the time after the prior GL commands finish.\n```\nmSignalValue       \u003d signalValue.valid() ? signalValue.value() : signaledValue + 1;\n```\n\n\nI think we shouldn\u0027t assign a value to `mSignalValue`, if the attribs map doesn\u0027t contain `EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_HI_ANGLE` or `EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_LO_ANGLE`;",
+      "revId": "f951baee2d0dd5588e04d44e77b48829d2c134eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
