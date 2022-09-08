@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a44efc_0e1ee59c",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-08T01:21:11Z",
+      "side": 1,
+      "message": "I\u0027m curious and probably out of my element here but ... the specs (GLES/EGL) seem to say the only things that guarantee changes in one context are seen in another are glFinish, vgFinish, eglWaitClient, eglWaitNative, and eglBindTextImage.\n\nIs it correct that this just magically works because platformSupportsMultithreading() returnss true or should there be some extension or other method here?",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
