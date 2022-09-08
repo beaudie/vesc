@@ -16,6 +16,108 @@
       "message": "LGTM",
       "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87cab123_3ef3bd04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "Nice work on this Dan. The tests look very good. I didn\u0027t have the time to review this really thoroughly, so could I ask that Jonah be the second reviewer? CC\u0027ing Gregg and Quyen as well in case they have any comments.\n",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc1de3b_080eb2b3",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "I think there\u0027s an extra leading space here.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2719c1c_fde09e20",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "Can a stronger assertion be made following this if a glFinish() is added? It would be nice to test that the sync object is signaled at some point.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca5ea195_aa34a517",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "Is there a specific reason to use ASSERT_EQ rather than EXPECT_EQ here? I think this will crash the entire test harness if this fails, and this is difficult to debug.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96d5be96_79dc3adc",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f16e97c_4b7a2954",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-08T01:20:56Z",
+      "side": 1,
+      "message": "How about returning early if it is equal to EGL_NO_SYNC? It\u0027s not clear the operations after the if-block will work correctly if the sync object creation failed.",
+      "revId": "fde32e09337e2591a990d9b0bfee6c6169c34866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
