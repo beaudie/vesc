@@ -51,6 +51,23 @@
       "parentUuid": "7d575ac4_e1b5122d",
       "revId": "87992b3fbb41c609fb5303bc322e8f8771b8bb38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a1c16a1_43946ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-08T20:17:28Z",
+      "side": 1,
+      "message": "Rethinking my response - probably would be better to just scope this to the Metal generator, but ideally your CI system would not need to run these scripts at build time.",
+      "revId": "87992b3fbb41c609fb5303bc322e8f8771b8bb38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
