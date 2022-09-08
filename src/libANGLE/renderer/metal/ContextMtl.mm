@@ -212,7 +212,7 @@ ContextMtl::ContextMtl(const gl::State &state,
       mBlitEncoder(&mCmdBuffer),
       mComputeEncoder(&mCmdBuffer),
       mDriverUniforms{},
-      mProvokingVertexHelper(this, &display->cmdQueue(), display),
+      mProvokingVertexHelper(this),
       mContextDevice(GetOwnershipIdentity(attribs))
 {}
 
@@ -1686,12 +1686,12 @@ void ContextMtl::endEncoding(bool forceSaveRenderPassContent)
     if (mComputeEncoder.valid())
     {
         mComputeEncoder.endEncoding();
+        mProvokingVertexHelper.releaseInFlightBuffers(this);
     }
 }
 
 void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
 {
-    mProvokingVertexHelper.commitPreconditionCommandBuffer(this);
     if (!mCmdBuffer.ready())
     {
         return;
@@ -1721,7 +1721,6 @@ void ContextMtl::flushCommandBufferIfNeeded()
 void ContextMtl::present(const gl::Context *context, id<CAMetalDrawable> presentationDrawable)
 {
     ensureCommandBufferReady();
-    mProvokingVertexHelper.commitPreconditionCommandBuffer(this);
 
     FramebufferMtl *currentframebuffer = mtl::GetImpl(getState().getDrawFramebuffer());
     if (currentframebuffer)
@@ -1875,17 +1874,12 @@ mtl::ComputeCommandEncoder *ContextMtl::getComputeCommandEncoder()
 
 mtl::ComputeCommandEncoder *ContextMtl::getIndexPreprocessingCommandEncoder()
 {
-    return mProvokingVertexHelper.getComputeCommandEncoder();
+    return getComputeCommandEncoder();
 }
 
 void ContextMtl::ensureCommandBufferReady()
 {
     flushCommandBufferIfNeeded();
-
-    if (getDisplay()->getFeatures().preemptivelyStartProvokingVertexCommandBuffer.enabled)
-    {
-        mProvokingVertexHelper.ensureCommandBufferReady();
-    }
 
     if (!mCmdBuffer.ready())
     {
