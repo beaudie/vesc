@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e75e7c31_58b8ad9b",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-08T16:09:47Z",
+      "side": 1,
+      "message": "Shared objects are mentioned in appendix D.3 of the ES 3.0 spec",
+      "parentUuid": "1321b93d_8786bbd6",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "961d331a_8c0ff217",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 12
