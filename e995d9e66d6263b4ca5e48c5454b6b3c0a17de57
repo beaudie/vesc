@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63d5d447_b8e11d5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-08T17:17:37Z",
+      "side": 1,
+      "message": "This and the following CL might be missing some files.  Is this CL supposed to modify JSON files in `src/tests/restricted_traces`?",
+      "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
