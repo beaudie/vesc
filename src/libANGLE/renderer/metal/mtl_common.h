@@ -273,6 +273,8 @@ class WrappedObject
         mMetalObject = obj;
     }
 
+    T leakObject() { return std::exchange(mMetalObject, nullptr); }
+
   private:
     void release()
     {
@@ -365,6 +367,8 @@ class AutoObjCPtr : public WrappedObject<T>
     template <typename U>
     friend AutoObjCObj<U> adoptObjCObj(U *NS_RELEASES_ARGUMENT)
         __attribute__((__warn_unused_result__));
+
+    T leakRef() { return this->leakObject(); }
 
   private:
     enum AdoptTag
