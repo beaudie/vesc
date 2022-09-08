@@ -25,9 +25,7 @@ class ContextMtl;
 class ProvokingVertexHelper : public mtl::ProvokingVertexCacheSpecializeShaderFactory
 {
   public:
-    ProvokingVertexHelper(ContextMtl *context,
-                          mtl::CommandQueue *commandQueue,
-                          DisplayMtl *display);
+    ProvokingVertexHelper(ContextMtl *context);
     mtl::BufferRef preconditionIndexBuffer(ContextMtl *context,
                                            mtl::BufferRef indexBuffer,
                                            size_t indexCount,
@@ -55,11 +53,9 @@ class ProvokingVertexHelper : public mtl::ProvokingVertexCacheSpecializeShaderFa
 
   private:
     id<MTLLibrary> mProvokingVertexLibrary;
-    mtl::CommandBuffer mCommandBuffer;
     mtl::BufferPool mIndexBuffers;
     mtl::ProvokingVertexComputePipelineCache mPipelineCache;
     mtl::ProvokingVertexComputePipelineDesc mCachedDesc;
-    mtl::ComputeCommandEncoder mCurrentEncoder;
 
     // Program cache
     virtual angle::Result getSpecializedShader(
