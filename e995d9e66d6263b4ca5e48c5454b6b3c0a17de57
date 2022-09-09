@@ -34,6 +34,41 @@
       "parentUuid": "63d5d447_b8e11d5b",
       "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7edbc34_35a29815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-09T20:59:42Z",
+      "side": 1,
+      "message": "Sean, can you add a section to the README in this directory showing how to use the new option?  I\u0027d like to try it out before we land it.\n\nFor instance, what options do I provide to just get min requirements for `league_of_legends_wild_rift`?",
+      "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2901a1a_93cb2b2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-09T20:59:42Z",
+      "side": 1,
+      "message": "My mistake - I thought the change to `code_generation_hashes/restricted_traces.json` indicated that `restricted_traces.json` had changed, but it is the python diff changing the hash.",
+      "parentUuid": "aebf0532_c47f51b0",
+      "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
