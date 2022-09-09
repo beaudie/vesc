@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "254654e0_615bff46",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-09T18:55:00Z",
+      "side": 1,
+      "message": "AFAICT, there is no order guarantee across contexts with `glFlush` or implied `glFlush` (eg, eglMakeCurrent). If you want to make sure one thing happens before another across contexts you\u0027re supposed to do either\n\n...modify some resources in context1\nglFinish();\neglMakeCurrent(context2);\n...rebind modified resources in context2\n...use modified resources in context2\n\nOR\n\n...modify some resources in context1\nGLsync sync \u003d glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);\neglMakeCurrent(context2);\nglWaitSync(sync, 0, GL_TIMEOUT_IGNORED);\n...rebind modified resources in context2\n...use modified resources in context2\n\nAm I wrong? The test seems like it\u0027s not following those steps. I get that glMapBufferRange is supposed to block until the buffer is done but it\u0027s not clear to me from the spec that you can use it as a substitute for Finish/WaitSync/ClientWaitSync",
+      "parentUuid": "e75e7c31_58b8ad9b",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "961d331a_8c0ff217",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 12
