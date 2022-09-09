@@ -115,6 +115,45 @@ class BlockLayoutEncoder
     size_t mCurrentOffset;
 };
 
+class BlockLayoutEncoderMTL
+{
+  public:
+    BlockLayoutEncoderMTL();
+    virtual ~BlockLayoutEncoderMTL() {}
+
+    BlockMemberInfo encodeType(GLenum type,
+                               const std::vector<unsigned int> &arraySizes,
+                               bool isRowMajorMatrix);
+    // Advance the offset based on struct size and array dimensions.  Size can be calculated with
+    // getShaderVariableSize() or equivalent.  |enterAggregateType|/|exitAggregateType| is necessary
+    // around this call.
+    BlockMemberInfo encodeArrayOfPreEncodedStructs(size_t size,
+                                                   const std::vector<unsigned int> &arraySizes);
+
+    size_t getCurrentOffset() const;
+    size_t getShaderVariableSize(const ShaderVariable &structVar, bool isRowMajor);
+
+    // Called when entering/exiting a structure variable.
+    virtual void enterAggregateType(const ShaderVariable &structVar);
+    virtual void exitAggregateType(const ShaderVariable &structVar);
+
+  protected:
+    void align(size_t baseAlignment);
+
+    virtual void getBlockLayoutInfo(GLenum type,
+                                    const std::vector<unsigned int> &arraySizes,
+                                    bool isRowMajorMatrix,
+                                    int *arrayStrideOut,
+                                    int *matrixStrideOut) = 0;
+    virtual void advanceOffset(GLenum type,
+                               const std::vector<unsigned int> &arraySizes,
+                               bool isRowMajorMatrix,
+                               int arrayStride,
+                               int matrixStride)          = 0;
+
+    size_t mCurrentOffsetBytes;
+};
+
 // Will return default values for everything.
 class StubBlockEncoder : public BlockLayoutEncoder
 {

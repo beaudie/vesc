@@ -151,6 +151,9 @@ MTLIndexType GetIndexType(gl::DrawElementsType type);
 MTLTextureSwizzle GetTextureSwizzle(GLenum swizzle);
 #endif
 
+size_t GetMetalSizeForGLType(GLenum type);
+size_t GetMetalAlignmentForGLType(GLenum type);
+
 // Get color write mask for a specified format. Some formats such as RGB565 doesn't have alpha
 // channel but is emulated by a RGBA8 format, we need to disable alpha write for this format.
 // - emulatedChannelsOut: if the format is emulated, this pointer will store a true value.
