@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "7269b50c_32b8550c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-09T22:50:36Z",
+      "side": 1,
+      "message": "nit: type: not --\u003e no.",
+      "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "107283d0_93284ccf",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-09-09T22:04:03Z",
       "side": 1,
       "message": "With this, shadowgun_legends now matches all load/store ops with native driver, with one renderpass ANGLE actually does better.",
+      "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5a267e_7c718bc5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-09T22:50:36Z",
+      "side": 1,
+      "message": "The comment said loadOp/storeOp\u003dNone is preferred because it reduces the amount of synchronization. Is there performance benefits to keep using DontCare if the attachment is invalidated?",
       "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
