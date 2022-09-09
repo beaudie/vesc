@@ -67,6 +67,24 @@
       "message": "Please add a comment like:\n\n// Because this backend uses an intermediate representation for the rendering\n// commands, a render encoder can coexist with blit/compute command encoders.\n\nWould also suggest grouping the two new blit/compute methods under this new comment.",
       "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40ac7387_9a374348",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-09T23:05:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c96bcd7e_aca08cf3",
+      "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
