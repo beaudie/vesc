@@ -1214,7 +1214,7 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
             // and the data has also not been stored back into attachment, then just skip the
             // load/clear op.  If loadOp/storeOp=None is supported, prefer that to reduce the amount
             // of synchronization; DontCare is a write operation, while None is not.
-            if (supportsLoadStoreOpNone)
+            if (supportsLoadStoreOpNone && !isInvalidated(currentCmdCount))
             {
                 *loadOp  = RenderPassLoadOp::None;
                 *storeOp = RenderPassStoreOp::None;
