@@ -50,6 +50,24 @@
       "message": "The mention here of an unpack buffer doesn\u0027t match the code at the moment. Should the description be generalized to cover both client data and an unpack buffer, and a TODO left in the code to make it support unpack buffers?",
       "revId": "5c6f75e254bd0ab29e69b0086f9f834ca9aef3ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85a61df2_1a590407",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-09T21:17:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f7ed9e_0cf5378c",
+      "revId": "5c6f75e254bd0ab29e69b0086f9f834ca9aef3ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
