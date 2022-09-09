@@ -16,6 +16,23 @@
       "message": "done",
       "revId": "7b07358e20dd65e15467a001da3c3a67ab9a4f1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc8e8eb_454b9160",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-09T00:44:31Z",
+      "side": 1,
+      "message": "Still lgtm.\n\nSince this was all the feedback, +2\u0027ing and CQ\u0027ing.\n",
+      "revId": "7b07358e20dd65e15467a001da3c3a67ab9a4f1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

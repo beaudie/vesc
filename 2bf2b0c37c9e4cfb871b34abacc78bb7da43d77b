@@ -51,6 +51,24 @@
       "parentUuid": "79bf4403_4b5ba105",
       "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a739d5c9_f24a3c01",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-09T00:44:31Z",
+      "side": 1,
+      "message": "Thanks for handling this.",
+      "parentUuid": "280a8ef9_8ab641d1",
+      "revId": "2bf2b0c37c9e4cfb871b34abacc78bb7da43d77b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
