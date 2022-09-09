@@ -33,6 +33,40 @@
       "message": "One issue is I\u0027m not sure what happens if the index buffer being read to has a pending write. Is there already a test for that or do I need to write one?",
       "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b9aa097_176d902d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-09T18:31:08Z",
+      "side": 1,
+      "message": "lgtm\n\nWould you add the targeted test you mentioned, about overwriting the index buffer in between two draw calls, into ProvokingVertexTest.cpp? angle_end2end_tests itself doesn\u0027t seem to have many flat shading tests, and even if it\u0027s covered by the dEQP, it\u0027d be better to have a small and easy-to-read test for it.\n",
+      "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c96bcd7e_aca08cf3",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-09T18:31:08Z",
+      "side": 1,
+      "message": "Please add a comment like:\n\n// Because this backend uses an intermediate representation for the rendering\n// commands, a render encoder can coexist with blit/compute command encoders.\n\nWould also suggest grouping the two new blit/compute methods under this new comment.",
+      "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
