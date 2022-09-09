@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ce14d3a_792b66b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "hi jamie, was hoping you had some bandwidth now?\n\n\u003e It could also help if you include some mention of how this makes ANGLE better in the issue description\n\ni was hoping this paragraph in the commit message would suffice -\n```\n   The commit 3a9f18f135fe82 caused a link to occur everytime\n   glUseProgramStages is called. This is redundant since the program\n   pipeline can be linked just before usage, thus allowing for multiple\n   stages to be bound before linking the executable.\n```\n\n\u003e lower latency loads on some apps, and which apps\n\nthis would be any app that calls `glUseProgramStages` more than once per draw but not sure what exactly you are looking for. i know that the \"command_and_conquer_rivals\" trace hits this usecase but do not have perf numbers",
+      "parentUuid": "f6748a46_38fcb70c",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20903edf_603dbaa0",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9ffce9_bff89960",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "actually `GL_COMPUTE_SHADER_BIT` has a value of 32 and is the max for now so 8bits is sufficient, have cast it to `BitSet\u003c8\u003e` instead",
+      "parentUuid": "20903edf_603dbaa0",
+      "range": {
+        "startLine": 209,
+        "startChar": 38,
+        "endLine": 209,
+        "endChar": 88
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43e826d1_9c748b7b",
@@ -54,6 +96,24 @@
       "writtenOn": "2022-08-22T20:59:16Z",
       "side": 1,
       "message": "This is not \"inlined to reduce overhead\" 😄\n\nSuggest removing this out of `link()` and put it here:\n\n```\nif (mState.mIsLinked)\n{\n    return angle::Result::Continue;\n}\nlink(context);\n```\n\nInside `link()`, you can `ASSERT(!mState.mIsLinked);`.",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c27829c_2bd8acae",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "\u003e This is not \"inlined to reduce overhead\"\n\ncopy-paste from `Program::resolveLink` 😊\n\nDone.",
+      "parentUuid": "43e826d1_9c748b7b",
       "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -83,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05620ae5_e654b719",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "there are many places inside link that return `Stop` or `Continue` or `ANGLE_TRY`, it would result in a lot of unrelated code change, can we do this in a follow up?\n\nfor now, i will ignore return value here",
+      "parentUuid": "308db6c1_fee86058",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5ff0dd8_2dd46422",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 8
@@ -100,6 +184,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3491da3_6d1fc132",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "\u003e When the binding changes, we shouldn\u0027t need to attempt to actually process the program or pipeline\n\nnot sure i understand, if the binding changes the newly bound PPO may not yet be linked. To account for this we need to set the object as dirty\n\n\u003e it\u0027d be good to set this object dirty when the PPO actually changes ... `onProgramPipelineExecutableChange`\n\nDone",
+      "parentUuid": "b5ff0dd8_2dd46422",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6733f5c7_c80128af",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 8
@@ -111,6 +213,24 @@
       "writtenOn": "2022-08-22T20:59:16Z",
       "side": 1,
       "message": "From what I can make, this is only called due to `glUniformBlockBinding`. Technically we should have the program notify its observers about a change etc, such that `onProgramPipelineExecutableChange` is called. This may already happen actually (maybe through `angle::SubjectMessage::ProgramRelinked` instead), not sure.\n\nA test would make sure there are no bugs.",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "019771f0_a78dac84",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3540,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-09T23:32:53Z",
+      "side": 1,
+      "message": "Ack\n\nNo longer relevant since we now have dedicated dirty object bit for PPO",
+      "parentUuid": "6733f5c7_c80128af",
       "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
