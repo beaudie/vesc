@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ee67be5_63fc1e84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-09T02:01:54Z",
+      "side": 1,
+      "message": "Reminds me of https://store.steampowered.com/app/975150/Resolutiion/ 😄",
+      "range": {
+        "startLine": 7,
+        "startChar": 45,
+        "endLine": 7,
+        "endChar": 56
+      },
+      "revId": "adc7a848a7f09e3d1526d452ecf0a4d5c744e8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
