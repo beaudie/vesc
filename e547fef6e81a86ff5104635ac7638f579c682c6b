@@ -68,6 +68,24 @@
       "parentUuid": "df5a267e_7c718bc5",
       "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a84eab7_5c4e09e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-09T23:15:33Z",
+      "side": 1,
+      "message": "DontCare translates to Discard in the driver, and None translates to Preserve. Preserve can\u0027t be faster than Discard, and native gles uses  Discard here. (Not exact sure the difference here, maybe some cache operation?) The actual frame time difference is not much (this and previous loadOp fix total ~1%), but we are using the same load/store ops as gles now.",
+      "parentUuid": "95a1ee3e_c86c8e12",
+      "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
