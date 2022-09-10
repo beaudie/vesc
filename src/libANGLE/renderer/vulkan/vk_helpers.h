@@ -1697,7 +1697,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                      uint32_t baseArrayLayer,
                                      uint32_t layerCount,
                                      gl::SrgbWriteControlMode srgbWriteControlMode,
-                                     gl::YuvSamplingMode yuvSamplingMode) const;
+                                     gl::YuvSamplingMode yuvSamplingMode,
+                                     VkImageUsageFlags imageUsageFlags) const;
     angle::Result initReinterpretedLayerImageView(Context *context,
                                                   gl::TextureType textureType,
                                                   VkImageAspectFlags aspectMask,
@@ -1715,7 +1716,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                 const gl::SwizzleState &swizzleMap,
                                 ImageView *imageViewOut,
                                 LevelIndex baseMipLevelVk,
-                                uint32_t levelCount);
+                                uint32_t levelCount,
+                                VkImageUsageFlags imageUsageFlags = 0);
     // Create a 2D[Array] for staging purposes.  Used by:
     //
     // - TextureVk::copySubImageImplWithDraw
@@ -2813,7 +2815,8 @@ class ImageViewHelper final : angle::NonCopyable
                                     LevelIndex baseLevel,
                                     uint32_t levelCount,
                                     uint32_t baseLayer,
-                                    uint32_t layerCount);
+                                    uint32_t layerCount,
+                                    VkImageUsageFlags imageUsageFlags = 0);
 
     // Create SRGB-reinterpreted read views
     angle::Result initSRGBReadViewsImpl(ContextVk *contextVk,

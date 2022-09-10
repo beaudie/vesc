@@ -1328,7 +1328,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 ANGLE_TRY(depthStencilImage->initLayerImageView(
                     contextVk, textureType, VK_IMAGE_ASPECT_DEPTH_BIT, gl::SwizzleState(),
                     &depthView.get(), levelIndex, 1, layerIndex, 1,
-                    gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default));
+                    gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default, 0));
             }
 
             if (blitStencilBuffer)
@@ -1336,7 +1336,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                 ANGLE_TRY(depthStencilImage->initLayerImageView(
                     contextVk, textureType, VK_IMAGE_ASPECT_STENCIL_BIT, gl::SwizzleState(),
                     &stencilView.get(), levelIndex, 1, layerIndex, 1,
-                    gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default));
+                    gl::SrgbWriteControlMode::Default, gl::YuvSamplingMode::Default, 0));
             }
 
             // If shader stencil export is not possible, defer stencil blit/stencil to another pass.
