@@ -1866,10 +1866,13 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
         static_cast<size_t>(mPhysicalDeviceProperties.limits.minMemoryMapAlignment);
     ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
     ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment));
+    // Usually minTexelBufferOffsetAlignment is much smaller than  nonCoherentAtomSize
+    ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.minTexelBufferOffsetAlignment));
     mStagingBufferAlignment = std::max(
         {mStagingBufferAlignment,
          static_cast<size_t>(mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment),
-         static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize)});
+         static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize),
+         static_cast<size_t>(mPhysicalDeviceProperties.limits.minTexelBufferOffsetAlignment)});
     ASSERT(gl::isPow2(mStagingBufferAlignment));
 
     // Device local vertex conversion buffer
@@ -3903,6 +3906,18 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTimestampSurfaceAttribute,
                             IsAndroid() && ExtensionFound(VK_GOOGLE_DISPLAY_TIMING_EXTENSION_NAME,
                                                           deviceExtensionNames));
+
+    // 1) host vk driver does not natively support ETC format.
+    // 2) host vk driver supports BC format.
+    // 3) host vk driver supports subgroup instructions: clustered, shuffle.
+    //    * This limitation can be removed if necessary.
+    constexpr VkSubgroupFeatureFlags kRequiredSubgroupOp =
+        VK_SUBGROUP_FEATURE_SHUFFLE_BIT | VK_SUBGROUP_FEATURE_CLUSTERED_BIT;
+    static constexpr bool kSupportTranscodeEtcToBc = false;
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsComputeTranscodeEtcToBc,
+        !mPhysicalDeviceFeatures.textureCompressionETC2 && kSupportTranscodeEtcToBc &&
+            (mSubgroupProperties.supportedOperations & kRequiredSubgroupOp) == kRequiredSubgroupOp);
 
     // Allow passthrough of EGL colorspace attributes on Android platform and for vendors that
     // are known to support wide color gamut.
