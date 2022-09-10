@@ -303,5 +303,139 @@ TEST_P(ETCTextureTest, ETC2SRGB8A1Validation)
     }
 }
 
+class ETCToBCTextureTest : public ANGLETest<>
+{
+  protected:
+    ETCToBCTextureTest() : mTexture(0u)
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
+
+    void testSetUp() override
+    {
+        glGenTextures(1, &mTexture);
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testTearDown() override { glDeleteTextures(1, &mTexture); }
+
+    GLuint mTexture;
+};
+
+constexpr int abs_error = 8;
+// Tests GPU compute transcode ETC2_RGB8 to BC1
+TEST_P(ETCToBCTextureTest, ETC2Rgb8UnormToBC1)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan() &&
+                       !GetParam().isEnabled(Feature::SupportsComputeTranscodeEtcToBc));
+    GLuint fboTexture      = 0;
+    constexpr int kWidth   = 4;
+    constexpr int kHeight  = 4;
+    constexpr int kTexSize = 4;
+    glGenTextures(1, &fboTexture);
+    glBindTexture(GL_TEXTURE_2D, fboTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTexture, 0);
+    glViewport(0, 0, kHeight, kHeight);
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_COMPRESSED_RGB8_ETC2, kTexSize, kTexSize);
+    uint32_t data[2] = {0x14050505, 0x00ffff33};
+    // the transcoded BC1 data
+    // {0x0000a534, 0x05055555}
+    // then decoded RGBA data are
+    // 0xff000000 0xff000000 0xff000000 0xff000000
+    // 0xff000000 0xff000000 0xff000000 0xff000000
+    // 0xff000000 0xff000000 0xffa5a6a5 0xffa5a6a5
+    // 0xff000000 0xff000000 0xffa5a6a5 0xffa5a6a5
+    glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTexSize, kTexSize, GL_COMPRESSED_RGB8_ETC2,
+                              sizeof(data), data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    draw2DTexturedQuad(0.5f, 1.0f, false);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0, 0, 0, 0xff), abs_error);
+    EXPECT_PIXEL_COLOR_NEAR(1, 1, GLColor(0, 0, 0, 0xff), abs_error);
+    EXPECT_PIXEL_COLOR_NEAR(2, 2, GLColor(0xa5, 0xa6, 0xa5, 0xff), abs_error);
+    EXPECT_PIXEL_COLOR_NEAR(3, 3, GLColor(0xa5, 0xa6, 0xa5, 0xff), abs_error);
+}
+
+// Tests GPU compute transcode ETC2_RGBA8 to BC3
+TEST_P(ETCToBCTextureTest, ETC2Rgba8UnormToBC3)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan() &&
+                       !GetParam().isEnabled(Feature::SupportsComputeTranscodeEtcToBc));
+    GLuint fboTexture      = 0;
+    constexpr int kWidth   = 4;
+    constexpr int kHeight  = 4;
+    constexpr int kTexSize = 4;
+    glGenTextures(1, &fboTexture);
+    glBindTexture(GL_TEXTURE_2D, fboTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    GLuint fbo = 0;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTexture, 0);
+    glViewport(0, 0, kHeight, kHeight);
+    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_COMPRESSED_RGBA8_ETC2_EAC, kTexSize, kTexSize);
+    uint32_t data[4] = {0xd556975c, 0x088ff048, 0x9e6c6c6c, 0x3f11f1ff};
+    // the transcoded RGB data (BC1)
+    // {0x0000a534 0x58585c5f}
+    // the 16 ETC2 decoded alpha value are
+    // 20,  20, 182, 182
+    // 128, 128, 110, 110
+    // 128, 47,   47, 47
+    // 128, 65,   65, 65
+    // max alpha value = 0xb6
+    // min alpha value = 0x14
+    // result BC4 data are 0xb00914b6, 0xdb3ffb91
+    GLColor expectedColor[4][4] = {
+        {
+            GLColor(55, 55, 55, 20),
+            GLColor(55, 55, 55, 20),
+            GLColor(0, 0, 0, 182),
+            GLColor(0, 0, 0, 182),
+        },
+        {
+            GLColor(165, 166, 165, 136),
+            GLColor(55, 55, 55, 136),
+            GLColor(0, 0, 0, 112),
+            GLColor(0, 0, 0, 112),
+        },
+        {
+            GLColor(165, 166, 165, 136),
+            GLColor(110, 111, 110, 43),
+            GLColor(0, 0, 0, 43),
+            GLColor(0, 0, 0, 43),
+        },
+        {
+            GLColor(165, 166, 165, 136),
+            GLColor(110, 111, 110, 66),
+            GLColor(0, 0, 0, 66),
+            GLColor(0, 0, 0, 66),
+        },
+    };
+    glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTexSize, kTexSize,
+                              GL_COMPRESSED_RGBA8_ETC2_EAC, sizeof(data), data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    draw2DTexturedQuad(0.5f, 1.0f, false);
+    for (int i = 0; i < 4; ++i)
+    {
+        for (int j = 0; j < 4; ++j)
+        {
+            EXPECT_PIXEL_COLOR_NEAR(j, i, expectedColor[i][j], abs_error);
+        }
+    }
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ETCTextureTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ETCToBCTextureTest);
 }  // anonymous namespace

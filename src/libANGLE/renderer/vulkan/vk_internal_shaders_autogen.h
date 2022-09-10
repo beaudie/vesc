@@ -90,6 +90,23 @@ enum Conversion
 constexpr size_t kArrayLen = 0x00000008;
 }  // namespace ConvertVertex_comp
 
+namespace EtcToBc_comp
+{
+enum OutImageType
+{
+    kImage3D      = 0x00000000,
+    kImage2DArray = 0x00000001,
+};
+enum OutputFormat
+{
+    kEtcToBC1 = 0x00000000,
+    kEtcToBC3 = 0x00000002,
+    kEtcToBC4 = 0x00000004,
+    kEtcToBC5 = 0x00000006,
+};
+constexpr size_t kArrayLen = 0x00000008;
+}  // namespace EtcToBc_comp
+
 namespace FullScreenTri_vert
 {
 constexpr size_t kArrayLen = 0x00000001;
@@ -200,6 +217,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getConvertVertex_comp(Context *context,
                                         uint32_t shaderFlags,
                                         RefCounted<ShaderAndSerial> **shaderOut);
+    angle::Result getEtcToBc_comp(Context *context,
+                                  uint32_t shaderFlags,
+                                  RefCounted<ShaderAndSerial> **shaderOut);
     angle::Result getFullScreenTri_vert(Context *context,
                                         uint32_t shaderFlags,
                                         RefCounted<ShaderAndSerial> **shaderOut);
@@ -232,6 +252,7 @@ class ShaderLibrary final : angle::NonCopyable
         [InternalShader::ConvertIndirectLineLoop_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mConvertVertex_comp_shaders[InternalShader::ConvertVertex_comp::kArrayLen];
+    RefCounted<ShaderAndSerial> mEtcToBc_comp_shaders[InternalShader::EtcToBc_comp::kArrayLen];
     RefCounted<ShaderAndSerial>
         mFullScreenTri_vert_shaders[InternalShader::FullScreenTri_vert::kArrayLen];
     RefCounted<ShaderAndSerial>
