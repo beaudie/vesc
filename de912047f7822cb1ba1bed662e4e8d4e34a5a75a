@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a64e54d_4326a03a",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-10T07:07:18Z",
+      "side": 1,
+      "message": "It seems there are still ambiguities. Also the ticket on Khronos site is still unanswered. Maybe I should omit this test. There are already existing tests that use sync objects to synchronize between threads.\n\nbtw, this test still discovers that the vulkan backend would crash.",
+      "parentUuid": "254654e0_615bff46",
+      "revId": "de912047f7822cb1ba1bed662e4e8d4e34a5a75a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "961d331a_8c0ff217",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 12
