@@ -1,0 +1,21 @@
+{
+    "Description": [
+        "Copyright 2020 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "EtcToBc.comp.json: Build parameters for Etc2Bc.comp."
+    ],
+    "OutputFormat": [
+        ["EtcToBC1", "--target-env", "vulkan1.1"],
+		["EtcToBC3", "--target-env", "vulkan1.1"],
+		["EtcToBC4", "--target-env", "vulkan1.1"],
+		["EtcToBC5", "--target-env", "vulkan1.1"]
+    ],
+	"OutImageType": [
+        "Image3D",
+		"Image2DArray"
+    ]
+}
+
+

@@ -741,6 +741,13 @@ struct FeaturesVk : FeatureSetBase
                                             FeatureCategory::VulkanFeatures,
                                             "VkDevice supports VK_EXT_color_write_enable extension",
                                             &members, "https://anglebug.com/7161"};
+
+    FeatureInfo supportsComputeTranscodeEtcToBc = {
+        "supportsComputeTranscodeEtcToBc",
+        FeatureCategory::VulkanFeatures,
+        "supports compute shader transcode etc format to bc format",
+        &members,
+    };
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
