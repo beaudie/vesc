@@ -1007,6 +1007,13 @@
                 "VkDevice supports VK_EXT_color_write_enable extension"
             ],
             "issue": "https://anglebug.com/7161"
-        }
+        },
+		{
+			"name": "supports_compute_transcode_etc_to_bc",
+            "category": "Features",
+            "description": [
+                 "supports compute shader transcode etc format to bc format"
+            ]
+		}
     ]
 }

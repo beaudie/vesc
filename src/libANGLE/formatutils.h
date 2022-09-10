@@ -410,6 +410,11 @@ ANGLE_INLINE bool IsBPTCFormat(const GLenum format)
     }
 }
 
+ANGLE_INLINE bool IsBCFormat(const GLenum format)
+{
+    return IsS3TCFormat(format) || IsRGTCFormat(format) || IsBPTCFormat(format);
+}
+
 ANGLE_INLINE bool IsASTC2DFormat(const GLenum format)
 {
     if ((format >= GL_COMPRESSED_RGBA_ASTC_4x4_KHR &&
@@ -454,6 +459,11 @@ ANGLE_INLINE bool IsETC2EACFormat(const GLenum format)
         default:
             return false;
     }
+}
+
+ANGLE_INLINE bool IsETCFormat(const GLenum format)
+{
+    return IsETC2EACFormat(format) || IsETC1Format(format);
 }
 
 ANGLE_INLINE bool IsPVRTC1Format(const GLenum format)
