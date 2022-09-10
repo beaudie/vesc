@@ -1858,10 +1858,13 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
         static_cast<size_t>(mPhysicalDeviceProperties.limits.minMemoryMapAlignment);
     ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.nonCoherentAtomSize));
     ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment));
+    // Usually minTexelBufferOffsetAlignment is much smaller than  nonCoherentAtomSize
+    ASSERT(gl::isPow2(mPhysicalDeviceProperties.limits.minTexelBufferOffsetAlignment));
     mStagingBufferAlignment = std::max(
         {mStagingBufferAlignment,
          static_cast<size_t>(mPhysicalDeviceProperties.limits.optimalBufferCopyOffsetAlignment),
-         static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize)});
+         static_cast<size_t>(mPhysicalDeviceProperties.limits.nonCoherentAtomSize),
+         static_cast<size_t>(mPhysicalDeviceProperties.limits.minTexelBufferOffsetAlignment)});
     ASSERT(gl::isPow2(mStagingBufferAlignment));
 
     // Device local vertex conversion buffer
@@ -3888,6 +3891,20 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTimestampSurfaceAttribute,
                             IsAndroid() && ExtensionFound(VK_GOOGLE_DISPLAY_TIMING_EXTENSION_NAME,
                                                           deviceExtensionNames));
+
+    // Enable compute shader transcode ETC to BC format only if
+    // 1) host vk driver do not native support ETC format.
+    // 2) host vk driver do support BC format.
+    // 3) host vk driver do support subgroup instructions.
+    // subgroup_clustered, subgroup_shuffle
+    // we can remove limitation 3) if necessary.
+    const VkSubgroupFeatureFlags requiredSubgroupOp =
+        VK_SUBGROUP_FEATURE_SHUFFLE_BIT | VK_SUBGROUP_FEATURE_CLUSTERED_BIT;
+    static constexpr bool supportTranscodeEtcToBc = true;
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsComputeTranscodeEtcToBc,
+        !mPhysicalDeviceFeatures.textureCompressionETC2 && supportTranscodeEtcToBc &&
+            (mSubgroupProperties.supportedOperations & requiredSubgroupOp) == requiredSubgroupOp);
 
     // Allow passthrough of EGL colorspace attributes on Android platform and for vendors that
     // are known to support wide color gamut.
