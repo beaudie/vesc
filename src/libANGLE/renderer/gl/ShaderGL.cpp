@@ -178,6 +178,11 @@ void ShaderGL::compileAndCheckShader(const char *source)
 
 void ShaderGL::compileShader(const char *source)
 {
+    if (strstr(source, "GL_EXT_shader_framebuffer_fetch"))
+    {
+        printf("<PLSShader>\n\n\n%s\n\n\n</PLSShader>\n", source);
+        fflush(stdout);
+    }
     const FunctionsGL *functions = mRenderer->getFunctions();
     functions->shaderSource(mShaderID, 1, &source, nullptr);
     functions->compileShader(mShaderID);
@@ -402,9 +407,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
                 options->pls.fragmentSynchronizationType =
                     ShFragmentSynchronizationType::FragmentShaderOrdering_INTEL_GL;
             }
-            else
+            else if (features.supportsFragmentShaderInterlockARB.enabled)
             {
-                ASSERT(features.supportsFragmentShaderInterlockARB.enabled);
                 // This extension requires 450+. GetShaderOutputType() should always select 450+ on
                 // a GL 4.5 context, where this extension is defined.
                 ASSERT(mRenderer->getFunctions()->isAtLeastGL(gl::Version(4, 5)));
