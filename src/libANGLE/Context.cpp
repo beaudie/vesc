@@ -4224,18 +4224,35 @@ void Context::initCaps()
 
     if (mSupportedExtensions.shaderPixelLocalStorageANGLE)
     {
-        // TODO(anglebug.com/7279): These limits are specific to shader images. They will need to be
-        // updated once we have other implementations.
-        mState.mCaps.maxPixelLocalStoragePlanes =
-            mState.mCaps.maxShaderImageUniforms[ShaderType::Fragment];
-        ANGLE_LIMIT_CAP(mState.mCaps.maxPixelLocalStoragePlanes,
-                        IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
-        mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage =
-            mState.mCaps.maxColorAttachments;
-        mState.mCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes =
-            std::min(mState.mCaps.maxPixelLocalStoragePlanes +
-                         std::min(mState.mCaps.maxDrawBuffers, mState.mCaps.maxColorAttachments),
-                     mState.mCaps.maxCombinedShaderOutputResources);
+        int maxDrawableAttachments =
+            std::min(mState.mCaps.maxDrawBuffers, mState.mCaps.maxColorAttachments);
+        switch (mImplementation->getNativePixelLocalStorageType())
+        {
+            case ShPixelLocalStorageType::ImageStoreR32PackedFormats:
+            case ShPixelLocalStorageType::ImageStoreNativeFormats:
+                mState.mCaps.maxPixelLocalStoragePlanes =
+                    mState.mCaps.maxShaderImageUniforms[ShaderType::Fragment];
+                ANGLE_LIMIT_CAP(mState.mCaps.maxPixelLocalStoragePlanes,
+                                IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
+                mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage =
+                    maxDrawableAttachments;
+                mState.mCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes =
+                    std::min(maxDrawableAttachments + mState.mCaps.maxPixelLocalStoragePlanes,
+                             mState.mCaps.maxCombinedShaderOutputResources);
+                break;
+            case ShPixelLocalStorageType::FramebufferFetch:
+                mState.mCaps.maxPixelLocalStoragePlanes = maxDrawableAttachments;
+                ANGLE_LIMIT_CAP(mState.mCaps.maxPixelLocalStoragePlanes,
+                                IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
+                mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage =
+                    maxDrawableAttachments - 1;
+                mState.mCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes =
+                    maxDrawableAttachments;
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
     }
 
 #undef ANGLE_LIMIT_CAP

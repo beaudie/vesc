@@ -147,7 +147,7 @@ class PixelLocalStorage
 
     void begin(Context *, GLsizei n, const GLenum loadops[], const void *cleardata);
     void end(Context *);
-    virtual void barrier(Context *) = 0;
+    void barrier(Context *);
 
   protected:
     // Called when the context is lost or destroyed. Causes the subclass to clear its GL object
@@ -161,6 +161,8 @@ class PixelLocalStorage
                          Extents plsSize) = 0;
 
     virtual void onEnd(Context *, GLsizei numActivePLSPlanes) = 0;
+
+    virtual void onBarrier(Context *) = 0;
 
   private:
     std::array<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> mPlanes;
