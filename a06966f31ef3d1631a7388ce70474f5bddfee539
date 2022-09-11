@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4734601_a54cf863",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-11T05:02:18Z",
+      "side": 1,
+      "message": "This almost implements the rest of the spec, minus feedback loop detection, the ban list, and a few per-draw checks.\n\nAfter this change is when things get exciting! By implementing the extension as a frontend feature, plus a few tweaks to the compiler, I think we can get it working quickly on all the tilers, including Metal. We just need two more relatively small backends: EXT_framebuffer_fetch and EXT_shader_pixel_local_storage.\n\nAdd a fourth backend that uses texelFetch an glTextureBarrier and the extension is fully implemented!",
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "769e7a75_40ebb480",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-11T05:02:18Z",
+      "side": 1,
+      "message": "This seems really natural to me. I like it better than orphaning and it\u0027s also easier to implement.",
+      "range": {
+        "startLine": 637,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 19
+      },
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

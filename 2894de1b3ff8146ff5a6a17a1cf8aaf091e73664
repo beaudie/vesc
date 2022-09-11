@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d019974_bc714875",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-11T05:02:18Z",
+      "side": 0,
+      "message": "Virtually every GPU that has glTextureBarrier() also has way more texture units than we expose in ANGLE. For the texelFetch implemention, we can just bind to those extra texture units under the hood.",
+      "range": {
+        "startLine": 185,
+        "startChar": 6,
+        "endLine": 186,
+        "endChar": 80
+      },
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cf6c48f_faf533cd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-11T05:02:18Z",
+      "side": 0,
+      "message": "Not needed if we can use spare backend textures for the texelFetch implementation.",
+      "range": {
+        "startLine": 741,
+        "startChar": 0,
+        "endLine": 755,
+        "endChar": 39
+      },
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
