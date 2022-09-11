@@ -525,12 +525,154 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
     GLint mSavedFramebufferDefaultHeight;
     std::vector<ImageUnit> mSavedImageBindings;
 };
+
+// Implements pixel local storage via framebuffer fetch.
+class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
+{
+  public:
+    PixelLocalStorageFramebufferFetch(Context *angle) {}
+
+    void onContextObjectsLost() override {}
+
+    void onBegin(Context *angle,
+                 GLsizei n,
+                 const GLenum loadops[],
+                 const char *cleardata,
+                 Extents plsExtents) override
+    {
+        const State &state                              = angle->getState();
+        const Caps &caps                                = angle->getCaps();
+        Framebuffer *framebuffer                        = angle->getState().getDrawFramebuffer();
+        const DrawBuffersVector<GLenum> &appDrawBuffers = framebuffer->getDrawBufferStates();
+
+        // Remember the current draw buffer state so we can restore it during onEnd().
+        mSavedDrawBuffers.resize(appDrawBuffers.size());
+        std::copy(appDrawBuffers.begin(), appDrawBuffers.end(), mSavedDrawBuffers.begin());
+
+        // Set up new draw buffers for PLS.
+        int firstPLSDrawBuffer = caps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes - n;
+        DrawBuffersArray<GLenum> plsDrawBuffers;
+        GLenum *plsPos = std::copy(
+            appDrawBuffers.begin(),
+            appDrawBuffers.begin() + std::min((int)appDrawBuffers.size(), firstPLSDrawBuffer),
+            plsDrawBuffers.begin());
+        std::fill(plsPos, plsDrawBuffers.begin() + firstPLSDrawBuffer, GL_NONE);
+
+        mBlendsToReEnable.reset();
+        mInvalidateList.clear();
+        bool needsClear = false;
+
+        for (GLsizei i = 0; i < n; ++i)
+        {
+            // Bind the PLS attachments in reverse order from the rear. This way, the shader
+            // translator doesn't need to know how many planes are going to be active in order to
+            // figure out plane indices.
+            GLsizei drawBufferIdx = caps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes - i - 1;
+            GLenum loadop         = loadops[i];
+            if (loadop == GL_DISABLE_ANGLE)
+            {
+                plsDrawBuffers[drawBufferIdx] = GL_NONE;
+                continue;
+            }
+            PixelLocalStoragePlane &plane = getPlane(i);
+            ASSERT(!plane.isDeinitialized());
+            GLenum colorAttachment = GL_COLOR_ATTACHMENT0 + drawBufferIdx;
+            plane.attachToDrawFramebuffer(angle, plsExtents, colorAttachment);
+            plsDrawBuffers[drawBufferIdx] = colorAttachment;
+            if (state.isBlendEnabledIndexed(drawBufferIdx))
+            {
+                angle->disablei(GL_BLEND, drawBufferIdx);
+                mBlendsToReEnable.set(drawBufferIdx);
+            }
+            if (plane.isMemoryless())
+            {
+                mInvalidateList.push_back(colorAttachment);
+            }
+            needsClear |= loadop != GL_KEEP;
+        }
+
+        // Turn on the PLS draw buffers.
+        angle->drawBuffers(caps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes,
+                           plsDrawBuffers.data());
+
+        // Clear the non-KEEP PLS planes now that their draw buffers are turned on.
+        if (needsClear)
+        {
+            ScopedDisableScissor scopedDisableScissor(angle);
+            for (GLsizei i = 0; i < n; ++i)
+            {
+                GLenum loadop = loadops[i];
+                if (loadop != GL_DISABLE_ANGLE && loadop != GL_KEEP)
+                {
+                    GLsizei drawBufferIdx =
+                        caps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes - i - 1;
+                    getPlane(i).performLoadOperationClear(angle, drawBufferIdx, loadop,
+                                                          cleardata + i * 4 * 4);
+                }
+            }
+        }
+    }
+
+    void onEnd(Context *angle, GLint numActivePLSPlanes) override
+    {
+
+        const Caps &caps = angle->getCaps();
+
+        // Invalidate the memoryless PLS attachments.
+        if (!mInvalidateList.empty())
+        {
+            angle->invalidateFramebuffer(GL_DRAW_FRAMEBUFFER, (GLsizei)mInvalidateList.size(),
+                                         mInvalidateList.data());
+            mInvalidateList.clear();
+        }
+
+        // Restore blend state and detach the PLS textures. Validation should have ensured nothing
+        // else was attached at these points when glBeginPixelLocalStorageANGLE() was called, and
+        // that none of this changed while PLS was active, so we can just reset their attachment
+        // points.
+        for (GLsizei i = 0; i < numActivePLSPlanes; ++i)
+        {
+            GLsizei drawBufferIdx  = caps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes - i - 1;
+            GLenum colorAttachment = GL_COLOR_ATTACHMENT0 + drawBufferIdx;
+            angle->framebufferTexture2D(GL_DRAW_FRAMEBUFFER, colorAttachment, TextureTarget::_2D,
+                                        TextureID(), 0);
+            if (mBlendsToReEnable[drawBufferIdx])
+            {
+                angle->enablei(GL_BLEND, drawBufferIdx);
+            }
+        }
+
+        // Restore the draw buffer state from before PLS was enabled.
+        angle->drawBuffers((GLsizei)mSavedDrawBuffers.size(), mSavedDrawBuffers.data());
+        mSavedDrawBuffers.clear();
+    }
+
+    void barrier(Context *angle) override
+    {
+        ASSERT(!angle->getExtensions().shaderPixelLocalStorageCoherentANGLE);
+        angle->framebufferFetchBarrier();
+    }
+
+  private:
+    DrawBufferMask mBlendsToReEnable;
+    DrawBuffersVector<GLenum> mSavedDrawBuffers;
+    DrawBuffersVector<GLenum> mInvalidateList;
+};
 }  // namespace
 
 std::unique_ptr<PixelLocalStorage> PixelLocalStorage::Make(Context *angle)
 {
-    bool needsR32Packing = angle->getImplementation()->getNativePixelLocalStorageType() ==
-                           ShPixelLocalStorageType::ImageStoreR32PackedFormats;
-    return std::make_unique<PixelLocalStorageImageLoadStore>(angle, needsR32Packing);
+    switch (angle->getImplementation()->getNativePixelLocalStorageType())
+    {
+        case ShPixelLocalStorageType::ImageStoreR32PackedFormats:
+            return std::make_unique<PixelLocalStorageImageLoadStore>(angle, true);
+        case ShPixelLocalStorageType::ImageStoreNativeFormats:
+            return std::make_unique<PixelLocalStorageImageLoadStore>(angle, false);
+        case ShPixelLocalStorageType::FramebufferFetch:
+            return std::make_unique<PixelLocalStorageFramebufferFetch>(angle);
+        default:
+            UNREACHABLE();
+            return nullptr;
+    }
 }
 }  // namespace gl
