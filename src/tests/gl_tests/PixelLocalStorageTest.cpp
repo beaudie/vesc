@@ -1147,6 +1147,7 @@ TEST_P(PixelLocalStorageTest, LoadOnly)
     // Pass 1: draw to memoryless conditionally.
     useProgram(R"(
     layout(binding=0, r32f) highp uniform pixelLocalANGLE memoryless;
+    layout(binding=1, rgba8) highp uniform pixelLocalANGLE tex;
     void main()
     {
         // Omit braces on the 'if' to ensure proper insertion of memoryBarriers in the translator.
@@ -1156,7 +1157,9 @@ TEST_P(PixelLocalStorageTest, LoadOnly)
     drawBoxes({{FULLSCREEN}});
 
     // Pass 2: draw to tex conditionally.
+    // Don't touch memoryless -- make sure it gets preserved!
     useProgram(R"(
+    layout(binding=0, r32f) highp uniform pixelLocalANGLE memoryless;
     layout(binding=1, rgba8) highp uniform pixelLocalANGLE tex;
     void main()
     {
@@ -1451,9 +1454,6 @@ TEST_P(PixelLocalStorageTest, EarlyFragmentTests)
 // Check that if the "_coherent" extension is advertised, PLS operations are ordered and coherent.
 TEST_P(PixelLocalStorageTest, Coherency)
 {
-    // We could run this test with barriers and non-coherent, but it takes an extremely long time.
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
-
     useProgram(R"(
     layout(binding=0, rgba8ui) lowp uniform upixelLocalANGLE framebuffer;
     layout(binding=1, rgba8) lowp uniform pixelLocalANGLE tmp;
@@ -1490,13 +1490,20 @@ TEST_P(PixelLocalStorageTest, Coherency)
     std::vector<uint8_t> expected(H * W * 4);
     memset(expected.data(), 0, H * W * 4);
 
+    // This test times out on Swiftshader and noncoherent backends if we draw anywhere near the
+    // same number of boxes as we do on coherent, hardware backends.
+    int boxesPerList = !IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent") ||
+                               strstr((const char *)glGetString(GL_RENDERER), "SwiftShader")
+                           ? 200
+                           : H * W * 3;
+
     // Prepare a ton of random sized boxes in various draws.
     std::vector<Box> boxesList[5];
     srand(17);
     uint32_t boxID = 1;
     for (auto &boxes : boxesList)
     {
-        for (int i = 0; i < H * W * 11; ++i)
+        for (int i = 0; i < boxesPerList; ++i)
         {
             // Define a box.
             int w     = rand() % 10 + 1;
@@ -1751,40 +1758,51 @@ TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTest);
-ANGLE_INSTANTIATE_TEST(PixelLocalStorageTest,
-                       // D3D coherent.
-                       ES31_D3D11().enable(Feature::EmulatePixelLocalStorage),
-                       // D3D noncoherent.
-                       ES31_D3D11()
-                           .enable(Feature::DisableRasterizerOrderViews)
-                           .enable(Feature::EmulatePixelLocalStorage),
-                       // OpenGL coherent.
-                       ES31_OPENGL().enable(Feature::EmulatePixelLocalStorage),
-                       // OpenGL noncoherent.
-                       ES31_OPENGL()
-                           .enable(Feature::EmulatePixelLocalStorage)
-                           .disable(Feature::SupportsFragmentShaderInterlockNV)
-                           .disable(Feature::SupportsFragmentShaderOrderingINTEL)
-                           .disable(Feature::SupportsFragmentShaderInterlockARB),
-                       // OpenGL ES noncoherent.
-                       ES31_OPENGLES().enable(Feature::EmulatePixelLocalStorage),
-                       // Vulkan coherent.
-                       ES31_VULKAN().enable(Feature::EmulatePixelLocalStorage),
-                       // Vulkan noncoherent.
-                       ES31_VULKAN()
-                           .disable(Feature::SupportsFragmentShaderPixelInterlock)
-                           .enable(Feature::EmulatePixelLocalStorage),
-                       // Vulkan coherent, GLSL instead of SPIR-V: The coherent version of the
-                       // extension relies on ARB_fragment_shader_interlock. Ensure it works in
-                       // Vulkan GLSL.
-                       ES31_VULKAN()
-                           .enable(Feature::AsyncCommandQueue)
-                           .enable(Feature::EmulatePixelLocalStorage)
-                           .enable(Feature::GenerateSPIRVThroughGlslang),
-                       // Swiftshader.
-                       ES31_VULKAN_SWIFTSHADER()
-                           .enable(Feature::AsyncCommandQueue)
-                           .enable(Feature::EmulatePixelLocalStorage));
+ANGLE_INSTANTIATE_TEST(
+    PixelLocalStorageTest,
+    // D3D coherent.
+    ES31_D3D11().enable(Feature::EmulatePixelLocalStorage),
+    // D3D noncoherent.
+    ES31_D3D11()
+        .enable(Feature::DisableRasterizerOrderViews)
+        .enable(Feature::EmulatePixelLocalStorage),
+    // OpenGL coherent.
+    ES31_OPENGL().enable(Feature::EmulatePixelLocalStorage),
+    // OpenGL noncoherent.
+    ES31_OPENGL()
+        .enable(Feature::EmulatePixelLocalStorage)
+        .disable(Feature::SupportsFragmentShaderInterlockNV)
+        .disable(Feature::SupportsFragmentShaderOrderingINTEL)
+        .disable(Feature::SupportsFragmentShaderInterlockARB),
+    // OpenGL ES coherent.
+    ES31_OPENGLES().enable(Feature::EmulatePixelLocalStorage),
+    // OpenGL ES noncoherent.
+    ES31_OPENGLES()
+        .enable(Feature::EmulatePixelLocalStorage)
+        .disable(Feature::SupportsNativeShaderFramebufferFetchEXT),
+    // Vulkan coherent.
+    ES31_VULKAN().enable(Feature::AsyncCommandQueue).enable(Feature::EmulatePixelLocalStorage),
+    // Vulkan noncoherent.
+    ES31_VULKAN()
+        .disable(Feature::SupportsShaderFramebufferFetch)
+        .disable(Feature::SupportsFragmentShaderPixelInterlock)
+        .enable(Feature::EmulatePixelLocalStorage),
+    // Vulkan coherent, GLSL instead of SPIR-V: The coherent version of the
+    // extension relies on ARB_fragment_shader_interlock. Ensure it works in
+    // Vulkan GLSL.
+    ES31_VULKAN()
+        .enable(Feature::EmulatePixelLocalStorage)
+        .enable(Feature::GenerateSPIRVThroughGlslang),
+    // Swiftshader coherent (framebuffer fetch).
+    ES31_VULKAN_SWIFTSHADER()
+        .enable(Feature::AsyncCommandQueue)
+        .enable(Feature::EmulatePixelLocalStorage),
+    // Swiftshader noncoherent.
+    ES31_VULKAN_SWIFTSHADER()
+        .disable(Feature::SupportsShaderFramebufferFetch)
+        .disable(Feature::SupportsFragmentShaderPixelInterlock)
+        .enable(Feature::AsyncCommandQueue)
+        .enable(Feature::EmulatePixelLocalStorage));
 
 class PixelLocalStorageValidationTest : public ANGLETest<>
 {

@@ -173,9 +173,12 @@ void TranslatorESSL::writeExtensionBehavior(const ShCompileOptions &compileOptio
             }
             else if (iter->first == TExtension::ANGLE_shader_pixel_local_storage)
             {
-                // Don't emit anything. This extension is emulated on ES 3.1.
                 // TODO(anglebug.com/7279): future impl that uses EXT_shader_pixel_local_storage.
-                // TODO(anglebug.com/7279): future impl that uses EXT_shader_framebuffer_fetch.
+                if (compileOptions.pls.type == ShPixelLocalStorageType::FramebufferFetch)
+                {
+                    sink << "#extension GL_EXT_shader_framebuffer_fetch : "
+                         << GetBehaviorString(iter->second) << "\n";
+                }
                 continue;
             }
             else if (iter->first == TExtension::WEBGL_video_texture)
