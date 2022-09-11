@@ -4008,7 +4008,9 @@ ShPixelLocalStorageType RendererVk::getNativePixelLocalStorageType() const
     {
         return ShPixelLocalStorageType::NotSupported;
     }
-    return ShPixelLocalStorageType::ImageStoreNativeFormats;
+    return getFeatures().supportsShaderFramebufferFetch.enabled
+               ? ShPixelLocalStorageType::FramebufferFetch
+               : ShPixelLocalStorageType::ImageStoreNativeFormats;
 }
 
 void RendererVk::initializeFrontendFeatures(angle::FrontendFeatures *features) const
