@@ -1573,30 +1573,40 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLESExtension("GL_KHR_robust_buffer_access_behavior"));
 
     // ANGLE_shader_pixel_local_storage.
-    if (functions->isAtLeastGL(gl::Version(4, 2)) ||
-        functions->hasGLExtension("GL_ARB_shader_image_load_store"))
+    if (features.supportsNativeShaderFramebufferFetchEXT.enabled)
     {
-        // [ANGLE_shader_pixel_local_storage] "New Implementation Dependent State":
-        // MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE must be at least 4.
-        //
-        // MAX_FRAGMENT_IMAGE_UNIFORMS is at least 8 on Desktop Core and ARB.
-        extensions->shaderPixelLocalStorageANGLE = true;
+        // We can support PLS natively, probably in tiled memory.
+        extensions->shaderPixelLocalStorageANGLE         = true;
+        extensions->shaderPixelLocalStorageCoherentANGLE = true;
     }
-    else if (functions->isAtLeastGLES(gl::Version(3, 1)))
+    else
     {
-        // [ANGLE_shader_pixel_local_storage] "New Implementation Dependent State":
-        // MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE must be at least 4.
-        //
-        // ES 3.1, Table 20.44: MAX_FRAGMENT_IMAGE_UNIFORMS can be 0.
-        extensions->shaderPixelLocalStorageANGLE =
-            caps->maxShaderImageUniforms[gl::ShaderType::Fragment] >= 4;
-    }
-    if (extensions->shaderPixelLocalStorageANGLE)
-    {
-        extensions->shaderPixelLocalStorageCoherentANGLE =
-            features.supportsFragmentShaderInterlockNV.enabled ||
-            features.supportsFragmentShaderOrderingINTEL.enabled ||
-            features.supportsFragmentShaderInterlockARB.enabled;
+        // Can we polyfill PLS with shader image load/store?
+        if (functions->isAtLeastGL(gl::Version(4, 2)) ||
+            functions->hasGLExtension("GL_ARB_shader_image_load_store"))
+        {
+            // [ANGLE_shader_pixel_local_storage] "New Implementation Dependent State":
+            // MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE must be at least 4.
+            //
+            // MAX_FRAGMENT_IMAGE_UNIFORMS is at least 8 on Desktop Core and ARB.
+            extensions->shaderPixelLocalStorageANGLE = true;
+        }
+        else if (functions->isAtLeastGLES(gl::Version(3, 1)))
+        {
+            // [ANGLE_shader_pixel_local_storage] "New Implementation Dependent State":
+            // MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE must be at least 4.
+            //
+            // ES 3.1, Table 20.44: MAX_FRAGMENT_IMAGE_UNIFORMS can be 0.
+            extensions->shaderPixelLocalStorageANGLE =
+                caps->maxShaderImageUniforms[gl::ShaderType::Fragment] >= 4;
+        }
+        if (extensions->shaderPixelLocalStorageANGLE)
+        {
+            extensions->shaderPixelLocalStorageCoherentANGLE =
+                features.supportsFragmentShaderInterlockNV.enabled ||
+                features.supportsFragmentShaderOrderingINTEL.enabled ||
+                features.supportsFragmentShaderInterlockARB.enabled;
+        }
     }
 
     extensions->copyTextureCHROMIUM = true;
@@ -2353,6 +2363,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, supportsFragmentShaderInterlockARB,
                             functions->isAtLeastGL(gl::Version(4, 5)) &&
                                 functions->hasGLExtension("GL_ARB_fragment_shader_interlock"));
+
+    // ANGLE_shader_pixel_local_storage -- https://anglebug.com/7279
+    ANGLE_FEATURE_CONDITION(features, supportsNativeShaderFramebufferFetchEXT,
+                            functions->hasGLESExtension("GL_EXT_shader_framebuffer_fetch"));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

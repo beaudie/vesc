@@ -261,8 +261,8 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermSymbol *variable)
 
     CommaSeparatedListItemPrefixGenerator listItemPrefix;
 
-    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn ||
-        IsVarying(type.getQualifier()))
+    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut ||
+        type.getQualifier() == EvqVertexIn || IsVarying(type.getQualifier()))
     {
         if (layoutQualifier.location >= 0)
         {
@@ -1400,8 +1400,8 @@ bool NeedsToWriteLayoutQualifier(const TType &type)
 
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
 
-    if ((type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn ||
-         IsVarying(type.getQualifier())) &&
+    if ((type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut ||
+         type.getQualifier() == EvqVertexIn || IsVarying(type.getQualifier())) &&
         layoutQualifier.location >= 0)
     {
         return true;

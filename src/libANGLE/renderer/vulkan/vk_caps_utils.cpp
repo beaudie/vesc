@@ -1146,7 +1146,8 @@ void RendererVk::ensureCapsInitialized() const
     // GL_ANGLE_shader_pixel_local_storage
     mNativeExtensions.shaderPixelLocalStorageANGLE = true;
     mNativeExtensions.shaderPixelLocalStorageCoherentANGLE =
-        getFeatures().supportsFragmentShaderPixelInterlock.enabled;
+        getFeatures().supportsFragmentShaderPixelInterlock.enabled ||
+        getFeatures().supportsShaderFramebufferFetch.enabled;
 
     mNativeExtensions.logicOpANGLE = mPhysicalDeviceFeatures.logicOp == VK_TRUE;
 }
