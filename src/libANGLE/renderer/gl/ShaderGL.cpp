@@ -402,9 +402,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
                 options->pls.fragmentSynchronizationType =
                     ShFragmentSynchronizationType::FragmentShaderOrdering_INTEL_GL;
             }
-            else
+            else if (features.supportsFragmentShaderInterlockARB.enabled)
             {
-                ASSERT(features.supportsFragmentShaderInterlockARB.enabled);
                 // This extension requires 450+. GetShaderOutputType() should always select 450+ on
                 // a GL 4.5 context, where this extension is defined.
                 ASSERT(mRenderer->getFunctions()->isAtLeastGL(gl::Version(4, 5)));
