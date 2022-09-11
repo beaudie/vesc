@@ -1447,8 +1447,11 @@ TEST_P(PixelLocalStorageTest, EarlyFragmentTests)
 // Check that if the "_coherent" extension is advertised, PLS operations are ordered and coherent.
 TEST_P(PixelLocalStorageTest, Coherency)
 {
-    // We could run this test with barriers and non-coherent, but it takes an extremely long time.
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
+    printf("GL_VERSION=%s\n", glGetString(GL_VERSION));
+    printf("GL_RENDERER=%s\n", glGetString(GL_RENDERER));
+    printf("GL_ANGLE_shader_pixel_local_storage_coherent=%i\n",
+           IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
+    fflush(stdout);
 
     useProgram(R"(
     layout(binding=0, rgba8ui) lowp uniform upixelLocalANGLE framebuffer;
@@ -1486,13 +1489,20 @@ TEST_P(PixelLocalStorageTest, Coherency)
     std::vector<uint8_t> expected(H * W * 4);
     memset(expected.data(), 0, H * W * 4);
 
+    // This test times out on Swiftshader and noncoherent backends if we draw anywhere near the
+    // same number of boxes as we do on coherent, hardware backends.
+    int boxesPerList = !IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent") ||
+                               strstr((const char *)glGetString(GL_RENDERER), "SwiftShader")
+                           ? 200
+                           : H * W * 3;
+
     // Prepare a ton of random sized boxes in various draws.
     std::vector<Box> boxesList[5];
     srand(17);
     uint32_t boxID = 1;
     for (auto &boxes : boxesList)
     {
-        for (int i = 0; i < H * W * 11; ++i)
+        for (int i = 0; i < boxesPerList; ++i)
         {
             // Define a box.
             int w     = rand() % 10 + 1;
@@ -1645,8 +1655,12 @@ ANGLE_INSTANTIATE_TEST(PixelLocalStorageTest,
                            .disable(Feature::SupportsFragmentShaderInterlockNV)
                            .disable(Feature::SupportsFragmentShaderOrderingINTEL)
                            .disable(Feature::SupportsFragmentShaderInterlockARB),
-                       // OpenGL ES noncoherent.
+                       // OpenGL ES coherent.
                        ES31_OPENGLES().enable(Feature::EmulatePixelLocalStorage),
+                       // OpenGL ES noncoherent.
+                       ES31_OPENGLES()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .disable(Feature::SupportsNativeShaderFramebufferFetchEXT),
                        // Vulkan coherent.
                        ES31_VULKAN().enable(Feature::EmulatePixelLocalStorage),
                        // Vulkan noncoherent.
@@ -1660,10 +1674,15 @@ ANGLE_INSTANTIATE_TEST(PixelLocalStorageTest,
                            .enable(Feature::AsyncCommandQueue)
                            .enable(Feature::EmulatePixelLocalStorage)
                            .enable(Feature::GenerateSPIRVThroughGlslang),
-                       // Swiftshader.
+                       // Swiftshader coherent (framebuffer fetch).
                        ES31_VULKAN_SWIFTSHADER()
                            .enable(Feature::AsyncCommandQueue)
-                           .enable(Feature::EmulatePixelLocalStorage));
+                           .enable(Feature::EmulatePixelLocalStorage),
+                       // Swiftshader noncoherent.
+                       ES31_VULKAN_SWIFTSHADER()
+                           .enable(Feature::AsyncCommandQueue)
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .disable(Feature::SupportsShaderFramebufferFetch));
 
 class PixelLocalStorageValidationTest : public ANGLETest<>
 {
