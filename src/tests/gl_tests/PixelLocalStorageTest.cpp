@@ -1660,10 +1660,15 @@ ANGLE_INSTANTIATE_TEST(PixelLocalStorageTest,
                            .enable(Feature::AsyncCommandQueue)
                            .enable(Feature::EmulatePixelLocalStorage)
                            .enable(Feature::GenerateSPIRVThroughGlslang),
-                       // Swiftshader.
+                       // Swiftshader coherent (framebuffer fetch).
                        ES31_VULKAN_SWIFTSHADER()
                            .enable(Feature::AsyncCommandQueue)
-                           .enable(Feature::EmulatePixelLocalStorage));
+                           .enable(Feature::EmulatePixelLocalStorage),
+                       // Swiftshader noncoherent.
+                       ES31_VULKAN_SWIFTSHADER()
+                           .enable(Feature::AsyncCommandQueue)
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .disable(Feature::SupportsShaderFramebufferFetch));
 
 class PixelLocalStorageValidationTest : public ANGLETest<>
 {

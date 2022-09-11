@@ -20,7 +20,6 @@ namespace sh
 
 namespace
 {
-
 constexpr static TBasicType DataTypeOfPLSType(TBasicType plsType)
 {
     switch (plsType)
@@ -101,14 +100,41 @@ static TIntermNode *CreateBuiltInInterlockEndCall(const ShCompileOptions &compil
     }
 }
 
-// Rewrites high level PLS operations to shader image operations.
-class RewriteToImagesTraverser : public TIntermTraverser
+// Surrounds the critical section of PLS operations in fragment synchronization calls, if supported.
+// This makes pixel local storage coherent when built on images.
+static void InjectPLSFragmentSynchronization(TSymbolTable &symbolTable,
+                                             const ShCompileOptions &compileOptions,
+                                             TIntermBlock *mainBody)
+{
+    ASSERT(compileOptions.pls.type == ShPixelLocalStorageType::ImageStoreR32PackedFormats ||
+           compileOptions.pls.type == ShPixelLocalStorageType::ImageStoreNativeFormats);
+    TIntermNode *interlockBeginCall = CreateBuiltInInterlockBeginCall(compileOptions, symbolTable);
+    if (interlockBeginCall)
+    {
+        // TODO(anglebug.com/7279): Inject these functions in a tight critical section, instead of
+        // just locking the entire main() function:
+        //   - Monomorphize all PLS calls into main().
+        //   - Insert begin/end calls around the first/last PLS calls (and outside of flow control).
+        mainBody->insertStatement(0, interlockBeginCall);
+        TIntermNode *interlockEndCall = CreateBuiltInInterlockEndCall(compileOptions, symbolTable);
+        if (interlockEndCall)
+        {
+            // Not all fragment synchronization extensions have an end() call.
+            mainBody->appendStatement(interlockEndCall);
+        }
+    }
+}
+
+// Rewrites high level PLS operations to real GLSL.
+class RewritePLSTraverser : public TIntermTraverser
 {
   public:
-    RewriteToImagesTraverser(TSymbolTable &symbolTable,
-                             const ShCompileOptions &compileOptions,
-                             int shaderVersion)
+    RewritePLSTraverser(TCompiler *compiler,
+                        TSymbolTable &symbolTable,
+                        const ShCompileOptions &compileOptions,
+                        int shaderVersion)
         : TIntermTraverser(true, false, false, &symbolTable),
+          mCompiler(compiler),
           mCompileOptions(&compileOptions),
           mShaderVersion(shaderVersion)
     {}
@@ -133,20 +159,7 @@ class RewriteToImagesTraverser : public TIntermTraverser
         TIntermSymbol *plsSymbol = declVariable->getAsSymbolNode();
         ASSERT(plsSymbol);
 
-        // Insert a global to hold the pixel coordinate as soon as we see PLS declared. This will be
-        // initialized at the beginning of main().
-        if (!mGlobalPixelCoord)
-        {
-            TType *coordType  = new TType(EbtInt, EbpHigh, EvqGlobal, 2);
-            mGlobalPixelCoord = CreateTempVariable(mSymbolTable, coordType);
-            insertStatementInParentBlock(CreateTempDeclarationNode(mGlobalPixelCoord));
-        }
-
-        // Replace the PLS declaration with an image2D.
-        TVariable *image2D = createPLSImageReplacement(plsSymbol);
-        insertNewPLSImage(plsSymbol, image2D);
-        queueReplacement(new TIntermDeclaration({new TIntermSymbol(image2D)}),
-                         OriginalNode::IS_DROPPED);
+        visitPLSDeclaration(plsSymbol);
 
         return false;
     }
@@ -161,36 +174,20 @@ class RewriteToImagesTraverser : public TIntermTraverser
         const TIntermSequence &args = *aggregate->getSequence();
         ASSERT(args.size() >= 1);
         TIntermSymbol *plsSymbol = args[0]->getAsSymbolNode();
-        TVariable *image2D       = findPLSImage(plsSymbol);
-        ASSERT(mGlobalPixelCoord);
 
         // Rewrite pixelLocalLoadANGLE -> imageLoad.
         if (aggregate->getOp() == EOpPixelLocalLoadANGLE)
         {
-            // Replace the pixelLocalLoadANGLE with imageLoad.
-            TIntermTyped *pls;
-            pls = CreateBuiltInFunctionCallNode(
-                "imageLoad", {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord)},
-                *mSymbolTable, mShaderVersion);
-            pls = unpackImageDataIfNecessary(pls, plsSymbol, image2D);
-            queueReplacement(pls, OriginalNode::IS_DROPPED);
+            visitPLSLoad(plsSymbol);
             return false;  // No need to recurse since this node is being dropped.
         }
 
         // Rewrite pixelLocalStoreANGLE -> imageStore.
         if (aggregate->getOp() == EOpPixelLocalStoreANGLE)
         {
-            // Surround the store with memoryBarrierImage calls in order to ensure dependent stores
-            // and loads in a single shader invocation are coherent. From the ES 3.1 spec:
-            //
-            //   Using variables declared as "coherent" guarantees only that the results of stores
-            //   will be immediately visible to shader invocations using similarly-declared
-            //   variables; calling MemoryBarrier is required to ensure that the stores are visible
-            //   to other operations.
-            //
             // Also hoist the 'value' expression into a temp. In the event of
             // "pixelLocalStoreANGLE(..., pixelLocalLoadANGLE(...))", this ensures the load occurs
-            // _before_ the memoryBarrierImage.
+            // _before_ any potential barriers required by the subclass.
             //
             // NOTE: It is generally unsafe to hoist function arguments due to short circuiting,
             // e.g., "if (false && function(...))", but pixelLocalStoreANGLE returns type void, so
@@ -201,21 +198,9 @@ class RewriteToImagesTraverser : public TIntermTraverser
             TIntermDeclaration *valueDecl =
                 CreateTempInitDeclarationNode(valueVar, args[1]->getAsTyped());
             valueDecl->traverse(this);  // Rewrite any potential pixelLocalLoadANGLEs in valueDecl.
+            insertStatementInParentBlock(valueDecl);
 
-            insertStatementsInParentBlock(
-                {valueDecl, CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
-                                                          mShaderVersion)},  // Before.
-                {CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
-                                               mShaderVersion)});  // After.
-
-            // Rewrite the pixelLocalStoreANGLE with imageStore.
-            queueReplacement(CreateBuiltInFunctionCallNode(
-                                 "imageStore",
-                                 {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord),
-                                  clampAndPackPLSDataIfNecessary(valueVar, plsSymbol, image2D)},
-                                 *mSymbolTable, mShaderVersion),
-                             OriginalNode::IS_DROPPED);
-
+            visitPLSStore(plsSymbol, valueVar);
             return false;  // No need to recurse since this node is being dropped.
         }
 
@@ -224,28 +209,50 @@ class RewriteToImagesTraverser : public TIntermTraverser
 
     TVariable *globalPixelCoord() const { return mGlobalPixelCoord; }
 
-  private:
-    // Do all PLS formats need to be packed into r32f, r32i, or r32ui image2Ds?
-    bool needsR32Packing() const
+  protected:
+    virtual void visitPLSDeclaration(TIntermSymbol *plsSymbol)             = 0;
+    virtual void visitPLSLoad(TIntermSymbol *plsSymbol)                    = 0;
+    virtual void visitPLSStore(TIntermSymbol *plsSymbol, TVariable *value) = 0;
+
+    void ensureGlobalPixelCoordDeclared()
     {
-        return mCompileOptions->pls.type == ShPixelLocalStorageType::ImageStoreR32PackedFormats;
+        // Insert a global to hold the pixel coordinate as soon as we see PLS declared. This will be
+        // initialized at the beginning of main().
+        if (!mGlobalPixelCoord)
+        {
+            TType *coordType  = new TType(EbtInt, EbpHigh, EvqGlobal, 2);
+            mGlobalPixelCoord = CreateTempVariable(mSymbolTable, coordType);
+            insertStatementInParentBlock(CreateTempDeclarationNode(mGlobalPixelCoord));
+        }
     }
 
-    // Sets the given image2D as the backing storage for the plsSymbol's binding point. An entry
+    const TCompiler *const mCompiler;
+    const ShCompileOptions *const mCompileOptions;
+    const int mShaderVersion;
+
+    // Stores the shader invocation's pixel coordinate as "ivec2(floor(gl_FragCoord.xy))".
+    TVariable *mGlobalPixelCoord = nullptr;
+};
+
+// Maps PLS symbols to a TVariable * that holds their backing store.
+class PLSBackingStoreMap
+{
+  public:
+    // Sets the given variable as the backing storage for the plsSymbol's binding point. An entry
     // must not already exist in the map for this binding point.
-    void insertNewPLSImage(TIntermSymbol *plsSymbol, TVariable *image2D)
+    void insertNew(TIntermSymbol *plsSymbol, TVariable *backingStore)
     {
         ASSERT(plsSymbol);
         ASSERT(IsPixelLocal(plsSymbol->getBasicType()));
         int binding = plsSymbol->getType().getLayoutQualifier().binding;
         ASSERT(binding >= 0);
-        auto result = mPLSImages.insert({binding, image2D});
+        auto result = mPLSImages.insert({binding, backingStore});
         ASSERT(result.second);  // Ensure an image didn't already exist for this symbol.
     }
 
-    // Looks up the image2D backing storage for the given plsSymbol's binding point. An entry
-    // must already exist in the map for this binding point.
-    TVariable *findPLSImage(TIntermSymbol *plsSymbol)
+    // Looks up the backing store for the given plsSymbol's binding point. An entry must already
+    // exist in the map for this binding point.
+    TVariable *find(TIntermSymbol *plsSymbol)
     {
         ASSERT(plsSymbol);
         ASSERT(IsPixelLocal(plsSymbol->getBasicType()));
@@ -254,6 +261,38 @@ class RewriteToImagesTraverser : public TIntermTraverser
         auto iter = mPLSImages.find(binding);
         ASSERT(iter != mPLSImages.end());  // Ensure PLSImages already exist for this symbol.
         return iter->second;
+    }
+
+  private:
+    angle::HashMap<int, TVariable *> mPLSImages;
+};
+
+// Rewrites high level PLS operations to shader image operations.
+class RewritePLSToImagesTraverser : public RewritePLSTraverser
+{
+  public:
+    RewritePLSToImagesTraverser(TCompiler *compiler,
+                                TSymbolTable &symbolTable,
+                                const ShCompileOptions &compileOptions,
+                                int shaderVersion)
+        : RewritePLSTraverser(compiler, symbolTable, compileOptions, shaderVersion)
+    {}
+
+  private:
+    void visitPLSDeclaration(TIntermSymbol *plsSymbol) override
+    {
+        // Replace the PLS declaration with an image2D.
+        ensureGlobalPixelCoordDeclared();
+        TVariable *image2D = createPLSImageReplacement(plsSymbol);
+        mImages.insertNew(plsSymbol, image2D);
+        queueReplacement(new TIntermDeclaration({new TIntermSymbol(image2D)}),
+                         OriginalNode::IS_DROPPED);
+    }
+
+    // Do all PLS formats need to be packed into r32f, r32i, or r32ui image2Ds?
+    bool needsR32Packing() const
+    {
+        return mCompileOptions->pls.type == ShPixelLocalStorageType::ImageStoreR32PackedFormats;
     }
 
     // Creates an image2D that replaces a pixel local storage handle.
@@ -323,6 +362,18 @@ class RewriteToImagesTraverser : public TIntermTraverser
                              plsVar.extensions(), imageType);
     }
 
+    void visitPLSLoad(TIntermSymbol *plsSymbol) override
+    {
+        // Replace the pixelLocalLoadANGLE with imageLoad.
+        TVariable *image2D = mImages.find(plsSymbol);
+        ASSERT(mGlobalPixelCoord);
+        TIntermTyped *pls = CreateBuiltInFunctionCallNode(
+            "imageLoad", {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord)},
+            *mSymbolTable, mShaderVersion);
+        pls = unpackImageDataIfNecessary(pls, plsSymbol, image2D);
+        queueReplacement(pls, OriginalNode::IS_DROPPED);
+    }
+
     // Unpacks the raw PLS data if the output shader language needs r32* packing.
     TIntermTyped *unpackImageDataIfNecessary(TIntermTyped *data,
                                              TIntermSymbol *plsSymbol,
@@ -366,6 +417,35 @@ class RewriteToImagesTraverser : public TIntermTraverser
                 UNREACHABLE();
         }
         return data;
+    }
+
+    void visitPLSStore(TIntermSymbol *plsSymbol, TVariable *value) override
+    {
+        TVariable *image2D       = mImages.find(plsSymbol);
+        TIntermTyped *packedData = clampAndPackPLSDataIfNecessary(value, plsSymbol, image2D);
+
+        // Surround the store with memoryBarrierImage calls in order to ensure dependent stores and
+        // loads in a single shader invocation are coherent. From the ES 3.1 spec:
+        //
+        //   Using variables declared as "coherent" guarantees only that the results of stores will
+        //   be immediately visible to shader invocations using similarly-declared variables;
+        //   calling MemoryBarrier is required to ensure that the stores are visible to other
+        //   operations.
+        //
+        insertStatementsInParentBlock(
+            {CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
+                                           mShaderVersion)},  // Before.
+            {CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
+                                           mShaderVersion)});  // After.
+
+        // Rewrite the pixelLocalStoreANGLE with imageStore.
+        ASSERT(mGlobalPixelCoord);
+        queueReplacement(
+            CreateBuiltInFunctionCallNode(
+                "imageStore",
+                {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord), packedData},
+                *mSymbolTable, mShaderVersion),
+            OriginalNode::IS_DROPPED);
     }
 
     // Packs the PLS to raw data if the output shader language needs r32* packing.
@@ -477,23 +557,98 @@ class RewriteToImagesTraverser : public TIntermTraverser
         return TIntermAggregate::CreateConstructor(imageStoreType, {result});
     }
 
-    const ShCompileOptions *const mCompileOptions;
-    const int mShaderVersion;
-
-    // Stores the shader invocation's pixel coordinate as "ivec2(floor(gl_FragCoord.xy))".
-    TVariable *mGlobalPixelCoord = nullptr;
-
-    // Maps PLS variables to their image2D backing storage.
-    angle::HashMap<int, TVariable *> mPLSImages;
+    PLSBackingStoreMap mImages;
 };
 
+// Rewrites high level PLS operations to framebuffer fetch operations.
+class RewritePLSToFramebufferFetchTraverser : public RewritePLSTraverser
+{
+  public:
+    RewritePLSToFramebufferFetchTraverser(TCompiler *compiler,
+                                          TSymbolTable &symbolTable,
+                                          const ShCompileOptions &compileOptions,
+                                          int shaderVersion)
+        : RewritePLSTraverser(compiler, symbolTable, compileOptions, shaderVersion)
+    {}
+
+    void visitPLSDeclaration(TIntermSymbol *plsSymbol) override
+    {
+        const TVariable &plsVar = plsSymbol->variable();
+        const TType &plsType    = plsVar.getType();
+
+        // PLS attachments are bound in reverse order from the rear.
+        TLayoutQualifier layoutQualifier = TLayoutQualifier::Create();
+        layoutQualifier.location =
+            mCompiler->getResources().MaxCombinedDrawBuffersAndPixelLocalStoragePlanes -
+            plsType.getLayoutQualifier().binding - 1;
+
+        // Create a framebuffer attachment variable.
+        TType *attachmentType = new TType(DataTypeOfPLSType(plsType.getBasicType()), 4);
+        attachmentType->setQualifier(TQualifier::EvqFragmentInOut);
+        attachmentType->setPrecision(plsType.getPrecision());
+        attachmentType->setLayoutQualifier(layoutQualifier);
+        TVariable *attachment = new TVariable(plsVar.uniqueId(), plsVar.name(), plsVar.symbolType(),
+                                              plsVar.extensions(), attachmentType);
+
+        // Replace the PLS declaration with our framebuffer attachment.
+        mAttachments.insertNew(plsSymbol, attachment);
+        queueReplacement(new TIntermDeclaration({new TIntermSymbol(attachment)}),
+                         OriginalNode::IS_DROPPED);
+    }
+
+    void visitPLSLoad(TIntermSymbol *plsSymbol) override
+    {
+        // Read the framebuffer.
+        TVariable *attachment = mAttachments.find(plsSymbol);
+        TIntermTyped *data    = new TIntermSymbol(attachment);
+        data                  = SetUnusedComponentsToDefaultValues(data, plsSymbol);
+        queueReplacement(data, OriginalNode::IS_DROPPED);
+    }
+
+    void visitPLSStore(TIntermSymbol *plsSymbol, TVariable *value) override
+    {
+        // Output to the framebuffer.
+        TVariable *attachment = mAttachments.find(plsSymbol);
+        queueReplacement(
+            new TIntermBinary(EOpAssign, new TIntermSymbol(attachment), new TIntermSymbol(value)),
+            OriginalNode::IS_DROPPED);
+    }
+
+  private:
+    // Some implementations don't enforce default values on unused components when there are
+    // dependent loads in a single shader invocation.
+    static TIntermTyped *SetUnusedComponentsToDefaultValues(TIntermTyped *data,
+                                                            TIntermSymbol *plsSymbol)
+    {
+        switch (plsSymbol->getType().getLayoutQualifier().imageInternalFormat)
+        {
+            case EiifR32F:
+                // r32f loads as (r, 0, 0, 1).
+                data = TIntermAggregate::CreateConstructor(
+                    TType(EbtFloat, 4), {CreateSwizzle(data, 0), CreateFloatNode(0, EbpHigh),
+                                         CreateFloatNode(0, EbpHigh), CreateFloatNode(1, EbpHigh)});
+                break;
+            case EiifR32UI:
+                // r32ui loads as (r, 0, 0, 1).
+                data = TIntermAggregate::CreateConstructor(
+                    TType(EbtUInt, 4), {CreateSwizzle(data, 0), CreateUIntNode(0),
+                                        CreateUIntNode(0), CreateUIntNode(1)});
+                break;
+            default:
+                break;
+        }
+        return data;
+    }
+
+    PLSBackingStoreMap mAttachments;
+};
 }  // anonymous namespace
 
-bool RewritePixelLocalStorageToImages(TCompiler *compiler,
-                                      TIntermBlock *root,
-                                      TSymbolTable &symbolTable,
-                                      const ShCompileOptions &compileOptions,
-                                      int shaderVersion)
+bool RewritePixelLocalStorage(TCompiler *compiler,
+                              TIntermBlock *root,
+                              TSymbolTable &symbolTable,
+                              const ShCompileOptions &compileOptions,
+                              int shaderVersion)
 {
     // If any functions take PLS arguments, monomorphize the functions by removing said parameters
     // and making the PLS calls from main() instead, using the global uniform from the call site
@@ -508,28 +663,30 @@ bool RewritePixelLocalStorageToImages(TCompiler *compiler,
 
     TIntermBlock *mainBody = FindMainBody(root);
 
-    // Surround the critical section of PLS operations in fragment synchronization calls, if
-    // supported. This makes pixel local storage coherent.
-    TIntermNode *interlockBeginCall = CreateBuiltInInterlockBeginCall(compileOptions, symbolTable);
-    if (interlockBeginCall)
+    std::unique_ptr<RewritePLSTraverser> traverser;
+    switch (compileOptions.pls.type)
     {
-        // TODO(anglebug.com/7279): Inject these functions in a tight critical section, instead of
-        // just locking the entire main() function:
-        //   - Monomorphize all PLS calls into main().
-        //   - Insert begin/end calls around the first/last PLS calls (and outside of flow control).
-        mainBody->insertStatement(0, interlockBeginCall);
-        TIntermNode *interlockEndCall = CreateBuiltInInterlockEndCall(compileOptions, symbolTable);
-        if (interlockEndCall)
-        {
-            // Not all fragment synchronization extensions have an end() call.
-            mainBody->appendStatement(interlockEndCall);
-        }
+        case ShPixelLocalStorageType::ImageStoreR32PackedFormats:
+        case ShPixelLocalStorageType::ImageStoreNativeFormats:
+            InjectPLSFragmentSynchronization(symbolTable, compileOptions, mainBody);
+            traverser = std::make_unique<RewritePLSToImagesTraverser>(
+                compiler, symbolTable, compileOptions, shaderVersion);
+            // When PLS is implemented with images, early_fragment_tests ensure that depth/stencil
+            // can also block stores to PLS.
+            compiler->specifyEarlyFragmentTests();
+            break;
+        case ShPixelLocalStorageType::FramebufferFetch:
+            traverser = std::make_unique<RewritePLSToFramebufferFetchTraverser>(
+                compiler, symbolTable, compileOptions, shaderVersion);
+            break;
+        default:
+            UNREACHABLE();
+            return false;
     }
 
     // Rewrite PLS operations to image operations.
-    RewriteToImagesTraverser traverser(symbolTable, compileOptions, shaderVersion);
-    root->traverse(&traverser);
-    if (!traverser.updateTree(compiler, root))
+    root->traverse(traverser.get());
+    if (!traverser->updateTree(compiler, root))
     {
         return false;
     }
@@ -538,14 +695,14 @@ bool RewritePixelLocalStorageToImages(TCompiler *compiler,
     //
     //     pixelCoord = ivec2(floor(gl_FragCoord.xy));
     //
-    if (traverser.globalPixelCoord())
+    if (traverser->globalPixelCoord())
     {
         TIntermTyped *exp;
         exp = ReferenceBuiltInVariable(ImmutableString("gl_FragCoord"), symbolTable, shaderVersion);
         exp = CreateSwizzle(exp, 0, 1);
         exp = CreateBuiltInFunctionCallNode("floor", {exp}, symbolTable, shaderVersion);
         exp = TIntermAggregate::CreateConstructor(TType(EbtInt, 2), {exp});
-        exp = CreateTempAssignmentNode(traverser.globalPixelCoord(), exp);
+        exp = CreateTempAssignmentNode(traverser->globalPixelCoord(), exp);
         mainBody->insertStatement(0, exp);
     }
 
