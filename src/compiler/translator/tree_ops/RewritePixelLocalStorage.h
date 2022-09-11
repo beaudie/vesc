@@ -18,11 +18,11 @@ class TSymbolTable;
 
 // This mutating tree traversal rewrites high level ANGLE_shader_pixel_local_storage operations to
 // shader image operations.
-[[nodiscard]] bool RewritePixelLocalStorageToImages(TCompiler *compiler,
-                                                    TIntermBlock *root,
-                                                    TSymbolTable &symbolTable,
-                                                    const ShCompileOptions &compileOptions,
-                                                    int shaderVersion);
+[[nodiscard]] bool RewritePixelLocalStorage(TCompiler *compiler,
+                                            TIntermBlock *root,
+                                            TSymbolTable &symbolTable,
+                                            const ShCompileOptions &compileOptions,
+                                            int shaderVersion);
 
 }  // namespace sh
 
