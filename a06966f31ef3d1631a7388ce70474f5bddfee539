@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7159c559_f96b114a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-11T05:19:52Z",
+      "side": 1,
+      "message": "Oh, and a fifth that does noncoherent subpass loads for Vulkan and Metal.",
+      "parentUuid": "b4734601_a54cf863",
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "769e7a75_40ebb480",
