@@ -263,6 +263,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::SupportsMultisampledRenderToSingleSampledGOOGLEX,
      "supportsMultisampledRenderToSingleSampledGOOGLEX"},
     {Feature::SupportsMultiview, "supportsMultiview"},
+    {Feature::SupportsNativeShaderFramebufferFetchEXT, "supportsNativeShaderFramebufferFetchEXT"},
     {Feature::SupportsNegativeViewport, "supportsNegativeViewport"},
     {Feature::SupportsPipelineCreationCacheControl, "supportsPipelineCreationCacheControl"},
     {Feature::SupportsPipelineCreationFeedback, "supportsPipelineCreationFeedback"},

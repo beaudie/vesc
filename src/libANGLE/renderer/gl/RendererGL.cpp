@@ -337,10 +337,16 @@ ShPixelLocalStorageType RendererGL::getNativePixelLocalStorageType() const
     {
         return ShPixelLocalStorageType::NotSupported;
     }
+    if (mFeatures.supportsNativeShaderFramebufferFetchEXT.enabled)
+    {
+        return ShPixelLocalStorageType::FramebufferFetch;
+    }
+    if (getFunctions()->standard == StandardGL::STANDARD_GL_DESKTOP)
+    {
+        return ShPixelLocalStorageType::ImageStoreNativeFormats;
+    }
     // OpenGL ES only allows read/write access to "r32*" images.
-    return getFunctions()->standard == StandardGL::STANDARD_GL_ES
-               ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
-               : ShPixelLocalStorageType::ImageStoreNativeFormats;
+    return ShPixelLocalStorageType::ImageStoreR32PackedFormats;
 }
 
 MultiviewImplementationTypeGL RendererGL::getMultiviewImplementationType() const
