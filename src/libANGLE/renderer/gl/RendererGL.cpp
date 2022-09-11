@@ -337,7 +337,20 @@ ShPixelLocalStorageType RendererGL::getNativePixelLocalStorageType() const
     {
         return ShPixelLocalStorageType::NotSupported;
     }
-    // OpenGL ES only allows read/write access to "r32*" images.
+    if (mFeatures.supportsNativeShaderFramebufferFetchEXT.enabled)
+    {
+        // We have coherent EXT_shader_framebuffer_fetch.
+        ASSERT(getNativeExtensions().shaderPixelLocalStorageCoherentANGLE);
+        return ShPixelLocalStorageType::FramebufferFetch;
+    }
+    if (mFeatures.supportsNativeShaderFramebufferFetchNonCoherentEXT.enabled &&
+        !getNativeExtensions().shaderPixelLocalStorageCoherentANGLE)
+    {
+        // Only use EXT_shader_framebuffer_fetch_non_coherent if coherent shader images aren't an
+        // option.
+        return ShPixelLocalStorageType::FramebufferFetch;
+    }
+    // Use shader images, but OpenGL ES only allows read/write access to "r32*" images.
     return getFunctions()->standard == StandardGL::STANDARD_GL_ES
                ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
                : ShPixelLocalStorageType::ImageStoreNativeFormats;
