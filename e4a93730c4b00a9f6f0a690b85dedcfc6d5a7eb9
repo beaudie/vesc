@@ -22,6 +22,30 @@
       },
       "revId": "e4a93730c4b00a9f6f0a690b85dedcfc6d5a7eb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3391cbe_cabcf925",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-12T23:27:02Z",
+      "side": 1,
+      "message": "Done, captured return value and swallowed error",
+      "parentUuid": "9c03cadb_67e1fb92",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 28
+      },
+      "revId": "e4a93730c4b00a9f6f0a690b85dedcfc6d5a7eb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
