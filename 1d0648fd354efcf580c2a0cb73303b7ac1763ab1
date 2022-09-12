@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b348ca4b_b92eabe3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-12T13:58:38Z",
+      "side": 1,
+      "message": "Right now only thing that can write to an index buffer is transform feedback (which is part of a render command encoder). If provoking vertex index buffer needs to be updated, a new compute command encoder will start (ending the previous render command encoder).\n\nI think it\u0027s fine?",
+      "parentUuid": "968687ad_f6ccec9b",
+      "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c96bcd7e_aca08cf3",

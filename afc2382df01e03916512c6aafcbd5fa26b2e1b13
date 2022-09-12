@@ -33,6 +33,23 @@
       "message": "Awesome work on the new tests! Still lgtm.\n",
       "revId": "afc2382df01e03916512c6aafcbd5fa26b2e1b13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "638bf60a_166a756d",
+        "filename": "src/libANGLE/renderer/metal/ProvokingVertexHelper.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-12T13:58:38Z",
+      "side": 1,
+      "message": "I think we should use the `encoder` passed through an argument of this function?\n\nThe encoder is passed from `preconditionIndexBuffer`/`generateIndexBuffer` below, and it is obtained by calling `getComputeCommandEncoderWithoutEndingRenderEncoder` there.\n\nBy using `getComputeCommandEncoder` here, the active render encoder will always be ended regardless of whether `getComputeCommandEncoderWithoutEndingRenderEncoder` is used priorly or not.",
+      "revId": "afc2382df01e03916512c6aafcbd5fa26b2e1b13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
