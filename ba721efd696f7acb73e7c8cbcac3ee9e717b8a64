@@ -34,6 +34,24 @@
       "parentUuid": "dcd5259b_7f2df7e3",
       "revId": "ba721efd696f7acb73e7c8cbcac3ee9e717b8a64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b8d2325_71f11793",
+        "filename": "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-12T23:04:16Z",
+      "side": 0,
+      "message": "i believe this has been adequately addressed, Ian if you feel otherwise please comment when you are back and i will take a look",
+      "parentUuid": "2dbf3d28_c19ce3fb",
+      "revId": "ba721efd696f7acb73e7c8cbcac3ee9e717b8a64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
