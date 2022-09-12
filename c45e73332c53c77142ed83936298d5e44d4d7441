@@ -20,6 +20,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "06f8a058_79867060",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-09-12T16:45:32Z",
+      "side": 1,
+      "message": "nit, not related to the primary purpose of the CL.\n\nPersonally this *Linux* is confusing to me. (and the *windows* below). Should this be *using Linux host* or something to avoid confusion with a Linux build?",
+      "revId": "c45e73332c53c77142ed83936298d5e44d4d7441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2430372c_52dd55ac",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-09-12T16:45:32Z",
+      "side": 1,
+      "message": "should we mention the cache to delete before rebuild?  remember the fragmentation fault that I had, which was resolved by deleting the cache files and rebuild?",
+      "revId": "c45e73332c53c77142ed83936298d5e44d4d7441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c719dc18_83ed8f96",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 2
