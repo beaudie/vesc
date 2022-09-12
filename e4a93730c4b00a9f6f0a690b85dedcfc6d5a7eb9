@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c03cadb_67e1fb92",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-12T20:03:56Z",
+      "side": 1,
+      "message": "can you leave this as returning an error? It\u0027s better to swallow the error in the last step possible because of how bad swallowing errors is.",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 28
+      },
+      "revId": "e4a93730c4b00a9f6f0a690b85dedcfc6d5a7eb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

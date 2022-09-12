@@ -185,6 +185,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ed23e3f1_be173015",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-12T20:03:56Z",
+      "side": 1,
+      "message": "Please revert this part - propagate errors as much as possible to make it easier to handle this error correctly later on.",
+      "parentUuid": "05620ae5_e654b719",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5ff0dd8_2dd46422",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 8
