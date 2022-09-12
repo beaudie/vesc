@@ -69,6 +69,24 @@
       "parentUuid": "66c972e0_3e147e0e",
       "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d772edf0_3a690a59",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-12T16:43:32Z",
+      "side": 1,
+      "message": "FYI there is a cost just to executing instructions even if you disregard the branch entirely. My work on optimizing draw call paths showed that any if statement can have an impact even if the code execution only visits one path 100% of the time.",
+      "parentUuid": "db8897e8_bf8ffb6f",
+      "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
