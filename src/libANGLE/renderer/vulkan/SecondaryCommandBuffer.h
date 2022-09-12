@@ -1097,7 +1097,10 @@ ANGLE_INLINE void SecondaryCommandBuffer::bindDescriptorSets(const PipelineLayou
     paramStruct->dynamicOffsetCount = dynamicOffsetCount;
     // Copy variable sized data
     writePtr = storePointerParameter(writePtr, descriptorSets, descSize);
-    storePointerParameter(writePtr, dynamicOffsets, offsetSize);
+    if (offsetSize)
+    {
+        storePointerParameter(writePtr, dynamicOffsets, offsetSize);
+    }
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::bindGraphicsPipeline(const Pipeline &pipeline)
