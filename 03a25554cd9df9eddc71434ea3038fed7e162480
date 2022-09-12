@@ -87,6 +87,24 @@
       "parentUuid": "db8897e8_bf8ffb6f",
       "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca086ab5_601dbc87",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-12T17:13:23Z",
+      "side": 1,
+      "message": "Well, it\u0027s obvious that more instructions equals more time.\nHowever, did you observe this for branch instructions as well?\nI\u0027d assume that the CPU would just execute the 2 branches in parallel, and parallel to that, also check the condition and decide which branch is the right one.\nI.e. \"if\" and \"memcpy\" should run in parallel to each other, so I\u0027d expect the slowdown to be minimal.\n\nAnyway, there was one more place where I needed to add a check and UBSAN passes again now, PTAL.",
+      "parentUuid": "d772edf0_3a690a59",
+      "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
