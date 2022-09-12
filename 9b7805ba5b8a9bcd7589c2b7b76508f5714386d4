@@ -16,6 +16,23 @@
       "message": "friendly ping!",
       "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b880d454_0a82380a",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-09-12T17:23:52Z",
+      "side": 1,
+      "message": "Wouldn\u0027t this be a problem for any current or future devices using a vulkan backend that don\u0027t support this extension?\n\nWhat was the reason that the extension isn\u0027t queried?",
+      "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
