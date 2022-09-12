@@ -51,6 +51,24 @@
       "parentUuid": "caa807f4_11d296d5",
       "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8897e8_bf8ffb6f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-12T16:27:03Z",
+      "side": 1,
+      "message": "But note that CPU\u0027s execution prediction is \u003e 99% correct for such cases, so this probably doesn\u0027t affect performance and is more correct.",
+      "parentUuid": "66c972e0_3e147e0e",
+      "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
