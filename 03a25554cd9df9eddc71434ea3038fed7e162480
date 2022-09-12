@@ -105,6 +105,24 @@
       "parentUuid": "d772edf0_3a690a59",
       "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a0c724f_72eaa881",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-12T17:23:39Z",
+      "side": 1,
+      "message": "Alls I can say for sure is that removing if instructions can improve performance even if the conditional expression is basically invariant. There\u0027s no guarantee it will improve performance measurably, but it certainly can, especially when combined with other optimizations.",
+      "parentUuid": "ca086ab5_601dbc87",
+      "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
