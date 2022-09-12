@@ -33,6 +33,24 @@
       "message": "Wouldn\u0027t this be a problem for any current or future devices using a vulkan backend that don\u0027t support this extension?\n\nWhat was the reason that the extension isn\u0027t queried?",
       "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f58b86ed_73a33d72",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-12T17:28:08Z",
+      "side": 1,
+      "message": "\u003e What was the reason that the extension isn\u0027t queried?\n\nnot sure i understand, the feature `supportsSurfacelessQueryExtension` is enabled only if the `VK_GOOGLE_surfaceless_query` extension is supported in RendererVk.cpp.\n\n\u003e using a vulkan backend that don\u0027t support this extension\n\nthen those platforms are out of luck since we need `VK_GOOGLE_surfaceless_query` extension so we can call `vkGetPhysicalDeviceSurfaceFormats2KHR` with a null surface handle",
+      "parentUuid": "b880d454_0a82380a",
+      "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
