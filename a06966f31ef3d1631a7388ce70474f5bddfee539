@@ -74,6 +74,23 @@
       },
       "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f752d04a_447aedc9",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 19
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-12T09:02:21Z",
+      "side": 1,
+      "message": "Please beware of this change: https://chromium-review.googlesource.com/c/angle/angle/+/3856649\n\nFrom now on we\u0027ll be upstream these a la https://github.com/KhronosGroup/OpenGL-Registry/pull/538",
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
