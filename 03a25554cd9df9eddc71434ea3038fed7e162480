@@ -16,6 +16,23 @@
       "message": "Shabi or Cody, PTAL, should fix UBSAN problem.",
       "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caa807f4_11d296d5",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-12T16:16:59Z",
+      "side": 1,
+      "message": "This `if` is in a hot path, and most of the times completely unnecessary. Could you instead place it in `SecondaryCommandBuffer::bindDescriptorSets` around this?\n\n```\n    storePointerParameter(writePtr, dynamicOffsets, offsetSize);\n```\n\nIf UBSAN catches is failing on another instance too, we could add an if there too.",
+      "revId": "03a25554cd9df9eddc71434ea3038fed7e162480",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
