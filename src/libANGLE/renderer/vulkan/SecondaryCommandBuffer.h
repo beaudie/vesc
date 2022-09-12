@@ -997,7 +997,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                                 const PtrType *paramData,
                                                 size_t sizeInBytes)
     {
-        memcpy(writePointer, paramData, sizeInBytes);
+        if (sizeInBytes)
+        {
+            memcpy(writePointer, paramData, sizeInBytes);
+        }
         return writePointer + sizeInBytes;
     }
 
