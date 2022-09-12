@@ -17,8 +17,6 @@ using namespace angle;
 //
 // NOTE: the hope is for this to eventually move into ANGLE.
 
-#define GL_DISABLE_ANGLE 0xbaadbeef
-
 constexpr static int MAX_LOCAL_STORAGE_PLANES                = 3;
 constexpr static int MAX_FRAGMENT_OUTPUTS_WITH_LOCAL_STORAGE = 1;
 

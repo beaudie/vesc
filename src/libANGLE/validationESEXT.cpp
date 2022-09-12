@@ -1567,6 +1567,43 @@ bool ValidateImportSemaphoreZirconHandleANGLE(const Context *context,
     return true;
 }
 
+bool ValidateFramebufferMemorylessPixelLocalStorageANGLE(const Context *context,
+                                                         angle::EntryPoint entryPoint,
+                                                         GLint plane,
+                                                         GLenum internalformat)
+{
+    UNIMPLEMENTED();
+}
+
+bool ValidateFramebufferTexturePixelLocalStorageANGLE(const Context *context,
+                                                      angle::EntryPoint entryPoint,
+                                                      GLint plane,
+                                                      TextureID backingtexture,
+                                                      GLint level,
+                                                      GLint layer)
+{
+    UNIMPLEMENTED();
+}
+
+bool ValidateBeginPixelLocalStorageANGLE(const Context *context,
+                                         angle::EntryPoint entryPoint,
+                                         GLsizei planes,
+                                         const GLenum loadops[],
+                                         const void *cleardata)
+{
+    UNIMPLEMENTED();
+}
+
+bool ValidateEndPixelLocalStorageANGLE(const Context *context, angle::EntryPoint entryPoint)
+{
+    UNIMPLEMENTED();
+}
+
+bool ValidatePixelLocalStorageBarrierANGLE(const Context *context, angle::EntryPoint entryPoint)
+{
+    UNIMPLEMENTED();
+}
+
 bool ValidateFramebufferFetchBarrierEXT(const Context *context, angle::EntryPoint entryPoint)
 {
     return true;
