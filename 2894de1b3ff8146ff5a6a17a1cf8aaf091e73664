@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35773a3_58fa353c",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-12T23:20:34Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is a step forward for future JavaScript bindings of this extension. At the JS level, what would the argument type be? Per https://registry.khronos.org/webgl/specs/latest/1.0/ - probably sequence\u0026lt;GLfloat\u0026gt, or an ArrayBuffer which was packed together using DataView. A sequence of \"any\" would lead to developer confusion - what are the elements of the sequence? Under the hood, the Blink engine\u0027s C++ code will need to keep track of the formats of all of the pixel local storage planes, to know whether to coerce each 4-tuple into a float or an int before repacking it for the call to BeginPixelLocalStorageANGLE.\n\nIf you really want to go in this direction I\u0027ll approve this, but the developer ergonomics seem poor.",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
