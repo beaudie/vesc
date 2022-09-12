@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a3e42f_b3592b73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-09-12T17:43:59Z",
+      "side": 1,
+      "message": "LGTM,\n\nI would like to see Ian come through and clear out his comment below, but I believe that you adequately addressed his concern.",
+      "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b880d454_0a82380a",
@@ -49,6 +66,24 @@
       "side": 1,
       "message": "\u003e What was the reason that the extension isn\u0027t queried?\n\nnot sure i understand, the feature `supportsSurfacelessQueryExtension` is enabled only if the `VK_GOOGLE_surfaceless_query` extension is supported in RendererVk.cpp.\n\n\u003e using a vulkan backend that don\u0027t support this extension\n\nthen those platforms are out of luck since we need `VK_GOOGLE_surfaceless_query` extension so we can call `vkGetPhysicalDeviceSurfaceFormats2KHR` with a null surface handle",
       "parentUuid": "b880d454_0a82380a",
+      "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62543e25_9467acf1",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-09-12T17:43:59Z",
+      "side": 1,
+      "message": "I see now that isConfigFormatSupported is only called when \n\n    if (!getRenderer()-\u003egetFeatures().supportsSurfacelessQueryExtension.enabled)\n\nis false",
+      "parentUuid": "f58b86ed_73a33d72",
       "revId": "9b7805ba5b8a9bcd7589c2b7b76508f5714386d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
