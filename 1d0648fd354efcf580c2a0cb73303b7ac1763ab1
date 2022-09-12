@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8193d827_4d1f2340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-09-12T16:06:08Z",
+      "side": 1,
+      "message": "I think it should work, if there\u0027s a pending CPU write I think we just need to call didModifyRange. GPU Write to GPU Read synchronization should be handled by the driver.",
+      "parentUuid": "968687ad_f6ccec9b",
+      "revId": "1d0648fd354efcf580c2a0cb73303b7ac1763ab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c96bcd7e_aca08cf3",
