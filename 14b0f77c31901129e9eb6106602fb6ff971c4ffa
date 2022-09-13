@@ -22,6 +22,23 @@
       },
       "revId": "14b0f77c31901129e9eb6106602fb6ff971c4ffa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e52268a_17a377f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T17:22:56Z",
+      "side": 1,
+      "message": "I held off reviewing this because I thought we would be switching to `retrace_restricted_traces.py` for MEC coverage.  But this looks valuable too, so good to land, although I think we still want to establish MEC coverage with retracing.",
+      "revId": "14b0f77c31901129e9eb6106602fb6ff971c4ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
