@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure this is a step forward for future JavaScript bindings of this extension. At the JS level, what would the argument type be? Per https://registry.khronos.org/webgl/specs/latest/1.0/ - probably sequence\u0026lt;GLfloat\u0026gt, or an ArrayBuffer which was packed together using DataView. A sequence of \"any\" would lead to developer confusion - what are the elements of the sequence? Under the hood, the Blink engine\u0027s C++ code will need to keep track of the formats of all of the pixel local storage planes, to know whether to coerce each 4-tuple into a float or an int before repacking it for the call to BeginPixelLocalStorageANGLE.\n\nIf you really want to go in this direction I\u0027ll approve this, but the developer ergonomics seem poor.",
       "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40d16f0c_5ba1cc70",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-13T00:19:58Z",
+      "side": 1,
+      "message": "\u003e probably sequence\u0026lt;GLfloat\u0026gt, or an ArrayBuffer which was packed together using DataView.\n\nI was worried about this too, but then I thought we could make it take a plain JavaScript `Array` like drawBuffers:\n\n```\n gl.beginPixelLocalStorageANGLE(2,\n                                [gl.CLEAR_ANGLE, gl.CLEAR_ANGLE],\n                                [0.5, 0.5, 0.5, 0.5, // floats\n                                 1, -1, -3, -40]); // ints\n```\n\n\u003e A sequence of \"any\" would lead to developer confusion - what are the elements of the sequence?\n\nDo you still think it\u0027s confusing taking an `Array` like above?\n\nEither way, I agree that the C API has poor ergonomics requiring the developer to basically memcpy something together.\n\n\u003e Under the hood, the Blink engine\u0027s C++ code will need to keep track of the formats of all of the pixel local storage planes, to know whether to coerce each 4-tuple into a float or an int before repacking it for the call to BeginPixelLocalStorageANGLE.\n\nVery true. Is there any machinery in Blink for shadowing framebuffer state already? Or has Blink managed to get away so far without having to do that? If not, that\u0027s a strong argument against doing it this way.\n\nI had two concerns with the API as-is:\n\n1) The spec and implementation will get pretty hefty. In addition to implementing these methods, we will have to take 3 more GLenums and provide state queries for all types of clear values:\n\n```\n    PIXEL_LOCAL_CLEAR_VALUE_FLOAT_ANGLE\n    PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE\n    PIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE\n```\n\nPIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE is a little awkward because the value is returned as an int, and I understand that it isn\u0027t strictly valid C++ to assume two\u0027s compliment, but is it always valid to pun int to an unsigned int? Is there a precedent for this? Also, what is the WebGL2 analog to glGetIntegeri_v?\n\n2) I think it\u0027s a little awkward to split up the loadOp and clear value -- loadOps are currently passed as function arguments and the clear values are framebuffer state. Would it make more sense for the loadOp and clear value both to be framebuffer state?\n\nI don\u0027t have a strong opinion on this one as long as the API can support clear loads. If we can resolve #1 and #2 I\u0027m happy to implement it either way!",
+      "parentUuid": "b35773a3_58fa353c",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
