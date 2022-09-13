@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 305
+#define ANGLE_SH_VERSION 306
 
 enum ShShaderSpec
 {
@@ -140,6 +140,9 @@ struct ShCompileOptions
     // functionality mandated in GLSL 1.0 spec, Appendix A, Section 4 and 5.  There is no need to
     // specify this parameter when compiling for WebGL - it is implied.
     uint64_t validateLoopIndexing : 1;
+
+    // Emit support code for GLES1 emulation.
+    uint64_t isGLES1 : 1;
 
     // Emits #line directives in HLSL.
     uint64_t lineDirectives : 1;
@@ -930,6 +933,19 @@ constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesOffset     = 12;
 constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesMask       = 0xFF;
 constexpr uint32_t kDriverUniformsMiscTransformDepthOffset        = 20;
 constexpr uint32_t kDriverUniformsMiscTransformDepthMask          = 0x1;
+
+// Packing information for driver uniform's logicOp field (used for GLES1):
+// - 4x4 bits for channel width
+// - 2 bits for source modifier (0, s, ~s, 1)
+// - 2 bits for dest modifier (0, d, ~d, 1)
+// - 2 bits for operator (disable logic op, &, |, ^)
+constexpr uint32_t kDriverUniformsLogicOpChannelWidthMask  = 0xFFFF;
+constexpr uint32_t kDriverUniformsLogicOpSrcModifierOffset = 16;
+constexpr uint32_t kDriverUniformsLogicOpSrcModifierMask   = 0x3;
+constexpr uint32_t kDriverUniformsLogicOpDstModifierOffset = 18;
+constexpr uint32_t kDriverUniformsLogicOpDstModifierMask   = 0x3;
+constexpr uint32_t kDriverUniformsLogicOpOpOffset          = 20;
+constexpr uint32_t kDriverUniformsLogicOpOpMask            = 0x3;
 
 // Interface block array name used for atomic counter emulation
 extern const char kAtomicCountersBlockName[];
