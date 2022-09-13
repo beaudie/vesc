@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0506a430_1ee44bee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T02:51:17Z",
+      "side": 1,
+      "message": "I personally _much_ prefer loadOps to not be state. Like if I clear a PLS once, I don\u0027t want that to be \"sticky\". Clear values are fine to be a state IMO, I could see them being set once to like black and reused for all render passes.",
+      "parentUuid": "604d610c_ec25c057",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b35773a3_58fa353c",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 4
