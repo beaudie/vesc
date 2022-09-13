@@ -2677,6 +2677,87 @@ void CaptureVertexPointerES1(std::vector<CallCapture> *setupCalls,
     }
 }
 
+#define CAPTURE_TEX_ENVI(A, B)                                                                   \
+    if (currentEnv.A != defaultEnv.A)                                                            \
+    {                                                                                            \
+        Capture(setupCalls, CaptureTexEnvi(*replayState, true, gl::TextureEnvTarget::Env,        \
+                                           gl::TextureEnvParameter::B, ToGLenum(currentEnv.A))); \
+    }
+
+void CaptureTextureEnvironmentState(std::vector<CallCapture> *setupCalls,
+                                    gl::State *replayState,
+                                    const gl::State *apiState,
+                                    unsigned int unit)
+{
+    gl::TextureEnvironmentParameters currentEnv = apiState->gles1().textureEnvironment(unit);
+    gl::TextureEnvironmentParameters defaultEnv = replayState->gles1().textureEnvironment(unit);
+
+    if (currentEnv == defaultEnv)
+    {
+        return;
+    }
+
+    // When the texture env state differs on a non-default sampler unit, emit an ActiveTexture call.
+    // The default sampler unit is GL_TEXTURE0.
+    if (unit != replayState->getActiveSampler())
+    {
+        Capture(setupCalls,
+                CaptureActiveTexture(*replayState, true, GL_TEXTURE0 + static_cast<GLenum>(unit)));
+    }
+
+    CAPTURE_TEX_ENVI(mode, Mode)
+    CAPTURE_TEX_ENVI(combineRgb, CombineRgb)
+    CAPTURE_TEX_ENVI(combineAlpha, CombineAlpha)
+    CAPTURE_TEX_ENVI(src0Rgb, Src0Rgb)
+    CAPTURE_TEX_ENVI(src1Rgb, Src1Rgb)
+    CAPTURE_TEX_ENVI(src2Rgb, Src2Rgb)
+    CAPTURE_TEX_ENVI(src0Alpha, Src0Alpha)
+    CAPTURE_TEX_ENVI(src1Alpha, Src1Alpha)
+    CAPTURE_TEX_ENVI(src2Alpha, Src2Alpha)
+    CAPTURE_TEX_ENVI(op0Rgb, Op0Rgb)
+    CAPTURE_TEX_ENVI(op1Rgb, Op1Rgb)
+    CAPTURE_TEX_ENVI(op2Rgb, Op2Rgb)
+    CAPTURE_TEX_ENVI(op0Alpha, Op0Alpha)
+    CAPTURE_TEX_ENVI(op1Alpha, Op1Alpha)
+    CAPTURE_TEX_ENVI(op2Alpha, Op2Alpha)
+
+    if (currentEnv.rgbScale != defaultEnv.rgbScale)
+    {
+        Capture(setupCalls, CaptureTexEnvf(*replayState, true, gl::TextureEnvTarget::Env,
+                                           gl::TextureEnvParameter::RgbScale, currentEnv.rgbScale));
+    }
+
+    if (currentEnv.alphaScale != defaultEnv.alphaScale)
+    {
+        Capture(setupCalls,
+                CaptureTexEnvf(*replayState, true, gl::TextureEnvTarget::Env,
+                               gl::TextureEnvParameter::AlphaScale, currentEnv.alphaScale));
+    }
+
+    if (currentEnv.color != defaultEnv.color)
+    {
+        Capture(setupCalls,
+                CaptureTexEnvfv(*replayState, true, gl::TextureEnvTarget::Env,
+                                gl::TextureEnvParameter::Color, currentEnv.color.data()));
+    }
+
+    if (currentEnv.pointSpriteCoordReplace != defaultEnv.pointSpriteCoordReplace)
+    {
+        Capture(setupCalls, CaptureTexEnvi(*replayState, true, gl::TextureEnvTarget::PointSprite,
+                                           gl::TextureEnvParameter::PointCoordReplace,
+                                           currentEnv.pointSpriteCoordReplace));
+    }
+
+    // In case of non-default sampler units, the default unit must be set back here.
+    if (unit != replayState->getActiveSampler())
+    {
+        Capture(setupCalls,
+                CaptureActiveTexture(
+                    *replayState, true,
+                    GL_TEXTURE0 + static_cast<GLenum>(replayState->getActiveSampler())));
+    }
+}
+
 bool VertexBindingMatchesAttribStride(const gl::VertexAttribute &attrib,
                                       const gl::VertexBinding &binding)
 {
@@ -4137,6 +4218,16 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                 replayState.setSamplerTexture(context, textureType,
                                               apiBindings[bindingIndex].get());
             }
+        }
+    }
+
+    // Capture Texture Environment
+    if (context->isGLES1())
+    {
+        const gl::Caps &caps = context->getCaps();
+        for (GLuint unit = 0; unit < caps.maxMultitextureUnits; ++unit)
+        {
+            CaptureTextureEnvironmentState(setupCalls, &replayState, &apiState, unit);
         }
     }
 

@@ -494,6 +494,22 @@ const TextureEnvironmentParameters &GLES1State::textureEnvironment(unsigned int 
     return mTextureEnvironments[unit];
 }
 
+bool operator==(const TextureEnvironmentParameters &a, const TextureEnvironmentParameters &b)
+{
+    return a.mode == b.mode && a.combineRgb == b.combineRgb && a.combineAlpha == b.combineAlpha &&
+           a.src0Rgb == b.src0Rgb && a.src1Rgb == b.src1Rgb && a.src2Rgb == b.src2Rgb &&
+           a.src0Alpha == b.src0Alpha && a.src1Alpha == b.src1Alpha && a.src2Alpha == b.src2Alpha &&
+           a.op0Rgb == b.op0Rgb && a.op1Rgb == b.op1Rgb && a.op2Rgb == b.op2Rgb &&
+           a.op0Alpha == b.op0Alpha && a.op1Alpha == b.op1Alpha && a.op2Alpha == b.op2Alpha &&
+           a.color == b.color && a.rgbScale == b.rgbScale && a.alphaScale == b.alphaScale &&
+           a.pointSpriteCoordReplace == b.pointSpriteCoordReplace;
+}
+
+bool operator!=(const TextureEnvironmentParameters &a, const TextureEnvironmentParameters &b)
+{
+    return !(a == b);
+}
+
 PointParameters &GLES1State::pointParameters()
 {
     setDirty(DIRTY_GLES1_POINT_PARAMETERS);
