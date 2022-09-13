@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "299763e4_a12a5dd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T16:12:49Z",
+      "side": 1,
+      "message": "Good stuff Lubosz, thanks. Would be good to try the suggestions from Jamie.",
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b830fc25_40a18fc0",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-09-13T15:22:33Z",
       "side": 1,
       "message": "here\u0027s a place where std::tie would also help.. kinda leaning towards that kind of solution. Look for the string \"auto tie() const\" in the ANGLE source.",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 1
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a812cf2_dd29569d",
+        "filename": "src/libANGLE/GLES1State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T16:12:49Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "b830fc25_40a18fc0",
       "range": {
         "startLine": 497,
         "startChar": 0,
@@ -60,6 +101,30 @@
       "writtenOn": "2022-09-13T15:22:33Z",
       "side": 1,
       "message": "I wonder if you could use std::tie to template this instead of using a macro. Cody any opinions on if we should prefer c++ code?\n\nOtherwise please use ANGLE_CAPTURE_ as prefix.",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2723,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecb9dd4a_58a0d9a5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T16:12:49Z",
+      "side": 1,
+      "message": "No macros, please.  Just a regular C++ helper or a lambda.",
+      "parentUuid": "275e1e6c_8ba17afd",
       "range": {
         "startLine": 2708,
         "startChar": 0,
