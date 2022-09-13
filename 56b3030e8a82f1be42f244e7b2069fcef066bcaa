@@ -16,6 +16,24 @@
       "message": "flex didn\u0027t change on Linux but did on windows?",
       "revId": "56b3030e8a82f1be42f244e7b2069fcef066bcaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd9ae082_efddb2dc",
+        "filename": "tools/flex-bison/linux/bison.sha1",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-13T12:16:57Z",
+      "side": 1,
+      "message": "Yeah, the version of flex was the same, so I didn\u0027t recompile it. Probably if I were being totally safe, I would recompile it with the newer compiler toolchain, but I left it as-is.",
+      "parentUuid": "59e5642f_5adfb9d8",
+      "revId": "56b3030e8a82f1be42f244e7b2069fcef066bcaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
