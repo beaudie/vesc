@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b830fc25_40a18fc0",
+        "filename": "src/libANGLE/GLES1State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-13T15:22:33Z",
+      "side": 1,
+      "message": "here\u0027s a place where std::tie would also help.. kinda leaning towards that kind of solution. Look for the string \"auto tie() const\" in the ANGLE source.",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 1
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4871fa7_7d21c2ea",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-13T15:22:33Z",
+      "side": 1,
+      "message": "nit: looks like these can be const \u0026",
+      "range": {
+        "startLine": 2692,
+        "startChar": 0,
+        "endLine": 2694,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "275e1e6c_8ba17afd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-13T15:22:33Z",
+      "side": 1,
+      "message": "I wonder if you could use std::tie to template this instead of using a macro. Cody any opinions on if we should prefer c++ code?\n\nOtherwise please use ANGLE_CAPTURE_ as prefix.",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2723,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
