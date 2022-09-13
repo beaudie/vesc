@@ -127,6 +127,24 @@
       "parentUuid": "f752d04a_447aedc9",
       "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2b88710_9d54d62a",
+        "filename": "scripts/gl.xml",
+        "patchSetId": 19
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T13:59:32Z",
+      "side": 1,
+      "message": "It\u0027s hard to justify upstreaming this because it\u0027s an unpublished ANGLE extension. We should somehow make things work such that you could add this to gl_angle_ext.xml. We can\u0027t do that now (feel free to take a stab at it)",
+      "parentUuid": "6133da94_92d39966",
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
