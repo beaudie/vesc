@@ -118,6 +118,9 @@ struct TextureEnvironmentParameters
     bool pointSpriteCoordReplace = false;
 };
 
+bool operator==(const TextureEnvironmentParameters &a, const TextureEnvironmentParameters &b);
+bool operator!=(const TextureEnvironmentParameters &a, const TextureEnvironmentParameters &b);
+
 struct PointParameters
 {
     PointParameters();
