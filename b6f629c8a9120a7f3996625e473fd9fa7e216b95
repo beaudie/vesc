@@ -233,6 +233,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c212a3c5_0fb8f883",
+        "filename": "src/libANGLE/ProgramPipeline.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T02:24:57Z",
+      "side": 1,
+      "message": "The WARN and error-swallow are still there? I think what Jamie was suggesting was to make `resolveLink` return the error and let it propagate. Is that not possible?",
+      "parentUuid": "66986000_151e8031",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 9
+      },
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5ff0dd8_2dd46422",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 8
@@ -262,6 +286,24 @@
       "side": 1,
       "message": "\u003e When the binding changes, we shouldn\u0027t need to attempt to actually process the program or pipeline\n\nnot sure i understand, if the binding changes the newly bound PPO may not yet be linked. To account for this we need to set the object as dirty\n\n\u003e it\u0027d be good to set this object dirty when the PPO actually changes ... `onProgramPipelineExecutableChange`\n\nDone",
       "parentUuid": "b5ff0dd8_2dd46422",
+      "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a73cde41_0d5b68d2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1989,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T02:24:57Z",
+      "side": 1,
+      "message": "Ack. The new logic is good AFAICT. It\u0027s true that PPOs need a check for link on binding change (programs don\u0027t)",
+      "parentUuid": "d3491da3_6d1fc132",
       "revId": "b6f629c8a9120a7f3996625e473fd9fa7e216b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
