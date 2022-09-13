@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 305
+#define ANGLE_SH_VERSION 306
 
 enum ShShaderSpec
 {
@@ -140,6 +140,9 @@ struct ShCompileOptions
     // functionality mandated in GLSL 1.0 spec, Appendix A, Section 4 and 5.  There is no need to
     // specify this parameter when compiling for WebGL - it is implied.
     uint64_t validateLoopIndexing : 1;
+
+    // Emit support code for GLES1 emulation.
+    uint64_t isGLES1 : 1;
 
     // Emits #line directives in HLSL.
     uint64_t lineDirectives : 1;
@@ -916,7 +919,7 @@ extern const char kDriverUniformsVarName[];
 
 // Packing information for driver uniform's misc field:
 // - 1 bit for whether surface rotation results in swapped axes
-// - 5 bits for advanced blend equation
+// - 5 bits for advanced blend equation, or logicOp if GLES1
 // - 6 bits for sample count
 // - 8 bits for enabled clip planes
 // - 1 bit for whether depth should be transformed to Vulkan clip space
