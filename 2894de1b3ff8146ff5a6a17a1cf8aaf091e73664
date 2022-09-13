@@ -121,6 +121,24 @@
       "parentUuid": "40d16f0c_5ba1cc70",
       "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0ee8a91_171066e8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T14:09:30Z",
+      "side": 1,
+      "message": "FWIW, having the clear values be stateful and loadOps as parameter likely works just fine.",
+      "parentUuid": "9d42ace2_0204e75a",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
