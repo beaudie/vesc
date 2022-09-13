@@ -36,6 +36,10 @@ class AHBFunctions
     PFN_AHARDWAREBUFFER_acquire mAcquireFn   = nullptr;
     PFN_AHARDWAREBUFFER_describe mDescribeFn = nullptr;
     PFN_AHARDWAREBUFFER_release mReleaseFn   = nullptr;
+
+    void GetAhbProcAddresses(void *handle);
+
+    void *mLibNativeWindowHandle;
 };
 
 }  // namespace rx
