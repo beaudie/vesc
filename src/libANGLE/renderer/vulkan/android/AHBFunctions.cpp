@@ -20,16 +20,40 @@ void AssignFn(void *handle, const char *name, T &fn)
     fn = reinterpret_cast<T>(dlsym(handle, name));
 }
 
+constexpr char kNativeWindowLibraryName[] = "libnativewindow.so";
+constexpr char kAhbAcquireFunctionName[]  = "AHardwareBuffer_acquire";
+constexpr char kAhbDescribeFunctionName[] = "AHardwareBuffer_describe";
+constexpr char kAhbReleaseFunctionName[]  = "AHardwareBuffer_release";
+
 }  // namespace
 
 AHBFunctions::AHBFunctions()
 {
     void *handle = dlopen(nullptr, RTLD_NOW);
-    AssignFn(handle, "AHardwareBuffer_acquire", mAcquireFn);
-    AssignFn(handle, "AHardwareBuffer_describe", mDescribeFn);
-    AssignFn(handle, "AHardwareBuffer_release", mReleaseFn);
+    AssignFn(handle, kAhbAcquireFunctionName, mAcquireFn);
+    AssignFn(handle, kAhbDescribeFunctionName, mDescribeFn);
+    AssignFn(handle, kAhbReleaseFunctionName, mReleaseFn);
+
+    // Some services load "libnativewindow.so" with RTLD_LOCAL flag resulting in AHB function
+    // symbols being unresolvable through dlsym. Account for such cases and explicitly dlopen the
+    // library.
+    if (!valid())
+    {
+        mLibNativeWindowHandle = nullptr;
+        mLibNativeWindowHandle = dlopen(kNativeWindowLibraryName, RTLD_NOW);
+        ASSERT(mLibNativeWindowHandle);
+        AssignFn(mLibNativeWindowHandle, kAhbAcquireFunctionName, mAcquireFn);
+        AssignFn(mLibNativeWindowHandle, kAhbDescribeFunctionName, mDescribeFn);
+        AssignFn(mLibNativeWindowHandle, kAhbReleaseFunctionName, mReleaseFn);
+    }
 }
 
-AHBFunctions::~AHBFunctions() = default;
+AHBFunctions::~AHBFunctions()
+{
+    if (mLibNativeWindowHandle)
+    {
+        dlclose(mLibNativeWindowHandle);
+    }
+}
 
 }  // namespace rx
