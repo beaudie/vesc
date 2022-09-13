@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7175769a_0e0316aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-13T06:01:12Z",
+      "side": 1,
+      "message": "lgtm\n",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b35773a3_58fa353c",
@@ -84,6 +101,24 @@
       "side": 1,
       "message": "\u003e probably sequence\u0026lt;GLfloat\u0026gt, or an ArrayBuffer which was packed together using DataView.\n\nI was worried about this too, but then I thought we could make it take a plain JavaScript `Array` like drawBuffers:\n\n```\n gl.beginPixelLocalStorageANGLE(2,\n                                [gl.CLEAR_ANGLE, gl.CLEAR_ANGLE],\n                                [0.5, 0.5, 0.5, 0.5, // floats\n                                 1, -1, -3, -40]); // ints\n```\n\n\u003e A sequence of \"any\" would lead to developer confusion - what are the elements of the sequence?\n\nDo you still think it\u0027s confusing taking an `Array` like above?\n\nEither way, I agree that the C API has poor ergonomics requiring the developer to basically memcpy something together.\n\n\u003e Under the hood, the Blink engine\u0027s C++ code will need to keep track of the formats of all of the pixel local storage planes, to know whether to coerce each 4-tuple into a float or an int before repacking it for the call to BeginPixelLocalStorageANGLE.\n\nVery true. Is there any machinery in Blink for shadowing framebuffer state already? Or has Blink managed to get away so far without having to do that? If not, that\u0027s a strong argument against doing it this way.\n\nI had two concerns with the API as-is:\n\n1) The spec and implementation will get pretty hefty. In addition to implementing these methods, we will have to take 3 more GLenums and provide state queries for all types of clear values:\n\n```\n    PIXEL_LOCAL_CLEAR_VALUE_FLOAT_ANGLE\n    PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE\n    PIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE\n```\n\nPIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE is a little awkward because the value is returned as an int, and I understand that it isn\u0027t strictly valid C++ to assume two\u0027s compliment, but is it always valid to pun int to an unsigned int? Is there a precedent for this? Also, what is the WebGL2 analog to glGetIntegeri_v?\n\n2) I think it\u0027s a little awkward to split up the loadOp and clear value -- loadOps are currently passed as function arguments and the clear values are framebuffer state. Would it make more sense for the loadOp and clear value both to be framebuffer state?\n\nI don\u0027t have a strong opinion on this one as long as the API can support clear loads. If we can resolve #1 and #2 I\u0027m happy to implement it either way!",
       "parentUuid": "b35773a3_58fa353c",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d42ace2_0204e75a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-13T06:01:12Z",
+      "side": 1,
+      "message": "WebGL\u0027s drawBuffers takes sequence\u003cGLenum\u003e - see https://registry.khronos.org/webgl/specs/latest/2.0/ - so it\u0027s not a direct analogue.\n\nKeep in mind that the types here are specified by Web IDL, not JavaScript:\nhttps://webidl.spec.whatwg.org/#idl-sequence\n\nThere\u0027s precedent in Blink for tracking the state of objects like framebuffer attachments. See:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/modules/webgl/webgl_framebuffer.h?q\u003dwebgl_framebuffer.h\n\nso if additionally tracking pixel-local storage state in these classes isn\u0027t too difficult, I guess that the change here is fine. The type in the JS bindings will probably be `(sequence\u003cdouble\u003e or ArrayBuffer)`, because all JavaScript numbers are implicitly doubles, and they can represent all 32-bit integer and floating-point values. We\u0027d specify in the WebGL extension spec how they\u0027re coerced to the appropriate 32-bit float or integer value.\n\n1) I can see that these would be annoying queries to add. The WebGL 1/2 analogue is \"any getParameter\" or e.g. \"any getFramebufferAttachmentParameter\", so at the JS level they\u0027re easy, but the implementation has to figure out which type to query.\n\nThere\u0027s precedent for not putting the queries in at the WebGL level at all. This was done for https://registry.khronos.org/webgl/extensions/OES_draw_buffers_indexed/ .\n\n2) I think making the loadOps framebuffer state would make the API harder to use to, so after more thought, let\u0027s pursue the direction you\u0027re proposing here.",
+      "parentUuid": "40d16f0c_5ba1cc70",
       "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
