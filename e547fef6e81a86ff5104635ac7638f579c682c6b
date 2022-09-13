@@ -86,6 +86,24 @@
       "parentUuid": "95a1ee3e_c86c8e12",
       "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e06593e_c07cef75",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T03:03:50Z",
+      "side": 1,
+      "message": "Why not just use LOAD_OP_DONT_CARE unconditionally then?\n\nMy understanding was that with NONE/NONE, the driver can entirely remove the attachment from the pass and not allocate it on the tile. With DONT_CARE/DONT_CARE, it can\u0027t do that. We\u0027d also need more barriers with DONT_CARE compared to NONE. So I\u0027m not so sure about \"Preserve can\u0027t be faster than Discard\". Perhaps we can ask the partners which they prefer.\n\n\u003e this and previous loadOp fix total ~1%\n\nWhat about this change alone?\n\n---\n\nSeems to me it\u0027s either better to use DONT_CARE/DONT_CARE all the time, or NONE/NONE all the time. I don\u0027t understand what makes invalidated attachments special.",
+      "parentUuid": "7a84eab7_5c4e09e4",
+      "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
