@@ -104,6 +104,24 @@
       "parentUuid": "7a84eab7_5c4e09e4",
       "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b0e057a_69f10f3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-13T21:46:09Z",
+      "side": 1,
+      "message": "Ack, chatted offline.",
+      "parentUuid": "0e06593e_c07cef75",
+      "revId": "e547fef6e81a86ff5104635ac7638f579c682c6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
