@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44b82c11_3923eb51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T17:34:22Z",
+      "side": 1,
+      "message": "You could merge this with the source test.  Take a look at that, if it doesn\u0027t seem feasible, go ahead and land.  If you don\u0027t plan to land the MEC scripting changes and switch to retracing, probably don\u0027t need to add this test.",
+      "revId": "38fb5b43a6fac7d04f30b4f999cefd03c8f8af52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "824b35cb_fa773d56",
+        "filename": "src/tests/gl_tests/EGLImageMECFriendlyTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T17:34:22Z",
+      "side": 1,
+      "message": "2022",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 18
+      },
+      "revId": "38fb5b43a6fac7d04f30b4f999cefd03c8f8af52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d6f9f81_f92db281",
+        "filename": "src/tests/gl_tests/EGLImageMECFriendlyTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T17:34:22Z",
+      "side": 1,
+      "message": "This needs to be updated.\n\nActually, this file is almost identical to ExternalWrapTest.cpp.  Probably worth exploring if you can just create a MECFriendlyTest in that file, easier to maintain.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "38fb5b43a6fac7d04f30b4f999cefd03c8f8af52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "489c62bb_f20879e9",
+        "filename": "src/tests/gl_tests/EGLImageMECFriendlyTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-13T17:34:22Z",
+      "side": 1,
+      "message": "Could use a different test name.",
+      "range": {
+        "startLine": 141,
+        "startChar": 32,
+        "endLine": 141,
+        "endChar": 38
+      },
+      "revId": "38fb5b43a6fac7d04f30b4f999cefd03c8f8af52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
