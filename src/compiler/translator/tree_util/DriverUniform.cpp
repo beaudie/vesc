@@ -34,7 +34,7 @@ constexpr const char kMisc[]             = "misc";
 // Extended uniforms
 constexpr const char kXfbBufferOffsets[]       = "xfbBufferOffsets";
 constexpr const char kXfbVerticesPerInstance[] = "xfbVerticesPerInstance";
-constexpr const char kUnused[]                 = "unused";
+constexpr const char kLogicOp[]                = "logicOp";
 constexpr const char kUnused2[]                = "unused2";
 }  // anonymous namespace
 
@@ -381,15 +381,16 @@ TFieldList *DriverUniformExtended::createUniformFields(TSymbolTable *symbolTable
     constexpr size_t kNumGraphicsDriverUniformsExt = 4;
     constexpr std::array<const char *, kNumGraphicsDriverUniformsExt>
         kGraphicsDriverUniformNamesExt = {
-            {kXfbBufferOffsets, kXfbVerticesPerInstance, kUnused, kUnused2}};
+            {kXfbBufferOffsets, kXfbVerticesPerInstance, kLogicOp, kUnused2}};
 
     const std::array<TType *, kNumGraphicsDriverUniformsExt> kDriverUniformTypesExt = {{
         // xfbBufferOffsets: uvec4
         new TType(EbtInt, EbpHigh, EvqGlobal, 4),
         // xfbVerticesPerInstance: uint
         new TType(EbtInt, EbpHigh, EvqGlobal),
-        // unused: uvec3
+        // logicOp: uint
         new TType(EbtUInt, EbpHigh, EvqGlobal),
+        // unused: uvec2
         new TType(EbtUInt, EbpHigh, EvqGlobal, 2),
     }};
 
@@ -413,6 +414,47 @@ TIntermTyped *DriverUniformExtended::getXfbBufferOffsets() const
 TIntermTyped *DriverUniformExtended::getXfbVerticesPerInstance() const
 {
     return createDriverUniformRef(kXfbVerticesPerInstance);
+}
+
+TIntermTyped *DriverUniformExtended::getLogicOpChannelWidth() const
+{
+    TIntermTyped *logicOpRef   = createDriverUniformRef(kLogicOp);
+    TIntermTyped *channelWidth = new TIntermBinary(
+        EOpBitwiseAnd, logicOpRef, CreateUIntNode(vk::kDriverUniformsLogicOpChannelWidthMask));
+
+    return channelWidth;
+}
+
+TIntermTyped *DriverUniformExtended::getLogicOpSrcModifier() const
+{
+    TIntermTyped *logicOpRef  = createDriverUniformRef(kLogicOp);
+    TIntermTyped *srcModifier = new TIntermBinary(
+        EOpBitShiftRight, logicOpRef, CreateUIntNode(vk::kDriverUniformsLogicOpSrcModifierOffset));
+    srcModifier = new TIntermBinary(EOpBitwiseAnd, srcModifier,
+                                    CreateUIntNode(vk::kDriverUniformsLogicOpSrcModifierMask));
+
+    return srcModifier;
+}
+
+TIntermTyped *DriverUniformExtended::getLogicOpDstModifier() const
+{
+    TIntermTyped *logicOpRef  = createDriverUniformRef(kLogicOp);
+    TIntermTyped *dstModifier = new TIntermBinary(
+        EOpBitShiftRight, logicOpRef, CreateUIntNode(vk::kDriverUniformsLogicOpDstModifierOffset));
+    dstModifier = new TIntermBinary(EOpBitwiseAnd, dstModifier,
+                                    CreateUIntNode(vk::kDriverUniformsLogicOpDstModifierMask));
+
+    return dstModifier;
+}
+
+TIntermTyped *DriverUniformExtended::getLogicOpOp() const
+{
+    TIntermTyped *logicOpRef = createDriverUniformRef(kLogicOp);
+    TIntermTyped *op         = new TIntermBinary(EOpBitShiftRight, logicOpRef,
+                                                 CreateUIntNode(vk::kDriverUniformsLogicOpOpOffset));
+    op = new TIntermBinary(EOpBitwiseAnd, op, CreateUIntNode(vk::kDriverUniformsLogicOpOpMask));
+
+    return op;
 }
 
 TIntermTyped *MakeSwapXMultiplier(TIntermTyped *swapped)

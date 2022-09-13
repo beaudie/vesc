@@ -265,14 +265,14 @@ TEST_P(GLES1ConformanceTest, LineHV)
 
 TEST_P(GLES1ConformanceTest, LineRaster)
 {
-    // http://g.co/anglebug/3862
+    // http://anglebug.com/3862
     ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineRasterExec());
 }
 
 TEST_P(GLES1ConformanceTest, LogicOp)
 {
-    ANGLE_SKIP_TEST_IF(true);
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LogicOpExec());
 }
 
@@ -357,7 +357,7 @@ TEST_P(GLES1ConformanceTest, Scissor)
 
 TEST_P(GLES1ConformanceTest, SPClear)
 {
-    // http://g.co/anglebug/3863
+    // http://anglebug.com/3863
     ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPClearExec());
 }
@@ -482,7 +482,7 @@ TEST_P(GLES1ConformanceTest, XFormHomogenous)
 
 TEST_P(GLES1ConformanceTest, ZBClear)
 {
-    // http://g.co/anglebug/3864
+    // http://anglebug.com/3864
     ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ZBClearExec());
 }

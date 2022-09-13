@@ -72,6 +72,11 @@ class DriverUniform
     virtual TIntermTyped *getXfbBufferOffsets() const { return nullptr; }
     virtual TIntermTyped *getXfbVerticesPerInstance() const { return nullptr; }
 
+    virtual TIntermTyped *getLogicOpChannelWidth() const { return nullptr; }
+    virtual TIntermTyped *getLogicOpSrcModifier() const { return nullptr; }
+    virtual TIntermTyped *getLogicOpDstModifier() const { return nullptr; }
+    virtual TIntermTyped *getLogicOpOp() const { return nullptr; }
+
     const TVariable *getDriverUniformsVariable() const { return mDriverUniforms; }
 
   protected:
@@ -92,6 +97,11 @@ class DriverUniformExtended : public DriverUniform
 
     TIntermTyped *getXfbBufferOffsets() const override;
     TIntermTyped *getXfbVerticesPerInstance() const override;
+
+    TIntermTyped *getLogicOpChannelWidth() const override;
+    TIntermTyped *getLogicOpSrcModifier() const override;
+    TIntermTyped *getLogicOpDstModifier() const override;
+    TIntermTyped *getLogicOpOp() const override;
 
   protected:
     TFieldList *createUniformFields(TSymbolTable *symbolTable) override;

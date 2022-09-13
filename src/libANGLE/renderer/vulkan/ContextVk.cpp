@@ -99,6 +99,11 @@ struct GraphicsDriverUniformsExtended
     std::array<int32_t, 4> xfbBufferOffsets;
     int32_t xfbVerticesPerInstance;
 
+    // Bits [0,4) for logicOp, bit 4 for logicOpEnable, TODO: bits for mask/multiplier
+    // TODO: alternatively, 2 bits for what to do with s, 2 bits for d, 2 bits for operator (no
+    // logic op, &|^) + mask/multiplier.
+    uint32_t logicOp;
+
     int32_t padding[3];
 };
 static_assert(sizeof(GraphicsDriverUniformsExtended) % (sizeof(uint32_t) * 4) == 0,

@@ -3,12 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// EmulateAdvancedBlendEquations.cpp: Emulate advanced blend equations by implicitly reading back
-// from the color attachment (as an input attachment) and apply the equation function based on a
-// uniform.
+// EmulateLogicOp.cpp: Emulate logicOp by implicitly reading back from the color attachment (as an
+// input attachment) and apply the logic op equation based on a uniform.
 //
 
-#include "compiler/translator/tree_ops/vulkan/EmulateAdvancedBlendEquations.h"
+#include "compiler/translator/tree_ops/vulkan/EmulateLogicOp.h"
 
 #include <map>
 
@@ -36,14 +35,12 @@ class Builder
             const ShCompileOptions &compileOptions,
             TSymbolTable *symbolTable,
             const DriverUniform *driverUniforms,
-            std::vector<ShaderVariable> *uniforms,
-            const AdvancedBlendEquations &advancedBlendEquations)
+            std::vector<ShaderVariable> *uniforms)
         : mCompiler(compiler),
           mCompileOptions(compileOptions),
           mSymbolTable(symbolTable),
           mDriverUniforms(driverUniforms),
-          mUniforms(uniforms),
-          mAdvancedBlendEquations(advancedBlendEquations)
+          mUniforms(uniforms)
     {}
 
     bool build(TIntermBlock *root);
@@ -51,90 +48,52 @@ class Builder
   private:
     void findColorOutput(TIntermBlock *root);
     void createSubpassInputVar(TIntermBlock *root);
-    void generateHslHelperFunctions();
-    void generateBlendFunctions();
-    void insertGeneratedFunctions(TIntermBlock *root);
     TIntermTyped *divideFloatNode(TIntermTyped *dividend, TIntermTyped *divisor);
-    TIntermSymbol *premultiplyAlpha(TIntermBlock *blendBlock, TIntermTyped *var, const char *name);
-    void generatePreamble(TIntermBlock *blendBlock);
-    void generateEquationSwitch(TIntermBlock *blendBlock);
+    TIntermSymbol *premultiplyAlpha(TIntermBlock *opBlock, TIntermTyped *var, const char *name);
+    void generatePreamble(TIntermBlock *opBlock);
+    void generateLogicOpSwitches(TIntermBlock *opBlock);
 
     TCompiler *mCompiler;
     const ShCompileOptions &mCompileOptions;
     TSymbolTable *mSymbolTable;
     const DriverUniform *mDriverUniforms;
     std::vector<ShaderVariable> *mUniforms;
-    const AdvancedBlendEquations &mAdvancedBlendEquations;
 
-    // The color input and output.  Output is the blend source, and input is the destination.
+    // The color input and output.  Output is the logic op source, and input is the destination.
     const TVariable *mSubpassInputVar = nullptr;
     const TVariable *mOutputVar       = nullptr;
 
-    // The value of output, premultiplied by alpha
+    // The multipliers to change color channels from float to unnormalized integer.
+    TIntermSybmol *mChannelMultiplier = nullptr;
+
+    // The value of output, unnormalized
     TIntermSymbol *mSrc = nullptr;
-    // The value of input, premultiplied by alpha
+    // The value of input, unnormalized
     TIntermSymbol *mDst = nullptr;
-
-    // p0, p1 and p2 coefficients
-    TIntermSymbol *mP0 = nullptr;
-    TIntermSymbol *mP1 = nullptr;
-    TIntermSymbol *mP2 = nullptr;
-
-    // Functions implementing an advanced blend equation:
-    angle::PackedEnumMap<gl::BlendEquationType, TIntermFunctionDefinition *> mBlendFuncs = {};
-
-    // HSL helpers:
-    TIntermFunctionDefinition *mMinv3     = nullptr;
-    TIntermFunctionDefinition *mMaxv3     = nullptr;
-    TIntermFunctionDefinition *mLumv3     = nullptr;
-    TIntermFunctionDefinition *mSatv3     = nullptr;
-    TIntermFunctionDefinition *mClipColor = nullptr;
-    TIntermFunctionDefinition *mSetLum    = nullptr;
-    TIntermFunctionDefinition *mSetLumSat = nullptr;
 };
 
 bool Builder::build(TIntermBlock *root)
 {
-    // Find the output variable for which advanced blend is specified.  Note that advanced blend can
-    // only used when rendering is done to a single color attachment.
+    // Find the output variable and declare a corresponding input variable.
     findColorOutput(root);
-    if (mSubpassInputVar == nullptr)
-    {
-        createSubpassInputVar(root);
-    }
+    createSubpassInputVar(root);
 
-    // If any HSL blend equation is used, generate a few utility functions used in Table X.2 in the
-    // spec.
-    if (mAdvancedBlendEquations.anyHsl())
-    {
-        generateHslHelperFunctions();
-    }
-
-    // Generate a function for each enabled blend equation.  This is |f| in the spec.
-    generateBlendFunctions();
-
-    // Insert the generated functions to root.
-    insertGeneratedFunctions(root);
-
-    // Prepare for blend by:
+    // Prepare for logic op by:
     //
-    // - Premultiplying src and dst color by alpha
-    // - Calculating p0, p1 and p2
-    //
-    // Note that the color coefficients (X,Y,Z) are always (1,1,1) in the KHR extension (they were
-    // not in the NV extension), so they are implicitly dropped.
-    TIntermBlock *blendBlock = new TIntermBlock;
-    generatePreamble(blendBlock);
+    // - Loading from subpass input
+    // - Turning source and destination to unorm
+    TIntermBlock *opBlock = new TIntermBlock;
+    generatePreamble(opBlock);
 
-    // Generate the |switch| that calls the right function based on a driver uniform.
-    generateEquationSwitch(blendBlock);
+    // Generate the |switch| statements that perform the logic operation based on driver uniforms.
+    generateLogicOpSwitches(opBlock);
 
-    // Place the entire blend block under an if (equation != 0)
-    TIntermTyped *equationUniform = mDriverUniforms->getAdvancedBlendEquation();
-    TIntermTyped *notZero = new TIntermBinary(EOpNotEqual, equationUniform, CreateUIntNode(0));
+    // Place the entire block under an if (op != 0)
+    TIntermTyped *opUniform = mDriverUniforms->getLogicOpOp();
+    TIntermTyped *notZero   = new TIntermBinary(EOpNotEqual, opUniform, CreateUIntNode(0));
 
-    TIntermIfElse *blend = new TIntermIfElse(notZero, blendBlock, nullptr);
-    return RunAtTheEndOfShader(mCompiler, root, blend, mSymbolTable);
+    TIntermIfElse *logicOp = new TIntermIfElse(notZero, opBlock, nullptr);
+    return RunAtTheEndOfShader(mCompiler, root, logicOp, mSymbolTable);
 }
 
 void Builder::findColorOutput(TIntermBlock *root)
@@ -157,27 +116,17 @@ void Builder::findColorOutput(TIntermBlock *root)
         }
 
         const TType &type = symbol->getType();
-        if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut)
+        if (type.getQualifier() == EvqFragmentOut)
         {
-            // There can only be one output with advanced blend per spec.
-            // If there are multiple outputs, take the one one with location 0.
-            if (mOutputVar == nullptr || mOutputVar->getType().getLayoutQualifier().location > 0)
-            {
-                mOutputVar = &symbol->variable();
-            }
-        }
-
-        if (IsSubpassInputType(type.getBasicType()))
-        {
-            // There can only be one output with advanced blend, so there can only be a maximum of
-            // one subpass input already defined (by framebuffer fetch emulation).
-            ASSERT(mSubpassInputVar == nullptr);
-            mSubpassInputVar = &symbol->variable();
+            // There can only be one output in GLES1.
+            ASSERT(mOutputVar == nullptr);
+            mOutputVar = &symbol->variable();
         }
     }
 
     // This transformation is only ever called when advanced blend is specified.
     ASSERT(mOutputVar != nullptr);
+    ASSERT(mSubpassInputVar == nullptr);
 }
 
 TIntermSymbol *MakeVariable(TSymbolTable *symbolTable, const char *name, const TType *type)
@@ -195,9 +144,6 @@ void Builder::createSubpassInputVar(TIntermBlock *root)
     // (or implicitly 0 if not specified).
     const unsigned int inputAttachmentIndex =
         std::max(0, mOutputVar->getType().getLayoutQualifier().location);
-
-    // Note that blending can only happen on float/fixed-point output.
-    ASSERT(mOutputVar->getType().getBasicType() == EbtFloat);
 
     // Create the subpass input uniform.
     TType *inputAttachmentType = new TType(EbtSubpassInput, precision, EvqUniform, 1);
@@ -267,304 +213,6 @@ TIntermFunctionDefinition *MakeSimpleFunctionDefinition(TSymbolTable *symbolTabl
     const TFunction *function =
         MakeFunction(symbolTable, name, &returnExpression->getType(), argsAsVar);
     return MakeFunctionDefinition(function, body);
-}
-
-void Builder::generateHslHelperFunctions()
-{
-    const TPrecision precision = mOutputVar->getType().getPrecision();
-
-    TType *floatType     = new TType(EbtFloat, precision, EvqTemporary, 1);
-    TType *vec3Type      = new TType(EbtFloat, precision, EvqTemporary, 3);
-    TType *vec3ParamType = new TType(EbtFloat, precision, EvqParamIn, 3);
-
-    // float ANGLE_minv3(vec3 c)
-    // {
-    //     return min(min(c.r, c.g), c.b);
-    // }
-    {
-        TIntermSymbol *c = MakeVariable(mSymbolTable, "c", vec3ParamType);
-
-        TIntermTyped *cR = new TIntermSwizzle(c, {0});
-        TIntermTyped *cG = new TIntermSwizzle(c->deepCopy(), {1});
-        TIntermTyped *cB = new TIntermSwizzle(c->deepCopy(), {2});
-
-        // min(c.r, c.g)
-        TIntermSequence cRcG = {cR, cG};
-        TIntermTyped *minRG  = CreateBuiltInFunctionCallNode("min", &cRcG, *mSymbolTable, 100);
-
-        // min(min(c.r, c.g), c.b)
-        TIntermSequence minRGcB = {minRG, cB};
-        TIntermTyped *minRGB = CreateBuiltInFunctionCallNode("min", &minRGcB, *mSymbolTable, 100);
-
-        mMinv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_minv3", minRGB, {c});
-    }
-
-    // float ANGLE_maxv3(vec3 c)
-    // {
-    //     return max(max(c.r, c.g), c.b);
-    // }
-    {
-        TIntermSymbol *c = MakeVariable(mSymbolTable, "c", vec3ParamType);
-
-        TIntermTyped *cR = new TIntermSwizzle(c, {0});
-        TIntermTyped *cG = new TIntermSwizzle(c->deepCopy(), {1});
-        TIntermTyped *cB = new TIntermSwizzle(c->deepCopy(), {2});
-
-        // max(c.r, c.g)
-        TIntermSequence cRcG = {cR, cG};
-        TIntermTyped *maxRG  = CreateBuiltInFunctionCallNode("max", &cRcG, *mSymbolTable, 100);
-
-        // max(max(c.r, c.g), c.b)
-        TIntermSequence maxRGcB = {maxRG, cB};
-        TIntermTyped *maxRGB = CreateBuiltInFunctionCallNode("max", &maxRGcB, *mSymbolTable, 100);
-
-        mMaxv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_maxv3", maxRGB, {c});
-    }
-
-    // float ANGLE_lumv3(vec3 c)
-    // {
-    //     return dot(c, vec3(0.30f, 0.59f, 0.11f));
-    // }
-    {
-        TIntermSymbol *c = MakeVariable(mSymbolTable, "c", vec3ParamType);
-
-        constexpr std::array<float, 3> kCoeff = {0.30f, 0.59f, 0.11f};
-        TIntermConstantUnion *coeff           = CreateVecNode(kCoeff.data(), 3, EbpMedium);
-
-        // dot(c, coeff)
-        TIntermSequence cCoeff = {c, coeff};
-        TIntermTyped *dot      = CreateBuiltInFunctionCallNode("dot", &cCoeff, *mSymbolTable, 100);
-
-        mLumv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_lumv3", dot, {c});
-    }
-
-    // float ANGLE_satv3(vec3 c)
-    // {
-    //     return ANGLE_maxv3(c) - ANGLE_minv3(c);
-    // }
-    {
-        TIntermSymbol *c = MakeVariable(mSymbolTable, "c", vec3ParamType);
-
-        // ANGLE_maxv3(c)
-        TIntermSequence cMaxArg = {c};
-        TIntermTyped *maxv3 =
-            TIntermAggregate::CreateFunctionCall(*mMaxv3->getFunction(), &cMaxArg);
-
-        // ANGLE_minv3(c)
-        TIntermSequence cMinArg = {c->deepCopy()};
-        TIntermTyped *minv3 =
-            TIntermAggregate::CreateFunctionCall(*mMinv3->getFunction(), &cMinArg);
-
-        // max - min
-        TIntermTyped *diff = new TIntermBinary(EOpSub, maxv3, minv3);
-
-        mSatv3 = MakeSimpleFunctionDefinition(mSymbolTable, "ANGLE_satv3", diff, {c});
-    }
-
-    // vec3 ANGLE_clip_color(vec3 color)
-    // {
-    //     float lum = ANGLE_lumv3(color);
-    //     float mincol = ANGLE_minv3(color);
-    //     float maxcol = ANGLE_maxv3(color);
-    //     if (mincol < 0.0f)
-    //     {
-    //         color = lum + ((color - lum) * lum) / (lum - mincol);
-    //     }
-    //     if (maxcol > 1.0f)
-    //     {
-    //         color = lum + ((color - lum) * (1.0f - lum)) / (maxcol - lum);
-    //     }
-    //     return color;
-    // }
-    {
-        TIntermSymbol *color  = MakeVariable(mSymbolTable, "color", vec3ParamType);
-        TIntermSymbol *lum    = MakeVariable(mSymbolTable, "lum", floatType);
-        TIntermSymbol *mincol = MakeVariable(mSymbolTable, "mincol", floatType);
-        TIntermSymbol *maxcol = MakeVariable(mSymbolTable, "maxcol", floatType);
-
-        // ANGLE_lumv3(color)
-        TIntermSequence cLumArg = {color};
-        TIntermTyped *lumv3 =
-            TIntermAggregate::CreateFunctionCall(*mLumv3->getFunction(), &cLumArg);
-
-        // ANGLE_minv3(color)
-        TIntermSequence cMinArg = {color->deepCopy()};
-        TIntermTyped *minv3 =
-            TIntermAggregate::CreateFunctionCall(*mMinv3->getFunction(), &cMinArg);
-
-        // ANGLE_maxv3(color)
-        TIntermSequence cMaxArg = {color->deepCopy()};
-        TIntermTyped *maxv3 =
-            TIntermAggregate::CreateFunctionCall(*mMaxv3->getFunction(), &cMaxArg);
-
-        TIntermBlock *body = new TIntermBlock;
-        body->appendStatement(CreateTempInitDeclarationNode(&lum->variable(), lumv3));
-        body->appendStatement(CreateTempInitDeclarationNode(&mincol->variable(), minv3));
-        body->appendStatement(CreateTempInitDeclarationNode(&maxcol->variable(), maxv3));
-
-        // color - lum
-        TIntermTyped *colorMinusLum = new TIntermBinary(EOpSub, color->deepCopy(), lum);
-        // (color - lum) * lum
-        TIntermTyped *colorMinusLumTimesLum =
-            new TIntermBinary(EOpVectorTimesScalar, colorMinusLum, lum->deepCopy());
-        // lum - mincol
-        TIntermTyped *lumMinusMincol = new TIntermBinary(EOpSub, lum->deepCopy(), mincol);
-        // ((color - lum) * lum) / (lum - mincol)
-        TIntermTyped *negativeMincolLumOffset =
-            new TIntermBinary(EOpDiv, colorMinusLumTimesLum, lumMinusMincol);
-        // lum + ((color - lum) * lum) / (lum - mincol)
-        TIntermTyped *negativeMincolOffset =
-            new TIntermBinary(EOpAdd, lum->deepCopy(), negativeMincolLumOffset);
-        // color = lum + ((color - lum) * lum) / (lum - mincol)
-        TIntermBlock *if1Body = new TIntermBlock;
-        if1Body->appendStatement(
-            new TIntermBinary(EOpAssign, color->deepCopy(), negativeMincolOffset));
-
-        // mincol < 0.0f
-        TIntermTyped *lessZero = new TIntermBinary(EOpLessThan, mincol->deepCopy(), Float(0));
-        // if (mincol < 0.0f) ...
-        body->appendStatement(new TIntermIfElse(lessZero, if1Body, nullptr));
-
-        // 1.0f - lum
-        TIntermTyped *oneMinusLum = new TIntermBinary(EOpSub, Float(1.0f), lum->deepCopy());
-        // (color - lum) * (1.0f - lum)
-        TIntermTyped *colorMinusLumTimesOneMinusLum =
-            new TIntermBinary(EOpVectorTimesScalar, colorMinusLum->deepCopy(), oneMinusLum);
-        // maxcol - lum
-        TIntermTyped *maxcolMinusLum = new TIntermBinary(EOpSub, maxcol, lum->deepCopy());
-        // (color - lum) * (1.0f - lum) / (maxcol - lum)
-        TIntermTyped *largeMaxcolLumOffset =
-            new TIntermBinary(EOpDiv, colorMinusLumTimesOneMinusLum, maxcolMinusLum);
-        // lum + (color - lum) * (1.0f - lum) / (maxcol - lum)
-        TIntermTyped *largeMaxcolOffset =
-            new TIntermBinary(EOpAdd, lum->deepCopy(), largeMaxcolLumOffset);
-        // color = lum + (color - lum) * (1.0f - lum) / (maxcol - lum)
-        TIntermBlock *if2Body = new TIntermBlock;
-        if2Body->appendStatement(
-            new TIntermBinary(EOpAssign, color->deepCopy(), largeMaxcolOffset));
-
-        // maxcol > 1.0f
-        TIntermTyped *largerOne = new TIntermBinary(EOpGreaterThan, maxcol->deepCopy(), Float(1));
-        // if (maxcol > 1.0f) ...
-        body->appendStatement(new TIntermIfElse(largerOne, if2Body, nullptr));
-
-        body->appendStatement(new TIntermBranch(EOpReturn, color->deepCopy()));
-
-        const TFunction *function =
-            MakeFunction(mSymbolTable, "ANGLE_clip_color", vec3Type, {&color->variable()});
-        mClipColor = MakeFunctionDefinition(function, body);
-    }
-
-    // vec3 ANGLE_set_lum(vec3 cbase, vec3 clum)
-    // {
-    //     float lbase = ANGLE_lumv3(cbase);
-    //     float llum = ANGLE_lumv3(clum);
-    //     float ldiff = llum - lbase;
-    //     vec3 color = cbase + ldiff;
-    //     return ANGLE_clip_color(color);
-    // }
-    {
-        TIntermSymbol *cbase = MakeVariable(mSymbolTable, "cbase", vec3ParamType);
-        TIntermSymbol *clum  = MakeVariable(mSymbolTable, "clum", vec3ParamType);
-
-        // ANGLE_lumv3(cbase)
-        TIntermSequence cbaseArg = {cbase};
-        TIntermTyped *lbase =
-            TIntermAggregate::CreateFunctionCall(*mLumv3->getFunction(), &cbaseArg);
-
-        // ANGLE_lumv3(clum)
-        TIntermSequence clumArg = {clum};
-        TIntermTyped *llum = TIntermAggregate::CreateFunctionCall(*mLumv3->getFunction(), &clumArg);
-
-        // llum - lbase
-        TIntermTyped *ldiff = new TIntermBinary(EOpSub, llum, lbase);
-        // cbase + ldiff
-        TIntermTyped *color = new TIntermBinary(EOpAdd, cbase->deepCopy(), ldiff);
-        // ANGLE_clip_color(color);
-        TIntermSequence clipColorArg = {color};
-        TIntermTyped *result =
-            TIntermAggregate::CreateFunctionCall(*mClipColor->getFunction(), &clipColorArg);
-
-        TIntermBlock *body = new TIntermBlock;
-        body->appendStatement(new TIntermBranch(EOpReturn, result));
-
-        const TFunction *function = MakeFunction(mSymbolTable, "ANGLE_set_lum", vec3Type,
-                                                 {&cbase->variable(), &clum->variable()});
-        mSetLum                   = MakeFunctionDefinition(function, body);
-    }
-
-    // vec3 ANGLE_set_lum_sat(vec3 cbase, vec3 csat, vec3 clum)
-    // {
-    //     float minbase = ANGLE_minv3(cbase);
-    //     float sbase = ANGLE_satv3(cbase);
-    //     float ssat = ANGLE_satv3(csat);
-    //     vec3 color;
-    //     if (sbase > 0.0f)
-    //     {
-    //         color = (cbase - minbase) * ssat / sbase;
-    //     }
-    //     else
-    //     {
-    //         color = vec3(0.0f);
-    //     }
-    //     return ANGLE_set_lum(color, clum);
-    // }
-    {
-        TIntermSymbol *cbase   = MakeVariable(mSymbolTable, "cbase", vec3ParamType);
-        TIntermSymbol *csat    = MakeVariable(mSymbolTable, "csat", vec3ParamType);
-        TIntermSymbol *clum    = MakeVariable(mSymbolTable, "clum", vec3ParamType);
-        TIntermSymbol *minbase = MakeVariable(mSymbolTable, "minbase", floatType);
-        TIntermSymbol *sbase   = MakeVariable(mSymbolTable, "sbase", floatType);
-        TIntermSymbol *ssat    = MakeVariable(mSymbolTable, "ssat", floatType);
-
-        // ANGLE_minv3(cbase)
-        TIntermSequence cMinArg = {cbase};
-        TIntermTyped *minv3 =
-            TIntermAggregate::CreateFunctionCall(*mMinv3->getFunction(), &cMinArg);
-
-        // ANGLE_satv3(cbase)
-        TIntermSequence cSatArg = {cbase->deepCopy()};
-        TIntermTyped *baseSatv3 =
-            TIntermAggregate::CreateFunctionCall(*mSatv3->getFunction(), &cSatArg);
-
-        // ANGLE_satv3(csat)
-        TIntermSequence sSatArg = {csat};
-        TIntermTyped *satSatv3 =
-            TIntermAggregate::CreateFunctionCall(*mSatv3->getFunction(), &sSatArg);
-
-        TIntermBlock *body = new TIntermBlock;
-        body->appendStatement(CreateTempInitDeclarationNode(&minbase->variable(), minv3));
-        body->appendStatement(CreateTempInitDeclarationNode(&sbase->variable(), baseSatv3));
-        body->appendStatement(CreateTempInitDeclarationNode(&ssat->variable(), satSatv3));
-
-        // cbase - minbase
-        TIntermTyped *cbaseMinusMinbase = new TIntermBinary(EOpSub, cbase->deepCopy(), minbase);
-        // (cbase - minbase) * ssat
-        TIntermTyped *cbaseMinusMinbaseTimesSsat =
-            new TIntermBinary(EOpVectorTimesScalar, cbaseMinusMinbase, ssat);
-        // (cbase - minbase) * ssat / sbase
-        TIntermTyped *colorSbaseGreaterZero =
-            new TIntermBinary(EOpDiv, cbaseMinusMinbaseTimesSsat, sbase);
-
-        // sbase > 0.0f
-        TIntermTyped *greaterZero = new TIntermBinary(EOpGreaterThan, sbase->deepCopy(), Float(0));
-
-        // sbase > 0.0f ? (cbase - minbase) * ssat / sbase : vec3(0.0)
-        TIntermTyped *color =
-            new TIntermTernary(greaterZero, colorSbaseGreaterZero, CreateZeroNode(*vec3Type));
-
-        // ANGLE_set_lum(color);
-        TIntermSequence setLumArg = {color, clum};
-        TIntermTyped *result =
-            TIntermAggregate::CreateFunctionCall(*mSetLum->getFunction(), &setLumArg);
-
-        body->appendStatement(new TIntermBranch(EOpReturn, result));
-
-        const TFunction *function =
-            MakeFunction(mSymbolTable, "ANGLE_set_lum_sat", vec3Type,
-                         {&cbase->variable(), &csat->variable(), &clum->variable()});
-        mSetLumSat = MakeFunctionDefinition(function, body);
-    }
 }
 
 void Builder::generateBlendFunctions()
@@ -1033,9 +681,7 @@ TIntermTyped *Builder::divideFloatNode(TIntermTyped *dividend, TIntermTyped *div
     return new TIntermTernary(cond, CreateFloatNode(1.0f, EbpHigh), divideExpr->deepCopy());
 }
 
-TIntermSymbol *Builder::premultiplyAlpha(TIntermBlock *blendBlock,
-                                         TIntermTyped *var,
-                                         const char *name)
+TIntermSymbol *Builder::premultiplyAlpha(TIntermBlock *opBlock, TIntermTyped *var, const char *name)
 {
     const TPrecision precision = mOutputVar->getType().getPrecision();
     TType *vec3Type            = new TType(EbtFloat, precision, EvqTemporary, 3);
@@ -1070,9 +716,9 @@ TIntermSymbol *Builder::premultiplyAlpha(TIntermBlock *blendBlock,
     }
 
     TIntermIfElse *ifBlock = new TIntermIfElse(alphaNotZero, rgbDivAlphaBlock, nullptr);
-    blendBlock->appendStatement(
+    opBlock->appendStatement(
         CreateTempInitDeclarationNode(&symbol->variable(), CreateZeroNode(*vec3Type)));
-    blendBlock->appendStatement(ifBlock);
+    opBlock->appendStatement(ifBlock);
 
     return symbol;
 }
@@ -1087,8 +733,10 @@ TIntermTyped *GetFirstElementIfArray(TIntermTyped *var)
     return element;
 }
 
-void Builder::generatePreamble(TIntermBlock *blendBlock)
+void Builder::generatePreamble(TIntermBlock *opBlock)
 {
+    TIntermTyped *output = new TIntermSymbol(mOutputVar);
+
     // Use subpassLoad to read from the input attachment
     const TPrecision precision      = mOutputVar->getType().getPrecision();
     TType *vec4Type                 = new TType(EbtFloat, precision, EvqTemporary, 4);
@@ -1099,52 +747,71 @@ void Builder::generatePreamble(TIntermBlock *blendBlock)
     TIntermTyped *subpassLoadFuncCall = CreateBuiltInFunctionCallNode(
         "subpassLoad", &subpassArguments, *mSymbolTable, kESSLInternalBackendBuiltIns);
 
-    blendBlock->appendStatement(
+    opBlock->appendStatement(
         CreateTempInitDeclarationNode(&subpassInputData->variable(), subpassLoadFuncCall));
 
-    // Get element 0 of the output, if array.
-    TIntermTyped *output = GetFirstElementIfArray(new TIntermSymbol(mOutputVar));
+    // Get the color attachment channel widths.  This is packed in 16 bits, 4 for each channel.
+    TIntermTyped *channelWidth = mDriverUniforms->getLogicOpChannelWidth();
+    const TVariable *channelWidthVar =
+        CreateTempVariable(mSymbolTable, StaticType::GetBasic<EbtUInt, EbpMedium>());
+    opBlock->appendStatement(CreateTempInitDeclarationNode(channelWidthVar, channelWidth));
 
-    // Expand output to vec4, if not already.
-    uint32_t vecSize = mOutputVar->getType().getNominalSize();
-    if (vecSize < 4)
-    {
-        TIntermSequence vec4Args = {output};
-        for (uint32_t channel = vecSize; channel < 3; ++channel)
-        {
-            vec4Args.push_back(Float(0));
-        }
-        vec4Args.push_back(Float(1));
-        output = TIntermAggregate::CreateConstructor(*vec4Type, &vec4Args);
-    }
+    channelWidth = new TIntermSymbol(channelWidthVar);
 
-    // Premultiply src and dst.
-    mSrc = premultiplyAlpha(blendBlock, output, "ANGLE_blend_src");
-    mDst = premultiplyAlpha(blendBlock, subpassInputData, "ANGLE_blend_dst");
+    // Unpack into uvec4
+    const TType *uvec4Type = StaticType::GetBasic<EbtUInt, EbpMedium, 4>();
 
-    // Calculate the p coefficients:
-    TIntermTyped *srcAlpha = new TIntermSwizzle(output->deepCopy(), {3});
-    TIntermTyped *dstAlpha = new TIntermSwizzle(subpassInputData->deepCopy(), {3});
+    TIntermSequence channelWidthArgs = {
+        new TIntermBinary(EOpBitwiseAnd, channelWidth, CreateUIntNode(0xF)),
+        new TIntermBinary(
+            EOpBitwiseAnd,
+            new TIntermBinary(EOpBitShiftRight, channelWidth->deepCopy(), CreateUIntNode(4)),
+            CreateUIntNode(0xF)),
+        new TIntermBinary(
+            EOpBitwiseAnd,
+            new TIntermBinary(EOpBitShiftRight, channelWidth->deepCopy(), CreateUIntNode(8)),
+            CreateUIntNode(0xF)),
+        new TIntermBinary(
+            EOpBitwiseAnd,
+            new TIntermBinary(EOpBitShiftRight, channelWidth->deepCopy(), CreateUIntNode(12)),
+            CreateUIntNode(0xF)),
+    };
+    channelWidth = TIntermAggregate::CreateConstructor(*uvec4Type, &channelWidthArgs);
 
-    // As * Ad
-    TIntermTyped *AsTimesAd = new TIntermBinary(EOpMul, srcAlpha, dstAlpha);
-    // As * (1. - Ad)
-    TIntermTyped *oneMinusAd        = new TIntermBinary(EOpSub, Float(1), dstAlpha->deepCopy());
-    TIntermTyped *AsTimesOneMinusAd = new TIntermBinary(EOpMul, srcAlpha->deepCopy(), oneMinusAd);
-    // Ad * (1. - As)
-    TIntermTyped *oneMinusAs        = new TIntermBinary(EOpSub, Float(1), srcAlpha->deepCopy());
-    TIntermTyped *AdTimesOneMinusAs = new TIntermBinary(EOpMul, dstAlpha->deepCopy(), oneMinusAs);
+    // Generate (1u << width) - 1 to create the multiplier
+    TIntermTyped *one = CreateUVecNode({1, 1, 1, 1}, 4, EbpMedium);
+    channelMultiplier = new TIntermBinary(EOpBitShiftLeft, one, channelWidthArgs);
+    channelMultiplier = new TIntermBinary(EOpSub, channelMultiplier, one->deepCopy());
 
-    mP0 = MakeVariable(mSymbolTable, "ANGLE_blend_p0", &srcAlpha->getType());
-    mP1 = MakeVariable(mSymbolTable, "ANGLE_blend_p1", &srcAlpha->getType());
-    mP2 = MakeVariable(mSymbolTable, "ANGLE_blend_p2", &srcAlpha->getType());
+    const TVariable *channelMultiplierVar = CreateTempVariable(mSymbolTable, uvec4Type);
+    opBlock->appendStatement(
+        CreateTempInitDeclarationNode(channelMultiplierVar, channelMultiplier));
+    mChannelMultiplier = new TIntermSybmol(channelMultiplierVar);
 
-    blendBlock->appendStatement(CreateTempInitDeclarationNode(&mP0->variable(), AsTimesAd));
-    blendBlock->appendStatement(CreateTempInitDeclarationNode(&mP1->variable(), AsTimesOneMinusAd));
-    blendBlock->appendStatement(CreateTempInitDeclarationNode(&mP2->variable(), AdTimesOneMinusAs));
+    // Unnormalize source and destination
+    TIntermSequence channelMultiplierArgs = {
+        channelMultiplier,
+    };
+    channelMultiplier = TIntermAggregate::CreateConstructor(
+        *StaticType::GetBasic<EbtFloat, EbpMedium, 4>(), &channelMultiplierArgs);
+
+    mSrc = MakeVariable(mSymbolTable, "logicOpSrc", uvec4Type);
+    mDst = MakeVariable(mSymbolTable, "logicOpDst", uvec4Type);
+
+    // uvec4((src * multiplier) + 0.5);
+    output                  = new TIntermBinary(EOpMul, output, channelMultiplier);
+    output                  = new TIntermBinary(EOpAdd, output, CreateFloatNode(0.49, EbpMedium));
+    TIntermSequence srcArgs = {
+        output,
+    };
+    output = TIntermAggregate::CreateConstructor(uvec4Type, &srcArgs);
+    opBlock->appendStatement(CreateTempInitDeclarationNode(mSrc->variable(), output));
+
+    // uvec4((src * multiplier) + 0.5);
+    // TODO
 }
 
-void Builder::generateEquationSwitch(TIntermBlock *blendBlock)
+void Builder::generateLogicOpSwitches(TIntermBlock *opBlock)
 {
     const TPrecision precision = mOutputVar->getType().getPrecision();
 
@@ -1171,7 +838,7 @@ void Builder::generateEquationSwitch(TIntermBlock *blendBlock)
     // output = vec4(rgb, a);
 
     TIntermSymbol *f = MakeVariable(mSymbolTable, "ANGLE_f", vec3Type);
-    blendBlock->appendStatement(CreateTempDeclarationNode(&f->variable()));
+    opBlock->appendStatement(CreateTempDeclarationNode(&f->variable()));
 
     TIntermBlock *switchBody = new TIntermBlock;
 
@@ -1215,7 +882,7 @@ void Builder::generateEquationSwitch(TIntermBlock *blendBlock)
     // A driver uniform is used to communicate the blend equation to use.
     TIntermTyped *equationUniform = mDriverUniforms->getAdvancedBlendEquation();
 
-    blendBlock->appendStatement(new TIntermSwitch(equationUniform, switchBody));
+    opBlock->appendStatement(new TIntermSwitch(equationUniform, switchBody));
 
     // Calculate the final blend according to the following formula:
     //
@@ -1251,20 +918,18 @@ void Builder::generateEquationSwitch(TIntermBlock *blendBlock)
 
     TIntermTyped *output = GetFirstElementIfArray(new TIntermSymbol(mOutputVar));
 
-    blendBlock->appendStatement(new TIntermBinary(EOpAssign, output, blendResult));
+    opBlock->appendStatement(new TIntermBinary(EOpAssign, output, blendResult));
 }
 }  // anonymous namespace
 
-bool EmulateAdvancedBlendEquations(TCompiler *compiler,
-                                   const ShCompileOptions &compileOptions,
-                                   TIntermBlock *root,
-                                   TSymbolTable *symbolTable,
-                                   const DriverUniform *driverUniforms,
-                                   std::vector<ShaderVariable> *uniforms,
-                                   const AdvancedBlendEquations &advancedBlendEquations)
+bool EmulateLogicOp(TCompiler *compiler,
+                    const ShCompileOptions &compileOptions,
+                    TIntermBlock *root,
+                    TSymbolTable *symbolTable,
+                    const DriverUniform *driverUniforms,
+                    std::vector<ShaderVariable> *uniforms)
 {
-    Builder builder(compiler, compileOptions, symbolTable, driverUniforms, uniforms,
-                    advancedBlendEquations);
+    Builder builder(compiler, compileOptions, symbolTable, driverUniforms, uniforms);
     return builder.build(root);
 }  // namespace
 
