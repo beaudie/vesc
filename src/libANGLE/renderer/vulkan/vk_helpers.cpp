@@ -6745,6 +6745,9 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     {
         ASSERT(storageFormat.pixelBytes != 0);
 
+        fprintf(stderr, "glExtents.width=%d glExtents.height=%d\n", (int)glExtents.width,
+                (int)glExtents.height);
+
         if (storageFormat.id == angle::FormatID::D24_UNORM_S8_UINT)
         {
             stencilLoadFunction = angle::LoadX24S8ToS8;
@@ -7057,6 +7060,11 @@ angle::Result ImageHelper::CalculateBufferInfo(ContextVk *contextVk,
         contextVk, formatInfo.computeSkipBytes(type, *inputRowPitch, *inputDepthPitch, unpack, is3D,
                                                inputSkipBytes));
 
+    if (formatInfo.paletted)
+    {
+        ASSERT(*inputSkipBytes == 0);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -7297,7 +7305,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     GLuint inputSkipBytes  = 0;
     ANGLE_TRY(CalculateBufferInfo(contextVk, glExtents, formatInfo, unpack, type, index.usesTex3D(),
                                   &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
-
+    fprintf(stderr, "inputRowPitch=%d inputDepthPitch=%d\n", (int)inputRowPitch,
+            (int)inputDepthPitch);
     ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, unpack,
                                          type, pixels, vkFormat, access, inputRowPitch,
                                          inputDepthPitch, inputSkipBytes));
