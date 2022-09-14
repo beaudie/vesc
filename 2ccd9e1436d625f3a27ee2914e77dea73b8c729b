@@ -16,6 +16,24 @@
       "message": "Should we use the existing helper function `validateSamplePass()`? It checks that both the glDrawArrays works and the FBO has the correct default size.\n\n```\nGLQuery query;\nfor (int loop \u003d 0; loop \u003c 2; loop++)\n{\n   GLFramebuffer framebuffer;\n   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);\n   GLuint defaultWidth  \u003d 1 \u003c\u003c loop;\n   GLuint defaultHeight \u003d 1 \u003c\u003c loop;\n   glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);\n   glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);\n   EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));\n   \n   validateSamplePass(query, defaultWidth, defaultHeight);\n   \n}\n```",
       "revId": "2ccd9e1436d625f3a27ee2914e77dea73b8c729b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b54a9bf4_c59c8642",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-14T22:17:38Z",
+      "side": 1,
+      "message": "Sounds good to me. You can change it in your CL.",
+      "parentUuid": "6bb2034e_8c73d24f",
+      "revId": "2ccd9e1436d625f3a27ee2914e77dea73b8c729b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
