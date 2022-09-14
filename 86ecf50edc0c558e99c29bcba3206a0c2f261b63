@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "890f0fed_60e80f0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-14T16:19:20Z",
+      "side": 1,
+      "message": "Patch set 3 - replaced \"and\" with \"\u0026\u0026\". to fix errors",
+      "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
