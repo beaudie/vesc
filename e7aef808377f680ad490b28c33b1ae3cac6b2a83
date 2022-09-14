@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf0bc1f_65db43e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-14T13:05:57Z",
+      "side": 1,
+      "message": "have been looking at logs but dont see a crash stack or other helpful info, any pointers on why android bots are failing?\n\ni have modified the call to `dlopen` to take in the full path, will see how that works out",
+      "parentUuid": "d73ab749_0dfafcbf",
+      "revId": "e7aef808377f680ad490b28c33b1ae3cac6b2a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d35db734_586def87",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-14T12:28:22Z",
       "side": 1,
       "message": "nit: place in helper to de-duplicate.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 58
+      },
+      "revId": "e7aef808377f680ad490b28c33b1ae3cac6b2a83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "734b1198_e02d9862",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-14T13:05:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d35db734_586def87",
       "range": {
         "startLine": 35,
         "startChar": 0,
