@@ -764,3 +764,6 @@
 7598 OpenGL : FogBlendTest.ShadowEffect/* = SKIP
 7598 GLES : FogBlendTest.ShadowEffect/* = SKIP
 7598 D3D11 : FogBlendTest.ShadowEffect/* = SKIP
+
+// EXT_multisample_compatibility exposed for the sake of GLES1, but not implemented on Vulkan
+7657 VULKAN : EXTMultisampleCompatibilityTest.* = SKIP

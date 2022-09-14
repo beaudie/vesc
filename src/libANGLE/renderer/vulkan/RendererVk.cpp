@@ -2544,6 +2544,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     mEnabledFeatures.features.tessellationShader = mPhysicalDeviceFeatures.tessellationShader;
     // Used to support EXT_blend_func_extended
     mEnabledFeatures.features.dualSrcBlend = mPhysicalDeviceFeatures.dualSrcBlend;
+    // Used to support EXT_multisample_compatibility
+    mEnabledFeatures.features.alphaToOne = mPhysicalDeviceFeatures.alphaToOne;
 
     if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
         !vk::RenderPassCommandBuffer::ExecutesInline())
