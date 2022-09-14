@@ -424,7 +424,6 @@ TEST_P(GLES1ConformanceTest, TexDecal)
 
 TEST_P(GLES1ConformanceTest, TexPalet)
 {
-    ANGLE_SKIP_TEST_IF(true);
     ASSERT_NE(CONFORMANCE_TEST_ERROR, TexPaletExec());
 }
 
