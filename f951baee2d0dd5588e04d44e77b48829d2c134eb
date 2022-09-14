@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b6316e4_49537d8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-14T01:03:50Z",
+      "side": 1,
+      "message": "I can\u0027t see \"CQ DRY RUN\" but I think there\u0027s something wrong with my test setup:\n\n```\n[ RUN      ] GoogleTestVerification.UninstantiatedParameterizedTestSuite\u003cEGLSyncTestMetalSharedEvent\u003e\n../../src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm:70: Failure\nParameterized test suite EGLSyncTestMetalSharedEvent is defined via TEST_P, but never instantiated. None of the test cases will run. Either no INSTANTIATE_TEST_SUITE_P is provided or the only ones provided expand to nothing.\n\nIdeally, TEST_P definitions should only ever be included as part of binaries that intend to use them. (As opposed to, for example, being placed in a library that may be linked in to get other utilities.)\n\nTo suppress this error for this test suite, insert the following line (in a non-header) in the namespace it is defined in:\n\nGTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLSyncTestMetalSharedEvent);\n```",
+      "parentUuid": "efb55348_d44d6d07",
+      "revId": "f951baee2d0dd5588e04d44e77b48829d2c134eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f38329b_e22060c5",
