@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "480f9be4ba5ea0b496fa0b7a5fe89f2778d86dc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe20bd57_87d6499f",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-14T16:20:17Z",
+      "side": 1,
+      "message": "nit: naming style",
+      "range": {
+        "startLine": 65,
+        "startChar": 19,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "480f9be4ba5ea0b496fa0b7a5fe89f2778d86dc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
