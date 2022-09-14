@@ -7297,7 +7297,6 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     GLuint inputSkipBytes  = 0;
     ANGLE_TRY(CalculateBufferInfo(contextVk, glExtents, formatInfo, unpack, type, index.usesTex3D(),
                                   &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
-
     ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, unpack,
                                          type, pixels, vkFormat, access, inputRowPitch,
                                          inputDepthPitch, inputSkipBytes));
