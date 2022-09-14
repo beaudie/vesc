@@ -80,6 +80,13 @@ class ShareGroupVk : public ShareGroupImpl
 
     void onTextureRelease(TextureVk *textureVk);
 
+    void appendFramebufferHelperWithNoAttachment(vk::FramebufferHelper &&framebufferHelper)
+    {
+        mFramebufferWithNoAttachments.emplace_back(std::move(framebufferHelper));
+    }
+
+    void destroyFramebufferHelperWithNoAttachment(RendererVk *rendererVk);
+
   private:
     // VkFramebuffer caches
     FramebufferCache mFramebufferCache;
@@ -108,6 +115,8 @@ class ShareGroupVk : public ShareGroupImpl
     // The pool dedicated for small allocations that uses faster buddy algorithm
     std::unique_ptr<vk::BufferPool> mSmallBufferPool;
     static constexpr VkDeviceSize kMaxSizeToUseSmallBufferPool = 256;
+
+    std::vector<vk::FramebufferHelper> mFramebufferWithNoAttachments;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;

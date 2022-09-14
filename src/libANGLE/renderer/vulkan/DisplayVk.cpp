@@ -655,6 +655,7 @@ void ShareGroupVk::onDestroy(const egl::Display *display)
     mMetaDescriptorPools[DescriptorSetIndex::ShaderResource].destroy(renderer);
 
     mFramebufferCache.destroy(renderer);
+    destroyFramebufferHelperWithNoAttachment(renderer);
     resetPrevTexture();
 
     ASSERT(mResourceUseLists.empty());
@@ -853,6 +854,14 @@ void ShareGroupVk::logBufferPools() const
         std::ostringstream log;
         mSmallBufferPool->addStats(&log);
         INFO() << "\t" << log.str();
+    }
+}
+
+void ShareGroupVk::destroyFramebufferHelperWithNoAttachment(RendererVk *rendererVk)
+{
+    for (vk::FramebufferHelper &framebufferHelper : mFramebufferWithNoAttachments)
+    {
+        framebufferHelper.destroy(rendererVk);
     }
 }
 }  // namespace rx
