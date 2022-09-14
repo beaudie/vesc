@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cbc9e61_5477fc4a",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-14T23:11:54Z",
+      "side": 1,
+      "message": "You don\u0027t need this, and appendFramebufferHelperWithNoAttachments/destroyFramebufferHelperWithNoAttachments functions.\n\nMy guess is that you are doing this to destroy vkFramebuffer object. What I am suggesting is to do what amirali\u0027s CL does, by add FramebufferVk::invalidateCurrentFramebuffer() at places where  mCurrentFramebuffer.release() is called. Otherwise, the way you do it here, if someone keep change size in a loop, you will leak VkFramebuffer objects.",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 68
+      },
+      "revId": "0e0d1edd34d54abb1f1f95b8912bad825f11af2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef5298fe_2a490fe1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2239,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-14T23:11:54Z",
+      "side": 1,
+      "message": "You can just mCurrentFramebuffer \u003d std::move(newFramebuffer)?",
+      "range": {
+        "startLine": 2237,
+        "startChar": 9,
+        "endLine": 2239,
+        "endChar": 39
+      },
+      "revId": "0e0d1edd34d54abb1f1f95b8912bad825f11af2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
