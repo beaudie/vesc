@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf223a1a_afe35516",
+        "filename": "src/libANGLE/GLES1State.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-09-14T09:14:52Z",
+      "side": 1,
+      "message": "`std::tie` really simplified this.",
+      "parentUuid": "9a812cf2_dd29569d",
+      "range": {
+        "startLine": 497,
+        "startChar": 0,
+        "endLine": 506,
+        "endChar": 1
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4871fa7_7d21c2ea",
@@ -78,6 +102,30 @@
       "writtenOn": "2022-09-13T15:22:33Z",
       "side": 1,
       "message": "nit: looks like these can be const \u0026",
+      "range": {
+        "startLine": 2692,
+        "startChar": 0,
+        "endLine": 2694,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8714435_6761ec71",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-09-14T09:14:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4871fa7_7d21c2ea",
       "range": {
         "startLine": 2692,
         "startChar": 0,
@@ -125,6 +173,30 @@
       "side": 1,
       "message": "No macros, please.  Just a regular C++ helper or a lambda.",
       "parentUuid": "275e1e6c_8ba17afd",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2723,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cec158ba_c61ed73b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-09-14T09:14:52Z",
+      "side": 1,
+      "message": "I went with lambdas. I am open to ideas how to improve this.\n\n@Jamie: I thought about a solution using `std:tie` here, but I would need to map the `gl::TextureEnvParameter` `pname` to the `TextureEnvironmentParameters` members. Also considering that I would somehow need to handle the different types in a more generic fashion I think the current solution is more readable.",
+      "parentUuid": "ecb9dd4a_58a0d9a5",
       "range": {
         "startLine": 2708,
         "startChar": 0,
