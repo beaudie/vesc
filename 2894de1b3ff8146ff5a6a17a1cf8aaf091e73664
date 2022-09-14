@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05abba16_e00b776e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-14T20:24:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0506a430_1ee44bee",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b35773a3_58fa353c",
@@ -173,6 +191,24 @@
       "side": 1,
       "message": "WebGL 2.0 does have a getIndexedParameter: https://registry.khronos.org/webgl/specs/latest/2.0/\n\nWebGL deliberately elided an analogue to IsEnablediOES to simplify the API:\nhttps://registry.khronos.org/OpenGL/extensions/OES/OES_draw_buffers_indexed.txt\nhttps://registry.khronos.org/webgl/extensions/OES_draw_buffers_indexed/\n\nIf the indexed parameter fetch is overloaded - i.e. it should really be an indexed variant of GetFramebufferAttachmentParameter - then I\u0027m in favor of keeping the API simpler and not providing queries. The app can store the state (clear color) if it needs it.\n\nLeaving the spec as-is is also fine with me.",
       "parentUuid": "0840bc5d_dc6eee88",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9db836_b0204968",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-14T20:24:42Z",
+      "side": 1,
+      "message": "Ok let\u0027s give ourselves more time to think this over. I\u0027m planning to move the spec into a doc like we talked about in the WebGL working group, so we can move this discussion into that doc.\n\nIn the meantime, in the interest of keeping https://chromium-review.googlesource.com/c/angle/angle/+/3886462 as simple as possible, let\u0027s land this. It\u0027s always easy to put together another CL if we decide to add back the clear state.",
+      "parentUuid": "d1b4022d_16f8863d",
       "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
