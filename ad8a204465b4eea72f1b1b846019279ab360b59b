@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5353e802_9c44730c",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-14T19:07:01Z",
+      "side": 0,
+      "message": "Why is this test being removed? It still seems valid.",
+      "revId": "ad8a204465b4eea72f1b1b846019279ab360b59b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

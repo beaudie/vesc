@@ -18,6 +18,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3fea723_53d04ecc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-14T19:07:01Z",
+      "side": 1,
+      "message": "This lgtm overall but I\u0027d like to hold back on +2\u0027ing it until the parent CL lands. Others are welcome to +2 if they like.\n",
+      "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5782b20b_959a5c3b",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-14T19:07:01Z",
+      "side": 1,
+      "message": "Would it be OK to add something like:\n\n\"If this returns a non-null value, the caller is responsible for releasing the MTLSharedEvent once after calling this function.\"\n\nI know it\u0027s implicit via \"increases the retain count\" but it might be better to be very explicit about its usage.",
+      "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce50a5c5_e699e7c2",
@@ -31,6 +65,23 @@
       "writtenOn": "2022-09-14T08:42:54Z",
       "side": 1,
       "message": "nit: I think this method is unnecessary, `leakObject` could be used directly instead.",
+      "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6018798f_2a1c2b9d",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-14T19:07:01Z",
+      "side": 1,
+      "message": "Can this be moved to the end of the test, and after the eglDestroySync call, expect that the sharedEvent\u0027s retain count is 1ul before releasing it?\n\nCan we remove the if-test since sharedEvent is supposed to be non-null?",
       "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
