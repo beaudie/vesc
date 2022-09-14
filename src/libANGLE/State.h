@@ -268,6 +268,8 @@ class State : angle::NonCopyable
     void setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height);
     const Rectangle &getScissor() const { return mScissor; }
 
+    void setScissorBitDirty();
+
     // Dither state toggle & query
     bool isDitherEnabled() const { return mRasterizer.dither; }
     void setDither(bool enabled);

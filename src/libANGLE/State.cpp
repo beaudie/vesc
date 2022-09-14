@@ -1232,6 +1232,11 @@ void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
     }
 }
 
+void State::setScissorBitDirty()
+{
+    mDirtyBits.set(DIRTY_BIT_SCISSOR);
+}
+
 void State::setDither(bool enabled)
 {
     if (mRasterizer.dither != enabled)
