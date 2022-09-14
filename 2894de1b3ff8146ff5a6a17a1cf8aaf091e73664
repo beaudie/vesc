@@ -157,6 +157,24 @@
       "parentUuid": "f0ee8a91_171066e8",
       "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1b4022d_16f8863d",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-14T19:24:45Z",
+      "side": 1,
+      "message": "WebGL 2.0 does have a getIndexedParameter: https://registry.khronos.org/webgl/specs/latest/2.0/\n\nWebGL deliberately elided an analogue to IsEnablediOES to simplify the API:\nhttps://registry.khronos.org/OpenGL/extensions/OES/OES_draw_buffers_indexed.txt\nhttps://registry.khronos.org/webgl/extensions/OES_draw_buffers_indexed/\n\nIf the indexed parameter fetch is overloaded - i.e. it should really be an indexed variant of GetFramebufferAttachmentParameter - then I\u0027m in favor of keeping the API simpler and not providing queries. The app can store the state (clear color) if it needs it.\n\nLeaving the spec as-is is also fine with me.",
+      "parentUuid": "0840bc5d_dc6eee88",
+      "revId": "2894de1b3ff8146ff5a6a17a1cf8aaf091e73664",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
