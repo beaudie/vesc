@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c0af6b9_7f6e46da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-14T04:17:13Z",
+      "side": 1,
+      "message": "LGTM - hard to verify the tests are still running.",
+      "revId": "5aba2de6fdf97f97839ec8f348fc1ba2dcc6e692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
