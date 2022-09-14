@@ -229,6 +229,30 @@
       },
       "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6771cc98_3121b885",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-09-14T12:49:29Z",
+      "side": 1,
+      "message": "The advantage of using lambdas here over template functions is that I avoid passing `setupCalls` and `replayState` to each call, since they are part of the lambda scope.",
+      "parentUuid": "d0fbd975_e7c03b73",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2723,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
