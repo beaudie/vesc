@@ -6632,6 +6632,10 @@ void Context::framebufferParameteri(GLenum target, GLenum pname, GLint param)
 {
     Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
     SetFramebufferParameteri(this, framebuffer, pname, param);
+    if (pname == GL_FRAMEBUFFER_DEFAULT_WIDTH || pname == GL_FRAMEBUFFER_DEFAULT_HEIGHT)
+    {
+        mState.setScissorBitDirty();
+    }
 }
 
 bool Context::getScratchBuffer(size_t requstedSizeBytes,
