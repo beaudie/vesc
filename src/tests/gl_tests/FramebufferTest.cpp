@@ -2945,9 +2945,6 @@ void main()
 // If fbo has no attachments, change size should still work without vvl error.
 TEST_P(FramebufferTest_ES31, ChangeFBOSizeWithNoAttachments)
 {
-    // b/246334302. Temporary disable it until we fix it.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kVS1[] = R"(#version 310 es
 in layout(location = 0) highp vec2 a_position;
 void main()
@@ -2975,6 +2972,7 @@ void main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
 
+    GLQuery query;
     for (int loop = 0; loop < 2; loop++)
     {
         GLFramebuffer framebuffer;
@@ -2985,9 +2983,8 @@ void main()
         glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
         EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
 
-        // Draw
-        glUniform2i(0, 0, 0);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // Draw and check the FBO size
+        validateSamplePass(query, defaultWidth, defaultHeight);
     }
     ASSERT_GL_NO_ERROR();
 }

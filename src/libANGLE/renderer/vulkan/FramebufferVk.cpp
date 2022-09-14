@@ -2225,13 +2225,20 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     // Check that our description matches our attachments. Can catch implementation bugs.
     ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
-    insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
-
-    bool result = contextVk->getShareGroup()->getFramebufferCache().get(
-        contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
-    ASSERT(result);
+    if (mCurrentFramebufferDesc.attachmentCount() > 0)
+    {
+        insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));
+        bool result = contextVk->getShareGroup()->getFramebufferCache().get(
+            contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);
+        ASSERT(result);
+    }
+    else
+    {
+        mCurrentFramebuffer.setHandle(newFramebuffer.getFramebuffer().getHandle());
+        contextVk->getShareGroup()->appendFramebufferHelperWithNoAttachments(
+            std::move(newFramebuffer));
+    }
     ASSERT(mCurrentFramebuffer.valid());
-
     *framebufferOut = &mCurrentFramebuffer;
     return angle::Result::Continue;
 }
