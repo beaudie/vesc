@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13948c88_54b69d6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-14T08:42:54Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce50a5c5_e699e7c2",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-09-14T08:42:54Z",
+      "side": 1,
+      "message": "nit: I think this method is unnecessary, `leakObject` could be used directly instead.",
+      "revId": "701f412464a189ebf0d40e271db0983eb02d4c23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
