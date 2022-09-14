@@ -855,4 +855,5 @@ void ShareGroupVk::logBufferPools() const
         INFO() << "\t" << log.str();
     }
 }
+
 }  // namespace rx

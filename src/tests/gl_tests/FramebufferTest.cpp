@@ -2945,9 +2945,6 @@ void main()
 // If fbo has no attachments, change size should still work without vvl error.
 TEST_P(FramebufferTest_ES31, ChangeFBOSizeWithNoAttachments)
 {
-    // b/246334302. Temporary disable it until we fix it.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kVS1[] = R"(#version 310 es
 in layout(location = 0) highp vec2 a_position;
 void main()
@@ -2975,20 +2972,85 @@ void main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
 
-    for (int loop = 0; loop < 2; loop++)
-    {
-        GLFramebuffer framebuffer;
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
-        GLuint defaultWidth  = 1 << loop;
-        GLuint defaultHeight = 1 << loop;
-        glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);
-        glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
-        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+    GLQuery query;
 
-        // Draw
-        glUniform2i(0, 0, 0);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-    }
+    // Test that:
+    // 1. create 1st no-attachment framebuffer with size 1*1, draw, delete framebuffer
+    // 2. create 2nd no-attachment framebuffer with size 2*2, draw, delete framebuffer
+    // works properly
+    //    for (int loop = 0; loop < 2; loop++)
+    //    {
+    //        GLFramebuffer framebuffer;
+    //        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffer);
+    //        GLuint defaultWidth  = 1 << loop;
+    //        GLuint defaultHeight = 1 << loop;
+    //        glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+    //        defaultWidth); glFramebufferParameteri(GL_DRAW_FRAMEBUFFER,
+    //        GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+    //        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE,
+    //        glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+    //
+    //        // Draw and check the FBO size
+    //        validateSamplePass(query, defaultWidth, defaultHeight);
+    //    }
+    //
+    //    // Test that:
+    //    // 1. create a no-attachment framebuffer with size 1*1, draw
+    //    // 2. change the no-attachment framebuffer size to 2*2, draw
+    //    // works properly
+    //    GLFramebuffer framebufferWithVariousSize;
+    //    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferWithVariousSize);
+    //    for(int loop = 0; loop < 2; loop++)
+    //    {
+    //        GLuint defaultWidth = 1 << loop;
+    //        GLuint defaultHeight = 1 << loop;
+    //        glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH,
+    //        defaultWidth); glFramebufferParameteri(GL_DRAW_FRAMEBUFFER,
+    //        GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+    //        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE,
+    //        glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+    //
+    //        // Draw and check the FBO size
+    //        validateSamplePass(query, defaultWidth, defaultHeight);
+    //    }
+
+    // Test that:
+    // 1. create a no-attachment framebuffer with size 1*1, draw
+    // 2. give the fbo with 1 color attachment, draw
+    // 3. change the fbo size, draw
+    // 4. remove the fbo attachment, draw
+    // works properly
+    GLFramebuffer framebufferWithVariousSizeAndAttachment;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferWithVariousSizeAndAttachment);
+    GLuint defaultWidth  = 1;
+    GLuint defaultHeight = 1;
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+    validateSamplePass(query, defaultWidth, defaultHeight);
+
+    GLTexture mTexture;
+    glBindTexture(GL_TEXTURE_2D, mTexture.get());
+    GLuint attachmentWidth  = 2;
+    GLuint attachmentHeight = 2;
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, attachmentWidth, attachmentHeight);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTexture.get(),
+                           0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    validateSamplePass(query, attachmentWidth, attachmentWidth);
+
+    defaultWidth  = 3;
+    defaultHeight = 3;
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, defaultWidth);
+    glFramebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, defaultHeight);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+    validateSamplePass(query, attachmentWidth, attachmentHeight);
+
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER));
+
+    validateSamplePass(query, defaultWidth, defaultHeight);
+
     ASSERT_GL_NO_ERROR();
 }
 

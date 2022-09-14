@@ -143,6 +143,8 @@ class FramebufferVk : public FramebufferImpl
     void setBackbuffer(WindowSurfaceVk *backbuffer) { mBackbuffer = backbuffer; }
     WindowSurfaceVk *getBackbuffer() const { return mBackbuffer; }
 
+    void inValidateCurrentFramebuffer(ContextVk *contextVk, bool garbageCollect);
+
   private:
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.
     angle::Result blitWithCommand(ContextVk *contextVk,
