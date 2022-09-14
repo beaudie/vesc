@@ -1496,6 +1496,9 @@ class FramebufferDesc
         mSrgbWriteControlMode = static_cast<uint16_t>(mode);
     }
     void updateIsMultiview(bool isMultiview) { mIsMultiview = isMultiview; }
+    void updateIsNoAttachment(bool isNoAttachment) { mIsNoAttachment = isNoAttachment; }
+    void updateFramebufferWidth(uint32_t width) { mWidth = width; }
+    void updateFramebufferHeight(uint32_t height) { mHeight = height; }
     size_t hash() const;
 
     bool operator==(const FramebufferDesc &other) const;
@@ -1546,15 +1549,19 @@ class FramebufferDesc
 
     // Whether this is a multisampled-render-to-single-sampled framebuffer.  Only used when using
     // VK_EXT_multisampled_render_to_single_sampled.  Only one bit is used and the rest is padding.
-    uint16_t mIsRenderToTexture : 15 - kMaxFramebufferNonResolveAttachments;
+    // uint16_t mIsRenderToTexture : 15 - kMaxFramebufferNonResolveAttachments;
+    uint16_t mIsRenderToTexture : 14 - kMaxFramebufferNonResolveAttachments;
+    uint16_t mIsNoAttachment : 1;
 
     uint16_t mIsMultiview : 1;
 
+    uint32_t mHeight;
+    uint32_t mWidth;
     FramebufferAttachmentArray<ImageOrBufferViewSubresourceSerial> mSerials;
 };
 
 constexpr size_t kFramebufferDescSize = sizeof(FramebufferDesc);
-static_assert(kFramebufferDescSize == 148, "Size check failed");
+static_assert(kFramebufferDescSize == 156, "Size check failed");
 
 // Disable warnings about struct padding.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS

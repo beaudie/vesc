@@ -4123,8 +4123,10 @@ void FramebufferDesc::updateDepthStencilResolve(ImageOrBufferViewSubresourceSeri
 
 size_t FramebufferDesc::hash() const
 {
+    const uint32_t widthAndHeight[2] = {mWidth, mHeight};
     return angle::ComputeGenericHash(&mSerials, sizeof(mSerials[0]) * mMaxIndex) ^
-           mHasFramebufferFetch << 26 ^ mIsRenderToTexture << 25 ^ mLayerCount << 16 ^
+           angle::ComputeGenericHash(widthAndHeight) ^ mHasFramebufferFetch << 26 ^
+           mIsRenderToTexture << 25 ^ mIsNoAttachment << 24 ^ mLayerCount << 16 ^
            mUnresolveAttachmentMask;
 }
 
@@ -4136,6 +4138,9 @@ void FramebufferDesc::reset()
     mSrgbWriteControlMode    = 0;
     mUnresolveAttachmentMask = 0;
     mIsRenderToTexture       = 0;
+    mIsNoAttachment          = true;
+    mHeight                  = 0;
+    mWidth                   = 0;
     memset(&mSerials, 0, sizeof(mSerials));
 }
 

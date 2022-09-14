@@ -1889,6 +1889,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     bool shouldUpdateColorMaskAndBlend    = false;
     bool shouldUpdateLayerCount           = false;
     bool shouldUpdateSrgbWriteControlMode = false;
+    bool shouldUpdateNumberOfAttachment   = false;
+    bool shouldUpdateWidthAndHeight       = false;
 
     // For any updated attachments we'll update their Serials below
     ASSERT(dirtyBits.any());
@@ -1901,15 +1903,17 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
             case gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS:
                 ANGLE_TRY(updateDepthStencilAttachment(context));
-                shouldUpdateLayerCount      = true;
-                dirtyDepthStencilAttachment = true;
+                shouldUpdateLayerCount         = true;
+                dirtyDepthStencilAttachment    = true;
+                shouldUpdateNumberOfAttachment = true;
                 break;
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
                 ANGLE_TRY(mRenderTargetCache.update(context, mState, dirtyBits));
                 break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
-                shouldUpdateColorMaskAndBlend = true;
-                shouldUpdateLayerCount        = true;
+                shouldUpdateColorMaskAndBlend  = true;
+                shouldUpdateLayerCount         = true;
+                shouldUpdateNumberOfAttachment = true;
                 break;
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
@@ -1918,6 +1922,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 // Invalidate the cache. If we have performance critical code hitting this path we
                 // can add related data (such as width/height) to the cache
                 mCurrentFramebuffer.release();
+                shouldUpdateNumberOfAttachment = true;
+                shouldUpdateWidthAndHeight     = true;
                 break;
             case gl::Framebuffer::DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE:
                 shouldUpdateSrgbWriteControlMode = true;
@@ -1976,6 +1982,24 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     if (shouldUpdateLayerCount)
     {
         updateLayerCount();
+    }
+
+    if (shouldUpdateNumberOfAttachment)
+    {
+        if (mState.getColorAttachmentsMask().any() || getDepthStencilRenderTarget() != nullptr)
+        {
+            mCurrentFramebufferDesc.updateIsNoAttachment(false);
+        }
+        else
+        {
+            mCurrentFramebufferDesc.updateIsNoAttachment(true);
+        }
+    }
+
+    if (shouldUpdateWidthAndHeight)
+    {
+        mCurrentFramebufferDesc.updateFramebufferWidth(mState.getExtents().width);
+        mCurrentFramebufferDesc.updateFramebufferHeight(mState.getExtents().height);
     }
 
     // Only defer clears for draw framebuffer ops.  Note that this will result in a render area that

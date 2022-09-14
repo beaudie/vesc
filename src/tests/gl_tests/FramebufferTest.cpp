@@ -2951,6 +2951,77 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Test that rendering to two no-attachment FBOs of different sizes works properly
+TEST_P(FramebufferTest_ES31, RenderingToFBOWithoutAttachmentDifferentDefaultSize)
+{
+    constexpr char kVS[] = R"(#version 310 es
+in layout(location = 0) highp vec2 a_position;
+void main()
+{
+    gl_Position = vec4(a_position, 0.0, 1.0);
+})";
+
+    constexpr char kFS[] = R"(#version 310 es
+uniform layout(location = 0) highp ivec2 u_expectedSize;
+out layout(location = 3) mediump vec4 f_color;
+void main()
+{
+    if(ivec2(gl_FragCoord.xy) != u_expectedSize) discard;
+    f_color = vec4(1.0, 0.5, 0.25, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program1, kVS, kFS);
+
+    glUseProgram(program1);
+
+    GLFramebuffer mFramebuffer;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
+
+    GLuint fboDefaultWidth1  = 1;
+    GLuint fboDefaultHeight1 = 1;
+
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, fboDefaultWidth1);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, fboDefaultHeight1);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    const float data[] = {1.0f,  1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
+                          -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f};
+
+    GLuint vertexBuffer = 0;
+    GLuint query        = 0;
+    GLuint passedCount  = 0;
+
+    glGenQueries(1, &query);
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+    validateSamplePass(query, passedCount, fboDefaultWidth1, fboDefaultHeight1);
+
+    // Delete framebuffer
+    mFramebuffer.reset();
+
+    // Recreate framebuffer
+    mFramebuffer.get();
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebuffer);
+    GLuint fboDefaultWidth2  = 2;
+    GLuint fboDefaultHeight2 = 2;
+
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_WIDTH, fboDefaultWidth2);
+    glFramebufferParameteri(GL_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT, fboDefaultHeight2);
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    validateSamplePass(query, passedCount, fboDefaultWidth2, fboDefaultHeight2);
+
+    glDisableVertexAttribArray(0);
+    glDeleteBuffers(1, &vertexBuffer);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Validates both MESA and standard functions can be used on OpenGL ES >=3.1
 TEST_P(FramebufferTest_ES31, ValidateFramebufferFlipYMesaExtension)
 {
