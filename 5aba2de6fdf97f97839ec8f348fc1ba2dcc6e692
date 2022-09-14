@@ -16,6 +16,24 @@
       "message": "LGTM - hard to verify the tests are still running.",
       "revId": "5aba2de6fdf97f97839ec8f348fc1ba2dcc6e692",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e0a071_43aac5ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-14T04:33:44Z",
+      "side": 1,
+      "message": "They are only run on windows it seems: https://ci.chromium.org/ui/p/angle/builders/try/win-test/8174/overview",
+      "parentUuid": "5c0af6b9_7f6e46da",
+      "revId": "5aba2de6fdf97f97839ec8f348fc1ba2dcc6e692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
