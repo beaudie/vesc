@@ -16,6 +16,24 @@
       "message": "You\u0027ll need to add:\nGTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLSyncTestMetalSharedEvent);\n\nbecause this test isn\u0027t instantiated on the OpenGL backend on macOS. (Best to add that as a comment.)",
       "revId": "d8e7c709c426bab300ab6efde02b3299f8d9cd9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d402446_6499ffbf",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-14T04:14:22Z",
+      "side": 1,
+      "message": "Thank you. I\u0027ve added the annotation with comment.",
+      "parentUuid": "2310dfd5_2342d46f",
+      "revId": "d8e7c709c426bab300ab6efde02b3299f8d9cd9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
