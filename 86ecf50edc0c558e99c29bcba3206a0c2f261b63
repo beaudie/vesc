@@ -86,6 +86,41 @@
       "parentUuid": "a2241f7e_92a43769",
       "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55bb089b_b2a12a85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-15T16:02:47Z",
+      "side": 1,
+      "message": "If this rendering was repeatable, then I\u0027d say the buffer size is wrong now that a FourCC code can be queried from the config, previously it would default to 0.",
+      "parentUuid": "8d55f9ad_f8200d8f",
+      "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3f2eeb_2a6393d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-15T16:02:47Z",
+      "side": 1,
+      "message": "OK. seems good.\nWe\u0027ll have Antonio follow up with a fix to moving ANGLE_USES_GBM",
+      "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
