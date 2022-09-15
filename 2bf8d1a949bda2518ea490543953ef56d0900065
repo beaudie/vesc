@@ -70,6 +70,24 @@
       "parentUuid": "2860b2ff_6fdf54cf",
       "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f54292f6_93c50bf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-15T19:57:06Z",
+      "side": 1,
+      "message": "Right, well, I\u0027d say for Linux use SwiftShader for testing, then on Android obviously you use the system driver. As you prefer though.",
+      "parentUuid": "6b77b47d_14c0f0a1",
+      "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
