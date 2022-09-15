@@ -33,6 +33,24 @@
       "message": "This trivially passed the dry run because of the No-Try, No-Presubmit, and No-Tree-Checks directives in the CL description.\n\nChris, could you please remove those and let\u0027s send this for a dry run? I can\u0027t do it, because if I edit the CL I won\u0027t be able to review it.\n",
       "revId": "065acee49ce5957ebf2200607dd25cf8ba47467b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e58249a1_02078cee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-15T01:35:59Z",
+      "side": 1,
+      "message": "Done.\n\nPixelLocalInternalFormatANGLE is a group I added to gl.xml, and then had to remove because ANGLE uses the exact upstream gl.xml copy. It looks like it still made it into this change though. I wonder if something went weird with code generation and/or rebasing and/or dry run skips ¯\\_(ツ)_/¯",
+      "parentUuid": "f8c9bc2c_79bf6380",
+      "revId": "065acee49ce5957ebf2200607dd25cf8ba47467b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
