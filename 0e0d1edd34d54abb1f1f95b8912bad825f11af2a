@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cede4d_e60e9fbc",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-15T21:01:19Z",
+      "side": 1,
+      "message": "I see, the vector will indeed keep growing and run out of memory.",
+      "parentUuid": "4cbc9e61_5477fc4a",
+      "range": {
+        "startLine": 119,
+        "startChar": 4,
+        "endLine": 119,
+        "endChar": 68
+      },
+      "revId": "0e0d1edd34d54abb1f1f95b8912bad825f11af2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef5298fe_2a490fe1",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-14T23:11:54Z",
       "side": 1,
       "message": "You can just mCurrentFramebuffer \u003d std::move(newFramebuffer)?",
+      "range": {
+        "startLine": 2237,
+        "startChar": 9,
+        "endLine": 2239,
+        "endChar": 39
+      },
+      "revId": "0e0d1edd34d54abb1f1f95b8912bad825f11af2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8edbb030_d430954b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2239,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-15T21:01:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef5298fe_2a490fe1",
       "range": {
         "startLine": 2237,
         "startChar": 9,
