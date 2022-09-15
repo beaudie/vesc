@@ -88,6 +88,24 @@
       "parentUuid": "6b77b47d_14c0f0a1",
       "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ded7e3_e5ec85f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T20:07:37Z",
+      "side": 1,
+      "message": "Ugh, this landed in the meantime lol\n\nLet\u0027s see if it starts to annoy us (flakes, timeouts etc), and I\u0027ll revert this. Given that windows and Linux are on the same hardware (and Nvidia even the same driver), I wouldn\u0027t miss this running on Linux in the end.",
+      "parentUuid": "f54292f6_93c50bf8",
+      "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
