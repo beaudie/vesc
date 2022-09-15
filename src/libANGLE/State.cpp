@@ -1305,6 +1305,10 @@ void State::setEnableFeature(GLenum feature, bool enabled)
             setDither(enabled);
             return;
         case GL_COLOR_LOGIC_OP:
+            if (mClientVersion.major == 1)
+            {
+                break;
+            }
             setLogicOpEnabled(enabled);
             return;
         case GL_PRIMITIVE_RESTART_FIXED_INDEX:
@@ -1411,7 +1415,7 @@ void State::setEnableFeature(GLenum feature, bool enabled)
             mGLES1State.mPointSpriteEnabled = enabled;
             break;
         case GL_COLOR_LOGIC_OP:
-            mGLES1State.mLogicOpEnabled = enabled;
+            mGLES1State.setLogicOpEnabled(enabled);
             break;
         default:
             UNREACHABLE();
@@ -1457,6 +1461,10 @@ bool State::getEnableFeature(GLenum feature) const
         case GL_DITHER:
             return isDitherEnabled();
         case GL_COLOR_LOGIC_OP:
+            if (mClientVersion.major == 1)
+            {
+                break;
+            }
             return isLogicOpEnabled();
         case GL_PRIMITIVE_RESTART_FIXED_INDEX:
             return isPrimitiveRestartEnabled();
@@ -2449,6 +2457,7 @@ void State::getBooleanv(GLenum pname, GLboolean *params) const
             *params = mRasterizer.dither;
             break;
         case GL_COLOR_LOGIC_OP:
+            ASSERT(mClientVersion.major > 1);
             *params = mLogicOpEnabled;
             break;
         case GL_TRANSFORM_FEEDBACK_ACTIVE:
