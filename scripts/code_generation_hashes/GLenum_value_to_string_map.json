@@ -2,9 +2,9 @@
   "scripts/gen_gl_enum_utils.py":
     "ed3a9b835c9d5f386869a7c3a20671b2",
   "scripts/gl_angle_ext.xml":
-    "07ce630bceb8d419943bfc8064e247b3",
+    "1598ba52210c2a27a17e259b100dbfaf",
   "scripts/registry_xml.py":
-    "b1150b94db620646a38156213cbba402",
+    "b2a776467e0299976957cf6038763adb",
   "src/libANGLE/capture/gl_enum_utils_autogen.cpp":
     "97399091c2f00cf512e35f8ec5d53d4d",
   "src/libANGLE/capture/gl_enum_utils_autogen.h":

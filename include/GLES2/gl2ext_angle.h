@@ -613,4 +613,29 @@ GL_APICALL void GL_APIENTRY glReleaseTexturesANGLE(GLuint numTexture, const GLui
 
 #endif /* GL_ANGLE_rgbx_internal_format */
 
+#ifndef GL_ANGLE_logic_op
+#define GL_ANGLE_logic_op
+
+// Enums identical to GLES1 and desktop GL
+#define GL_COLOR_LOGIC_OP_ANGLE 0x0BF2
+#define CLEAR_ANGLE             0x1500
+#define AND_ANGLE               0x1501
+#define AND_REVERSE_ANGLE       0x1502
+#define COPY_ANGLE              0x1503
+#define AND_INVERTED_ANGLE      0x1504
+#define NOOP_ANGLE              0x1505
+#define XOR_ANGLE               0x1506
+#define OR_ANGLE                0x1507
+#define NOR_ANGLE               0x1508
+#define EQUIV_ANGLE             0x1509
+#define INVERT_ANGLE            0x150A
+#define OR_REVERSE_ANGLE        0x150B
+#define COPY_INVERTED_ANGLE     0x150C
+#define OR_INVERTED_ANGLE       0x150D
+#define NAND_ANGLE              0x150E
+#define SET_ANGLE               0x150F
+typedef void (GL_APIENTRYP PFNGLLOGICOPANGLEPROC) (GLenum);
+
+#endif /* GL_ANGLE_logic_op */
+
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
