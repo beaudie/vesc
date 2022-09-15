@@ -34,6 +34,24 @@
       "parentUuid": "80494ed2_a79bd15c",
       "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2860b2ff_6fdf54cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-15T19:37:55Z",
+      "side": 1,
+      "message": "FYI, this will just probably make the maintenance burden worse, rather than help with coverage. SwS should give us the coverage we care about. Is there something SwS doesn\u0027t support?",
+      "parentUuid": "3bdb0c5a_771deb12",
+      "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
