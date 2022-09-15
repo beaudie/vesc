@@ -16,6 +16,23 @@
       "message": "I think this one should fix the issue we ran into yesterday",
       "revId": "93125cafbee51b087a2d046921f3647a3192a46b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61e285f5_49e017e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-15T18:12:41Z",
+      "side": 1,
+      "message": "I defer to Shabi\u0027s review.\n",
+      "revId": "93125cafbee51b087a2d046921f3647a3192a46b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
