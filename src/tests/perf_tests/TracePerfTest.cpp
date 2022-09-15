@@ -2143,6 +2143,9 @@ void RegisterTraceTests()
             renderers.push_back(VulkanMockICD<P>);
         }
         renderers.push_back(VulkanSwiftShader<P>);
+#if defined(ANGLE_HAS_MESA)
+        renderers.push_back(Mesa<P>);
+#endif  // defined(ANGLE_HAS_MESA)
     }
 
     PV withTraceInfo   = CombineWithValues({P()}, traceInfos, CombineWithTraceInfo);

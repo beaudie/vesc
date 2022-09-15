@@ -215,6 +215,10 @@ config("internal_config") {
   if (angle_test_enable_system_egl) {
     defines += [ "ANGLE_TEST_ENABLE_SYSTEM_EGL" ]
   }
+
+  if (angle_build_mesa) {
+    defines += [ "ANGLE_HAS_MESA" ]
+  }
 }
 
 config("constructor_and_destructor_warnings") {
@@ -1261,17 +1265,20 @@ config("library_name_config") {
       "ANGLE_EGL_LIBRARY_NAME=\"libEGL${angle_libs_suffix}.cr\"",
       "ANGLE_GLESV2_LIBRARY_NAME=\"libGLESv2${angle_libs_suffix}.cr\"",
     ]
-  } else if (angle_expose_wgl_entry_points) {
-    defines = [
-      "ANGLE_EGL_LIBRARY_NAME=\"libEGL\"",
-      "ANGLE_GLESV2_LIBRARY_NAME=\"opengl32\"",
-    ]
   } else {
+    glesv2_library_name = "libGLESv2"
+    if (angle_expose_wgl_entry_points) {
+      glesv2_library_name = "opengl32"
+    }
     defines = [
       "ANGLE_EGL_LIBRARY_NAME=\"libEGL${angle_libs_suffix}\"",
-      "ANGLE_GLESV2_LIBRARY_NAME=\"libGLESv2${angle_libs_suffix}\"",
+      "ANGLE_GLESV2_LIBRARY_NAME=\"${glesv2_library_name}${angle_libs_suffix}\"",
     ]
   }
+  defines += [
+    "ANGLE_MESA_EGL_LIBRARY_NAME=\"mesa_EGL\"",
+    "ANGLE_MESA_GLESV2_LIBRARY_NAME=\"mesa_GLESv2\"",
+  ]
 }
 
 # This config controls export definitions on ANGLE API calls.
