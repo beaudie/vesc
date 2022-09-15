@@ -16,6 +16,23 @@
       "message": "I think the mac-test run caught the tree in a broken state (which I\u0027m not sure how slipped through ANGLE\u0027s commit queue). Retrying.\n",
       "revId": "1e315a143b48205b779772014535a3a73b1b53a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8146dd57_bb051f5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-15T01:04:44Z",
+      "side": 1,
+      "message": "The mac-test compile failure is related to changes just made in anglebug.com/7279 . CC\u0027ing those teammates and have commented on that bug asking for help.\n",
+      "revId": "1e315a143b48205b779772014535a3a73b1b53a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
