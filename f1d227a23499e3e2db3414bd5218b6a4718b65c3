@@ -39,6 +39,30 @@
       },
       "revId": "f1d227a23499e3e2db3414bd5218b6a4718b65c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "426575ed_ff428629",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-15T21:53:33Z",
+      "side": 1,
+      "message": "\u003e is this library always available?\n\nAFAIK, on android it has to be there",
+      "parentUuid": "70144835_b4729f40",
+      "range": {
+        "startLine": 43,
+        "startChar": 8,
+        "endLine": 43,
+        "endChar": 39
+      },
+      "revId": "f1d227a23499e3e2db3414bd5218b6a4718b65c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
