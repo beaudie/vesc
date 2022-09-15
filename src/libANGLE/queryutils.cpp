@@ -3221,6 +3221,7 @@ bool GetQueryParameterInfo(const State &glState,
         case GL_DEPTH_TEST:
         case GL_BLEND:
         case GL_DITHER:
+        case GL_COLOR_LOGIC_OP:
         case GL_CONTEXT_ROBUST_ACCESS_EXT:
         {
             *type      = GL_BOOL;
