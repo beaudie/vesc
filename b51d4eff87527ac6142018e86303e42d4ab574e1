@@ -46,6 +46,30 @@
       },
       "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "307d8f14_4b04edd0",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-09-15T20:06:21Z",
+      "side": 1,
+      "message": "The explicit paths are better removed, and can be incorrect if linker config changes again (e.g. ship those in apex instead.)",
+      "parentUuid": "34308e71_019053cb",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
