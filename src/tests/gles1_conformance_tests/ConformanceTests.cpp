@@ -271,9 +271,9 @@ TEST_P(GLES1ConformanceTest, LineRaster)
 TEST_P(GLES1ConformanceTest, LogicOp)
 {
     // To be implemented through framebuffer fetch
-    ANGLE_SKIP_TEST_IF(IsOpenGLES());
-    // To be implemented on other backends
-    ANGLE_SKIP_TEST_IF(!IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOpenGLES() || (IsVulkan() && !IsNVIDIA()));
+    // Implemented with logicOp support from underlying hardware.
+    ANGLE_SKIP_TEST_IF(!IsOpenGL() && !(IsVulkan() && IsNVIDIA()));
     // Incorrect results on Intel.  http://anglebug.com/7660
     ANGLE_SKIP_TEST_IF(IsIntel());
 
