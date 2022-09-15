@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338b33ee_30895341",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-15T16:48:01Z",
+      "side": 1,
+      "message": "I still think this can be simpler if you just use one boolean indicate if mCurrentFramebuffer has any attachment or not. Then you dont need any of these logic. Here is what it will look like:\n```\nFramebufferVk::getFramebuffer(...)\n{\n    ...\n    // Check that our description matches our attachments. Can catch implementation bugs.\n    ASSERT(static_cast\u003cuint32_t\u003e(attachments.size()) \u003d\u003d mCurrentFramebufferDesc.attachmentCount());\n\n    if(attachments.size())\n    {\n        insertCache(contextVk, mCurrentFramebufferDesc, std::move(newFramebuffer));\n\n        bool result \u003d contextVk-\u003egetShareGroup()-\u003egetFramebufferCache().get(\n            contextVk, mCurrentFramebufferDesc, mCurrentFramebuffer);\n        ASSERT(result);\n        mIsCurrentFramebufferCached \u003d true;\n    }\n    else\n    {\n        // For fbo without any attachment, since cache key does not contain width/height information, dont insert into cache\n        mCurrentFramebuffer \u003d std::move(newFramebuffer);\n        mIsCurrentFramebufferCached \u003d false;\n    }\n    ASSERT(mCurrentFramebuffer.valid());\n    *framebufferOut \u003d \u0026mCurrentFramebuffer;\n    return angle::Result::Continue;\n}\n\n\nFramebufferVk::invalidateCurrentFramebuffer()\n{\n    if(mIsCurrentFramebufferCached)\n    {\n        mCurrentFramebuffer.release();\n        mIsCurrentFramebufferCached \u003d false;\n    }\n    else\n    {\n        contextVk-\u003eaddGarbage(\u0026mCurrentFramebuffer);\n    }\n}\n```",
+      "range": {
+        "startLine": 2037,
+        "startChar": 4,
+        "endLine": 2048,
+        "endChar": 5
+      },
+      "revId": "ccac5d0d408037ab20f9a9f11e43ae17760600e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
