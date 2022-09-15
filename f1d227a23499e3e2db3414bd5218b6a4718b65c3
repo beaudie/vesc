@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d49f4ac_72baccae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-15T21:14:27Z",
+      "side": 1,
+      "message": "thank you for the review\n\nshabi / jamie - can i get a +2?",
+      "revId": "f1d227a23499e3e2db3414bd5218b6a4718b65c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
