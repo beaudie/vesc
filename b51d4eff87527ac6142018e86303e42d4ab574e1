@@ -91,6 +91,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9567b433_33989d18",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-15T20:22:37Z",
+      "side": 1,
+      "message": "\u003e ship those in apex instead\n\nah, interesting. Makes sense, switched to relative path",
+      "parentUuid": "307d8f14_4b04edd0",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "92290829_95fc79fd",
         "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
         "patchSetId": 11
@@ -102,6 +126,24 @@
       "writtenOn": "2022-09-15T20:20:46Z",
       "side": 1,
       "message": "If AHB are only built in the Android environment, why do we need to do these tricks to get the entry points in the 1st place? All those 3 are ndk apis that available since api level 26.",
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "074a1f2d_b446f2da",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-15T20:22:37Z",
+      "side": 1,
+      "message": "from -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/2653506\n\ni believe the intent was - `so vulkan backend can be built with old NDK, but can work with newer android releases.`",
+      "parentUuid": "92290829_95fc79fd",
       "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
