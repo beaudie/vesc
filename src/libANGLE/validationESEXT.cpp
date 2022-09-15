@@ -3103,4 +3103,12 @@ bool ValidateShadingRateQCOM(const Context *context, angle::EntryPoint entryPoin
 
     return true;
 }
+
+bool ValidateLogicOpANGLE(const Context *context,
+                          angle::EntryPoint entryPoint,
+                          LogicalOperation opcodePacked)
+{
+    UNREACHABLE();
+    return false;
+}
 }  // namespace gl

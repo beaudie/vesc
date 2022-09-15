@@ -1022,6 +1022,9 @@
     "glLogicOp": {
         "opcode": "LogicalOperation"
     },
+    "glLogicOpANGLE": {
+        "opcode": "LogicalOperation"
+    },
     "glLoseContext": {
         "current": "GraphicsResetStatus",
         "other": "GraphicsResetStatus"
