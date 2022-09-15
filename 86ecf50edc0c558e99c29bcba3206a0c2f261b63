@@ -16,6 +16,23 @@
       "message": "Patch set 3 - replaced \"and\" with \"\u0026\u0026\". to fix errors",
       "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57381a86_ff2b1be3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-15T15:14:46Z",
+      "side": 1,
+      "message": "Can we run again?\nSays a windows failure. This change is purely linux+gbm. I see the golden image failures, but I can\u0027t see how it is result of a Native ID. There is one config format: GL_BGRA8_EXT. Golden image failures are missing areas of the final image. Very strange.\n\nCould this be a glitch? can we run again?",
+      "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
