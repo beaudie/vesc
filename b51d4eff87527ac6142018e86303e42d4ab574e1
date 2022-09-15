@@ -164,6 +164,24 @@
       "parentUuid": "074a1f2d_b446f2da",
       "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7633385_d6532e5a",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-15T20:50:19Z",
+      "side": 1,
+      "message": "I remember it breaks chrome build, when I enable the vulkan backend for Chrome. And ANGLE + Chrome is still being used with some very older systems (M and later), so we don\u0027t want to increate required sdk level.",
+      "parentUuid": "30265961_17753da0",
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
