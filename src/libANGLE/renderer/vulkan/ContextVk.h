@@ -722,6 +722,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
     void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
 
+    bool checkCurrentGraphicsPipeline(vk::PipelineHelper** pipeline)  { return *pipeline == mCurrentGraphicsPipeline; }
+
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
     angle::Result handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType);
@@ -774,6 +776,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Add resource to the resource use list tracking the last CommandBuffer (i.e,
     // RenderpassCommands if exists, or outsideRenderPassCommands)
     void retainResource(vk::Resource *resource);
+
+    ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
+    {
+        // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
+        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
+    }
 
   private:
     // Dirty bits.
@@ -1040,11 +1048,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     template <typename CommandBufferHelperT>
     angle::Result updateActiveImages(CommandBufferHelperT *commandBufferHelper);
 
-    ANGLE_INLINE void invalidateCurrentGraphicsPipeline()
-    {
-        // Note: DIRTY_BIT_PIPELINE_BINDING will be automatically set if pipeline bind is necessary.
-        mGraphicsDirtyBits.set(DIRTY_BIT_PIPELINE_DESC);
-    }
 
     ANGLE_INLINE void invalidateCurrentComputePipeline()
     {
