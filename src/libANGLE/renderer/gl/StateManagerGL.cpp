@@ -2198,8 +2198,9 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                             break;
                         case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
                         case gl::State::EXTENDED_DIRTY_BIT_SHADING_RATE:
+                            // Unimplemented extensions.
+                            break;
                         default:
-                            // Unimplemented functionality.
                             UNREACHABLE();
                             break;
                     }
