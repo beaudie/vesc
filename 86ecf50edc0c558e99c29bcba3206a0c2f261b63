@@ -51,6 +51,23 @@
       "parentUuid": "57381a86_ff2b1be3",
       "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2241f7e_92a43769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-15T15:51:51Z",
+      "side": 1,
+      "message": "This run, a very different result:\n\n\n[ RUN      ] TestSuiteTest.RunCrashingTests\n..\\..\\src\\tests\\test_utils\\runner\\TestSuite_unittest.cpp(178): error: Expected equality of these values:\n  expectedResults\n    Which is: { (MockCrashTestSuiteTest.DISABLED_Crash, Crash), (MockCrashTestSuiteTest.DISABLED_PassAfterCrash, Pass), (MockCrashTestSuiteTest.DISABLED_SkipAfterCrash, Skip), (MockTestSuiteTest.DISABLED_Fail, Fail), (MockTestSuiteTest.DISABLED_Pass, Pass), (MockTestSuiteTest.DISABLED_Skip, Skip) }\n  actual.results\n    Which is: { (MockCrashTestSuiteTest.DISABLED_Crash, Timeout), (MockCrashTestSuiteTest.DISABLED_PassAfterCrash, Pass), (MockCrashTestSuiteTest.DISABLED_SkipAfterCrash, Skip), (MockTestSuiteTest.DISABLED_Fail, Fail), (MockTestSuiteTest.DISABLED_Pass, Pass), (MockTestSuiteTest.DISABLED_Skip, Skip) }\n[  FAILED  ] TestSuiteTest.RunCrashingTests (9283 ms)\n",
+      "revId": "86ecf50edc0c558e99c29bcba3206a0c2f261b63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
