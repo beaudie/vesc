@@ -50,6 +50,24 @@
       "message": "nit: move up to constructor init list (like `: mLibNativeWindowHandle(nullptr)`, not sure what\u0027s the proper C++ name)",
       "revId": "0ab28c81f56a5801486abc9396ac4c3ac47775e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebe5badc_025cef2b",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-15T16:38:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4bf10bf_441e8ac5",
+      "revId": "0ab28c81f56a5801486abc9396ac4c3ac47775e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
