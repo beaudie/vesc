@@ -717,7 +717,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mLastFramebufferSerial(0)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -5637,6 +5638,11 @@ void ContextVk::onDrawFramebufferRenderPassDescChange(FramebufferVk *framebuffer
 
     // Update render area in the driver uniforms.
     invalidateGraphicsDriverUniforms();
+}
+
+void ContextVk::setFramebufferSerial(FramebufferVk *framebufferVk)
+{
+    framebufferVk->setFramebufferSerial(++mLastFramebufferSerial);
 }
 
 void ContextVk::invalidateCurrentTransformFeedbackBuffers()

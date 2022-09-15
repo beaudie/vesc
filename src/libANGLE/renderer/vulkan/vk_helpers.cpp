@@ -1580,7 +1580,8 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
-      mImageOptimizeForPresent(nullptr)
+      mImageOptimizeForPresent(nullptr),
+      mFramebufferSerial(0)
 {}
 
 RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()
@@ -2291,6 +2292,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                   : VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 
     primary->beginRenderPass(beginInfo, kSubpassContents);
+    mFramebufferSerial++;
+    // Update the serial in framebufferVk?
+
     for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
     {
         if (subpass > 0)

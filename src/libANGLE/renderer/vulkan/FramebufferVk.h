@@ -143,6 +143,9 @@ class FramebufferVk : public FramebufferImpl
     void setBackbuffer(WindowSurfaceVk *backbuffer) { mBackbuffer = backbuffer; }
     WindowSurfaceVk *getBackbuffer() const { return mBackbuffer; }
 
+    void setFramebufferSerial(uint64_t serial) { mFramebufferSerial = serial; }
+    uint64_t getFramebufferSerial() { return mFramebufferSerial; }
+
   private:
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.
     angle::Result blitWithCommand(ContextVk *contextVk,
@@ -245,6 +248,9 @@ class FramebufferVk : public FramebufferImpl
     bool mReadOnlyDepthFeedbackLoopMode;
 
     gl::DrawBufferMask mIsAHBColorAttachments;
+
+    // Framebuffer serial
+    uint64_t mFramebufferSerial;
 };
 }  // namespace rx
 
