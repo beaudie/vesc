@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa83d2a_3c0f976a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T21:48:16Z",
+      "side": 1,
+      "message": "+Amirali, there\u0027s overlap with imageless here regarding garbage collection of uncached framebuffer. Since you are doing the same thing, could you please verify that your implementations touch the same code the same way?",
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce4473c2_71685e47",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T21:48:16Z",
+      "side": 1,
+      "message": "nit: false, as there\u0027s no framebuffer",
+      "range": {
+        "startLine": 320,
+        "startChar": 34,
+        "endLine": 320,
+        "endChar": 38
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "460ea2ec_65cecbb0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T21:48:16Z",
+      "side": 1,
+      "message": "Funny how Amirali also arrived at this same name! Please call it `releaseCurrentFramebuffer`",
+      "range": {
+        "startLine": 146,
+        "startChar": 9,
+        "endLine": 146,
+        "endChar": 37
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20fcc9d0_ccafa693",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T21:48:16Z",
+      "side": 1,
+      "message": "nit: Remove comment too",
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
