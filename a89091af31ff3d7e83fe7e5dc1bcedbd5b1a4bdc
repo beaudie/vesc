@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92f48850_31bf08ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-15T21:13:35Z",
+      "side": 1,
+      "message": "This ought to simplify https://chromium-review.googlesource.com/c/angle/angle/+/3886462",
+      "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c75cb7ed_bb4b95ca",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-15T21:13:35Z",
+      "side": 1,
+      "message": "Does this seem like the right spot for it? Or is there somewhere else that makes more sense?",
+      "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
