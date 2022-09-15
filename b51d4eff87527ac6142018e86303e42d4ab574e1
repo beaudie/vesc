@@ -182,6 +182,24 @@
       "parentUuid": "30265961_17753da0",
       "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b3279e9_14e44368",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-09-15T20:56:28Z",
+      "side": 1,
+      "message": "Got it, thanks!",
+      "parentUuid": "e7633385_d6532e5a",
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
