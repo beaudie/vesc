@@ -146,6 +146,24 @@
       "parentUuid": "92290829_95fc79fd",
       "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30265961_17753da0",
+        "filename": "src/libANGLE/renderer/vulkan/android/AHBFunctions.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-09-15T20:40:39Z",
+      "side": 1,
+      "message": "but angle support in android was born in Android 10, which is api level 29. Hi Peng, do we really need to do these? I don\u0027t think angle support can be easily backported to even Pie, let alone saying before 26.",
+      "parentUuid": "074a1f2d_b446f2da",
+      "revId": "b51d4eff87527ac6142018e86303e42d4ab574e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
