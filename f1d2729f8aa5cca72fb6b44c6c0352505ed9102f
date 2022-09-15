@@ -83,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18f221a4_34ab10f8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-15T22:12:58Z",
+      "side": 1,
+      "message": "Because inside `updateColorResolveAttachment()`, we previously released the mCurrentFramebuffer: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/FramebufferVk.cpp;l\u003d1381. If I replace that line with `invalidateCurrentFramebuffer()`, it would require us to pass in one more parameter `contextVk`. So I took that line out and replace it with `invalidateCurrentFramebuffer()` before the call to `updateColorResolveAttachment()`.",
+      "parentUuid": "89cda764_d2803d83",
+      "range": {
+        "startLine": 1464,
+        "startChar": 4,
+        "endLine": 1464,
+        "endChar": 32
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ddb191e_59751d3b",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -106,6 +130,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05ef913a_0ddea482",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-15T22:12:58Z",
+      "side": 1,
+      "message": "I thought it would help us call `inValidateCurrentFramebuffer()` fewer times. But since that function is not that expensive, it might not be necessary to add an extra flag just to reduce the number of that function call.",
+      "parentUuid": "7ddb191e_59751d3b",
+      "range": {
+        "startLine": 1934,
+        "startChar": 16,
+        "endLine": 1934,
+        "endChar": 43
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "206d1f27_060172ac",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 8
@@ -117,6 +165,30 @@
       "writtenOn": "2022-09-15T22:00:13Z",
       "side": 1,
       "message": "I don\u0027t think you need a check here. You can do an assertion at line 2145 that \nAssert(mCurrentFramebufferDesc.attachmentCount() \u003e 0);\n\nsince fbo with no attachment should never have cache hit/",
+      "range": {
+        "startLine": 2141,
+        "startChar": 8,
+        "endLine": 2141,
+        "endChar": 56
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85e12a63_3ebbb4c6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-15T22:12:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "206d1f27_060172ac",
       "range": {
         "startLine": 2141,
         "startChar": 8,
