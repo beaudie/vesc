@@ -16,6 +16,24 @@
       "message": "If these are vulkan only or primarily vulkan, I\u0027d recommend just running them on SwiftShader and not worrying about Intel or NVIDIA.",
       "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bdb0c5a_771deb12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T19:33:31Z",
+      "side": 1,
+      "message": "The tests are sparse, and behavior not very well defined. I\u0027m trying to make sure coverage is varied so I don\u0027t accidentally miss things due to tests passing on one platform but not the others.\n\nLike anti-aliased points are not implemented, but passing tests! Not even sure what\u0027s the deal with rescale-normal: https://chromium-review.googlesource.com/c/angle/angle/+/3896213\n\nAgain, I want to make sure the tests run everywhere so I don\u0027t accidentally think the job\u0027s done.",
+      "parentUuid": "80494ed2_a79bd15c",
+      "revId": "2bf8d1a949bda2518ea490543953ef56d0900065",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
