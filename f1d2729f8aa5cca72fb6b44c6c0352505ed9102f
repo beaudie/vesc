@@ -105,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d52b6862_654075ac",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1464,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-15T22:22:23Z",
+      "side": 1,
+      "message": "I see. Your change also looks good to me.",
+      "parentUuid": "18f221a4_34ab10f8",
+      "range": {
+        "startLine": 1464,
+        "startChar": 4,
+        "endLine": 1464,
+        "endChar": 32
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ddb191e_59751d3b",
@@ -142,6 +166,30 @@
       "side": 1,
       "message": "I thought it would help us call `inValidateCurrentFramebuffer()` fewer times. But since that function is not that expensive, it might not be necessary to add an extra flag just to reduce the number of that function call.",
       "parentUuid": "7ddb191e_59751d3b",
+      "range": {
+        "startLine": 1934,
+        "startChar": 16,
+        "endLine": 1934,
+        "endChar": 43
+      },
+      "revId": "f1d2729f8aa5cca72fb6b44c6c0352505ed9102f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6234f67c_f7b3313f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-15T22:22:23Z",
+      "side": 1,
+      "message": "I see. You try to optimize when both WIDTH/HEIGHT dirty bits are set. I think your change looks good to me.",
+      "parentUuid": "05ef913a_0ddea482",
       "range": {
         "startLine": 1934,
         "startChar": 16,
