@@ -23,6 +23,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
+#include <chrono>
 #include <type_traits>
 
 namespace rx
@@ -1027,7 +1028,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
                                            RenderPassHelper *renderPassHelper)
 {
     constexpr VkAttachmentReference kUnusedAttachment   = {VK_ATTACHMENT_UNUSED,
-                                                           VK_IMAGE_LAYOUT_UNDEFINED};
+                                                         VK_IMAGE_LAYOUT_UNDEFINED};
     constexpr VkAttachmentReference2 kUnusedAttachment2 = {
         VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR, nullptr, VK_ATTACHMENT_UNUSED,
         VK_IMAGE_LAYOUT_UNDEFINED, 0};
@@ -1089,9 +1090,9 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         VkAttachmentReference colorRef;
         colorRef.attachment = attachmentCount.get();
         colorRef.layout     = needInputAttachments
-                                  ? VK_IMAGE_LAYOUT_GENERAL
-                                  : ConvertImageLayoutToVkImageLayout(
-                                        static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+                              ? VK_IMAGE_LAYOUT_GENERAL
+                              : ConvertImageLayoutToVkImageLayout(
+                                    static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
         colorAttachmentRefs.push_back(colorRef);
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
@@ -1126,7 +1127,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         depthStencilAttachmentRef.attachment = attachmentCount.get();
         depthStencilAttachmentRef.layout     = ConvertImageLayoutToVkImageLayout(
-                static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
+            static_cast<ImageLayout>(ops[attachmentCount].initialLayout));
 
         UnpackAttachmentDesc(&attachmentDescs[attachmentCount.get()], attachmentFormatID,
                              attachmentSamples, ops[attachmentCount]);
@@ -1249,8 +1250,8 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
-                                                   ? colorResolveAttachmentRefs.data()
-                                                   : nullptr;
+                                                  ? colorResolveAttachmentRefs.data()
+                                                  : nullptr;
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -4080,8 +4081,8 @@ FramebufferDesc::FramebufferDesc()
     reset();
 }
 
-FramebufferDesc::~FramebufferDesc()                                       = default;
-FramebufferDesc::FramebufferDesc(const FramebufferDesc &other)            = default;
+FramebufferDesc::~FramebufferDesc()                            = default;
+FramebufferDesc::FramebufferDesc(const FramebufferDesc &other) = default;
 FramebufferDesc &FramebufferDesc::operator=(const FramebufferDesc &other) = default;
 
 void FramebufferDesc::update(uint32_t index, ImageOrBufferViewSubresourceSerial serial)
@@ -4310,8 +4311,8 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     samplerYcbcrConversionInfo.ycbcrRange   = static_cast<VkSamplerYcbcrRange>(mColorRange);
     samplerYcbcrConversionInfo.chromaFilter = static_cast<VkFilter>(mChromaFilter);
     samplerYcbcrConversionInfo.components   = {
-          static_cast<VkComponentSwizzle>(mRSwizzle), static_cast<VkComponentSwizzle>(mGSwizzle),
-          static_cast<VkComponentSwizzle>(mBSwizzle), static_cast<VkComponentSwizzle>(mASwizzle)};
+        static_cast<VkComponentSwizzle>(mRSwizzle), static_cast<VkComponentSwizzle>(mGSwizzle),
+        static_cast<VkComponentSwizzle>(mBSwizzle), static_cast<VkComponentSwizzle>(mASwizzle)};
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     VkExternalFormatANDROID externalFormat = {};
@@ -4432,8 +4433,8 @@ void SamplerDesc::update(ContextVk *contextVk,
             GLenum glFilter = (mYcbcrConversionDesc.getChromaFilter() == VK_FILTER_LINEAR)
                                   ? GL_LINEAR
                                   : GL_NEAREST;
-            minFilter       = glFilter;
-            magFilter       = glFilter;
+            minFilter = glFilter;
+            magFilter = glFilter;
         }
     }
 
@@ -5755,6 +5756,7 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
                                                         bool updatePerfCounters,
                                                         vk::RenderPass **renderPassOut)
 {
+
     auto outerIt = mPayload.find(desc);
     if (outerIt != mPayload.end())
     {
@@ -5772,6 +5774,19 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
     }
     else
     {
+        /*
+        if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+        {
+            std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+            for (size_t i = 0; i < mCacheEvictionTolerance; i++)
+                mPayload.erase(mPayload.begin());
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+            ANGLE_LOG(WARN) << "Cache Eviction: RenderPassCache - " << mPayload.size() << " - " <<
+        std::chrono::duration_cast<std::chrono::nanoseconds> (end-begin).count() << " ns";
+        }
+        */
+
         auto emplaceResult = mPayload.emplace(desc, InnerCache());
         outerIt            = emplaceResult.first;
     }
@@ -5912,6 +5927,19 @@ angle::Result GraphicsPipelineCache::insertPipeline(
                                                             : vk::CacheLookUpFeedback::WarmUpMiss;
     }
 
+    /*
+    if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        for (size_t i = 0; i < mCacheEvictionTolerance; i++)
+            mPayload.erase(mPayload.begin());
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: GraphicsPipelineCache - " << mPayload.size() << " - " <<
+    std::chrono::duration_cast<std::chrono::nanoseconds> (end-begin).count() << " ns";
+    }
+    */
+
     // The Serial will be updated outside of this query.
     auto insertedItem = mPayload.emplace(std::piecewise_construct, std::forward_as_tuple(desc),
                                          std::forward_as_tuple(std::move(newPipeline), feedback));
@@ -5986,6 +6014,38 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
 
     vk::DescriptorSetLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+
+    if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        size_t evicted                              = 0;
+        auto evictIter                              = mPayload.begin();
+        // Walk the unordered_map and evict up to mCacheEvictionTolerence
+        // elements if they are unreferenced
+        while (evictIter != mPayload.end())
+        {
+            vk::RefCountedDescriptorSetLayout &layout = evictIter->second;
+            if (!layout.isReferenced())
+            {
+                mCacheStats.decrementSize();
+                evictIter = mPayload.erase(evictIter);
+                evicted++;
+                if (evicted >= mCacheEvictionTolerance)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                evictIter++;
+            }
+        }
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: DescriptorSetLayoutCache - " << mPayload.size() << " - "
+                        << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                        << " ns";
+    }
 
     auto insertedItem =
         mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
@@ -6069,6 +6129,38 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::PipelineLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
 
+    if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        size_t evicted                              = 0;
+        auto evictIter                              = mPayload.begin();
+        // Walk the unordered_map and evict up to mCacheEvictionTolerence
+        // elements if they are unreferenced
+        while (evictIter != mPayload.end())
+        {
+            vk::RefCountedPipelineLayout &layout = evictIter->second;
+            if (!layout.isReferenced())
+            {
+                mCacheStats.decrementSize();
+                evictIter = mPayload.erase(evictIter);
+                evicted++;
+                if (evicted >= mCacheEvictionTolerance)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                evictIter++;
+            }
+        }
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: PipelineLayoutCache - " << mPayload.size() << " - "
+                        << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                        << " ns";
+    }
+
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
     pipelineLayoutOut->set(&insertedLayout);
@@ -6135,6 +6227,31 @@ angle::Result SamplerYcbcrConversionCache::getSamplerYcbcrConversion(
     vk::SamplerYcbcrConversion wrappedSamplerYcbcrConversion;
     ANGLE_TRY(ycbcrConversionDesc.init(context, &wrappedSamplerYcbcrConversion));
 
+    /*
+    if (mExternalFormatPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        for (size_t i = 0; i < mCacheEvictionTolerance; i++)
+            mExternalFormatPayload.erase(mExternalFormatPayload.begin());
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: SamplerYcbcrConversionCache ExternalFormat- " <<
+    mExternalFormatPayload.size() << " - " << std::chrono::duration_cast<std::chrono::nanoseconds>
+    (end-begin).count() << " ns";
+    }
+    if (mVkFormatPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        for (size_t i = 0; i < mCacheEvictionTolerance; i++)
+            mVkFormatPayload.erase(mVkFormatPayload.begin());
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: SamplerYcbcrConversionCache VkFormat - " <<
+    mVkFormatPayload.size() << " - " << std::chrono::duration_cast<std::chrono::nanoseconds>
+    (end-begin).count() << " ns";
+    }
+    */
+
     auto insertedItem = payload.emplace(
         ycbcrConversionDesc, vk::SamplerYcbcrConversion(std::move(wrappedSamplerYcbcrConversion)));
     vk::SamplerYcbcrConversion &insertedSamplerYcbcrConversion = insertedItem.first->second;
@@ -6188,6 +6305,38 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
     vk::SamplerHelper samplerHelper(contextVk);
     ANGLE_TRY(desc.init(contextVk, &samplerHelper.get()));
 
+    if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        size_t evicted                              = 0;
+        auto evictIter                              = mPayload.begin();
+        // Walk the unordered_map and evict up to mCacheEvictionTolerence
+        // elements if they are unreferenced
+        while (evictIter != mPayload.end())
+        {
+            vk::RefCountedSampler &sampler = evictIter->second;
+            if (!sampler.isReferenced())
+            {
+                mCacheStats.decrementSize();
+                evictIter = mPayload.erase(evictIter);
+                evicted++;
+                if (evicted >= mCacheEvictionTolerance)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                evictIter++;
+            }
+        }
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: SamplerCache - " << mPayload.size() << " - "
+                        << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                        << " ns";
+    }
+
     vk::RefCountedSampler newSampler(std::move(samplerHelper));
     auto insertedItem                      = mPayload.emplace(desc, std::move(newSampler));
     vk::RefCountedSampler &insertedSampler = insertedItem.first->second;
@@ -6197,4 +6346,44 @@ angle::Result SamplerCache::getSampler(ContextVk *contextVk,
 
     return angle::Result::Continue;
 }
+
+void DescriptorSetCache::insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                                             VkDescriptorSet descriptorSet,
+                                             vk::RefCountedDescriptorPoolHelper *pool)
+{
+    if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        size_t evicted                              = 0;
+        auto evictIter                              = mPayload.begin();
+        // Walk the unordered_map and evict up to mCacheEvictionTolerence
+        // elements if they are unreferenced
+        while (evictIter != mPayload.end())
+        {
+            vk::RefCountedDescriptorPoolHelper *descriptor = evictIter->second.get()->getPool();
+            if (!descriptor->isReferenced())
+            {
+                mPayload.erase(evictIter);
+                evictIter++;
+                evicted++;
+                if (evicted >= mCacheEvictionTolerance)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                evictIter++;
+            }
+        }
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        ANGLE_LOG(WARN) << "Cache Eviction: DescriptorSetCache - " << mPayload.size() << " - "
+                        << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                        << " ns";
+    }
+
+    mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
+}
+
 }  // namespace rx

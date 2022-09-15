@@ -776,6 +776,8 @@ constexpr uint32_t kMaxDescriptorSetLayoutBindings =
 using DescriptorSetLayoutBindingVector =
     angle::FixedVector<VkDescriptorSetLayoutBinding, kMaxDescriptorSetLayoutBindings>;
 
+using RefCountedGraphicsPipelineDesc = BindingPointer<GraphicsPipelineDesc>;
+
 // A packed description of a descriptor set layout. Use similarly to RenderPassDesc and
 // GraphicsPipelineDesc. Currently we only need to differentiate layouts based on sampler and ubo
 // usage. In the future we could generalize this.
@@ -1108,6 +1110,8 @@ class PipelineHelper final : public Resource
     Pipeline mPipeline;
     CacheLookUpFeedback mCacheLookUpFeedback = CacheLookUpFeedback::None;
 };
+
+using RefCountedPipelineHelper = BindingPointer<PipelineHelper>;
 
 class FramebufferHelper : public Resource
 {
@@ -1715,14 +1719,11 @@ struct hash<rx::vk::SamplerDesc>
 };
 
 // See Resource Serial types defined in vk_utils.h.
-#define ANGLE_HASH_VK_SERIAL(Type)                               \
-    template <>                                                  \
-    struct hash<rx::vk::Type##Serial>                            \
-    {                                                            \
-        size_t operator()(const rx::vk::Type##Serial &key) const \
-        {                                                        \
-            return key.getValue();                               \
-        }                                                        \
+#define ANGLE_HASH_VK_SERIAL(Type)                                                          \
+    template <>                                                                             \
+    struct hash<rx::vk::Type##Serial>                                                       \
+    {                                                                                       \
+        size_t operator()(const rx::vk::Type##Serial &key) const { return key.getValue(); } \
     };
 
 ANGLE_VK_SERIAL_OP(ANGLE_HASH_VK_SERIAL)
@@ -1926,6 +1927,9 @@ class RenderPassCache final : angle::NonCopyable
     OuterCache mPayload;
     CacheStats mCompatibleRenderPassCacheStats;
     CacheStats mRenderPassWithOpsCacheStats;
+
+    // size_t mCacheEvictionSize = 4;
+    // size_t mCacheEvictionTolerance = 2;
 };
 
 // A class that encapsulates the vk::PipelineCache and associated mutex.  The mutex may be nullptr
@@ -2025,6 +2029,9 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  vk::PipelineHelper **pipelineOut);
 
     std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
+
+    // size_t mCacheEvictionSize = 4;
+    // size_t mCacheEvictionTolerance = 2;
 };
 
 class DescriptorSetLayoutCache final : angle::NonCopyable
@@ -2043,6 +2050,9 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
   private:
     std::unordered_map<vk::DescriptorSetLayoutDesc, vk::RefCountedDescriptorSetLayout> mPayload;
     CacheStats mCacheStats;
+
+    size_t mCacheEvictionSize      = 16;
+    size_t mCacheEvictionTolerance = 8;
 };
 
 class PipelineLayoutCache final : public HasCacheStats<VulkanCacheType::PipelineLayout>
@@ -2060,6 +2070,9 @@ class PipelineLayoutCache final : public HasCacheStats<VulkanCacheType::Pipeline
 
   private:
     std::unordered_map<vk::PipelineLayoutDesc, vk::RefCountedPipelineLayout> mPayload;
+
+    size_t mCacheEvictionSize      = 16;
+    size_t mCacheEvictionTolerance = 8;
 };
 
 class SamplerCache final : public HasCacheStats<VulkanCacheType::Sampler>
@@ -2076,6 +2089,9 @@ class SamplerCache final : public HasCacheStats<VulkanCacheType::Sampler>
 
   private:
     std::unordered_map<vk::SamplerDesc, vk::RefCountedSampler> mPayload;
+
+    size_t mCacheEvictionSize      = 4;
+    size_t mCacheEvictionTolerance = 2;
 };
 
 // YuvConversion Cache
@@ -2097,6 +2113,9 @@ class SamplerYcbcrConversionCache final
         std::unordered_map<vk::YcbcrConversionDesc, vk::SamplerYcbcrConversion>;
     SamplerYcbcrConversionMap mExternalFormatPayload;
     SamplerYcbcrConversionMap mVkFormatPayload;
+
+    // size_t mCacheEvictionSize = 16;
+    // size_t mCacheEvictionTolerance = 8;
 };
 
 // Descriptor Set Cache
@@ -2133,12 +2152,9 @@ class DescriptorSetCache final : angle::NonCopyable
         return false;
     }
 
-    ANGLE_INLINE void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
-                                          VkDescriptorSet descriptorSet,
-                                          vk::RefCountedDescriptorPoolHelper *pool)
-    {
-        mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
-    }
+    void insertDescriptorSet(const vk::DescriptorSetDesc &desc,
+                             VkDescriptorSet descriptorSet,
+                             vk::RefCountedDescriptorPoolHelper *pool);
 
     ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
     {
@@ -2178,6 +2194,9 @@ class DescriptorSetCache final : angle::NonCopyable
         vk::RefCountedDescriptorPoolHelper *mPool;
     };
     angle::HashMap<vk::DescriptorSetDesc, std::unique_ptr<dsCacheEntry>> mPayload;
+
+    size_t mCacheEvictionSize      = 4;
+    size_t mCacheEvictionTolerance = 2;
 };
 
 // Only 1 driver uniform binding is used.
