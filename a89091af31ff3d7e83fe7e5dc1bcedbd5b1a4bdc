@@ -33,6 +33,24 @@
       "message": "Does this seem like the right spot for it? Or is there somewhere else that makes more sense?",
       "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "848cdb72_0ef732e2",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T22:13:46Z",
+      "side": 1,
+      "message": "Hard to tell without knowing where you want to use it other than Shader*.cpp. If the frontend doesn\u0027t need to call this, then you actually don\u0027t need to make this virtual, you always have access to the backend context/renderer from ShaderX, you could call it directly on the backend object (and not make it virtual). Then you could also drop `Native` from the name.",
+      "parentUuid": "c75cb7ed_bb4b95ca",
+      "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
