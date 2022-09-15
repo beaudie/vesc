@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bb3606a_a151bc02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-15T17:16:32Z",
+      "side": 1,
+      "message": "@Geoff, the test fails on Intel, but passes on Nvidia. I wonder if there\u0027s a GL check I missed that says whether logic op is supported or not?",
+      "revId": "44c53e32b3e7c5e9642eda4945421395c4c9d50b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
