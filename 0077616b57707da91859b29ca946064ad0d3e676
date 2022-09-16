@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35a2e99c_02cc72cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-16T20:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550ca614_0fe63e9f",
+      "revId": "0077616b57707da91859b29ca946064ad0d3e676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da2b7903_01097f8d",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-16T02:46:29Z",
       "side": 1,
       "message": "Please put helpers in the anonymous namespace, and use CamelCase.",
+      "revId": "0077616b57707da91859b29ca946064ad0d3e676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d29f14_99d3ea5a",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-16T20:55:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2b7903_01097f8d",
       "revId": "0077616b57707da91859b29ca946064ad0d3e676",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
