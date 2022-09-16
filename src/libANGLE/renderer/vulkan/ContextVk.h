@@ -625,7 +625,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                      const vk::PackedAttachmentCount colorAttachmentCount,
                                      const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
                                      const vk::PackedClearValuesArray &clearValues,
-                                     vk::RenderPassCommandBuffer **commandBufferOut);
+                                     vk::RenderPassCommandBuffer **commandBufferOut,
+                                     vk::RenderPassSerial *rpSerialOut);
 
     // Only returns true if we have a started RP and we've run setupDraw.
     bool hasStartedRenderPass() const
@@ -634,10 +635,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mRenderPassCommandBuffer && mRenderPassCommands->started();
     }
 
-    bool hasStartedRenderPassWithFramebuffer(vk::Framebuffer *framebuffer)
+    bool hasStartedRenderPassWithSerial(const vk::RenderPassSerial rpSerial) const
     {
-        return hasStartedRenderPass() &&
-               mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle();
+        return hasStartedRenderPass() && mRenderPassCommands->getRenderPassSerial() == rpSerial;
     }
 
     bool hasStartedRenderPassWithCommands() const
@@ -652,7 +652,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     // TODO(https://anglebug.com/4968): Support multiple open render passes.
-    void restoreFinishedRenderPass(vk::Framebuffer *framebuffer);
+    void restoreFinishedRenderPass(const vk::RenderPassSerial rpSerial);
 
     uint32_t getCurrentSubpassIndex() const;
     uint32_t getCurrentViewCount() const;
@@ -1526,6 +1526,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // A graph built from pipeline descs and their transitions.
     std::ostringstream mPipelineCacheGraph;
+
+    // The latest serial used for a started render pass.
+    vk::RenderPassSerial mCurrentRenderPassSerial;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
