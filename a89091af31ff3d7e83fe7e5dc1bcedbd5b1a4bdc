@@ -51,6 +51,24 @@
       "parentUuid": "c75cb7ed_bb4b95ca",
       "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8a40e15_89356950",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-16T04:29:31Z",
+      "side": 1,
+      "message": "The current prototype looks like this:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3900142\n\nPixel local storage is implemented as a frontend feature, and it calls getNativePixelLocalStorageType() in a couple different places from the frontend \"gl::Context\" level, in order to decide how to emulate it.\n\nI\u0027m totally open to suggestions, but that\u0027s just how I\u0027ve gotten it to work so far. (And it\u0027s super exciting to finally see this working in fast tiled memory 😊!!)",
+      "parentUuid": "848cdb72_0ef732e2",
+      "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
