@@ -46,6 +46,30 @@
       },
       "revId": "b82836884fe900709bea906bd20bd9bd3f48600e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35e1056_0c867c2c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-16T23:18:42Z",
+      "side": 1,
+      "message": "yea, try to limit it to the config that actually failed so that we can have maximum test coverage. I am wondering this failure is because of the same bug that you try to fix with follow up CL.",
+      "parentUuid": "506443fa_9059d814",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 88
+      },
+      "revId": "b82836884fe900709bea906bd20bd9bd3f48600e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
