@@ -22,6 +22,30 @@
       },
       "revId": "b82836884fe900709bea906bd20bd9bd3f48600e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "506443fa_9059d814",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-16T22:52:07Z",
+      "side": 1,
+      "message": "Yes: https://chromium-swarm.appspot.com/task?id\u003d5d61246a097c0f11.\n\nThe test failed on D3D backends only. I can update the expectation file to only limit the backend to D3D if it is NVIDIA.",
+      "parentUuid": "f34ef60e_2c237af0",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 88
+      },
+      "revId": "b82836884fe900709bea906bd20bd9bd3f48600e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
