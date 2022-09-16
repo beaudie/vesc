@@ -270,10 +270,12 @@ TEST_P(GLES1ConformanceTest, LineRaster)
 
 TEST_P(GLES1ConformanceTest, LogicOp)
 {
-    // To be implemented through framebuffer fetch
-    ANGLE_SKIP_TEST_IF(IsOpenGLES() || (IsVulkan() && !IsNVIDIA()));
-    // Implemented with logicOp support from underlying hardware.
-    ANGLE_SKIP_TEST_IF(!IsOpenGL() && !(IsVulkan() && IsNVIDIA()));
+    // Only supported if logicOp or framebuffer fetch is supported by the backend.
+    //
+    // - Desktop GL: has logicOp support
+    // - GLES: has framebuffer fetch support
+    // - Vulkan: has at least framebuffer fetch support.
+    ANGLE_SKIP_TEST_IF(!IsOpenGL() && !IsVulkan());
 
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LogicOpExec());
 }
