@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b39f62e9_6cf5c220",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Quyen: could you please re-review?\n\nDan: the tests look good overall; one small request for strengthening one of them. Please wait for Quyen\u0027s re-review before CQ - thanks.\n\nlgtm, though I didn\u0027t review this as thoroughly as Quyen did.\n",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c445adbd_1598d9fe",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Should \"isg\" be \"is the\"?",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c7c35e5_a6fd1f2d",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Could you fetch the sharedEvent\u0027s signaledValue and store it off here?",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f426aa85_19125a10",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Can you add:\n\nEXPECT_EQ([sharedEvent signaledValue], 1 + prevSignaledValue);\n\nhere? Is that what\u0027s expected?",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4703eb1e_a3dc6e97",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Update comment? \"import same shared event as first sync\"",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "983ddca0_30e24b87",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-16T02:28:10Z",
+      "side": 1,
+      "message": "Strictly speaking, no context is current at this point. The EGL calls below don\u0027t need one.",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
