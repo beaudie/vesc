@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f34ef60e_2c237af0",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-16T22:45:20Z",
+      "side": 1,
+      "message": "These exceptions was only skipped on windows if it is intel or AMD. Is it also failing on NVidia as well?",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 88
+      },
+      "revId": "b82836884fe900709bea906bd20bd9bd3f48600e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
