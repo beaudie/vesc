@@ -2093,6 +2093,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    RenderPassSerial *rpSerial,
     RenderPassCommandBuffer **commandBufferOut)
 {
     ASSERT(!mRenderPassStarted);
@@ -2104,6 +2105,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mFramebuffer.setHandle(framebuffer.getHandle());
     mRenderArea       = renderArea;
     mClearValues      = clearValues;
+    mRenderPassSerial = *rpSerial;
     *commandBufferOut = &getCommandBuffer();
 
     mRenderPassStarted = true;
