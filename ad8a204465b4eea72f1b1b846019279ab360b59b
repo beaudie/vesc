@@ -16,6 +16,24 @@
       "message": "Why is this test being removed? It still seems valid.",
       "revId": "ad8a204465b4eea72f1b1b846019279ab360b59b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2238777e_bb5b4240",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:51:49Z",
+      "side": 0,
+      "message": "Because it\u0027s no longer an error to create an EGL_SYNC_METAL_SHARED_EVENT_ANGLE with no attributes. This patch changes the behavior and allows for EGL to create the MTLSharedEvent and allow API user to access that event which was verboten in the previous patch.",
+      "parentUuid": "5353e802_9c44730c",
+      "revId": "ad8a204465b4eea72f1b1b846019279ab360b59b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
