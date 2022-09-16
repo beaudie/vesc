@@ -69,6 +69,24 @@
       "parentUuid": "848cdb72_0ef732e2",
       "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ea468f8_c897dfba",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-16T18:14:55Z",
+      "side": 1,
+      "message": "Ack, I have no better suggestion at the moment.\n\nThe backends don\u0027t need to call this through the front-end object though, just call the function in the backend renderer object directly.",
+      "parentUuid": "c8a40e15_89356950",
+      "revId": "a89091af31ff3d7e83fe7e5dc1bcedbd5b1a4bdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
