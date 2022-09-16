@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7af3fd_d836706f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-16T03:07:32Z",
+      "side": 1,
+      "message": "Jamie and others, could we finalize the review and land this? We are starting to see interest in more VkSwapchain-replacing implementations and they could build on top of the abstraction created in this change.",
+      "revId": "11ce19717acf804064aa54adc6c5a943dcb7eb63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
