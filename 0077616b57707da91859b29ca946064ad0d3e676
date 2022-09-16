@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550ca614_0fe63e9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-16T02:46:29Z",
+      "side": 1,
+      "message": "Nice, I was going to look into this soon (we should sync!)\n\nCould you enable `GLES1ConformanceTest.TexPalet` in `src/tests/gles1_conformance_tests/ConformanceTests.cpp` too?",
+      "revId": "0077616b57707da91859b29ca946064ad0d3e676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2b7903_01097f8d",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-16T02:46:29Z",
+      "side": 1,
+      "message": "Please put helpers in the anonymous namespace, and use CamelCase.",
+      "revId": "0077616b57707da91859b29ca946064ad0d3e676",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
