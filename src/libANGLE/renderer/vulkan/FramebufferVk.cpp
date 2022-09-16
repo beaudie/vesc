@@ -316,7 +316,8 @@ FramebufferVk::FramebufferVk(RendererVk *renderer, const gl::FramebufferState &s
     : FramebufferImpl(state),
       mBackbuffer(nullptr),
       mActiveColorComponentMasksForClear(0),
-      mReadOnlyDepthFeedbackLoopMode(false)
+      mReadOnlyDepthFeedbackLoopMode(false),
+      mRenderPassSerial{}
 {
     if (mState.isDefault())
     {
@@ -507,10 +508,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     {
         // If a render pass is open with commands, it must be for this framebuffer.  Otherwise,
         // either FramebufferVk::syncState() or ContextVk::syncState() would have closed it.
-        vk::Framebuffer *currentFramebuffer = nullptr;
-        ANGLE_TRY(getFramebuffer(contextVk, &currentFramebuffer, nullptr,
-                                 SwapchainResolveMode::Disabled));
-        ASSERT(contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer));
+        ASSERT(contextVk->hasStartedRenderPassWithSerial(mRenderPassSerial));
 
         // Emit debug-util markers for this mid-render-pass clear
         ANGLE_TRY(
@@ -1220,13 +1218,14 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             // already done and whose data is already flushed from the tile (in a tile-based
             // renderer), so there's no chance for the resolve attachment to take advantage of the
             // data already being present in the tile.
-            vk::Framebuffer *srcVkFramebuffer = nullptr;
-            ANGLE_TRY(srcFramebufferVk->getFramebuffer(contextVk, &srcVkFramebuffer, nullptr,
-                                                       SwapchainResolveMode::Disabled));
 
             // TODO(https://anglebug.com/4968): Support multiple open render passes so we can remove
             //  this hack to 'restore' the finished render pass.
-            contextVk->restoreFinishedRenderPass(srcVkFramebuffer);
+            bool isCurrentFramebufferValid = srcFramebufferVk->mCurrentFramebuffer.valid();
+            if (isCurrentFramebufferValid)
+            {
+                contextVk->restoreFinishedRenderPass(srcFramebufferVk->getRenderPassSerial());
+            }
 
             // glBlitFramebuffer() needs to copy the read color attachment to all enabled
             // attachments in the draw framebuffer, but Vulkan requires a 1:1 relationship for
@@ -1234,9 +1233,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             // this, we currently only support using resolve attachments when there is a single draw
             // attachment enabled.
             bool canResolveWithSubpass =
-                mState.getEnabledDrawBuffers().count() == 1 &&
+                isCurrentFramebufferValid && mState.getEnabledDrawBuffers().count() == 1 &&
                 mCurrentFramebufferDesc.getLayerCount() == 1 &&
-                contextVk->hasStartedRenderPassWithFramebuffer(srcVkFramebuffer);
+                contextVk->hasStartedRenderPassWithSerial(srcFramebufferVk->getRenderPassSerial());
 
             // Additionally, when resolving with a resolve attachment, the src and destination
             // offsets must match, the render area must match the resolve area, and there should be
@@ -1665,11 +1664,7 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     //- Bind FBO 2, draw
     //- Bind FBO 1, invalidate D/S
     // to invalidate the D/S of FBO 2 since it would be the currently active renderpass.
-    vk::Framebuffer *currentFramebuffer = nullptr;
-    ANGLE_TRY(
-        getFramebuffer(contextVk, &currentFramebuffer, nullptr, SwapchainResolveMode::Disabled));
-
-    if (contextVk->hasStartedRenderPassWithFramebuffer(currentFramebuffer))
+    if (contextVk->hasStartedRenderPassWithSerial(mRenderPassSerial))
     {
         // Mark the invalidated attachments in the render pass for loadOp and storeOp determination
         // at its end.
@@ -2802,7 +2797,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         *framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        depthStencilAttachmentIndex, packedClearValues, commandBufferOut, &mRenderPassSerial));
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);

@@ -717,7 +717,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mLastRenderPassSerial{}
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -6752,16 +6753,27 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
-    vk::RenderPassCommandBuffer **commandBufferOut)
+    vk::RenderPassCommandBuffer **commandBufferOut,
+    vk::RenderPassSerial *rpSerialOut)
 {
-    // Next end any currently outstanding render pass.  The render pass is normally closed before
-    // reaching here for various reasons, except typically when UtilsVk needs to start one.
+    // End any currently outstanding render pass. The render pass is normally closed before reaching
+    // here for various reasons, except typically when UtilsVk needs to start one.
     ANGLE_TRY(flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
 
+    // The last render pass serial is also incremented and used to update the render pass command
+    // buffer helper and the framebuffer object (via the output argument). Note that UtilsVk ignores
+    // the output serial.
+    mLastRenderPassSerial = mRenderer->getResourceSerialFactory().generateRenderPassSerial();
+    if (rpSerialOut)
+    {
+        *rpSerialOut = mLastRenderPassSerial;
+    }
+
     mPerfCounters.renderPasses++;
-    return mRenderPassCommands->beginRenderPass(
-        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
-        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, commandBufferOut);
+    return mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
+                                                renderPassAttachmentOps, colorAttachmentCount,
+                                                depthStencilAttachmentIndex, clearValues,
+                                                rpSerialOut, commandBufferOut);
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
@@ -6798,7 +6810,7 @@ angle::Result ContextVk::startNextSubpass()
     return mRenderPassCommands->nextSubpass(this, &mRenderPassCommandBuffer);
 }
 
-void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
+void ContextVk::restoreFinishedRenderPass(const vk::RenderPassSerial rpSerial)
 {
     if (mRenderPassCommandBuffer != nullptr)
     {
@@ -6806,8 +6818,7 @@ void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
         return;
     }
 
-    if (mRenderPassCommands->started() &&
-        mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle())
+    if (mRenderPassCommands->started() && mRenderPassCommands->getRenderPassSerial() == rpSerial)
     {
         // There is already a render pass open for this framebuffer, so just restore the
         // pointer rather than starting a whole new render pass. One possible path here

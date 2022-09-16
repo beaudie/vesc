@@ -852,6 +852,7 @@ class ClearValuesArray final
     X(Buffer)                 \
     X(Image)                  \
     X(ImageOrBufferView)      \
+    X(RenderPass)             \
     X(Sampler)
 
 #define ANGLE_DEFINE_VK_SERIAL_TYPE(Type)                                  \
