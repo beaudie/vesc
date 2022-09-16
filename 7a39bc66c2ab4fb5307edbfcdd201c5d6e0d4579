@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af05be20_b7c6fff6",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c445adbd_1598d9fe",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c7c35e5_a6fd1f2d",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-16T02:28:10Z",
       "side": 1,
       "message": "Could you fetch the sharedEvent\u0027s signaledValue and store it off here?",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fcdaea9_da6a542a",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4c7c35e5_a6fd1f2d",
       "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a21cbecf_7eeff188",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f426aa85_19125a10",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4703eb1e_a3dc6e97",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da9abaaf_a8a41702",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4703eb1e_a3dc6e97",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "983ddca0_30e24b87",
@@ -99,6 +171,24 @@
       "writtenOn": "2022-09-16T02:28:10Z",
       "side": 1,
       "message": "Strictly speaking, no context is current at this point. The EGL calls below don\u0027t need one.",
+      "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ab12c7_dd9a3cfe",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-16T04:04:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "983ddca0_30e24b87",
       "revId": "7a39bc66c2ab4fb5307edbfcdd201c5d6e0d4579",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
