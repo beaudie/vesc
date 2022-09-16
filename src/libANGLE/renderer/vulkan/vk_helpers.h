@@ -1387,6 +1387,12 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    uint64_t getFramebufferSerial() { return mFramebufferSerial; }
+    void setFramebufferSerial(uint64_t framebufferSerial)
+    {
+        mFramebufferSerial = framebufferSerial;
+    }
+
   private:
     angle::Result initializeCommandBuffer(Context *context);
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
@@ -1467,6 +1473,10 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
     ImageHelper *mImageOptimizeForPresent;
+
+    // This serial is updated when a render pass starts, and is used to identify the framebuffer it
+    // belongs to.
+    uint64_t mFramebufferSerial;
 };
 
 // The following class helps support both Vulkan and ANGLE secondary command buffers by
