@@ -7209,12 +7209,6 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
     {
         if (activeQuery)
         {
-            // Transform feedback queries are handled separately.
-            if (activeQuery->getType() == gl::QueryType::TransformFeedbackPrimitivesWritten)
-            {
-                continue;
-            }
-
             ANGLE_TRY(activeQuery->onRenderPassStart(this));
 
             // Update rasterizer discard emulation with primitives generated query if necessary.
@@ -7231,14 +7225,6 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 angle::Result ContextVk::resumeXfbRenderPassQueriesIfActive()
 {
     ASSERT(mRenderPassCommandBuffer);
-
-    // All other queries are handled separately.
-    QueryVk *xfbQuery = mActiveRenderPassQueries[gl::QueryType::TransformFeedbackPrimitivesWritten];
-    if (xfbQuery && mState.isTransformFeedbackActiveUnpaused())
-    {
-        ANGLE_TRY(xfbQuery->onRenderPassStart(this));
-    }
-
     return angle::Result::Continue;
 }
 
