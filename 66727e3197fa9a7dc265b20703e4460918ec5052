@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f3c4511_f07e23e4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6763,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-16T21:41:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b4a7d19_8b1c0bf7",
+      "range": {
+        "startLine": 6760,
+        "startChar": 82,
+        "endLine": 6763,
+        "endChar": 21
+      },
+      "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24d018d0_1255f924",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f091ea4_98c25c38",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 6771,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-16T21:41:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24d018d0_1255f924",
+      "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7c50fae_0e634e22",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-09-16T19:03:00Z",
       "side": 1,
       "message": "Use `Serial` to make it clear what the number is.\n\nBut more importantly, this is not the _framebuffer_ serial, but rather the _render pass_ serial.\n\nThe vk::Framebuffer check was really a hack that happened to work, because it\u0027s unique between FramebufferVk objects. With serial, we can be more direct; FramebufferVk A opened render pass #N; so render pass #N is its, and render pass #M isn\u0027t.",
+      "range": {
+        "startLine": 1526,
+        "startChar": 4,
+        "endLine": 1526,
+        "endChar": 12
+      },
+      "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6abc3e93_4c9fa9e4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-16T21:41:17Z",
+      "side": 1,
+      "message": "Thanks for the clarification! Renamed to render pass serial.\nIn order to increment the last serial when starting the render pass, I added `RenderPassSerial` in `vk_utils.h` to be used as the type. Should we have a separate serial factory?",
+      "parentUuid": "e7c50fae_0e634e22",
       "range": {
         "startLine": 1526,
         "startChar": 4,
