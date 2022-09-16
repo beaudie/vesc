@@ -16,6 +16,24 @@
       "message": "Jamie and others, could we finalize the review and land this? We are starting to see interest in more VkSwapchain-replacing implementations and they could build on top of the abstraction created in this change.",
       "revId": "11ce19717acf804064aa54adc6c5a943dcb7eb63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7a4d226_b5b6db34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-09-16T10:26:15Z",
+      "side": 1,
+      "message": "We can\u0027t yet as it is right now. This depends on new GBM surface APIs, still under review..:\nhttps://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/15886\nhttps://chromium-review.googlesource.com/c/chromiumos/platform/minigbm/+/3578766\n\nI can split it though into a VkSwapchain-refactoring CL and a GBMSurface-only CL.",
+      "parentUuid": "cf7af3fd_d836706f",
+      "revId": "11ce19717acf804064aa54adc6c5a943dcb7eb63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
