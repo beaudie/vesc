@@ -119,6 +119,24 @@
       "message": "Note: ANGLE_USES_GBM is probably not being set as needed.\nCurrently located: angle/src/libANGLE/renderer/gl/BUILD.gn\nAntonio is going to create a patch to fix this.",
       "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfed8b51_2dff0aad",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-16T16:52:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22977357_ef881492",
+      "revId": "62465af7374aa5f86f661b27ce5c9a13dcad02f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
