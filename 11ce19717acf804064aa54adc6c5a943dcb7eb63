@@ -34,6 +34,24 @@
       "parentUuid": "cf7af3fd_d836706f",
       "revId": "11ce19717acf804064aa54adc6c5a943dcb7eb63",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c781d8_46300bc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-16T18:19:52Z",
+      "side": 1,
+      "message": "\u003e I can split it though into a VkSwapchain-refactoring CL and a GBMSurface-only CL.\n\nThat would be great, thanks",
+      "parentUuid": "b7a4d226_b5b6db34",
+      "revId": "11ce19717acf804064aa54adc6c5a943dcb7eb63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
