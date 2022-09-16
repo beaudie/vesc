@@ -272,22 +272,24 @@ precision highp float;
 #define kZero                              0x0
 #define kOne                               0x1
 
-#define kClear                          0x1500
-#define kAnd                            0x1501
-#define kAnd_reverse                    0x1502
-#define kCopy                           0x1503
-#define kAnd_inverted                   0x1504
-#define kNoop                           0x1505
-#define kXor                            0x1506
-#define kOr                             0x1507
-#define kNor                            0x1508
-#define kEquiv                          0x1509
-#define kInvert                         0x150A
-#define kOr_reverse                     0x150B
-#define kCopy_inverted                  0x150C
-#define kOr_inverted                    0x150D
-#define kNand                           0x150E
-#define kSet                            0x150F)";
+// Based on LogicalOperation
+#define kAnd                            0
+#define kAndInverted                    1
+#define kAndReverse                     2
+#define kClear                          3
+#define kCopy                           4
+#define kCopyInverted                   5
+#define kEquiv                          6
+#define kInvert                         7
+#define kNand                           8
+#define kNoop                           9
+#define kNor                            10
+#define kOr                             11
+#define kOrInverted                     12
+#define kOrReverse                      13
+#define kSet                            14
+#define kXor                            15
+)";
 
 constexpr char kGLES1DrawFShaderUniformDefs[] = R"(
 
@@ -359,13 +361,24 @@ uniform vec4 fog_color;
 
 uniform vec4 clip_planes[kMaxClipPlanes];
 
+// Logic Op ////////////////////////////////////////////////////////////////////
+
+// Format is:
+// - 4x4 bits depicting the bit width of each channel of color output
+// - 4 bits for the op based on LogicalOperation's packing
+uniform uint logic_op;
+
 // Point rasterization//////////////////////////////////////////////////////////
 
 // GL_OES_draw_texture//////////////////////////////////////////////////////////
+)";
 
-// Outgoing fragment////////////////////////////////////////////////////////////
-
+constexpr char kGLES1DrawFShaderOutputDef[] = R"(
 out vec4 frag_color;
+)";
+
+constexpr char kGLES1DrawFShaderFramebufferFetchOutputDef[] = R"(
+inout vec4 frag_color;
 )";
 
 constexpr char kGLES1DrawFShaderFunctions[] = R"(
@@ -563,7 +576,90 @@ vec4 doFog(vec4 currentFragment)
     vec4 result = f * currentFragment + (1.0 - f) * fog_color;
     return result;
 }
+)";
 
+constexpr char kGLES1DrawFShaderLogicOpFramebufferFetchDisabled[] = R"(
+vec4 applyLogicOp(vec4 currentFragment)
+{
+    return currentFragment;
+}
+)";
+
+constexpr char kGLES1DrawFShaderLogicOpFramebufferFetchEnabled[] = R"(
+vec4 applyLogicOp(vec4 currentFragment)
+{
+    vec4 previousFragment = frag_color;
+
+    uvec4 channelWidths = uvec4(logic_op & 0xFu,
+                                logic_op >> 4u & 0xFu,
+                                logic_op >> 8u & 0xFu,
+                                logic_op >> 12u & 0xFu);
+
+    uvec4 channelMasks = (uvec4(1) << channelWidths) - 1u;
+
+    uvec4 src = uvec4(round(currentFragment * vec4(channelMasks)));
+    uvec4 dst = uvec4(round(previousFragment * vec4(channelMasks)));
+    uvec4 result;
+
+    switch (logic_op >> 16u & 0xFu)
+    {
+        case kAnd:
+            result = src & dst;
+            break;
+        case kAndInverted:
+            result = ~src & dst;
+            break;
+        case kAndReverse:
+            result = src & ~dst;
+            break;
+        case kClear:
+            result = uvec4(0);
+            break;
+        case kCopy:
+            result = src;
+            break;
+        case kCopyInverted:
+            result = ~src;
+            break;
+        case kEquiv:
+            result = ~(src ^ dst);
+            break;
+        case kInvert:
+            result = ~dst;
+            break;
+        case kNand:
+            result = ~(src & dst);
+            break;
+        case kNoop:
+            result = dst;
+            break;
+        case kNor:
+            result = ~(src | dst);
+            break;
+        case kOr:
+            result = src | dst;
+            break;
+        case kOrInverted:
+            result = ~src | dst;
+            break;
+        case kOrReverse:
+            result = src | ~dst;
+            break;
+        case kSet:
+            result = channelMasks;
+            break;
+        case kXor:
+            result = src ^ dst;
+            break;
+    }
+
+    result &= channelMasks;
+
+    // Avoid division by zero for formats without alpha
+    channelMask.a = max(channelMask.a, 1);
+
+    return vec4(result) / vec4(channelMask);
+}
 )";
 
 constexpr char kGLES1DrawFShaderMultitexturing[] = R"(
@@ -1101,6 +1197,6 @@ void main()
         discard;
     }
 
-    frag_color = currentFragment;
+    frag_color = applyLogicOp(currentFragment);
 }
 )";

@@ -25,6 +25,18 @@
 namespace
 {
 #include "libANGLE/GLES1Shaders.inc"
+
+uint32_t GetLogicOpUniform(const gl::FramebufferAttachment *color, gl::LogicalOperation logicOp)
+{
+    const uint32_t red   = color->getRedSize();
+    const uint32_t green = color->getGreenSize();
+    const uint32_t blue  = color->getBlueSize();
+    const uint32_t alpha = color->getAlphaSize();
+
+    ASSERT(red <= 8 && green <= 8 && blue <= 8 && alpha <= 8);
+
+    return red | green << 4 | blue << 8 | alpha << 12 | static_cast<uint32_t>(logicOp) << 16;
+}
 }  // anonymous namespace
 
 namespace gl
@@ -247,6 +259,28 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     {
         context->setLogicOpEnabled(gles1State.mLogicOpEnabled);
         context->setLogicOp(gles1State.mLogicOp);
+    }
+    else if (context->getExtensions().shaderFramebufferFetchEXT ||
+             context->getExtensions().shaderFramebufferFetchNonCoherentEXT)
+    {
+        mShaderState.mGLES1StateEnabled[GLES1StateEnables::LogicOpThroughFramebufferFetch] =
+            gles1State.mLogicOpEnabled;
+
+        const Framebuffer *drawFramebuffer           = glState->getDrawFramebuffer();
+        const FramebufferAttachment *colorAttachment = drawFramebuffer->getColorAttachment(0);
+
+        if (gles1State.mLogicOpEnabled)
+        {
+            // Set up uniform value for logic op
+            setUniform1i(context, programObject, programState.logicOpLoc,
+                         GetLogicOpUniform(colorAttachment, gles1State.mLogicOp));
+
+            // Issue a framebuffer fetch barrier if non-coherent
+            if (!context->getExtensions().shaderFramebufferFetchEXT)
+            {
+                context->framebufferFetchBarrier();
+            }
+        }
     }
 
     // Client state / current vector enables
@@ -863,6 +897,24 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
     fragmentStream << kGLES1DrawFShaderHeader;
     fragmentStream << GLES1DrawFShaderStateDefs.str();
     fragmentStream << kGLES1DrawFShaderUniformDefs;
+    if (mShaderState.mGLES1StateEnabled[GLES1StateEnables::LogicOpThroughFramebufferFetch])
+    {
+        if (context->getExtensions().shaderFramebufferFetchEXT)
+        {
+            fragmentStream << "#extension GL_EXT_shader_framebuffer_fetch : require\n";
+        }
+        else
+        {
+            fragmentStream << "#extension GL_EXT_shader_framebuffer_fetch_non_coherent : require\n";
+        }
+        fragmentStream << kGLES1DrawFShaderFramebufferFetchOutputDef;
+        fragmentStream << kGLES1DrawFShaderLogicOpFramebufferFetchEnabled;
+    }
+    else
+    {
+        fragmentStream << kGLES1DrawFShaderOutputDef;
+        fragmentStream << kGLES1DrawFShaderLogicOpFramebufferFetchDisabled;
+    }
     fragmentStream << kGLES1DrawFShaderFunctions;
     fragmentStream << kGLES1DrawFShaderMultitexturing;
     fragmentStream << kGLES1DrawFShaderMain;
@@ -948,6 +1000,8 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
     programState.fogColorLoc   = programObject->getUniformLocation("fog_color");
 
     programState.clipPlanesLoc = programObject->getUniformLocation("clip_planes");
+
+    programState.logicOpLoc = programObject->getUniformLocation("logic_op");
 
     programState.pointSizeMinLoc = programObject->getUniformLocation("point_size_min");
     programState.pointSizeMaxLoc = programObject->getUniformLocation("point_size_max");
