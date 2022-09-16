@@ -1580,7 +1580,8 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
-      mImageOptimizeForPresent(nullptr)
+      mImageOptimizeForPresent(nullptr),
+      mFramebufferSerial(0)
 {}
 
 RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()

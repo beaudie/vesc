@@ -717,7 +717,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mLastFramebufferSerial(0)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -6752,11 +6753,19 @@ angle::Result ContextVk::beginNewRenderPass(
     const vk::PackedAttachmentCount colorAttachmentCount,
     const vk::PackedAttachmentIndex depthStencilAttachmentIndex,
     const vk::PackedClearValuesArray &clearValues,
-    vk::RenderPassCommandBuffer **commandBufferOut)
+    vk::RenderPassCommandBuffer **commandBufferOut,
+    uint64_t *framebufferSerialOut)
 {
     // Next end any currently outstanding render pass.  The render pass is normally closed before
     // reaching here for various reasons, except typically when UtilsVk needs to start one.
     ANGLE_TRY(flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
+
+    mLastFramebufferSerial++;
+    if (framebufferSerialOut)
+    {
+        *framebufferSerialOut = mLastFramebufferSerial;
+    }
+    mRenderPassCommands->setFramebufferSerial(mLastFramebufferSerial);
 
     mPerfCounters.renderPasses++;
     return mRenderPassCommands->beginRenderPass(
@@ -6798,7 +6807,7 @@ angle::Result ContextVk::startNextSubpass()
     return mRenderPassCommands->nextSubpass(this, &mRenderPassCommandBuffer);
 }
 
-void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
+void ContextVk::restoreFinishedRenderPass(uint64_t framebufferSerial)
 {
     if (mRenderPassCommandBuffer != nullptr)
     {
@@ -6807,7 +6816,7 @@ void ContextVk::restoreFinishedRenderPass(vk::Framebuffer *framebuffer)
     }
 
     if (mRenderPassCommands->started() &&
-        mRenderPassCommands->getFramebufferHandle() == framebuffer->getHandle())
+        mRenderPassCommands->getFramebufferSerial() == framebufferSerial)
     {
         // There is already a render pass open for this framebuffer, so just restore the
         // pointer rather than starting a whole new render pass. One possible path here
