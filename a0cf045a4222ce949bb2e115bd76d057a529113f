@@ -16,6 +16,24 @@
       "message": "I tested this patch out on Windows/NVIDIA. I am running into a crash in vkDestroySwapchainKHR at exit (which I wasn\u0027t getting before this patch), and I suspected there is a teardown order problem. But based on the output of the Vulkan validation layers it looks like another problem.\n\nWith validation layers enabled, I get this:\n\n\u003e VUID-vkDestroyImage-image-04882(ERROR / SPEC): msgNum: -701044896 - Validation Error: [ VUID-vkDestroyImage-image-04882 ] Object 0: handle \u003d 0x2393ab35d20, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0xd636e760 | vkDestroyImage(): VkImage 0xec4bec000000000b[] is a presentable image and it is controlled by the implementation and is destroyed with vkDestroySwapchainKHR. The Vulkan spec states: image must not have been acquired from vkGetSwapchainImagesKHR (https://vulkan.lunarg.com/doc/view/1.3.224.1/windows/1.3-extensions/vkspec.html#VUID-vkDestroyImage-image-04882)\n\n\n\nIn this callstack:\n\n```\n\u003e\t[Inline Frame] libGLESv2.dll!rx::vk::Image::destroy(VkDevice_T * device) Line 1353\tC++\n \tlibGLESv2.dll!rx::vk::ImageHelper::destroy(rx::RendererVk * renderer) Line 5731\tC++\n \tlibGLESv2.dll!rx::impl::SwapchainImage::destroy(rx::DisplayVk * displayVk, rx::vk::Recycler\u003crx::vk::Semaphore\u003e * presentSemaphoreRecycler) Line 745\tC++\n \tlibGLESv2.dll!rx::WindowSurfaceVk::destroySwapChainImages(rx::DisplayVk * displayVk) Line 1623\tC++\n \tlibGLESv2.dll!rx::WindowSurfaceVkSwapchain::destroy(const egl::Display * display) Line 814\tC++\n \tlibGLESv2.dll!egl::Surface::destroyImpl(const egl::Display * display) Line 177\tC++\n \tlibGLESv2.dll!egl::Surface::onDestroy(const egl::Display * display) Line 305\tC++\n \tlibGLESv2.dll!egl::Display::destroySurfaceImpl(egl::Surface * surface, absl::flat_hash_set\u003cegl::Surface *,absl::container_internal::HashEq\u003cegl::Surface *,void\u003e::Hash,absl::container_internal::HashEq\u003cegl::Surface *,void\u003e::Eq,std::allocator\u003cegl::Surface *\u003e\u003e * surfaces) Line 1670\tC++\n \tlibGLESv2.dll!egl::Display::destroyInvalidEglObjects() Line 1100\tC++\n \tlibGLESv2.dll!egl::Display::terminate(egl::Thread * thread, egl::Display::TerminateReason terminateReason) Line 1205\tC++\n \tlibGLESv2.dll!egl::Terminate(egl::Thread * thread, egl::Display * display) Line 696\tC++\n\n ```",
       "revId": "a0cf045a4222ce949bb2e115bd76d057a529113f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe2f9b15_9b2d4d69",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-09-17T15:42:04Z",
+      "side": 1,
+      "message": "If I do this, the crash and validation error go away:\n\n```\ndiff --git a/src/libANGLE/renderer/vulkan/SurfaceVk.cpp b/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\nindex 6b3414a4f..6fd6b0fa7 100644\n--- a/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/SurfaceVk.cpp\n@@ -1384,6 +1384,7 @@ angle::Result WindowSurfaceVkSwapchain::createSwapChain(vk::Context *context,\n                                          actualFormatID, 1, robustInit);\n         member.imageViews.init(renderer);\n         member.mFrameNumber \u003d 0;\n+        member.weakReference \u003d true;\n     }\n\n     ANGLE_TRY(initDepthStencil(context, vkExtents));\n```",
+      "parentUuid": "70cce649_79f7809a",
+      "revId": "a0cf045a4222ce949bb2e115bd76d057a529113f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
