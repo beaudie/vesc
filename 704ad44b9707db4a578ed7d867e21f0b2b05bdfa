@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "144a040f_8dde52e2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:38:52Z",
+      "side": 0,
+      "message": "Why not call `releaseCurrentFramebuffer` here, and avoid calling it next to these functions in `resolveColorWithSubpass`?",
+      "revId": "704ad44b9707db4a578ed7d867e21f0b2b05bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

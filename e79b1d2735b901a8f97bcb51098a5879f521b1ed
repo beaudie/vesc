@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf092f40_9a452460",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:38:52Z",
+      "side": 1,
+      "message": "Nice test! Now let\u0027s make sure the opposite works too (for both tests); i.e. start with larger sizes and shrink.",
+      "revId": "e79b1d2735b901a8f97bcb51098a5879f521b1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
