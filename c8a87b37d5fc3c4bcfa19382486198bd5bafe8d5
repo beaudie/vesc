@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6dfae53_1e15a2ad",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:20:42Z",
+      "side": 0,
+      "message": "Only supported under Vulkan, right? Then this could similarly be skip if !IsVulkan()\n\nThat said, these tests are failing on Vulkan too, looks like they caught a bug in this change.",
+      "revId": "c8a87b37d5fc3c4bcfa19382486198bd5bafe8d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
