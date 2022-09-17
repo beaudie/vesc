@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee5b9fa_1b538e59",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "If you look at the implementation, this uses an atomic integer and ensures uniqueness among resources. We don\u0027t need that, a simple Serial would do, and ++ here works.",
+      "range": {
+        "startLine": 6766,
+        "startChar": 28,
+        "endLine": 6766,
+        "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "463ac236_d385eb3e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "Pass `mLastRenderPassSerial` here instead, so there\u0027s always a serial",
+      "range": {
+        "startLine": 6776,
+        "startChar": 48,
+        "endLine": 6776,
+        "endChar": 59
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b33f6a6c_28faf3be",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "nit: unnecessary, there\u0027s a constructor",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c37ffd27_0480fc61",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "Is this if necessary? Wouldn\u0027t `restoreFinishedRenderPass` checking the serial be enough?",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "271a48c0_1b2829b1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "Again seems unnecessary, `hasStartedRenderPassWithSerial` should return false if render pass doesn\u0027t belong to srcFramebufferVk. If it does belong to it, then mCurrentFramebuffer should be valid.",
+      "range": {
+        "startLine": 1236,
+        "startChar": 16,
+        "endLine": 1236,
+        "endChar": 41
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b03e4be_a4669582",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:31:18Z",
+      "side": 1,
+      "message": "super duper nit: unnecessary parentheses are unnecessary\n\nBut actually the render pass should _always_ get a serial, no matter what.",
+      "range": {
+        "startLine": 2108,
+        "startChar": 24,
+        "endLine": 2108,
+        "endChar": 49
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
