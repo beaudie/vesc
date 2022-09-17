@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbb2a971_57a3755b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:07:14Z",
+      "side": 1,
+      "message": "Feels like it shouldn\u0027t be _this_ complicated. How about something like this (warning: also ugly, but very simple):\n\nAdd `State::isFramebufferBindingDirty()`. Then in `QueryVk::beginQuery()` do\n\n```\nif (contextVk-\u003egetState().isFramebufferBindingDirty())\n    contextVk-\u003eonRenderPassFinished();\n```",
+      "revId": "906e4d9d12f2ec3a32c48dcf6d9d9060e009a5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e75c228_11228e36",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:07:14Z",
+      "side": 1,
+      "message": "Should be able to drop this; if there are deferred clears at this point, they should be handled one way or another. I don\u0027t believe you could get deferred clear here if the draw framebuffer had a render pass open even, so you could also assert.",
+      "range": {
+        "startLine": 267,
+        "startChar": 12,
+        "endLine": 267,
+        "endChar": 50
+      },
+      "revId": "906e4d9d12f2ec3a32c48dcf6d9d9060e009a5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "923c43c7_ccd9b23b",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:07:14Z",
+      "side": 1,
+      "message": "Better yet, `redeferClears()`.",
+      "range": {
+        "startLine": 269,
+        "startChar": 41,
+        "endLine": 269,
+        "endChar": 60
+      },
+      "revId": "906e4d9d12f2ec3a32c48dcf6d9d9060e009a5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
