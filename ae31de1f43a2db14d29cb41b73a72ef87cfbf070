@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c504daf_5c5d0e1e",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-17T02:30:19Z",
+      "side": 1,
+      "message": "Just curious, why do we need to disable this feature for the test?",
+      "revId": "ae31de1f43a2db14d29cb41b73a72ef87cfbf070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
