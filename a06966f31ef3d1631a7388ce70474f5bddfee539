@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09fe90dc_1ba4f171",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 19
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "SGTM. Probably a case of never happens in practice",
+      "parentUuid": "769e7a75_40ebb480",
+      "range": {
+        "startLine": 637,
+        "startChar": 4,
+        "endLine": 639,
+        "endChar": 19
+      },
+      "revId": "a06966f31ef3d1631a7388ce70474f5bddfee539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f752d04a_447aedc9",

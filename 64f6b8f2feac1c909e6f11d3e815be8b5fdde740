@@ -16,6 +16,235 @@
       "message": "This should be ready to review now",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "654d985a_75fd0609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "Partial review. I haven\u0027t reviewed the main file yet (sorry for the sluggishness!)",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae02d10_67f2faa8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "typo: duplicate `is`",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 300,
+        "endChar": 11
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b94471_1f162d3e",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "Most vendors don\u0027t actually do anything with dither, it\u0027s not anything useful to rely on. How about forbidding it both here, and in `BeginPixelLocalStorageANGLE`?\n\nMind you, changing dither state with the new VK_EXT_legacy_dithering results in a render pass break.",
+      "range": {
+        "startLine": 361,
+        "startChar": 40,
+        "endLine": 361,
+        "endChar": 46
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e6ede11_36f23cf8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "will",
+      "range": {
+        "startLine": 413,
+        "startChar": 32,
+        "endLine": 413,
+        "endChar": 35
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c883cc3_98a1d162",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "Not sure where this is coming from",
+      "range": {
+        "startLine": 453,
+        "startChar": 13,
+        "endLine": 453,
+        "endChar": 53
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735ff4de_5c6da7fb",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "why not `GLuint` for these?",
+      "range": {
+        "startLine": 378,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 9
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a6c0f39_5aa97f83",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "s/angle/context everywhere.",
+      "range": {
+        "startLine": 26,
+        "startChar": 33,
+        "endLine": 26,
+        "endChar": 38
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0540504_99404d8f",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "`index` is `GLuint`! How did the compiler not catch this?",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3ca0fb5_3801cd99",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "nit: we use `static_cast`. Unnecessary if the cap itself if `GLuint`",
+      "range": {
+        "startLine": 3386,
+        "startChar": 16,
+        "endLine": 3386,
+        "endChar": 17
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b3d607_b99e2669",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "This is out of place. The validation layer shouldn\u0027t do work. For one thing, it could be disabled with KHR_no_error",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff48c453_536b506f",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T03:11:45Z",
+      "side": 1,
+      "message": "Also out of place. Again, the validation layer shouldn\u0027t do any work.",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
