@@ -16,6 +16,24 @@
       "message": "Just curious, why do we need to disable this feature for the test?",
       "revId": "ae31de1f43a2db14d29cb41b73a72ef87cfbf070",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc62aad9_a00cf485",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-17T02:41:49Z",
+      "side": 1,
+      "message": "To make sure the static path is also exercised. Note that the `ES3_VULKAN()` configuration is also specified (as part of the list specified inside the `ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND` macro). The `ES3_VULKAN().disable(...)` config is to test when dynamic state is not available.\n\nThere\u0027s also a simpler reason; logicOp dynamic state is an optional part of VK_EXT_extended_dynamic_state2 and isn\u0027t currently independently enabled, so if the latter is disabled so should the former be.",
+      "parentUuid": "9c504daf_5c5d0e1e",
+      "revId": "ae31de1f43a2db14d29cb41b73a72ef87cfbf070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
