@@ -51,6 +51,24 @@
       "parentUuid": "dd7230c2_2706b741",
       "revId": "2d8ceb40a1d68cd6dcd446fb50fcd98db9c7eb72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "346ffdee_c67a3cd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-18T09:59:53Z",
+      "side": 1,
+      "message": "The conclusion comes from the fact that apparently the CI does not succeed without the extension - do I understand that wrong? Is there a chance that it\u0027s just flaky?\n\nI definitely need the extension to either\n1. be not advertised\n2. work properly/be fully implemented, i.e. not crash when calling `queryDmaBufFormats()`/`queryDmaBufModifiers()` when using the EGL backend\n\nas it blocks landing a major Exo feature, https://chromium-review.googlesource.com/c/chromium/src/+/3857556\n\nImplementing it fully would be needed in case the Angle EGL backend is planned to be shipped on ChromeOS. If the plan is to ship the Vulkan backend instead, we can probably skip that - the Vulkan implementation works fine.",
+      "parentUuid": "773bf3dd_f9c6f3de",
+      "revId": "2d8ceb40a1d68cd6dcd446fb50fcd98db9c7eb72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
