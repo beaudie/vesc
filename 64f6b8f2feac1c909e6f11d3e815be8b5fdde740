@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db118733_345cfb4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "Super nice!",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ae02d10_67f2faa8",
@@ -169,6 +186,211 @@
         "endLine": 26,
         "endChar": 38
       },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5630acea_d7887e15",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "nit: static_cast",
+      "range": {
+        "startLine": 204,
+        "startChar": 22,
+        "endLine": 204,
+        "endChar": 27
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bff4db41_ed8ac88a",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "nit: ANGLE\u0027s style would be:\n\n```\nconst bool hasMemorylessTextureId \u003d mMemorylessTextureID.value !\u003d 0;\nconst bool hasTextureRef \u003d mTextureRef !\u003d nullptr;\nASSERT(hasMemorylessTextureId \u003d\u003d hasTextureRef);\n```",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b941ba95_ee4cc976",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "Same nits (`\u003d\u003d nullptr`, `static_cast`)",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96717bab_e97f4323",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "Don\u0027t hesitate to simplify the extension for this, like would anyone miss 3D PLS textures?",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d433ef7_67383a2c",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "Thanks for handling this. Do you have any tests in place to be sure it works?",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aa310f9_de5eb002",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 447,
+        "startChar": 63,
+        "endLine": 447,
+        "endChar": 70
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7b3e8cc_559da32f",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "The pattern of modifying the framebuffer and calling clear causes a lot of `syncState`s. At least in Vulkan we \"deal with it\", but it\u0027s a bit iffy nevertheless.\n\nIs it possible to instead loop once and set up the framebuffer (attach to different attachments), then loop again and clear all attachments one after the other? Then the framebuffer is sync\u0027ed only once.",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b57d302_9432e506",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "Similarly, a test would be good to make sure this state is restored",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66573afe_9f301b5c",
+        "filename": "src/libANGLE/PixelLocalStorage.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "If it must, then please put it in the spec. Otherwise the implementation should support it.",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f920dce3_75ffa2cf",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "nit: we tend to be explicit about bool conversion, i.e. `pls \u003d\u003d nullptr`",
+      "range": {
+        "startLine": 3248,
+        "startChar": 16,
+        "endLine": 3248,
+        "endChar": 20
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8726b26e_3927a5b0",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-18T04:10:28Z",
+      "side": 1,
+      "message": "GL_NONE seems irrelevant here?",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
