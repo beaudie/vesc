@@ -16,6 +16,29 @@
       "message": "Seems to pass CV",
       "revId": "f7d0ede3f7ee3c37a8d3b8d3c46aca34485501bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09af7d02_a2efcb33",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T18:38:38Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we delete `check_hash` altogether then?",
+      "range": {
+        "startLine": 222,
+        "startChar": 4,
+        "endLine": 222,
+        "endChar": 27
+      },
+      "revId": "f7d0ede3f7ee3c37a8d3b8d3c46aca34485501bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
