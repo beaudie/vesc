@@ -79,6 +79,24 @@
       "message": "Thanks, Shaobo. The fix looks very straightforward. But I am not sure whether this is the best place to include windows.h. Would like Shahbaz and Geoff to review this. ",
       "revId": "6dc152d3b5634957c01efba783112feaf5600391",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d81163b0_c8280bd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2022-09-19T02:35:52Z",
+      "side": 1,
+      "message": "Thanks Jiajia. For more details: the best place in my mind is to place \u003cwindows.h\u003e is to place them in the testS/test_expectations/GPUTestConfig.cpp and\ntests/test_utils/third_party/vulkan_command_buffer_utils.cpp. It is ok for vulkan_command_buffer_utils.cpp but for GPUTestConfig.cpp, the header file order should be:\ninclude \u003cwindows.h\u003e\ninclude \u003cversionhelpers.h\u003e\n\nBut git cl format will change the order and it is not correct.\nSo do you have any suggestions?",
+      "parentUuid": "293b7183_5290acc3",
+      "revId": "6dc152d3b5634957c01efba783112feaf5600391",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
