@@ -605,6 +605,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57fd816f_59ba8315",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:54:05Z",
+      "side": 1,
+      "message": "Actually I can guess that `syncState` syncs the ANGLE state with Vulkan/GL/etc. state. So is this a costly CPU operation that can be generally mitigated by binding them all to different attachments on the scratch framebuffer?",
+      "parentUuid": "ce64d5de_250a5c42",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5b57d302_9432e506",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
