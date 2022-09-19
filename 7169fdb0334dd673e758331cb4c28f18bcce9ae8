@@ -16,6 +16,29 @@
       "message": "Seems to be unnecessary, likely because of other refactoring and redesigns of XFB and queries and RPs.",
       "revId": "7169fdb0334dd673e758331cb4c28f18bcce9ae8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd67f82_f0e2b347",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7225,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T14:18:23Z",
+      "side": 1,
+      "message": "I should probably remove this event before landing if we accept this CL.",
+      "range": {
+        "startLine": 7225,
+        "startChar": 25,
+        "endLine": 7225,
+        "endChar": 59
+      },
+      "revId": "7169fdb0334dd673e758331cb4c28f18bcce9ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
