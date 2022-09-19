@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5fafc6b_0d97c30c",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T15:40:05Z",
+      "side": 1,
+      "message": "Is there a faster way to detect this? i.e., is there (or could there be) a flag on `Texture` that says whether its GL handle has been deleted?",
+      "revId": "e4f091792cdbf7df347e357851525d083252c85f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
