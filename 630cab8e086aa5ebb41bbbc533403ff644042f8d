@@ -52,6 +52,24 @@
       "parentUuid": "f8c397d9_0d292a48",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d5585d_523de6f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T18:48:29Z",
+      "side": 1,
+      "message": "If I have `out/Android` and `out/Android2`, this will run one or the other based on whichever binary has the newest mtime, right? This allows for obscure mistakes like accidentally building the wrong binary then assuming it\u0027s running only to find later that it was running the wrong thing.\n\nApproaches that I listed avoid this by being explicit about what you want to run and result in an error instead of surprising behavior if the intended binary is missing.",
+      "parentUuid": "ba6850ed_62df7340",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
