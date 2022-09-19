@@ -160,6 +160,24 @@
       "parentUuid": "65e3cce1_9ec53079",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cebcc6a2_6360f752",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-19T20:16:21Z",
+      "side": 1,
+      "message": "Roman, how do you specify the target directory now?  I agree navigating to the dir each time is not efficient.  Could we have a `-C` or similar argument, like we use with `gen args`?  I\u0027d be okay with scanning for the default when the argument isn\u0027t provided, I\u0027ve used that with the gfxbench scripts we have.  Also, I\u0027m accustomed to always specifying which dir contains my output files, i.e.:\n`out/AndroidDebug/angle_perftests --gtest_filter\u003dblah`",
+      "parentUuid": "e4492dc1_02571152",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
