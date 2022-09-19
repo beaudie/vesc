@@ -305,9 +305,14 @@ RoHelper::RoHelper()
 
     auto result = RoInitialize(RO_INIT_MULTITHREADED);
 
-    if (SUCCEEDED(result) || result == S_FALSE || result == RPC_E_CHANGED_MODE)
+    if (SUCCEEDED(result) || result == RPC_E_CHANGED_MODE)
     {
         mWinRtAvailable = true;
+
+        if (SUCCEEDED(result))
+        {
+            mWinRtInitialized = true;
+        }
     }
 #endif
 }
@@ -315,7 +320,7 @@ RoHelper::RoHelper()
 RoHelper::~RoHelper()
 {
 #ifndef ANGLE_ENABLE_WINDOWS_UWP
-    if (mWinRtAvailable)
+    if (mWinRtInitialized)
     {
         RoUninitialize();
     }
