@@ -79,10 +79,27 @@ def _FindAdb():
     else:
         adb = 'adb'
 
-    adb_info = subprocess.check_output([adb, '--version']).decode()
+    adb_info = ', '.join(subprocess.check_output([adb, '--version']).decode().strip().split('\n'))
     logging.info('adb --version: %s', adb_info)
 
     return adb
+
+
+@functools.lru_cache()
+def _FindAapt():
+    build_tools = (
+        pathlib.Path(angle_path_util.ANGLE_ROOT_DIR) / 'third_party' / 'android_sdk' / 'public' /
+        'build-tools' / '33.0.0')
+
+    if build_tools.exists():
+        aapt = str(build_tools / 'aapt')
+    else:
+        aapt = 'aapt'
+
+    aapt_info = subprocess.check_output([aapt, 'version']).decode()
+    logging.info('aapt version: %s', aapt_info.strip())
+
+    return aapt
 
 
 def _AdbRun(args):
@@ -133,11 +150,52 @@ def _AddRestrictedTracesJson():
     _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
 
 
+def _RemovePrefix(str, prefix):
+    assert str.startswith(prefix)
+    return str[len(prefix):]
+
+
+def _FindPackageName(apk_path):
+    aapt = _FindAapt()
+    badging = subprocess.check_output([aapt, 'dump', 'badging', apk_path]).decode()
+    package_name = next(
+        _RemovePrefix(item, 'name=').strip('\'')
+        for item in badging.split()
+        if item.startswith('name='))
+    logging.debug('Package name: %s' % package_name)
+    return package_name
+
+
+def _GetDeviceApkPath(package_name):
+    pm_path = _AdbShell('pm path %s' % package_name).decode().strip()
+    device_apk_path = _RemovePrefix(pm_path, 'package:')
+    logging.debug('Device APK path is %s' % device_apk_path)
+    return device_apk_path
+
+
+def _CompareHashes(local_path, device_path):
+    device_hash = _AdbShell('sha256sum -b ' + device_path +
+                            ' 2> /dev/null || true').decode().strip()
+    if not device_hash:
+        return False  # file not on device
+
+    h = hashlib.sha256()
+    with open(local_path, 'rb') as f:
+        for data in iter(lambda: f.read(65536), b''):
+            h.update(data)
+    return h.hexdigest() == device_hash
+
+
 def _PrepareTestSuite(suite_name):
     apk_path = _ApkPath(suite_name)
-    logging.info('Installing apk path=%s size=%s' % (apk_path, os.path.getsize(apk_path)))
+    package_name = _FindPackageName(apk_path)
+    device_apk_path = _GetDeviceApkPath(package_name)
 
-    _AdbRun(['install', '-r', '-d', apk_path])
+    if _CompareHashes(apk_path, device_apk_path):
+        logging.info('Skipping APK install because host and device hashes match')
+    else:
+        logging.info('Installing apk path=%s size=%s' % (apk_path, os.path.getsize(apk_path)))
+        _AdbRun(['install', '-r', '-d', apk_path])
 
     permissions = [
         'android.permission.CAMERA', 'android.permission.CHANGE_CONFIGURATION',
@@ -159,19 +217,6 @@ def _PrepareTestSuite(suite_name):
             'push', '../../src/tests/angle_end2end_tests_expectations.txt',
             '/sdcard/chromium_tests_root/src/tests/angle_end2end_tests_expectations.txt'
         ])
-
-
-def _CompareHashes(local_path, device_path):
-    device_hash = _AdbShell('sha256sum -b ' + device_path +
-                            ' 2> /dev/null || true').decode().strip()
-    if not device_hash:
-        return False  # file not on device
-
-    h = hashlib.sha256()
-    with open(local_path, 'rb') as f:
-        for data in iter(lambda: f.read(65536), b''):
-            h.update(data)
-    return h.hexdigest() == device_hash
 
 
 def PrepareRestrictedTraces(traces, check_hash=False):
