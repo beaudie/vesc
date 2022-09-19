@@ -16,6 +16,24 @@
       "message": "This seems error prone to me.. wdyt about alternatives?\na) ninja style `run_perf_tests.py out/Android ...`\nb) android style, generate a wrapper for it like `out/*/run_perf_tests`? (though not sure about platforms)",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8c397d9_0d292a48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T18:35:45Z",
+      "side": 1,
+      "message": "..platforms that don\u0027t like scripts very much, Windows. `run_perf_tests.cmd`?",
+      "parentUuid": "a59cddaf_947daf7c",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
