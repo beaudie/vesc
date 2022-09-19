@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7242255_80e83b75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T19:40:20Z",
+      "side": 1,
+      "message": "You are disabling an optimization: https://chromium-review.googlesource.com/c/angle/angle/+/3246532\n\nIt\u0027s the way it is because XFB may not be active on render pass start, so resuming RP doesn\u0027t necessarily resume the XFB queries.",
+      "revId": "7169fdb0334dd673e758331cb4c28f18bcce9ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cd67f82_f0e2b347",
