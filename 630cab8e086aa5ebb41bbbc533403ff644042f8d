@@ -196,6 +196,24 @@
       "parentUuid": "cebcc6a2_6360f752",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "431c3cb0_d30f5e16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-19T20:46:49Z",
+      "side": 1,
+      "message": "I would lean towards always requiring the output directory as a parameter, if that can be supported (can it, without a wrapper script?).  Jamie, can you be just as efficient that way?  Getting incorrect results by accidentally using the wrong build is pretty scary.\n\nAnother idea could be a prompt that requires confirmation to use the discovered binary, i.e.:\n```\nFound the latest binaries in `out/AndroidDebug`.\nUse this build? (Y/N):\n```",
+      "parentUuid": "e381cf04_a0092808",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
