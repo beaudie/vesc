@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0be45b2b_a2a2c23f",
+        "filename": "src/common/platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T13:13:08Z",
+      "side": 1,
+      "message": "see here",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 29
+      },
+      "revId": "d63fdfa5538671e128efa74c894dfca01a9a07e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a1d6fa_26c2c4fb",
+        "filename": "src/common/platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T13:13:08Z",
+      "side": 1,
+      "message": "follow-up: you can omit \"if defined(ANGLE_PLATFORM_WINDOWS) because this is already in an #ifdef ANGLE_PLATFORM_WINDOWS block",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 10
+      },
+      "revId": "d63fdfa5538671e128efa74c894dfca01a9a07e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
