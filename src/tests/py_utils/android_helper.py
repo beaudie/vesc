@@ -229,7 +229,7 @@ def _PrepareTestSuite(suite_name):
         ])
 
 
-def PrepareRestrictedTraces(traces, check_hash=False):
+def PrepareRestrictedTraces(traces, check_hash=True):
     start = time.time()
     total_size = 0
     skipped = 0
