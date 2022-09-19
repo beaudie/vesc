@@ -88,6 +88,24 @@
       "parentUuid": "93d5585d_523de6f0",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a2b1130_bc0cebfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T18:54:19Z",
+      "side": 1,
+      "message": "Oh, and you are right that updating the wrapper script would be a good direction to explore. As it stands though, this is a solution that\u0027s easy for me to implement and doesn\u0027t have the issue of needing a separate way to run perf tests vs gold tests.",
+      "parentUuid": "b5ef85a0_128cbb36",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
