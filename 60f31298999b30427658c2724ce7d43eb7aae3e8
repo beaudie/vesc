@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dabe489_c2445213",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T19:51:39Z",
+      "side": 1,
+      "message": "`aapt \u003d str(build_tools / \u0027aapt\u0027) if build_tools.exists() else \u0027aapt\u0027`\n?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "60f31298999b30427658c2724ce7d43eb7aae3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6bc9a4_be8c3d82",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T19:51:39Z",
+      "side": 1,
+      "message": "`Exception` is too broad and can hide unrelated errors, could you narrow it to the specific exception or maybe add `|| true` to the shell command? (which I think will result in an empty string)",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 181,
+        "endChar": 20
+      },
+      "revId": "60f31298999b30427658c2724ce7d43eb7aae3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
