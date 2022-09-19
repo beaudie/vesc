@@ -34,6 +34,24 @@
       "parentUuid": "a59cddaf_947daf7c",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba6850ed_62df7340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T18:43:20Z",
+      "side": 1,
+      "message": "Hey Roman, what are the advantages of the approaches you list there? I like to run it this way because I can easily run the script from any directory. I don\u0027t think there\u0027s much of a risk in causing harm as fragile as the script looks. I have coded a similar approach in other ANGLE scripts as well, see perf_test_runner.py in scripts/. Works well for me!",
+      "parentUuid": "f8c397d9_0d292a48",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
