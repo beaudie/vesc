@@ -178,6 +178,24 @@
       "parentUuid": "e4492dc1_02571152",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e381cf04_a0092808",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T20:29:34Z",
+      "side": 1,
+      "message": "I do this: `(cd out/Android; ../../src/tests/run_perf_tests.py {flags})`\n\nI\u0027d expect it to break if the binary doesn\u0027t exist rather than run some other `out/*` binary instead.\n\nSome variation of `src/tests/run_perf_tests.py -C out/Android` (I also suggested something like this above) would make it more convenient for me. I personally would always specify the flag rather than rely on mtime based discovery because I know it happened to me before that I built the wrong binary and I\u0027d rather have the run fail explicitly than run some unrelated build that I happen to have in `out/`.",
+      "parentUuid": "cebcc6a2_6360f752",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
