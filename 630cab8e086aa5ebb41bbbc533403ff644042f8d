@@ -70,6 +70,24 @@
       "parentUuid": "ba6850ed_62df7340",
       "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ef85a0_128cbb36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T18:52:57Z",
+      "side": 1,
+      "message": "Right, that\u0027s the intent of the script. As I run this script a lot, it saves me time and effort to not have to specify a directory. If we run into a costly issue like you described, I\u0027d be happy to believe that situation might occur. As it stands I haven\u0027t had that problem locally. Especially as the script prints which directory it\u0027s using as it runs.",
+      "parentUuid": "93d5585d_523de6f0",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
