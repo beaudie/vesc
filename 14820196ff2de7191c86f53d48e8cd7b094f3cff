@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be55b522_98f6ccd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-19T15:25:56Z",
+      "side": 1,
+      "message": "FYI, I used this in the last run, forgot to upload it.  You need this if you want to use this script along with persistent caching.",
+      "revId": "14820196ff2de7191c86f53d48e8cd7b094f3cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
