@@ -5,7 +5,32 @@
 # found in the LICENSE file.
 #
 # trigger.py:
-#   Helper script for triggering GPU tests on swarming.
+#   Helper script for triggering GPU tests on LUCI swarming.
+#
+# HOW TO USE THIS SCRIPT
+#
+# Prerequisites:
+#   - Your host OS must be able to build the targets. Linux can cross-compile Android, Windows and others.
+#   - You might need to be logged in to some services. Look in the error output to verify.
+#
+# Steps:
+#   1. First find a build to model your trigger. Visit https://ci.chromium.org/p/angle/g/ci/console and find
+#      a builder similar to your configuration. For example, find linux-test:
+#         https://ci.chromium.org/p/angle/builders/ci/linux-test
+#   2. Open up a build from the builder, for example, the most recent green build:
+#         https://ci.chromium.org/ui/p/angle/builders/ci/linux-test/2443/overview
+#   3. Find a test step shard that corresponds to your tests. For example, angle_unittests on Intel:
+#         https://chromium-swarm.appspot.com/task?id=5d6eecdda8e82210
+#   4. Run this script to get a template for the command line. e.g.:
+#         trigger.py [-g GPU] gn_path test os_dim <args>
+#   5. Fill in the parameters for GPU/os_dim/args from the shard, and the rest from your tests.
+#      Discard the --isolated-script-test-* arguments as they just save output files. e.g.:
+#         trigger.py -g 8086:9bc5-20.0.8 out/Debug angle_unittests Ubuntu-18.04.6 angle_unittests
+#
+# Additional Arguments:
+#   - Android uses device-type and device-os.
+#   - Use --priority 1 to ensure you don't have to wait. Just be careful.
+#   - For Skia Gold tests specifically, append --gold. Otherwise ignore this argument.
 
 import argparse
 import json
