@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a59cddaf_947daf7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-19T18:34:40Z",
+      "side": 1,
+      "message": "This seems error prone to me.. wdyt about alternatives?\na) ninja style `run_perf_tests.py out/Android ...`\nb) android style, generate a wrapper for it like `out/*/run_perf_tests`? (though not sure about platforms)",
+      "revId": "630cab8e086aa5ebb41bbbc533403ff644042f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
