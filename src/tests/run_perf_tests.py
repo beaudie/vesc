@@ -9,6 +9,7 @@
 
 import argparse
 import fnmatch
+import glob
 import importlib
 import io
 import json
@@ -20,7 +21,8 @@ import re
 import subprocess
 import sys
 
-PY_UTILS = str(pathlib.Path(__file__).resolve().parent / 'py_utils')
+SCRIPT_DIR = str(pathlib.Path(__file__).resolve().parent)
+PY_UTILS = str(pathlib.Path(SCRIPT_DIR) / 'py_utils')
 if PY_UTILS not in sys.path:
     os.stat(PY_UTILS) and sys.path.insert(0, PY_UTILS)
 import android_helper
@@ -36,6 +38,7 @@ from tracing.value import histogram_set
 from tracing.value import merge_histograms
 
 ANGLE_PERFTESTS = 'angle_perftests'
+TEST_SUITE_SEARCH_PATH = glob.glob('out/*')
 DEFAULT_LOG = 'info'
 DEFAULT_SAMPLES = 4
 DEFAULT_TRIALS = 3
@@ -393,13 +396,36 @@ def _run_tests(tests, args, extra_flags, env):
     return results, histograms
 
 
+def _find_test_suite_directory(test_suite):
+    if os.path.exists(angle_test_util.ExecutablePathInCurrentDir(test_suite)):
+        return '.'
+
+    # Find most recent binary in search paths.
+    newest_binary = None
+    newest_mtime = None
+
+    for path in TEST_SUITE_SEARCH_PATH:
+        binary_path = str(pathlib.Path(SCRIPT_DIR).parent.parent / path / test_suite)
+        if os.path.exists(binary_path):
+            binary_mtime = os.path.getmtime(binary_path)
+            if (newest_binary is None) or (binary_mtime > newest_mtime):
+                newest_binary = binary_path
+                newest_mtime = binary_mtime
+
+    if newest_binary:
+        logging.info('Found %s in %s' % (test_suite, os.path.dirname(newest_binary)))
+        return os.path.dirname(newest_binary)
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--isolated-script-test-output', type=str)
     parser.add_argument('--isolated-script-test-perf-output', type=str)
     parser.add_argument(
         '-f', '--filter', '--isolated-script-test-filter', type=str, help='Test filter.')
-    parser.add_argument('--test-suite', help='Test suite to run.', default=ANGLE_PERFTESTS)
+    parser.add_argument(
+        '--test-suite', '--suite', help='Test suite to run.', default=ANGLE_PERFTESTS)
     parser.add_argument('--xvfb', help='Use xvfb.', action='store_true')
     parser.add_argument(
         '--shard-count',
@@ -467,6 +493,13 @@ def main():
 
     if angle_test_util.HasGtestShardsAndIndex(env):
         args.shard_count, args.shard_index = angle_test_util.PopGtestShardsAndIndex(env)
+
+    test_suite_dir = _find_test_suite_directory(args.test_suite)
+    if not test_suite_dir:
+        logging.fatal('Could not find test suite: %s' % args.test_suite)
+        return EXIT_FAILURE
+    else:
+        os.chdir(test_suite_dir)
 
     angle_test_util.Initialize(args.test_suite)
 
