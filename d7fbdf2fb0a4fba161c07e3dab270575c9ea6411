@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cc1cd45_58fb62ed",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T19:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a17ba53f_5b58688d",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 56
+      },
+      "revId": "d7fbdf2fb0a4fba161c07e3dab270575c9ea6411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "496915ae_06eed5b4",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-19T17:23:33Z",
       "side": 1,
       "message": "As discussed offline, package name is hard-coded in other places in this file. I actually intentionally left it that way as I didn\u0027t want to add `aapt` that I consider unnecessary complexity at this point and I find constants much easier to understand and debug than variables that never change.\n\nwdyt about hard-coding here as well and moving `_FindPackageName(apk_path)` to be part of `Initialize()`, just assert that it\u0027s equal to `com.android.angle.test`, keep it this way until we make a change that breaks that assumption?",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 45
+      },
+      "revId": "d7fbdf2fb0a4fba161c07e3dab270575c9ea6411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c03e637_c8856d70",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-19T19:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "496915ae_06eed5b4",
       "range": {
         "startLine": 191,
         "startChar": 4,
