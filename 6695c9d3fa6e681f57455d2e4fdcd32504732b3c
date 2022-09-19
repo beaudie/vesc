@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b9e7d05_78ee1b0e",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-19T19:14:02Z",
+      "side": 1,
+      "message": "No local statics please, it will break in some tests where we destroy and re-initialize the display.\n\nYou can use std::optional for mDrmFormats or move this to a member bool",
+      "range": {
+        "startLine": 1058,
+        "startChar": 4,
+        "endLine": 1058,
+        "endChar": 40
+      },
+      "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c61758f9_fb0fa26f",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-19T19:14:02Z",
+      "side": 1,
+      "message": "this is the only block that writes numFormats, it should be written unconditionally.",
+      "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
