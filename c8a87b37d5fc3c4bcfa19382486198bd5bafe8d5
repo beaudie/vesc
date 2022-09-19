@@ -16,6 +16,24 @@
       "message": "Only supported under Vulkan, right? Then this could similarly be skip if !IsVulkan()\n\nThat said, these tests are failing on Vulkan too, looks like they caught a bug in this change.",
       "revId": "c8a87b37d5fc3c4bcfa19382486198bd5bafe8d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "207a9633_3b91def2",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-19T10:06:16Z",
+      "side": 0,
+      "message": "Right. Right now, these tests are failing under Vulkan too because I forgot to report the formats as supported.",
+      "parentUuid": "f6dfae53_1e15a2ad",
+      "revId": "c8a87b37d5fc3c4bcfa19382486198bd5bafe8d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
