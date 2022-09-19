@@ -16,6 +16,46 @@
       "message": "FYI, I used this in the last run, forgot to upload it.  You need this if you want to use this script along with persistent caching.",
       "revId": "14820196ff2de7191c86f53d48e8cd7b094f3cff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86d567af_9cf63a51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-19T17:18:49Z",
+      "side": 1,
+      "message": "Nice fix! LGTM with one comment.",
+      "revId": "14820196ff2de7191c86f53d48e8cd7b094f3cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf41318_8e888875",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-19T17:18:49Z",
+      "side": 1,
+      "message": "Instead of delete, could we \"restore\" to the setting before you run the script?",
+      "range": {
+        "startLine": 980,
+        "startChar": 6,
+        "endLine": 980,
+        "endChar": 23
+      },
+      "revId": "14820196ff2de7191c86f53d48e8cd7b094f3cff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
