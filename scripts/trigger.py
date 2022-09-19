@@ -5,7 +5,41 @@
 # found in the LICENSE file.
 #
 # trigger.py:
-#   Helper script for triggering GPU tests on swarming.
+#   Helper script for triggering GPU tests on LUCI swarming.
+#
+# HOW TO USE THIS SCRIPT
+#
+# Prerequisites:
+#   - Your host OS must be able to build the targets. Linux can cross-compile Android, Windows and others.
+#   - You might need to be logged in to some services. Look in the error output to verify.
+#
+# Steps:
+#   1. First find a build to model your trigger. Visit https://ci.chromium.org/p/angle/g/ci/console and find
+#      a builder similar to your configuration. For example, if you're on Linux, look at linux-test.
+#         https://ci.chromium.org/p/angle/builders/ci/linux-test
+#   2. Open up a the most recent green build from the builder, for example:
+#         https://ci.chromium.org/ui/p/angle/builders/ci/linux-test/2443/overview
+#   3. Find a test step shard that corresponds to your tests. For example, angle_unittests on Intel:
+#         https://chromium-swarm.appspot.com/task?id=5d6eecdda8e82210
+#   4. Run this script without arguments for a help message explaning the command line arguments. For desktop,
+#      you'll retrive values for "GPU" and "os_dim" from the swarming task dimensions. For Android, you will
+#      need "DEVICE_TYPE" and "DEVICE_OS" as well as "os_dim" for the host OS. e.g.:
+#         trigger.py -g GPU gn_path test os_dim <args>
+#         trigger.py -t DEVICE_TYPE -o DEVICE_OS gn_path test os_dim <args>
+#   5. Fill in the parameters by looking them up in the task. Look for the specific dimensions in the task
+#      UI. For "gn_path" and "test", use your test (e.g. angle_unittests) and GN out directory path.
+#      You can discard the --isolated-script-test-* arguments as they just save output files. e.g.:
+#         trigger.py -g 8086:9bc5-20.0.8 out/Debug angle_unittests Ubuntu-18.04.6 angle_unittests
+#   6. If you do want to retrieve output files, you can look them up in the task CAS outputs. e.g.:
+#      https://cas-viewer.appspot.com/projects/chromium-swarm/instances/default_instance/blobs/6165a0ede67ef2530f595ed9a1202671a571da952b6c887f516641993c9a96d4/87/tree
+#
+# Notes on arguments:
+#   - Currently many tests run through a python script, which takes as an argument the test name. This is why
+#     the above example repeats "angle_unittests" an extra time.
+#   - You can use --priority 1 to ensure your task is scheduled immediately, just be careful.
+#   - For Skia Gold tests specifically, append --gold. Otherwise ignore this argument.
+#   - Add extra command line arguments to the tests, e.g. --gtest_filter, by appending them. e.g.:
+#         trigger.py -g 8086:9bc5 out/Debug angle_end2end_tests Ubuntu angle_end2end_tests --gtest_filter=P*
 
 import argparse
 import json
