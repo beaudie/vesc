@@ -880,6 +880,9 @@ void DisplayEGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     outExtensions->imageDmaBufImportEXT = mEGL->hasExtension("EGL_EXT_image_dma_buf_import");
 
+    outExtensions->imageDmaBufImportModifiersEXT =
+        mEGL->hasExtension("EGL_EXT_image_dma_buf_import_modifiers");
+
     outExtensions->robustnessVideoMemoryPurgeNV = mHasNVRobustnessVideoMemoryPurge;
 
     outExtensions->bufferAgeEXT = mEGL->hasExtension("EGL_EXT_buffer_age");
@@ -1041,6 +1044,70 @@ EGLint DisplayEGL::fixSurfaceType(EGLint surfaceType) const
 const FunctionsEGL *DisplayEGL::getFunctionsEGL() const
 {
     return mEGL;
+}
+
+bool DisplayEGL::supportsDmaBufFormat(EGLint format) const
+{
+    return std::find(std::begin(mDrmFormats), std::end(mDrmFormats), format) !=
+           std::end(mDrmFormats);
+}
+
+egl::Error DisplayEGL::queryDmaBufFormats(EGLint maxFormats, EGLint *formats, EGLint *numFormats)
+
+{
+    if (!mDrmFormatsInited)
+    {
+        EGLint numFormatsInit = 0;
+        if (mEGL->queryDmaBufFormatsEXT(0, nullptr, &numFormatsInit) && numFormatsInit > 0)
+        {
+            mDrmFormats.resize(numFormatsInit);
+            if (mEGL->queryDmaBufFormatsEXT(numFormatsInit, mDrmFormats.data(), &numFormatsInit))
+            {
+                mDrmFormats.resize(numFormatsInit);
+            }
+            else
+            {
+                mDrmFormats.resize(0);
+            }
+        }
+        mDrmFormatsInited = true;
+    }
+
+    EGLint formatsSize = static_cast<EGLint>(mDrmFormats.size());
+    if (maxFormats == 0)
+    {
+        *numFormats = formatsSize;
+    }
+    else if (maxFormats > 0)
+    {
+        if (formats == nullptr)
+        {
+            return egl::Error(EGL_BAD_PARAMETER);
+        }
+
+        *numFormats = std::min(maxFormats, formatsSize);
+        std::memcpy(formats, mDrmFormats.data(), *numFormats * sizeof(EGLint));
+    }
+    else
+    {
+        return egl::Error(EGL_BAD_PARAMETER);
+    }
+
+    return egl::NoError();
+}
+
+egl::Error DisplayEGL::queryDmaBufModifiers(EGLint drmFormat,
+                                            EGLint maxModifiers,
+                                            EGLuint64KHR *modifiers,
+                                            EGLBoolean *externalOnly,
+                                            EGLint *numModifiers)
+
+{
+    if (!mEGL->queryDmaBufModifiersEXT(drmFormat, maxModifiers, modifiers, externalOnly,
+                                       numModifiers))
+        return egl::Error(mEGL->getError(), "eglQueryDmaBufModifiersEXT failed");
+
+    return egl::NoError();
 }
 
 }  // namespace rx
