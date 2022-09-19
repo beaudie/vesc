@@ -148,6 +148,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1cee265e_1bfbccfe",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "On the very first run, the dev will hit a GL error that says dither should be disabled, then they\u0027ll disable it. The implicit state change is not great, or do you think getting a GL error on first try would be too bad a user experience?",
+      "parentUuid": "51eb885c_631d2164",
+      "range": {
+        "startLine": 361,
+        "startChar": 40,
+        "endLine": 361,
+        "endChar": 46
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e6ede11_36f23cf8",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 24
@@ -183,6 +207,30 @@
       "side": 1,
       "message": "Unless it generated the error because PLS was already enabled?",
       "parentUuid": "2e6ede11_36f23cf8",
+      "range": {
+        "startLine": 413,
+        "startChar": 32,
+        "endLine": 413,
+        "endChar": 35
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebf103c3_dfa37390",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Ah, ok",
+      "parentUuid": "cc25e602_48d4894b",
       "range": {
         "startLine": 413,
         "startChar": 32,
@@ -242,6 +290,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0085ae4f_a3c94a60",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Got it! Yeah, I still think it\u0027s best to disallow dither.",
+      "parentUuid": "4b399062_2797aac2",
+      "range": {
+        "startLine": 453,
+        "startChar": 13,
+        "endLine": 453,
+        "endChar": 53
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "735ff4de_5c6da7fb",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 24
@@ -277,6 +349,30 @@
       "side": 1,
       "message": "The thought was because `maxColorAttachments`, `maxDrawBuffers`, `maxCombinedShaderOutputResources`, and `GLsizei` are all ints. But I\u0027m fine either way.",
       "parentUuid": "735ff4de_5c6da7fb",
+      "range": {
+        "startLine": 378,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 9
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7c547a5_e1b55460",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Your call. Those might have been specified as signed by the spec, but we are not bound by that for these.",
+      "parentUuid": "910255c8_f6207b85",
       "range": {
         "startLine": 378,
         "startChar": 4,
@@ -488,6 +584,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6df2d9b2_67deb2a2",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Good riddance. Not sure how attached people would be to cube maps though, would someone want to advanced blend into a lighting-related cube map?\n\nAbout mipmap levels, I\u0027d trust your judgement. You most definitely know the usages of advanced blend more than myself.",
+      "parentUuid": "cdbaab99_6407b58a",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d433ef7_67383a2c",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
@@ -517,6 +631,24 @@
       "side": 1,
       "message": "There\u0027s a test now 😁\n\nI just added a test that queries GL state rather than checking pixels. I\u0027m starting to get worried about the amount of time it takes to run the PLS tests (30 seconds debug on my laptop). Let me know if you think we should add pixel tests too to verify the state is actually set.",
       "parentUuid": "8d433ef7_67383a2c",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1df36800_704cd3fa",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "30 seconds is nothing, don\u0027t worry. We run with an optimized build (+ debug asserts), so it takes much less time. Also the tests are sharded and run on multiple devices in parallel. The PLS tests aren\u0027t affecting the run time in any perceptible way (so feel free to make as extensive as you need).",
+      "parentUuid": "cc7df7da_9635b3f9",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -617,6 +749,24 @@
       "side": 1,
       "message": "Actually I can guess that `syncState` syncs the ANGLE state with Vulkan/GL/etc. state. So is this a costly CPU operation that can be generally mitigated by binding them all to different attachments on the scratch framebuffer?",
       "parentUuid": "ce64d5de_250a5c42",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f74cfa_9e52d21c",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Your guess is right, and yes it\u0027s a little costly. With clear not so much actually, because the clear ends up deferring stuff, but if you can avoid it, why not? 😄\n\nThe code does `sync, clear, sync, clear, sync, clear, sync, clear, ...` now, while it could be doing `sync, clear, clear, clear, ...`.",
+      "parentUuid": "57fd816f_59ba8315",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -886,6 +1036,24 @@
       "side": 1,
       "message": "Oh interesting.\n\nDoes this mean we can\u0027t make assertions based on validaiton when KHR_no_error is enabled? Or does it mean we\u0027re free to crash if given bad inputs?\n\n(Took the work out of validation.)",
       "parentUuid": "72b3d607_b99e2669",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57720373_32667f0d",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-19T20:19:24Z",
+      "side": 1,
+      "message": "Free to crash!",
+      "parentUuid": "bdb14d08_0d487d61",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
