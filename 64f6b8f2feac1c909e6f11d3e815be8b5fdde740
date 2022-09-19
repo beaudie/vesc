@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10e76cfb_3eee1ad7",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ae02d10_67f2faa8",
+      "range": {
+        "startLine": 300,
+        "startChar": 8,
+        "endLine": 300,
+        "endChar": 11
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8b94471_1f162d3e",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "Most vendors don\u0027t actually do anything with dither, it\u0027s not anything useful to rely on. How about forbidding it both here, and in `BeginPixelLocalStorageANGLE`?\n\nMind you, changing dither state with the new VK_EXT_legacy_dithering results in a render pass break.",
+      "range": {
+        "startLine": 361,
+        "startChar": 40,
+        "endLine": 361,
+        "endChar": 46
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51eb885c_631d2164",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Oof. Scary. Removed DITHER.\n\nSince the default state of DITHER is enabled, it sounds like a bad experience if `BeginPixelLocalStorageANGLE` triggers an error in the default state.\n\nWhat about just saying DITHER is implicitly disabled by `BeginPixelLocalStorageANGLE`?",
+      "parentUuid": "a8b94471_1f162d3e",
       "range": {
         "startLine": 361,
         "startChar": 40,
@@ -123,6 +171,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc25e602_48d4894b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Unless it generated the error because PLS was already enabled?",
+      "parentUuid": "2e6ede11_36f23cf8",
+      "range": {
+        "startLine": 413,
+        "startChar": 32,
+        "endLine": 413,
+        "endChar": 35
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c883cc3_98a1d162",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 24
@@ -134,6 +206,30 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "Not sure where this is coming from",
+      "range": {
+        "startLine": 453,
+        "startChar": 13,
+        "endLine": 453,
+        "endChar": 53
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b399062_2797aac2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Basically, the thought was:\n\n* Framebuffer attachments will do whatever the DITHER state says\n* Shader images will do whatever they do -- not dithered?\n* Changing DITHER might or might not affect PLS (depending on if it\u0027s implemented as shader images or attachments.)\n\nIf we just forbid dither like you suggested, this could just say something like \"DITHER never occurs anywhere while PLS is active\"?",
+      "parentUuid": "1c883cc3_98a1d162",
       "range": {
         "startLine": 453,
         "startChar": 13,
@@ -169,6 +265,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "910255c8_f6207b85",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "The thought was because `maxColorAttachments`, `maxDrawBuffers`, `maxCombinedShaderOutputResources`, and `GLsizei` are all ints. But I\u0027m fine either way.",
+      "parentUuid": "735ff4de_5c6da7fb",
+      "range": {
+        "startLine": 378,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 9
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a6c0f39_5aa97f83",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
@@ -180,6 +300,30 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "s/angle/context everywhere.",
+      "range": {
+        "startLine": 26,
+        "startChar": 33,
+        "endLine": 26,
+        "endChar": 38
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a69507c8_d5fd5560",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a6c0f39_5aa97f83",
       "range": {
         "startLine": 26,
         "startChar": 33,
@@ -213,6 +357,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c530a39a_c81fd15b",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5630acea_d7887e15",
+      "range": {
+        "startLine": 204,
+        "startChar": 22,
+        "endLine": 204,
+        "endChar": 27
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bff4db41_ed8ac88a",
@@ -230,6 +398,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a8487e_177cf25f",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bff4db41_ed8ac88a",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b941ba95_ee4cc976",
@@ -243,6 +429,24 @@
       "writtenOn": "2022-09-18T04:10:28Z",
       "side": 1,
       "message": "Same nits (`\u003d\u003d nullptr`, `static_cast`)",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8fe8b4_c33d48f1",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b941ba95_ee4cc976",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -266,6 +470,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdbaab99_6407b58a",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Glad you agree.\n\nWe will probably almost definitely have to take out cube maps, since the texelFetch becomes more complex than is worth it IMO.\n\nIf 3D textures go really smoothly, maybe we can keep them, but they\u0027re still complex for texelFetch and probably more likely to have ANGLE or backend driver bugs.\n\nWhat do you think about mipmap levels?",
+      "parentUuid": "96717bab_e97f4323",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d433ef7_67383a2c",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
@@ -283,6 +505,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc7df7da_9635b3f9",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "There\u0027s a test now 😁\n\nI just added a test that queries GL state rather than checking pixels. I\u0027m starting to get worried about the amount of time it takes to run the PLS tests (30 seconds debug on my laptop). Let me know if you think we should add pixel tests too to verify the state is actually set.",
+      "parentUuid": "8d433ef7_67383a2c",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8aa310f9_de5eb002",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
@@ -294,6 +534,30 @@
       "writtenOn": "2022-09-18T04:10:28Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 447,
+        "startChar": 63,
+        "endLine": 447,
+        "endChar": 70
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f269b6c4_22e49711",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aa310f9_de5eb002",
       "range": {
         "startLine": 447,
         "startChar": 63,
@@ -323,6 +587,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce64d5de_250a5c42",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "That\u0027s actually how the framebuffer fetch implementation works: https://chromium-review.googlesource.com/c/angle/angle/+/3900142\n\nBut I thought for shader images, since we\u0027re on a scratch fbo anyway, and definitely going to have to clear main memory, it didn\u0027t matter. Is that not the case? (I\u0027m not familiar with what `syncState` does.) There will be a bit of complexity if MAX_PIXEL_LOCAL_STORAGE_PLANES is larger than MAX_DRAW_BUFFERS, but otherwise clearing them all on different color attachments is certainly doable.",
+      "parentUuid": "f7b3e8cc_559da32f",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5b57d302_9432e506",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 24
@@ -334,6 +616,24 @@
       "writtenOn": "2022-09-18T04:10:28Z",
       "side": 1,
       "message": "Similarly, a test would be good to make sure this state is restored",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f40df40_7d42db2c",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b57d302_9432e506",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -357,6 +657,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "defcb85f_2f248ee7",
+        "filename": "src/libANGLE/PixelLocalStorage.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "The expectation is just that the context does this ahead of time so we aren\u0027t thrashing scissor state -- not the application. Does that work?",
+      "parentUuid": "66573afe_9f301b5c",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f920dce3_75ffa2cf",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 24
@@ -368,6 +686,30 @@
       "writtenOn": "2022-09-18T04:10:28Z",
       "side": 1,
       "message": "nit: we tend to be explicit about bool conversion, i.e. `pls \u003d\u003d nullptr`",
+      "range": {
+        "startLine": 3248,
+        "startChar": 16,
+        "endLine": 3248,
+        "endChar": 20
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6adfbf4d_9efa1998",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3248,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f920dce3_75ffa2cf",
       "range": {
         "startLine": 3248,
         "startChar": 16,
@@ -397,6 +739,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a1ac967_345ea41a",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "I moved the implementation into PixelLocalStorage.cpp, but the idea is, GL_PIXEL_LOCAL_FORMAT_ANGLE returns GL_NONE if deinitialized. So `if (deinitialized) return 0;` only works because GL_NONE is 0.",
+      "parentUuid": "8726b26e_3927a5b0",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0540504_99404d8f",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 24
@@ -408,6 +768,24 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "`index` is `GLuint`! How did the compiler not catch this?",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65883db6_ee3f41d8",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3381,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Good catch.\n\nI think I want to update the plane index in the API to be GLuint instead of GLint in a follow-on CL.",
+      "parentUuid": "d0540504_99404d8f",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -425,6 +803,30 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "nit: we use `static_cast`. Unnecessary if the cap itself if `GLuint`",
+      "range": {
+        "startLine": 3386,
+        "startChar": 16,
+        "endLine": 3386,
+        "endChar": 17
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18cce4c6_d34f382e",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3386,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3ca0fb5_3801cd99",
       "range": {
         "startLine": 3386,
         "startChar": 16,
@@ -454,6 +856,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdb14d08_0d487d61",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Oh interesting.\n\nDoes this mean we can\u0027t make assertions based on validaiton when KHR_no_error is enabled? Or does it mean we\u0027re free to crash if given bad inputs?\n\n(Took the work out of validation.)",
+      "parentUuid": "72b3d607_b99e2669",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff48c453_536b506f",
         "filename": "src/libANGLE/validationESEXT.cpp",
         "patchSetId": 24
@@ -465,6 +885,24 @@
       "writtenOn": "2022-09-17T03:11:45Z",
       "side": 1,
       "message": "Also out of place. Again, the validation layer shouldn\u0027t do any work.",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a5de1ae_02827083",
+        "filename": "src/libANGLE/validationESEXT.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-19T07:51:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff48c453_536b506f",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
