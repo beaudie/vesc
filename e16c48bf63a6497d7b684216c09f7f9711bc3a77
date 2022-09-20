@@ -16,6 +16,23 @@
       "message": "The test is fixed, but please verify with the app too, if anything\u0027s still not right.",
       "revId": "e16c48bf63a6497d7b684216c09f7f9711bc3a77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d12967_a9413052",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T20:39:09Z",
+      "side": 1,
+      "message": "I can confirm this progresses Street Fighter IV: CE\n\n+2\u0027ing for time zone friendly reviews",
+      "revId": "e16c48bf63a6497d7b684216c09f7f9711bc3a77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
