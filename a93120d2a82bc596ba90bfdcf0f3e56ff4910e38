@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f97b76fc_5045e1ca",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-20T14:38:06Z",
+      "side": 1,
+      "message": "Could you add some info what we need to match for the build itself? Would copy-pasting \"lookup GN args\" be a good idea?\nAlso host OS vs bot OS. I suppose host has to be Windows for Windows builds, Linux for Linux \u0026 Android, and I don\u0027t know about Mac?",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d325dc2_f26b1724",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -43,6 +66,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c6be84c_a89878c4",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-20T14:38:06Z",
+      "side": 1,
+      "message": "I may be missing something, what do you mean by \"get a template\" here? This script does subprocess.call at the end so it would also spawn the task?\n\nBy the way, when I was poking around at this script I actually modified it locally to separate upload to CAS vs invocation (I was looking at flakes so I would the same command multiple times with the same CAS digests). I also added some other arguments that I was experimenting with. If this script printed out the command line instead of subprocess.call\u0027ing it, that would be more convenient for this use case (but possibly less convenient for some other use cases)",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2134f61_7e149e63",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-20T14:38:06Z",
+      "side": 1,
+      "message": "Could you expand on what \"test\" means here, maybe a few examples? Also, in my experience I had to pass additional arguments, for example I needed a second `angle_perftests` for some reason in this case:\n\n```\nscripts/trigger.py --gpu\u003dnone out/linuxtest angle_perftests \\\n  \u0027Ubuntu 18.04\u0027 angle_perftests --gtest_filter\u003d...\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 38,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2152c3db_b96a20ce",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -59,6 +128,29 @@
         "startChar": 7,
         "endLine": 26,
         "endChar": 64
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98a52cde_145ea247",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-20T14:38:06Z",
+      "side": 1,
+      "message": "Is there way to get the output files with this script? For example, screenshots that we normally see in CAS outputs of gold test runs.",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
       },
       "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
