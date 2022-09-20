@@ -16,6 +16,24 @@
       "message": "Sorry for the noise - added error handling paths to `queryDmaBufFormats()` to match the spec. Also some style fixes regarding braces.",
       "revId": "a1afa47ae68b8edecfa9cdab15c7bcaa5df43441",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc4dc76e_7d1252de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-20T10:37:51Z",
+      "side": 1,
+      "message": "Those error handling paths are also missing from the VK impl and, if accepted, should probably be ported.",
+      "parentUuid": "f0259676_233390f7",
+      "revId": "a1afa47ae68b8edecfa9cdab15c7bcaa5df43441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
