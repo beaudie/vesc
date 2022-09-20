@@ -175,6 +175,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28a6834a_43d63e3b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T16:20:49Z",
+      "side": 1,
+      "message": "I suggested this because it makes it perfectly clear when this value should be accessed, and avoids risking out of sync serials. I.e. there\u0027s _one_ place the context generates it and gives it to whoever needs to remember it.",
+      "parentUuid": "90e8b767_5d06c67c",
+      "range": {
+        "startLine": 2800,
+        "startChar": 75,
+        "endLine": 2800,
+        "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c67f405_92b1a055",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 5
@@ -186,6 +210,30 @@
       "writtenOn": "2022-09-20T00:39:18Z",
       "side": 1,
       "message": "When renderpass closed, we do not invalidate this serial number, right? Maybe better name it \"mUsedByRenderpass\"? (Not sure what @syoussefi think)",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 42
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6df4de50_24fbc1ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T16:20:49Z",
+      "side": 1,
+      "message": "It\u0027s the serial assigned to the render pass last opened by this framebuffer, so `mRenderPassSerial` makes sense. `mCurrentRenderPassSerial` would also work.\n\nThere\u0027s no benefit to invalidating this though, it won\u0027t match any new render passes, so it could be any number lower than or equal to this (including 0 \u003d\u003d invalid).\n\nWe shouldn\u0027t update it on render pass \"close\" though, because render passes can be revived and this is exactly used for that. We could on render pass \"flush\", but again not really necessary.",
+      "parentUuid": "7c67f405_92b1a055",
       "range": {
         "startLine": 252,
         "startChar": 25,
