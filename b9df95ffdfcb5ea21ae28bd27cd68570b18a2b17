@@ -16,6 +16,24 @@
       "message": "Would be nice to move this to config that affects tests only, otherwise changing it results in rebuilding everything (+ causes cache misses with goma (our distributed build system))",
       "revId": "b9df95ffdfcb5ea21ae28bd27cd68570b18a2b17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1120338_8daf2446",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T20:31:03Z",
+      "side": 1,
+      "message": "What do you mean Shabi? Are you interacting with this gn argument?",
+      "parentUuid": "751f5b5b_abc51ab9",
+      "revId": "b9df95ffdfcb5ea21ae28bd27cd68570b18a2b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
