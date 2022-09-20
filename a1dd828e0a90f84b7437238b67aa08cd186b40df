@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aca74f7a_9dd3d86b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T20:15:57Z",
+      "side": 1,
+      "message": "@abdolrashidi, ICYMI. Passes tests now",
+      "revId": "a1dd828e0a90f84b7437238b67aa08cd186b40df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
