@@ -45,6 +45,30 @@
       },
       "revId": "d63fdfa5538671e128efa74c894dfca01a9a07e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e5bfc62_54ee8ed9",
+        "filename": "src/common/platform.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2022-09-20T02:05:44Z",
+      "side": 1,
+      "message": "Thanks, I\u0027ll make a follow-up CL to fix this.",
+      "parentUuid": "42a1d6fa_26c2c4fb",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 10
+      },
+      "revId": "d63fdfa5538671e128efa74c894dfca01a9a07e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
