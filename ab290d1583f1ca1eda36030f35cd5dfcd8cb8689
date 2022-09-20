@@ -253,6 +253,30 @@
       },
       "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6b4a2fd_220e88b1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2723,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T19:09:35Z",
+      "side": 1,
+      "message": "There are non-lambda ways to solve this, but OK, seems like not worth the effort of pursuing any more. Also we use lambas already for similar capture.",
+      "parentUuid": "6771cc98_3121b885",
+      "range": {
+        "startLine": 2708,
+        "startChar": 0,
+        "endLine": 2723,
+        "endChar": 0
+      },
+      "revId": "ab290d1583f1ca1eda36030f35cd5dfcd8cb8689",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
