@@ -779,6 +779,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eeed5c9_791e7cfa",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T17:11:56Z",
+      "side": 1,
+      "message": "Oh, that\u0027s awesome to know, thanks! Currently at 226 so getting there. I might also look into lowering that batch size locally now...",
+      "parentUuid": "b4634914_c42be90a",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8aa310f9_de5eb002",
@@ -1017,6 +1035,24 @@
       "side": 1,
       "message": "Ack. As long as the spec is clear about this, so if the app does scissor + entire-pls-pass, they wouldn\u0027t be surprised if the clear applied to everything while all the draws are scissored.\n\nStill it feels like this function could do the scissor state change itself the same way the context could, which would make it a bit better encapsulated. You could always add an `if (scissor was enabled)` around the state setting and recovering so you won\u0027t dirty the state if not changed (unnecessary still, because: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/State.cpp;l\u003d1215;drc\u003dd375547ced52fc3aee7a29828a838980e43c75ce)",
       "parentUuid": "0b5b6360_121f6281",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8afe7e5_14193cbb",
+        "filename": "src/libANGLE/PixelLocalStorage.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T17:11:56Z",
+      "side": 1,
+      "message": "\u003e\u003e As long as the spec is clear about this, so if the app does scissor + entire-pls-pass, they wouldn\u0027t be surprised if the clear applied to everything while all the draws are scissored.\n\nI think it is. Current wording: \"Load Operations are performed on the entire area of each plane, irrespective of scissor or viewport state.\n\n\u003e\u003e Still it feels like this function could do the scissor state change itself the same way the context could, which would make it a bit better encapsulated. \n\nWhat way would that be?\n\n\u003e\u003e You could always add an if (scissor was enabled) around the state setting and recovering\n\nYes! That\u0027s what `ScopedDisableScissor` does in PixelLocalStorage.cpp.",
+      "parentUuid": "75bdd84c_f27b9a85",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd4f2a09_933a37a9",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T17:11:56Z",
+      "side": 1,
+      "message": "I believe that if the app rendered into the texture immediately before calling begin(), we would need GL_FRAMEBUFFER_BARRIER_BIT here in order to guarantee the prior rendering completed before the PLS imageLoads, right?",
+      "parentUuid": "767747fc_466cde77",
+      "range": {
+        "startLine": 543,
+        "startChar": 31,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "4116f86f08374be26a14d1185826d605f09a0667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "823f4c89_0c2c3702",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 31
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-20T15:19:27Z",
       "side": 1,
       "message": "super duper nit",
+      "revId": "4116f86f08374be26a14d1185826d605f09a0667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0791e926_f429bbce",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T17:11:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "823f4c89_0c2c3702",
       "revId": "4116f86f08374be26a14d1185826d605f09a0667",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
