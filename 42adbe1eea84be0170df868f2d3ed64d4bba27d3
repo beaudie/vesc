@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fb49839_03dc60e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:46:28Z",
+      "side": 1,
+      "message": "Drive by nits",
+      "revId": "42adbe1eea84be0170df868f2d3ed64d4bba27d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6876b9_b385f379",
+        "filename": "src/tests/perf_tests/ReadPixelsPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:46:28Z",
+      "side": 1,
+      "message": "nit: date",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "42adbe1eea84be0170df868f2d3ed64d4bba27d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b372247_84a72e0a",
+        "filename": "src/tests/perf_tests/ReadPixelsPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:46:28Z",
+      "side": 1,
+      "message": "Copy-pasta",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "42adbe1eea84be0170df868f2d3ed64d4bba27d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
