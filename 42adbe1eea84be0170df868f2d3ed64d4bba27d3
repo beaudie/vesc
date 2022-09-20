@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1936ad76_1f268b37",
+        "filename": "src/tests/perf_tests/ReadPixelsPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-20T18:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b6876b9_b385f379",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "42adbe1eea84be0170df868f2d3ed64d4bba27d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b372247_84a72e0a",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-09-20T15:46:28Z",
       "side": 1,
       "message": "Copy-pasta",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "42adbe1eea84be0170df868f2d3ed64d4bba27d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afac18de_cbf9a516",
+        "filename": "src/tests/perf_tests/ReadPixelsPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-20T18:51:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b372247_84a72e0a",
       "range": {
         "startLine": 6,
         "startChar": 0,
