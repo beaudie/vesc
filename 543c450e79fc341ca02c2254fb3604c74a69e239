@@ -16,6 +16,23 @@
       "message": "It is very strange that 3 other tests started giving a different result after this CL:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1546/overview\nbrawl_stars\ncommand_and_conquer_rivals\nwordscapes\nSo it looks like some state is leaking from one test to another.\n\nAnd the new images look slightly worse than previous version.\nE.g. https://angle-gold.skia.org/detail?test\u003dbrawl_stars\u0026digest\u003deb4748bffe8e7a879172973492beb072",
       "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356fd768_caa28ab6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-20T15:53:50Z",
+      "side": 1,
+      "message": "Also https://angle-gold.skia.org/detail?test\u003dcommand_and_conquer_rivals\u0026digest\u003dce533e0c45a265aff10ef6e8e39570ed\n\nThese 2 images look distinctively worse to me than the goldens, so I would triage them as negative if asked to.\nCody, can you please investigate?",
+      "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
