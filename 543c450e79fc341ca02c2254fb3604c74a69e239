@@ -33,6 +33,24 @@
       "message": "Also https://angle-gold.skia.org/detail?test\u003dcommand_and_conquer_rivals\u0026digest\u003dce533e0c45a265aff10ef6e8e39570ed\n\nThese 2 images look distinctively worse to me than the goldens, so I would triage them as negative if asked to.\nCody, can you please investigate?",
       "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b49f6440_a37d9641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T16:09:56Z",
+      "side": 1,
+      "message": "Looks like an issue with line width somehow",
+      "parentUuid": "356fd768_caa28ab6",
+      "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
