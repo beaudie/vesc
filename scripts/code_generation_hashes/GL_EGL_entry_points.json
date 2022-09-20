@@ -12,7 +12,7 @@
   "scripts/gl_angle_ext.xml":
     "12d08e2b574315c45189e1c582c659ff",
   "scripts/registry_xml.py":
-    "b1150b94db620646a38156213cbba402",
+    "e9da2274986cec2e9c9169b1428fde49",
   "src/common/entry_points_enum_autogen.cpp":
     "9d7f5242b6e1db685af2c41bea446b74",
   "src/common/entry_points_enum_autogen.h":
@@ -36,7 +36,7 @@
   "src/libANGLE/Context_gles_3_2_autogen.h":
     "48567dca16fd881dfe6d61fee0e3106f",
   "src/libANGLE/Context_gles_ext_autogen.h":
-    "e821607a5050b8d912585f722874b310",
+    "30d28f1f03e1ce79a20ff8c17766bfae",
   "src/libANGLE/capture/capture_gl_1_autogen.cpp":
     "a43ea4d99dfec5682df0e37cf7266536",
   "src/libANGLE/capture/capture_gl_1_autogen.h":

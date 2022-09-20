@@ -4288,7 +4288,7 @@ void Context::updateCaps()
             }
         }
 
-        if (formatCaps.texturable && formatInfo.compressed)
+        if (formatCaps.texturable && (formatInfo.compressed || formatInfo.paletted))
         {
             mState.mCaps.compressedTextureFormats.push_back(sizedInternalFormat);
         }

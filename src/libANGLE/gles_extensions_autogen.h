@@ -623,6 +623,9 @@ struct Extensions
     // GL_ANGLE_multiview_multisample
     bool multiviewMultisampleANGLE = false;
 
+    // GL_ANGLE_paletted_texture
+    bool palettedTextureANGLE = false;
+
     // GL_ANGLE_program_binary
     bool programBinaryANGLE = false;
 
