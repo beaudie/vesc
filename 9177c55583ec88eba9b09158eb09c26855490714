@@ -221,6 +221,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a23ca2a_97ce6dfe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T17:57:49Z",
+      "side": 1,
+      "message": "Well it\u0027s ContextVk that owns the serial generation, so this is passing the pointer for ContextVk to fill.",
+      "parentUuid": "91e3165c_90e31fad",
+      "range": {
+        "startLine": 2800,
+        "startChar": 75,
+        "endLine": 2800,
+        "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c67f405_92b1a055",
@@ -282,6 +306,30 @@
       "side": 1,
       "message": "I am not asking to invalidate the serial at close (in fact I dont think we should invalidate). What I mean is when renderpass is closed, this mRenderPassSerial is still valid value, referring to a closed renderpass. So the name seems a bit confusing here since when I read it, it sounds like the current open renderpass\u0027s serial. It really is `the last used renerpass serial`.",
       "parentUuid": "6df4de50_24fbc1ea",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 42
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "725a3b8a_6829eeb8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T17:57:49Z",
+      "side": 1,
+      "message": "`mLastRenderPassSerial` SGTM.",
+      "parentUuid": "fa8db966_546649e0",
       "range": {
         "startLine": 252,
         "startChar": 25,
