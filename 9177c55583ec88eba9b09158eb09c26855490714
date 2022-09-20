@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db1c1696_89c18e74",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:39:18Z",
+      "side": 1,
+      "message": "Do you need this? I thought the default constructor initialize it to invalidValue?",
+      "range": {
+        "startLine": 721,
+        "startChar": 6,
+        "endLine": 721,
+        "endChar": 27
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eee5b9fa_1b538e59",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -19,6 +42,29 @@
         "startChar": 28,
         "endLine": 6766,
         "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7e3030_58720379",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6766,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:39:18Z",
+      "side": 1,
+      "message": "This appears to me is the \"current\" renderpass\u0027s serial instead of last, maybe mCurrentRenderPassSerial?",
+      "range": {
+        "startLine": 6766,
+        "startChar": 4,
+        "endLine": 6766,
+        "endChar": 25
       },
       "revId": "9177c55583ec88eba9b09158eb09c26855490714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -106,6 +152,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90e8b767_5d06c67c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:39:18Z",
+      "side": 1,
+      "message": "Instead of passing an out pointer here, it is better just add a getCurrentRenderPassSerial() function in ContextVK?",
+      "range": {
+        "startLine": 2800,
+        "startChar": 75,
+        "endLine": 2800,
+        "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c67f405_92b1a055",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:39:18Z",
+      "side": 1,
+      "message": "When renderpass closed, we do not invalidate this serial number, right? Maybe better name it \"mUsedByRenderpass\"? (Not sure what @syoussefi think)",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 42
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b03e4be_a4669582",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -117,6 +209,30 @@
       "writtenOn": "2022-09-17T02:31:18Z",
       "side": 1,
       "message": "super duper nit: unnecessary parentheses are unnecessary\n\nBut actually the render pass should _always_ get a serial, no matter what.",
+      "range": {
+        "startLine": 2108,
+        "startChar": 24,
+        "endLine": 2108,
+        "endChar": 49
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb5515c5_bb715366",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:39:18Z",
+      "side": 1,
+      "message": "+1. \nOr you can just generate serial here and have a getRenderPassSerial() function to retrieve?",
+      "parentUuid": "7b03e4be_a4669582",
       "range": {
         "startLine": 2108,
         "startChar": 24,
