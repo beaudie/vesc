@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "751f5b5b_abc51ab9",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T20:25:34Z",
+      "side": 1,
+      "message": "Would be nice to move this to config that affects tests only, otherwise changing it results in rebuilding everything (+ causes cache misses with goma (our distributed build system))",
+      "revId": "b9df95ffdfcb5ea21ae28bd27cd68570b18a2b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
