@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45669695_55a3a97b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-20T10:06:28Z",
+      "side": 1,
+      "message": "Last update was just a trivial variable name change to not hurt your eyes.",
+      "revId": "35eb99e69023dca78eeaf05e6c3e32643a66c956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
