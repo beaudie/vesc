@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4b60c8f_a645c36b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:10:50Z",
+      "side": 1,
+      "message": "Driving by",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e37fd49e_50c2cf12",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:10:50Z",
+      "side": 1,
+      "message": "Arguably a rare situation, but this disables this function for Vulkan 1.0 devices. Should be easy to get both pointers and fallback to `vkGetPhysicalDeviceProperties` if `vkGetPhysicalDeviceProperties2` is missing.",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ad6a04_2cc70392",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:10:50Z",
+      "side": 1,
+      "message": "Please tag TODOs with anblebug.com issues.",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
