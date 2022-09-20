@@ -1057,6 +1057,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16d5957_23394992",
+        "filename": "src/libANGLE/PixelLocalStorage.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T17:17:32Z",
+      "side": 1,
+      "message": "\u003e What way would that be?\n\nSorry if I didn\u0027t piece these together myself. The comment says:\n\n\u003e The context must internally disable the scissor test before calling this method\n\nand I was wondering why doesn\u0027t this method itself internally disable the scissor.",
+      "parentUuid": "a8afe7e5_14193cbb",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f920dce3_75ffa2cf",
