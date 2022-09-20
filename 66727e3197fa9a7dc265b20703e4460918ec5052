@@ -152,6 +152,30 @@
       },
       "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d81550_ed619208",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "Added `RenderPassSerialFactory` to always generate a new serial in `RenderPassCommandBufferHelper::beginRenderPass()` and pass it up.",
+      "parentUuid": "e073c20d_1d5ee6b6",
+      "range": {
+        "startLine": 1526,
+        "startChar": 4,
+        "endLine": 1526,
+        "endChar": 12
+      },
+      "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

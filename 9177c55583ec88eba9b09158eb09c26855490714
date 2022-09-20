@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c1eabfb_c695dd42",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "True. Removed.",
+      "parentUuid": "db1c1696_89c18e74",
+      "range": {
+        "startLine": 721,
+        "startChar": 6,
+        "endLine": 721,
+        "endChar": 27
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eee5b9fa_1b538e59",
@@ -70,6 +94,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a887eb32_11da4f6b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6766,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa7e3030_58720379",
+      "range": {
+        "startLine": 6766,
+        "startChar": 4,
+        "endLine": 6766,
+        "endChar": 25
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "323e8402_381bcb26",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6766,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "As per our discussion from before, I added a new `RenderPassSerialFactory` object independent from resources to generate a new serial.",
+      "parentUuid": "eee5b9fa_1b538e59",
+      "range": {
+        "startLine": 6766,
+        "startChar": 28,
+        "endLine": 6766,
+        "endChar": 92
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "463ac236_d385eb3e",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-09-17T02:31:18Z",
       "side": 1,
       "message": "Pass `mLastRenderPassSerial` here instead, so there\u0027s always a serial",
+      "range": {
+        "startLine": 6776,
+        "startChar": 48,
+        "endLine": 6776,
+        "endChar": 59
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3a71bdf_95135382",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6776,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "463ac236_d385eb3e",
       "range": {
         "startLine": 6776,
         "startChar": 48,
@@ -110,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae1aef18_22bb480f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "True. Removed.",
+      "parentUuid": "b33f6a6c_28faf3be",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c37ffd27_0480fc61",
@@ -123,6 +237,24 @@
       "writtenOn": "2022-09-17T02:31:18Z",
       "side": 1,
       "message": "Is this if necessary? Wouldn\u0027t `restoreFinishedRenderPass` checking the serial be enough?",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc8f31b4_cb3d8ea4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "The following test fails without using `isCurrentFramebufferValid` (here and for `canResolveWithSubpass`): `KHR-GLES31.core.geometry_shader.layered_rendering.layered_rendering`",
+      "parentUuid": "c37ffd27_0480fc61",
       "revId": "9177c55583ec88eba9b09158eb09c26855490714",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -340,6 +472,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94c7e66b_362533ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "Renamed",
+      "parentUuid": "725a3b8a_6829eeb8",
+      "range": {
+        "startLine": 252,
+        "startChar": 25,
+        "endLine": 252,
+        "endChar": 42
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b03e4be_a4669582",
@@ -377,6 +533,30 @@
       "side": 1,
       "message": "+1. \nOr you can just generate serial here and have a getRenderPassSerial() function to retrieve?",
       "parentUuid": "7b03e4be_a4669582",
+      "range": {
+        "startLine": 2108,
+        "startChar": 24,
+        "endLine": 2108,
+        "endChar": 49
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51ad12d1_55396c88",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2108,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T20:29:39Z",
+      "side": 1,
+      "message": "Serial is now generated here and passed up.",
+      "parentUuid": "eb5515c5_bb715366",
       "range": {
         "startLine": 2108,
         "startChar": 24,
