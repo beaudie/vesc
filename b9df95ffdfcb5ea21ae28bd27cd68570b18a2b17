@@ -52,6 +52,24 @@
       "parentUuid": "f1120338_8daf2446",
       "revId": "b9df95ffdfcb5ea21ae28bd27cd68570b18a2b17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbde7c3d_fb03cc09",
+        "filename": "BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T21:02:11Z",
+      "side": 1,
+      "message": "Yeah, it does make sense to encapsulate this into a test config. I don\u0027t know if we have a mixin test config like we do for this, but we can add one.",
+      "parentUuid": "fd892e62_43a1e937",
+      "revId": "b9df95ffdfcb5ea21ae28bd27cd68570b18a2b17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
