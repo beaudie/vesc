@@ -52,6 +52,24 @@
       "parentUuid": "bc62aad9_a00cf485",
       "revId": "ae31de1f43a2db14d29cb41b73a72ef87cfbf070",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7559d9e_ef4911a2",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T16:15:06Z",
+      "side": 1,
+      "message": "Yes! Added in the parent change: https://chromium-review.googlesource.com/c/angle/angle/+/3898316",
+      "parentUuid": "d01185c7_c72ebf64",
+      "revId": "ae31de1f43a2db14d29cb41b73a72ef87cfbf070",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
