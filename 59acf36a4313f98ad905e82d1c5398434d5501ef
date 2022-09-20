@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f9f114e_3d198ebc",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-20T16:34:09Z",
+      "side": 1,
+      "message": "MoltenVk supports 1.1. And I think this method is an instance method, and vulkan-loader should always provide this method, since the latest vulkan-loader is built with angle. so probably we don\u0027t need to handle this rare case.",
+      "parentUuid": "0e7273f1_61b7ac01",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dba35d13_72795a24",
         "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
         "patchSetId": 4
@@ -83,6 +101,30 @@
       "writtenOn": "2022-09-20T15:27:20Z",
       "side": 1,
       "message": "nit: use explicit type for readability",
+      "range": {
+        "startLine": 173,
+        "startChar": 18,
+        "endLine": 173,
+        "endChar": 19
+      },
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c686fa1_ccdd7dfc",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-20T16:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dba35d13_72795a24",
       "range": {
         "startLine": 173,
         "startChar": 18,
@@ -106,6 +148,24 @@
       "writtenOn": "2022-09-20T15:10:50Z",
       "side": 1,
       "message": "Please tag TODOs with anblebug.com issues.",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409968db_d0a307d9",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-20T16:34:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1ad6a04_2cc70392",
       "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
