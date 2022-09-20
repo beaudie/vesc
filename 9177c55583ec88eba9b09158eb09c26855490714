@@ -261,6 +261,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53433e18_12096b5f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T20:37:03Z",
+      "side": 1,
+      "message": "Looks like it\u0027s exposing a bug somewhere then. If `hasStartedRenderPassWithSerial` returns true, the framebuffer shouldn\u0027t be invalid.\n\nIs that before or after imageless framebuffers? If it fails after but not before, it may be due to imageless framebuffers releasing framebuffers while !imageless doesn\u0027t. In that case, imageless framebuffers releasing framebuffers is causing optimizations to be disabled, which is not great.",
+      "parentUuid": "dc8f31b4_cb3d8ea4",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271a48c0_1b2829b1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
