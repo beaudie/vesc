@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b9eceb6_17c20973",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T02:53:12Z",
+      "side": 0,
+      "message": "Why doesn\u0027t `mImageUsageFlags` work?",
+      "range": {
+        "startLine": 3229,
+        "startChar": 44,
+        "endLine": 3229,
+        "endChar": 60
+      },
+      "revId": "a8a04ce16ee6a192fe673e2e0c634d74a1578d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
