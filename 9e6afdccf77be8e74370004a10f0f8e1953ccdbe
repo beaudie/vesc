@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e2e9af1_bc9ce4f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-20T21:39:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "116e3a71_42b96fa3",
+      "range": {
+        "startLine": 9,
+        "startChar": 15,
+        "endLine": 9,
+        "endChar": 20
+      },
+      "revId": "9e6afdccf77be8e74370004a10f0f8e1953ccdbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd3446e4_cb50217f",
@@ -49,6 +73,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c648c797_9a9fb773",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-20T21:39:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd3446e4_cb50217f",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 56
+      },
+      "revId": "9e6afdccf77be8e74370004a10f0f8e1953ccdbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "5c719b93_11cea832",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -60,6 +108,23 @@
       "writtenOn": "2022-09-19T19:41:52Z",
       "side": 1,
       "message": "This change is missing from:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3857830\n",
+      "revId": "9e6afdccf77be8e74370004a10f0f8e1953ccdbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3a4ddc_366a31d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-20T21:39:43Z",
+      "side": 1,
+      "message": "Commit message updated",
       "revId": "9e6afdccf77be8e74370004a10f0f8e1953ccdbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
