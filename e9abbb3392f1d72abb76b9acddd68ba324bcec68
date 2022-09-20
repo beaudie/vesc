@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45bfc109_50325b84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1135559
+      },
+      "writtenOn": "2022-09-20T05:14:09Z",
+      "side": 1,
+      "message": "This is the follow up of CL https://chromium-review.googlesource.com/c/angle/angle/+/3902853, PTAL, thanks!",
+      "revId": "e9abbb3392f1d72abb76b9acddd68ba324bcec68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
