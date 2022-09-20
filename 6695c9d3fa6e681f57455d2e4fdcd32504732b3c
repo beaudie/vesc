@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ef70997_5ee319dc",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-20T09:59:57Z",
+      "side": 1,
+      "message": "Urgh, indeed. Went for a simple member bool - and also change its value now :P\n\nNote that this was copied from the Vulkan implementation, so you might want to remove the static member in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/linux/DisplayVkLinux.cpp;l\u003d134 as well.",
+      "parentUuid": "63209555_043b2e3a",
+      "range": {
+        "startLine": 1058,
+        "startChar": 4,
+        "endLine": 1058,
+        "endChar": 40
+      },
+      "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c61758f9_fb0fa26f",
@@ -78,6 +102,24 @@
       "writtenOn": "2022-09-19T19:14:02Z",
       "side": 1,
       "message": "this is the only block that writes numFormats, it should be written unconditionally.",
+      "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c0caaf7_df892349",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-20T09:59:57Z",
+      "side": 1,
+      "message": "Done, makes the code also more intuitive.",
+      "parentUuid": "c61758f9_fb0fa26f",
       "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
