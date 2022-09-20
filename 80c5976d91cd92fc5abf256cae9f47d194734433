@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69ebb355_babd0996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T04:13:32Z",
+      "side": 1,
+      "message": "Limited to P4 until I can figure out what\u0027s the deal with P6",
+      "revId": "80c5976d91cd92fc5abf256cae9f47d194734433",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
