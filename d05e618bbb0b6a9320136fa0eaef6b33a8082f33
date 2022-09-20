@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b1a4f2e_b3e10383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:12:38Z",
+      "side": 1,
+      "message": "Overall very nice change to me!",
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5288c0a_e471367b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:12:38Z",
+      "side": 1,
+      "message": "This block of code seems better fit in this way:\nIn FormatTable::initialize(), you add BC format as the fallback format before RGBA format.\nIn Format::initImageFallback() you check the supportsComputeTranscodeEtcToBc feature flag and pick BC format if feature is enabled.\n\nThat way it is easier to see all possible fallback format in the FormatTable::initialize() and this fits the existing code better.",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 273,
+        "endChar": 0
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3572737e_395c2bbb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:12:38Z",
+      "side": 1,
+      "message": "This can be \nreturn formatID\u003e\u003dAC_R11G11_SNORM_BLOCK \u0026\u0026 formatID\u003c\u003dETC2_R8G8B8_UNORM_BLOCK. \nBut I am not sure if it will be cheaper than switch statement here though. You can check the compiler generated bits to see which way is better.  Same thing with IsBCFormat(). And GetTransCodeBCFormatID() can just use a predefined table. But again. I am not sure which way is better or no difference. But what I suggested has less code :-)",
+      "range": {
+        "startLine": 415,
+        "startChar": 4,
+        "endLine": 415,
+        "endChar": 21
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1743a04_ad91a3bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7917,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:12:38Z",
+      "side": 1,
+      "message": "The style guide asks for \u0027{...}\u0027.",
+      "range": {
+        "startLine": 7911,
+        "startChar": 3,
+        "endLine": 7917,
+        "endChar": 0
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4269b343_d2fb65a4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 9392,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:12:38Z",
+      "side": 1,
+      "message": "This can be simplified to \n    if (angleFmt.isBlock)\n    {\n        return !textureFmt.isBlock;\n    }\n    \nDo we need to check feature flag here?",
+      "range": {
+        "startLine": 9385,
+        "startChar": 4,
+        "endLine": 9392,
+        "endChar": 5
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
