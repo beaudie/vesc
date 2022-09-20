@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e69459_92310426",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/converged/CompositorNativeWindow11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1556137
+      },
+      "writtenOn": "2022-09-20T17:18:31Z",
+      "side": 1,
+      "message": "The `|| result \u003d\u003d S_FALSE` is redundant as `SUCCEEDED(result)` is true if result is `S_FALSE`.\n\n`SUCCEEDED` checks that the `HRESULT` has a non-negative value: https://learn.microsoft.com/en-us/windows/win32/api/winerror/nf-winerror-succeeded#parameters\n\n`S_FALSE` has value `0x1`: https://learn.microsoft.com/en-us/windows/win32/learnwin32/error-handling-in-com",
+      "revId": "43cc269d0a7b6a57f7a1818748cdc97038e2fa64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
