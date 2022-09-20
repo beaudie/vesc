@@ -16,7 +16,9 @@
 namespace rx
 {
 
-DisplayVkLinux::DisplayVkLinux(const egl::DisplayState &state) : DisplayVk(state) {}
+DisplayVkLinux::DisplayVkLinux(const egl::DisplayState &state)
+    : DisplayVk(state), mDrmFormatsInitialized(false)
+{}
 
 ExternalImageSiblingImpl *DisplayVkLinux::createExternalImageSibling(
     const gl::Context *context,
@@ -131,11 +133,10 @@ egl::Error DisplayVkLinux::queryDmaBufFormats(EGLint maxFormats,
                                               EGLint *formats,
                                               EGLint *numFormats)
 {
-    static bool drmFormatInited = false;
-
-    if (drmFormatInited == false)
+    if (!mDrmFormatsInitialized)
     {
-        mDrmFormats = GetDrmFormats(getRenderer());
+        mDrmFormats            = GetDrmFormats(getRenderer());
+        mDrmFormatsInitialized = true;
     }
 
     EGLint formatsSize = static_cast<EGLint>(mDrmFormats.size());
