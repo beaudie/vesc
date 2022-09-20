@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0a1bf0_411a33ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T15:27:20Z",
+      "side": 1,
+      "message": "LGTM with comments addressed.",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e37fd49e_50c2cf12",
@@ -31,6 +48,47 @@
       "writtenOn": "2022-09-20T15:10:50Z",
       "side": 1,
       "message": "Arguably a rare situation, but this disables this function for Vulkan 1.0 devices. Should be easy to get both pointers and fallback to `vkGetPhysicalDeviceProperties` if `vkGetPhysicalDeviceProperties2` is missing.",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e7273f1_61b7ac01",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T15:27:20Z",
+      "side": 1,
+      "message": "+1, maybe it could happen on emulation layers like MoltenVk.",
+      "parentUuid": "e37fd49e_50c2cf12",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dba35d13_72795a24",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-20T15:27:20Z",
+      "side": 1,
+      "message": "nit: use explicit type for readability",
+      "range": {
+        "startLine": 173,
+        "startChar": 18,
+        "endLine": 173,
+        "endChar": 19
+      },
       "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
