@@ -176,6 +176,30 @@
       },
       "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bcb2eeb_373768f5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1526,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T22:30:25Z",
+      "side": 1,
+      "message": "Due to several `AsyncCommandQueue` errors, moved the serial factory back to the context. The serial is now generated in `ContextVk::beginNewRenderPass()` and then passed down to `RenderPassCommandBufferHelper::beginRenderPass()`.",
+      "parentUuid": "a9d81550_ed619208",
+      "range": {
+        "startLine": 1526,
+        "startChar": 4,
+        "endLine": 1526,
+        "endChar": 12
+      },
+      "revId": "66727e3197fa9a7dc265b20703e4460918ec5052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
