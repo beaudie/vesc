@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "665ea873_71831869",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:52:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46fe339a_ca39bf5c",
+      "range": {
+        "startLine": 1308,
+        "startChar": 0,
+        "endLine": 1311,
+        "endChar": 13
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3035c91d_e4c874d6",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cf22e83_fa9a7467",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:52:59Z",
+      "side": 1,
+      "message": "The others don\u0027t set a dirty bit (so this is not just setting the value). Ideally all of them should have used a function.",
+      "parentUuid": "3035c91d_e4c874d6",
+      "range": {
+        "startLine": 1418,
+        "startChar": 0,
+        "endLine": 1418,
+        "endChar": 51
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28f4d35b_943a80fd",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-09-20T15:24:42Z",
       "side": 1,
       "message": "Am I reading this right that it is only passing on Nvidia?",
+      "range": {
+        "startLine": 276,
+        "startChar": 40,
+        "endLine": 276,
+        "endChar": 64
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "277c1737_20b551a0",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:52:59Z",
+      "side": 1,
+      "message": "Only one with the `logicOp` Vulkan feature.\n\nActually Intel might have it too, but no matter, next change will make this unconditionally so any hardware can use whatever they support.",
+      "parentUuid": "28f4d35b_943a80fd",
       "range": {
         "startLine": 276,
         "startChar": 40,
