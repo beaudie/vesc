@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "741b2273_2ca284d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T20:39:58Z",
+      "side": 1,
+      "message": "\u003e lead towards situations where you could have a render pass change without a sync?\n\nNo? It\u0027s just closing the render pass. The query will then naturally defer itself.",
+      "parentUuid": "8bfc82aa_ea1e3f5d",
+      "revId": "906e4d9d12f2ec3a32c48dcf6d9d9060e009a5a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8e75c228_11228e36",
