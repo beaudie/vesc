@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b89ca71_b5f307ff",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T17:24:20Z",
+      "side": 1,
+      "message": "No, the `GL_X_BARRIER_BIT`s synchronize \"shader write, then X\". That\u0027s except for `GL_SHADER_IMAGE_ACCESS_BARRIER_BIT` which _also_ synchronizes \"everything, then shader write\":\n\n\u003e `SHADER_IMAGE_ACCESS_BARRIER_BIT`: Memory accesses using shader\n\u003e built-in image load and store functions issued after the barrier will reflect\n\u003e data written by shaders prior to the barrier. Additionally, image stores issued\n\u003e after the barrier will not execute until all memory accesses (e.g., loads,\n\u003e stores, texture fetches, vertex fetches) initiated prior to the barrier complete",
+      "parentUuid": "fd4f2a09_933a37a9",
+      "range": {
+        "startLine": 543,
+        "startChar": 31,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "4116f86f08374be26a14d1185826d605f09a0667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "823f4c89_0c2c3702",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 31
