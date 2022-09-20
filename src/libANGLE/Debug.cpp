@@ -76,6 +76,12 @@ const char *GLMessageTypeToString(GLenum type)
 
 namespace gl
 {
+uint64_t get_time_ns()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+    return ts.tv_sec * 1'000'000'000llu + ts.tv_nsec;
+}
 
 Debug::Control::Control() {}
 

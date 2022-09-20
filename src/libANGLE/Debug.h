@@ -21,6 +21,17 @@
 
 namespace gl
 {
+uint64_t get_time_ns();
+class ScopedTime
+{
+public:
+    ScopedTime(const char *func, const char *message): mBegin(get_time_ns()), mFunc(func), mMessage(message) {}
+    ~ScopedTime() { fprintf(stderr, "%s: %s (%lluns)\n", mFunc, mMessage, (unsigned long long)(get_time_ns() - mBegin)); }
+private:
+    uint64_t mBegin;
+    const char *mFunc, *mMessage;
+};
+
 class Context;
 
 class LabeledObject
