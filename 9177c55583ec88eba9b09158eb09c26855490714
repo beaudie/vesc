@@ -297,6 +297,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a9a0c6d_77a84090",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T22:34:52Z",
+      "side": 1,
+      "message": "Got it. Perhaps the situation is that these cases are already unoptimized (because the handle-match fails), and this change points out that they could have been optimized. The check here LGTM, you could open a bug and a TODO here to look into this in the future as an optimization opportunity",
+      "parentUuid": "2c1ca8ed_612d3903",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271a48c0_1b2829b1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
