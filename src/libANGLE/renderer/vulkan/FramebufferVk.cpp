@@ -2014,7 +2014,8 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
     }
 
     // No-op redundant changes to prevent closing the RenderPass.
-    if (mCurrentFramebufferDesc == priorFramebufferDesc)
+    if (mCurrentFramebufferDesc == priorFramebufferDesc &&
+        mCurrentFramebufferDesc.attachmentCount() > 0)
     {
         return angle::Result::Continue;
     }
