@@ -279,6 +279,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2c1ca8ed_612d3903",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-20T21:49:24Z",
+      "side": 1,
+      "message": "This is before imageless framebuffers.",
+      "parentUuid": "53433e18_12096b5f",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271a48c0_1b2829b1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
