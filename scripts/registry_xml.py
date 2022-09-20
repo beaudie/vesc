@@ -216,6 +216,7 @@ gles_requestable_extensions = [
 angle_es_only_extensions = [
     "GL_ANGLE_client_arrays",
     "GL_ANGLE_get_serialized_context_string",
+    "GL_ANGLE_paletted_texture",
     "GL_ANGLE_program_binary",
     "GL_ANGLE_program_cache_control",
     "GL_ANGLE_relaxed_vertex_attribute_type",
