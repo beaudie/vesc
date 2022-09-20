@@ -108,6 +108,29 @@
       },
       "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2207aa38_b42719f9",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-20T00:16:58Z",
+      "side": 1,
+      "message": "I believe these new tests will skip on chrome bots since feature is disabled? If yes, for bots testing purpose, we should enable the feature flag for these tests so that no one will regress it. I don\u0027t know whats the best way to do this, shabi may have better idea (maybe a config or white box test?).",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
