@@ -46,6 +46,30 @@
       },
       "revId": "493bab09b564f9cfa6333f92baf3abadcb5a57db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d92a2cc7_a2915f8b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:19:27Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "49846c4e_4bc19652",
+      "range": {
+        "startLine": 163,
+        "startChar": 65,
+        "endLine": 163,
+        "endChar": 71
+      },
+      "revId": "493bab09b564f9cfa6333f92baf3abadcb5a57db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

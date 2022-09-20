@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "767747fc_466cde77",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:19:27Z",
+      "side": 1,
+      "message": "`GL_SHADER_IMAGE_ACCESS_BARRIER_BIT` should be sufficient here (`ALL` on end does make sense though)",
+      "range": {
+        "startLine": 543,
+        "startChar": 31,
+        "endLine": 543,
+        "endChar": 50
+      },
+      "revId": "4116f86f08374be26a14d1185826d605f09a0667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "823f4c89_0c2c3702",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:19:27Z",
+      "side": 1,
+      "message": "super duper nit",
+      "revId": "4116f86f08374be26a14d1185826d605f09a0667",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
