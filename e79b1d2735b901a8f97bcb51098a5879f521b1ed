@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "63311d85_628699e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T02:31:40Z",
+      "side": 1,
+      "message": "SGTM. Yuxin, feel free to follow up with whatever\u0027s left to do.",
+      "parentUuid": "2c831a65_df21e55d",
+      "revId": "e79b1d2735b901a8f97bcb51098a5879f521b1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf092f40_9a452460",

@@ -34,6 +34,24 @@
       "parentUuid": "144a040f_8dde52e2",
       "revId": "704ad44b9707db4a578ed7d867e21f0b2b05bdfa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2e51fcb_1dd80106",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T02:31:40Z",
+      "side": 0,
+      "message": "Ack, though passing context is perfectly fine. I think that was the diff with Amirali\u0027s change too, and it probably encapsulates things better.",
+      "parentUuid": "76d40ee7_b44106d3",
+      "revId": "704ad44b9707db4a578ed7d867e21f0b2b05bdfa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
