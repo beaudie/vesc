@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84a2979f_4b570799",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:00:42Z",
+      "side": 1,
+      "message": "Yeesh, thanks done: https://chromium-review.googlesource.com/c/angle/angle/+/3905327",
+      "parentUuid": "9ef70997_5ee319dc",
+      "range": {
+        "startLine": 1058,
+        "startChar": 4,
+        "endLine": 1058,
+        "endChar": 40
+      },
+      "revId": "6695c9d3fa6e681f57455d2e4fdcd32504732b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c61758f9_fb0fa26f",

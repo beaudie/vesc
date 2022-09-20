@@ -34,6 +34,41 @@
       "parentUuid": "f0259676_233390f7",
       "revId": "a1afa47ae68b8edecfa9cdab15c7bcaa5df43441",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4a95af_4fc24de5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:00:42Z",
+      "side": 1,
+      "message": "They are not missing, we separate validation from implementation 😊\n\nSee here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/validationEGL.cpp;l\u003d6644;drc\u003d3960e63b1a9ce85658a9031c43d55efd85534525",
+      "parentUuid": "bc4dc76e_7d1252de",
+      "revId": "a1afa47ae68b8edecfa9cdab15c7bcaa5df43441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79f62fda_2ca58343",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T15:00:42Z",
+      "side": 1,
+      "message": "The spec doesn\u0027t actually say it, but the usual thing to do is to return `formatSize` in `*numFormats` regardless of what `maxFormats` is, so the `*numFormats \u003d formatSize;` line can be moved out of the `if` and be unconditionally set.\n\nI\u0027ll do that same in `vulkan/`",
+      "revId": "a1afa47ae68b8edecfa9cdab15c7bcaa5df43441",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
