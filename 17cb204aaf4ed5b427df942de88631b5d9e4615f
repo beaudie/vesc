@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb98a6fb_a34e44c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:20Z",
+      "side": 1,
+      "message": "Awesome stuff, Shabi!\n\nDo any tests come online, end2end or conformance?",
+      "revId": "17cb204aaf4ed5b427df942de88631b5d9e4615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca33626_829ec3a1",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:20Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be split up? i.e.:\n```\n    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_LOGIC_OP)\n    {\n        if (hasLogicOpANGLE)\n        {\n            ...\n        }\n        else if (hasFramebufferFetch)\n        {\n            ...\n        }\n        else\n        {\n            UNREACHABLE();\n        }\n    }\n```",
+      "range": {
+        "startLine": 267,
+        "startChar": 0,
+        "endLine": 267,
+        "endChar": 80
+      },
+      "revId": "17cb204aaf4ed5b427df942de88631b5d9e4615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "561c129b_b31a9b4d",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:20Z",
+      "side": 1,
+      "message": "Is there a need to move away from the official enums?  It is a bit jarring vs. other values.\n\nEdit: On further review, this is to allow packing in the uniform.",
+      "range": {
+        "startLine": 276,
+        "startChar": 12,
+        "endLine": 276,
+        "endChar": 28
+      },
+      "revId": "17cb204aaf4ed5b427df942de88631b5d9e4615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9cd38f0_29411a06",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 5
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:20Z",
+      "side": 1,
+      "message": "I bet this was fun to write. Cool stuff!\n\nMay be worth a comment explaining at a high level, but okay to leave it as is too.  Understanding the values coming through logic_op is key.",
+      "range": {
+        "startLine": 593,
+        "startChar": 15,
+        "endLine": 593,
+        "endChar": 62
+      },
+      "revId": "17cb204aaf4ed5b427df942de88631b5d9e4615f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
