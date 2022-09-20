@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46fe339a_ca39bf5c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:42Z",
+      "side": 1,
+      "message": "A comment would be useful here (and the one below).",
+      "range": {
+        "startLine": 1308,
+        "startChar": 0,
+        "endLine": 1311,
+        "endChar": 13
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3035c91d_e4c874d6",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:42Z",
+      "side": 1,
+      "message": "Any significance to using a setter here versus directly modifying the value?  Just curious if there is any problem with all the other values being set directly here.",
+      "range": {
+        "startLine": 1418,
+        "startChar": 0,
+        "endLine": 1418,
+        "endChar": 51
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28f4d35b_943a80fd",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T15:24:42Z",
+      "side": 1,
+      "message": "Am I reading this right that it is only passing on Nvidia?",
+      "range": {
+        "startLine": 276,
+        "startChar": 40,
+        "endLine": 276,
+        "endChar": 64
+      },
+      "revId": "53e819591adf5fd273d53126f6833ea06f3280d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
