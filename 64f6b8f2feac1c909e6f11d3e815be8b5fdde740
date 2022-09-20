@@ -170,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7969d715_a7e0d3c3",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "That doesn\u0027t seem so bad. There\u0027s always time to change it if we decide it\u0027s too painful. Otherwise, I like forcing dither off.",
+      "parentUuid": "1cee265e_1bfbccfe",
+      "range": {
+        "startLine": 361,
+        "startChar": 40,
+        "endLine": 361,
+        "endChar": 46
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e6ede11_36f23cf8",
@@ -312,6 +336,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eba5fa8_17983b26",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Banned!",
+      "parentUuid": "0085ae4f_a3c94a60",
+      "range": {
+        "startLine": 453,
+        "startChar": 13,
+        "endLine": 453,
+        "endChar": 53
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "735ff4de_5c6da7fb",
@@ -373,6 +421,30 @@
       "side": 1,
       "message": "Your call. Those might have been specified as signed by the spec, but we are not bound by that for these.",
       "parentUuid": "910255c8_f6207b85",
+      "range": {
+        "startLine": 378,
+        "startChar": 4,
+        "endLine": 378,
+        "endChar": 9
+      },
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb3a2c1_4a919aea",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "I think they will be overall better as GLuints once we update the \u003cplane\u003e argument to GLuint.",
+      "parentUuid": "a7c547a5_e1b55460",
       "range": {
         "startLine": 378,
         "startChar": 4,
@@ -600,6 +672,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "666c733e_fed67483",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Let\u0027s open the discussion up the the broader WebGL working group. They\u0027re already waiting for me to copy the spec into a Google doc once this lands.",
+      "parentUuid": "6df2d9b2_67deb2a2",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d433ef7_67383a2c",
@@ -649,6 +739,24 @@
       "side": 1,
       "message": "30 seconds is nothing, don\u0027t worry. We run with an optimized build (+ debug asserts), so it takes much less time. Also the tests are sharded and run on multiple devices in parallel. The PLS tests aren\u0027t affecting the run time in any perceptible way (so feel free to make as extensive as you need).",
       "parentUuid": "cc7df7da_9635b3f9",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c3afe4_b0fd3acb",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll continue adding necessary tests without holding back.\n\nI think what we have here is good though -- a super thorough test that queries all the state, plus various state related pixel tests.",
+      "parentUuid": "1df36800_704cd3fa",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -771,6 +879,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b016449_e49f32e2",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Done. This is feeling pretty solid now.",
+      "parentUuid": "88f74cfa_9e52d21c",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b57d302_9432e506",
@@ -837,6 +963,24 @@
       "side": 1,
       "message": "The expectation is just that the context does this ahead of time so we aren\u0027t thrashing scissor state -- not the application. Does that work?",
       "parentUuid": "66573afe_9f301b5c",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b5b6360_121f6281",
+        "filename": "src/libANGLE/PixelLocalStorage.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "defcb85f_2f248ee7",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -919,6 +1063,24 @@
       "side": 1,
       "message": "I moved the implementation into PixelLocalStorage.cpp, but the idea is, GL_PIXEL_LOCAL_FORMAT_ANGLE returns GL_NONE if deinitialized. So `if (deinitialized) return 0;` only works because GL_NONE is 0.",
       "parentUuid": "8726b26e_3927a5b0",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdcfdea8_7debf9e9",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3251,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a1ac967_345ea41a",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1054,6 +1216,24 @@
       "side": 1,
       "message": "Free to crash!",
       "parentUuid": "bdb14d08_0d487d61",
+      "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa6fd32_bde8e98c",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 3398,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-20T05:53:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57720373_32667f0d",
       "revId": "64f6b8f2feac1c909e6f11d3e815be8b5fdde740",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
