@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2377470_b0befe4c",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T05:04:44Z",
+      "side": 1,
+      "message": "Some have the extension check here, like `GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT`. Went with that.",
+      "parentUuid": "14ae295e_bf34ab3c",
+      "range": {
+        "startLine": 3224,
+        "startChar": 8,
+        "endLine": 3224,
+        "endChar": 31
+      },
+      "revId": "716da8bc5b0a1a3adfd93c6d637be70292c8b907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38b43bef_68b140eb",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-19T19:24:57Z",
       "side": 1,
       "message": "possible to put an `UNREACHABLE` here? Maybe a couple no-op switch cases needed",
+      "range": {
+        "startLine": 2199,
+        "startChar": 28,
+        "endLine": 2199,
+        "endChar": 34
+      },
+      "revId": "716da8bc5b0a1a3adfd93c6d637be70292c8b907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e02df2c_2be10920",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-20T05:04:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38b43bef_68b140eb",
       "range": {
         "startLine": 2199,
         "startChar": 28,
