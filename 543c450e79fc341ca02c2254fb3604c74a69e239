@@ -51,6 +51,42 @@
       "parentUuid": "356fd768_caa28ab6",
       "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c217ff48_d4dea6ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T17:20:31Z",
+      "side": 1,
+      "message": "It looks like more of the same to me, a gradient that is dropping off, getting slightly larger or smaller based on a boundary condition.  I would approve them.  They are probably slightly non-determinstic on those edges.  Approving the new one should allow either result to pass, if I understand how Skia Gold manages goldens (a growing set, not eliminating the old result).",
+      "parentUuid": "b49f6440_a37d9641",
+      "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14228a11_7d6ead74",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-20T17:20:31Z",
+      "side": 1,
+      "message": "I\u0027ve seen that on Pixel 4, where the next couple of traces in alphabetical order will get slightly different results.  Might be a matter of teardown between them, like you said, state leakage.  The wordscapes and zombie_smasher kind of mess up that pattern though.\n\nYuly, would it make sense to turn on Pixel 6 devices for CLs that land new traces, to force the author to review and approve them?  I do it locally (inspecting with diffs and such), but I always forget when landing them.",
+      "parentUuid": "692ce4a9_cb81f1db",
+      "revId": "543c450e79fc341ca02c2254fb3604c74a69e239",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
