@@ -380,7 +380,7 @@ vec4 doLighting(vec4 currentFragment)
     vec4 materialAmbientActual = material_ambient;
     vec4 materialDiffuseActual = material_diffuse;
 
-    if (enable_color_material || enable_texture_2d[0] || enable_texture_cube_map[0])
+    if (enable_color_material)
     {
         materialAmbientActual = currentFragment;
         materialDiffuseActual = currentFragment;
@@ -1064,6 +1064,11 @@ void main()
 
     currentFragment = vertex_color;
 
+    if (enable_lighting)
+    {
+        currentFragment = doLighting(currentFragment);
+    }
+
     vec4 texturePrevColor = currentFragment;
 
     for (int i = 0; i < kMaxTexUnits; i++)
@@ -1085,11 +1090,6 @@ void main()
             vertex_color, texturePrevColor, textureColor);
 
         texturePrevColor = currentFragment;
-    }
-
-    if (enable_lighting)
-    {
-        currentFragment = doLighting(currentFragment);
     }
 
     if (enable_fog)
