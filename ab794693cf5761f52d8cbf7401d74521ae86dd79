@@ -39,6 +39,30 @@
       },
       "revId": "ab794693cf5761f52d8cbf7401d74521ae86dd79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e91b4f6_f7e92fec",
+        "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-21T22:27:34Z",
+      "side": 1,
+      "message": "No, I don\u0027t want it to be considered block compressed. It doesn\u0027t hold up to a lot of assumptions about block compressed formats, such as size (paletted image has a constant additive factor in its size -- the palette), etc. The actual paletted images patch handles paletted images separately where necessary.",
+      "parentUuid": "57b96a0c_2053e84d",
+      "range": {
+        "startLine": 138,
+        "startChar": 272,
+        "endLine": 138,
+        "endChar": 277
+      },
+      "revId": "ab794693cf5761f52d8cbf7401d74521ae86dd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
