@@ -333,6 +333,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92860902_59867bc8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T00:45:25Z",
+      "side": 1,
+      "message": "The thing is, even if FramebufferVk is not holding on to the vk::Framebuffer any more, the render pass still references it. We should still be able to modify the just-closed render pass.\n\nThat sounds like exactly what should happen; `restoreFinishedRenderPass` is restoring the render pass, and we understand here that indeed it was the one FramebufferVk had just closed. Why is a test failing? That was intended behavior",
+      "parentUuid": "5c9f90e3_6d587c71",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271a48c0_1b2829b1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
