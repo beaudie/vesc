@@ -763,9 +763,6 @@
 
 7625 WIN SWIFTSHADER : VulkanPerformanceCounterTest.EndXfbAfterRenderPassClosed/* = SKIP
 
-// ANGLE's FF shader computes lighting correctly
-6201 : LightsTest.*LitMesh/* = SKIP
-
 // Slow tests, should appear last in this file
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
