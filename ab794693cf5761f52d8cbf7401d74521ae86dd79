@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a32da8_7585af44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-21T22:29:38Z",
+      "side": 1,
+      "message": "I\u0027m using the OES ext now, custom extension turned out to not be necessary. Spec for that can be found in third_party/OpenGL-Registry/src/extensions/OES/OES_compressed_paletted_texture.txt",
+      "parentUuid": "0484db96_8e62323a",
+      "revId": "ab794693cf5761f52d8cbf7401d74521ae86dd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57b96a0c_2053e84d",
