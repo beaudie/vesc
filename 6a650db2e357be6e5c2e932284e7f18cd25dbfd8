@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab592830_7f2f9abb",
+        "filename": "src/tests/gl_tests/gles1/LightsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T17:34:09Z",
+      "side": 1,
+      "message": "Thanks, I ended up renaming this as part of https://chromium-review.googlesource.com/c/angle/angle/+/3906393/\n\nYour name is better, I\u0027ll fold it into that change and you can abandon this?",
+      "range": {
+        "startLine": 320,
+        "startChar": 19,
+        "endLine": 320,
+        "endChar": 34
+      },
+      "revId": "6a650db2e357be6e5c2e932284e7f18cd25dbfd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
