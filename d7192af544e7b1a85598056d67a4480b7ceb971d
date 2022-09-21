@@ -156,6 +156,24 @@
       "parentUuid": "8fc4a132_db368c6a",
       "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acecb168_f732e5d1",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:50:20Z",
+      "side": 1,
+      "message": "Are you sure they don\u0027t have `GL_CHROMIUM_lose_context`? Looks to me like that extension is unconditionally available.",
+      "parentUuid": "c5761291_194f3ea5",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
