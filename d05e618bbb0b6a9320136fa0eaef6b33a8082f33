@@ -510,6 +510,30 @@
       },
       "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ae1f35_02f0287b",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T14:52:07Z",
+      "side": 1,
+      "message": "It will fail. There\u0027s a way to detect that, but I don\u0027t want to proliferate that code. Let me write something up to make that easier, then you could add a feature just for the subgroup thing, and skip if that is false.",
+      "parentUuid": "44071349_457d66d1",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
