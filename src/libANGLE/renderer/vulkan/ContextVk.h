@@ -720,7 +720,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
     // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
-    void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
+    void resetCurrentGraphicsPipeline()
+    {
+        mCurrentGraphicsPipeline->releaseRef();
+        mCurrentGraphicsPipeline = nullptr;
+    }
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
@@ -1307,7 +1311,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::RenderPassCommandBuffer *mRenderPassCommandBuffer;
 
-    vk::PipelineHelper *mCurrentGraphicsPipeline;
+    vk::RefCounted<vk::PipelineHelper> *mCurrentGraphicsPipeline;
     vk::PipelineHelper *mCurrentComputePipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
