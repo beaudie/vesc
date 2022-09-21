@@ -15,7 +15,7 @@ namespace rx
 
 WindowSurfaceVkSimple::WindowSurfaceVkSimple(const egl::SurfaceState &surfaceState,
                                              EGLNativeWindowType window)
-    : WindowSurfaceVk(surfaceState, window)
+    : WindowSurfaceVkSwapchain(surfaceState, window)
 {}
 
 WindowSurfaceVkSimple::~WindowSurfaceVkSimple() {}
