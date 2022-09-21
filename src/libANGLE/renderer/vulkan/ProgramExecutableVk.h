@@ -141,7 +141,7 @@ class ProgramExecutableVk
                                       const vk::GraphicsPipelineDesc &desc,
                                       const gl::ProgramExecutable &glExecutable,
                                       const vk::GraphicsPipelineDesc **descPtrOut,
-                                      vk::PipelineHelper **pipelineOut);
+                                      vk::RefCounted<vk::PipelineHelper> **pipelineOut);
 
     angle::Result getComputePipeline(ContextVk *contextVk,
                                      PipelineCacheAccess *pipelineCache,
@@ -314,7 +314,7 @@ class ProgramExecutableVk
                                           const vk::GraphicsPipelineDesc &desc,
                                           const gl::ProgramExecutable &glExecutable,
                                           const vk::GraphicsPipelineDesc **descPtrOut,
-                                          vk::PipelineHelper **pipelineOut);
+                                          vk::RefCounted<vk::PipelineHelper> **pipelineOut);
 
     angle::Result resizeUniformBlockMemory(ContextVk *contextVk,
                                            const gl::ProgramExecutable &glExecutable,

@@ -1771,6 +1771,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
     if (!mCurrentGraphicsPipeline)
     {
+        ANGLE_LOG(WARN);
         const vk::GraphicsPipelineDesc *descPtr;
 
         // The desc's specialization constant depends on program's
@@ -1779,13 +1780,16 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         updateGraphicsPipelineDescWithSpecConstUsageBits(usageBits);
 
         // Draw call shader patching, shader compilation, and pipeline cache query.
+        vk::RefCounted<vk::PipelineHelper> *pipelineHelper = nullptr;
         ANGLE_TRY(executableVk->getGraphicsPipeline(
             this, mCurrentDrawMode, &pipelineCache, PipelineSource::Draw, *mGraphicsPipelineDesc,
-            glExecutable, &descPtr, &mCurrentGraphicsPipeline));
+            glExecutable, &descPtr, &pipelineHelper));
+        mCurrentGraphicsPipeline = &pipelineHelper->get();
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
     {
+        ANGLE_LOG(WARN);
         ASSERT(mCurrentGraphicsPipeline->valid());
         if (!mCurrentGraphicsPipeline->findTransition(
                 mGraphicsPipelineTransition, *mGraphicsPipelineDesc, &mCurrentGraphicsPipeline))
@@ -1793,9 +1797,12 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
             vk::PipelineHelper *oldPipeline = mCurrentGraphicsPipeline;
             const vk::GraphicsPipelineDesc *descPtr;
 
+            vk::RefCounted<vk::PipelineHelper> *pipelineHelper = nullptr;
             ANGLE_TRY(executableVk->getGraphicsPipeline(
                 this, mCurrentDrawMode, &pipelineCache, PipelineSource::Draw,
-                *mGraphicsPipelineDesc, glExecutable, &descPtr, &mCurrentGraphicsPipeline));
+                *mGraphicsPipelineDesc, glExecutable, &descPtr, &pipelineHelper));
+        
+            mCurrentGraphicsPipeline = &pipelineHelper->get();
 
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
