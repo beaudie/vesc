@@ -36,4 +36,10 @@ EGLint DeviceNULL::getType()
 
 void DeviceNULL::generateExtensions(egl::DeviceExtensions *outExtensions) const {}
 
+const std::string DeviceNULL::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
+}
+
 }  // namespace rx

@@ -138,6 +138,12 @@ void DeviceVk::generateExtensions(egl::DeviceExtensions *outExtensions) const
     outExtensions->deviceVulkan = true;
 }
 
+const std::string DeviceVk::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
+}
+
 // static
 VKAPI_ATTR VkResult VKAPI_CALL
 DeviceVk::WrappedCreateInstance(const VkInstanceCreateInfo *pCreateInfo,

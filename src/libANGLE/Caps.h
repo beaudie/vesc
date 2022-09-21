@@ -692,6 +692,12 @@ struct DeviceExtensions
 
     // EGL_ANGLE_device_vulkan
     bool deviceVulkan = false;
+
+    // EGL_EXT_device_drm
+    bool deviceDrmExt = false;
+
+    // EGL_EXT_device_drm_render_node
+    bool deviceDrmRenderNodeExt = false;
 };
 
 struct ClientExtensions
