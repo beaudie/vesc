@@ -36,6 +36,11 @@ class MockDevice : public DeviceImpl
     {
         *outExtensions = egl::DeviceExtensions();
     }
+    const std::string getDeviceString(EGLint name) override
+    {
+        UNREACHABLE();
+        return std::string();
+    }
 };
 }  // anonymous namespace
 

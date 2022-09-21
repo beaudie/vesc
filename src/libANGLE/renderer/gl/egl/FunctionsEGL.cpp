@@ -88,7 +88,11 @@ struct FunctionsEGL::EGLDispatchTable
           dupNativeFenceFDANDROIDPtr(nullptr),
 
           queryDmaBufFormatsEXTPtr(nullptr),
-          queryDmaBufModifiersEXTPtr(nullptr)
+          queryDmaBufModifiersEXTPtr(nullptr),
+
+          queryDeviceAttribEXTPtr(nullptr),
+          queryDeviceStringEXTPtr(nullptr),
+          queryDisplayAttribEXTPtr(nullptr)
     {}
 
     // 1.0
@@ -155,10 +159,19 @@ struct FunctionsEGL::EGLDispatchTable
     // EGL_EXT_image_dma_buf_import_modifiers
     PFNEGLQUERYDMABUFFORMATSEXTPROC queryDmaBufFormatsEXTPtr;
     PFNEGLQUERYDMABUFMODIFIERSEXTPROC queryDmaBufModifiersEXTPtr;
+
+    // EGL_EXT_device_query
+    PFNEGLQUERYDEVICEATTRIBEXTPROC queryDeviceAttribEXTPtr;
+    PFNEGLQUERYDEVICESTRINGEXTPROC queryDeviceStringEXTPtr;
+    PFNEGLQUERYDISPLAYATTRIBEXTPROC queryDisplayAttribEXTPtr;
 };
 
 FunctionsEGL::FunctionsEGL()
-    : majorVersion(0), minorVersion(0), mFnPtrs(new EGLDispatchTable()), mEGLDisplay(EGL_NO_DISPLAY)
+    : majorVersion(0),
+      minorVersion(0),
+      mFnPtrs(new EGLDispatchTable()),
+      mEGLDisplay(EGL_NO_DISPLAY),
+      mHasDeviceQueryExt(false)
 {}
 
 FunctionsEGL::~FunctionsEGL()
@@ -339,6 +352,15 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
         }
     }
 
+    // EGL_EXT_device_query is only advertised in extension string in the
+    // no-display case, see getNativeDisplay().
+    if (SetPtr(&mFnPtrs->queryDeviceAttribEXTPtr, getProcAddress("eglQueryDeviceAttribEXT")) &&
+        SetPtr(&mFnPtrs->queryDeviceStringEXTPtr, getProcAddress("eglQueryDeviceStringEXT")) &&
+        SetPtr(&mFnPtrs->queryDisplayAttribEXTPtr, getProcAddress("eglQueryDisplayAttribEXT")))
+    {
+        mHasDeviceQueryExt = true;
+    }
+
 #undef ANGLE_GET_PROC_OR_ERROR
 
     return egl::NoError();
@@ -435,6 +457,11 @@ FunctionsGL *FunctionsEGL::makeFunctionsGL(void) const
 
 bool FunctionsEGL::hasExtension(const char *extension) const
 {
+    if (strcmp(extension, "EGL_EXT_device_query") == 0)
+    {
+        return mHasDeviceQueryExt;
+    }
+
     return std::find(mExtensions.begin(), mExtensions.end(), extension) != mExtensions.end();
 }
 
@@ -658,6 +685,23 @@ EGLint FunctionsEGL::queryDmaBufModifiersEXT(EGLint format,
 {
     return mFnPtrs->queryDmaBufModifiersEXTPtr(mEGLDisplay, format, maxModifiers, modifiers,
                                                externalOnly, numModifiers);
+}
+
+EGLBoolean FunctionsEGL::queryDeviceAttribEXT(EGLDeviceEXT device,
+                                              EGLint attribute,
+                                              EGLAttrib *value) const
+{
+    return mFnPtrs->queryDeviceAttribEXTPtr(device, attribute, value);
+}
+
+const char *FunctionsEGL::queryDeviceStringEXT(EGLDeviceEXT device, EGLint name) const
+{
+    return mFnPtrs->queryDeviceStringEXTPtr(device, name);
+}
+
+EGLBoolean FunctionsEGL::queryDisplayAttribEXT(EGLint attribute, EGLAttrib *value) const
+{
+    return mFnPtrs->queryDisplayAttribEXTPtr(mEGLDisplay, attribute, value);
 }
 
 }  // namespace rx

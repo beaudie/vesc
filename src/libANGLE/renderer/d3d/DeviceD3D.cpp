@@ -81,4 +81,10 @@ void DeviceD3D::generateExtensions(egl::DeviceExtensions *outExtensions) const
     outExtensions->deviceD3D = true;
 }
 
+const std::string DeviceD3D::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
+}
+
 }  // namespace rx

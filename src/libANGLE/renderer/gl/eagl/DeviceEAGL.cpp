@@ -54,6 +54,12 @@ void DeviceEAGL::generateExtensions(egl::DeviceExtensions *outExtensions) const
     outExtensions->deviceEAGL = true;
 }
 
+const std::string DeviceEAGL::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
+}
+
 }  // namespace rx
 
 #endif  // defined(ANGLE_ENABLE_EAGL)

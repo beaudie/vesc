@@ -47,5 +47,10 @@ void DeviceMtl::generateExtensions(egl::DeviceExtensions *outExtensions) const
 {
     outExtensions->deviceMetal = true;
 }
-
+const std::string DeviceMtl::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
 }
+
+}  // namespace rx

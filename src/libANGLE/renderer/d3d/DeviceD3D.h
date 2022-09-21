@@ -27,6 +27,7 @@ class DeviceD3D : public DeviceImpl
                             void **outValue) override;
     EGLint getType() override;
     void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
+    const std::string getDeviceString(EGLint name) override;
 
   private:
     void *mDevice;

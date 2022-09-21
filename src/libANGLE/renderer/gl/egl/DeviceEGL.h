@@ -1,26 +1,27 @@
 //
-// Copyright 2021 The ANGLE Project Authors. All rights reserved.
+// Copyright 2022 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
+// DeviceEGL.h:
+//    Defines the class interface for DeviceEGL, implementing DeviceImpl.
+//
 
-// DeviceMtl: Metal implementation of egl::Device
+#ifndef LIBANGLE_RENDERER_GL_EGL__DEVICEEGL_H_
+#define LIBANGLE_RENDERER_GL_EGL__DEVICEEGL_H_
 
-#ifndef LIBANGLE_RENDERER_METAL_DEVICEMTL_H_
-#define LIBANGLE_RENDERER_METAL_DEVICEMTL_H_
-
-#include "libANGLE/Device.h"
 #include "libANGLE/renderer/DeviceImpl.h"
 
 namespace rx
 {
 
-// DeviceMTL implementation, implements DeviceImpl
-class DeviceMtl : public DeviceImpl
+class DisplayEGL;
+
+class DeviceEGL : public DeviceImpl
 {
   public:
-    DeviceMtl();
-    ~DeviceMtl() override;
+    DeviceEGL(DisplayEGL *display);
+    ~DeviceEGL() override;
 
     egl::Error initialize() override;
     egl::Error getAttribute(const egl::Display *display,
@@ -29,8 +30,12 @@ class DeviceMtl : public DeviceImpl
     EGLint getType() override;
     void generateExtensions(egl::DeviceExtensions *outExtensions) const override;
     const std::string getDeviceString(EGLint name) override;
+
+  private:
+    DisplayEGL *mDisplay;
+    EGLDeviceEXT mDevice;
 };
 
 }  // namespace rx
 
-#endif  // LIBANGLE_RENDERER_METAL_DEVICEMTL_H_
+#endif  // LIBANGLE_RENDERER_GL_EGL__DEVICEEGL_H_

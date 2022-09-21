@@ -56,6 +56,12 @@ void DeviceCGL::generateExtensions(egl::DeviceExtensions *outExtensions) const
     outExtensions->deviceCGL = true;
 }
 
+const std::string DeviceCGL::getDeviceString(EGLint name)
+{
+    UNIMPLEMENTED();
+    return std::string();
+}
+
 }  // namespace rx
 
 #endif  // defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
