@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0484db96_8e62323a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:46:32Z",
+      "side": 1,
+      "message": "Thanks! Feel free to move the spec for the ext here too, but no big difference",
+      "revId": "ab794693cf5761f52d8cbf7401d74521ae86dd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57b96a0c_2053e84d",
+        "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:46:32Z",
+      "side": 1,
+      "message": "I don\u0027t know if it matters, but if you want this format to be considered \"block compressed\", you\u0027d need to tweak the python code to look for PALETTE too.",
+      "range": {
+        "startLine": 138,
+        "startChar": 272,
+        "endLine": 138,
+        "endChar": 277
+      },
+      "revId": "ab794693cf5761f52d8cbf7401d74521ae86dd79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
