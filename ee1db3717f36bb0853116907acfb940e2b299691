@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "969a0c6e_aa14d418",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:33:07Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "ee1db3717f36bb0853116907acfb940e2b299691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e389ebe_08549595",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:33:07Z",
+      "side": 1,
+      "message": "This sentence is confusing. Is it correct to rewrite it as:\n\n\"...it must be set to either a valid id\u003cMTLSharedEvent\u003e, or to a NULL pointer.\"\n\n? If not, could you try rewriting it? \"pointer to a valid id...\" is confusing, \"refers to a Metal event object\" is confusing.",
+      "revId": "ee1db3717f36bb0853116907acfb940e2b299691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
