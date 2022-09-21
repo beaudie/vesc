@@ -68,6 +68,24 @@
       "parentUuid": "b3b185a2_7e0a0176",
       "revId": "fcac94513de3e5fc40889e1730983d1958402fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53bbb55_5e26fc68",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:47:29Z",
+      "side": 1,
+      "message": "My point was we are getting the properties twice now. If you move it to else, we get the properties only once 😊",
+      "parentUuid": "e0b18b7d_2078aca8",
+      "revId": "fcac94513de3e5fc40889e1730983d1958402fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
