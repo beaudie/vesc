@@ -236,6 +236,7 @@ RoHelper::RoHelper()
       mFpRoInitialize(nullptr),
       mFpRoUninitialize(nullptr),
       mWinRtAvailable(false),
+      mWinRtInitialized(false),
       mComBaseModule(nullptr),
       mCoreMessagingModule(nullptr)
 {
