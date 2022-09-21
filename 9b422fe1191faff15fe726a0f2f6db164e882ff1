@@ -16,6 +16,46 @@
       "message": "Thanks",
       "revId": "9b422fe1191faff15fe726a0f2f6db164e882ff1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5a149f7_aa97aa87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-21T16:58:29Z",
+      "side": 1,
+      "message": "LGTM. Will let you and shabi resolve the remaining comments.",
+      "revId": "9b422fe1191faff15fe726a0f2f6db164e882ff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f79d015e_c432616c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6798,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-21T16:58:29Z",
+      "side": 1,
+      "message": "nit, you can always ensure caller pass in a pointer here for you to write so that you don\u0027t need to have if check here. Only UtilsVk pass in a null here, we dont need to eat cost of if for that.",
+      "range": {
+        "startLine": 6798,
+        "startChar": 4,
+        "endLine": 6798,
+        "endChar": 20
+      },
+      "revId": "9b422fe1191faff15fe726a0f2f6db164e882ff1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
