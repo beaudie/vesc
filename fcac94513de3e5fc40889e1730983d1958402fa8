@@ -16,6 +16,40 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "fcac94513de3e5fc40889e1730983d1958402fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "971f99cd_05aaa08d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:21:10Z",
+      "side": 1,
+      "message": "Fixed RenderDoc here: https://github.com/baldurk/renderdoc/pull/2728\n\nThe change is still good to land though.",
+      "revId": "fcac94513de3e5fc40889e1730983d1958402fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3b185a2_7e0a0176",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T20:21:10Z",
+      "side": 1,
+      "message": "Please put the `pfnGetPhysicalDeviceProperties` call in `else`",
+      "revId": "fcac94513de3e5fc40889e1730983d1958402fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
