@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daea82cd_01092c1a",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1447542
+      },
+      "writtenOn": "2022-09-21T20:56:56Z",
+      "side": 1,
+      "message": "This is very different than what I was going to do. I was going to pass a bool here if it supported rgbx\n\nI was going to get that support via the egl::Display -\u003e . getCaps and add a new cap like this:\noutCaps-\u003ergbxInternalFormatANGLE    \u003d getRenderer()-\u003egetNativeExtensions().rgbxInternalFormatANGLE \n\nThen grab that cap on initialization and use it as the input flag to DRMFourCC..",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 68
+      },
+      "revId": "d33ebc629a44c2f10e9eaa482e48e8303ba23f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
