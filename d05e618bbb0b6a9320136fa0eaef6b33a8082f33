@@ -630,6 +630,30 @@
       },
       "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ec7626_e097ffbf",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T19:58:05Z",
+      "side": 1,
+      "message": "good idea. will try add test for nvidia. but if someday nvidia change something. those test may failed again.",
+      "parentUuid": "c2244b66_fbfd31d7",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
