@@ -1068,6 +1068,7 @@ class PipelineHelper final : public Resource
 {
   public:
     PipelineHelper();
+    PipelineHelper(PipelineHelper &&) = default;
     ~PipelineHelper() override;
     inline explicit PipelineHelper(Pipeline &&pipeline, CacheLookUpFeedback feedback);
 
@@ -2002,7 +2003,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         if (item != mPayload.end())
         {
             *descPtrOut  = &item->first;
-            *pipelineOut = &item->second;
+            *pipelineOut = &item->second.get();
             mCacheStats.hit();
             return angle::Result::Continue;
         }
@@ -2031,10 +2032,10 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
 
-    std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
+    std::unordered_map<vk::GraphicsPipelineDesc, vk::RefCounted<vk::PipelineHelper>> mPayload;
 
-    // size_t mCacheEvictionSize = 4;
-    // size_t mCacheEvictionTolerance = 2;
+    size_t mCacheEvictionSize      = 4;
+    size_t mCacheEvictionTolerance = 2;
 };
 
 class DescriptorSetLayoutCache final : angle::NonCopyable
