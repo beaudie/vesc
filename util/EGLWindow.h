@@ -13,6 +13,7 @@
 #include <string>
 
 #include "common/Optional.h"
+#include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "util/EGLPlatformParameters.h"
 #include "util/util_export.h"
@@ -156,6 +157,14 @@ class ANGLE_UTIL_EXPORT GLWindowBase : angle::NonCopyable
     ConfigParameters mConfigParams;
 };
 
+enum class ANGLEFeatureStatus
+{
+    Enabled,
+    Disabled,
+    Unknown,
+};
+using ANGLEFeatureArray = angle::PackedEnumMap<angle::Feature, ANGLEFeatureStatus>;
+
 class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 {
   public:
@@ -240,6 +249,12 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 
     bool isDisplayInitialized() const { return mDisplay != EGL_NO_DISPLAY; }
 
+    // Get the status of features and cache them in mFeatures.
+    void queryFeatures();
+    // Return whether a feature is enabled.  Features that don't exist in the backend have Unknown
+    // status, and are considered disabled for the purposes of this function.
+    bool isFeatureEnabled(angle::Feature feature);
+
   private:
     EGLWindow(EGLenum clientType,
               EGLint glesMajorVersion,
@@ -254,6 +269,8 @@ class ANGLE_UTIL_EXPORT EGLWindow : public GLWindowBase
 
     EGLint mEGLMajorVersion;
     EGLint mEGLMinorVersion;
+
+    ANGLEFeatureArray mFeatures;
 };
 
 #endif  // UTIL_EGLWINDOW_H_
