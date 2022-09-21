@@ -315,6 +315,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c9f90e3_6d587c71",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-21T00:05:48Z",
+      "side": 1,
+      "message": "In the test, the framebuffer is released in `syncState()`, but the render pass serial remains in `FramebufferVk`. So `mRenderPassCommandBuffer` is updated in `restoreFinishedRenderPass()` and `canResolveWithSubpass` becomes true.\nCan we reset the serial in `releaseCurrentFramebuffer()` so invalid framebuffers would always have a serial of 0?",
+      "parentUuid": "4a9a0c6d_77a84090",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "271a48c0_1b2829b1",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 5
@@ -326,6 +344,30 @@
       "writtenOn": "2022-09-17T02:31:18Z",
       "side": 1,
       "message": "Again seems unnecessary, `hasStartedRenderPassWithSerial` should return false if render pass doesn\u0027t belong to srcFramebufferVk. If it does belong to it, then mCurrentFramebuffer should be valid.",
+      "range": {
+        "startLine": 1236,
+        "startChar": 16,
+        "endLine": 1236,
+        "endChar": 41
+      },
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fda0ace_21863530",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-21T00:05:48Z",
+      "side": 1,
+      "message": "Removed for now",
+      "parentUuid": "271a48c0_1b2829b1",
       "range": {
         "startLine": 1236,
         "startChar": 16,
