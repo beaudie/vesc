@@ -16,6 +16,23 @@
       "message": "Hailin, with this change you could add a feature to know if the necessary subgroup ops are there, and then skip the feature-overridden test based on that",
       "revId": "ec1cc24e03ec397b6598c5bfb41ce910325d3f66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb13ee83_73dc81d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-21T16:18:38Z",
+      "side": 1,
+      "message": "Can you make this a GLWindow member by default that returns false? Let\u0027s future-proof this against not having EGL.",
+      "revId": "ec1cc24e03ec397b6598c5bfb41ce910325d3f66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
