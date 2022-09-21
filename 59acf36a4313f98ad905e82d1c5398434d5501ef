@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be9d4ca4_8e9a9428",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T04:42:39Z",
+      "side": 1,
+      "message": "This is necessary after all. This CL breaks RenderDoc capturing on Android which crashes on nullptr inside `/lib/arm64/libVkLayer_GLES_RenderDoc.so (WrappedVulkan::vkGetPhysicalDeviceProperties2(VkPhysicalDevice_T*, VkPhysicalDeviceProperties2*)+56)`\n\nI won\u0027t revert if you plan to follow up soon.",
+      "parentUuid": "2f9f114e_3d198ebc",
+      "revId": "59acf36a4313f98ad905e82d1c5398434d5501ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dba35d13_72795a24",
         "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
         "patchSetId": 4
