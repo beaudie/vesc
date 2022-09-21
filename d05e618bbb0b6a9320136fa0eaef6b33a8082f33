@@ -606,6 +606,30 @@
       },
       "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2244b66_fbfd31d7",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-21T19:50:53Z",
+      "side": 1,
+      "message": "Ack, let\u0027s skip this for now. You could follow up with another CL that enables the change on Nvidia for example, so we get coverage.",
+      "parentUuid": "1874131b_8f71d4a0",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
