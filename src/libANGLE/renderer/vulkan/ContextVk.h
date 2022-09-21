@@ -1307,7 +1307,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::RenderPassCommandBuffer *mRenderPassCommandBuffer;
 
-    vk::PipelineHelper *mCurrentGraphicsPipeline;
+    vk::RefCounted<vk::PipelineHelper> *mCurrentGraphicsPipeline;
     vk::PipelineHelper *mCurrentComputePipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 

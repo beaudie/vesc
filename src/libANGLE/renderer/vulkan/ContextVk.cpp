@@ -1758,7 +1758,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
                                                          DirtyBits dirtyBitMask)
 {
     const VkPipeline previousPipeline = mCurrentGraphicsPipeline
-                                            ? mCurrentGraphicsPipeline->getPipeline().getHandle()
+                                            ? mCurrentGraphicsPipeline->get().getPipeline().getHandle()
                                             : VK_NULL_HANDLE;
 
     ASSERT(mState.getProgramExecutable() != nullptr);
@@ -1786,11 +1786,12 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     }
     else if (mGraphicsPipelineTransition.any())
     {
-        ASSERT(mCurrentGraphicsPipeline->valid());
-        if (!mCurrentGraphicsPipeline->findTransition(
-                mGraphicsPipelineTransition, *mGraphicsPipelineDesc, &mCurrentGraphicsPipeline))
+        ASSERT(mCurrentGraphicsPipeline->get().valid());
+        vk::RefCounted<vk::PipelineHelper> *helper = mCurrentGraphicsPipeline;
+        if (!mCurrentGraphicsPipeline->get().findTransition(
+                mGraphicsPipelineTransition, *mGraphicsPipelineDesc, &helper))
         {
-            vk::PipelineHelper *oldPipeline = mCurrentGraphicsPipeline;
+            vk::PipelineHelper *oldPipeline = &mCurrentGraphicsPipeline->get();
             const vk::GraphicsPipelineDesc *descPtr;
 
             ANGLE_TRY(executableVk->getGraphicsPipeline(
@@ -1800,15 +1801,19 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
             oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr,
                                        mCurrentGraphicsPipeline);
         }
+        else
+        {
+            mCurrentGraphicsPipeline = helper;
+        }
 
         mGraphicsPipelineTransition.reset();
     }
     // Update the queue serial for the pipeline object.
-    ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
+    ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->get().valid());
 
-    mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
+    mRenderPassCommands->retainResource(&mCurrentGraphicsPipeline->get());
 
-    const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
+    const VkPipeline newPipeline = mCurrentGraphicsPipeline->get().getPipeline().getHandle();
 
     // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
     // command buffer or UtilsVk, it will happen anyway with DIRTY_BIT_PIPELINE_BINDING.
@@ -1975,7 +1980,7 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator 
 {
     ASSERT(mCurrentGraphicsPipeline);
 
-    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->get().getPipeline());
 
     return angle::Result::Continue;
 }
