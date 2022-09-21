@@ -16,6 +16,23 @@
       "message": "Re-LGTM",
       "revId": "5262dff653ba9edeb83f54071d86267ada7777bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aa0228d_3894275b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-21T17:20:24Z",
+      "side": 1,
+      "message": "Thanks for the reviews! Can\u0027t submit myself, so hope one of you can push the button :)",
+      "revId": "5262dff653ba9edeb83f54071d86267ada7777bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
