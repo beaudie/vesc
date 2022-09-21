@@ -22,6 +22,30 @@
       },
       "revId": "a8a04ce16ee6a192fe673e2e0c634d74a1578d91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fba7ecb4_c5b5cc71",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3229,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 0,
+      "message": "for external memory resource. mImageUsageFlags is all bits set \nhttps://github.com/google/angle/blob/790dc4793f7ff80f151987a93d5004a351ed1068/src/libANGLE/Context.cpp#L8813, but when it create the image. it only use a few bits.\nwe can not use all the bits here.",
+      "parentUuid": "9b9eceb6_17c20973",
+      "range": {
+        "startLine": 3229,
+        "startChar": 44,
+        "endLine": 3229,
+        "endChar": 60
+      },
+      "revId": "a8a04ce16ee6a192fe673e2e0c634d74a1578d91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

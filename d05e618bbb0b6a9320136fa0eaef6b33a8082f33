@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c677f1c9_df555152",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3901,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59e732ef_8d9a5075",
+      "range": {
+        "startLine": 3901,
+        "startChar": 4,
+        "endLine": 3901,
+        "endChar": 51
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91edfa5d_d590e3d0",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-20T02:53:12Z",
       "side": 1,
       "message": "nit: `kSupport...`",
+      "range": {
+        "startLine": 3903,
+        "startChar": 26,
+        "endLine": 3903,
+        "endChar": 49
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08b8ef29_20e3ed4c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3903,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91edfa5d_d590e3d0",
       "range": {
         "startLine": 3903,
         "startChar": 26,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "474cd328_e95e0257",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09a24d39_65eb2874",
+      "range": {
+        "startLine": 3,
+        "startChar": 27,
+        "endLine": 3,
+        "endChar": 48
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07b1314b_c5b225c5",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-09-20T02:53:12Z",
       "side": 1,
       "message": "These shaders have a binary size cost. They don\u0027t affect the interface of the shader, so they can be uniforms (push constants). That\u0027s preferred, unless any flag is adversely affecting the performance of the shader.\n\nActually the `SUBGROUP_OP` option does need a shader variation, and you can have that be specified as a flag here. I.e. ideally you\u0027d have only two variations.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4a13b9a_efc15bc0",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp.json",
+        "patchSetId": 19
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "merge BC1_RGB, BC1_RGB8A1, BC3_RGBA8 to one shader\nmerge BC4 and BC5 to one shader.\nmeasured BC1 on BC3 shader on my local device around 30% performance loss. (2kx2k, 1.4ms to 1.8ms)",
+      "parentUuid": "07b1314b_c5b225c5",
       "range": {
         "startLine": 10,
         "startChar": 0,
@@ -156,6 +252,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8d4c83f_14936b0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3572737e_395c2bbb",
+      "range": {
+        "startLine": 415,
+        "startChar": 4,
+        "endLine": 415,
+        "endChar": 21
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1743a04_ad91a3bb",
@@ -169,6 +289,30 @@
       "writtenOn": "2022-09-20T00:12:38Z",
       "side": 1,
       "message": "The style guide asks for \u0027{...}\u0027.",
+      "range": {
+        "startLine": 7911,
+        "startChar": 3,
+        "endLine": 7917,
+        "endChar": 0
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f88960ca_897fdb01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 7917,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1743a04_ad91a3bb",
       "range": {
         "startLine": 7911,
         "startChar": 3,
@@ -202,6 +346,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "302ce4de_b2805c01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 9392,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "thanks for catching this.\nfor those blocked emulator format. the pixel data size is equal.",
+      "parentUuid": "4269b343_d2fb65a4",
+      "range": {
+        "startLine": 9385,
+        "startChar": 4,
+        "endLine": 9392,
+        "endChar": 5
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ff613b9_14f00088",
@@ -215,6 +383,30 @@
       "writtenOn": "2022-09-20T02:53:12Z",
       "side": 1,
       "message": "Unused? Either way, we don\u0027t default-initialize parameters.",
+      "range": {
+        "startLine": 1701,
+        "startChar": 37,
+        "endLine": 1701,
+        "endChar": 74
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4715eca9_a56f95f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ff613b9_14f00088",
       "range": {
         "startLine": 1701,
         "startChar": 37,
@@ -262,6 +454,30 @@
       "side": 1,
       "message": "`ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(ETCToBCTextureTest, ES3_VULKAN().enable(Feature::SupportsComputeTranscodeEtcToBc));`\n\nPlease add that to other ETC tests too, if there are any,",
       "parentUuid": "2207aa38_b42719f9",
+      "range": {
+        "startLine": 661,
+        "startChar": 35,
+        "endLine": 661,
+        "endChar": 53
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed2d6e60_d8cb7838",
+        "filename": "src/tests/gl_tests/ETCTextureTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T07:37:43Z",
+      "side": 1,
+      "message": "there is conditions for enable this. (need the subgroup op) if device don\u0027t have such subgroup op. the test may failed or skipped?",
+      "parentUuid": "9307ce9d_6c2f43d0",
       "range": {
         "startLine": 661,
         "startChar": 35,
