@@ -225,6 +225,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_memory_size"] = enableableExtension(&Extensions::memorySizeANGLE);
         map["GL_ANGLE_multi_draw"] = enableableExtension(&Extensions::multiDrawANGLE);
         map["GL_ANGLE_multiview_multisample"] = enableableExtension(&Extensions::multiviewMultisampleANGLE);
+        map["GL_ANGLE_paletted_texture"] = esOnlyExtension(&Extensions::palettedTextureANGLE);
         map["GL_ANGLE_program_binary"] = esOnlyExtension(&Extensions::programBinaryANGLE);
         map["GL_ANGLE_program_cache_control"] = esOnlyExtension(&Extensions::programCacheControlANGLE);
         map["GL_ANGLE_provoking_vertex"] = enableableExtension(&Extensions::provokingVertexANGLE);

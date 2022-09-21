@@ -408,6 +408,7 @@
                                     DrawElementsType typePacked, const GLvoid *const *indices,     \
                                     const GLsizei *instanceCounts, GLsizei drawcount);             \
     /* GL_ANGLE_multiview_multisample */                                                           \
+    /* GL_ANGLE_paletted_texture */                                                                \
     /* GL_ANGLE_program_binary */                                                                  \
     /* GL_ANGLE_program_cache_control */                                                           \
     /* GL_ANGLE_provoking_vertex */                                                                \
