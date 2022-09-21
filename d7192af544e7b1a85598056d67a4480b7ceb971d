@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eff5665_b0c42db4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:26:23Z",
+      "side": 1,
+      "message": "Awesome work Chris. I didn\u0027t have time to review this in detail but the spec and test changes look good. A few questions; please go ahead and submit when you\u0027re ready.\n\nlgtm",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b232d1f2_c4260559",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:26:23Z",
+      "side": 1,
+      "message": "Why is tex not deleted in this test?",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b813034_90ea0188",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:26:23Z",
+      "side": 1,
+      "message": "How is it verified that PLS is properly cleaned up? There\u0027s no leak checking in this test suite. The test\u0027s run once, so any leaks would not be apparent.",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e0330d_b89bff0a",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:26:23Z",
+      "side": 1,
+      "message": "This is a mega-test which will be difficult to debug if something goes wrong. Would you consider splitting it up into smaller tests so that the test name makes it clear what aspect of BeginPixelLocalStorageANGLE validation failed?",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fc4a132_db368c6a",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-21T18:26:23Z",
+      "side": 1,
+      "message": "Nice test - thanks for adding it. How does this test verify that PLS is cleaned up properly?",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
