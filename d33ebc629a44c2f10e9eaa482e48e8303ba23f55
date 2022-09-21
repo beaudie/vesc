@@ -22,6 +22,30 @@
       },
       "revId": "d33ebc629a44c2f10e9eaa482e48e8303ba23f55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "685f9063_cd91a26e",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1358398
+      },
+      "writtenOn": "2022-09-21T21:08:47Z",
+      "side": 1,
+      "message": "In the bug, Geoff said, \"we need to add a new parameter to DrmFourCCFormatToGLInternalFormat stating the support of GL_BGRX8_ANGLEX or explictily check this case in DmaBufImageSiblingEGL.cpp (our GL backend import of dma bufs).\", so this is just a pretty simple implementation of the latter suggestion. As far as I can tell, the rgbxInternalFormatANGLE extension is unconditionally enabled on the Vulkan backend and unconditionally disabled otherwise, so I didn\u0027t see the need to plumb the flag through to DrmFourCCFormatToGLInternalFormat.\n\nMy main goal was to get this fixed ASAP so I can continue the Finch, and it wasn\u0027t clear on the bug if anyone else was going to make the fix. Adding a flag is definitely more robust, so feel free to author that, and I can abandon this change.",
+      "parentUuid": "daea82cd_01092c1a",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 68
+      },
+      "revId": "d33ebc629a44c2f10e9eaa482e48e8303ba23f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
