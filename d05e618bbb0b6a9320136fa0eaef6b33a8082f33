@@ -231,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c2f9a40_88dac5b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-21T19:15:42Z",
+      "side": 1,
+      "message": "at begining I was thinking this way too. but it involve more changes.\nregenerate format table. if supportsComputeTranscodeEtcToBc not enabled\nwe need to skip the bc format. it is not like fallback(lossy). it is more like hack.",
+      "parentUuid": "b5288c0a_e471367b",
+      "range": {
+        "startLine": 260,
+        "startChar": 8,
+        "endLine": 273,
+        "endChar": 0
+      },
+      "revId": "d05e618bbb0b6a9320136fa0eaef6b33a8082f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3572737e_395c2bbb",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 19
