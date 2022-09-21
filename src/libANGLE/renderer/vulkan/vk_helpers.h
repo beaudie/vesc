@@ -2935,7 +2935,7 @@ class ShaderProgramHelper : angle::NonCopyable
         const gl::ComponentTypeMask &programAttribsTypeMask,
         const gl::DrawBufferMask &missingOutputsMask,
         const GraphicsPipelineDesc **descPtrOut,
-        PipelineHelper **pipelineOut)
+        RefCounted<PipelineHelper> **pipelineOut)
     {
         // Pull in a compatible RenderPass.
         RenderPass *compatibleRenderPass = nullptr;

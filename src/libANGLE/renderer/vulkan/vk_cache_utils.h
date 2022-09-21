@@ -776,8 +776,6 @@ constexpr uint32_t kMaxDescriptorSetLayoutBindings =
 using DescriptorSetLayoutBindingVector =
     angle::FixedVector<VkDescriptorSetLayoutBinding, kMaxDescriptorSetLayoutBindings>;
 
-using RefCountedGraphicsPipelineDesc = BindingPointer<GraphicsPipelineDesc>;
-
 // A packed description of a descriptor set layout. Use similarly to RenderPassDesc and
 // GraphicsPipelineDesc. Currently we only need to differentiate layouts based on sampler and ubo
 // usage. In the future we could generalize this.
@@ -1066,6 +1064,7 @@ class PipelineHelper final : public Resource
 {
   public:
     PipelineHelper();
+    PipelineHelper(PipelineHelper &&) = default;
     ~PipelineHelper() override;
     inline explicit PipelineHelper(Pipeline &&pipeline, CacheLookUpFeedback feedback);
 
@@ -1111,7 +1110,7 @@ class PipelineHelper final : public Resource
     CacheLookUpFeedback mCacheLookUpFeedback = CacheLookUpFeedback::None;
 };
 
-using RefCountedPipelineHelper = BindingPointer<PipelineHelper>;
+using RefCountedPipelineHelper = RefCounted<PipelineHelper>;
 
 class FramebufferHelper : public Resource
 {
@@ -1993,7 +1992,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                            PipelineSource source,
                                            const vk::GraphicsPipelineDesc &desc,
                                            const vk::GraphicsPipelineDesc **descPtrOut,
-                                           vk::PipelineHelper **pipelineOut)
+                                           vk::RefCounted<vk::PipelineHelper> **pipelineOut)
     {
         auto item = mPayload.find(desc);
         if (item != mPayload.end())
@@ -2026,12 +2025,12 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  PipelineSource source,
                                  const vk::GraphicsPipelineDesc &desc,
                                  const vk::GraphicsPipelineDesc **descPtrOut,
-                                 vk::PipelineHelper **pipelineOut);
+                                 vk::RefCounted<vk::PipelineHelper> **pipelineOut);
 
-    std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> mPayload;
+    std::unordered_map<vk::GraphicsPipelineDesc, vk::RefCounted<vk::PipelineHelper>> mPayload;
 
-    // size_t mCacheEvictionSize = 4;
-    // size_t mCacheEvictionTolerance = 2;
+    size_t mCacheEvictionSize      = 4;
+    size_t mCacheEvictionTolerance = 2;
 };
 
 class DescriptorSetLayoutCache final : angle::NonCopyable

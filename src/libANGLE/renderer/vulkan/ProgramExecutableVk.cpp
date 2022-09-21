@@ -702,8 +702,8 @@ angle::Result ProgramExecutableVk::warmUpPipelineCache(ContextVk *contextVk,
                                   &pipeline);
     }
 
-    const vk::GraphicsPipelineDesc *descPtr = nullptr;
-    vk::PipelineHelper *pipeline            = nullptr;
+    const vk::GraphicsPipelineDesc *descPtr      = nullptr;
+    vk::RefCounted<vk::PipelineHelper> *pipeline = nullptr;
     vk::GraphicsPipelineDesc graphicsPipelineDesc;
 
     // It is only at drawcall time that we will have complete information required to build the
@@ -1014,7 +1014,7 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
     const vk::GraphicsPipelineDesc &desc,
     const gl::ProgramExecutable &glExecutable,
     const vk::GraphicsPipelineDesc **descPtrOut,
-    vk::PipelineHelper **pipelineOut)
+    vk::RefCounted<vk::PipelineHelper> **pipelineOut)
 {
     ASSERT(glExecutable.hasLinkedShaderStage(gl::ShaderType::Vertex));
 
@@ -1056,14 +1056,15 @@ angle::Result ProgramExecutableVk::getGraphicsPipelineImpl(
         descPtrOut, pipelineOut);
 }
 
-angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
-                                                       gl::PrimitiveMode mode,
-                                                       PipelineCacheAccess *pipelineCache,
-                                                       PipelineSource source,
-                                                       const vk::GraphicsPipelineDesc &desc,
-                                                       const gl::ProgramExecutable &glExecutable,
-                                                       const vk::GraphicsPipelineDesc **descPtrOut,
-                                                       vk::PipelineHelper **pipelineOut)
+angle::Result ProgramExecutableVk::getGraphicsPipeline(
+    ContextVk *contextVk,
+    gl::PrimitiveMode mode,
+    PipelineCacheAccess *pipelineCache,
+    PipelineSource source,
+    const vk::GraphicsPipelineDesc &desc,
+    const gl::ProgramExecutable &glExecutable,
+    const vk::GraphicsPipelineDesc **descPtrOut,
+    vk::RefCounted<vk::PipelineHelper> **pipelineOut)
 {
     const gl::State &glState = contextVk->getState();
 

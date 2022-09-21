@@ -2330,7 +2330,7 @@ void OutputAllPipelineState(ContextVk *contextVk,
 
 void DumpPipelineCacheGraph(
     ContextVk *contextVk,
-    const std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper> &cache)
+    const std::unordered_map<vk::GraphicsPipelineDesc, vk::RefCounted<vk::PipelineHelper>> &cache)
 {
     std::ostream &out = contextVk->getPipelineCacheGraphStream();
 
@@ -2365,7 +2365,7 @@ void DumpPipelineCacheGraph(
         OutputAllPipelineState(contextVk, out, pipelines[descId], nodeState, false);
         out << "\"]";
 
-        switch (descAndPipeline.second.getCacheLookUpFeedback())
+        switch (descAndPipeline.second.get().getCacheLookUpFeedback())
         {
             case vk::CacheLookUpFeedback::Hit:
                 // Default is green already
@@ -2392,7 +2392,7 @@ void DumpPipelineCacheGraph(
     for (const auto &descAndPipeline : cache)
     {
         const vk::GraphicsPipelineDesc &desc     = descAndPipeline.first;
-        const vk::PipelineHelper &pipelineHelper = descAndPipeline.second;
+        const vk::PipelineHelper &pipelineHelper = descAndPipeline.second.get();
         const std::vector<GraphicsPipelineTransition> &transitions =
             pipelineHelper.getTransitions();
 
@@ -5866,7 +5866,11 @@ void GraphicsPipelineCache::destroy(RendererVk *rendererVk)
 
     for (auto &item : mPayload)
     {
-        vk::PipelineHelper &pipeline = item.second;
+        if (item.second.isReferenced())
+        {
+            ANGLE_LOG(ERR) << "GraphicsPipelineCache object to be destroyed is still referenced";
+        }
+        vk::PipelineHelper &pipeline = item.second.get();
         pipeline.destroy(device);
     }
 
@@ -5882,7 +5886,11 @@ void GraphicsPipelineCache::release(ContextVk *contextVk)
 
     for (auto &item : mPayload)
     {
-        vk::PipelineHelper &pipeline = item.second;
+        if (item.second.isReferenced())
+        {
+            ANGLE_LOG(ERR) << "GraphicsPipelineCache object to be released is still referenced";
+        }
+        vk::PipelineHelper &pipeline = item.second.get();
         contextVk->addGarbage(&pipeline.getPipeline());
     }
 
@@ -5891,6 +5899,13 @@ void GraphicsPipelineCache::release(ContextVk *contextVk)
 
 void GraphicsPipelineCache::reset()
 {
+    for (auto &item : mPayload)
+    {
+        if (item.second.isReferenced())
+        {
+            ANGLE_LOG(ERR) << "GraphicsPipelineCache object to be destroyed is still referenced";
+        }
+    }
     mPayload.clear();
 }
 
@@ -5907,10 +5922,12 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     PipelineSource source,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
-    vk::PipelineHelper **pipelineOut)
+    vk::RefCounted<vk::PipelineHelper> **pipelineOut)
 {
     vk::Pipeline newPipeline;
     vk::CacheLookUpFeedback feedback = vk::CacheLookUpFeedback::None;
+    vk::PipelineHelper pipelineHelper =
+        vk::PipelineHelper(std::move(newPipeline), vk::CacheLookUpFeedback::None);
 
     // This "if" is left here for the benefit of VulkanPipelineCachePerfTest.
     if (contextVk != nullptr)
@@ -5918,7 +5935,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
         ANGLE_TRY(desc.initializePipeline(contextVk, pipelineCache, compatibleRenderPass,
                                           pipelineLayout, activeAttribLocationsMask,
                                           programAttribsTypeMask, missingOutputsMask, shaders,
-                                          specConsts, &newPipeline, &feedback));
+                                          specConsts, &pipelineHelper.getPipeline(), &feedback));
     }
 
     if (source == PipelineSource::WarmUp)
@@ -5926,25 +5943,26 @@ angle::Result GraphicsPipelineCache::insertPipeline(
         feedback = feedback == vk::CacheLookUpFeedback::Hit ? vk::CacheLookUpFeedback::WarmUpHit
                                                             : vk::CacheLookUpFeedback::WarmUpMiss;
     }
+    pipelineHelper.setCacheLookUpFeedback(feedback);
 
-    /*
     if (mPayload.size() + 1 > mCacheEvictionSize + mCacheEvictionTolerance)
     {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-        for (size_t i = 0; i < mCacheEvictionTolerance; i++)
-            mPayload.erase(mPayload.begin());
+        // for (size_t i = 0; i < mCacheEvictionTolerance; i++)
+        // mPayload.erase(mPayload.begin());
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
-        ANGLE_LOG(WARN) << "Cache Eviction: GraphicsPipelineCache - " << mPayload.size() << " - " <<
-    std::chrono::duration_cast<std::chrono::nanoseconds> (end-begin).count() << " ns";
+        ANGLE_LOG(WARN) << "Cache Eviction: GraphicsPipelineCache - " << mPayload.size() << " - "
+                        << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count()
+                        << " ns";
     }
-    */
 
     // The Serial will be updated outside of this query.
-    auto insertedItem = mPayload.emplace(std::piecewise_construct, std::forward_as_tuple(desc),
-                                         std::forward_as_tuple(std::move(newPipeline), feedback));
-    *descPtrOut       = &insertedItem.first->first;
-    *pipelineOut      = &insertedItem.first->second;
+    auto insertedItem = mPayload.emplace(
+        std::piecewise_construct, std::forward_as_tuple(desc),
+        std::forward_as_tuple(vk::RefCounted<vk::PipelineHelper>(std::move(pipelineHelper))));
+    *descPtrOut  = &insertedItem.first->first;
+    *pipelineOut = &insertedItem.first->second;
 
     return angle::Result::Continue;
 }
@@ -5957,9 +5975,12 @@ void GraphicsPipelineCache::populate(const vk::GraphicsPipelineDesc &desc, vk::P
         return;
     }
 
+    vk::PipelineHelper pipelineHelper =
+        vk::PipelineHelper(std::move(pipeline), vk::CacheLookUpFeedback::None);
     // Note: this function is only used for testing.
-    mPayload.emplace(std::piecewise_construct, std::forward_as_tuple(desc),
-                     std::forward_as_tuple(std::move(pipeline), vk::CacheLookUpFeedback::None));
+    mPayload.emplace(
+        std::piecewise_construct, std::forward_as_tuple(desc),
+        std::forward_as_tuple(vk::RefCounted<vk::PipelineHelper>(std::move(pipelineHelper))));
 }
 
 // DescriptorSetLayoutCache implementation.
