@@ -50,6 +50,23 @@
       "message": "This failure looks more random than valid. Lets try again",
       "revId": "7c48c51207b9c5b1a22c4458a030cb47872310d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92400e6f_5a1c4663",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-21T15:35:25Z",
+      "side": 1,
+      "message": "@Sungyong, try to rebase this to resolve conflict and dry run. This should merge without much issue.",
+      "revId": "7c48c51207b9c5b1a22c4458a030cb47872310d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
