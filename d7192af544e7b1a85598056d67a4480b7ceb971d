@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c367a260_29cd9275",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1610,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-21T20:36:47Z",
+      "side": 1,
+      "message": "Added a note in the comment",
+      "parentUuid": "b232d1f2_c4260559",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b813034_90ea0188",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-09-21T18:26:23Z",
       "side": 1,
       "message": "How is it verified that PLS is properly cleaned up? There\u0027s no leak checking in this test suite. The test\u0027s run once, so any leaks would not be apparent.",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d00b7d_b590af73",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-21T20:36:47Z",
+      "side": 1,
+      "message": "Added a comment about internal assertions that verify GL objects have been disposed of.",
+      "parentUuid": "7b813034_90ea0188",
       "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbcdcbdc_06fde8e3",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-21T20:36:47Z",
+      "side": 1,
+      "message": "Done -- these are more manageable now",
+      "parentUuid": "08e0330d_b89bff0a",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fc4a132_db368c6a",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-09-21T18:26:23Z",
       "side": 1,
       "message": "Nice test - thanks for adding it. How does this test verify that PLS is cleaned up properly?",
+      "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5761291_194f3ea5",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-21T20:36:47Z",
+      "side": 1,
+      "message": "There are internal assertions in the frontend implementation that ensure the objects are disposed of.\n\nOf course, the test doesn\u0027t run in angle_end2end_tests because they don\u0027t have GL_CHROMIUM_lose_context. Is there another way to trigger context reset?",
+      "parentUuid": "8fc4a132_db368c6a",
       "revId": "d7192af544e7b1a85598056d67a4480b7ceb971d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
