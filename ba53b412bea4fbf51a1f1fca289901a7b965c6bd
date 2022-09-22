@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd308a37_dcdcb2e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-22T17:15:53Z",
+      "side": 1,
+      "message": "LGTM. Do you think performance of palette textures would matter? Because we could also potentially emulate them with a uint texture + uniform buffer + textureGather",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69a7271d_131bda1d",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-22T17:15:53Z",
+      "side": 1,
+      "message": "Please either resolve or open a bug for it and tag with `anglebug.com/NNNN`",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
