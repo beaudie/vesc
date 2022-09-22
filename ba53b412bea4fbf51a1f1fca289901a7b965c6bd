@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c606bc9c_aa42ecd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-22T18:19:19Z",
+      "side": 1,
+      "message": "\u003e E.g. GL_PALETTE*_R5G6B5 would actually decompress to R5G6B5 instead of R8G8B8A8\n\nActually that\u0027d be great to have (and probably not so hard to implement)\n\n\u003e I think implementing that using gather would be really painful, in terms of both code and performance\n\nIt\u0027d definitely be annoying in terms of code, though we are generating the code in the front-end, so not too bad. But in terms of performance it should be a win, you\u0027d be sampling from an image with a smaller memory footprint (i.e. less stuff to pull in the cache). Note that the hardware is always texture-gathering for linear sampling anyway, so the gather itself shouldn\u0027t be more expensive than a `texture` call.",
+      "parentUuid": "042770b9_497ad251",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69a7271d_131bda1d",
