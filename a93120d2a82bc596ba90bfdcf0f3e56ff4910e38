@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bed36343_76c981f4",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "Can you explain what you want here? I rewrote this a bit, but fundamentally if you\u0027re on Android, you want an Android build, on Linux, a Linux bot, on Windows, a Windows bot, etc. Can you explain what you don\u0027t quite understand? I don\u0027t want to make it too excessive with unnecessary detail because that makes it harder to read everything.\n\nGN args you can use whatever you have in your local setup. Android is a bit of a special case, but I don\u0027t want to replicate build instructions for Android here. Hopefully the reader knows for Android you have to specify a target OS in your gn args, because that\u0027s described elsewhere in the docs.\n\nAre you confused about how to locate the specific dimensions?",
+      "parentUuid": "f97b76fc_5045e1ca",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d325dc2_f26b1724",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2022-09-19T16:36:12Z",
       "side": 1,
       "message": "A more complicated example, like end2end or perftests would be more useful",
+      "range": {
+        "startLine": 22,
+        "startChar": 75,
+        "endLine": 22,
+        "endChar": 91
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfef06be_582833b3",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "This pattern should work for both of those cases. Added one extra example at the end.",
+      "parentUuid": "8d325dc2_f26b1724",
       "range": {
         "startLine": 22,
         "startChar": 75,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "133409db_b21e4926",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "Updated. The script logs every command to logging.info, so is that sufficient? Or do you want a command that also stops after upload?",
+      "parentUuid": "6c6be84c_a89878c4",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2134f61_7e149e63",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -100,6 +172,30 @@
       "writtenOn": "2022-09-20T14:38:06Z",
       "side": 1,
       "message": "Could you expand on what \"test\" means here, maybe a few examples? Also, in my experience I had to pass additional arguments, for example I needed a second `angle_perftests` for some reason in this case:\n\n```\nscripts/trigger.py --gpu\u003dnone out/linuxtest angle_perftests \\\n  \u0027Ubuntu 18.04\u0027 angle_perftests --gtest_filter\u003d...\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 38,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba89cee_23fa968a",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "Added more docs here. The second test name is an artifact of using a \"runner\" script, although I thought Yuly was going to remove that. I guess we didn\u0027t end up needing to remove it?",
+      "parentUuid": "a2134f61_7e149e63",
       "range": {
         "startLine": 25,
         "startChar": 38,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "185d960b_ce28e8b2",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "Can you clarify specifically how you\u0027d change the docs here? I mean GPU \u003d GPU, OS \u003d OS, etc. Maybe just write a short example of how you\u0027d reword or edit this section and I\u0027ll update the doc in the next revision.",
+      "parentUuid": "2152c3db_b96a20ce",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 64
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98a52cde_145ea247",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -146,6 +266,30 @@
       "writtenOn": "2022-09-20T14:38:06Z",
       "side": 1,
       "message": "Is there way to get the output files with this script? For example, screenshots that we normally see in CAS outputs of gold test runs.",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7231679c_c21dc037",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T19:24:01Z",
+      "side": 1,
+      "message": "Yes, they should all be in the CAS outputs. documented this.",
+      "parentUuid": "98a52cde_145ea247",
       "range": {
         "startLine": 27,
         "startChar": 54,
