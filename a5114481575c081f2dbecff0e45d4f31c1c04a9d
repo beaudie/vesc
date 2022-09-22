@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02be9ce1_1b0276b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-22T20:46:00Z",
+      "side": 1,
+      "message": "You are modifying a local variable \"helper\" instead of modifying mCurrentGraphicsPipeline",
+      "range": {
+        "startLine": 1798,
+        "startChar": 84,
+        "endLine": 1798,
+        "endChar": 92
+      },
+      "revId": "a5114481575c081f2dbecff0e45d4f31c1c04a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba759cb2_1bd80b3c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-09-22T20:46:00Z",
+      "side": 1,
+      "message": "Can\u0027t you just use BindingPointer\u003cvk::PipelineHelper\u003e mCurrentGraphicsPipeline?",
+      "range": {
+        "startLine": 1314,
+        "startChar": 5,
+        "endLine": 1314,
+        "endChar": 65
+      },
+      "revId": "a5114481575c081f2dbecff0e45d4f31c1c04a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
