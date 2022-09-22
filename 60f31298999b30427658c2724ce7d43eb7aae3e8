@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4dba99d_e6ee3c7d",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T20:04:18Z",
+      "side": 1,
+      "message": "It\u0027s basically the equivalent of c++\u0027s ternary operator (aapt \u003d a ? b : c). So that\u0027s fine. FYI this code is templated on the existing _FindAdb, so I replaced both with the ternary thing.",
+      "parentUuid": "a7bbe9a0_5a4c1f8e",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 21
+      },
+      "revId": "60f31298999b30427658c2724ce7d43eb7aae3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca6bc9a4_be8c3d82",
@@ -85,6 +109,30 @@
       "writtenOn": "2022-09-19T19:51:39Z",
       "side": 1,
       "message": "`Exception` is too broad and can hide unrelated errors, could you narrow it to the specific exception or maybe add `|| true` to the shell command? (which I think will result in an empty string)",
+      "range": {
+        "startLine": 181,
+        "startChar": 11,
+        "endLine": 181,
+        "endChar": 20
+      },
+      "revId": "60f31298999b30427658c2724ce7d43eb7aae3e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba2bd76b_db8109ee",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T20:04:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca6bc9a4_be8c3d82",
       "range": {
         "startLine": 181,
         "startChar": 11,
