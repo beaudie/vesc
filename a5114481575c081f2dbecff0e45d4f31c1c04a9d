@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "325a1935_405ac336",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1798,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-09-22T22:47:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02be9ce1_1b0276b3",
+      "range": {
+        "startLine": 1798,
+        "startChar": 84,
+        "endLine": 1798,
+        "endChar": 92
+      },
+      "revId": "a5114481575c081f2dbecff0e45d4f31c1c04a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba759cb2_1bd80b3c",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-22T20:46:00Z",
       "side": 1,
       "message": "Can\u0027t you just use BindingPointer\u003cvk::PipelineHelper\u003e mCurrentGraphicsPipeline?",
+      "range": {
+        "startLine": 1314,
+        "startChar": 5,
+        "endLine": 1314,
+        "endChar": 65
+      },
+      "revId": "a5114481575c081f2dbecff0e45d4f31c1c04a9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d70a08_700c6ca1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1314,
+      "author": {
+        "id": 1452687
+      },
+      "writtenOn": "2022-09-22T22:47:32Z",
+      "side": 1,
+      "message": "Yes. This can also be done with BindingPointer. I\u0027m working directly with RefCounted for prototyping",
+      "parentUuid": "ba759cb2_1bd80b3c",
       "range": {
         "startLine": 1314,
         "startChar": 5,
