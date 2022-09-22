@@ -514,6 +514,14 @@ void State::initialize(Context *context)
 
         mAtomicCounterBuffers.resize(mCaps.maxAtomicCounterBufferBindings);
         mShaderStorageBuffers.resize(mCaps.maxShaderStorageBufferBindings);
+    }
+    if (clientVersion >= Version(3, 1) ||
+        (mExtensions.shaderPixelLocalStorageANGLE &&
+         (context->getImplementation()->getNativePixelLocalStorageType() ==
+              ShPixelLocalStorageType::ImageStoreR32PackedFormats ||
+          context->getImplementation()->getNativePixelLocalStorageType() ==
+              ShPixelLocalStorageType::ImageStoreNativeFormats)))
+    {
         mImageUnits.resize(mCaps.maxImageUnits);
     }
     if (clientVersion >= Version(3, 2) || mExtensions.textureCubeMapArrayAny())

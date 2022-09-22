@@ -34,6 +34,13 @@ bool TranslatorESSL::translate(TIntermBlock *root,
     TInfoSinkBase &sink = getInfoSink().obj;
 
     int shaderVer = getShaderVersion();
+    if (IsExtensionEnabled(this->getExtensionBehavior(),
+                           TExtension::ANGLE_shader_pixel_local_storage) &&
+        (compileOptions.pls.type == ShPixelLocalStorageType::ImageStoreNativeFormats ||
+         compileOptions.pls.type == ShPixelLocalStorageType::ImageStoreR32PackedFormats))
+    {
+        shaderVer = std::max(shaderVer, 310);
+    }
     if (shaderVer > 100)
     {
         sink << "#version " << shaderVer << " es\n";
