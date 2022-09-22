@@ -33,6 +33,24 @@
       "message": "Will +2 again once presubmit failures are fixed",
       "revId": "8e34ee5791fdd22347b7e4e0e213a9535b52527b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4da2326_3cd4abb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1556137
+      },
+      "writtenOn": "2022-09-22T18:37:35Z",
+      "side": 1,
+      "message": "One day I\u0027ll remember to wrap the description 🙃",
+      "parentUuid": "704c1c0d_10837d20",
+      "revId": "8e34ee5791fdd22347b7e4e0e213a9535b52527b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
