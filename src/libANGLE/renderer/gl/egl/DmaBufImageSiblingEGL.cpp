@@ -34,6 +34,7 @@ egl::Error DmaBufImageSiblingEGL::initialize(const egl::Display *display)
     return egl::NoError();
 }
 
+// No-op change.
 gl::Format DmaBufImageSiblingEGL::getFormat() const
 {
     return mFormat;
