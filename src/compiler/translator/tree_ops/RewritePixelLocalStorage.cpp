@@ -316,7 +316,7 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
         ASSERT(mGlobalPixelCoord);
         TIntermTyped *pls = CreateBuiltInFunctionCallNode(
             "imageLoad", {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord)},
-            *mSymbolTable, mShaderVersion);
+            *mSymbolTable, 310);
         pls = unpackImageDataIfNecessary(pls, plsSymbol, image2D);
         queueReplacement(pls, OriginalNode::IS_DROPPED);
     }
@@ -343,7 +343,7 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
                 //     unpackUnorm4x8(data.r)
                 //
                 data = CreateBuiltInFunctionCallNode("unpackUnorm4x8", {CreateSwizzle(data, 0)},
-                                                     *mSymbolTable, mShaderVersion);
+                                                     *mSymbolTable, 310);
                 break;
             case EiifRGBA8I:
             case EiifRGBA8UI:
@@ -381,9 +381,9 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
         //
         insertStatementsInParentBlock(
             {CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
-                                           mShaderVersion)},  // Before.
+                                           310)},  // Before.
             {CreateBuiltInFunctionCallNode("memoryBarrierImage", {}, *mSymbolTable,
-                                           mShaderVersion)});  // After.
+                                           310)});  // After.
 
         // Rewrite the pixelLocalStoreANGLE with imageStore.
         ASSERT(mGlobalPixelCoord);
@@ -391,7 +391,7 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
             CreateBuiltInFunctionCallNode(
                 "imageStore",
                 {new TIntermSymbol(image2D), new TIntermSymbol(mGlobalPixelCoord), packedData},
-                *mSymbolTable, mShaderVersion),
+                *mSymbolTable, 310),
             OriginalNode::IS_DROPPED);
     }
 
@@ -465,8 +465,8 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
                 //
                 //     packUnorm4x8(workaroundHighpVar)
                 //
-                result = CreateBuiltInFunctionCallNode("packUnorm4x8", {result}, *mSymbolTable,
-                                                       mShaderVersion);
+                result =
+                    CreateBuiltInFunctionCallNode("packUnorm4x8", {result}, *mSymbolTable, 310);
                 break;
             }
             case EiifRGBA8I:
@@ -774,6 +774,7 @@ class RewritePLSToFramebufferFetchTraverser : public RewritePLSTraverser
                 compiler->getResources().MaxCombinedDrawBuffersAndPixelLocalStoragePlanes -
                 plsType.getLayoutQualifier().binding - 1;
             layoutQualifier.locationsSpecified = 1;
+#if 0
             if (compileOptions.pls.fragmentSynchronizationType ==
                 ShFragmentSynchronizationType::NotSupported)
             {
@@ -781,6 +782,7 @@ class RewritePLSToFramebufferFetchTraverser : public RewritePLSTraverser
                 // "noncoherent" qualifier.
                 layoutQualifier.noncoherent = true;
             }
+#endif
             fragmentVarType->setLayoutQualifier(layoutQualifier);
 
             fragmentVar = new TVariable(plsVar.uniqueId(), plsVar.name(), plsVar.symbolType(),
