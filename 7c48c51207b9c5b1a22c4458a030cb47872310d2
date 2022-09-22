@@ -67,6 +67,24 @@
       "message": "@Sungyong, try to rebase this to resolve conflict and dry run. This should merge without much issue.",
       "revId": "7c48c51207b9c5b1a22c4458a030cb47872310d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23835968_e6cbcbb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-09-22T11:05:41Z",
+      "side": 1,
+      "message": "I rebased. Can we try it again ?",
+      "parentUuid": "92400e6f_5a1c4663",
+      "revId": "7c48c51207b9c5b1a22c4458a030cb47872310d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
