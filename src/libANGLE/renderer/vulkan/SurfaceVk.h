@@ -20,6 +20,8 @@ namespace rx
 {
 class RendererVk;
 
+VkImageUsageFlags GetSwapchainImageUsageFlags(const angle::FeaturesVk &features);
+
 class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
 {
   public:

@@ -351,6 +351,18 @@ angle::Result GetPresentModes(DisplayVk *displayVk,
 
 }  // namespace
 
+VkImageUsageFlags GetSwapchainImageUsageFlags(const angle::FeaturesVk &features)
+{
+    // We need transfer src for reading back from the backbuffer.
+    VkImageUsageFlags imageUsageFlags = kSurfaceVkColorImageUsageFlags;
+    // If shaders may be fetching from this, we need this image to be an input
+    if (NeedsInputAttachmentUsage(features))
+    {
+        imageUsageFlags |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+    }
+    return imageUsageFlags;
+}
+
 SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfaceState) {}
 
 SurfaceVk::~SurfaceVk() {}
@@ -1285,14 +1297,7 @@ angle::Result WindowSurfaceVkSwapchain::createSwapChain(vk::Context *context,
         std::swap(rotatedExtents.width, rotatedExtents.height);
     }
 
-    // We need transfer src for reading back from the backbuffer.
-    VkImageUsageFlags imageUsageFlags = kSurfaceVkColorImageUsageFlags;
-
-    // If shaders may be fetching from this, we need this image to be an input
-    if (NeedsInputAttachmentUsage(renderer->getFeatures()))
-    {
-        imageUsageFlags |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
-    }
+    VkImageUsageFlags imageUsageFlags = GetSwapchainImageUsageFlags(renderer->getFeatures());
 
     VkSwapchainCreateInfoKHR swapchainInfo = {};
     swapchainInfo.sType                    = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
