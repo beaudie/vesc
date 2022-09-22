@@ -94,6 +94,29 @@
       },
       "revId": "d33ebc629a44c2f10e9eaa482e48e8303ba23f55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a051174f_89a80b3e",
+        "filename": "src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-22T14:46:28Z",
+      "side": 1,
+      "message": "this needs \u0027internalFormat \u003d\u003d GL_BGRX8_ANGLEX\u0027 otherwise it\u0027s always true",
+      "range": {
+        "startLine": 29,
+        "startChar": 41,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "d33ebc629a44c2f10e9eaa482e48e8303ba23f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
