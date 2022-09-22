@@ -104,6 +104,24 @@
       "parentUuid": "e9863a98_80e2e5ab",
       "revId": "79b52a56faadc4a3b6b6307756faa1ce62a6b620",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41844172_55fe4eb3",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-22T16:47:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e614350b_3917e3f8",
+      "revId": "79b52a56faadc4a3b6b6307756faa1ce62a6b620",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
