@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ac1f7ca_1a8ce7e8",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-22T02:13:20Z",
+      "side": 1,
+      "message": "nit: This is similar to `!hasWildcard` from `overrideFeatures()`. Both cases could be done in the same way.",
+      "range": {
+        "startLine": 1090,
+        "startChar": 16,
+        "endLine": 1090,
+        "endChar": 34
+      },
+      "revId": "e7891693cb1f2ab5a87181afe9d56dfec85f48dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
