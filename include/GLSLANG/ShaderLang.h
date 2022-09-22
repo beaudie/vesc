@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 307
+#define ANGLE_SH_VERSION 308
 
 enum ShShaderSpec
 {
@@ -88,6 +88,12 @@ enum class ShPixelLocalStorageType
     ImageStoreNativeFormats,
     FramebufferFetch
 };
+
+constexpr bool ShPixelLocalStorageUsesShaderImages(ShPixelLocalStorageType type)
+{
+    return type == ShPixelLocalStorageType::ImageStoreR32PackedFormats ||
+           type == ShPixelLocalStorageType::ImageStoreNativeFormats;
+}
 
 // For ANGLE_shader_pixel_local_storage_coherent.
 // Instructs the compiler which fragment synchronization method to use, if any.
