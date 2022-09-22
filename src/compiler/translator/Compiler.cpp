@@ -689,6 +689,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("check1\n");
+    validateAST(root);
     // For now, rewrite pixel local storage before collecting variables or any operations on images.
     //
     // TODO(anglebug.com/7279):
@@ -707,28 +709,38 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("check2\n");
+    validateAST(root);
     // Disallow expressions deemed too complex.
     if (compileOptions.limitExpressionComplexity && !limitExpressionComplexity(root))
     {
         return false;
     }
 
+    printf("check3\n");
+    validateAST(root);
     if (shouldRunLoopAndIndexingValidation(compileOptions) &&
         !ValidateLimitations(root, mShaderType, &mSymbolTable, &mDiagnostics))
     {
         return false;
     }
 
+    printf("check4\n");
+    validateAST(root);
     if (shouldLimitTypeSizes() && !ValidateTypeSizeLimitations(root, &mSymbolTable, &mDiagnostics))
     {
         return false;
     }
 
+    printf("check5\n");
+    validateAST(root);
     if (!ValidateFragColorAndFragData(mShaderType, mShaderVersion, mSymbolTable, &mDiagnostics))
     {
         return false;
     }
 
+    printf("check6\n");
+    validateAST(root);
     // Fold expressions that could not be folded before validation that was done as a part of
     // parsing.
     if (!FoldExpressions(this, root, &mDiagnostics))
@@ -738,12 +750,16 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     // Folding should only be able to generate warnings.
     ASSERT(mDiagnostics.numErrors() == 0);
 
+    printf("check7\n");
+    validateAST(root);
     // Validate no barrier() after return before prunning it in |PruneNoOps()| below.
     if (mShaderType == GL_TESS_CONTROL_SHADER && !ValidateBarrierFunctionCall(root, &mDiagnostics))
     {
         return false;
     }
 
+    printf("check8\n");
+    validateAST(root);
     // We prune no-ops to work around driver bugs and to keep AST processing and output simple.
     // The following kinds of no-ops are pruned:
     //   1. Empty declarations "int;".
@@ -758,6 +774,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
     mValidateASTOptions.validateNoStatementsAfterBranch = true;
 
+    printf("check9\n");
+    validateAST(root);
     // We need to generate globals early if we have non constant initializers enabled
     bool initializeLocalsAndGlobals =
         compileOptions.initializeUninitializedLocals && !IsOutputHLSL(getOutputType());
@@ -779,6 +797,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     // This is because MSL doesn't allow statically initialized globals.
     bool forceDeferGlobalInitializers = getOutputType() == SH_MSL_METAL_OUTPUT;
 
+    printf("checka\n");
+    validateAST(root);
     if (enableNonConstantInitializers &&
         !DeferGlobalInitializers(this, root, initializeLocalsAndGlobals, canUseLoopsToInitialize,
                                  highPrecisionSupported, forceDeferGlobalInitializers,
@@ -787,17 +807,23 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checkb\n");
+    validateAST(root);
     // Create the function DAG and check there is no recursion
     if (!initCallDag(root))
     {
         return false;
     }
 
+    printf("checkc\n");
+    validateAST(root);
     if (compileOptions.limitCallStackDepth && !checkCallDepth())
     {
         return false;
     }
 
+    printf("checkd\n");
+    validateAST(root);
     // Checks which functions are used and if "main" exists
     mFunctionMetadata.clear();
     mFunctionMetadata.resize(mCallDag.size());
@@ -806,11 +832,15 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checke\n");
+    validateAST(root);
     if (!pruneUnusedFunctions(root))
     {
         return false;
     }
 
+    printf("checkf\n");
+    validateAST(root);
     if (IsSpecWithFunctionBodyNewScope(mShaderSpec, mShaderVersion))
     {
         if (!ReplaceShadowingVariables(this, root, &mSymbolTable))
@@ -819,11 +849,15 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkg\n");
+    validateAST(root);
     if (mShaderVersion >= 310 && !ValidateVaryingLocations(root, &mDiagnostics, mShaderType))
     {
         return false;
     }
 
+    printf("checkh\n");
+    validateAST(root);
     // anglebug.com/7484: The ESSL spec has a bug with images as function arguments. The recommended
     // workaround is to inline functions that accept image arguments.
     if (mShaderVersion >= 310 && !MonomorphizeUnsupportedFunctions(
@@ -833,12 +867,16 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checki\n");
+    validateAST(root);
     if (mShaderVersion >= 300 && mShaderType == GL_FRAGMENT_SHADER &&
         !ValidateOutputs(root, getExtensionBehavior(), mResources.MaxDrawBuffers, &mDiagnostics))
     {
         return false;
     }
 
+    printf("checkj\n");
+    validateAST(root);
     if (parseContext.isExtensionEnabled(TExtension::EXT_clip_cull_distance))
     {
         if (!ValidateClipCullDistance(root, &mDiagnostics,
@@ -848,6 +886,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkk\n");
+    validateAST(root);
     // Clamping uniform array bounds needs to happen after validateLimitations pass.
     if (compileOptions.clampIndirectArrayBounds)
     {
@@ -857,6 +897,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkl\n");
+    validateAST(root);
     if (compileOptions.initializeBuiltinsForInstancedMultiview &&
         (parseContext.isExtensionEnabled(TExtension::OVR_multiview2) ||
          parseContext.isExtensionEnabled(TExtension::OVR_multiview)) &&
@@ -869,6 +911,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkm\n");
+    validateAST(root);
     // This pass might emit short circuits so keep it before the short circuit unfolding
     if (compileOptions.rewriteDoWhileLoops)
     {
@@ -878,6 +922,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkn\n");
+    validateAST(root);
     if (compileOptions.addAndTrueToLoopCondition)
     {
         if (!AddAndTrueToLoopCondition(this, root))
@@ -886,6 +932,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checko\n");
+    validateAST(root);
     if (compileOptions.unfoldShortCircuit)
     {
         if (!UnfoldShortCircuitAST(this, root))
@@ -894,6 +942,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkp\n");
+    validateAST(root);
     if (compileOptions.regenerateStructNames)
     {
         if (!RegenerateStructNames(this, root, &mSymbolTable))
@@ -902,6 +952,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkq\n");
+    validateAST(root);
     if (mShaderType == GL_VERTEX_SHADER &&
         IsExtensionEnabled(mExtensionBehavior, TExtension::ANGLE_multi_draw))
     {
@@ -915,6 +967,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkr\n");
+    validateAST(root);
     if (mShaderType == GL_VERTEX_SHADER &&
         IsExtensionEnabled(mExtensionBehavior,
                            TExtension::ANGLE_base_vertex_base_instance_shader_builtin))
@@ -930,6 +984,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checks\n");
+    validateAST(root);
     if (mShaderType == GL_FRAGMENT_SHADER && mShaderVersion == 100 && mResources.EXT_draw_buffers &&
         mResources.MaxDrawBuffers > 1 &&
         IsExtensionEnabled(mExtensionBehavior, TExtension::EXT_draw_buffers))
@@ -945,6 +1001,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
                                  ? IntermNodePatternMatcher::kScalarizedVecOrMatConstructor
                                  : 0;
 
+    printf("checkt\n");
+    validateAST(root);
     // Split multi declarations and remove calls to array length().
     // Note that SimplifyLoopConditions needs to be run before any other AST transformations
     // that may need to generate new statements from loop conditions or loop expressions.
@@ -957,6 +1015,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checku\n");
+    validateAST(root);
     // Note that separate declarations need to be run before other AST transformations that
     // generate new statements from expressions.
     if (!SeparateDeclarations(this, root, &getSymbolTable()))
@@ -965,6 +1025,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
     mValidateASTOptions.validateMultiDeclarations = true;
 
+    printf("checkv\n");
+    validateAST(root);
     if (!SplitSequenceOperator(this, root,
                                IntermNodePatternMatcher::kArrayLengthMethod | simplifyScalarized,
                                &getSymbolTable()))
@@ -972,16 +1034,22 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checkw\n");
+    validateAST(root);
     if (!RemoveArrayLengthMethod(this, root))
     {
         return false;
     }
 
+    printf("checkx\n");
+    validateAST(root);
     if (!RemoveUnreferencedVariables(this, root, &mSymbolTable))
     {
         return false;
     }
 
+    printf("checky\n");
+    validateAST(root);
     // In case the last case inside a switch statement is a certain type of no-op, GLSL compilers in
     // drivers may not accept it. In this case we clean up the dead code from the end of switch
     // statements. This is also required because PruneNoOps or RemoveUnreferencedVariables may have
@@ -993,12 +1061,16 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checkz\n");
+    validateAST(root);
     // Built-in function emulation needs to happen after validateLimitations pass.
     GetGlobalPoolAllocator()->lock();
     initBuiltInFunctionEmulator(&mBuiltInFunctionEmulator, compileOptions);
     GetGlobalPoolAllocator()->unlock();
     mBuiltInFunctionEmulator.markBuiltInFunctionsForEmulation(root);
 
+    printf("checkA\n");
+    validateAST(root);
     if (compileOptions.scalarizeVecAndMatConstructorArgs)
     {
         if (!ScalarizeVecAndMatConstructorArgs(this, root, &mSymbolTable))
@@ -1007,6 +1079,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkB\n");
+    validateAST(root);
     if (compileOptions.forceShaderPrecisionHighpToMediump)
     {
         if (!ForceShaderPrecisionToMediump(root, &mSymbolTable, mShaderType))
@@ -1015,6 +1089,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkC\n");
+    validateAST(root);
     if (shouldCollectVariables(compileOptions))
     {
         ASSERT(!mVariablesCollected);
@@ -1055,6 +1131,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkD\n");
+    validateAST(root);
     // Removing invariant declarations must be done after collecting variables.
     // Otherwise, built-in invariant declarations don't apply.
     if (RemoveInvariant(mShaderType, mShaderVersion, mOutputType, compileOptions))
@@ -1065,6 +1143,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkE\n");
+    validateAST(root);
     // gl_Position is always written in compatibility output mode.
     // It may have been already initialized among other output variables, in that case we don't
     // need to initialize it twice.
@@ -1078,6 +1158,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         mGLPositionInitialized = true;
     }
 
+    printf("checkF\n");
+    validateAST(root);
     // DeferGlobalInitializers needs to be run before other AST transformations that generate new
     // statements from expressions. But it's fine to run DeferGlobalInitializers after the above
     // SplitSequenceOperator and RemoveArrayLengthMethod since they only have an effect on the AST
@@ -1093,6 +1175,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         return false;
     }
 
+    printf("checkG\n");
+    validateAST(root);
     if (initializeLocalsAndGlobals)
     {
         // Initialize uninitialized local variables.
@@ -1121,6 +1205,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkH\n");
+    validateAST(root);
     if (getShaderType() == GL_VERTEX_SHADER && compileOptions.clampPointSize)
     {
         if (!ClampPointSize(this, root, mResources.MaxPointSize, &getSymbolTable()))
@@ -1129,6 +1215,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkI\n");
+    validateAST(root);
     if (getShaderType() == GL_FRAGMENT_SHADER && compileOptions.clampFragDepth)
     {
         if (!ClampFragDepth(this, root, &getSymbolTable()))
@@ -1137,6 +1225,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkJ\n");
+    validateAST(root);
     if (compileOptions.rewriteRepeatedAssignToSwizzled)
     {
         if (!sh::RewriteRepeatedAssignToSwizzled(this, root))
@@ -1145,6 +1235,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
     }
 
+    printf("checkK\n");
+    validateAST(root);
     if (compileOptions.removeDynamicIndexingOfSwizzledVector)
     {
         if (!sh::RemoveDynamicIndexingOfSwizzledVector(this, root, &getSymbolTable(), nullptr))
