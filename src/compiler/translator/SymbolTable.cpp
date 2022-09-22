@@ -68,6 +68,8 @@ class TSymbolTable::TSymbolTableLevel
     // Insert a function using its unmangled name as the key.
     void insertUnmangled(TFunction *function);
 
+    void replace(TSymbol *symbol);
+
     TSymbol *find(const ImmutableString &name) const;
 
   private:
@@ -79,6 +81,11 @@ class TSymbolTable::TSymbolTableLevel
 
     tLevel level;
 };
+
+void TSymbolTable::TSymbolTableLevel::replace(TSymbol *symbol)
+{
+    level[symbol->getMangledName()] = symbol;
+}
 
 bool TSymbolTable::TSymbolTableLevel::insert(TSymbol *symbol)
 {
@@ -299,6 +306,11 @@ const TSymbol *TSymbolTable::findGlobalWithConversion(
             return target;
     }
     return nullptr;
+}
+
+void TSymbolTable::replaceGlobal(TSymbol *symbol)
+{
+    mTable[0]->replace(symbol);
 }
 
 const TSymbol *TSymbolTable::findBuiltInWithConversion(const std::vector<ImmutableString> &names,
