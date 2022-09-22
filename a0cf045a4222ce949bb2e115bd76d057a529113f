@@ -51,6 +51,24 @@
       "parentUuid": "70cce649_79f7809a",
       "revId": "a0cf045a4222ce949bb2e115bd76d057a529113f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "872cbffc_af686e9a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1528827
+      },
+      "writtenOn": "2022-09-22T10:14:30Z",
+      "side": 1,
+      "message": "Thanks for reporting that, Steven!\nI fixed this issue in the previous commit: https://chromium-review.googlesource.com/c/angle/angle/+/3909394/3..4\n\nAnd updated this one: https://chromium-review.googlesource.com/c/angle/angle/+/3596045/43..44",
+      "parentUuid": "fe2f9b15_9b2d4d69",
+      "revId": "a0cf045a4222ce949bb2e115bd76d057a529113f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
