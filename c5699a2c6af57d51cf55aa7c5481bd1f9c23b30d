@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b847f0c5_83be82c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T20:05:43Z",
+      "side": 1,
+      "message": "Might need to tweak this a bit to get it perfect, but trying to make the script a bit more like Cody\u0027s and also working on a way to stabilize the bot measurements, for which this is a prerequisite.",
+      "revId": "c5699a2c6af57d51cf55aa7c5481bd1f9c23b30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
