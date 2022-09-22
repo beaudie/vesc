@@ -1149,6 +1149,8 @@ void RendererVk::ensureCapsInitialized() const
         getFeatures().supportsFragmentShaderPixelInterlock.enabled;
 
     mNativeExtensions.logicOpANGLE = mPhysicalDeviceFeatures.logicOp == VK_TRUE;
+
+    mNativeExtensions.compressedPalettedTextureOES = true;
 }
 
 namespace vk
