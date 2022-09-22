@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "042770b9_497ad251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-22T18:02:11Z",
+      "side": 1,
+      "message": "As far as I understand, at least Street Fighter IV renders large (in terms of fragments shaded) sprites that sample paletted textures. It doesn\u0027t seem like they use mips and I don\u0027t know if they use aniso sampling (considering it\u0027s all screen-aligned in this game, they probably don\u0027t or it doesn\u0027t matter), but if some game happened to use mips or aniso sampling on paletted textures, I think implementing that using gather would be really painful, in terms of both code and performance (and thus battery life?)\n\nPerhaps if we were to find some app have an uncomfortably high memory usage, which decompressed paletted textures have a significant % in, then we could look at what can be done about it. We also could improve decompression to use more formats first. E.g. GL_PALETTE*_R5G6B5 would actually decompress to R5G6B5 instead of R8G8B8A8, same for other formats, this would reduce memory usage for 16 bits per texel formats.\n\nAnother less attractive option I see would be to somehow recompress into some block-compressed format, without regard for quality, so this would hopefully work sufficiently fast. This would not be conformant, so it would have to be gated behind an app profile option and apps would have to be opted-in on case by case basis.",
+      "parentUuid": "cd308a37_dcdcb2e6",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69a7271d_131bda1d",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-22T17:15:53Z",
       "side": 1,
       "message": "Please either resolve or open a bug for it and tag with `anglebug.com/NNNN`",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff293e65_f0e740f3",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1147,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-22T18:02:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69a7271d_131bda1d",
       "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
