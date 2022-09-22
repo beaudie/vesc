@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f41a17_c9b7c36c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-22T20:04:55Z",
+      "side": 1,
+      "message": "PTAL, made this a non-default option.. I can make a little wrapper script invoke this script with the argument if I want to save some typing. I\u0027ll get to that later, for now just using -a should be pretty easy if needed.",
+      "revId": "103453b88413ed959638fa17a453dc79d8467e87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
