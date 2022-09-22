@@ -7,6 +7,7 @@
 #include "compiler/translator/TranslatorESSL.h"
 
 #include "angle_gl.h"
+#include "common/utilities.h"
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
 #include "compiler/translator/OutputESSL.h"
 #include "compiler/translator/tree_ops/RecordConstantPrecision.h"
@@ -33,7 +34,14 @@ bool TranslatorESSL::translate(TIntermBlock *root,
 {
     TInfoSinkBase &sink = getInfoSink().obj;
 
-    int shaderVer = getShaderVersion();
+    int shaderVer = getShaderVersion();  // Frontend shader version.
+    if (IsExtensionEnabled(this->getExtensionBehavior(),
+                           TExtension::ANGLE_shader_pixel_local_storage) &&
+        ShPixelLocalStorageTypeUsesImages(compileOptions.pls.type))
+    {
+        // The backend translator emits shader image code. Use a minimum version of 310.
+        shaderVer = std::max(shaderVer, 310);
+    }
     if (shaderVer > 100)
     {
         sink << "#version " << shaderVer << " es\n";
