@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa97ba4_24fa765c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-22T22:17:38Z",
+      "side": 1,
+      "message": "\u003e Actually that\u0027d be great to have (and probably not so hard to implement)\n\nI can look into that once this is merged, which in turn depends on crashes in d3d11 backend being solved.\n\n\u003e Note that the hardware is always texture-gathering for linear sampling anyway\n\nThat\u0027s true, but shader would end up using more registers for gather results, which could in turn have worse performance, if the hardware limits no. of warps/waves/subgroups/whatever in-flight based on that. If we\u0027re linearly interpolating between mips, it\u0027s twice as many. Aniso sampling seems especially tricky, as we might have to do a lot of gathers in the worst case.",
+      "parentUuid": "c606bc9c_aa42ecd9",
+      "revId": "ba53b412bea4fbf51a1f1fca289901a7b965c6bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69a7271d_131bda1d",
