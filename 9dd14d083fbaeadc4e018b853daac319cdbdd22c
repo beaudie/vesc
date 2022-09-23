@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cba4cd91_deedc3e3",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-23T19:59:09Z",
+      "side": 1,
+      "message": "One comment, it\u0027s a little scary to me it might first copy to a texture, the in the next check also copy to a buffer.\n\nDoes that matter? Should it do one or the other or is both ok?",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
