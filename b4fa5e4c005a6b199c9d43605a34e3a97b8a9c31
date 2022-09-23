@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a73ab8ee_3a095b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T18:49:30Z",
+      "side": 1,
+      "message": "Lubosz, looks like it needs a rebase (my fault), but go ahead and land it when you can.",
+      "revId": "b4fa5e4c005a6b199c9d43605a34e3a97b8a9c31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
