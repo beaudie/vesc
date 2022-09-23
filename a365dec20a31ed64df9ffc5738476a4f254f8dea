@@ -16,6 +16,23 @@
       "message": "I also have an idea of how to emulate the functionality of this extension for GLES1 specifically and in the front-end; just some complications with alpha-to-one in combination with alpha-to-coverage, but I _think_ that could be worked around.\n\nHowever, I still think it\u0027s good to get this in to unblock the rest of the conformance tests, then think about improving this if ever needed.",
       "revId": "a365dec20a31ed64df9ffc5738476a4f254f8dea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab477a1_dc790a6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T13:51:32Z",
+      "side": 1,
+      "message": "PTAL Cody, ICYMI",
+      "revId": "a365dec20a31ed64df9ffc5738476a4f254f8dea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
