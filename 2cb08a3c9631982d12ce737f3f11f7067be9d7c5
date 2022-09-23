@@ -16,6 +16,23 @@
       "message": "@Shahbaz\nCan you start a dry run so we can get past this fail.",
       "revId": "2cb08a3c9631982d12ce737f3f11f7067be9d7c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "544aa823_7078d458",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-23T21:09:30Z",
+      "side": 1,
+      "message": "The tests are labeled android on pixel4. But results say linux ubuntu.\nI can see that the image seems truncated or smaller than the expected window. Specifically top-right can be truncated. Question is how does this change affect the window size, or the render size?",
+      "revId": "2cb08a3c9631982d12ce737f3f11f7067be9d7c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
