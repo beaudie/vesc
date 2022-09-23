@@ -197,6 +197,7 @@ class GenMetalTraverser : public TIntermTraverser
     size_t mMainUniformBufferIndex        = 0;
     size_t mDriverUniformsBindingIndex    = 0;
     size_t mUBOArgumentBufferBindingIndex = 0;
+    bool mRasterOrderGroupsSupported      = false;
 };
 }  // anonymous namespace
 
@@ -221,7 +222,9 @@ GenMetalTraverser::GenMetalTraverser(const TCompiler &compiler,
       mIdGen(idGen),
       mMainUniformBufferIndex(compileOptions.metal.defaultUniformsBindingIndex),
       mDriverUniformsBindingIndex(compileOptions.metal.driverUniformsBindingIndex),
-      mUBOArgumentBufferBindingIndex(compileOptions.metal.UBOArgumentBufferBindingIndex)
+      mUBOArgumentBufferBindingIndex(compileOptions.metal.UBOArgumentBufferBindingIndex),
+      mRasterOrderGroupsSupported(compileOptions.pls.fragmentSynchronizationType ==
+                                  ShFragmentSynchronizationType::RasterOrderGroups_Metal)
 {}
 
 void GenMetalTraverser::emitIndentation()
@@ -1064,6 +1067,7 @@ void GenMetalTraverser::emitFieldDeclaration(const TField &field,
             break;
 
         case TQualifier::EvqFragmentOut:
+        case TQualifier::EvqFragmentInOut:
         case TQualifier::EvqFragData:
             if (mPipelineStructs.fragmentOut.external == &parent)
             {
@@ -1080,7 +1084,16 @@ void GenMetalTraverser::emitFieldDeclaration(const TField &field,
                     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
                     size_t index = layoutQualifier.locationsSpecified ? layoutQualifier.location
                                                                       : annotationIndices.color++;
-                    mOut << " [[color(" << index << ")]]";
+                    mOut << " [[color(" << index << ")";
+                    if (mRasterOrderGroupsSupported && qual == TQualifier::EvqFragmentInOut)
+                    {
+                        // Put fragment inouts in their own raster order group for better
+                        // parallelism.
+                        // NOTE: this is not required for the reads to be ordered and coherent.
+                        // TODO(7279): Make raster order group a PLS layout qualifier?
+                        mOut << ", raster_order_group(0)";
+                    }
+                    mOut << "]]";
                 }
             }
             break;
@@ -1813,12 +1826,13 @@ void GenMetalTraverser::emitFunctionParameter(const TFunction &func, const TVari
     const TStructure *structure = type.getStruct();
 
     EmitVariableDeclarationConfig evdConfig;
-    evdConfig.isParameter       = true;
-    evdConfig.isMainParameter   = isMain;
-    evdConfig.emitPostQualifier = isMain;
-    evdConfig.isUBO             = mSymbolEnv.isUBO(param);
-    evdConfig.isPointer         = mSymbolEnv.isPointer(param);
-    evdConfig.isReference       = mSymbolEnv.isReference(param);
+    evdConfig.isParameter            = true;
+    evdConfig.disableStructSpecifier = true;
+    evdConfig.isMainParameter        = isMain;
+    evdConfig.emitPostQualifier      = isMain;
+    evdConfig.isUBO                  = mSymbolEnv.isUBO(param);
+    evdConfig.isPointer              = mSymbolEnv.isPointer(param);
+    evdConfig.isReference            = mSymbolEnv.isReference(param);
     emitVariableDeclaration(VarDecl(param), evdConfig);
 
     if (isMain)
