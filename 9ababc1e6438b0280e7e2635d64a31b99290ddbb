@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b328b3bf_dc8efc5f",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 25
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1517582
+      },
+      "writtenOn": "2022-09-23T22:34:12Z",
+      "side": 1,
+      "message": "Optional suggestion: For efficiency, have you considered using `inversesqrt()` here? E.g.\n\n```\neigenvalue_sq \u003d dot(vg, vg);\nif (eigenvalue_sq \u003e 0.0f) {\n  vg *\u003d inversesqrt(eigenvalue_sq);\n}\n```\n\nThis would also require trivially modifying L155 and L173.",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 0
+      },
+      "revId": "9ababc1e6438b0280e7e2635d64a31b99290ddbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
