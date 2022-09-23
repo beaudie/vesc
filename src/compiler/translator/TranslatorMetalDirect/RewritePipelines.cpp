@@ -348,6 +348,9 @@ class PipelineFunctionEnv
 
     std::unordered_map<const TFunction *, const TFunction *> mFuncMap;
 
+    // Optional value with which to initialize mPipelineMainLocalVar.
+    TVariable *mPipelineInitValue = nullptr;
+
   public:
     PipelineFunctionEnv(TCompiler &compiler,
                         SymbolEnv &symbolEnv,
@@ -397,6 +400,20 @@ class PipelineFunctionEnv
                 ASSERT(func.getReturnType().getBasicType() == TBasicType::EbtVoid);
                 newFunc = &CloneFunctionAndChangeReturnType(mSymbolTable, nullptr, func,
                                                             *mPipelineStruct.external);
+                if (mPipeline.type == Pipeline::Type::FragmentOut &&
+                    mCompiler.hasPixelLocalStorageUniforms())
+                {
+                    // Add an input argument to main() that contains the current framebuffer
+                    // attachment values, for loading pixel local storage.
+                    TType *type = new TType(mPipelineStruct.external, true);
+                    TVariable *lastFragmentOut =
+                        new TVariable(&mSymbolTable, ImmutableString("lastFragmentOut"), type,
+                                      SymbolType::AngleInternal);
+                    newFunc = &CloneFunctionAndPrependParam(mSymbolTable, nullptr, *newFunc,
+                                                            *lastFragmentOut);
+                    // Initialize the main local variable with the current framebuffer contents.
+                    mPipelineInitValue = lastFragmentOut;
+                }
             }
             else if (isMain && (mPipeline.type == Pipeline::Type::InvocationVertexGlobals ||
                                 mPipeline.type == Pipeline::Type::InvocationFragmentGlobals))
@@ -546,6 +563,9 @@ class PipelineFunctionEnv
         const TFunction &newFunc = getUpdatedFunction(func);
         return new TIntermFunctionPrototype(&newFunc);
     }
+
+    // If not null, this is the value we need to initialize the pipeline main local variable with.
+    TVariable *getPipelineInitValue() { return mPipelineInitValue; }
 };
 
 class UpdatePipelineFunctions : private TIntermRebuild
@@ -768,6 +788,13 @@ class UpdatePipelineFunctions : private TIntermRebuild
 
             auto *newBody = new TIntermBlock();
             newBody->appendStatement(new TIntermDeclaration{mPipelineMainLocalVar.internal});
+            if (mEnv.getPipelineInitValue() != nullptr)
+            {
+                // The pipeline var has an initializer value.
+                newBody->appendStatement(
+                    new TIntermBinary{EOpAssign, new TIntermSymbol(mPipelineMainLocalVar.internal),
+                                      new TIntermSymbol(mEnv.getPipelineInitValue())});
+            }
 
             if (mPipeline.type == Pipeline::Type::InvocationVertexGlobals ||
                 mPipeline.type == Pipeline::Type::InvocationFragmentGlobals)
@@ -776,7 +803,7 @@ class UpdatePipelineFunctions : private TIntermRebuild
                 for (const TField *field : mPipelineStruct.external->fields())
                 {
                     auto *var        = new TVariable(&mSymbolTable, field->name(), field->type(),
-                                              field->symbolType());
+                                                     field->symbolType());
                     auto *symbol     = new TIntermSymbol(var);
                     auto &accessNode = AccessField(*mPipelineMainLocalVar.internal, var->name());
                     auto *assignNode = new TIntermBinary(TOperator::EOpAssign, &accessNode, symbol);
