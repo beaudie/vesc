@@ -22,6 +22,30 @@
       },
       "revId": "9ababc1e6438b0280e7e2635d64a31b99290ddbb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc208393_32dfe62c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 25
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-23T23:04:25Z",
+      "side": 1,
+      "message": "thanks for suggestion. I haven\u0027t considered in such details.\n\nbut it seems can save one instruction. ususally hw will have inversesqrt instruction.",
+      "parentUuid": "b328b3bf_dc8efc5f",
+      "range": {
+        "startLine": 163,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 0
+      },
+      "revId": "9ababc1e6438b0280e7e2635d64a31b99290ddbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
