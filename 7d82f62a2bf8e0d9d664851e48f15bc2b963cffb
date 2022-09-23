@@ -94,6 +94,30 @@
       },
       "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5359d383_c29206ca",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-23T16:23:21Z",
+      "side": 0,
+      "message": "Could you elaborate on the use case we\u0027re looking to support? \"See `roll_aosp.sh --genAndroidBp` for testing\" sounds good enough for cases I can think of. \"See --help for usage\" seems reasonable too. Maybe there is some improvement to `--help` that you\u0027d like to see?\n\nAlternatively, I could move invocation of gn gen / gn desc into this script. This would allow to drop arguments and `--genAndroidBp` altogether, make it all within one script. There is still flag generation though, I personally would rather have it in python rather than .sh but it may not be worth it to mess up codesearch history / blame layer.",
+      "parentUuid": "d0bae3ae_480d8285",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 64
+      },
+      "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
