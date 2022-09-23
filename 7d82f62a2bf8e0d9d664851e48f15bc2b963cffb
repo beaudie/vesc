@@ -118,6 +118,30 @@
       },
       "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "908bec4e_6f8a084b",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T16:29:36Z",
+      "side": 0,
+      "message": "I\u0027m mostly trying to avoid an RTFM at the top of the file. :)\n\nIf the intent is that this script shouldn\u0027t be run directly, only via `roll_aosp.sh`, that would be fine to state.  We have that in other scripts.",
+      "parentUuid": "5359d383_c29206ca",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 64
+      },
+      "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
