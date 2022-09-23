@@ -46,6 +46,30 @@
       },
       "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a2500b_8b97d53e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-23T16:15:29Z",
+      "side": 0,
+      "message": "\u003e --help isn\u0027t going to show that we pipe it to a file\n\n--help actually does mention how the file is generated actually, but it doesn\u0027t list all the details because there are 4 abis, flags and `gn gen` that are all needed. The current example usage is misleading in its simplicity and incorrect.",
+      "parentUuid": "7eecf44a_d08803f4",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 64
+      },
+      "revId": "7d82f62a2bf8e0d9d664851e48f15bc2b963cffb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
