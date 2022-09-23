@@ -1,0 +1,330 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dffb55bd_c0547e53",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 6844,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Is this necessary?\n\nIf you rebase this on your other change that uses serial, then you wouldn\u0027t need to worry about this",
+      "range": {
+        "startLine": 6843,
+        "startChar": 95,
+        "endLine": 6844,
+        "endChar": 84
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "335b759e_3b63cabe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Please use pointers for outputs",
+      "range": {
+        "startLine": 2129,
+        "startChar": 29,
+        "endLine": 2129,
+        "endChar": 30
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328708a8_90b72dea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Please use the fixed-size vectors we have for attachments instead. Like `FramebufferAttachmentsVector` for these two",
+      "range": {
+        "startLine": 2130,
+        "startChar": 9,
+        "endLine": 2130,
+        "endChar": 15
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "949cee51_fe5e6cef",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right, the resolve attachment can come from a render target of another framebuffer. Instead of passing `resolveImageViewIn`, you\u0027d need to pass in a `RenderTargetVk`. Could fake one for surface, if there isn\u0027t one already.\n\nPlease add a test where `glBlitFramebuffer` is used to resolve (through `FramebufferVk::resolveColorWithSubpass`), but that the destination of blit is not level 0 of a texture.\n\nOnce that is done, it looks to me like this function is just putting a few `RenderTargetVk`s together in a list, so you can probably remove `FramebufferAttachmentEmbeddedInfo` and return a list of `RenderTargetVk`s directly.",
+      "range": {
+        "startLine": 2173,
+        "startChar": 62,
+        "endLine": 2173,
+        "endChar": 66
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdd5fab9_c7c42656",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Does `mCurrentFramebufferDesc.getLayerCount()` alone not work?\n\n`std::max` seems redundant too, I think `info.layerCount` would always be `\u003e\u003d` desc layer count (because desc layer count is the min of all attachment layer counts)",
+      "range": {
+        "startLine": 2340,
+        "startChar": 22,
+        "endLine": 2340,
+        "endChar": 88
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48a3e5c_f4415575",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "What\u0027s with this private constructor?",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49226366_4acf7c08",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 3847,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Could you please file a specific swiftshader bug for this in buganizer?",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fef2381_54f4efe0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "nit: `std::fill` if possible",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed16a132_bce4e19c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "nit: `AddToPNextChain` exists",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7ebe042_8df7eead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 5014,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "`std::fill`",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "253c3a20_cc5dbc35",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 5332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "nit: `s/Format/ViewFormats`",
+      "range": {
+        "startLine": 5332,
+        "startChar": 29,
+        "endLine": 5332,
+        "endChar": 35
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81287536_fff5f164",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "nit: `OptionalImagelessFramebuffer`\n\n`MaybeImagelessFramebuffer` also works",
+      "range": {
+        "startLine": 1240,
+        "startChar": 6,
+        "endLine": 1240,
+        "endChar": 30
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07260683_dda4ba62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like a copy is really necessary. If you std::move this class around, you can avoid the copy.\n\nPlease inherit this class from `angle::NonCopyable` to prevent accidental copies.",
+      "range": {
+        "startLine": 1246,
+        "startChar": 9,
+        "endLine": 1246,
+        "endChar": 28
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea559def_d09788e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Ideally we won\u0027t need this",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e772fc1_2b1c4757",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "Please use a single function to set the handle and update the views, to avoid them getting out of sync. Again, the views would be `std::move`d. It\u0027s ok if the caller sends in an empty view list when !imageless",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "374b14ae_51f0d4ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T14:53:04Z",
+      "side": 1,
+      "message": "This too can be folded into the function that sets the handle and views. Then the object is never partially correct.\n\nAnd since you now need a `bool` for that, remember to use an `enum class` instead 😊",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
