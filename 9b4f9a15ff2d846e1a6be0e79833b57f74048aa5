@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36804e50_0b91fb4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:39:49Z",
+      "side": 1,
+      "message": "Can you briefly describe how glClear plays in to the changes you made?",
+      "range": {
+        "startLine": 10,
+        "startChar": 48,
+        "endLine": 10,
+        "endChar": 55
+      },
+      "revId": "9b4f9a15ff2d846e1a6be0e79833b57f74048aa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
