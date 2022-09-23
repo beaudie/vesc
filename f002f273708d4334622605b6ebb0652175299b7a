@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dea6b5c8_a071c1af",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-23T20:44:09Z",
+      "side": 1,
+      "message": "It\u0027s a little different from your example. The old path was:\n\n```\n if sim \u0026\u0026 not depth \u0026\u0026 not stencil\n    upload with staging buffer\n if not sim \u0026\u0026 cpu accessible\n    replaceRegion\n    \n ASSERT(depth || stencil)\n ...\n```\n\nI think my refactor makes it more understandable by flipping the initial condition and merging the staging paths:\n```\n if not sim \u0026\u0026 cpu accessible \u0026\u0026 not forced staging\n    replaceRegion\n    \n iterate through staging paths depending on data type\n```",
+      "parentUuid": "65c1dab9_dd709262",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3629fa1b_5689dbd0",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 1
@@ -82,6 +100,42 @@
       "writtenOn": "2022-09-23T19:35:22Z",
       "side": 1,
       "message": "This early-return isn\u0027t strictly needed any more.",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ee5296_8e2cc7ff",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-23T20:44:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3629fa1b_5689dbd0",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95cc6f9_81a77943",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-23T20:44:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87c484a7_30d678f8",
       "revId": "f002f273708d4334622605b6ebb0652175299b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
