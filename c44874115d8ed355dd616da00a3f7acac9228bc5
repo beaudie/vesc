@@ -1,0 +1,268 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b01010_e0bdd845",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 21
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Also add:\n```\nBug: angleproject:7688\n```",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68d106e5_66435b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Great stuff, Constantine!  Thanks for pushing on this.\n\nI have questions and small refactor requests, but generally this LGTM.",
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e127fa46_0178f8bc",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "This could use a comment explaining the logic, or a spec/extension chapter to refer to.",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 57
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1041a633_afa09d1a",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Prefer `UNREACHABLE();` or a comment explaining why the default fallthrough is okay for each of these.  Too many hours lost to silent unintended behavior. :)\n\nI see you have one at the end, but visually prefer to see them here.",
+      "range": {
+        "startLine": 67,
+        "startChar": 20,
+        "endLine": 67,
+        "endChar": 25
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f3a098_3c12eb72",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Can you add a comment or helpful constant name to explain this 2?",
+      "range": {
+        "startLine": 114,
+        "startChar": 27,
+        "endLine": 114,
+        "endChar": 28
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "943f929d_52a86097",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Can you add a TODO here pointing to 7688 and a comment that we don\u0027t support mip levels yet?",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 66
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795037cf_7f8bc288",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1823,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "prefer real variable types here, save auto for complicated/verbose types",
+      "range": {
+        "startLine": 1822,
+        "startChar": 0,
+        "endLine": 1823,
+        "endChar": 53
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b3a0d2_2955675f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "To re-organize this a bit, can you add this early check?:\n```\n    if (!formatInfo.compressed \u0026\u0026 !formatInfo.paletted)\n    {\n        return false;\n    }\n    \n    // These are mutually exclusive\n    ASSERT((formatInfo.compressed \u0026\u0026 formatInfo.paletted) \u003d\u003d false);\n```",
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1e3cc06_a90a6163",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "With the early exits and asserts, you can remove these early `true` outs and just fall through to the function exit and return true, which is the more common pattern here.",
+      "range": {
+        "startLine": 1142,
+        "startChar": 0,
+        "endLine": 1142,
+        "endChar": 20
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98e0eebe_e801291b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Can you quote the spec here:\n\n```\nOpenGL ES Version 1.1.12\n3.7.4 Compressed Paletted Textures\nSubimages may not be specified for compressed paletted textures. Calling\nCompressedTexSubImage2D with any of the PALETTE* arguments in table 3.11\nwill generate an INVALID OPERATION error.\n```",
+      "range": {
+        "startLine": 996,
+        "startChar": 67,
+        "endLine": 996,
+        "endChar": 72
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ab1ff1b_eb0bee18",
+        "filename": "src/tests/gl_tests/gles1/PalettedTextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "Remove or uncomment?",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 39
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d437e1ff_013f80dd",
+        "filename": "src/tests/gl_tests/gles1/PalettedTextureTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T17:29:24Z",
+      "side": 1,
+      "message": "prefer real type here",
+      "range": {
+        "startLine": 55,
+        "startChar": 9,
+        "endLine": 55,
+        "endChar": 13
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
