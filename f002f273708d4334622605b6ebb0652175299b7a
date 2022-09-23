@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d78ec13_03a580d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T19:35:22Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work tracking this down Geoff!",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65c1dab9_dd709262",
@@ -48,6 +65,23 @@
       "writtenOn": "2022-09-23T19:34:38Z",
       "side": 1,
       "message": "The way the code is structured is this return is superfluous?",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c484a7_30d678f8",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T19:35:22Z",
+      "side": 1,
+      "message": "This early-return isn\u0027t strictly needed any more.",
       "revId": "f002f273708d4334622605b6ebb0652175299b7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
