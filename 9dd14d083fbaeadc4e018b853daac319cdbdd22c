@@ -3,6 +3,40 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "154133ef_dc02778b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T20:15:00Z",
+      "side": 1,
+      "message": "lgtm with one request.",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bae193e7_b68e8f2a",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T20:15:00Z",
+      "side": 1,
+      "message": "Could you modify mtl_features.json to include a reference to anglebug.com/7573 too?\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/include/platform/mtl_features.json;l\u003d205?q\u003d%22some%20GPUs%20are%20faster%20to%20read%22",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cba4cd91_deedc3e3",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 1
@@ -14,6 +48,24 @@
       "writtenOn": "2022-09-23T19:59:09Z",
       "side": 1,
       "message": "One comment, it\u0027s a little scary to me it might first copy to a texture, the in the next check also copy to a buffer.\n\nDoes that matter? Should it do one or the other or is both ok?",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df3c86eb_4108e620",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T20:15:00Z",
+      "side": 1,
+      "message": "Good point, let\u0027s leave this unresolved for Geoff to think about.",
+      "parentUuid": "cba4cd91_deedc3e3",
       "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
