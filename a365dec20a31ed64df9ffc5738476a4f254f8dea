@@ -33,6 +33,46 @@
       "message": "PTAL Cody, ICYMI",
       "revId": "a365dec20a31ed64df9ffc5738476a4f254f8dea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4420a49b_7221af80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T16:14:55Z",
+      "side": 1,
+      "message": "LGTM with a comment request.",
+      "revId": "a365dec20a31ed64df9ffc5738476a4f254f8dea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f2e5f39_c5d2a002",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T16:14:55Z",
+      "side": 1,
+      "message": "Is this needed if CTS doesn\u0027t test it? Or is this a reference to GLES1 conformance?\n\nEdit: After reading the rest of the CL, it isn\u0027t actually implemented in Vulkan, so it isn\u0027t conformant, even if untested.  Might be worth replicating the comment from expectations here.\n\nEdit 2: I see it is also mentioned in the CL message, but this is the spot we usually look for reasoning.",
+      "range": {
+        "startLine": 524,
+        "startChar": 8,
+        "endLine": 524,
+        "endChar": 66
+      },
+      "revId": "a365dec20a31ed64df9ffc5738476a4f254f8dea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
