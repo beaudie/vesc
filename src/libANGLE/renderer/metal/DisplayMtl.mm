@@ -676,8 +676,8 @@ const gl::Limitations &DisplayMtl::getNativeLimitations() const
 }
 ShPixelLocalStorageType DisplayMtl::getNativePixelLocalStorageType() const
 {
-    // PLS isn't supported on Metal yet.
-    return ShPixelLocalStorageType::NotSupported;
+    ensureCapsInitialized();
+    return mPixelLocalStorageType;
 }
 
 void DisplayMtl::ensureCapsInitialized() const
@@ -1021,6 +1021,34 @@ void DisplayMtl::initializeExtensions() const
     // Metal uses the opposite provoking vertex as GLES so emulation is required to use the GLES
     // behaviour. Allow users to change the provoking vertex for improved performance.
     mNativeExtensions.provokingVertexANGLE = true;
+
+    // GL_ANGLE_shader_pixel_local_storage.
+
+    if (supportsAppleGPUFamily(2) &&
+        useDirectToMetalCompiler())  // The SPIRV Metal compiler doesn't handle framebuffer fetch.
+    {
+        // Programmable blending starts in Apple GPU family 2, and is always coherent.
+        mPixelLocalStorageType = ShPixelLocalStorageType::FramebufferFetch;
+        // Raster order groups begin in Apple GPU family 4, and can fine tune PLS performance,
+        // but framebuffer fetches are still coherent without them.
+        mRasterOrderGroupsSupported                            = supportsAppleGPUFamily(4);
+        mNativeExtensions.shaderPixelLocalStorageANGLE         = true;
+        mNativeExtensions.shaderPixelLocalStorageCoherentANGLE = true;
+    }
+    else
+    {
+        // TODO(7279): Implement PLS shader images.
+        // MTLReadWriteTextureTier readWriteTextureTier = [mMetalDevice readWriteTextureSupport];
+        // if (readWriteTextureTier != MTLReadWriteTextureTierNone)
+        // {
+        //     mPixelLocalStorageType = (readWriteTextureTier == MTLReadWriteTextureTier1)
+        //                                  ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
+        //                                  : ShPixelLocalStorageType::ImageStoreNativeFormats;
+        //     mRasterOrderGroupsSupported = [mMetalDevice areRasterOrderGroupsSupported];
+        //     mNativeExtensions.shaderPixelLocalStorageANGLE         = true;
+        //     mNativeExtensions.shaderPixelLocalStorageCoherentANGLE = mRasterOrderGroupsSupported;
+        // }
+    }
 }
 
 void DisplayMtl::initializeTextureCaps() const
