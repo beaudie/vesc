@@ -37,6 +37,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ce072c19_f20fbbe8",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-23T20:44:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bae193e7_b68e8f2a",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cba4cd91_deedc3e3",
         "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Good point, let\u0027s leave this unresolved for Geoff to think about.",
       "parentUuid": "cba4cd91_deedc3e3",
+      "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7b02dd6_485e281b",
+        "filename": "src/libANGLE/renderer/metal/FrameBufferMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1578,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-23T20:44:15Z",
+      "side": 1,
+      "message": "I figured that if it\u0027s a general optimization to copy to a buffer then map it for reading then it still applies here even after copying from one texture to another. I could be wrong though, I didn\u0027t experiment. This path is only for iosurfaces on AMD though so it\u0027s isolated.",
+      "parentUuid": "df3c86eb_4108e620",
       "revId": "9dd14d083fbaeadc4e018b853daac319cdbdd22c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
