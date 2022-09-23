@@ -676,8 +676,8 @@ const gl::Limitations &DisplayMtl::getNativeLimitations() const
 }
 ShPixelLocalStorageType DisplayMtl::getNativePixelLocalStorageType() const
 {
-    // PLS isn't supported on Metal yet.
-    return ShPixelLocalStorageType::NotSupported;
+    ensureCapsInitialized();
+    return mPixelLocalStorageType;
 }
 
 void DisplayMtl::ensureCapsInitialized() const
@@ -1021,6 +1021,28 @@ void DisplayMtl::initializeExtensions() const
     // Metal uses the opposite provoking vertex as GLES so emulation is required to use the GLES
     // behaviour. Allow users to change the provoking vertex for improved performance.
     mNativeExtensions.provokingVertexANGLE = true;
+
+    // GL_ANGLE_shader_pixel_local_storage.
+    if (supportsAppleGPUFamily(2))
+    {
+        // Programmable blending starts in Apple GPU family 2, and is always coherent.
+        mNativeExtensions.shaderPixelLocalStorageANGLE         = true;
+        mNativeExtensions.shaderPixelLocalStorageCoherentANGLE = true;
+        mPixelLocalStorageType = ShPixelLocalStorageType::FramebufferFetch;
+        // Raster order groups begin in Apple GPU family 4, and can fine tune PLS synchronization,
+        // but framebuffer fetches are still coherent without them.
+        mRasterOrderGroupsSupported = supportsAppleGPUFamily(4);
+    }
+    else if ([mMetalDevice readWriteTextureSupport])
+    {
+
+        // TODO(7279): Implement shader images.
+        // mNativeExtensions.shaderPixelLocalStorageANGLE = true;
+        // mNativeExtensions.shaderPixelLocalStorageCoherentANGLE =
+        //     mRasterOrderGroupsSupported;
+        // mPixelLocalStorageType = ShPixelLocalStorageType::ImageStoreNativeFormats;
+        // mRasterOrderGroupsSupported = [mMetalDevice areRasterOrderGroupsSupported];
+    }
 }
 
 void DisplayMtl::initializeTextureCaps() const

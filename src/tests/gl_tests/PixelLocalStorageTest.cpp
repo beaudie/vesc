@@ -1733,7 +1733,7 @@ TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
 }
 
 #define PLATFORM(API, BACKEND) API##_##BACKEND()
-#define PLS_INSTANTIATE_RENDERING_TEST(TEST, API)                                                  \
+#define PLS_INSTANTIATE_RENDERING_TEST(TEST, API, ...)                                             \
     ANGLE_INSTANTIATE_TEST(                                                                        \
         TEST, PLATFORM(API, D3D11).enable(Feature::EmulatePixelLocalStorage), /* D3D coherent.*/   \
         PLATFORM(API, D3D11) /* D3D noncoherent.*/                                                 \
@@ -1769,10 +1769,13 @@ TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
             .disable(Feature::SupportsShaderFramebufferFetch)                                      \
             .disable(Feature::SupportsFragmentShaderPixelInterlock)                                \
             .enable(Feature::AsyncCommandQueue)                                                    \
-            .enable(Feature::EmulatePixelLocalStorage))
+            .enable(Feature::EmulatePixelLocalStorage),                                            \
+        __VA_ARGS__)
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTest);
-PLS_INSTANTIATE_RENDERING_TEST(PixelLocalStorageTest, ES3);
+PLS_INSTANTIATE_RENDERING_TEST(PixelLocalStorageTest,
+                               ES3,
+                               ES3_METAL().enable(Feature::EmulatePixelLocalStorage));
 
 class PixelLocalStorageTestES31 : public PixelLocalStorageTest
 {};
