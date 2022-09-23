@@ -676,8 +676,13 @@ const gl::Limitations &DisplayMtl::getNativeLimitations() const
 }
 ShPixelLocalStorageType DisplayMtl::getNativePixelLocalStorageType() const
 {
-    // PLS isn't supported on Metal yet.
-    return ShPixelLocalStorageType::NotSupported;
+    ensureCapsInitialized();
+    return mPixelLocalStorageType;
+}
+ShFragmentSynchronizationType DisplayMtl::getPLSSynchronizationType() const
+{
+    ensureCapsInitialized();
+    return mPLSSynchronizationType;
 }
 
 void DisplayMtl::ensureCapsInitialized() const
@@ -1021,6 +1026,43 @@ void DisplayMtl::initializeExtensions() const
     // Metal uses the opposite provoking vertex as GLES so emulation is required to use the GLES
     // behaviour. Allow users to change the provoking vertex for improved performance.
     mNativeExtensions.provokingVertexANGLE = true;
+
+    // GL_ANGLE_shader_pixel_local_storage.
+    if (supportsAppleGPUFamily(2))
+    {
+        // Programmable blending starts in Apple GPU family 2, and is always coherent.
+        mPixelLocalStorageType = ShPixelLocalStorageType::FramebufferFetch;
+
+        // Raster order groups are NOT required to make framebuffer fetch coherent, however, they
+        // may improve performance by allowing finer grained synchronization.
+        bool rasterOrderGroupsSupported = supportsAppleGPUFamily(4);
+        mPLSSynchronizationType         = rasterOrderGroupsSupported
+                                              ? ShFragmentSynchronizationType::RasterOrderGroups_Metal
+                                              : ShFragmentSynchronizationType::Automatic;
+
+        mNativeExtensions.shaderPixelLocalStorageANGLE         = true;
+        mNativeExtensions.shaderPixelLocalStorageCoherentANGLE = true;
+    }
+    else
+    {
+        // TODO(anglebug.com/7279): Implement PLS shader images.
+        // MTLReadWriteTextureTier readWriteTextureTier = [mMetalDevice readWriteTextureSupport];
+        // if (readWriteTextureTier != MTLReadWriteTextureTierNone)
+        // {
+        //     mPixelLocalStorageType = (readWriteTextureTier == MTLReadWriteTextureTier1)
+        //                                  ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
+        //                                  : ShPixelLocalStorageType::ImageStoreNativeFormats;
+        //
+        //     // Raster order groups are required to make PLS coherent via readWrite textures.
+        //     bool rasterOrderGroupsSupported = [mMetalDevice areRasterOrderGroupsSupported];
+        //     mPLSSynchronizationType = rasterOrderGroupsSupported
+        //                                  ? ShFragmentSynchronizationType::RasterOrderGroups_Metal
+        //                                  : ShFragmentSynchronizationType::NotSupported;
+        //
+        //     mNativeExtensions.shaderPixelLocalStorageANGLE         = true;
+        //     mNativeExtensions.shaderPixelLocalStorageCoherentANGLE = rasterOrderGroupsSupported;
+        // }
+    }
 }
 
 void DisplayMtl::initializeTextureCaps() const
