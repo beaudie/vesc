@@ -442,6 +442,30 @@
       },
       "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94225f27_967a6372",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-23T13:23:50Z",
+      "side": 1,
+      "message": "That\u0027s what I\u0027m wondering too. Note that the current documentation says \"You can discard the --isolated-script-test-* arguments\"\n\nJamie, if you\u0027d like to wrap up this CL rather than going into all special cases, maybe we could start with an explicit subset of tests that this documentation was written for (listed somewhere at the top rather than just saying \"test\") and then augment this in follow-up CLs, maybe with links to external docs.",
+      "parentUuid": "a4bd3ede_13fd29af",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
