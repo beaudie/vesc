@@ -16,6 +16,23 @@
       "message": "The easy (still incorrect) fix. I could very well squash it into the next commit, we\u0027ll see if that one passes tests without issues.",
       "revId": "a79f8942cb14323b536ff8d98bb8fb9824927da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d920e6c4_468fb7cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T18:54:25Z",
+      "side": 1,
+      "message": "I believe this is no longer relevant with https://chromium-review.googlesource.com/c/angle/angle/+/3906394",
+      "revId": "a79f8942cb14323b536ff8d98bb8fb9824927da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
