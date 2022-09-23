@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "304f6ec2_6d51d5cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000805
+      },
+      "writtenOn": "2022-09-23T17:31:14Z",
+      "side": 1,
+      "message": "Hopefully this fixes the Chromium-into-ANGLE autoroller...",
+      "revId": "de1f6aa88afc9a48cd18560ba145c2b919bce22a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
