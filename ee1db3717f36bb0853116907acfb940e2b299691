@@ -33,6 +33,24 @@
       "message": "This sentence is confusing. Is it correct to rewrite it as:\n\n\"...it must be set to either a valid id\u003cMTLSharedEvent\u003e, or to a NULL pointer.\"\n\n? If not, could you try rewriting it? \"pointer to a valid id...\" is confusing, \"refers to a Metal event object\" is confusing.",
       "revId": "ee1db3717f36bb0853116907acfb940e2b299691",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39a82e69_f9f077ce",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-09-23T02:55:51Z",
+      "side": 1,
+      "message": "Yeah, that sentence is a train wreck. What was I thinking?!",
+      "parentUuid": "2e389ebe_08549595",
+      "revId": "ee1db3717f36bb0853116907acfb940e2b299691",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
