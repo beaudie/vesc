@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78430f15_d1c570b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-23T19:34:38Z",
+      "side": 1,
+      "message": "looks good, just one question and a nit",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c1dab9_dd709262",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-23T19:34:38Z",
+      "side": 1,
+      "message": "I gotta say I find this entire funciton hard to understand. It apperas to be called all over the place for all types of textures but the old logic is\n\n```\n if sim \u0026\u0026 not depth \u0026\u0026 not stencil\n    upload with staging buffer\n if cpu accessable\n    replaceRegion\n\n ASSERT(depth || stencil)\n ...\n```\n\nSo I guess all textures except depth or stencil are CPU accessable?\n\n\nThe new code seems to be\n\n```\n if not sim \u0026\u0026 cpu accessable \u0026\u0026 not forced\n   replaceRegion\n if not depth and not stencil\n   stage\n ...\n```\n\nWould it make sense to remove the #if TARGET_OS_SIMULATOR here and set the feature flag in DisplayMtl.mm if TARGET_OS_SIMULATOR\n\nThen this code would be simpler?",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3629fa1b_5689dbd0",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 549,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-23T19:34:38Z",
+      "side": 1,
+      "message": "The way the code is structured is this return is superfluous?",
+      "revId": "f002f273708d4334622605b6ebb0652175299b7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
