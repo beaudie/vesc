@@ -39,6 +39,30 @@
       },
       "revId": "b80816c8b5850c8e9eaa62478df58ec334964f59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb09e386_9eebdfed",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 4
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-23T19:43:39Z",
+      "side": 1,
+      "message": "Yes. If you cherry-pick this and look with `git diff`, it\u0027s clearer",
+      "parentUuid": "90306c6c_d8dd72f2",
+      "range": {
+        "startLine": 357,
+        "startChar": 0,
+        "endLine": 367,
+        "endChar": 38
+      },
+      "revId": "b80816c8b5850c8e9eaa62478df58ec334964f59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
