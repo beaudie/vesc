@@ -206,6 +206,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8cc32a_2b059545",
+        "filename": "src/image_util/loadimage_paletted.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-23T21:59:40Z",
+      "side": 1,
+      "message": "Ah, I see.  You are using a single parameter to indicate two values, red bits and blue bits, since they are always the same.",
+      "parentUuid": "e8398f7a_55ce296b",
+      "range": {
+        "startLine": 114,
+        "startChar": 27,
+        "endLine": 114,
+        "endChar": 28
+      },
+      "revId": "c44874115d8ed355dd616da00a3f7acac9228bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "943f929d_52a86097",
