@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36460bb0_60c737d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T21:59:19Z",
+      "side": 1,
+      "message": "Still lgtm. CQ\u0027ing.",
+      "revId": "127aedf59d8c142e4b8cdc81cb50fb8030b42ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60bf76f4_7f452f04",
+        "filename": "extensions/EGL_ANGLE_sync_mtl_shared_event.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-09-23T21:59:19Z",
+      "side": 1,
+      "message": "It\u0027s not really a pointer to a valid id\u003cMTLSharedEvent\u003e, but an id\u003cMTLSharedEvent\u003e reinterpret-casted to an EGLAttrib. For this reason I\u0027d say \"be set to a valid id\u003cMTLSharedEvent\u003e, or to a NULL pointer.\"\n\nNot a big deal. Marking this comment resolved.",
+      "revId": "127aedf59d8c142e4b8cdc81cb50fb8030b42ec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
