@@ -141,6 +141,7 @@ class DisplayMtl : public DisplayImpl
     mtl::RenderUtils &getUtils() { return mUtils; }
     mtl::StateCache &getStateCache() { return mStateCache; }
     uint32_t getMaxColorTargetBits() { return mMaxColorTargetBits; }
+    bool rasterOrderGroupsSupported() { return mRasterOrderGroupsSupported; }
 
     id<MTLLibrary> getDefaultShadersLib();
 
@@ -203,6 +204,10 @@ class DisplayMtl : public DisplayImpl
     mutable gl::Caps mNativeCaps;
     mutable gl::Limitations mNativeLimitations;
     mutable uint32_t mMaxColorTargetBits = 0;
+
+    // GL_ANGLE_shader_pixel_local_storage.
+    mutable ShPixelLocalStorageType mPixelLocalStorageType = ShPixelLocalStorageType::NotSupported;
+    mutable bool mRasterOrderGroupsSupported               = false;
 
     angle::FeaturesMtl mFeatures;
 };
