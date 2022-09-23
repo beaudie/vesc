@@ -418,6 +418,30 @@
       },
       "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4bd3ede_13fd29af",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-23T13:17:01Z",
+      "side": 1,
+      "message": "I\u0027ve also observed CAS outputs missing from some tryjobs.\nFor sure, post-processing results, like merge scripts isn\u0027t triggered by trigger.py, maybe it\u0027s worth mentioning this.\n\nIs it possible that CAS outputs were missing for Roman because `--isolated-script-test-output` wasn\u0027t specified properly?",
+      "parentUuid": "58f1526e_d2522c91",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
