@@ -387,7 +387,9 @@ def _run_tests(tests, args, extra_flags, env):
                 histograms.Merge(_merge_into_one_histogram(test_histogram_set))
                 results.result_pass(test)
             else:
-                logging.error('Test %s failed to record some samples' % test)
+                logging.error(
+                    'Test %s failed to record some samples (expected %d * %d, got %d)' %
+                    (test, args.samples_per_test, args.trials_per_sample, len(wall_times)))
                 results.result_fail(test)
 
     return results, histograms
