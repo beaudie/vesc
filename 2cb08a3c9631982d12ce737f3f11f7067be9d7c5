@@ -33,6 +33,24 @@
       "message": "The tests are labeled android on pixel4. But results say linux ubuntu.\nI can see that the image seems truncated or smaller than the expected window. Specifically top-right can be truncated. Question is how does this change affect the window size, or the render size?",
       "revId": "2cb08a3c9631982d12ce737f3f11f7067be9d7c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada7613e_b5b28f56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-24T04:04:17Z",
+      "side": 1,
+      "message": "If you are referring to SwiftShader GOLD failures (where the output looks cropped), there\u0027s flakiness there we are investigating.",
+      "parentUuid": "544aa823_7078d458",
+      "revId": "2cb08a3c9631982d12ce737f3f11f7067be9d7c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
