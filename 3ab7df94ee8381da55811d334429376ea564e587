@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a728410d_fd93ff8e",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-24T04:15:26Z",
+      "side": 1,
+      "message": "`std::atomic`\u0027s default constructor does not actually set the pointer to `nullptr` IIUC. Is that correct?\n\n`AllocateGlobalMutex` actually checks for `nullptr`, so I believe this change results in a read of uninitialized values. It might _work_ because this is a global, but it\u0027s technically wrong. Is there no other way to avoid the visual studio bug (Including using a newer version on the flutter bots)?",
+      "range": {
+        "startLine": 26,
+        "startChar": 69,
+        "endLine": 26,
+        "endChar": 71
+      },
+      "revId": "3ab7df94ee8381da55811d334429376ea564e587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
