@@ -126,6 +126,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f8aa048_ee869e72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:53:41Z",
+      "side": 1,
+      "message": "Thanks, Amirali, could you please +2?",
+      "parentUuid": "a77f5de9_8951f45e",
+      "revId": "e7891693cb1f2ab5a87181afe9d56dfec85f48dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ac1f7ca_1a8ce7e8",
