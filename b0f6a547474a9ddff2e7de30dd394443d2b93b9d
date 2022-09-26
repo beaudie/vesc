@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd61f765_3aef769e",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:49:20Z",
+      "side": 1,
+      "message": "Please move this sort of helper to where it\u0027s used, or `src/common` if used both in translator and frontend/backend. This is a public API header, so the smaller the better.",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "333963f9_f85982ff",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:49:20Z",
+      "side": 1,
+      "message": "super nit: `AST`",
+      "range": {
+        "startLine": 91,
+        "startChar": 57,
+        "endLine": 91,
+        "endChar": 61
+      },
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcbd3507_f5e85b82",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:49:20Z",
+      "side": 1,
+      "message": "nit: avoid bitwise op on logical type. `needsClear \u003d neadsClear || ...` (yes, it\u0027s annoying that C doesn\u0027t have `||\u003d`)",
+      "range": {
+        "startLine": 699,
+        "startChar": 23,
+        "endLine": 699,
+        "endChar": 25
+      },
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8863993_79959c91",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:49:20Z",
+      "side": 1,
+      "message": "For Vulkan you mentioned images with interlock are preferred over framebuffer fetch. Isn\u0027t that true for GL too? The two `if`s here are probably mutually exclusive, but logically speaking.",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eee6fe0d_78942c5d",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-26T19:49:20Z",
+      "side": 1,
+      "message": "It looks like with this change, you should be able to support framebuffer fetch for the GL backend just fine. If you feel like taking a very small detour, you can try following up with a change that removes `supportsNativeShaderFramebufferFetchEXT` and directly makes the GL backend advertise support for the extension. If it fails tests, you don\u0027t have to spend any more time on that.",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
