@@ -34,6 +34,23 @@
       "parentUuid": "608339de_9ff27f61",
       "revId": "43354edbe671af534c469089066e0259731563c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d59f5316_6db43b5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-26T19:49:45Z",
+      "side": 1,
+      "message": "Going to revert this. Looks like we either need a fix to DisplayVkGbm or an update to our build files/chrome to not use this path.",
+      "revId": "43354edbe671af534c469089066e0259731563c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
