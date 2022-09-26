@@ -14,13 +14,13 @@
 namespace rx
 {
 
+// Note: To avoid any race conditions between threads, this class has no private data;
+// DebugAnnotatorContext11 will be retrieved from Context11.
 class DebugAnnotator11 : public angle::LoggingAnnotator
 {
   public:
     DebugAnnotator11();
     ~DebugAnnotator11() override;
-    void initialize(ID3D11DeviceContext *context);
-    void release();
     void beginEvent(gl::Context *context,
                     angle::EntryPoint entryPoint,
                     const char *eventName,
@@ -30,6 +30,19 @@ class DebugAnnotator11 : public angle::LoggingAnnotator
                   angle::EntryPoint entryPoint) override;
     void setMarker(const char *markerName) override;
     bool getStatus() override;
+};
+
+class DebugAnnotatorContext11
+{
+  public:
+    DebugAnnotatorContext11();
+    ~DebugAnnotatorContext11();
+    void initialize(ID3D11DeviceContext *context);
+    void release();
+    void beginEvent(angle::EntryPoint entryPoint, const char *eventName, const char *eventMessage);
+    void endEvent(const char *eventName, angle::EntryPoint entryPoint);
+    void setMarker(const char *markerName);
+    bool getStatus();
 
   private:
     bool loggingEnabledForThisThread() const;
