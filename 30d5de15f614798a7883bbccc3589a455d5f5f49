@@ -46,6 +46,30 @@
       },
       "revId": "30d5de15f614798a7883bbccc3589a455d5f5f49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0010b4fd_a42635d4",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-26T14:56:24Z",
+      "side": 1,
+      "message": "We used to do a blanket `git add .` at the end of this script. I\u0027m guessing these cleanup steps were for to make sure these files were not rolled into Android.",
+      "parentUuid": "995e237e_85cfdcc1",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 29
+      },
+      "revId": "30d5de15f614798a7883bbccc3589a455d5f5f49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
