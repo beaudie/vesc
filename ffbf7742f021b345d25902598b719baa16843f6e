@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3cb4f9c_9ad2b035",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-26T17:42:14Z",
+      "side": 1,
+      "message": "I\u0027d like to avoid referencing gCurrentValidContext if possible, it\u0027s a performance optimization for some other code and doesn\u0027t always exist depending on the platform.\n\nCan we not rely on the context passed in being valid? IMO it\u0027s ok if we can\u0027t log some EGL calls due to no current context.",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
