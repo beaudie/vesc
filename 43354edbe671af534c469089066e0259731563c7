@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "608339de_9ff27f61",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-09-26T19:44:06Z",
+      "side": 1,
+      "message": "This CL is failing to roll into Chromium. Looks like ChromeOS bots are trying to use DisplayGbmVK and failing to initialize:\n\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3916135/",
+      "revId": "43354edbe671af534c469089066e0259731563c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
