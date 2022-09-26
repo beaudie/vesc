@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61d646be_8f988115",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-26T15:55:34Z",
+      "side": 0,
+      "message": "Ops, missed this local change. Readded.",
+      "parentUuid": "a822cd63_08696dc8",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 6
+      },
+      "revId": "0d34d4f8810aeb2297bf2814f8b1ca7f749decd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0f94fdc_528a8145",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-26T15:00:23Z",
       "side": 0,
       "message": "I don\u0027t remember why we made these modifications. We should have bot coverage of it though so I\u0027m not too worried.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 43
+      },
+      "revId": "0d34d4f8810aeb2297bf2814f8b1ca7f749decd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db95fd6b_feeb474a",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-26T15:55:34Z",
+      "side": 0,
+      "message": "This was a upstream change, see https://github.com/KhronosGroup/EGL-Registry/commit/64aa561f19710f21efa4768dc3599e182c4e9556",
+      "parentUuid": "d0f94fdc_528a8145",
       "range": {
         "startLine": 112,
         "startChar": 0,
