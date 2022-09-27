@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "140dea86_1d827978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-27T18:49:29Z",
+      "side": 1,
+      "message": "I\u0027ll need to check whether the crash in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7703 is caused by framebuffer fetch or not. Depending on that, we may or may not want to enable framebuffer fetch by default on GLES.\n\nBut either way, it will be good to have it in and tests running.",
+      "revId": "797226e5fec6a760900805178157777d2c26c4b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
