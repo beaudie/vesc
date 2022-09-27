@@ -51,6 +51,23 @@
       "message": "Going to revert this. Looks like we either need a fix to DisplayVkGbm or an update to our build files/chrome to not use this path.",
       "revId": "43354edbe671af534c469089066e0259731563c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d39bf16_34fab5e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-09-27T14:49:41Z",
+      "side": 1,
+      "message": "Note that we have this running on yocto linux with arm64 (Android hardware), and Collabora has it running with linux on x86 using intel GPU.",
+      "revId": "43354edbe671af534c469089066e0259731563c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
