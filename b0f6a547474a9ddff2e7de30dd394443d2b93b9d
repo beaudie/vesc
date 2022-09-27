@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c12f7e2_a0c44d2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:28:54Z",
+      "side": 1,
+      "message": "Should we disallow framebuffer fetch and advanced blend equations when PLS is active? (In case not done already)\n\nAlso added Ken to be in the loop",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd61f765_3aef769e",
@@ -37,6 +54,23 @@
         "endLine": 91,
         "endChar": 61
       },
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b276c7da_405f9c73",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:28:54Z",
+      "side": 1,
+      "message": "Only `1`?\n\nYou can always use a `Vector` of `{0, 1, 2, 3}` and resize it to `accessVar-\u003egetType().getNominalSize()` (and use `new TIntermSwizzle`), so you don\u0027t have to specifically list the sizes in the switch statement",
       "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
