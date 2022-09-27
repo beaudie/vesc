@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23794adb_b8c6179e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-27T18:03:47Z",
+      "side": 1,
+      "message": "s",
+      "revId": "28aadf46794db96cee52473421d8e0914ce333bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8369f221_2bf972a8",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "I didn\u0027t find there the configs is not set by default, so I added it. Does angle_static_library will set it?",
       "parentUuid": "8369f221_2bf972a8",
+      "range": {
+        "startLine": 534,
+        "startChar": 2,
+        "endLine": 534,
+        "endChar": 14
+      },
+      "revId": "28aadf46794db96cee52473421d8e0914ce333bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04966515_4868a0e1",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-27T18:03:47Z",
+      "side": 1,
+      "message": "It\u0027s defined by `set_defaults` here:\nhttps://crsrc.org/c/third_party/angle/gni/angle.gni;drc\u003db9df95ffdfcb5ea21ae28bd27cd68570b18a2b17;l\u003d333\n\nhttps://crrev.com/c/3922776 passed CI and Kai +2\u0027d, I just submitted it",
+      "parentUuid": "398eea77_07282470",
       "range": {
         "startLine": 534,
         "startChar": 2,
