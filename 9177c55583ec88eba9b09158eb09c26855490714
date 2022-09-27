@@ -367,6 +367,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da51c3f7_2a534574",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T14:34:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "017a25d4_5082ad33",
+      "revId": "9177c55583ec88eba9b09158eb09c26855490714",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "271a48c0_1b2829b1",
