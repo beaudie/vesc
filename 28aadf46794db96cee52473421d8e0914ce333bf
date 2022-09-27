@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8369f221_2bf972a8",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-27T16:09:04Z",
+      "side": 1,
+      "message": "This overrides angle_static_library default - this wasn\u0027t the intent, right?\n-\u003e https://crrev.com/c/3922776",
+      "range": {
+        "startLine": 534,
+        "startChar": 2,
+        "endLine": 534,
+        "endChar": 14
+      },
+      "revId": "28aadf46794db96cee52473421d8e0914ce333bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
