@@ -170,18 +170,13 @@ std::string TOutputGLSLBase::getCommonLayoutQualifiers(TIntermSymbol *variable)
     const TType &type                       = variable->getType();
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
 
-    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn ||
-        IsVarying(type.getQualifier()))
+    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut)
     {
-        if (type.getQualifier() == EvqFragmentOut && layoutQualifier.index >= 0)
+        if (layoutQualifier.index >= 0)
         {
             out << listItemPrefix << "index = " << layoutQualifier.index;
         }
-    }
-
-    if (type.getQualifier() == EvqFragmentOut)
-    {
-        if (layoutQualifier.yuv == true)
+        if (layoutQualifier.yuv)
         {
             out << listItemPrefix << "yuv";
         }
@@ -261,8 +256,8 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermSymbol *variable)
 
     CommaSeparatedListItemPrefixGenerator listItemPrefix;
 
-    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn ||
-        IsVarying(type.getQualifier()))
+    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut ||
+        type.getQualifier() == EvqVertexIn || IsVarying(type.getQualifier()))
     {
         if (layoutQualifier.location >= 0)
         {
@@ -1400,16 +1395,23 @@ bool NeedsToWriteLayoutQualifier(const TType &type)
 
     const TLayoutQualifier &layoutQualifier = type.getLayoutQualifier();
 
-    if ((type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqVertexIn ||
-         IsVarying(type.getQualifier())) &&
+    if ((type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut ||
+         type.getQualifier() == EvqVertexIn || IsVarying(type.getQualifier())) &&
         layoutQualifier.location >= 0)
     {
         return true;
     }
 
-    if (type.getQualifier() == EvqFragmentOut && layoutQualifier.yuv == true)
+    if (type.getQualifier() == EvqFragmentOut || type.getQualifier() == EvqFragmentInOut)
     {
-        return true;
+        if (layoutQualifier.index >= 0)
+        {
+            return true;
+        }
+        if (layoutQualifier.yuv)
+        {
+            return true;
+        }
     }
 
     if (IsOpaqueType(type.getBasicType()) && layoutQualifier.binding != -1)
