@@ -22,6 +22,30 @@
       },
       "revId": "28aadf46794db96cee52473421d8e0914ce333bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "398eea77_07282470",
+        "filename": "BUILD.gn",
+        "patchSetId": 4
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-27T17:59:10Z",
+      "side": 1,
+      "message": "I didn\u0027t find there the configs is not set by default, so I added it. Does angle_static_library will set it?",
+      "parentUuid": "8369f221_2bf972a8",
+      "range": {
+        "startLine": 534,
+        "startChar": 2,
+        "endLine": 534,
+        "endChar": 14
+      },
+      "revId": "28aadf46794db96cee52473421d8e0914ce333bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
