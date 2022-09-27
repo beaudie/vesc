@@ -247,6 +247,8 @@ enum class Feature
     SupportsMultisampledRenderToSingleSampled,
     SupportsMultisampledRenderToSingleSampledGOOGLEX,
     SupportsMultiview,
+    SupportsNativeShaderFramebufferFetchEXT,
+    SupportsNativeShaderFramebufferFetchNonCoherentEXT,
     SupportsNegativeViewport,
     SupportsPipelineCreationCacheControl,
     SupportsPipelineCreationFeedback,
