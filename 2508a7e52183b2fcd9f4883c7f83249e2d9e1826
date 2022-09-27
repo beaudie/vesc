@@ -33,6 +33,344 @@
       "message": "the oom crash (on the chat). turn out to be another issue at my local. this cl I don\u0027t see any errors tested on many games on b*",
       "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6044d5c9_99cafc01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Typically what we do when emulating formats is to directly have the \"load\" function convert from the source data to the destination data. Is that too costly for ETC-\u003eBC? It would save a lot of complexity here.",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df547c46_1c2eb96d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3913,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "typos:\n\n```\n    // 1) host vk driver does not natively support ETC format.\n    // 2) host vk driver supports BC format.\n    // 3) host vk driver supports subgroup instructions: clustered, shuffle\n    //    * This limitation can be removed if necessary\n```",
+      "range": {
+        "startLine": 3909,
+        "startChar": 0,
+        "endLine": 3913,
+        "endChar": 48
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d1ff272_f6ce70d3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Instead of a constant 0, please declare a `constexpr` (`kDefaultImageViewUsageFlags` or something like that) in the header that\u0027s set to 0 and use that.",
+      "range": {
+        "startLine": 1336,
+        "startChar": 81,
+        "endLine": 1336,
+        "endChar": 82
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "910389b1_d727f75f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3272,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "I think this will fail for the lower mips of the image. We had bugs like this fixed before. Can you please add a test where an ETC image has a full mipchain?",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f214513b_74ac353e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Please turn this into a condition of the feature. I see numerous mobile vendors having a 64KB limit. I realize they support ETC already, but better make our assumptions explicit nevertheless.",
+      "range": {
+        "startLine": 3283,
+        "startChar": 0,
+        "endLine": 3283,
+        "endChar": 43
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93684a9e_aa51c036",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Please use `roundUpPow2` instead",
+      "range": {
+        "startLine": 3305,
+        "startChar": 22,
+        "endLine": 3305,
+        "endChar": 69
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dfd80aa_3333b227",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3357,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Please use `UnsignedCeilDivide`",
+      "range": {
+        "startLine": 3357,
+        "startChar": 32,
+        "endLine": 3357,
+        "endChar": 47
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f7f0e06_c4e042f4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Please use `uint` for things that are unsigned. Same with the corresponding struct in `UtilsVk.h`",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928cd8e5_36e12538",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/etc_decoder/etc_decoder.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Needs a `LICENSE` and `README.chromium` file next to this file. See `ffx_spd/` next to this dir.",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2487182_daa81e77",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "nit: `transcodeEtcToBc`",
+      "range": {
+        "startLine": 260,
+        "startChar": 13,
+        "endLine": 260,
+        "endChar": 25
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e505d10_3c0b9e70",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "This is not checked elsewhere where `supportsComputeTranscodeEtcToBc` is checked, is that not necessary? I suggest making `supportsComputeTranscodeEtcToBc` itself conditional to `!forceFallbackFormat` (in RendererVk). You can add an ASSERT here for that.",
+      "range": {
+        "startLine": 262,
+        "startChar": 13,
+        "endLine": 262,
+        "endChar": 64
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7538c066_48fe4b05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "nit: `static_cast\u003cuint32_t\u003e`",
+      "range": {
+        "startLine": 443,
+        "startChar": 33,
+        "endLine": 443,
+        "endChar": 38
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5205e8fc_0e98e096",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "nit: transcode is one word. Could you please change all `[tT]ransCode` to `[tT]ranscode` in the code?",
+      "range": {
+        "startLine": 250,
+        "startChar": 19,
+        "endLine": 250,
+        "endChar": 28
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c892ad3e_014788c0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 7968,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Could you please add a test? It\u0027s ok to skip the test on Vulkan.\n\nThat said, if you adjust the logic enough, you should be able to make sure the \"transfer\" path is taken when copying between emulated ETC images, don\u0027t you think so?",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a053e8a7_d43a1b30",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "Please remove the default initializer. We don\u0027t do that in ANGLE.",
+      "range": {
+        "startLine": 1720,
+        "startChar": 65,
+        "endLine": 1720,
+        "endChar": 69
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7123823f_af607f23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 26
+      },
+      "lineNbr": 2819,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T15:13:02Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2819,
+        "startChar": 69,
+        "endLine": 2819,
+        "endChar": 73
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
