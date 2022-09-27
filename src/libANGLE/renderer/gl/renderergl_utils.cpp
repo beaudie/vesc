@@ -1599,6 +1599,18 @@ void GenerateCaps(const FunctionsGL *functions,
             features.supportsFragmentShaderInterlockARB.enabled;
     }
 
+    // EXT_shader_framebuffer_fetch.
+    if (functions->hasGLESExtension("GL_EXT_shader_framebuffer_fetch"))
+    {
+        extensions->shaderFramebufferFetchEXT = true;
+    }
+
+    // EXT_shader_framebuffer_fetch_non_coherent.
+    if (functions->hasGLESExtension("EXT_shader_framebuffer_fetch_non_coherent"))
+    {
+        extensions->shaderFramebufferFetchNonCoherentEXT = true;
+    }
+
     extensions->copyTextureCHROMIUM = true;
     extensions->syncQueryCHROMIUM   = SyncQueryGL::IsSupported(functions);
 
