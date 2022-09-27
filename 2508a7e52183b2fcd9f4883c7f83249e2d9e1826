@@ -181,6 +181,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c4e3356_a41f2a03",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 3272,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "there is a adjust function before enter this function. I don\u0027t see crash happen.",
+      "parentUuid": "6157da82_3247f487",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f214513b_74ac353e",
@@ -375,6 +393,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eaf4e3b_b3159661",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "kOffsetX\nkOffsetY need cast too.\notherwise, change quite a few code. I really don\u0027t understand why int is secondary people.",
+      "parentUuid": "1dcc0119_e54d6d2e",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8de567ba_ef47039e",
@@ -388,6 +424,30 @@
       "writtenOn": "2022-09-27T18:50:53Z",
       "side": 1,
       "message": "nit: For consistency, please remove the `k` prefix (e.g. `width` here), and name the uniform block instance as `params`. All the other shaders are written that way.",
+      "range": {
+        "startLine": 69,
+        "startChar": 17,
+        "endLine": 69,
+        "endChar": 23
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85fa3fa1_8139cb2d",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "will do that.",
+      "parentUuid": "8de567ba_ef47039e",
       "range": {
         "startLine": 69,
         "startChar": 17,
@@ -421,6 +481,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5189a6c0_46ef72e7",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "will do.",
+      "parentUuid": "86321f57_14e74203",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93edf7a3_3250ba7f",
@@ -434,6 +518,30 @@
       "writtenOn": "2022-09-27T18:50:53Z",
       "side": 1,
       "message": "nit: tab-\u003espaces",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 1
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff56d277_5b1774df",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "will do.",
+      "parentUuid": "93edf7a3_3250ba7f",
       "range": {
         "startLine": 73,
         "startChar": 0,
@@ -716,6 +824,24 @@
       "side": 1,
       "message": "I don\u0027t believe you need to transcode from an image. glCopyImageSubData only works for ETC-\u003eETC copies, so you should be able to just vkCmdCopyImage between the emulated formats.\n\nThe reason you hit UNREACHABLE is that `CanCopyWithTransferForCopyImage` returns false. If `CanCopyWithTransferForCopyImage` is massaged enough, it should let emulated-ETC through. Currently, we immediately reject emulated formats for simplicity.\n\nEither way, a test would be a first step.",
       "parentUuid": "2db168fa_781e64a0",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58a5cd2e_9fa49e26",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 7968,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-27T21:55:11Z",
+      "side": 1,
+      "message": "1) https://github.com/google/angle/blob/36424efd2425294c3e5751280b0beae4a5474211/src/libANGLE/renderer/vulkan/vk_helpers.cpp#L772\nCanCopyWithTransferForCopyImage  only used for non emulated format. \n2)\nfrom the spec, it can do casting form RG32 to ETC2\nhttps://registry.khronos.org/OpenGL-Refpages/es3/html/glCopyImageSubData.xhtml\nin this case, we can not directly copy.",
+      "parentUuid": "e928279b_0fcc2cba",
       "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
