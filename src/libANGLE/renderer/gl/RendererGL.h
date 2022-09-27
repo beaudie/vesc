@@ -122,6 +122,7 @@ class RendererGL : angle::NonCopyable
 
     angle::Result memoryBarrier(GLbitfield barriers);
     angle::Result memoryBarrierByRegion(GLbitfield barriers);
+    void framebufferFetchBarrier();
 
     bool bindWorkerContext(std::string *infoLog);
     void unbindWorkerContext();
