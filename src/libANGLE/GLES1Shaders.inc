@@ -10,20 +10,13 @@
 // bool clip_plane_enables
 // bool enable_alpha_test
 // bool enable_clip_planes
-// bool enable_color_material
 // bool enable_draw_texture
 // bool enable_fog
-// bool enable_lighting
-// bool enable_normalize
-// bool enable_rescale_normal
 // bool enable_texture_2d[kMaxTexUnits]
 // bool enable_texture_cube_map[kMaxTexUnits]
-// bool light_enables[kMaxLights]
-// bool light_model_two_sided
 // bool point_rasterization
 // bool point_sprite_coord_replace
 // bool point_sprite_enabled
-// bool shade_model_flat
 // int texture_format[kMaxTexUnits];
 // int texture_env_mode[kMaxTexUnits];
 // int combine_rgb[kMaxTexUnits];
@@ -66,13 +59,18 @@ uniform mat4 modelview;
 uniform mat4 modelview_invtr;
 uniform mat4 texture_matrix[kMaxTexUnits];
 
+uniform bool enable_rescale_normal;
+uniform bool enable_normalize;
+
 // Point rasterization//////////////////////////////////////////////////////////
 
 uniform float point_size_min;
 uniform float point_size_max;
 uniform vec3 point_distance_attenuation;
 
-// Shading: flat shading, lighting, and materials///////////////////////////////
+// Shading: lighting, and materials/////////////////////////////////////////////
+uniform bool enable_lighting;
+uniform bool enable_color_material;
 
 uniform vec4 material_ambient;
 uniform vec4 material_diffuse;
@@ -81,7 +79,9 @@ uniform vec4 material_emissive;
 uniform float material_specular_exponent;
 
 uniform vec4 light_model_scene_ambient;
+uniform bool light_model_two_sided;
 
+uniform bool light_enables[kMaxLights];
 uniform vec4 light_ambients[kMaxLights];
 uniform vec4 light_diffuses[kMaxLights];
 uniform vec4 light_speculars[kMaxLights];
@@ -476,6 +476,9 @@ in vec4 texcoord3_varying;
 // Alpha test///////////////////////////////////////////////////////////////////
 
 uniform float alpha_test_ref;
+
+// Flat shading ////////////////////////////////////////////////////////////////
+uniform bool shade_model_flat;
 
 // Fog /////////////////////////////////////////////////////////////////////////
 
