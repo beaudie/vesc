@@ -30,22 +30,16 @@ class ShaderProgramManager;
 
 enum class GLES1StateEnables : uint64_t
 {
-    Lighting                       = 0,
-    Fog                            = 1,
-    ClipPlanes                     = 2,
-    DrawTexture                    = 3,
-    PointRasterization             = 4,
-    PointSprite                    = 5,
-    RescaleNormal                  = 6,
-    Normalize                      = 7,
-    AlphaTest                      = 8,
-    ShadeModelFlat                 = 9,
-    ColorMaterial                  = 10,
-    LightModelTwoSided             = 11,
-    LogicOpThroughFramebufferFetch = 12,
+    Fog                            = 0,
+    ClipPlanes                     = 1,
+    DrawTexture                    = 2,
+    PointRasterization             = 3,
+    PointSprite                    = 4,
+    AlphaTest                      = 5,
+    LogicOpThroughFramebufferFetch = 6,
 
-    InvalidEnum = 13,
-    EnumCount   = 13,
+    InvalidEnum = 7,
+    EnumCount   = 7,
 };
 
 constexpr int kClipPlaneCount = 6;
@@ -247,6 +241,12 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation alphaTestRefLoc;
 
         // Shading, materials, and lighting
+        UniformLocation shadeModelFlatLoc;
+        UniformLocation enableLightingLoc;
+        UniformLocation enableRescaleNormalLoc;
+        UniformLocation enableNormalizeLoc;
+        UniformLocation enableColorMaterialLoc;
+
         UniformLocation materialAmbientLoc;
         UniformLocation materialDiffuseLoc;
         UniformLocation materialSpecularLoc;
@@ -254,7 +254,9 @@ class GLES1Renderer final : angle::NonCopyable
         UniformLocation materialSpecularExponentLoc;
 
         UniformLocation lightModelSceneAmbientLoc;
+        UniformLocation lightModelTwoSidedLoc;
 
+        UniformLocation lightEnablesLoc;
         UniformLocation lightAmbientsLoc;
         UniformLocation lightDiffusesLoc;
         UniformLocation lightSpecularsLoc;
@@ -298,6 +300,7 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<GLfloat, kTexUnitCount> texEnvAlphaScales;
 
         // Lighting
+        std::array<GLint, kLightCount> lightEnables;
         std::array<Vec4Uniform, kLightCount> lightAmbients;
         std::array<Vec4Uniform, kLightCount> lightDiffuses;
         std::array<Vec4Uniform, kLightCount> lightSpeculars;

@@ -190,24 +190,11 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     mShaderState.mGLES1StateEnabled[GLES1StateEnables::DrawTexture] = mDrawTextureEnabled;
     mShaderState.mGLES1StateEnabled[GLES1StateEnables::PointRasterization] =
         mode == PrimitiveMode::Points;
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::ShadeModelFlat] =
-        gles1State.mShadeModel == ShadingModel::Flat;
     mShaderState.mGLES1StateEnabled[GLES1StateEnables::AlphaTest] =
         glState->getEnableFeature(GL_ALPHA_TEST);
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::Lighting] =
-        glState->getEnableFeature(GL_LIGHTING);
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::RescaleNormal] =
-        glState->getEnableFeature(GL_RESCALE_NORMAL);
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::Normalize] =
-        glState->getEnableFeature(GL_NORMALIZE);
     mShaderState.mGLES1StateEnabled[GLES1StateEnables::Fog] = glState->getEnableFeature(GL_FOG);
     mShaderState.mGLES1StateEnabled[GLES1StateEnables::PointSprite] =
         glState->getEnableFeature(GL_POINT_SPRITE_OES);
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::ColorMaterial] =
-        glState->getEnableFeature(GL_COLOR_MATERIAL);
-
-    // TODO (lfy@google.com): Implement two-sided lighting model (lightModel.twoSided)
-    mShaderState.mGLES1StateEnabled[GLES1StateEnables::LightModelTwoSided] = false;
 
     GLES1ShaderState::BoolTexArray &pointSpriteCoordReplaces =
         mShaderState.pointSpriteCoordReplaces;
@@ -252,6 +239,16 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     // completely for now.
 
     // Feature enables
+    {
+        setUniform1i(context, programObject, programState.enableLightingLoc,
+                     glState->getEnableFeature(GL_LIGHTING));
+        setUniform1i(context, programObject, programState.enableRescaleNormalLoc,
+                     glState->getEnableFeature(GL_RESCALE_NORMAL));
+        setUniform1i(context, programObject, programState.enableNormalizeLoc,
+                     glState->getEnableFeature(GL_NORMALIZE));
+        setUniform1i(context, programObject, programState.enableColorMaterialLoc,
+                     glState->getEnableFeature(GL_COLOR_MATERIAL));
+    }
 
     // Texture unit enables and format info
     std::array<Vec4Uniform, kTexUnitCount> texCropRects;
@@ -397,6 +394,12 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     }
 
     // Shading, materials, and lighting
+    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_SHADE_MODEL))
+    {
+        setUniform1i(context, programObject, programState.shadeModelFlatLoc,
+                     gles1State.mShadeModel == ShadingModel::Flat);
+    }
+
     if (gles1State.isDirty(GLES1State::DIRTY_GLES1_MATERIAL))
     {
         const auto &material = gles1State.mMaterial;
@@ -416,9 +419,13 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
         setUniform4fv(programObject, programState.lightModelSceneAmbientLoc, 1,
                       lightModel.color.data());
 
+        // TODO(http://anglebug.com/7702): Implement two-sided lighting model (lightModel.twoSided)
+        setUniform1i(context, programObject, programState.lightModelTwoSidedLoc, false);
+
         for (int i = 0; i < kLightCount; i++)
         {
-            const auto &light = gles1State.mLights[i];
+            const auto &light              = gles1State.mLights[i];
+            uniformBuffers.lightEnables[i] = light.enabled;
             memcpy(uniformBuffers.lightAmbients.data() + i, light.ambient.data(),
                    sizeof(Vec4Uniform));
             memcpy(uniformBuffers.lightDiffuses.data() + i, light.diffuse.data(),
@@ -436,6 +443,8 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
             uniformBuffers.attenuationQuadratics[i] = light.attenuationQuadratic;
         }
 
+        setUniform1iv(context, programObject, programState.lightEnablesLoc, kLightCount,
+                      uniformBuffers.lightEnables.data());
         setUniform4fv(programObject, programState.lightAmbientsLoc, kLightCount,
                       reinterpret_cast<float *>(uniformBuffers.lightAmbients.data()));
         setUniform4fv(programObject, programState.lightDiffusesLoc, kLightCount,
@@ -784,16 +793,8 @@ void GLES1Renderer::addShaderBoolClipPlaneArray(std::stringstream &outStream,
 
 void GLES1Renderer::addVertexShaderDefs(std::stringstream &outStream)
 {
-    addShaderDefine(outStream, GLES1StateEnables::Lighting, "enable_lighting");
-    addShaderDefine(outStream, GLES1StateEnables::ColorMaterial, "enable_color_material");
     addShaderDefine(outStream, GLES1StateEnables::DrawTexture, "enable_draw_texture");
     addShaderDefine(outStream, GLES1StateEnables::PointRasterization, "point_rasterization");
-    addShaderDefine(outStream, GLES1StateEnables::RescaleNormal, "enable_rescale_normal");
-    addShaderDefine(outStream, GLES1StateEnables::Normalize, "enable_normalize");
-    addShaderDefine(outStream, GLES1StateEnables::LightModelTwoSided, "light_model_two_sided");
-
-    // bool light_enables[kMaxLights] = bool[kMaxLights](...);
-    addShaderBoolLightArray(outStream, "light_enables", mShaderState.lightEnables);
 }
 
 void GLES1Renderer::addFragmentShaderDefs(std::stringstream &outStream)
@@ -804,7 +805,6 @@ void GLES1Renderer::addFragmentShaderDefs(std::stringstream &outStream)
     addShaderDefine(outStream, GLES1StateEnables::PointRasterization, "point_rasterization");
     addShaderDefine(outStream, GLES1StateEnables::PointSprite, "point_sprite_enabled");
     addShaderDefine(outStream, GLES1StateEnables::AlphaTest, "enable_alpha_test");
-    addShaderDefine(outStream, GLES1StateEnables::ShadeModelFlat, "shade_model_flat");
 
     // bool enable_texture_2d[kMaxTexUnits] = bool[kMaxTexUnits](...);
     addShaderBoolTexArray(outStream, "enable_texture_2d", mShaderState.tex2DEnables);
@@ -1003,6 +1003,14 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
 
     programState.alphaTestRefLoc = programObject->getUniformLocation("alpha_test_ref");
 
+    programState.shadeModelFlatLoc = programObject->getUniformLocation("shade_model_flat");
+    programState.enableLightingLoc = programObject->getUniformLocation("enable_lighting");
+    programState.enableRescaleNormalLoc =
+        programObject->getUniformLocation("enable_rescale_normal");
+    programState.enableNormalizeLoc = programObject->getUniformLocation("enable_normalize");
+    programState.enableColorMaterialLoc =
+        programObject->getUniformLocation("enable_color_material");
+
     programState.materialAmbientLoc  = programObject->getUniformLocation("material_ambient");
     programState.materialDiffuseLoc  = programObject->getUniformLocation("material_diffuse");
     programState.materialSpecularLoc = programObject->getUniformLocation("material_specular");
@@ -1012,7 +1020,9 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
 
     programState.lightModelSceneAmbientLoc =
         programObject->getUniformLocation("light_model_scene_ambient");
+    programState.lightModelTwoSidedLoc = programObject->getUniformLocation("light_model_two_sided");
 
+    programState.lightEnablesLoc    = programObject->getUniformLocation("light_enables");
     programState.lightAmbientsLoc   = programObject->getUniformLocation("light_ambients");
     programState.lightDiffusesLoc   = programObject->getUniformLocation("light_diffuses");
     programState.lightSpecularsLoc  = programObject->getUniformLocation("light_speculars");
