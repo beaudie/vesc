@@ -22,6 +22,30 @@
       },
       "revId": "3ab7df94ee8381da55811d334429376ea564e587",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "580deba9_7ea1d2c5",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1556137
+      },
+      "writtenOn": "2022-09-27T00:41:11Z",
+      "side": 1,
+      "message": "Your concern is valid. I\u0027m looking into updating Flutter\u0027s Visual Studio installation. The only other workaround I can think of is to remove this `ANGLE_REQUIRE_CONSTANT_INIT`, which is not ideal. I\u0027ll abandon this for now.",
+      "parentUuid": "a728410d_fd93ff8e",
+      "range": {
+        "startLine": 26,
+        "startChar": 69,
+        "endLine": 26,
+        "endChar": 71
+      },
+      "revId": "3ab7df94ee8381da55811d334429376ea564e587",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
