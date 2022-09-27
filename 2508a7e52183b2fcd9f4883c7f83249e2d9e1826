@@ -359,6 +359,93 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1dcc0119_e54d6d2e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T18:50:53Z",
+      "side": 1,
+      "message": "Mostly for code clarify. If it can\u0027t be negative, the type itself (`uint`) would enforce that.\n\nTaking a quick look, `kTexelOffset` can remain `int` and everything can be `uint`. Only `kWidth` would need a cast, everything else is already a part of constructor or is directly being compared.",
+      "parentUuid": "f0deb777_18e5a560",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8de567ba_ef47039e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T18:50:53Z",
+      "side": 1,
+      "message": "nit: For consistency, please remove the `k` prefix (e.g. `width` here), and name the uniform block instance as `params`. All the other shaders are written that way.",
+      "range": {
+        "startLine": 69,
+        "startChar": 17,
+        "endLine": 69,
+        "endChar": 23
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86321f57_14e74203",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T18:50:53Z",
+      "side": 1,
+      "message": "nit: please drop the `uniform` here, it\u0027s unnecessary.",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93edf7a3_3250ba7f",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T18:50:53Z",
+      "side": 1,
+      "message": "nit: tab-\u003espaces",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 1
+      },
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "928cd8e5_36e12538",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/etc_decoder/etc_decoder.h",
         "patchSetId": 26
@@ -611,6 +698,24 @@
       "side": 1,
       "message": "I\u0027m not familar with the code. maybe i was wrong. \nhttps://github.com/google/angle/blob/36424efd2425294c3e5751280b0beae4a5474211/src/libANGLE/renderer/vulkan/vk_helpers.cpp#L6475\nglCopyImageSubData is es3.2 feature.(es3.1 have extension).\nwe can add logic to handle this case. but we need compute shader fetch from a image not from the buffer.",
       "parentUuid": "c892ad3e_014788c0",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e928279b_0fcc2cba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 7968,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-27T18:50:53Z",
+      "side": 1,
+      "message": "I don\u0027t believe you need to transcode from an image. glCopyImageSubData only works for ETC-\u003eETC copies, so you should be able to just vkCmdCopyImage between the emulated formats.\n\nThe reason you hit UNREACHABLE is that `CanCopyWithTransferForCopyImage` returns false. If `CanCopyWithTransferForCopyImage` is massaged enough, it should let emulated-ETC through. Currently, we immediately reject emulated formats for simplicity.\n\nEither way, a test would be a first step.",
+      "parentUuid": "2db168fa_781e64a0",
       "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
