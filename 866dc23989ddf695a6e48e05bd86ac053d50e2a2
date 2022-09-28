@@ -22,6 +22,30 @@
       },
       "revId": "866dc23989ddf695a6e48e05bd86ac053d50e2a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb7f603a_90ea8555",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-28T16:00:26Z",
+      "side": 1,
+      "message": "Went for `Some drivers, notably older versions of ANGLE, ...`\n\nHowever I\u0027m quite sure it can only be older ANGLE since it\u0027s certainly not the case for Mesa drivers and I\u0027ve never seen a prop. hardware driver doing so - it would make e.g. Wayland compositors crash (and I\u0027m not aware of any similar workaround in any FOSS Wayland compositor).",
+      "parentUuid": "9c4cb839_82a190c4",
+      "range": {
+        "startLine": 303,
+        "startChar": 28,
+        "endLine": 303,
+        "endChar": 33
+      },
+      "revId": "866dc23989ddf695a6e48e05bd86ac053d50e2a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
