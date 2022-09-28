@@ -104,6 +104,23 @@
       "parentUuid": "d7edbc34_35a29815",
       "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0126b48_2e042f07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-28T04:35:37Z",
+      "side": 1,
+      "message": "Sean, this CL looks good to me, but I think you should merge it with the last CL in the series.",
+      "revId": "e995d9e66d6263b4ca5e48c5454b6b3c0a17de57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
