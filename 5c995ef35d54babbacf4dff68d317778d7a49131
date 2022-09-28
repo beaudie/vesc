@@ -16,6 +16,24 @@
       "message": "Hi, unfortunately I don\u0027t have access to the b/248404756 - can anyone grant me access or give me a hint about what went wrong? That would be super nice.",
       "revId": "5c995ef35d54babbacf4dff68d317778d7a49131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1029b4bf_f9f7c0a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2022-09-28T13:49:48Z",
+      "side": 1,
+      "message": "Seems this CL causes build failures on kevin bot https://ci.chromium.org/ui/p/chromium/builders/ci/chromeos-kevin-rel/44875/overview .\n\nhttps://ci.chromium.org/ui/artifact/raw/invocations/task-chromium-swarm.appspot.com-5d810a529fce0511/artifacts/chrome%2Fchrome_20220923-024851",
+      "parentUuid": "36ad9fe6_613737a9",
+      "revId": "5c995ef35d54babbacf4dff68d317778d7a49131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
