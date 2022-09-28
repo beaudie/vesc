@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d0913b_4add9b88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-09-28T22:21:32Z",
+      "side": 1,
+      "message": "shabi - the test added here captures call flow of a skia CTS test. hits corner case of adv. blend emulation + MSAA + GL_EXT_multisampled_render_to_texture emulation\n\ni was hoping to get some insight from you on whether there is a bug in the test or the implementation of the emulation. We see the MSAA failure on NVIDIA GeForce GTX 950M (single sample test passes)",
+      "revId": "c5854b5619c5cb92cf535ace9f54af852dcb3c7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
