@@ -16,6 +16,23 @@
       "message": "Kyle, Quyen, looking forward any feedback you have.",
       "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eda9a69_a65f828c",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-09-28T22:40:11Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the rationale for all the cases in this switch statement. Can you help me understand this?\n\n\nMy understanding of the Metal buffer options comes from here, in the section \"Buffer Storage Mode (macOS)\":\n\nhttps://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/MTLBestPracticesGuide/ResourceOptions.html\n\nAnd my understanding of the GL buffer usage options comes from here:\n\nhttps://docs.gl/gl3/glBufferData#description\n\n\nGiven the above docs, I would expect the GL usage to Metal storage mode mapping to be something like:\n\n- *Copy -\u003e \"Private\" or \"Managed\", since Copy seems to imply primarily GPU-side reads/writes\n- *Read -\u003e \"Shared\", since Read seems to suggest optimizing for CPU-side reads\n- \"StaticDraw\" -\u003e \"Private\" or \"Managed\", since the data is rarely written by the application, but frequently used by the GPU\n- \"DynamicDraw\" -\u003e \"Managed\", since the data is sometimes written by the application, and used frequently by the GPU\n- \"StreamDraw\" -\u003e \"Shared\", since the data is written frequently by the application, and used a few times by the GPU\n\n\nAs for the switch statement:\n\n- The *Read cases I agree with, because the CPU side is expected to read from the buffers. Shared mode makes the most sense there.\n\n- The StaticCopy I\u0027m unsure about. It sounds like that\u0027s expected to be read/written entirely GPU side.\n\n- A puzzler for me here is StaticDraw. To me, that means \"the application writes this data very rarely (or even once), and it is frequently used for draw commands by the GPU\". I would not expect \"Shared\" for that. To me, given the option of Shared or Managed, I\u0027d expect the latter.\n\nSo for me, it seems like maybe the \"StaticDraw\" case perhaps should have been \"StreamDraw\" instead?\n\nWhat am I missing here?",
+      "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
