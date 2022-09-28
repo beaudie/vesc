@@ -54,6 +54,163 @@ class MultisampleTest : public ANGLETest<>
 class MultisampleTestES3 : public MultisampleTest
 {};
 
+class MultisampleTestAdvancedBlendEqMultDrawTest : public MultisampleTestES3
+{
+  protected:
+    MultisampleTestAdvancedBlendEqMultDrawTest() : mProgram(0) {}
+    void testSetUp() override
+    {
+        MultisampleTestES3::testSetUp();
+        glGenBuffers(1, &mVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+        static const float vertices[] = {
+            1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
+        };
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        ASSERT_GL_NO_ERROR();
+    }
+    void testTearDown() override
+    {
+        MultisampleTestES3::testTearDown();
+        glDeleteBuffers(1, &mVBO);
+        if (mProgram)
+        {
+            glDeleteProgram(mProgram);
+        }
+        ASSERT_GL_NO_ERROR();
+    }
+    void makeProgram(const char *vertSource, const char *fragSource)
+    {
+        mProgram = CompileProgram(vertSource, fragSource);
+        ASSERT_NE(0u, mProgram);
+    }
+    virtual GLint getVertexAttribLocation(const char *name)
+    {
+        return glGetAttribLocation(mProgram, name);
+    }
+    virtual GLint getFragmentUniformLocation(const char *name)
+    {
+        return glGetUniformLocation(mProgram, name);
+    }
+    virtual void setUniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+    {
+        glUniform4f(location, v0, v1, v2, v3);
+    }
+    void CheckPixels(GLint x,
+                     GLint y,
+                     GLsizei width,
+                     GLsizei height,
+                     GLint tolerance,
+                     const angle::GLColor &color)
+    {
+        for (GLint yy = 0; yy < height; ++yy)
+        {
+            for (GLint xx = 0; xx < width; ++xx)
+            {
+                const auto px = x + xx;
+                const auto py = y + yy;
+                EXPECT_PIXEL_COLOR_NEAR(px, py, color, 1);
+            }
+        }
+    }
+    void drawTest(GLint samples)
+    {
+        GLRenderbuffer rb;
+        GLFramebuffer fb;
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glBindRenderbuffer(GL_RENDERBUFFER, rb);
+        glBindFramebuffer(GL_FRAMEBUFFER, fb);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_USAGE_ANGLE, GL_FRAMEBUFFER_ATTACHMENT_ANGLE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kWindowWidth, kWindowHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, nullptr);
+
+        if (samples > 1)
+        {
+            glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                                 GL_TEXTURE_2D, tex, 0, samples);
+            glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, samples, GL_RGBA8, kWindowWidth,
+                                                kWindowHeight);
+        }
+        else
+        {
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, kWindowWidth, kWindowHeight);
+        }
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, rb);
+
+        glUseProgram(mProgram);
+        GLint position = getVertexAttribLocation(essl1_shaders::PositionAttrib());
+        GLint u_color  = getFragmentUniformLocation("u_color");
+        ASSERT_GL_NO_ERROR();
+        glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+        glEnableVertexAttribArray(position);
+        glVertexAttribPointer(position, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        ASSERT_GL_NO_ERROR();
+        static const float kDst[4] = {1.0f, 1.0f, 0.5f, 1.0f};
+        static const float kSrc[4] = {0.5f, 1.0f, 1.0f, 1.0f};
+        setUniform4f(u_color, kSrc[0], kSrc[1], kSrc[2], kSrc[3]);
+        ASSERT_GL_NO_ERROR();
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_MULTIPLY_KHR);
+        glViewport(0, 0, kWindowWidth, kWindowHeight);
+        glClearColor(kDst[0], kDst[1], kDst[2], kDst[3]);
+        ASSERT_GL_NO_ERROR();
+        glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+        // verify
+        angle::GLColor color = angle::GLColor(0x80, 0xFF, 0x80, 0xFF);
+        CheckPixels(kWindowWidth / 4, (3 * kWindowHeight) / 4, 1, 1, 1, color);
+        CheckPixels(kWindowWidth - 1, 0, 1, 1, 1, color);
+    }
+    GLuint mVBO;
+    GLuint mProgram;
+};
+
+// Interaction between GL_EXT_multisampled_render_to_texture and adv blend with MSAA config
+TEST_P(MultisampleTestAdvancedBlendEqMultDrawTest, Multisample)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
+    const char *kFragColorShader =
+        "#version 300 es\n"
+        "#extension GL_KHR_blend_equation_advanced : require\n"
+        "precision mediump float;\n"
+        "uniform vec4 u_color;\n"
+        "layout (blend_support_multiply) out\n;"
+        "layout (location = 0) out vec4 outColor;\n"
+        "void main() {\n"
+        "  outColor = u_color;\n"
+        "}\n";
+    makeProgram(essl3_shaders::vs::Simple(), kFragColorShader);
+    drawTest(4);
+}
+
+// Interaction between GL_EXT_multisampled_render_to_texture and adv blend with single sample config
+TEST_P(MultisampleTestAdvancedBlendEqMultDrawTest, SingleSample)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
+    const char *kFragColorShader =
+        "#version 300 es\n"
+        "#extension GL_KHR_blend_equation_advanced : require\n"
+        "precision mediump float;\n"
+        "uniform vec4 u_color;\n"
+        "layout (blend_support_multiply) out\n;"
+        "layout (location = 0) out vec4 outColor;\n"
+        "void main() {\n"
+        "  outColor = u_color;\n"
+        "}\n";
+    makeProgram(essl3_shaders::vs::Simple(), kFragColorShader);
+    drawTest(1);
+}
+
 // Test point rendering on a multisampled surface.  GLES2 section 3.3.1.
 TEST_P(MultisampleTest, Point)
 {
@@ -998,6 +1155,12 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31_AND(
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampleTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND_ES31_AND(MultisampleTestES3,
+                                        ES3_VULKAN().enable(Feature::EmulatedPrerotation90),
+                                        ES3_VULKAN().enable(Feature::EmulatedPrerotation180),
+                                        ES3_VULKAN().enable(Feature::EmulatedPrerotation270));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampleTestAdvancedBlendEqMultDrawTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31_AND(MultisampleTestAdvancedBlendEqMultDrawTest,
                                         ES3_VULKAN().enable(Feature::EmulatedPrerotation90),
                                         ES3_VULKAN().enable(Feature::EmulatedPrerotation180),
                                         ES3_VULKAN().enable(Feature::EmulatedPrerotation270));
