@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "600d89e5_4d271240",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T22:04:44Z",
+      "side": 1,
+      "message": "Nevermind, KHR_bea doesn\u0027t allow *any* color attachments other than 0. Removed the test and added an item to https://docs.google.com/document/d/1BsXxar1gbJ_w-Xvy76VbgmLOgB3qON6BY6YB5LVOqwo/edit that we should ban it. (Thanks for clarifying.)",
+      "parentUuid": "1317894c_c024ffc5",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd61f765_3aef769e",
