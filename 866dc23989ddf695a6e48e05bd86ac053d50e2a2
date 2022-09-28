@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c4cb839_82a190c4",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-28T15:49:42Z",
+      "side": 1,
+      "message": "nit: Are we sure it was ANGLE? It\u0027s ok to say \"some drivers\". That said the nit is: `s/Angle/ANGLE`",
+      "range": {
+        "startLine": 303,
+        "startChar": 28,
+        "endLine": 303,
+        "endChar": 33
+      },
+      "revId": "866dc23989ddf695a6e48e05bd86ac053d50e2a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
