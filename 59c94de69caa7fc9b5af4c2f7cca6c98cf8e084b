@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76475577_d74272bf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 6844,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "I agree. Rebased on the render pass serial change.",
+      "parentUuid": "dffb55bd_c0547e53",
+      "range": {
+        "startLine": 6843,
+        "startChar": 95,
+        "endLine": 6844,
+        "endChar": 84
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "335b759e_3b63cabe",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eba9527_bed148ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "335b759e_3b63cabe",
+      "range": {
+        "startLine": 2129,
+        "startChar": 29,
+        "endLine": 2129,
+        "endChar": 30
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "328708a8_90b72dea",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "Please use the fixed-size vectors we have for attachments instead. Like `FramebufferAttachmentsVector` for these two",
+      "range": {
+        "startLine": 2130,
+        "startChar": 9,
+        "endLine": 2130,
+        "endChar": 15
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c678bee1_3fc2277c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "328708a8_90b72dea",
       "range": {
         "startLine": 2130,
         "startChar": 9,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "949e2543_45ae3526",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2173,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Do you mean `resolveImageIn`? I have changed `getFramebuffer()` to pass in a `RenderTargetVk` instead. Also `FramebufferAttachmentEmbeddedInfo` replaced with `RenderTargetInfo`, which includes a `RenderTargetVk*` and an enum to indicate whether the resolve image should be used for the render pass.\n\nAlso, test added (`MultisampleResolveWithBlitNonZeroLevel`).",
+      "parentUuid": "949cee51_fe5e6cef",
+      "range": {
+        "startLine": 2173,
+        "startChar": 62,
+        "endLine": 2173,
+        "endChar": 66
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cdd5fab9_c7c42656",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 27
@@ -106,6 +202,30 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "Does `mCurrentFramebufferDesc.getLayerCount()` alone not work?\n\n`std::max` seems redundant too, I think `info.layerCount` would always be `\u003e\u003d` desc layer count (because desc layer count is the min of all attachment layer counts)",
+      "range": {
+        "startLine": 2340,
+        "startChar": 22,
+        "endLine": 2340,
+        "endChar": 88
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03d074a9_743fb1ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Yes, it works. Removed. Thanks!",
+      "parentUuid": "cdd5fab9_c7c42656",
       "range": {
         "startLine": 2340,
         "startChar": 22,
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d51d86_1215e2ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Not sure where it came from! Thanks!\nRemoved.",
+      "parentUuid": "c48a3e5c_f4415575",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 47
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49226366_4acf7c08",
@@ -152,6 +296,24 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "Could you please file a specific swiftshader bug for this in buganizer?",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f79ba0df_0498d8a5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 3847,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done. The bug is now fixed. So it can be removed.",
+      "parentUuid": "49226366_4acf7c08",
       "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -173,6 +335,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f907c320_a6a58156",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1638,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fef2381_54f4efe0",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed16a132_bce4e19c",
@@ -186,6 +366,24 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "nit: `AddToPNextChain` exists",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83735354_7b01fbaa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2304,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed16a132_bce4e19c",
       "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -207,6 +405,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26048436_0eb8aa3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 5014,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done (Using `.end()` as limit did not work; used `.max_size()` instead)",
+      "parentUuid": "f7ebe042_8df7eead",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "253c3a20_cc5dbc35",
@@ -220,6 +436,30 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "nit: `s/Format/ViewFormats`",
+      "range": {
+        "startLine": 5332,
+        "startChar": 29,
+        "endLine": 5332,
+        "endChar": 35
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4821aa_c6ca314a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 5332,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "253c3a20_cc5dbc35",
       "range": {
         "startLine": 5332,
         "startChar": 29,
@@ -253,6 +493,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fd8feb2_5e2a020c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1240,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Renamed to `MaybeImagelessFramebuffer`",
+      "parentUuid": "81287536_fff5f164",
+      "range": {
+        "startLine": 1240,
+        "startChar": 6,
+        "endLine": 1240,
+        "endChar": 30
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07260683_dda4ba62",
@@ -266,6 +530,30 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "It doesn\u0027t look like a copy is really necessary. If you std::move this class around, you can avoid the copy.\n\nPlease inherit this class from `angle::NonCopyable` to prevent accidental copies.",
+      "range": {
+        "startLine": 1246,
+        "startChar": 9,
+        "endLine": 1246,
+        "endChar": 28
+      },
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b61073d1_d1e4122d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done. This function has now been removed and replaced with `operator\u003d`.",
+      "parentUuid": "07260683_dda4ba62",
       "range": {
         "startLine": 1246,
         "startChar": 9,
@@ -293,6 +581,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d172c5f_30feb4c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "ea559def_d09788e4",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e772fc1_2b1c4757",
@@ -310,6 +616,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b72740c_9acc3a77",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e772fc1_2b1c4757",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "374b14ae_51f0d4ab",
@@ -323,6 +647,24 @@
       "writtenOn": "2022-09-23T14:53:04Z",
       "side": 1,
       "message": "This too can be folded into the function that sets the handle and views. Then the object is never partially correct.\n\nAnd since you now need a `bool` for that, remember to use an `enum class` instead 😊",
+      "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6017a919_e617a2dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 27
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-28T19:07:37Z",
+      "side": 1,
+      "message": "Done. Also, bool replaced with enum class.",
+      "parentUuid": "374b14ae_51f0d4ab",
       "revId": "59c94de69caa7fc9b5af4c2f7cca6c98cf8e084b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
