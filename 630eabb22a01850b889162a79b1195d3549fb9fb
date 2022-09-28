@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38d3e265_0c22afb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-28T04:41:25Z",
+      "side": 1,
+      "message": "Hey Sean, great stuff, I\u0027ve been trying it locally with traces.  One question below that I think should probably be addressed.",
+      "revId": "630eabb22a01850b889162a79b1195d3549fb9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72916215_cfdb222d",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-28T04:41:25Z",
+      "side": 1,
+      "message": "This is getting the min version without requesting any additional extensions.  I think there\u0027s a problem here.  Take a trace that requires ES 3.1 + extensions.  With this logic, you\u0027ll still end up with ES 3.2 as the required minimum, and a collection of extensions, some of which that are already core in 3.2.  I verified this with `dead_by_daylight` and `sky_force_reloaded` on SwiftShader.",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 56
+      },
+      "revId": "630eabb22a01850b889162a79b1195d3549fb9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
