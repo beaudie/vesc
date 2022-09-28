@@ -34,6 +34,24 @@
       "parentUuid": "36ad9fe6_613737a9",
       "revId": "5c995ef35d54babbacf4dff68d317778d7a49131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "926a391e_32c1b7fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-28T14:19:23Z",
+      "side": 1,
+      "message": "Thanks! So this is a bit funny: the error is `Could not load EGL entry point eglQueryDmaBufFormatsEXT`, meaning the test is run on top of a buggy driver that announces `EGL_EXT_image_dma_buf_import_modifiers` without implementing `eglQueryDmaBufFormatsEXT`.\n\nAFAIK there\u0027s only one such driver that comes into question here, which is Angle-EGL before Ifbb0a182171646df8161f6f42eafe2a476fea6b2\n\nSo IIUC the scenario here is new Angle-EGL running on top of older Angle-EGL - is that realistic?\n\nIf so, I see two ways to solve that:\n1. wait until the test/CI is updated to newer Angle, including the fix.\n2. fail softly if `eglQueryDmaBufFormatsEXT` or `eglQueryDmaBufModifiersEXT` are not implemented by the driver and remove `EGL_EXT_image_dma_buf_import_modifiers` from the extension list.\n \nI\u0027ll look into proposing a reland with 2., assuming 1. will take quite a while.",
+      "parentUuid": "1029b4bf_f9f7c0a7",
+      "revId": "5c995ef35d54babbacf4dff68d317778d7a49131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
