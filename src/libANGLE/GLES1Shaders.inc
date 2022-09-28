@@ -27,12 +27,6 @@
 // int src1_alpha[kMaxTexUnits];
 // int src2_rgb[kMaxTexUnits];
 // int src2_alpha[kMaxTexUnits];
-// int op0_rgb[kMaxTexUnits];
-// int op0_alpha[kMaxTexUnits];
-// int op1_rgb[kMaxTexUnits];
-// int op1_alpha[kMaxTexUnits];
-// int op2_rgb[kMaxTexUnits];
-// int op2_alpha[kMaxTexUnits];
 // int alpha_func;
 // int fog_mode;
 
@@ -401,11 +395,6 @@ constexpr char kGLES1DrawFShaderHeader[] = R"(precision highp float;
 #define kPrimaryColor                   0x8577
 #define kPrevious                       0x8578
 
-#define kSrcColor                       0x0300
-#define kOneMinusSrcColor               0x0301
-#define kSrcAlpha                       0x0302
-#define kOneMinusSrcAlpha               0x0303
-
 #define kLinear                         0x2601
 #define kExp                            0x0800
 #define kExp2                           0x0801
@@ -458,6 +447,8 @@ uniform samplerCube tex_cube_sampler2;
 uniform sampler2D tex_sampler3;
 uniform samplerCube tex_cube_sampler3;
 
+// Packed ops. See textureCombine() for details.
+uniform uint ops[kMaxTexUnits];
 uniform vec4 texture_env_color[kMaxTexUnits];
 uniform float texture_env_rgb_scale[kMaxTexUnits];
 uniform float texture_env_alpha_scale[kMaxTexUnits];
@@ -786,7 +777,8 @@ vec4 getPointSpriteTextureColor(int unit)
 }
 
 vec3 textureCombineSrcnOpnRgb(int srcnRgb,
-                              int opnRgb,
+                              uint ops,
+                              uint opsBitOffset,
                               vec4 textureEnvColor,
                               vec4 vertexColor,
                               vec4 texturePrevColor,
@@ -807,74 +799,54 @@ vec3 textureCombineSrcnOpnRgb(int srcnRgb,
             op = vertexColor;
             break;
         case kPrevious:
-            op = texturePrevColor;
-            break;
         default:
             op = texturePrevColor;
             break;
     }
 
-    switch (opnRgb)
-    {
-        case kSrcColor:
-            res = op.rgb;
-            break;
-        case kOneMinusSrcColor:
-            res = 1.0 - op.rgb;
-            break;
-        case kSrcAlpha:
-            res = vec3(op.a, op.a, op.a);
-            break;
-        case kOneMinusSrcAlpha:
-            res = vec3(1.0 - op.a, 1.0 - op.a, 1.0 - op.a);
-            break;
-        default:
-            break;
-    }
+    // Bit pattern is:
+    // - bit 0 selects between op.rgb and 1.0-op.rgb
+    // - bit 1 selects between op.a and 1.0-op.a
+    // - bit 2 selects between the previous two
+    vec3 selectRgb = bool(ops >> opsBitOffset & 1u) ? 1.0 - op.rgb : op.rgb;
+    float selectA = bool(ops >> (opsBitOffset + 1u) & 1u) ? 1.0 - op.a : op.a;
+
+    res = bool(ops >> (opsBitOffset + 2u) & 1u) ? vec3(selectA) : selectRgb;
 
     return res;
 }
 
 float textureCombineSrcnOpnAlpha(int srcn,
-                                 int opn,
+                                 uint ops,
+                                 uint opsBitOffset,
                                  vec4 textureEnvColor,
                                  vec4 vertexColor,
                                  vec4 texturePrevColor,
                                  vec4 textureColor)
 {
     float res;
-    vec4 op;
+    float op;
 
     switch (srcn)
     {
         case kTexture:
-            op = textureColor;
+            op = textureColor.a;
             break;
         case kConstant:
-            op = textureEnvColor;
+            op = textureEnvColor.a;
             break;
         case kPrimaryColor:
-            op = vertexColor;
+            op = vertexColor.a;
             break;
         case kPrevious:
-            op = texturePrevColor;
-            break;
         default:
-            op = texturePrevColor;
+            op = texturePrevColor.a;
             break;
     }
 
-    switch (opn)
-    {
-        case kSrcAlpha:
-            res = op.a;
-            break;
-        case kOneMinusSrcAlpha:
-            res = 1.0 - op.a;
-            break;
-        default:
-            break;
-    }
+    // Bit pattern is:
+    // - bit 0 selects between op.a and 1.0-op.A
+    res = bool(ops >> opsBitOffset & 1u) ? 1.0 - op : op;
 
     return res;
 }
@@ -887,12 +859,7 @@ vec4 textureCombine(int combineRgb,
                     int src1Alpha,
                     int src2Rgb,
                     int src2Alpha,
-                    int op0Rgb,
-                    int op0Alpha,
-                    int op1Rgb,
-                    int op1Alpha,
-                    int op2Rgb,
-                    int op2Alpha,
+                    uint ops,
                     vec4 textureEnvColor,
                     float rgbScale,
                     float alphaScale,
@@ -912,32 +879,42 @@ vec4 textureCombine(int combineRgb,
     float arg2Alpha;
     float dotVal;
 
-    arg0Rgb   = textureCombineSrcnOpnRgb(src0Rgb, op0Rgb, textureEnvColor, vertexColor,
+    // ops is a packed bitset selecting the rgb and alpha ops for arg0, arg1 and arg2.  The bit
+    // pattern is:
+    //
+    //  (LSB) aaa b  ccc d  eee f 0000 0000 0000 0000 0000 (MSB)
+    //         ^  ^   ^  ^   ^  ^
+    //         |  |   |  |   |  |
+    //       rgb0 | rgb1 | rgb2 |
+    //         alpha0 alpha1 alpha2
+    //
+
+    arg0Rgb   = textureCombineSrcnOpnRgb(src0Rgb, ops, 0u, textureEnvColor, vertexColor,
                                        texturePrevColor, textureColor);
-    arg0Alpha = textureCombineSrcnOpnAlpha(src0Alpha, op0Alpha, textureEnvColor, vertexColor,
+    arg0Alpha = textureCombineSrcnOpnAlpha(src0Alpha, ops, 3u, textureEnvColor, vertexColor,
                                            texturePrevColor, textureColor);
 
     if (combineRgb != kReplace)
     {
-        arg1Rgb = textureCombineSrcnOpnRgb(src1Rgb, op1Rgb, textureEnvColor, vertexColor,
+        arg1Rgb = textureCombineSrcnOpnRgb(src1Rgb, ops, 4u, textureEnvColor, vertexColor,
                                            texturePrevColor, textureColor);
     }
 
     if (combineAlpha != kReplace)
     {
-        arg1Alpha = textureCombineSrcnOpnAlpha(src1Alpha, op1Alpha, textureEnvColor, vertexColor,
+        arg1Alpha = textureCombineSrcnOpnAlpha(src1Alpha, ops, 7u, textureEnvColor, vertexColor,
                                                texturePrevColor, textureColor);
     }
 
     if (combineRgb == kInterpolate)
     {
-        arg2Rgb = textureCombineSrcnOpnRgb(src2Rgb, op2Rgb, textureEnvColor, vertexColor,
+        arg2Rgb = textureCombineSrcnOpnRgb(src2Rgb, ops, 8u, textureEnvColor, vertexColor,
                                            texturePrevColor, textureColor);
     }
 
     if (combineAlpha == kInterpolate)
     {
-        arg2Alpha = textureCombineSrcnOpnAlpha(src2Alpha, op2Alpha, textureEnvColor, vertexColor,
+        arg2Alpha = textureCombineSrcnOpnAlpha(src2Alpha, ops, 11u, textureEnvColor, vertexColor,
                                                texturePrevColor, textureColor);
     }
 
@@ -1019,12 +996,7 @@ vec4 textureFunction(int unit,
                      int src1Alpha,
                      int src2Rgb,
                      int src2Alpha,
-                     int op0Rgb,
-                     int op0Alpha,
-                     int op1Rgb,
-                     int op1Alpha,
-                     int op2Rgb,
-                     int op2Alpha,
+                     uint ops,
                      vec4 textureEnvColor,
                      float rgbScale,
                      float alphaScale,
@@ -1145,8 +1117,7 @@ vec4 textureFunction(int unit,
             break;
         case kCombine:
             res = textureCombine(combineRgb, combineAlpha, src0Rgb, src0Alpha, src1Rgb, src1Alpha,
-                                 src2Rgb, src2Alpha, op0Rgb, op0Alpha, op1Rgb, op1Alpha, op2Rgb,
-                                 op2Alpha, textureEnvColor, rgbScale, alphaScale, vertexColor,
+                                 src2Rgb, src2Alpha, ops, textureEnvColor, rgbScale, alphaScale, vertexColor,
                                  texturePrevColor, textureColor);
             res.rgb *= rgbScale;
             res.a *= alphaScale;
@@ -1199,8 +1170,7 @@ void main()
         currentFragment = textureFunction(
             i, texture_format[i], texture_env_mode[i], combine_rgb[i], combine_alpha[i],
             src0_rgb[i], src0_alpha[i], src1_rgb[i], src1_alpha[i], src2_rgb[i], src2_alpha[i],
-            op0_rgb[i], op0_alpha[i], op1_rgb[i], op1_alpha[i], op2_rgb[i], op2_alpha[i],
-            texture_env_color[i], texture_env_rgb_scale[i], texture_env_alpha_scale[i],
+            ops[i], texture_env_color[i], texture_env_rgb_scale[i], texture_env_alpha_scale[i],
             vertex_color, texturePrevColor, textureColor);
 
         texturePrevColor = currentFragment;

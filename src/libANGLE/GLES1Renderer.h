@@ -77,12 +77,6 @@ struct GLES1ShaderState
     IntTexArray texCombineSrc1Alphas = {};
     IntTexArray texCombineSrc2Rgbs   = {};
     IntTexArray texCombineSrc2Alphas = {};
-    IntTexArray texCombineOp0Rgbs    = {};
-    IntTexArray texCombineOp0Alphas  = {};
-    IntTexArray texCombineOp1Rgbs    = {};
-    IntTexArray texCombineOp1Alphas  = {};
-    IntTexArray texCombineOp2Rgbs    = {};
-    IntTexArray texCombineOp2Alphas  = {};
 
     BoolTexArray pointSpriteCoordReplaces = {};
 
@@ -158,12 +152,16 @@ class GLES1Renderer final : angle::NonCopyable
                       Program *programObject,
                       UniformLocation location,
                       GLint value);
-    void setUniform1ui(Program *programObject, UniformLocation location, GLuint value);
     void setUniform1iv(Context *context,
                        Program *programObject,
                        UniformLocation location,
                        GLint count,
                        const GLint *value);
+    void setUniform1ui(Program *programObject, UniformLocation location, GLuint value);
+    void setUniform1uiv(Program *programObject,
+                        UniformLocation location,
+                        GLint count,
+                        const GLuint *value);
     void setUniformMatrix4fv(Program *programObject,
                              UniformLocation location,
                              GLint count,
@@ -233,6 +231,7 @@ class GLES1Renderer final : angle::NonCopyable
         std::array<UniformLocation, kTexUnitCount> tex2DSamplerLocs;
         std::array<UniformLocation, kTexUnitCount> texCubeSamplerLocs;
 
+        UniformLocation opsLoc;
         UniformLocation textureEnvColorLoc;
         UniformLocation rgbScaleLoc;
         UniformLocation alphaScaleLoc;
@@ -295,6 +294,7 @@ class GLES1Renderer final : angle::NonCopyable
     {
         std::array<Mat4Uniform, kTexUnitCount> textureMatrices;
 
+        std::array<GLuint, kTexUnitCount> texCombineOps;
         std::array<Vec4Uniform, kTexUnitCount> texEnvColors;
         std::array<GLfloat, kTexUnitCount> texEnvRgbScales;
         std::array<GLfloat, kTexUnitCount> texEnvAlphaScales;
