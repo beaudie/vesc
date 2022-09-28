@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36ad9fe6_613737a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-28T12:37:37Z",
+      "side": 1,
+      "message": "Hi, unfortunately I don\u0027t have access to the b/248404756 - can anyone grant me access or give me a hint about what went wrong? That would be super nice.",
+      "revId": "5c995ef35d54babbacf4dff68d317778d7a49131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
