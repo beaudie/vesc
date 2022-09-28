@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1317894c_c024ffc5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Other than maybe https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7706 , I don\u0027t think we have to disallow them. They may be of questionable value when combined with PLS, but it\u0027s more spec work to ban them.\n\nI added a test for both to make sure they work as expected.",
+      "parentUuid": "8c12f7e2_a0c44d2e",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd61f765_3aef769e",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-09-26T19:49:20Z",
       "side": 1,
       "message": "Please move this sort of helper to where it\u0027s used, or `src/common` if used both in translator and frontend/backend. This is a public API header, so the smaller the better.",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd0be1c1_99188ea6",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd61f765_3aef769e",
       "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a86a313a_d1591f37",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "333963f9_f85982ff",
+      "range": {
+        "startLine": 91,
+        "startChar": 57,
+        "endLine": 91,
+        "endChar": 61
+      },
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b276c7da_405f9c73",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-09-27T15:28:54Z",
       "side": 1,
       "message": "Only `1`?\n\nYou can always use a `Vector` of `{0, 1, 2, 3}` and resize it to `accessVar-\u003egetType().getNominalSize()` (and use `new TIntermSwizzle`), so you don\u0027t have to specifically list the sizes in the switch statement",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d260db6_892cbfbc",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 817,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Whoa! that\u0027s brilliant 🤯\n\nJust 1 for now because we only support rgba8* and r32* formats. I hope to add rg16* though.",
+      "parentUuid": "b276c7da_405f9c73",
       "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1145d22_2a772586",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcbd3507_f5e85b82",
+      "range": {
+        "startLine": 699,
+        "startChar": 23,
+        "endLine": 699,
+        "endChar": 25
+      },
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8863993_79959c91",
@@ -115,6 +217,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09855196_8759c190",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Now that we can use EXT_shader_framebuffer_fetch_non_coherent in GLES, this is also true. Updated the comment.",
+      "parentUuid": "e8863993_79959c91",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eee6fe0d_78942c5d",
@@ -128,6 +248,24 @@
       "writtenOn": "2022-09-26T19:49:20Z",
       "side": 1,
       "message": "It looks like with this change, you should be able to support framebuffer fetch for the GL backend just fine. If you feel like taking a very small detour, you can try following up with a change that removes `supportsNativeShaderFramebufferFetchEXT` and directly makes the GL backend advertise support for the extension. If it fails tests, you don\u0027t have to spend any more time on that.",
+      "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fecba9a5_4b4b7c58",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 2369,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-28T07:10:46Z",
+      "side": 1,
+      "message": "Rebased on https://chromium-review.googlesource.com/c/angle/angle/+/3920577",
+      "parentUuid": "eee6fe0d_78942c5d",
       "revId": "b0f6a547474a9ddff2e7de30dd394443d2b93b9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
