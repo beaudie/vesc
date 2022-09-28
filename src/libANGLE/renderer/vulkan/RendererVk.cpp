@@ -3516,6 +3516,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsBlendOperationAdvanced,
         ExtensionFound(VK_EXT_BLEND_OPERATION_ADVANCED_EXTENSION_NAME, deviceExtensionNames));
 
+    // Force emulation of this feature
+    mFeatures.supportsBlendOperationAdvanced.enabled = false;
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTransformFeedbackExtension,
                             mTransformFeedbackFeatures.transformFeedback == VK_TRUE);
 
