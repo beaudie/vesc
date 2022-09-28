@@ -22,6 +22,30 @@
       },
       "revId": "cb91067a2e0e4271a00391abceda1214dc0a88fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01b7b34c_93396237",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-09-28T06:23:16Z",
+      "side": 1,
+      "message": "yes! thanks!",
+      "parentUuid": "19e83b5f_f7a5e7e2",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 24
+      },
+      "revId": "cb91067a2e0e4271a00391abceda1214dc0a88fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
