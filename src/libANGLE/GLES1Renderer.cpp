@@ -26,6 +26,52 @@ namespace
 {
 #include "libANGLE/GLES1Shaders.inc"
 
+uint32_t GetCombineRGBOpUniform(gl::TextureOp op)
+{
+    // The bit pattern is:
+    //
+    //    SrcColor : 000
+    //    OneMinusSrcColor : 001
+    //    SrcAlpha : 100
+    //    OneMinusSrcAlpha : 110
+    //
+    switch (op)
+    {
+        case gl::TextureOp::SrcColor:
+            return 0x0;
+        case gl::TextureOp::OneMinusSrcColor:
+            return 0x1;
+        case gl::TextureOp::SrcAlpha:
+            return 0x4;
+        case gl::TextureOp::OneMinusSrcAlpha:
+            return 0x6;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+uint32_t GetCombineAlphaOpUniform(gl::TextureOp op)
+{
+    // The bit pattern is:
+    //
+    //    SrcAlpha : 0
+    //    OneMinusSrcAlpha : 1
+    //
+    switch (op)
+    {
+        case gl::TextureOp::SrcAlpha:
+            return 0x0;
+        case gl::TextureOp::OneMinusSrcAlpha:
+            return 0x1;
+        case gl::TextureOp::SrcColor:
+        case gl::TextureOp::OneMinusSrcColor:
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 uint32_t GetLogicOpUniform(const gl::FramebufferAttachment *color, gl::LogicalOperation logicOp)
 {
     const uint32_t red   = color->getRedSize();
@@ -148,12 +194,6 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     GLES1ShaderState::IntTexArray &texCombineSrc1Alphas = mShaderState.texCombineSrc1Alphas;
     GLES1ShaderState::IntTexArray &texCombineSrc2Rgbs   = mShaderState.texCombineSrc2Rgbs;
     GLES1ShaderState::IntTexArray &texCombineSrc2Alphas = mShaderState.texCombineSrc2Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp0Rgbs    = mShaderState.texCombineOp0Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp0Alphas  = mShaderState.texCombineOp0Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp1Rgbs    = mShaderState.texCombineOp1Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp1Alphas  = mShaderState.texCombineOp1Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp2Rgbs    = mShaderState.texCombineOp2Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp2Alphas  = mShaderState.texCombineOp2Alphas;
 
     if (gles1State.isDirty(GLES1State::DIRTY_GLES1_TEXTURE_ENVIRONMENT))
     {
@@ -169,12 +209,6 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
             texCombineSrc1Alphas[i] = ToGLenum(env.src1Alpha);
             texCombineSrc2Rgbs[i]   = ToGLenum(env.src2Rgb);
             texCombineSrc2Alphas[i] = ToGLenum(env.src2Alpha);
-            texCombineOp0Rgbs[i]    = ToGLenum(env.op0Rgb);
-            texCombineOp0Alphas[i]  = ToGLenum(env.op0Alpha);
-            texCombineOp1Rgbs[i]    = ToGLenum(env.op1Rgb);
-            texCombineOp1Alphas[i]  = ToGLenum(env.op1Alpha);
-            texCombineOp2Rgbs[i]    = ToGLenum(env.op2Rgb);
-            texCombineOp2Alphas[i]  = ToGLenum(env.op2Alpha);
         }
     }
 
@@ -370,6 +404,15 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
         {
             const auto &env = gles1State.textureEnvironment(i);
 
+            // Pack the ops based on the format specified in the shader (textureCombine())
+            uniformBuffers.texCombineOps[i] = 0;
+            uniformBuffers.texCombineOps[i] |= GetCombineRGBOpUniform(env.op0Rgb);
+            uniformBuffers.texCombineOps[i] |= GetCombineAlphaOpUniform(env.op0Alpha) << 3;
+            uniformBuffers.texCombineOps[i] |= GetCombineRGBOpUniform(env.op1Rgb) << 4;
+            uniformBuffers.texCombineOps[i] |= GetCombineAlphaOpUniform(env.op1Alpha) << 7;
+            uniformBuffers.texCombineOps[i] |= GetCombineRGBOpUniform(env.op2Rgb) << 8;
+            uniformBuffers.texCombineOps[i] |= GetCombineAlphaOpUniform(env.op2Alpha) << 11;
+
             uniformBuffers.texEnvColors[i][0] = env.color.red;
             uniformBuffers.texEnvColors[i][1] = env.color.green;
             uniformBuffers.texEnvColors[i][2] = env.color.blue;
@@ -379,6 +422,8 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
             uniformBuffers.texEnvAlphaScales[i] = env.alphaScale;
         }
 
+        setUniform1uiv(programObject, programState.opsLoc, kTexUnitCount,
+                       uniformBuffers.texCombineOps.data());
         setUniform4fv(programObject, programState.textureEnvColorLoc, kTexUnitCount,
                       reinterpret_cast<float *>(uniformBuffers.texEnvColors.data()));
         setUniform1fv(programObject, programState.rgbScaleLoc, kTexUnitCount,
@@ -849,24 +894,6 @@ void GLES1Renderer::addFragmentShaderDefs(std::stringstream &outStream)
     // int src2_alpha[kMaxTexUnits];
     addShaderIntTexArray(outStream, "src2_alpha", mShaderState.texCombineSrc2Alphas);
 
-    // int op0_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op0_rgb", mShaderState.texCombineOp0Rgbs);
-
-    // int op0_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op0_alpha", mShaderState.texCombineOp0Alphas);
-
-    // int op1_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op1_rgb", mShaderState.texCombineOp1Rgbs);
-
-    // int op1_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op1_alpha", mShaderState.texCombineOp1Alphas);
-
-    // int op2_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op2_rgb", mShaderState.texCombineOp2Rgbs);
-
-    // int op2_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op2_alpha", mShaderState.texCombineOp2Alphas);
-
     // int alpha_func;
     addShaderInt(outStream, "alpha_func", ToGLenum(mShaderState.alphaTestFunc));
 
@@ -997,6 +1024,7 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
             programObject->getUniformLocation(sscube.str().c_str());
     }
 
+    programState.opsLoc             = programObject->getUniformLocation("ops");
     programState.textureEnvColorLoc = programObject->getUniformLocation("texture_env_color");
     programState.rgbScaleLoc        = programObject->getUniformLocation("texture_env_rgb_scale");
     programState.alphaScaleLoc      = programObject->getUniformLocation("texture_env_alpha_scale");
@@ -1084,13 +1112,6 @@ void GLES1Renderer::setUniform1i(Context *context,
     programObject->setUniform1iv(context, location, 1, &value);
 }
 
-void GLES1Renderer::setUniform1ui(Program *programObject, UniformLocation location, GLuint value)
-{
-    if (location.value == -1)
-        return;
-    programObject->setUniform1uiv(location, 1, &value);
-}
-
 void GLES1Renderer::setUniform1iv(Context *context,
                                   Program *programObject,
                                   UniformLocation location,
@@ -1100,6 +1121,23 @@ void GLES1Renderer::setUniform1iv(Context *context,
     if (location.value == -1)
         return;
     programObject->setUniform1iv(context, location, count, value);
+}
+
+void GLES1Renderer::setUniform1ui(Program *programObject, UniformLocation location, GLuint value)
+{
+    if (location.value == -1)
+        return;
+    programObject->setUniform1uiv(location, 1, &value);
+}
+
+void GLES1Renderer::setUniform1uiv(Program *programObject,
+                                   UniformLocation location,
+                                   GLint count,
+                                   const GLuint *value)
+{
+    if (location.value == -1)
+        return;
+    programObject->setUniform1uiv(location, count, value);
 }
 
 void GLES1Renderer::setUniformMatrix4fv(Program *programObject,
