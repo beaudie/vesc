@@ -462,6 +462,83 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// new corner bug
+TEST_P(ComputeShaderTest, NewCornerCase)
+{
+    constexpr char cShaderCode[] = {
+        R"(#version 310 es
+
+#ifdef GL_EXT_texture_buffer
+#extension GL_EXT_texture_buffer : enable
+
+#endif
+#define INTERFACE_BLOCK(Pos, Interp, Modifiers, Semantic, PreType, PostType) layout(location=Pos) Modifiers Semantic { PreType PostType; }
+
+// end extensions
+layout( local_size_x = 64, local_size_y = 1, local_size_z = 1 ) in;
+uniform writeonly layout(rgba32f,binding=0) highp image2D ci0;
+uniform highp usamplerBuffer cs1;
+void main()
+{
+    texelFetch(cs1,int(1));
+    imageStore(ci0, ivec2(2, 2), vec4(0.5));
+})",
+    };
+
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, cShaderCode);
+    glUseProgram(computeProgram.get());
+
+    GLint uniformLocation = glGetUniformLocation(computeProgram, "cs1");
+    glUniform1i(uniformLocation, 0);
+
+    GLuint buffer2Id = 0;
+    glGenBuffers(1, &buffer2Id);
+    const size_t buffer2Size = 17;
+    std::vector<GLubyte> buffer2BinaryData(buffer2Size, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer2Id);
+    glBufferData(GL_ARRAY_BUFFER, buffer2Size, buffer2BinaryData.data(), GL_DYNAMIC_DRAW);
+
+    GLuint texture3Id = 0;
+    glGenTextures(1, &texture3Id);
+    glBindTexture(GL_TEXTURE_BUFFER, texture3Id);
+    glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGBA32F, buffer2Id);
+
+    GLuint texture1Id = 0;
+    glGenTextures(1, &texture1Id);
+    glBindTexture(GL_TEXTURE_2D, texture1Id);
+    const size_t textureWidth  = 3;
+    const size_t textureHeight = 5;
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F, textureWidth, textureHeight);
+    const GLfloat initData = 0.1;
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGBA, GL_FLOAT,
+                    &initData);
+
+    glBindImageTexture(0, texture1Id, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+    ASSERT_GL_NO_ERROR();
+
+    glDispatchCompute(3, 1, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // define the memory barrier
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
+    // read back the texels to confirm the shader executed
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture1Id, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<float> temp(4, 0.0);
+    const GLColor32F expected(0.5, 0.5, 0.5, 0.5);
+    EXPECT_PIXEL_COLOR32F_NEAR(2, 2, expected, 0.01);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that the buffer written to by imageStore() in the CS does not race with writing to the
 // buffer when it's mapped.
 TEST_P(ComputeShaderTest, BufferImageBufferMapWrite)
