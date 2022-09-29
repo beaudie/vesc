@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eed9034e_46697321",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4168,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T22:17:33Z",
+      "side": 1,
+      "message": "I went ahead and split it into https://chromium-review.googlesource.com/c/angle/angle/+/3928208",
+      "parentUuid": "7f881007_0d4d1233",
+      "range": {
+        "startLine": 4168,
+        "startChar": 47,
+        "endLine": 4168,
+        "endChar": 52
+      },
+      "revId": "dd895de04c3489b079a6a1b52e861a04bd504241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1650e4a0_0c529022",
@@ -109,6 +133,30 @@
       "side": 1,
       "message": "Yes, thanks.  I\u0027ll update that for clarity.",
       "parentUuid": "1650e4a0_0c529022",
+      "range": {
+        "startLine": 1466,
+        "startChar": 82,
+        "endLine": 1466,
+        "endChar": 90
+      },
+      "revId": "dd895de04c3489b079a6a1b52e861a04bd504241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e4b934_fcf3c052",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T22:17:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9f664f7_3c6328b6",
       "range": {
         "startLine": 1466,
         "startChar": 82,
