@@ -6346,6 +6346,7 @@ void ContextVk::handleError(VkResult errorCode,
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)
 {
+    std::cout << "============ in ContextVk::updateActiveTextures()\n";
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
     ProgramExecutableVk *executableVk = getExecutable();
@@ -6365,10 +6366,12 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
         ASSERT(textureType != gl::TextureType::InvalidEnum);
 
         const bool isIncompleteTexture = texture == nullptr;
+        std::cout << "============ texture: " << std::hex << texture << "\n";
 
         // Null textures represent incomplete textures.
         if (isIncompleteTexture)
         {
+            std::cout << "============ trying getIncompleteTexture() \n";
             ANGLE_TRY(getIncompleteTexture(
                 context, textureType, executable->getSamplerFormatForTextureUnitIndex(textureUnit),
                 &texture));
