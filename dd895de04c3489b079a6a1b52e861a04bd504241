@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6af75d9a_edcc19f3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4168,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T22:04:51Z",
+      "side": 1,
+      "message": "No, that\u0027s required now.  The first trace wouldn\u0027t run anywhere other than ANGLE and Nvidia native.  By dropping this extension, the app stops using it and we get a trace that runs everywhere (and faster).\n\nI can split it to its own CL or mention it in this one.  We usually do the latter just to save testing cycles.",
+      "parentUuid": "8a4704c0_4ad07e9f",
+      "range": {
+        "startLine": 4168,
+        "startChar": 47,
+        "endLine": 4168,
+        "endChar": 52
+      },
+      "revId": "dd895de04c3489b079a6a1b52e861a04bd504241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1650e4a0_0c529022",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2022-09-29T21:29:37Z",
       "side": 1,
       "message": "`baseLocation` here as well? The check above seems to be checking for dangling pointer and we don\u0027t assert `location \u003d\u003d baseLocation`",
+      "range": {
+        "startLine": 1466,
+        "startChar": 82,
+        "endLine": 1466,
+        "endChar": 90
+      },
+      "revId": "dd895de04c3489b079a6a1b52e861a04bd504241",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f664f7_3c6328b6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T22:04:51Z",
+      "side": 1,
+      "message": "Yes, thanks.  I\u0027ll update that for clarity.",
+      "parentUuid": "1650e4a0_0c529022",
       "range": {
         "startLine": 1466,
         "startChar": 82,
