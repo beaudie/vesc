@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee67298_f9d17961",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-29T23:43:49Z",
+      "side": 1,
+      "message": "how can we verify the rest of the invocations are dropped out?",
+      "revId": "dbfada988407f77ce8f66df42f627e5ac3090b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
