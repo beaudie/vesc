@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "897a1d6b_e4a4486b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-09-29T23:34:38Z",
+      "side": 1,
+      "message": "Can we update the bug description at http://anglebug.com/7711 to include this vulkan validation error?",
+      "revId": "88c8feafdc84e8a839edf9f5279d5b5a84ee1a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
