@@ -48,6 +48,14 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         const TType &leftType  = node->getLeft()->getType();
         const TType &rightType = node->getRight()->getType();
 
+        // Don't clamp indirect indices on buffer blocks.  They are covered by the relevant
+        // robust access behavior of the backend.  The same is true for uniform blocks, but it's not
+        // excluded to support driver bug workarounds for WebGL.
+        if (leftType.getQualifier() == EvqBuffer)
+        {
+            return true;
+        }
+
         // On GLSL es 100, clamp is only defined for float, so float arguments are used.
         //
         // However, float clamp is unconditionally emitted to workaround driver bugs with integer
@@ -59,19 +67,9 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         TIntermConstantUnion *zero = createClampValue(0, useFloatClamp);
         TIntermTyped *max;
 
-        if (leftType.isUnsizedArray())
-        {
-            // Unsized arrays are an ES3.1 feature, so integer clamp should be available already.
-            max = new TIntermUnary(EOpArrayLength, node->getLeft(), nullptr);
-            max = new TIntermBinary(EOpSub, max, CreateIndexNode(1));
-            if (useFloatClamp)
-            {
-                TIntermSequence constructorArgs = {max};
-                max                             = TIntermAggregate::CreateConstructor(
-                    *StaticType::GetBasic<EbtFloat, EbpHigh>(), &constructorArgs);
-            }
-        }
-        else if (leftType.isArray())
+        // Since arrays in buffer blocks are not clamped, the array cannot be unsized here.
+        ASSERT(!leftType.isUnsizedArray());
+        if (leftType.isArray())
         {
             max = createClampValue(static_cast<int>(leftType.getOutermostArraySize()) - 1,
                                    useFloatClamp);
