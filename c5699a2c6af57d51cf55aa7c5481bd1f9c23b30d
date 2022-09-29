@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e0deaab_98a56dde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T12:52:52Z",
+      "side": 1,
+      "message": "I updated the CL description, please take another look at my explanation of what the change is doing.",
+      "parentUuid": "91d442dc_c0696a6b",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "c5699a2c6af57d51cf55aa7c5481bd1f9c23b30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b847f0c5_83be82c5",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-09-23T13:35:04Z",
       "side": 1,
       "message": "Why does it default to 3 here but run_perf_tests defaults to 2? Would it be possible to use the same default in both?",
+      "range": {
+        "startLine": 36,
+        "startChar": 95,
+        "endLine": 36,
+        "endChar": 96
+      },
+      "revId": "c5699a2c6af57d51cf55aa7c5481bd1f9c23b30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a548b9_725cea4c",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T12:52:52Z",
+      "side": 1,
+      "message": "I didn\u0027t want to have warmup changes in this CL, but to satisfy this comment I changed run_perf_tests default to 3. Originally I had left it at 2 because I wanted to save time on the bots.\n\nChanging the angle_perftests default could be risky because downstream users could be depending on defaults here.",
+      "parentUuid": "49eb1e4a_f0f83b12",
       "range": {
         "startLine": 36,
         "startChar": 95,
