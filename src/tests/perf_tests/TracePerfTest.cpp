@@ -1301,6 +1301,14 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
+    if (traceNameIs("life_is_strange"))
+    {
+        addExtensionPrerequisite("GL_EXT_gpu_shader5");
+        addExtensionPrerequisite("GL_EXT_shader_io_blocks");
+        addExtensionPrerequisite("GL_EXT_texture_buffer");
+        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
+    }
+
     // glDebugMessageControlKHR and glDebugMessageCallbackKHR crash on ARM GLES1.
     if (IsARM() && mParams->traceInfo.contextClientMajorVersion == 1)
     {
