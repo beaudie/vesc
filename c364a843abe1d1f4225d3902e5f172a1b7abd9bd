@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3146bd2_3bd52446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-29T02:40:43Z",
+      "side": 1,
+      "message": "FYI, I\u0027m working to make TexCombine faster! The test takes ~5s on release build, but ~45s on release+assert!\n\nThis should shave off 10%: https://chromium-review.googlesource.com/c/angle/angle/+/3926036\nThis should shave off another 10%: https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/4599\nI have a SPIR-V Tools change WIP that should let us shave off another 5-10%",
+      "revId": "c364a843abe1d1f4225d3902e5f172a1b7abd9bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
