@@ -16,6 +16,24 @@
       "message": "shouldn\u0027t we change the `location` to `baseLocation`?\n\ne.g.\n```\nASSERT(defaultUniformResetCalls.find(baseLocation) !\u003d defaultUniformResetCalls.end());\nstd::vector\u003cCallCapture\u003e \u0026callsPerLocation \u003d defaultUniformResetCalls[baseLocation];\n```",
       "revId": "02cc1689ef9a060015b61ed5ee9ada551ca9756a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b08e2327_f3e8e3d8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1465,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T21:15:21Z",
+      "side": 1,
+      "message": "Good catch!  Yes, the assert needed to be updated.  It isn\u0027t firing because we only reach this code when `location \u003d\u003d baseLocation`, but it is worth keeping in.  Fixed.",
+      "parentUuid": "044a1391_9712fc02",
+      "revId": "02cc1689ef9a060015b61ed5ee9ada551ca9756a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
