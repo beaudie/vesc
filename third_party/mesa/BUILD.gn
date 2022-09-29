@@ -1,0 +1,31 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../../gni/angle.gni")
+import("mesa_autogen.gni")
+
+angle_mesa_build_dir = "$root_build_dir/mesa"
+
+action("mesa_setup") {
+  script = "mesa_build.py"
+  args = [
+    "setup",
+    rebase_path(angle_mesa_build_dir, root_build_dir),
+  ]
+  sources = [ "mesa.stamp" ]
+  outputs = [ "$angle_mesa_build_dir/mesa.stamp" ]
+}
+
+action("mesa") {
+  script = "mesa_build.py"
+  args = [
+    "compile",
+    rebase_path(angle_mesa_build_dir, root_build_dir),
+  ]
+  sources = rebase_path(angle_mesa_sources, ".", "src")
+  outputs =
+      get_path_info(rebase_path(angle_mesa_outputs, ".", angle_mesa_build_dir),
+                    "abspath")
+  deps = [ ":mesa_setup" ]
+}
