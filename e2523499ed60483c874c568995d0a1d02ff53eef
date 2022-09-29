@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf1ad02d_632e21c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-29T02:36:04Z",
+      "side": 1,
+      "message": "Thanks for the tests!\n\nEmulation of Advanced Blend and MSRTT both use input attachments, and different ones. It\u0027d be considerable effort to make them work together. If this is an issue for you right now, my suggestion is to disable MSRTT emulation on your hardware. On non-TBR, it probably hurts performance anyway.",
+      "revId": "e2523499ed60483c874c568995d0a1d02ff53eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f90cfc_02bcb116",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-29T02:36:04Z",
+      "side": 1,
+      "message": "Adding `ES3_Vulkan().disable(Feature::SupportsBlendOperationAdvanced).enable(Feature::EmulateAdvancedBlendEquations)` to test instantiation should do the trick.",
+      "revId": "e2523499ed60483c874c568995d0a1d02ff53eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
