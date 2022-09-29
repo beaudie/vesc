@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7000f7e7_655487a3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T13:03:26Z",
+      "side": 1,
+      "message": "Done. Thanks for the suggestion, I\u0027m not familiar with this stuff.",
+      "parentUuid": "0d8041f6_177f6699",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 49
+      },
+      "revId": "c364a843abe1d1f4225d3902e5f172a1b7abd9bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d3146bd2_3bd52446",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -37,6 +61,24 @@
       "writtenOn": "2022-09-29T02:40:43Z",
       "side": 1,
       "message": "FYI, I\u0027m working to make TexCombine faster! The test takes ~5s on release build, but ~45s on release+assert!\n\nThis should shave off 10%: https://chromium-review.googlesource.com/c/angle/angle/+/3926036\nThis should shave off another 10%: https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/4599\nI have a SPIR-V Tools change WIP that should let us shave off another 5-10%",
+      "revId": "c364a843abe1d1f4225d3902e5f172a1b7abd9bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da3040d5_ffda14e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T13:03:26Z",
+      "side": 1,
+      "message": "Awesome! Copy-pasted to https://anglebug.com/7708#c5",
+      "parentUuid": "d3146bd2_3bd52446",
       "revId": "c364a843abe1d1f4225d3902e5f172a1b7abd9bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
