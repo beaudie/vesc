@@ -46,6 +46,30 @@
       },
       "revId": "866dc23989ddf695a6e48e05bd86ac053d50e2a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ec80ddd_6a8dd8f8",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-09-29T09:01:23Z",
+      "side": 1,
+      "message": "I have to correct myself: there appear to be other drivers which expose this extension in an unexpected way. https://ci.chromium.org/ui/p/chromium/builders/ci/ChromeOS%20FYI%20Release%20(amd64-generic)/6897/overview suggests that llvmpipe on VirtIO(?) does so. Maybe such a setup was the reason for the revert, not stacked/nested ANGLE. Even more reason to have this workaround.",
+      "parentUuid": "fb7f603a_90ea8555",
+      "range": {
+        "startLine": 303,
+        "startChar": 28,
+        "endLine": 303,
+        "endChar": 33
+      },
+      "revId": "866dc23989ddf695a6e48e05bd86ac053d50e2a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
