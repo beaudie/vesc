@@ -16,6 +16,24 @@
       "message": "Yuly: looks like the LSAN pattern here isn\u0027t working:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:build/sanitizers/lsan_suppressions.cc;l\u003d61?q\u003dlsan_suppressions\u0026ss\u003dchromium\n\nThis should be working as per https://buganizer.corp.google.com/issues/216733833",
       "revId": "571637028e090cf89be358b5710a1313b5ca5eb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a77b2852_2f8bcae1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-29T14:47:31Z",
+      "side": 1,
+      "message": "It certainly works in Chromium, I\u0027ve just observed it recently in crbug.com/1368867.\nLSAN reported:\n```\n-----------------------------------------------------\nSuppressions used:\n  count      bytes template\n    961     260491 libnvidia-glcore.so\n     61      76142 libnvidia-rtcore.so\n    578     893185 \u003cunknown module\u003e\n-----------------------------------------------------\n```\n\nSo, it suppressed 578 leaks from \u003cunknown module\u003e\n\nMaybe we don\u0027t compile in build/sanitizers/lsan_suppressions.cc in ANGLE build?\nMaybe it needs something like is_lsan\u003dtrue GN arg?\nOr we need our own lsan_suppressions.cc in standalone ANGLE?",
+      "parentUuid": "a5e8590c_d7032348",
+      "revId": "571637028e090cf89be358b5710a1313b5ca5eb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
