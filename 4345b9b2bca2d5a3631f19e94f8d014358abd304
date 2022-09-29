@@ -16,6 +16,23 @@
       "message": "OES_compressed_paletted_texture is still in registry_xml.py so that format strings for GL_PALETTE* enums are generated.",
       "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f4ce0af_1977b36d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-09-29T23:29:32Z",
+      "side": 1,
+      "message": "Feels like this could be done with a feature instead of an extension, but I can see how you are using it in the next CL.",
+      "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
