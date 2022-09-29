@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b66ba2e_6ea19c29",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T21:08:23Z",
+      "side": 1,
+      "message": "Thank you, looks great now!",
+      "parentUuid": "b38a6dba_3eacd442",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d325dc2_f26b1724",
@@ -245,6 +269,30 @@
       "side": 1,
       "message": "I recommend we make modifications to trigger.py as follow-ups as necessary.",
       "parentUuid": "133409db_b21e4926",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b0ebd54_5a7a4590",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T21:08:23Z",
+      "side": 1,
+      "message": "Sorry, not sure why I missed this earlier. I personally am never shy to modify scripts locally or ctrl-c to stop mid way, agree we can see later if we want the script to stop \u0027normally\u0027.",
+      "parentUuid": "87c48f8d_5e68ada3",
       "range": {
         "startLine": 24,
         "startChar": 7,
@@ -578,6 +626,30 @@
       "side": 1,
       "message": "I reworded some of this.\n\nIf I understand you correctly, the issue here is that the screenshots aren\u0027t saved as test artifacts in the output directory. We can certainly modify the gold tests to save screenshots, but that\u0027s outside the scope of trigger.py. Note that there\u0027s no relation between merge scripts and gold tests and screenshots, the screenshots only exist currently for the lifetime of the test on a shard.\n\nI think I\u0027ve covered most if not all of the cases for this script, so no need to confuse the reader by stating an explicit subset of tests.",
       "parentUuid": "94225f27_967a6372",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d374647_584fe3f5",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T21:08:23Z",
+      "side": 1,
+      "message": "I think this documentation is probably not going to be sufficient to figure out how to run a gold test but maybe we can figure this out later.",
+      "parentUuid": "fc8842ce_3b939b81",
       "range": {
         "startLine": 27,
         "startChar": 54,

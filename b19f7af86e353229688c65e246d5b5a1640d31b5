@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59a09885_07f713ce",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T21:08:23Z",
+      "side": 1,
+      "message": "Yup, makes sense to me now.",
+      "parentUuid": "b0241b8d_5af7fc39",
+      "range": {
+        "startLine": 18,
+        "startChar": 61,
+        "endLine": 18,
+        "endChar": 99
+      },
+      "revId": "b19f7af86e353229688c65e246d5b5a1640d31b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1154cc8a_8de61e04",
@@ -120,6 +144,30 @@
       "side": 1,
       "message": "I redid the launcher scripts to no longer require this.",
       "parentUuid": "1154cc8a_8de61e04",
+      "range": {
+        "startLine": 42,
+        "startChar": 71,
+        "endLine": 42,
+        "endChar": 90
+      },
+      "revId": "b19f7af86e353229688c65e246d5b5a1640d31b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78184925_305f579e",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-09-29T21:08:23Z",
+      "side": 1,
+      "message": "Ah, nice!",
+      "parentUuid": "aec5bb5c_815b5dc0",
       "range": {
         "startLine": 42,
         "startChar": 71,
