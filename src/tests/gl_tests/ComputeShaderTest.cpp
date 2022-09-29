@@ -462,6 +462,81 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test driver behavior when the actual type of a descriptor set mismatches from
+// its declaration.
+TEST_P(ComputeShaderTest, DescriptorTypeMismatch)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_buffer"));
+
+    constexpr char cShaderCode[] = {
+        R"(#version 310 es
+
+#extension GL_EXT_texture_buffer : enable
+// end extensions
+
+layout( local_size_x = 64, local_size_y = 1, local_size_z = 1 ) in;
+uniform writeonly layout(rgba32f,binding=0) highp image2D dst;
+uniform highp usamplerBuffer src;
+void main()
+{
+    imageStore(dst, ivec2(2, 2), vec4(texelFetch(src,int(0))));
+})",
+    };
+
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, cShaderCode);
+    glUseProgram(computeProgram.get());
+
+    GLint uniformLocation = glGetUniformLocation(computeProgram, "src");
+    glUniform1i(uniformLocation, 0);
+
+    GLBuffer buffer;
+    constexpr size_t bufferSize = 17;
+    std::vector<GLubyte> bufferBinaryData(bufferSize, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, bufferBinaryData.data(), GL_DYNAMIC_DRAW);
+
+    GLTexture texture0;
+    glBindTexture(GL_TEXTURE_BUFFER, texture0);
+    glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGBA32F, buffer);
+
+    GLTexture texture1;
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    constexpr size_t textureWidth  = 3;
+    constexpr size_t textureHeight = 5;
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F, textureWidth, textureHeight);
+    constexpr GLfloat initData = 0.1;
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, textureWidth, textureHeight, GL_RGBA, GL_FLOAT,
+                    &initData);
+
+    glBindImageTexture(0, texture1, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);
+    ASSERT_GL_NO_ERROR();
+
+    glDispatchCompute(3, 1, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // define the memory barrier
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+
+    // read back the texels to confirm the shader executed
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture1, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_READ_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<float> temp(4, 0.0);
+    // GL says the shader would read black from an "incomplete texture", ex)
+    // samplerbuffer, sampler2D, sampler3D etc). In such cases, ANGLE creates a
+    // placeholder tiny black image to use.
+    constexpr GLColor32F expected(0.0, 0.0, 0.0, 0.0);
+    EXPECT_PIXEL_COLOR32F_NEAR(2, 2, expected, 0.01);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that the buffer written to by imageStore() in the CS does not race with writing to the
 // buffer when it's mapped.
 TEST_P(ComputeShaderTest, BufferImageBufferMapWrite)
