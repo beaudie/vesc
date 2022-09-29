@@ -18,6 +18,20 @@ namespace sh
 {
 namespace
 {
+bool IsIndexOp(TOperator op)
+{
+    switch (op)
+    {
+        case EOpIndexDirect:
+        case EOpIndexIndirect:
+        case EOpIndexDirectStruct:
+        case EOpIndexDirectInterfaceBlock:
+            return true;
+        default:
+            return false;
+    }
+}
+
 // Traverser that finds EOpIndexIndirect nodes and applies a clamp to their right-hand side
 // expression.
 class ClampIndirectIndicesTraverser : public TIntermTraverser
@@ -48,6 +62,24 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         const TType &leftType  = node->getLeft()->getType();
         const TType &rightType = node->getRight()->getType();
 
+        // Don't clamp indirect indices on buffer blocks.  They are covered by the relevant
+        // robust access behavior of the backend.  The same is true for uniform blocks, but it's not
+        // excluded to support driver bug workarounds for WebGL.
+        TIntermTyped *block = node->getLeft();
+        while (true)
+        {
+            TIntermBinary *asBinary = block->getAsBinaryNode();
+            if (asBinary == nullptr || !IsIndexOp(asBinary->getOp()))
+            {
+                break;
+            }
+            block = asBinary->getLeft();
+        }
+        if (block->getType().getQualifier() == EvqBuffer)
+        {
+            return true;
+        }
+
         // On GLSL es 100, clamp is only defined for float, so float arguments are used.
         //
         // However, float clamp is unconditionally emitted to workaround driver bugs with integer
@@ -59,19 +91,9 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         TIntermConstantUnion *zero = createClampValue(0, useFloatClamp);
         TIntermTyped *max;
 
-        if (leftType.isUnsizedArray())
-        {
-            // Unsized arrays are an ES3.1 feature, so integer clamp should be available already.
-            max = new TIntermUnary(EOpArrayLength, node->getLeft(), nullptr);
-            max = new TIntermBinary(EOpSub, max, CreateIndexNode(1));
-            if (useFloatClamp)
-            {
-                TIntermSequence constructorArgs = {max};
-                max                             = TIntermAggregate::CreateConstructor(
-                    *StaticType::GetBasic<EbtFloat, EbpHigh>(), &constructorArgs);
-            }
-        }
-        else if (leftType.isArray())
+        // Since arrays in buffer blocks are not clamped, the array cannot be unsized here.
+        ASSERT(!leftType.isUnsizedArray());
+        if (leftType.isArray())
         {
             max = createClampValue(static_cast<int>(leftType.getOutermostArraySize()) - 1,
                                    useFloatClamp);
