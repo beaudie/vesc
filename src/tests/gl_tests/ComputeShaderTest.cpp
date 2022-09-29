@@ -462,6 +462,129 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// new corner bug
+TEST_P(ComputeShaderTest, NewCornerCase)
+{
+    // const char *const cShaderCode[] = {
+    constexpr char cShaderCode[] = {
+        R"(#version 310 es
+
+#ifdef GL_EXT_texture_buffer
+#extension GL_EXT_texture_buffer : enable
+
+#endif
+#define INTERFACE_BLOCK(Pos, Interp, Modifiers, Semantic, PreType, PostType) layout(location=Pos) Modifiers Semantic { PreType PostType; }
+
+// end extensions
+layout( local_size_x = 64, local_size_y = 1, local_size_z = 1 ) in;
+// uniform uvec4 cu_u[4];
+uniform writeonly layout(rgba32f,binding=0) highp image2D ci0;
+// uniform highp samplerBuffer cs0; // ?
+uniform highp usamplerBuffer cs1;// ?
+void main()
+{
+    texelFetch(cs1,int(1));
+    // imageStore(ci0, ivec2(ivec2(0)), texelFetch(cs1,int(0)).xyzw);
+})",
+    };
+
+    // trace test specifc setup
+    // GLint **gUniformLocations;
+    // std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;  //
+    // uint8_t *gBinaryData;
+    // extern GLuint *gBufferMap;
+    // extern uint8_t *gReadBuffer;
+    // extern GLuint *gTextureMap;
+    // GLuint *gSamplerMap;
+    //
+
+    // setup gShaderProgramMap[3], aka computeProgram
+    // setup gShaderProgramMap[255], aka computeProgram2
+    // GLuint computeProgram  = glCreateProgram();
+    // GLuint computeProgram2 = glCreateShader(GL_COMPUTE_SHADER);
+    // glShaderSource(computeProgram2, 1, cShaderCode, nullptr);
+    // glCompileShader(computeProgram2);
+    // glAttachShader(computeProgram, computeProgram2);
+    // glLinkProgram(computeProgram);
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, cShaderCode);
+
+    // std::vector<GLint> uniformLocations(7, 0);
+    std::vector<GLint> uniformLocations(2, 0);
+    // uniformLocations[0] = glGetUniformLocation(computeProgram, "cu_u");
+    // uniformLocations[1] = uniformLocations[0] + 1;
+    // uniformLocations[2] = uniformLocations[1] + 1;
+    // uniformLocations[3] = uniformLocations[2] + 1;
+    // uniformLocations[4] = glGetUniformLocation(computeProgram, "cs0");
+    // uniformLocations[5] = glGetUniformLocation(computeProgram, "cs1");
+    uniformLocations[0] = glGetUniformLocation(computeProgram, "cs1");
+    uniformLocations[1] = glGetUniformLocation(computeProgram, "ci0");
+    glUseProgram(computeProgram.get());
+
+    // UpdateCurrentProgram(3);
+    // std::vector<GLuint> binaryDataUint(4, 0);
+    // std::vector<GLint> binaryDataInt(2, 0);
+    // glUniform4uiv(uniformLocations[0], 4, binaryDataUint.data()); // cu_u
+    // glUniform1iv(uniformLocations[4], 1, binaryDataInt.data()); // cs0
+    // glUniform1iv(uniformLocations[5], 1, binaryDataInt.data() + 1); // cs1
+    GLint binaryDataInt = 0;
+    glUniform1iv(uniformLocations[0], 1, &binaryDataInt);  // cs1
+    // glDeleteShader(computeProgram2);
+
+    // setup gBufferMap[1788], aka buffer1Id
+    // setup gBufferMap[1789], aka buffer2Id
+    // GLuint buffer1Id = 0;
+    // glGenBuffers(1, &buffer1Id);
+    // const size_t buffer1Size = 512;
+    // std::vector<GLubyte> buffer1BinaryData(buffer1Size, 0);
+    // // UpdateBufferID(1788, 0);
+    // glBindBuffer(GL_ARRAY_BUFFER, buffer1Id);
+    // glBufferData(GL_ARRAY_BUFFER, buffer1Size, buffer1BinaryData.data(), GL_DYNAMIC_DRAW);
+
+    GLuint buffer2Id = 0;
+    glGenBuffers(1, &buffer2Id);
+    const size_t buffer2Size = 17;
+    std::vector<GLubyte> buffer2BinaryData(buffer2Size, 0);
+    // UpdateBufferID(1789, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer2Id);
+    glBufferData(GL_ARRAY_BUFFER, buffer2Size, buffer2BinaryData.data(), GL_DYNAMIC_DRAW);
+
+    // setup gTextureMap[369], aka texture1Id
+    GLuint texture1Id = 0;
+    glGenTextures(1, &texture1Id);
+    // UpdateTextureID(369, 0);
+    glBindTexture(GL_TEXTURE_2D, texture1Id);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F, 11, 13);
+
+    // setup gTextureMap[563], aka texture2Id
+    // setup gTextureMap[564], aka texture3Id
+    // GLuint texture2Id = 0;
+    // glGenTextures(1, &texture2Id);
+    // UpdateTextureID(563, 0);
+    // glBindTexture(GL_TEXTURE_BUFFER, texture2Id);
+    // glTexBufferEXT(GL_TEXTURE_BUFFER, GL_R32F, buffer1Id);
+
+    GLuint texture3Id = 0;
+    glGenTextures(1, &texture3Id);
+    // UpdateTextureID(564, 0);
+    glBindTexture(GL_TEXTURE_BUFFER, texture3Id);
+    glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGBA32F, buffer2Id);  // fail
+    // glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGBA32UI, buffer2Id); // pass
+
+    // setup gSamplerMap[1], aka samplerId, not really matter
+    // GLuint samplerId = 0;
+
+    // from _context3_001.cpp
+    // glUseProgram(computeProgram);  // must
+    glBindTexture(GL_TEXTURE_BUFFER, texture3Id);
+    // glBindSampler(0, samplerId);
+    // glActiveTexture(GL_TEXTURE1);
+    // glBindTexture(GL_TEXTURE_BUFFER, texture2Id);
+    // glBindSampler(1, samplerId);
+    glBindImageTexture(0, texture1Id, 0, GL_FALSE, 0, GL_READ_WRITE, GL_RGBA32F);  // must
+    glDispatchCompute(3, 1, 1);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that the buffer written to by imageStore() in the CS does not race with writing to the
 // buffer when it's mapped.
 TEST_P(ComputeShaderTest, BufferImageBufferMapWrite)
