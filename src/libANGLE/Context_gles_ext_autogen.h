@@ -65,6 +65,7 @@
     void selectPerfMonitorCounters(GLuint monitor, GLboolean enable, GLuint group,                 \
                                    GLint numCounters, GLuint *counterList);                        \
     /* GL_ANDROID_extension_pack_es31a */                                                          \
+    /* GL_ANGLE_compressed_paletted_texture_implemented */                                         \
     /* GL_ANGLE_depth_texture */                                                                   \
     /* GL_ANGLE_framebuffer_blit */                                                                \
     /* GL_ANGLE_instanced_arrays */                                                                \

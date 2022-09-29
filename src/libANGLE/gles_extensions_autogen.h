@@ -143,6 +143,9 @@ struct Extensions
     // GL_OES_compressed_paletted_texture
     bool compressedPalettedTextureOES = false;
 
+    // GL_ANGLE_compressed_paletted_texture_implemented
+    bool compressedPalettedTextureImplementedANGLE = false;
+
     // GL_EXT_copy_image
     bool copyImageEXT = false;
 

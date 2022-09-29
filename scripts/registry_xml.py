@@ -79,6 +79,7 @@ angle_requestable_extensions = [
 ]
 
 gles_requestable_extensions = [
+    "GL_ANGLE_compressed_paletted_texture_implemented",
     "GL_ANGLE_framebuffer_blit",
     "GL_ANGLE_instanced_arrays",
     "GL_ANGLE_pack_reverse_row_order",
