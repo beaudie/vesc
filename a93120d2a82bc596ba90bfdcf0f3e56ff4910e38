@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b38a6dba_3eacd442",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T20:42:15Z",
+      "side": 1,
+      "message": "Reworded here. PTAL",
+      "parentUuid": "04e7aeeb_3583f981",
+      "range": {
+        "startLine": 17,
+        "startChar": 7,
+        "endLine": 17,
+        "endChar": 47
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d325dc2_f26b1724",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -209,6 +233,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87c48f8d_5e68ada3",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T20:42:15Z",
+      "side": 1,
+      "message": "I recommend we make modifications to trigger.py as follow-ups as necessary.",
+      "parentUuid": "133409db_b21e4926",
+      "range": {
+        "startLine": 24,
+        "startChar": 7,
+        "endLine": 24,
+        "endChar": 61
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2134f61_7e149e63",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
@@ -268,6 +316,30 @@
       "side": 1,
       "message": "We\u0027ve removed it in Chromium, but not in standalone.\nIn standalone it\u0027s blocked on LSAN reported leaks.\nBut I\u0027ll remove it eventually, since I want to migrate iOS to standalone.",
       "parentUuid": "4ba89cee_23fa968a",
+      "range": {
+        "startLine": 25,
+        "startChar": 38,
+        "endLine": 25,
+        "endChar": 42
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95794c56_e4854568",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T20:42:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "324ccf4a_c3af8d27",
       "range": {
         "startLine": 25,
         "startChar": 38,
@@ -339,6 +411,30 @@
       "side": 1,
       "message": "I should have added this comment to another part of this paragraph, GPU/os_dim are indeed clear. The needed args is the hard part.\nE.g.\nhttps://chromium-swarm.appspot.com/task?id\u003d5d8062fdd4628610\nrun_command([\u0027/b/swarming/w/ir/.task_template_packages/rdb\u0027, \u0027stream\u0027, \u0027-test-id-prefix\u0027, \u0027ninja://src/tests:angle_deqp_gles2_tests/\u0027, \u0027-var\u0027, \u0027builder:android-arm64-test\u0027, \u0027-var\u0027, \u0027device_os:R\u0027, \u0027-var\u0027, \u0027device_type:flame\u0027, \u0027-var\u0027, \u0027os:Android\u0027, \u0027-var\u0027, \u0027test_suite:angle_deqp_gles2_vulkan_tests\u0027, \u0027-tag\u0027, \u0027step_name:angle_deqp_gles2_vulkan_tests on Android device Pixel 4\u0027, \u0027-tag\u0027, \u0027target_platform:android\u0027, \u0027-coerce-negative-duration\u0027, \u0027-location-tags-file\u0027, \u0027../../testing/location_tags.json\u0027, \u0027-exonerate-unexpected-pass\u0027, \u0027--\u0027, \u0027result_adapter\u0027, \u0027json\u0027, \u0027-result-file\u0027, \u0027/b/swarming/w/iouu4qih62/output.json\u0027, \u0027-artifact-directory\u0027, \u0027/b/swarming/w/iouu4qih62\u0027, \u0027--\u0027, \u0027luci-auth\u0027, \u0027context\u0027, \u0027--\u0027, \u0027vpython3\u0027, \u0027../../testing/test_env.py\u0027, \u0027../../build/android/test_wrapper/logdog_wrapper.py\u0027, \u0027--script\u0027, \u0027../../scripts/run_gtest_angle_test.py\u0027, \u0027--logdog-bin-cmd\u0027, \u0027../../.task_template_packages/logdog_butler\u0027, \u0027--isolated-script-test-output\u003d/b/swarming/w/iouu4qih62/output.json\u0027, \u0027--isolated-script-test-perf-output\u003d/b/swarming/w/iouu4qih62/perftest-output.json\u0027, \u0027angle_deqp_gles2_tests\u0027, \u0027--use-angle\u003dvulkan\u0027, \u0027-v\u0027, \u0027--shard-timeout\u003d500\u0027]\n\nIt\u0027s not obvious which of these arguments need to be passed to trigger.py and which aren\u0027t.",
       "parentUuid": "185d960b_ce28e8b2",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 64
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06c339ab_e61b2534",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T20:42:15Z",
+      "side": 1,
+      "message": "I reworded this. Now that we removed the wrapper script, you are running your local test remotely, so you use whatever arguments you\u0027d use locally remotely. So there\u0027s no need to model arguments on the build, we just use that for the gpu and device dimensions.",
+      "parentUuid": "42607454_ca3f7c49",
       "range": {
         "startLine": 26,
         "startChar": 7,
@@ -458,6 +554,30 @@
       "side": 1,
       "message": "That\u0027s what I\u0027m wondering too. Note that the current documentation says \"You can discard the --isolated-script-test-* arguments\"\n\nJamie, if you\u0027d like to wrap up this CL rather than going into all special cases, maybe we could start with an explicit subset of tests that this documentation was written for (listed somewhere at the top rather than just saying \"test\") and then augment this in follow-up CLs, maybe with links to external docs.",
       "parentUuid": "a4bd3ede_13fd29af",
+      "range": {
+        "startLine": 27,
+        "startChar": 54,
+        "endLine": 27,
+        "endChar": 84
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc8842ce_3b939b81",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-29T20:42:15Z",
+      "side": 1,
+      "message": "I reworded some of this.\n\nIf I understand you correctly, the issue here is that the screenshots aren\u0027t saved as test artifacts in the output directory. We can certainly modify the gold tests to save screenshots, but that\u0027s outside the scope of trigger.py. Note that there\u0027s no relation between merge scripts and gold tests and screenshots, the screenshots only exist currently for the lifetime of the test on a shard.\n\nI think I\u0027ve covered most if not all of the cases for this script, so no need to confuse the reader by stating an explicit subset of tests.",
+      "parentUuid": "94225f27_967a6372",
       "range": {
         "startLine": 27,
         "startChar": 54,
