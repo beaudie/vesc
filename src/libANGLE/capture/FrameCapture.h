@@ -397,6 +397,10 @@ class ResourceTracker final : angle::NonCopyable
 
     void getContextIDs(std::set<gl::ContextID> &idsOut);
 
+    std::map<void *, egl::AttributeMap> &getImageToAttribTable() { return mMatchImageToAttribs; }
+
+    std::map<GLuint, void *> &getTextureIDToImageTable() { return mMatchTextureIDToImage; }
+
   private:
     // Buffer map calls will map a buffer with correct offset, length, and access flags
     BufferCalls mBufferMapCalls;
@@ -430,6 +434,9 @@ class ResourceTracker final : angle::NonCopyable
     // Tracked resources per context
     TrackedResourceArray mTrackedResourcesShared;
     std::map<gl::ContextID, TrackedResourceArray> mTrackedResourcesPerContext;
+
+    std::map<void *, egl::AttributeMap> mMatchImageToAttribs;
+    std::map<GLuint, void *> mMatchTextureIDToImage;
 };
 
 // Used by the CPP replay to filter out unnecessary code.
