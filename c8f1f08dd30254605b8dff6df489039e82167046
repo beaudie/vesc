@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c22464_4df29844",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T14:26:32Z",
+      "side": 1,
+      "message": "Awesome",
+      "revId": "c8f1f08dd30254605b8dff6df489039e82167046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fea16a7c_1d3aacc9",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 12
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T14:26:32Z",
+      "side": 1,
+      "message": "super nit: No need for `native`, it\u0027s implied.",
+      "range": {
+        "startLine": 672,
+        "startChar": 30,
+        "endLine": 672,
+        "endChar": 37
+      },
+      "revId": "c8f1f08dd30254605b8dff6df489039e82167046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
