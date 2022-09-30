@@ -8,6 +8,7 @@
 //
 
 #include "ANGLEPerfTest.h"
+#include "ANGLEPerfTestArgs.h"
 
 #include <cmath>
 #include <sstream>
@@ -54,6 +55,7 @@ struct InstancingPerfParams final : public RenderTestParams
         runTimeSeconds    = 10.0;
         animationEnabled  = false;
         instancingEnabled = true;
+        updateBuffers     = false;
     }
 
     std::string story() const override
@@ -73,6 +75,7 @@ struct InstancingPerfParams final : public RenderTestParams
     double runTimeSeconds;
     bool animationEnabled;
     bool instancingEnabled;
+    bool updateBuffers;
 };
 
 std::ostream &operator<<(std::ostream &os, const InstancingPerfParams &params)
@@ -309,6 +312,11 @@ void InstancingPerfBenchmark::drawBenchmark()
     {
         for (unsigned int it = 0; it < params.iterationsPerStep; it++)
         {
+            if (params.updateBuffers)
+            {
+                glBindBuffer(GL_ARRAY_BUFFER, mBuffers[3]);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, VectorSizeBytes(mSizeData), &mSizeData[0]);
+            }
             glDrawElementsInstancedANGLE(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr, mNumPoints);
         }
     }
@@ -316,6 +324,11 @@ void InstancingPerfBenchmark::drawBenchmark()
     {
         for (unsigned int it = 0; it < params.iterationsPerStep; it++)
         {
+            if (params.updateBuffers)
+            {
+                glBindBuffer(GL_ARRAY_BUFFER, mBuffers[3]);
+                glBufferSubData(GL_ARRAY_BUFFER, 0, VectorSizeBytes(mSizeData), &mSizeData[0]);
+            }
             glDrawElements(GL_TRIANGLES, 6 * mNumPoints, GL_UNSIGNED_INT, nullptr);
         }
     }
@@ -349,9 +362,76 @@ TEST_P(InstancingPerfBenchmark, Run)
     run();
 }
 
+class InstancingPerfComparisonBenchmark : public InstancingPerfBenchmark
+{
+  protected:
+    void SetUp() override;
+    void drawBenchmark() override;
+};
+
+void InstancingPerfComparisonBenchmark::SetUp()
+{
+    disableTestHarnessSwap();
+    if (!gEnablePermutationTests)
+    {
+        skipTest("comparision tests not enabled");
+    }
+
+    InstancingPerfBenchmark::SetUp();
+}
+
+void InstancingPerfComparisonBenchmark::drawBenchmark()
+{
+    InstancingPerfBenchmark::drawBenchmark();
+    glFinish();
+}
+
+void InitInstancingPerfComparisonBenchmarkParams(InstancingPerfParams &params)
+{
+    params.windowWidth       = 2;
+    params.windowHeight      = 2;
+    params.iterationsPerStep = 100;
+    params.updateBuffers     = true;
+}
+
+InstancingPerfParams InstancingPerfComparisonD3D11Params()
+{
+    InstancingPerfParams params;
+    params.eglParameters = D3D11();
+    InitInstancingPerfComparisonBenchmarkParams(params);
+    return params;
+}
+
+InstancingPerfParams InstancingPerfComparisonMetalParams()
+{
+    InstancingPerfParams params;
+    params.eglParameters = METAL();
+    InitInstancingPerfComparisonBenchmarkParams(params);
+    return params;
+}
+
+InstancingPerfParams InstancingPerfComparisonOpenGLOrGLESParams()
+{
+    InstancingPerfParams params;
+    params.eglParameters = OPENGL_OR_GLES();
+    InitInstancingPerfComparisonBenchmarkParams(params);
+    return params;
+}
+
+// Tests for comparing backend performance.
+TEST_P(InstancingPerfComparisonBenchmark, Run)
+{
+    run();
+}
+
 ANGLE_INSTANTIATE_TEST(InstancingPerfBenchmark,
                        InstancingPerfD3D11Params(),
                        InstancingPerfMetalParams(),
                        InstancingPerfOpenGLOrGLESParams());
+
+ANGLE_INSTANTIATE_TEST(InstancingPerfComparisonBenchmark,
+                       InstancingPerfComparisonD3D11Params(),
+                       InstancingPerfComparisonMetalParams(),
+                       InstancingPerfComparisonOpenGLOrGLESParams());
 
 }  // anonymous namespace

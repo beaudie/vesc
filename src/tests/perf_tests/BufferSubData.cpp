@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "ANGLEPerfTest.h"
+#include "ANGLEPerfTestArgs.h"
 #include "test_utils/draw_call_perf_utils.h"
 
 using namespace angle;
@@ -40,7 +41,6 @@ struct BufferSubDataParams final : public RenderTestParams
     GLint vertexComponentCount;
     unsigned int updateRate;
 
-    // static parameters
     GLsizeiptr updateSize;
     GLsizeiptr bufferSize;
 };
@@ -238,11 +238,13 @@ std::string BufferSubDataParams::story() const
             strstr << "_ushort";
             break;
         default:
-            strstr << "_vunk_" << vertexType << "_";
+            strstr << "_vunk_" << vertexType;
             break;
     }
 
-    strstr << vertexComponentCount;
+    strstr << "_" << (bufferSize / 0x400) << "k";
+    strstr << "_" << (updateSize / 0x400) << "k";
+    strstr << "_" << vertexComponentCount;
     strstr << "_every" << updateRate;
 
     return strstr.str();
@@ -384,6 +386,111 @@ TEST_P(BufferSubDataBenchmark, Run)
 {
     run();
 }
+
+class BufferSubDataPermutationBenchmark : public BufferSubDataBenchmark
+{
+  protected:
+    void SetUp() override;
+    void drawBenchmark() override;
+};
+
+void BufferSubDataPermutationBenchmark::SetUp()
+{
+    disableTestHarnessSwap();
+    if (!gEnablePermutationTests)
+    {
+        skipTest("comparision tests not enabled");
+    }
+
+    BufferSubDataBenchmark::SetUp();
+}
+
+void BufferSubDataPermutationBenchmark::drawBenchmark()
+{
+    BufferSubDataBenchmark::drawBenchmark();
+    glFinish();
+}
+
+struct SizePermutation
+{
+    size_t bufferSizeK;
+    size_t updateSizeK;
+};
+
+// clang-format off
+
+SizePermutation kSizePermutations[] = {
+    { 32, 32, },
+    { 39, 31, },
+    { 64, 32, },
+    { 96, 32, },
+    { 128, 32, },
+    { 256, 32, },
+    { 64, 64, },
+    { 96, 64, },
+    { 128, 64, },
+    { 256, 64, },
+    { 96, 96, },
+    { 128, 96, },
+    { 256, 96, },
+    { 128, 128, },
+    { 256, 128, },
+    { 256, 256, },
+    { 512, 256, },
+    { 512, 512, },
+    { 1024, 512, },
+    { 1024, 1024, },
+    { 2048, 1024, },
+    { 2048, 2048, },
+};
+
+// clang-format on
+
+std::vector<BufferSubDataParams> generateParams()
+{
+    EGLPlatformParameters platforms[] = {
+        egl_platform::D3D11(),
+        egl_platform::METAL(),
+        egl_platform::OPENGL_OR_GLES(),
+        egl_platform::VULKAN(),
+    };
+
+    std::vector<BufferSubDataParams> permutations;
+    for (const auto &platform : platforms)
+    {
+        for (const auto &size : kSizePermutations)
+        {
+            BufferSubDataParams params;
+            params.eglParameters        = platform;
+            params.vertexType           = GL_FLOAT;
+            params.vertexComponentCount = 4;
+            params.vertexNormalized     = GL_FALSE;
+            params.updateSize           = size.updateSizeK * 0x400;
+            params.bufferSize           = size.bufferSizeK * 0x400;
+            params.iterationsPerStep    = 1000;
+            params.windowWidth          = 2;
+            params.windowHeight         = 2;
+            permutations.push_back(params);
+        }
+    }
+    return permutations;
+}
+
+// Tests for comparing backend performance.
+TEST_P(BufferSubDataPermutationBenchmark, Run)
+{
+    run();
+}
+
+INSTANTIATE_TEST_SUITE_P(
+    Run,
+    BufferSubDataPermutationBenchmark,
+    ::testing::ValuesIn(generateParams()),
+    [](const ::testing::TestParamInfo<BufferSubDataPermutationBenchmark::ParamType> &info) {
+        std::stringstream name;
+        name << info.param;
+        return name.str();
+    });
 
 ANGLE_INSTANTIATE_TEST(BufferSubDataBenchmark,
                        BufferUpdateD3D11Params(),

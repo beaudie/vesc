@@ -33,6 +33,7 @@ extern bool gEnableAllTraceTests;
 extern bool gRetraceMode;
 extern bool gMinimizeGPUWork;
 extern bool gTraceTestValidation;
+extern bool gEnablePermutationTests;
 extern const char *gPerfCounters;
 
 inline bool OneFrame()
