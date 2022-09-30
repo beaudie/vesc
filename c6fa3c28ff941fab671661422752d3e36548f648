@@ -33,6 +33,24 @@
       "message": "Anything that could be avoided? I just realized that the original shader used the `kFoo` notation, so if that\u0027s all, we could `#define kFoo foo` before the header to avoid modifying the shader.\n\nOtherwise please list the modifications, so when we update the header we\u0027d know what needs doing.",
       "revId": "c6fa3c28ff941fab671661422752d3e36548f648",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d907d3e_d6a09187",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/third_party/etc_decoder/README.chromium",
+        "patchSetId": 33
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-09-30T20:41:28Z",
+      "side": 1,
+      "message": "quite a few changes. list the changes below.",
+      "parentUuid": "ce0d38e7_b2698050",
+      "revId": "c6fa3c28ff941fab671661422752d3e36548f648",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
