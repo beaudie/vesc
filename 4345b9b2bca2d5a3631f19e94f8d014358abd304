@@ -33,6 +33,24 @@
       "message": "Feels like this could be done with a feature instead of an extension, but I can see how you are using it in the next CL.",
       "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7f42ce_a84b40ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-30T01:18:03Z",
+      "side": 1,
+      "message": "That would require letting format support functions in formatutils.cpp be aware about supported features",
+      "parentUuid": "5f4ce0af_1977b36d",
+      "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
