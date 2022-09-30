@@ -3306,7 +3306,9 @@ void CaptureShareGroupMidExecutionSetup(
     std::vector<CallCapture> *setupCalls,
     ResourceTracker *resourceTracker,
     gl::State &replayState,
-    const PackedEnumMap<ResourceIDType, uint32_t> &maxAccessedResourceIDs)
+    const PackedEnumMap<ResourceIDType, uint32_t> &maxAccessedResourceIDs,
+    std::map<void *, std::vector<GLint64>> imageToAttribsMap,
+    std::map<GLuint, void *> textureToImageMap)
 {
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
     const gl::State &apiState              = context->getState();
@@ -3697,13 +3699,11 @@ void CaptureShareGroupMidExecutionSetup(
 
                 if (index.getType() == gl::TextureType::External)
                 {
-                    constexpr EGLint attribs[] = {
-                        EGL_IMAGE_PRESERVED,
-                        EGL_TRUE,
-                        EGL_NONE,
-                    };
+                    const std::vector<GLint64> retrievedAttribs =
+                        imageToAttribsMap.find(textureToImageMap.find(id.value)->second)->second;
+
                     const egl::AttributeMap &attrib_listPacked =
-                        egl::PackParam<const egl::AttributeMap &>(attribs);
+                        egl::PackParam<const egl::AttributeMap &>(retrievedAttribs.data());
                     attrib_listPacked.initializeWithoutValidation();
 
                     // Create the image on demand
@@ -6585,6 +6585,19 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLEGLImageTargetTexture2DOES:
+        {
+            gl::TextureType target =
+                call.params.getParam("targetPacked", ParamType::TTextureType, 0)
+                    .value.TextureTypeVal;
+            GLeglImageOES image =
+                call.params.getParam("image", ParamType::TGLeglImageOES, 1).value.GLeglImageOESVal;
+
+            mMatchTextureIDToImage.insert(std::pair<GLuint, void *>(
+                context->getState().getTargetTexture(target)->getId(), image));
+            break;
+        }
+
         case EntryPoint::EGLCreateImage:
         case EntryPoint::EGLCreateImageKHR:
         {
@@ -6604,15 +6617,19 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 reconstructedAttribs[i] = compiledAttrib;
             }
 
-            // Check if the passed-in attribs are as expected, otherwise throw an UNREACHABLE
-            if (!isCaptureActive() &&
-                (reconstructedAttribs[0] != EGL_IMAGE_PRESERVED ||
-                 reconstructedAttribs[1] != EGL_TRUE || reconstructedAttribs[2] != EGL_NONE))
-            {
-                ERR() << "EGLImage created with " << numAttribs << " unsupported attribs types.";
-                UNREACHABLE();
-            }
+            GLeglImageOES image = call.params.getReturnValue().value.voidPointerVal;
+            mMatchImageToAttribs.insert(
+                std::pair<void *, std::vector<GLint64>>(image, reconstructedAttribs));
 
+            // Check if the passed-in attribs are as expected, otherwise throw an UNREACHABLE
+            //            if (!isCaptureActive() &&
+            //                (reconstructedAttribs[0] != EGL_IMAGE_PRESERVED ||
+            //                 reconstructedAttribs[1] != EGL_TRUE || reconstructedAttribs[2] !=
+            //                 EGL_NONE))
+            //            {
+            //                ERR() << "EGLImage created with " << numAttribs << " unsupported
+            //                attribs types."; UNREACHABLE();
+            //            }
             break;
         }
 
@@ -7125,7 +7142,8 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
     mainContextReplayState.initializeForCapture(mainContext);
 
     CaptureShareGroupMidExecutionSetup(mainContext, &mShareGroupSetupCalls, &mResourceTracker,
-                                       mainContextReplayState, mMaxAccessedResourceIDs);
+                                       mainContextReplayState, mMaxAccessedResourceIDs,
+                                       mMatchImageToAttribs, mMatchTextureIDToImage);
 
     scanSetupCalls(mainContext, mShareGroupSetupCalls);
 

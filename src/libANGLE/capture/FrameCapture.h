@@ -837,6 +837,9 @@ class FrameCaptureShared final : angle::NonCopyable
     PackedEnumMap<ResourceIDType, uint32_t> mMaxAccessedResourceIDs;
     CoherentBufferTracker mCoherentBufferTracker;
 
+    std::map<void *, std::vector<GLint64>> mMatchImageToAttribs;
+    std::map<GLuint, void *> mMatchTextureIDToImage;
+
     ResourceTracker mResourceTracker;
     ReplayWriter mReplayWriter;
 
