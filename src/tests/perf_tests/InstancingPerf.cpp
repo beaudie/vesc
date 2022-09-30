@@ -48,9 +48,9 @@ struct InstancingPerfParams final : public RenderTestParams
     {
         majorVersion      = 2;
         minorVersion      = 0;
-        windowWidth       = 256;
-        windowHeight      = 256;
-        iterationsPerStep = 1;
+        windowWidth       = 2;
+        windowHeight      = 2;
+        iterationsPerStep = 100;
         runTimeSeconds    = 10.0;
         animationEnabled  = false;
         instancingEnabled = true;
@@ -309,6 +309,8 @@ void InstancingPerfBenchmark::drawBenchmark()
     {
         for (unsigned int it = 0; it < params.iterationsPerStep; it++)
         {
+            glBindBuffer(GL_ARRAY_BUFFER, mBuffers[3]);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, VectorSizeBytes(mSizeData), &mSizeData[0]);
             glDrawElementsInstancedANGLE(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr, mNumPoints);
         }
     }
@@ -316,10 +318,13 @@ void InstancingPerfBenchmark::drawBenchmark()
     {
         for (unsigned int it = 0; it < params.iterationsPerStep; it++)
         {
+            glBindBuffer(GL_ARRAY_BUFFER, mBuffers[3]);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, VectorSizeBytes(mSizeData), &mSizeData[0]);
             glDrawElements(GL_TRIANGLES, 6 * mNumPoints, GL_UNSIGNED_INT, nullptr);
         }
     }
 
+    glFinish();
     ASSERT_GL_NO_ERROR();
 }
 

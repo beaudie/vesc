@@ -731,7 +731,7 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name,
       mIsTimestampQueryAvailable(false),
       mGLWindow(nullptr),
       mOSWindow(nullptr),
-      mSwapEnabled(true)
+      mSwapEnabled(false)
 {
     // Force fast tests to make sure our slowest bots don't time out.
     if (OneFrame())
@@ -1111,6 +1111,10 @@ void ANGLERenderTest::step()
         {
             updatePerfCounters();
             mGLWindow->swap();
+        }
+        else
+        {
+            glFinish();
         }
         mOSWindow->messageLoop();
 

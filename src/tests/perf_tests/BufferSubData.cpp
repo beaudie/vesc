@@ -16,7 +16,7 @@ using namespace angle;
 
 namespace
 {
-constexpr unsigned int kIterationsPerStep = 4;
+constexpr unsigned int kIterationsPerStep = 1000;
 
 struct BufferSubDataParams final : public RenderTestParams
 {
@@ -25,8 +25,8 @@ struct BufferSubDataParams final : public RenderTestParams
         // Common default values
         majorVersion      = 2;
         minorVersion      = 0;
-        windowWidth       = 512;
-        windowHeight      = 512;
+        windowWidth       = 2;
+        windowHeight      = 2;
         updateSize        = 32000;
         bufferSize        = 40000;
         iterationsPerStep = kIterationsPerStep;
@@ -40,7 +40,6 @@ struct BufferSubDataParams final : public RenderTestParams
     GLint vertexComponentCount;
     unsigned int updateRate;
 
-    // static parameters
     GLsizeiptr updateSize;
     GLsizeiptr bufferSize;
 };
@@ -238,11 +237,13 @@ std::string BufferSubDataParams::story() const
             strstr << "_ushort";
             break;
         default:
-            strstr << "_vunk_" << vertexType << "_";
+            strstr << "_vunk_" << vertexType;
             break;
     }
 
-    strstr << vertexComponentCount;
+    strstr << "_" << (bufferSize / 0x400) << "k";
+    strstr << "_" << (updateSize / 0x400) << "k";
+    strstr << "_" << vertexComponentCount;
     strstr << "_every" << updateRate;
 
     return strstr.str();
@@ -337,6 +338,7 @@ void BufferSubDataBenchmark::drawBenchmark()
         glDrawArrays(GL_TRIANGLES, 0, 3 * mNumTris);
     }
 
+    glFinish();
     ASSERT_GL_NO_ERROR();
 }
 
@@ -385,8 +387,64 @@ TEST_P(BufferSubDataBenchmark, Run)
     run();
 }
 
+// OP(size, updateSize)
+#define ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(OP) \
+    OP(32, 32)                                \
+    OP(64, 32)                                \
+    OP(96, 32)                                \
+    OP(128, 32)                               \
+    OP(256, 32)                               \
+    OP(64, 64)                                \
+    OP(96, 64)                                \
+    OP(128, 64)                               \
+    OP(256, 64)                               \
+    OP(96, 96)                                \
+    OP(128, 96)                               \
+    OP(256, 96)                               \
+    OP(128, 128)                              \
+    OP(256, 128)                              \
+    OP(256, 256)                              \
+    OP(512, 256)                              \
+    OP(512, 512)                              \
+    OP(1024, 512)                             \
+    OP(1024, 1024)                            \
+    OP(2048, 1024)                            \
+    OP(2048, 2048)
+
+#define ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK)                       \
+    BufferSubDataParams BufferUpdate_##bufferSizeK##_##updateSizeK##_MetalParams()        \
+    {                                                                                     \
+        BufferSubDataParams params;                                                       \
+        params.eglParameters        = egl_platform::METAL();                              \
+        params.vertexType           = GL_FLOAT;                                           \
+        params.vertexComponentCount = 4;                                                  \
+        params.vertexNormalized     = GL_FALSE;                                           \
+        params.updateSize           = updateSizeK * 0x400;                                \
+        params.bufferSize           = bufferSizeK * 0x400;                                \
+        return params;                                                                    \
+    }                                                                                     \
+                                                                                          \
+    BufferSubDataParams BufferUpdate_##bufferSizeK##_##updateSizeK##_OpenGLOrGLESParams() \
+    {                                                                                     \
+        BufferSubDataParams params;                                                       \
+        params.eglParameters        = egl_platform::OPENGL_OR_GLES();                     \
+        params.vertexType           = GL_FLOAT;                                           \
+        params.vertexComponentCount = 4;                                                  \
+        params.vertexNormalized     = GL_FALSE;                                           \
+        params.updateSize           = updateSizeK * 0x400;                                \
+        params.bufferSize           = bufferSizeK * 0x400;                                \
+        return params;                                                                    \
+    }
+
+ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(ANGLE_BUFFER_PERF_TEST_MAKE_PARAM)
+
+#define ANGLE_BUFFER_PERF_TEST_ARG(bufferSize, updateSize)    \
+    BufferUpdate_##bufferSize##_##updateSize##_MetalParams(), \
+        BufferUpdate_##bufferSize##_##updateSize##_OpenGLOrGLESParams(),
+
 ANGLE_INSTANTIATE_TEST(BufferSubDataBenchmark,
-                       BufferUpdateD3D11Params(),
+                       ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(ANGLE_BUFFER_PERF_TEST_ARG)
+                           BufferUpdateD3D11Params(),
                        BufferUpdateMetalParams(),
                        BufferUpdateOpenGLOrGLESParams(),
                        BufferUpdateVulkanParams());

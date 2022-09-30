@@ -19,7 +19,7 @@ using namespace angle;
 
 namespace
 {
-constexpr unsigned int kIterationsPerStep = 100;
+constexpr unsigned int kIterationsPerStep = 1000;
 
 struct PointSpritesParams final : public RenderTestParams
 {
@@ -30,9 +30,9 @@ struct PointSpritesParams final : public RenderTestParams
         // Common default params
         majorVersion = 2;
         minorVersion = 0;
-        windowWidth  = 1280;
-        windowHeight = 720;
-        count        = 10;
+        windowWidth  = 2;
+        windowHeight = 2;
+        count        = 1000;
         size         = 3.0f;
         numVaryings  = 3;
     }
@@ -184,13 +184,18 @@ void PointSpritesBenchmark::drawBenchmark()
     glClear(GL_COLOR_BUFFER_BIT);
 
     const auto &params = GetParam();
+    std::vector<float> vertexPositions(params.count * 2, 0.0f);
 
     for (unsigned int it = 0; it < params.iterationsPerStep; it++)
     {
         // TODO(jmadill): Indexed point rendering. ANGLE is bad at this.
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexPositions.size() * sizeof(float),
+                        &vertexPositions[0]);
         glDrawArrays(GL_POINTS, 0, params.count);
     }
 
+    glFinish();
     ASSERT_GL_NO_ERROR();
 }
 
