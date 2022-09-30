@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f46a942_4a68499c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-30T19:09:17Z",
+      "side": 1,
+      "message": "Sounds good",
+      "parentUuid": "7f941a78_04dc22ac",
+      "range": {
+        "startLine": 151,
+        "startChar": 15,
+        "endLine": 151,
+        "endChar": 44
+      },
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d32a0e5c_1e0900c5",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "148285d6_c424de5f",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-30T19:09:17Z",
+      "side": 1,
+      "message": "Oops",
+      "parentUuid": "d32a0e5c_1e0900c5",
+      "range": {
+        "startLine": 2874,
+        "startChar": 96,
+        "endLine": 2874,
+        "endChar": 97
+      },
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32ef9df5_b3326a0c",
@@ -77,6 +125,24 @@
       "writtenOn": "2022-09-30T15:20:12Z",
       "side": 1,
       "message": "Suggest removing this flush. It could dominate the CPU usage of the test. On the same note, please consider disabling `preferSubmitAtFBOBoundary` on both variants too.",
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b47d8d7_35040eff",
+        "filename": "src/tests/perf_tests/ImagelessFramebufferPerfTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-09-30T19:09:17Z",
+      "side": 1,
+      "message": "Done. The CPU time for both variants has slightly decreased vs the original test. However, the reported memory increases much faster now. (Data: https://docs.google.com/spreadsheets/d/1n2yI58CR6Gl2VYvPsYEuP5On1RQPoRC7eo7gvZf_ljw/edit?pli\u003d1\u0026resourcekey\u003d0-jgfXtv4cqJ8BBKo1JW9tCA#gid\u003d1687392645)",
+      "parentUuid": "32ef9df5_b3326a0c",
       "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
