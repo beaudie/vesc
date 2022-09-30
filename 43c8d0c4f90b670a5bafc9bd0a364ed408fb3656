@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f734ca7_4dea2150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 39
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:01:24Z",
+      "side": 1,
+      "message": "LGTM, great job as always\n\nKen or Geoff, feel free to take a look and +2",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9576ea3_e305679b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:01:24Z",
+      "side": 1,
+      "message": "Ack, though you may have to revisit when implementing on top of EXT_pls. As you said, it\u0027s a weird combination",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
