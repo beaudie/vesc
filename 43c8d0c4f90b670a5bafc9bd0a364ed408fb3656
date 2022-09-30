@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb0993ec_030e559d",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-30T19:24:06Z",
+      "side": 1,
+      "message": "https://github.com/KhronosGroup/OpenGL-Registry/pull/540 is so awesome. I\u0027m really excited to use the extension! (It\u0027s next on my implement list.)\n\nAnd for sure, we can definitely check for pls2 during glBeginPixelLocalStroageANGLE, and use it to clear the attachments.\n\nThat being said, I thought the plan was to otherwise *draw* a clear when pls2 isn\u0027t supported. I was assuming that would provide the same security guarantees as clearing, but do you think it might not?",
+      "parentUuid": "ce149637_929593ff",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ec24f9a_faa4e267",
