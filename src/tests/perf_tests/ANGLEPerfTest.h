@@ -222,10 +222,10 @@ class ANGLERenderTest : public ANGLEPerfTest
     bool mIsTimestampQueryAvailable;
     bool mEnableDebugCallback = true;
 
-  private:
     void SetUp() override;
     void TearDown() override;
 
+  private:
     void step() override;
     void startTest() override;
     void finishTest() override;

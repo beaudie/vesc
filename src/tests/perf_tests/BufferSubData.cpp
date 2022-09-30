@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "ANGLEPerfTest.h"
+#include "ANGLEPerfTestArgs.h"
 #include "test_utils/draw_call_perf_utils.h"
 
 using namespace angle;
@@ -40,7 +41,6 @@ struct BufferSubDataParams final : public RenderTestParams
     GLint vertexComponentCount;
     unsigned int updateRate;
 
-    // static parameters
     GLsizeiptr updateSize;
     GLsizeiptr bufferSize;
 };
@@ -238,11 +238,13 @@ std::string BufferSubDataParams::story() const
             strstr << "_ushort";
             break;
         default:
-            strstr << "_vunk_" << vertexType << "_";
+            strstr << "_vunk_" << vertexType;
             break;
     }
 
-    strstr << vertexComponentCount;
+    strstr << "_" << (bufferSize / 0x400) << "k";
+    strstr << "_" << (updateSize / 0x400) << "k";
+    strstr << "_" << vertexComponentCount;
     strstr << "_every" << updateRate;
 
     return strstr.str();
@@ -385,10 +387,101 @@ TEST_P(BufferSubDataBenchmark, Run)
     run();
 }
 
+class BufferSubDataComparisonBenchmark : public BufferSubDataBenchmark
+{
+  protected:
+    void SetUp() override;
+    void drawBenchmark() override;
+};
+
+void BufferSubDataComparisonBenchmark::SetUp()
+{
+    disableTestHarnessSwap();
+    if (!gEnableComparisonTests)
+    {
+        skipTest("comparision tests not enabled");
+    }
+
+    BufferSubDataBenchmark::SetUp();
+}
+
+void BufferSubDataComparisonBenchmark::drawBenchmark()
+{
+    BufferSubDataBenchmark::drawBenchmark();
+    glFinish();
+}
+
+// OP(bufferSize, updateSize)
+#define ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(OP) \
+    OP(32, 32)                                \
+    OP(39, 31)                                \
+    OP(64, 32)                                \
+    OP(96, 32)                                \
+    OP(128, 32)                               \
+    OP(256, 32)                               \
+    OP(64, 64)                                \
+    OP(96, 64)                                \
+    OP(128, 64)                               \
+    OP(256, 64)                               \
+    OP(96, 96)                                \
+    OP(128, 96)                               \
+    OP(256, 96)                               \
+    OP(128, 128)                              \
+    OP(256, 128)                              \
+    OP(256, 256)                              \
+    OP(512, 256)                              \
+    OP(512, 512)                              \
+    OP(1024, 512)                             \
+    OP(1024, 1024)                            \
+    OP(2048, 1024)                            \
+    OP(2048, 2048)
+
+#define ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK, api, API)        \
+    BufferSubDataParams BufferUpdate_##bufferSizeK##_##updateSizeK##_##api##Params() \
+    {                                                                                \
+        BufferSubDataParams params;                                                  \
+        params.eglParameters        = egl_platform::API();                           \
+        params.vertexType           = GL_FLOAT;                                      \
+        params.vertexComponentCount = 4;                                             \
+        params.vertexNormalized     = GL_FALSE;                                      \
+        params.updateSize           = updateSizeK * 0x400;                           \
+        params.bufferSize           = bufferSizeK * 0x400;                           \
+        params.iterationsPerStep    = 1000;                                          \
+        params.windowWidth          = 2;                                             \
+        params.windowHeight         = 2;                                             \
+        return params;                                                               \
+    }
+
+#define ANGLE_BUFFER_PERF_TEST_MAKE_PARAMS(bufferSizeK, updateSizeK)                          \
+    ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK, D3D11, D3D11)                 \
+    ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK, Metal, METAL)                 \
+    ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK, OpenGLOrGLES, OPENGL_OR_GLES) \
+    ANGLE_BUFFER_PERF_TEST_MAKE_PARAM(bufferSizeK, updateSizeK, Vulkan, VULKAN)
+
+ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(ANGLE_BUFFER_PERF_TEST_MAKE_PARAMS)
+
+// Tests for comparing backend performance.
+TEST_P(BufferSubDataComparisonBenchmark, Run)
+{
+    run();
+}
+
+BufferSubDataParams BufferUpdate_end;
+
+#define ANGLE_BUFFER_PERF_TEST_ARG(bufferSize, updateSize)               \
+    BufferUpdate_##bufferSize##_##updateSize##_D3D11Params(),            \
+        BufferUpdate_##bufferSize##_##updateSize##_MetalParams(),        \
+        BufferUpdate_##bufferSize##_##updateSize##_OpenGLOrGLESParams(), \
+        BufferUpdate_##bufferSize##_##updateSize##_VulkanParams(),
+
 ANGLE_INSTANTIATE_TEST(BufferSubDataBenchmark,
                        BufferUpdateD3D11Params(),
                        BufferUpdateMetalParams(),
                        BufferUpdateOpenGLOrGLESParams(),
                        BufferUpdateVulkanParams());
+
+ANGLE_INSTANTIATE_TEST(BufferSubDataComparisonBenchmark,
+                       ANGLE_BUFFER_SUB_PERF_TEST_PARAMS(ANGLE_BUFFER_PERF_TEST_ARG)
+                           BufferUpdate_end);
 
 }  // namespace
