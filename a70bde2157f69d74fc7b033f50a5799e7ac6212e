@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8a96ba_0bbc4d47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:20:12Z",
+      "side": 1,
+      "message": "LGTM, thanks for the persistence",
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f941a78_04dc22ac",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 42
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:20:12Z",
+      "side": 1,
+      "message": "nit: some naming suggestions:\n\n```\nenum class RenderTargetImage\n{\n    AttachmentImage,\n    ResolveImage\n}\n```",
+      "range": {
+        "startLine": 151,
+        "startChar": 15,
+        "endLine": 151,
+        "endChar": 44
+      },
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d32a0e5c_1e0900c5",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:20:12Z",
+      "side": 1,
+      "message": "Should be 1!",
+      "range": {
+        "startLine": 2874,
+        "startChar": 96,
+        "endLine": 2874,
+        "endChar": 97
+      },
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32ef9df5_b3326a0c",
+        "filename": "src/tests/perf_tests/ImagelessFramebufferPerfTest.cpp",
+        "patchSetId": 42
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:20:12Z",
+      "side": 1,
+      "message": "Suggest removing this flush. It could dominate the CPU usage of the test. On the same note, please consider disabling `preferSubmitAtFBOBoundary` on both variants too.",
+      "revId": "a70bde2157f69d74fc7b033f50a5799e7ac6212e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
