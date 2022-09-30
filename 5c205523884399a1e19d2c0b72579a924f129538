@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21eec9d1_80742f3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-30T11:40:12Z",
+      "side": 1,
+      "message": "Please also add ninja in ANGLE_CHROMIUM_DEPS in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/scripts/roll_chromium_deps.py;l\u003d33\nso it\u0027s updated automatically from Chromium.",
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a4caaf2_14b74493",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-09-30T11:40:12Z",
+      "side": 1,
+      "message": "Please add this condition.",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 43
+      },
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
