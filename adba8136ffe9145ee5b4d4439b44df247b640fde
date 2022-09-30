@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e318dc17_4b06d592",
+        "filename": "src/compiler/translator/tree_ops/ClampIndirectIndices.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T17:36:57Z",
+      "side": 0,
+      "message": "Ref. This transformation replaces node-\u003egetRight() (i.e. the index) with a clamped expression, but in this path the clamped expression used the array\u0027s size, i.e. referenced the array itself (node-\u003egetLeft()). Something like `array[clamp(... array.length ...)]`. The `array` reference node became the child of two different parents.",
+      "range": {
+        "startLine": 65,
+        "startChar": 51,
+        "endLine": 65,
+        "endChar": 66
+      },
+      "revId": "adba8136ffe9145ee5b4d4439b44df247b640fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
