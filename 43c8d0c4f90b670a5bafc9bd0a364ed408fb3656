@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f69a8540_d2d31a2d",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-09-30T21:02:16Z",
+      "side": 1,
+      "message": "\u003e It would, but the point of the spec change was that you actually don\u0027t need to clear, it\u0027s already secure...\n\nOoooh, that\u0027s a big deal. Does this mean we\u0027re guaranteed no leaks, even if the render pass breaks and there\u0027s a flush?\n\nIt would be nice to not have to do anything on GL_DONT_CARE (after confirming the non-existence of EXT_pls2, of course).",
+      "parentUuid": "fdedbe1b_1c3c3d91",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ec24f9a_faa4e267",
