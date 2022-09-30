@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce149637_929593ff",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:47:42Z",
+      "side": 1,
+      "message": "Ack. Recall the gentlemen\u0027s agreement that led to https://github.com/KhronosGroup/OpenGL-Registry/pull/540 was that EXT_pls2 is used to clear the attachments if available. Imagination (only one with EXT_pls2) agreed to update the driver to conform with the EXT_pls change going forward, but older drivers would still require this for ANGLE_pls to be secure.\n\nDefinitely no need to use EXT_pls2 functionality to make PLS+Attachment work, just the clear is enough. Hopefully that would make the blind code a bit less risky :-S",
+      "parentUuid": "c15c5b07_466ca05b",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ec24f9a_faa4e267",
@@ -66,6 +84,30 @@
       "writtenOn": "2022-09-30T15:41:07Z",
       "side": 1,
       "message": "This will cause the test to be skipped when using EXT_pls.",
+      "range": {
+        "startLine": 1981,
+        "startChar": 4,
+        "endLine": 1981,
+        "endChar": 82
+      },
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd36fcd4_234265cd",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T15:47:42Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "1ec24f9a_faa4e267",
       "range": {
         "startLine": 1981,
         "startChar": 4,
