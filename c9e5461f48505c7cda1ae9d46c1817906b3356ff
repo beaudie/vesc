@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7762d50d_085d1d93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-09-30T12:43:01Z",
+      "side": 1,
+      "message": "Thanks Roman. Yuly any follow-ups before I land this?",
+      "revId": "c9e5461f48505c7cda1ae9d46c1817906b3356ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
