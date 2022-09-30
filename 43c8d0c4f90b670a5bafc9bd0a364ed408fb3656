@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdedbe1b_1c3c3d91",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 1976,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T19:31:19Z",
+      "side": 1,
+      "message": "It would, but the point of the spec change was that you actually _don\u0027t_ need to clear, it\u0027s already secure...\n\n... again, that is except older imagination drivers, and you can know that by the existence of EXT_pls2.\n\nIf you want to always clear, I have no objection (though it\u0027s wasted code)",
+      "parentUuid": "eb0993ec_030e559d",
+      "revId": "43c8d0c4f90b670a5bafc9bd0a364ed408fb3656",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ec24f9a_faa4e267",
