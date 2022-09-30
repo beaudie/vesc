@@ -68,6 +68,24 @@
       "message": "Is it just me, or there\u0027s no text in the extension file?",
       "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44eab518_d123e942",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2022-09-30T01:34:52Z",
+      "side": 1,
+      "message": "There\u0027s indeed no text, right. I created it so that link in doc is valid, iirc, or maybe I thought the script requires file to be present. I guess I could put same thing as the commit message in that extension\u0027s description.",
+      "parentUuid": "3a37b471_f295f66f",
+      "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
