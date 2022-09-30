@@ -429,6 +429,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b9c878_cc669f89",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 26
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T14:53:40Z",
+      "side": 1,
+      "message": "`int` generally has more undefined behavior associated with it compared to uint, but that\u0027s not the reason here. The types reflect the range of values that can be inside, so if a number can\u0027t be negative, the code is clearer if an unsigned type is used.",
+      "parentUuid": "4eaf4e3b_b3159661",
+      "revId": "2508a7e52183b2fcd9f4883c7f83249e2d9e1826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8de567ba_ef47039e",
