@@ -86,6 +86,24 @@
       "parentUuid": "3a37b471_f295f66f",
       "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5058198f_e74cb581",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-09-30T01:38:33Z",
+      "side": 1,
+      "message": "It would have to look like a real extension, but yes the contents could be brief.\n\nBut it seems overkill to do this TBH. I wonder if you can just get away with not using any extension at all. Like assume palette support for GLES1, which is true even if backend implementations are \"incomplete\", and validate calls based on that.",
+      "parentUuid": "44eab518_d123e942",
+      "revId": "4345b9b2bca2d5a3631f19e94f8d014358abd304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
