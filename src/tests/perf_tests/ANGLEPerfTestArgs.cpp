@@ -30,6 +30,7 @@ bool gEnableAllTraceTests      = false;
 bool gRetraceMode              = false;
 bool gMinimizeGPUWork          = false;
 bool gTraceTestValidation      = false;
+bool gEnableComparisonTests    = false;
 const char *gPerfCounters      = nullptr;
 
 // Default to three warmup trials. There's no science to this. More than two was experimentally
@@ -190,6 +191,10 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         {
             gPerfCounters = argv[argIndex + 1];
             argIndex++;
+        }
+        else if (strcmp("--enable-comparison-tests", argv[argIndex]) == 0)
+        {
+            gEnableComparisonTests = true;
         }
     }
 }

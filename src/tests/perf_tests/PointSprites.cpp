@@ -8,6 +8,7 @@
 //
 //
 #include "ANGLEPerfTest.h"
+#include "ANGLEPerfTestArgs.h"
 
 #include <iostream>
 #include <sstream>
@@ -19,7 +20,7 @@ using namespace angle;
 
 namespace
 {
-constexpr unsigned int kIterationsPerStep = 100;
+constexpr unsigned int kIterationsPerStep = 1000;
 
 struct PointSpritesParams final : public RenderTestParams
 {
@@ -184,13 +185,18 @@ void PointSpritesBenchmark::drawBenchmark()
     glClear(GL_COLOR_BUFFER_BIT);
 
     const auto &params = GetParam();
+    std::vector<float> vertexPositions(params.count * 2, 0.0f);
 
     for (unsigned int it = 0; it < params.iterationsPerStep; it++)
     {
         // TODO(jmadill): Indexed point rendering. ANGLE is bad at this.
+        glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertexPositions.size() * sizeof(float),
+                        &vertexPositions[0]);
         glDrawArrays(GL_POINTS, 0, params.count);
     }
 
+    glFinish();
     ASSERT_GL_NO_ERROR();
 }
 
@@ -222,9 +228,76 @@ PointSpritesParams VulkanParams()
     return params;
 }
 
-}  // namespace
-
 TEST_P(PointSpritesBenchmark, Run)
+{
+    run();
+}
+
+class PointSpritesComparisonBenchmark : public PointSpritesBenchmark
+{
+  protected:
+    void SetUp() override;
+    void drawBenchmark() override;
+};
+
+void PointSpritesComparisonBenchmark::SetUp()
+{
+    disableTestHarnessSwap();
+    if (!gEnableComparisonTests)
+    {
+        skipTest("comparision tests not enabled");
+    }
+
+    PointSpritesBenchmark::SetUp();
+}
+
+void PointSpritesComparisonBenchmark::drawBenchmark()
+{
+    PointSpritesBenchmark::drawBenchmark();
+    glFinish();
+}
+
+void InitPointSpritesComparisonBenchmarkParams(PointSpritesParams &params)
+{
+    params.windowWidth  = 2;
+    params.windowHeight = 2;
+    params.count        = 1000;
+}
+
+PointSpritesParams D3D11ComparisonParams()
+{
+    PointSpritesParams params;
+    params.eglParameters = egl_platform::D3D11();
+    InitPointSpritesComparisonBenchmarkParams(params);
+    return params;
+}
+
+PointSpritesParams MetalComparisonParams()
+{
+    PointSpritesParams params;
+    params.eglParameters = egl_platform::METAL();
+    InitPointSpritesComparisonBenchmarkParams(params);
+    return params;
+}
+
+PointSpritesParams OpenGLOrGLESComparisonParams()
+{
+    PointSpritesParams params;
+    params.eglParameters = egl_platform::OPENGL_OR_GLES();
+    InitPointSpritesComparisonBenchmarkParams(params);
+    return params;
+}
+
+PointSpritesParams VulkanComparisonParams()
+{
+    PointSpritesParams params;
+    params.eglParameters = egl_platform::VULKAN();
+    InitPointSpritesComparisonBenchmarkParams(params);
+    return params;
+}
+
+// Tests for comparing backend performance.
+TEST_P(PointSpritesComparisonBenchmark, Run)
 {
     run();
 }
@@ -234,3 +307,11 @@ ANGLE_INSTANTIATE_TEST(PointSpritesBenchmark,
                        MetalParams(),
                        OpenGLOrGLESParams(),
                        VulkanParams());
+
+ANGLE_INSTANTIATE_TEST(PointSpritesComparisonBenchmark,
+                       D3D11ComparisonParams(),
+                       MetalComparisonParams(),
+                       OpenGLOrGLESComparisonParams(),
+                       VulkanComparisonParams());
+
+}  // namespace
