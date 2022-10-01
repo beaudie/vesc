@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a66ebe82_cbd2f06e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 40
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "Awesome work Chris! I couldn\u0027t review in detail but looked at the tests a fair bit. lgtm overall. (BTW geofflang\u0027s OOO for a little while.)",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a01c530_3da348af",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 40
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "typo: attachments",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55cfbe44_60a23612",
+        "filename": "include/platform/FrontendFeatures_autogen.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "It\u0027s hard to see from anglebug.com/7279 that this feature flag\u0027s being added in order to enable testing of the pixel local storage extension without support for OES/EXT_draw_buffers_indexed. Is it worth filing another bug describing specifically this need (similar to anglebug.com/5007, above) and blocking 7279 on the new one, then referencing the new one here?",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "865567d3_12cee82c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 40
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "Nice, finding some likely driver bugs. 😊",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c53ab4a3_c060142a",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "Cool way to factor the test to handle both code paths.",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe941914_dc62c845",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-01T00:05:53Z",
+      "side": 1,
+      "message": "Amazing work testing all of these configurations!",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
