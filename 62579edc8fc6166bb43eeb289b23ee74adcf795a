@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae9208a_9b1daeb3",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 40
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-01T15:06:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a01c530_3da348af",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55cfbe44_60a23612",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-01T00:05:53Z",
       "side": 1,
       "message": "It\u0027s hard to see from anglebug.com/7279 that this feature flag\u0027s being added in order to enable testing of the pixel local storage extension without support for OES/EXT_draw_buffers_indexed. Is it worth filing another bug describing specifically this need (similar to anglebug.com/5007, above) and blocking 7279 on the new one, then referencing the new one here?",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bcae9b0_ef2007eb",
+        "filename": "include/platform/FrontendFeatures_autogen.h",
+        "patchSetId": 40
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-01T15:06:35Z",
+      "side": 1,
+      "message": "Yes, now it actually makes sense having a bug number here 😊",
+      "parentUuid": "55cfbe44_60a23612",
       "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -99,6 +135,24 @@
       "writtenOn": "2022-10-01T00:05:53Z",
       "side": 1,
       "message": "Amazing work testing all of these configurations!",
+      "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1288bdcf_a49311ab",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 40
+      },
+      "lineNbr": 2046,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-01T15:06:35Z",
+      "side": 1,
+      "message": "Yeah, I\u0027m really happy with how configurable the test harness is!\n\n(Although I\u0027m getting worried about https://chromium-review.googlesource.com/c/angle/angle/+/3916794. Are there any iPhones or M1s on CQ?)",
+      "parentUuid": "fe941914_dc62c845",
       "revId": "62579edc8fc6166bb43eeb289b23ee74adcf795a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
