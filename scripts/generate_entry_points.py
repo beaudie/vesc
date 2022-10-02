@@ -175,7 +175,9 @@ void GL_APIENTRY GL_{name}({params})
     if ({valid_context_check})
     {{{packed_gl_enum_conversions}
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid = (context->skipValidation() || Validate{name}({validate_params}));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GL{name}>(context) &&
+                             Validate{name}({validate_params})));
         if (isCallValid)
         {{
             context->{name_lower_no_suffix}({internal_params});
