@@ -43,8 +43,9 @@ void GL_APIENTRY GL_GetVertexAttribdv(GLuint index, GLenum pname, GLdouble *para
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateGetVertexAttribdv(context, angle::EntryPoint::GLGetVertexAttribdv, index,
-                                       pname, params));
+             (ValidateEntryPoint<angle::EntryPoint::GLGetVertexAttribdv>(context) &&
+              ValidateGetVertexAttribdv(context, angle::EntryPoint::GLGetVertexAttribdv, index,
+                                        pname, params)));
         if (isCallValid)
         {
             context->getVertexAttribdv(index, pname, params);
@@ -67,7 +68,8 @@ void GL_APIENTRY GL_VertexAttrib1d(GLuint index, GLdouble x)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib1d(context, angle::EntryPoint::GLVertexAttrib1d, index, x));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib1d>(context) &&
+              ValidateVertexAttrib1d(context, angle::EntryPoint::GLVertexAttrib1d, index, x)));
         if (isCallValid)
         {
             context->vertexAttrib1d(index, x);
@@ -91,7 +93,8 @@ void GL_APIENTRY GL_VertexAttrib1dv(GLuint index, const GLdouble *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib1dv(context, angle::EntryPoint::GLVertexAttrib1dv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib1dv>(context) &&
+              ValidateVertexAttrib1dv(context, angle::EntryPoint::GLVertexAttrib1dv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib1dv(index, v);
@@ -114,7 +117,8 @@ void GL_APIENTRY GL_VertexAttrib1s(GLuint index, GLshort x)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib1s(context, angle::EntryPoint::GLVertexAttrib1s, index, x));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib1s>(context) &&
+              ValidateVertexAttrib1s(context, angle::EntryPoint::GLVertexAttrib1s, index, x)));
         if (isCallValid)
         {
             context->vertexAttrib1s(index, x);
@@ -138,7 +142,8 @@ void GL_APIENTRY GL_VertexAttrib1sv(GLuint index, const GLshort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib1sv(context, angle::EntryPoint::GLVertexAttrib1sv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib1sv>(context) &&
+              ValidateVertexAttrib1sv(context, angle::EntryPoint::GLVertexAttrib1sv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib1sv(index, v);
@@ -162,7 +167,8 @@ void GL_APIENTRY GL_VertexAttrib2d(GLuint index, GLdouble x, GLdouble y)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib2d(context, angle::EntryPoint::GLVertexAttrib2d, index, x, y));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib2d>(context) &&
+              ValidateVertexAttrib2d(context, angle::EntryPoint::GLVertexAttrib2d, index, x, y)));
         if (isCallValid)
         {
             context->vertexAttrib2d(index, x, y);
@@ -186,7 +192,8 @@ void GL_APIENTRY GL_VertexAttrib2dv(GLuint index, const GLdouble *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib2dv(context, angle::EntryPoint::GLVertexAttrib2dv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib2dv>(context) &&
+              ValidateVertexAttrib2dv(context, angle::EntryPoint::GLVertexAttrib2dv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib2dv(index, v);
@@ -210,7 +217,8 @@ void GL_APIENTRY GL_VertexAttrib2s(GLuint index, GLshort x, GLshort y)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib2s(context, angle::EntryPoint::GLVertexAttrib2s, index, x, y));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib2s>(context) &&
+              ValidateVertexAttrib2s(context, angle::EntryPoint::GLVertexAttrib2s, index, x, y)));
         if (isCallValid)
         {
             context->vertexAttrib2s(index, x, y);
@@ -234,7 +242,8 @@ void GL_APIENTRY GL_VertexAttrib2sv(GLuint index, const GLshort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib2sv(context, angle::EntryPoint::GLVertexAttrib2sv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib2sv>(context) &&
+              ValidateVertexAttrib2sv(context, angle::EntryPoint::GLVertexAttrib2sv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib2sv(index, v);
@@ -256,9 +265,10 @@ void GL_APIENTRY GL_VertexAttrib3d(GLuint index, GLdouble x, GLdouble y, GLdoubl
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateVertexAttrib3d(context, angle::EntryPoint::GLVertexAttrib3d, index, x, y, z));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib3d>(context) &&
+                             ValidateVertexAttrib3d(context, angle::EntryPoint::GLVertexAttrib3d,
+                                                    index, x, y, z)));
         if (isCallValid)
         {
             context->vertexAttrib3d(index, x, y, z);
@@ -282,7 +292,8 @@ void GL_APIENTRY GL_VertexAttrib3dv(GLuint index, const GLdouble *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib3dv(context, angle::EntryPoint::GLVertexAttrib3dv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib3dv>(context) &&
+              ValidateVertexAttrib3dv(context, angle::EntryPoint::GLVertexAttrib3dv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib3dv(index, v);
@@ -304,9 +315,10 @@ void GL_APIENTRY GL_VertexAttrib3s(GLuint index, GLshort x, GLshort y, GLshort z
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateVertexAttrib3s(context, angle::EntryPoint::GLVertexAttrib3s, index, x, y, z));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib3s>(context) &&
+                             ValidateVertexAttrib3s(context, angle::EntryPoint::GLVertexAttrib3s,
+                                                    index, x, y, z)));
         if (isCallValid)
         {
             context->vertexAttrib3s(index, x, y, z);
@@ -330,7 +342,8 @@ void GL_APIENTRY GL_VertexAttrib3sv(GLuint index, const GLshort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib3sv(context, angle::EntryPoint::GLVertexAttrib3sv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib3sv>(context) &&
+              ValidateVertexAttrib3sv(context, angle::EntryPoint::GLVertexAttrib3sv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib3sv(index, v);
@@ -354,7 +367,8 @@ void GL_APIENTRY GL_VertexAttrib4Nbv(GLuint index, const GLbyte *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4Nbv(context, angle::EntryPoint::GLVertexAttrib4Nbv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nbv>(context) &&
+              ValidateVertexAttrib4Nbv(context, angle::EntryPoint::GLVertexAttrib4Nbv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Nbv(index, v);
@@ -378,7 +392,8 @@ void GL_APIENTRY GL_VertexAttrib4Niv(GLuint index, const GLint *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4Niv(context, angle::EntryPoint::GLVertexAttrib4Niv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Niv>(context) &&
+              ValidateVertexAttrib4Niv(context, angle::EntryPoint::GLVertexAttrib4Niv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Niv(index, v);
@@ -402,7 +417,8 @@ void GL_APIENTRY GL_VertexAttrib4Nsv(GLuint index, const GLshort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4Nsv(context, angle::EntryPoint::GLVertexAttrib4Nsv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nsv>(context) &&
+              ValidateVertexAttrib4Nsv(context, angle::EntryPoint::GLVertexAttrib4Nsv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Nsv(index, v);
@@ -424,9 +440,11 @@ void GL_APIENTRY GL_VertexAttrib4Nub(GLuint index, GLubyte x, GLubyte y, GLubyte
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid = (context->skipValidation() ||
-                            ValidateVertexAttrib4Nub(context, angle::EntryPoint::GLVertexAttrib4Nub,
-                                                     index, x, y, z, w));
+        bool isCallValid =
+            (context->skipValidation() ||
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nub>(context) &&
+              ValidateVertexAttrib4Nub(context, angle::EntryPoint::GLVertexAttrib4Nub, index, x, y,
+                                       z, w)));
         if (isCallValid)
         {
             context->vertexAttrib4Nub(index, x, y, z, w);
@@ -448,9 +466,10 @@ void GL_APIENTRY GL_VertexAttrib4Nubv(GLuint index, const GLubyte *v)
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateVertexAttrib4Nubv(context, angle::EntryPoint::GLVertexAttrib4Nubv, index, v));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nubv>(context) &&
+                             ValidateVertexAttrib4Nubv(
+                                 context, angle::EntryPoint::GLVertexAttrib4Nubv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Nubv(index, v);
@@ -472,9 +491,10 @@ void GL_APIENTRY GL_VertexAttrib4Nuiv(GLuint index, const GLuint *v)
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateVertexAttrib4Nuiv(context, angle::EntryPoint::GLVertexAttrib4Nuiv, index, v));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nuiv>(context) &&
+                             ValidateVertexAttrib4Nuiv(
+                                 context, angle::EntryPoint::GLVertexAttrib4Nuiv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Nuiv(index, v);
@@ -496,9 +516,10 @@ void GL_APIENTRY GL_VertexAttrib4Nusv(GLuint index, const GLushort *v)
     if (context)
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateVertexAttrib4Nusv(context, angle::EntryPoint::GLVertexAttrib4Nusv, index, v));
+        bool isCallValid = (context->skipValidation() ||
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4Nusv>(context) &&
+                             ValidateVertexAttrib4Nusv(
+                                 context, angle::EntryPoint::GLVertexAttrib4Nusv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4Nusv(index, v);
@@ -522,7 +543,8 @@ void GL_APIENTRY GL_VertexAttrib4bv(GLuint index, const GLbyte *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4bv(context, angle::EntryPoint::GLVertexAttrib4bv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4bv>(context) &&
+              ValidateVertexAttrib4bv(context, angle::EntryPoint::GLVertexAttrib4bv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4bv(index, v);
@@ -545,8 +567,9 @@ void GL_APIENTRY GL_VertexAttrib4d(GLuint index, GLdouble x, GLdouble y, GLdoubl
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
-                            ValidateVertexAttrib4d(context, angle::EntryPoint::GLVertexAttrib4d,
-                                                   index, x, y, z, w));
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4d>(context) &&
+                             ValidateVertexAttrib4d(context, angle::EntryPoint::GLVertexAttrib4d,
+                                                    index, x, y, z, w)));
         if (isCallValid)
         {
             context->vertexAttrib4d(index, x, y, z, w);
@@ -570,7 +593,8 @@ void GL_APIENTRY GL_VertexAttrib4dv(GLuint index, const GLdouble *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4dv(context, angle::EntryPoint::GLVertexAttrib4dv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4dv>(context) &&
+              ValidateVertexAttrib4dv(context, angle::EntryPoint::GLVertexAttrib4dv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4dv(index, v);
@@ -594,7 +618,8 @@ void GL_APIENTRY GL_VertexAttrib4iv(GLuint index, const GLint *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4iv(context, angle::EntryPoint::GLVertexAttrib4iv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4iv>(context) &&
+              ValidateVertexAttrib4iv(context, angle::EntryPoint::GLVertexAttrib4iv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4iv(index, v);
@@ -617,8 +642,9 @@ void GL_APIENTRY GL_VertexAttrib4s(GLuint index, GLshort x, GLshort y, GLshort z
     {
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
-                            ValidateVertexAttrib4s(context, angle::EntryPoint::GLVertexAttrib4s,
-                                                   index, x, y, z, w));
+                            (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4s>(context) &&
+                             ValidateVertexAttrib4s(context, angle::EntryPoint::GLVertexAttrib4s,
+                                                    index, x, y, z, w)));
         if (isCallValid)
         {
             context->vertexAttrib4s(index, x, y, z, w);
@@ -642,7 +668,8 @@ void GL_APIENTRY GL_VertexAttrib4sv(GLuint index, const GLshort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4sv(context, angle::EntryPoint::GLVertexAttrib4sv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4sv>(context) &&
+              ValidateVertexAttrib4sv(context, angle::EntryPoint::GLVertexAttrib4sv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4sv(index, v);
@@ -666,7 +693,8 @@ void GL_APIENTRY GL_VertexAttrib4ubv(GLuint index, const GLubyte *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4ubv(context, angle::EntryPoint::GLVertexAttrib4ubv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4ubv>(context) &&
+              ValidateVertexAttrib4ubv(context, angle::EntryPoint::GLVertexAttrib4ubv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4ubv(index, v);
@@ -690,7 +718,8 @@ void GL_APIENTRY GL_VertexAttrib4uiv(GLuint index, const GLuint *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4uiv(context, angle::EntryPoint::GLVertexAttrib4uiv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4uiv>(context) &&
+              ValidateVertexAttrib4uiv(context, angle::EntryPoint::GLVertexAttrib4uiv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4uiv(index, v);
@@ -714,7 +743,8 @@ void GL_APIENTRY GL_VertexAttrib4usv(GLuint index, const GLushort *v)
         SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexAttrib4usv(context, angle::EntryPoint::GLVertexAttrib4usv, index, v));
+             (ValidateEntryPoint<angle::EntryPoint::GLVertexAttrib4usv>(context) &&
+              ValidateVertexAttrib4usv(context, angle::EntryPoint::GLVertexAttrib4usv, index, v)));
         if (isCallValid)
         {
             context->vertexAttrib4usv(index, v);
