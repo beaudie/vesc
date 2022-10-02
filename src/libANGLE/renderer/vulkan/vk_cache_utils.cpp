@@ -1240,7 +1240,13 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     subpassDesc.push_back({});
     VkSubpassDescription *applicationSubpass = &subpassDesc.back();
 
-    applicationSubpass->flags             = 0;
+    applicationSubpass->flags = 0;
+    if (desc.hasFramebufferFetch() &&
+        contextVk->getFeatures().supportsRasterizationOrderColorAttachmentAccess.enabled)
+    {
+        applicationSubpass->flags |=
+            VK_SUBPASS_DESCRIPTION_RASTERIZATION_ORDER_ATTACHMENT_COLOR_ACCESS_BIT_EXT;
+    }
     applicationSubpass->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     applicationSubpass->inputAttachmentCount =
         needInputAttachments ? static_cast<uint32_t>(colorAttachmentRefs.size()) : 0;
@@ -3061,8 +3067,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     depthStencilState.minDepthBounds = 0;
     depthStencilState.maxDepthBounds = 0;
 
-    blendState.sType           = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-    blendState.flags           = 0;
+    blendState.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+    blendState.flags = 0;
+    if (mRenderPassDesc.hasFramebufferFetch() &&
+        contextVk->getFeatures().supportsRasterizationOrderColorAttachmentAccess.enabled)
+    {
+        blendState.flags |=
+            VK_PIPELINE_COLOR_BLEND_STATE_CREATE_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_BIT_EXT;
+    }
     blendState.logicOpEnable   = static_cast<VkBool32>(inputAndRaster.bits.logicOpEnable);
     blendState.logicOp         = static_cast<VkLogicOp>(inputAndRaster.bits.logicOp);
     blendState.attachmentCount = static_cast<uint32_t>(mRenderPassDesc.colorAttachmentRange());

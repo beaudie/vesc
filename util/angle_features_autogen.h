@@ -257,7 +257,7 @@ enum class Feature
     SupportsPrimitivesGeneratedQuery,
     SupportsPrimitiveTopologyListRestart,
     SupportsProtectedMemory,
-    SupportsRasterizationOrderAttachmentAccess,
+    SupportsRasterizationOrderColorAttachmentAccess,
     SupportsRenderpass2,
     SupportsRenderPassLoadStoreOpNone,
     SupportsRenderPassStoreOpNone,

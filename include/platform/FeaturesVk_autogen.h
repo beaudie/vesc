@@ -722,10 +722,12 @@ struct FeaturesVk : FeatureSetBase
         "Platform supports setting frame timestamp surface attribute", &members,
         "https://anglebug.com/7489"};
 
-    FeatureInfo supportsRasterizationOrderAttachmentAccess = {
-        "supportsRasterizationOrderAttachmentAccess", FeatureCategory::VulkanFeatures,
-        "VkDevice supports VK_EXT_rasterization_order_attachment_access extension", &members,
-        "https://anglebug.com/7604"};
+    FeatureInfo supportsRasterizationOrderColorAttachmentAccess = {
+        "supportsRasterizationOrderColorAttachmentAccess", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_EXT_rasterization_order_attachment_access or "
+        "VK_ARM_rasterization_order_attachment_access extensions and has the "
+        "rasterizationOrderColorAttachmentAccess feature",
+        &members, "https://anglebug.com/7604"};
 
     FeatureInfo eglColorspaceAttributePassthrough = {
         "eglColorspaceAttributePassthrough", FeatureCategory::VulkanFeatures,

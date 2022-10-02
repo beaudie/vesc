@@ -714,6 +714,9 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT mBlendOperationAdvancedFeatures;
     VkPhysicalDeviceSamplerYcbcrConversionFeatures mSamplerYcbcrConversionFeatures;
     VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT mPipelineCreationCacheControlFeatures;
+    VkPhysicalDeviceRasterizationOrderAttachmentAccessFeaturesEXT
+        mRasterizationOrderAttachmentAccessFeatures;
+    const char *mRasterizationOrderAttachmentAccessExtensionName = nullptr;
     VkPhysicalDeviceExtendedDynamicStateFeaturesEXT mExtendedDynamicStateFeatures;
     VkPhysicalDeviceExtendedDynamicState2FeaturesEXT mExtendedDynamicState2Features;
     VkPhysicalDeviceFragmentShadingRateFeaturesKHR mFragmentShadingRateFeatures;

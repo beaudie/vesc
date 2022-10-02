@@ -977,10 +977,12 @@
             "issue": "https://anglebug.com/7489"
         },
         {
-            "name": "supports_rasterization_order_attachment_access",
+            "name": "supports_rasterization_order_color_attachment_access",
             "category": "Features",
             "description": [
-                "VkDevice supports VK_EXT_rasterization_order_attachment_access extension"
+                "VkDevice supports the VK_EXT_rasterization_order_attachment_access or ",
+                "VK_ARM_rasterization_order_attachment_access extensions and has the ",
+                "rasterizationOrderColorAttachmentAccess feature"
             ],
             "issue": "https://anglebug.com/7604"
         },
