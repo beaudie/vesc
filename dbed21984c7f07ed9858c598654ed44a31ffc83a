@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5543624b_26ea1e7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-02T19:29:10Z",
+      "side": 1,
+      "message": "Ken and Gregg, are you the right ones to ask to take a look at this one? I\u0027m pretty limited in Metal experience so the programmable blending only works for pixel local storage, but I\u0027m wondering if it\u0027s enough to at least get a foot in the door.\n\nAs for testing, are there any M1 GPUs on the ANGLE waterfall? How can we make sure this gets tested?\n\nOn the brighter side, the fill rate on my Macbook is ridiculously fast! (Benchmarking fill rate alone with minimal GPU work, it\u0027s about 10x faster than my NVIDIA laptop using Vulkan shader images!)",
+      "revId": "dbed21984c7f07ed9858c598654ed44a31ffc83a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
