@@ -1587,21 +1587,14 @@ bool ValidatePLSCommon(const Context *context,
         return false;
     }
 
-    // INVALID_FRAMEBUFFER_OPERATION is generated if the default framebuffer object name 0 is
-    // bound to DRAW_FRAMEBUFFER.
-    if (context->getState().getDrawFramebuffer()->id().value == 0)
-    {
-        context->validationError(entryPoint, GL_INVALID_FRAMEBUFFER_OPERATION,
-                                 kPLSDefaultFramebufferBound);
-        return false;
-    }
-
     if (expectedStatus == PLSExpectedStatus::Inactive)
     {
-        // INVALID_OPERATION is generated if PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE is TRUE.
-        if (context->getState().getPixelLocalStorageActive())
+        // INVALID_FRAMEBUFFER_OPERATION is generated if the default framebuffer object name 0 is
+        // bound to DRAW_FRAMEBUFFER.
+        if (context->getState().getDrawFramebuffer()->id().value == 0)
         {
-            context->validationError(entryPoint, GL_INVALID_OPERATION, kPLSActive);
+            context->validationError(entryPoint, GL_INVALID_FRAMEBUFFER_OPERATION,
+                                     kPLSDefaultFramebufferBound);
             return false;
         }
     }
