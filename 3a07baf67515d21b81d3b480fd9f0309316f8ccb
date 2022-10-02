@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc796dd4_fad84390",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-02T22:13:50Z",
+      "side": 1,
+      "message": "Actually didn\u0027t notice https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7604 until after I started working on this 😊\n\nI hope I\u0027m not colliding with anybody else\u0027s work.",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4f4c85_71189d12",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-02T22:13:50Z",
+      "side": 1,
+      "message": "Totally shooting in the dark here. Are there other subpass or pipeline descriptions that need to be updated?",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
