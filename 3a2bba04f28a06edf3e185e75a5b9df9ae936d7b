@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "502d3519_07fc417d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-10-03T23:53:01Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cd4841a_71d18da7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3702,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-10-03T23:53:01Z",
+      "side": 1,
+      "message": "nit: Camel case?",
+      "range": {
+        "startLine": 3702,
+        "startChar": 38,
+        "endLine": 3702,
+        "endChar": 55
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3899e9a_168e394e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6664,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-10-03T23:53:01Z",
+      "side": 1,
+      "message": "`sizeof(uint8_t)`?",
+      "range": {
+        "startLine": 6664,
+        "startChar": 44,
+        "endLine": 6664,
+        "endChar": 55
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20557b41_9f1df780",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6667,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-10-03T23:53:01Z",
+      "side": 1,
+      "message": "Suggestion: Embedding this part into a function that takes `attribs` and returns `reconstructedAttribs`?",
+      "range": {
+        "startLine": 6634,
+        "startChar": 0,
+        "endLine": 6667,
+        "endChar": 17
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
