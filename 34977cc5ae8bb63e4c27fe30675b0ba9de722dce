@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99bc3dfc_eaf5f221",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-03T18:19:00Z",
+      "side": 1,
+      "message": "Due to this comment above:\n// http://anglebug.com/7685\n\nthis now looks like it\u0027s part of that bug, not 7729",
+      "range": {
+        "startLine": 228,
+        "startChar": 4,
+        "endLine": 228,
+        "endChar": 46
+      },
+      "revId": "34977cc5ae8bb63e4c27fe30675b0ba9de722dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
