@@ -1739,8 +1739,11 @@ angle::Result ContextVk::handleDirtyEventLogImpl(CommandBufferT *commandBuffer)
         commandBuffer->endDebugUtilsLabelEXT();
     }
     commandBuffer->endDebugUtilsLabelEXT();
-    // The final end* call for #1 above is made in the ContextVk::draw* or
-    //  ContextVk::dispatch* function calls.
+
+    // The final end* call for #1 above is made via a special glDebugMessageInsert
+    // call made in the GLES debug layer following GL Draw/Dispatch/Clear/Query/* function
+    // calls. These are intercepted in Context::debugMessageInsert which then issues a
+    // popDebugGroup call which then generates the closing endDebugUtilsLabelEXT() call.
 
     mEventLog.clear();
     return angle::Result::Continue;
@@ -4099,6 +4102,18 @@ angle::Result ContextVk::popDebugGroup(const gl::Context *context)
     return popDebugGroupImpl();
 }
 
+angle::Result ContextVk::debugMessageInsert(const gl::Context *context,
+                                            GLenum source,
+                                            GLenum type,
+                                            GLuint id,
+                                            GLenum severity,
+                                            const std::string &message)
+{
+    // Save this event about an OpenGL ES command being called
+    logEvent(message.c_str());
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::pushDebugGroupImpl(GLenum source, GLuint id, const char *message)
 {
     if (!mRenderer->enableDebugUtils() && !mRenderer->angleDebuggerMode())
@@ -4155,55 +4170,6 @@ void ContextVk::logEvent(const char *eventString)
     mComputeDirtyBits.set(DIRTY_BIT_EVENT_LOG);
 }
 
-void ContextVk::endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType)
-{
-    if (!mRenderer->angleDebuggerMode())
-    {
-        return;
-    }
-
-    if (pipelineType == PipelineType::Graphics)
-    {
-        ASSERT(mRenderPassCommands);
-        mRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
-    }
-    else
-    {
-        ASSERT(pipelineType == PipelineType::Compute);
-        ASSERT(mOutsideRenderPassCommands);
-        mOutsideRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
-    }
-}
-void ContextVk::endEventLogForClearOrQuery()
-{
-    if (!mRenderer->angleDebuggerMode())
-    {
-        return;
-    }
-
-    switch (mQueryEventType)
-    {
-        case GraphicsEventCmdBuf::InOutsideCmdBufQueryCmd:
-            ASSERT(mOutsideRenderPassCommands);
-            mOutsideRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
-            break;
-        case GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd:
-            ASSERT(mRenderPassCommands);
-            mRenderPassCommands->getCommandBuffer().endDebugUtilsLabelEXT();
-            break;
-        case GraphicsEventCmdBuf::NotInQueryCmd:
-            // The glClear* or gl*Query* command was noop'd or otherwise ended early.  We could
-            // call handleDirtyEventLogImpl() to start the hierarchy, but it isn't clear which (if
-            // any) command buffer to use.  We'll just skip processing this command (other than to
-            // let it stay queued for the next time handleDirtyEventLogImpl() is called.
-            return;
-        default:
-            UNREACHABLE();
-    }
-
-    mQueryEventType = GraphicsEventCmdBuf::NotInQueryCmd;
-}
-
 angle::Result ContextVk::handleNoopDrawEvent()
 {
     // Even though this draw call is being no-op'd, we still must handle the dirty event log
@@ -4212,7 +4178,6 @@ angle::Result ContextVk::handleNoopDrawEvent()
 
 angle::Result ContextVk::handleGraphicsEventLog(GraphicsEventCmdBuf queryEventType)
 {
-    ASSERT(mQueryEventType == GraphicsEventCmdBuf::NotInQueryCmd || mEventLog.empty());
     if (!mRenderer->angleDebuggerMode())
     {
         return angle::Result::Continue;

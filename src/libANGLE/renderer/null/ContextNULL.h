@@ -182,6 +182,12 @@ class ContextNULL : public ContextImpl
                                  GLuint id,
                                  const std::string &message) override;
     angle::Result popDebugGroup(const gl::Context *context) override;
+    angle::Result debugMessageInsert(const gl::Context *context,
+                                     GLenum source,
+                                     GLenum type,
+                                     GLuint id,
+                                     GLenum severity,
+                                     const std::string &message) override;
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,

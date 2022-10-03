@@ -31,6 +31,63 @@ NO_EVENT_MARKER_EXCEPTIONS_LIST = sorted([
     "glInsertEventMarkerEXT",
 ])
 
+# This is a list of the APIs that will require a closing 'end event'.  This includes
+# draws, dispatches, clears and queries.
+LABEL_EVENT_API_LIST = sorted([
+    "glDrawArrays",
+    "glDrawArraysIndirect",
+    "glDrawArraysInstanced",
+    "glDrawArraysInstancedANGLE",
+    "glDrawArraysInstancedBaseInstance",
+    "glDrawArraysInstancedBaseInstanceANGLE",
+    "glDrawArraysInstancedEXT",
+    "glDrawElements",
+    "glDrawElementsBaseVertex",
+    "glDrawElementsBaseVertexEXT",
+    "glDrawElementsBaseVertexOES",
+    "glDrawElementsIndirect",
+    "glDrawElementsInstanced",
+    "glDrawElementsInstancedANGLE",
+    "glDrawElementsInstancedBaseInstance",
+    "glDrawElementsInstancedBaseVertex",
+    "glDrawElementsInstancedBaseVertexBaseInstance",
+    "glDrawElementsInstancedBaseVertexBaseInstanceANGLE",
+    "glDrawElementsInstancedBaseVertexEXT",
+    "glDrawElementsInstancedBaseVertexOES",
+    "glDrawElementsInstancedEXT",
+    "glDrawPixels",
+    "glDrawRangeElements",
+    "glDrawRangeElementsBaseVertex",
+    "glDrawRangeElementsBaseVertexEXT",
+    "glDrawRangeElementsBaseVertexOES",
+    "glDrawTexfOES",
+    "glDrawTexfvOES",
+    "glDrawTexiOES",
+    "glDrawTexivOES",
+    "glDrawTexsOES",
+    "glDrawTexsvOES",
+    "glDrawTexxOES",
+    "glDrawTexxvOES",
+    "glDrawTransformFeedback",
+    "glDrawTransformFeedbackInstanced",
+    "glDrawTransformFeedbackStream",
+    "glDrawTransformFeedbackStreamInstanced",
+    "glDispatchCompute",
+    "glDispatchComputeIndirect",
+    "glClear",
+    "glClearBufferfi",
+    "glClearBufferfv",
+    "glClearBufferiv",
+    "glClearBufferuiv",
+    "glBeginQuery",
+    "glBeginQueryEXT",
+    "glBeginQueryIndexed",
+    "glEndQuery",
+    "glEndQueryEXT",
+    "glEndQueryIndexed",
+])
+
+
 # glRenderbufferStorageMultisampleEXT aliases glRenderbufferStorageMultisample on desktop GL, and is
 # marked as such in the registry.  However, that is not correct for GLES where this entry point
 # comes from GL_EXT_multisampled_render_to_texture which is never promoted to core GLES.
@@ -219,6 +276,37 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
 }}
 """
 
+TEMPLATE_GLES_LAYER_ENTRY_POINT_NO_RETURN = """\
+void GL_APIENTRY GL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "gl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::GL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["gl{name}"];
+    PFNGL{name_upper}PROC next = reinterpret_cast<PFNGL{name_upper}PROC>(entry);
+    next({non_packed_internal_params});
+    {end_label_event_call}
+}}
+"""
+
+TEMPLATE_GLES_LAYER_ENTRY_POINT_WITH_RETURN = """\
+{return_type} GL_APIENTRY GL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "gl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::GL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["gl{name}"];
+    PFNGL{name_upper}PROC next = reinterpret_cast<PFNGL{name_upper}PROC>(entry);
+    return next({non_packed_internal_params});
+}}
+"""
+
 TEMPLATE_EGL_ENTRY_POINT_NO_RETURN = """\
 void EGLAPIENTRY EGL_{name}({params})
 {{
@@ -267,6 +355,68 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_CUSTOM = """\
 {return_type} EGLAPIENTRY EGL_{name}({params})
 {{
     return {name}({internal_params});
+}}
+"""
+
+TEMPLATE_EGL_LAYER_ENTRY_POINT_NO_RETURN = """\
+void EGLAPIENTRY EGL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "egl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::EGL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["egl{name}"];
+    PFNEGL{name_upper}PROC next = reinterpret_cast<PFNEGL{name_upper}PROC>(entry);
+    next({non_packed_internal_params});
+    {end_label_event_call}
+}}
+"""
+
+TEMPLATE_EGL_LAYER_ENTRY_POINT_NO_RETURN_CUSTOM = """\
+void EGLAPIENTRY EGL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "egl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::EGL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["egl{name}"];
+    PFNEGL{name_upper}PROC next = reinterpret_cast<PFNEGL{name_upper}PROC>(entry);
+    next({non_packed_internal_params});
+    {end_label_event_call}
+}}
+"""
+
+TEMPLATE_EGL_LAYER_ENTRY_POINT_WITH_RETURN = """\
+{return_type} EGLAPIENTRY EGL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "egl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::EGL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["egl{name}"];
+    PFNEGL{name_upper}PROC next = reinterpret_cast<PFNEGL{name_upper}PROC>(entry);
+    return next({non_packed_internal_params});
+}}
+"""
+
+TEMPLATE_EGL_LAYER_ENTRY_POINT_WITH_RETURN_CUSTOM = """\
+{return_type} EGLAPIENTRY EGL_{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "egl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::EGL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["egl{name}"];
+    PFNEGL{name_upper}PROC next = reinterpret_cast<PFNEGL{name_upper}PROC>(entry);
+    return next({non_packed_internal_params});
 }}
 """
 
@@ -327,6 +477,71 @@ TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_POINTER = """\
     ANGLE_CL_VALIDATE_POINTER({name}{comma_if_needed}{internal_params});
 
     return {name}({internal_params});
+}}
+"""
+
+TEMPLATE_CL_LAYER_ENTRY_POINT_NO_RETURN = """\
+typedef void *(CL_API_CALL *PFNCL{name})({params});
+void CL_API_CALL cl{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "cl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::CL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["cl{name}"];
+    PFNCL{name} next = reinterpret_cast<PFNCL{name}>(entry);
+    next({non_packed_internal_params});
+    {end_label_event_call}
+}}
+"""
+
+TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_RETURN_ERROR = """\
+typedef {return_type} (CL_API_CALL *PFNCL{name})({params});
+cl_int CL_API_CALL cl{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "cl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::CL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["cl{name}"];
+    PFNCL{name} next = reinterpret_cast<PFNCL{name}>(entry);
+    return next({non_packed_internal_params});
+}}
+"""
+
+TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_ERRCODE_RET = """\
+typedef {return_type} (CL_API_CALL *PFNCL{name})({params});
+{return_type} CL_API_CALL cl{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "cl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::CL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["cl{name}"];
+    PFNCL{name} next = reinterpret_cast<PFNCL{name}>(entry);
+    return next({non_packed_internal_params});
+}}
+"""
+
+TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_RETURN_POINTER = """\
+typedef {return_type} (CL_API_CALL *PFNCL{name})({params});
+{return_type} CL_API_CALL cl{name}({params})
+{{
+    char entryPointMessage[512];
+    std::sprintf(entryPointMessage, "cl{name}({format_params})"{comma_if_needed}{pass_params});
+    g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR,
+        static_cast<GLuint>(angle::EntryPoint::CL{name}), GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, entryPointMessage);
+
+    // Call down to the next layer
+    void *entry = funcMap["cl{name}"];
+    PFNCL{name} next = reinterpret_cast<PFNCL{name}>(entry);
+    return next({non_packed_internal_params});
 }}
 """
 
@@ -572,7 +787,65 @@ namespace {namespace}
 }}  // namespace {namespace}
 """
 
-TEMPLATE_CAPTURE_METHOD_WITH_RETURN_VALUE = """\
+TEMPLATE_LAYER_HEADER = """\
+// GENERATED FILE - DO NOT EDIT.
+// Generated by {script_name} using data from {data_source_name}.
+//
+// Copyright 2022 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// layer_entry_points_{annotation_lower}_autogen.h:
+//   Layer functions for the OpenGL ES {comment} entry points.
+
+#ifndef LIBANGLE_LAYER_ENTRY_POINTS_{annotation_upper}_AUTOGEN_H_
+#define LIBANGLE_LAYER_ENTRY_POINTS_{annotation_upper}_AUTOGEN_H_
+
+{includes}
+
+namespace agi_layer
+{{
+
+void setup{annotation_upper}Hooks();
+
+{prototypes}
+}}  // namespace agi_layer
+
+#endif  // LIBANGLE_LAYER_ENTRY_POINTS_{annotation_upper}_AUTOGEN_H_
+"""
+
+TEMPLATE_LAYER_SOURCE = """\
+// GENERATED FILE - DO NOT EDIT.
+// Generated by {script_name} using data from {data_source_name}.
+//
+// Copyright 2022 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// layer_entry_points_{annotation_lower}_autogen.cpp:
+//   Layer functions for the OpenGL ES {comment} entry points.
+
+#include "labelLayer.h"
+#include "libGLESv2/layer_entry_points_{annotation_lower}_autogen.h"
+#include "common/entry_points_enum_autogen.h"
+#include "common/gl_enum_utils.h"
+
+using namespace gl;
+
+namespace agi_layer
+{{
+
+{defs}
+
+void setup{annotation_upper}Hooks()
+{{
+{hooks}
+}}
+
+}}  // namespace agi_layer
+"""
+
+TEMPLATE_CAPTURE_METHOD_WITH_RETURN_VALUE = """
 CallCapture Capture{short_name}({params_with_type}, {return_value_type_original} returnValue)
 {{
     ParamBuffer paramBuffer;
@@ -825,6 +1098,12 @@ TEMPLATE_SOURCES_INCLUDES = """\
 using namespace gl;
 """
 
+TEMPLATE_LAYER_SOURCES_INCLUDES = """\
+#include "GLES/gl.h"
+#include "labelLayer.h"
+#include "libGLESv2/layer_entry_points_{header_version}_autogen.h"
+"""
+
 GLES_EXT_HEADER_INCLUDES = TEMPLATE_HEADER_INCLUDES.format(
     major="", minor="") + """
 #include <GLES/glext.h>
@@ -1002,9 +1281,14 @@ TEMPLATE_EVENT_COMMENT = """\
     // It can interfere with the debug events being set by the caller.
     // """
 
+TEMPLATE_END_LABEL_EVENT = """\
+g_debug_message_insert(GL_DEBUG_SOURCE_THIRD_PARTY_KHR, GL_DEBUG_TYPE_OTHER_KHR, 0xFFFFAAAA, GL_DEBUG_SEVERITY_NOTIFICATION_KHR, -1, "EndLabelEvent");"""
+
 TEMPLATE_CAPTURE_PROTO = "angle::CallCapture Capture%s(%s);"
 
 TEMPLATE_VALIDATION_PROTO = "%s Validate%s(%s);"
+
+TEMPLATE_LAYER_HOOK_ENTRY = "    hookMap[\"%s\"] = (void *)%s%s;"
 
 TEMPLATE_WINDOWS_DEF_FILE = """\
 ; GENERATED FILE - DO NOT EDIT.
@@ -1506,39 +1790,70 @@ def get_packed_enums(api, cmd_packed_gl_enums, cmd_name, packed_param_types, par
 CUSTOM_EGL_ENTRY_POINTS = ["eglPrepareSwapBuffersANGLE"]
 
 
-def get_def_template(api, cmd_name, return_type, has_errcode_ret):
+def get_def_template(api, cmd_name, return_type, has_errcode_ret, for_layer):
     if return_type == "void":
         if api == apis.EGL:
             if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-                return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN_CUSTOM
-            return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN
+                if for_layer == "true":
+                    return TEMPLATE_EGL_LAYER_ENTRY_POINT_NO_RETURN_CUSTOM
+                else:
+                    return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN_CUSTOM
+            if for_layer == "true":
+                return TEMPLATE_EGL_LAYER_ENTRY_POINT_NO_RETURN
+            else:
+                return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN
         elif api == apis.CL:
-            return TEMPLATE_CL_ENTRY_POINT_NO_RETURN
+            if for_layer == "true":
+                return TEMPLATE_CL_LAYER_ENTRY_POINT_NO_RETURN
+            else:
+                return TEMPLATE_CL_ENTRY_POINT_NO_RETURN
         else:
-            return TEMPLATE_GLES_ENTRY_POINT_NO_RETURN
+            if for_layer == "true":
+                return TEMPLATE_GLES_LAYER_ENTRY_POINT_NO_RETURN
+            else:
+                return TEMPLATE_GLES_ENTRY_POINT_NO_RETURN
     elif return_type == "cl_int":
-        return TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_ERROR
+        if for_layer == "true":
+            return TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_RETURN_ERROR
+        else:
+            return TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_ERROR
     else:
         if api == apis.EGL:
             if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-                return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_CUSTOM
-            return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN
+                if for_layer == "true":
+                    return TEMPLATE_EGL_LAYER_ENTRY_POINT_WITH_RETURN_CUSTOM
+                else:
+                    return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_CUSTOM
+            if for_layer == "true":
+                return TEMPLATE_EGL_LAYER_ENTRY_POINT_WITH_RETURN
+            else:
+                return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN
         elif api == apis.CL:
             if has_errcode_ret:
-                return TEMPLATE_CL_ENTRY_POINT_WITH_ERRCODE_RET
+                if for_layer == "true":
+                    return TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_ERRCODE_RET
+                else:
+                    return TEMPLATE_CL_ENTRY_POINT_WITH_ERRCODE_RET
             else:
-                return TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_POINTER
+                if for_layer == "true":
+                    return TEMPLATE_CL_LAYER_ENTRY_POINT_WITH_RETURN_POINTER
+                else:
+                    return TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_POINTER
         else:
-            return TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN
+            if for_layer == "true":
+                return TEMPLATE_GLES_LAYER_ENTRY_POINT_WITH_RETURN
+            else:
+                return TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN
 
 
 def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packed_enums,
-                           packed_param_types, ep_to_object):
+                           packed_param_types, ep_to_object, for_layer):
     packed_enums = get_packed_enums(api, cmd_packed_enums, cmd_name, packed_param_types, params)
     if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
         internal_params = [just_the_name(param) for param in params]
     else:
         internal_params = [just_the_name_packed(param, packed_enums) for param in params]
+    non_packed_internal_params = [just_the_name(param) for param in params]
     if internal_params and internal_params[-1] == "errcode_ret":
         internal_params.pop()
         has_errcode_ret = True
@@ -1563,6 +1878,7 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
     return_type = proto[:-len(cmd_name)].strip()
     initialization = "InitBackEnds(%s);\n" % INIT_DICT[cmd_name] if cmd_name in INIT_DICT else ""
     event_comment = TEMPLATE_EVENT_COMMENT if cmd_name in NO_EVENT_MARKER_EXCEPTIONS_LIST else ""
+    end_label_event_call = TEMPLATE_END_LABEL_EVENT if cmd_name in LABEL_EVENT_API_LIST else ""
     name_lower_no_suffix = strip_suffix(api, cmd_name[2:3].lower() + cmd_name[3:])
     entry_point_name = "angle::EntryPoint::GL" + strip_api_prefix(cmd_name)
 
@@ -1571,12 +1887,16 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             strip_api_prefix(cmd_name),
         "name_lower_no_suffix":
             name_lower_no_suffix,
+        "name_upper":
+            strip_api_prefix(cmd_name).upper(),
         "return_type":
             return_type,
         "params":
             ", ".join(params),
         "internal_params":
             ", ".join(internal_params),
+        "non_packed_internal_params":
+            ", ".join(non_packed_internal_params),
         "initialization":
             initialization,
         "packed_gl_enum_conversions":
@@ -1601,6 +1921,8 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             get_constext_lost_error_generator(cmd_name),
         "event_comment":
             event_comment,
+        "end_label_event_call":
+            end_label_event_call,
         "labeled_object":
             get_egl_entry_point_labeled_object(ep_to_object, cmd_name, params, packed_enums),
         "entry_point_locks":
@@ -1609,7 +1931,7 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             get_preamble(api, cmd_name, params)
     }
 
-    template = get_def_template(api, cmd_name, return_type, has_errcode_ret)
+    template = get_def_template(api, cmd_name, return_type, has_errcode_ret, for_layer)
     return template.format(**format_params)
 
 
@@ -1781,6 +2103,19 @@ def format_entry_point_export(cmd_name, proto, params, template):
         internal_params=", ".join(internal_params))
 
 
+def format_layer_hook_entry(api, cmd_name):
+    hookPrefix = ''
+    if api == apis.CL:
+        hookPrefix = "cl"
+    elif api in [apis.GLES, apis.GL]:
+        hookPrefix = "GL_"
+    elif api == apis.EGL:
+        hookPrefix = "EGL_"
+    else:
+        hookPrefix = "WGL_"
+    return TEMPLATE_LAYER_HOOK_ENTRY % (cmd_name, hookPrefix, strip_api_prefix(cmd_name))
+
+
 def format_validation_proto(api, cmd_name, proto, params, cmd_packed_gl_enums, packed_param_types):
     if api == apis.CL:
         return_type = "cl_int"
@@ -1818,6 +2153,7 @@ class ANGLEEntryPoints(registry_xml.EntryPoints):
                  api,
                  xml,
                  commands,
+                 for_layer,
                  all_param_types,
                  cmd_packed_enums,
                  export_template=TEMPLATE_GL_ENTRY_POINT_EXPORT,
@@ -1827,6 +2163,8 @@ class ANGLEEntryPoints(registry_xml.EntryPoints):
 
         self.decls = []
         self.defs = []
+        self.layer_defs = []
+        self.layer_hooks = []
         self.export_defs = []
         self.validation_protos = []
         self.capture_protos = []
@@ -1836,8 +2174,19 @@ class ANGLEEntryPoints(registry_xml.EntryPoints):
         for (cmd_name, command_node, param_text, proto_text) in self.get_infos():
             self.decls.append(format_entry_point_decl(self.api, cmd_name, proto_text, param_text))
             self.defs.append(
+                # I added the for_layer parameter here as a way to experiment and create layer
+                # entrypoints, using the existing entry-point auto-gen code.  This is probably not
+                # the correct place to do this.  I probably need a format_layer_entry_point_def()
+                # function, or something like format_capture_method().
                 format_entry_point_def(self.api, command_node, cmd_name, proto_text, param_text,
-                                       cmd_packed_enums, packed_param_types, ep_to_object))
+                                       cmd_packed_enums, packed_param_types, ep_to_object,
+                                       "false"))
+
+            self.layer_defs.append(
+                format_entry_point_def(self.api, command_node, cmd_name, proto_text, param_text,
+                                       cmd_packed_enums, packed_param_types, ep_to_object, "true"))
+
+            self.layer_hooks.append(format_layer_hook_entry(self.api, cmd_name))
 
             self.export_defs.append(
                 format_entry_point_export(cmd_name, proto_text, param_text, export_template))
@@ -1862,8 +2211,8 @@ class GLEntryPoints(ANGLEEntryPoints):
 
     all_param_types = set()
 
-    def __init__(self, api, xml, commands):
-        super().__init__(api, xml, commands, GLEntryPoints.all_param_types,
+    def __init__(self, api, xml, commands, for_layer):
+        super().__init__(api, xml, commands, for_layer, GLEntryPoints.all_param_types,
                          GLEntryPoints.get_packed_enums())
 
     _packed_enums = None
@@ -1880,11 +2229,12 @@ class EGLEntryPoints(ANGLEEntryPoints):
 
     all_param_types = set()
 
-    def __init__(self, xml, commands):
+    def __init__(self, xml, commands, for_layer):
         super().__init__(
             apis.EGL,
             xml,
             commands,
+            for_layer,
             EGLEntryPoints.all_param_types,
             EGLEntryPoints.get_packed_enums(),
             export_template=TEMPLATE_EGL_ENTRY_POINT_EXPORT,
@@ -1945,11 +2295,12 @@ class CLEntryPoints(ANGLEEntryPoints):
 
     all_param_types = set()
 
-    def __init__(self, xml, commands):
+    def __init__(self, xml, commands, for_layer):
         super().__init__(
             apis.CL,
             xml,
             commands,
+            for_layer,
             CLEntryPoints.all_param_types,
             CLEntryPoints.get_packed_enums(),
             export_template=TEMPLATE_CL_ENTRY_POINT_EXPORT,
@@ -2159,6 +2510,40 @@ def write_capture_source(api, annotation_with_dash, annotation_no_dash, comment,
 
     path = path_to(
         os.path.join("libANGLE", "capture"), "capture_%s_autogen.cpp" % annotation_with_dash)
+
+    with open(path, "w") as out:
+        out.write(content)
+        out.close()
+
+
+def write_layer_header(annotation, comment, protos, includes):
+    content = TEMPLATE_LAYER_HEADER.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name="gl.xml",
+        annotation_lower=annotation.lower(),
+        annotation_upper=annotation.upper(),
+        comment=comment,
+        includes=includes,
+        prototypes=protos)
+
+    path = path_to("libGLESv2", "layer_entry_points_%s_autogen.h" % annotation.lower())
+
+    with open(path, "w") as out:
+        out.write(content)
+        out.close()
+
+
+def write_layer_source(annotation, comment, defs, hooks):
+    content = TEMPLATE_LAYER_SOURCE.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name="gl.xml",
+        annotation_lower=annotation.lower(),
+        annotation_upper=annotation.upper(),
+        comment=comment,
+        defs=defs,
+        hooks=hooks)
+
+    path = path_to("libGLESv2", "layer_entry_points_%s_autogen.cpp" % annotation.lower())
 
     with open(path, "w") as out:
         out.write(content)
@@ -2761,6 +3146,24 @@ def main():
             '../src/libGLESv2/entry_points_gles_3_2_autogen.h',
             '../src/libGLESv2/entry_points_gles_ext_autogen.cpp',
             '../src/libGLESv2/entry_points_gles_ext_autogen.h',
+            '../src/libGLESv2/layer_entry_points_cl_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_cl_autogen.h',
+            '../src/libGLESv2/layer_entry_points_egl_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_egl_autogen.h',
+            '../src/libGLESv2/layer_entry_points_egl_ext_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_egl_ext_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_1_0_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_1_0_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_2_0_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_3_0_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_3_0_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_3_1_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_3_1_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_3_2_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_3_2_autogen.h',
+            '../src/libGLESv2/layer_entry_points_gles_ext_autogen.cpp',
+            '../src/libGLESv2/layer_entry_points_gles_ext_autogen.h',
             '../src/libGLESv2/libGLESv2_autogen.cpp',
             '../src/libGLESv2/libGLESv2_autogen.def',
             '../src/libGLESv2/libGLESv2_no_capture_autogen.def',
@@ -2804,6 +3207,8 @@ def main():
 
     # Collect all GL+GLES validation declarations
     glesv2_validation_protos = []
+    # for_layer = "false"
+    for_layer = "true"
 
     # First run through the main GLES entry points.  Since ES2+ is the primary use
     # case, we go through those first and then add ES1-only APIs at the end.
@@ -2824,7 +3229,7 @@ def main():
         all_commands_no_suffix.extend(xml.commands[version])
         all_commands_with_suffix.extend(xml.commands[version])
 
-        eps = GLEntryPoints(apis.GLES, xml, version_commands)
+        eps = GLEntryPoints(apis.GLES, xml, version_commands, for_layer)
         eps.decls.insert(0, "extern \"C\" {")
         eps.decls.append("} // extern \"C\"")
         eps.defs.insert(0, "extern \"C\" {")
@@ -2869,10 +3274,16 @@ def main():
         write_capture_source(apis.GLES, 'gles_' + version, validation_annotation, comment,
                              eps.capture_methods)
 
+        write_layer_header(annotation, "GLES " + comment, "\n".join(eps.decls), header_includes)
+        write_layer_source(annotation, comment, "\n".join(eps.layer_defs),
+                           "\n".join(eps.layer_hooks))
+
     # After we finish with the main entry points, we process the extensions.
     extension_decls = ["extern \"C\" {"]
     extension_defs = ["extern \"C\" {"]
     extension_commands = []
+    extension_layer_hooks = []
+    extension_layer_defs = []
 
     # Accumulated validation prototypes.
     ext_validation_protos = []
@@ -2893,7 +3304,7 @@ def main():
         extension_commands.extend(xml.ext_data[extension_name])
 
         # Detect and filter duplicate extensions.
-        eps = GLEntryPoints(apis.GLES, xml, ext_cmd_names)
+        eps = GLEntryPoints(apis.GLES, xml, ext_cmd_names, for_layer)
 
         # Write the extension name as a comment before the first EP.
         comment = "\n// {}".format(extension_name)
@@ -2901,6 +3312,8 @@ def main():
 
         extension_defs += [comment] + eps.defs
         extension_decls += [comment] + eps.decls
+        extension_layer_hooks += eps.layer_hooks
+        extension_layer_defs += eps.layer_defs
 
         # Avoid writing out entry points defined by a prior extension.
         for dupe in xml.ext_dupes[extension_name]:
@@ -2971,7 +3384,7 @@ def main():
             ]
 
             # Validation duplicates handled with suffix
-            eps = GLEntryPoints(apis.GL, glxml, just_libgl_commands_suffix)
+            eps = GLEntryPoints(apis.GL, glxml, just_libgl_commands_suffix, for_layer)
 
             desktop_gl_decls['core'][(major_version, "X")] += get_decls(
                 apis.GL, CONTEXT_DECL_FORMAT, glxml.all_commands, just_libgl_commands_suffix,
@@ -3045,6 +3458,8 @@ def main():
     cl_validation_protos = []
     cl_decls = ["namespace cl\n{"]
     cl_defs = ["namespace cl\n{"]
+    cl_layer_hooks = []
+    cl_layer_defs = []
     libcl_ep_defs = []
     libcl_windows_def_exports = []
     cl_commands = []
@@ -3066,7 +3481,9 @@ def main():
         if not cl_version_commands:
             continue
 
-        eps = CLEntryPoints(clxml, cl_version_commands)
+        eps = CLEntryPoints(clxml, cl_version_commands, for_layer)
+        cl_layer_hooks += eps.layer_hooks
+        cl_layer_defs += eps.layer_defs
 
         comment = "\n// CL %d.%d" % (major_version, minor_version)
         win_def_comment = "\n    ; CL %d.%d" % (major_version, minor_version)
@@ -3085,7 +3502,9 @@ def main():
             continue
 
         # Detect and filter duplicate extensions.
-        eps = CLEntryPoints(clxml, ext_cmd_names)
+        eps = CLEntryPoints(clxml, ext_cmd_names, for_layer)
+        cl_layer_hooks += eps.layer_hooks
+        cl_layer_defs += eps.layer_defs
 
         comment = "\n// %s" % extension_name
         win_def_comment = "\n    ; %s" % (extension_name)
@@ -3114,6 +3533,8 @@ def main():
                             TEMPLATE_CL_VALIDATION_HEADER)
     write_stubs_header("CL", "cl", "CL", "cl.xml", CL_STUBS_HEADER_PATH, clxml.all_commands,
                        cl_commands, CLEntryPoints.get_packed_enums(), CL_PACKED_TYPES)
+    write_layer_header("cl", "CL", "\n".join(cl_decls), LIBCL_HEADER_INCLUDES)
+    write_layer_source("cl", "CL", "\n".join(cl_layer_defs), "\n".join(cl_layer_hooks))
 
     # EGL
     eglxml = registry_xml.RegistryXML('egl.xml', 'egl_angle_ext.xml')
@@ -3123,6 +3544,8 @@ def main():
     egl_defs = ["extern \"C\" {"]
     libegl_ep_defs = []
     libegl_windows_def_exports = []
+    egl_layer_hooks = []
+    egl_layer_defs = []
     egl_commands = []
     egl_capture_protos = []
     egl_capture_methods = []
@@ -3144,7 +3567,9 @@ def main():
         if not egl_version_commands:
             continue
 
-        eps = EGLEntryPoints(eglxml, egl_version_commands)
+        eps = EGLEntryPoints(eglxml, egl_version_commands, for_layer)
+        egl_layer_hooks += eps.layer_hooks
+        egl_layer_defs += eps.layer_defs
 
         comment = "\n// EGL %d.%d" % (major_version, minor_version)
         win_def_comment = "\n    ; EGL %d.%d" % (major_version, minor_version)
@@ -3166,10 +3591,14 @@ def main():
                EGL_SOURCE_INCLUDES, "libGLESv2", "egl.xml")
     write_stubs_header("EGL", "egl", "EGL", "egl.xml", EGL_STUBS_HEADER_PATH, eglxml.all_commands,
                        egl_commands, EGLEntryPoints.get_packed_enums(), EGL_PACKED_TYPES)
+    write_layer_header("egl", "EGL", "\n".join(egl_decls), EGL_HEADER_INCLUDES)
+    write_layer_source("egl", "EGL", "\n".join(egl_layer_defs), "\n".join(egl_layer_hooks))
 
     eglxml.AddExtensionCommands(registry_xml.supported_egl_extensions, ['egl'])
     egl_ext_decls = ["extern \"C\" {"]
     egl_ext_defs = ["extern \"C\" {"]
+    egl_ext_layer_hooks = []
+    egl_ext_layer_defs = []
     egl_ext_commands = []
 
     for extension_name, ext_cmd_names in sorted(eglxml.ext_data.items()):
@@ -3179,7 +3608,9 @@ def main():
             continue
 
         # Detect and filter duplicate extensions.
-        eps = EGLEntryPoints(eglxml, ext_cmd_names)
+        eps = EGLEntryPoints(eglxml, ext_cmd_names, for_layer)
+        egl_ext_layer_hooks += eps.layer_hooks
+        egl_ext_layer_defs += eps.layer_defs
 
         comment = "\n// %s" % extension_name
         win_def_comment = "\n    ; %s" % (extension_name)
@@ -3211,6 +3642,10 @@ def main():
     write_stubs_header("EGL", "egl_ext", "EXT extension", "egl.xml and egl_angle_ext.xml",
                        EGL_EXT_STUBS_HEADER_PATH, eglxml.all_commands, egl_ext_commands,
                        EGLEntryPoints.get_packed_enums(), EGL_PACKED_TYPES)
+    write_layer_header("egl_ext", "EGL extension", "\n".join(egl_ext_decls),
+                       EGL_EXT_HEADER_INCLUDES)
+    write_layer_source("egl_ext", "EGL extension", "\n".join(egl_ext_layer_defs),
+                       "\n".join(egl_ext_layer_hooks))
 
     write_capture_header(apis.EGL, 'egl', 'EGL', egl_capture_protos, [])
     write_capture_source(apis.EGL, 'egl', 'EGL', 'all', egl_capture_methods)
@@ -3251,6 +3686,11 @@ def main():
 
     write_context_api_decls(glesdecls, "gles")
     write_context_api_decls(desktop_gl_decls, "gl")
+
+    write_layer_header("gles_ext", "GLES ext", "\n".join([item for item in extension_decls]),
+                       GLES_EXT_HEADER_INCLUDES)
+    write_layer_source("gles_ext", "GLES ext", "\n".join([item for item in extension_layer_defs]),
+                       "\n".join(extension_layer_hooks))
 
     # Entry point enum
     unsorted_enums = clxml.GetEnums() + eglxml.GetEnums() + xml.GetEnums() + glxml.GetEnums(

@@ -6,7 +6,7 @@
   "scripts/entry_point_packed_gl_enums.json":
     "85e375c52f80e288c046f0e7c835c844",
   "scripts/generate_entry_points.py":
-    "e67634903ee8dd67739d559f8fd2051f",
+    "fc5f50e0c3bcffeb5560dc1eeb760b29",
   "scripts/gl_angle_ext.xml":
     "8dd9662655c39ce22fecdc2449594e54",
   "scripts/registry_xml.py":
@@ -40,11 +40,11 @@
   "src/libANGLE/Context_gles_ext_autogen.h":
     "d38299e6df7eb2d90d1806a45df626a2",
   "src/libANGLE/capture/capture_egl_autogen.cpp":
-    "592bc4286183e250f28218ee8c4d2d51",
+    "d91a7370eaaba0d7e8d69f71b922ceb0",
   "src/libANGLE/capture/capture_egl_autogen.h":
     "c45d56554bab98a0ead68a2625f622ad",
   "src/libANGLE/capture/capture_gl_1_autogen.cpp":
-    "e9be6eedfd0d92c4a384c3c3670dfd61",
+    "b9771ada30555310422efdbf3d44edfe",
   "src/libANGLE/capture/capture_gl_1_autogen.h":
     "48ab591d9671ea49aa9ae977b6a0d2fb",
   "src/libANGLE/capture/capture_gl_2_autogen.cpp":
@@ -171,6 +171,42 @@
     "e0210a7212a126e74f9df7beefe6ed9e",
   "src/libGLESv2/entry_points_gles_ext_autogen.h":
     "20844022b652ccc15f294c03da7255fc",
+  "src/libGLESv2/layer_entry_points_cl_autogen.cpp":
+    "45c9e12af27c78ebf0576a0a839d9896",
+  "src/libGLESv2/layer_entry_points_cl_autogen.h":
+    "03ce2a2aaa22468a5727c22c5de990b5",
+  "src/libGLESv2/layer_entry_points_egl_autogen.cpp":
+    "9eac88ccfeca90b44ecd94622a39c3ab",
+  "src/libGLESv2/layer_entry_points_egl_autogen.h":
+    "6de028533b94a5af03e4545ffc31872e",
+  "src/libGLESv2/layer_entry_points_egl_ext_autogen.cpp":
+    "7739915d669145c28b566bc72d06b6d1",
+  "src/libGLESv2/layer_entry_points_egl_ext_autogen.h":
+    "55b9f90a9f04cba63d34ae59267c8d85",
+  "src/libGLESv2/layer_entry_points_gles_1_0_autogen.cpp":
+    "7c91cd21add4d54659e4f5ac868b7ee2",
+  "src/libGLESv2/layer_entry_points_gles_1_0_autogen.h":
+    "f324e85225154d15c6a61ad64708851b",
+  "src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp":
+    "3a59471cc2d009b580845d1752fff292",
+  "src/libGLESv2/layer_entry_points_gles_2_0_autogen.h":
+    "b39c90277ec86793430db50ebbf5c54a",
+  "src/libGLESv2/layer_entry_points_gles_3_0_autogen.cpp":
+    "21e71e24f2fe51d7e44d62f90804ed77",
+  "src/libGLESv2/layer_entry_points_gles_3_0_autogen.h":
+    "e486515e134d0e8846e931e2897a4aa5",
+  "src/libGLESv2/layer_entry_points_gles_3_1_autogen.cpp":
+    "b53b13b09952b910cbb6bd28abf10408",
+  "src/libGLESv2/layer_entry_points_gles_3_1_autogen.h":
+    "4d880b862b3123b7e7365654fde4a4df",
+  "src/libGLESv2/layer_entry_points_gles_3_2_autogen.cpp":
+    "e5097486be89ac302aa2a405f524627b",
+  "src/libGLESv2/layer_entry_points_gles_3_2_autogen.h":
+    "4fef9a019656feba4f2587003902dbbc",
+  "src/libGLESv2/layer_entry_points_gles_ext_autogen.cpp":
+    "8c5f8ea516c72f109839a4146b269742",
+  "src/libGLESv2/layer_entry_points_gles_ext_autogen.h":
+    "949b37a4ff1fb3933ce73b953adb973e",
   "src/libGLESv2/libGLESv2_autogen.cpp":
     "e3d4791f3c9df1b6e7bbbbfb4075b2ce",
   "src/libGLESv2/libGLESv2_autogen.def":

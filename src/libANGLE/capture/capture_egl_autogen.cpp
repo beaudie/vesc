@@ -19,6 +19,7 @@ using namespace angle;
 
 namespace egl
 {
+
 CallCapture CaptureChooseConfig(egl::Thread *thread,
                                 bool isCallValid,
                                 egl::Display *dpyPacked,

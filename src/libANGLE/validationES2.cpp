@@ -2042,13 +2042,6 @@ bool ValidateDebugMessageInsertKHR(const Context *context,
         return false;
     }
 
-    if (!context->getState().getDebug().isOutputEnabled())
-    {
-        // If the DEBUG_OUTPUT state is disabled calls to DebugMessageInsert are discarded and do
-        // not generate an error.
-        return false;
-    }
-
     if (!ValidDebugSeverity(severity))
     {
         context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidDebugSource);

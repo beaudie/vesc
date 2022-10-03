@@ -4457,6 +4457,7 @@ CallCapture CaptureVertex4sv(const State &glState, bool isCallValid, const GLsho
 }
 
 // GL 1.1
+
 CallCapture CaptureAreTexturesResident(const State &glState,
                                        bool isCallValid,
                                        GLsizei n,
