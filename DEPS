@@ -475,6 +475,7 @@ deps = {
       }
     ],
     'dep_type': 'cipd',
+    'condition': 'not build_with_chromium',
   },
 
   'third_party/OpenCL-Docs/src': {
