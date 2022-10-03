@@ -22,6 +22,30 @@
       },
       "revId": "dcb0e8d7a5206fd5b6c5111b443ff07858273a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e98429b_e21d4c09",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-03T13:38:50Z",
+      "side": 1,
+      "message": "This will work fine, the auto-roller uses gclient commands to modify deps.",
+      "parentUuid": "432fac69_b41c90f2",
+      "range": {
+        "startLine": 474,
+        "startChar": 19,
+        "endLine": 474,
+        "endChar": 39
+      },
+      "revId": "dcb0e8d7a5206fd5b6c5111b443ff07858273a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
