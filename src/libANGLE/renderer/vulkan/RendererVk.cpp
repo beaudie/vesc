@@ -2846,6 +2846,13 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     volkLoadDevice(mDevice);
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 
+    // crbug:1273344 In some driver we are seeing vkResetQueryPoolEXT is null but feature is
+    // enabled. Disable the feature flag in this case
+    if (getFeatures().supportsHostQueryReset.enabled && vkResetQueryPoolEXT == nullptr)
+    {
+        getFeatures().supportsHostQueryReset.enabled = false;
+    }
+
     vk::DeviceQueueMap graphicsQueueMap =
         queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
 
