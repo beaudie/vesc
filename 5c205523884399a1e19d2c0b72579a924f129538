@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfa0a7a_b0c16a00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-03T16:46:00Z",
+      "side": 1,
+      "message": "This is because ANGLE has no-squash Gerrit workflow.\nSo, every git commit \u003d gerrit CL.\nIn order to change the original gerrit CL, you\u0027d usually use `git commit -a --amend`. But since you have 2 commits already, you\u0027ll need to squash them, e.g. with `git rebase -i` like in https://stackoverflow.com/questions/6934752/combining-multiple-commits-before-pushing-in-git.\n\nYou can also try using `git cl upload --squash`.",
+      "parentUuid": "b2b4fca0_8fdef999",
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a4caaf2_14b74493",
