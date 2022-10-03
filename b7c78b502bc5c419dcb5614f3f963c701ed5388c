@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "920a0c76_29e2bc16",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "typo: silicon (or Silicon)",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b995007_0d539d2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "Amazing work Chris! lgtm overall.",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a16f7a1_994ad48c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "Please use TODO(anglebug.com/7279).",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5bd347b_32bef5cb",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "What is the side-effect of adding disableStructSpecifier? Could this have side-effects on any end-user code?",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c6af1ee_fdd85813",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "TODO(anglebug.com/7279)",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f6f8ae_9a182601",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-03T22:51:10Z",
+      "side": 1,
+      "message": "Until the alternative code path is implemented, would it be more appropriate to only expose ANGLE_shader_pixel_local_storage if raster order groups are supported?",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
