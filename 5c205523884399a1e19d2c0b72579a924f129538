@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dede296_5f29f2a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-03T16:48:01Z",
+      "side": 1,
+      "message": "Nevermind, the 2nd CL looks fine, I\u0027ll abandon this one.",
+      "parentUuid": "5dfa0a7a_b0c16a00",
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a4caaf2_14b74493",
