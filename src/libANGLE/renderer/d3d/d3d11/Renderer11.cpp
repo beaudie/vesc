@@ -1603,6 +1603,7 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
                 case GL_RGB10_A2_EXT:
                 case GL_R16_EXT:
                 case GL_RG16_EXT:
+                case GL_LUMINANCE:
                     break;
                 default:
                     return egl::EglBadParameter()
@@ -1610,7 +1611,11 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
                            << internalFormat;
             }
 
-            const GLenum type = gl::GetSizedInternalFormatInfo(sizedInternalFormat).type;
+            GLenum type = gl::GetSizedInternalFormatInfo(sizedInternalFormat).type;
+            if (type == GL_HALF_FLOAT && internalFormat == GL_LUMINANCE)
+            {
+                type = GL_HALF_FLOAT_OES;
+            }
 
             const auto format = gl::Format(internalFormat, type);
             if (!format.valid())
