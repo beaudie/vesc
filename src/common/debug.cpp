@@ -144,7 +144,8 @@ ScopedPerfEventHelper::~ScopedPerfEventHelper()
     // ended now.
     if (DebugAnnotationsInitialized() && mCalledBeginEvent)
     {
-        g_debugAnnotator->endEvent(mContext, mFunctionName, mEntryPoint);
+        // LUGMAL Skip this for now to see if layer can add this end call
+        // LUGMAL g_debugAnnotator->endEvent(mContext, mFunctionName, mEntryPoint);
     }
 }
 

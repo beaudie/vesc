@@ -1541,7 +1541,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         mEnabledInstanceExtensions.push_back(wsiExtension);
     }
 
-    mEnableDebugUtils = canLoadDebugUtils && mEnableValidationLayers &&
+    // LUGMAL mEnableDebugUtils = canLoadDebugUtils && mEnableValidationLayers &&
+    mEnableDebugUtils = canLoadDebugUtils &&  // LUGMAL mEnableValidationLayers &&
                         ExtensionFound(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instanceExtensionNames);
 
     bool enableDebugReport =
@@ -4506,13 +4507,8 @@ void RendererVk::setGlobalDebugAnnotator()
     //    will cause dEQP tests to fail).
     //
     // 2) The DebugAnnotatorVk class processes OpenGL ES commands that the application uses.  It is
-    //    installed for the following purposes:
-    //
-    //    1) To enable calling the vkCmd*DebugUtilsLabelEXT functions in order to communicate to
-    //       debuggers (e.g. AGI) the OpenGL ES commands that the application uses.  In addition to
-    //       simply installing DebugAnnotatorVk, also enable calling vkCmd*DebugUtilsLabelEXT.
-    //
-    //    2) To enable logging to Android logcat the OpenGL ES commands that the application uses.
+    //    installed to enable logging to Android logcat the OpenGL ES commands that the application
+    //    uses.
     bool installDebugAnnotatorVk = false;
 
     // Enable calling the vkCmd*DebugUtilsLabelEXT functions if the vkCmd*DebugUtilsLabelEXT
@@ -4525,7 +4521,7 @@ void RendererVk::setGlobalDebugAnnotator()
         if (!enabled.empty() && enabled.compare("0") != 0)
         {
             mAngleDebuggerMode      = true;
-            installDebugAnnotatorVk = true;
+            installDebugAnnotatorVk = false;  // WAS TRUE LUGMAL
         }
     }
 #if defined(ANGLE_ENABLE_TRACE_ANDROID_LOGCAT)

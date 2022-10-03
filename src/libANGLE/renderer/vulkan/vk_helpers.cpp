@@ -3802,7 +3802,6 @@ angle::Result QueryHelper::beginQuery(ContextVk *contextVk)
         ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass(
             RenderPassClosureReason::BeginNonRenderPassQuery));
     }
-
     OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
 

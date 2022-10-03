@@ -881,6 +881,16 @@ angle::Result ContextGL::popDebugGroup(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result ContextGL::debugMessageInsert(const gl::Context *context,
+                                            GLenum source,
+                                            GLenum type,
+                                            GLuint id,
+                                            GLenum severity,
+                                            const std::string &message)
+{
+    return angle::Result::Continue;
+}
+
 angle::Result ContextGL::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask,

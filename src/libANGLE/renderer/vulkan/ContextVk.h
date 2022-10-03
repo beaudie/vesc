@@ -279,11 +279,18 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                  GLuint id,
                                  const std::string &message) override;
     angle::Result popDebugGroup(const gl::Context *context) override;
+    angle::Result debugMessageInsert(const gl::Context *context,
+                                     GLenum source,
+                                     GLenum type,
+                                     GLuint id,
+                                     GLenum severity,
+                                     const std::string &message) override;
 
     // Record GL API calls for debuggers
     void logEvent(const char *eventString);
-    void endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType);
-    void endEventLogForClearOrQuery();
+    // LUGMAL
+    // void endEventLog(angle::EntryPoint entryPoint, PipelineType pipelineType);
+    // void endEventLogForClearOrQuery();
 
     bool isViewportFlipEnabledForDrawFBO() const;
     bool isViewportFlipEnabledForReadFBO() const;

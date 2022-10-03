@@ -865,6 +865,57 @@ config("angle_backend_config") {
   }
 }
 
+if (is_android) {
+  config("labelLayer_config") {
+    if (is_clang) {
+      cflags = [
+        "-Wno-exit-time-destructors",
+        "-Wno-global-constructors",
+      ]
+    }
+    include_dirs = [
+      "include",
+      "src",
+      "src/labelLayer",
+      "src/common/third_party/base",
+    ]
+    defines = []
+  }
+
+  angle_shared_library("liblabel_layer") {
+    output_name = "liblabel_layer"
+    libs = [ "log" ]
+    configs += [ ":labelLayer_config" ]
+    public_deps = [ ":angle_common" ]
+    sources = [
+      "src/labelLayer/labelLayer.cpp",
+      "src/labelLayer/labelLayer.h",
+      "src/libANGLE/capture/gl_enum_utils.cpp",
+      "src/libANGLE/capture/gl_enum_utils.h",
+      "src/libANGLE/capture/gl_enum_utils_autogen.cpp",
+      "src/libANGLE/capture/gl_enum_utils_autogen.h",
+      "src/libGLESv2/layer_entry_points_cl_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_cl_autogen.h",
+      "src/libGLESv2/layer_entry_points_egl_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_egl_autogen.h",
+      "src/libGLESv2/layer_entry_points_egl_ext_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_egl_ext_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_1_0_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_1_0_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_2_0_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_3_0_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_3_0_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_3_1_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_3_1_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_3_2_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_3_2_autogen.h",
+      "src/libGLESv2/layer_entry_points_gles_ext_autogen.cpp",
+      "src/libGLESv2/layer_entry_points_gles_ext_autogen.h",
+    ]
+  }
+}
+
 config("libANGLE_config") {
   cflags = []
   defines = []

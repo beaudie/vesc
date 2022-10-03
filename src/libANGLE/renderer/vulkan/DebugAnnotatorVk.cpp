@@ -25,11 +25,6 @@ void DebugAnnotatorVk::beginEvent(gl::Context *context,
                                   const char *eventMessage)
 {
     angle::LoggingAnnotator::beginEvent(context, entryPoint, eventName, eventMessage);
-    if (vkCmdBeginDebugUtilsLabelEXT && context)
-    {
-        ContextVk *contextVk = vk::GetImpl(static_cast<gl::Context *>(context));
-        contextVk->logEvent(eventMessage);
-    }
 }
 
 void DebugAnnotatorVk::endEvent(gl::Context *context,
@@ -37,26 +32,11 @@ void DebugAnnotatorVk::endEvent(gl::Context *context,
                                 angle::EntryPoint entryPoint)
 {
     angle::LoggingAnnotator::endEvent(context, eventName, entryPoint);
-    if (vkCmdBeginDebugUtilsLabelEXT && context)
-    {
-        ContextVk *contextVk = vk::GetImpl(static_cast<gl::Context *>(context));
-        if (angle::IsDrawEntryPoint(entryPoint))
-        {
-            contextVk->endEventLog(entryPoint, PipelineType::Graphics);
-        }
-        else if (angle::IsDispatchEntryPoint(entryPoint))
-        {
-            contextVk->endEventLog(entryPoint, PipelineType::Compute);
-        }
-        else if (angle::IsClearEntryPoint(entryPoint) || angle::IsQueryEntryPoint(entryPoint))
-        {
-            contextVk->endEventLogForClearOrQuery();
-        }
-    }
 }
 
 bool DebugAnnotatorVk::getStatus()
 {
     return true;
 }
+
 }  // namespace rx

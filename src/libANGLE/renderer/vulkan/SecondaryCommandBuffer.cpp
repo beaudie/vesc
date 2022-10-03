@@ -235,6 +235,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         Offset<VkDescriptorSet>(params, sizeof(BindDescriptorSetParams));
                     const uint32_t *dynamicOffsets = Offset<uint32_t>(
                         descriptorSets, sizeof(VkDescriptorSet) * params->descriptorSetCount);
+
                     vkCmdBindDescriptorSets(cmdBuffer, params->pipelineBindPoint, params->layout,
                                             params->firstSet, params->descriptorSetCount,
                                             descriptorSets, params->dynamicOffsetCount,

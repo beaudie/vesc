@@ -181,8 +181,14 @@ class ContextImpl : public GLImplFactory
     virtual angle::Result pushDebugGroup(const gl::Context *context,
                                          GLenum source,
                                          GLuint id,
-                                         const std::string &message) = 0;
-    virtual angle::Result popDebugGroup(const gl::Context *context)  = 0;
+                                         const std::string &message)     = 0;
+    virtual angle::Result popDebugGroup(const gl::Context *context)      = 0;
+    virtual angle::Result debugMessageInsert(const gl::Context *context,
+                                             GLenum source,
+                                             GLenum type,
+                                             GLuint id,
+                                             GLenum severity,
+                                             const std::string &message) = 0;
     virtual angle::Result handleNoopDrawEvent();
 
     // KHR_parallel_shader_compile

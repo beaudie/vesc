@@ -6330,8 +6330,27 @@ void Context::debugMessageInsert(GLenum source,
                                  const GLchar *buf)
 {
     std::string msg(buf, (length > 0) ? static_cast<size_t>(length) : strlen(buf));
-    mState.getDebug().insertMessage(source, type, id, severity, std::move(msg), gl::LOG_INFO,
-                                    angle::EntryPoint::GLDebugMessageInsert);
+
+    // LUGMAL -- if parms match our special recipe, dispatch to impl, o/w continue
+    if ((source == GL_DEBUG_SOURCE_THIRD_PARTY_KHR) && (type == GL_DEBUG_TYPE_OTHER) &&
+        (severity == GL_DEBUG_SEVERITY_NOTIFICATION))
+    {
+        std::string endEventMessage = buf;
+        if (!endEventMessage.compare("EndLabelEvent"))
+        {
+            ANGLE_CONTEXT_TRY(mImplementation->popDebugGroup(this));
+        }
+        else
+        {
+            ANGLE_CONTEXT_TRY(
+                mImplementation->debugMessageInsert(this, source, type, id, severity, msg));
+        }
+    }
+    else
+    {
+        mState.getDebug().insertMessage(source, type, id, severity, std::move(msg), gl::LOG_INFO,
+                                        angle::EntryPoint::GLDebugMessageInsert);
+    }
 }
 
 void Context::debugMessageCallback(GLDEBUGPROCKHR callback, const void *userParam)

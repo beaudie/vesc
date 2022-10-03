@@ -2042,12 +2042,11 @@ bool ValidateDebugMessageInsertKHR(const Context *context,
         return false;
     }
 
-    if (!context->getState().getDebug().isOutputEnabled())
-    {
-        // If the DEBUG_OUTPUT state is disabled calls to DebugMessageInsert are discarded and do
-        // not generate an error.
-        return false;
-    }
+    // LUGMAL DebugMessageInsert is now passed on to ANGLE so this is no longer applicable
+    // if (!context->getState().getDebug().isOutputEnabled())
+    // {
+    //     return false;
+    // }
 
     if (!ValidDebugSeverity(severity))
     {
