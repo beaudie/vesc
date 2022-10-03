@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a23efc7_ff9f92f4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5989,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-03T23:47:28Z",
+      "side": 1,
+      "message": "Should we have a similar skip for ARM and SwiftShader? Or no, since that\u0027s an off-script usage of the API?",
+      "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1de42247_ccfe1ca9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-03T23:47:28Z",
+      "side": 1,
+      "message": "Nice to have the ARM extension in here too!",
+      "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
