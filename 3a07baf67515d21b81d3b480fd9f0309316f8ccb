@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "324bce37_834b63b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-03T23:54:20Z",
+      "side": 1,
+      "message": "Awesome! I\u0027m happy to see a proper implementation going in. Glad this change could be of use.\n\nSome Qualcomm devices are starting to advertise this extension, so this gives us more coverage on Vulkan.",
+      "parentUuid": "837a2be4_67c686d1",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
