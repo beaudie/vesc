@@ -39,6 +39,30 @@
       },
       "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d94313bc_58cf088f",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-03T22:05:37Z",
+      "side": 1,
+      "message": "I had considered it, but it seemed like that would only make things more error prone, in case I make a mistake and someone ends up using the enums.\n\nLet\u0027s see what @cnorthrop@google.com thinks as tie breaker",
+      "parentUuid": "5376a8e2_31974f3d",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 9
+      },
+      "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
