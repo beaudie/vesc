@@ -35,6 +35,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b0a6bf9_40732cdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1366072
+      },
+      "writtenOn": "2022-10-03T02:21:54Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "21eec9d1_80742f3d",
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b4fca0_8fdef999",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1366072
+      },
+      "writtenOn": "2022-10-03T02:21:54Z",
+      "side": 1,
+      "message": "git cl created another CL for some reason. \nPTAL https://crrev.com/c/3929902",
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a4caaf2_14b74493",
@@ -48,6 +83,30 @@
       "writtenOn": "2022-09-30T11:40:12Z",
       "side": 1,
       "message": "Please add this condition.",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 467,
+        "endChar": 43
+      },
+      "revId": "5c205523884399a1e19d2c0b72579a924f129538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "979e1939_da7df47a",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1366072
+      },
+      "writtenOn": "2022-10-03T02:21:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a4caaf2_14b74493",
       "range": {
         "startLine": 467,
         "startChar": 0,
