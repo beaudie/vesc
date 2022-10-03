@@ -33,6 +33,24 @@
       "message": "I noticed that this is the only `ClearTestES31` test, while the rest of the new tests are `ClearTestES3`. Just wanted to make sure if that was the intention.",
       "revId": "47cf6065fe3deff87249003513343900f0125fc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68edea81_0498c436",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-03T19:12:03Z",
+      "side": 1,
+      "message": "It is. It\u0027s using compute shaders.",
+      "parentUuid": "ee476626_b9526fde",
+      "revId": "47cf6065fe3deff87249003513343900f0125fc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
