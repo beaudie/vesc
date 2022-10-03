@@ -63,6 +63,30 @@
       },
       "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b52b0ad7_1236e912",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-03T23:11:51Z",
+      "side": 1,
+      "message": "Is there any reason not to spell them out without math?\n```\nBlitColor,\nBlitDepth,\nBlitStencil,\nBlitAll,\n```\nWhat mistake are you worried about?\n\nFine with landing as-is too, it just took me a bit to see you were adding hidden enums with `Blit + 0x7`.",
+      "parentUuid": "d94313bc_58cf088f",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 9
+      },
+      "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
