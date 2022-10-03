@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0de6a27_0065ed3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-03T10:50:25Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org @syoussefi@chromium.org: sorry the mess around this extension - I hope the approach taken here now can land without causing so much trouble :(\n\nUnfortunately full support of this extension is strongly required for some pending Exo work, so I hope we can land this soon.",
+      "revId": "0e1b273970e19b18cee361167cd68d78b342cc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
