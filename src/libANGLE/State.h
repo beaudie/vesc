@@ -732,10 +732,10 @@ class State : angle::NonCopyable
         DIRTY_OBJECT_ACTIVE_TEXTURES,  // Top-level dirty bit. Also see mDirtyActiveTextures.
         DIRTY_OBJECT_TEXTURES_INIT,
         DIRTY_OBJECT_IMAGES_INIT,
-        DIRTY_OBJECT_READ_ATTACHMENTS,
         DIRTY_OBJECT_DRAW_ATTACHMENTS,
-        DIRTY_OBJECT_READ_FRAMEBUFFER,
+        DIRTY_OBJECT_READ_ATTACHMENTS,
         DIRTY_OBJECT_DRAW_FRAMEBUFFER,
+        DIRTY_OBJECT_READ_FRAMEBUFFER,
         DIRTY_OBJECT_VERTEX_ARRAY,
         DIRTY_OBJECT_TEXTURES,  // Top-level dirty bit. Also see mDirtyTextures.
         DIRTY_OBJECT_IMAGES,    // Top-level dirty bit. Also see mDirtyImages.
@@ -983,10 +983,10 @@ class State : angle::NonCopyable
         &State::syncActiveTextures,
         &State::syncTexturesInit,
         &State::syncImagesInit,
-        &State::syncReadAttachments,
         &State::syncDrawAttachments,
-        &State::syncReadFramebuffer,
+        &State::syncReadAttachments,
         &State::syncDrawFramebuffer,
+        &State::syncReadFramebuffer,
         &State::syncVertexArray,
         &State::syncTextures,
         &State::syncImages,
@@ -1004,10 +1004,10 @@ class State : angle::NonCopyable
     static_assert(DIRTY_OBJECT_ACTIVE_TEXTURES == 0, "check DIRTY_OBJECT_ACTIVE_TEXTURES index");
     static_assert(DIRTY_OBJECT_TEXTURES_INIT == 1, "check DIRTY_OBJECT_TEXTURES_INIT index");
     static_assert(DIRTY_OBJECT_IMAGES_INIT == 2, "check DIRTY_OBJECT_IMAGES_INIT index");
-    static_assert(DIRTY_OBJECT_READ_ATTACHMENTS == 3, "check DIRTY_OBJECT_READ_ATTACHMENTS index");
-    static_assert(DIRTY_OBJECT_DRAW_ATTACHMENTS == 4, "check DIRTY_OBJECT_DRAW_ATTACHMENTS index");
-    static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 5, "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
-    static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 6, "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
+    static_assert(DIRTY_OBJECT_DRAW_ATTACHMENTS == 3, "check DIRTY_OBJECT_DRAW_ATTACHMENTS index");
+    static_assert(DIRTY_OBJECT_READ_ATTACHMENTS == 4, "check DIRTY_OBJECT_READ_ATTACHMENTS index");
+    static_assert(DIRTY_OBJECT_DRAW_FRAMEBUFFER == 5, "check DIRTY_OBJECT_DRAW_FRAMEBUFFER index");
+    static_assert(DIRTY_OBJECT_READ_FRAMEBUFFER == 6, "check DIRTY_OBJECT_READ_FRAMEBUFFER index");
     static_assert(DIRTY_OBJECT_VERTEX_ARRAY == 7, "check DIRTY_OBJECT_VERTEX_ARRAY index");
     static_assert(DIRTY_OBJECT_TEXTURES == 8, "check DIRTY_OBJECT_TEXTURES index");
     static_assert(DIRTY_OBJECT_IMAGES == 9, "check DIRTY_OBJECT_IMAGES index");
