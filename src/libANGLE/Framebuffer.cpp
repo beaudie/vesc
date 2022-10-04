@@ -1729,9 +1729,9 @@ angle::Result Framebuffer::clearBufferfi(const Context *context,
                                          GLfloat depth,
                                          GLint stencil)
 {
-    const bool clearDepth =
-        getDepthAttachment() != nullptr && context->getState().getDepthStencilState().depthMask;
-    const bool clearStencil = getStencilAttachment() != nullptr &&
+    const bool clearDepth = buffer != GL_STENCIL && getDepthAttachment() != nullptr &&
+                            context->getState().getDepthStencilState().depthMask;
+    const bool clearStencil = buffer != GL_DEPTH && getStencilAttachment() != nullptr &&
                               context->getState().getDepthStencilState().stencilWritemask != 0;
 
     if (clearDepth && clearStencil)

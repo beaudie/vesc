@@ -2550,6 +2550,8 @@ bool ValidateClearBufferfi(const Context *context,
 {
     switch (buffer)
     {
+        case GL_DEPTH:
+        case GL_STENCIL:
         case GL_DEPTH_STENCIL:
             if (drawbuffer != 0)
             {

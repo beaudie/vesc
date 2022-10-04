@@ -778,3 +778,7 @@
 6678 UBSAN : dEQP-GLES3.functional.fragment_ops.interaction.basic_shader.* = SKIP
 6678 UBSAN : dEQP-GLES3.functional.fragment_out.* = SKIP
 6678 UBSAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.* = SKIP
+
+// dEQP doesn't expect glClearBufferfi to accept GL_DEPTH or GL_STENCIL.
+7735 : dEQP-GLES31.functional.debug.negative_coverage.get_error.buffer.clear_bufferfi.* = SKIP
+7735 : dEQP-GLES3.functional.negative_api.buffer.clear_bufferfi.* = SKIP
