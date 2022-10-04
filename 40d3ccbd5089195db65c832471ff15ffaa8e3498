@@ -87,6 +87,30 @@
       },
       "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8733f957_1bb22586",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T01:56:18Z",
+      "side": 1,
+      "message": "Because it\u0027s combinatorial, and the enum is constructed with `|`. Spelling it out would look like:\n\n```\nBlit,\nBlitColor \u003d Blit + 0x1,\nBlitDepth \u003d Blit + 0x2,\nBlitStencil \u003d Blit + 0x4,\nBlitColorAndDepth \u003d Blit + 0x3,\nBlitColorAndStencil \u003d Blit + 0x5,\nBlitDepthAndStencil \u003d Blit + 0x6,\nBlitAll \u003d Blit + 0x7,\n```\n\nand no code would use `Blit*` other than `BlitAll` (for range check). Is that helpful in any way?",
+      "parentUuid": "b52b0ad7_1236e912",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 9
+      },
+      "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
