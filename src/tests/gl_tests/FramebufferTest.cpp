@@ -904,6 +904,79 @@ TEST_P(FramebufferTest_ES3, ClearNonexistentDepthStencil)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that glClearBufferfi supports GL_DEPTH, GL_STENCIL, and GL_DEPTH_STENCIL.
+TEST_P(FramebufferTest_ES3, ClearBufferDepthStencil)
+{
+    constexpr char kFS[] = R"(#version 300 es
+out highp vec4 color;
+void main()
+{
+    color = vec4(0, 1, 0, 1);
+}
+)";
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLRenderbuffer rbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 10, 10);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 10, 10);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+    float red[4]{1, 0, 0, 1};
+
+    glClearBufferfi(GL_DEPTH_STENCIL, 0, 0.0f, 0);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_NOTEQUAL, 0, 0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::red);
+    glDisable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_NOTEQUAL);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::green);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::red);
+
+    // Clear stencil and ensure depth was unaffected.
+    glClearBufferfi(GL_STENCIL, 0, 0.0f, 1);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::green);
+    glDisable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::red);
+
+    // Clear depth and ensure stencil was unaffected.
+    glClearBufferfi(GL_DEPTH, 0, 0.0f, 0);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::green);
+    glDisable(GL_STENCIL_TEST);
+    glEnable(GL_DEPTH_TEST);
+    glClearBufferfv(GL_COLOR, 0, red);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 1.f);
+    EXPECT_PIXEL_RECT_EQ(0, 0, 10, 10, GLColor::green);
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that clearing a color attachment that has been deleted doesn't crash.
 TEST_P(FramebufferTest_ES3, ClearDeletedAttachment)
 {
