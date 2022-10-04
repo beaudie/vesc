@@ -16,6 +16,40 @@
       "message": "Accidental +2. I meant do issue a dry run.",
       "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "774780c2_37d371f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-04T23:36:28Z",
+      "side": 1,
+      "message": "New concern about part of the code so have removed +1 for now. Happy to re-review.",
+      "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96520945_36ae9011",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-04T23:36:28Z",
+      "side": 1,
+      "message": "Is this if-test redundant? See:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/common/apple_platform_utils.mm;l\u003d59\n\nhttp://anglebug.com/7514\n\nhttps://chromium-review.googlesource.com/3806252\n\nI\u0027m not 100% sure what the semantics are. On macOS the support check is for MTLGPUFamilyMac2 but I\u0027m not sure how that corresponds to Apple Silicon.\n\nIf the Metal backend isn\u0027t supported on this GPU family, then let\u0027s clean up this code.",
+      "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -113,6 +113,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38c242ae_14db625f",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-04T23:36:28Z",
+      "side": 1,
+      "message": "Please just mention exactly this in a comment in the code.",
+      "parentUuid": "827575c2_97038ec5",
+      "range": {
+        "startLine": 1325,
+        "startChar": 34,
+        "endLine": 1325,
+        "endChar": 46
+      },
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5bd347b_32bef5cb",
         "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
         "patchSetId": 11
@@ -142,6 +166,24 @@
       "side": 1,
       "message": "It\u0027s invalid to have a struct declaration as a function argument, and the ANGLE code also has an `ASSERT(!evdConfig.isParameter)`, so I think `disableStructSpecifier` is the only correct way to emit a function parameter.",
       "parentUuid": "f5bd347b_32bef5cb",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44817625_766dda99",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-04T23:36:28Z",
+      "side": 1,
+      "message": "OK. I\u0027m surprised this wasn\u0027t hit before in end-user shaders. Have asked for a comment at the point of the assert.",
+      "parentUuid": "4055715f_2ac2f53c",
       "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -212,6 +254,24 @@
       "side": 1,
       "message": "Good catch. This should have been setting it to `ShFragmentSynchronizationType::Automatic` in framebuffer fetch mode when raster order groups weren\u0027t supported.\n\nRaster order groups are not required to make framebuffer fetches coherent. They\u0027re just a tool to make your synchronization more efficient, e.g., by assigning different attachments to different groups if they don\u0027t depend on each other. The core feature we need is \"programmable blending\", and it\u0027s been around since Apple family 2. (See new comments.)",
       "parentUuid": "33f6f8ae_9a182601",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4578b54e_d7ce61fa",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-04T23:36:28Z",
+      "side": 1,
+      "message": "OK, thanks. Please see new comment in the other code then.",
+      "parentUuid": "8fe05656_c6c95f9a",
       "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
