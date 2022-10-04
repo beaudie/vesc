@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bc22886_4cf1086a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T16:23:09Z",
+      "side": 1,
+      "message": "Ok, that all makes sense. The spec specifically mentions \"per-primitive flushes\", which does sound like noncoherent hardware and they are flushing between every triangle! Hopefully that\u0027s changed now if they\u0027re supporting this extension.\n\nThe use case I\u0027m thinking of was low on triangle count, come to think of it, so that\u0027s probably why I didn\u0027t see a difference.\n\nSide note: If QC flushes between every triangle in order to make EXT_shader_framebuffer_fetch look coherent on GL, then maybe ANGLE could provide a similar functionality for pixel local storage. Could we add an interaction with ANGLE_multi_draw that inserts glPixelLocalStorageBarrierANGLE() between every draw? Could that be decently optimized in Vulkan?",
+      "parentUuid": "685e0267_65d9af32",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
