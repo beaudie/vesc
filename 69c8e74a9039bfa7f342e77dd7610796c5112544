@@ -70,6 +70,24 @@
       "parentUuid": "b1e1eee2_a4cd25de",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "134e545d_ae960b5e",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T23:43:38Z",
+      "side": 1,
+      "message": "Transforming after `InitializeVariables` wouldn\u0027t work for now. Currently the PLS transformations need to run before collecting variables.\n\nHere\u0027s another idea. Vulkan doesn\u0027t actually care if this has `layout(location\u003d0)`, right? Does only ESSL care? The ESSL backed could just always emit `location\u003d0` if location is unspecified and it knows pixel local storage is enabled. Is that too hacky?\n\n\u003e Skip init in InitializeVariables for that variable.\n\nHow would it know to skip initialization? An internal layout qualifier flag or something?",
+      "parentUuid": "b1e1eee2_a4cd25de",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
