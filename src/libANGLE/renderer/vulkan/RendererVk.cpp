@@ -3339,8 +3339,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     const bool isImmediateModeRenderer = isNvidia || isAMD || isIntel || isSamsung || isSwiftShader;
     const bool isTileBasedRenderer     = isARM || isPowerVR || isQualcomm || isBroadcom;
 
-    bool isDiscreteGPU =
-        mPhysicalDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
+    // Host visible device local memory heap size for discrete gpu usually quite small.
+    // at virutal platform (VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU). we'd better to choose
+    // device local instead of host visible device local memory for out of memory safety.
+    // But this may cause some performance loss for underlying integrated gpu.
+    bool isIntegratedGPU =
+        mPhysicalDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU;
 
     // Make sure all known architectures are accounted for.
     if (!isImmediateModeRenderer && !isTileBasedRenderer && !isMockICDEnabled())
@@ -3845,7 +3849,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // For discrete GPUs, most of device local memory is host invisible. We should not force the
     // host visible flag for them and result in allocation failure.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferDeviceLocalMemoryHostVisible, !isDiscreteGPU);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferDeviceLocalMemoryHostVisible, isIntegratedGPU);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
                             mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
