@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5437ee6c_fdd1581c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T19:02:54Z",
+      "side": 1,
+      "message": "Note: this is being fixed in https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/4621\n\nPlease remember to revert once that change lands and rolls.",
+      "revId": "5b421679fb574ed06f9d67a97405664dd115c074",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
