@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9194f755_d757f83e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T15:23:54Z",
+      "side": 1,
+      "message": "It\u0027s there:\n\nhttps://vulkan.gpuinfo.org/listdevicescoverage.php?extension\u003dVK_EXT_rasterization_order_attachment_access\u0026platform\u003dall\n\nhttps://vulkan.gpuinfo.org/listdevicescoverage.php?extension\u003dVK_ARM_rasterization_order_attachment_access\u0026platform\u003dall\n\nThe QCOM_shader_framebuffer_fetch_noncoherent spec says\n\n    This extension adds support for reading those same inputs with \n    relaxed coherency requirements.  This mode can avoid expensive\n    per-primitive flushes of the pixel pipeline and may offer performance\n    improvements in some implementations.\n    \nSo maybe QCOM made the noncoherent extension for a perf optimization when you don\u0027t need coherency? I\u0027ve personally experimented with it and didn\u0027t see any perf gains in the particular use case I was looking at.",
+      "parentUuid": "421d211c_39e8916a",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
