@@ -143,6 +143,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b63fa61_5ec2d62b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T16:42:47Z",
+      "side": 1,
+      "message": "Totally agreed. The app should be able to expect reasonably consistently, decent performance if an extension is advertised.\n\nThat\u0027s kind of where I started going with the ANGLE_multi_draw interaction -- the app can split up their draws however they want (even per triangle if they think that\u0027s what\u0027s best) and then ask for barriers between with ANGLE_multi_draw. Hopefully that\u0027s a little faster than just calling `drawArrays(); barrier();` in loop?",
+      "parentUuid": "eaf9ec96_cb383430",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
