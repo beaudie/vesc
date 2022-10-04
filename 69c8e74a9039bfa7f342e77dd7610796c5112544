@@ -34,6 +34,24 @@
       "parentUuid": "0ab137ab_6af6b9b0",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1e1eee2_a4cd25de",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T17:56:24Z",
+      "side": 1,
+      "message": "So `InitializeVariables` already skips the `inout` PLS variables.\n\nThe problem here is when a shader has a single output, `out vec4 color`, and this transformation has to rewrite it to `layout(location \u003d 0) out vec4 color` (since after we add outputs, `location` becomes required on that original output). In this case, I think `InitializeVariables` can\u0027t skip that output, right? (Unless we take care of initializing it here.)",
+      "parentUuid": "110356ed_353aa555",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
