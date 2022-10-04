@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3b4eed_00053000",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T14:16:17Z",
+      "side": 1,
+      "message": "Unfortunately ineffective on Android, but at least reduces gles1 run time on the other bots from ~2 minutes to ~1 minute.",
+      "revId": "491366629df05ec14c795a069ec5507109129849",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
