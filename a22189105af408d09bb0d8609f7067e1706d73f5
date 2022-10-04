@@ -16,6 +16,29 @@
       "message": "Looks like there is a conflict between the new suppression and existing ones",
       "revId": "a22189105af408d09bb0d8609f7067e1706d73f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f595443_20eca776",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-04T18:41:05Z",
+      "side": 1,
+      "message": "here",
+      "range": {
+        "startLine": 480,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 79
+      },
+      "revId": "a22189105af408d09bb0d8609f7067e1706d73f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
