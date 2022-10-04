@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0adb8a9c_6cf1f908",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T16:55:41Z",
+      "side": 1,
+      "message": "Marginally, ANGLE would still have to do that loop itself (but yes, less validation etc).\n\nYou are of course always welcome to experiment with it, though I\u0027d leave it until after everything else is done.",
+      "parentUuid": "1b63fa61_5ec2d62b",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
