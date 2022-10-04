@@ -52,6 +52,24 @@
       "parentUuid": "110356ed_353aa555",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67ce931e_56547b69",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T22:09:06Z",
+      "side": 1,
+      "message": "That\u0027s not ideal, but a reasonable workaround. So to recap:\n\n- Init the variable during transformation, if `InitializeVariables` was necessary\n- Skip init in `InitializeVariables` for that variable.\n\n---\n\nThe real fix IMO is to have `InitializeVariables` iterate on the declarations itself, instead of using the collected (and possibly transformed) `ShaderVariable`s, that\u0027s a recipe for bugs like this.\n\nYour alternative solution is to make sure the PLS transformations are done _after_ `InitializeVariables`. Would that work?",
+      "parentUuid": "b1e1eee2_a4cd25de",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
