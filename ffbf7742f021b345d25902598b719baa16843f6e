@@ -46,6 +46,30 @@
       },
       "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27c68b87_beeda524",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-04T08:51:10Z",
+      "side": 1,
+      "message": "Hi, @geofflang@chromium.org, @jmadill@chromium.org\nPlease advice, what should we do for `setMarker()` and `getStatus()` if we don\u0027t want to use `gCurrentValidContext`. What could be a best way to know the current context? In those functions, context is not passed in as an argument.\n\nWe cannot reuse single `ID3DUserDefinedAnnotation` for every `Renderer11` either, because it is stored globally and shared by multiple `Renderer11`. If used by a wrong `Renderer11` on a different thread, it will crash saying the device context is being used on multiple threads (`CORRUPTED_MULTITHREADING`).",
+      "parentUuid": "fbec2a1c_f60aa861",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
