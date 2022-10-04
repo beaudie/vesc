@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dfd69f82_636b8538",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6634,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T02:23:23Z",
+      "side": 1,
+      "message": "nit: per ANGLE\u0027s style, we use `kFoo` to name `constexpr` objects.",
+      "range": {
+        "startLine": 6634,
+        "startChar": 30,
+        "endLine": 6634,
+        "endChar": 31
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3899e9a_168e394e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
@@ -54,6 +77,30 @@
       "writtenOn": "2022-10-03T23:53:01Z",
       "side": 1,
       "message": "`sizeof(uint8_t)`?",
+      "range": {
+        "startLine": 6664,
+        "startChar": 44,
+        "endLine": 6664,
+        "endChar": 55
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ec85c6_f492bd5f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T02:23:23Z",
+      "side": 1,
+      "message": "`sizeof(uint8_t)` is about 8 times smaller than this ;)",
+      "parentUuid": "f3899e9a_168e394e",
       "range": {
         "startLine": 6664,
         "startChar": 44,
