@@ -118,6 +118,30 @@
       },
       "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5fdeec6_2dcc25f6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-04T13:07:03Z",
+      "side": 1,
+      "message": "Yeah if you want to pass nullptr, that\u0027s fine, just leave some comments and make sure you test for nullptr in places where it could be an expected value.",
+      "parentUuid": "00225149_ece99628",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
