@@ -94,6 +94,30 @@
       },
       "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00225149_ece99628",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-04T12:45:26Z",
+      "side": 1,
+      "message": "Currently `setMarker` is being called by `gl::Trace` function. And `gl::Trace` seems to be invoked by:\n- `Display_logError`/`Display_logWarning`\n- `LogMessage::~LogMessage()` which is in turn used by various `ASSERT`, `UNREACHABLE`, etc macros.\n\nI don\u0027t think we can pass the current context to the above places. Are we ok to pass nullptr instead? That means the `annotator-\u003esetMarker` could be a no-op at those points where the macros are used (i.e `ASSERT`, `UNREACHABLE`, etc).",
+      "parentUuid": "1a0e250d_f5bacb3c",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
