@@ -16,6 +16,24 @@
       "message": "The switch to ES3 uncovered an AST transformation (InitializeVariables) that looks up globals in the symbol table by name. So when we rewrote fragment out/inout variables to specify `location`, this would fail.\n\nI don\u0027t know what the preferred resolution would be, but for now, this is a proof of concept that shows the issue is understood and solvable.",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "110356ed_353aa555",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T17:41:38Z",
+      "side": 1,
+      "message": "Can you make `InitializeVariables` skip over these variables?",
+      "parentUuid": "0ab137ab_6af6b9b0",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
