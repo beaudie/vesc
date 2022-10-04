@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77dca11_5b12b203",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3702,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "Thanks for catching this! I have removed this variable.",
+      "parentUuid": "9cd4841a_71d18da7",
+      "range": {
+        "startLine": 3702,
+        "startChar": 38,
+        "endLine": 3702,
+        "endChar": 55
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e265b848_f0788fc2",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-10-04T04:12:54Z",
       "side": 1,
       "message": "Should this ever happen, or can we assert that we have it?\n`ASSERT(eglImageIter !\u003d textureToImageMap.end()`\n\nIf we can remove all the if checks, this code simplifies quite a bit.",
+      "range": {
+        "startLine": 3705,
+        "startChar": 24,
+        "endLine": 3705,
+        "endChar": 63
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3a8a6ea_36646621",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "I have changed all the if checks to ASSERT, assuming we always have a non-empty attribute list when calling `eglCreateImage()` or `eglCreateImageKHR()`",
+      "parentUuid": "e265b848_f0788fc2",
       "range": {
         "startLine": 3705,
         "startChar": 24,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "619fe697_821bad58",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6634,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "Cody suggested I can use `reinterpret_cast\u003cconst EGLAttrib *\u003e` to convert `uint8_t` to `EGLAttrib`, instead of doing manually bit shifting, so these constexpr objects are no longer needed, but thanks for pointing it out!",
+      "parentUuid": "dfd69f82_636b8538",
+      "range": {
+        "startLine": 6634,
+        "startChar": 30,
+        "endLine": 6634,
+        "endChar": 31
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8cf2239_454b04d3",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-10-04T04:12:54Z",
       "side": 1,
       "message": "Is it possible to pull in `egl::AttributeMap` here to make this simpler?  You can see how it is used in `capture_egl.cpp`.  I can see it has a constructor that takes `EGLint*`.  Maybe the `TGLint64Pointer` can be cast to the right type, then construct the map?  If we need to enhance the class to handle this data, we can do that.",
+      "range": {
+        "startLine": 6647,
+        "startChar": 0,
+        "endLine": 6647,
+        "endChar": 69
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8fef40c_6d7caa3f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6647,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "Thank you Cody. Using `EGLint*` doesn\u0027t work because it will combine each 4 elements in the `ParamData[0]` into one `EGLint`, instead of 8 elements. `reinterpret_cast\u003cconst EGLAttrib *\u003e` works.",
+      "parentUuid": "a8cf2239_454b04d3",
       "range": {
         "startLine": 6647,
         "startChar": 0,
@@ -221,6 +317,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7edfae63_b474091e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6667,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "As https://chromium-review.googlesource.com/c/angle/angle/+/3928212/comment/dfd69f82_636b8538/ says, this code chunk is no longer needed.",
+      "parentUuid": "20557b41_9f1df780",
+      "range": {
+        "startLine": 6634,
+        "startChar": 0,
+        "endLine": 6667,
+        "endChar": 17
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c259e07c_2d41e1bb",
@@ -234,6 +354,30 @@
       "writtenOn": "2022-10-04T04:12:54Z",
       "side": 1,
       "message": "Yuxin, can we merge these into one map of maps, similar to `DefaultUniformCallsPerLocationMap`?\n\nAlso, I think we could move it to ResourceTracker for easier access.",
+      "range": {
+        "startLine": 840,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 52
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad1ff9d3_e9132e5b",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-04T23:59:48Z",
+      "side": 1,
+      "message": "I am not sure if this is doable. In `CaptureShareGroupMidExecutionSetup()`, we need to use `TextureID` as the key to find the image, and then the attribute. If we combine two maps into one map, it will have to be something like `std::map\u003cTextureID, std::map\u003cvoid*, AttributeMap\u003e\u003e`. \n\nUsually app will make calls in this sequence:\n\n```\nEGLImageKHR eglImage \u003d eglCreateImageKHR(..., AttributeMap);\nGLTexture textureID;\nglBindTexture(GL_TEXTURE_EXTERNAL_OES, textureID);\nglEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, eglImage);\n```\n\nDuring `eglCreateImageKHR()` call, we need to insert \u003cvoid*, AttributeMap\u003e into the map, but we don\u0027t know the `TextureID` yet. `TextureID` will only be available after the app issues the `glEGLImageTargetTexture2DOES()` call. And when `TextureID` is available, we need a way to retrieve back the eglImage and its\u0027 AttributeMap. I think we still need two maps to track the TextureID--\u003eeglImage--\u003eAttributeMap information.",
+      "parentUuid": "c259e07c_2d41e1bb",
       "range": {
         "startLine": 840,
         "startChar": 0,
