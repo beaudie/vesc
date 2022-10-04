@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2993e617_2e6f235d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "Accidental +2. I meant do issue a dry run.",
+      "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

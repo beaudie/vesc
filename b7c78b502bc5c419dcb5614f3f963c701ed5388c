@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "993953ad_9bb61af1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "920a0c76_29e2bc16",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8b995007_0d539d2e",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -52,6 +70,47 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ab3ac5_2e3a0a6b",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a16f7a1_994ad48c",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "827575c2_97038ec5",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "This ASSERT will fire if we don\u0027t set `evdConfig.disableStructSpecifier` in `emitFunctionParameter`.",
+      "range": {
+        "startLine": 1325,
+        "startChar": 34,
+        "endLine": 1325,
+        "endChar": 46
+      },
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5bd347b_32bef5cb",
@@ -65,6 +124,24 @@
       "writtenOn": "2022-10-03T22:51:10Z",
       "side": 1,
       "message": "What is the side-effect of adding disableStructSpecifier? Could this have side-effects on any end-user code?",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4055715f_2ac2f53c",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "It\u0027s invalid to have a struct declaration as a function argument, and the ANGLE code also has an `ASSERT(!evdConfig.isParameter)`, so I think `disableStructSpecifier` is the only correct way to emit a function parameter.",
+      "parentUuid": "f5bd347b_32bef5cb",
       "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +163,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d8e639d_7f17985e",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c6af1ee_fdd85813",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33f6f8ae_9a182601",
@@ -99,6 +194,24 @@
       "writtenOn": "2022-10-03T22:51:10Z",
       "side": 1,
       "message": "Until the alternative code path is implemented, would it be more appropriate to only expose ANGLE_shader_pixel_local_storage if raster order groups are supported?",
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fe05656_c6c95f9a",
+        "filename": "src/libANGLE/renderer/metal/ShaderMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-04T05:46:32Z",
+      "side": 1,
+      "message": "Good catch. This should have been setting it to `ShFragmentSynchronizationType::Automatic` in framebuffer fetch mode when raster order groups weren\u0027t supported.\n\nRaster order groups are not required to make framebuffer fetches coherent. They\u0027re just a tool to make your synchronization more efficient, e.g., by assigning different attachments to different groups if they don\u0027t depend on each other. The core feature we need is \"programmable blending\", and it\u0027s been around since Apple family 2. (See new comments.)",
+      "parentUuid": "33f6f8ae_9a182601",
       "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
