@@ -786,3 +786,6 @@
 
 // EXT_multisample_compatibility exposed for the sake of GLES1, but not implemented on Vulkan
 7657 VULKAN : EXTMultisampleCompatibilityTest.* = SKIP
+
+// Recent VVL change causes the following to fail
+7736 VULKAN : DrawBuffersTest.MidRenderPassClearWithGapsRGB/* = SKIP
