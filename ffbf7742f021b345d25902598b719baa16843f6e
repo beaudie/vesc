@@ -70,6 +70,30 @@
       },
       "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a0e250d_f5bacb3c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-04T12:07:35Z",
+      "side": 1,
+      "message": "Hey Quyen, please make a small CL to pass down the current context to setMarker and getStatus, refactoring all the different versions of these in ANGLE. Then rebase this CL on top of that refactor CL. Would that be sufficient?",
+      "parentUuid": "27c68b87_beeda524",
+      "range": {
+        "startLine": 53,
+        "startChar": 18,
+        "endLine": 53,
+        "endChar": 42
+      },
+      "revId": "ffbf7742f021b345d25902598b719baa16843f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
