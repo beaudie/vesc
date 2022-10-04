@@ -1786,17 +1786,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     }
     ANGLE_VK_CHECK(displayVk, queueFamilyMatchCount > 0, VK_ERROR_INITIALIZATION_FAILED);
 
+    // Store the physical device memory properties so we can find the right memory pools.
+    mMemoryProperties.init(mPhysicalDevice);
+    ANGLE_VK_CHECK(displayVk, mMemoryProperties.getMemoryTypeCount() > 0,
+                   VK_ERROR_INITIALIZATION_FAILED);
+
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
     if (queueFamilyMatchCount == 1)
     {
         ANGLE_TRY(initializeDevice(displayVk, firstGraphicsQueueFamily));
     }
-
-    // Store the physical device memory properties so we can find the right memory pools.
-    mMemoryProperties.init(mPhysicalDevice);
-    ANGLE_VK_CHECK(displayVk, mMemoryProperties.getMemoryTypeCount() > 0,
-                   VK_ERROR_INITIALIZATION_FAILED);
 
     ANGLE_TRY(initializeMemoryAllocator(displayVk));
 
@@ -3293,6 +3293,31 @@ bool RendererVk::canSupportFragmentShadingRate(const vk::ExtensionNameList &devi
            mSupportedFragmentShadingRates.test(gl::ShadingRate::_2x2);
 }
 
+bool RendererVk::canPreferDeviceLocalMemoryHostVisible()
+{
+    const vk::MemoryProperties &memoryProperties = getMemoryProperties();
+    static constexpr VkMemoryPropertyFlags kHostVisiableDeviceLostFlags =
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    VkDeviceSize minHostvisiableDeviceLocalHeapSize = std::numeric_limits<VkDeviceSize>::max();
+    VkDeviceSize maxDeviceLocalHeapSize             = 0;
+    for (uint32_t i = 0; i < memoryProperties.getMemoryTypeCount(); ++i)
+    {
+        if (memoryProperties.getMemoryType(i).propertyFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+        {
+            maxDeviceLocalHeapSize =
+                std::max(maxDeviceLocalHeapSize, memoryProperties.getHeapSizeForMemoryType(i));
+        }
+        if ((memoryProperties.getMemoryType(i).propertyFlags & kHostVisiableDeviceLostFlags) ==
+            kHostVisiableDeviceLostFlags)
+        {
+            minHostvisiableDeviceLocalHeapSize = std::min(
+                minHostvisiableDeviceLocalHeapSize, memoryProperties.getHeapSizeForMemoryType(i));
+        }
+    }
+    return minHostvisiableDeviceLocalHeapSize != std::numeric_limits<VkDeviceSize>::max() &&
+           minHostvisiableDeviceLocalHeapSize >= maxDeviceLocalHeapSize;
+}
+
 void RendererVk::initFeatures(DisplayVk *displayVk,
                               const vk::ExtensionNameList &deviceExtensionNames)
 {
@@ -3338,9 +3363,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // the device architecture for optimal performance on both.
     const bool isImmediateModeRenderer = isNvidia || isAMD || isIntel || isSamsung || isSwiftShader;
     const bool isTileBasedRenderer     = isARM || isPowerVR || isQualcomm || isBroadcom;
-
-    bool isDiscreteGPU =
-        mPhysicalDeviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU;
 
     // Make sure all known architectures are accounted for.
     if (!isImmediateModeRenderer && !isTileBasedRenderer && !isMockICDEnabled())
@@ -3845,7 +3867,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // For discrete GPUs, most of device local memory is host invisible. We should not force the
     // host visible flag for them and result in allocation failure.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferDeviceLocalMemoryHostVisible, !isDiscreteGPU);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferDeviceLocalMemoryHostVisible,
+                            canPreferDeviceLocalMemoryHostVisible());
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
                             mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
