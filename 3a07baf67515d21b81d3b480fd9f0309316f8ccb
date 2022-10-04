@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "685e0267_65d9af32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-04T15:33:13Z",
+      "side": 1,
+      "message": "Perhaps they added support in their new hardware. The way I understood it, the QC hardware wasn\u0027t coherent, so it would have had to go through hoops to make things look coherent (and hence the noncoherent version was born).\n\nBased on your experiment, maybe it was not a problem in the common use cases, but some corner case ones (like self-overlapping geometry).",
+      "parentUuid": "9194f755_d757f83e",
+      "revId": "3a07baf67515d21b81d3b480fd9f0309316f8ccb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b4f4c85_71189d12",
