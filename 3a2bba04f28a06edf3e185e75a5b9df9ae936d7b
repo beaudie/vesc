@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b86713a1_3ae42226",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T04:12:54Z",
+      "side": 1,
+      "message": "Hey Yuxin, thanks for working on this!\n\nI have some questions/requests below.  Also, can you add a case to ImageTest.cpp similar to the other AppTraceExternal tests?",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cd4841a_71d18da7",
@@ -43,6 +60,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e265b848_f0788fc2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T04:12:54Z",
+      "side": 1,
+      "message": "Should this ever happen, or can we assert that we have it?\n`ASSERT(eglImageIter !\u003d textureToImageMap.end()`\n\nIf we can remove all the if checks, this code simplifies quite a bit.",
+      "range": {
+        "startLine": 3705,
+        "startChar": 24,
+        "endLine": 3705,
+        "endChar": 63
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dfd69f82_636b8538",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
@@ -59,6 +99,29 @@
         "startChar": 30,
         "endLine": 6634,
         "endChar": 31
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8cf2239_454b04d3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 6647,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T04:12:54Z",
+      "side": 1,
+      "message": "Is it possible to pull in `egl::AttributeMap` here to make this simpler?  You can see how it is used in `capture_egl.cpp`.  I can see it has a constructor that takes `EGLint*`.  Maybe the `TGLint64Pointer` can be cast to the right type, then construct the map?  If we need to enhance the class to handle this data, we can do that.",
+      "range": {
+        "startLine": 6647,
+        "startChar": 0,
+        "endLine": 6647,
+        "endChar": 69
       },
       "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
@@ -153,6 +216,29 @@
         "startChar": 0,
         "endLine": 6667,
         "endChar": 17
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c259e07c_2d41e1bb",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T04:12:54Z",
+      "side": 1,
+      "message": "Yuxin, can we merge these into one map of maps, similar to `DefaultUniformCallsPerLocationMap`?\n\nAlso, I think we could move it to ResourceTracker for easier access.",
+      "range": {
+        "startLine": 840,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 52
       },
       "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
