@@ -111,6 +111,30 @@
       },
       "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a14e7dfe_083aeddd",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T02:26:05Z",
+      "side": 1,
+      "message": "Ah, got it.  Doesn\u0027t really help assigning enum values out of order (that\u0027s confusing).  And putting them in order is even goofier.\n\nProbably fine to leave it as-is in the CL.",
+      "parentUuid": "8733f957_1bb22586",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 9
+      },
+      "revId": "40d3ccbd5089195db65c832471ff15ffaa8e3498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
