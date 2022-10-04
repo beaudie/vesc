@@ -395,6 +395,22 @@ class MemoryProperties final : angle::NonCopyable
         return mMemoryProperties.memoryHeaps[heapIndex].size;
     }
 
+    VkDeviceSize getMaxHeapSizeWithFlags(VkMemoryHeapFlags flags) const
+    {
+        VkDeviceSize heapSize = 0;
+        std::for_each(mMemoryProperties.memoryTypes,
+                      mMemoryProperties.memoryTypes + mMemoryProperties.memoryTypeCount,
+                      [&heapSize, flags, this](const VkMemoryType &memoryType) {
+                          if ((memoryType.propertyFlags & flags) == flags)
+                          {
+                              heapSize = std::max(
+                                  heapSize,
+                                  mMemoryProperties.memoryHeaps[memoryType.heapIndex].size);
+                          }
+                      });
+        return heapSize;
+    }
+
     uint32_t getMemoryTypeCount() const { return mMemoryProperties.memoryTypeCount; }
 
   private:
