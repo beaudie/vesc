@@ -33,6 +33,24 @@
       "message": "or should we change to heap size based detection?",
       "revId": "28af87ccd8bf8aeee3b386a0c27825afd21d0aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71bfd357_da0d70de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-04T19:04:09Z",
+      "side": 1,
+      "message": "I would be definitely in favor of such approach.",
+      "parentUuid": "cbec9949_61274278",
+      "revId": "28af87ccd8bf8aeee3b386a0c27825afd21d0aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
