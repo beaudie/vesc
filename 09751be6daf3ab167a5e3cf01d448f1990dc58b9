@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ceb2eda_8d33292c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 969,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-04T03:15:52Z",
+      "side": 1,
+      "message": "Would it make sense to keep ANGLE in the entrypoint, like `ANGLE_LoadLibEGL_EGL` or similar?  Just paranoid about collisions, but don\u0027t have any proof we need it.",
+      "range": {
+        "startLine": 969,
+        "startChar": 8,
+        "endLine": 969,
+        "endChar": 22
+      },
+      "revId": "09751be6daf3ab167a5e3cf01d448f1990dc58b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
