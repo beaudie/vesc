@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a3cd8e0_70d0f6e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-05T00:01:12Z",
+      "side": 1,
+      "message": "Can I ask which `AppTraceExternal` are you referring to?",
+      "parentUuid": "b86713a1_3ae42226",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cd4841a_71d18da7",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
