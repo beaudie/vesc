@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16d05f33_8720b815",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-05T20:30:39Z",
+      "side": 1,
+      "message": "LGTM. Will leave+2 to Shabi.",
+      "revId": "1ba8c713e1f752b186c91215ff9ec281261153de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
