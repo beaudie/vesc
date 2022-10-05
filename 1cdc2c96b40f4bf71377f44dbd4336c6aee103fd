@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3c7ff1_983773a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-05T19:59:31Z",
+      "side": 1,
+      "message": "Looks like the VVL change landed in https://chromium-review.googlesource.com/c/angle/angle/+/3935360",
+      "revId": "1cdc2c96b40f4bf71377f44dbd4336c6aee103fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
