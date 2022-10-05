@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef24331_41d13035",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T18:06:07Z",
+      "side": 1,
+      "message": "OK, let\u0027s see the HW usage with the reduced trials.",
+      "revId": "23fe7ac5ee3185627d56e3cc9fe2e6b2b10c4ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f4f8dc2_e050eec0",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T18:06:07Z",
+      "side": 1,
+      "message": "Per my understanding, this timeout applies when there is no I/O from the Swarming task.\nSince our tests log output, I don\u0027t see us hitting this timeout, so I don\u0027t think there is a need to increase it.\nActually, it might make sense to decrease it, so that hanged tests / machines would be discovered sooner.",
+      "range": {
+        "startLine": 46,
+        "startChar": 13,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "23fe7ac5ee3185627d56e3cc9fe2e6b2b10c4ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
