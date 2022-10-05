@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22dfecae_74642749",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3299,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T19:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56950b71_05372961",
+      "range": {
+        "startLine": 3299,
+        "startChar": 43,
+        "endLine": 3299,
+        "endChar": 72
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2f0808d_d9019128",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f809f381_3253bfc0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T19:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2f0808d_d9019128",
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09f2c8c5_d86ad3e3",
@@ -71,6 +113,24 @@
       "writtenOn": "2022-10-05T13:47:47Z",
       "side": 1,
       "message": "nit: Per our style, don\u0027t `if (a\u0026b)`, but explicitly cast to bool: `if ((a\u0026b) !\u003d 0)`",
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab1f30a1_32da19ea",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3305,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T19:53:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09f2c8c5_d86ad3e3",
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -280,6 +340,30 @@
       "side": 1,
       "message": "ok, so the conclusion is compare memory size only for vGPU. others keep the same?",
       "parentUuid": "f2c5d31f_248e37fe",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4afcc7b1_ffb801c5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T19:53:34Z",
+      "side": 1,
+      "message": "to avoid regression. only check the memory heap size for vGPU. others keep the same. and  also add *0.8 factor",
+      "parentUuid": "359c024c_42d8a242",
       "range": {
         "startLine": 3318,
         "startChar": 46,
