@@ -16,6 +16,24 @@
       "message": "Perf bots are timing out after this, e.g.:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-intel-uhd630-perf/120/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-nvidia-gtx1660-perf/122/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win10-nvidia-gtx1660-perf/120/overview\nShould this be reverted?",
       "revId": "67af8d892814cb543e224b7b86b96634916e666f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5894e149_f51a6733",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-05T15:07:34Z",
+      "side": 1,
+      "message": "My bad, it certainly wasn\u0027t intended and I should have followed up to ensure they were OK. It is expected that they take more time due to the changes in the script.\n\nWe do want to keep the basic changes in this CL, so can we keep it and increase the timeout? I\u0027ll file a bug and please follow up there.",
+      "parentUuid": "8a810e96_063780c4",
+      "revId": "67af8d892814cb543e224b7b86b96634916e666f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
