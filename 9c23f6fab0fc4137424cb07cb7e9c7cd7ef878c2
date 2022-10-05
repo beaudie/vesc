@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c058b78a_e9cc28c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T15:23:22Z",
+      "side": 1,
+      "message": "Mohan, I don\u0027t get this error as you mentioned before: VUID-VkPipelineColorBlendAttachmentState-colorBlendOp-01410\n\nBut this solves a (minor) issue I\u0027ve hit when running your tests. Let me know if this change resolves your issue, otherwise we\u0027ll have to see how to reproduce it.",
+      "revId": "9c23f6fab0fc4137424cb07cb7e9c7cd7ef878c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
