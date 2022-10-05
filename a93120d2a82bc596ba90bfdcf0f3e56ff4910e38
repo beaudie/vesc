@@ -495,6 +495,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a956c8f2_6d6a68bd",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T07:51:35Z",
+      "side": 1,
+      "message": "We still use wrapper scripts for these suites: angle_perftests, angle_restricted_trace_gold_tests, angle_white_box_perftests. I\u0027m actually not sure how to run angle_restricted_trace_gold_tests locally, would my local run upload images to Gold, for example?",
+      "parentUuid": "06c339ab_e61b2534",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 64
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98a52cde_145ea247",
         "filename": "scripts/trigger.py",
         "patchSetId": 1

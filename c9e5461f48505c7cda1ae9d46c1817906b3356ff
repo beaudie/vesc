@@ -16,6 +16,70 @@
       "message": "Thanks Roman. Yuly any follow-ups before I land this?",
       "revId": "c9e5461f48505c7cda1ae9d46c1817906b3356ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f402b42_b3553671",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T07:51:35Z",
+      "side": 1,
+      "message": "Sorry, forgot to reply to this.",
+      "parentUuid": "7762d50d_085d1d93",
+      "revId": "c9e5461f48505c7cda1ae9d46c1817906b3356ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d07783b6_efaa8d88",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T07:51:35Z",
+      "side": 1,
+      "message": "Not necessarily, e.g. Xvfb, bot-mode.\nWhen trying to reprocude a bot failure, it would make more sense to use the arguments that the bot uses than using arguments you\u0027d use when running locally.",
+      "range": {
+        "startLine": 33,
+        "startChar": 42,
+        "endLine": 33,
+        "endChar": 64
+      },
+      "revId": "c9e5461f48505c7cda1ae9d46c1817906b3356ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fcd3def_e4cd4c2e",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-05T07:51:35Z",
+      "side": 1,
+      "message": "These would be there only if output dir is set up properly.",
+      "range": {
+        "startLine": 36,
+        "startChar": 60,
+        "endLine": 36,
+        "endChar": 71
+      },
+      "revId": "c9e5461f48505c7cda1ae9d46c1817906b3356ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
