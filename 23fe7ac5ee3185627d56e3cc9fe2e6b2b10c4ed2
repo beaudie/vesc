@@ -39,6 +39,30 @@
       },
       "revId": "23fe7ac5ee3185627d56e3cc9fe2e6b2b10c4ed2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c836b5_e475d4fb",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-05T18:33:49Z",
+      "side": 1,
+      "message": "Done\n\nI chose 5 minutes, let me know if you think that\u0027s too aggressive.",
+      "parentUuid": "0f4f8dc2_e050eec0",
+      "range": {
+        "startLine": 46,
+        "startChar": 13,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "23fe7ac5ee3185627d56e3cc9fe2e6b2b10c4ed2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
