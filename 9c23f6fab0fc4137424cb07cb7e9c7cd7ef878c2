@@ -52,6 +52,24 @@
       "parentUuid": "09aeecbf_a519973b",
       "revId": "9c23f6fab0fc4137424cb07cb7e9c7cd7ef878c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2accf45b_eb25919e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T19:19:46Z",
+      "side": 1,
+      "message": "Woot woot! I was terrified to try the load+draw case (instead of clear+draw), because the load pass would use a different set of input attachments compared to the draw pass, but wrote the tests and it all works, so 🎉\n\nAll in all, turned out to be trivial 😊",
+      "parentUuid": "ec6db39d_740f1576",
+      "revId": "9c23f6fab0fc4137424cb07cb7e9c7cd7ef878c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
