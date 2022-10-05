@@ -34,6 +34,24 @@
       "parentUuid": "c058b78a_e9cc28c8",
       "revId": "9c23f6fab0fc4137424cb07cb7e9c7cd7ef878c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6db39d_740f1576",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-10-05T19:09:09Z",
+      "side": 1,
+      "message": "update - shabi, this change appears to have fixed the issue on our side as well, thanks a ton",
+      "parentUuid": "09aeecbf_a519973b",
+      "revId": "9c23f6fab0fc4137424cb07cb7e9c7cd7ef878c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
