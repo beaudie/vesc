@@ -106,6 +106,24 @@
       "parentUuid": "134e545d_ae960b5e",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ba6c85_950294fc",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T20:10:00Z",
+      "side": 1,
+      "message": "\u003e Maybe? Emitting location\u003d0 unconditionally is perfectly fine IMO, or at least conditional to PLS being active in case it causes problems with ES100 shaders.\n\nAdded some logic to always emit `location` when PLS is active. To me it feels solid still, maybe not the most ideal, but better than mutating the symbol table.",
+      "parentUuid": "284f037a_bedbfbb3",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
