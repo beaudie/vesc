@@ -216,6 +216,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0369f467_6f9162e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-05T18:23:39Z",
+      "side": 1,
+      "message": "I thought your workload are mostly CPU bound? I will be surprised that android games run on nvidia GPU is GPU bound.\n\nBut anyway, I don\u0027t think the end result of all ideas is anything different here. We all end up will set preferDeviceLocalMemoryHostVisible to false on NVidia GPU. That is why I am saying we can just be explicit here without causing any potential regression on other GPUs (I don\u0027t know the exact memory size samsung or IMG GPU expose).",
+      "parentUuid": "0597ec5f_edf29f74",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
