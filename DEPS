@@ -11,6 +11,7 @@ gclient_gn_args = [
   'generate_location_tags',
 ]
 
+
 vars = {
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
