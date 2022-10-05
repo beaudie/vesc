@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc54604_d24ba442",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T07:00:45Z",
+      "side": 1,
+      "message": "Overall looks good from our needs perspecitve. Small nits added.",
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56950b71_05372961",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3299,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T07:00:45Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 3299,
+        "startChar": 43,
+        "endLine": 3299,
+        "endChar": 72
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2f0808d_d9019128",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3301,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T07:00:45Z",
+      "side": 1,
+      "message": "nit: typo",
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22e88afb_24a5d64a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T07:00:45Z",
+      "side": 1,
+      "message": "nit: I\u0027m not sure we need \u003e\u003d, and it\u0027s confusing (at least for me, I spent some time checking how \u003e part would be possible), \u003d\u003d would be fully ok.",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
