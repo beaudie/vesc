@@ -50,6 +50,42 @@
       "message": "Is this if-test redundant? See:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/common/apple_platform_utils.mm;l\u003d59\n\nhttp://anglebug.com/7514\n\nhttps://chromium-review.googlesource.com/3806252\n\nI\u0027m not 100% sure what the semantics are. On macOS the support check is for MTLGPUFamilyMac2 but I\u0027m not sure how that corresponds to Apple Silicon.\n\nIf the Metal backend isn\u0027t supported on this GPU family, then let\u0027s clean up this code.",
       "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ef4b69b_253b6e75",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T04:51:27Z",
+      "side": 1,
+      "message": "This branch is still necessary to differentiate between Apple Silicon .\n\nOn Apple GPUs we can use `ShPixelLocalStorageType::FramebufferFetch`, but",
+      "parentUuid": "96520945_36ae9011",
+      "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987dcc0d_9b0ad748",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1031,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T04:51:27Z",
+      "side": 1,
+      "message": "\u003e On macOS the support check is for MTLGPUFamilyMac2\n\nThat confuses me too, because from my read of the feature tables, \"Mac2\" is non-Apple Silicon: https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf\n\nRegardless, this branch is necessary to detect Apple\u0027s \"programmable blending\" feature. `supportsAppleGPUFamily(2)` means `isApple \u0026\u0026 family \u003e\u003d Apple2`. My M1 laptop, which is Apple7, takes this branch.\n\nI just tested this on an AMD MacBook and verified that the check fails, causing it to take the other branch, where we will implement shader images. (Good news! The AMD MacBook supports readWrite textures and raster order groups, so it will also support the coherent extension.)",
+      "parentUuid": "96520945_36ae9011",
+      "revId": "60e55bb47cda06cbdb980477f26d5d9b4d22efbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

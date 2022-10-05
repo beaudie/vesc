@@ -135,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ecb7fdd_9998c35f",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T04:51:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38c242ae_14db625f",
+      "range": {
+        "startLine": 1325,
+        "startChar": 34,
+        "endLine": 1325,
+        "endChar": 46
+      },
+      "revId": "b7c78b502bc5c419dcb5614f3f963c701ed5388c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5bd347b_32bef5cb",
