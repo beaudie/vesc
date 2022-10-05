@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "eb9cf16d_ba3570ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T16:25:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "793ddc75_67e114cb",
+      "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "eb75f52e_26b6b534",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -49,6 +67,24 @@
       "writtenOn": "2022-10-05T16:18:20Z",
       "side": 1,
       "message": "Any other comments Chris?",
+      "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "725c4a02_10ef2d0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T16:25:49Z",
+      "side": 1,
+      "message": "Nope! So excited to see official Vulkan support for coherent framebuffer fetch!",
+      "parentUuid": "eb75f52e_26b6b534",
       "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -84,6 +120,24 @@
       "side": 1,
       "message": "Ext is supported by SwiftShader FYI.\n\nBut no, we shouldn\u0027t because yes, that\u0027s not per spec. Mostly satisfying VVL though.\n\nActually this change is rather redundant. With the rasterization order ext, we expose framebuffer fetch as coherent, so the barrier is not going to be called anyway. I added the if here because if the application does call the barrier (unnecessarily), we can\u0027t technically issue a Vulkan barrier because elsewhere I\u0027ve also removed the subpass self-dependency.",
       "parentUuid": "1a23efc7_ff9f92f4",
+      "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "416627c0_65309729",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5989,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-05T16:25:49Z",
+      "side": 1,
+      "message": "Agreed",
+      "parentUuid": "c7394276_650f0418",
       "revId": "5cc158c0564fc3642cf3e3f9fca5a0534d71fa36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
