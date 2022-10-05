@@ -168,6 +168,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "178104cc_d4744fda",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-05T17:31:26Z",
+      "side": 1,
+      "message": "on dGPU you don\u0027t want to CPU access to VRAM even if the memory is host visible. That is why it checks dGPU. How about keep it explicit:\n\n// In case of virtual GPU, we try to figure out if it is a dGPU or not based on memory size of different heap type\npreferDeviceLocalMemoryHostVisible \u003d !(isDiscreteGPU || \n(isVirtualGPU \u0026\u0026 memoryProperties.getHeapSizeForMemoryType(kDeviceLocalHostCoherentFlags) \u003c memoryProperties.getHeapSizeForMemoryType(kDeviceLocalFlags))",
+      "parentUuid": "33d6f0b6_c1035463",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
