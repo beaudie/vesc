@@ -34,6 +34,7 @@ namespace
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11gs.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/passthrough3d11vs.h"
 
+#include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvecolor2dps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvedepth11_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvedepthstencil11_ps.h"
 #include "libANGLE/renderer/d3d/d3d11/shaders/compiled/resolvedepthstencil11_vs.h"
@@ -683,6 +684,15 @@ angle::Result Blit11::initResources(const gl::Context *context)
 
     ANGLE_TRY(mRenderer->allocateResource(context11, swizzleBufferDesc, &mSwizzleCB));
     mSwizzleCB.setInternalName("Blit11SwizzleConstantBuffer");
+
+    d3d11::PixelShader resolveColorPS;
+    ANGLE_TRY(mRenderer->allocateResource(
+        context11, ShaderData(g_PS_ResolveColor2D, ArraySize(g_PS_ResolveColor2D)),
+        &resolveColorPS));
+    resolveColorPS.setInternalName("Blit11ResolveColorPS");
+
+    mResolveColorShader.dimension   = SHADER_2D;
+    mResolveColorShader.pixelShader = std::move(resolveColorPS);
 
     mResourcesInitialized = true;
 
@@ -1743,6 +1753,115 @@ angle::Result Blit11::resolveDepth(const gl::Context *context,
     deviceContext->Draw(6, 0);
 
     *textureOut = mResolvedDepth;
+    return angle::Result::Continue;
+}
+
+angle::Result Blit11::resolveColor2DDirectly(const gl::Context *context,
+                                             const d3d11::SharedSRV &source,
+                                             const gl::Rectangle &sourceRect,
+                                             const gl::Extents &sourceSize,
+                                             GLenum sourceFormat,
+                                             const d3d11::RenderTargetView &dest,
+                                             int destOffsetX,
+                                             int destOffsetY,
+                                             const gl::Extents &destSize,
+                                             const gl::Rectangle *scissor,
+                                             bool maskOffAlpha)
+{
+    // Multisampled texture SRVs are not available in feature level below 10.0
+    if (mRenderer->getRenderer11DeviceCaps().featureLevel < D3D_FEATURE_LEVEL_10_0)
+    {
+        return angle::Result::Stop;
+    }
+
+    auto *deviceContext = mRenderer->getDeviceContext();
+    auto *stateManager  = mRenderer->getStateManager();
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC sourceSRVDesc;
+    source.get()->GetDesc(&sourceSRVDesc);
+
+    D3D11_RENDER_TARGET_VIEW_DESC destRTVDesc;
+    dest.get()->GetDesc(&destRTVDesc);
+
+    if (sourceSRVDesc.ViewDimension != D3D11_SRV_DIMENSION_TEXTURE2DMS)
+    {
+        return angle::Result::Stop;
+    }
+
+    GLenum srcComponentType  = d3d11::GetComponentType(sourceSRVDesc.Format);
+    GLenum destComponentType = d3d11::GetComponentType(destRTVDesc.Format);
+    if (srcComponentType == GL_INT || srcComponentType == GL_UNSIGNED_INT ||
+        destComponentType == GL_INT || destComponentType == GL_UNSIGNED_INT)
+    {
+        // Integer formats are not supported
+        return angle::Result::Stop;
+    }
+
+    ANGLE_TRY(initResources(context));
+
+    ShaderSupport support;
+    ANGLE_TRY(getShaderSupport(context, mResolveColorShader, &support));
+
+    // Set vertices
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    ANGLE_TRY(mRenderer->mapResource(context, mVertexBuffer.get(), 0, D3D11_MAP_WRITE_DISCARD, 0,
+                                     &mappedResource));
+
+    UINT stride    = 0;
+    UINT drawCount = 0;
+    D3D11_PRIMITIVE_TOPOLOGY topology;
+
+    const gl::Box sourceArea(sourceRect.x, sourceRect.y, 0, sourceRect.width, sourceRect.height, 1);
+    const gl::Box destArea(destOffsetX, destOffsetY, 0, sourceRect.width, sourceRect.height, 1);
+    support.vertexWriteFunction(sourceArea, sourceSize, destArea, destSize, mappedResource.pData,
+                                &stride, &drawCount, &topology);
+
+    deviceContext->Unmap(mVertexBuffer.get(), 0);
+
+    // Apply vertex buffer
+    stateManager->setSingleVertexBuffer(&mVertexBuffer, stride, 0);
+
+    // Apply state
+    if (maskOffAlpha)
+    {
+        ANGLE_TRY(mAlphaMaskBlendState.resolve(GetImplAs<Context11>(context), mRenderer));
+        stateManager->setSimpleBlendState(&mAlphaMaskBlendState.getObj());
+    }
+    else
+    {
+        stateManager->setSimpleBlendState(nullptr);
+    }
+    stateManager->setDepthStencilState(nullptr, 0xFFFFFFFF);
+
+    if (scissor)
+    {
+        stateManager->setSimpleScissorRect(*scissor);
+        stateManager->setRasterizerState(&mScissorEnabledRasterizerState);
+    }
+    else
+    {
+        stateManager->setRasterizerState(&mScissorDisabledRasterizerState);
+    }
+
+    // Apply shaders
+    stateManager->setInputLayout(support.inputLayout);
+    stateManager->setPrimitiveTopology(topology);
+
+    stateManager->setDrawShaders(support.vertexShader, support.geometryShader,
+                                 &mResolveColorShader.pixelShader);
+
+    // Apply render target
+    stateManager->setRenderTarget(dest.get(), nullptr);
+
+    // Set the viewport
+    stateManager->setSimpleViewport(sourceSize);
+
+    // Apply texture and sampler
+    stateManager->setSimplePixelTextureAndSampler(source, mPointSampler);
+
+    // Trigger the blit on the GPU.
+    deviceContext->Draw(drawCount, 0);
+
     return angle::Result::Continue;
 }
 

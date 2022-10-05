@@ -3633,50 +3633,6 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
     RenderTarget11 *readRenderTarget11 = GetAs<RenderTarget11>(readRenderTarget);
     ASSERT(readRenderTarget11);
 
-    TextureHelper11 readTexture;
-    unsigned int readSubresource = 0;
-    d3d11::SharedSRV readSRV;
-
-    if (readRenderTarget->isMultisampled())
-    {
-        ANGLE_TRY(resolveMultisampledTexture(context, readRenderTarget11, depthBlit, stencilBlit,
-                                             &readTexture));
-
-        if (!stencilBlit)
-        {
-            const auto &readFormatSet = readTexture.getFormatSet();
-
-            D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
-            viewDesc.Format                    = readFormatSet.srvFormat;
-            viewDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
-            viewDesc.Texture2D.MipLevels       = 1;
-            viewDesc.Texture2D.MostDetailedMip = 0;
-
-            ANGLE_TRY(allocateResource(GetImplAs<Context11>(context), viewDesc, readTexture.get(),
-                                       &readSRV));
-        }
-    }
-    else
-    {
-        ASSERT(readRenderTarget11);
-        readTexture     = readRenderTarget11->getTexture();
-        readSubresource = readRenderTarget11->getSubresourceIndex();
-        const d3d11::SharedSRV *blitSRV;
-        ANGLE_TRY(readRenderTarget11->getBlitShaderResourceView(context, &blitSRV));
-        readSRV = blitSRV->makeCopy();
-        if (!readSRV.valid())
-        {
-            ASSERT(depthBlit || stencilBlit);
-            const d3d11::SharedSRV *srv;
-            ANGLE_TRY(readRenderTarget11->getShaderResourceView(context, &srv));
-            readSRV = srv->makeCopy();
-        }
-        ASSERT(readSRV.valid());
-    }
-
-    // Stencil blits don't use shaders.
-    ASSERT(readSRV.valid() || stencilBlit);
-
     const gl::Extents readSize(readRenderTarget->getWidth(), readRenderTarget->getHeight(), 1);
     const gl::Extents drawSize(drawRenderTarget->getWidth(), drawRenderTarget->getHeight(), 1);
 
@@ -3792,6 +3748,85 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
     bool partialDSBlit =
         (nativeFormat.depthBits > 0 && depthBlit) != (nativeFormat.stencilBits > 0 && stencilBlit);
 
+    const d3d11::RenderTargetView &drawRTV = drawRenderTarget11->getRenderTargetView();
+
+    // We don't currently support masking off any other channel than alpha
+    bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
+
+    TextureHelper11 readTexture;
+    unsigned int readSubresource = 0;
+    d3d11::SharedSRV readSRV;
+
+    if (readRenderTarget->isMultisampled())
+    {
+        // Try fast resolving path without using any intermediate resolve texture.
+        if (!stretchRequired && !outOfBounds && !drawRenderTarget->isMultisampled())
+        {
+            if (wholeBufferCopy)
+            {
+                readTexture     = readRenderTarget11->getTexture();
+                readSubresource = readRenderTarget11->getSubresourceIndex();
+                mDeviceContext->ResolveSubresource(drawTexture.get(), drawSubresource,
+                                                   readTexture.get(), readSubresource,
+                                                   drawRenderTarget11->getFormatSet().texFormat);
+                return angle::Result::Continue;
+            }
+            else if (!(depthBlit || stencilBlit))
+            {
+                const d3d11::SharedSRV *blitSRV;
+                ANGLE_TRY(readRenderTarget11->getBlitShaderResourceView(context, &blitSRV));
+                readSRV = blitSRV->makeCopy();
+                if (ANGLE_LIKELY(!IsError(mBlit->resolveColor2DDirectly(
+                        context, readSRV, readRect, readSize, srcFormatInfo.format, drawRTV,
+                        /*destOffsetX=*/drawRect.x, /*destOffsetY=*/drawRect.y, drawSize, scissor,
+                        maskOffAlpha))))
+                {
+                    return angle::Result::Continue;
+                }
+                // Fallback to slower path using an intermediate texture below.
+                readSRV.reset();
+            }
+        }
+
+        // Slower path: Resolve to an intermediate texture.
+        ANGLE_TRY(resolveMultisampledTexture(context, readRenderTarget11, depthBlit, stencilBlit,
+                                             &readTexture));
+
+        if (!stencilBlit)
+        {
+            const auto &readFormatSet = readTexture.getFormatSet();
+
+            D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+            viewDesc.Format                    = readFormatSet.srvFormat;
+            viewDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+            viewDesc.Texture2D.MipLevels       = 1;
+            viewDesc.Texture2D.MostDetailedMip = 0;
+
+            ANGLE_TRY(allocateResource(GetImplAs<Context11>(context), viewDesc, readTexture.get(),
+                                       &readSRV));
+        }
+    }
+    else
+    {
+        ASSERT(readRenderTarget11);
+        readTexture     = readRenderTarget11->getTexture();
+        readSubresource = readRenderTarget11->getSubresourceIndex();
+        const d3d11::SharedSRV *blitSRV;
+        ANGLE_TRY(readRenderTarget11->getBlitShaderResourceView(context, &blitSRV));
+        readSRV = blitSRV->makeCopy();
+        if (!readSRV.valid())
+        {
+            ASSERT(depthBlit || stencilBlit);
+            const d3d11::SharedSRV *srv;
+            ANGLE_TRY(readRenderTarget11->getShaderResourceView(context, &srv));
+            readSRV = srv->makeCopy();
+        }
+        ASSERT(readSRV.valid());
+    }
+
+    // Stencil blits don't use shaders.
+    ASSERT(readSRV.valid() || stencilBlit);
+
     if (drawRenderTarget->getSamples() == readRenderTarget->getSamples() &&
         readRenderTarget11->getFormatSet().formatID ==
             drawRenderTarget11->getFormatSet().formatID &&
@@ -3869,10 +3904,6 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
         }
         else
         {
-            const d3d11::RenderTargetView &drawRTV = drawRenderTarget11->getRenderTargetView();
-
-            // We don't currently support masking off any other channel than alpha
-            bool maskOffAlpha = colorMaskingNeeded && colorMask.alpha;
             ASSERT(readSRV.valid());
             ANGLE_TRY(mBlit->copyTexture(context, readSRV, readArea, readSize, srcFormatInfo.format,
                                          drawRTV, drawArea, drawSize, scissor,

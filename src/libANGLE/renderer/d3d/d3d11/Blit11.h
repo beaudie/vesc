@@ -90,6 +90,24 @@ class Blit11 : angle::NonCopyable
                                  bool alsoDepth,
                                  TextureHelper11 *textureOut);
 
+    // Resolve 2D texture directly without using any intermediate texture.
+    // Note:
+    // - dest must be single sample texture.
+    // - source must be 2D MS texture.
+    // - both source and dest must have floating point format.
+    // If any of the above is not satisfied, return angle::Result::Stop
+    angle::Result resolveColor2DDirectly(const gl::Context *context,
+                                         const d3d11::SharedSRV &source,
+                                         const gl::Rectangle &sourceRect,
+                                         const gl::Extents &sourceSize,
+                                         GLenum sourceFormat,
+                                         const d3d11::RenderTargetView &dest,
+                                         int destOffsetX,
+                                         int destOffsetY,
+                                         const gl::Extents &destSize,
+                                         const gl::Rectangle *scissor,
+                                         bool maskOffAlpha);
+
     using BlitConvertFunction = void(const gl::Box &sourceArea,
                                      const gl::Box &destArea,
                                      const gl::Rectangle &clipRect,
@@ -288,6 +306,7 @@ class Blit11 : angle::NonCopyable
     d3d11::LazyShader<ID3D11PixelShader> mResolveDepthPS;
     d3d11::LazyShader<ID3D11PixelShader> mResolveDepthStencilPS;
     d3d11::LazyShader<ID3D11PixelShader> mResolveStencilPS;
+    Shader mResolveColorShader;
     d3d11::ShaderResourceView mStencilSRV;
     TextureHelper11 mResolvedDepthStencil;
     d3d11::RenderTargetView mResolvedDepthStencilRTView;
