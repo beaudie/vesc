@@ -3944,6 +3944,75 @@ TEST_P(MultisampledRenderToTextureES3Test, ClearThenMaskedClearFramebufferTest)
     ASSERT_GL_NO_ERROR();
 }
 
+class MultisampledRenderToTextureWithAdvancedBlendTest : public MultisampledRenderToTextureES3Test
+{
+  protected:
+    void drawTestCommon(bool useRenderbuffer);
+};
+
+void MultisampledRenderToTextureWithAdvancedBlendTest::drawTestCommon(bool useRenderbuffer)
+{
+    constexpr char kFS[] = R"(#version 300 es
+#extension GL_KHR_blend_equation_advanced : require
+precision mediump float;
+uniform vec4 color;
+layout (blend_support_multiply) out;
+layout (location = 0) out vec4 outColor;
+void main() {
+  outColor = color;
+})";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint colorLoc = glGetUniformLocation(program, "color");
+    ASSERT_NE(colorLoc, -1);
+
+    GLFramebuffer FBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+    // Set up color attachment and bind to FBO
+    constexpr GLsizei kSize = 1;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    createAndAttachColorAttachment(true, kSize, GL_COLOR_ATTACHMENT0, nullptr, mTestSampleCount,
+                                   &texture, &renderbuffer);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    constexpr float kDst[4] = {1.0f, 0.25f, 0.5f, 1.0f};
+    constexpr float kSrc[4] = {0.5f, 1.0f, 1.0f, 1.0f};
+
+    glClearColor(kDst[0], kDst[1], kDst[2], kDst[3]);
+    glUniform4f(colorLoc, kSrc[0], kSrc[1], kSrc[2], kSrc[3]);
+
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_MULTIPLY_KHR);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0);
+
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(0x7F, 0x3F, 0x7F, 0xFF), 1);
+    ASSERT_GL_NO_ERROR();
+}
+
+// Interaction between GL_EXT_multisampled_render_to_texture and advanced blend.
+TEST_P(MultisampledRenderToTextureWithAdvancedBlendTest, Draw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
+
+    drawTestCommon(false);
+}
+
+// Same as Draw, but with renderbuffers.
+TEST_P(MultisampledRenderToTextureWithAdvancedBlendTest, RenderbufferDraw)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_blend_equation_advanced"));
+
+    drawTestCommon(true);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31_AND(MultisampledRenderToTextureTest,
                                                 ES3_VULKAN()
                                                     .disable(Feature::SupportsExtendedDynamicState)
@@ -3972,4 +4041,10 @@ ANGLE_INSTANTIATE_TEST_ES31_AND(MultisampledRenderToTextureES31Test,
                                 ES31_VULKAN()
                                     .disable(Feature::SupportsExtendedDynamicState2)
                                     .disable(Feature::SupportsLogicOpDynamicState));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MultisampledRenderToTextureWithAdvancedBlendTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND(MultisampledRenderToTextureWithAdvancedBlendTest,
+                               ES3_VULKAN()
+                                   .disable(Feature::SupportsBlendOperationAdvanced)
+                                   .enable(Feature::EmulateAdvancedBlendEquations));
 }  // namespace
