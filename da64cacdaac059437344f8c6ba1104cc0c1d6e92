@@ -60,6 +60,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09f2c8c5_d86ad3e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T13:47:47Z",
+      "side": 1,
+      "message": "nit: Per our style, don\u0027t `if (a\u0026b)`, but explicitly cast to bool: `if ((a\u0026b) !\u003d 0)`",
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22e88afb_24a5d64a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -71,6 +88,30 @@
       "writtenOn": "2022-10-05T07:00:45Z",
       "side": 1,
       "message": "nit: I\u0027m not sure we need \u003e\u003d, and it\u0027s confusing (at least for me, I spent some time checking how \u003e part would be possible), \u003d\u003d would be fully ok.",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d86d40_77d5a3b3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T13:47:47Z",
+      "side": 1,
+      "message": "So this check says we prefer host visible if _all_ of device local memory is host visible. But what if some device has a small device local only memory? We could still prefer host visible as it covers the _majority_ of device local memory.\n\nShould we instead turn this to something like:\n\n```\nminHostvisiableDeviceLocalHeapSize \u003e\u003d maxDeviceLocalHeapSize * 0.8\n```",
+      "parentUuid": "22e88afb_24a5d64a",
       "range": {
         "startLine": 3318,
         "startChar": 46,
