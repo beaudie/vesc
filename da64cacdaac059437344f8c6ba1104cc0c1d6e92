@@ -192,6 +192,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0597ec5f_edf29f74",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T17:59:13Z",
+      "side": 1,
+      "message": "\u003e on dGPU you don\u0027t want to CPU access to VRAM even if the memory is host visible. That is why it checks dGPU.\n\nWell, for one-time write, on GPU-bound workloads, it may be better to initialize resource on CPU, as you are saving on GPU exection, along with objects creation and memory pressure.\nAdditionally, even for non-GPU-bound workloads, write latency can be hidden, for example by delegating memcpy to separate thread, and ensuring completion just before submission. It shouldn\u0027t be more work than issuing extra upload pass for the buffer.\nSpecifically about VB/IB case, here are NVidia suggestions, specifically telling that this cpu visible VRAM should be used for VB/IB  https://developer.nvidia.com/blog/optimizing-dx12-resource-uploads-to-the-gpu-using-cpu-visible-vram/#:~:text\u003dDX12%20UPLOAD%20heaps%20are%20allocated,by%20using%20an%20IASetVertexBuffers%20command.",
+      "parentUuid": "178104cc_d4744fda",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
