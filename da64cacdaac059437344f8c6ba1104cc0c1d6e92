@@ -120,6 +120,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa33005_99592269",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-05T16:32:27Z",
+      "side": 1,
+      "message": "In the case of virtual GPU, do we know what the type of underline GPU is? I still think the less confusing/logical check here is it is a discreteGPU or not. All we need here is get the underline GPU information of vGPU.",
+      "parentUuid": "b8d86d40_77d5a3b3",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
