@@ -240,6 +240,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2c5d31f_248e37fe",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T18:36:01Z",
+      "side": 1,
+      "message": "Yeah, I agree that end of the day we are aiming to the same here. \n\nMy generic note is that probably we SHOULD leverage DEVICE_LOCAL + HOST_VISIBLE for specifically VB/IBs and other static one-shot buffers. This is not the case for this CL, but this should be addressed for sake of the better performance. Of course, there needs to be a fallback mechanism, that we are lacking now...\n\nAnd, for whatever reason, we are still mostly synchronization bound, so reducing GPU workload is directly helping with getting better FPS/smoothness.",
+      "parentUuid": "0369f467_6f9162e3",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
