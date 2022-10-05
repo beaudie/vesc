@@ -144,6 +144,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d6f0b6_c1035463",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2022-10-05T16:43:40Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org I first thought so, but then I realized that this would be different heap, per spec suggestion, so in this csae, so the biggest DEVICE_LOCAL heap will be the heap with host visibility, It\u0027s actually pretty smart move from Hailin to keep it defined as it is.\n\n@cclao@google.com We don\u0027t know it at guest, and there is no API to pass that info. Also, I think, proposed solution is better, as vendors are trying to play with resizableMemBar, that should in theory expose whole device memory to host, and we may end up without DEVICE_LOCAL only heap even on discrete.",
+      "parentUuid": "5aa33005_99592269",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
