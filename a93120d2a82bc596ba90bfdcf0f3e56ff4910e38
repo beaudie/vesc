@@ -519,6 +519,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c0b5224_7487dc08",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-05T12:51:20Z",
+      "side": 1,
+      "message": "The Gold scripts detect if you\u0027re running locally and then it switches to a comparison-only mode. You\u0027d still invoke the gold tests the same way locally as they get invoked on the bots, by running the trace gold tests script.",
+      "parentUuid": "a956c8f2_6d6a68bd",
+      "range": {
+        "startLine": 26,
+        "startChar": 7,
+        "endLine": 26,
+        "endChar": 64
+      },
+      "revId": "a93120d2a82bc596ba90bfdcf0f3e56ff4910e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98a52cde_145ea247",
         "filename": "scripts/trigger.py",
         "patchSetId": 1
