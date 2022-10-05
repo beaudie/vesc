@@ -264,6 +264,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "359c024c_42d8a242",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T19:03:46Z",
+      "side": 1,
+      "message": "ok, so the conclusion is compare memory size only for vGPU. others keep the same?",
+      "parentUuid": "f2c5d31f_248e37fe",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
