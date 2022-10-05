@@ -372,6 +372,30 @@
       },
       "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "429a3968_143a72c5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T21:21:36Z",
+      "side": 1,
+      "message": "Based on Mateusz\u0027s response, `\u003d\u003d` was better than `\u003e *0.8`. Since this is now contained to vGPU, that\u0027s perfectly fine with me (so feel free to go back to that)",
+      "parentUuid": "4afcc7b1_ffb801c5",
+      "range": {
+        "startLine": 3318,
+        "startChar": 46,
+        "endLine": 3318,
+        "endChar": 48
+      },
+      "revId": "da64cacdaac059437344f8c6ba1104cc0c1d6e92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
