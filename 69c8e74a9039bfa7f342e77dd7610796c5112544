@@ -88,6 +88,24 @@
       "parentUuid": "b1e1eee2_a4cd25de",
       "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "284f037a_bedbfbb3",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-05T13:41:30Z",
+      "side": 1,
+      "message": "\u003e How would it know to skip initialization? An internal layout qualifier flag or something?\n\nNo, something more basic, like \"if not in symbol table, and is color output, and is PLS active\", skip it.\n\n\u003e Does only ESSL care?\n\nMaybe? Emitting location\u003d0 unconditionally is perfectly fine IMO, or at least conditional to PLS being active in case it causes problems with ES100 shaders.",
+      "parentUuid": "134e545d_ae960b5e",
+      "revId": "69c8e74a9039bfa7f342e77dd7610796c5112544",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
