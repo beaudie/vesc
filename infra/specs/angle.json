@@ -478,7 +478,8 @@
       {
         "args": [
           "--log=debug",
-          "--show-test-stdout"
+          "--show-test-stdout",
+          "--trial-time=10"
         ],
         "isolate_name": "angle_perftests",
         "merge": {
@@ -1053,8 +1054,9 @@
               "pool": "chromium.tests.gpu"
             }
           ],
+          "hard_timeout": 12000,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 20
+          "shards": 10
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       }
@@ -1705,8 +1707,9 @@
               "pool": "chromium.tests.gpu"
             }
           ],
+          "hard_timeout": 12000,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 20
+          "shards": 10
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       }
@@ -4689,8 +4692,9 @@
               "pool": "chromium.tests.gpu"
             }
           ],
+          "hard_timeout": 12000,
           "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com",
-          "shards": 20
+          "shards": 10
         },
         "test_id_prefix": "ninja://src/tests:angle_perftests/"
       }
