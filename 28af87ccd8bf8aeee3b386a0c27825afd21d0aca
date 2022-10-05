@@ -51,6 +51,24 @@
       "parentUuid": "cbec9949_61274278",
       "revId": "28af87ccd8bf8aeee3b386a0c27825afd21d0aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a13a7bba_b886f125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2022-10-05T01:18:01Z",
+      "side": 1,
+      "message": "for safety and simple, compare the min host visiable device local and max device local memory size.",
+      "parentUuid": "7cbbd2a4_fcab03f6",
+      "revId": "28af87ccd8bf8aeee3b386a0c27825afd21d0aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
