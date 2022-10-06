@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6a8a088_4447eb24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "Still wrapping my head around your approach.  I\u0027m guessing that it works?\n\nI have several nits, and a few questions.",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40a01d8_5a244d0a",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "Did this work out?\n\nI think this needs to be supported long-term.",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5af4140b_16c27779",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6325,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "How come you are using this entrypoint instead of the push/pop (begin/end) entrypoints?",
+      "range": {
+        "startLine": 6325,
+        "startChar": 4,
+        "endLine": 6325,
+        "endChar": 32
+      },
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76e6cfc_50fa7535",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "So this call still happens, but the end event processing is handled differently?",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b7c07ab_b093deba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7110,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "Please undo this extra newline:-)",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1691a810_ef944216",
+        "filename": "src/libANGLE/renderer/vulkan/DebugAnnotatorVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "Please undo this extra newline:-)",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "444ff540_c0c94302",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "Please undo this newline:-)",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea54b069_abbb727c",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be related to the AGI labeling functionality.  Why did you do this?",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0495a800_15dfb717",
+        "filename": "src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-10-06T20:31:59Z",
+      "side": 1,
+      "message": "So the idea is to always use \"EndLabelEvent\" to signal the end of a clear/draw/etc call?",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
