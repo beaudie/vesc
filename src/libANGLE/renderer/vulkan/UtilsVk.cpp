@@ -2091,12 +2091,9 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
-    vk::Framebuffer *currentFramebuffer      = nullptr;
     vk::RenderPassCommandBuffer *commandBuffer;
 
     // Start a new render pass if not already started
-    ANGLE_TRY(framebuffer->getFramebuffer(contextVk, &currentFramebuffer, nullptr,
-                                          SwapchainResolveMode::Disabled));
     if (contextVk->hasStartedRenderPassWithSerial(framebuffer->getLastRenderPassSerial()))
     {
         vk::RenderPassCommandBufferHelper *renderPassCommands =
