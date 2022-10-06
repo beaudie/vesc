@@ -518,7 +518,7 @@ angle::Result ProgramMtl::initDefaultUniformBlocks(const gl::Context *glContext)
         if (location.used() && !location.ignored)
         {
             const gl::LinkedUniform &uniform = uniforms[location.index];
-            if (uniform.isInDefaultBlock() && !uniform.isSampler())
+            if (uniform.isInDefaultBlock() && !uniform.isSampler() && !uniform.isImage())
             {
                 std::string uniformName = uniform.name;
                 if (uniform.isArray())
@@ -1360,6 +1360,29 @@ angle::Result ProgramMtl::updateTextures(const gl::Context *glContext,
         {
             cmdEncoder->setData(shaderType, mShadowCompareModes,
                                 mtl::kShadowSamplerCompareModesBindingIndex);
+        }
+
+        for (const gl::ImageBinding &imageBinding : mState.getImageBindings())
+        {
+            if (imageBinding.boundImageUnits.size() != 1)
+            {
+                UNIMPLEMENTED();
+                continue;
+            }
+
+            int glslBinding    = imageBinding.boundImageUnits[0];
+            size_t textureSlot = shaderInfo.actualImageBindings[glslBinding];
+            if (textureSlot >= mtl::kMaxShaderImages)
+            {
+                // No binding assigned
+                continue;
+            }
+
+            const gl::ImageUnit &imageUnit = glState.getImageUnit(glslBinding);
+            TextureMtl *textureMtl         = mtl::GetImpl(imageUnit.texture.get());
+            ANGLE_TRY(textureMtl->bindToShaderImage(
+                glContext, cmdEncoder, shaderType, static_cast<uint32_t>(textureSlot),
+                imageUnit.level, imageUnit.layer, imageUnit.format));
         }
     }  // for shader types
 

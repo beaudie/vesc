@@ -4227,7 +4227,9 @@ void Context::initCaps()
         mMemoryProgramCache = nullptr;
     }
 
-    if (mSupportedExtensions.shaderPixelLocalStorageANGLE)
+    // ANGLE_shader_pixel_local_storage caps.
+    if (mSupportedExtensions.shaderPixelLocalStorageANGLE &&
+        mState.mCaps.maxPixelLocalStoragePlanes == 0)  // Did the backend not already set PLS caps?
     {
         int maxDrawableAttachments =
             std::min(mState.mCaps.maxDrawBuffers, mState.mCaps.maxColorAttachments);
@@ -4253,11 +4255,11 @@ void Context::initCaps()
                             IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
             if (!mSupportedExtensions.drawBuffersIndexedAny())
             {
-                // When pixel local storage is implemented as framebuffer attachments, we need to
-                // disable color masks and blending to its attachments. If the backend context
-                // doesn't have indexed blend and color mask support, then we will have have to
-                // disable them globally. This also means the application can't have its own draw
-                // buffers while PLS is active.
+                // When pixel local storage is implemented as framebuffer attachments, we need
+                // to disable color masks and blending to its attachments. If the backend
+                // context doesn't have indexed blend and color mask support, then we will have
+                // have to disable them globally. This also means the application can't have its
+                // own draw buffers while PLS is active.
                 mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage = 0;
             }
             else
@@ -4268,6 +4270,8 @@ void Context::initCaps()
             mState.mCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes = maxDrawableAttachments;
         }
     }
+    ASSERT(mState.mCaps.maxPixelLocalStoragePlanes <=
+           IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
 
 #undef ANGLE_LIMIT_CAP
 #undef ANGLE_LOG_CAP_LIMIT

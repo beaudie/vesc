@@ -1510,10 +1510,51 @@ angle::Result ContextMtl::dispatchComputeIndirect(const gl::Context *context, GL
 
 angle::Result ContextMtl::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
-    // NOTE(hqle): ES 3.0
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    if (barriers == 0)
+    {
+        return angle::Result::Continue;
+    }
+    if (context->getClientVersion() >= gl::Version{3, 1})
+    {
+        // We expect ES 3.0, and as such we don't consider ES 3.1+ objects in this function yet.
+        UNIMPLEMENTED();
+        return angle::Result::Stop;
+    }
+    mtl::BarrierScope scope;
+    switch (barriers)
+    {
+        case GL_ALL_BARRIER_BITS:
+            scope = MTLBarrierScopeTextures | MTLBarrierScopeBuffers;
+            if (getDisplay()->hasFragmentMemoryBarriers())
+            {
+                scope |= MTLBarrierScopeRenderTargets;
+            }
+            break;
+        case GL_SHADER_IMAGE_ACCESS_BARRIER_BIT:
+            // SHADER_IMAGE_ACCESS_BARRIER_BIT (and SHADER_STORAGE_BARRIER_BIT) require that all
+            // prior types of accesses are finished before writes to the resource. Since this is the
+            // case, we also have to include render targets in our barrier to ensure any rendering
+            // completes before an imageLoad().
+            scope = MTLBarrierScopeTextures;
+            if (getDisplay()->hasFragmentMemoryBarriers())
+            {
+                scope |= MTLBarrierScopeRenderTargets;
+            }
+            break;
+        default:
+            UNIMPLEMENTED();
+            return angle::Result::Stop;
+    }
+    // The GL API doesn't provide a distinction between different shader stages.
+    mtl::RenderStages stages = MTLRenderStageVertex;
+    if (getDisplay()->hasFragmentMemoryBarriers())
+    {
+        stages |= MTLRenderStageFragment;
+    }
+    mRenderEncoder.memoryBarrier(scope, stages, stages);
+    return angle::Result::Continue;
 }
+
 angle::Result ContextMtl::memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers)
 {
     // NOTE(hqle): ES 3.0
@@ -2513,16 +2554,10 @@ angle::Result ContextMtl::handleDirtyActiveTextures(const gl::Context *context)
     const gl::State &glState   = mState;
     const gl::Program *program = glState.getProgram();
 
-    const gl::ActiveTexturesCache &textures     = glState.getActiveTexturesCache();
-    const gl::ActiveTextureMask &activeTextures = program->getExecutable().getActiveSamplersMask();
-
-    for (size_t textureUnit : activeTextures)
-    {
-        gl::Texture *texture = textures[textureUnit];
-
+    auto ensureTextureCreated = [context](gl::Texture *texture) -> angle::Result {
         if (texture == nullptr)
         {
-            continue;
+            return angle::Result::Continue;
         }
 
         TextureMtl *textureMtl = mtl::GetImpl(texture);
@@ -2531,6 +2566,20 @@ angle::Result ContextMtl::handleDirtyActiveTextures(const gl::Context *context)
         ANGLE_TRY(textureMtl->ensureTextureCreated(context));
 
         // The binding of this texture will be done by ProgramMtl.
+        return angle::Result::Continue;
+    };
+
+    const gl::ActiveTexturesCache &textures     = glState.getActiveTexturesCache();
+    const gl::ActiveTextureMask &activeTextures = program->getExecutable().getActiveSamplersMask();
+
+    for (size_t textureUnit : activeTextures)
+    {
+        ANGLE_TRY(ensureTextureCreated(textures[textureUnit]));
+    }
+
+    for (size_t imageUnit : program->getExecutable().getActiveImagesMask())
+    {
+        ANGLE_TRY(ensureTextureCreated(glState.getImageUnit(imageUnit).texture.get()));
     }
 
     return angle::Result::Continue;
