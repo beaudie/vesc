@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "433d6393_53dcdc45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T19:27:15Z",
+      "side": 1,
+      "message": "Since these files are coming from another project, we should put them under a `third_party/` directory together with a LICENSE and README.chromium. You can `find` examples around in the codebase.\n\nOtherwise no objection to caching the encoders, or using threads. You\u0027d probably want to add a \"feature\" though (as in include/platform/frontend_features.json) to choose between threaded or not, just in case.",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1fd6a06_ee66f7c7",
+        "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T19:27:15Z",
+      "side": 1,
+      "message": "We have worker threads in WorkerThread.cpp, which the code should definitely use. When built with Chromium, those threads hook into Chromium\u0027s thread pool, which is important for Chromium\u0027s job management.\n\nThat said, ANGLE\u0027s own thread pool implementation is pretty bad (recreates threads every time), so if you need to improve that, it would be welcome!",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
