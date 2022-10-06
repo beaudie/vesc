@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c45efcde_b193490c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-06T06:10:47Z",
+      "side": 1,
+      "message": "Hi all, I just wanted to run this all past you as WIP.\n\nAs currently spec\u0027d, pixel local storage has an \"allow list\" of GL commands while it\u0027s active. This is to work around undefined behavior in EXT_shader_pixel_local_storage, as well as enable memoryless/transient attachments in Metal and Vulkan.\n\nIf we want to keep the allow list, I think we might be looking at something pretty heavy handed like this CL. It\u0027s not a lot of work for developers, but it is heavy on code generation. In my opinion, I think the extension is better with an allow list, but I also realize that it takes quite a toll on the rest of the code base.\n\nI\u0027m curious to hear your thoughts!",
+      "revId": "6946186ae6177665f6aa22bb8a73347661f1287c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
