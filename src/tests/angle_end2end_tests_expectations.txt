@@ -155,6 +155,7 @@
 // Mac
 
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8Index/* = SKIP
+
 6025 MAC AMD OPENGL : IndexBufferOffsetTestES3.UseAsUBOThenUpdateThenUInt8IndexSmallUpdates/* = SKIP
 6060 MAC NVIDIA METAL : BlitFramebufferTest.OOBWrite/* = SKIP
 6124 MAC OPENGL : GLSLTestLoops.*ContinueInSwitch/* = SKIP
@@ -845,3 +846,9 @@
 5466 OPENGL : ClipCullDistanceTest.CullDistanceInteractWithGeometryShader/* = SKIP
 5466 GLES : ClipCullDistanceTest.ClipDistanceInteractWithGeometryShader/* = SKIP
 5466 GLES : ClipCullDistanceTest.CullDistanceInteractWithGeometryShader/* = SKIP
+
+// bits 24..31 from glClearValueuiv value don't work on Intel Metal.
+7794 MAC INTEL METAL : PixelLocalStorageTest.ClearValues_r32/* = SKIP
+
+// GL program cache failure with shader images.
+7797 WIN OPENGL : PixelLocalStorageTest.ProgramCache/*
