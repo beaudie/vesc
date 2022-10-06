@@ -16,6 +16,29 @@
       "message": "Hey Jamie, here\u0027s one take on resetting the calls back to initial state by binding 0.  The key being removal of the assert, but using the same logic to decide if the entrypoint needs a default value.  Since most of the time we won\u0027t need these defaults, deferring them to \"just in time\" creation seemed like a good approach.",
       "revId": "802f5517bd5e6712515b8e2b106c91cc20a9ea47",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0871d396_fa21858c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7550,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-06T20:17:20Z",
+      "side": 1,
+      "message": "I\u0027d suggest you only set them if the current state mismatches the zero state.",
+      "range": {
+        "startLine": 7524,
+        "startChar": 0,
+        "endLine": 7550,
+        "endChar": 0
+      },
+      "revId": "802f5517bd5e6712515b8e2b106c91cc20a9ea47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
