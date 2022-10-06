@@ -23,6 +23,7 @@ class TranslatorMetalReflection;
 typedef std::unordered_map<size_t, std::string> originalNamesMap;
 typedef std::unordered_map<std::string, size_t> samplerBindingMap;
 typedef std::unordered_map<std::string, size_t> textureBindingMap;
+typedef std::unordered_map<int, size_t> rwTextureBindingMap;
 typedef std::unordered_map<std::string, size_t> userUniformBufferBindingMap;
 typedef std::pair<size_t, size_t> uboBindingInfo;
 struct UBOBindingInfo
@@ -54,6 +55,19 @@ class TranslatorMetalReflection
     void addTextureBinding(const std::string &name, size_t textureBinding)
     {
         textureBindings.insert({name, textureBinding});
+    }
+    void addRWTextureBinding(int imageBinding, size_t rwTextureBinding)
+    {
+        bool inserted = rwTextureBindings.insert({imageBinding, rwTextureBinding}).second;
+        if (!inserted)
+        {
+            // Shader images are currently only implemented enough to support pixel local storage,
+            // which does not allow more than one image to be bound to the same index.
+            //
+            // NOTE: Pixel local storage also does not allow image bindings to change via
+            // glUniform1i, which we do not currently account for in this backend.
+            UNIMPLEMENTED();
+        }
     }
     void addUserUniformBufferBinding(const std::string &name, size_t userUniformBufferBinding)
     {
@@ -95,6 +109,17 @@ class TranslatorMetalReflection
         ASSERT(0);
         return std::numeric_limits<size_t>::max();
     }
+    size_t getRWTextureBinding(int imageBinding) const
+    {
+        auto it = rwTextureBindings.find(imageBinding);
+        if (it != rwTextureBindings.end())
+        {
+            return it->second;
+        }
+        // If we can't find a matching read_write texture binding, return an invalid value. This
+        // signals to the program that there is nothing to bind on this slot.
+        return std::numeric_limits<size_t>::max();
+    }
     size_t getUserUniformBufferBinding(const std::string &name) const
     {
         auto it = userUniformBufferBindings.find(name);
@@ -129,6 +154,7 @@ class TranslatorMetalReflection
         originalNames.clear();
         samplerBindings.clear();
         textureBindings.clear();
+        rwTextureBindings.clear();
         userUniformBufferBindings.clear();
         uniformBufferBindings.clear();
     }
@@ -142,6 +168,7 @@ class TranslatorMetalReflection
     originalNamesMap originalNames;
     samplerBindingMap samplerBindings;
     textureBindingMap textureBindings;
+    rwTextureBindingMap rwTextureBindings;
     userUniformBufferBindingMap userUniformBufferBindings;
     uniformBufferBindingMap uniformBufferBindings;
 };
