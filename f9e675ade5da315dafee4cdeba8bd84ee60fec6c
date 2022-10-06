@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1c373a3_f72cd125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "Could you please add `ES3_VULKAN().enable(Feature::PreferSubmitAtLastAnySamplePassedQuery)` to the configurations that run the tests in `OcclusionQueriesTest.cpp`?",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78389a59_5173666d",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "naming nit: `prefer_submit_on_any_samples_passed_query_end`?",
+      "range": {
+        "startLine": 1034,
+        "startChar": 21,
+        "endLine": 1034,
+        "endChar": 66
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82e7f60c_1c032274",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "So first of all, the way to do this from dirty bit handlers is `flushDirtyGraphicsRenderPass`, which also takes care of setting the dirty bits.\n\nI was going to suggest not using a dirty bit at all, but I see you are using it as a way to undo this if the query is restarted. In that case, I suggest making this function simply do:\n\n```\ndirtyBitsIterator-\u003esetLaterBit(DIRTY_BIT_RENDER_PASS)\n```\n\nand let `handleDirtyGraphicsRenderPass` deal with the flush. If you want to make sure there is a flush regardless of `preferSubmitAtFBOBoundary`, simply set `mHasDeferredFlush` :)",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97333cff_ae229275",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "nit: a small helper like `IsAnySamplesQuery()` to dedup the code",
+      "range": {
+        "startLine": 7219,
+        "startChar": 13,
+        "endLine": 7219,
+        "endChar": 95
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "648babab_79bd3e00",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4040,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "nit: clean up before submit",
+      "range": {
+        "startLine": 4040,
+        "startChar": 28,
+        "endLine": 4040,
+        "endChar": 56
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3adbe2be_1b0cf62f",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3514,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:19:13Z",
+      "side": 1,
+      "message": "You can use `isFeatureEnabled(Feature::PreferSubmitAtLastAnySamplePassedQuery)` to determine if the feature is in effect and adjust the count here.",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
