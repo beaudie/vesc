@@ -57,17 +57,17 @@ BUILD_URL = 'https://ci.chromium.org/ui/p/angle/builders/ci/%s/%d'
 
 
 def _upload_perf_results(json_to_upload, name, configuration_name, build_properties,
-                         output_json_file):
+                         output_json_file, smoke_test_mode):
     """Upload the contents of result JSON(s) to the perf dashboard."""
     args = [
         '--buildername',
-        build_properties['buildername'],
+        build_properties.get('buildername', 'placeholder-builder'),
         '--buildnumber',
-        build_properties['buildnumber'],
+        build_properties.get('buildnumber', '1'),
         '--name',
         name,
         '--configuration-name',
-        configuration_name,
+        configuration_name or 'placeholder-config',
         '--results-file',
         json_to_upload,
         '--results-url',
@@ -77,7 +77,7 @@ def _upload_perf_results(json_to_upload, name, configuration_name, build_propert
         '--perf-dashboard-machine-group',
         MACHINE_GROUP,
         '--got-angle-revision',
-        build_properties['got_angle_revision'],
+        build_properties.get('got_angle_revision', '10000'),
         '--send-as-histograms',
         '--project',
         'angle',
@@ -86,6 +86,9 @@ def _upload_perf_results(json_to_upload, name, configuration_name, build_propert
     if build_properties.get('git_revision'):
         args.append('--git-revision')
         args.append(build_properties['git_revision'])
+
+    if smoke_test_mode:
+        args.append('--smoke-test-mode')
 
     #TODO(crbug.com/1072729): log this in top level
     logging.info('upload_results_to_perf_dashboard: %s.' % args)
@@ -295,16 +298,18 @@ def process_perf_results(output_json,
     benchmark_enabled_map = _handle_perf_json_test_results(benchmark_directory_map,
                                                            test_results_list)
 
-    if not smoke_test_mode and handle_perf:
-        build_properties_map = json.loads(build_properties)
-        if not configuration_name:
-            # we are deprecating perf-id crbug.com/817823
-            configuration_name = build_properties_map['buildername']
-
+    if handle_perf:
+        if build_properties:
+            build_properties_map = json.loads(build_properties)
+            if not configuration_name:
+                # we are deprecating perf-id crbug.com/817823
+                configuration_name = build_properties_map['buildername']
+        else:
+            build_properties_map = {}
         try:
             return_code, benchmark_upload_result_map = _handle_perf_results(
                 benchmark_enabled_map, benchmark_directory_map, configuration_name,
-                build_properties_map, extra_links, output_results_dir)
+                build_properties_map, extra_links, output_results_dir, smoke_test_mode)
         except Exception:
             logging.exception('Error handling perf results jsons')
             return_code = 1
@@ -383,7 +388,8 @@ def _merge_perf_results(benchmark_name, results_filename, directories, build_pro
     merged_results = _merge_histogram_results(collected_results)
 
     # Write additional histogram build info.
-    merged_results = _add_build_info(merged_results, benchmark_name, build_properties)
+    if build_properties:
+        merged_results = _add_build_info(merged_results, benchmark_name, build_properties)
 
     with open(results_filename, 'w') as rf:
         json.dump(merged_results, rf)
@@ -393,7 +399,7 @@ def _merge_perf_results(benchmark_name, results_filename, directories, build_pro
 
 
 def _upload_individual(benchmark_name, directories, configuration_name, build_properties,
-                       output_json_file):
+                       output_json_file, smoke_test_mode):
     tmpfile_dir = tempfile.mkdtemp()
     try:
         upload_begin_time = time.time()
@@ -415,7 +421,8 @@ def _upload_individual(benchmark_name, directories, configuration_name, build_pr
                      (benchmark_name, results_size_in_mib))
         with open(output_json_file, 'w') as oj:
             upload_return_code = _upload_perf_results(results_filename, benchmark_name,
-                                                      configuration_name, build_properties, oj)
+                                                      configuration_name, build_properties, oj,
+                                                      smoke_test_mode)
             upload_end_time = time.time()
             print_duration(('%s upload time' % (benchmark_name)), upload_begin_time,
                            upload_end_time)
@@ -513,7 +520,7 @@ def _update_perf_json_with_summary_on_device_id(directory, device_id):
 
 
 def _handle_perf_results(benchmark_enabled_map, benchmark_directory_map, configuration_name,
-                         build_properties, extra_links, output_results_dir):
+                         build_properties, extra_links, output_results_dir, smoke_test_mode):
     """
     Upload perf results to the perf dashboard.
 
@@ -541,8 +548,8 @@ def _handle_perf_results(benchmark_enabled_map, benchmark_directory_map, configu
         results_dict[benchmark_name] = output_json_file
         #TODO(crbug.com/1072729): pass final arguments instead of build properties
         # and configuration_name
-        invocations.append(
-            (benchmark_name, directories, configuration_name, build_properties, output_json_file))
+        invocations.append((benchmark_name, directories, configuration_name, build_properties,
+                            output_json_file, smoke_test_mode))
 
     # Kick off the uploads in multiple processes
     # crbug.com/1035930: We are hitting HTTP Response 429. Limit ourselves
