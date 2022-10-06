@@ -16,6 +16,24 @@
       "message": "I\u0027m not entirely confident this will upload correctly, as it\u0027s a bit hard to verify without uploading real data.",
       "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b675e75_6fda97cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-06T16:14:18Z",
+      "side": 1,
+      "message": "Note that I forgot to add the flag to the bots, I should probably do that and test before landing.",
+      "parentUuid": "d65b3c22_bc954d50",
+      "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
