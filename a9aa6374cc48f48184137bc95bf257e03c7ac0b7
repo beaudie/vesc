@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76311e7d_01e386b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T03:58:56Z",
+      "side": 1,
+      "message": "Tying up a loose end. Algorithm is credit to Baldur.\n\n@Mohan, please make sure this doesn\u0027t break MSRTT on your end. Intel mesa has VK_EXT_shader_stencil_export, but I\u0027m not sure if the bots are recent enough. FYI, since your device has VK_EXT_shader_stencil_export, it\u0027s not going to be taking this hackish path.",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
