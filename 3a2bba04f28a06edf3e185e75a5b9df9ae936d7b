@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4601ba7_75d41a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-06T04:44:11Z",
+      "side": 1,
+      "message": "Sure, sorry for the confusing. I was trying to point out these two tests, which were added over the summer to facilitate EGL work:\n```\nTEST_P(ImageTest, AppTraceExternalTextureUseCase)\nTEST_P(ImageTest, AppTraceExternalTextureWithAHBUseCase)\n```\nI was thinking you could add a test that different attribs to hit the new code.",
+      "parentUuid": "8a3cd8e0_70d0f6e8",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cd4841a_71d18da7",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
@@ -137,6 +155,30 @@
       "side": 1,
       "message": "I have changed all the if checks to ASSERT, assuming we always have a non-empty attribute list when calling `eglCreateImage()` or `eglCreateImageKHR()`",
       "parentUuid": "e265b848_f0788fc2",
+      "range": {
+        "startLine": 3705,
+        "startChar": 24,
+        "endLine": 3705,
+        "endChar": 63
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a129a732_8eeba703",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-06T04:44:11Z",
+      "side": 1,
+      "message": "I checked the spec and it is possible for attrib_list to be null:\n\n*If attrib list is non-NULL, the last attribute specified in the list must be EGL_NONE*\n\nI don\u0027t know how likely it is in practice.  Probably a good test case to add.\n\nIf no attribs were provided, I think we\u0027d want to keep attrib_list as null when recreating the call.  You could do that rather than using the default attribs.",
+      "parentUuid": "f3a8a6ea_36646621",
       "range": {
         "startLine": 3705,
         "startChar": 24,
