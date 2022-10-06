@@ -69,6 +69,7 @@ namespace
     PROC(DrawIndexedInstancedBaseVertexBaseInstance) \
     PROC(SetVisibilityResultMode)                    \
     PROC(UseResource)                                \
+    PROC(MemoryBarrier)                              \
     PROC(MemoryBarrierWithResource)                  \
     PROC(InsertDebugsign)                            \
     PROC(PushDebugGroup)                             \
@@ -379,6 +380,22 @@ inline void UseResourceCmd(id<MTLRenderCommandEncoder> encoder, IntermediateComm
         [encoder useResource:resource usage:usage];
     }
     [resource ANGLE_MTL_RELEASE];
+}
+
+inline void MemoryBarrierCmd(id<MTLRenderCommandEncoder> encoder, IntermediateCommandStream *stream)
+{
+    mtl::RenderStages scope  = stream->fetch<mtl::BarrierScope>();
+    mtl::RenderStages after  = stream->fetch<mtl::RenderStages>();
+    mtl::RenderStages before = stream->fetch<mtl::RenderStages>();
+    ANGLE_UNUSED_VARIABLE(scope);
+    ANGLE_UNUSED_VARIABLE(after);
+    ANGLE_UNUSED_VARIABLE(before);
+#if defined(__MAC_10_14) && (TARGET_OS_OSX || TARGET_OS_MACCATALYST)
+    if (ANGLE_APPLE_AVAILABLE_XC(10.14, 13.0))
+    {
+        [encoder memoryBarrierWithScope:scope afterStages:after beforeStages:before];
+    }
+#endif
 }
 
 inline void MemoryBarrierWithResourceCmd(id<MTLRenderCommandEncoder> encoder,
@@ -1661,6 +1678,7 @@ RenderCommandEncoder &RenderCommandEncoder::setSamplerState(gl::ShaderType shade
 
     return *this;
 }
+
 RenderCommandEncoder &RenderCommandEncoder::setTexture(gl::ShaderType shaderType,
                                                        const TextureRef &texture,
                                                        uint32_t index)
@@ -1686,6 +1704,19 @@ RenderCommandEncoder &RenderCommandEncoder::setTexture(gl::ShaderType shaderType
         .push(index);
 
     return *this;
+}
+
+RenderCommandEncoder &RenderCommandEncoder::setRWTexture(gl::ShaderType shaderType,
+                                                         const TextureRef &texture,
+                                                         uint32_t index)
+{
+    if (index >= kMaxShaderSamplers)
+    {
+        return *this;
+    }
+
+    cmdBuffer().setWriteDependency(texture);
+    return setTexture(shaderType, texture, index);
 }
 
 RenderCommandEncoder &RenderCommandEncoder::draw(MTLPrimitiveType primitiveType,
@@ -1855,6 +1886,14 @@ RenderCommandEncoder &RenderCommandEncoder::useResource(const BufferRef &resourc
         .push(usage)
         .push(states);
 
+    return *this;
+}
+
+RenderCommandEncoder &RenderCommandEncoder::memoryBarrier(mtl::BarrierScope scope,
+                                                          mtl::RenderStages after,
+                                                          mtl::RenderStages before)
+{
+    mCommands.push(CmdType::MemoryBarrier).push(scope).push(after).push(before);
     return *this;
 }
 
