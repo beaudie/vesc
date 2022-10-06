@@ -455,6 +455,10 @@ angle::Result GlslangGetMSL(const gl::Context *glContext,
             GetAssignedSamplerBindings(reflection, originalSamplerBindings, structSamplers,
                                        &mslShaderInfoOut->at(type).actualSamplerBindings);
         }
+        for (uint32_t i = 0; i < kMaxShaderImages; ++i)
+        {
+            mslShaderInfoOut->at(type).actualImageBindings[i] = reflection->getRWTextureBinding(i);
+        }
         (*mslShaderInfoOut)[type].hasInvariantOrAtan =
             reflection->hasAtan || reflection->hasInvariance;
     }
