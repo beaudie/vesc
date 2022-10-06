@@ -4232,7 +4232,9 @@ void Context::initCaps()
         mMemoryProgramCache = nullptr;
     }
 
-    if (mSupportedExtensions.shaderPixelLocalStorageANGLE)
+    // ANGLE_shader_pixel_local_storage caps.
+    if (mSupportedExtensions.shaderPixelLocalStorageANGLE &&
+        mState.mCaps.maxPixelLocalStoragePlanes == 0)  // Did the backend not already set PLS caps?
     {
         int maxDrawableAttachments =
             std::min(mState.mCaps.maxDrawBuffers, mState.mCaps.maxColorAttachments);
@@ -4291,6 +4293,8 @@ void Context::initCaps()
                 break;
         }
     }
+    ASSERT(mState.mCaps.maxPixelLocalStoragePlanes <=
+           IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
 
 #undef ANGLE_LIMIT_CAP
 #undef ANGLE_LOG_CAP_LIMIT
