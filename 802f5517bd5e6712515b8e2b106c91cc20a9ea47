@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87b678c4_4ff1d5a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-06T19:07:39Z",
+      "side": 1,
+      "message": "Hey Jamie, here\u0027s one take on resetting the calls back to initial state by binding 0.  The key being removal of the assert, but using the same logic to decide if the entrypoint needs a default value.  Since most of the time we won\u0027t need these defaults, deferring them to \"just in time\" creation seemed like a good approach.",
+      "revId": "802f5517bd5e6712515b8e2b106c91cc20a9ea47",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
