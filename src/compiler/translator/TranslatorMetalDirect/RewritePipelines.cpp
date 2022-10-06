@@ -244,6 +244,17 @@ class GeneratePipelineStruct : private TIntermRebuild
             }
             break;
 
+            case Pipeline::Type::Image:
+            {
+                for (const TVariable *var : mPipelineVariableList)
+                {
+                    auto &type  = CloneType(var->getType());
+                    auto *field = new TField(&type, var->name(), kNoSourceLoc, var->symbolType());
+                    fields.push_back(field);
+                }
+            }
+            break;
+
             case Pipeline::Type::UniformBuffer:
             {
                 for (const TVariable *var : mPipelineVariableList)
@@ -525,6 +536,7 @@ class PipelineFunctionEnv
                     {
                         case Pipeline::Type::VertexIn:
                         case Pipeline::Type::FragmentIn:
+                        case Pipeline::Type::Image:
                             markAsReference = false;
                             break;
 
@@ -1015,7 +1027,8 @@ bool sh::RewritePipelines(TCompiler &compiler,
 
     Info infos[] = {
         {Pipeline::Type::InstanceId, outStructs.instanceId, nullptr, nullptr},
-        {Pipeline::Type::Texture, outStructs.texture, nullptr, nullptr},
+        {Pipeline::Type::Texture, outStructs.image, nullptr, nullptr},
+        {Pipeline::Type::Image, outStructs.texture, nullptr, nullptr},
         {Pipeline::Type::NonConstantGlobals, outStructs.nonConstantGlobals, nullptr, nullptr},
         {Pipeline::Type::AngleUniforms, outStructs.angleUniforms,
          angleUniformsGlobalInstanceVar.getDriverUniformsVariable(), nullptr},
