@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbc57b3_fd8c51e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T14:02:40Z",
+      "side": 1,
+      "message": "Half-done based on EmulateAdvancedBlendEquations.  This is entirely differently implemented in top-of-tree and in the front-end GLES1 emulation, but may be revived for Desktop GL logic op emulation if necessary.",
+      "revId": "f0a49226ddc8b758278392464ae06da3c9191f8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
