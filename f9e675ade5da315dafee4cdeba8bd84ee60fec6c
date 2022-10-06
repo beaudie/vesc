@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "194ae4ac_74d379cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1c373a3_f72cd125",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78389a59_5173666d",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-06T14:19:13Z",
       "side": 1,
       "message": "naming nit: `prefer_submit_on_any_samples_passed_query_end`?",
+      "range": {
+        "startLine": 1034,
+        "startChar": 21,
+        "endLine": 1034,
+        "endChar": 66
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d71fc026_9ef1d15f",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78389a59_5173666d",
       "range": {
         "startLine": 1034,
         "startChar": 21,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2987b3f9_728b4ad6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Thanks for suggestion. That was exact thing I was looking for.",
+      "parentUuid": "82e7f60c_1c032274",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97333cff_ae229275",
@@ -71,6 +131,30 @@
       "writtenOn": "2022-10-06T14:19:13Z",
       "side": 1,
       "message": "nit: a small helper like `IsAnySamplesQuery()` to dedup the code",
+      "range": {
+        "startLine": 7219,
+        "startChar": 13,
+        "endLine": 7219,
+        "endChar": 95
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1371c515_25908c06",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7219,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97333cff_ae229275",
       "range": {
         "startLine": 7219,
         "startChar": 13,
@@ -106,6 +190,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "92004286_dba15e6e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Right, that is exactly the intent. This is temporary to get maximum test on bots.",
+      "parentUuid": "648babab_79bd3e00",
+      "range": {
+        "startLine": 4040,
+        "startChar": 28,
+        "endLine": 4040,
+        "endChar": 56
+      },
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3adbe2be_1b0cf62f",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 6
@@ -117,6 +225,24 @@
       "writtenOn": "2022-10-06T14:19:13Z",
       "side": 1,
       "message": "You can use `isFeatureEnabled(Feature::PreferSubmitAtLastAnySamplePassedQuery)` to determine if the feature is in effect and adjust the count here.",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c91c12b_584e5aa9",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3514,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:19:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3adbe2be_1b0cf62f",
       "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
