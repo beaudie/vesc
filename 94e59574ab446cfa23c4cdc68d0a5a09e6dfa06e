@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea33f4f_c3db33e3",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 828,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-06T15:35:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "47bc5baa_ab61e1a1",
+      "revId": "94e59574ab446cfa23c4cdc68d0a5a09e6dfa06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "096ca7a3_f0fbd112",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "Actually not quite sure. This function is intended to be called with the RP that uses the query is in effect. So the real problem is that the bindFB didn\u0027t result in an endRenderPass, so I understand now why you need the sync.\n\nYou might get away with syncing only the `DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING` dirty bit (so RP is closed), but not `DIRTY_OBJECT_DRAW_FRAMEBUFFER`. Would that be too error-prone? Technically any stale state ContextVk::syncState may pick up due to that would be corrected next time the framebuffer is synced. Completely untested territory here though :/",
       "parentUuid": "096ca7a3_f0fbd112",
+      "range": {
+        "startLine": 128,
+        "startChar": 21,
+        "endLine": 128,
+        "endChar": 78
+      },
+      "revId": "94e59574ab446cfa23c4cdc68d0a5a09e6dfa06e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef9f182a_a8f7e79e",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-06T15:35:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d2ecaf5_7c015545",
       "range": {
         "startLine": 128,
         "startChar": 21,
