@@ -267,7 +267,9 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
     ]
 
     if (is_ios) {
+      sources += angle_end2end_tests_ios_sources
       deps += [ ":angle_end2end_tests_bundle_data" ]
+      frameworks = [ "IOSurface.framework" ]
     } else {
       data = [ "angle_end2end_tests_expectations.txt" ]
     }
