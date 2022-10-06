@@ -118,6 +118,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5dbde11_13e7de0a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:41:06Z",
+      "side": 1,
+      "message": "\u003e I was going to suggest not using a dirty bit at all, but I see you are using it as a way to undo this if the query is restarted.\nThis is exact the trick. Basically I do not want to endRP for every query. If you look at all query usage in apps, they are all bundled together and issue many of the queries back to back, with color/depth write disabled. The intent here is to issue endRP at the very last query.",
+      "parentUuid": "2987b3f9_728b4ad6",
+      "revId": "f9e675ade5da315dafee4cdeba8bd84ee60fec6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97333cff_ae229275",

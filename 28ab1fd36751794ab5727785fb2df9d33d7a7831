@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2329a6ce_e62ed22d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-06T22:41:06Z",
+      "side": 1,
+      "message": "This also improves ni_no_kuni by 6%",
+      "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
