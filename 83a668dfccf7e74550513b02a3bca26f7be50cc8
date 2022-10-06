@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e2c172a_034547b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-06T19:49:54Z",
+      "side": 1,
+      "message": "It depends I guess on how much you could consider this ANGLE code. If the license at the top says AOSP, then it\u0027s third party. If you change the license to be ANGLE\u0027s, then you probably need to ask the original author if you could do that. If this was originally gfxstream\u0027s code and you are donating it, then sure you could do that :)\n\nThat said, stuff in third_party/ aren\u0027t necessarily git repos pointing elsewhere. For example see how the files in src/libANGLE/renderer/vulkan/shaders/src/third_party/etc_decoder are copies that have been modified by ANGLE.\n\n---\n\nAbout features, unfortunately our features are currently just bool. I think that works ok for now, just have enabled / disabled, and leave it to the pool to decide the thread count based on the system configuration.",
+      "parentUuid": "21d3eced_1a4484c6",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1fd6a06_ee66f7c7",
         "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
         "patchSetId": 3
