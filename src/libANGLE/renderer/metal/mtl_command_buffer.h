@@ -468,6 +468,10 @@ class RenderCommandEncoder final : public CommandEncoder
                                       MTLResourceUsage usage,
                                       mtl::RenderStages states);
 
+    RenderCommandEncoder &memoryBarrier(mtl::BarrierScope,
+                                        mtl::RenderStages after,
+                                        mtl::RenderStages before);
+
     RenderCommandEncoder &memoryBarrierWithResource(const BufferRef &resource,
                                                     mtl::RenderStages after,
                                                     mtl::RenderStages before);
