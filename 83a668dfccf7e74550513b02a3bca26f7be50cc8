@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "21d3eced_1a4484c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-06T19:39:30Z",
+      "side": 1,
+      "message": "So my original idea was to re-home these files into ANGLE (ie: they would be first party to ANGLE, not third party). AstcCpuDecompressor.h would be a public ANGLE header, so that gfxstream can use this code (since we have a dependency on ANGLE). \n\ngfxstream would no longer keep a copy of AstcCpuDecompressor.\n\nDoes that make sense?\n\nOtherwise, if we put them into ANGLE\u0027s third_party, then we have to keep them as first party to gfxstream, any any fixes that we do there needs to be manually propagated over to ANGLE, with the risk of code divergence.\n\n\u003e You\u0027d probably want to add a \"feature\" though (as in include/platform/frontend_features.json) to choose between threaded or not, just in case.\n\nSounds good. I\u0027m thinking of exposing the thread count as a feature. Currently it\u0027s hard coded, but obviously we will want to adjust it. If thread_count \u003d\u003d 1, then we can have a special paths to not use any worker threads.",
+      "parentUuid": "433d6393_53dcdc45",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1fd6a06_ee66f7c7",
         "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-06T19:27:15Z",
       "side": 1,
       "message": "We have worker threads in WorkerThread.cpp, which the code should definitely use. When built with Chromium, those threads hook into Chromium\u0027s thread pool, which is important for Chromium\u0027s job management.\n\nThat said, ANGLE\u0027s own thread pool implementation is pretty bad (recreates threads every time), so if you need to improve that, it would be welcome!",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d99fe7_2aa8970b",
+        "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-06T19:39:30Z",
+      "side": 1,
+      "message": "sg, will look into that.",
+      "parentUuid": "e1fd6a06_ee66f7c7",
       "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
