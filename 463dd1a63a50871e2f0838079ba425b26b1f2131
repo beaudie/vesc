@@ -34,6 +34,52 @@
       "parentUuid": "d65b3c22_bc954d50",
       "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79ef461c_acc29b8c",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-07T13:41:06Z",
+      "side": 1,
+      "message": "It seems like this suffix will be also added to the test name in output.json.\nMaybe some handling in the merge script is needed to combine the results from different shards into one result that\u0027s uploaded to the dashboard?",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 18
+      },
+      "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c74ffff7_a55a675b",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-07T13:41:06Z",
+      "side": 1,
+      "message": "Let\u0027s say we have 2 tests, 2 samples and 3 shards.\nPer my understanding, the tests will be split like this:\ntest1_shard1\ntest2_shard1\ntest1_shard2\ntest2_shard3\nIs this good enough? Maybe we need to require that shard_count is a multiple of samples_per_test?",
+      "range": {
+        "startLine": 560,
+        "startChar": 0,
+        "endLine": 563,
+        "endChar": 0
+      },
+      "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
