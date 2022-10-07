@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dae0f05_7fc3948c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-07T17:11:55Z",
+      "side": 1,
+      "message": "For future reference, feel free to land this kind of thing together with your other changes, and save the bots some time",
+      "revId": "7d9ad55fa0bc67a47079eff1b3f520e80f7eb268",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
