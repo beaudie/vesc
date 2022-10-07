@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65620fbe_58519df7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-07T13:42:57Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c439ce7_6b00e524",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-10-07T00:58:24Z",
       "side": 1,
       "message": "Can I ask what will be blocked waiting for result? Is it the second render pass for the draw outside query?",
+      "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1fcc760_5207b0fd",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3530,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-07T13:42:57Z",
+      "side": 1,
+      "message": "The `glGetQueryObjectuivEXT` with `GL_QUERY_RESULT_EXT` is blocking call. It will wait until results are available before returning. The second render pass will not be blocked, it\u0027ll continue right after the first one regardless of what the application (i.e. this test) is doing.",
+      "parentUuid": "3c439ce7_6b00e524",
       "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
