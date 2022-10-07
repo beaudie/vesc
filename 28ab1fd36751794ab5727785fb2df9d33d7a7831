@@ -68,6 +68,24 @@
       "parentUuid": "3c439ce7_6b00e524",
       "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be3954d9_9bfdf85c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3530,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T17:39:25Z",
+      "side": 1,
+      "message": "Thanks Shabi. On CPU side, the process will halt until the query result is back, is that right?",
+      "parentUuid": "a1fcc760_5207b0fd",
+      "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
