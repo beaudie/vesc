@@ -69,6 +69,24 @@
       "parentUuid": "86bed2bd_a9bd795d",
       "revId": "c647b08c8ed673603d9e8bc6faef04f75b13548f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27570fa1_4066a7e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-07T23:22:49Z",
+      "side": 1,
+      "message": "Hmm I\u0027m not sure we can actually trigger this bug with the current code, it seems more of a theoretical case.\n\nThe current shader I have is:\n\n```\nvoid main()\n{\n    int i \u003d 0;\n    do {\n        i++;\n    } while (XXXX);  // \u003c--- figure out a condition to reproduce\n    color \u003d vec4(0, 1, 0, 1);\n}\n\n```\n\nThe issue is that:\n\n- to reproduce the bug I need to have `cond` non-null and `typedCond` null\n- if `cond` is non-null, `typedCond` will be set to `cond-\u003egetAsTyped()`, and that is non-null if and only if the condition is of a `TIntermTyped` instance.\n- So I need to put a condition in the while loop that is non-null and not an instance of `TIntermTyped`, and I don\u0027t think that\u0027s possible because it will generate a syntax error and the shader won\u0027t compile.\n\nPlease let me know if you can think of a way to reproduce it.",
+      "parentUuid": "a0dc5e88_da3c7b0b",
+      "revId": "c647b08c8ed673603d9e8bc6faef04f75b13548f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
