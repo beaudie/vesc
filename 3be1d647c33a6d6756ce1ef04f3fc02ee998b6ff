@@ -33,6 +33,23 @@
       "message": "Thanks for the build fix! lgtm+2.",
       "revId": "3be1d647c33a6d6756ce1ef04f3fc02ee998b6ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b404938c_e5e34bd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-07T22:29:29Z",
+      "side": 1,
+      "message": "The mac-angle-chromium-try failure is crbug.com/1372495 . Unfortuntately there\u0027s no workaround, so until it\u0027s fixed, let\u0027s try again.",
+      "revId": "3be1d647c33a6d6756ce1ef04f3fc02ee998b6ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
