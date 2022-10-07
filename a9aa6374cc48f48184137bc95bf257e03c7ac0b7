@@ -69,6 +69,24 @@
       "parentUuid": "ab14a3e0_c4895db5",
       "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce74da19_2581c88e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T20:46:05Z",
+      "side": 1,
+      "message": "Thanks Shabi. I have couple more questions:\n\n\u003e That\u0027s because previously we couldn\u0027t discard the previous render pass\u0027s stencil data (because we had no way to recover it in the next render pass).  \n\nPreviously we have to store the multisampled stencil data to RAM, because we couldn\u0027t initialize its\u0027 value from the single sampled image, without the extension \nVK_EXT_shader_stencil_export, is that correct? \n\n\u003e In essence, this is a copy operation, with the single sampled image as source, and the multisampled image as destination.\n\nWhy do we need to use the for loop to copy bit by bit, rather than just issue one copy to copy the entire value?",
+      "parentUuid": "dc9f6269_a8e662fc",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
