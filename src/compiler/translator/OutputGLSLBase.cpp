@@ -296,7 +296,9 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermSymbol *variable)
 
 void TOutputGLSLBase::writeFieldLayoutQualifier(const TField *field)
 {
-    if (!field->type()->isMatrix() && !field->type()->isStructureContainingMatrices())
+    TLayoutQualifier layoutQualifier = field->type()->getLayoutQualifier();
+    if (!field->type()->isMatrix() && !field->type()->isStructureContainingMatrices() &&
+        field->type()->getLayoutQualifier().imageInternalFormat == EiifUnspecified)
     {
         return;
     }
@@ -304,21 +306,30 @@ void TOutputGLSLBase::writeFieldLayoutQualifier(const TField *field)
     TInfoSinkBase &out = objSink();
 
     out << "layout(";
-    switch (field->type()->getLayoutQualifier().matrixPacking)
+    CommaSeparatedListItemPrefixGenerator listItemPrefix;
+    if (field->type()->isMatrix() && !field->type()->isStructureContainingMatrices())
     {
-        case EmpUnspecified:
-        case EmpColumnMajor:
-            // Default matrix packing is column major.
-            out << "column_major";
-            break;
+        switch (field->type()->getLayoutQualifier().matrixPacking)
+        {
+            case EmpUnspecified:
+            case EmpColumnMajor:
+                // Default matrix packing is column major.
+                out << listItemPrefix << "column_major";
+                break;
 
-        case EmpRowMajor:
-            out << "row_major";
-            break;
+            case EmpRowMajor:
+                out << listItemPrefix << "row_major";
+                break;
 
-        default:
-            UNREACHABLE();
-            break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+    // EXT_shader_pixel_local_storage.
+    if (layoutQualifier.imageInternalFormat != EiifUnspecified)
+    {
+        out << listItemPrefix << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
     }
     out << ") ";
 }
@@ -1408,6 +1419,13 @@ bool TOutputGLSLBase::needsToWriteLayoutQualifier(const TType &type)
 {
     if (type.getBasicType() == EbtInterfaceBlock)
     {
+        if (type.getQualifier() == EvqPixelLocalEXT)
+        {
+            // We only use per-member EXT_shader_pixel_local_storage formats, so the PLS interface
+            // block will never have a layout qualifier.
+            ASSERT(type.getLayoutQualifier().imageInternalFormat == EiifUnspecified);
+            return false;
+        }
         return true;
     }
 

@@ -70,6 +70,7 @@ class GLES1Renderer;
 class MemoryProgramCache;
 class MemoryShaderCache;
 class MemoryObject;
+class PixelLocalStoragePlane;
 class Program;
 class ProgramPipeline;
 class Query;
@@ -673,6 +674,23 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     const angle::PerfMonitorCounterGroups &getPerfMonitorCounterGroups() const;
 
+    // Enables GL_SHADER_PIXEL_LOCAL_STORAGE_EXT and polyfills load operations for
+    // ANGLE_shader_pixel_local_storage with a fullscreen draw.
+    //
+    // The implementation's ShPixelLocalStorageType must be "PixelLocalStorageEXT".
+    void drawPixelLocalStorageEXTEnable(GLsizei n,
+                                        const PixelLocalStoragePlane[],
+                                        const GLenum loadops[],
+                                        const void *cleardata);
+
+    // Stores texture-backed PLS planes via fullscreen draw and disables
+    // GL_SHADER_PIXEL_LOCAL_STORAGE_EXT.
+    //
+    // The implementation's ShPixelLocalStorageType must be "PixelLocalStorageEXT".
+    void drawPixelLocalStorageEXTDisable(GLsizei n,
+                                         const PixelLocalStoragePlane[],
+                                         const GLenum loadops[]);
+
   private:
     void initializeDefaultResources();
 
@@ -815,6 +833,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     State::DirtyObjects mCopyImageDirtyObjects;
     State::DirtyBits mReadInvalidateDirtyBits;
     State::DirtyBits mDrawInvalidateDirtyBits;
+    State::DirtyBits mPixelLocalStorageEXTEnableDisableDirtyBits;
+    State::DirtyObjects mPixelLocalStorageEXTEnableDisableDirtyObjects;
 
     // Binding to container objects that use dependent state updates.
     angle::ObserverBinding mVertexArrayObserverBinding;
