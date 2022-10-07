@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5f61bf0_f515a48d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-07T17:38:58Z",
+      "side": 1,
+      "message": "That unfortunately doesn\u0027t work well with Chromium, which can reference issues in Monorail, any subproject in Monorail or buganizer. In fact, if you click on the bug number in gerrit, it attempts to take you to Chromium.\n\nAnyway, this change will fail presubmit until the bug tag is changed to `b/` so my feelings are not the issue 😊",
+      "parentUuid": "00519074_fb6f42f9",
+      "revId": "6d8316a872be45247405efce4212ad227af2a9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "54761adc_f94f2b60",
