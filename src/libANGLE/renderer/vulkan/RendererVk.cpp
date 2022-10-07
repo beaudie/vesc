@@ -541,6 +541,12 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
      "prior_usage: SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, "
      "write_barriers: 0, command: vkCmdEndRenderPass"},
+    // From: TracePerfTest.Run/vulkan_rec_room http://anglebug.com/7744
+    {"SYNC-HAZARD-READ-AFTER-WRITE",
+     "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, "
+     "imageLayout: VK_IMAGE_LAYOUT_GENERAL",
+     "Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
+     "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE"},
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.

@@ -1327,6 +1327,14 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
+    if (traceNameIs("rec_room"))
+    {
+        if (mParams->isVulkan())
+        {
+            skipTest("http://anglebug.com/7746 App and trace throw VVL errors on ANGLE");
+        }
+    }
+
     // glDebugMessageControlKHR and glDebugMessageCallbackKHR crash on ARM GLES1.
     if (IsARM() && mParams->traceInfo.contextClientMajorVersion == 1)
     {
