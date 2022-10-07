@@ -61,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6a05ed8_fea603fa",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-07T18:49:05Z",
+      "side": 1,
+      "message": "So there are two json result files - one for test results (pass/fail/etc) for ResultDB and the other is a completely different pipeline given to the perf dashboard. This CL makes it so we write multiple samples with the same name to the histogram JSON files, which I hope it will know how to merge. It\u0027s a bit hard to tell before landing if everything will work. I do know the _sample1 nonsense is necessary to avoid merge issues with the ResultDB pipeline.",
+      "parentUuid": "79ef461c_acc29b8c",
+      "range": {
+        "startLine": 323,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 18
+      },
+      "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c74ffff7_a55a675b",
         "filename": "src/tests/run_perf_tests.py",
         "patchSetId": 2
@@ -72,6 +96,30 @@
       "writtenOn": "2022-10-07T13:41:06Z",
       "side": 1,
       "message": "Let\u0027s say we have 2 tests, 2 samples and 3 shards.\nPer my understanding, the tests will be split like this:\ntest1_shard1\ntest2_shard1\ntest1_shard2\ntest2_shard3\nIs this good enough? Maybe we need to require that shard_count is a multiple of samples_per_test?",
+      "range": {
+        "startLine": 560,
+        "startChar": 0,
+        "endLine": 563,
+        "endChar": 0
+      },
+      "revId": "463dd1a63a50871e2f0838079ba425b26b1f2131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2333f368_e01b64d4",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-07T18:49:05Z",
+      "side": 1,
+      "message": "Seems fine to me, I\u0027m not too particular about the naming. It can even be helpful when locating the test in the milo UI. Note that it doesn\u0027t affect the perf result reporting as discussed in the other comment.",
+      "parentUuid": "c74ffff7_a55a675b",
       "range": {
         "startLine": 560,
         "startChar": 0,
