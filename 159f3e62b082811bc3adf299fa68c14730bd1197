@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10df0fca_9e70e504",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-07T22:36:38Z",
+      "side": 1,
+      "message": "This CL breaks the build for me with the following message:\n\n```\nsrc/common/spirv/angle_spirv_utils.cpp(35,13): error: no member named \u0027SetFriendlyNames\u0027 in \u0027spvtools::ValidatorOptions\u0027\n    options.SetFriendlyNames(false);\n    ~~~~~~~ ^\n```\n\n(Compiling ANGLE on Windows). Not sure what needs to be done to fix it.",
+      "revId": "159f3e62b082811bc3adf299fa68c14730bd1197",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
