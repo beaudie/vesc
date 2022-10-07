@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "00519074_fb6f42f9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-07T17:33:56Z",
+      "side": 1,
+      "message": "The standard way to notify go/gitwatcher of a Buganizer issue to link with seems to be `bug: \u003cid\u003e`, not `bug: b/\u003cid\u003e`, as far as I can see. Although I believe both work, the majority of commits use the former syntax. (In the Android repo at least, not sure how things are over there in Chromium land)\n\nIf you\u0027re ok with that, I\u0027d rather not change this because this isn\u0027t my commit message anyway, this was from the original CL author. \n\nBut let me know of course if you feel strongly about it, no problem.",
+      "parentUuid": "7b529c09_68ffcca4",
+      "revId": "6d8316a872be45247405efce4212ad227af2a9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "54761adc_f94f2b60",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-07T17:11:02Z",
       "side": 1,
       "message": "Weird complaint from the tool, but ok",
+      "revId": "6d8316a872be45247405efce4212ad227af2a9b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba41e375_a66d9c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-07T17:33:56Z",
+      "side": 1,
+      "message": "It\u0027s to avoid the risk of confusing 1 with l. https://clang.llvm.org/extra/clang-tidy/checks/readability/uppercase-literal-suffix.html\n\nI agree, a bit silly.",
+      "parentUuid": "54761adc_f94f2b60",
       "revId": "6d8316a872be45247405efce4212ad227af2a9b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
