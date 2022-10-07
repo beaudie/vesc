@@ -276,6 +276,7 @@ enum class Feature
     SupportsShaderFramebufferFetchEXT,
     SupportsShaderFramebufferFetchNonCoherent,
     SupportsShaderFramebufferFetchNonCoherentEXT,
+    SupportsShaderPixelLocalStorageEXT,
     SupportsShaderStencilExport,
     SupportsSharedPresentableImageExtension,
     SupportsSurfaceCapabilities2Extension,
