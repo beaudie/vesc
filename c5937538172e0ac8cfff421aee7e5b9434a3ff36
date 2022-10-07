@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3332232b_4c50350e",
+        "filename": "scripts/process_angle_perf_results.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-07T12:55:54Z",
+      "side": 1,
+      "message": "seems like this can be removed as well",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 31
+      },
+      "revId": "c5937538172e0ac8cfff421aee7e5b9434a3ff36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
