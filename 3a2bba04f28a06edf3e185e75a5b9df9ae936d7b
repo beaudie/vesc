@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dc487307_44d04c17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T02:16:32Z",
+      "side": 1,
+      "message": "I see. The new code will be hit with the existing test. The difficulty is how we verify if the attribs retrieved matches with what the original gl calls use. Let me think about it.",
+      "parentUuid": "b4601ba7_75d41a23",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cd4841a_71d18da7",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 7
@@ -179,6 +197,30 @@
       "side": 1,
       "message": "I checked the spec and it is possible for attrib_list to be null:\n\n*If attrib list is non-NULL, the last attribute specified in the list must be EGL_NONE*\n\nI don\u0027t know how likely it is in practice.  Probably a good test case to add.\n\nIf no attribs were provided, I think we\u0027d want to keep attrib_list as null when recreating the call.  You could do that rather than using the default attribs.",
       "parentUuid": "f3a8a6ea_36646621",
+      "range": {
+        "startLine": 3705,
+        "startChar": 24,
+        "endLine": 3705,
+        "endChar": 63
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9dd7ac_bf7220ff",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3705,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T02:16:32Z",
+      "side": 1,
+      "message": "Thanks for helping checking.\n\nI added a new test case `AppTraceExternalTextureUseCaseNullAttributes`, and it turns out that in capture code, we will insert a `EGL_NONE` is the attrib_list is null: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/capture/capture_egl.cpp;l\u003d94.  \n\nThat means the attribs we retrieved with ` call.params.getParam(\"attrib_list\", ParamType::TGLint64Pointer, 4).data[0].data());` will never be nullptr, it will have at lease one `EGL_NONE`. I think this is correct, since one `EGL_NONE` is equivalent to no attribute values specified.\n\nI have removed the default attribs as well.",
+      "parentUuid": "a129a732_8eeba703",
       "range": {
         "startLine": 3705,
         "startChar": 24,

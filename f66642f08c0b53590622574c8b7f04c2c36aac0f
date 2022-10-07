@@ -22,6 +22,30 @@
       },
       "revId": "f66642f08c0b53590622574c8b7f04c2c36aac0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2615e43_79880d11",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7126,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T02:16:32Z",
+      "side": 1,
+      "message": "Yes that\u0027s a good point, thank you!",
+      "parentUuid": "57b24b3b_90bb63ac",
+      "range": {
+        "startLine": 7125,
+        "startChar": 0,
+        "endLine": 7126,
+        "endChar": 82
+      },
+      "revId": "f66642f08c0b53590622574c8b7f04c2c36aac0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
