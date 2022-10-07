@@ -34,6 +34,23 @@
       "parentUuid": "76311e7d_01e386b6",
       "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab14a3e0_c4895db5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T19:10:59Z",
+      "side": 1,
+      "message": "It is still not quite clear to me why this would help with keeping multisampled stencil data on tile.\n\nFor instance, if we have a 1*1 stencil buffer, and its\u0027 stencil value is 80 (1010000). After drawing 8 quads with below loop, isn\u0027t the resulting stencil value the same? Also why the latter draws won\u0027t overwrite the results in previous draws?",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
