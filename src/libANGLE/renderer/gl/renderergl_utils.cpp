@@ -706,7 +706,8 @@ void GenerateCaps(const FunctionsGL *functions,
                   gl::Extensions *extensions,
                   gl::Limitations *limitations,
                   gl::Version *maxSupportedESVersion,
-                  MultiviewImplementationTypeGL *multiviewImplementationType)
+                  MultiviewImplementationTypeGL *multiviewImplementationType,
+                  ShPixelLocalStorageType *pixelLocalStorageType)
 {
     // Start by assuming ES3.1 support and work down
     *maxSupportedESVersion = gl::Version(3, 1);
@@ -1573,11 +1574,30 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLESExtension("GL_KHR_robust_buffer_access_behavior"));
 
     // ANGLE_shader_pixel_local_storage.
-    if (features.supportsShaderFramebufferFetchEXT.enabled)
+    if (features.supportsShaderPixelLocalStorageEXT.enabled &&
+        functions->isAtLeastGLES(gl::Version(3, 1)))
+    {
+        // We can support PLS natively, including memoryless planes, in tiled memory.
+        // EXT_shader_pixel_local_storage doesn't have a mechanism to preserve more than one plane
+        // of data, so we can only use this backend if we also have ES3.1 shader images.
+        caps->maxShaderPixelLocalStorageFastSizeEXT =
+            QuerySingleGLInt(functions, GL_MAX_SHADER_PIXEL_LOCAL_STORAGE_FAST_SIZE_EXT);
+        if (caps->maxShaderPixelLocalStorageFastSizeEXT >= 16)
+        {
+            // EXT_shader_pixel_local_storage defines a minimum value of 16 for
+            // MAX_SHADER_PIXEL_LOCAL_STORAGE_FAST_SIZE_EXT, which gives us 4 planes. If we don't
+            // take this branch, it means the backend driver is nonconformant.
+            extensions->shaderPixelLocalStorageANGLE         = true;
+            extensions->shaderPixelLocalStorageCoherentANGLE = true;
+            *pixelLocalStorageType = ShPixelLocalStorageType::PixelLocalStorageEXT;
+        }
+    }
+    else if (features.supportsShaderFramebufferFetchEXT.enabled)
     {
         // We can support PLS natively, probably in tiled memory.
         extensions->shaderPixelLocalStorageANGLE         = true;
         extensions->shaderPixelLocalStorageCoherentANGLE = true;
+        *pixelLocalStorageType = ShPixelLocalStorageType::FramebufferFetch;
     }
     else
     {
@@ -1600,19 +1620,36 @@ void GenerateCaps(const FunctionsGL *functions,
             hasFragmentShaderImageLoadStore =
                 caps->maxShaderImageUniforms[gl::ShaderType::Fragment] >= 4;
         }
-
-        extensions->shaderPixelLocalStorageANGLE =
-            hasFragmentShaderImageLoadStore ||
-            features.supportsShaderFramebufferFetchNonCoherentEXT.enabled;
-
-        if (hasFragmentShaderImageLoadStore)
+        if (hasFragmentShaderImageLoadStore &&
+            (features.supportsFragmentShaderInterlockNV.enabled ||
+             features.supportsFragmentShaderOrderingINTEL.enabled ||
+             features.supportsFragmentShaderInterlockARB.enabled))
         {
-            // Check if shader image load/store can be coherent. If so, we will always prefer it
-            // over EXT_shader_framebuffer_fetch_non_coherent.
-            extensions->shaderPixelLocalStorageCoherentANGLE =
-                features.supportsFragmentShaderInterlockNV.enabled ||
-                features.supportsFragmentShaderOrderingINTEL.enabled ||
-                features.supportsFragmentShaderInterlockARB.enabled;
+            // If shader image load/store can be coherent, prefer it over
+            // EXT_shader_framebuffer_fetch_non_coherent.
+            extensions->shaderPixelLocalStorageANGLE         = true;
+            extensions->shaderPixelLocalStorageCoherentANGLE = true;
+            *pixelLocalStorageType =
+                functions->standard == StandardGL::STANDARD_GL_ES
+                    // OpenGL ES only allows read/write access to "r32*" images.
+                    ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
+                    : ShPixelLocalStorageType::ImageStoreNativeFormats;
+        }
+        else if (features.supportsShaderFramebufferFetchNonCoherentEXT.enabled)
+        {
+            extensions->shaderPixelLocalStorageANGLE         = true;
+            extensions->shaderPixelLocalStorageCoherentANGLE = false;
+            *pixelLocalStorageType = ShPixelLocalStorageType::FramebufferFetch;
+        }
+        else if (hasFragmentShaderImageLoadStore)
+        {
+            extensions->shaderPixelLocalStorageANGLE         = true;
+            extensions->shaderPixelLocalStorageCoherentANGLE = false;
+            *pixelLocalStorageType =
+                functions->standard == StandardGL::STANDARD_GL_ES
+                    // OpenGL ES only allows read/write access to "r32*" images.
+                    ? ShPixelLocalStorageType::ImageStoreR32PackedFormats
+                    : ShPixelLocalStorageType::ImageStoreNativeFormats;
         }
     }
 
@@ -2406,6 +2443,10 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(
         features, supportsShaderFramebufferFetchNonCoherentEXT,
         functions->hasGLESExtension("GL_EXT_shader_framebuffer_fetch_non_coherent"));
+
+    // EXT_shader_pixel_local_storage
+    ANGLE_FEATURE_CONDITION(features, supportsShaderPixelLocalStorageEXT,
+                            functions->hasGLESExtension("GL_EXT_shader_pixel_local_storage"));
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
