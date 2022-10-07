@@ -16,6 +16,23 @@
       "message": "This also improves ni_no_kuni by 6%",
       "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c439ce7_6b00e524",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3530,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-07T00:58:24Z",
+      "side": 1,
+      "message": "Can I ask what will be blocked waiting for result? Is it the second render pass for the draw outside query?",
+      "revId": "28ab1fd36751794ab5727785fb2df9d33d7a7831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
