@@ -51,6 +51,24 @@
       "message": "It is still not quite clear to me why this would help with keeping multisampled stencil data on tile.\n\nFor instance, if we have a 1*1 stencil buffer, and its\u0027 stencil value is 80 (1010000). After drawing 8 quads with below loop, isn\u0027t the resulting stencil value the same? Also why the latter draws won\u0027t overwrite the results in previous draws?",
       "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9f6269_a8e662fc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-07T19:22:12Z",
+      "side": 1,
+      "message": "\u003e It is still not quite clear to me why this would help with keeping multisampled stencil data on tile.\n\nThat\u0027s because previously we _couldn\u0027t_ discard the previous render pass\u0027s stencil data (because we had no way to recover it in the next render pass). Now we can always discard stencil (See `Ref`), so the multisampled stencil data never leaves the tile.\n\n\u003e isn\u0027t the resulting stencil value the same?\n\nYes, and that\u0027s the goal. But there are two images involved here; the single sampled image (real image, lives in RAM) has the stencil data we want, the multisampled image (ephemeral, lives in tile) wants to have its contents initialized from the single sampled image.\n\nIn essence, this is a copy operation, with the single sampled image as source, and the multisampled image as destination.\n\n\u003e why the latter draws won\u0027t overwrite the results in previous draws?\n\nBecause of this:\n\n```\nconst uint32_t writeMask \u003d 1u \u003c\u003c bit;\ncommandBuffer-\u003esetStencilWriteMask(writeMask, writeMask);\n```\n\nWhen a stencil write mask is set, the GPU only writes to the bits that are 1 in the mask, and never touches the other bits.",
+      "parentUuid": "ab14a3e0_c4895db5",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
