@@ -87,6 +87,24 @@
       "parentUuid": "a0dc5e88_da3c7b0b",
       "revId": "c647b08c8ed673603d9e8bc6faef04f75b13548f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6757a5ac_57acd0f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-08T02:03:02Z",
+      "side": 1,
+      "message": "Ack, agreed it\u0027s an impossible situation. We usually turn that into an `ASSERT`, but the analyzer is probably not smart enough to notice that.\n\nI\u0027ll take this as-is then, just to satisfy the analyzer.",
+      "parentUuid": "27570fa1_4066a7e5",
+      "revId": "c647b08c8ed673603d9e8bc6faef04f75b13548f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
