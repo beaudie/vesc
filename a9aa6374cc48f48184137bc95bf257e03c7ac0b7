@@ -87,6 +87,24 @@
       "parentUuid": "dc9f6269_a8e662fc",
       "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb8edb37_f7b8cac3",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-08T01:55:13Z",
+      "side": 1,
+      "message": "\u003e is that correct?\n\nYes!\n\n\u003e Why do we need to use the for loop to copy bit by bit, rather than just issue one copy to copy the entire value?\n\nBecause the shader only has the ability to specifically accept a set of numbers and reject the complement set. Because the only tool at our disposal is `discard;` here, i.e. it\u0027s a binary decision. Without VK_EXT_shader_stencil_export, the shader cannot \"copy the entire value\". So for example the shader could either accept the currently configured mask N or reject it. If you want to copy entire values, you\u0027d have to loop 256 times.\n\nThe binary decision is used to output exactly one bit (i.e. a binary piece of data!).",
+      "parentUuid": "ce74da19_2581c88e",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
