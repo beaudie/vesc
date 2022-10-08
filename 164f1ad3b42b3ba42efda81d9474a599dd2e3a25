@@ -33,6 +33,24 @@
       "message": "Need to do perf testing on a platform that suffers from \"control flow via uniforms\" before we land.  I believe either of our Android platforms would show it, as does Intel Windows (last I checked anyway).  Can you verify on Pixel 6 this doesn\u0027t regress our handful of GLES1 traces?",
       "revId": "164f1ad3b42b3ba42efda81d9474a599dd2e3a25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67517c1f_ec167132",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-08T01:56:38Z",
+      "side": 1,
+      "message": "I had checked this on a few of our shaders on Pixel 6 with AGI, summoners_war at least. I can check again.",
+      "parentUuid": "45f25202_eff3230f",
+      "revId": "164f1ad3b42b3ba42efda81d9474a599dd2e3a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
