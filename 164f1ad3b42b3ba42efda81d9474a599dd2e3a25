@@ -69,6 +69,24 @@
       "parentUuid": "67517c1f_ec167132",
       "revId": "164f1ad3b42b3ba42efda81d9474a599dd2e3a25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8cc293e_631f4e75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-08T17:30:58Z",
+      "side": 1,
+      "message": "Thanks for checking. Timeout is not an issue anymore for the bots, but ok we can put this on ice for now. I didn\u0027t do this for the bots though, but for apps to avoid compiling so much.\n\nLet\u0027s revisit once I get around to optimize the shaders themselves a little bit, perhaps the cost would then be less pronounced.",
+      "parentUuid": "8f29b456_8814f72e",
+      "revId": "164f1ad3b42b3ba42efda81d9474a599dd2e3a25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
