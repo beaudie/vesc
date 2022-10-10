@@ -122,6 +122,24 @@
       "parentUuid": "ce74da19_2581c88e",
       "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b89d77a_35d1293e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3766,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-10T23:27:33Z",
+      "side": 1,
+      "message": "\u003e Because the shader only has the ability to specifically accept a set of numbers and reject the complement set. \n\nWhy we can\u0027t set writeMask to 1 in all the bits, then issue a copy command? Isn\u0027t that going to write all the bits from source image to the destination image?",
+      "parentUuid": "cb8edb37_f7b8cac3",
+      "revId": "a9aa6374cc48f48184137bc95bf257e03c7ac0b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
