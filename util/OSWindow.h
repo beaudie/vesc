@@ -74,6 +74,7 @@ class ANGLE_UTIL_EXPORT OSWindow
     bool valid() const { return mValid; }
 
     void ignoreSizeEvents() { mIgnoreSizeEvents = true; }
+    void pinWindowMinSize() { mPinWindowMinSize = true; }
 
   protected:
     OSWindow();
@@ -90,6 +91,7 @@ class ANGLE_UTIL_EXPORT OSWindow
 
     bool mValid;
     bool mIgnoreSizeEvents;
+    bool mPinWindowMinSize{false};
 };
 
 namespace angle
