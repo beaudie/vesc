@@ -24,7 +24,7 @@ class EGLRobustnessTest : public ANGLETest<>
     void testSetUp() override
     {
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLRobustnessTest", 500, 500);
+        mOSWindow->initialize("EGLRobustnessTest", 500, 500, false);
         setWindowVisible(mOSWindow, true);
 
         const auto &platform = GetParam().eglParameters;

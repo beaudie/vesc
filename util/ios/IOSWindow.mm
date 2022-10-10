@@ -20,7 +20,7 @@ static CALayer *rootLayer()
     return [[[[[UIApplication sharedApplication] delegate] window] rootViewController] view].layer;
 }
 
-bool IOSWindow::initializeImpl(const std::string &name, int width, int height)
+bool IOSWindow::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     resize(width, height);
     return true;

@@ -40,7 +40,7 @@ void WaylandWindow::RegistryHandleGlobalRemove(void *data,
 const struct wl_registry_listener WaylandWindow::registryListener = {
     WaylandWindow::RegistryHandleGlobal, WaylandWindow::RegistryHandleGlobalRemove};
 
-bool WaylandWindow::initializeImpl(const std::string &name, int width, int height)
+bool WaylandWindow::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     destroy();
 

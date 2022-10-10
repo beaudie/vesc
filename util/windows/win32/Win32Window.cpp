@@ -501,7 +501,7 @@ Win32Window::~Win32Window()
     destroy();
 }
 
-bool Win32Window::initializeImpl(const std::string &name, int width, int height)
+bool Win32Window::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     destroy();
 
@@ -687,7 +687,7 @@ bool Win32Window::takeScreenshot(uint8_t *pixelData)
         bitmapInfo.biClrUsed       = 0;
         bitmapInfo.biClrImportant  = 0;
         int getBitsResult          = GetDIBits(screenDC, tmpBitmap, 0, mHeight, pixelData,
-                                      reinterpret_cast<BITMAPINFO *>(&bitmapInfo), DIB_RGB_COLORS);
+                                               reinterpret_cast<BITMAPINFO *>(&bitmapInfo), DIB_RGB_COLORS);
         error                      = (getBitsResult == 0);
     }
 

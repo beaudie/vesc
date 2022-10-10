@@ -25,7 +25,7 @@ class ANGLE_UTIL_EXPORT OSWindow
     static OSWindow *New();
     static void Delete(OSWindow **osWindow);
 
-    bool initialize(const std::string &name, int width, int height);
+    bool initialize(const std::string &name, int width, int height, bool sizeHint);
     virtual void destroy()                   = 0;
     virtual void disableErrorMessageDialog() = 0;
 
@@ -79,7 +79,7 @@ class ANGLE_UTIL_EXPORT OSWindow
     OSWindow();
     virtual ~OSWindow();
 
-    virtual bool initializeImpl(const std::string &name, int width, int height) = 0;
+    virtual bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) = 0;
 
     int mX;
     int mY;

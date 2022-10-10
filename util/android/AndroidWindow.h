@@ -37,7 +37,7 @@ class AndroidWindow : public OSWindow
     ANGLE_UTIL_EXPORT static std::string GetExternalStorageDirectory();
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
 };
 
 #endif /* UTIL_ANDROID_WINDOW_H_ */

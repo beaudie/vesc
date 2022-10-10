@@ -277,7 +277,7 @@ X11Window::~X11Window()
     destroy();
 }
 
-bool X11Window::initializeImpl(const std::string &name, int width, int height)
+bool X11Window::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     destroy();
 

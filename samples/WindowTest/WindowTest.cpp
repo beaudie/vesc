@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     int x            = 0;
     int y            = 0;
 
-    if (!window->initialize("Window Test", width, height))
+    if (!window->initialize("Window Test", width, height, false))
     {
         return -1;
     }

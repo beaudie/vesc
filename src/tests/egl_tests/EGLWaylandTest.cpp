@@ -40,7 +40,7 @@ class EGLWaylandTest : public ANGLETest<>
     void testSetUp() override
     {
         mOsWindow = WaylandWindow::New();
-        ASSERT_TRUE(mOsWindow->initialize("EGLWaylandTest", 500, 500));
+        ASSERT_TRUE(mOsWindow->initialize("EGLWaylandTest", 500, 500, false));
         setWindowVisible(mOsWindow, true);
 
         EGLNativeDisplayType waylandDisplay = mOsWindow->getNativeDisplay();

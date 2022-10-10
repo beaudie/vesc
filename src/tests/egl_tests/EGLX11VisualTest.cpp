@@ -92,7 +92,7 @@ TEST_P(EGLX11VisualHintTest, ValidVisualIDAndClear)
     // We'll test the extension with one visual ID but we don't care which one. This means we
     // can use OSWindow to create a window and just grab its visual.
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLX11VisualHintTest", 500, 500);
+    osWindow->initialize("EGLX11VisualHintTest", 500, 500, false);
     setWindowVisible(osWindow, true);
 
     Window xWindow = osWindow->getNativeWindow();
@@ -167,7 +167,7 @@ TEST_P(EGLX11VisualHintTest, InvalidWindowVisualID)
     int visualId;
     {
         OSWindow *osWindow = OSWindow::New();
-        osWindow->initialize("EGLX11VisualHintTest", 500, 500);
+        osWindow->initialize("EGLX11VisualHintTest", 500, 500, false);
         setWindowVisible(osWindow, true);
 
         Window xWindow = osWindow->getNativeWindow();
@@ -192,7 +192,7 @@ TEST_P(EGLX11VisualHintTest, InvalidWindowVisualID)
     ASSERT_NE(visualId, otherVisualId);
 
     OSWindow *osWindow = new X11Window(otherVisualId);
-    osWindow->initialize("EGLX11VisualHintTest", 500, 500);
+    osWindow->initialize("EGLX11VisualHintTest", 500, 500, false);
     setWindowVisible(osWindow, true);
 
     Window xWindow = osWindow->getNativeWindow();

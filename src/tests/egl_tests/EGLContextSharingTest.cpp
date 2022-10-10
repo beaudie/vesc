@@ -885,7 +885,7 @@ TEST_P(EGLContextSharingTestNoFixture, EglTerminateMultiThreaded)
     EGLConfig config = EGL_NO_CONFIG_KHR;
     EXPECT_TRUE(chooseConfig(&config));
 
-    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight);
+    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, mOsWindow->getNativeWindow(), &mSurface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -1003,7 +1003,7 @@ TEST_P(EGLContextSharingTestNoFixture, EglDestoryContextManyTimesSameContext)
     EGLConfig config = EGL_NO_CONFIG_KHR;
     EXPECT_TRUE(chooseConfig(&config));
 
-    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight);
+    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, mOsWindow->getNativeWindow(), &mSurface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -1139,7 +1139,7 @@ TEST_P(EGLContextSharingTestNoFixture, EglTerminateMultipleTimes)
     EGLConfig config = EGL_NO_CONFIG_KHR;
     EXPECT_TRUE(chooseConfig(&config));
 
-    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight);
+    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, mOsWindow->getNativeWindow(), &mSurface));
     EXPECT_TRUE(mSurface != EGL_NO_SURFACE);
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
@@ -1182,7 +1182,7 @@ TEST_P(EGLContextSharingTestNoFixture, SwapBuffersShared)
     EGLConfig config = EGL_NO_CONFIG_KHR;
     EXPECT_TRUE(chooseConfig(&config));
 
-    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight);
+    mOsWindow->initialize("EGLContextSharingTestNoFixture", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, mOsWindow->getNativeWindow(), &mSurface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 

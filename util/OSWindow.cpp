@@ -358,9 +358,9 @@ OSWindow::OSWindow() : mX(0), mY(0), mWidth(0), mHeight(0), mValid(false), mIgno
 
 OSWindow::~OSWindow() {}
 
-bool OSWindow::initialize(const std::string &name, int width, int height)
+bool OSWindow::initialize(const std::string &name, int width, int height, bool sizeHint)
 {
-    mValid = initializeImpl(name, width, height);
+    mValid = initializeImpl(name, width, height, sizeHint);
     return mValid;
 }
 

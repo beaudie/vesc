@@ -47,7 +47,7 @@ class EGLSurfaceTest : public ANGLETest<>
     void testSetUp() override
     {
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSurfaceTest", 64, 64);
+        mOSWindow->initialize("EGLSurfaceTest", 64, 64, false);
     }
 
     void tearDownContextAndSurface()
@@ -329,7 +329,7 @@ class EGLFloatSurfaceTest : public EGLSurfaceTest
     void testSetUp() override
     {
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLFloatSurfaceTest", 64, 64);
+        mOSWindow->initialize("EGLFloatSurfaceTest", 64, 64, false);
     }
 
     void testTearDown() override
@@ -1872,7 +1872,7 @@ TEST_P(EGLSingleBufferTest, OnCreateWindowSurface)
 
     EGLSurface surface = EGL_NO_SURFACE;
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight);
+    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight, false);
     EXPECT_EGL_TRUE(
         createWindowSurface(config, osWindow->getNativeWindow(), &surface, EGL_SINGLE_BUFFER));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
@@ -1924,7 +1924,7 @@ TEST_P(EGLSingleBufferTest, OnSetSurfaceAttrib)
 
     EGLSurface surface = EGL_NO_SURFACE;
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight);
+    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight, false);
     EXPECT_EGL_TRUE(
         createWindowSurface(config, osWindow->getNativeWindow(), &surface, EGL_BACK_BUFFER));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
@@ -1997,7 +1997,7 @@ TEST_P(EGLAndroidAutoRefreshTest, Basic)
 
     EGLSurface surface = EGL_NO_SURFACE;
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight);
+    osWindow->initialize("EGLSingleBufferTest", kWidth, kHeight, false);
     EXPECT_EGL_TRUE(
         createWindowSurface(config, osWindow->getNativeWindow(), &surface, EGL_BACK_BUFFER));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
