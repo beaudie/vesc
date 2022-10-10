@@ -44,7 +44,7 @@ class ANGLE_UTIL_EXPORT DisplayWindow : public OSWindow
     void signalTestEvent() override;
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
     SimpleDisplayWindow mWindow;
 };
 

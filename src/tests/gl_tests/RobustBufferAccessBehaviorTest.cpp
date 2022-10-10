@@ -39,7 +39,7 @@ class RobustBufferAccessBehaviorTest : public ANGLETest<>
     {
         mOSWindow = OSWindow::New();
         if (!mOSWindow->initialize("RobustBufferAccessBehaviorTest", getWindowWidth(),
-                                   getWindowHeight()))
+                                   getWindowHeight(), false))
         {
             return false;
         }

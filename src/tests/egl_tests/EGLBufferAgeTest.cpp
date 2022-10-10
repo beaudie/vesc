@@ -190,7 +190,7 @@ TEST_P(EGLBufferAgeTest, QueryBufferAge)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -246,7 +246,7 @@ TEST_P(EGLBufferAgeTest, VerifyContents)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -315,7 +315,7 @@ TEST_P(EGLBufferAgeTest_MSAA, VerifyContentsForMultisampled)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest_MSAA", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest_MSAA", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -384,7 +384,7 @@ TEST_P(EGLBufferAgeTest_MSAA_DS, VerifyContentsForMultisampledWithDepthStencil)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest_MSAA", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest_MSAA", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -453,7 +453,7 @@ TEST_P(EGLBufferAgeTest, UncurrentContextBadSurface)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 
@@ -521,7 +521,7 @@ TEST_P(EGLBufferAgeTest, BufferPreserved)
     EGLSurface surface = EGL_NO_SURFACE;
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight);
+    osWindow->initialize("EGLBufferAgeTest", kWidth, kHeight, false);
     EXPECT_TRUE(createWindowSurface(config, osWindow->getNativeWindow(), &surface));
     ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
 

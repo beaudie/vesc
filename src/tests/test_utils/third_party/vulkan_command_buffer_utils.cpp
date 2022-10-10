@@ -147,7 +147,7 @@ VkResult init_device_extension_properties(struct sample_info &info, layer_proper
         layer_props.device_extensions.resize(device_extension_count);
         device_extensions = layer_props.device_extensions.data();
         res               = vkEnumerateDeviceExtensionProperties(info.gpus[0], layer_name,
-                                                   &device_extension_count, device_extensions);
+                                                                 &device_extension_count, device_extensions);
     } while (res == VK_INCOMPLETE);
 
     return res;
@@ -567,7 +567,7 @@ void init_window_size(struct sample_info &info, int32_t default_width, int32_t d
 #ifdef __ANDROID__
     info.mOSWindow = OSWindow::New();
     ASSERT(info.mOSWindow != nullptr);
-    info.mOSWindow->initialize("VulkanTest", default_width, default_height);
+    info.mOSWindow->initialize("VulkanTest", default_width, default_height, false);
 #endif
     info.width  = default_width;
     info.height = default_height;
@@ -920,7 +920,7 @@ void init_swap_chain(struct sample_info &info, VkImageUsageFlags usageFlags)
     swapchain_ci.queueFamilyIndexCount = 0;
     swapchain_ci.pQueueFamilyIndices   = NULL;
     uint32_t queueFamilyIndices[2]     = {(uint32_t)info.graphics_queue_family_index,
-                                      (uint32_t)info.present_queue_family_index};
+                                          (uint32_t)info.present_queue_family_index};
     if (info.graphics_queue_family_index != info.present_queue_family_index)
     {
         // If the graphics and present queues are from different queue families,
@@ -1144,9 +1144,9 @@ void init_uniform_buffer(struct sample_info &info)
 
     alloc_info.allocationSize = mem_reqs.size;
     pass                      = memory_type_from_properties(
-        info, mem_reqs.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        &alloc_info.memoryTypeIndex);
+                             info, mem_reqs.memoryTypeBits,
+                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                             &alloc_info.memoryTypeIndex);
     ASSERT(pass && "No mappable, coherent memory");
 
     res = vkAllocateMemory(info.device, &alloc_info, NULL, &(info.uniform_data.mem));
@@ -1347,9 +1347,9 @@ void init_vertex_buffer(struct sample_info &info,
 
     alloc_info.allocationSize = mem_reqs.size;
     pass                      = memory_type_from_properties(
-        info, mem_reqs.memoryTypeBits,
-        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        &alloc_info.memoryTypeIndex);
+                             info, mem_reqs.memoryTypeBits,
+                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+                             &alloc_info.memoryTypeIndex);
     ASSERT(pass && "No mappable, coherent memory");
 
     res = vkAllocateMemory(info.device, &alloc_info, NULL, &(info.vertex_buffer.mem));
@@ -1514,7 +1514,7 @@ void init_shaders(struct sample_info &info, const char *vertShaderText, const ch
         moduleCreateInfo.codeSize = vtx_spv.size() * sizeof(unsigned int);
         moduleCreateInfo.pCode    = vtx_spv.data();
         res                       = vkCreateShaderModule(info.device, &moduleCreateInfo, NULL,
-                                   &info.shaderStages[0].module);
+                                                         &info.shaderStages[0].module);
         ASSERT(res == VK_SUCCESS);
     }
 
@@ -1537,7 +1537,7 @@ void init_shaders(struct sample_info &info, const char *vertShaderText, const ch
         moduleCreateInfo.codeSize = frag_spv.size() * sizeof(unsigned int);
         moduleCreateInfo.pCode    = frag_spv.data();
         res                       = vkCreateShaderModule(info.device, &moduleCreateInfo, NULL,
-                                   &info.shaderStages[1].module);
+                                                         &info.shaderStages[1].module);
         ASSERT(res == VK_SUCCESS);
     }
 

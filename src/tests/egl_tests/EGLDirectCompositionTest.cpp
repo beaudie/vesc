@@ -51,7 +51,7 @@ class EGLDirectCompositionTest : public ANGLETest<>
         // Create an OS Window
         mOSWindow = OSWindow::New();
 
-        mOSWindow->initialize("EGLDirectCompositionTest", WINDOWWIDTH, WINDOWHEIGHT);
+        mOSWindow->initialize("EGLDirectCompositionTest", WINDOWWIDTH, WINDOWHEIGHT, false);
         auto nativeWindow = mOSWindow->getNativeWindow();
         setWindowVisible(mOSWindow, true);
 

@@ -31,7 +31,7 @@ class EGLPresentPathD3D11 : public ANGLETest<>
     {
         mOSWindow    = OSWindow::New();
         mWindowWidth = 64;
-        mOSWindow->initialize("EGLPresentPathD3D11", mWindowWidth, mWindowWidth);
+        mOSWindow->initialize("EGLPresentPathD3D11", mWindowWidth, mWindowWidth, false);
     }
 
     void initializeEGL(bool usePresentPathFast)

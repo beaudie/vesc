@@ -20,7 +20,7 @@ DisplayWindow::DisplayWindow()
 
 DisplayWindow::~DisplayWindow() {}
 
-bool DisplayWindow::initializeImpl(const std::string &name, int width, int height)
+bool DisplayWindow::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     return resize(width, height);
 }

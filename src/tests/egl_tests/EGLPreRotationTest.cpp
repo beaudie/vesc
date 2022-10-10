@@ -96,7 +96,7 @@ class EGLPreRotationSurfaceTest : public ANGLETest<EGLPreRotationSurfaceTestPara
     void testSetUp() override
     {
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSurfaceTest", mSize, mSize);
+        mOSWindow->initialize("EGLSurfaceTest", mSize, mSize, false);
     }
 
     void initializeDisplay()
@@ -644,7 +644,7 @@ class EGLPreRotationLargeSurfaceTest : public EGLPreRotationSurfaceTest
     void testSetUp() override
     {
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSurfaceTest", 400, 300);
+        mOSWindow->initialize("EGLSurfaceTest", 400, 300, false);
     }
 
     int mSize;

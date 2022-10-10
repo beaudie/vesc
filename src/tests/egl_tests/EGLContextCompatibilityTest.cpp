@@ -254,7 +254,7 @@ class EGLContextCompatibilityTest : public ANGLETestBase, public testing::Test
     {
         OSWindow *osWindow = OSWindow::New();
         ASSERT_TRUE(osWindow != nullptr);
-        osWindow->initialize("EGLContextCompatibilityTest", 500, 500);
+        osWindow->initialize("EGLContextCompatibilityTest", 500, 500, false);
 
         EGLContext context =
             eglCreateContext(mDisplay, contextConfig, EGL_NO_CONTEXT, kContextAttribs.data());

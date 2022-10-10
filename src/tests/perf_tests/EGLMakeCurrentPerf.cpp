@@ -61,7 +61,7 @@ EGLMakeCurrentPerfTest::EGLMakeCurrentPerfTest()
     displayAttributes.push_back(EGL_NONE);
 
     mOSWindow = OSWindow::New();
-    mOSWindow->initialize("EGLMakeCurrent Test", 64, 64);
+    mOSWindow->initialize("EGLMakeCurrent Test", 64, 64, false);
 
     mEGLLibrary.reset(
         angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, angle::SearchType::ModuleDir));

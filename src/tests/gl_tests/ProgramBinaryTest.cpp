@@ -1390,7 +1390,7 @@ class ProgramBinariesAcrossPlatforms : public testing::TestWithParam<PlatformsWi
     void SetUp() override
     {
         mOSWindow   = OSWindow::New();
-        bool result = mOSWindow->initialize("ProgramBinariesAcrossRenderersTests", 100, 100);
+        bool result = mOSWindow->initialize("ProgramBinariesAcrossRenderersTests", 100, 100, false);
 
         if (result == false)
         {

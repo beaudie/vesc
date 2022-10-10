@@ -239,7 +239,7 @@ EGLContext SampleApplication::getContext() const
 
 int SampleApplication::run()
 {
-    if (!mOSWindow->initialize(mName, mWidth, mHeight))
+    if (!mOSWindow->initialize(mName, mWidth, mHeight, false))
     {
         return -1;
     }

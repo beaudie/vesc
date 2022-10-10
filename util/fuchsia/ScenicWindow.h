@@ -70,7 +70,7 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
     void onViewProperties(const fuchsia::ui::gfx::ViewProperties &properties);
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
     void updateViewSize();
 
     // ScenicWindow async loop.
