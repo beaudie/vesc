@@ -43,7 +43,7 @@ class Win32Window : public OSWindow
     void signalTestEvent() override;
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
     static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
     std::string mParentClassName;

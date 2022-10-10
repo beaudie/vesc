@@ -484,7 +484,7 @@ TEST_P(EGLLockSurface3Test, WindowSurfaceReadTest)
     EXPECT_GT(count, 0);
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("LockSurfaceTest", kWidth, kHeight);
+    osWindow->initialize("LockSurfaceTest", kWidth, kHeight, false);
     EGLint winAttribs[] = {EGL_NONE};
     EGLSurface windowSurface =
         eglCreateWindowSurface(mDisplay, config, osWindow->getNativeWindow(), winAttribs);
@@ -568,7 +568,7 @@ TEST_P(EGLLockSurface3Test, WindowMsaaSurfaceReadTest)
     EXPECT_GT(count, 0);
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("LockSurfaceTest", kWidth, kHeight);
+    osWindow->initialize("LockSurfaceTest", kWidth, kHeight, false);
     EGLint winAttribs[] = {EGL_RENDER_BUFFER, EGL_SINGLE_BUFFER, EGL_NONE};
     EGLSurface windowSurface =
         eglCreateWindowSurface(mDisplay, config, osWindow->getNativeWindow(), winAttribs);
@@ -648,7 +648,7 @@ TEST_P(EGLLockSurface3Test, WindowSurfaceWritePreserveTest)
     EXPECT_GT(count, 0);
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("LockSurfaceTest", kWidth, kHeight);
+    osWindow->initialize("LockSurfaceTest", kWidth, kHeight, false);
     EGLint winAttribs[] = {EGL_NONE};
     EGLSurface windowSurface =
         eglCreateWindowSurface(mDisplay, config, osWindow->getNativeWindow(), winAttribs);

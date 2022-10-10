@@ -169,7 +169,7 @@ class CaptureReplayTests
     bool initializeTest(const std::string &execDir, const angle::TraceInfo &traceInfo)
     {
         if (!mOSWindow->initialize(traceInfo.name, traceInfo.drawSurfaceWidth,
-                                   traceInfo.drawSurfaceHeight))
+                                   traceInfo.drawSurfaceHeight, false))
         {
             return false;
         }

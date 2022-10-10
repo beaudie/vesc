@@ -122,7 +122,7 @@ class EGLDeviceCreationTest : public ANGLETest<>
 
         // Create an OS Window
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSurfaceTest", 64, 64);
+        mOSWindow->initialize("EGLSurfaceTest", 64, 64, false);
 
         // Create window surface
         mSurface = eglCreateWindowSurface(mDisplay, mConfig, mOSWindow->getNativeWindow(), nullptr);

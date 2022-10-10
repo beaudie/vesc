@@ -311,7 +311,8 @@ NativeWindow::NativeWindow(ANGLENativeDisplay *nativeDisplay,
     }
 
     mWindow->setNativeDisplay(nativeDisplay->getDeviceContext());
-    bool initialized = mWindow->initialize("dEQP ANGLE Tests", osWindowWidth, osWindowHeight);
+    bool initialized =
+        mWindow->initialize("dEQP ANGLE Tests", osWindowWidth, osWindowHeight, false);
     TCU_CHECK(initialized);
 
     if (params.visibility != eglu::WindowParams::VISIBILITY_DONT_CARE)

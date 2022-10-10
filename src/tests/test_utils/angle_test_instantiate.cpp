@@ -636,7 +636,7 @@ bool IsConfigSupported(const PlatformParameters &param)
 {
     OSWindow *osWindow = OSWindow::New();
     bool result        = false;
-    if (osWindow->initialize("CONFIG_TESTER", 1, 1))
+    if (osWindow->initialize("CONFIG_TESTER", 1, 1, false))
     {
         switch (param.driver)
         {

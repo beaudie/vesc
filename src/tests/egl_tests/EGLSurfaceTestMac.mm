@@ -54,7 +54,7 @@ class EGLSurfaceTestMac : public ANGLETest<>
 
         // Create a window, context and surface if multisampling is possible.
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSurfaceTestMac", kWindowWidth, kWindowHeight);
+        mOSWindow->initialize("EGLSurfaceTestMac", kWindowWidth, kWindowHeight, false);
         setWindowVisible(mOSWindow, true);
 
         EGLint contextAttributes[] = {

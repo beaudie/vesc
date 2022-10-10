@@ -422,7 +422,7 @@ void EGLProtectedContentTest::windowTest(bool isProtectedContext, bool isProtect
     ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("ProtectedContentTest", kWidth, kHeight);
+    osWindow->initialize("ProtectedContentTest", kWidth, kHeight, false);
     EGLSurface windowSurface          = EGL_NO_SURFACE;
     EGLBoolean createWinSurfaceResult = createWindowSurface(
         isProtectedSurface, config, osWindow->getNativeWindow(), &windowSurface);
@@ -495,7 +495,7 @@ void EGLProtectedContentTest::textureTest(bool isProtectedContext, bool isProtec
     ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("ProtectedContentTest", kWidth, kHeight);
+    osWindow->initialize("ProtectedContentTest", kWidth, kHeight, false);
     EGLSurface windowSurface          = EGL_NO_SURFACE;
     EGLBoolean createWinSurfaceResult = createWindowSurface(
         isProtectedSurface, config, osWindow->getNativeWindow(), &windowSurface);
@@ -580,7 +580,7 @@ void EGLProtectedContentTest::textureFromImageTest(bool isProtectedContext, bool
     ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("ProtectedContentTest", kWidth, kHeight);
+    osWindow->initialize("ProtectedContentTest", kWidth, kHeight, false);
     EGLSurface windowSurface          = EGL_NO_SURFACE;
     EGLBoolean createWinSurfaceResult = createWindowSurface(
         isProtectedSurface, config, osWindow->getNativeWindow(), &windowSurface);
@@ -686,7 +686,7 @@ void EGLProtectedContentTest::textureFromPbufferTest(bool isProtectedContext,
     ASSERT_GL_NO_ERROR() << "glFinish failed";
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("ProtectedContentTest", kWidth, kHeight);
+    osWindow->initialize("ProtectedContentTest", kWidth, kHeight, false);
     EGLSurface windowSurface          = EGL_NO_SURFACE;
     EGLBoolean createWinSurfaceResult = createWindowSurface(
         isProtectedSurface, config, osWindow->getNativeWindow(), &windowSurface);
@@ -761,7 +761,7 @@ void EGLProtectedContentTest::textureFromAndroidNativeBufferTest(bool isProtecte
     ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
 
     OSWindow *osWindow = OSWindow::New();
-    osWindow->initialize("ProtectedContentTest", kWidth, kHeight);
+    osWindow->initialize("ProtectedContentTest", kWidth, kHeight, false);
     EGLSurface windowSurface          = EGL_NO_SURFACE;
     EGLBoolean createWinSurfaceResult = createWindowSurface(
         isProtectedSurface, config, osWindow->getNativeWindow(), &windowSurface);

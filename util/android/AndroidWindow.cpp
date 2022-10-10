@@ -60,7 +60,7 @@ AndroidWindow::AndroidWindow() {}
 
 AndroidWindow::~AndroidWindow() {}
 
-bool AndroidWindow::initializeImpl(const std::string &name, int width, int height)
+bool AndroidWindow::initializeImpl(const std::string &name, int width, int height, bool sizeHint)
 {
     return resize(width, height);
 }

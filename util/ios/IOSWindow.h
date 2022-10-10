@@ -40,7 +40,7 @@ class IOSWindow : public OSWindow
     void signalTestEvent() override { UNIMPLEMENTED(); }
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
 };
 
 #endif  // UTIL_IOS_WINDOW_H_

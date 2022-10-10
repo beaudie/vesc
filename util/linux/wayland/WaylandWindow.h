@@ -51,7 +51,7 @@ class ANGLE_UTIL_EXPORT WaylandWindow : public OSWindow
                                      uint32_t version);
     static void RegistryHandleGlobalRemove(void *data, struct wl_registry *registry, uint32_t name);
 
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
 
     static const struct wl_registry_listener registryListener;
 

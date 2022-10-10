@@ -102,7 +102,7 @@ class EGLSyncControlTest : public testing::Test
 
         // Create an OS Window
         mOSWindow = OSWindow::New();
-        mOSWindow->initialize("EGLSyncControlTest", 64, 64);
+        mOSWindow->initialize("EGLSyncControlTest", 64, 64, false);
         mOSWindow->setVisible(true);
 
         // Create an EGLDisplay using the EGLDevice

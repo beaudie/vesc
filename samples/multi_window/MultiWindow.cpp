@@ -59,7 +59,7 @@ void main()
             window window;
 
             window.osWindow = OSWindow::New();
-            if (!window.osWindow->initialize("MultiWindow", 256, 256))
+            if (!window.osWindow->initialize("MultiWindow", 256, 256, false))
             {
                 return false;
             }

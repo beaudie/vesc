@@ -55,7 +55,7 @@ class OSXWindow : public OSWindow
     NSWindow *getNSWindow() const;
 
   private:
-    bool initializeImpl(const std::string &name, int width, int height) override;
+    bool initializeImpl(const std::string &name, int width, int height, bool sizeHint) override;
 
     NSWindow *mWindow;
     WindowDelegate *mDelegate;
