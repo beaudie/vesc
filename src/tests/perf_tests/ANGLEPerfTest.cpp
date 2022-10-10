@@ -819,6 +819,7 @@ void ANGLERenderTest::SetUp()
     mPlatformMethods.monotonicallyIncreasingTime = MonotonicallyIncreasingTime;
     mPlatformMethods.context                     = this;
 
+    mOSWindow->pinWindowMinSize();
     if (!mOSWindow->initialize(mName, mTestParams.windowWidth, mTestParams.windowHeight))
     {
         failTest("Failed initializing OSWindow");
