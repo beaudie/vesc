@@ -329,6 +329,13 @@ bool X11Window::initializeImpl(const std::string &name, int width, int height)
         mWindow = XCreateWindow(mDisplay, root, 0, 0, width, height, 0, depth, InputOutput, visual,
                                 attributeMask, &attributes);
         XFreeColormap(mDisplay, colormap);
+
+        XSizeHints sizeHints;
+        sizeHints.flags = PMinSize;
+        sizeHints.width = sizeHints.min_width = width;
+        sizeHints.height = sizeHints.min_height = height;
+        XSetWMNormalHints(mDisplay, mWindow, &sizeHints);
+        XMapWindow(mDisplay, mWindow);
     }
 
     if (!mWindow)

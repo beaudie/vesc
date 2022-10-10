@@ -24,8 +24,8 @@ class StateChangeTest : public ANGLETest<>
   protected:
     StateChangeTest()
     {
-        setWindowWidth(64);
-        setWindowHeight(64);
+        setWindowWidth(128);
+        setWindowHeight(128);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
