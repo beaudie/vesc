@@ -16,6 +16,24 @@
       "message": "Will wait for input from the author or confirmation that the revert fixes the issues before submitting.",
       "revId": "ea34c3e6add3629ae1cb2d5389484cb61b29abc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d710dea_215bde9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-10T15:11:05Z",
+      "side": 1,
+      "message": "So from what I understand the crashes only happen on proprietary Mali drivers - and even with the `angle-disabled` flag set (see e.g. https://ci.chromium.org/ui/p/chromium/builders/ci/ChromeOS%20FYI%20Release%20(kevin)/9485/test-results?q\u003dExactID%3Aninja%3A%2F%2Fchrome%2Ftest%3Atelemetry_gpu_integration_test%2Fgpu_tests.context_lost_integration_test.ContextLostIntegrationTest.GpuNormalTermination_OriginalWebGLNotBlocked+VHash%3Aa7311f0a6272cea9 ).\n\nGiven the oddness of these crashes, I wouldn\u0027t rule out that a revert will somehow \"fix\" the issues. But I have strong doubts that the CL is at fault here and I\u0027m trying to reach out to people familiar with that hardware/driver.\n\nThat being said, IF the revert fixes the crashes, it should be save to land. While it blocks some Exo work of mine, it shouldn\u0027t break anything else :/",
+      "parentUuid": "88c7ef06_677cd083",
+      "revId": "ea34c3e6add3629ae1cb2d5389484cb61b29abc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
