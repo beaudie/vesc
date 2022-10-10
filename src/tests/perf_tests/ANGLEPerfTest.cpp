@@ -819,7 +819,7 @@ void ANGLERenderTest::SetUp()
     mPlatformMethods.monotonicallyIncreasingTime = MonotonicallyIncreasingTime;
     mPlatformMethods.context                     = this;
 
-    if (!mOSWindow->initialize(mName, mTestParams.windowWidth, mTestParams.windowHeight, false))
+    if (!mOSWindow->initialize(mName, mTestParams.windowWidth, mTestParams.windowHeight, true))
     {
         failTest("Failed initializing OSWindow");
         return;
