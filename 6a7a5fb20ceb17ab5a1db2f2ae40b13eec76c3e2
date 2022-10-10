@@ -16,6 +16,24 @@
       "message": "The drawback of this window hint is of course that on X11 the minimum size of the window is pinned from the start, not sure whether this is an issue, and whether it would be better to add a parameter to OSWindow::initialize that indicates whether the size hint should be set or not.",
       "revId": "6a7a5fb20ceb17ab5a1db2f2ae40b13eec76c3e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cdb53f2_2a571a03",
+        "filename": "util/linux/x11/X11Window.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-10-10T10:24:57Z",
+      "side": 1,
+      "message": "Disregard this comment, I\u0027ve change the approach so that the size hint is only used when the caller requests this and it is used only for ANGLEPerfTests (second patch)",
+      "parentUuid": "c2e26e06_a98e64d1",
+      "revId": "6a7a5fb20ceb17ab5a1db2f2ae40b13eec76c3e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
