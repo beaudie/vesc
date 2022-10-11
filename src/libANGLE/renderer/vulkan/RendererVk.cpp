@@ -2057,6 +2057,10 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mPipelineRobustnessFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_ROBUSTNESS_FEATURES_EXT;
 
+    mPipelineProtectedAccessFeatures = {};
+    mPipelineProtectedAccessFeatures.sType =
+        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_PROTECTED_ACCESS_FEATURES_EXT;
+
     mRasterizationOrderAttachmentAccessFeatures = {};
     mRasterizationOrderAttachmentAccessFeatures.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_FEATURES_EXT;
@@ -2248,6 +2252,11 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
         vk::AddToPNextChain(&deviceFeatures, &mPipelineRobustnessFeatures);
     }
 
+    if (ExtensionFound(VK_EXT_PIPELINE_PROTECTED_ACCESS_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(&deviceFeatures, &mPipelineProtectedAccessFeatures);
+    }
+
     // The EXT and ARM versions are interchangeable. The structs and enums alias each other.
     if (ExtensionFound(VK_EXT_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_EXTENSION_NAME,
                        deviceExtensionNames))
@@ -2298,6 +2307,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mFragmentShaderInterlockFeatures.pNext                  = nullptr;
     mImagelessFramebufferFeatures.pNext                     = nullptr;
     mPipelineRobustnessFeatures.pNext                       = nullptr;
+    mPipelineProtectedAccessFeatures.pNext                  = nullptr;
     mRasterizationOrderAttachmentAccessFeatures.pNext       = nullptr;
 }
 
@@ -2832,6 +2842,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_PIPELINE_ROBUSTNESS_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mPipelineRobustnessFeatures);
+    }
+
+    if (getFeatures().supportsPipelineProtectedAccess.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_PIPELINE_PROTECTED_ACCESS_EXTENSION_NAME);
+        vk::AddToPNextChain(&mEnabledFeatures, &mPipelineProtectedAccessFeatures);
     }
 
     if (getFeatures().supportsRasterizationOrderAttachmentAccess.enabled)
@@ -3460,17 +3476,20 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // http://b/208458772. ARM driver supports this protected memory extension but we are seeing
     // excessive load/store unit activity when this extension is enabled, even if not been used.
-    // Disable this extension on ARM platform until we resolve this performance issue.
-    // http://anglebug.com/3965
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsProtectedMemory,
-                            (mProtectedMemoryFeatures.protectedMemory == VK_TRUE) && !isARM);
+    // Disable this extension on older ARM platforms that don't support
+    // VK_EXT_pipeline_protected_access.
+    // http://anglebug.com/7714
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsProtectedMemory,
+        mProtectedMemoryFeatures.protectedMemory == VK_TRUE &&
+            (!isARM || mPipelineProtectedAccessFeatures.pipelineProtectedAccess == VK_TRUE));
 
     // Workaround for nvidia earlier version driver which appears having a bug that
     // vkGetQueryPoolResult() with VK_QUERY_RESULT_WAIT_BIT may result in incorrect result. In that
     // case we force into CPU wait for submission to complete. http://anglebug.com/6692
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsHostQueryReset,
-                            (mHostQueryResetFeatures.hostQueryReset == VK_TRUE &&
-                             !(isNvidia && nvidiaVersion.major < 470u)));
+                            mHostQueryResetFeatures.hostQueryReset == VK_TRUE &&
+                                !(isNvidia && nvidiaVersion.major < 470u));
 
     // VK_EXT_pipeline_creation_feedback is promoted to core in Vulkan 1.3.
     ANGLE_FEATURE_CONDITION(
@@ -3974,6 +3993,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsPipelineRobustness,
                             mPipelineRobustnessFeatures.pipelineRobustness == VK_TRUE &&
                                 mPhysicalDeviceFeatures.robustBufferAccess);
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsPipelineProtectedAccess,
+                            mPipelineProtectedAccessFeatures.pipelineProtectedAccess == VK_TRUE &&
+                                mProtectedMemoryFeatures.protectedMemory == VK_TRUE);
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
