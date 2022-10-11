@@ -6305,6 +6305,7 @@ bool ValidateQueryDeviceAttribEXT(const ValidationContext *val,
             }
             break;
         case EGL_METAL_DEVICE_ANGLE:
+        case EGL_METAL_COMMAND_QUEUE_ANGLE:
             if (!device->getExtensions().deviceMetal)
             {
                 val->setError(EGL_BAD_ATTRIBUTE);

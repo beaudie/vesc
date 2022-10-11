@@ -357,6 +357,7 @@ EGLAPI EGLBoolean EGLAPIENTRY eglPrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurf
 #ifndef EGL_ANGLE_device_metal
 #define EGL_ANGLE_device_metal 1
 #define EGL_METAL_DEVICE_ANGLE 0x34A6
+#define EGL_METAL_COMMAND_QUEUE_ANGLE 0x34DC
 #endif /* EGL_ANGLE_device_metal */
 
 #ifndef EGL_ANGLE_display_semaphore_share_group

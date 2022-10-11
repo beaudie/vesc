@@ -280,6 +280,7 @@
         <extension name="EGL_ANGLE_device_metal" supported="egl">
             <require>
                 <enum name="EGL_METAL_DEVICE_ANGLE"/>
+                <enum name="EGL_METAL_COMMAND_QUEUE_ANGLE"/>
             </require>
         </extension>
         <extension name="EGL_ANGLE_device_vulkan" supported="egl">
@@ -560,6 +561,7 @@
         <enum value="0x34A4" name="EGL_PLATFORM_VULKAN_DISPLAY_MODE_SIMPLE_ANGLE"/>
         <enum value="0x34A5" name="EGL_PLATFORM_VULKAN_DISPLAY_MODE_HEADLESS_ANGLE"/>
         <enum value="0x34A6" name="EGL_METAL_DEVICE_ANGLE"/>
+        <enum value="0x34DC" name="EGL_METAL_COMMAND_QUEUE_ANGLE"/>
         <enum value="0x34A7" name="EGL_METAL_TEXTURE_ANGLE"/>
         <enum value="0x34A8" name="EGL_VULKAN_VERSION_ANGLE"/>
         <enum value="0x34A9" name="EGL_VULKAN_INSTANCE_ANGLE"/>
