@@ -5679,7 +5679,8 @@ void *Context::mapBufferRange(BufferBinding target,
         return nullptr;
     }
 
-    return buffer->getMapPointer();
+    return getShareGroup()->getFrameCaptureShared()->maybeGetShadowMemoryPointer(buffer, length,
+                                                                                 access);
 }
 
 void Context::flushMappedBufferRange(BufferBinding /*target*/,
