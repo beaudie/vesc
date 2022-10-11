@@ -41,7 +41,7 @@
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/capture/FrameCapture.h"
-#include "libANGLE/capture/frame_capture_utils.h"
+#include "libANGLE/capture/serialize.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/queryutils.h"
