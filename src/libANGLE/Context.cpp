@@ -5694,7 +5694,11 @@ void *Context::mapBufferRange(BufferBinding target,
         return nullptr;
     }
 
+#if ANGLE_CAPTURE_ENABLED
+    return getShareGroup()->getFrameCaptureShared()->maybeGetShadowMemoryPointer(buffer, access);
+#else
     return buffer->getMapPointer();
+#endif
 }
 
 void Context::flushMappedBufferRange(BufferBinding /*target*/,
