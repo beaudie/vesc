@@ -723,6 +723,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceFragmentShaderInterlockFeaturesEXT mFragmentShaderInterlockFeatures;
     VkPhysicalDeviceImagelessFramebufferFeaturesKHR mImagelessFramebufferFeatures;
     VkPhysicalDevicePipelineRobustnessFeaturesEXT mPipelineRobustnessFeatures;
+    VkPhysicalDevicePipelineProtectedAccessFeaturesEXT mPipelineProtectedAccessFeatures;
     VkPhysicalDeviceRasterizationOrderAttachmentAccessFeaturesEXT
         mRasterizationOrderAttachmentAccessFeatures;
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;

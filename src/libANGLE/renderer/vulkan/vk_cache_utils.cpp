@@ -2892,6 +2892,11 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk, GraphicsPipe
     // Context robustness affects vertex input and shader stages.
     mVertexInput.inputAssembly.bits.isRobustContext = mShaders.shaders.bits.isRobustContext =
         contextVk->shouldUsePipelineRobustness();
+
+    // Context protected-ness affects all subsets.
+    mVertexInput.inputAssembly.bits.isProtectedContext = mShaders.shaders.bits.isProtectedContext =
+        mFragmentOutput.blendMaskAndLogic.bits.isProtectedContext =
+            contextVk->shouldRestrictPipelineToProtectedAccess();
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
@@ -2987,6 +2992,18 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         robustness.images         = VK_PIPELINE_ROBUSTNESS_IMAGE_BEHAVIOR_DEVICE_DEFAULT_EXT;
 
         AddToPNextChain(&createInfo, &robustness);
+    }
+
+    if ((hasVertexInput && mVertexInput.inputAssembly.bits.isProtectedContext) ||
+        (hasShaders && mShaders.shaders.bits.isProtectedContext) ||
+        (hasFragmentOutput && mFragmentOutput.blendMaskAndLogic.bits.isProtectedContext))
+    {
+        ASSERT(context->getFeatures().supportsPipelineProtectedAccess.enabled);
+        createInfo.flags |= VK_PIPELINE_CREATE_PROTECTED_ACCESS_ONLY_BIT_EXT;
+    }
+    else if (context->getFeatures().supportsPipelineProtectedAccess.enabled)
+    {
+        createInfo.flags |= VK_PIPELINE_CREATE_NO_PROTECTED_ACCESS_BIT_EXT;
     }
 
     VkPipelineCreationFeedback feedback = {};
