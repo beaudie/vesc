@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a327923_bb46e091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-11T16:41:46Z",
+      "side": 1,
+      "message": "hmm, it\u0027s now showing both the old Linux and the new Android info https://screenshot.googleplex.com/7FbwUqHEENiZxob",
+      "revId": "6eff905c7c38044deb74e16a479eae796ed4f46d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
