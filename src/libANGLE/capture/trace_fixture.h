@@ -71,7 +71,7 @@ using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
 extern SyncResourceMap gSyncMap;
 using SurfaceMap = std::unordered_map<uintptr_t, EGLSurface>;
 extern SurfaceMap gSurfaceMap;
-using ContextMap = std::unordered_map<uint32_t, EGLContext>;
+using ContextMap = std::unordered_map<uintptr_t, EGLContext>;
 extern ContextMap gContextMap;
 
 void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLint count);
@@ -80,6 +80,7 @@ void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index);
 void UpdateUniformBlockBinding(GLuint program, GLuint blockIndex, GLuint blockBinding);
 void UpdateCurrentProgram(GLuint program);
 
+// TODO(jmadill): Consolidate into one function. http://anglebug.com/7731
 void InitializeReplay(const char *binaryDataFileName,
                       size_t maxClientArraySize,
                       size_t readBufferSize,
@@ -96,6 +97,24 @@ void InitializeReplay(const char *binaryDataFileName,
                       uint32_t maxTexture,
                       uint32_t maxTransformFeedback,
                       uint32_t maxVertexArray);
+
+void InitializeReplay2(const char *binaryDataFileName,
+                       size_t maxClientArraySize,
+                       size_t readBufferSize,
+                       uintptr_t contextId,
+                       uint32_t maxBuffer,
+                       uint32_t maxFenceNV,
+                       uint32_t maxFramebuffer,
+                       uint32_t maxMemoryObject,
+                       uint32_t maxProgramPipeline,
+                       uint32_t maxQuery,
+                       uint32_t maxRenderbuffer,
+                       uint32_t maxSampler,
+                       uint32_t maxSemaphore,
+                       uint32_t maxShaderProgram,
+                       uint32_t maxTexture,
+                       uint32_t maxTransformFeedback,
+                       uint32_t maxVertexArray);
 
 // Global state
 
@@ -164,13 +183,13 @@ void CreateShaderProgramv(GLenum type,
                           GLuint shaderProgram);
 void FenceSync(GLenum condition, GLbitfield flags, uint64_t fenceSync);
 void CreateEGLImage(EGLDisplay dpy,
-                    EGLContext ctx,
+                    uintptr_t ctx,
                     EGLenum target,
                     uint64_t buffer,
                     const EGLAttrib *attrib_list,
                     uint64_t image);
 void CreateEGLImageKHR(EGLDisplay dpy,
-                       EGLContext ctx,
+                       uintptr_t ctx,
                        EGLenum target,
                        uint64_t buffer,
                        const EGLint *attrib_list,
@@ -180,6 +199,8 @@ void CreatePbufferSurface(EGLDisplay dpy,
                           const EGLint *attrib_list,
                           uint64_t surface);
 void CreateNativeClientBuffer(const EGLint *attrib_list, uint64_t clientBuffer);
+void CreateContext(uintptr_t contextId);
+void MakeCurrent(uintptr_t contextId);
 
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line);
 #define VALIDATE_CHECKPOINT(STATE) ValidateSerializedState(STATE, __FILE__, __LINE__)

@@ -804,12 +804,8 @@ CallCapture CaptureMakeCurrent(egl::Display *display,
                                gl::Context *context)
 {
     ParamBuffer paramBuffer;
-    paramBuffer.addValueParam("display", ParamType::Tegl_DisplayPointer, display);
-    paramBuffer.addValueParam("draw", ParamType::Tegl_SurfacePointer, draw);
-    paramBuffer.addValueParam("read", ParamType::Tegl_SurfacePointer, read);
     paramBuffer.addValueParam("context", ParamType::Tgl_ContextPointer, context);
-
-    return CallCapture(angle::EntryPoint::EGLMakeCurrent, std::move(paramBuffer));
+    return CallCapture("MakeCurrent", std::move(paramBuffer));
 }
 
 std::string GetBinaryDataFilePath(bool compression, const std::string &captureLabel)
@@ -868,19 +864,13 @@ void WriteInitReplayCall(bool compression,
                          size_t readBufferSize,
                          const PackedEnumMap<ResourceIDType, uint32_t> &maxIDs)
 {
-    for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
-    {
-        const char *name = GetResourceIDTypeName(resourceID);
-        out << "    uint32_t kMax" << name << " = " << maxIDs[resourceID] << ";\n";
-    }
-
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
-    out << "    InitializeReplay(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
-        << readBufferSize;
+    out << "    InitializeReplay2(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+        << readBufferSize << ", " << contextId.value;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
     {
-        out << ", kMax" << GetResourceIDTypeName(resourceID);
+        out << ", " << maxIDs[resourceID];
     }
 
     out << ");\n";
@@ -6254,6 +6244,14 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
             CaptureCustomCreateNativeClientbuffer(inCall, outCalls);
             break;
         }
+        case EntryPoint::EGLMakeCurrent:
+        {
+            const ParamCapture &param =
+                inCall.params.getParam("ctxPacked", ParamType::Tgl_ContextPointer, 3);
+            outCalls.push_back(
+                CaptureMakeCurrent(nullptr, nullptr, nullptr, param.value.gl_ContextPointerVal));
+            break;
+        }
 
         default:
         {
@@ -8101,11 +8099,6 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
 
             out << proto << "\n";
             out << "{\n";
-            out << "    gContextMap[0] = EGL_NO_CONTEXT;\n";
-            out << "    EGLContext context = eglGetCurrentContext();\n";
-            out << "    gContextMap[" << context->id().value << "] = context;\n";
-            out << "\n";
-
             // Setup all of the shared objects.
             out << "    InitReplay();\n";
             if (usesMidExecutionCapture())
@@ -8132,10 +8125,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 // TODO(http://www.anglebug.com/5878): Support capture/replay of eglCreateContext()
                 // so this block can be moved into SetupReplayContextXX() by injecting them into the
                 // beginning of the setup call stream.
-                out << "    EGLContext context" << shareContext->id()
-                    << " = eglCreateContext(nullptr, nullptr, context, nullptr);\n";
-                out << "    gContextMap[" << shareContext->id().value << "] = context"
-                    << shareContext->id() << ";\n";
+                out << "    CreateContext(" << shareContext->id() << ");\n";
                 // The SetupReplayContextXX() calls only exist if this is a mid-execution capture
                 // and we can only call them if they exist, so only output the calls if this is a
                 // MEC.
@@ -8150,8 +8140,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             if (shareContextSet.size() > 1)
             {
                 out << "\n";
-                out << "    eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, "
-                       "context);\n";
+                out << "    MakeCurrent(" << context->id() << ");\n";
             }
 
             out << "}\n";
@@ -8256,11 +8245,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 if (anyResourceReset && contextID != context->id())
                 {
                     contextChanged = true;
-
-                    bodyStream << "    // Switching contexts for non-shared Reset\n"
-                               << "    eglMakeCurrent("
-                               << "EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, "
-                               << "gContextMap[" << contextID.value << "]);\n\n";
+                    bodyStream << "    MakeCurrent(" << contextID.value << ");\n\n";
                 }
 
                 // Then append the Reset calls
@@ -8277,10 +8262,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         // Bind the main context again if we bound any additional contexts
         if (contextChanged)
         {
-            resetBodyStream << "    // Restoring main context\n"
-                            << "    eglMakeCurrent("
-                            << "EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, "
-                            << "gContexMap[" << context->id() << "]);\n";
+            resetBodyStream << "    MakeCurrent(" << context->id().value << ");\n";
         }
 
         // Now that we're back on the main context, reset any additional state
@@ -8874,14 +8856,7 @@ void WriteParamValueReplay<ParamType::Tgl_ContextPointer>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::Context *value)
 {
-    if (value == nullptr)
-    {
-        os << "EGL_NO_CONTEXT";
-    }
-    else
-    {
-        os << "gContextMap[" << value->id().value << "]";
-    }
+    os << reinterpret_cast<uintptr_t>(value) << "ul";
 }
 
 template <>
