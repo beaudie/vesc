@@ -39,6 +39,30 @@
       },
       "revId": "630eabb22a01850b889162a79b1195d3549fb9fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09b282e6_770b425a",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-11T17:39:34Z",
+      "side": 1,
+      "message": "The default behavior when running the test suite is that all extensions are enabled. When you request an extension through \"--request-ext \u003cEXT\u003e\" then it changes the behavior so all extensions are turned off by default, then it requests each extension that was passed in as an argument.\n\nSo when we run through all the ES versions, we\u0027re running them with all extensions enabled. If run_test_suite on line 327 fails for ES 3.1, then that means even with all extensions enabled ES 3.1 does not support the trace.",
+      "parentUuid": "72916215_cfdb222d",
+      "range": {
+        "startLine": 329,
+        "startChar": 0,
+        "endLine": 329,
+        "endChar": 56
+      },
+      "revId": "630eabb22a01850b889162a79b1195d3549fb9fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
