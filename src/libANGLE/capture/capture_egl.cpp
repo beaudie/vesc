@@ -137,20 +137,20 @@ angle::CallCapture CaptureEGLCreateImage(const gl::Context *context,
 
     // The EGL display will be queried directly in the emitted code
     // so this is actually just a place holder
-    paramBuffer.addValueParam("display", angle::ParamType::TEGLContext, EGL_NO_DISPLAY);
+    paramBuffer.addValueParam("display", angle::ParamType::TEGLDisplay, EGL_NO_DISPLAY);
 
     // In CaptureMidExecutionSetup and FrameCaptureShared::captureCall
     // we capture the actual context ID (via CaptureMakeCurrent),
     // so we have to do the same here.
-    if (context != EGL_NO_CONTEXT)
+    if (context == EGL_NO_CONTEXT)
+    {
+        paramBuffer.addValueParam("context", angle::ParamType::TEGLContext, EGL_NO_CONTEXT);
+    }
+    else
     {
         uint64_t contextID    = context->id().value;
         EGLContext eglContext = reinterpret_cast<EGLContext>(contextID);
         paramBuffer.addValueParam("context", angle::ParamType::TEGLContext, eglContext);
-    }
-    else
-    {
-        paramBuffer.addValueParam("context", angle::ParamType::TEGLContext, EGL_NO_CONTEXT);
     }
 
     paramBuffer.addEnumParam("target", gl::GLESEnum::AllEnums, angle::ParamType::TEGLenum, target);
