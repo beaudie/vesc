@@ -40,6 +40,7 @@ bool gVsync                      = false;
 bool gOneFrameOnly               = false;
 bool gNoWarmup                   = false;
 int gFixedTestTime               = 0;
+bool gTraceInterpreter           = false;
 
 // Default to three warmup trials. There's no science to this. More than two was experimentally
 // helpful on a Windows NVIDIA setup when testing with Vulkan and native trace tests.
@@ -79,6 +80,8 @@ bool TraceTestArg(int *argc, char **argv, int argIndex)
            ParseFlag("--save-screenshots", argc, argv, argIndex, &gSaveScreenshots) ||
            ParseFlag("--offscreen", argc, argv, argIndex, &gOffscreen) ||
            ParseFlag("--vsync", argc, argv, argIndex, &gVsync) ||
+           ParseFlag("--trace-interpreter", argc, argv, argIndex, &gTraceInterpreter) ||
+           ParseFlag("--interpreter", argc, argv, argIndex, &gTraceInterpreter) ||
            ParseIntArg("--screenshot-frame", argc, argv, argIndex, &gScreenshotFrame) ||
            ParseCStringArg("--render-test-output-dir", argc, argv, argIndex,
                            &gRenderTestOutputDir) ||
@@ -151,6 +154,10 @@ void ANGLEProcessTraceTestArgs(int *argc, char **argv)
         if (!TraceTestArg(argc, argv, argIndex))
         {
             argIndex++;
+        }
+        else if (strcmp("--trace-interpreter", argv[argIndex]) == 0)
+        {
+            gTraceInterpreter = true;
         }
     }
 
