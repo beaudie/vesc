@@ -22,6 +22,30 @@
       },
       "revId": "6a0ad2d671306ba25c9dafae5363a719fea463ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "654b97d4_0d7b442a",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-10-11T07:31:05Z",
+      "side": 1,
+      "message": "This was just for discussion, and simpler approach is in https://chromium-review.googlesource.com/c/angle/angle/+/3942648",
+      "parentUuid": "95c5a26f_a60766c7",
+      "range": {
+        "startLine": 28,
+        "startChar": 68,
+        "endLine": 28,
+        "endChar": 72
+      },
+      "revId": "6a0ad2d671306ba25c9dafae5363a719fea463ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
