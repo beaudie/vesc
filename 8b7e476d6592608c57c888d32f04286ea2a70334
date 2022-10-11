@@ -16,6 +16,23 @@
       "message": "Not submitting until I can confirm that this is the cause of the issues I\u0027m seeing.",
       "revId": "8b7e476d6592608c57c888d32f04286ea2a70334",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aea5e7f5_20235f08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2022-10-11T19:45:17Z",
+      "side": 1,
+      "message": "Confirmed this is the culprit. Without the revert, we fail https://chromium-swarm.appspot.com/task?id\u003d5de11e833643eb10 but with it we pass https://chromium-swarm.appspot.com/task?id\u003d5de12d50eff46510",
+      "revId": "8b7e476d6592608c57c888d32f04286ea2a70334",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
