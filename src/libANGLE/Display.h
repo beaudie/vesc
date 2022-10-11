@@ -329,14 +329,18 @@ class Display final : public LabeledObject,
                                EGLBoolean *external_only,
                                EGLint *num_modifiers);
 
+    const gl::Context *getContext(gl::ContextID contextID) const;
+    const egl::Surface *getSurface(egl::SurfaceID surfaceID) const;
+    const egl::Image *getImage(egl::ImageID imageID) const;
+    gl::Context *getContext(gl::ContextID contextID);
+    egl::Surface *getSurface(egl::SurfaceID surfaceID);
+    egl::Image *getImage(egl::ImageID imageID);
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
     void setAttributes(const AttributeMap &attribMap) { mAttributeMap = attribMap; }
-
     void setupDisplayPlatform(rx::DisplayImpl *impl);
-
-    void updateAttribsFromEnvironment(const AttributeMap &attribMap);
 
     Error restoreLostDevice();
     Error releaseContext(gl::Context *context, Thread *thread);

@@ -109,6 +109,15 @@ typename std::enable_if<std::is_enum<PackedT>::value, PackedT>::type PackParam(F
     return FromEGLenum<PackedT>(from);
 }
 
+// Second case: handling resource ids.
+template <typename PackedT,
+          typename FromT,
+          typename std::enable_if<IsResourceIDType<PackedT>::value>::type * = nullptr>
+PackedT PackParam(FromT from)
+{
+    return {static_cast<GLuint>(reinterpret_cast<uintptr_t>(from))};
+}
+
 // This and the next 2 template specializations handle distinguishing between EGLint, EGLAttrib
 // and other. This is needed because on some architectures EGLint and EGLAttrib are not the same
 // base type. Previously the code conditionally compiled 2 specializations on 64 bit but it turns
@@ -116,7 +125,7 @@ typename std::enable_if<std::is_enum<PackedT>::value, PackedT>::type PackParam(F
 // different did not hold.
 template <typename PackedT,
           typename FromT,
-          typename std::enable_if<!std::is_enum<PackedT>::value>::type *              = nullptr,
+          typename std::enable_if<!std::is_enum<PackedT>::value>::type              * = nullptr,
           typename std::enable_if<std::is_same<FromT, const EGLint *>::value>::type * = nullptr>
 typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
 {
@@ -125,8 +134,8 @@ typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
 
 template <typename PackedT,
           typename FromT,
-          typename std::enable_if<!std::is_enum<PackedT>::value>::type *                 = nullptr,
-          typename std::enable_if<!std::is_same<FromT, const EGLint *>::value>::type *   = nullptr,
+          typename std::enable_if<!std::is_enum<PackedT>::value>::type                 * = nullptr,
+          typename std::enable_if<!std::is_same<FromT, const EGLint *>::value>::type   * = nullptr,
           typename std::enable_if<std::is_same<FromT, const EGLAttrib *>::value>::type * = nullptr>
 typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
 {
@@ -135,12 +144,13 @@ typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
 
 template <typename PackedT,
           typename FromT,
-          typename std::enable_if<!std::is_enum<PackedT>::value>::type *                  = nullptr,
-          typename std::enable_if<!std::is_same<FromT, const EGLint *>::value>::type *    = nullptr,
-          typename std::enable_if<!std::is_same<FromT, const EGLAttrib *>::value>::type * = nullptr>
-typename std::remove_reference<PackedT>::type PackParam(FromT attribs)
+          typename std::enable_if<!std::is_enum<PackedT>::value>::type                  * = nullptr,
+          typename std::enable_if<!std::is_same<FromT, const EGLint *>::value>::type    * = nullptr,
+          typename std::enable_if<!std::is_same<FromT, const EGLAttrib *>::value>::type * = nullptr,
+          typename std::enable_if<!IsResourceIDType<PackedT>::value>::type              * = nullptr>
+typename std::remove_reference<PackedT>::type PackParam(FromT from)
 {
-    return static_cast<PackedT>(attribs);
+    return static_cast<PackedT>(from);
 }
 
 }  // namespace egl
