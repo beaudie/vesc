@@ -401,6 +401,33 @@ void ANGLEPerfTest::SetUp() {}
 
 void ANGLEPerfTest::TearDown() {}
 
+void ANGLEPerfTest::recordMetric(const char *metric, size_t value, const std::string &units)
+{
+    // Prints "RESULT ..." to stdout
+    mReporter->AddResult(metric, value);
+
+    // Saves results to file if enabled
+    TestSuite::GetMetricWriter().writeInfo(mName, mBackend, mStory, metric, units);
+    TestSuite::GetMetricWriter().writeValue(value);
+}
+
+void ANGLEPerfTest::recordMetric(const char *metric, double value, const std::string &units)
+{
+    // Prints "RESULT ..." to stdout
+    mReporter->AddResult(metric, value);
+
+    // Saves results to file if enabled
+    TestSuite::GetMetricWriter().writeInfo(mName, mBackend, mStory, metric, units);
+    TestSuite::GetMetricWriter().writeValue(value);
+}
+
+void ANGLEPerfTest::addHistogramSample(const char *metric, double value, const std::string &units)
+{
+    std::string measurement = mName + mBackend + metric;
+    // Output histogram JSON set format if enabled.
+    TestSuite::GetInstance()->addHistogramSample(measurement, mStory, value, units);
+}
+
 void ANGLEPerfTest::processResults()
 {
     processClockResult(".cpu_time", mTimer.getElapsedCpuTime());
@@ -450,32 +477,21 @@ void ANGLEPerfTest::processResults()
 
         // Median
         {
-            size_t midpoint = samples.size() >> 1;
+            size_t midpoint = samples.size() / 2;
             std::nth_element(samples.begin(), samples.begin() + midpoint, samples.end());
 
-            std::stringstream medianStr;
-            medianStr << "." << counterName << "_median";
-            std::string medianName = medianStr.str();
-
-            mReporter->AddResult(medianName, static_cast<size_t>(samples[midpoint]));
-
-            std::string measurement = mName + mBackend + "." + counterName + "_median";
-            TestSuite::GetInstance()->addHistogramSample(
-                measurement, mStory, static_cast<double>(samples[midpoint]), "count");
+            std::string medianName = "." + counterName + "_median";
+            recordMetric(medianName.c_str(), static_cast<size_t>(samples[midpoint]), "count");
+            addHistogramSample(medianName.c_str(), static_cast<double>(samples[midpoint]), "count");
         }
 
         // Maximum
         {
             const auto &maxIt = std::max_element(samples.begin(), samples.end());
 
-            std::stringstream maxStr;
-            maxStr << "." << counterName << "_max";
-            std::string maxName = maxStr.str();
-            mReporter->AddResult(maxName, static_cast<size_t>(*maxIt));
-
-            std::string measurement = mName + mBackend + "." + counterName + "_max";
-            TestSuite::GetInstance()->addHistogramSample(measurement, mStory,
-                                                         static_cast<double>(*maxIt), "count");
+            std::string maxName = "." + counterName + "_max";
+            recordMetric(maxName.c_str(), static_cast<size_t>(*maxIt), "count");
+            addHistogramSample(maxName.c_str(), static_cast<double>(*maxIt), "count");
         }
 
         // Sum
@@ -483,14 +499,9 @@ void ANGLEPerfTest::processResults()
             GLuint64 sum =
                 std::accumulate(samples.begin(), samples.end(), static_cast<GLuint64>(0));
 
-            std::stringstream sumStr;
-            sumStr << "." << counterName << "_sum";
-            std::string sumName = sumStr.str();
-            mReporter->AddResult(sumName, static_cast<size_t>(sum));
-
-            std::string measurement = mName + mBackend + "." + counterName + "_sum";
-            TestSuite::GetInstance()->addHistogramSample(measurement, mStory,
-                                                         static_cast<double>(sum), "count");
+            std::string sumName = "." + counterName + "_max";
+            recordMetric(sumName.c_str(), static_cast<size_t>(sum), "count");
+            addHistogramSample(sumName.c_str(), static_cast<double>(sum), "count");
         }
     }
 }
@@ -524,12 +535,9 @@ void ANGLEPerfTest::processClockResult(const char *metric, double resultSeconds)
     {
         result = secondsPerIteration * kNanoSecondsPerSecond;
     }
-    mReporter->AddResult(metric, result);
-
-    // Output histogram JSON set format if enabled.
-    TestSuite::GetInstance()->addHistogramSample(mName + mBackend + metric, mStory,
-                                                 secondsPerIteration * kMilliSecondsPerSecond,
-                                                 "msBestFitFormat_smallerIsBetter");
+    recordMetric(metric, result, units);
+    addHistogramSample(metric, secondsPerIteration * kMilliSecondsPerSecond,
+                       "msBestFitFormat_smallerIsBetter");
 }
 
 void ANGLEPerfTest::processMemoryResult(const char *metric, uint64_t resultKB)
@@ -540,11 +548,9 @@ void ANGLEPerfTest::processMemoryResult(const char *metric, uint64_t resultKB)
         mReporter->RegisterImportantMetric(metric, "sizeInBytes");
     }
 
-    mReporter->AddResult(metric, static_cast<size_t>(resultKB * 1000));
-
-    TestSuite::GetInstance()->addHistogramSample(mName + mBackend + metric, mStory,
-                                                 static_cast<double>(resultKB) * 1000.0,
-                                                 "sizeInBytes_smallerIsBetter");
+    recordMetric(metric, static_cast<size_t>(resultKB * 1000), "sizeInBytes");
+    addHistogramSample(metric, static_cast<double>(resultKB) * 1000.0,
+                       "sizeInBytes_smallerIsBetter");
 }
 
 double ANGLEPerfTest::normalizedTime(size_t value) const

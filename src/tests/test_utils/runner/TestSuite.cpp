@@ -898,6 +898,51 @@ bool UsesExternalBatching()
 }
 }  // namespace
 
+void MetricWriter::enable(const std::string &testArtifactDirectory)
+{
+    mMetricFile.open(testArtifactDirectory + GetPathSeparator() + "angle_metrics");
+}
+
+void MetricWriter::writeInfo(const std::string &name,
+                             const std::string &backend,
+                             const std::string &story,
+                             const std::string &metric,
+                             const std::string &units)
+{
+    if (mMetricFile.is_open())
+    {
+        mMetricFile << "name=" << name << ","
+                    << "backend=" << backend << ","
+                    << "story=" << story << ","
+                    << "metric=" << metric << ","
+                    << "units=" << units << ",";
+    }
+}
+
+void MetricWriter::writeValue(double value)
+{
+    if (mMetricFile.is_open())
+    {
+        mMetricFile << "value=" << std::fixed << std::setprecision(10) << value << std::endl;
+    }
+}
+
+void MetricWriter::writeValue(size_t value)
+{
+    if (mMetricFile.is_open())
+    {
+        mMetricFile << "value=" << value << std::endl;
+    }
+}
+
+void MetricWriter::close()
+{
+    if (mMetricFile.is_open())
+    {
+        mMetricFile.close();
+    }
+}
+
 // static
 TestSuite *TestSuite::mInstance = nullptr;
 
@@ -1268,6 +1313,11 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
         std::stringstream resultFileName;
         resultFileName << mResultsDirectory << GetPathSeparator() << mResultsFile;
         mResultsFile = resultFileName.str();
+    }
+
+    if (!mTestArtifactDirectory.empty())
+    {
+        mMetricWriter.enable(mTestArtifactDirectory);
     }
 
     if (!mBotMode)
@@ -2015,6 +2065,8 @@ void TestSuite::writeOutputFiles(bool interrupted)
     {
         WriteHistogramJson(mHistogramWriter, mHistogramJsonFile);
     }
+
+    mMetricWriter.close();
 }
 
 const char *TestResultTypeToString(TestResultType type)
