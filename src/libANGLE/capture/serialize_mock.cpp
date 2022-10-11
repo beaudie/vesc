@@ -7,7 +7,7 @@
 //   ANGLE frame capture util stub implementation.
 //
 
-#include "libANGLE/capture/frame_capture_utils.h"
+#include "libANGLE/capture/serialize.h"
 
 namespace angle
 {
