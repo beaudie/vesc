@@ -414,8 +414,10 @@ struct PackedInputAssemblyState final
 
         // Whether the pipeline is robust (vertex input copy)
         uint32_t isRobustContext : 1;
+        // Whether the pipeline needs access to protected content (vertex input copy)
+        uint32_t isProtectedContext : 1;
 
-        uint32_t padding : 24;
+        uint32_t padding : 23;
     } bits;
 };
 
@@ -467,8 +469,10 @@ struct PackedPreRasterizationAndFragmentStates final
 
         // Whether the pipeline is robust (shader stages copy)
         uint32_t isRobustContext : 1;
+        // Whether the pipeline needs access to protected content (shader stages copy)
+        uint32_t isProtectedContext : 1;
 
-        uint32_t padding : 3;
+        uint32_t padding : 2;
     } bits;
 
     // Affecting specialization constants
@@ -542,7 +546,10 @@ struct PackedBlendMaskAndLogicOpState final
         // Dynamic in VK_EXT_extended_dynamic_state2
         uint32_t logicOp : 4;
 
-        uint32_t padding : 17;
+        // Whether the pipeline needs access to protected content (fragment output copy)
+        uint32_t isProtectedContext : 1;
+
+        uint32_t padding : 16;
 
         // The following bits are hijacked from this state to store the subset of the pipeline being
         // compiled.  The separate subsets and the full pipeline are stored in separate caches, so
