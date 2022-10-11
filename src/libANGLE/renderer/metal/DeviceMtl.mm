@@ -33,6 +33,9 @@ egl::Error DeviceMtl::getAttribute(const egl::Display *display, EGLint attribute
         case EGL_METAL_DEVICE_ANGLE:
             *outValue = displayImpl->getMetalDevice();
             break;
+        case EGL_METAL_COMMAND_QUEUE_ANGLE:
+            *outValue = displayImpl->cmdQueue().get();
+            break;
         default:
             return egl::EglBadAttribute();
     }
@@ -48,4 +51,4 @@ void DeviceMtl::generateExtensions(egl::DeviceExtensions *outExtensions) const
     outExtensions->deviceMetal = true;
 }
 
-}
+}  // namespace rx
