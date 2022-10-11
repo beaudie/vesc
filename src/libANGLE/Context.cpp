@@ -4269,6 +4269,12 @@ void Context::initCaps()
         }
     }
 
+    if (mDisplay->getFrontendFeatures().dumpShaderSource.enabled)
+    {
+        // Compile shaders in order when writing to file
+        mState.mExtensions.parallelShaderCompileKHR = false;
+    }
+
 #undef ANGLE_LIMIT_CAP
 #undef ANGLE_LOG_CAP_LIMIT
 
@@ -7019,6 +7025,23 @@ void Context::compileShader(ShaderProgramID shader)
     {
         return;
     }
+
+    if (mDisplay->getFrontendFeatures().dumpShaderSource.enabled)
+    {
+        // Create a new file per entry, i.e.: GL_VERTEX_SHADER_0.glsl, GL_FRAGMENT_SHADER_1.glsl
+        static uint32_t shaderID = 0;
+        std::stringstream fileName;
+        fileName << angle::GetTempDirectory().value() << "/"
+                 << shaderObject->getState().getShaderType() << "_" << shaderID++ << ".glsl";
+
+        // Write the file to temp storage
+        writeFile(fileName.str().c_str(), shaderObject->getState().getSource().c_str(),
+                  shaderObject->getState().getSource().size());
+
+        // Announce its name so it is easier to associate with the instruction stream
+        INFO() << "Wrote shader source: " << fileName.str();
+    }
+
     shaderObject->compile(this);
 }
 
