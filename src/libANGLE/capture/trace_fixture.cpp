@@ -112,8 +112,15 @@ void DeleteUniformLocations(GLuint program)
 
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
 {
-    gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(program, name);
+    gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(gShaderProgramMap[program], name);
 }
+
+void UniformBlockBinding(GLuint program, GLuint uniformblockIndex, GLuint binding)
+{
+    glUniformBlockBinding(gShaderProgramMap[program],
+                          gUniformBlockIndexes[program][uniformblockIndex], binding);
+}
+
 void UpdateCurrentProgram(GLuint program)
 {
     gCurrentProgram = program;
