@@ -3149,6 +3149,26 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
     }
 }
 
+void CaptureCustomUniformBlockBinding(const CallCapture &callIn, std::vector<CallCapture> &callsOut)
+{
+    const ParamBuffer &paramsIn = callIn.params;
+
+    const ParamCapture &programID =
+        paramsIn.getParam("programPacked", ParamType::TShaderProgramID, 0);
+    const ParamCapture &blockIndex =
+        paramsIn.getParam("uniformBlockIndexPacked", ParamType::TUniformBlockIndex, 1);
+    const ParamCapture &blockBinding =
+        paramsIn.getParam("uniformBlockBinding", ParamType::TGLuint, 2);
+
+    ParamBuffer params;
+    params.addValueParam("program", ParamType::TGLuint, programID.value.ShaderProgramIDVal.value);
+    params.addValueParam("uniformBlockIndex", ParamType::TGLuint,
+                         blockIndex.value.UniformBlockIndexVal.value);
+    params.addValueParam("uniformBlockBinding", ParamType::TGLuint, blockBinding.value.GLuintVal);
+
+    callsOut.emplace_back("UpdateUniformBlockBinding", std::move(params));
+}
+
 void GenerateLinkedProgram(const gl::Context *context,
                            const gl::State &replayState,
                            ResourceTracker *resourceTracker,
@@ -3250,8 +3270,9 @@ void GenerateLinkedProgram(const gl::Context *context,
          uniformBlockIndex < program->getActiveUniformBlockCount(); uniformBlockIndex++)
     {
         GLuint blockBinding = program->getUniformBlockBinding(uniformBlockIndex);
-        Capture(setupCalls, CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex},
-                                                       blockBinding));
+        CallCapture updateCallCapture =
+            CaptureUniformBlockBinding(replayState, true, id, {uniformBlockIndex}, blockBinding);
+        CaptureCustomUniformBlockBinding(updateCallCapture, *setupCalls);
     }
 
     // Add DetachShader call if that's what the app does, so that the
@@ -5077,6 +5098,13 @@ bool SkipCall(EntryPoint entryPoint)
             // - Same as uniforms, the value can vary, asking above GL_ACTIVE_ATTRIBUTES is an error
             return true;
 
+        case EntryPoint::GLGetActiveUniformBlockiv:
+        case EntryPoint::GLGetActiveUniformName:
+            // Skip these calls because:
+            // - We don't use the return values.
+            // - It reduces the number of references to the uniform block index map.
+            return true;
+
         case EntryPoint::EGLChooseConfig:
         case EntryPoint::EGLGetProcAddress:
         case EntryPoint::EGLGetConfigAttrib:
@@ -6161,6 +6189,11 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
             // Binary formats are not portable at all, so replace the calls with full linking
             // sequence
             overrideProgramBinary(context, inCall, outCalls);
+            break;
+        }
+        case EntryPoint::GLUniformBlockBinding:
+        {
+            CaptureCustomUniformBlockBinding(inCall, outCalls);
             break;
         }
         default:
@@ -8716,13 +8749,8 @@ void WriteParamValueReplay<ParamType::TUniformBlockIndex>(std::ostream &os,
                                                           const CallCapture &call,
                                                           gl::UniformBlockIndex value)
 {
-    // Find the program from the call parameters.
-    std::vector<gl::ShaderProgramID> programIDs;
-    bool foundProgram = FindShaderProgramIDsInCall(call, programIDs);
-    ASSERT(foundProgram && programIDs.size() == 1);
-
-    os << "gUniformBlockIndexes[gShaderProgramMap[" << programIDs[0].value << "]][" << value.value
-       << "]";
+    // We do not support directly using uniform block indexes due to their multiple indirections.
+    UNREACHABLE();
 }
 
 template <>
