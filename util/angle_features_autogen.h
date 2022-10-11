@@ -81,6 +81,7 @@ enum class Feature
     DontRelinkProgramsInParallel,
     DontUseLoopsToInitializeVariables,
     DoWhileGLSLCausesGPUHang,
+    DumpShaderSource,
     EglColorspaceAttributePassthrough,
     EmulateAbsIntFunction,
     EmulateAdvancedBlendEquations,
