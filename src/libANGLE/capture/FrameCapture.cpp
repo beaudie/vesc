@@ -60,6 +60,8 @@ namespace angle
 namespace
 {
 
+// TODO: Consolidate to C output and remove option. http://anglebug.com/7753
+
 constexpr char kEnabledVarName[]        = "ANGLE_CAPTURE_ENABLED";
 constexpr char kOutDirectoryVarName[]   = "ANGLE_CAPTURE_OUT_DIR";
 constexpr char kFrameStartVarName[]     = "ANGLE_CAPTURE_FRAME_START";
@@ -71,6 +73,7 @@ constexpr char kSerializeStateVarName[] = "ANGLE_CAPTURE_SERIALIZE_STATE";
 constexpr char kValidationVarName[]     = "ANGLE_CAPTURE_VALIDATION";
 constexpr char kValidationExprVarName[] = "ANGLE_CAPTURE_VALIDATION_EXPR";
 constexpr char kTrimEnabledVarName[]    = "ANGLE_CAPTURE_TRIM_ENABLED";
+constexpr char kSourceExtVarName[]      = "ANGLE_CAPTURE_SOURCE_EXT";
 constexpr char kSourceSizeVarName[]     = "ANGLE_CAPTURE_SOURCE_SIZE";
 
 constexpr size_t kBinaryAlignment   = 16;
@@ -80,6 +83,7 @@ constexpr size_t kFunctionSizeLimit = 5000;
 constexpr size_t kStringLengthLimit = 16380;
 
 // Default limit to number of bytes in a capture source files.
+constexpr char kDefaultSourceFileExt[]           = "cpp";
 constexpr size_t kDefaultSourceFileSizeThreshold = 400000;
 
 // Android debug properties that correspond to the above environment variables
@@ -93,6 +97,7 @@ constexpr char kAndroidCompression[]    = "debug.angle.capture.compression";
 constexpr char kAndroidValidation[]     = "debug.angle.capture.validation";
 constexpr char kAndroidValidationExpr[] = "debug.angle.capture.validation_expr";
 constexpr char kAndroidTrimEnabled[]    = "debug.angle.capture.trim_enabled";
+constexpr char kAndroidSourceExt[]      = "debug.angle.capture.source_ext";
 constexpr char kAndroidSourceSize[]     = "debug.angle.capture.source_size";
 
 struct FramebufferCaptureFuncs
@@ -258,14 +263,34 @@ enum class ReplayFunc
 
 constexpr uint32_t kNoPartId = std::numeric_limits<uint32_t>::max();
 
+enum FuncUsage
+{
+    Prototype,
+    Definition,
+    Call,
+};
+
+std::ostream &operator<<(std::ostream &os, FuncUsage usage)
+{
+    os << "(";
+    if (usage != FuncUsage::Call)
+    {
+        os << "void";
+    }
+    os << ")";
+    return os;
+}
+
 struct FmtReplayFunction
 {
     FmtReplayFunction(gl::ContextID contextIdIn,
+                      FuncUsage usageIn,
                       uint32_t frameIndexIn,
                       uint32_t partIdIn = kNoPartId)
-        : contextId(contextIdIn), frameIndex(frameIndexIn), partId(partIdIn)
+        : contextId(contextIdIn), usage(usageIn), frameIndex(frameIndexIn), partId(partIdIn)
     {}
     gl::ContextID contextId;
+    FuncUsage usage;
     uint32_t frameIndex;
     uint32_t partId;
 };
@@ -289,18 +314,19 @@ std::ostream &operator<<(std::ostream &os, const FmtReplayFunction &fmt)
     {
         os << "Part" << fmt.partId;
     }
-    os << "()";
+    os << fmt.usage;
     return os;
 }
 
 struct FmtSetupFunction
 {
-    FmtSetupFunction(uint32_t partIdIn, gl::ContextID contextIdIn)
-        : partId(partIdIn), contextId(contextIdIn)
+    FmtSetupFunction(uint32_t partIdIn, gl::ContextID contextIdIn, FuncUsage usageIn)
+        : partId(partIdIn), contextId(contextIdIn), usage(usageIn)
     {}
 
     uint32_t partId;
     gl::ContextID contextId;
+    FuncUsage usage;
 };
 
 std::ostream &operator<<(std::ostream &os, const FmtSetupFunction &fmt)
@@ -320,18 +346,19 @@ std::ostream &operator<<(std::ostream &os, const FmtSetupFunction &fmt)
     {
         os << "Part" << fmt.partId;
     }
-    os << "()";
+    os << fmt.usage;
     return os;
 }
 
 struct FmtResetFunction
 {
-    FmtResetFunction(uint32_t partIdIn, gl::ContextID contextIdIn)
-        : partId(partIdIn), contextId(contextIdIn)
+    FmtResetFunction(uint32_t partIdIn, gl::ContextID contextIdIn, FuncUsage usageIn)
+        : partId(partIdIn), contextId(contextIdIn), usage(usageIn)
     {}
 
     uint32_t partId;
     gl::ContextID contextId;
+    FuncUsage usage;
 };
 
 std::ostream &operator<<(std::ostream &os, const FmtResetFunction &fmt)
@@ -351,7 +378,7 @@ std::ostream &operator<<(std::ostream &os, const FmtResetFunction &fmt)
     {
         os << "Part" << fmt.partId;
     }
-    os << "()";
+    os << fmt.usage;
     return os;
 }
 
@@ -359,13 +386,19 @@ struct FmtFunction
 {
     FmtFunction(ReplayFunc funcTypeIn,
                 gl::ContextID contextIdIn,
+                FuncUsage usageIn,
                 uint32_t frameIndexIn,
                 uint32_t partIdIn)
-        : funcType(funcTypeIn), contextId(contextIdIn), frameIndex(frameIndexIn), partId(partIdIn)
+        : funcType(funcTypeIn),
+          contextId(contextIdIn),
+          usage(usageIn),
+          frameIndex(frameIndexIn),
+          partId(partIdIn)
     {}
 
     ReplayFunc funcType;
     gl::ContextID contextId;
+    FuncUsage usage;
     uint32_t frameIndex;
     uint32_t partId;
 };
@@ -375,15 +408,15 @@ std::ostream &operator<<(std::ostream &os, const FmtFunction &fmt)
     switch (fmt.funcType)
     {
         case ReplayFunc::Replay:
-            os << FmtReplayFunction(fmt.contextId, fmt.frameIndex, fmt.partId);
+            os << FmtReplayFunction(fmt.contextId, fmt.usage, fmt.frameIndex, fmt.partId);
             break;
 
         case ReplayFunc::Setup:
-            os << FmtSetupFunction(fmt.partId, fmt.contextId);
+            os << FmtSetupFunction(fmt.partId, fmt.contextId, fmt.usage);
             break;
 
         case ReplayFunc::Reset:
-            os << FmtResetFunction(fmt.partId, fmt.contextId);
+            os << FmtResetFunction(fmt.partId, fmt.contextId, fmt.usage);
             break;
 
         default:
@@ -396,16 +429,20 @@ std::ostream &operator<<(std::ostream &os, const FmtFunction &fmt)
 
 struct FmtGetSerializedContextStateFunction
 {
-    FmtGetSerializedContextStateFunction(gl::ContextID contextIdIn, uint32_t frameIndexIn)
-        : contextId(contextIdIn), frameIndex(frameIndexIn)
+    FmtGetSerializedContextStateFunction(gl::ContextID contextIdIn,
+                                         FuncUsage usageIn,
+                                         uint32_t frameIndexIn)
+        : contextId(contextIdIn), usage(usageIn), frameIndex(frameIndexIn)
     {}
     gl::ContextID contextId;
+    FuncUsage usage;
     uint32_t frameIndex;
 };
 
 std::ostream &operator<<(std::ostream &os, const FmtGetSerializedContextStateFunction &fmt)
 {
-    os << "GetSerializedContext" << fmt.contextId << "StateFrame" << fmt.frameIndex << "Data()";
+    os << "GetSerializedContext" << fmt.contextId << "StateFrame" << fmt.frameIndex << "Data"
+       << fmt.usage;
     return os;
 }
 
@@ -478,6 +515,38 @@ void WriteInlineData<GLchar>(const std::vector<uint8_t> &vec, std::ostream &out)
     out << "\"";
 }
 
+struct FmtMultiLineString
+{
+    FmtMultiLineString(const std::string &str)
+        : strings(angle::SplitString(str,
+                                     "\n",
+                                     WhitespaceHandling::KEEP_WHITESPACE,
+                                     SplitResult::SPLIT_WANT_ALL))
+    {}
+
+    std::vector<std::string> strings;
+};
+
+std::ostream &operator<<(std::ostream &ostr, const FmtMultiLineString &fmt)
+{
+    ASSERT(!fmt.strings.empty());
+    bool first = true;
+    for (const std::string &string : fmt.strings)
+    {
+        if (!first)
+        {
+            ostr << "\n";
+        }
+        else
+        {
+            first = false;
+        }
+        ostr << "\"" << string << "\\n\"";
+    }
+
+    return ostr;
+}
+
 void WriteStringParamReplay(ReplayWriter &replayWriter,
                             std::ostream &out,
                             std::ostream &header,
@@ -498,12 +567,12 @@ void WriteStringParamReplay(ReplayWriter &replayWriter,
         size_t offset = rx::roundUpPow2(binaryData->size(), kBinaryAlignment);
         binaryData->resize(offset + str.size() + 1);
         memcpy(binaryData->data() + offset, str.data(), str.size() + 1);
-        out << "reinterpret_cast<const char *>(&gBinaryData[" << offset << "])";
+        out << "(const char *)&gBinaryData[" << offset << "]";
     }
     else if (str.find('\n') != std::string::npos)
     {
         std::string varName = replayWriter.getInlineVariableName(call.entryPoint, param.name);
-        header << "const char " << varName << "[] = R\"(" << str << ")\";\n";
+        header << "const char " << varName << "[] = \n" << FmtMultiLineString(str) << ";";
         out << varName;
     }
     else
@@ -553,7 +622,7 @@ void WriteStringPointerParamReplay(ReplayWriter &replayWriter,
                     separator  = "";
                 }
 
-                header << "    R\"(" << str.substr(i, copyLength) << ")\"" << separator << "\n";
+                header << FmtMultiLineString(str.substr(i, copyLength)) << separator << "\n";
             }
         }
 
@@ -644,8 +713,7 @@ void WriteBinaryParamReplay(ReplayWriter &replayWriter,
         size_t offset = rx::roundUpPow2(binaryData->size(), kBinaryAlignment);
         binaryData->resize(offset + data.size());
         memcpy(binaryData->data() + offset, data.data(), data.size());
-        out << "reinterpret_cast<" << ParamTypeToString(overrideType) << ">(&gBinaryData[" << offset
-            << "])";
+        out << "(" << ParamTypeToString(overrideType) << ")&gBinaryData[" << offset << "]";
     }
 }
 
@@ -673,7 +741,7 @@ void WriteCppReplayForCall(const CallCapture &call,
         }
         else if (param.readBufferSizeBytes > 0)
         {
-            callOut << "reinterpret_cast<" << ParamTypeToString(param.type) << ">(gReadBuffer)";
+            callOut << "(" << ParamTypeToString(param.type) << ")gReadBuffer";
         }
         else if (param.data.empty())
         {
@@ -1476,11 +1544,15 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
 
     if (calls.size() > kFunctionSizeLimit)
     {
-        out << "void " << FmtFunction(replayFunc, contextID, frameIndex, ++partCount) << "\n";
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, ++partCount)
+            << "\n";
     }
     else
     {
-        out << "void " << FmtFunction(replayFunc, contextID, frameIndex, kNoPartId) << "\n";
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
     }
 
     out << "{\n";
@@ -1501,7 +1573,10 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
         {
             out << "}\n";
             out << "\n";
-            out << "void " << FmtFunction(replayFunc, contextID, frameIndex, ++partCount) << "\n";
+            out << "void "
+                << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex,
+                               ++partCount)
+                << "\n";
             out << "{\n";
         }
     }
@@ -1510,13 +1585,17 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
     if (partCount > 0)
     {
         out << "\n";
-        out << "void " << FmtFunction(replayFunc, contextID, frameIndex, kNoPartId) << "\n";
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
         out << "{\n";
 
         // Write out the main call which calls all the parts.
         for (int i = 1; i <= partCount; i++)
         {
-            out << "    " << FmtFunction(replayFunc, contextID, frameIndex, i) << ";\n";
+            out << "    "
+                << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, i)
+                << ";\n";
         }
 
         out << "}\n";
@@ -1547,6 +1626,7 @@ void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
 
     {
         std::stringstream include;
+        include << "#define ANGLE_TRACE_C\n";
         include << "#include \""
                 << FmtCapturePrefix(frameCaptureShared.getWindowSurfaceContextID(), captureLabel)
                 << ".h\"\n";
@@ -1562,7 +1642,7 @@ void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
         std::stringstream headerStream;
         std::stringstream bodyStream;
 
-        protoStream << "void " << FmtSetupFunction(kNoPartId, context->id());
+        protoStream << "void " << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Prototype);
         std::string proto = protoStream.str();
 
         WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Setup, replayWriter, frameIndex,
@@ -1589,6 +1669,7 @@ void WriteShareGroupCppSetupReplay(ReplayWriter &replayWriter,
     {
         std::stringstream include;
 
+        include << "#define ANGLE_TRACE_C\n";
         include << "#include \"angle_trace_gl.h\"\n";
         include << "#include \"" << FmtCapturePrefix(windowSurfaceContextID, captureLabel)
                 << ".h\"\n";
@@ -1603,7 +1684,8 @@ void WriteShareGroupCppSetupReplay(ReplayWriter &replayWriter,
         std::stringstream headerStream;
         std::stringstream bodyStream;
 
-        protoStream << "void " << FmtSetupFunction(kNoPartId, kSharedContextId);
+        protoStream << "void "
+                    << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Prototype);
         std::string proto = protoStream.str();
 
         WriteCppReplayFunctionWithParts(kSharedContextId, ReplayFunc::Setup, replayWriter,
@@ -5275,6 +5357,21 @@ FrameCaptureShared::FrameCaptureShared()
         mTrimEnabled = false;
     }
 
+    // TODO: Remove. http://anglebug.com/7753
+    std::string sourceExtFromEnv =
+        GetEnvironmentVarOrUnCachedAndroidProperty(kSourceExtVarName, kAndroidSourceExt);
+    if (!sourceExtFromEnv.empty())
+    {
+        if (sourceExtFromEnv == "c" || sourceExtFromEnv == "cpp")
+        {
+            mReplayWriter.setSourceFileExtension(sourceExtFromEnv.c_str());
+        }
+        else
+        {
+            WARN() << "Invalid capture source extension: " << sourceExtFromEnv;
+        }
+    }
+
     std::string sourceSizeFromEnv =
         GetEnvironmentVarOrUnCachedAndroidProperty(kSourceSizeVarName, kAndroidSourceSize);
     if (!sourceSizeFromEnv.empty())
@@ -7749,7 +7846,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         header << "#pragma once\n";
         header << "\n";
         header << "#include <EGL/egl.h>\n";
-        header << "#include <cstdint>\n";
+        header << "#include \"stdint.h\"\n";
 
         std::string includes = header.str();
         mReplayWriter.setHeaderPrologue(includes);
@@ -7758,6 +7855,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     {
         std::stringstream source;
 
+        source << "#define ANGLE_TRACE_C\n";
         source << "#include \"" << FmtCapturePrefix(contextId, mCaptureLabel) << ".h\"\n";
         source << "#include \"trace_fixture.h\"\n";
         source << "#include \"angle_trace_gl.h\"\n";
@@ -7767,7 +7865,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     }
 
     {
-        std::string proto = "void InitReplay()";
+        std::string proto = "void InitReplay(void)";
 
         std::stringstream source;
         source << proto << "\n";
@@ -7792,7 +7890,8 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         for (uint32_t frameIndex : mActiveFrameIndices)
         {
             source << "        case " << frameIndex << ":\n";
-            source << "            " << FmtReplayFunction(contextId, frameIndex) << ";\n";
+            source << "            " << FmtReplayFunction(contextId, FuncUsage::Call, frameIndex)
+                   << ";\n";
             source << "            break;\n";
         }
         source << "        default:\n";
@@ -7805,7 +7904,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
 
     if (writeResetContextCall)
     {
-        std::string proto = "void ResetReplay()";
+        std::string proto = "void ResetReplay(void)";
 
         std::stringstream source;
 
@@ -7832,7 +7931,8 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         {
             source << "        case " << frameIndex << ":\n";
             source << "            return "
-                   << FmtGetSerializedContextStateFunction(contextId, frameIndex) << ";\n";
+                   << FmtGetSerializedContextStateFunction(contextId, FuncUsage::Call, frameIndex)
+                   << ";\n";
         }
         source << "        default:\n";
         source << "            return nullptr;\n";
@@ -7864,6 +7964,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
     {
         std::stringstream header;
 
+        header << "#define ANGLE_TRACE_C\n";
         header << "#include \"" << FmtCapturePrefix(context->id(), mCaptureLabel) << ".h\"\n";
         header << "#include \"angle_trace_gl.h\"\n";
 
@@ -7881,7 +7982,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             std::stringstream headerStream;
             std::stringstream bodyStream;
 
-            protoStream << "void " << FmtSetupFunction(kNoPartId, context->id());
+            protoStream << "void "
+                        << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Prototype);
             std::string proto = protoStream.str();
 
             WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Setup, mReplayWriter,
@@ -7892,7 +7994,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         }
 
         {
-            std::string proto = "void SetupReplay()";
+            std::string proto = "void SetupReplay(void)";
 
             std::stringstream out;
 
@@ -7903,11 +8005,12 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             out << "    InitReplay();\n";
             if (usesMidExecutionCapture())
             {
-                out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId) << ";\n";
+                out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
+                    << ";\n";
             }
 
             // Setup the presentation (this) context first.
-            out << "    " << FmtSetupFunction(kNoPartId, context->id()) << ";\n";
+            out << "    " << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Call) << ";\n";
             out << "\n";
 
             // Setup each of the auxiliary contexts.
@@ -7931,7 +8034,9 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 // MEC.
                 if (usesMidExecutionCapture())
                 {
-                    out << "    " << FmtSetupFunction(kNoPartId, shareContext->id()) << ";\n";
+                    out << "    "
+                        << FmtSetupFunction(kNoPartId, shareContext->id(), FuncUsage::Call)
+                        << ";\n";
                 }
             }
 
@@ -7957,7 +8062,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         std::stringstream resetHeaderStream;
         std::stringstream resetBodyStream;
 
-        resetProtoStream << "void ResetReplay()";
+        resetProtoStream << "void ResetReplay(void)";
 
         resetBodyStream << resetProtoStream.str() << "\n";
         resetBodyStream << "{\n";
@@ -7983,7 +8088,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             std::stringstream headerStream;
             std::stringstream bodyStream;
 
-            protoStream << "void " << FmtResetFunction(kNoPartId, kSharedContextId);
+            protoStream << "void "
+                        << FmtResetFunction(kNoPartId, kSharedContextId, FuncUsage::Prototype);
             bodyStream << protoStream.str() << "\n";
             bodyStream << "{\n";
 
@@ -8009,7 +8115,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         }
 
         // Emit the call to shared object reset
-        resetBodyStream << "    " << FmtResetFunction(kNoPartId, kSharedContextId) << ";\n";
+        resetBodyStream << "    " << FmtResetFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
+                        << ";\n";
 
         // Reset our output tracker (Note: This was unused during shared reset)
         anyResourceReset = false;
@@ -8023,7 +8130,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 std::stringstream headerStream;
                 std::stringstream bodyStream;
 
-                protoStream << "void " << FmtResetFunction(kNoPartId, contextID);
+                protoStream << "void "
+                            << FmtResetFunction(kNoPartId, contextID, FuncUsage::Prototype);
                 bodyStream << protoStream.str() << "\n";
                 bodyStream << "{\n";
 
@@ -8058,7 +8166,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             }
 
             // Emit a call to reset each context's non-shared objects
-            resetBodyStream << "    " << FmtResetFunction(kNoPartId, contextID) << ";\n";
+            resetBodyStream << "    " << FmtResetFunction(kNoPartId, contextID, FuncUsage::Call)
+                            << ";\n";
         }
 
         // Bind the main context again if we bound any additional contexts
@@ -8081,7 +8190,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
     if (!mFrameCalls.empty())
     {
         std::stringstream protoStream;
-        protoStream << "void " << FmtReplayFunction(context->id(), frameIndex);
+        protoStream << "void "
+                    << FmtReplayFunction(context->id(), FuncUsage::Prototype, frameIndex);
         std::string proto = protoStream.str();
 
         std::stringstream headerStream;
@@ -8102,13 +8212,14 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         {
             std::stringstream protoStream;
             protoStream << "const char *"
-                        << FmtGetSerializedContextStateFunction(context->id(), frameIndex);
+                        << FmtGetSerializedContextStateFunction(context->id(), FuncUsage::Prototype,
+                                                                frameIndex);
             std::string proto = protoStream.str();
 
             std::stringstream bodyStream;
             bodyStream << proto << "\n";
             bodyStream << "{\n";
-            bodyStream << "    return R\"(" << serializedContextString << ")\";\n";
+            bodyStream << "    return " << FmtMultiLineString(serializedContextString) << ";\n";
             bodyStream << "}\n";
 
             mReplayWriter.addPrivateFunction(proto, std::stringstream(), bodyStream);
@@ -8308,7 +8419,9 @@ void CaptureShaderStrings(GLsizei count,
 
 // ReplayWriter implementation.
 ReplayWriter::ReplayWriter()
-    : mSourceFileSizeThreshold(kDefaultSourceFileSizeThreshold), mFrameIndex(1)
+    : mSourceFileExtension(kDefaultSourceFileExt),
+      mSourceFileSizeThreshold(kDefaultSourceFileSizeThreshold),
+      mFrameIndex(1)
 {}
 
 ReplayWriter::~ReplayWriter()
@@ -8319,6 +8432,11 @@ ReplayWriter::~ReplayWriter()
     ASSERT(mPublicFunctions.empty());
     ASSERT(mGlobalVariableDeclarations.empty());
     ASSERT(mReplayHeaders.empty());
+}
+
+void ReplayWriter::setSourceFileExtension(const char *ext)
+{
+    mSourceFileExtension = ext;
 }
 
 void ReplayWriter::setSourceFileSizeThreshold(size_t sourceFileSizeThreshold)
@@ -8462,9 +8580,11 @@ void ReplayWriter::saveFrame()
         return;
     }
 
+    ASSERT(!mSourceFileExtension.empty());
+
     std::stringstream strstr;
-    strstr << mFilenamePattern << "_" << std::setfill('0') << std::setw(3) << mFrameIndex++
-           << ".cpp";
+    strstr << mFilenamePattern << "_" << std::setfill('0') << std::setw(3) << mFrameIndex++ << "."
+           << mSourceFileExtension;
 
     std::string frameFilePath = strstr.str();
 
@@ -8521,8 +8641,10 @@ void ReplayWriter::saveHeader()
 
 void ReplayWriter::saveIndexFilesAndHeader()
 {
+    ASSERT(!mSourceFileExtension.empty());
+
     std::stringstream sourcePathStream;
-    sourcePathStream << mFilenamePattern << ".cpp";
+    sourcePathStream << mFilenamePattern << "." << mSourceFileExtension;
     std::string sourcePath = sourcePathStream.str();
 
     writeReplaySource(sourcePath);
@@ -8531,8 +8653,10 @@ void ReplayWriter::saveIndexFilesAndHeader()
 
 void ReplayWriter::saveSetupFile()
 {
+    ASSERT(!mSourceFileExtension.empty());
+
     std::stringstream strstr;
-    strstr << mFilenamePattern << ".cpp";
+    strstr << mFilenamePattern << "." << mSourceFileExtension;
 
     std::string frameFilePath = strstr.str();
 
@@ -8560,15 +8684,11 @@ void ReplayWriter::writeReplaySource(const std::string &filename)
 
     saveCpp << "// Public Functions\n";
     saveCpp << "\n";
-    saveCpp << "extern \"C\"\n";
-    saveCpp << "{\n";
 
     for (const std::string &func : mPublicFunctions)
     {
         saveCpp << func << "\n";
     }
-
-    saveCpp << "}  // extern \"C\"\n";
 
     mReplayHeaders.clear();
     mPrivateFunctions.clear();
