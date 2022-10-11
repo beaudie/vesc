@@ -105,6 +105,10 @@ struct FrontendFeatures : FeatureSetBase
     FeatureInfo cacheCompiledShader = {"cacheCompiledShader", FeatureCategory::FrontendFeatures,
                                        "Enable to cache compiled shaders", &members,
                                        "http://anglebug.com/7036"};
+
+    FeatureInfo dumpShaderSource = {"dumpShaderSource", FeatureCategory::FrontendFeatures,
+                                    "Write shader source to temp directory", &members,
+                                    "http://anglebug.com/7760"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
