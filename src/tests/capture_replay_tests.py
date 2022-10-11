@@ -390,7 +390,7 @@ class Test():
         source_json_count = 0
         context_id = 0
         for f in test_files:
-            if "_001.cpp" in f:
+            if "_001.c" in f:
                 frame_files_count += 1
             elif f.endswith(".json"):
                 source_json_count += 1
@@ -399,7 +399,7 @@ class Test():
                 if TRACE_FILE_SUFFIX in f:
                     context = f.split(TRACE_FILE_SUFFIX)[1][:-2]
                     context_id = int(context)
-            elif f.endswith(".cpp"):
+            elif f.endswith(".c"):
                 context_source_count += 1
         can_run_replay = frame_files_count >= 1 and context_header_count >= 1 \
             and context_source_count >= 1 and source_json_count == 1
