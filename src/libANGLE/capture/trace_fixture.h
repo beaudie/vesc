@@ -11,6 +11,7 @@
 #define ANGLE_TRACE_FIXTURE_H_
 
 #include <EGL/egl.h>
+#include <EGL/eglext.h>
 #include "angle_gl.h"
 
 #include <cstdint>
@@ -62,6 +63,16 @@ using BlockIndexesMap = std::unordered_map<GLuint, std::unordered_map<GLuint, GL
 extern BlockIndexesMap gUniformBlockIndexes;
 using BufferHandleMap = std::unordered_map<GLuint, void *>;
 extern BufferHandleMap gMappedBufferData;
+using ClientBufferMap = std::unordered_map<uintptr_t, EGLClientBuffer>;
+extern ClientBufferMap gClientBufferMap;
+using EGLImageMap = std::unordered_map<uintptr_t, GLeglImageOES>;
+extern EGLImageMap gEGLImageMap;
+using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
+extern SyncResourceMap gSyncMap;
+using SurfaceMap = std::unordered_map<uintptr_t, EGLSurface>;
+extern SurfaceMap gSurfaceMap;
+using ContextMap = std::unordered_map<uintptr_t, EGLContext>;
+extern ContextMap gContextMap;
 
 void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLint count);
 void DeleteUniformLocations(GLuint program);
@@ -108,20 +119,6 @@ extern GLuint *gTextureMap;
 extern GLuint *gTransformFeedbackMap;
 extern GLuint *gVertexArrayMap;
 
-using ClientBufferMap = std::unordered_map<EGLClientBuffer, EGLClientBuffer>;
-extern ClientBufferMap gClientBufferMap;
-using EGLImageMap = std::unordered_map<uintptr_t, GLeglImageOES>;
-extern EGLImageMap gEGLImageMap;
-
-// TODO(http://www.anglebug.com/5878): avoid std::unordered_map, it's slow
-using SyncResourceMap = std::unordered_map<uintptr_t, GLsync>;
-extern SyncResourceMap gSyncMap;
-using ContextMap = std::unordered_map<uintptr_t, EGLContext>;
-extern ContextMap gContextMap;
-
-using SurfaceMap = std::unordered_map<uintptr_t, EGLSurface>;
-extern SurfaceMap gSurfaceMap;
-
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size);
 void UpdateClientBufferData(GLuint bufferID, const void *source, GLsizei size);
 void UpdateClientBufferDataWithOffset(GLuint bufferID,
@@ -142,9 +139,6 @@ void UpdateTextureID(GLuint id, GLsizei readBufferOffset);
 void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 
-void UpdateClientBuffer(EGLClientBuffer key, EGLClientBuffer data);
-EGLClientBuffer GetClientBuffer(EGLenum target, uint64_t key);
-
 void SetFramebufferID(GLuint id);
 void SetBufferID(GLuint id);
 void SetRenderbufferID(GLuint id);
@@ -162,6 +156,30 @@ void MapBufferRangeEXT(GLenum target,
                        GLbitfield access,
                        GLuint buffer);
 void MapBufferOES(GLenum target, GLbitfield access, GLuint buffer);
+void CreateShader(GLenum shaderType, GLuint shaderProgram);
+void CreateProgram(GLuint shaderProgram);
+void CreateShaderProgramv(GLenum type,
+                          GLsizei count,
+                          const GLchar *const *strings,
+                          GLuint shaderProgram);
+void FenceSync(GLenum condition, GLbitfield flags, uintptr_t fenceSync);
+void CreateEGLImage(EGLDisplay dpy,
+                    EGLContext ctx,
+                    EGLenum target,
+                    uintptr_t buffer,
+                    const EGLAttrib *attrib_list,
+                    uintptr_t image);
+void CreateEGLImageKHR(EGLDisplay dpy,
+                       EGLContext ctx,
+                       EGLenum target,
+                       uintptr_t buffer,
+                       const EGLint *attrib_list,
+                       uintptr_t image);
+void CreatePbufferSurface(EGLDisplay dpy,
+                          EGLConfig config,
+                          const EGLint *attrib_list,
+                          uintptr_t surface);
+void CreateNativeClientBuffer(const EGLint *attrib_list, uintptr_t clientBuffer);
 
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line);
 #define VALIDATE_CHECKPOINT(STATE) ValidateSerializedState(STATE, __FILE__, __LINE__)

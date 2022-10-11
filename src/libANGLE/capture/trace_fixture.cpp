@@ -81,6 +81,35 @@ void LoadBinaryData(const char *fileName)
     fclose(fp);
 }
 
+EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
+{
+    switch (target)
+    {
+        case EGL_GL_TEXTURE_2D:
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+        case EGL_GL_TEXTURE_3D:
+        {
+            uintptr_t id = static_cast<uintptr_t>(gTextureMap[key]);
+            return reinterpret_cast<EGLClientBuffer>(id);
+        }
+        case EGL_GL_RENDERBUFFER:
+        {
+            uintptr_t id = static_cast<uintptr_t>(gRenderbufferMap[key]);
+            return reinterpret_cast<EGLClientBuffer>(id);
+        }
+        default:
+        {
+            const auto &iData = gClientBufferMap.find(key);
+            return iData != gClientBufferMap.end() ? iData->second : nullptr;
+        }
+    }
+}
+
 ValidateSerializedStateCallback gValidateSerializedStateCallback;
 std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
 }  // namespace
@@ -354,40 +383,6 @@ void SetTextureID(GLuint id)
     SetResourceID(gTextureMap, id);
 }
 
-void UpdateClientBuffer(EGLClientBuffer key, EGLClientBuffer data)
-{
-    gClientBufferMap[key] = data;
-}
-
-EGLClientBuffer GetClientBuffer(EGLenum target, uint64_t key)
-{
-    switch (target)
-    {
-        case EGL_GL_TEXTURE_2D:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        case EGL_GL_TEXTURE_3D:
-        {
-            GLuint64 id = gTextureMap[key];
-            return reinterpret_cast<EGLClientBuffer>(id);
-        }
-        case EGL_GL_RENDERBUFFER:
-        {
-            GLuint64 id = gRenderbufferMap[key];
-            return reinterpret_cast<EGLClientBuffer>(id);
-        }
-        default:
-        {
-            const auto &iData = gClientBufferMap.find(reinterpret_cast<EGLClientBuffer>(key));
-            return iData != gClientBufferMap.end() ? iData->second : nullptr;
-        }
-    }
-}
-
 GLeglImageOES GetEGLImage(uintptr_t key)
 {
     auto iData = gEGLImageMap.find(key);
@@ -423,6 +418,64 @@ void MapBufferRangeEXT(GLenum target,
 void MapBufferOES(GLenum target, GLbitfield access, GLuint buffer)
 {
     gMappedBufferData[gBufferMap[buffer]] = glMapBufferOES(target, access);
+}
+
+void CreateShader(GLenum shaderType, GLuint shaderProgram)
+{
+    gShaderProgramMap[shaderProgram] = glCreateShader(shaderType);
+}
+
+void CreateProgram(GLuint shaderProgram)
+{
+    gShaderProgramMap[shaderProgram] = glCreateProgram();
+}
+
+void CreateShaderProgramv(GLenum type,
+                          GLsizei count,
+                          const GLchar *const *strings,
+                          GLuint shaderProgram)
+{
+    gShaderProgramMap[shaderProgram] = glCreateShaderProgramv(type, count, strings);
+}
+
+void FenceSync(GLenum condition, GLbitfield flags, uintptr_t fenceSync)
+{
+    gSyncMap[fenceSync] = glFenceSync(condition, flags);
+}
+
+void CreateEGLImage(EGLDisplay dpy,
+                    EGLContext ctx,
+                    EGLenum target,
+                    uintptr_t buffer,
+                    const EGLAttrib *attrib_list,
+                    uintptr_t image)
+{
+    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
+    gEGLImageMap[image]          = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+}
+
+void CreateEGLImageKHR(EGLDisplay dpy,
+                       EGLContext ctx,
+                       EGLenum target,
+                       uintptr_t buffer,
+                       const EGLint *attrib_list,
+                       uintptr_t image)
+{
+    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
+    gEGLImageMap[image]          = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+}
+
+void CreatePbufferSurface(EGLDisplay dpy,
+                          EGLConfig config,
+                          const EGLint *attrib_list,
+                          uintptr_t surface)
+{
+    gSurfaceMap[surface] = eglCreatePbufferSurface(dpy, config, attrib_list);
+}
+
+void CreateNativeClientBuffer(const EGLint *attrib_list, uintptr_t clientBuffer)
+{
+    gClientBufferMap[clientBuffer] = eglCreateNativeClientBufferANDROID(attrib_list);
 }
 
 ANGLE_REPLAY_EXPORT PFNEGLCREATEIMAGEPROC r_eglCreateImage;
