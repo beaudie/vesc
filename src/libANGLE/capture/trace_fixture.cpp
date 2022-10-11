@@ -161,6 +161,7 @@ uint8_t *gReadBuffer;
 uint8_t *gClientArrays[kMaxClientArrays];
 SyncResourceMap gSyncMap;
 ContextMap gContextMap;
+uintptr_t gShareContextId;
 
 GLuint *gBufferMap;
 GLuint *gFenceNVMap;
@@ -197,6 +198,34 @@ GLuint *AllocateZeroedUints(size_t count)
     GLuint *mem = new GLuint[count + 1];
     memset(mem, 0, sizeof(GLuint) * (count + 1));
     return mem;
+}
+
+// TODO(jmadill): Consolidate into one function. http://anglebug.com/7731
+void InitializeReplay2(const char *binaryDataFileName,
+                       size_t maxClientArraySize,
+                       size_t readBufferSize,
+                       uintptr_t contextId,
+                       uint32_t maxBuffer,
+                       uint32_t maxFenceNV,
+                       uint32_t maxFramebuffer,
+                       uint32_t maxMemoryObject,
+                       uint32_t maxProgramPipeline,
+                       uint32_t maxQuery,
+                       uint32_t maxRenderbuffer,
+                       uint32_t maxSampler,
+                       uint32_t maxSemaphore,
+                       uint32_t maxShaderProgram,
+                       uint32_t maxTexture,
+                       uint32_t maxTransformFeedback,
+                       uint32_t maxVertexArray)
+{
+    InitializeReplay(binaryDataFileName, maxClientArraySize, readBufferSize, maxBuffer, maxFenceNV,
+                     maxFramebuffer, maxMemoryObject, maxProgramPipeline, maxQuery, maxRenderbuffer,
+                     maxSampler, maxSemaphore, maxShaderProgram, maxTexture, maxTransformFeedback,
+                     maxVertexArray);
+
+    gShareContextId        = contextId;
+    gContextMap[contextId] = eglGetCurrentContext();
 }
 
 void InitializeReplay(const char *binaryDataFileName,
@@ -241,6 +270,8 @@ void InitializeReplay(const char *binaryDataFileName,
 
     gUniformLocations = new GLint *[maxShaderProgram + 1];
     memset(gUniformLocations, 0, sizeof(GLint *) * (maxShaderProgram + 1));
+
+    gContextMap[0] = EGL_NO_CONTEXT;
 }
 
 void FinishReplay()
@@ -444,25 +475,26 @@ void FenceSync(GLenum condition, GLbitfield flags, uintptr_t fenceSync)
 }
 
 void CreateEGLImage(EGLDisplay dpy,
-                    EGLContext ctx,
+                    uintptr_t ctx,
                     EGLenum target,
                     uintptr_t buffer,
                     const EGLAttrib *attrib_list,
                     uintptr_t image)
 {
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap[image]          = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+    gEGLImageMap[image] = eglCreateImage(dpy, gContextMap[ctx], target, clientBuffer, attrib_list);
 }
 
 void CreateEGLImageKHR(EGLDisplay dpy,
-                       EGLContext ctx,
+                       uintptr_t ctx,
                        EGLenum target,
                        uintptr_t buffer,
                        const EGLint *attrib_list,
                        uintptr_t image)
 {
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap[image]          = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    gEGLImageMap[image] =
+        eglCreateImageKHR(dpy, gContextMap[ctx], target, clientBuffer, attrib_list);
 }
 
 void CreatePbufferSurface(EGLDisplay dpy,
@@ -476,6 +508,19 @@ void CreatePbufferSurface(EGLDisplay dpy,
 void CreateNativeClientBuffer(const EGLint *attrib_list, uintptr_t clientBuffer)
 {
     gClientBufferMap[clientBuffer] = eglCreateNativeClientBufferANDROID(attrib_list);
+}
+
+void CreateContext(uintptr_t contextId)
+{
+    EGLContext shareContext = gContextMap[gShareContextId];
+    EGLContext context      = eglCreateContext(nullptr, nullptr, shareContext, nullptr);
+    gContextMap[contextId]  = context;
+}
+
+void MakeCurrent(uintptr_t contextId)
+{
+    // The display and surface are placeholder values that get transformed in the trace harness.
+    eglMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, gContextMap[contextId]);
 }
 
 ANGLE_REPLAY_EXPORT PFNEGLCREATEIMAGEPROC r_eglCreateImage;
