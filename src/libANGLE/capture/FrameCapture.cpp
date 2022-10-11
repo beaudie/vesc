@@ -693,35 +693,6 @@ void WriteCppReplayForCall(const CallCapture &call,
         callOut << "gClientBufferMap[" << reinterpret_cast<EGLClientBuffer>(buffer) << "] = ";
     }
 
-    // Depending on how a buffer is mapped, we may need to track its location for readback
-    bool trackBufferPointer = false;
-
-    if (call.entryPoint == EntryPoint::GLMapBufferRange ||
-        call.entryPoint == EntryPoint::GLMapBufferRangeEXT)
-    {
-        GLbitfield access =
-            call.params.getParam("access", ParamType::TGLbitfield, 3).value.GLbitfieldVal;
-
-        trackBufferPointer = access & GL_MAP_WRITE_BIT;
-    }
-
-    if (call.entryPoint == EntryPoint::GLMapBuffer || call.entryPoint == EntryPoint::GLMapBufferOES)
-    {
-        GLenum access = call.params.getParam("access", ParamType::TGLenum, 1).value.GLenumVal;
-
-        trackBufferPointer =
-            access == GL_WRITE_ONLY_OES || access == GL_WRITE_ONLY || access == GL_READ_WRITE;
-    }
-
-    if (trackBufferPointer)
-    {
-        // Track the returned pointer so we update its data when unmapped
-        gl::BufferID bufferID = call.params.getMappedBufferID();
-        callOut << "gMappedBufferData[";
-        WriteParamValueReplay<ParamType::TBufferID>(callOut, call, bufferID);
-        callOut << "] = ";
-    }
-
     callOut << call.name() << "(";
 
     bool first = true;
@@ -3169,6 +3140,12 @@ void CaptureCustomUniformBlockBinding(const CallCapture &callIn, std::vector<Cal
     callsOut.emplace_back("UpdateUniformBlockBinding", std::move(params));
 }
 
+void CaptureCustomMapBuffer(const char *name, CallCapture &call, std::vector<CallCapture> &callsOut)
+{
+    call.params.addValueParam("buffer", ParamType::TGLuint, call.params.getMappedBufferID().value);
+    callsOut.emplace_back(name, std::move(call.params));
+}
+
 void GenerateLinkedProgram(const gl::Context *context,
                            const gl::State &replayState,
                            ResourceTracker *resourceTracker,
@@ -3350,12 +3327,12 @@ void CaptureBufferResetCalls(const gl::Context *context,
         Capture(&bufferMapCalls[bufferID],
                 CaptureBindBuffer(replayState, true, gl::BufferBinding::Array, *id));
 
-        void *dontCare = nullptr;
-        Capture(&bufferMapCalls[bufferID],
-                CaptureMapBufferRange(replayState, true, gl::BufferBinding::Array,
-                                      static_cast<GLsizeiptr>(buffer->getMapOffset()),
-                                      static_cast<GLsizeiptr>(buffer->getMapLength()),
-                                      buffer->getAccessFlags(), dontCare));
+        void *dontCare             = nullptr;
+        CallCapture mapBufferRange = CaptureMapBufferRange(
+            replayState, true, gl::BufferBinding::Array,
+            static_cast<GLsizeiptr>(buffer->getMapOffset()),
+            static_cast<GLsizeiptr>(buffer->getMapLength()), buffer->getAccessFlags(), dontCare);
+        CaptureCustomMapBuffer("MapBufferRange", mapBufferRange, bufferMapCalls[bufferID]);
 
         // Track the bufferID that was just mapped
         bufferMapCalls[bufferID].back().params.setMappedBufferID(buffer->id());
@@ -3533,11 +3510,12 @@ void CaptureShareGroupMidExecutionSetup(
         if (bufferMapped)
         {
             void *dontCare = nullptr;
-            Capture(setupCalls,
-                    CaptureMapBufferRange(replayState, true, gl::BufferBinding::Array,
-                                          static_cast<GLsizeiptr>(buffer->getMapOffset()),
-                                          static_cast<GLsizeiptr>(buffer->getMapLength()),
-                                          buffer->getAccessFlags(), dontCare));
+            CallCapture mapBufferRange =
+                CaptureMapBufferRange(replayState, true, gl::BufferBinding::Array,
+                                      static_cast<GLsizeiptr>(buffer->getMapOffset()),
+                                      static_cast<GLsizeiptr>(buffer->getMapLength()),
+                                      buffer->getAccessFlags(), dontCare);
+            CaptureCustomMapBuffer("MapBufferRange", mapBufferRange, *setupCalls);
 
             resourceTracker->setStartingBufferMapped(buffer->id().value, true);
 
@@ -6196,6 +6174,28 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
             CaptureCustomUniformBlockBinding(inCall, outCalls);
             break;
         }
+        case EntryPoint::GLMapBufferRange:
+        {
+            CaptureCustomMapBuffer("MapBufferRange", inCall, outCalls);
+            break;
+        }
+        case EntryPoint::GLMapBufferRangeEXT:
+        {
+            CaptureCustomMapBuffer("MapBufferRangeEXT", inCall, outCalls);
+            break;
+        }
+        case EntryPoint::GLMapBuffer:
+        {
+            // Currently desktop GL is not implemented.
+            UNREACHABLE();
+            break;
+        }
+        case EntryPoint::GLMapBufferOES:
+        {
+            CaptureCustomMapBuffer("MapBufferOES", inCall, outCalls);
+            break;
+        }
+
         default:
         {
             // Pass the single call through
