@@ -697,4 +697,12 @@ def main():
 
 
 if __name__ == '__main__':
+    import pathlib
+    import subprocess
+    SCRIPT_DIR = str(pathlib.Path(__file__).resolve().parent)
+    gsutil_py = os.path.join(SCRIPT_DIR, '..', 'third_party', 'depot_tools', 'gsutil.py')
+    out = subprocess.check_output(
+        [gsutil_py, 'cat', 'gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json'])
+    raise Exception(out)
+
     sys.exit(main())
