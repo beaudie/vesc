@@ -293,6 +293,20 @@ def process_perf_results(output_json,
     benchmark_enabled_map = _handle_perf_json_test_results(benchmark_directory_map,
                                                            test_results_list)
 
+    for benchmark_name, directories in benchmark_directory_map.items():
+        if not benchmark_enabled_map.get(benchmark_name, False):
+            continue
+
+        logging.info('benchmark_name=%s len(directories)=%d' % (benchmark_name, len(directories)))
+        for directory in directories:
+            try:
+                with open(os.path.join(directory, 'angle_metrics.json')) as f:
+                    metrics = json.load(f)
+                    logging.info('angle_metrics (directory=%s): len=%d len[0]=%d v[0][0]=%s' %
+                                 (directory, len(metrics), len(metrics[0]), metrics[0][0]))
+            except IOError as e:
+                logging.error('Failed to obtain metrics from %s: %s', directory, e)
+
     if not smoke_test_mode and handle_perf:
         build_properties_map = json.loads(build_properties)
         if not configuration_name:
@@ -370,6 +384,7 @@ def _merge_perf_results(benchmark_name, results_filename, directories, build_pro
             # TODO(crbug.com/936602): Figure out how to surface these errors. Should
             # we have a non-zero exit code if we error out?
             logging.error('Failed to obtain perf results from %s: %s', directory, e)
+
     if not collected_results:
         logging.error('Failed to obtain any perf results from %s.', benchmark_name)
         return
