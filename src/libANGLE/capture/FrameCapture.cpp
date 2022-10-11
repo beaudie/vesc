@@ -7755,7 +7755,7 @@ void FrameCaptureShared::replay(gl::Context *context)
     {
         INFO() << "frame index: " << mFrameIndex << " " << call.name();
 
-        if (call.entryPoint == EntryPoint::GLInvalid)
+        if (call.entryPoint == EntryPoint::Invalid)
         {
             if (call.customFunctionName == "UpdateClientArrayPointer")
             {
