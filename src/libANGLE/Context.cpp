@@ -4273,6 +4273,12 @@ void Context::initCaps()
         }
     }
 
+    if (mDisplay->getFrontendFeatures().dumpShaderSource.enabled)
+    {
+        // Compile shaders in order when writing to file
+        mState.mExtensions.parallelShaderCompileKHR = false;
+    }
+
 #undef ANGLE_LIMIT_CAP
 #undef ANGLE_LOG_CAP_LIMIT
 
@@ -7032,6 +7038,24 @@ void Context::compileShader(ShaderProgramID shader)
     {
         return;
     }
+
+    if (mDisplay->getFrontendFeatures().dumpShaderSource.enabled)
+    {
+        static uint32_t shaderID = 0;
+
+        // Create a filename unique per entry, i.e. GL_VERTEX_SHADER_0.txt, GL_FRAGMENT_SHADER_1.txt
+        std::stringstream fileName;
+        fileName << angle::GetTempDirectory().value() << std::filesystem::path::preferred_separator
+                 << shaderObject->getState().getShaderType() << "_" << shaderID++ << ".txt";
+
+        // Write the file to temp storage
+        writeFile(fileName.str().c_str(), shaderObject->getState().getSource().c_str(),
+                  shaderObject->getState().getSource().size());
+
+        // Announce its name so it is easier to associate with the instruction stream
+        INFO() << "Wrote shader source: " << fileName.str();
+    }
+
     shaderObject->compile(this);
 }
 
