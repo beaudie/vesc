@@ -51,6 +51,24 @@
       "parentUuid": "3eda9a69_a65f828c",
       "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7dc6f299_0b25ebd8",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-11T16:53:07Z",
+      "side": 1,
+      "message": "Let me add, rather than talking abstractly, small, easily timed benchmarks can help us verify which path is fastest on which architecture. As it is, I don\u0027t have any tests. Maybe you can offer some, ideally angle_perftests.\n\nIt seems like we\u0027d need to make each of the 9 cases listed above, as in, STATIC_DRAW, a test that makes a bunch of buffers, never changes them, draws with them. Then with that test, test Shared, Managed, Private, for different sized buffers and see if one is a win\n\nSimilarly for STATIC_READ, write a test that \"queries often\" and check the various modes for various sized buffers.\n\netc... for each different behavior.",
+      "parentUuid": "e5f7c672_8493b107",
+      "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
