@@ -222,8 +222,8 @@ angle_source_set("angle_trace_fixture") {
     "capture/trace_fixture.h",
   ]
   public_deps = [
-    "$angle_root:includes",
     ":angle_trace_loader",
+    "$angle_root:includes",
   ]
   if (is_ios) {
     # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
