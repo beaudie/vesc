@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d964520f_2bf0eb49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-11T18:44:55Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "80b1ebd3d8faa153b977b7cfcfc850bb6624eab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e71db8ea_ad0db6ce",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "That is because of crrev.com/c/3313382. See the next CL which I try to resolve it with different fix. https://chromium-review.googlesource.com/c/angle/angle/+/3929236",
       "parentUuid": "e71db8ea_ad0db6ce",
+      "range": {
+        "startLine": 543,
+        "startChar": 10,
+        "endLine": 543,
+        "endChar": 44
+      },
+      "revId": "80b1ebd3d8faa153b977b7cfcfc850bb6624eab1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0932e2_1b43f0e1",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-11T18:44:55Z",
+      "side": 1,
+      "message": "Ack. Feel free to reorder the CLs to make it simpler",
+      "parentUuid": "93c112ba_b2fd9138",
       "range": {
         "startLine": 543,
         "startChar": 10,
