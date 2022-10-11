@@ -25,6 +25,7 @@ typedef void (GL_APIENTRYP PFNGLREQUESTEXTENSIONANGLEPROC) (const GLchar *name);
 typedef void (GL_APIENTRYP PFNGLDISABLEEXTENSIONANGLEPROC) (const GLchar *name);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glRequestExtensionANGLE (const GLchar *name);
+GL_APICALL void GL_APIENTRY glDisableExtensionANGLE (const GLchar *name);
 #endif
 #endif /* GL_ANGLE_webgl_compatibility */
 
@@ -661,7 +662,9 @@ GL_APICALL void GL_APIENTRY glPixelLocalStorageBarrierANGLE ();
 #define GL_LOGIC_OP_NAND_ANGLE           0x150E
 #define GL_LOGIC_OP_SET_ANGLE            0x150F
 typedef void (GL_APIENTRYP PFNGLLOGICOPANGLEPROC) (GLenum);
-
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glLogicOpANGLE (GLenum);
+#endif
 #endif /* GL_ANGLE_logic_op */
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
