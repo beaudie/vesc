@@ -22,6 +22,30 @@
       },
       "revId": "1d665bdeaf8eaa8e0fed8ed7fed79c525d06a786",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa767c18_dbb56df0",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-11T18:50:05Z",
+      "side": 1,
+      "message": "The VK and GL specs say reading back e vec4 could give either 0,0,0,0 or 0,0,0,1 and it\u0027s unspecified which. Some drivers return one and some return the other.",
+      "parentUuid": "8edac2ef_e1efe9a3",
+      "range": {
+        "startLine": 480,
+        "startChar": 23,
+        "endLine": 480,
+        "endChar": 26
+      },
+      "revId": "1d665bdeaf8eaa8e0fed8ed7fed79c525d06a786",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
