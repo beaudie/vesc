@@ -4943,9 +4943,9 @@ bool ValidatePushGroupMarkerEXT(const Context *context,
 bool ValidateEGLImageObject(const Context *context,
                             angle::EntryPoint entryPoint,
                             TextureType type,
-                            GLeglImageOES image)
+                            egl::ImageID imageID)
 {
-    egl::Image *imageObject = static_cast<egl::Image *>(image);
+    egl::Image *imageObject = context->getDisplay()->getImage(imageID);
 
     ASSERT(context->getDisplay());
     if (!context->getDisplay()->isValidImage(imageObject))
@@ -5017,7 +5017,7 @@ bool ValidateEGLImageObject(const Context *context,
 bool ValidateEGLImageTargetTexture2DOES(const Context *context,
                                         angle::EntryPoint entryPoint,
                                         TextureType type,
-                                        GLeglImageOES image)
+                                        egl::ImageID image)
 {
     if (!context->getExtensions().EGLImageOES && !context->getExtensions().EGLImageExternalOES)
     {
@@ -5062,7 +5062,7 @@ bool ValidateEGLImageTargetTexture2DOES(const Context *context,
 bool ValidateEGLImageTargetRenderbufferStorageOES(const Context *context,
                                                   angle::EntryPoint entryPoint,
                                                   GLenum target,
-                                                  GLeglImageOES image)
+                                                  egl::ImageID image)
 {
     if (!context->getExtensions().EGLImageOES)
     {
@@ -5080,7 +5080,7 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(const Context *context,
             return false;
     }
 
-    egl::Image *imageObject = static_cast<egl::Image *>(image);
+    egl::Image *imageObject = context->getDisplay()->getImage(image);
 
     ASSERT(context->getDisplay());
     if (!context->getDisplay()->isValidImage(imageObject))

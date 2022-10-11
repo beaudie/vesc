@@ -2392,9 +2392,10 @@ bool ValidateTerminate(const ValidationContext *val, const Display *display)
 bool ValidateCreateContext(const ValidationContext *val,
                            const Display *display,
                            const Config *configuration,
-                           const gl::Context *shareContext,
+                           gl::ContextID shareContextID,
                            const AttributeMap &attributes)
 {
+    const gl::Context *shareContext = display->getContext(shareContextID);
     if (configuration)
     {
         ANGLE_VALIDATION_TRY(ValidateConfig(val, display, configuration));
@@ -3177,11 +3178,15 @@ bool ValidateCreatePixmapSurface(const ValidationContext *val,
 
 bool ValidateMakeCurrent(const ValidationContext *val,
                          const Display *display,
-                         const Surface *draw,
-                         const Surface *read,
-                         const gl::Context *context)
+                         SurfaceID drawSurfaceID,
+                         SurfaceID readSurfaceID,
+                         gl::ContextID contextID)
 {
-    if (context == EGL_NO_CONTEXT && (draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE))
+    const Surface *draw        = display->getSurface(drawSurfaceID);
+    const Surface *read        = display->getSurface(readSurfaceID);
+    const gl::Context *context = display->getContext(contextID);
+
+    if (context == nullptr && (draw != nullptr || read != nullptr))
     {
         val->setError(EGL_BAD_MATCH, "If ctx is EGL_NO_CONTEXT, surfaces must be EGL_NO_SURFACE");
         return false;
@@ -3189,11 +3194,11 @@ bool ValidateMakeCurrent(const ValidationContext *val,
 
     // If ctx is EGL_NO_CONTEXT and either draw or read are not EGL_NO_SURFACE, an EGL_BAD_MATCH
     // error is generated. EGL_KHR_surfaceless_context allows both surfaces to be EGL_NO_SURFACE.
-    if (context != EGL_NO_CONTEXT && (draw == EGL_NO_SURFACE || read == EGL_NO_SURFACE))
+    if (context != nullptr && (draw == nullptr || read == nullptr))
     {
         if (display->getExtensions().surfacelessContext)
         {
-            if ((draw == EGL_NO_SURFACE) != (read == EGL_NO_SURFACE))
+            if ((draw == nullptr) != (read == nullptr))
             {
                 val->setError(EGL_BAD_MATCH,
                               "If ctx is not EGL_NOT_CONTEXT, draw or read must "
@@ -3211,7 +3216,7 @@ bool ValidateMakeCurrent(const ValidationContext *val,
 
     // If either of draw or read is a valid surface and the other is EGL_NO_SURFACE, an
     // EGL_BAD_MATCH error is generated.
-    if ((read == EGL_NO_SURFACE) != (draw == EGL_NO_SURFACE))
+    if ((read == nullptr) != (draw == nullptr))
     {
         val->setError(EGL_BAD_MATCH,
                       "read and draw must both be valid surfaces, or both be EGL_NO_SURFACE");
@@ -3225,14 +3230,13 @@ bool ValidateMakeCurrent(const ValidationContext *val,
     }
 
     // EGL 1.5 spec: dpy can be uninitialized if all other parameters are null
-    if (!display->isInitialized() &&
-        (context != EGL_NO_CONTEXT || draw != EGL_NO_SURFACE || read != EGL_NO_SURFACE))
+    if (!display->isInitialized() && (context != nullptr || draw != nullptr || read != nullptr))
     {
         val->setError(EGL_NOT_INITIALIZED, "'dpy' not initialized");
         return false;
     }
 
-    if (context != EGL_NO_CONTEXT)
+    if (context != nullptr)
     {
         ANGLE_VALIDATION_TRY(ValidateContext(val, display, context));
     }
@@ -3243,12 +3247,12 @@ bool ValidateMakeCurrent(const ValidationContext *val,
         return false;
     }
 
-    if (draw != EGL_NO_SURFACE)
+    if (draw != nullptr)
     {
         ANGLE_VALIDATION_TRY(ValidateSurface(val, display, draw));
     }
 
-    if (read != EGL_NO_SURFACE)
+    if (read != nullptr)
     {
         ANGLE_VALIDATION_TRY(ValidateSurface(val, display, read));
         ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, read));
@@ -3270,11 +3274,12 @@ bool ValidateMakeCurrent(const ValidationContext *val,
 
 bool ValidateCreateImage(const ValidationContext *val,
                          const Display *display,
-                         const gl::Context *context,
+                         gl::ContextID contextID,
                          EGLenum target,
                          EGLClientBuffer buffer,
                          const AttributeMap &attributes)
 {
+    const gl::Context *context = display->getContext(contextID);
 
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
@@ -3957,16 +3962,16 @@ bool ValidateCreateImage(const ValidationContext *val,
     return true;
 }
 
-bool ValidateDestroyImage(const ValidationContext *val, const Display *display, const Image *image)
+bool ValidateDestroyImage(const ValidationContext *val, const Display *display, ImageID imageID)
 {
+    const Image *image = display->getImage(imageID);
     ANGLE_VALIDATION_TRY(ValidateImage(val, display, image));
-
     return true;
 }
 
 bool ValidateCreateImageKHR(const ValidationContext *val,
                             const Display *display,
-                            const gl::Context *context,
+                            gl::ContextID contextID,
                             EGLenum target,
                             EGLClientBuffer buffer,
                             const AttributeMap &attributes)
@@ -3982,13 +3987,14 @@ bool ValidateCreateImageKHR(const ValidationContext *val,
         return false;
     }
 
-    return ValidateCreateImage(val, display, context, target, buffer, attributes);
+    return ValidateCreateImage(val, display, contextID, target, buffer, attributes);
 }
 
-bool ValidateDestroyImageKHR(const ValidationContext *val,
-                             const Display *display,
-                             const Image *image)
+bool ValidateDestroyImageKHR(const ValidationContext *val, const Display *display, ImageID imageID)
 {
+    ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
+
+    const Image *image = display->getImage(imageID);
     ANGLE_VALIDATION_TRY(ValidateImage(val, display, image));
 
     if (!display->getExtensions().imageBase && !display->getExtensions().image)
@@ -4739,8 +4745,9 @@ bool ValidateStreamPostD3DTextureANGLE(const ValidationContext *val,
 
 bool ValidateSyncControlCHROMIUM(const ValidationContext *val,
                                  const Display *display,
-                                 const Surface *eglSurface)
+                                 SurfaceID surfaceID)
 {
+    const Surface *eglSurface = display->getSurface(surfaceID);
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, eglSurface));
 
@@ -4756,8 +4763,9 @@ bool ValidateSyncControlCHROMIUM(const ValidationContext *val,
 
 bool ValidateSyncControlRateANGLE(const ValidationContext *val,
                                   const Display *display,
-                                  const Surface *eglSurface)
+                                  SurfaceID surfaceID)
 {
+    const Surface *eglSurface = display->getSurface(surfaceID);
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, eglSurface));
 
@@ -4773,11 +4781,11 @@ bool ValidateSyncControlRateANGLE(const ValidationContext *val,
 
 bool ValidateGetMscRateANGLE(const ValidationContext *val,
                              const Display *display,
-                             const Surface *eglSurface,
+                             SurfaceID surfaceID,
                              const EGLint *numerator,
                              const EGLint *denominator)
 {
-    ANGLE_VALIDATION_TRY(ValidateSyncControlRateANGLE(val, display, eglSurface));
+    ANGLE_VALIDATION_TRY(ValidateSyncControlRateANGLE(val, display, surfaceID));
 
     if (numerator == nullptr)
     {
@@ -4795,12 +4803,12 @@ bool ValidateGetMscRateANGLE(const ValidationContext *val,
 
 bool ValidateGetSyncValuesCHROMIUM(const ValidationContext *val,
                                    const Display *display,
-                                   const Surface *eglSurface,
+                                   SurfaceID surfaceID,
                                    const EGLuint64KHR *ust,
                                    const EGLuint64KHR *msc,
                                    const EGLuint64KHR *sbc)
 {
-    ANGLE_VALIDATION_TRY(ValidateSyncControlCHROMIUM(val, display, eglSurface));
+    ANGLE_VALIDATION_TRY(ValidateSyncControlCHROMIUM(val, display, surfaceID));
 
     if (ust == nullptr)
     {
@@ -4823,24 +4831,26 @@ bool ValidateGetSyncValuesCHROMIUM(const ValidationContext *val,
 
 bool ValidateDestroySurface(const ValidationContext *val,
                             const Display *display,
-                            const Surface *surface)
+                            SurfaceID surfaceID)
 {
+    const Surface *surface = display->getSurface(surfaceID);
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
     return true;
 }
 
 bool ValidateDestroyContext(const ValidationContext *val,
                             const Display *display,
-                            const gl::Context *glCtx)
+                            gl::ContextID contextID)
 {
-    ANGLE_VALIDATION_TRY(ValidateContext(val, display, glCtx));
+    const gl::Context *context = display->getContext(contextID);
+    ANGLE_VALIDATION_TRY(ValidateContext(val, display, context));
     return true;
 }
 
-bool ValidateSwapBuffers(const ValidationContext *val,
-                         const Display *display,
-                         const Surface *eglSurface)
+bool ValidateSwapBuffers(const ValidationContext *val, const Display *display, SurfaceID surfaceID)
 {
+    const Surface *eglSurface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, eglSurface));
 
     if (display->isDeviceLost())
@@ -4867,10 +4877,12 @@ bool ValidateSwapBuffers(const ValidationContext *val,
 
 bool ValidateSwapBuffersWithDamageKHR(const ValidationContext *val,
                                       const Display *display,
-                                      const Surface *surface,
+                                      SurfaceID surfaceID,
                                       const EGLint *rects,
                                       EGLint n_rects)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
     if (!display->getExtensions().swapBuffersWithDamage)
@@ -4932,9 +4944,11 @@ bool ValidateWaitNative(const ValidationContext *val, const EGLint engine)
 
 bool ValidateCopyBuffers(const ValidationContext *val,
                          const Display *display,
-                         const Surface *surface,
+                         SurfaceID surfaceID,
                          EGLNativePixmapType target)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
     if (display->isDeviceLost())
@@ -4948,9 +4962,11 @@ bool ValidateCopyBuffers(const ValidationContext *val,
 
 bool ValidateBindTexImage(const ValidationContext *val,
                           const Display *display,
-                          const Surface *surface,
+                          SurfaceID surfaceID,
                           const EGLint buffer)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
     if (buffer != EGL_BACK_BUFFER)
@@ -5002,9 +5018,11 @@ bool ValidateBindTexImage(const ValidationContext *val,
 
 bool ValidateReleaseTexImage(const ValidationContext *val,
                              const Display *display,
-                             const Surface *surface,
+                             SurfaceID surfaceID,
                              const EGLint buffer)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
     if (buffer != EGL_BACK_BUFFER)
@@ -5063,9 +5081,11 @@ bool ValidateBindAPI(const ValidationContext *val, const EGLenum api)
 
 bool ValidatePresentationTimeANDROID(const ValidationContext *val,
                                      const Display *display,
-                                     const Surface *surface,
+                                     SurfaceID surfaceID,
                                      EGLnsecsANDROID time)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().presentationTime)
@@ -5346,10 +5366,12 @@ bool ValidateProgramCacheResizeANGLE(const ValidationContext *val,
 
 bool ValidateSurfaceAttrib(const ValidationContext *val,
                            const Display *display,
-                           const Surface *surface,
+                           SurfaceID surfaceID,
                            EGLint attribute,
                            EGLint value)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
@@ -5487,10 +5509,12 @@ bool ValidateSurfaceAttrib(const ValidationContext *val,
 
 bool ValidateQuerySurface(const ValidationContext *val,
                           const Display *display,
-                          const Surface *surface,
+                          SurfaceID surfaceID,
                           EGLint attribute,
                           const EGLint *value)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
@@ -5639,10 +5663,12 @@ bool ValidateQuerySurface(const ValidationContext *val,
 
 bool ValidateQueryContext(const ValidationContext *val,
                           const Display *display,
-                          const gl::Context *context,
+                          gl::ContextID contextID,
                           EGLint attribute,
                           const EGLint *value)
 {
+    const gl::Context *context = display->getContext(contextID);
+
     ANGLE_VALIDATION_TRY(ValidateContext(val, display, context));
 
     switch (attribute)
@@ -5771,9 +5797,11 @@ bool ValidateLabelObjectKHR(const ValidationContext *val,
 
 bool ValidateGetCompositorTimingSupportedANDROID(const ValidationContext *val,
                                                  const Display *display,
-                                                 const Surface *surface,
+                                                 SurfaceID surfaceID,
                                                  CompositorTiming name)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().getFrameTimestamps)
@@ -5796,11 +5824,13 @@ bool ValidateGetCompositorTimingSupportedANDROID(const ValidationContext *val,
 
 bool ValidateGetCompositorTimingANDROID(const ValidationContext *val,
                                         const Display *display,
-                                        const Surface *surface,
+                                        SurfaceID surfaceID,
                                         EGLint numTimestamps,
                                         const EGLint *names,
                                         const EGLnsecsANDROID *values)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().getFrameTimestamps)
@@ -5852,9 +5882,11 @@ bool ValidateGetCompositorTimingANDROID(const ValidationContext *val,
 
 bool ValidateGetNextFrameIdANDROID(const ValidationContext *val,
                                    const Display *display,
-                                   const Surface *surface,
+                                   SurfaceID surfaceID,
                                    const EGLuint64KHR *frameId)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().getFrameTimestamps)
@@ -5877,9 +5909,11 @@ bool ValidateGetNextFrameIdANDROID(const ValidationContext *val,
 
 bool ValidateGetFrameTimestampSupportedANDROID(const ValidationContext *val,
                                                const Display *display,
-                                               const Surface *surface,
+                                               SurfaceID surfaceID,
                                                Timestamp timestamp)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().getFrameTimestamps)
@@ -5902,12 +5936,14 @@ bool ValidateGetFrameTimestampSupportedANDROID(const ValidationContext *val,
 
 bool ValidateGetFrameTimestampsANDROID(const ValidationContext *val,
                                        const Display *display,
-                                       const Surface *surface,
+                                       SurfaceID surfaceID,
                                        EGLuint64KHR frameId,
                                        EGLint numTimestamps,
                                        const EGLint *timestamps,
                                        const EGLnsecsANDROID *values)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().getFrameTimestamps)
@@ -6146,9 +6182,11 @@ bool ValidateDupNativeFenceFDANDROID(const ValidationContext *val,
 
 bool ValidateSwapBuffersWithFrameTokenANGLE(const ValidationContext *val,
                                             const Display *display,
-                                            const Surface *surface,
+                                            SurfaceID surfaceID,
                                             EGLFrameTokenANGLE frametoken)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().swapWithFrameToken)
@@ -6164,9 +6202,9 @@ bool ValidateSwapBuffersWithFrameTokenANGLE(const ValidationContext *val,
 
 bool ValidatePrepareSwapBuffersANGLE(const ValidationContext *val,
                                      const Display *display,
-                                     const Surface *surface)
+                                     SurfaceID surfaceID)
 {
-    return ValidateSwapBuffers(val, display, surface);
+    return ValidateSwapBuffers(val, display, surfaceID);
 }
 
 bool ValidateSignalSyncKHR(const ValidationContext *val,
@@ -6201,10 +6239,12 @@ bool ValidateSignalSyncKHR(const ValidationContext *val,
 
 bool ValidateQuerySurfacePointerANGLE(const ValidationContext *val,
                                       const Display *display,
-                                      const Surface *eglSurface,
+                                      SurfaceID surfaceID,
                                       EGLint attribute,
                                       void *const *value)
 {
+    const Surface *eglSurface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().querySurfacePointer)
@@ -6242,12 +6282,14 @@ bool ValidateQuerySurfacePointerANGLE(const ValidationContext *val,
 
 bool ValidatePostSubBufferNV(const ValidationContext *val,
                              const Display *display,
-                             const Surface *eglSurface,
+                             SurfaceID surfaceID,
                              EGLint x,
                              EGLint y,
                              EGLint width,
                              EGLint height)
 {
+    const Surface *eglSurface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
 
     if (!display->getExtensions().postSubBuffer)
@@ -6350,16 +6392,18 @@ bool ValidateQueryDeviceStringEXT(const ValidationContext *val, const Device *de
 
 bool ValidateReleaseHighPowerGPUANGLE(const ValidationContext *val,
                                       const Display *display,
-                                      const gl::Context *context)
+                                      gl::ContextID contextID)
 {
+    const gl::Context *context = display->getContext(contextID);
     ANGLE_VALIDATION_TRY(ValidateContext(val, display, context));
     return true;
 }
 
 bool ValidateReacquireHighPowerGPUANGLE(const ValidationContext *val,
                                         const Display *display,
-                                        const gl::Context *context)
+                                        gl::ContextID contextID)
 {
+    const gl::Context *context = display->getContext(contextID);
     ANGLE_VALIDATION_TRY(ValidateContext(val, display, context));
     return true;
 }
@@ -6497,9 +6541,11 @@ bool ValidateCreatePlatformWindowSurface(const ValidationContext *val,
 
 bool ValidateLockSurfaceKHR(const ValidationContext *val,
                             const egl::Display *dpy,
-                            const Surface *surface,
+                            SurfaceID surfaceID,
                             const AttributeMap &attributes)
 {
+    const Surface *surface = dpy->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, dpy, surface));
 
@@ -6568,10 +6614,12 @@ bool ValidateLockSurfaceKHR(const ValidationContext *val,
 
 bool ValidateQuerySurface64KHR(const ValidationContext *val,
                                const egl::Display *dpy,
-                               const Surface *surface,
+                               SurfaceID surfaceID,
                                EGLint attribute,
                                const EGLAttribKHR *value)
 {
+    const Surface *surface = dpy->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, dpy, surface));
 
@@ -6615,8 +6663,10 @@ bool ValidateQuerySurface64KHR(const ValidationContext *val,
 
 bool ValidateUnlockSurfaceKHR(const ValidationContext *val,
                               const egl::Display *dpy,
-                              const Surface *surface)
+                              SurfaceID surfaceID)
 {
+    const Surface *surface = dpy->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, dpy, surface));
 
@@ -6637,10 +6687,12 @@ bool ValidateUnlockSurfaceKHR(const ValidationContext *val,
 
 bool ValidateExportVkImageANGLE(const ValidationContext *val,
                                 const Display *dpy,
-                                const Image *image,
+                                ImageID imageID,
                                 const void *vkImage,
                                 const void *vkImageCreateInfo)
 {
+    const Image *image = dpy->getImage(imageID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, dpy));
     ANGLE_VALIDATION_TRY(ValidateImage(val, dpy, image));
 
@@ -6667,10 +6719,12 @@ bool ValidateExportVkImageANGLE(const ValidationContext *val,
 
 bool ValidateSetDamageRegionKHR(const ValidationContext *val,
                                 const Display *display,
-                                const Surface *surface,
+                                SurfaceID surfaceID,
                                 const EGLint *rects,
                                 EGLint n_rects)
 {
+    const Surface *surface = display->getSurface(surfaceID);
+
     ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
     ANGLE_VALIDATION_TRY(ValidateSurface(val, display, surface));
 
