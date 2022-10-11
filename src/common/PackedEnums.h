@@ -695,6 +695,7 @@ struct IsResourceIDType;
 
 #define ANGLE_GL_ID_TYPES_OP(X) \
     X(Buffer)                   \
+    X(Context)                  \
     X(FenceNV)                  \
     X(Framebuffer)              \
     X(MemoryObject)             \
@@ -866,6 +867,26 @@ ANGLE_EGL_ID_TYPES_OP(ANGLE_DEFINE_ID_TYPE)
 
 #undef ANGLE_EGL_ID_TYPES_OP
 
+template <>
+struct IsResourceIDType<gl::ContextID>
+{
+    static constexpr bool value = true;
+};
+
+template <typename T>
+struct IsResourceIDType
+{
+    static constexpr bool value = false;
+};
+
+// Util funcs for resourceIDs
+template <typename T>
+typename std::enable_if<IsResourceIDType<T>::value && !std::is_same<T, gl::ContextID>::value,
+                        bool>::type
+operator==(const T &lhs, const T &rhs)
+{
+    return lhs.value == rhs.value;
+}
 }  // namespace egl
 
 #undef ANGLE_DEFINE_ID_TYPE

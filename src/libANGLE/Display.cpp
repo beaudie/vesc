@@ -81,6 +81,20 @@
 #    include "libANGLE/renderer/metal/DisplayMtl_api.h"
 #endif  // defined(ANGLE_ENABLE_METAL)
 
+template <typename T, typename IDType, typename SetT>
+T GetResourceFromHashSet(IDType id, SetT &hashSet)
+{
+    for (T resource : hashSet)
+    {
+        if (resource->id() == id)
+        {
+            return resource;
+        }
+    }
+
+    return nullptr;
+}
+
 namespace egl
 {
 
@@ -2509,6 +2523,35 @@ Error Display::queryDmaBufModifiers(EGLint format,
     ANGLE_TRY(mImplementation->queryDmaBufModifiers(format, max_modifiers, modifiers, external_only,
                                                     num_modifiers));
     return NoError();
+}
+
+const gl::Context *Display::getContext(gl::ContextID contextID) const
+{
+    return GetResourceFromHashSet<const gl::Context *>(contextID, mState.contextSet);
+}
+
+const egl::Surface *Display::getSurface(egl::SurfaceID surfaceID) const
+{
+    return GetResourceFromHashSet<const egl::Surface *>(surfaceID, mState.surfaceSet);
+}
+
+const egl::Image *Display::getImage(egl::ImageID imageID) const
+{
+    return GetResourceFromHashSet<const egl::Image *>(imageID, mImageSet);
+}
+
+gl::Context *Display::getContext(gl::ContextID contextID)
+{
+    return GetResourceFromHashSet<gl::Context *>(contextID, mState.contextSet);
+}
+
+egl::Surface *Display::getSurface(egl::SurfaceID surfaceID)
+{
+    return GetResourceFromHashSet<egl::Surface *>(surfaceID, mState.surfaceSet);
+}
+egl::Image *Display::getImage(egl::ImageID imageID)
+{
+    return GetResourceFromHashSet<egl::Image *>(imageID, mImageSet);
 }
 
 }  // namespace egl

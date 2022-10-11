@@ -26,6 +26,7 @@ enum class ParamType
     TBufferUsage,
     TClientVertexArrayType,
     TCompositorTiming,
+    TContextID,
     TCullFaceMode,
     TDrawElementsType,
     TEGLAttribConstPointer,
@@ -125,6 +126,7 @@ enum class ParamType
     TGLvoidConstPointerPointer,
     TGraphicsResetStatus,
     THandleType,
+    TImageID,
     TLightParameter,
     TLogicalOperation,
     TMaterialParameter,
@@ -157,6 +159,7 @@ enum class ParamType
     TShaderProgramIDPointer,
     TShaderType,
     TShadingModel,
+    TSurfaceID,
     TTextureEnvParameter,
     TTextureEnvTarget,
     TTextureID,
@@ -178,11 +181,8 @@ enum class ParamType
     Tegl_ConfigPointer,
     Tegl_DevicePointer,
     Tegl_DisplayPointer,
-    Tegl_ImagePointer,
     Tegl_StreamPointer,
-    Tegl_SurfacePointer,
     Tegl_SyncPointer,
-    Tgl_ContextPointer,
     TvoidConstPointer,
     TvoidConstPointerPointer,
     TvoidPointer,
@@ -202,6 +202,7 @@ union ParamValue
     gl::BufferUsage BufferUsageVal;
     gl::ClientVertexArrayType ClientVertexArrayTypeVal;
     egl::CompositorTiming CompositorTimingVal;
+    gl::ContextID ContextIDVal;
     gl::CullFaceMode CullFaceModeVal;
     gl::DrawElementsType DrawElementsTypeVal;
     const EGLAttrib *EGLAttribConstPointerVal;
@@ -301,6 +302,7 @@ union ParamValue
     const GLvoid *const *GLvoidConstPointerPointerVal;
     gl::GraphicsResetStatus GraphicsResetStatusVal;
     gl::HandleType HandleTypeVal;
+    egl::ImageID ImageIDVal;
     gl::LightParameter LightParameterVal;
     gl::LogicalOperation LogicalOperationVal;
     gl::MaterialParameter MaterialParameterVal;
@@ -333,6 +335,7 @@ union ParamValue
     gl::ShaderProgramID *ShaderProgramIDPointerVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
+    egl::SurfaceID SurfaceIDVal;
     gl::TextureEnvParameter TextureEnvParameterVal;
     gl::TextureEnvTarget TextureEnvTargetVal;
     gl::TextureID TextureIDVal;
@@ -354,11 +357,8 @@ union ParamValue
     egl::Config *egl_ConfigPointerVal;
     egl::Device *egl_DevicePointerVal;
     egl::Display *egl_DisplayPointerVal;
-    egl::Image *egl_ImagePointerVal;
     egl::Stream *egl_StreamPointerVal;
-    egl::Surface *egl_SurfacePointerVal;
     egl::Sync *egl_SyncPointerVal;
-    gl::Context *gl_ContextPointerVal;
     const void *voidConstPointerVal;
     const void *const *voidConstPointerPointerVal;
     void *voidPointerVal;
@@ -428,6 +428,12 @@ inline egl::CompositorTiming GetParamVal<ParamType::TCompositorTiming, egl::Comp
     const ParamValue &value)
 {
     return value.CompositorTimingVal;
+}
+
+template <>
+inline gl::ContextID GetParamVal<ParamType::TContextID, gl::ContextID>(const ParamValue &value)
+{
+    return value.ContextIDVal;
 }
 
 template <>
@@ -1068,6 +1074,12 @@ inline gl::HandleType GetParamVal<ParamType::THandleType, gl::HandleType>(const 
 }
 
 template <>
+inline egl::ImageID GetParamVal<ParamType::TImageID, egl::ImageID>(const ParamValue &value)
+{
+    return value.ImageIDVal;
+}
+
+template <>
 inline gl::LightParameter GetParamVal<ParamType::TLightParameter, gl::LightParameter>(
     const ParamValue &value)
 {
@@ -1287,6 +1299,12 @@ inline gl::ShadingModel GetParamVal<ParamType::TShadingModel, gl::ShadingModel>(
 }
 
 template <>
+inline egl::SurfaceID GetParamVal<ParamType::TSurfaceID, egl::SurfaceID>(const ParamValue &value)
+{
+    return value.SurfaceIDVal;
+}
+
+template <>
 inline gl::TextureEnvParameter
 GetParamVal<ParamType::TTextureEnvParameter, gl::TextureEnvParameter>(const ParamValue &value)
 {
@@ -1432,12 +1450,6 @@ inline egl::Display *GetParamVal<ParamType::Tegl_DisplayPointer, egl::Display *>
 }
 
 template <>
-inline egl::Image *GetParamVal<ParamType::Tegl_ImagePointer, egl::Image *>(const ParamValue &value)
-{
-    return value.egl_ImagePointerVal;
-}
-
-template <>
 inline egl::Stream *GetParamVal<ParamType::Tegl_StreamPointer, egl::Stream *>(
     const ParamValue &value)
 {
@@ -1445,23 +1457,9 @@ inline egl::Stream *GetParamVal<ParamType::Tegl_StreamPointer, egl::Stream *>(
 }
 
 template <>
-inline egl::Surface *GetParamVal<ParamType::Tegl_SurfacePointer, egl::Surface *>(
-    const ParamValue &value)
-{
-    return value.egl_SurfacePointerVal;
-}
-
-template <>
 inline egl::Sync *GetParamVal<ParamType::Tegl_SyncPointer, egl::Sync *>(const ParamValue &value)
 {
     return value.egl_SyncPointerVal;
-}
-
-template <>
-inline gl::Context *GetParamVal<ParamType::Tgl_ContextPointer, gl::Context *>(
-    const ParamValue &value)
-{
-    return value.gl_ContextPointerVal;
 }
 
 template <>
@@ -1519,6 +1517,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TClientVertexArrayType, T>(value);
         case ParamType::TCompositorTiming:
             return GetParamVal<ParamType::TCompositorTiming, T>(value);
+        case ParamType::TContextID:
+            return GetParamVal<ParamType::TContextID, T>(value);
         case ParamType::TCullFaceMode:
             return GetParamVal<ParamType::TCullFaceMode, T>(value);
         case ParamType::TDrawElementsType:
@@ -1717,6 +1717,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TGraphicsResetStatus, T>(value);
         case ParamType::THandleType:
             return GetParamVal<ParamType::THandleType, T>(value);
+        case ParamType::TImageID:
+            return GetParamVal<ParamType::TImageID, T>(value);
         case ParamType::TLightParameter:
             return GetParamVal<ParamType::TLightParameter, T>(value);
         case ParamType::TLogicalOperation:
@@ -1781,6 +1783,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TShaderType, T>(value);
         case ParamType::TShadingModel:
             return GetParamVal<ParamType::TShadingModel, T>(value);
+        case ParamType::TSurfaceID:
+            return GetParamVal<ParamType::TSurfaceID, T>(value);
         case ParamType::TTextureEnvParameter:
             return GetParamVal<ParamType::TTextureEnvParameter, T>(value);
         case ParamType::TTextureEnvTarget:
@@ -1823,16 +1827,10 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::Tegl_DevicePointer, T>(value);
         case ParamType::Tegl_DisplayPointer:
             return GetParamVal<ParamType::Tegl_DisplayPointer, T>(value);
-        case ParamType::Tegl_ImagePointer:
-            return GetParamVal<ParamType::Tegl_ImagePointer, T>(value);
         case ParamType::Tegl_StreamPointer:
             return GetParamVal<ParamType::Tegl_StreamPointer, T>(value);
-        case ParamType::Tegl_SurfacePointer:
-            return GetParamVal<ParamType::Tegl_SurfacePointer, T>(value);
         case ParamType::Tegl_SyncPointer:
             return GetParamVal<ParamType::Tegl_SyncPointer, T>(value);
-        case ParamType::Tgl_ContextPointer:
-            return GetParamVal<ParamType::Tgl_ContextPointer, T>(value);
         case ParamType::TvoidConstPointer:
             return GetParamVal<ParamType::TvoidConstPointer, T>(value);
         case ParamType::TvoidConstPointerPointer:
@@ -1905,6 +1903,12 @@ inline void SetParamVal<ParamType::TCompositorTiming>(egl::CompositorTiming valu
                                                       ParamValue *valueOut)
 {
     valueOut->CompositorTimingVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TContextID>(gl::ContextID valueIn, ParamValue *valueOut)
+{
+    valueOut->ContextIDVal = valueIn;
 }
 
 template <>
@@ -2531,6 +2535,12 @@ inline void SetParamVal<ParamType::THandleType>(gl::HandleType valueIn, ParamVal
 }
 
 template <>
+inline void SetParamVal<ParamType::TImageID>(egl::ImageID valueIn, ParamValue *valueOut)
+{
+    valueOut->ImageIDVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TLightParameter>(gl::LightParameter valueIn,
                                                     ParamValue *valueOut)
 {
@@ -2746,6 +2756,12 @@ inline void SetParamVal<ParamType::TShadingModel>(gl::ShadingModel valueIn, Para
 }
 
 template <>
+inline void SetParamVal<ParamType::TSurfaceID>(egl::SurfaceID valueIn, ParamValue *valueOut)
+{
+    valueOut->SurfaceIDVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TTextureEnvParameter>(gl::TextureEnvParameter valueIn,
                                                          ParamValue *valueOut)
 {
@@ -2884,33 +2900,15 @@ inline void SetParamVal<ParamType::Tegl_DisplayPointer>(egl::Display *valueIn, P
 }
 
 template <>
-inline void SetParamVal<ParamType::Tegl_ImagePointer>(egl::Image *valueIn, ParamValue *valueOut)
-{
-    valueOut->egl_ImagePointerVal = valueIn;
-}
-
-template <>
 inline void SetParamVal<ParamType::Tegl_StreamPointer>(egl::Stream *valueIn, ParamValue *valueOut)
 {
     valueOut->egl_StreamPointerVal = valueIn;
 }
 
 template <>
-inline void SetParamVal<ParamType::Tegl_SurfacePointer>(egl::Surface *valueIn, ParamValue *valueOut)
-{
-    valueOut->egl_SurfacePointerVal = valueIn;
-}
-
-template <>
 inline void SetParamVal<ParamType::Tegl_SyncPointer>(egl::Sync *valueIn, ParamValue *valueOut)
 {
     valueOut->egl_SyncPointerVal = valueIn;
-}
-
-template <>
-inline void SetParamVal<ParamType::Tgl_ContextPointer>(gl::Context *valueIn, ParamValue *valueOut)
-{
-    valueOut->gl_ContextPointerVal = valueIn;
 }
 
 template <>
@@ -2975,6 +2973,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TCompositorTiming:
             SetParamVal<ParamType::TCompositorTiming>(valueIn, valueOut);
+            break;
+        case ParamType::TContextID:
+            SetParamVal<ParamType::TContextID>(valueIn, valueOut);
             break;
         case ParamType::TCullFaceMode:
             SetParamVal<ParamType::TCullFaceMode>(valueIn, valueOut);
@@ -3273,6 +3274,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::THandleType:
             SetParamVal<ParamType::THandleType>(valueIn, valueOut);
             break;
+        case ParamType::TImageID:
+            SetParamVal<ParamType::TImageID>(valueIn, valueOut);
+            break;
         case ParamType::TLightParameter:
             SetParamVal<ParamType::TLightParameter>(valueIn, valueOut);
             break;
@@ -3369,6 +3373,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TShadingModel:
             SetParamVal<ParamType::TShadingModel>(valueIn, valueOut);
             break;
+        case ParamType::TSurfaceID:
+            SetParamVal<ParamType::TSurfaceID>(valueIn, valueOut);
+            break;
         case ParamType::TTextureEnvParameter:
             SetParamVal<ParamType::TTextureEnvParameter>(valueIn, valueOut);
             break;
@@ -3432,20 +3439,11 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::Tegl_DisplayPointer:
             SetParamVal<ParamType::Tegl_DisplayPointer>(valueIn, valueOut);
             break;
-        case ParamType::Tegl_ImagePointer:
-            SetParamVal<ParamType::Tegl_ImagePointer>(valueIn, valueOut);
-            break;
         case ParamType::Tegl_StreamPointer:
             SetParamVal<ParamType::Tegl_StreamPointer>(valueIn, valueOut);
             break;
-        case ParamType::Tegl_SurfacePointer:
-            SetParamVal<ParamType::Tegl_SurfacePointer>(valueIn, valueOut);
-            break;
         case ParamType::Tegl_SyncPointer:
             SetParamVal<ParamType::Tegl_SyncPointer>(valueIn, valueOut);
-            break;
-        case ParamType::Tgl_ContextPointer:
-            SetParamVal<ParamType::Tgl_ContextPointer>(valueIn, valueOut);
             break;
         case ParamType::TvoidConstPointer:
             SetParamVal<ParamType::TvoidConstPointer>(valueIn, valueOut);
@@ -3471,8 +3469,10 @@ const char *ParamTypeToString(ParamType paramType);
 enum class ResourceIDType
 {
     Buffer,
+    Context,
     FenceNV,
     Framebuffer,
+    Image,
     MemoryObject,
     ProgramPipeline,
     Query,
@@ -3480,6 +3480,7 @@ enum class ResourceIDType
     Sampler,
     Semaphore,
     ShaderProgram,
+    Surface,
     Texture,
     TransformFeedback,
     VertexArray,
@@ -3500,6 +3501,12 @@ struct GetResourceIDTypeFromType<gl::BufferID>
 };
 
 template <>
+struct GetResourceIDTypeFromType<gl::ContextID>
+{
+    static constexpr ResourceIDType IDType = ResourceIDType::Context;
+};
+
+template <>
 struct GetResourceIDTypeFromType<gl::FenceNVID>
 {
     static constexpr ResourceIDType IDType = ResourceIDType::FenceNV;
@@ -3509,6 +3516,12 @@ template <>
 struct GetResourceIDTypeFromType<gl::FramebufferID>
 {
     static constexpr ResourceIDType IDType = ResourceIDType::Framebuffer;
+};
+
+template <>
+struct GetResourceIDTypeFromType<egl::ImageID>
+{
+    static constexpr ResourceIDType IDType = ResourceIDType::Image;
 };
 
 template <>
@@ -3551,6 +3564,12 @@ template <>
 struct GetResourceIDTypeFromType<gl::ShaderProgramID>
 {
     static constexpr ResourceIDType IDType = ResourceIDType::ShaderProgram;
+};
+
+template <>
+struct GetResourceIDTypeFromType<egl::SurfaceID>
+{
+    static constexpr ResourceIDType IDType = ResourceIDType::Surface;
 };
 
 template <>
