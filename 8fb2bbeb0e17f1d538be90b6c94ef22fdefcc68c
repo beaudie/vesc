@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1cc165d_09be26bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2022-10-11T12:20:50Z",
+      "side": 1,
+      "message": "Is this reasonable? The use case is this patch:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3945192\n\nIdeally we will remove the need for this (and maybe we should just get rid of this after that).",
+      "revId": "8fb2bbeb0e17f1d538be90b6c94ef22fdefcc68c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
