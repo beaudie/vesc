@@ -474,8 +474,9 @@ struct PackedDitherAndContextState final
                   "2 bits per draw buffer is needed for dither emulation");
     uint16_t emulatedDitherControl;
     uint16_t isRobustContext : 1;
+    uint16_t isProtectedContext : 1;
     uint16_t nonZeroStencilWriteMaskWorkaround : 1;
-    uint16_t unused : 14;
+    uint16_t unused : 13;
 };
 
 // State that is dynamic in VK_EXT_extended_dynamic_state and 2.  These are placed at the end of the

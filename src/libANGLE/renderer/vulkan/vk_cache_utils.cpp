@@ -2725,6 +2725,7 @@ void GraphicsPipelineDesc::initDefaults(const ContextVk *contextVk)
 
     mDitherAndContextState.emulatedDitherControl = 0;
     mDitherAndContextState.isRobustContext       = contextVk->shouldUsePipelineRobustness();
+    mDitherAndContextState.isProtectedContext    = contextVk->shouldUsePipelineProtectedAccess();
     mDitherAndContextState.nonZeroStencilWriteMaskWorkaround = 0;
     mDitherAndContextState.unused                            = 0;
 
@@ -3258,6 +3259,15 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         robustness.images         = VK_PIPELINE_ROBUSTNESS_IMAGE_BEHAVIOR_DEVICE_DEFAULT_EXT;
 
         AddToPNextChain(&createInfo, &robustness);
+    }
+
+    if (mDitherAndContextState.isProtectedContext)
+    {
+        // TODO: Set protected-only
+    }
+    else if (contextVk->getFeatures().supportsPipelineProtectedAccess.enabled)
+    {
+        // TODO: Set no-protected
     }
 
     VkPipelineCreationFeedback feedback = {};

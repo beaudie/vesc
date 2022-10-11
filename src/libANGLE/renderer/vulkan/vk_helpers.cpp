@@ -10286,6 +10286,16 @@ angle::Result ShaderProgramHelper::getComputePipeline(ContextVk *contextVk,
         AddToPNextChain(&createInfo, &robustness);
     }
 
+    // Restrict pipeline to protected or unprotected command buffers if possible.
+    if (pipelineFlags[ComputePipelineFlag::Protected])
+    {
+        // TODO: Set protected-only
+    }
+    else if (contextVk->getFeatures().supportsPipelineProtectedAccess.enabled)
+    {
+        // TODO: Set no-protected
+    }
+
     VkPipelineCreationFeedback feedback               = {};
     VkPipelineCreationFeedback perStageFeedback       = {};
     VkPipelineCreationFeedbackCreateInfo feedbackInfo = {};
