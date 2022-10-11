@@ -69,6 +69,24 @@
       "parentUuid": "e5f7c672_8493b107",
       "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6669e5b9_63181fdf",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 13
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-11T19:02:13Z",
+      "side": 1,
+      "message": "I filed a bug to follow up with this\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7749",
+      "parentUuid": "7dc6f299_0b25ebd8",
+      "revId": "dcff856257a5c0bafc9c2e453dcb54cc8aa84886",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
