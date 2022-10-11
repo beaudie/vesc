@@ -4216,6 +4216,9 @@ void Context::initCaps()
         constexpr GLint maxSamples = 4;
         INFO() << "Limiting GL_MAX_SAMPLES to " << maxSamples;
         ANGLE_LIMIT_CAP(mState.mCaps.maxSamples, maxSamples);
+
+        // Test if we require shadow memory for coherent buffer tracking
+        getShareGroup()->getFrameCaptureShared()->determineMemoryProtectionSupport(this);
     }
 
     // Disable support for OES_get_program_binary
@@ -5679,7 +5682,8 @@ void *Context::mapBufferRange(BufferBinding target,
         return nullptr;
     }
 
-    return buffer->getMapPointer();
+    return getShareGroup()->getFrameCaptureShared()->maybeGetShadowMemoryPointer(buffer, length,
+                                                                                 access);
 }
 
 void Context::flushMappedBufferRange(BufferBinding /*target*/,
