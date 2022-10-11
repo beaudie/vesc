@@ -112,12 +112,14 @@ EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
 
 ValidateSerializedStateCallback gValidateSerializedStateCallback;
 std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
+
+constexpr size_t kMaxClientArrays = 16;
 }  // namespace
 
 GLint **gUniformLocations;
 GLuint gCurrentProgram = 0;
 
-// TODO(jmadill): Hide from the traces. http://anglebug.com/7731
+// TODO(jmadill): Hide from the traces. http://anglebug.com/7753
 BlockIndexesMap gUniformBlockIndexes;
 
 void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLint count)
