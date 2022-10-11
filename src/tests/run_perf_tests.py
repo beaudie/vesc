@@ -521,6 +521,11 @@ def main():
 
     angle_test_util.SetupLogging(args.log.upper())
 
+    gsutil_py = os.path.join(SCRIPT_DIR, '..', '..', 'third_party', 'depot_tools', 'gsutil.py')
+    subprocess.check_output(
+        [gsutil_py, 'cat', 'gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json'])
+    raise Exception('test')
+
     start_time = time.time()
 
     # Use fast execution for smoke test mode.
