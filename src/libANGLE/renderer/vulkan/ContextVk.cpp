@@ -7846,4 +7846,16 @@ void ContextVk::resetPerFramePerfCounters()
     mShareGroupVk->getMetaDescriptorPool(DescriptorSetIndex::ShaderResource)
         .resetDescriptorCacheStats();
 }
+
+vk::ComputePipelineFlags ContextVk::getComputePipelineFlags() const
+{
+    vk::ComputePipelineFlags pipelineFlags = {};
+
+    if (shouldUsePipelineRobustness())
+    {
+        pipelineFlags.set(vk::ComputePipelineFlag::Robust);
+    }
+
+    return pipelineFlags;
+}
 }  // namespace rx
