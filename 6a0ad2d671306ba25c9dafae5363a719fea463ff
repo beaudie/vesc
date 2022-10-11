@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c5a26f_a60766c7",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-11T02:08:12Z",
+      "side": 1,
+      "message": "Drive by: Please use an `enum class` instead of `bool`.\n\nAlso, to avoid touching all the test files, you could consider adding an `initializeWithSizeHint()` function (that also calls `initializeImpl()`).",
+      "range": {
+        "startLine": 28,
+        "startChar": 68,
+        "endLine": 28,
+        "endChar": 72
+      },
+      "revId": "6a0ad2d671306ba25c9dafae5363a719fea463ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
