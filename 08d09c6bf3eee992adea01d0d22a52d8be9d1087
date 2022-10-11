@@ -16,6 +16,23 @@
       "message": "I\u0027m sorry this is so big. Can you please review? Thank you.",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fe81d7a_93dc0aed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-11T18:51:07Z",
+      "side": 1,
+      "message": "Note: after this CL lands I plan to add an inflight memory limit to BufferManager. I didn\u0027t want to make this CL even bigger than it is so it\u0027s not there yet.",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
