@@ -86,8 +86,10 @@ std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
 }  // namespace
 
 GLint **gUniformLocations;
-BlockIndexesMap gUniformBlockIndexes;
 GLuint gCurrentProgram = 0;
+
+// TODO(jmadill): Hide from the traces. http://anglebug.com/7731
+BlockIndexesMap gUniformBlockIndexes;
 
 void UpdateUniformLocation(GLuint program, const char *name, GLint location, GLint count)
 {
@@ -114,6 +116,14 @@ void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index)
 {
     gUniformBlockIndexes[program][index] = glGetUniformBlockIndex(program, name);
 }
+
+void UpdateUniformBlockBinding(GLuint program, GLuint blockIndex, GLuint blockBinding)
+{
+    GLuint shaderProgram = gShaderProgramMap[program];
+    glUniformBlockBinding(shaderProgram, gUniformBlockIndexes[shaderProgram][blockIndex],
+                          blockBinding);
+}
+
 void UpdateCurrentProgram(GLuint program)
 {
     gCurrentProgram = program;
@@ -392,6 +402,29 @@ void ValidateSerializedState(const char *serializedState, const char *fileName, 
     {
         gValidateSerializedStateCallback(serializedState, fileName, line);
     }
+}
+
+void MapBufferRange(GLenum target,
+                    GLintptr offset,
+                    GLsizeiptr length,
+                    GLbitfield access,
+                    GLuint buffer)
+{
+    gMappedBufferData[buffer] = glMapBufferRange(target, offset, length, access);
+}
+
+void MapBufferRangeEXT(GLenum target,
+                       GLintptr offset,
+                       GLsizeiptr length,
+                       GLbitfield access,
+                       GLuint buffer)
+{
+    gMappedBufferData[buffer] = glMapBufferRangeEXT(target, offset, length, access);
+}
+
+void MapBufferOES(GLenum target, GLbitfield access, GLuint buffer)
+{
+    gMappedBufferData[buffer] = glMapBufferOES(target, access);
 }
 
 ANGLE_REPLAY_EXPORT PFNEGLCREATEIMAGEPROC r_eglCreateImage;
