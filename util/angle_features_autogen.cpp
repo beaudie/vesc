@@ -91,6 +91,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::DontRelinkProgramsInParallel, "dontRelinkProgramsInParallel"},
     {Feature::DontUseLoopsToInitializeVariables, "dontUseLoopsToInitializeVariables"},
     {Feature::DoWhileGLSLCausesGPUHang, "doWhileGLSLCausesGPUHang"},
+    {Feature::DumpShaderSource, "dumpShaderSource"},
     {Feature::EglColorspaceAttributePassthrough, "eglColorspaceAttributePassthrough"},
     {Feature::EmulateAbsIntFunction, "emulateAbsIntFunction"},
     {Feature::EmulateAdvancedBlendEquations, "emulateAdvancedBlendEquations"},

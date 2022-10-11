@@ -137,6 +137,14 @@
                 "Enable to cache compiled shaders"
             ],
             "issue": "http://anglebug.com/7036"
+        },
+        {
+            "name": "dump_shader_source",
+            "category": "Features",
+            "description": [
+                "Write shader source to temp directory"
+            ],
+            "issue": "http://anglebug.com/7760"
         }
     ]
 }
