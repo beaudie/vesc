@@ -9,6 +9,7 @@
 #ifndef ANGLE_TESTS_TEST_UTILS_TEST_SUITE_H_
 #define ANGLE_TESTS_TEST_UTILS_TEST_SUITE_H_
 
+#include <fstream>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -123,6 +124,28 @@ struct ProcessInfo : angle::NonCopyable
 
 using TestQueue = std::queue<std::vector<TestIdentifier>>;
 
+class MetricWriter
+{
+  public:
+    MetricWriter() {}
+
+    void enable(const std::string &testArtifactDirectory);
+
+    void writeInfo(const std::string &name,
+                   const std::string &backend,
+                   const std::string &story,
+                   const std::string &metric,
+                   const std::string &units);
+
+    void writeValue(double value);
+    void writeValue(size_t value);
+
+    void close();
+
+  private:
+    std::ofstream mMetricFile;
+};
+
 class TestSuite
 {
   public:
@@ -138,6 +161,7 @@ class TestSuite
                             const std::string &units);
 
     static TestSuite *GetInstance() { return mInstance; }
+    static MetricWriter &GetMetricWriter() { return GetInstance()->mMetricWriter; }
 
     // Returns the path to the artifact in the output directory.
     bool hasTestArtifactsDirectory() const;
@@ -207,6 +231,7 @@ class TestSuite
     std::vector<ProcessInfo> mCurrentProcesses;
     std::thread mWatchdogThread;
     HistogramWriter mHistogramWriter;
+    MetricWriter mMetricWriter;
     std::string mTestArtifactDirectory;
     GPUTestExpectationsParser mTestExpectationsParser;
 

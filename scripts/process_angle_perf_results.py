@@ -370,6 +370,15 @@ def _merge_perf_results(benchmark_name, results_filename, directories, build_pro
             # TODO(crbug.com/936602): Figure out how to surface these errors. Should
             # we have a non-zero exit code if we error out?
             logging.error('Failed to obtain perf results from %s: %s', directory, e)
+
+        try:
+            with open(os.path.join(directory, 'angle_metrics.json')) as f:
+                metrics = json.load(f)
+                logging.info('angle_metrics: len=%d len[0]=%d v[0][0]=%s' %
+                             (len(metrics), len(metrics[0]), metrics[0][0]))
+        except IOError as e:
+            logging.error('Failed to obtain metrics from %s: %s', directory, e)
+
     if not collected_results:
         logging.error('Failed to obtain any perf results from %s.', benchmark_name)
         return
