@@ -43,6 +43,13 @@ void FrameCaptureShared::onMakeCurrent(const gl::Context *context, const egl::Su
 {}
 void FrameCaptureShared::onDestroyContext(const gl::Context *context) {}
 void FrameCaptureShared::replay(gl::Context *context) {}
+void *FrameCaptureShared::maybeGetShadowMemoryPointer(gl::Buffer *buffer,
+                                                      GLsizeiptr length,
+                                                      GLbitfield access)
+{
+    return buffer->getMapPointer();
+}
+
 const ProgramSources &FrameCaptureShared::getProgramSources(gl::ShaderProgramID id) const
 {
     const auto &foundSources = mCachedProgramSources.find(id);
