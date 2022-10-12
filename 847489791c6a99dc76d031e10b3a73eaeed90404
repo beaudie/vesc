@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f479730_838a209f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-12T01:27:48Z",
+      "side": 1,
+      "message": "I would avoid all these references to comparison. How we use the perf tests and why can change over time, and there\u0027s no need to think of these as only useful for comparison of backends.\n\nThese are just perf tests.",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2d6573f_dd450830",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-12T01:27:48Z",
+      "side": 1,
+      "message": "There\u0027s no comparison there, lol",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 35
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
