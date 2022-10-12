@@ -146,6 +146,21 @@ void ProcessHandle::reset()
     }
 }
 
+bool ParseArgWithLambda(const char *flag,
+                        int *argc,
+                        char **argv,
+                        int argIndex,
+                        std::function<bool(const char *)> lambda)
+{
+    const char *value = GetSingleArg(flag, argc, argv, argIndex, ArgHandling::Delete);
+    if (!value)
+    {
+        return false;
+    }
+
+    return lambda(value);
+}
+
 bool ParseIntArgWithHandling(const char *flag,
                              int *argc,
                              char **argv,
