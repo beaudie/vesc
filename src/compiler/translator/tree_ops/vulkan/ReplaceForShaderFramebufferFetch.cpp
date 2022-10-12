@@ -319,7 +319,7 @@ class ReplaceSubpassInputUtils
                                              const TVariable *loadInputAttachmentDataVar);
 
     ImmutableString getInputAttachmentName(unsigned int index);
-    ImmutableString getInputAttachmentArrayName();
+    [[maybe_unused]] ImmutableString getInputAttachmentArrayName();
 
     TCompiler *mCompiler;
     TSymbolTable *mSymbolTable;
