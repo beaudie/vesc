@@ -97,6 +97,7 @@ bool AttributeMap::validate(const ValidationContext *val,
                 static_cast<EGLAttrib>(curAttrib[1]);
         }
         mIntPointer = nullptr;
+        mMapType    = AttributeMapType::Int;
     }
 
     if (mAttribPointer)
@@ -111,6 +112,7 @@ bool AttributeMap::validate(const ValidationContext *val,
             mValidatedAttributes[curAttrib[0]] = curAttrib[1];
         }
         mAttribPointer = nullptr;
+        mMapType       = AttributeMapType::Attrib;
     }
 
     return true;
