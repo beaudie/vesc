@@ -33,6 +33,126 @@
       "message": "Note: after this CL lands I plan to add an inflight memory limit to BufferManager. I didn\u0027t want to make this CL even bigger than it is so it\u0027s not there yet.",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8900cb39_da733cfb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "overall lgtm. Just some questions about the bigger than intended buffers\u0027 allocations in the buffer manager.",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8b48dab_54057900",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "should be `Shared`?",
+      "range": {
+        "startLine": 254,
+        "startChar": 69,
+        "endLine": 254,
+        "endChar": 76
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "411593c1_2da74cd3",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "nit: maybe put a comment saying we are copying the old data before and after the updated region.",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80af94e3_2c66dc59",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "Is it going to waste a lot of memory? because we always allocate a bigger than intended buffer.\n\nIs there any way or plan to sub-allocate a smaller buffer inside a big allocation?\nOr maybe a more complicated buffer manager that uses \"malloc\"-like strategy is being planned?",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec916f5e_e128b796",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "I think the using of shared mem should be restricted on AMD hardwares. Apple\u0027s doc says\nwe should only use it for small buffers.\nhttps://developer.apple.com/documentation/metal/resource_fundamentals/choosing_a_resource_storage_mode_for_intel_and_amd_gpus?language\u003dobjc\n\n```\nA relatively small buffer that changes frequently, and both the CPU and the GPU\naccess it. Choose the MTLStorageModeShared mode.\n\nA relatively large buffer that changes frequently, and both the CPU and the GPU\naccess it. Choose the MTLStorageModeManaged mode. Always synchronize the buffer\nafter modifying its contents with the CPU or the GPU.\n```",
+      "range": {
+        "startLine": 177,
+        "startChar": 9,
+        "endLine": 177,
+        "endChar": 18
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acebf545_02eee462",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2022-10-12T17:40:20Z",
+      "side": 1,
+      "message": "Could we do the same for Metal backend? creating several test instances with overridden feature flags. For example, override the \"AlwaysUseManagedStorageModeForBuffers\" or \"AlwaysUseSharedStorageModeForBuffers\" or \"AlwaysUseStagedBufferUpdates\" feature flag to be always true.\n\nJust to verify different scenarios regardless of the underlying hardwares.",
+      "range": {
+        "startLine": 2094,
+        "startChar": 60,
+        "endLine": 2094,
+        "endChar": 85
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
