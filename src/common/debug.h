@@ -346,6 +346,12 @@ std::ostream &FmtHex(std::ostream &os, T value)
 
 #define ANGLE_UNUSED_VARIABLE(variable) (static_cast<void>(variable))
 
+#if defined(__GNUC__)
+#    define ANGLE_MAYBE_UNUSED
+#else
+#    define ANGLE_MAYBE_UNUSED [[maybe_unused]]
+#endif
+
 // A macro to indicate unimplemented functionality
 #ifndef NOASSERT_UNIMPLEMENTED
 #    define NOASSERT_UNIMPLEMENTED 1

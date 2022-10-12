@@ -34,6 +34,7 @@ class WrapIter
     typedef typename std::iterator_traits<iterator_type>::iterator_category iterator_category;
 
     WrapIter() : mIter() {}
+    WrapIter(const WrapIter &x) = default;
     WrapIter(const Iter &iter) : mIter(iter) {}
     ~WrapIter() = default;
 
