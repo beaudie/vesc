@@ -732,6 +732,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         return;
     }
 
+    for (std::string extension : mParams->traceInfo.requiredExtensions)
+    {
+        addExtensionPrerequisite(extension);
+    }
+
     if (IsWindows() && IsIntel() && mParams->isVulkan() && traceNameIs("manhattan_10"))
     {
         skipTest(
@@ -746,63 +751,14 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("cod_mobile"))
     {
-        // TODO: http://anglebug.com/4967 Vulkan: GL_EXT_color_buffer_float not supported on Pixel 2
-        // The COD:Mobile trace uses a framebuffer attachment with:
-        //   format = GL_RGB
-        //   type = GL_UNSIGNED_INT_10F_11F_11F_REV
-        // That combination is only renderable if GL_EXT_color_buffer_float is supported.
-        // It happens to not be supported on Pixel 2's Vulkan driver.
-        addExtensionPrerequisite("GL_EXT_color_buffer_float");
-
-        // TODO: http://anglebug.com/4731 This extension is missing on older Intel drivers.
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-
         if (IsWindows() && IsIntel())
         {
             skipTest("http://anglebug.com/6568 Flaky on Intel/windows");
         }
     }
 
-    if (traceNameIs("brawl_stars"))
-    {
-        addExtensionPrerequisite("GL_EXT_shadow_samplers");
-    }
-
-    if (traceNameIs("free_fire"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-    }
-
-    if (traceNameIs("marvel_contest_of_champions"))
-    {
-        addExtensionPrerequisite("GL_EXT_color_buffer_half_float");
-    }
-
-    if (traceNameIs("world_of_tanks_blitz"))
-    {
-        addExtensionPrerequisite("GL_EXT_disjoint_timer_query");
-    }
-
-    if (traceNameIs("dragon_ball_legends"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("lego_legacy"))
-    {
-        addExtensionPrerequisite("GL_EXT_shadow_samplers");
-    }
-
-    if (traceNameIs("world_war_doh"))
-    {
-        // Linux+NVIDIA doesn't support GL_KHR_texture_compression_astc_ldr (possibly others also)
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("saint_seiya_awakening"))
     {
-        addExtensionPrerequisite("GL_EXT_shadow_samplers");
-
         if (IsLinux() && IsIntel() && mParams->isVulkan())
         {
             skipTest(
@@ -811,34 +767,12 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("magic_tiles_3"))
-    {
-        // Linux+NVIDIA doesn't support GL_KHR_texture_compression_astc_ldr (possibly others also)
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("real_gangster_crime"))
     {
-        // Linux+NVIDIA doesn't support GL_KHR_texture_compression_astc_ldr (possibly others also)
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
-        // Intel doesn't support external images.
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-
         if (IsLinux() && (IsIntel() || IsAMD()) && mParams->driver != GLESDriverType::AngleEGL)
         {
             skipTest("http://anglebug.com/5822 Failing on Linux Intel and AMD due to invalid enum");
         }
-    }
-
-    if (traceNameIs("asphalt_8"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("hearthstone"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
     if (traceNameIs("efootball_pes_2021"))
@@ -849,17 +783,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
                 "TODO: https://anglebug.com/5517 Linux+Intel generate 'Framebuffer is "
                 "incomplete' errors with the Vulkan backend");
         }
-    }
-
-    if (traceNameIs("shadow_fight_2"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("rise_of_kingdoms"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
 
     if (traceNameIs("happy_color"))
@@ -887,11 +810,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("among_us"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("car_parking_multiplayer"))
     {
         if (IsNVIDIA() && !mParams->isVulkan())
@@ -916,11 +834,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("extreme_car_driving_simulator"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("plants_vs_zombies_2"))
     {
         if (IsWindows() && IsAMD() && mParams->isVulkan())
@@ -929,37 +842,16 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("junes_journey"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-    }
-
-    if (traceNameIs("ragnarok_m_eternal_love"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("league_of_legends_wild_rift"))
     {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
         if (IsLinux() && IsIntel() && mParams->isVulkan())
         {
             skipTest("TODO: http://anglebug.com/5815 Trace is crashing on Intel Linux");
         }
     }
 
-    if (traceNameIs("aztec_ruins"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("dragon_raja"))
     {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-
         if ((IsLinux() && IsIntel()) && mParams->isVulkan())
         {
             skipTest(
@@ -976,11 +868,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
             skipTest(
                 "http://anglebug.com/5823 Adreno gives a driver error with empty/small draw calls");
         }
-    }
-
-    if (traceNameIs("avakin_life"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
     }
 
     if (traceNameIs("professional_baseball_spirits"))
@@ -1004,11 +891,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("ludo_king"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("summoners_war"))
     {
         if (IsWindows() && IsIntel() && mParams->driver != GLESDriverType::AngleEGL)
@@ -1019,9 +901,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("pokemon_go"))
     {
-        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
         if (IsLinux() && IsIntel() && mParams->isVulkan())
         {
             skipTest("TODO: http://anglebug.com/5989 Intel Linux crashing on teardown");
@@ -1033,16 +912,8 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("cookie_run_kingdom"))
-    {
-        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-    }
-
     if (traceNameIs("genshin_impact"))
     {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
         if (IsNVIDIA() && mParams->isVulkan())
         {
             skipTest("http://anglebug.com/7496 Nondeterministic noise between runs");
@@ -1069,8 +940,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("pubg_mobile_skydive") || traceNameIs("pubg_mobile_battle_royale"))
     {
-        addExtensionPrerequisite("GL_EXT_texture_buffer");
-
         if (((IsWindows() && IsIntel()) || IsNVIDIA()) && !mParams->isVulkan())
         {
             skipTest("TODO: http://anglebug.com/6240 Internal errors on Windows/Intel and NVIDIA");
@@ -1085,23 +954,12 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("scrabble_go"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
     if (traceNameIs("world_of_kings"))
     {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
         if (IsWindows() && IsIntel())
         {
             skipTest("http://anglebug.com/6372 Flaky on Intel");
         }
-    }
-
-    if (traceNameIs("nier_reincarnation"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
     if (traceNameIs("mini_world"))
@@ -1116,8 +974,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("pokemon_unite"))
     {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
         if (IsIntel())
         {
             skipTest(
@@ -1128,8 +984,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 
     if (traceNameIs("world_cricket_championship_2"))
     {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-
         if (IsLinux() && IsIntel() && !mParams->isVulkan())
         {
             skipTest("http://anglebug.com/6657 Native test timing out on Intel Linux");
@@ -1143,16 +997,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("http://anglebug.com/6658 Crashing in Vulkan backend");
         }
-    }
-
-    if (traceNameIs("township"))
-    {
-        addExtensionPrerequisite("GL_OES_EGL_image_external");
-    }
-
-    if (traceNameIs("asphalt_9"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
     if (traceNameIs("pubg_mobile_launch"))
@@ -1171,22 +1015,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         }
     }
 
-    if (traceNameIs("dead_by_daylight"))
-    {
-        addExtensionPrerequisite("GL_EXT_shader_framebuffer_fetch");
-    }
-
-    if (traceNameIs("war_planet_online"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("lords_mobile"))
-    {
-        // http://anglebug.com/7000 - glTexStorage2DEXT is not exposed on Pixel 4 native
-        addExtensionPrerequisite("GL_EXT_texture_storage");
-    }
-
     if (traceNameIs("marvel_strike_force"))
     {
         if ((IsAndroid() && IsQualcomm()) && mParams->driver != GLESDriverType::AngleEGL)
@@ -1195,23 +1023,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
                 "http://anglebug.com/7017 Qualcomm native driver gets confused about the state of "
                 "a buffer that was recreated during the trace");
         }
-    }
-
-    if (traceNameIs("real_racing3"))
-    {
-        addExtensionPrerequisite("GL_EXT_shader_framebuffer_fetch");
-    }
-
-    if (traceNameIs("blade_and_soul_revolution"))
-    {
-        addExtensionPrerequisite("GL_EXT_texture_buffer");
-        addExtensionPrerequisite("GL_EXT_shader_framebuffer_fetch");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("scary_teacher_3d"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
     }
 
     if (traceNameIs("car_chase"))
@@ -1230,22 +1041,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("http://anglebug.com/7125 Renders incorrectly on NVIDIA");
         }
-
-        addExtensionPrerequisite("GL_EXT_geometry_shader");
-        addExtensionPrerequisite("GL_EXT_primitive_bounding_box");
-        addExtensionPrerequisite("GL_EXT_tessellation_shader");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
-    }
-
-    if (traceNameIs("aztec_ruins_high"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("special_forces_group_2"))
-    {
-        addExtensionPrerequisite("GL_EXT_texture_buffer");
     }
 
     if (traceNameIs("tessellation"))
@@ -1254,38 +1049,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("http://anglebug.com/7240 Tessellation driver bugs on Nvidia");
         }
-
-        addExtensionPrerequisite("GL_EXT_geometry_shader");
-        addExtensionPrerequisite("GL_EXT_primitive_bounding_box");
-        addExtensionPrerequisite("GL_EXT_tessellation_shader");
-        addExtensionPrerequisite("GL_EXT_texture_cube_map_array");
-    }
-
-    if (traceNameIs("basemark_gpu"))
-    {
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("mortal_kombat"))
-    {
-        addExtensionPrerequisite("GL_EXT_texture_buffer");
-    }
-
-    if (traceNameIs("ni_no_kuni"))
-    {
-        addExtensionPrerequisite("GL_EXT_shader_framebuffer_fetch");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("octopath_traveler"))
-    {
-        addExtensionPrerequisite("GL_EXT_shader_framebuffer_fetch");
-        addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
-    }
-
-    if (traceNameIs("antutu_refinery"))
-    {
-        addExtensionPrerequisite("GL_ANDROID_extension_pack_es31a");
     }
 
     if (traceNameIs("botworld_adventure"))
