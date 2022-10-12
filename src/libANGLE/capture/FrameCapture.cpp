@@ -32,7 +32,7 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/capture/capture_egl.h"
+#include "libANGLE/capture/capture_egl_autogen.h"
 #include "libANGLE/capture/capture_gles_1_0_autogen.h"
 #include "libANGLE/capture/capture_gles_2_0_autogen.h"
 #include "libANGLE/capture/capture_gles_3_0_autogen.h"
@@ -3843,11 +3843,11 @@ void CaptureShareGroupMidExecutionSetup(
 
                     // Create the image on demand
                     egl::Image *image = nullptr;
-                    Capture(setupCalls,
-                            CaptureEGLCreateImage(nullptr, context, EGL_GL_TEXTURE_2D_KHR,
-                                                  reinterpret_cast<EGLClientBuffer>(
-                                                      static_cast<GLuint64>(stagingTexId.value)),
-                                                  retrievedAttribs, image));
+                    Capture(setupCalls, egl::CaptureCreateImage(
+                                            nullptr, true, nullptr, context, EGL_GL_TEXTURE_2D_KHR,
+                                            reinterpret_cast<EGLClientBuffer>(
+                                                static_cast<GLuint64>(stagingTexId.value)),
+                                            retrievedAttribs, image));
 
                     // Pass the eglImage to the texture that is bound to GL_TEXTURE_EXTERNAL_OES
                     // target
@@ -5079,6 +5079,14 @@ bool SkipCall(EntryPoint entryPoint)
             // Skip these calls because:
             // - We don't use the return values.
             // - Same as uniforms, the value can vary, asking above GL_ACTIVE_ATTRIBUTES is an error
+            return true;
+
+        case EntryPoint::EGLGetProcAddress:
+        case EntryPoint::EGLGetConfigAttrib:
+        case EntryPoint::EGLQuerySurface:
+            // Skip these call because:
+            // - We don't use the return values.
+            // - Some EGL types and pointer parameters aren't handled in EGL capture.
             return true;
 
         default:
@@ -8748,6 +8756,70 @@ void WriteParamValueReplay<ParamType::TEGLSetBlobFuncANDROID>(std::ostream &os,
     os << reinterpret_cast<void *>(value);
 }
 
+template <>
+void WriteParamValueReplay<ParamType::Tegl_ConfigPointer>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          egl::Config *value)
+{
+    os << "EGL_NO_CONFIG_KHR";
+}
+
+template <>
+void WriteParamValueReplay<ParamType::Tegl_SurfacePointer>(std::ostream &os,
+                                                           const CallCapture &call,
+                                                           egl::Surface *value)
+{
+    if (value == nullptr)
+    {
+        os << "EGL_NO_SURFACE";
+    }
+    else
+    {
+        os << "gSurfaceMap[" << reinterpret_cast<uintptr_t>(value) << "ul]";
+    }
+}
+
+template <>
+void WriteParamValueReplay<ParamType::Tgl_ContextPointer>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          gl::Context *value)
+{
+    if (value == nullptr)
+    {
+        os << "EGL_NO_CONTEXT";
+    }
+    else
+    {
+        os << "gContextMap[" << value->id().value << "]";
+    }
+}
+
+template <>
+void WriteParamValueReplay<ParamType::Tegl_DisplayPointer>(std::ostream &os,
+                                                           const CallCapture &call,
+                                                           egl::Display *value)
+{
+    os << "EGL_NO_DISPLAY";
+}
+
+template <>
+void WriteParamValueReplay<ParamType::Tegl_ImagePointer>(std::ostream &os,
+                                                         const CallCapture &call,
+                                                         egl::Image *value)
+{
+    uint64_t pointerValue = reinterpret_cast<uint64_t>(value);
+    os << "gEGLImageMap[" << pointerValue << "ul]";
+}
+
+template <>
+void WriteParamValueReplay<ParamType::TEGLClientBuffer>(std::ostream &os,
+                                                        const CallCapture &call,
+                                                        EGLClientBuffer value)
+{
+    const ParamCapture &targetParam = call.params.getParam("target", ParamType::TEGLenum, 2);
+    os << "GetClientBuffer(" << targetParam.value.EGLenumVal << ", " << value << ")";
+}
+
 // ReplayWriter implementation.
 ReplayWriter::ReplayWriter()
     : mSourceFileSizeThreshold(kDefaultSourceFileSizeThreshold), mFrameIndex(1)
@@ -9035,3 +9107,51 @@ std::vector<std::string> ReplayWriter::getAndResetWrittenFiles()
     return results;
 }
 }  // namespace angle
+
+namespace egl
+{
+angle::ParamCapture CaptureAttributeMap(const egl::AttributeMap &attribMap)
+{
+    switch (attribMap.getType())
+    {
+        case AttributeMapType::Attrib:
+        {
+            std::vector<EGLAttrib> attribs;
+            for (const auto &[key, value] : attribMap)
+            {
+                attribs.push_back(key);
+                attribs.push_back(value);
+            }
+            attribs.push_back(EGL_NONE);
+
+            angle::ParamCapture paramCapture("attrib_list", angle::ParamType::TEGLAttribPointer);
+            angle::CaptureMemory(attribs.data(), attribs.size() * sizeof(EGLAttrib), &paramCapture);
+            return paramCapture;
+        }
+
+        case AttributeMapType::Int:
+        {
+            std::vector<EGLint> attribs;
+            for (const auto &[key, value] : attribMap)
+            {
+                attribs.push_back(static_cast<EGLint>(key));
+                attribs.push_back(static_cast<EGLint>(value));
+            }
+            attribs.push_back(EGL_NONE);
+
+            angle::ParamCapture paramCapture("attrib_list", angle::ParamType::TEGLintPointer);
+            angle::CaptureMemory(attribs.data(), attribs.size() * sizeof(EGLint), &paramCapture);
+            return paramCapture;
+        }
+
+        default:
+            UNREACHABLE();
+            return angle::ParamCapture();
+    }
+}
+
+angle::CallCapture CaptureGetProcAddress(...)
+{
+    return angle::CallCapture("Invalid", angle::ParamBuffer());
+}
+}  // namespace egl
