@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d138dcec_5404dbd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-12T20:57:15Z",
+      "side": 1,
+      "message": "The change is for the most part a no-op. Hopefully there\u0027s no mistake in the transition bit stuff.",
+      "revId": "2ec98ffcee293f2cd6e8aebe1b099c7fefc104e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
