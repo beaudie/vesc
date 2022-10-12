@@ -13,24 +13,26 @@
 
 namespace angle
 {
-bool gCalibration              = false;
-int gStepsPerTrial             = std::numeric_limits<int>::max();
-int gMaxStepsPerformed         = 0;
-bool gEnableTrace              = false;
-const char *gTraceFile         = "ANGLETrace.json";
-const char *gScreenShotDir     = nullptr;
-bool gSaveScreenshots          = false;
-int gScreenShotFrame           = 1;
-bool gVerboseLogging           = false;
-double gCalibrationTimeSeconds = 1.0;
-double gMaxTrialTimeSeconds    = 10.0;
-int gTestTrials                = 3;
-bool gNoFinish                 = false;
-bool gEnableAllTraceTests      = false;
-bool gRetraceMode              = false;
-bool gMinimizeGPUWork          = false;
-bool gTraceTestValidation      = false;
-const char *gPerfCounters      = nullptr;
+bool gCalibration                              = false;
+int gStepsPerTrial                             = std::numeric_limits<int>::max();
+int gMaxStepsPerformed                         = 0;
+bool gEnableTrace                              = false;
+const char *gTraceFile                         = "ANGLETrace.json";
+const char *gScreenShotDir                     = nullptr;
+bool gSaveScreenshots                          = false;
+int gScreenShotFrame                           = 1;
+bool gVerboseLogging                           = false;
+double gCalibrationTimeSeconds                 = 1.0;
+double gMaxTrialTimeSeconds                    = 10.0;
+int gTestTrials                                = 3;
+bool gNoFinish                                 = false;
+bool gEnableAllTraceTests                      = false;
+bool gRetraceMode                              = false;
+bool gMinimizeGPUWork                          = false;
+bool gTraceTestValidation                      = false;
+const char *gPerfCounters                      = nullptr;
+const char *gPrintExtensionsToFile             = nullptr;
+std::vector<std::string> *gRequestedExtensions = nullptr;
 
 // Default to three warmup trials. There's no science to this. More than two was experimentally
 // helpful on a Windows NVIDIA setup when testing with Vulkan and native trace tests.
@@ -189,6 +191,20 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         else if (strcmp("--perf-counters", argv[argIndex]) == 0 && argIndex < *argc - 1)
         {
             gPerfCounters = argv[argIndex + 1];
+            argIndex++;
+        }
+        else if (strcmp("--request-ext", argv[argIndex]) == 0 && argIndex < *argc - 1)
+        {
+            if (gRequestedExtensions == nullptr)
+            {
+                gRequestedExtensions = new std::vector<std::string>();
+            }
+            gRequestedExtensions->push_back(std::string(argv[argIndex + 1]));
+            argIndex++;
+        }
+        else if (strcmp("--print-extensions-to-file", argv[argIndex]) == 0 && argIndex < *argc - 1)
+        {
+            gPrintExtensionsToFile = argv[argIndex + 1];
             argIndex++;
         }
     }

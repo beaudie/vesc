@@ -524,11 +524,11 @@ void State::initialize(Context *context)
     {
         mImageUnits.resize(mCaps.maxImageUnits);
     }
-    if (clientVersion >= Version(3, 2) || mExtensions.textureCubeMapArrayAny())
+    if (clientVersion >= Version(3, 2))
     {
         mSamplerTextures[TextureType::CubeMapArray].resize(mCaps.maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 2) || mExtensions.textureBufferAny())
+    if (clientVersion >= Version(3, 2))
     {
         mSamplerTextures[TextureType::Buffer].resize(mCaps.maxCombinedTextureImageUnits);
     }
