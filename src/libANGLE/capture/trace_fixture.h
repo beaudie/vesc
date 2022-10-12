@@ -137,7 +137,6 @@ void UpdateShaderProgramID(GLuint id, GLsizei readBufferOffset);
 void UpdateTextureID(GLuint id, GLsizei readBufferOffset);
 void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
-void UpdateBufferID2(GLuint id, GLsizei readBufferOffset);
 
 void UpdateClientBuffer(EGLClientBuffer key, EGLClientBuffer data);
 EGLClientBuffer GetClientBuffer(EGLenum target, uint64_t key);
