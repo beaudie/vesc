@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d63f3d_a130c0f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-12T00:58:51Z",
+      "side": 1,
+      "message": "Yuxin, from our conversation over chat, I think `capture_replay_tests.py` will take care of verifying the attribs match during the run vs. during a replay.  Also I can see you refactored the existing test",
+      "parentUuid": "dc487307_44d04c17",
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cd4841a_71d18da7",
@@ -480,6 +498,30 @@
       "side": 1,
       "message": "I am not sure if this is doable. In `CaptureShareGroupMidExecutionSetup()`, we need to use `TextureID` as the key to find the image, and then the attribute. If we combine two maps into one map, it will have to be something like `std::map\u003cTextureID, std::map\u003cvoid*, AttributeMap\u003e\u003e`. \n\nUsually app will make calls in this sequence:\n\n```\nEGLImageKHR eglImage \u003d eglCreateImageKHR(..., AttributeMap);\nGLTexture textureID;\nglBindTexture(GL_TEXTURE_EXTERNAL_OES, textureID);\nglEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, eglImage);\n```\n\nDuring `eglCreateImageKHR()` call, we need to insert \u003cvoid*, AttributeMap\u003e into the map, but we don\u0027t know the `TextureID` yet. `TextureID` will only be available after the app issues the `glEGLImageTargetTexture2DOES()` call. And when `TextureID` is available, we need a way to retrieve back the eglImage and its\u0027 AttributeMap. I think we still need two maps to track the TextureID--\u003eeglImage--\u003eAttributeMap information.",
       "parentUuid": "c259e07c_2d41e1bb",
+      "range": {
+        "startLine": 840,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 52
+      },
+      "revId": "3a2bba04f28a06edf3e185e75a5b9df9ae936d7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7c6b9fa_f6bae7dd",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-12T00:58:51Z",
+      "side": 1,
+      "message": "Thanks Yuxin, let\u0027s move forward with this.",
+      "parentUuid": "ad1ff9d3_e9132e5b",
       "range": {
         "startLine": 840,
         "startChar": 0,

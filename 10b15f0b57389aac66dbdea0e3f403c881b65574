@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "492cb473_54b707ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-12T00:58:51Z",
+      "side": 1,
+      "message": "Thanks Yuxin!  We still have lots of apps using external images, so these improvements are needed.",
+      "revId": "10b15f0b57389aac66dbdea0e3f403c881b65574",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
