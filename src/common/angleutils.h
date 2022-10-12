@@ -564,6 +564,12 @@ size_t FormatStringIntoVector(const char *fmt, va_list vararg, std::vector<char>
 #    define ANGLE_MACRO_STRINGIFY(x) ANGLE_STRINGIFY(x)
 #endif
 
+#if defined(__clang__) || !defined(__GNUC__)
+#    define ANGLE_MAYBE_UNUSED [[maybe_unused]]
+#else
+#    define ANGLE_MAYBE_UNUSED
+#endif
+
 #if __has_cpp_attribute(clang::require_constant_initialization)
 #    define ANGLE_REQUIRE_CONSTANT_INIT [[clang::require_constant_initialization]]
 #else
