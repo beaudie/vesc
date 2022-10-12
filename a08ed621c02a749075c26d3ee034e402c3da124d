@@ -16,6 +16,24 @@
       "message": "@bsheedy@chromium.org: the crashes mentioned in https://chromium-review.googlesource.com/c/angle/angle/+/3946903 strongly suggest that we\u0027re dealing with a driver bug - on a proprietary driver not updated since 2018.\n\nI tried to work around that now - can I ask you to test the patch here with the previously crashing test, in order to avoid further reverts? That would be super helpful to me! :)\n\nUnfortunately the crash logs do not reveal all that much about the exact crash reason, so I can only guess what\u0027s needed here.",
       "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff467fe5_6087cbea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2022-10-12T17:08:43Z",
+      "side": 1,
+      "message": "Sure, should hopefully have results for you later today.",
+      "parentUuid": "6e8e3d74_7a7978ff",
+      "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
