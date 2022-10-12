@@ -683,8 +683,8 @@ void WriteCppReplayForCall(const CallCapture &call,
 
     if (call.entryPoint == EntryPoint::EGLCreatePbufferSurface)
     {
-        EGLSurface surface = call.params.getReturnValue().value.EGLSurfaceVal;
-        callOut << "gSurfaceMap[" << reinterpret_cast<uintptr_t>(surface) << "ul] = ";
+        egl::Surface *surface = call.params.getReturnValue().value.egl_SurfacePointerVal;
+        callOut << "gSurfaceMap[" << surface->getId() << "ul] = ";
     }
 
     if (call.entryPoint == EntryPoint::EGLCreateNativeClientBufferANDROID)
@@ -860,16 +860,16 @@ size_t MaxClientArraySize(const gl::AttribArray<size_t> &clientArraySizes)
     return found;
 }
 
-CallCapture CaptureMakeCurrent(EGLDisplay display,
-                               EGLSurface draw,
-                               EGLSurface read,
-                               EGLContext context)
+CallCapture CaptureMakeCurrent(egl::Display *display,
+                               egl::Surface *draw,
+                               egl::Surface *read,
+                               gl::Context *context)
 {
     ParamBuffer paramBuffer;
-    paramBuffer.addValueParam("display", ParamType::TEGLDisplay, display);
-    paramBuffer.addValueParam("draw", ParamType::TEGLSurface, draw);
-    paramBuffer.addValueParam("read", ParamType::TEGLSurface, read);
-    paramBuffer.addValueParam("context", ParamType::TEGLContext, context);
+    paramBuffer.addValueParam("display", ParamType::Tegl_DisplayPointer, display);
+    paramBuffer.addValueParam("draw", ParamType::Tegl_SurfacePointer, draw);
+    paramBuffer.addValueParam("read", ParamType::Tegl_SurfacePointer, read);
+    paramBuffer.addValueParam("context", ParamType::Tgl_ContextPointer, context);
 
     return CallCapture(angle::EntryPoint::EGLMakeCurrent, std::move(paramBuffer));
 }
@@ -4116,7 +4116,7 @@ void CaptureShareGroupMidExecutionSetup(
     }
 }
 
-void CaptureMidExecutionSetup(const gl::Context *context,
+void CaptureMidExecutionSetup(gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               CallResetMap &resetCalls,
                               std::vector<CallCapture> *shareGroupSetupCalls,
@@ -4134,9 +4134,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // warning on 64b systems:
     //   error C4312: 'reinterpret_cast': conversion from 'uint32_t' to 'EGLContext' of
     //   greater size
-    uint64_t contextID    = static_cast<uint64_t>(context->id().value);
-    EGLContext eglContext = reinterpret_cast<EGLContext>(contextID);
-    cap(CaptureMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, eglContext));
+    cap(CaptureMakeCurrent(nullptr, nullptr, nullptr, context));
 
     // Vertex input states. Must happen after buffer data initialization. Do not capture on GLES1.
     if (!context->isGLES1())
@@ -6921,9 +6919,7 @@ void FrameCaptureShared::updateResourceCountsFromCallCapture(const CallCapture &
     }
 }
 
-void FrameCaptureShared::captureCall(const gl::Context *context,
-                                     CallCapture &&inCall,
-                                     bool isCallValid)
+void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall, bool isCallValid)
 {
     if (SkipCall(inCall.entryPoint))
     {
@@ -6938,19 +6934,8 @@ void FrameCaptureShared::captureCall(const gl::Context *context,
         size_t contextCount = context->getShareGroup()->getShareGroupContextCount();
         if (contextCount > 1 && mLastContextId != context->id())
         {
-            // Inject the eglMakeCurrent() call.
-            // The EGLDisplay and EGLSurface values can't be known here, since we may not even be
-            // running the trace with ANGLE.
-            // The EGLContext value is actually the context ID, so we can look it up in
-            // 'gContextMap'.
-            // Need to go from uint32 -> uint64 -> EGLContext (void*) to handle MSVC compiler
-            // warning on 64b systems:
-            //   error C4312: 'reinterpret_cast': conversion from 'uint32_t' to 'EGLContext' of
-            //   greater size
-            uint64_t contextID    = static_cast<uint64_t>(context->id().value);
-            EGLContext eglContext = reinterpret_cast<EGLContext>(contextID);
-            CallCapture makeCurrentCall =
-                CaptureMakeCurrent(EGL_NO_DISPLAY, EGL_NO_SURFACE, EGL_NO_SURFACE, eglContext);
+            // Inject the eglMakeCurrent() call. Ignore the display and surface.
+            CallCapture makeCurrentCall = CaptureMakeCurrent(nullptr, nullptr, nullptr, context);
             mFrameCalls.emplace_back(std::move(makeCurrentCall));
             mLastContextId = context->id();
         }
@@ -7313,7 +7298,7 @@ void FrameCaptureShared::runMidExecutionCapture(const gl::Context *mainContext)
 
     scanSetupCalls(mainContext, mShareGroupSetupCalls);
 
-    for (const gl::Context *shareContext : shareGroup->getContexts())
+    for (gl::Context *shareContext : shareGroup->getContexts())
     {
         FrameCapture *frameCapture = shareContext->getFrameCapture();
         ASSERT(frameCapture->getSetupCalls().empty());

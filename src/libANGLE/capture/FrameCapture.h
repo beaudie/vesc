@@ -652,7 +652,7 @@ class FrameCaptureShared final : angle::NonCopyable
     FrameCaptureShared();
     ~FrameCaptureShared();
 
-    void captureCall(const gl::Context *context, CallCapture &&call, bool isCallValid);
+    void captureCall(gl::Context *context, CallCapture &&call, bool isCallValid);
     void checkForCaptureTrigger();
     void onEndFrame(const gl::Context *context);
     void onDestroyContext(const gl::Context *context);
@@ -1139,19 +1139,19 @@ void WriteParamValueReplay<ParamType::TGLubyte>(std::ostream &os,
                                                 GLubyte value);
 
 template <>
-void WriteParamValueReplay<ParamType::TEGLContext>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLContext value);
+void WriteParamValueReplay<ParamType::Tgl_ContextPointer>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          gl::Context *value);
 
 template <>
-void WriteParamValueReplay<ParamType::TEGLDisplay>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLContext value);
+void WriteParamValueReplay<ParamType::Tegl_DisplayPointer>(std::ostream &os,
+                                                           const CallCapture &call,
+                                                           egl::Display *value);
 
 template <>
-void WriteParamValueReplay<ParamType::TEGLSurface>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLContext value);
+void WriteParamValueReplay<ParamType::Tegl_SurfacePointer>(std::ostream &os,
+                                                           const CallCapture &call,
+                                                           egl::Surface *value);
 
 template <>
 void WriteParamValueReplay<ParamType::TEGLDEBUGPROCKHR>(std::ostream &os,
@@ -1173,14 +1173,14 @@ void WriteParamValueReplay<ParamType::TEGLClientBuffer>(std::ostream &os,
                                                         EGLClientBuffer value);
 
 template <>
-void WriteParamValueReplay<ParamType::TEGLConfig>(std::ostream &os,
-                                                  const CallCapture &call,
-                                                  EGLConfig value);
+void WriteParamValueReplay<ParamType::Tegl_ConfigPointer>(std::ostream &os,
+                                                          const CallCapture &call,
+                                                          egl::Config *value);
 
 template <>
-void WriteParamValueReplay<ParamType::TEGLSurface>(std::ostream &os,
-                                                   const CallCapture &call,
-                                                   EGLSurface value);
+void WriteParamValueReplay<ParamType::Tegl_SurfacePointer>(std::ostream &os,
+                                                           const CallCapture &call,
+                                                           egl::Surface *value);
 
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
