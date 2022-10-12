@@ -133,6 +133,11 @@ enum ArgHandling
     Preserve,
 };
 
+bool ParseArgWithLambda(const char *flag,
+                        int *argc,
+                        char **argv,
+                        int argIndex,
+                        std::function<bool(const char *)> lambda);
 bool ParseIntArgWithHandling(const char *flag,
                              int *argc,
                              char **argv,
