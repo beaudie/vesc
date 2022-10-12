@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fd20387_3d130635",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-12T14:21:23Z",
+      "side": 1,
+      "message": "I agree with this. I\u0027d call them something like extra permutations, etc.\n\nA bigger question is: What kind of analysis can you get with these extra permutations that you can\u0027t get just by making a single better base case?",
+      "parentUuid": "3f479730_838a209f",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d2d6573f_dd450830",
@@ -42,6 +66,75 @@
         "startChar": 10,
         "endLine": 11,
         "endChar": 35
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cb41c77_86f2cc83",
+        "filename": "src/tests/perf_tests/BufferSubData.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-12T14:21:23Z",
+      "side": 1,
+      "message": "can you use the existing templating methods I added \"CombineWithValues\" and \"CombineWithFuncs\", etc? See TracePerfTest.cpp.",
+      "range": {
+        "startLine": 455,
+        "startChar": 8,
+        "endLine": 455,
+        "endChar": 42
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1d2bdb5_d69aa44c",
+        "filename": "src/tests/perf_tests/InstancingPerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-12T14:21:23Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 69
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9b99b95_7eecab08",
+        "filename": "src/tests/perf_tests/PointSprites.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-12T14:21:23Z",
+      "side": 1,
+      "message": "and here",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 0
       },
       "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
