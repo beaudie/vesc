@@ -375,6 +375,9 @@ def _run_tests(tests, args, extra_flags, env):
         wall_times = []
         test_histogram_set = histogram_set.HistogramSet()
         for sample in range(args.samples_per_test):
+            if test_index == 0:
+                logging.info('test_index == 0: sleeping 5s')
+                time.sleep(5)
             try:
                 test_status, sample_wall_times, sample_histogram = _run_perf(
                     args, common_args, env, steps_per_trial)
