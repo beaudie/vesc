@@ -87,6 +87,24 @@
       "parentUuid": "e1fd6a06_ee66f7c7",
       "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3387cd49_23d8a8d6",
+        "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-13T19:37:41Z",
+      "side": 1,
+      "message": "So I ran some perf tests and for larger image size (e.g. 1024x1024), both ANGLE thread pool and my implementation perform similarly (since most of time is spent doing the actual decompression work), but for smaller sizes (16x16) ANGLE\u0027s thread pool is 70 times slower than mine, due to the thread creation costs. \n\nOuch.\n\nAnd optimizing for those smaller sizes is important since mipmapped textures will always have a bunch of smaller sized images, down to 1x1.\n\nI\u0027ll see how hard it would be to improve ANGLE\u0027s thread pool to not re-create the threads.",
+      "parentUuid": "46d99fe7_2aa8970b",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
