@@ -105,6 +105,24 @@
       "parentUuid": "0c7c9eb6_bad56a85",
       "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06315abb_302ea846",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-13T17:42:33Z",
+      "side": 1,
+      "message": "\u003e IIUC, the issue is that this function is called before the renderer is created, and so `InitializeFeatures()` is not yet called, is that right?\n\nExactly.\n\n\u003e Unless @geofflang@chromium.org or @jonahr@google.com have any ideas, I\u0027ll let this through to unblock you, and you could experiment with adding an instance of features for EGL as a follow up.\n\nGreat - given that I have more EGL related work in the pipe, chances are that we\u0027ll need more driver specific quirks in the future, so it\u0027s probably worth adding a proper framework (as a follow-up).",
+      "parentUuid": "58b4c115_3a3b0c79",
+      "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
