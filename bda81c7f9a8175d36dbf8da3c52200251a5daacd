@@ -80,6 +80,30 @@
       },
       "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "046e084d_9f8c2fa4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-13T18:10:04Z",
+      "side": 1,
+      "message": "yea, still think this is a bit confusing, but its okay and minor anyway.",
+      "parentUuid": "f3881af5_2243c48c",
+      "range": {
+        "startLine": 292,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 12
+      },
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
