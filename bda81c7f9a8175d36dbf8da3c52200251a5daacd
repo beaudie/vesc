@@ -37,6 +37,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0236e9a0_68f67552",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-13T21:39:34Z",
+      "side": 1,
+      "message": "Is this a typo? \n\n\"Note that the global robustBufferAccess feature must be `enabled` by default\".",
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e48ee38_d53f50dd",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 3
@@ -102,6 +119,23 @@
         "endLine": 292,
         "endChar": 12
       },
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46738d77_c6053ad9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-13T21:39:34Z",
+      "side": 1,
+      "message": "why do GraphicsPipelieSubset values not participate in the hash key?",
       "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
