@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e00e6f03_cf0510bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T16:01:57Z",
+      "side": 1,
+      "message": "I\u0027m happy to name them anything you want. I don\u0027t want to waste time on the bots running tests that are not always needed but I don\u0027t want to to throw the tests away.\n\nAs for a better base case, there are various limits in both the Metal backend and in the Metal drivers themselves. Testing the permutations helped me find where one technique wins vs another. For exampple on the Metal backend, Intel, under \u003c 256k it\u0027s faster to use a shadow copy of buffers, update the shadow, copy the shadow into a new real buffer for each call to bufferSubData. Over 256k it\u0027s faster to copy the data to a temp staging buffer and blit. Metal also has storage options and when to use one vs another can be different by size.",
+      "parentUuid": "1fd20387_3d130635",
+      "range": {
+        "startLine": 7,
+        "startChar": 19,
+        "endLine": 7,
+        "endChar": 28
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d2d6573f_dd450830",
@@ -96,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "56bb029d_747ab313",
+        "filename": "src/tests/perf_tests/BufferSubData.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T16:01:57Z",
+      "side": 1,
+      "message": "used INSTANTIATE_TEST_SUITE_P. Is that acceptable?",
+      "parentUuid": "1cb41c77_86f2cc83",
+      "range": {
+        "startLine": 455,
+        "startChar": 8,
+        "endLine": 455,
+        "endChar": 42
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c1d2bdb5_d69aa44c",
         "filename": "src/tests/perf_tests/InstancingPerf.cpp",
         "patchSetId": 3
@@ -119,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7520890c_01041db6",
+        "filename": "src/tests/perf_tests/InstancingPerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T16:01:57Z",
+      "side": 1,
+      "message": "I am not sure what you\u0027re asking for here",
+      "parentUuid": "c1d2bdb5_d69aa44c",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 435,
+        "endChar": 69
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9b99b95_7eecab08",
         "filename": "src/tests/perf_tests/PointSprites.cpp",
         "patchSetId": 3
@@ -130,6 +202,30 @@
       "writtenOn": "2022-10-12T14:21:23Z",
       "side": 1,
       "message": "and here",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 0
+      },
+      "revId": "847489791c6a99dc76d031e10b3a73eaeed90404",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "915e7647_673ef79c",
+        "filename": "src/tests/perf_tests/PointSprites.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T16:01:57Z",
+      "side": 1,
+      "message": "I am not sure what you\u0027re askoing for here",
+      "parentUuid": "c9b99b95_7eecab08",
       "range": {
         "startLine": 311,
         "startChar": 0,
