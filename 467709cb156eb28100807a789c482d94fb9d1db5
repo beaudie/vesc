@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e70df75_0c4d6593",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 9157,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-13T22:14:00Z",
+      "side": 1,
+      "message": "Since the EGLAttribPointerVal can be nullptr now, it is possible that when we retrieve the EGLAttrib to reconstruct the `EGLCreateImage()` calls in MidExcutionCapture: https://crrev.com/c/3928212/12/src/libANGLE/capture/FrameCapture.cpp#3850, we will pass in nullptr for EGLAttrib function parameter in `EGLCreateImage()`, is that going to be ok? In short, is it valid to pass nullptr as EGLAttrib in `EGLCreateImage()`?",
+      "revId": "467709cb156eb28100807a789c482d94fb9d1db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
