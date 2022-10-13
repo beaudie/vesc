@@ -16,6 +16,24 @@
       "message": "fyi this trace is failing on the Pixel 6. Cody or Lubosz can you address that with a fix or suppression?",
       "revId": "85631d24ddf941f81c0392404da55c145c18c2fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "070c7eae_26acf74c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T14:48:00Z",
+      "side": 1,
+      "message": "AFAICT everything is failing on Pixel 6 in CI:\nhttps://ci.chromium.org/p/angle/builders/try/android-arm64-exp-test\n\nThe trace worked for us locally on Pixel 6.  Can you share or link an example?  Do we just need to approve an additional gold?",
+      "parentUuid": "7df0a4ba_433de333",
+      "revId": "85631d24ddf941f81c0392404da55c145c18c2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
