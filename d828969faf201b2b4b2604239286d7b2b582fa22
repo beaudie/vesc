@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a093910_f32c8e12",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-13T19:33:59Z",
+      "side": 1,
+      "message": "expecting this changes the values of ```ci0```.  but it doesn\u0027t.",
+      "revId": "d828969faf201b2b4b2604239286d7b2b582fa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c320d91f_5d608c49",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-13T19:33:59Z",
+      "side": 1,
+      "message": "the byte values are still 0x0.",
+      "revId": "d828969faf201b2b4b2604239286d7b2b582fa22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
