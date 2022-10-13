@@ -37,7 +37,7 @@ from tracing.value import histogram
 from tracing.value import histogram_set
 from tracing.value import merge_histograms
 
-ANGLE_PERFTESTS = 'angle_perftests'
+DEFAULT_TEST_SUITE = 'angle_perftests'
 DEFAULT_LOG = 'info'
 DEFAULT_SAMPLES = 4
 DEFAULT_TRIALS = 3
@@ -452,7 +452,7 @@ def main():
     parser.add_argument(
         '-f', '--filter', '--isolated-script-test-filter', type=str, help='Test filter.')
     parser.add_argument(
-        '--test-suite', '--suite', help='Test suite to run.', default=ANGLE_PERFTESTS)
+        '--test-suite', '--suite', help='Test suite to run.', default=DEFAULT_TEST_SUITE)
     parser.add_argument('--xvfb', help='Use xvfb.', action='store_true')
     parser.add_argument(
         '--shard-count',
