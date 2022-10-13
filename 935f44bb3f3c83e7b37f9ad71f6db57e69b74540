@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d2962d6_b855be63",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T19:45:22Z",
+      "side": 1,
+      "message": "Great stuff Jamie, passing pointers are gets rid of a bunch of cruft.\n\n+1 in case Yuxin would like to provide feedback, since she is working in the EGL space as well.",
+      "revId": "935f44bb3f3c83e7b37f9ad71f6db57e69b74540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef3e04c_7e88bea0",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T19:45:22Z",
+      "side": 1,
+      "message": "This ends up giving some goofy types like `Tegl_ConfigPointer`.\nWould it break things to go with `TEGLConfigPointer` which is a bit easier to read and conforms with some other types, like `TEGLConfig`?",
+      "range": {
+        "startLine": 1620,
+        "startChar": 0,
+        "endLine": 1621,
+        "endChar": 50
+      },
+      "revId": "935f44bb3f3c83e7b37f9ad71f6db57e69b74540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1ecf884_c148a3d8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4136,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T19:45:22Z",
+      "side": 1,
+      "message": "Can probably strip this comment now, if MSVC is happy.",
+      "range": {
+        "startLine": 4133,
+        "startChar": 0,
+        "endLine": 4136,
+        "endChar": 21
+      },
+      "revId": "935f44bb3f3c83e7b37f9ad71f6db57e69b74540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
