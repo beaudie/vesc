@@ -71,6 +71,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b2e8bd4_348ad785",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-13T16:49:59Z",
+      "side": 1,
+      "message": "Spelling (Certain)",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d71dbb1e_066a7172",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-13T16:49:59Z",
+      "side": 1,
+      "message": "Inconsistant capitalization",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8b48dab_54057900",
         "filename": "include/platform/FeaturesMtl_autogen.h",
         "patchSetId": 14
@@ -88,6 +122,40 @@
         "endLine": 254,
         "endChar": 76
       },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa81909_d2241e51",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 14
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-13T16:49:59Z",
+      "side": 1,
+      "message": "Storage -\u003e Shared",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d56500f_8de85398",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-13T16:49:59Z",
+      "side": 1,
+      "message": "Sp (buffers)",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
