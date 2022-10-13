@@ -56,6 +56,30 @@
       },
       "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3881af5_2243c48c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-13T18:01:09Z",
+      "side": 1,
+      "message": "That\u0027s the spec terminology, so in the context of \"graphics pipeline subset\" it should be clear? Like the spec says things like \"A complete graphics pipeline ...\"",
+      "parentUuid": "3e48ee38_d53f50dd",
+      "range": {
+        "startLine": 292,
+        "startChar": 4,
+        "endLine": 292,
+        "endChar": 12
+      },
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
