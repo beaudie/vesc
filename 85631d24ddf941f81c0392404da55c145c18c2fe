@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df0a4ba_433de333",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-13T13:38:22Z",
+      "side": 1,
+      "message": "fyi this trace is failing on the Pixel 6. Cody or Lubosz can you address that with a fix or suppression?",
+      "revId": "85631d24ddf941f81c0392404da55c145c18c2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
