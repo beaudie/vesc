@@ -363,6 +363,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecbaad5b_76ca26cf",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:46:47Z",
+      "side": 1,
+      "message": "Also, the BufferManager is currently only used for GL buffers and staging buffers. It\u0027s not used for any other buffers. It could be, but BufferPool is still used ATM for index buffer conversion, uniforms, provoking vertex, etc. Maybe we would refactor those to use BufferManager but I was adviced to do less at first.",
+      "parentUuid": "c48accff_4c5a4b3b",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec916f5e_e128b796",
         "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
         "patchSetId": 14
