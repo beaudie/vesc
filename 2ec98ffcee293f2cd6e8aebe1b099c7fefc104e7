@@ -51,6 +51,40 @@
       "message": "LGTM, The shuffle around is hard to review, so I am trusting you and bots here that you didn\u0027t miss anything.",
       "revId": "2ec98ffcee293f2cd6e8aebe1b099c7fefc104e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fffb2b24_a23a34ba",
+        "filename": "src/common/hash_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-13T19:29:00Z",
+      "side": 1,
+      "message": "Why do we want to remove the static keyword?",
+      "revId": "2ec98ffcee293f2cd6e8aebe1b099c7fefc104e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54ddb387_e182f4da",
+        "filename": "src/tests/perf_tests/VulkanPipelineCachePerf.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-13T19:29:00Z",
+      "side": 1,
+      "message": "was mRNG always uninitialized before?",
+      "revId": "2ec98ffcee293f2cd6e8aebe1b099c7fefc104e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
