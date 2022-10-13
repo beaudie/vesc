@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9032d365_02b5931c",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-13T18:35:04Z",
+      "side": 1,
+      "message": "this is one thing to fix.",
+      "revId": "fec2ddc61d44281349438330e0b97d75e4317aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "580c6c8b_654dfef1",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-13T18:35:04Z",
+      "side": 1,
+      "message": "cs0 could be removed, we coudl use cs1 in texelFetch()",
+      "revId": "fec2ddc61d44281349438330e0b97d75e4317aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "029ddd0c_00e4e8a0",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-13T18:35:04Z",
+      "side": 1,
+      "message": "probably the problematic buffer.\n\nwe can experiment with test case with removing one buffer or confusion about the 2 at the same time.",
+      "revId": "fec2ddc61d44281349438330e0b97d75e4317aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
