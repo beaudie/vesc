@@ -86,6 +86,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2355de7_4048ef50",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b2e8bd4_348ad785",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d71dbb1e_066a7172",
@@ -99,6 +117,24 @@
       "writtenOn": "2022-10-13T16:49:59Z",
       "side": 1,
       "message": "Inconsistant capitalization",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "537e4840_f724929e",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d71dbb1e_066a7172",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +162,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad110c0_dfd322e7",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8b48dab_54057900",
+      "range": {
+        "startLine": 254,
+        "startChar": 69,
+        "endLine": 254,
+        "endChar": 76
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa81909_d2241e51",
@@ -139,6 +199,24 @@
       "writtenOn": "2022-10-13T16:49:59Z",
       "side": 1,
       "message": "Storage -\u003e Shared",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2d2d83_3f2a398e",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 14
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0fa81909_d2241e51",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -160,6 +238,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9732112_5efdf5d7",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d56500f_8de85398",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "411593c1_2da74cd3",
@@ -173,6 +269,24 @@
       "writtenOn": "2022-10-12T17:40:20Z",
       "side": 1,
       "message": "nit: maybe put a comment saying we are copying the old data before and after the updated region.",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1178bfec_37726b79",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "411593c1_2da74cd3",
       "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -211,6 +325,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "add36d5e_0628106c",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "There are plans to change it after this CL once we get some data.\n\nThe problem is freeing them. When do they get freed? If you make a 182 byte buffer, update 50 timeswith bufferSubData, you now have 50, 182 byte buffers which are only usable by other requests for 182 byte buffers. With this code you have 50, 256 byte buffers which can be used by any request from 129 to 256 bytes.\n\nIf I switch to exact allocation, then I need some metric to actually free those 182 byte buffers (as in free the metal buffer itself, not put it on a list of unused buffers). What is that metric? Hasn\u0027t been used in N frames? N seconds? There\u0027s Y amount of unused buffers?\n\nThe same problem exists with this solution though, it may collect unused buffers. It is per context tho so changing pages, closing the tab, will free the buffer. My plan was to first at a global limit of amount of memory represented by `mInUseBuffers`. If it hits some limit (400 meg?) then wait for at least 200meg to free and actually deallocate those buffers. Or something. Not sure yet.",
+      "parentUuid": "80af94e3_2c66dc59",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48accff_4c5a4b3b",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "Can we address that later or do you want it addressed now? Also are those buffers large? Like if they\u0027re 6k and we allocate 8k is it worth a special bucket to save a few k or will be saving megs?",
+      "parentUuid": "c095dd6b_c542a0ea",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec916f5e_e128b796",
@@ -236,6 +386,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d1e0e7a_5bc48c01",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "I agree with your assessment of the docs. I think though that we should deal with this in a separate issue.\n\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7749\n\nI don\u0027t want to just blindly pick. We need tests to prove that one choice is better than another.\n\nBut fyi, unless I\u0027m mis-understanding, alwaysUseManagedStorageModeForBuffers is true for AMD so we\u0027re not using shared at all on AMD with this CL",
+      "parentUuid": "ec916f5e_e128b796",
+      "range": {
+        "startLine": 177,
+        "startChar": 9,
+        "endLine": 177,
+        "endChar": 18
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acebf545_02eee462",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 14
@@ -247,6 +421,30 @@
       "writtenOn": "2022-10-12T17:40:20Z",
       "side": 1,
       "message": "Could we do the same for Metal backend? creating several test instances with overridden feature flags. For example, override the \"AlwaysUseManagedStorageModeForBuffers\" or \"AlwaysUseSharedStorageModeForBuffers\" or \"AlwaysUseStagedBufferUpdates\" feature flag to be always true.\n\nJust to verify different scenarios regardless of the underlying hardwares.",
+      "range": {
+        "startLine": 2094,
+        "startChar": 60,
+        "endLine": 2094,
+        "endChar": 85
+      },
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e0331db_69fbcd9d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2094,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-13T17:35:59Z",
+      "side": 1,
+      "message": "added",
+      "parentUuid": "acebf545_02eee462",
       "range": {
         "startLine": 2094,
         "startChar": 60,
