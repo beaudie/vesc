@@ -87,6 +87,24 @@
       "message": "@syoussefi@chromium.org: unfortunately the existing caps/feature framework from `gl_features.json` etc. can not be used here as at least the GL part is only initialized later. So in case this workaround is needed, do you think it would be ok to have stuff like this in the code - or would you like to see a new caps framework for EGL?",
       "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58b4c115_3a3b0c79",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-13T17:15:27Z",
+      "side": 1,
+      "message": "It\u0027s good to have the features working, because they show up in chrome://gpu, and they make testing-without-rebuilding easier.\n\nIIUC, the issue is that this function is called before the renderer is created, and so `InitializeFeatures()` is not yet called, is that right? Looking around the code, I don\u0027t see a clean solution that wouldn\u0027t require too much surgery. So far, the workarounds are one set per backend, but a new workarounds set for EGL is probably easy to do. We already deal with the front-end and back-end features getting mixed.\n\nUnless @geofflang@chromium.org or @jonahr@google.com have any ideas, I\u0027ll let this through to unblock you, and you could experiment with adding an instance of features for EGL as a follow up.",
+      "parentUuid": "0c7c9eb6_bad56a85",
+      "revId": "a08ed621c02a749075c26d3ee034e402c3da124d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
