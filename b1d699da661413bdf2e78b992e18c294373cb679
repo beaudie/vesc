@@ -16,6 +16,24 @@
       "message": "This breaks Pixel 6 https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1768/overview",
       "revId": "b1d699da661413bdf2e78b992e18c294373cb679",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b4a4725_76220609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-13T20:43:22Z",
+      "side": 1,
+      "message": "Thanks Yuly, I am looking now",
+      "parentUuid": "486d8e00_27e58b14",
+      "revId": "b1d699da661413bdf2e78b992e18c294373cb679",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
