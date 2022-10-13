@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b02f964_72fef13a",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-13T20:10:50Z",
+      "side": 1,
+      "message": "I needed to be able to distinguish `egl::Config *` from `EGLConfig *` by the type name here (`egl_ConfigPointer` vs `EGLConfigPointer`). Open to other suggestions of course, but this works and is consistent.",
+      "parentUuid": "eef3e04c_7e88bea0",
+      "range": {
+        "startLine": 1620,
+        "startChar": 0,
+        "endLine": 1621,
+        "endChar": 50
+      },
+      "revId": "935f44bb3f3c83e7b37f9ad71f6db57e69b74540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f1ecf884_c148a3d8",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 5
@@ -54,6 +78,30 @@
       "writtenOn": "2022-10-13T19:45:22Z",
       "side": 1,
       "message": "Can probably strip this comment now, if MSVC is happy.",
+      "range": {
+        "startLine": 4133,
+        "startChar": 0,
+        "endLine": 4136,
+        "endChar": 21
+      },
+      "revId": "935f44bb3f3c83e7b37f9ad71f6db57e69b74540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54029eec_198651de",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-13T20:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1ecf884_c148a3d8",
       "range": {
         "startLine": 4133,
         "startChar": 0,
