@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1684ff7_b15ddd13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "Awesome stuff, thanks for pushing on this Jamie.  This should really improve our EGL situation.",
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4ca930c_5084c3bd",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "I know we wouldn\u0027t use the result of this, but is there a reason to leave it out of the generate capture code?",
+      "range": {
+        "startLine": 1270,
+        "startChar": 0,
+        "endLine": 1270,
+        "endChar": 17
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a2b2a84_d8b6093d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "Should we tag this with a TODO?",
+      "range": {
+        "startLine": 1671,
+        "startChar": 10,
+        "endLine": 1671,
+        "endChar": 89
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a21ec35_db765e03",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5092,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "same TODO here",
+      "range": {
+        "startLine": 5092,
+        "startChar": 0,
+        "endLine": 5092,
+        "endChar": 93
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4efaf344_cfca042a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8755,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "Why is zero valid for these three params?\nedit: elaborated on the question below.",
+      "range": {
+        "startLine": 8755,
+        "startChar": 0,
+        "endLine": 8755,
+        "endChar": 14
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97045f69_2d8549cd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8779,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "Here and several below returning null essentially.  Because they are placeholder values? or are these still TBD?  If so, would be good to mark which ones need to be updated eventually.",
+      "range": {
+        "startLine": 8779,
+        "startChar": 0,
+        "endLine": 8779,
+        "endChar": 30
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cff3911_87885646",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-13T20:29:51Z",
+      "side": 1,
+      "message": "Can you describe how this interacts with the blocklist above?\n```\nCAPTURE_BLOCKLIST \u003d [\u0027eglGetProcAddress\u0027]\n```",
+      "range": {
+        "startLine": 1259,
+        "startChar": 19,
+        "endLine": 1259,
+        "endChar": 40
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
