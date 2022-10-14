@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d769ca1_ca14c637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-14T18:40:03Z",
+      "side": 1,
+      "message": "Thanks for the explanation.\n\nOn NV, desktop GLSL is used. So it\u0027s unknown whether this is broken only on QC or all of ES. Over the weekend, I\u0027ll run this on our (limited) Pixel 6 bots and see what happens. If it passes there, you are welcome to create a feature and disable this on QC.",
+      "parentUuid": "0ead9d90_f8685b52",
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49b09776_7d0aea28",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
