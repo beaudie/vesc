@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "76518b6b_831ae661",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T15:38:17Z",
+      "side": 1,
+      "message": "this will fail git presubmit, please check presubmit for landing. It\u0027s recommended you follow standard ANGLE contributor practices outlined in https://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "57e3630433431d29240fdee37ee6c8f912b30366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "eecf57aa_aeebc9a4",
@@ -48,6 +71,24 @@
       "writtenOn": "2022-10-14T01:14:08Z",
       "side": 1,
       "message": "We\u0027re changing the interface here because it\u0027s quite a bit easier to set the number of threads during construction",
+      "revId": "57e3630433431d29240fdee37ee6c8f912b30366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a5a535_2161ec69",
+        "filename": "src/libANGLE/WorkerThread.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T15:38:17Z",
+      "side": 1,
+      "message": "Please refrain from using default arguments. Instead prefer creating non-overloaded methods like Create and CreateMultithreaded, or changing all instances of Create to pass in a value.",
+      "parentUuid": "c68f14d5_28f46ea2",
       "revId": "57e3630433431d29240fdee37ee6c8f912b30366",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
