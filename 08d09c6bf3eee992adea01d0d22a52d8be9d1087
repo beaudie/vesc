@@ -381,6 +381,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89bfd358_e900fcc7",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-14T22:04:14Z",
+      "side": 1,
+      "message": "I\u0027m guessing Kyle\u0027s comment is not something that needs to be addressed, and think we should move forward with this CL as is.",
+      "parentUuid": "ecbaad5b_76ca26cf",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec916f5e_e128b796",
         "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
         "patchSetId": 14

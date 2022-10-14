@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a2eb78_4f8e77a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-14T22:04:14Z",
+      "side": 1,
+      "message": "Awesome work Gregg. This CL is an exemplar of how to make a major change in a well structured and well documented manner. lgtm",
+      "revId": "1fd94f94fa7191166623e8fb9dc15ead86e5a26f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "771b8e7d_fb258741",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-14T22:04:14Z",
+      "side": 1,
+      "message": "Add TODO(anglebug.com/7585) up front instead to make this more easily findable later?",
+      "revId": "1fd94f94fa7191166623e8fb9dc15ead86e5a26f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0ff75b4_1cdb9d5a",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-14T22:04:14Z",
+      "side": 1,
+      "message": "Could you document what this #define does?",
+      "revId": "1fd94f94fa7191166623e8fb9dc15ead86e5a26f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
