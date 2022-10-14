@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed3920e5_7357664b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-14T01:51:49Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4057,
+        "startChar": 63,
+        "endLine": 4057,
+        "endChar": 66
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
