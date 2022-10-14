@@ -34,6 +34,24 @@
       "parentUuid": "4e70df75_0c4d6593",
       "revId": "467709cb156eb28100807a789c482d94fb9d1db5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f15f0495_b780124e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 9157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:49:26Z",
+      "side": 1,
+      "message": "Turns out there was a test for this, and made me fix a bug where we unpack the attribute map parameter. Thanks for pointing out there might be a bug here.",
+      "parentUuid": "a329c3c2_98690441",
+      "revId": "467709cb156eb28100807a789c482d94fb9d1db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
