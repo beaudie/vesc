@@ -551,7 +551,8 @@ def main():
     if angle_test_util.IsAndroid():
         tests = android_helper.ListTests(args.test_suite)
     else:
-        exit_code, output, _ = _run_test_suite(args, ['--list-tests', '--verbose'], env)
+        exit_code, output, _ = _run_test_suite(args, ['--list-tests', '--verbose'] + extra_flags,
+                                               env)
         if exit_code != EXIT_SUCCESS:
             logging.fatal('Could not find test list from test output:\n%s' % output)
         tests = _get_tests_from_output(output)
