@@ -33,6 +33,23 @@
       "message": "It failed only in 1 out of 3 runs so far.\nNow it runs 77 tests in a batch.\nWDYT about trying batch size 40 instead?\n\nI also don\u0027t mind landing this if this coverage is not important.",
       "revId": "38aa5899eaa622018928aa442433f0ea35803fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0deaff71_9c32d4af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-14T13:33:18Z",
+      "side": 1,
+      "message": "I recently lifted a suppression on Windows Intel, maybe there\u0027s one particular test that was causing bluescreen issues, so you could add the suppression back (and go back to smaller batches).\n\nThat said, we have enough coverage, so I don\u0027t care enough to keep this configuration.",
+      "revId": "38aa5899eaa622018928aa442433f0ea35803fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
