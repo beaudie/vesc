@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7fa4fbc_d41a476c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-14T18:54:59Z",
+      "side": 1,
+      "message": "Thanks.\n\nI think NV drivers are able to create ES context; the run looks like:\n\n```\nNote: Google Test filter \u003d ClipDistanceTest*OpenGLES\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 8 tests from 1 test suite.\n[----------] Global test environment set-up.\n[----------] 8 tests from ClipDistanceTest\n[ RUN      ] ClipDistanceTest.StateQuery/ES2_OpenGLES\n[       OK ] ClipDistanceTest.StateQuery/ES2_OpenGLES (94 ms)\n[ RUN      ] ClipDistanceTest.StateQuery/ES3_OpenGLES\n[       OK ] ClipDistanceTest.StateQuery/ES3_OpenGLES (92 ms)\n[ RUN      ] ClipDistanceTest.OneClipDistance/ES2_OpenGLES\n[       OK ] ClipDistanceTest.OneClipDistance/ES2_OpenGLES (134 ms)\n[ RUN      ] ClipDistanceTest.OneClipDistance/ES3_OpenGLES\n[       OK ] ClipDistanceTest.OneClipDistance/ES3_OpenGLES (55 ms)\n[ RUN      ] ClipDistanceTest.ThreeClipDistances/ES2_OpenGLES\n[       OK ] ClipDistanceTest.ThreeClipDistances/ES2_OpenGLES (22 ms)\n[ RUN      ] ClipDistanceTest.ThreeClipDistances/ES3_OpenGLES\n[       OK ] ClipDistanceTest.ThreeClipDistances/ES3_OpenGLES (24 ms)\n[ RUN      ] ClipDistanceTest.ThreeClipDistancesRedeclared/ES2_OpenGLES\n[       OK ] ClipDistanceTest.ThreeClipDistancesRedeclared/ES2_OpenGLES (10 ms)\n[ RUN      ] ClipDistanceTest.ThreeClipDistancesRedeclared/ES3_OpenGLES\n[       OK ] ClipDistanceTest.ThreeClipDistancesRedeclared/ES3_OpenGLES (12 ms)\n[----------] 8 tests from ClipDistanceTest (456 ms total)\n\n[----------] Global test environment tear-down\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 8 tests from 1 test suite ran. (464 ms total)\n[  PASSED  ] 8 tests.\n```\n\nand dumping the translated shaders shows that they use ES language.",
+      "parentUuid": "8d769ca1_ca14c637",
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49b09776_7d0aea28",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
