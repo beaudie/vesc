@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5676340d_37a5f5da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-14T20:11:50Z",
+      "side": 1,
+      "message": "Just tested Adreno 540 shader compiler using a native Android app.\n\n1. `gl_ClipDistance` is not available in `es 100` shaders. This is unfortunate but not too wrong: the `GL_EXT_clip_cull_distance` extension requires ES 3.0 after all. Therefore, we cannot expose `GL_APPLE_clip_distance` there.\n\n2. `gl_ClipDistance` cannot be redeclared - compilation fails with \"reserved built-in name\" error (using the vertex shader from `ClipCullDistanceTest.ThreeClipDistancesRedeclared`). This seems to be a violation of the extension spec that says:\n\u003e The `gl_ClipDistance` array is predeclared as unsized and must be explicitly sized by the shader either redeclaring it with a size or implicitly sized by indexing it only with integral constant expressions.\n\nThese two issues cover all shader compilation errors on QC.",
+      "parentUuid": "e7fa4fbc_d41a476c",
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49b09776_7d0aea28",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
