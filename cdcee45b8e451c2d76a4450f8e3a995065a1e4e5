@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c4d7e5b_fb54eeec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T18:27:33Z",
+      "side": 1,
+      "message": "PTAL Shabi at this cherry-pick",
+      "revId": "cdcee45b8e451c2d76a4450f8e3a995065a1e4e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
