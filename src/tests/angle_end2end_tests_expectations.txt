@@ -821,3 +821,7 @@
 
 // EXT_multisample_compatibility exposed for the sake of GLES1, but not implemented on Vulkan
 7657 VULKAN : EXTMultisampleCompatibilityTest.* = SKIP
+
+// Missing geometry & tesselation shader interactions with clip / cull distance
+5466 VULKAN OPENGL ClipCullDistanceTest.ClipDistanceInteractWithGeometryShader/* = SKIP
+5466 VULKAN OPENGL ClipCullDistanceTest.CullDistanceInteractWithGeometryShader/* = SKIP
