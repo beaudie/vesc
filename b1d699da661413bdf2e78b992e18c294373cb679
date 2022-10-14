@@ -69,6 +69,24 @@
       "parentUuid": "552fb475_94a93f7a",
       "revId": "b1d699da661413bdf2e78b992e18c294373cb679",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1573cb32_22258f4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:13:33Z",
+      "side": 1,
+      "message": "Fix in flight https://chromium-review.googlesource.com/c/angle/angle/+/3954044",
+      "parentUuid": "2845ffbe_4c557ef8",
+      "revId": "b1d699da661413bdf2e78b992e18c294373cb679",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
