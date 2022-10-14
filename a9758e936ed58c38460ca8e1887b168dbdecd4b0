@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6890094f_4b4adf8b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-14T17:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbf594f8_872cc299",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2e5d804f_8a326695",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f961349_51463c84",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-14T17:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea612dda_c3c20edd",
+      "range": {
+        "startLine": 783,
+        "startChar": 41,
+        "endLine": 783,
+        "endChar": 50
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed3920e5_7357664b",
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43409c11_cd3ec505",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4057,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-14T17:31:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed3920e5_7357664b",
+      "range": {
+        "startLine": 4057,
+        "startChar": 63,
+        "endLine": 4057,
+        "endChar": 66
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f10a3004_00a45bd4",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-10-14T13:11:54Z",
       "side": 1,
       "message": "Should we also check isAndroid?",
+      "range": {
+        "startLine": 4059,
+        "startChar": 88,
+        "endLine": 4059,
+        "endChar": 93
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06cb38cc_d3b63e90",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4059,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-14T17:31:20Z",
+      "side": 1,
+      "message": "I believe this is arm vulkan driver bug, so should be just limitted to ARM. Once we hear back from ARM and have more understanding of this, we can revise.",
+      "parentUuid": "f10a3004_00a45bd4",
       "range": {
         "startLine": 4059,
         "startChar": 88,
