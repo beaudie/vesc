@@ -21,19 +21,22 @@ extern bool gEnableTrace;
 extern const char *gTraceFile;
 extern const char *gScreenShotDir;
 extern bool gSaveScreenshots;
-extern int gScreenShotFrame;
+extern int gScreenshotFrame;
 extern bool gVerboseLogging;
 extern int gWarmupTrials;
 extern int gWarmupSteps;
-extern double gCalibrationTimeSeconds;
-extern double gMaxTrialTimeSeconds;
+extern int gCalibrationTimeSeconds;
+extern int gMaxTrialTimeSeconds;
 extern int gTestTrials;
 extern bool gNoFinish;
-extern bool gEnableAllTraceTests;
 extern bool gRetraceMode;
 extern bool gMinimizeGPUWork;
 extern bool gTraceTestValidation;
 extern const char *gPerfCounters;
+extern const char *gUseANGLE;
+extern const char *gUseGL;
+extern bool gOffscreen;
+extern bool gVsync;
 
 inline bool OneFrame()
 {
