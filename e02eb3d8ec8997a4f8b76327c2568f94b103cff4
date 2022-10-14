@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dfc4d84_ba9a3dc2",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 1270,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "I updated this to be a more minimal intervention, where we just omit the parameter captures.",
+      "parentUuid": "c4ca930c_5084c3bd",
+      "range": {
+        "startLine": 1270,
+        "startChar": 0,
+        "endLine": 1270,
+        "endChar": 17
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6a2b2a84_d8b6093d",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-10-13T20:29:51Z",
       "side": 1,
       "message": "Should we tag this with a TODO?",
+      "range": {
+        "startLine": 1671,
+        "startChar": 10,
+        "endLine": 1671,
+        "endChar": 89
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3f47a23_61121904",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 1671,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "I\u0027m not sure. It\u0027s not clear to me when or if we\u0027ll need this, so I left out any TODOs, since I didn\u0027t know how to describe the task. I\u0027ll leave this off if it\u0027s okay with you.",
+      "parentUuid": "6a2b2a84_d8b6093d",
       "range": {
         "startLine": 1671,
         "startChar": 10,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75a323fb_111df3af",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5092,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6a21ec35_db765e03",
+      "range": {
+        "startLine": 5092,
+        "startChar": 0,
+        "endLine": 5092,
+        "endChar": 93
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4efaf344_cfca042a",
@@ -100,6 +172,30 @@
       "writtenOn": "2022-10-13T20:29:51Z",
       "side": 1,
       "message": "Why is zero valid for these three params?\nedit: elaborated on the question below.",
+      "range": {
+        "startLine": 8755,
+        "startChar": 0,
+        "endLine": 8755,
+        "endChar": 14
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c2809a_536d26ba",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8755,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "Added a comment.",
+      "parentUuid": "4efaf344_cfca042a",
       "range": {
         "startLine": 8755,
         "startChar": 0,
@@ -133,6 +229,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80fe23eb_01982670",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 8779,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "I don\u0027t know if any of them will need to be updated. I left a comment.",
+      "parentUuid": "97045f69_2d8549cd",
+      "range": {
+        "startLine": 8779,
+        "startChar": 0,
+        "endLine": 8779,
+        "endChar": 30
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1cff3911_87885646",
@@ -146,6 +266,30 @@
       "writtenOn": "2022-10-13T20:29:51Z",
       "side": 1,
       "message": "Can you describe how this interacts with the blocklist above?\n```\nCAPTURE_BLOCKLIST \u003d [\u0027eglGetProcAddress\u0027]\n```",
+      "range": {
+        "startLine": 1259,
+        "startChar": 19,
+        "endLine": 1259,
+        "endChar": 40
+      },
+      "revId": "e02eb3d8ec8997a4f8b76327c2568f94b103cff4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bcad16a_ab575261",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T19:06:13Z",
+      "side": 1,
+      "message": "I changed this to be entirely encapsulated in the auto-generation, so that cleans it up a bit. PTAL.",
+      "parentUuid": "1cff3911_87885646",
       "range": {
         "startLine": 1259,
         "startChar": 19,
