@@ -3,6 +3,69 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbf594f8_872cc299",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:11:54Z",
+      "side": 1,
+      "message": "nit: for (or maybe on?)",
+      "range": {
+        "startLine": 10,
+        "startChar": 10,
+        "endLine": 10,
+        "endChar": 14
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e5d804f_8a326695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:11:54Z",
+      "side": 1,
+      "message": "Looks like this fixes Pixel 6, nice!",
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea612dda_c3c20edd",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:11:54Z",
+      "side": 1,
+      "message": "253522366",
+      "range": {
+        "startLine": 783,
+        "startChar": 41,
+        "endLine": 783,
+        "endChar": 50
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ed3920e5_7357664b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -19,6 +82,29 @@
         "startChar": 63,
         "endLine": 4057,
         "endChar": 66
+      },
+      "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f10a3004_00a45bd4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4059,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:11:54Z",
+      "side": 1,
+      "message": "Should we also check isAndroid?",
+      "range": {
+        "startLine": 4059,
+        "startChar": 88,
+        "endLine": 4059,
+        "endChar": 93
       },
       "revId": "a9758e936ed58c38460ca8e1887b168dbdecd4b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
