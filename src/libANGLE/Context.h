@@ -649,8 +649,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
         return mTransformFeedbackMap;
     }
 
-    void onPreSwap();
-
     Program *getActiveLinkedProgram() const;
 
     // EGL_ANGLE_power_preference implementation.

@@ -796,11 +796,8 @@ class FrameCaptureShared final : angle::NonCopyable
                                     size_t instanceCount);
     void captureMappedBufferSnapshot(const gl::Context *context, const CallCapture &call);
 
-    void copyCompressedTextureData(const gl::Context *context, const CallCapture &call);
-    void captureCompressedTextureData(const gl::Context *context, const CallCapture &call);
-
     void reset();
-    void maybeOverrideEntryPoint(const gl::Context *context,
+    void maybeOverrideEntryPoint(gl::Context *context,
                                  CallCapture &call,
                                  std::vector<CallCapture> &newCalls);
     void maybeCapturePreCallUpdates(const gl::Context *context,

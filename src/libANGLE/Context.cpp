@@ -9686,12 +9686,6 @@ egl::Error Context::unsetDefaultFramebuffer()
     return egl::NoError();
 }
 
-void Context::onPreSwap()
-{
-    // Dump frame capture if enabled.
-    getShareGroup()->getFrameCaptureShared()->onEndFrame(this);
-}
-
 void Context::getTexImage(TextureTarget target,
                           GLint level,
                           GLenum format,
