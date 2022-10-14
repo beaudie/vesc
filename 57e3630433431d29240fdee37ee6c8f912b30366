@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35acd951_150c9d64",
+        "filename": "src/libANGLE/WorkerThread.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-14T01:14:08Z",
+      "side": 1,
+      "message": "Note that this class was simply moved. There are no code changes here.",
+      "revId": "57e3630433431d29240fdee37ee6c8f912b30366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68f14d5_28f46ea2",
+        "filename": "src/libANGLE/WorkerThread.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-14T01:14:08Z",
+      "side": 1,
+      "message": "We\u0027re changing the interface here because it\u0027s quite a bit easier to set the number of threads during construction",
+      "revId": "57e3630433431d29240fdee37ee6c8f912b30366",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
