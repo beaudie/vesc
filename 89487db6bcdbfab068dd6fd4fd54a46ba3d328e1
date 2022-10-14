@@ -154,6 +154,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2e0bad73_431e1dae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T18:26:18Z",
+      "side": 1,
+      "message": "Also, if it makes sense to go this route, we should rename eventLog to something more appropriate and avoid confusion with its old usage.",
+      "parentUuid": "4e77268f_7e8b1c71",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4b7c07ab_b093deba",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
