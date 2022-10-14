@@ -57,6 +57,30 @@
       },
       "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18bafb8e_012840bc",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T18:04:10Z",
+      "side": 1,
+      "message": "Also please use angle_end2end_test_expectations.txt",
+      "parentUuid": "49b09776_7d0aea28",
+      "range": {
+        "startLine": 1102,
+        "startChar": 23,
+        "endLine": 1102,
+        "endChar": 37
+      },
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
