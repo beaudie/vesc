@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17c59a9b_fe50278c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2978,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-14T01:46:36Z",
+      "side": 1,
+      "message": "No it\u0027s intentional. We keep `robustBufferAccess` disabled by default, and only enable it on the pipelines of a robust context.",
+      "parentUuid": "0236e9a0_68f67552",
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e48ee38_d53f50dd",
@@ -136,6 +154,24 @@
       "writtenOn": "2022-10-13T21:39:34Z",
       "side": 1,
       "message": "why do GraphicsPipelieSubset values not participate in the hash key?",
+      "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf59ce46_6aa1fa12",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-14T01:46:36Z",
+      "side": 1,
+      "message": "Because each subset will have its own cache, so within the same cache the subset is constant, and so there\u0027s no point in it being hashed.\n\nI haven\u0027t done the multi-cache part of things yet.",
+      "parentUuid": "46738d77_c6053ad9",
       "revId": "bda81c7f9a8175d36dbf8da3c52200251a5daacd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
