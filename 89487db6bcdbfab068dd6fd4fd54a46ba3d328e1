@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f404c491_c9df1a4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "Ian, I will clean up all the added/deleted newline changes. I\u0027m currently working to try to get AGI to load the layer.",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e40a01d8_5a244d0a",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-10-06T20:31:59Z",
       "side": 1,
       "message": "Did this work out?\n\nI think this needs to be supported long-term.",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bbd5d9b_781682d7",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "Yes, good catch.  Will restore to preserve the LoggingAnnotator end call functionality.",
+      "parentUuid": "e40a01d8_5a244d0a",
       "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -60,6 +95,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f72712d9_de9ca224",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6325,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "I did this for a few reasons. The main purpose of the push/pop approach was to communicate the message to ANGLE. DebugMessageInsert() allows this with half as many additional API calls (50% speedup?), while also allowing more additional parameters to better identify layer-added messages and separate them from legitimate application messages. One of the biggest wins however, is that on the ANGLE side, there was no need to add any tracking necessary to match up the pushes with the pops. Because the layer needs to insert additional \u0027end/pop\u0027 calls after draws/dispatches/clears/queries, this led to GLES validation errors and complications on the ANGLE side as well. I also believe that this obviated the need to track whether the Push/Begin calls were inside/outside a renderpass, but this might have fallen out anyway.\nIf using Push/PopDebugGroup is a hard requirement I think it would be possible but it\u0027s much less straightforward.",
+      "parentUuid": "5af4140b_16c27779",
+      "range": {
+        "startLine": 6325,
+        "startChar": 4,
+        "endLine": 6325,
+        "endChar": 32
+      },
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f76e6cfc_50fa7535",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -71,6 +130,24 @@
       "writtenOn": "2022-10-06T20:31:59Z",
       "side": 1,
       "message": "So this call still happens, but the end event processing is handled differently?",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e77268f_7e8b1c71",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1678,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "Yes, the eventLog is still used to store the API/parameter information from GLES, though is this no longer captured by the ScopedPerfEventHelper, but scraped from the DebugMessageInsert calls.  There is no end event processing related to the markers any longer, the end calls are inserted separately (as you noted below) by the layer.",
+      "parentUuid": "f76e6cfc_50fa7535",
       "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -145,6 +222,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "846841bd_ea212e0e",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2049,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "DebugMessageInsert is treated specially, and will not be passed through to the context handler if debug output is not enabled -- leaving this code in would cause ES2 validation to fail and the call would not be passed through to the context handler.  This change was part of adding support for DebugMessageInsert to be used for our specific purposes.",
+      "parentUuid": "ea54b069_abbb727c",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0495a800_15dfb717",
         "filename": "src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp",
         "patchSetId": 2
@@ -156,6 +251,24 @@
       "writtenOn": "2022-10-06T20:31:59Z",
       "side": 1,
       "message": "So the idea is to always use \"EndLabelEvent\" to signal the end of a clear/draw/etc call?",
+      "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9539ee2e_243fc507",
+        "filename": "src/libGLESv2/layer_entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-14T16:25:30Z",
+      "side": 1,
+      "message": "Exactly so.  I believe the specific combination of parameters here, type,severity, ID (we could use a magic number here as well!) and label give us solid assurances that the layer will not interfere with normal apps.",
+      "parentUuid": "0495a800_15dfb717",
       "revId": "89487db6bcdbfab068dd6fd4fd54a46ba3d328e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
