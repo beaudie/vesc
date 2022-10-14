@@ -1099,7 +1099,7 @@ TEST_P(ClipCullDistanceTest, ClipDistanceInteractWithGeometryShader)
     // TODO: http://anglebug.com/5466
     // After implementing EXT_geometry_shader, EXT_clip_cull_distance should be additionally
     // implemented to support the geometry shader. And then, this skip can be removed.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    ANGLE_SKIP_TEST_IF(IsVulkan() || IsOpenGL());
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clip_cull_distance") ||
                        !IsGLExtensionEnabled("GL_EXT_geometry_shader"));
@@ -1254,7 +1254,7 @@ TEST_P(ClipCullDistanceTest, CullDistanceInteractWithGeometryShader)
     // TODO: http://anglebug.com/5466
     // After implementing EXT_geometry_shader, EXT_clip_cull_distance should be additionally
     // implemented to support the geometry shader. And then, this skip can be removed.
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    ANGLE_SKIP_TEST_IF(IsVulkan() || IsOpenGL());
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_clip_cull_distance") ||
                        !IsGLExtensionEnabled("GL_EXT_geometry_shader"));
