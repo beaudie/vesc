@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "38aa5899eaa622018928aa442433f0ea35803fb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0eca12_b2c8676a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-14T13:24:18Z",
+      "side": 1,
+      "message": "It failed only in 1 out of 3 runs so far.\nNow it runs 77 tests in a batch.\nWDYT about trying batch size 40 instead?\n\nI also don\u0027t mind landing this if this coverage is not important.",
+      "revId": "38aa5899eaa622018928aa442433f0ea35803fb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
