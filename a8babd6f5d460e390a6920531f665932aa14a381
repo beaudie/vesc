@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c6bf56_2ee3a593",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-14T17:44:00Z",
+      "side": 1,
+      "message": "- Tests pass locally on OpenGL and OpenGL ES (NV).\n- Tests fail on `android-arm64-test`. I have no way to debug that myself.\n- Geometry and tesselation shader interactions are still not implemented, see https://anglebug.com/5466",
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
