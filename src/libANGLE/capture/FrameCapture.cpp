@@ -5088,11 +5088,6 @@ bool SkipCall(EntryPoint entryPoint)
             // - Some EGL types and pointer parameters aren't yet implemented in EGL capture.
             return true;
 
-        case EntryPoint::EGLSwapBuffers:
-            // Skip these calls because:
-            // - Swap is handled specially by the trace harness.
-            return true;
-
         default:
             break;
     }
@@ -6140,7 +6135,7 @@ void FrameCaptureShared::overrideProgramBinary(const gl::Context *context,
                           tempShaderStartID, getProgramSources(id));
 }
 
-void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
+void FrameCaptureShared::maybeOverrideEntryPoint(gl::Context *context,
                                                  CallCapture &inCall,
                                                  std::vector<CallCapture> &outCalls)
 {
@@ -6163,6 +6158,14 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
             overrideProgramBinary(context, inCall, outCalls);
             break;
         }
+        case EntryPoint::EGLSwapBuffers:
+        case EntryPoint::EGLSwapBuffersWithDamageKHR:
+        case EntryPoint::EGLSwapBuffersWithFrameTokenANGLE:
+        {
+            onEndFrame(context);
+            break;
+        }
+
         default:
         {
             // Pass the single call through
