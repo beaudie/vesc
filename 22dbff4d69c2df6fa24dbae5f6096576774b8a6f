@@ -39,6 +39,30 @@
       },
       "revId": "22dbff4d69c2df6fa24dbae5f6096576774b8a6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bbde455_8f0d65ef",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 1717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-14T20:12:26Z",
+      "side": 1,
+      "message": "I made it build_ prefixed. I also updated the CL so now in a standalone checkout we\u0027ll auto-build the trace tests if you check them out with a gclient argument. Same for the GLES 1.0 conformance tests.",
+      "parentUuid": "69fcb1e8_18ebf4cd",
+      "range": {
+        "startLine": 1717,
+        "startChar": 6,
+        "endLine": 1717,
+        "endChar": 27
+      },
+      "revId": "22dbff4d69c2df6fa24dbae5f6096576774b8a6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
