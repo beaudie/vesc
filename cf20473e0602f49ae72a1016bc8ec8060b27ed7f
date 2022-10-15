@@ -33,6 +33,47 @@
       "message": "Do you know how to resolve the CQ failure?\n\n```\nERROR at //src/image_util/AstcDecompressor.cpp:15:11: Include not allowed.\n#include \"libANGLE/WorkerThread.h\"\n          ^----------------------\nIt is not in any dependency of\n  //:angle_image_util\nThe include file is in the target(s):\n  //:libANGLE_headers\nwhich should somehow be reachable.\n```\n\nShould I move `WorkerThread` to a different place, or add `libANGLE_headers` as a dependency of `angle_image_util`? (worried this might create a circular dependency, though?)\n\nThanks!",
       "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fafecbe_cf9962d3",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-15T01:55:40Z",
+      "side": 1,
+      "message": "Typically we put stuff that are shared between different parts in `src/common/`.\n\n---\n\nI\u0027m a little bit on the fence about putting a worker pool in the decoder, though. The `Context` class has a worker pool, which so far we have been using for all jobs, and it makes sense to continue using the same pool; otherwise you end up with 2x the number of threads.\n\nHowever, passing the context\u0027s worker pool here is not trivial. In the very least, it would require adding a parameter to all the Load* functions. But ultimately I think that makes things better. It\u0027s some mechanical change, but would you be able to pass in the context\u0027s thread pool to the Load functions for use in this CL? Since you need both the single-threaded and the multi-threaded pools, you could consider wrapping the two shared_ptrs in one struct, and pass a pointer to that.",
+      "parentUuid": "9222cf7e_c3e9ddee",
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07794c4f_26128f07",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-15T01:55:40Z",
+      "side": 1,
+      "message": "This should really use the system\u0027s thread count. If you pass in the thread pool from the context, then you could query the thread count from that instead.",
+      "range": {
+        "startLine": 22,
+        "startChar": 19,
+        "endLine": 22,
+        "endChar": 30
+      },
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
