@@ -52,6 +52,24 @@
       "parentUuid": "a329c3c2_98690441",
       "revId": "467709cb156eb28100807a789c482d94fb9d1db5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d731b927_620db379",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 9157,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-15T00:07:47Z",
+      "side": 1,
+      "message": "Thank you for fixing the bug!",
+      "parentUuid": "f15f0495_b780124e",
+      "revId": "467709cb156eb28100807a789c482d94fb9d1db5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
