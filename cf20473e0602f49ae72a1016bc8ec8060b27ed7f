@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70a3ac15_ae8a4f47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-15T00:19:00Z",
+      "side": 1,
+      "message": "This change is now ready for review.",
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9222cf7e_c3e9ddee",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-15T00:19:00Z",
+      "side": 1,
+      "message": "Do you know how to resolve the CQ failure?\n\n```\nERROR at //src/image_util/AstcDecompressor.cpp:15:11: Include not allowed.\n#include \"libANGLE/WorkerThread.h\"\n          ^----------------------\nIt is not in any dependency of\n  //:angle_image_util\nThe include file is in the target(s):\n  //:libANGLE_headers\nwhich should somehow be reachable.\n```\n\nShould I move `WorkerThread` to a different place, or add `libANGLE_headers` as a dependency of `angle_image_util`? (worried this might create a circular dependency, though?)\n\nThanks!",
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

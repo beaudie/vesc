@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22828560_01cd339d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-15T00:19:00Z",
+      "side": 1,
+      "message": "Done, using ANGLE\u0027s license.\n\nRegarding the other point - using a feature to select threaded or not - I\u0027m not sure if there\u0027s a case where we don\u0027t want to use the threaded option? It\u0027s certainly greatly beneficial to decompression speed.",
+      "parentUuid": "8e2c172a_034547b4",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e1fd6a06_ee66f7c7",
         "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
         "patchSetId": 3
@@ -138,6 +156,24 @@
       "side": 1,
       "message": "That would be a very welcome change. I suggest making that a separate independent CL, just in case.",
       "parentUuid": "3387cd49_23d8a8d6",
+      "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea7b58af_fa21d69e",
+        "filename": "src/image_util/AstcCpuDecompressorImpl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-15T00:19:00Z",
+      "side": 1,
+      "message": "Done https://chromium-review.googlesource.com/c/angle/angle/+/3953905",
+      "parentUuid": "e77d0499_524a942d",
       "revId": "83a668dfccf7e74550513b02a3bca26f7be50cc8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
