@@ -76,7 +76,7 @@ Several command-line arguments control how the tests run:
 
 For example, for an endless run with no warmup, run:
 
-`angle_perftests --gtest_filter=TracePerfTest.Run/vulkan_trex_200 --steps 1000000 --no-warmup`
+`angle_trace_tests --gtest_filter=TraceTest.trex_200 --steps 1000000 --no-warmup`
 
 The command line arguments implementations are located in [`ANGLEPerfTestArgs.cpp`](ANGLEPerfTestArgs.cpp).
 
