@@ -37,7 +37,7 @@ from tracing.value import histogram
 from tracing.value import histogram_set
 from tracing.value import merge_histograms
 
-DEFAULT_TEST_SUITE = 'angle_perftests'
+DEFAULT_TEST_SUITE = 'angle_trace_tests'
 DEFAULT_LOG = 'info'
 DEFAULT_SAMPLES = 4
 DEFAULT_TRIALS = 3
