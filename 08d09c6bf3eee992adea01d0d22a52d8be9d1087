@@ -397,6 +397,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d36e0f3b_ef1585de",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-10-17T22:06:11Z",
+      "side": 1,
+      "message": "I think we can deal with it later.",
+      "parentUuid": "89bfd358_e900fcc7",
+      "revId": "08d09c6bf3eee992adea01d0d22a52d8be9d1087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec916f5e_e128b796",
