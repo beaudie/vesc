@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86904b8_1c2bc577",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8754,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-17T15:34:21Z",
+      "side": 1,
+      "message": "Would be useful to tell folks to use `CaptureCustomUniformBlockBinding` if they hit this.",
+      "range": {
+        "startLine": 8754,
+        "startChar": 0,
+        "endLine": 8754,
+        "endChar": 97
+      },
+      "revId": "0d59388053c1e046896680e572b241bb2d279760",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
