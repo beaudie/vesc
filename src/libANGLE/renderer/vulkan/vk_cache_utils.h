@@ -611,6 +611,8 @@ static_assert(kNumGraphicsPipelineDirtyBits <= 64, "Too many pipeline dirty bits
 // Set of dirty bits. Each bit represents kGraphicsPipelineDirtyBitBytes in the desc.
 using GraphicsPipelineTransitionBits = angle::BitSet<kNumGraphicsPipelineDirtyBits>;
 
+GraphicsPipelineTransitionBits GetGraphicsPipelineTransitionBitsMask(GraphicsPipelineSubset subset);
+
 // Disable padding warnings for a few helper structs that aggregate Vulkan state objects.  These are
 // not used as hash keys, they just simplify passing them around to functions.
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
@@ -1212,6 +1214,7 @@ class PipelineHelper final : public Resource
 
     bool valid() const { return mPipeline.valid(); }
     Pipeline &getPipeline() { return mPipeline; }
+    const Pipeline &getPipeline() const { return mPipeline; }
 
     ANGLE_INLINE bool findTransition(GraphicsPipelineTransitionBits bits,
                                      const GraphicsPipelineDesc &desc,
@@ -2019,7 +2022,7 @@ class RenderPassCache final : angle::NonCopyable
 
     ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *contextVk,
                                                        const vk::RenderPassDesc &desc,
-                                                       vk::RenderPass **renderPassOut)
+                                                       const vk::RenderPass **renderPassOut)
     {
         auto outerIt = mPayload.find(desc);
         if (outerIt != mPayload.end())
@@ -2040,18 +2043,18 @@ class RenderPassCache final : angle::NonCopyable
     angle::Result getRenderPassWithOps(ContextVk *contextVk,
                                        const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &attachmentOps,
-                                       vk::RenderPass **renderPassOut);
+                                       const vk::RenderPass **renderPassOut);
 
   private:
     angle::Result getRenderPassWithOpsImpl(ContextVk *contextVk,
                                            const vk::RenderPassDesc &desc,
                                            const vk::AttachmentOpsArray &attachmentOps,
                                            bool updatePerfCounters,
-                                           vk::RenderPass **renderPassOut);
+                                           const vk::RenderPass **renderPassOut);
 
     angle::Result addRenderPass(ContextVk *contextVk,
                                 const vk::RenderPassDesc &desc,
-                                vk::RenderPass **renderPassOut);
+                                const vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
     // The second layer caches the attachment load/store ops and initial/final layout.
@@ -2218,6 +2221,7 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
         *descPtrOut  = &item->first;
         *pipelineOut = &item->second;
 
+        // TODO: deal with cache stats from multiple of these classes
         mCacheStats.hit();
 
         return true;
@@ -2234,15 +2238,36 @@ class GraphicsPipelineCache final : public HasCacheStats<VulkanCacheType::Graphi
                                  const vk::GraphicsPipelineDesc **descPtrOut,
                                  vk::PipelineHelper **pipelineOut);
 
+    angle::Result linkLibraries(ContextVk *contextVk,
+                                PipelineCacheAccess *pipelineCache,
+                                PipelineSource source,
+                                const vk::GraphicsPipelineDesc &desc,
+                                const vk::PipelineHelper &vertexInputPipeline,
+                                const vk::PipelineHelper &shadersPipeline,
+                                const vk::PipelineHelper &fragmentOutputPipeline,
+                                const vk::GraphicsPipelineDesc **descPtrOut,
+                                vk::PipelineHelper **pipelineOut);
+
     // Helper for VulkanPipelineCachePerf that resets the object without destroying any object.
     void reset() { mPayload.clear(); }
 
   private:
+    void addToCache(PipelineSource source,
+                    const vk::GraphicsPipelineDesc &desc,
+                    vk::Pipeline &&pipeline,
+                    vk::CacheLookUpFeedback feedback,
+                    const vk::GraphicsPipelineDesc **descPtrOut,
+                    vk::PipelineHelper **pipelineOut);
+
     using KeyEqual = typename GraphicsPipelineCacheTypeHelper<Hash>::KeyEqual;
     std::unordered_map<vk::GraphicsPipelineDesc, vk::PipelineHelper, Hash, KeyEqual> mPayload;
 };
 
-using CompleteGraphicsPipelineCache = GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>;
+using CompleteGraphicsPipelineCache    = GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>;
+using VertexInputGraphicsPipelineCache = GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>;
+using ShadersGraphicsPipelineCache     = GraphicsPipelineCache<GraphicsPipelineDescShadersHash>;
+using FragmentOutputGraphicsPipelineCache =
+    GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>;
 
 class DescriptorSetLayoutCache final : angle::NonCopyable
 {

@@ -411,6 +411,10 @@ void ProgramExecutableVk::resetLayout(ContextVk *contextVk)
     {
         pipelines.release(contextVk);
     }
+    for (ShadersGraphicsPipelineCache &pipelines : mShadersGraphicsPipelines)
+    {
+        pipelines.release(contextVk);
+    }
     for (vk::PipelineHelper &pipeline : mComputePipelines)
     {
         pipeline.release(contextVk);
@@ -455,9 +459,12 @@ angle::Result ProgramExecutableVk::initializePipelineCache(
     ANGLE_VK_TRY(contextVk, mPipelineCache.init(contextVk->getDevice(), pipelineCacheCreateInfo));
 
     // Merge the pipeline cache into RendererVk's.
-    // TODO(http://anglebug.com/7369): When VK_EXT_graphics_pipeline_library is supported, do not
-    // merge into RendererVk's cache.  |mPipelineCache| will continue to be used in that case.
-    return contextVk->getRenderer()->mergeIntoPipelineCache(mPipelineCache);
+    if (contextVk->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
+    {
+        ANGLE_TRY(contextVk->getRenderer()->mergeIntoPipelineCache(mPipelineCache));
+    }
+
+    return angle::Result::Continue;
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
@@ -762,13 +769,21 @@ angle::Result ProgramExecutableVk::warmUpPipelineCache(ContextVk *contextVk,
         surfaceRotationVariations.push_back(true);
     }
 
+    // Only build the shaders subset of the pipeline if VK_EXT_graphics_pipeline_library is
+    // supported, especially since the vertex input and fragment output state set up here is
+    // completely bogus.
+    vk::GraphicsPipelineSubset subset =
+        contextVk->getFeatures().supportsGraphicsPipelineLibrary.enabled
+            ? vk::GraphicsPipelineSubset::Shaders
+            : vk::GraphicsPipelineSubset::Complete;
+
     for (bool rotation : surfaceRotationVariations)
     {
         transformOptions.surfaceRotation = rotation;
 
-        ANGLE_TRY(createGraphicsPipelineImpl(
-            contextVk, transformOptions, vk::GraphicsPipelineSubset::Complete, &pipelineCache,
-            PipelineSource::WarmUp, graphicsPipelineDesc, glExecutable, &descPtr, &pipeline));
+        ANGLE_TRY(createGraphicsPipelineImpl(contextVk, transformOptions, subset, &pipelineCache,
+                                             PipelineSource::WarmUp, graphicsPipelineDesc,
+                                             glExecutable, &descPtr, &pipeline));
     }
 
     // Merge the cache with RendererVk's
@@ -1104,14 +1119,28 @@ angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
     specConsts.dither          = desc.getEmulatedDitherControl();
 
     // Pull in a compatible RenderPass.
-    vk::RenderPass *compatibleRenderPass = nullptr;
+    const vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getRenderPassCache().getCompatibleRenderPass(
         contextVk, desc.getRenderPassDesc(), &compatibleRenderPass));
 
-    CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
-    return shaderProgram->createGraphicsPipeline(contextVk, &pipelines, pipelineCache,
-                                                 *compatibleRenderPass, getPipelineLayout(), source,
-                                                 desc, specConsts, descPtrOut, pipelineOut);
+    if (pipelineSubset == vk::GraphicsPipelineSubset::Complete)
+    {
+        CompleteGraphicsPipelineCache &pipelines = mCompleteGraphicsPipelines[programIndex];
+        return shaderProgram->createGraphicsPipeline(
+            contextVk, &pipelines, pipelineCache, *compatibleRenderPass, getPipelineLayout(),
+            source, desc, specConsts, descPtrOut, pipelineOut);
+    }
+    else
+    {
+        // Vertex input and fragment output subsets are independent of shaders, and are not created
+        // through the program executable.
+        ASSERT(pipelineSubset == vk::GraphicsPipelineSubset::Shaders);
+
+        ShadersGraphicsPipelineCache &pipelines = mShadersGraphicsPipelines[programIndex];
+        return shaderProgram->createGraphicsPipeline(
+            contextVk, &pipelines, pipelineCache, *compatibleRenderPass, getPipelineLayout(),
+            source, desc, specConsts, descPtrOut, pipelineOut);
+    }
 }
 
 angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
@@ -1132,7 +1161,18 @@ angle::Result ProgramExecutableVk::getGraphicsPipeline(ContextVk *contextVk,
     *descPtrOut  = nullptr;
     *pipelineOut = nullptr;
 
-    mCompleteGraphicsPipelines[programIndex].getPipeline(desc, descPtrOut, pipelineOut);
+    if (pipelineSubset == vk::GraphicsPipelineSubset::Complete)
+    {
+        mCompleteGraphicsPipelines[programIndex].getPipeline(desc, descPtrOut, pipelineOut);
+    }
+    else
+    {
+        // Vertex input and fragment output subsets are independent of shaders, and are not created
+        // through the program executable.
+        ASSERT(pipelineSubset == vk::GraphicsPipelineSubset::Shaders);
+
+        mShadersGraphicsPipelines[programIndex].getPipeline(desc, descPtrOut, pipelineOut);
+    }
 
     return angle::Result::Continue;
 }
@@ -1149,8 +1189,37 @@ angle::Result ProgramExecutableVk::createGraphicsPipeline(
 {
     ProgramTransformOptions transformOptions = getTransformOptions(contextVk, desc, glExecutable);
 
+    // When creating monolithic pipelines, the renderer's pipeline cache is used as passed in.
+    // When creating the shaders subset of pipelines, the program's own pipeline cache is used.
+    PipelineCacheAccess perProgramPipelineCache;
+    if (pipelineSubset == vk::GraphicsPipelineSubset::Shaders)
+    {
+        perProgramPipelineCache.init(&mPipelineCache, nullptr);
+        pipelineCache = &perProgramPipelineCache;
+    }
+
     return createGraphicsPipelineImpl(contextVk, transformOptions, pipelineSubset, pipelineCache,
                                       source, desc, glExecutable, descPtrOut, pipelineOut);
+}
+
+angle::Result ProgramExecutableVk::linkGraphicsPipelineLibraries(
+    ContextVk *contextVk,
+    PipelineCacheAccess *pipelineCache,
+    PipelineSource source,
+    const vk::GraphicsPipelineDesc &desc,
+    const gl::ProgramExecutable &glExecutable,
+    const vk::PipelineHelper &vertexInputPipeline,
+    const vk::PipelineHelper &shadersPipeline,
+    const vk::PipelineHelper &fragmentOutputPipeline,
+    const vk::GraphicsPipelineDesc **descPtrOut,
+    vk::PipelineHelper **pipelineOut)
+{
+    ProgramTransformOptions transformOptions = getTransformOptions(contextVk, desc, glExecutable);
+    const uint8_t programIndex               = GetGraphicsProgramIndex(transformOptions);
+
+    return mCompleteGraphicsPipelines[programIndex].linkLibraries(
+        contextVk, pipelineCache, source, desc, vertexInputPipeline, shadersPipeline,
+        fragmentOutputPipeline, descPtrOut, pipelineOut);
 }
 
 angle::Result ProgramExecutableVk::getOrCreateComputePipeline(

@@ -3954,7 +3954,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2,
                             mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE);
 
-    // Disabled on Intel/Mesa due to driver bug (crbug.com/1379201)
+    // Disabled on Intel/Mesa due to driver bug (crbug.com/1379201).  Bug is fixed since Mesa
+    // 22.1.0. TODO: limit the workaroud to mesa < 22.1.0.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsLogicOpDynamicState,
         mExtendedDynamicState2Features.extendedDynamicState2LogicOp == VK_TRUE &&

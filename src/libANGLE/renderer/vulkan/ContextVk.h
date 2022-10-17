@@ -513,10 +513,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result finishToSerial(Serial serial);
 
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
-                                          vk::RenderPass **renderPassOut);
+                                          const vk::RenderPass **renderPassOut);
     angle::Result getRenderPassWithOps(const vk::RenderPassDesc &desc,
                                        const vk::AttachmentOpsArray &ops,
-                                       vk::RenderPass **renderPassOut);
+                                       const vk::RenderPass **renderPassOut);
 
     vk::ShaderLibrary &getShaderLibrary() { return mShaderLibrary; }
     UtilsVk &getUtils() { return mUtils; }
@@ -722,7 +722,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
     // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
-    void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
+    void resetCurrentGraphicsPipeline()
+    {
+        mCurrentGraphicsPipeline        = nullptr;
+        mCurrentGraphicsPipelineShaders = nullptr;
+    }
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
@@ -1319,12 +1323,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
+    angle::Result createGraphicsPipeline();
+
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
     vk::RenderPassCommandBuffer *mRenderPassCommandBuffer;
 
     vk::PipelineHelper *mCurrentGraphicsPipeline;
+    vk::PipelineHelper *mCurrentGraphicsPipelineShaders;
+    vk::PipelineHelper *mCurrentGraphicsPipelineVertexInput;
+    vk::PipelineHelper *mCurrentGraphicsPipelineFragmentOutput;
     vk::PipelineHelper *mCurrentComputePipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
@@ -1337,7 +1346,41 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
     std::unique_ptr<vk::GraphicsPipelineDesc> mGraphicsPipelineDesc;
+    // TODO: refactor the stuff in handleDirtyGraphicsPipelineDesc so each subset can use its own
+    // data structures, such as input/output using two ProgramInfos in ContextVk or sharegroup (add
+    // one!) and shaders another ProgramInfos array in ProgramExecutable, same as
+    // mGraphicsProgramInfos but for shader stages only.
+    // TODO: add a thread to do monolithic pipelines. Synchronization needed with:
+    //    - mGraphicsProgramInfos, maybe doesn't need locks because it's only the thread that
+    //    accesses it?  Need to check what's inside of that class.
+    //    - The handle-replacement mechanism (use replacement map) should take care of released
+    //    pipelines
+    //    - When a program is deleted, the ProgramInfo will go away, need to ref count the
+    //    ProgramInfo array that will be accessed by the thread?
+    //      * Notes: ProgramInfo has:
+    //          mShaders: these are ref counted, so the thread can keep a reference to them.
+    //          Release is hard though, the thread cannot release to renderer, right? Or is garbage
+    //          collection mutex-protected?
+    //          ShaderProgramHelper: has GraphicsPipelineCache, this has the desc->pipeline map.  We
+    //          actually don't need this though, we just need the thread to get the desc + shaders,
+    //          and give back a PipelineHelper.  Not even that even, just an mPipeline +
+    //          mCacheLookUpFeedback.  So ok, a pipeline helper without any transitions.
+    //      * So maybe actually no ProgramInfo is needed in ProgramExecutable for monolithic
+    //      pipelines, the thread can return a PipelineHelper that's moved over the linked pipeline,
+    //      overriding everything.
+    // * TODO: use thread pool and make it job based?  Works better with Chrome, goes against rate
+    // limiting it, though rate-limiting can also be done by just not generating jobs too often in
+    // the first place (i.e. just skip monolithic builds if too often).
+    // * TODO: when there are no jobs, mark the cache as no-sync, otherwise sync.  Instead of
+    // stateful, how about have the context/etc own the mutex, and pass it (or not) to the
+    // monolithic cache look up function based on whether there is an active job.
+    //
     vk::GraphicsPipelineTransitionBits mGraphicsPipelineTransition;
+
+    // Used when VK_EXT_graphics_pipeline_library is available, the vertex input and fragment output
+    // partial pipelines are created in the following caches.
+    VertexInputGraphicsPipelineCache mVertexInputGraphicsPipelineCache;
+    FragmentOutputGraphicsPipelineCache mFragmentOutputGraphicsPipelineCache;
 
     // These pools are externally synchronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
