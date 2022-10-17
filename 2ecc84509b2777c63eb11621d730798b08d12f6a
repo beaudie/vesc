@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "2ecc84509b2777c63eb11621d730798b08d12f6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4175a7cf_d2eb243b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-17T17:15:03Z",
+      "side": 1,
+      "message": "This looks like a nice refactor, but it makes me nervous just due to how touchy this code is.  Can you share how you are verifying these changes?",
+      "revId": "2ecc84509b2777c63eb11621d730798b08d12f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13aacc81_ea1a91dc",
+        "filename": "src/libANGLE/capture/trace_fixture.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-17T17:15:03Z",
+      "side": 1,
+      "message": "Hard to parse.  Does this mean:\n```\nOverloads to abstract away return values\n```",
+      "range": {
+        "startLine": 153,
+        "startChar": 3,
+        "endLine": 153,
+        "endChar": 44
+      },
+      "revId": "2ecc84509b2777c63eb11621d730798b08d12f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
