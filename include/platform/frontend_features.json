@@ -130,6 +130,15 @@
                 "Enable to cache compiled shaders"
             ],
             "issue": "http://anglebug.com/7036"
+        },
+        {
+            "name": "enable_shader_substitution",
+            "category": "Workarounds",
+            "description": [
+                "Check the filesystem for shaders to use instead of those provided through glShaderSource"
+            ],
+            "issue": "http://anglebug.com/7761"
         }
+
     ]
 }
