@@ -17,6 +17,11 @@
 #    include <android/hardware_buffer.h>
 #endif
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <dlfcn.h>
+#    include <unwind.h>
+#endif
+
 // Taken from cutils/native_handle.h:
 // https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h
 typedef struct native_handle
@@ -273,6 +278,83 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
 }
 
 }  // anonymous namespace
+
+constexpr uint32_t kMaxStackTraceLimit = 16;
+
+struct UnwindCallbackFnState
+{
+    UnwindCallbackFnState() : current(nullptr), end(nullptr) {}
+    UnwindCallbackFnState(void **current, void **end) : current(current), end(end) {}
+    void **current;
+    void **end;
+};
+
+// Unwind callback function, which is called until the end of stack is reached.
+_Unwind_Reason_Code unwindCallbackFn(struct _Unwind_Context *context, void *args)
+{
+    UnwindCallbackFnState *state = reinterpret_cast<UnwindCallbackFnState *>(args);
+
+    // Instruction pointer
+    uintptr_t ip = _Unwind_GetIP(context);
+
+    if (ip == 0)
+    {
+        return _URC_NO_REASON;
+    }
+
+    // At the end of the specified range, the callback should stop.
+    if (state->current == state->end)
+    {
+        return _URC_END_OF_STACK;
+    }
+
+    // Populate the buffer with the instruction pointer address.
+    *state->current++ = reinterpret_cast<void *>(ip);
+    return _URC_NO_REASON;
+}
+
+// Prints the stack trace for an Android platform. (Also collects the results in the vector)
+void androidBacktrace()
+{
+    void *stackAddrBuffer[kMaxStackTraceLimit];
+    std::vector<std::string> stackAddresses;
+    std::vector<std::string> stackSymbols;
+
+    UnwindCallbackFnState unwindFnState(stackAddrBuffer, stackAddrBuffer + kMaxStackTraceLimit);
+    _Unwind_Backtrace(unwindCallbackFn, &unwindFnState);
+
+    // The first element of the buffer belongs to inside the backtrace function itself.
+    size_t count = static_cast<size_t>(unwindFnState.current - stackAddrBuffer);
+    for (size_t i = 0; i < count; i++)
+    {
+        // Add the address as a string.
+        void *stackAddr = stackAddrBuffer[i];
+        std::stringstream strStream;
+        strStream << stackAddr;
+        stackAddresses.push_back(strStream.str());
+
+        // Get the symbol if possible. dladdr() returns 0 on failure.
+        const char *stackSymbol = "";
+        Dl_info dlInfo;
+        if (dladdr(stackAddr, &dlInfo) != 0 && dlInfo.dli_sname)
+        {
+            stackSymbol = dlInfo.dli_sname;
+            std::string symbolStr(stackSymbol);
+            stackSymbols.push_back(symbolStr);
+        }
+        else
+        {
+            stackSymbols.push_back("UNKNOWN");
+        }
+    }
+
+    // We can now print stackAddresses as a list of strings, and symbols, if available.
+    WARN() << "Begin stack trace";
+    for (size_t i = 0; i < stackAddresses.size(); i++)
+    {
+        WARN() << "Checking: " << stackAddresses[i] << " -> " << stackSymbols[i];
+    }
+}
 
 namespace angle
 {

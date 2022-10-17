@@ -20,6 +20,12 @@
 struct ANativeWindowBuffer;
 struct AHardwareBuffer;
 
+#include <dlfcn.h>
+#include <unwind.h>
+
+// Prints the stack trace for an Android platform. (Also collects the results in the vector)
+void androidBacktrace();
+
 namespace angle
 {
 
