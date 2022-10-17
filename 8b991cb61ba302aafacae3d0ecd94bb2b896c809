@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74e57f59_051dc25b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2022-10-17T14:36:42Z",
+      "side": 1,
+      "message": "Alright. Let me know if I can help you by sending more testing info. Thank you for the review!",
+      "parentUuid": "4368a77e_e4873da7",
+      "revId": "8b991cb61ba302aafacae3d0ecd94bb2b896c809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4833c34_e6ffc600",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-10-17T13:24:13Z",
       "side": 1,
       "message": "Could you move this somewhere in this section, so that all `sources` modifications are in one place?",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 0
+      },
+      "revId": "8b991cb61ba302aafacae3d0ecd94bb2b896c809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "470420e2_3a225c5f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2022-10-17T14:36:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4833c34_e6ffc600",
       "range": {
         "startLine": 236,
         "startChar": 0,
