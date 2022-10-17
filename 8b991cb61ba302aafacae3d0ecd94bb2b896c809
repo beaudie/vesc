@@ -16,6 +16,46 @@
       "message": "Hi there! These IOSurface related tests have helped me to explore the results of using ANGLE on iOS, specifically with Metal. Is this something desired to be enabled on upstream also? Thank you very much.",
       "revId": "8b991cb61ba302aafacae3d0ecd94bb2b896c809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4368a77e_e4873da7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T13:24:13Z",
+      "side": 1,
+      "message": "I didn\u0027t enable Metal backend on our bots yet, so I am not sure if we can test this. Let me see if it passes the current GL bot, though.",
+      "revId": "8b991cb61ba302aafacae3d0ecd94bb2b896c809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4833c34_e6ffc600",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T13:24:13Z",
+      "side": 1,
+      "message": "Could you move this somewhere in this section, so that all `sources` modifications are in one place?",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 0
+      },
+      "revId": "8b991cb61ba302aafacae3d0ecd94bb2b896c809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
