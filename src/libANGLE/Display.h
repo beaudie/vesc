@@ -336,6 +336,8 @@ class Display final : public LabeledObject,
     }
     std::shared_ptr<angle::WorkerThreadPool> getMultiThreadPool() const { return mMultiThreadPool; }
 
+    angle::ImageLoadContext getImageLoadContext() const;
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 

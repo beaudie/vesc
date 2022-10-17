@@ -391,6 +391,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
                                                     uint32_t layerIndex);
     const mtl::BufferRef &getWorkBuffer() const { return mWorkBuffer; }
 
+    angle::ImageLoadContext getImageLoadContext() const;
+
   private:
     void ensureCommandBufferReady();
     void endBlitAndComputeEncoding();
