@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30b41a15_cf242449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T19:20:31Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t tell you this earlier, you\u0027ve used the old suppression method.\nWe now skip tests in an expectation file.\nSee https://chromium-review.googlesource.com/c/angle/angle/+/3960968 for example.",
+      "revId": "d6ce98fe9596a85c82a8bf1b2b3fd11e86c2275d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
