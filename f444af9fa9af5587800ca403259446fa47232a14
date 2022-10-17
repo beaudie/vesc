@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a90eeb07_ec969f4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T14:32:53Z",
+      "side": 1,
+      "message": "\"checkout_angle_restricted_traces\" or \"build_angle_trace_tests\"?",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a98bbca_99ffb728",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T14:32:53Z",
+      "side": 1,
+      "message": "build_angle_trace_perf_tests?",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 38
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "837b8932_f9cac56e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T14:32:53Z",
+      "side": 1,
+      "message": "Splitting trace_tests from perftests looks like a great idea to me!\n\nJust one thing that I found very confusing is that the bots now build `angle_trace_perf_tests` because they have the gclient variable `checkout_angle_internal` defined.\nThe connection `checkout_angle_internal` -\u003e `checkout_angle_restricted_traces` -\u003e `build_angle_trace_tests` was very difficult to discover.\nCould you simplify this somehow?\nLike, maybe get rid of `checkout_angle_restricted_traces` or have the bots explicitly define it?",
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "432deccf_9c15879a",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 9
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-17T14:32:53Z",
+      "side": 1,
+      "message": "I think we can reduce these numbers, now that trace tests are no longer a part of this suite, but let\u0027s see first how long it takes now on the perf bots and then follow up.",
+      "range": {
+        "startLine": 704,
+        "startChar": 0,
+        "endLine": 709,
+        "endChar": 10
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
