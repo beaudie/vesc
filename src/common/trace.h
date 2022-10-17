@@ -6,8 +6,8 @@
 // trace.h: Wrappers for ANGLE trace event functions.
 //
 
-#ifndef LIBANGLE_TRACE_H_
-#define LIBANGLE_TRACE_H_
+#ifndef COMMON_TRACE_H_
+#define COMMON_TRACE_H_
 
 #include <platform/PlatformMethods.h>
 #include "third_party/trace_event/trace_event.h"
@@ -23,4 +23,4 @@
 #define ANGLE_TRACE_EVENT1(CATEGORY, EVENT, NAME, PARAM) \
     TRACE_EVENT1(ANGLEPlatformCurrent(), CATEGORY, EVENT, NAME, PARAM)
 
-#endif  // LIBANGLE_TRACE_H_
+#endif  // COMMON_TRACE_H_

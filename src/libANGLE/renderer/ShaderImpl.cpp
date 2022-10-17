@@ -8,8 +8,8 @@
 
 #include "libANGLE/renderer/ShaderImpl.h"
 
+#include "common/trace.h"
 #include "libANGLE/Context.h"
-#include "libANGLE/trace.h"
 
 namespace rx
 {

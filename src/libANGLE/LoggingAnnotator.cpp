@@ -8,7 +8,7 @@
 
 #include "libANGLE/LoggingAnnotator.h"
 
-#include "libANGLE/trace.h"
+#include "common/trace.h"
 
 namespace angle
 {

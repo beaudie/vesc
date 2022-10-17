@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/ShaderD3D.h"
 
 #include "common/system_utils.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
@@ -18,7 +19,6 @@
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 #include "libANGLE/renderer/d3d/RendererD3D.h"
-#include "libANGLE/trace.h"
 
 namespace rx
 {

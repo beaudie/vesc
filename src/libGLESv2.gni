@@ -18,10 +18,13 @@ libangle_common_sources = [
   "src/common/PackedEnums.h",
   "src/common/PackedGLEnums_autogen.cpp",
   "src/common/PackedGLEnums_autogen.h",
+  "src/common/Platform.cpp",
   "src/common/PoolAlloc.cpp",
   "src/common/PoolAlloc.h",
   "src/common/Spinlock.h",
   "src/common/SynchronizedValue.h",
+  "src/common/WorkerThread.cpp",
+  "src/common/WorkerThread.h",
   "src/common/aligned_memory.cpp",
   "src/common/aligned_memory.h",
   "src/common/android_util.cpp",
@@ -71,10 +74,12 @@ libangle_common_sources = [
   "src/common/third_party/smhasher/src/PMurHash.h",
   "src/common/tls.cpp",
   "src/common/tls.h",
+  "src/common/trace.h",
   "src/common/uniform_type_info_autogen.cpp",
   "src/common/utilities.cpp",
   "src/common/utilities.h",
   "src/common/vector_utils.h",
+  "src/third_party/trace_event/trace_event.h",
 ]
 
 libangle_common_cl_sources = [
@@ -283,7 +288,6 @@ libangle_headers = [
   "src/libANGLE/VertexArray.h",
   "src/libANGLE/VertexAttribute.h",
   "src/libANGLE/VertexAttribute.inc",
-  "src/libANGLE/WorkerThread.h",
   "src/libANGLE/angletypes.h",
   "src/libANGLE/angletypes.inc",
   "src/libANGLE/entry_points_utils.h",
@@ -293,7 +297,6 @@ libangle_headers = [
   "src/libANGLE/histogram_macros.h",
   "src/libANGLE/queryconversions.h",
   "src/libANGLE/queryutils.h",
-  "src/libANGLE/trace.h",
   "src/libANGLE/renderer/BufferImpl.h",
   "src/libANGLE/renderer/CompilerImpl.h",
   "src/libANGLE/renderer/ContextImpl.h",
@@ -351,7 +354,6 @@ libangle_headers = [
   "src/libANGLE/validationGL2_autogen.h",
   "src/libANGLE/validationGL3_autogen.h",
   "src/libANGLE/validationGL4_autogen.h",
-  "src/third_party/trace_event/trace_event.h",
 ]
 
 libangle_sources = [
@@ -409,7 +411,6 @@ libangle_sources = [
   "src/libANGLE/VaryingPacking.cpp",
   "src/libANGLE/VertexArray.cpp",
   "src/libANGLE/VertexAttribute.cpp",
-  "src/libANGLE/WorkerThread.cpp",
   "src/libANGLE/angletypes.cpp",
   "src/libANGLE/es3_copy_conversion_table_autogen.cpp",
   "src/libANGLE/format_map_autogen.cpp",

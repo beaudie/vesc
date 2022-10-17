@@ -11,6 +11,7 @@
 #include <EGL/eglext.h>
 #include <sstream>
 
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
@@ -54,7 +55,6 @@
 #include "libANGLE/renderer/d3d/d3d9/renderer9_utils.h"
 #include "libANGLE/renderer/d3d/driver_utils_d3d.h"
 #include "libANGLE/renderer/driver_utils.h"
-#include "libANGLE/trace.h"
 
 #if !defined(ANGLE_COMPILE_OPTIMIZATION_LEVEL)
 #    define ANGLE_COMPILE_OPTIMIZATION_LEVEL D3DCOMPILE_OPTIMIZATION_LEVEL3

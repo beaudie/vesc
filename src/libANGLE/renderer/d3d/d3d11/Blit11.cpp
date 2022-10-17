@@ -10,6 +10,7 @@
 
 #include <float.h>
 
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/formatutils.h"
@@ -19,7 +20,6 @@
 #include "libANGLE/renderer/d3d/d3d11/formatutils11.h"
 #include "libANGLE/renderer/d3d/d3d11/renderer11_utils.h"
 #include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
-#include "libANGLE/trace.h"
 
 namespace rx
 {

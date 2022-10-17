@@ -9,7 +9,7 @@
 #include <gtest/gtest.h>
 #include <array>
 
-#include "libANGLE/WorkerThread.h"
+#include "common/WorkerThread.h"
 
 using namespace angle;
 

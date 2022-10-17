@@ -16,11 +16,11 @@
 #include "common/spirv/spirv_instruction_builder_autogen.h"
 #include "common/spirv/spirv_instruction_parser_autogen.h"
 #include "common/string_utils.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/renderer/ShaderInterfaceVariableInfoMap.h"
-#include "libANGLE/trace.h"
 
 namespace spirv = angle::spirv;
 

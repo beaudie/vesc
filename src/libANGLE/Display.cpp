@@ -26,6 +26,7 @@
 #include "common/string_utils.h"
 #include "common/system_utils.h"
 #include "common/tls.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Context.h"
@@ -41,7 +42,6 @@
 #include "libANGLE/renderer/DeviceImpl.h"
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
-#include "libANGLE/trace.h"
 
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #    include <versionhelpers.h>
