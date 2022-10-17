@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1125c9a_9f024e58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-17T21:22:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a90eeb07_ec969f4c",
+      "range": {
+        "startLine": 13,
+        "startChar": 20,
+        "endLine": 13,
+        "endChar": 46
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a98bbca_99ffb728",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-17T14:32:53Z",
       "side": 1,
       "message": "build_angle_trace_perf_tests?",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 38
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2580891e_8b175e52",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-17T21:22:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a98bbca_99ffb728",
       "range": {
         "startLine": 14,
         "startChar": 37,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fad56e8_434ef367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-17T21:22:17Z",
+      "side": 1,
+      "message": "Sorry to hear you had some confusion that took a while to work out. It is quite hard to specify gclient variables in the bots, and this adds complexity is due to gclient args being auto-converted to GN args. It\u0027s also quite a pain to redesign the args because of how gclient/depot_tools/recipes interact. Feel free to propose something if you have a really clear idea of how to avoid confusion in the future. I think getting rid of variables will make things more confusing unfortunately.",
+      "parentUuid": "837b8932_f9cac56e",
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "432deccf_9c15879a",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-10-17T14:32:53Z",
       "side": 1,
       "message": "I think we can reduce these numbers, now that trace tests are no longer a part of this suite, but let\u0027s see first how long it takes now on the perf bots and then follow up.",
+      "range": {
+        "startLine": 704,
+        "startChar": 0,
+        "endLine": 709,
+        "endChar": 10
+      },
+      "revId": "f444af9fa9af5587800ca403259446fa47232a14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42cffaf_e6c8da76",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 9
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-17T21:22:17Z",
+      "side": 1,
+      "message": "Ack. I\u0027m going to suggest we keep these numbers as high as possible so we can use the split-samples technique across a larger number of machines. In an upcoming CL I crank it up a bit too, now that we can split the tests and get more runtime per-test.\n\nOnce we have a stable time series, we can do phase 2, which is to turn on perf alerting, and lower the sampling frequency until we start to see noise and false positive alerts.",
+      "parentUuid": "432deccf_9c15879a",
       "range": {
         "startLine": 704,
         "startChar": 0,
