@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43a0bd55_3448e333",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-17T17:39:02Z",
+      "side": 1,
+      "message": "I think thread pools are a particularly good candidate for singletons.\n\nWe could add methods in WorkerThreadPool to retrieve a singleton instance of both the single-threaded and multi-threaded pool, and have everybody use that. Something like:\n\n```\nclass WorkerThreadPool {\n\tstatic std::shared_ptr\u003cWorkerThreadPool\u003e getSingleThreadedPool()\n\tstatic std::shared_ptr\u003cWorkerThreadPool\u003e getMultiThreadedPool()\n}\n```\n\nThis would not only avoid refactoring all the `Load*`, it would also make sense from an architectural standpoint (ie: we\u0027re not just being lazy here, we do want the property of a singleton) \n\nWhat do you think?",
+      "parentUuid": "6fafecbe_cf9962d3",
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07794c4f_26128f07",
         "filename": "src/image_util/AstcDecompressor.cpp",
         "patchSetId": 4
