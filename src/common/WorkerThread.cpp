@@ -8,9 +8,7 @@
 //   Might be implemented differently depending on platform.
 //
 
-#include "libANGLE/WorkerThread.h"
-
-#include "libANGLE/trace.h"
+#include "common/WorkerThread.h"
 
 #if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 #    include <condition_variable>
@@ -176,7 +174,8 @@ void AsyncWorkerPool::threadLoop()
         auto &waitable = task.first;
         auto &closure  = task.second;
 
-        ANGLE_TRACE_EVENT0("gpu.angle", "AsyncWorkerPool::RunTask");
+        // Note: always add an ANGLE_TRACE_EVENT* macro in the closure.  Then the job will show up
+        // in traces.
         (*closure)();
         waitable->markAsReady();
     }
@@ -194,12 +193,15 @@ bool AsyncWorkerPool::isAsync()
 class DelegateWorkerPool final : public WorkerThreadPool
 {
   public:
-    DelegateWorkerPool()           = default;
+    DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
     ~DelegateWorkerPool() override = default;
 
     std::shared_ptr<WaitableEvent> postWorkerTask(std::shared_ptr<Closure> task) override;
 
     bool isAsync() override;
+
+  private:
+    PlatformMethods *mPlatform;
 };
 
 // A function wrapper to execute the closure and to notify the waitable
@@ -236,8 +238,7 @@ std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(std::shared_pt
 
     // The task will be deleted by DelegateWorkerTask::RunTask(...) after its execution.
     DelegateWorkerTask *workerTask = new DelegateWorkerTask(task, waitable);
-    auto *platform                 = ANGLEPlatformCurrent();
-    platform->postWorkerTask(platform, DelegateWorkerTask::RunTask, workerTask);
+    mPlatform->postWorkerTask(mPlatform, DelegateWorkerTask::RunTask, workerTask);
 
     return std::move(waitable);
 }
@@ -249,16 +250,17 @@ bool DelegateWorkerPool::isAsync()
 #endif
 
 // static
-std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(size_t numThreads)
+std::shared_ptr<WorkerThreadPool> WorkerThreadPool::Create(size_t numThreads,
+                                                           PlatformMethods *platform)
 {
     const bool multithreaded = numThreads != 1;
     std::shared_ptr<WorkerThreadPool> pool(nullptr);
 
 #if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED)
-    const bool hasPostWorkerTaskImpl = ANGLEPlatformCurrent()->postWorkerTask;
+    const bool hasPostWorkerTaskImpl = platform->postWorkerTask;
     if (hasPostWorkerTaskImpl && multithreaded)
     {
-        pool = std::shared_ptr<WorkerThreadPool>(new DelegateWorkerPool());
+        pool = std::shared_ptr<WorkerThreadPool>(new DelegateWorkerPool(platform));
     }
 #endif
 #if (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
