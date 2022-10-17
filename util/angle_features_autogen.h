@@ -110,6 +110,7 @@ enum class Feature
     EnablePrecisionQualifiers,
     EnablePreRotateSurfaces,
     EnableProgramBinaryForCapture,
+    EnableShaderSubstitution,
     ExpandIntegerPowExpressions,
     ExplicitlyEnablePerSampleShading,
     ExposeNonConformantExtensionsAndVersions,
