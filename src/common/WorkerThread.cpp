@@ -8,9 +8,9 @@
 //   Might be implemented differently depending on platform.
 //
 
-#include "libANGLE/WorkerThread.h"
+#include "common/WorkerThread.h"
 
-#include "libANGLE/trace.h"
+#include "common/trace.h"
 
 #if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED) || (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 #    include <condition_variable>

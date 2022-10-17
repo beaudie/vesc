@@ -12,6 +12,7 @@
 
 #include <EGL/eglext.h>
 
+#include "common/trace.h"
 #include "libANGLE/Config.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
@@ -19,7 +20,6 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/EGLImplFactory.h"
-#include "libANGLE/trace.h"
 
 namespace egl
 {

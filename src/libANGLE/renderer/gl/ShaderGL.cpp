@@ -9,12 +9,12 @@
 #include "libANGLE/renderer/gl/ShaderGL.h"
 
 #include "common/debug.h"
+#include "common/trace.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
-#include "libANGLE/trace.h"
 #include "platform/FeaturesGL_autogen.h"
 
 #include <iostream>

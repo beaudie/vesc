@@ -11,6 +11,7 @@
 #include "common/MemoryBuffer.h"
 #include "common/bitset_utils.h"
 #include "common/string_utils.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
@@ -29,7 +30,6 @@
 #include "libANGLE/renderer/d3d/ShaderExecutableD3D.h"
 #include "libANGLE/renderer/d3d/VertexDataManager.h"
 #include "libANGLE/renderer/renderer_utils.h"
-#include "libANGLE/trace.h"
 
 using namespace angle;
 

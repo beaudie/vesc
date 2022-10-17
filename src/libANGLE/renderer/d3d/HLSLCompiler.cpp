@@ -9,13 +9,13 @@
 #include <sstream>
 
 #include "common/system_utils.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/features.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/d3d/ContextD3D.h"
-#include "libANGLE/trace.h"
 
 namespace
 {

@@ -12,21 +12,6 @@
 
 #include "common/debug.h"
 
-namespace
-{
-// TODO(jmadill): Make methods owned by egl::Display.
-angle::PlatformMethods &PlatformMethods()
-{
-    static angle::PlatformMethods platformMethods;
-    return platformMethods;
-}
-}  // anonymous namespace
-
-angle::PlatformMethods *ANGLEPlatformCurrent()
-{
-    return &PlatformMethods();
-}
-
 bool ANGLE_APIENTRY ANGLEGetDisplayPlatform(angle::EGLDisplayType display,
                                             const char *const methodNames[],
                                             unsigned int methodNameCount,
@@ -64,13 +49,13 @@ bool ANGLE_APIENTRY ANGLEGetDisplayPlatform(angle::EGLDisplayType display,
     }
 
     // TODO(jmadill): Store platform methods in display.
-    PlatformMethods().context = context;
-    *platformMethodsOut       = &PlatformMethods();
+    ANGLEPlatformCurrent()->context = context;
+    *platformMethodsOut             = ANGLEPlatformCurrent();
     return true;
 }
 
 void ANGLE_APIENTRY ANGLEResetDisplayPlatform(angle::EGLDisplayType display)
 {
     // TODO(jmadill): Store platform methods in display.
-    PlatformMethods() = angle::PlatformMethods();
+    *ANGLEPlatformCurrent() = angle::PlatformMethods();
 }

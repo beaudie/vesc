@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 
 #include "common/debug.h"
+#include "common/trace.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Overlay.h"
@@ -21,7 +22,6 @@
 #include "libANGLE/renderer/vulkan/OverlayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
-#include "libANGLE/trace.h"
 
 namespace rx
 {

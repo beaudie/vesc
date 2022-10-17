@@ -8,15 +8,14 @@
 //   Can be implemented as different targets, depending on platform.
 //
 
-#ifndef LIBANGLE_WORKER_THREAD_H_
-#define LIBANGLE_WORKER_THREAD_H_
+#ifndef COMMON_WORKER_THREAD_H_
+#define COMMON_WORKER_THREAD_H_
 
 #include <array>
 #include <memory>
 #include <vector>
 
 #include "common/debug.h"
-#include "libANGLE/features.h"
 
 namespace angle
 {
@@ -95,4 +94,4 @@ class WorkerThreadPool : angle::NonCopyable
 
 }  // namespace angle
 
-#endif  // LIBANGLE_WORKER_THREAD_H_
+#endif  // COMMON_WORKER_THREAD_H_

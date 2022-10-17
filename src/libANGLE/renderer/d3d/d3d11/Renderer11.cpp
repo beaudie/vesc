@@ -14,6 +14,7 @@
 
 #include "anglebase/no_destructor.h"
 #include "common/tls.h"
+#include "common/trace.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/Context.h"
@@ -63,7 +64,6 @@
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/dxgi_support_table.h"
 #include "libANGLE/renderer/renderer_utils.h"
-#include "libANGLE/trace.h"
 
 #ifdef ANGLE_ENABLE_WINDOWS_UWP
 #    include "libANGLE/renderer/d3d/d3d11/winrt/NativeWindow11WinRT.h"

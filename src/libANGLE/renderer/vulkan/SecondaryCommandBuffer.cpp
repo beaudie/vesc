@@ -9,8 +9,8 @@
 
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
 #include "common/debug.h"
+#include "common/trace.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
-#include "libANGLE/trace.h"
 
 namespace rx
 {
