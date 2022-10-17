@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a241f1e4_4bb4f761",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-17T23:18:35Z",
+      "side": 1,
+      "message": "Can you share how you picked these types to start with, and what other types could be added in the future?",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 857,
+        "endChar": 14
+      },
+      "revId": "5597070193978506d9e78a18d183c060a28f6ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
