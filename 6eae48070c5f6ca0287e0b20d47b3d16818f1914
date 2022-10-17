@@ -16,6 +16,24 @@
       "message": "Tests are failing in https://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/73/overview\nWe can land this if you suppress them.",
       "revId": "6eae48070c5f6ca0287e0b20d47b3d16818f1914",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fd364c7_4ffd8cd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2022-10-17T19:17:37Z",
+      "side": 1,
+      "message": "I have skipped them for now. Do you think this is okay for the time being? PTAL. Thanks again.",
+      "parentUuid": "69a46f32_bcc6e165",
+      "revId": "6eae48070c5f6ca0287e0b20d47b3d16818f1914",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
