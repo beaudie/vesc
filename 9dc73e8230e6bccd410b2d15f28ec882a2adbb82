@@ -52,6 +52,24 @@
       "parentUuid": "a51ebf5b_c9c1e1c9",
       "revId": "9dc73e8230e6bccd410b2d15f28ec882a2adbb82",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c763919f_1a42e88d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-17T13:48:37Z",
+      "side": 1,
+      "message": "You can use the crash dashboard to see if there was a spike in crash volume in the canaries. If no increase in volume, it\u0027s probably safe.",
+      "parentUuid": "f2557cea_a180a464",
+      "revId": "9dc73e8230e6bccd410b2d15f28ec882a2adbb82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
