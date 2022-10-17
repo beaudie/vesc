@@ -18,8 +18,10 @@
 
 #include "common/PackedEnums.h"
 #include "common/angle_version_info.h"
+#include "common/hash_utils.h"
 #include "common/matrix_utils.h"
 #include "common/platform.h"
+#include "common/string_utils.h"
 #include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Buffer.h"
@@ -7575,7 +7577,42 @@ void Context::shaderSource(ShaderProgramID shader,
 {
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
-    shaderObject->setSource(count, string, length);
+
+    if (getFrontendFeatures().enableShaderSubstitution.enabled)
+    {
+        // Generate a hash for the incoming shader
+        size_t shaderHash = std::hash<std::string>{}(*string);
+
+        // See if a matching file exists on disk
+        Optional<std::string> tempDir = angle::GetTempDirectory();
+        std::stringstream shaderFile;
+        shaderFile << tempDir.value() << std::filesystem::path::preferred_separator << shaderHash
+                   << ".txt";
+
+        // Print out the hash of all shaders that come through
+        INFO() << "Checking for shader file " << shaderFile.str();
+
+        std::string newShader;
+        bool exists = angle::ReadFileToString(shaderFile.str(), &newShader);
+
+        if (exists)
+        {
+            INFO() << "Shader substitute found, loading from " << shaderFile.str();
+        }
+
+        const GLchar *newStringTemp    = newShader.c_str();
+        const GLchar *const *newString = exists ? &newStringTemp : string;
+
+        const GLint newLengthTemp = static_cast<const GLint>(newShader.length());
+        const GLint *newLength    = exists ? &newLengthTemp : length;
+
+        // Use the new shader instead
+        shaderObject->setSource(count, newString, newLength);
+    }
+    else
+    {
+        shaderObject->setSource(count, string, length);
+    }
 }
 
 void Context::stencilFunc(GLenum func, GLint ref, GLuint mask)
