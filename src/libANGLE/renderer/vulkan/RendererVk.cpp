@@ -3722,7 +3722,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             isImmediateModeRenderer);
 
     // Currently disabled by default: http://anglebug.com/4324
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, true);
+#else
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
+#endif
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
@@ -4779,6 +4783,23 @@ angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 {
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        // Mutex is required to block new commands, so the "waitForWorkComplete()" may finish.
+        // TODO: Remove the mutex and wait only for previously called GL commands.
+        // std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+
+        const angle::Result result = mCommandProcessor.finishToSerial(
+            context, getLastSubmittedQueueSerial(), getMaxFenceWaitTimeNs());
+
+        // Ensure all non GPU related operations are also completed (queuePresent)
+        ANGLE_TRY(mCommandProcessor.waitForWorkComplete(context));
+
+        return result;
+    }
+#endif
+
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitIdle(context, getMaxFenceWaitTimeNs()));
@@ -4808,6 +4829,22 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 
     return angle::Result::Continue;
 }
+
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+angle::Result RendererVk::cleanupAllGarbage(vk::Context *context)
+{
+    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+    if (mFeatures.asyncCommandQueue.enabled)
+    {
+        ANGLE_TRY(mCommandProcessor.cleanupAllGarbage(context));
+    }
+    else
+    {
+        ANGLE_TRY(mCommandQueue.cleanupAllGarbage(context));
+    }
+    return angle::Result::Continue;
+}
+#endif
 
 angle::Result RendererVk::flushRenderPassCommands(
     vk::Context *context,
@@ -4867,7 +4904,11 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     }
     else
     {
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+        result = mCommandQueue.queuePresent(context, priority, presentInfo);
+#else
         result = mCommandQueue.queuePresent(priority, presentInfo);
+#endif
     }
 
     if (getFeatures().logMemoryReportStats.enabled)

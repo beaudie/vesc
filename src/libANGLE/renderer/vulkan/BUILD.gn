@@ -26,6 +26,19 @@ declare_args() {
   # Enable custom secondary command buffers for render pass commands only
   angle_enable_custom_vulkan_render_pass_cmd_buffers =
       angle_enable_custom_vulkan_cmd_buffers
+
+  # Related to Command Queue 2
+  # Command Queue
+  svdt_enable_vulkan_command_queue_2 = true
+  svdt_enable_vulkan_submit_thread_task_queue =
+      false  # also enables "asyncCommandQueue" feature
+
+  # Fence Waiting
+  svdt_enable_vulkan_command_queue_concurrent_wait = true
+
+  # Other Fixes
+  #svdt_disable_vulkan_fast_integer_map_for_serials = true  # fixes memory problem
+  #svdt_enable_vulkan_caches_race_condition_fix = true
 }
 
 _vulkan_backend_sources = [
@@ -261,6 +274,26 @@ config("angle_vulkan_backend_config") {
   if (angle_enable_vulkan_validation_layers) {
     defines += [ "ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS" ]
   }
+
+  # Command Queue 2
+  defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2=" +
+               "${svdt_enable_vulkan_command_queue_2}" ]
+  assert(svdt_enable_vulkan_command_queue_2 ||
+         !svdt_enable_vulkan_submit_thread_task_queue)
+  defines += [ "SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE=" +
+               "${svdt_enable_vulkan_submit_thread_task_queue}" ]
+
+  # Fence Waiting
+  assert(svdt_enable_vulkan_command_queue_2 ||
+         !svdt_enable_vulkan_command_queue_concurrent_wait)
+  defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT=" +
+               "${svdt_enable_vulkan_command_queue_concurrent_wait}" ]
+
+  # Other Fixes
+  #defines += [ "SVDT_DISABLE_VULKAN_FAST_INTEGER_MAP_FOR_SERIALS=" +
+  #           "${svdt_disable_vulkan_fast_integer_map_for_serials}" ]
+  #defines += [ "SVDT_ENABLE_VULKAN_CACHES_RACE_CONDITION_FIX=" +
+  #           "${svdt_enable_vulkan_caches_race_condition_fix}" ]
 }
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {

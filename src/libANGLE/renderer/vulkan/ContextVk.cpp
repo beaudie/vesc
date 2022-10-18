@@ -6612,6 +6612,9 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
 
     ANGLE_TRY(flushImpl(nullptr, renderPassClosureReason));
     ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    ANGLE_TRY(mRenderer->cleanupAllGarbage(this));
+#endif
 
     clearAllGarbage();
 
