@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f658da42_2cc9027c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-18T01:09:03Z",
+      "side": 1,
+      "message": "PTAL. Need to deal with Chromium build, which I\u0027m pursuing offline",
+      "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
