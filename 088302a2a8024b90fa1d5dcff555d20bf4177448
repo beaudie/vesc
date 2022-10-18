@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1046f5f_b513a1dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-10-18T18:44:37Z",
+      "side": 1,
+      "message": "OK, https://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/74/overview passed, LGTM.\nThanks for the contribution!",
+      "revId": "088302a2a8024b90fa1d5dcff555d20bf4177448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
