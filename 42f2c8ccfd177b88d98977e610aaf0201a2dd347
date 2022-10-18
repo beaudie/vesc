@@ -141,6 +141,30 @@
       },
       "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11782115_9cd4f947",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-18T20:21:35Z",
+      "side": 1,
+      "message": "Ok :) Thank you for the explanation!",
+      "parentUuid": "ed3b29eb_afd59e06",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 43
+      },
+      "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
