@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc9c9682_cd06dab9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-18T14:54:16Z",
+      "side": 1,
+      "message": "While I couldn\u0027t reproduce the CFI crash locally, I see what the issue is based on the stack trace. The problem is that `WaitableEvent` holds a shared_ptr reference to the pool, and if that\u0027s the one that ends up destroying the pool, the thread ends up join()ing itself.\n\nI\u0027ll follow the revert up with a fixed reland",
+      "revId": "d8ecd3a120c80d40cd98c0e9b9db473d6f0d9dbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
