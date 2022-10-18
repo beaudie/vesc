@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "632dbf48_8909686a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-18T16:28:08Z",
+      "side": 1,
+      "message": "Extensions are not exposed on P6, so the tests don\u0027t run. Please add a feature and disable this on QC.",
+      "parentUuid": "fe9ed15b_859d51ab",
+      "revId": "a8babd6f5d460e390a6920531f665932aa14a381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "49b09776_7d0aea28",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
