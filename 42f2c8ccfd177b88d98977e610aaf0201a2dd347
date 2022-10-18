@@ -93,6 +93,30 @@
       },
       "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce1b6a0a_343c97ea",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-18T19:09:41Z",
+      "side": 1,
+      "message": "Is \"SerializationNotAvailable\" the placeholder? That string length is 25. Does it mean when the \"SerializationNotAvailable\" is returned, we are not rejecting it (since its\u0027 length is 25, not smaller than 20)?",
+      "parentUuid": "7ddd1123_ab4f1a84",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 43
+      },
+      "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
