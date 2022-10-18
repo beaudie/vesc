@@ -6151,7 +6151,7 @@ TEST_P(VulkanPerformanceCounterTest, UnnecessaryFlushDoesntCauseSubmission)
 }
 
 // Ensure that glFenceSync doesn't lead to vkQueueSubmit if there's nothing to submit.
-TEST_P(VulkanPerformanceCounterTest, SyncWihtoutCommandsDoesntCauseSubmission)
+TEST_P(VulkanPerformanceCounterTest, SyncWithoutCommandsDoesntCauseSubmission)
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
 
