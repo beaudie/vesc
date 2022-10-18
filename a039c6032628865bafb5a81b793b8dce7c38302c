@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41b6a7d0_925f22f9",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-18T21:05:05Z",
+      "side": 0,
+      "message": "Do we not need these? I\u0027ve always assumed they were helpful for Android so I kept dragging them around despite the inconvenience.\n\nSeems like this could be its own CL given how it\u0027s not mentioned in the description.",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 5
+      },
+      "revId": "a039c6032628865bafb5a81b793b8dce7c38302c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
