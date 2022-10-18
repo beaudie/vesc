@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d56979c_3b42fd9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-18T16:14:39Z",
+      "side": 1,
+      "message": "Reland of worker pool improvement. Removed the reference to the pool by the jobs, plus a minor tweak to allow copy elision (which `return std::move(...)` disallows)",
+      "revId": "b9c89ce09e4708009a740ea32c4d5855ecfe446b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
