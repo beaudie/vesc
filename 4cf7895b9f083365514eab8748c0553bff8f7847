@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17629e9b_8233e74b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7590,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T21:00:27Z",
+      "side": 1,
+      "message": "SGTM.  When I was using this, I didn\u0027t even have an extension on the file, but I decided that looked too weird for general use.",
+      "parentUuid": "cdb446b2_1df8621f",
+      "range": {
+        "startLine": 7590,
+        "startChar": 24,
+        "endLine": 7590,
+        "endChar": 27
+      },
+      "revId": "4cf7895b9f083365514eab8748c0553bff8f7847",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad88afd1_82b6f7c2",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-18T14:25:55Z",
       "side": 1,
       "message": "naming nit: `subsituteShader/Source/etc`",
+      "range": {
+        "startLine": 7595,
+        "startChar": 20,
+        "endLine": 7595,
+        "endChar": 23
+      },
+      "revId": "4cf7895b9f083365514eab8748c0553bff8f7847",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4742bb59_fa97336b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7595,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T21:00:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad88afd1_82b6f7c2",
       "range": {
         "startLine": 7595,
         "startChar": 20,
