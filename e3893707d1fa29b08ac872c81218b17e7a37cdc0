@@ -39,6 +39,30 @@
       },
       "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f845b7c_f13c492c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-18T14:41:10Z",
+      "side": 1,
+      "message": "The pools themselves are created once, and AFAICT, access to them is already threadsafe, but I\u0027ll verify again. Are you worried about the shared_ptr itself? That should be read-only for the lifetime of Display",
+      "parentUuid": "cb1aa12e_647ce6b9",
+      "range": {
+        "startLine": 2515,
+        "startChar": 0,
+        "endLine": 2523,
+        "endChar": 1
+      },
+      "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
