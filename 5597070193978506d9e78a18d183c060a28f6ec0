@@ -22,6 +22,30 @@
       },
       "revId": "5597070193978506d9e78a18d183c060a28f6ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c419e9c_40cdf784",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-18T18:17:13Z",
+      "side": 1,
+      "message": "I copied some additional info out of a later CL\u0027s message into this CL message. tl;dr these were the ones that were necessary for t-rex.",
+      "parentUuid": "a241f1e4_4bb4f761",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 857,
+        "endChar": 14
+      },
+      "revId": "5597070193978506d9e78a18d183c060a28f6ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
