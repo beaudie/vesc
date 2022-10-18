@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8637049_1bbfc74c",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-18T18:29:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a903166a_5d496b4d",
+      "range": {
+        "startLine": 582,
+        "startChar": 21,
+        "endLine": 582,
+        "endChar": 34
+      },
+      "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e30ffd7b_48a8b372",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-18T14:43:42Z",
       "side": 1,
       "message": "What\u0027s the basis for this number?",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 43
+      },
+      "revId": "42f2c8ccfd177b88d98977e610aaf0201a2dd347",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ddd1123_ab4f1a84",
+        "filename": "src/tests/capture_replay_tests/CaptureReplayTests.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-18T18:29:06Z",
+      "side": 1,
+      "message": "Value is arbitrarily longer than any placeholder text, e.g.:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/capture/frame_capture_utils_mock.cpp;l\u003d14\n\nAdded a comment.",
+      "parentUuid": "e30ffd7b_48a8b372",
       "range": {
         "startLine": 40,
         "startChar": 0,
