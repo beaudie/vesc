@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f34e7e4_aea1b151",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-10-18T15:42:03Z",
+      "side": 1,
+      "message": "the difference is https://screenshot.googleplex.com/4jTU5gP3HtaCtyB.png",
+      "revId": "302be0c3dfb6f138a979b10c720fe32c113de65b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
