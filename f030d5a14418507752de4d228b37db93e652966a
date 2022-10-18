@@ -16,6 +16,92 @@
       "message": "PTAL Cody/Yuly, Roman is OOO so FYI.",
       "revId": "f030d5a14418507752de4d228b37db93e652966a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04c5bcd7_920c77f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T01:40:10Z",
+      "side": 1,
+      "message": "Will take some getting used to, but LGTM.",
+      "revId": "f030d5a14418507752de4d228b37db93e652966a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e21fe002_f898aea5",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T01:40:10Z",
+      "side": 1,
+      "message": "Might as well fix the case on this one too, while you are fixing gScreenshotFrame.  Makes the later code easier to read.",
+      "range": {
+        "startLine": 22,
+        "startChar": 19,
+        "endLine": 22,
+        "endChar": 33
+      },
+      "revId": "f030d5a14418507752de4d228b37db93e652966a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5feabff6_7b026b6a",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T01:40:10Z",
+      "side": 1,
+      "message": "Maybe `UNREACHABLE()` or `exit(EXIT_FAILURE)` rather than stumbling into an unexpected result?",
+      "range": {
+        "startLine": 826,
+        "startChar": 4,
+        "endLine": 826,
+        "endChar": 10
+      },
+      "revId": "f030d5a14418507752de4d228b37db93e652966a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09bdb7d1_47dc4eec",
+        "filename": "util/test_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-18T01:40:10Z",
+      "side": 1,
+      "message": "Prefer `exit(EXIT_FAILURE)` unless we need this flexibility.",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 245,
+        "endChar": 76
+      },
+      "revId": "f030d5a14418507752de4d228b37db93e652966a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
