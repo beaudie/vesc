@@ -165,6 +165,9 @@ struct Limitations
     bool compressedBaseMipLevelMultipleOfFour = false;
 
     bool limitWebglMaxTextureSizeTo4096 = false;
+
+    // Whether Vulman memory can be protected for capture
+    bool canProtectVulkanMemory = false;
 };
 
 struct TypePrecision
