@@ -282,6 +282,127 @@ GLint LimitToInt(const LargerInt physicalDeviceValue)
         physicalDeviceValue, static_cast<LargerInt>(std::numeric_limits<int32_t>::max() / 2)));
 }
 
+bool SortByPoints(const std::pair<uint32_t, uint32_t> &a, const std::pair<uint32_t, uint32_t> &b)
+{
+    return a.second > b.second;
+}
+
+bool DetermineMemoryProtectionSupport(const RendererVk *renderer)
+{
+    // Enumerate memory types
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(renderer->getPhysicalDevice(), &memoryProperties);
+
+    std::vector<std::pair<uint32_t, uint32_t>> memoryIndexPoints;
+
+    for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++)
+    {
+        VkMemoryType memoryType = memoryProperties.memoryTypes[i];
+
+        // Skip protected and lazily allocated
+        if ((memoryType.propertyFlags & VK_MEMORY_PROPERTY_PROTECTED_BIT) ||
+            (memoryType.propertyFlags & VK_MEMORY_PROPERTY_LAZILY_ALLOCATED_BIT))
+        {
+            continue;
+        }
+
+        // Only consider VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT as minimal requirement.
+        if (memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT)
+        {
+            uint32_t points = 0;
+
+            // Prefer memory types with these flags
+            if (memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+            {
+                points += 1;
+            }
+            if (memoryType.propertyFlags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+            {
+                points += 1;
+            }
+
+            memoryIndexPoints.emplace_back(std::pair<uint32_t, uint32_t>(i, points));
+        }
+    }
+
+    if (memoryIndexPoints.empty())
+    {
+        // Could not find any viable memory type.
+        return false;
+    }
+
+    sort(memoryIndexPoints.begin(), memoryIndexPoints.end(), SortByPoints);
+
+    uint32_t bestIndex = memoryIndexPoints[0].first;
+
+    size_t pageSize = angle::GetPageSize();
+
+    // Allocate memory
+    VkMemoryAllocateInfo allocateInfo = {};
+    allocateInfo.sType                = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    // Allocate 3 pages, so the middle page will always belong to the memory, even if it's not page
+    // aligned.
+    allocateInfo.allocationSize  = pageSize * 3;
+    allocateInfo.memoryTypeIndex = bestIndex;
+
+    VkDeviceMemory memory;
+    VkResult res = vkAllocateMemory(renderer->getDevice(), &allocateInfo, nullptr, &memory);
+    if (res != VK_SUCCESS)
+    {
+        // Could not allocate vk memory
+        return false;
+    }
+
+    void *map;
+    res = vkMapMemory(renderer->getDevice(), memory, 0, VK_WHOLE_SIZE, 0, &map);
+    if (res != VK_SUCCESS)
+    {
+        // Could not map vk memory
+        vkFreeMemory(renderer->getDevice(), memory, nullptr);
+        return false;
+    }
+
+    // Test mprotect
+    auto start = reinterpret_cast<uintptr_t>(map);
+
+    // Only protect a whole page inside the allocated memory
+    uintptr_t protectionStart = rx::roundUpPow2(start, pageSize);
+    uintptr_t protectionEnd   = protectionStart + pageSize;
+
+    ASSERT(protectionStart < protectionEnd);
+
+    angle::PageFaultCallback callback = [](uintptr_t address) {
+        return angle::PageFaultHandlerRangeType::InRange;
+    };
+
+    std::unique_ptr<angle::PageFaultHandler> handler(CreatePageFaultHandler(callback));
+
+    if (!handler->enable())
+    {
+        vkUnmapMemory(renderer->getDevice(), memory);
+        vkFreeMemory(renderer->getDevice(), memory, nullptr);
+        return false;
+    }
+
+    size_t protectionSize = protectionEnd - protectionStart;
+
+    ASSERT(protectionSize == pageSize);
+
+    bool canProtect = angle::ProtectMemory(protectionStart, protectionSize);
+
+    if (canProtect)
+    {
+        angle::UnprotectMemory(protectionStart, protectionSize);
+    }
+
+    // Clean up
+    handler->disable();
+    vkUnmapMemory(renderer->getDevice(), memory);
+    vkFreeMemory(renderer->getDevice(), memory, nullptr);
+
+    return canProtect;
+}
+
 void RendererVk::ensureCapsInitialized() const
 {
     if (mCapsInitialized)
@@ -316,6 +437,8 @@ void RendererVk::ensureCapsInitialized() const
     {
         mNativeLimitations.emulatedAstc = true;
     }
+
+    mNativeLimitations.canProtectVulkanMemory = DetermineMemoryProtectionSupport(this);
 
     // Vulkan doesn't support ASTC 3D block textures, which are required by
     // GL_OES_texture_compression_astc.
