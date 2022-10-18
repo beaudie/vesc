@@ -386,7 +386,41 @@ class RendererVk : angle::NonCopyable
 
     uint64_t getMaxFenceWaitTimeNs() const;
 
-    ANGLE_INLINE Serial getLastCompletedQueueSerial() const
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_COMMAND_QUEUE_CONCURRENT_WAIT
+    std::mutex &getCommandQueueMutex() { return mCommandQueueMutex; }
+#endif
+
+    ANGLE_INLINE Serial getCurrentQueueSerial()
+    {
+        if (isAsyncCommandQueueEnabled())
+        {
+            return mCommandProcessor.getCurrentQueueSerial();
+        }
+        else
+        {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+            std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+#endif
+            return mCommandQueue.getCurrentQueueSerial();
+        }
+    }
+
+    ANGLE_INLINE Serial getLastSubmittedQueueSerial()
+    {
+        if (isAsyncCommandQueueEnabled())
+        {
+            return mCommandProcessor.getLastSubmittedQueueSerial();
+        }
+        else
+        {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+            std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+#endif
+            return mCommandQueue.getLastSubmittedQueueSerial();
+        }
+    }
+
+    ANGLE_INLINE Serial getLastCompletedQueueSerial()
     {
         if (isAsyncCommandQueueEnabled())
         {
@@ -394,13 +428,18 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+            std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+#endif
             return mCommandQueue.getLastCompletedQueueSerial();
         }
     }
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
+#if !SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
         std::unique_lock<std::mutex> lock(mCommandQueueMutex);
+#endif
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.isBusy();
@@ -496,6 +535,9 @@ class RendererVk : angle::NonCopyable
                                                VkResult *result);
     angle::Result finish(vk::Context *context, bool hasProtectedContent);
     angle::Result checkCompletedCommands(vk::Context *context);
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    angle::Result cleanupAllGarbage(vk::Context *context);
+#endif
 
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,
@@ -820,7 +862,11 @@ class RendererVk : angle::NonCopyable
 
     // Synchronous Command Queue
     std::mutex mCommandQueueMutex;
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+    vk::CommandQueue2 mCommandQueue;
+#else
     vk::CommandQueue mCommandQueue;
+#endif
 
     // Async Command Queue
     vk::CommandProcessor mCommandProcessor;
