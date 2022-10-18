@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0d85233_c732a689",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2517,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-18T17:19:05Z",
+      "side": 1,
+      "message": "probably an unnecessary micro optimization, but since the pools are created only once, would it make sense to create this struct at the same time the pools and keep it around as a class member, and then only return a pointer or reference to it?\n\nI admittedly have no idea how much it costs to make these copies, but I imagine that this code will get called quite a lot, which might make it worthwhile?",
+      "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cb1aa12e_647ce6b9",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 1
