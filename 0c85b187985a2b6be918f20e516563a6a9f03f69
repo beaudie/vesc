@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c66cad8_693d5302",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T20:53:53Z",
+      "side": 0,
+      "message": "Did this move, or was it dead?\nEdit: It\u0027s dead, Jim.",
+      "range": {
+        "startLine": 339,
+        "startChar": 9,
+        "endLine": 339,
+        "endChar": 37
+      },
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "210c2efd_3caf523e",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 17
@@ -50,6 +73,29 @@
       "side": 0,
       "message": "I see, thank you!",
       "parentUuid": "536112c1_d7d06bdf",
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d1b35ee_5736373f",
+        "filename": "src/tests/gl_tests/D3D11FormatTablesTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T20:53:53Z",
+      "side": 0,
+      "message": "There\u0027s no bug here, do you know why the comment can go away?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 71
+      },
       "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bcbc171_c49cda6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T20:53:53Z",
+      "side": 1,
+      "message": "Jamie, great seeing all these pointers going away.  The PackedEnum system ANGLE provides really forces you to do the right thing.  Moving EGL to it increases ANGLE\u0027s quality level as a whole.\n\nSome questions and suggestions below, but nothing blocking.  +2\u0027ing for time zone friendly progress.",
+      "revId": "eac878ed1f343e039eca2db74e7d808acc0f0485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c38af004_1fb55278",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T20:53:53Z",
+      "side": 1,
+      "message": "Any reason not to include ANDROID in the name here, for consistency, and so the trace more closely reflects what the app called?",
+      "range": {
+        "startLine": 521,
+        "startChar": 5,
+        "endLine": 521,
+        "endChar": 29
+      },
+      "revId": "eac878ed1f343e039eca2db74e7d808acc0f0485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
