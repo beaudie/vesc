@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "702c6b34_d7a02aa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-19T17:25:11Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96425c9b_1b40acd8",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "Could we do that in a follow up separate CL? In particular, we haven\u0027t really reviewed the new pool closely, it\u0027s complicated and unsure if it\u0027s correct. Also making that decision dynamic requires some more work.\n\nThe goal of this change is mostly to ease Mohan\u0027s rebase job. We don\u0027t even have to land the new pool at all as long as Samsung can do a drop-in replacement.",
       "parentUuid": "96425c9b_1b40acd8",
+      "range": {
+        "startLine": 31,
+        "startChar": 53,
+        "endLine": 31,
+        "endChar": 58
+      },
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7238b03b_6cad06f8",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 18
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-19T17:25:11Z",
+      "side": 1,
+      "message": "SGTM",
+      "parentUuid": "1eefebaf_dea458bb",
       "range": {
         "startLine": 31,
         "startChar": 53,
