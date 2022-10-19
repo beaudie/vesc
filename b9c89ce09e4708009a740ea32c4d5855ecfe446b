@@ -34,6 +34,24 @@
       "parentUuid": "3d56979c_3b42fd9f",
       "revId": "b9c89ce09e4708009a740ea32c4d5855ecfe446b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eea0ce4a_03a51b65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T02:50:59Z",
+      "side": 1,
+      "message": "CFI is green as expected!",
+      "parentUuid": "6ae0c80d_f35d1631",
+      "revId": "b9c89ce09e4708009a740ea32c4d5855ecfe446b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
