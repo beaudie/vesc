@@ -34,6 +34,24 @@
       "parentUuid": "9ac645c0_5d061329",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0f6e554_cef65da8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-19T21:27:22Z",
+      "side": 1,
+      "message": "Isn\u0027t this going in the opposite direction of how other tests generally work? We\u0027re going to need to remember that for running `angle_perftests` we should specify test name as `vulkan_somename` and for `angle_trace_tests` it\u0027s going to be `somename` combined with `--use-gl` (or some other flag), right? How is this going to be disambiguated in dashboards? Instead of just `testname` we\u0027ll have to somehow identify tests by tuples like `(testname,renderer)`?",
+      "parentUuid": "a324c323_cb14e401",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
