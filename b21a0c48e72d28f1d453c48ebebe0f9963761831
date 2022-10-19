@@ -16,6 +16,23 @@
       "message": "My pleasure!\nThank you for the review 😊",
       "revId": "b21a0c48e72d28f1d453c48ebebe0f9963761831",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e5bf39a_dad3195f",
+        "filename": "src/common/debug.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T03:08:47Z",
+      "side": 1,
+      "message": "Looks like clang also defines __GNUC__? FYI, this macro was previously defined in angleutils.h (please move it there); this was the change that removed it: https://chromium-review.googlesource.com/c/angle/angle/+/3718999/4/src/common/angleutils.h",
+      "revId": "b21a0c48e72d28f1d453c48ebebe0f9963761831",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
