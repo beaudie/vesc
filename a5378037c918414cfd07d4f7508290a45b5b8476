@@ -135,6 +135,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f51a021_e2f75a41",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T16:25:54Z",
+      "side": 1,
+      "message": "Just read the submit message more closely. Alternately, for GCC you can disable the attribute ignored message - please see this file for how disable things in a scoped way.",
+      "parentUuid": "7ce3bb42_f9985d85",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
