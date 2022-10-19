@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685e42e7_11c2baa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:39:37Z",
+      "side": 1,
+      "message": "Thanks for the fixes!",
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26898bd9_989c3869",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:39:37Z",
+      "side": 1,
+      "message": "nit: please make this `\u003d default;` to, to match the constructor",
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8953ae1_1b754621",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:39:37Z",
+      "side": 1,
+      "message": "Can you please delete this function instead? It\u0027s really unused",
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb371e7_95a45a60",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:39:37Z",
+      "side": 1,
+      "message": "super nit: the warning was about `a \u0026\u0026 b || c` more clear as `(a \u0026\u0026 b) || c`. No need for parentheses around `(c)`.",
+      "range": {
+        "startLine": 6094,
+        "startChar": 11,
+        "endLine": 6094,
+        "endChar": 12
+      },
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
