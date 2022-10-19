@@ -396,8 +396,9 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
     output_json = {}
     try:
         with contextlib.ExitStack() as stack:
-            device_test_output_path = stack.enter_context(_TempDeviceFile())
-            args.append('--isolated-script-test-output=' + device_test_output_path)
+            if test_output_path:
+                device_test_output_path = stack.enter_context(_TempDeviceFile())
+                args.append('--isolated-script-test-output=' + device_test_output_path)
 
             if perf_output_path:
                 device_perf_path = stack.enter_context(_TempDeviceFile())
@@ -409,18 +410,18 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
 
             output = _RunInstrumentationWithTimeout(args, timeout=10 * 60)
 
-            test_output = _ReadDeviceFile(device_test_output_path)
             if test_output_path:
+                test_output = _ReadDeviceFile(device_test_output_path)
                 with open(test_output_path, 'wb') as f:
                     f.write(test_output)
 
-            output_json = json.loads(test_output)
+                output_json = json.loads(test_output)
 
-            num_failures = output_json.get('num_failures_by_type', {}).get('FAIL', 0)
-            interrupted = output_json.get('interrupted', True)  # Normally set to False
-            if num_failures != 0 or interrupted or output_json.get('is_unexpected', False):
-                logging.error('Tests failed: %s', test_output.decode())
-                result = 1
+                num_failures = output_json.get('num_failures_by_type', {}).get('FAIL', 0)
+                interrupted = output_json.get('interrupted', True)  # Normally set to False
+                if num_failures != 0 or interrupted or output_json.get('is_unexpected', False):
+                    logging.error('Tests failed: %s', test_output.decode())
+                    result = 1
 
             if test_output_dir:
                 _PullDir(device_output_dir, test_output_dir)
