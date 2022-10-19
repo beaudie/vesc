@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ef66c5_1eb9c5cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T02:53:05Z",
+      "side": 1,
+      "message": "Let me +2, gerrit doesn\u0027t let me run CQ on the next CL while there\u0027s no vote on this (for security reasons of course)",
+      "revId": "bf799768cd55e6791ab6853b0708b7076b9d1ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
