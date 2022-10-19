@@ -16,6 +16,40 @@
       "message": "LGTM.",
       "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5211886d_785a17ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:21:18Z",
+      "side": 1,
+      "message": "Surprised that shader can\u0027t be further reduced",
+      "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf371cc_7f7fca1c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T01:21:18Z",
+      "side": 1,
+      "message": "nit: please use `angle_end2end_tests_expectations.txt`",
+      "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
