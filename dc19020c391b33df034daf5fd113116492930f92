@@ -16,6 +16,24 @@
       "message": "How does this work when running from the command line? How do I switch between native and vulkan with `./angle_perftests --gtest_filter\u003d...`?",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a324c323_cb14e401",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T21:06:44Z",
+      "side": 1,
+      "message": "See the prior CL here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/3956937\n\nYou can use --use-gl\u003dnative for system GL. You can also use --use-angle\u003dswiftshader to run SwiftShader tests now, no need for --enable-all-trace-tests or other shenanigans. Feel free to ping the internal chat if you need more info.",
+      "parentUuid": "9ac645c0_5d061329",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
