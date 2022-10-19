@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec2305b_2f013117",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T15:16:30Z",
+      "side": 1,
+      "message": "I spent a decent amount of time trying to reduce if further, but it is sensitive.  Could probably clean up the window dressing more, but the structure of the shader (input, control flow, builtins) are all needed.",
+      "parentUuid": "5211886d_785a17ca",
+      "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8cf371cc_7f7fca1c",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-19T01:21:18Z",
       "side": 1,
       "message": "nit: please use `angle_end2end_tests_expectations.txt`",
+      "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e00783d_ef826f4f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3659,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T15:16:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cf371cc_7f7fca1c",
       "revId": "6b204d18703d7a50331b03392ec287fd8bcd06e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
