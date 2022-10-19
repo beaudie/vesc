@@ -1400,7 +1400,7 @@ void TracePerfTest::initializeBenchmark()
 
     if (gTraceInterpreter)
     {
-        mTraceReplay.reset(new TraceInterpreter(traceInfo, testDataDir));
+        mTraceReplay.reset(new TraceInterpreter(traceInfo, testDataDir, gVerboseLogging));
     }
     else
     {

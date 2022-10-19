@@ -184,7 +184,10 @@ class Parser : angle::NonCopyable
         skipNonWhitespace();
         advance();
         readStringAppend(&funcName, '(');
-        printf("function: %s\n", funcName.c_str());
+        if (mVerboseLogging)
+        {
+            printf("function: %s\n", funcName.c_str());
+        }
 
         // Skip this function because of the switch statements.
         if (funcName == "ReplayFrame")
@@ -228,16 +231,20 @@ class Parser : angle::NonCopyable
                     advance();
                 }
             }
-            printf("call: %s(", nameToken);
-            for (size_t paramIndex = 0; paramIndex < numParams; ++paramIndex)
+
+            if (mVerboseLogging)
             {
-                if (paramIndex > 0)
+                printf("call: %s(", nameToken);
+                for (size_t paramIndex = 0; paramIndex < numParams; ++paramIndex)
                 {
-                    printf(", ");
+                    if (paramIndex > 0)
+                    {
+                        printf(", ");
+                    }
+                    printf("%s", paramTokens[paramIndex]);
                 }
-                printf("%s", paramTokens[paramIndex]);
+                printf(")\n");
             }
-            printf(")\n");
 
             CallCapture call = ParseCallCapture(nameToken, numParams, paramTokens, mShaders);
             func.push_back(std::move(call));
@@ -260,7 +267,10 @@ class Parser : angle::NonCopyable
         ASSERT(check("glShaderSource"));
 
         readStringAppend(&name, '[');
-        printf("shader: %s\n", name.c_str());
+        if (mVerboseLogging)
+        {
+            printf("shader: %s\n", name.c_str());
+        }
         skipLine();
         std::string source;
         while (peek() != '}')
@@ -300,6 +310,7 @@ class Parser : angle::NonCopyable
     size_t mIndex;
     TraceFunctionMap mFunctions;
     TraceShaderMap mShaders;
+    bool mVerboseLogging = false;
 };
 
 void PackResourceID(ParamBuffer &params, const Token &token)
@@ -422,8 +433,10 @@ void PackConstPointerParameter(ParamBuffer &params, ParamType paramType, const T
 }
 }  // anonymous namespace
 
-TraceInterpreter::TraceInterpreter(const TraceInfo &traceInfo, const char *testDataDir)
-    : mTraceInfo(traceInfo), mTestDataDir(testDataDir)
+TraceInterpreter::TraceInterpreter(const TraceInfo &traceInfo,
+                                   const char *testDataDir,
+                                   bool verboseLogging)
+    : mTraceInfo(traceInfo), mTestDataDir(testDataDir), mVerboseLogging(verboseLogging)
 {}
 
 TraceInterpreter::~TraceInterpreter() = default;
@@ -457,10 +470,17 @@ void TraceInterpreter::setupReplay()
     {
         if (ShouldSkipFile(file))
         {
+            if (mVerboseLogging)
+            {
+                printf("Skipping function parsing for %s.\n", file.c_str());
+            }
             continue;
         }
 
-        printf("%s\n", file.c_str());
+        if (mVerboseLogging)
+        {
+            printf("Parsing functions from %s\n", file.c_str());
+        }
         std::stringstream pathStream;
         pathStream << mTestDataDir << GetPathSeparator() << file;
         std::string path = pathStream.str();
@@ -473,6 +493,13 @@ void TraceInterpreter::setupReplay()
 
         Parser parser(fileData);
         parser.getFunctionsAndShaders(mTraceFunctions, mTraceShaders);
+    }
+
+    if (mTraceFunctions.count("SetupReplay") == 0)
+    {
+        printf("Did not find a SetupReplay function to run among %zu parsed functions.",
+               mTraceFunctions.size());
+        exit(1);
     }
 
     runTraceFunction("SetupReplay");

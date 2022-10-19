@@ -25,7 +25,7 @@ using TraceShaderMap = std::map<std::string, TraceShader>;
 class TraceInterpreter : public TraceReplayInterface
 {
   public:
-    TraceInterpreter(const TraceInfo &traceInfo, const char *testDataDir);
+    TraceInterpreter(const TraceInfo &traceInfo, const char *testDataDir, bool verboseLogging);
     ~TraceInterpreter() override;
 
     bool valid() const override;
@@ -46,6 +46,7 @@ class TraceInterpreter : public TraceReplayInterface
     const char *mTestDataDir;
     TraceFunctionMap mTraceFunctions;
     TraceShaderMap mTraceShaders;
+    bool mVerboseLogging;
 };
 
 constexpr size_t kMaxTokenSize  = 100;
