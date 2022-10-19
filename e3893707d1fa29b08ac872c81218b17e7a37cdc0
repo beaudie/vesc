@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4991744f_219ded4f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T14:36:15Z",
+      "side": 1,
+      "message": "The load context can potentially carry more things in the future that could be gl::Context-specific. Also keeping the pools and the load context in sync is just error-prone.\n\nI kept it as-is for now, we could micro-optimize if it shows up as having any nontrivial cost.",
+      "parentUuid": "f0d85233_c732a689",
+      "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb1aa12e_647ce6b9",
@@ -96,6 +114,30 @@
       "side": 1,
       "message": "If the pools are internally synchronized can you please add a comment showing this, maybe even a link if possible?",
       "parentUuid": "9f845b7c_f13c492c",
+      "range": {
+        "startLine": 2515,
+        "startChar": 0,
+        "endLine": 2523,
+        "endChar": 1
+      },
+      "revId": "e3893707d1fa29b08ac872c81218b17e7a37cdc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4451f8e2_42d31170",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2523,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T14:36:15Z",
+      "side": 1,
+      "message": "Added a comment on WorkerThreadPool itself (and a reference here)",
+      "parentUuid": "32e189aa_5d34385f",
       "range": {
         "startLine": 2515,
         "startChar": 0,
