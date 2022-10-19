@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30713c0f_ce0b3e01",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:42:14Z",
+      "side": 0,
+      "message": "Looks like this was already dead (nothing using it).",
+      "range": {
+        "startLine": 1219,
+        "startChar": 0,
+        "endLine": 1222,
+        "endChar": 3
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b1e06f2_a8dda73f",
+        "filename": "BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 1236,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:42:14Z",
+      "side": 0,
+      "message": "How did you determine this wasn\u0027t needed?",
+      "range": {
+        "startLine": 1236,
+        "startChar": 0,
+        "endLine": 1236,
+        "endChar": 26
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

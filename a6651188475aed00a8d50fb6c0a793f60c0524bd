@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fabc526_1451d772",
+        "filename": "util/BUILD.gn",
+        "patchSetId": 7
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:42:14Z",
+      "side": 1,
+      "message": "This is testonly, but you aren\u0027t guarding it with `if (angle_build_tests)` anymore?",
+      "range": {
+        "startLine": 216,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 17
+      },
+      "revId": "a6651188475aed00a8d50fb6c0a793f60c0524bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
