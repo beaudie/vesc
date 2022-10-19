@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49b1d65_a0be0c90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-10-19T16:36:00Z",
+      "side": 1,
+      "message": "Replay to Jamie\n\nP.S. we have a small patch that adds yocto build to build system if - \"is_yocto_build\" is set as attribute. Yocto build has its own sysroot.\nWould you like that uploaded? for any other yocto users?",
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "014ddedc_6ddcce85",
@@ -174,6 +191,30 @@
       "writtenOn": "2022-10-19T16:33:10Z",
       "side": 1,
       "message": "\u003e for GCC you can disable the attribute ignored message\n\n@jmadill@chromium.org not sure i understand the suggestion, having a macro indirection to abstract out toolchain idiosyncrasies seems like a reasonable approach to me, like how its done to `ANGLE_NO_SANITIZE_MEMORY` and such",
+      "parentUuid": "8f51a021_e2f75a41",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaf4fd29_aab45062",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-10-19T16:36:00Z",
+      "side": 1,
+      "message": "I created the bug per the request above. It was not an existing bug.\nSungyong is addressing all the warnings he gets when building ANGLE with yocto SDK.\nThey seem to apply to any GCC, so we are having them upstreamed here.",
       "parentUuid": "8f51a021_e2f75a41",
       "range": {
         "startLine": 567,
