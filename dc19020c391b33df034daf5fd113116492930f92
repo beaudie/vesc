@@ -70,6 +70,24 @@
       "parentUuid": "b0f6e554_cef65da8",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6012fb8a_1477b460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T23:49:34Z",
+      "side": 1,
+      "message": "I pulled this CL locally and it works as expected.\n\nYou do get some output that informs you which backend is in use:\n```\nrunning test name: \"TracePerf\", backend: \"_vulkan\", story: \"shadowgun_legends\"\n```\n\nTo Roman\u0027s point, I think this will make the trace tests just like any other perf or end2end test.",
+      "parentUuid": "15d57bbb_cd284c65",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
