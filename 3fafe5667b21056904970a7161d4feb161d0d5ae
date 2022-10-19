@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c092bfb1_f2ce61c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-19T11:14:58Z",
+      "side": 1,
+      "message": "Added missing overrides for some `DeviceImpl` implementations.",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
