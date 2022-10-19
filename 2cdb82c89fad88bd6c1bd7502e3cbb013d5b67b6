@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8350603b_b57bd13e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 2229,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T11:17:36Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2229,
+        "startChar": 25,
+        "endLine": 2229,
+        "endChar": 40
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "86c25818_1f6b2972",
@@ -14,6 +37,24 @@
       "writtenOn": "2022-10-19T07:06:01Z",
       "side": 1,
       "message": "should it be `reinterpret_cast\u003cEGLSurface\u003e`?",
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d33b05de_ed3f2530",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T11:17:36Z",
+      "side": 1,
+      "message": "Good catch! EGLSurface and EGLContext are both void * so the compiler didn\u0027t catch this. Ideally we could use packed types for return values from these methods but we don\u0027t currently support unpacking types in the auto-gen entry points.",
+      "parentUuid": "86c25818_1f6b2972",
       "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
