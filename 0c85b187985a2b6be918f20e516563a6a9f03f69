@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57d6b967_a0d6811d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T10:57:55Z",
+      "side": 1,
+      "message": "Mac flakiness in http://anglebug.com/7754 .",
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
