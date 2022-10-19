@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff7b5087_a44635b4",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T14:29:35Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "119df806_e600a3eb",
+      "range": {
+        "startLine": 336,
+        "startChar": 4,
+        "endLine": 336,
+        "endChar": 13
+      },
+      "revId": "12a05a7948bac1018c5a8d54af722fa1c1ed6499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1ef183d_d8a89bb2",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-19T12:47:32Z",
       "side": 0,
       "message": "Also -\u003e https://crrev.com/c/3963651",
+      "range": {
+        "startLine": 164,
+        "startChar": 36,
+        "endLine": 164,
+        "endChar": 55
+      },
+      "revId": "12a05a7948bac1018c5a8d54af722fa1c1ed6499",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2edc0ecb_346120c1",
+        "filename": "src/tests/py_utils/angle_test_util.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T14:29:35Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "b1ef183d_d8a89bb2",
       "range": {
         "startLine": 164,
         "startChar": 36,
