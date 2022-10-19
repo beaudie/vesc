@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e856a6_dce37732",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T23:33:33Z",
+      "side": 1,
+      "message": "It is offputting that this matches the new name above.  Probably worth incorporating the flags into your CL message, i.e:\n```\nOld command: TracePerfTest.Run/native_offscreen_trex_200 --enable-all-trace-tests\nOld name: TracePerfTest.Run/native_offscreen_trex_200\nNew command: TracePerfTest.trex_200 --use-gl\u003dnative --offscreen\nNew name: TracePerfTest.trex_200\n```",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 32
+      },
+      "revId": "8408913ac9c0fdb1834b1cbca7f45c85bba9c01a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

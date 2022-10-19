@@ -52,6 +52,24 @@
       "parentUuid": "a324c323_cb14e401",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15d57bbb_cd284c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T23:33:33Z",
+      "side": 1,
+      "message": "Things are little bit broken on ToT at the moment, so we need to clean this up.\nFor instance, I can run the following:\n```\nangle_trace_tests --gtest_filter\u003dTracePerfTest.Run/vulkan_shadowgun_legends\n```\nand it works as expected, using ANGLE with Vulkan.\n\nBut if I run this:\n```\nangle_trace_tests --gtest_filter\u003dTracePerfTest.Run/vulkan_shadowgun_legends --use-gl\u003dnative\n```\nit doesn\u0027t run anything, finding no tests.\n\nThis also fails:\n```\nangle_trace_tests --gtest_filter\u003dTracePerfTest.Run/native_shadowgun_legends\n```\n\nBut if I add the flag, it works:\n```\nangle_trace_tests --gtest_filter\u003dTracePerfTest.Run/native_shadowgun_legends --use-gl\u003dnative\n```",
+      "parentUuid": "b0f6e554_cef65da8",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
