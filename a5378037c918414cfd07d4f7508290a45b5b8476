@@ -111,6 +111,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ce3bb42_f9985d85",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T16:24:17Z",
+      "side": 1,
+      "message": "Jeff: is this a GCC bug? Is there an upstream GCC bug report for it? Sorry I kinda missed earlier discussion if there was any.",
+      "parentUuid": "a1902acf_b349604f",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
