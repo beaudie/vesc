@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b138f40b_00aa5813",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-10-19T16:20:24Z",
+      "side": 1,
+      "message": "Created angle bug for this\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7767",
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "014ddedc_6ddcce85",
@@ -62,6 +79,30 @@
       "side": 1,
       "message": "if this is a GCC bug, please make this an explicit GCC thing, ideally with a link to an upstream bug report",
       "parentUuid": "ff7c90b1_ba864bdd",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1902acf_b349604f",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-10-19T16:20:24Z",
+      "side": 1,
+      "message": "I created this angle bug: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7767\nOK?",
+      "parentUuid": "897102b7_f718f2a3",
       "range": {
         "startLine": 567,
         "startChar": 0,
