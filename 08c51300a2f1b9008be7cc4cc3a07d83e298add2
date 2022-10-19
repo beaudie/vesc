@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "807da42b_e585d097",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T00:10:05Z",
+      "side": 1,
+      "message": "LGTM with feature description change",
+      "revId": "08c51300a2f1b9008be7cc4cc3a07d83e298add2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd3d3f43_e2714cc1",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T00:10:05Z",
+      "side": 1,
+      "message": "nit: Please refrain from listing vendors / specifying the condition. They rot over time.\n\nThe condition for which the feature is enabled gets through to chrome://gpu (i.e. it can be queried from ANGLE), so this is redundant too",
+      "range": {
+        "startLine": 651,
+        "startChar": 17,
+        "endLine": 651,
+        "endChar": 23
+      },
+      "revId": "08c51300a2f1b9008be7cc4cc3a07d83e298add2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
