@@ -39,6 +39,30 @@
       },
       "revId": "08c51300a2f1b9008be7cc4cc3a07d83e298add2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caba1a4e_52a810ca",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-19T00:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd3d3f43_e2714cc1",
+      "range": {
+        "startLine": 651,
+        "startChar": 17,
+        "endLine": 651,
+        "endChar": 23
+      },
+      "revId": "08c51300a2f1b9008be7cc4cc3a07d83e298add2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
