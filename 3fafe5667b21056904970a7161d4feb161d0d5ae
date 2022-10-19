@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66661452_62fd5256",
+        "filename": "src/libANGLE/renderer/d3d/DeviceD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-19T15:05:54Z",
+      "side": 1,
+      "message": "Ah great, judging by other funcs I though it was preferred to not do it. Will do!",
+      "parentUuid": "bdb437cf_96094c8f",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f55da9d7_f3064a51",
         "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
         "patchSetId": 2
@@ -71,6 +89,24 @@
       "writtenOn": "2022-10-19T15:01:05Z",
       "side": 1,
       "message": "Excuse my ignorance, but what device was being created for DisplayEGL before this change?",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d03170_0cae191e",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-19T15:05:54Z",
+      "side": 1,
+      "message": "`MockDevice` :/",
+      "parentUuid": "a037d779_67869652",
       "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
