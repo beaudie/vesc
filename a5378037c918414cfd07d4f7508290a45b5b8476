@@ -248,6 +248,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "084755aa_4f18934b",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-10-19T16:38:46Z",
+      "side": 1,
+      "message": "Did you mean angle project bug? or a GCC bug? I might have misunderstood and assumed.",
+      "parentUuid": "eaf4fd29_aab45062",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
