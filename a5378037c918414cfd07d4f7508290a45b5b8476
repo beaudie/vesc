@@ -272,6 +272,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad94d1d3_a606a56a",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-19T16:45:40Z",
+      "side": 1,
+      "message": "I meant GCC bug, but it seems this is more due to a difference in GCC vs Clang warnings than an implementation bug in GCC.\n\nCan we do the MAYBE_UNUSED_PRIVATE_FIELD thing? How many times in the code does this happen?",
+      "parentUuid": "084755aa_4f18934b",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
