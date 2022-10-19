@@ -16,6 +16,63 @@
       "message": "Added missing overrides for some `DeviceImpl` implementations.",
       "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb437cf_96094c8f",
+        "filename": "src/libANGLE/renderer/d3d/DeviceD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T15:01:05Z",
+      "side": 1,
+      "message": "FYI, you can put this generic UNIMPLEMENTED() implementation in `DeviceImpl` itself, so you don\u0027t have to put it in every backend.",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f55da9d7_f3064a51",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T15:01:05Z",
+      "side": 1,
+      "message": "nit: per our style, explicitly cast to bool; `if (extensionsString \u003d\u003d nullptr)`",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 9
+      },
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a037d779_67869652",
+        "filename": "src/libANGLE/renderer/gl/egl/DisplayEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1052,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T15:01:05Z",
+      "side": 1,
+      "message": "Excuse my ignorance, but what device was being created for DisplayEGL before this change?",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
