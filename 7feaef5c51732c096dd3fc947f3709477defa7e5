@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1666ad_0cec7fa2",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:02:31Z",
+      "side": 1,
+      "message": "This can be cleaned up too.\n\nAlso, can you provide an example of an enum pointed to in the API?  I seem to remember this inlining being a positive change (when introduced), but can\u0027t recall what changed.",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 59
+      },
+      "revId": "7feaef5c51732c096dd3fc947f3709477defa7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
