@@ -22,6 +22,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff7c90b1_ba864bdd",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-19T14:35:57Z",
+      "side": 1,
+      "message": "That won\u0027t work. The issue is that gcc does have this attribute, but doesn\u0027t accept it on unused private members. Also why this CL is not changing all instances of `[[maybe_unused]]`. It\u0027s used in 4 places only, 2 of which can just drop the unused member, but the other 2 are padding.",
+      "parentUuid": "014ddedc_6ddcce85",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
