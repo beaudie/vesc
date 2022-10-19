@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b419f3_7b6e8d52",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1453,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 0,
+      "message": "Similar questions, why is this function moving to utils, but not the surrounding?  What\u0027s the criteria?",
+      "range": {
+        "startLine": 1453,
+        "startChar": 5,
+        "endLine": 1453,
+        "endChar": 31
+      },
+      "revId": "7feaef5c51732c096dd3fc947f3709477defa7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

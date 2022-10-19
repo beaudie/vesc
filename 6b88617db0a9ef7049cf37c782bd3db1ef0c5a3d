@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b27e64a3_01281fe7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 1,
+      "message": "Nice!",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 59
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01364d70_391cd094",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 1,
+      "message": "Not clear to me how you chose what to move to common, but maybe it becomes clearer later in the series.",
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9abaaa6c_eec9c99b",
+        "filename": "src/common/frame_capture_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 1,
+      "message": "I see the value in moving some code out of FrameCapture.cpp, but it\u0027s not clear to me why you are moving these outside of capture.  What other components need this?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a4e9a34_35648217",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 1,
+      "message": "Serializing ANGLE\u0027s internal state has uses outside of capture, like rapidly priming state for a critical app, or for bug reports.  I could see it be moved outside of capture.",
+      "range": {
+        "startLine": 44,
+        "startChar": 27,
+        "endLine": 44,
+        "endChar": 36
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4dba60_e6d635bf",
+        "filename": "src/libANGLE/capture/serialize_mock.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-19T22:30:31Z",
+      "side": 1,
+      "message": "Comment needs updated too.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 32
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
