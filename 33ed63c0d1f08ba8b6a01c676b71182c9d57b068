@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "355f9f56_0f8bdd7e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-10-19T02:41:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26898bd9_989c3869",
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8953ae1_1b754621",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9f0cc22_2289b31d",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-10-19T02:41:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8953ae1_1b754621",
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8eb371e7_95a45a60",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-10-19T01:39:37Z",
       "side": 1,
       "message": "super nit: the warning was about `a \u0026\u0026 b || c` more clear as `(a \u0026\u0026 b) || c`. No need for parentheses around `(c)`.",
+      "range": {
+        "startLine": 6094,
+        "startChar": 11,
+        "endLine": 6094,
+        "endChar": 12
+      },
+      "revId": "33ed63c0d1f08ba8b6a01c676b71182c9d57b068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca6196f3_a3d1df1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6094,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-10-19T02:41:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb371e7_95a45a60",
       "range": {
         "startLine": 6094,
         "startChar": 11,
