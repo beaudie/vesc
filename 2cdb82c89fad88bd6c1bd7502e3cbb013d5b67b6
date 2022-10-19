@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86c25818_1f6b2972",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-19T07:06:01Z",
+      "side": 1,
+      "message": "should it be `reinterpret_cast\u003cEGLSurface\u003e`?",
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

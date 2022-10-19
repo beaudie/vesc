@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "210c2efd_3caf523e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 4744,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-19T07:06:01Z",
+      "side": 0,
+      "message": "Can I ask why `ValidateDisplay()` is removed?",
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
