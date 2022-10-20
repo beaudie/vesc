@@ -170,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0fb5b88_8fe9318d",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2022-10-20T14:32:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b53315e1_c64e8add",
+      "range": {
+        "startLine": 46,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 74
+      },
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f55da9d7_f3064a51",
