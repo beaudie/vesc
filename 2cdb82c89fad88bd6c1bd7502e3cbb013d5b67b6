@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1647702_263b61be",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 2284,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "Whoops, left in from a prior design. Thanks for catching, removed.",
+      "parentUuid": "aa394852_d8984273",
+      "range": {
+        "startLine": 2284,
+        "startChar": 4,
+        "endLine": 2284,
+        "endChar": 18
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6694d31e_4f2b14de",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6be2a9f_8a321d56",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6694d31e_4f2b14de",
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf4661a1_36dd295c",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-10-19T20:53:53Z",
       "side": 1,
       "message": "I\u0027ll need to see how this looks in a trace, but it looks like this constructs a comment informing the user of the max values, but then passes them all directly to `InitializeReplay2`.  I think this is because we don\u0027t want any variables to show up in the trace, to ease parsing.",
+      "range": {
+        "startLine": 867,
+        "startChar": 0,
+        "endLine": 867,
+        "endChar": 75
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60872e4d_21b92b20",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "Exactly. It looks like this\n\n```\nvoid InitReplay(void)\n{\n    // maxBuffer \u003d 23\n    // maxContext \u003d 1\n    // maxFenceNV \u003d 0\n    // maxFramebuffer \u003d 7\n    // maxImage \u003d 0\n    // maxMemoryObject \u003d 0\n    // maxProgramPipeline \u003d 0\n    // maxQuery \u003d 0\n    // maxRenderbuffer \u003d 6\n    // maxSampler \u003d 0\n    // maxSemaphore \u003d 0\n    // maxShaderProgram \u003d 98\n    // maxSurface \u003d 1\n    // maxTexture \u003d 93\n    // maxTransformFeedback \u003d 1\n    // maxVertexArray \u003d 0\n    InitializeReplay2(\"trex_200.angledata.gz\", 0, 4, 1, 23, 1, 0, 7, 0, 0, 0, 0, 6, 0, 0, 98, 1, 93, 1, 0);\n}\n```\n\nI kept it in because it\u0027s nice to see how many resources the trace uses, which was why I originally added the constants.",
+      "parentUuid": "cf4661a1_36dd295c",
       "range": {
         "startLine": 867,
         "startChar": 0,
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76dc4710_ef774676",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 7996,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "I reverted this - I had to change it at one point when I was using uintptr_t for context map indexes. Now that I\u0027m back to using ContextID I can keep the code the way it is before. Now if shared has any issues it won\u0027t be because of this.",
+      "parentUuid": "fe4cf16c_d1bfa37c",
+      "range": {
+        "startLine": 7996,
+        "startChar": 50,
+        "endLine": 7996,
+        "endChar": 57
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "67be3ffe_1831c9c1",
@@ -100,6 +190,30 @@
       "writtenOn": "2022-10-19T20:53:53Z",
       "side": 1,
       "message": "To confirm, `gSurfaceMap2[0]` contains `EGL_NO_SURFACE`?",
+      "range": {
+        "startLine": 8871,
+        "startChar": 11,
+        "endLine": 8871,
+        "endChar": 23
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "033a1d77_7c456180",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 8871,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "It doesn\u0027t, I\u0027m not sure if it needs it or not. I\u0027m hesitant to add it unless I know it needs it, because no one will remember to go back and remove it.",
+      "parentUuid": "67be3ffe_1831c9c1",
       "range": {
         "startLine": 8871,
         "startChar": 11,
@@ -158,6 +272,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5c644e21_40ca05b9",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 6426,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "I was having an issue with GetCurrentSurface and I noticed that this code wasn\u0027t properly implemented in the validation function. So I moved it there as a simultaneous cleanup. It could be a split CL, but I figured it was probably ok like this.",
+      "parentUuid": "983033a5_a05224c8",
+      "range": {
+        "startLine": 6426,
+        "startChar": 0,
+        "endLine": 6426,
+        "endChar": 21
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "86c25818_1f6b2972",
         "filename": "src/libGLESv2/egl_stubs.cpp",
         "patchSetId": 17
@@ -204,6 +342,30 @@
       "writtenOn": "2022-10-19T20:53:53Z",
       "side": 1,
       "message": "It looks like this and others below could use `HackANGLE` (or similar) as well.  Doesn\u0027t have to be in this CL, but would be nice to streamline all the double casting.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 83
+      },
+      "revId": "2cdb82c89fad88bd6c1bd7502e3cbb013d5b67b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fe235d1_f19343db",
+        "filename": "src/tests/gl_tests/D3D11InputLayoutCacheTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "Ack, it would be nice if we had a common place for white box tests, but I didn\u0027t know of an existing one and didn\u0027t want to do the work to add one.",
+      "parentUuid": "31908b4c_fe529bfa",
       "range": {
         "startLine": 69,
         "startChar": 0,

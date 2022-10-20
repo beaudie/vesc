@@ -39,6 +39,30 @@
       },
       "revId": "eac878ed1f343e039eca2db74e7d808acc0f0485",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d89c1de9_a7646504",
+        "filename": "src/libANGLE/capture/trace_fixture.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c38af004_1fb55278",
+      "range": {
+        "startLine": 521,
+        "startChar": 5,
+        "endLine": 521,
+        "endChar": 29
+      },
+      "revId": "eac878ed1f343e039eca2db74e7d808acc0f0485",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

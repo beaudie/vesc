@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87c7c92e_b084cce3",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "6c66cad8_693d5302",
+      "range": {
+        "startLine": 339,
+        "startChar": 9,
+        "endLine": 339,
+        "endChar": 37
+      },
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "210c2efd_3caf523e",
@@ -90,6 +114,30 @@
       "writtenOn": "2022-10-19T20:53:53Z",
       "side": 0,
       "message": "There\u0027s no bug here, do you know why the comment can go away?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 71
+      },
+      "revId": "0c85b187985a2b6be918f20e516563a6a9f03f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6f8895b_a4575c5f",
+        "filename": "src/tests/gl_tests/D3D11FormatTablesTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:31Z",
+      "side": 0,
+      "message": "Ack, the comment went away because we no longer support 9_3 in any way.",
+      "parentUuid": "2d1b35ee_5736373f",
       "range": {
         "startLine": 36,
         "startChar": 0,
