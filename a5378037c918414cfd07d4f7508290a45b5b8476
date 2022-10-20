@@ -368,6 +368,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af5208e0_578458de",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-10-20T01:20:01Z",
+      "side": 1,
+      "message": "I modified the macro\u0027s name as suggested.\nAnd also added comment for more information about this macro.\nThank you for the suggestion 😊",
+      "parentUuid": "8c48a7d1_a83e2ba3",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
