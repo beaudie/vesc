@@ -6383,6 +6383,11 @@ bool OutputSPIRV(TCompiler *compiler, TIntermBlock *root, const ShCompileOptions
 
     // Generate the final SPIR-V and store in the sink
     spirv::Blob spirvBlob = traverser.getSpirv();
+
+    spirv::Print(spirvBlob);
+
+    spirv::OutputToFile(spirvBlob);
+
     compiler->getInfoSink().obj.setBinary(std::move(spirvBlob));
 
     return true;

@@ -10,6 +10,9 @@
 // SPIR-V tools include for AST validation.
 #include <spirv-tools/libspirv.hpp>
 
+#include "common/system_utils.h"
+#include "common/utilities.h"
+
 namespace angle
 {
 namespace spirv
@@ -54,6 +57,26 @@ void Print(const Blob &blob)
     spirvTools.Disassemble(blob, &readableSpirv, 0);
     INFO() << "Dissembly SPIRV: " << readableSpirv.c_str();
 }
+
+void OutputToFile(const Blob &blob)
+{
+    static uint32_t spirvID = 0;
+
+    spvtools::SpirvTools spirvTools(SPV_ENV_VULKAN_1_1);
+    std::string readableSpirv;
+    spirvTools.Disassemble(blob, &readableSpirv, 0);
+
+    // Create a filename unique per entry, i.e. SPIRV_0.txt, SPIRV_1.txt
+    std::stringstream fileName;
+    fileName << angle::GetTempDirectory().value() << std::filesystem::path::preferred_separator
+             << "SPIRV_" << spirvID++ << ".spirv";
+
+    // Write the file to temp storage
+    writeFile(fileName.str().c_str(), readableSpirv.data(), readableSpirv.size());
+
+    INFO() << "Wrote SPIRV to: " << fileName.str();
+}
+
 #else   // ANGLE_ENABLE_ASSERTS
 bool Validate(const Blob &blob)
 {

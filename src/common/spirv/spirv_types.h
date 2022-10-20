@@ -126,6 +126,7 @@ enum HeaderIndex
 // SPIR-V is not valid.
 bool Validate(const Blob &blob);
 void Print(const Blob &blob);
+void OutputToFile(const Blob &blob);
 
 }  // namespace spirv
 }  // namespace angle
