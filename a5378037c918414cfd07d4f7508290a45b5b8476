@@ -344,6 +344,30 @@
       },
       "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c48a7d1_a83e2ba3",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-10-20T01:17:10Z",
+      "side": 1,
+      "message": "Reading the comments, it looks like the conclusion was made last night.\nTo summarize, \u0027attribute ignored\u0027 warning was occurred because GCC doesn\u0027t have \u0027-Wno-unused-private-field\u0027 whereas Clang has. You can refer to: https://stackoverflow.com/a/65633590",
+      "parentUuid": "5443134c_a1500d80",
+      "range": {
+        "startLine": 567,
+        "startChar": 0,
+        "endLine": 567,
+        "endChar": 43
+      },
+      "revId": "a5378037c918414cfd07d4f7508290a45b5b8476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
