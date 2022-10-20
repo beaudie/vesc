@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c410d5b_b0930410",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-20T22:11:08Z",
+      "side": 1,
+      "message": "why do we need to re-declare these arrays, after declaring them in https://chromium-review.googlesource.com/c/angle/angle/+/3966532/6/util/capture/trace_fixture.h#84",
+      "revId": "d7c7cc228c695803c0896c49da31c656e9fa4547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fe86085_c7ccb0b4",
         "filename": "util/capture/trace_fixture.h",
         "patchSetId": 6
