@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4655f633_b37fa9a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-20T21:59:29Z",
+      "side": 1,
+      "message": "This approach lgtm overall - an allowlist seems like the only scalable approach. A couple of minor comments / questions though.",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "898b30ba_64261dc5",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-20T21:59:29Z",
+      "side": 1,
+      "message": "It seems a little weird that ClearBuffer* is allowed but Clear* isn\u0027t. Is there a strong reason to disallow Clear? (I do see that this restriction required a large refactor of the tests below.)",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba8055d_b4375b90",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3015,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-20T21:59:29Z",
+      "side": 1,
+      "message": "Could a couple of negative tests be added, attempting to call disallowed functions while PLS is active?",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
