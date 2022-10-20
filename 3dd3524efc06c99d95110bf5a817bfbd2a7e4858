@@ -16,6 +16,23 @@
       "message": "I don\u0027t have a strong opinion on the python changes, but the resulting output looks good.\n\nFor future readers (including myself), the changes to `frame_capture_replay_autogen.cpp` are the core of this CL.  It allows replaying a trace without having access to ANGLE\u0027s internals, so you can replay them (from memory as opposed to compiled from source) on any GL implementation.  The new functions aren\u0027t used yet, but are central to this series.",
       "revId": "3dd3524efc06c99d95110bf5a817bfbd2a7e4858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2942155c_26ff824b",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-20T22:35:22Z",
+      "side": 1,
+      "message": "Where is the definition for this function?",
+      "revId": "3dd3524efc06c99d95110bf5a817bfbd2a7e4858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
