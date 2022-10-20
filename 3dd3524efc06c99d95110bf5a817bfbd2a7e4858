@@ -33,6 +33,47 @@
       "message": "Where is the definition for this function?",
       "revId": "3dd3524efc06c99d95110bf5a817bfbd2a7e4858",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef7beb5_47929453",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T22:59:25Z",
+      "side": 1,
+      "message": "Right below this call. Declaration is in the header, see ref.",
+      "parentUuid": "2942155c_26ff824b",
+      "revId": "3dd3524efc06c99d95110bf5a817bfbd2a7e4858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3933c42c_ebbab071",
+        "filename": "util/capture/frame_capture_test_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T22:59:25Z",
+      "side": 1,
+      "message": "ref.",
+      "range": {
+        "startLine": 183,
+        "startChar": 5,
+        "endLine": 183,
+        "endChar": 28
+      },
+      "revId": "3dd3524efc06c99d95110bf5a817bfbd2a7e4858",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
