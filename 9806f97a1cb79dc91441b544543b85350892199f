@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17f4e250_37108a3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-20T16:59:38Z",
+      "side": 1,
+      "message": "Any thoughts on this?\n\nIt would be nice to have the allow list in place before landing the EXT_shader_pixel_local_storage implementation at https://chromium-review.googlesource.com/c/angle/angle/+/3966075",
+      "revId": "9806f97a1cb79dc91441b544543b85350892199f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
