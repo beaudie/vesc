@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39805c77_df5acc91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-20T18:10:59Z",
+      "side": 1,
+      "message": "LGTM with one minor comment",
+      "revId": "6fbe60e541ff0cc9ffbedf520807fd6e8974e75e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e6cc98_00e4cfdd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5382,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-10-20T18:10:59Z",
+      "side": 1,
+      "message": "mGraphicsPipelineDesc only needs a boolean of IsRotatedAspectRatio, why not also change this updateSurfaceRotation() to actually take boolean?",
+      "range": {
+        "startLine": 5382,
+        "startChar": 35,
+        "endLine": 5382,
+        "endChar": 96
+      },
+      "revId": "6fbe60e541ff0cc9ffbedf520807fd6e8974e75e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
