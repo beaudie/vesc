@@ -71,7 +71,6 @@ def Initialize(suite_name):
     apk_path = _ApkPath(suite_name)
     if os.path.exists(apk_path):
         _Global.is_android = True
-        _GetAdbRoot()
         assert _FindPackageName(apk_path) == TEST_PACKAGE_NAME
 
     _Global.initialized = True
@@ -119,20 +118,6 @@ def _AdbRun(args):
 
 def _AdbShell(cmd):
     return _Run([_FindAdb(), 'shell', cmd])
-
-
-def _GetAdbRoot():
-    _AdbRun(['root'])
-
-    for _ in range(20):
-        time.sleep(0.5)
-        try:
-            id_out = _AdbShell('id').decode('ascii')
-            if 'uid=0(root)' in id_out:
-                return
-        except Exception:
-            continue
-    raise Exception("adb root failed")
 
 
 def _ReadDeviceFile(device_path):
