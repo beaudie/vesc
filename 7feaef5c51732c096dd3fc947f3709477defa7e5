@@ -22,6 +22,30 @@
       },
       "revId": "7feaef5c51732c096dd3fc947f3709477defa7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7778012_13bb9786",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:40Z",
+      "side": 1,
+      "message": "Done, and added to CL desciption.",
+      "parentUuid": "3b1666ad_0cec7fa2",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 639,
+        "endChar": 59
+      },
+      "revId": "7feaef5c51732c096dd3fc947f3709477defa7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
