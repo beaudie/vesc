@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a0e9768_a7114fa3",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-20T19:58:32Z",
+      "side": 1,
+      "message": "Does this come in a later CL in the series?",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 72
+      },
+      "revId": "9f9ae3b02ff7b92d7f26e87a64be05e9bde92168",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8433d382_14bd8014",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-20T19:58:32Z",
+      "side": 1,
+      "message": "This should probably be an error and replay should halt.",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 138,
+        "endChar": 81
+      },
+      "revId": "9f9ae3b02ff7b92d7f26e87a64be05e9bde92168",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
