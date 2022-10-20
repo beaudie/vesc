@@ -54,6 +54,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "37ac8c24_9a3d1084",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78bece5d_f9d25a95",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bdb437cf_96094c8f",
         "filename": "src/libANGLE/renderer/d3d/DeviceD3D.h",
         "patchSetId": 2
@@ -87,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3421197_480ebffc",
+        "filename": "src/libANGLE/renderer/d3d/DeviceD3D.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66661452_62fd5256",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c37d695b_ac765740",
@@ -100,6 +136,30 @@
       "writtenOn": "2022-10-19T20:00:57Z",
       "side": 1,
       "message": "nit: you can use mDisplay-\u003eGetClientExtensions().deviceQueryEXT",
+      "range": {
+        "startLine": 46,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 74
+      },
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53315e1_c64e8add",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "I\u0027m afraid `GetClientExtensions()` only exists for the frontend - and is unconditionally enabled in this case, see https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Display.cpp;l\u003d2051",
+      "parentUuid": "c37d695b_ac765740",
       "range": {
         "startLine": 46,
         "startChar": 9,
@@ -133,6 +193,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df67d6ec_9933cfda",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f55da9d7_f3064a51",
+      "range": {
+        "startLine": 54,
+        "startChar": 8,
+        "endLine": 54,
+        "endChar": 9
+      },
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb0ade7d_442dddd3",
@@ -146,6 +230,24 @@
       "writtenOn": "2022-10-19T20:00:57Z",
       "side": 1,
       "message": "nit: can you add a hasExtension function to this class and save the extensions in mExtensions?",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27221611_45fed46c",
+        "filename": "src/libANGLE/renderer/gl/egl/DeviceEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb0ade7d_442dddd3",
       "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -198,6 +300,24 @@
       "writtenOn": "2022-10-19T20:00:57Z",
       "side": 1,
       "message": "Can you please do mExtensions.push_back(\"EGL_EXT_device_query\"), like how EGL_ANDROID_native_fence_sync is handled in this function above? Then you can remove mHasDeviceQueryExt and the special case in hasExtension",
+      "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "397d5130_8b652e29",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-10-20T11:57:28Z",
+      "side": 1,
+      "message": "Indeed much better :)",
+      "parentUuid": "a6ad4214_c68aa923",
       "revId": "3fafe5667b21056904970a7161d4feb161d0d5ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
