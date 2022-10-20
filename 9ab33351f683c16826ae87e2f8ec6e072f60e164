@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0cb88c4_7665afd7",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-20T23:46:36Z",
+      "side": 1,
+      "message": "Yes, because `glClear(GL_COLOR_BUFFER_BIT)` clears every active draw buffer, which may or may not include your PLS planes, depending on whether they are implemented as framebuffer attachments. So the only way to get consistent behavior across every device is to direct the app to `glClearBuffer*` instead.\n\nAlso note that we still need to add validation so `glClearBuffer` can\u0027t wipe out your PLS planes.\n\nWe could technically allow `glClear(GL_STENCIL_BUFFFER_BIT | GL_DEPTH_BUFFER_BIT)`, but I think it\u0027s cleaner to just direct the app to `glClearBuffer*` for depth/stencil as well.",
+      "parentUuid": "898b30ba_64261dc5",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ba8055d_b4375b90",
         "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
         "patchSetId": 9
@@ -48,6 +66,24 @@
       "writtenOn": "2022-10-20T21:59:29Z",
       "side": 1,
       "message": "Could a couple of negative tests be added, attempting to call disallowed functions while PLS is active?",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62dbbcb8_bfbbddd4",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3015,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-20T23:46:36Z",
+      "side": 1,
+      "message": "Yes, I just wanted to make sure we were all on board with this approach before investing the time in writing the negative tests.\n\nIt sounds like we are now, so I\u0027ll do that!\n\nHow involved do you think they should be? We could exhaustively test every entry point, but would that be overkill?",
+      "parentUuid": "6ba8055d_b4375b90",
       "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
