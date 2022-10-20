@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c4a91f2d_f8617633",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:49Z",
+      "side": 1,
+      "message": "Ack, thanks.",
+      "parentUuid": "b27e64a3_01281fe7",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 59
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "01364d70_391cd094",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0e4011d_2a5a35d3",
+        "filename": "src/common/frame_capture_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:49Z",
+      "side": 1,
+      "message": "It\u0027s all for the trace interpreter, which deals with the capture classes e.g. CallCapture/ParamCapture. I think I moved WriteParamValueReplay for consistency, because some helper functions needed to be moved too, so I\u0027d prefer not to revisit that decisions because it might waste time if I try moving it back and re-discover why I had to move it originally. 😊\n\nAdded a note in the issue description.",
+      "parentUuid": "9abaaa6c_eec9c99b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a4e9a34_35648217",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
@@ -77,6 +125,30 @@
       "writtenOn": "2022-10-19T22:30:31Z",
       "side": 1,
       "message": "Serializing ANGLE\u0027s internal state has uses outside of capture, like rapidly priming state for a critical app, or for bug reports.  I could see it be moved outside of capture.",
+      "range": {
+        "startLine": 44,
+        "startChar": 27,
+        "endLine": 44,
+        "endChar": 36
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f460f127_847ec4e6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:49Z",
+      "side": 1,
+      "message": "Ack, yeah, I could see that too. For now I left it out.",
+      "parentUuid": "6a4e9a34_35648217",
       "range": {
         "startLine": 44,
         "startChar": 27,
@@ -100,6 +172,30 @@
       "writtenOn": "2022-10-19T22:30:31Z",
       "side": 1,
       "message": "Comment needs updated too.",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 32
+      },
+      "revId": "6b88617db0a9ef7049cf37c782bd3db1ef0c5a3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "503ab800_073ef8a8",
+        "filename": "src/libANGLE/capture/serialize_mock.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T12:32:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d4dba60_e6d635bf",
       "range": {
         "startLine": 6,
         "startChar": 0,
