@@ -163,7 +163,8 @@ class RewritePLSTraverser : public TIntermTraverser
                 CreateTempInitDeclarationNode(valueVar, args[1]->getAsTyped());
             valueDecl->traverse(this);  // Rewrite any potential pixelLocalLoadANGLEs in valueDecl.
             insertStatementInParentBlock(valueDecl);
-
+            clampPLSVarIfNeeded(valueVar,
+                                plsSymbol->getType().getLayoutQualifier().imageInternalFormat);
             visitPLSStore(plsSymbol, valueVar);
             return false;  // No need to recurse since this node is being dropped.
         }
@@ -504,7 +505,6 @@ class RewritePLSToImagesTraverser : public RewritePLSTraverser
     {
         TLayoutImageInternalFormat plsFormat =
             plsSymbol->getType().getLayoutQualifier().imageInternalFormat;
-        clampPLSVarIfNeeded(plsVar, plsFormat);
         TIntermTyped *result = new TIntermSymbol(plsVar);
         TLayoutImageInternalFormat imageFormat =
             image2D->getType().getLayoutQualifier().imageInternalFormat;
@@ -934,7 +934,6 @@ class RewriteANGLEToEXTTraverser : public RewritePLSTraverser
         TIntermConstantUnion *index = new TIntermConstantUnion(fieldEXT.indexInPLSBlock, typeEXT);
         TIntermTyped *fieldAccess =
             new TIntermBinary(EOpIndexDirectInterfaceBlock, new TIntermSymbol(mBlockEXT), index);
-        clampPLSVarIfNeeded(value, typeEXT.getLayoutQualifier().imageInternalFormat);
         queueReplacement(
             new TIntermBinary(EOpAssign, fieldAccess, Swizzle(value, typeEXT.getNominalSize())),
             OriginalNode::IS_DROPPED);
