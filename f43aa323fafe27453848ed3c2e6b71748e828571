@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "218761a3_6d519606",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-20T20:22:14Z",
+      "side": 1,
+      "message": "Intentional double comment here?",
+      "range": {
+        "startLine": 375,
+        "startChar": 8,
+        "endLine": 375,
+        "endChar": 13
+      },
+      "revId": "f43aa323fafe27453848ed3c2e6b71748e828571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
