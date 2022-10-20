@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5d50e7e_0da75cfc",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T22:14:21Z",
+      "side": 1,
+      "message": "It\u0027s how C/C++ has separate definitions and declarations. Can chat more about it offline - basically one identifies the symbol as a certain type, and one instantiates it in the code.",
+      "parentUuid": "9c410d5b_b0930410",
+      "revId": "d7c7cc228c695803c0896c49da31c656e9fa4547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3fe86085_c7ccb0b4",
         "filename": "util/capture/trace_fixture.h",
         "patchSetId": 6
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-20T20:14:27Z",
       "side": 1,
       "message": "Lowercase c looks odd here",
+      "range": {
+        "startLine": 213,
+        "startChar": 14,
+        "endLine": 213,
+        "endChar": 15
+      },
+      "revId": "d7c7cc228c695803c0896c49da31c656e9fa4547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebe6f242_b809f26b",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-20T22:14:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fe86085_c7ccb0b4",
       "range": {
         "startLine": 213,
         "startChar": 14,
