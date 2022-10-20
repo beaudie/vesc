@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70cba00c_11b70fd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-20T16:57:56Z",
+      "side": 1,
+      "message": "Is there a way to run angle_end2end_tests on Pixel 6 from here? The android tests are passing, but it looks like they\u0027re only running on Pixel 4, which is Qualcomm and does not have EXT_shader_pixel_local_storage.",
+      "revId": "6b3b2d9886dfd5045a43e2310a8f85712cad6ecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
