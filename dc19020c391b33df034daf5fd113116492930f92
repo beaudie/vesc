@@ -106,6 +106,24 @@
       "parentUuid": "6012fb8a_1477b460",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c4c2b5_7500a637",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T12:20:01Z",
+      "side": 1,
+      "message": "\u003e To Roman\u0027s point, I think this will make the trace tests just like any other perf or end2end test.\n\nSorry, not following here..\n\nperf tests:\n```\nCopyTexImageTest.RGBAToA/ES2_OpenGL\nCopyTexImageTest.RGBAToA/ES2_Vulkan_AsyncCommandQueue\n```\n\nend2end tests:\n```\nUniformsBenchmark.Run/gl_110_mat4x4\nUniformsBenchmark.Run/vulkan_110_mat4x4\n```\n\nThis CL is changing test name from `TracePerfTest.Run/vulkan_trex_200` (seemingly consistent with the above) to `TraceTest.trex_200` with flags. In what sense is it making it \"just like any other perf or end2end test\", what am I missing?\n\n@Jamie could you elaborate on the rationale in the CL description to explain this?\nAlso, shouldn\u0027t this CL be updating some docs?",
+      "parentUuid": "dbc5d0d4_a2ce89dd",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
