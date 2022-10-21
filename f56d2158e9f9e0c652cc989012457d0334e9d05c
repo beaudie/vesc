@@ -16,6 +16,24 @@
       "message": "Not sure if that\u0027s the appropriate place to do that. An alternative would be to handle it in the switches in the shader.",
       "revId": "f56d2158e9f9e0c652cc989012457d0334e9d05c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cfb272c_3014e80f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-21T03:57:21Z",
+      "side": 1,
+      "message": "This should be more optimal compared with doing it in the shader. Could you please add an end2end test?",
+      "parentUuid": "249b1f25_1b23f845",
+      "revId": "f56d2158e9f9e0c652cc989012457d0334e9d05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
