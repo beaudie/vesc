@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a85a4b61_c1621822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T13:44:58Z",
+      "side": 1,
+      "message": "Does this fix anything? Honestly I think it would be a better API contract if ANGLE tests always emitted an empty test results file when we read the --isolated-test-output command line argument, rather that the calling harness having to know that ANGLE doesn\u0027t write an output file specifically for --list-tests (layering violation, etc). LGTM in any case.",
+      "revId": "e0bb8313a134d5ddda4671811d58512046e0f975",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
