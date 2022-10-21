@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a7ef4e4_491c7512",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-21T01:56:24Z",
+      "side": 1,
+      "message": "Can the Pixel 4 and iOS suppressions be lifted now?\n\nAlso, given the complexity of the situation, can you make sure there are tests that cover these?\n\n- ES100 shader with APPLE_clip_distance using all its builtins\n- ES300 shader with APPLE_clip_distance using all its builtins\n- ES300 shader with EXT_clip_cull_distance using all its builts",
+      "revId": "515d4c7f8b6ec74ca3ab568457092331727a6bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
