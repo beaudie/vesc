@@ -124,6 +124,24 @@
       "parentUuid": "dbc5d0d4_a2ce89dd",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "692c8702_181fac20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T12:47:59Z",
+      "side": 1,
+      "message": "Spoke to Roman offline - I think the missing rationale was the problems we had with --enable-all-trace-tests. I updated the issue description to summarize this and also went through the code more carefully with code search and updated some references to the old test names. Thanks Roman for the feedback, PTAL.",
+      "parentUuid": "51c4c2b5_7500a637",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
