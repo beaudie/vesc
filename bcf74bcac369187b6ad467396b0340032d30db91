@@ -37,6 +37,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66dc4462_91da10c5",
+        "filename": "infra/specs/test_suite_exceptions.pyl",
+        "patchSetId": 24
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-21T19:26:35Z",
+      "side": 1,
+      "message": "nit, Should we mention in the anglebug.com/7752 that the test only works on Linux now? (If I am reading it correctly)",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3e28acc_68676b38",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-21T19:26:35Z",
+      "side": 1,
+      "message": "nit, for learning purpose, why there is no not adding \u0027gles3\u0027 supported_extensions?",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84e3d625_40925dee",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-21T19:26:35Z",
+      "side": 1,
+      "message": "Can I ask why we need two different flags for the same purpose?",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8048d13f_0777b8d0",
         "filename": "src/tests/perf_tests/TracePerfTest.cpp",
         "patchSetId": 24
@@ -54,6 +105,23 @@
         "endLine": 1408,
         "endChar": 51
       },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0490efb1_d87eb49a",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-21T19:26:35Z",
+      "side": 1,
+      "message": "is this json_data used anywhere?",
       "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
