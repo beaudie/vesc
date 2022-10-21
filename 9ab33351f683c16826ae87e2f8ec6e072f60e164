@@ -86,6 +86,24 @@
       "parentUuid": "6ba8055d_b4375b90",
       "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd27c077_317f0448",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3015,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-21T00:50:34Z",
+      "side": 1,
+      "message": "That\u0027s overkill IMO. Testing a couple of common disallowed entry points seems fine to me.\n\nNote I don\u0027t speak for the others, and hope they\u0027ll speak up if they have any objections to the overall technique. We made good ground in today\u0027s WebGL WG meeting deciding that if we just forbid memoryless attachments in WebGL, that browsers can end/begin PLS in order to do internal operations forbidden while PLS is active.",
+      "parentUuid": "62dbbcb8_bfbbddd4",
+      "revId": "9ab33351f683c16826ae87e2f8ec6e072f60e164",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
