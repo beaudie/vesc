@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd32cc12_576a0386",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "I\u0027ve only done a partial review, but posting findings so far.  More after lunch.",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8048d13f_0777b8d0",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 1408,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "Why is setting up the trace name only done for the library version?",
+      "range": {
+        "startLine": 1406,
+        "startChar": 0,
+        "endLine": 1408,
+        "endChar": 51
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66b95995_43f854a7",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "Note: It is immensely helpful to record a C trace with the prior CL and use it for reference when reviewing this file.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 33
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f681d1e_b4166147",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "Can you move this to the end of the functions?  I know if it C++, but easier to look up in the file to see the definitions of the functions.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a8b0ce_ce9a33e0",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "This is only called for `ReplayFrame`, which includes a switch statement and no other control flow.  So (if I\u0027m reading this right) it is specifically looking for the end of the switch statement (`}`), moving past it with `advance`, and then `advance`ing again to go beyond the function\u0027s close curly brace?\n\nIf I\u0027m reading it wrong, then this is exiting early when it hits the switch statement curly brace.",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 21
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1abd49b_b36958ed",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "Can `peek` actually match two characters?",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3386db9_01975244",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "This could use an explainer. What\u0027s the non-whitespace being skipped here?  Is it the return value of the function?",
+      "range": {
+        "startLine": 186,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 25
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0959c15f_3599298d",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "commented above, `skipFunction` may need to be specialized to incorporate the end of switch.  Or if it is working as intended, we can rename to `skipReplayFrame`.",
+      "range": {
+        "startLine": 194,
+        "startChar": 45,
+        "endLine": 194,
+        "endChar": 63
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "041250e2_94f90618",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "Its not immediately clear to me why we are passing the shader map to every function.  Will keep looking.",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 93
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acda7347_cc6ce72e",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T18:01:54Z",
+      "side": 1,
+      "message": "If this is looking for the end of the shader\u0027s `main()`, it will break down in the presence of control flow, layout blocks, or other functions.\n\nHere\u0027s how I see shaders ending with my local trace:\n```\n\"}\"\n,\n};\n```\nWe could delimit the shader with an unguarded `,` or `};` or some other invention.",
+      "range": {
+        "startLine": 279,
+        "startChar": 8,
+        "endLine": 279,
+        "endChar": 29
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
