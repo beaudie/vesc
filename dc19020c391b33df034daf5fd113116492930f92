@@ -142,6 +142,24 @@
       "parentUuid": "51c4c2b5_7500a637",
       "revId": "dc19020c391b33df034daf5fd113116492930f92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a46b3a25_10ca7afb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T13:02:18Z",
+      "side": 1,
+      "message": "Thanks for clarification Jamie. For posterity, we also discussed that this CL is making tests _less_ consistent with perf/end2end but more like deqp, but hopefully in future we can bring perf/end2end closer to this state (though Jamie suggested end2end might be a tricky one).",
+      "parentUuid": "692c8702_181fac20",
+      "revId": "dc19020c391b33df034daf5fd113116492930f92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

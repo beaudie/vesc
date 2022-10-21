@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "489896d2_bbc1524f",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T13:02:18Z",
+      "side": 1,
+      "message": "Could you add an explicit backend flag here instead of using default? (maybe hint at other options too unless it\u0027s not the right place for it)",
+      "range": {
+        "startLine": 79,
+        "startChar": 44,
+        "endLine": 79,
+        "endChar": 53
+      },
+      "revId": "d0f5163127b84d78ca788558859285288e7b7cd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e82fb21_9852c4aa",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T13:02:18Z",
+      "side": 1,
+      "message": "This seems confusing, as a script user I\u0027d be expecting `run_perf_tests` to run `angle_perftests` by default.\nMaybe a shorthand like `run_perf_tests.py -t ...` for running trace tests instead?",
+      "range": {
+        "startLine": 40,
+        "startChar": 22,
+        "endLine": 40,
+        "endChar": 39
+      },
+      "revId": "d0f5163127b84d78ca788558859285288e7b7cd1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
