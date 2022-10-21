@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2c2ea4d_66ec1e26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T05:54:05Z",
+      "side": 1,
+      "message": "Hey Jamie,\n\nI tested the CL out. CPP capture continue to work fine.\n\nFor the C capture, I\u0027m getting the following errors:\n```\nerror: use of undeclared identifier \u0027gSyncMap\u0027\n    glClientWaitSync(gSyncMap[1ul], 0, 0);\n                     ^\nerror: use of undeclared identifier \u0027gSyncMap\u0027\n    glDeleteSync(gSyncMap[1ul]);\n```\nSo it looks like we need two more Custom calls.",
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "941e25f4_54134462",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T05:54:05Z",
+      "side": 1,
+      "message": "This could use a short explainer.",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 59
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2661b0bf_37835023",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T05:54:05Z",
+      "side": 1,
+      "message": "Can you add a comment explaining what\u0027s happening here?",
+      "range": {
+        "startLine": 536,
+        "startChar": 0,
+        "endLine": 539,
+        "endChar": 9
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee6431e3_391cb1c4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T05:54:05Z",
+      "side": 1,
+      "message": "Also here.  Or maybe just an overall comment about how you are breaking up the strings.",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 30
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
