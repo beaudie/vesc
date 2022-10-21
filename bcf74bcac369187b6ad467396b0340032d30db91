@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e0b920_b801e10f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "Okay, I believe I follow this enough to make progress with it.  I verified CPP tracing still works after landing this CL, so we can make progress on C tracing without blocking our main workflow.",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8048d13f_0777b8d0",
@@ -135,6 +152,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5521feb_965da79e",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "I think the first is escaping a line continuation, it is one char.",
+      "parentUuid": "c1abd49b_b36958ed",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d3386db9_01975244",
         "filename": "util/capture/trace_interpreter.cpp",
         "patchSetId": 24
@@ -220,6 +261,121 @@
         "startChar": 8,
         "endLine": 279,
         "endChar": 29
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7bfcb1a_bc244284",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "Can you provide an example of what this is looking for?",
+      "range": {
+        "startLine": 420,
+        "startChar": 4,
+        "endLine": 420,
+        "endChar": 41
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c29f43b_ffc46318",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "Is this TODO, or cannot be supported?",
+      "range": {
+        "startLine": 523,
+        "startChar": 0,
+        "endLine": 524,
+        "endChar": 19
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08dcf687_43da60d0",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "nit: This could go to `PackResourceID`, just need to update the `value` type, or templatize it.",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 562,
+        "endChar": 65
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f27e8dc9_3b58b267",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "These and the below are just remaining work, right?",
+      "range": {
+        "startLine": 588,
+        "startChar": 0,
+        "endLine": 588,
+        "endChar": 18
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a3492f1_328460de",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-21T19:26:15Z",
+      "side": 1,
+      "message": "Can you share how this type indicates a need for searching through shaders?",
+      "range": {
+        "startLine": 716,
+        "startChar": 19,
+        "endLine": 716,
+        "endChar": 38
       },
       "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
