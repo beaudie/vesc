@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e1db16_b4b9aef3",
+        "filename": "infra/specs/test_suite_exceptions.pyl",
+        "patchSetId": 24
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "I used the wrong bug tag here, the correct one is 7777 (lucky). Updated.",
+      "parentUuid": "66dc4462_91da10c5",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3e28acc_68676b38",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5968ad03_b036a4b4",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "See gl.xml in the third_party folder, it doesn\u0027t use gles3, just gles2 and gles1. Basically gles 1 and 2+ are totally separate APIs, but 3/3.1/3.2 are all supersets of the prior.",
+      "parentUuid": "c3e28acc_68676b38",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84e3d625_40925dee",
@@ -82,6 +118,24 @@
       "writtenOn": "2022-10-21T19:26:35Z",
       "side": 1,
       "message": "Can I ask why we need two different flags for the same purpose?",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf531b4_3c161196",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "Just for convenience. \"need\" is a strong word. 😊",
+      "parentUuid": "84e3d625_40925dee",
       "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +180,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54302819_b5540f89",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 24
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "No, removed, thanks for catching.",
+      "parentUuid": "0490efb1_d87eb49a",
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66b95995_43f854a7",
@@ -139,6 +211,30 @@
       "writtenOn": "2022-10-21T18:01:54Z",
       "side": 1,
       "message": "Note: It is immensely helpful to record a C trace with the prior CL and use it for reference when reviewing this file.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 33
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813bd37c_9e4f9d41",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "66b95995_43f854a7",
       "range": {
         "startLine": 33,
         "startChar": 0,
@@ -172,6 +268,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67aca542_b506485f",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f681d1e_b4166147",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44a8b0ce_ce9a33e0",
@@ -185,6 +305,30 @@
       "writtenOn": "2022-10-21T18:01:54Z",
       "side": 1,
       "message": "This is only called for `ReplayFrame`, which includes a switch statement and no other control flow.  So (if I\u0027m reading this right) it is specifically looking for the end of the switch statement (`}`), moving past it with `advance`, and then `advance`ing again to go beyond the function\u0027s close curly brace?\n\nIf I\u0027m reading it wrong, then this is exiting early when it hits the switch statement curly brace.",
+      "range": {
+        "startLine": 121,
+        "startChar": 9,
+        "endLine": 121,
+        "endChar": 21
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48d801ca_c2839a5e",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "It\u0027s looking for a line that begins with }. Every function in our simplified C format ends on a line that begins with }, and all other statements are indented with whitespace. Since this maybe was non-obvious I left a comment.",
+      "parentUuid": "44a8b0ce_ce9a33e0",
       "range": {
         "startLine": 121,
         "startChar": 9,
@@ -242,6 +386,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06bb204a_79b3af5f",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "It\u0027s one character. in C/C++, if you want a \\ literal, you need to escape it, like with `\\n` or `\\\u0027` or `\\\"`.",
+      "parentUuid": "b5521feb_965da79e",
+      "range": {
+        "startLine": 136,
+        "startChar": 16,
+        "endLine": 136,
+        "endChar": 30
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3386db9_01975244",
@@ -255,6 +423,30 @@
       "writtenOn": "2022-10-21T18:01:54Z",
       "side": 1,
       "message": "This could use an explainer. What\u0027s the non-whitespace being skipped here?  Is it the return value of the function?",
+      "range": {
+        "startLine": 186,
+        "startChar": 8,
+        "endLine": 186,
+        "endChar": 25
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c98f925_12215bcf",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "\"void\". aka the return value. Added a comment.",
+      "parentUuid": "d3386db9_01975244",
       "range": {
         "startLine": 186,
         "startChar": 8,
@@ -290,6 +482,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ade6018e_5531e1d9",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "Maybe take a look at my comment above. It\u0027s skipping a function.",
+      "parentUuid": "0959c15f_3599298d",
+      "range": {
+        "startLine": 194,
+        "startChar": 45,
+        "endLine": 194,
+        "endChar": 63
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "041250e2_94f90618",
         "filename": "util/capture/trace_interpreter.cpp",
         "patchSetId": 24
@@ -301,6 +517,30 @@
       "writtenOn": "2022-10-21T18:01:54Z",
       "side": 1,
       "message": "Its not immediately clear to me why we are passing the shader map to every function.  Will keep looking.",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 93
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e558cbc_0699c340",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "```\ntemplate \u003c\u003e\nvoid PackParameter\u003cconst char *const *\u003e(ParamBuffer \u0026params,\n                                        const Token \u0026token,\n                                        const TraceShaderMap \u0026shaders)\n{\n    auto iter \u003d shaders.find(token);\n    ASSERT(iter !\u003d shaders.end());\n    const TraceShader \u0026shader \u003d iter-\u003esecond;\n    params.addUnnamedParam(ParamType::TGLcharConstPointerPointer, shader.pointers.data());\n}\n```\n\nLeft a comment for posterity.",
+      "parentUuid": "041250e2_94f90618",
       "range": {
         "startLine": 252,
         "startChar": 0,
@@ -336,6 +576,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f1e586a_e869e29d",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "We can\u0027t get fooled by \"}\" because readStringAppend below will consume the }, because it consumes everything between the quotes.\n\nHappy if you want to stress test this, but my intuition-based testing and limited code reading skills tells me it should work. 😊",
+      "parentUuid": "acda7347_cc6ce72e",
+      "range": {
+        "startLine": 279,
+        "startChar": 8,
+        "endLine": 279,
+        "endChar": 29
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7bfcb1a_bc244284",
         "filename": "util/capture/trace_interpreter.cpp",
         "patchSetId": 24
@@ -347,6 +611,30 @@
       "writtenOn": "2022-10-21T19:26:15Z",
       "side": 1,
       "message": "Can you provide an example of what this is looking for?",
+      "range": {
+        "startLine": 420,
+        "startChar": 4,
+        "endLine": 420,
+        "endChar": 41
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf85ced_5273befd",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "null pointer.. it\u0027s looking for a string that contains literally \"0\". Added a comment for posterity.",
+      "parentUuid": "d7bfcb1a_bc244284",
       "range": {
         "startLine": 420,
         "startChar": 4,
@@ -370,6 +658,30 @@
       "writtenOn": "2022-10-21T19:26:15Z",
       "side": 1,
       "message": "Is this TODO, or cannot be supported?",
+      "range": {
+        "startLine": 523,
+        "startChar": 0,
+        "endLine": 524,
+        "endChar": 19
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "554ba58e_50d94f66",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "It\u0027s implementable. Filed http://anglebug.com/7779 and left a TODO.",
+      "parentUuid": "9c29f43b_ffc46318",
       "range": {
         "startLine": 523,
         "startChar": 0,
@@ -405,6 +717,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f705890a_7efdb2f5",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "That\u0027s why I left it out, to keep it de-templated. YMMV.",
+      "parentUuid": "08dcf687_43da60d0",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 562,
+        "endChar": 65
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f27e8dc9_3b58b267",
         "filename": "util/capture/trace_interpreter.cpp",
         "patchSetId": 24
@@ -428,6 +764,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0131211_ea528120",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "I\u0027m not sure actually if they\u0027re all necessary for our current set of traces, but they are necessary for compilation with the set of functions we have in ANGLE. I filed http://anglebug.com/7780 , but since I wasn\u0027t sure what function set was used for the traces, I didn\u0027t add TODOs.",
+      "parentUuid": "f27e8dc9_3b58b267",
+      "range": {
+        "startLine": 588,
+        "startChar": 0,
+        "endLine": 588,
+        "endChar": 18
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a3492f1_328460de",
         "filename": "util/capture/trace_interpreter.cpp",
         "patchSetId": 24
@@ -439,6 +799,30 @@
       "writtenOn": "2022-10-21T19:26:15Z",
       "side": 1,
       "message": "Can you share how this type indicates a need for searching through shaders?",
+      "range": {
+        "startLine": 716,
+        "startChar": 19,
+        "endLine": 716,
+        "endChar": 38
+      },
+      "revId": "bcf74bcac369187b6ad467396b0340032d30db91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14962327_80d753f7",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T21:22:23Z",
+      "side": 1,
+      "message": "The \"token\" here correponds to a shader name. If we run into another entry point that takes an array of strings we can separate them out that way. Not thinking of one off the top of my head. Left a comment.",
+      "parentUuid": "9a3492f1_328460de",
       "range": {
         "startLine": 716,
         "startChar": 19,
