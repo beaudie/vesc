@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40ae27fc_e4883e76",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T14:12:36Z",
+      "side": 1,
+      "message": "wdyt about passing this as an argument to this function for clarity?",
+      "range": {
+        "startLine": 567,
+        "startChar": 25,
+        "endLine": 567,
+        "endChar": 62
+      },
+      "revId": "72f108f32019c96bfad813e40a0bbf92ff54bdac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1110ad4_a2563eb7",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T14:12:36Z",
+      "side": 1,
+      "message": "It\u0027s not obvious from the code what is used here to calculate steps (and why). Duration of the last `runTrial` run? Comment or explicit arg might help.",
+      "range": {
+        "startLine": 630,
+        "startChar": 18,
+        "endLine": 630,
+        "endChar": 36
+      },
+      "revId": "72f108f32019c96bfad813e40a0bbf92ff54bdac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce3f78ea_3ece2f61",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T14:12:36Z",
+      "side": 1,
+      "message": "Isn\u0027t this going to have a side effect on the next test when running multiple tests?",
+      "range": {
+        "startLine": 644,
+        "startChar": 4,
+        "endLine": 644,
+        "endChar": 21
+      },
+      "revId": "72f108f32019c96bfad813e40a0bbf92ff54bdac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
