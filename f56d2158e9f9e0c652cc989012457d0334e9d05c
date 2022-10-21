@@ -34,6 +34,24 @@
       "parentUuid": "249b1f25_1b23f845",
       "revId": "f56d2158e9f9e0c652cc989012457d0334e9d05c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6823231_148f18cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-21T03:58:02Z",
+      "side": 1,
+      "message": "Please make sure to test switching between RGBA and BGRA textures between draw calls",
+      "parentUuid": "0cfb272c_3014e80f",
+      "revId": "f56d2158e9f9e0c652cc989012457d0334e9d05c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
