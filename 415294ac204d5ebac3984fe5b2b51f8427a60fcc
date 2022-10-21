@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b98ac3e_1972cc52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 34
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T10:21:57Z",
+      "side": 1,
+      "message": "There are so many different entry points that take Sync parameters that instead I think we should switch Syncs to use an ID-indexed resource map. Filed http://anglebug.com/7775 to track this work as it\u0027s not necessary for T-Rex and I likely won\u0027t have time to complete it today.",
+      "parentUuid": "e2c2ea4d_66ec1e26",
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "941e25f4_54134462",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-10-21T05:54:05Z",
       "side": 1,
       "message": "This could use a short explainer.",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 59
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76422b91_bd4b119c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T10:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "941e25f4_54134462",
       "range": {
         "startLine": 273,
         "startChar": 0,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80e081ce_63569b3e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T10:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2661b0bf_37835023",
+      "range": {
+        "startLine": 536,
+        "startChar": 0,
+        "endLine": 539,
+        "endChar": 9
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee6431e3_391cb1c4",
@@ -77,6 +143,30 @@
       "writtenOn": "2022-10-21T05:54:05Z",
       "side": 1,
       "message": "Also here.  Or maybe just an overall comment about how you are breaking up the strings.",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 558,
+        "endChar": 30
+      },
+      "revId": "415294ac204d5ebac3984fe5b2b51f8427a60fcc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5b088a_6ae8e9e4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-21T10:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee6431e3_391cb1c4",
       "range": {
         "startLine": 558,
         "startChar": 0,
