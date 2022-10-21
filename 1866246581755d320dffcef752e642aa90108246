@@ -87,6 +87,30 @@
       },
       "revId": "1866246581755d320dffcef752e642aa90108246",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de701db6_62adcc08",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-21T13:42:38Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/3971078",
+      "parentUuid": "0cccc583_6c055677",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 30
+      },
+      "revId": "1866246581755d320dffcef752e642aa90108246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
