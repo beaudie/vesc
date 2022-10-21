@@ -56,6 +56,30 @@
       },
       "revId": "7588aa4af2399e409c69c22bbbd8e02b258d17a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "262d422d_ad4789cc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-21T02:36:00Z",
+      "side": 1,
+      "message": "Previously, we had:\n\n```\nif (x)\n{\n    transitions.reset();\n}\nelse if (transitions.any())\n{\n    transitions.reset();\n}\n```\n\nEither way, at the end `transitions` wouldn\u0027t have any bits. This just moves it out so `transitions.reset()` is called unconditionally; in the worst case it was already zero.",
+      "parentUuid": "e4de22b9_e9bb0017",
+      "range": {
+        "startLine": 1818,
+        "startChar": 4,
+        "endLine": 1818,
+        "endChar": 40
+      },
+      "revId": "7588aa4af2399e409c69c22bbbd8e02b258d17a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
