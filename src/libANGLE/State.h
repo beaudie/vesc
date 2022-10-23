@@ -616,7 +616,7 @@ class State : angle::NonCopyable
     GLuint getPatchVertices() const { return mPatchVertices; }
 
     // GL_ANGLE_shader_pixel_local_storage
-    void setPixelLocalStorageActivePlanes(GLuint planes);
+    void setPixelLocalStorageActivePlanes(GLuint n);
     GLuint getPixelLocalStorageActivePlanes() const { return mPixelLocalStorageActivePlanes; }
 
     // State query functions
