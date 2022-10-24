@@ -170,6 +170,8 @@ EGLSurface CreatePbufferFromClientBuffer(Thread *thread,
                                          Config *configuration,
                                          const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePbufferFromClientBuffer",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
@@ -187,6 +189,8 @@ EGLSurface CreatePbufferSurface(Thread *thread,
                                 Config *configuration,
                                 const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePbufferSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
@@ -202,6 +206,8 @@ EGLSurface CreatePixmapSurface(Thread *thread,
                                EGLNativePixmapType pixmap,
                                const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePixmapSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
@@ -219,6 +225,8 @@ EGLSurface CreatePlatformPixmapSurface(Thread *thread,
                                        void *pixmap,
                                        const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformPixmapSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface                 = nullptr;
@@ -237,6 +245,8 @@ EGLSurface CreatePlatformWindowSurface(Thread *thread,
                                        void *win,
                                        const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformWindowSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface                 = nullptr;
@@ -268,6 +278,8 @@ EGLSurface CreateWindowSurface(Thread *thread,
                                EGLNativeWindowType win,
                                const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateWindowSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
 
@@ -307,6 +319,8 @@ EGLBoolean DestroyImage(Thread *thread, Display *display, ImageID imageID)
 
 EGLBoolean DestroySurface(Thread *thread, Display *display, egl::SurfaceID surfaceID)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     Surface *eglSurface = display->getSurface(surfaceID);
 
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySurface",

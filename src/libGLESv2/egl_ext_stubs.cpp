@@ -77,6 +77,8 @@ EGLSurface CreatePlatformPixmapSurfaceEXT(Thread *thread,
                                           void *native_pixmap,
                                           const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformPixmapSurfaceEXT",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     thread->setError(EGL_BAD_DISPLAY, "eglCreatePlatformPixmapSurfaceEXT",
@@ -90,6 +92,8 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
                                           void *native_window,
                                           const AttributeMap &attributes)
 {
+    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformWindowSurfaceEXT",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
