@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e201ca3_ad5eb2d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000770
+      },
+      "writtenOn": "2022-10-24T13:51:41Z",
+      "side": 1,
+      "message": "Hi, this change has broken the ANGLE-\u003eSkia roller. I think we just need the autogen\u0027ed file to #include cstring.\n\nBroken build exampled:\nhttps://logs.chromium.org/logs/skia/5e121bb98d7b9d11/+/steps/ninja/0/stdout",
+      "revId": "cd10b6d25a6bb9eef7dfb7c84d1837cbb9679a67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
