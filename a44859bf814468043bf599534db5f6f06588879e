@@ -67,6 +67,24 @@
       "message": "Can you tell me a bit more about this change? Why do we need to add a new declaration to the resized var?",
       "revId": "a44859bf814468043bf599534db5f6f06588879e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0ea9ac4_e5da4c33",
+        "filename": "src/compiler/translator/tree_util/ReplaceClipCullDistanceVariable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-24T21:42:46Z",
+      "side": 1,
+      "message": "The `gl_ClipDistance` variable is missing from `ANGLE_VertexOut` struct when it\u0027s not redeclared in the original shader. This line adds it there with an appropriate size.",
+      "parentUuid": "97dfcd0d_b8fb6361",
+      "revId": "a44859bf814468043bf599534db5f6f06588879e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
