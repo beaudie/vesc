@@ -30,6 +30,9 @@ declare_args() {
   # Enable Command Queue 2
   svdt_enable_vulkan_command_queue_2 = true
 
+  # Enable submit thread used in Command Queue 2 (enables async command queue)
+  svdt_enable_vulkan_submit_thread_task_queue = false
+
   # Enable Fence Waiting used in Command Queue 2
   svdt_enable_vulkan_command_queue_concurrent_wait = true
 }
@@ -271,6 +274,12 @@ config("angle_vulkan_backend_config") {
   # Command Queue 2
   defines += [ "SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2=" +
                "${svdt_enable_vulkan_command_queue_2}" ]
+
+  # Submit thread
+  assert(svdt_enable_vulkan_command_queue_2 ||
+         !svdt_enable_vulkan_submit_thread_task_queue)
+  defines += [ "SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE=" +
+               "${svdt_enable_vulkan_submit_thread_task_queue}" ]
 
   # Fence Waiting
   assert(svdt_enable_vulkan_command_queue_2 ||
