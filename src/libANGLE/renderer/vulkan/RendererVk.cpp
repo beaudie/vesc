@@ -3722,7 +3722,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             isImmediateModeRenderer);
 
     // Currently disabled by default: http://anglebug.com/4324
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, true);
+#else
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
+#endif
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);

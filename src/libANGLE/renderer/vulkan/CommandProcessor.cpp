@@ -707,6 +707,11 @@ angle::Result CommandProcessor::waitForWorkComplete(Context *context)
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForWorkComplete");
     std::unique_lock<std::mutex> lock(mWorkerMutex);
     mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
+    // Worker thread is idle and command queue is empty so good to continue
+
+#if SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2 && SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    mCommandQueue.waitSubmitThreadIdle();
+#endif
 
     // Sync any errors to the context
     bool shouldStop = hasPendingError();
@@ -1662,11 +1667,25 @@ angle::Result CommandQueue2::init(Context *context, const DeviceQueueMap &queueM
         ANGLE_TRY(mCmdsStateMap[1].pool.init(context, true, queueMap.getIndex()));
     }
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    if (context->getRenderer()->getFeatures().asyncCommandQueue.enabled)
+    {
+        // CommandProcessor is required for handleError() and Present result handling.
+        mSubmitThreadTaskQueue.init();
+        mUseSubmitThread = true;
+    }
+#    endif
+
     return angle::Result::Continue;
 }
 
 void CommandQueue2::destroy(Context *context)
 {
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    mUseSubmitThread = false;
+    mSubmitThreadTaskQueue.destroy();
+#    endif
+
     for (VkQueue queue : mQueueMap)
     {
         if (queue != VK_NULL_HANDLE)
@@ -1678,6 +1697,9 @@ void CommandQueue2::destroy(Context *context)
     // Mark everything as completed
     updateLastCompletedQueueSerial({}, Serial::Infinite());
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    resetCompletedBuffers(context);
+#    endif
     clearGarbageQueue(context, Serial::Infinite());
 
     ASSERT(mPendingStateResetIndex == mNextPrepareIndex);
@@ -1696,8 +1718,22 @@ void CommandQueue2::destroy(Context *context)
     mFenceRecycler.destroy(context);
 }
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+void CommandQueue2::waitSubmitThreadIdle()
+{
+    if (mUseSubmitThread)
+    {
+        mSubmitThreadTaskQueue.waitIdle();
+    }
+}
+#    endif
+
 void CommandQueue2::handleDeviceLost(RendererVk *renderer)
 {
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    waitSubmitThreadIdle();
+#    endif
+
     VkDevice device = renderer->getDevice();
 
     for (QueueItemIndex index = 0; index < kQueueCapacity; ++index)
@@ -2303,7 +2339,23 @@ angle::Result CommandQueue2::doSubmitFrame(Context *context,
     item.submitInfo.commandBufferCount = 1;
     item.submitInfo.pCommandBuffers    = item.commandBuffer.ptr();
 
-    ANGLE_TRY(doSubmitFrameJob(context, std::move(itemSubmitScope)));
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    if (mUseSubmitThread)
+    {
+        mSubmitThreadTaskQueue.enqueue(
+            [this, context, scope = std::move(itemSubmitScope)]() mutable {
+                ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue2::doSubmitFrameJob");
+                QueueItem::SubmitScope itemSubmitScope(std::move(scope));
+                itemSubmitScope.setInSubmitThread();
+                return doSubmitFrameJob(context, std::move(itemSubmitScope));
+            });
+        resetCompletedBuffers(context);
+    }
+    else
+#    endif
+    {
+        ANGLE_TRY(doSubmitFrameJob(context, std::move(itemSubmitScope)));
+    }
 
     return angle::Result::Continue;
 }
@@ -2340,6 +2392,37 @@ bool CommandQueue2::checkIfCommandBufferValid(bool hasProtectedContent)
     return cmdsState.currentBuffer.valid();
 }
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+void CommandQueue2::resetCompletedBuffers(Context *context)
+{
+    {
+        std::lock_guard<std::mutex> lock(mCompletedBuffersMutex);
+
+        for (CmdsState &cmdsState : mCmdsStateMap)
+        {
+            ASSERT(cmdsState.completedBuffersPop.empty());
+            if (!cmdsState.completedBuffersPush.empty())
+            {
+                swap(cmdsState.completedBuffersPush, cmdsState.completedBuffersPop);
+            }
+        }
+    }
+
+    for (CmdsState &cmdsState : mCmdsStateMap)
+    {
+        if (!cmdsState.completedBuffersPop.empty())
+        {
+            for (vk::PrimaryCommandBuffer &buffer : cmdsState.completedBuffersPop)
+            {
+                const angle::Result result = cmdsState.pool.collect(context, std::move(buffer));
+                ASSERT(result == angle::Result::Continue);
+            }
+            cmdsState.completedBuffersPop.clear();
+        }
+    }
+}
+#    endif
+
 angle::Result CommandQueue2::doSubmitFrameJob(Context *context,
                                               QueueItem::SubmitScope &&itemSubmitScope)
 {
@@ -2362,7 +2445,23 @@ angle::Result CommandQueue2::doQueueSubmitOneOff(Context *context, QueueItemInde
 {
     QueueItem::SubmitScope itemSubmitScope(context, this, itemIndex);
 
-    ANGLE_TRY(queueSubmit(context, std::move(itemSubmitScope)));
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    if (mUseSubmitThread)
+    {
+        mSubmitThreadTaskQueue.enqueue(
+            [this, context, scope = std::move(itemSubmitScope)]() mutable {
+                ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue2::doQueueSubmitOneOffJob");
+                QueueItem::SubmitScope itemSubmitScope(std::move(scope));
+                itemSubmitScope.setInSubmitThread();
+                return queueSubmit(context, std::move(itemSubmitScope));
+            });
+        resetCompletedBuffers(context);
+    }
+    else
+#    endif
+    {
+        ANGLE_TRY(queueSubmit(context, std::move(itemSubmitScope)));
+    }
 
     return angle::Result::Continue;
 }
@@ -2482,8 +2581,68 @@ void CommandQueue2::doQueuePresent(Context *context,
                                    const VkPresentInfoKHR &presentInfo,
                                    ON_PRESENT_RESULT &&onPresentResult)
 {
-    doQueuePresentJob(context, priority, presentInfo,
-                      std::forward<ON_PRESENT_RESULT>(onPresentResult));
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    if (mUseSubmitThread)
+    {
+        ASSERT(presentInfo.swapchainCount == 1);
+        ASSERT(presentInfo.waitSemaphoreCount == 1);
+        ASSERT(presentInfo.pResults == nullptr);
+
+        std::vector<VkRectLayerKHR> vkRects;
+        if (presentInfo.pNext)
+        {
+            const VkStructureType sType = *static_cast<const VkStructureType *>(presentInfo.pNext);
+            if (sType == VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR)
+            {
+                const auto &regions = *static_cast<const VkPresentRegionsKHR *>(presentInfo.pNext);
+                ASSERT(regions.pNext == nullptr);
+                ASSERT(regions.swapchainCount == 1);
+                const VkPresentRegionKHR &region = regions.pRegions[0];
+                vkRects.resize(region.rectangleCount);
+                std::copy(region.pRectangles, region.pRectangles + region.rectangleCount,
+                          vkRects.begin());
+            }
+            else
+            {
+                ERR() << "Unknown sType: " << sType << " in VkPresentInfoKHR.pNext chain";
+                UNREACHABLE();
+            }
+        }
+
+        mSubmitThreadTaskQueue.enqueue(
+            [this, context, priority, swapchain = presentInfo.pSwapchains[0],
+             imageIndex    = presentInfo.pImageIndices[0],
+             waitSemaphore = presentInfo.pWaitSemaphores[0], vkRects = std::move(vkRects),
+             onPresentResult = std::forward<ON_PRESENT_RESULT>(onPresentResult)]() mutable {
+                ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue2::doQueuePresentJob");
+                VkPresentInfoKHR presentInfo       = {};
+                presentInfo.sType                  = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+                presentInfo.swapchainCount         = 1;
+                presentInfo.pSwapchains            = &swapchain;
+                presentInfo.pImageIndices          = &imageIndex;
+                presentInfo.waitSemaphoreCount     = 1;
+                presentInfo.pWaitSemaphores        = &waitSemaphore;
+                VkPresentRegionsKHR presentRegions = {};
+                VkPresentRegionKHR presentRegion   = {};
+                if (!vkRects.empty())
+                {
+                    presentInfo.pNext             = &presentRegions;
+                    presentRegions.sType          = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR;
+                    presentRegions.swapchainCount = 1;
+                    presentRegions.pRegions       = &presentRegion;
+                    presentRegion.pRectangles     = vkRects.data();
+                    presentRegion.rectangleCount  = static_cast<uint32_t>(vkRects.size());
+                }
+                doQueuePresentJob(context, priority, presentInfo, std::move(onPresentResult));
+                return angle::Result::Continue;
+            });
+    }
+    else
+#    endif
+    {
+        doQueuePresentJob(context, priority, presentInfo,
+                          std::forward<ON_PRESENT_RESULT>(onPresentResult));
+    }
 }
 
 template <class ON_PRESENT_RESULT>
@@ -2505,9 +2664,20 @@ angle::Result CommandQueue2::cleanupAllGarbage(Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue2::cleanupAllGarbage");
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    // Wait here, to be able to safely call below methods
+    waitSubmitThreadIdle();
+#    endif
+
     const Serial completedSerial = getLastCompletedQueueSerial();
 
     collectCommandBuffers(context, completedSerial);
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    if (mUseSubmitThread)
+    {
+        resetCompletedBuffers(context);
+    }
+#    endif
     resetSubmittedItems();
 
     ANGLE_TRY(clearGarbage(context, completedSerial));
@@ -2641,6 +2811,14 @@ CommandQueue2::QueueItem::SubmitScope::~SubmitScope()
 
     if (ANGLE_UNLIKELY(mItem))  // Submit failed
     {
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+        if (!mIsInSubmitThread)
+        {
+            // If failed not in the Submit thread, need to wait before cleanup
+            mOwner->waitSubmitThreadIdle();
+        }
+#    endif
+
         mOwner->advanceSubmitIndex(mItemIndex);
 
         ASSERT(mItem->getState() == State::Idle);
@@ -2648,12 +2826,30 @@ CommandQueue2::QueueItem::SubmitScope::~SubmitScope()
         mItem->resetFence(mOwner);
         mItem->setStateAndNotify(State::Error);
     }
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    else
+    {
+        ASSERT(!mOwner->mUseSubmitThread || mIsInSubmitThread);
+    }
+#    endif
 
     mOwner->checkAndCollectCommandBuffers(mContext);
 }
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+void CommandQueue2::QueueItem::SubmitScope::setInSubmitThread()
+{
+    ASSERT(mOwner->mUseSubmitThread && !mIsInSubmitThread);
+    mIsInSubmitThread = true;
+}
+#    endif
+
 void CommandQueue2::QueueItem::SubmitScope::setSubmitOK()
 {
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    ASSERT(!mOwner->mUseSubmitThread || mIsInSubmitThread);
+#    endif
+
     mOwner->advanceSubmitIndex(mItemIndex);
 
     ASSERT(mItem != nullptr);
@@ -2761,9 +2957,19 @@ void CommandQueue2::QueueItem::collectCommandBuffer(Context *context, CommandQue
 
     if (commandBuffer.valid())
     {
-        CmdsState &cmdsState       = owner->mCmdsStateMap[hasProtectedContent];
-        const angle::Result result = cmdsState.pool.collect(context, std::move(commandBuffer));
-        ASSERT(result == angle::Result::Continue);
+        CmdsState &cmdsState = owner->mCmdsStateMap[hasProtectedContent];
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+        if (owner->mUseSubmitThread)
+        {
+            std::lock_guard<std::mutex> lock(owner->mCompletedBuffersMutex);
+            cmdsState.completedBuffersPush.emplace_back(std::move(commandBuffer));
+        }
+        else
+#    endif
+        {
+            const angle::Result result = cmdsState.pool.collect(context, std::move(commandBuffer));
+            ASSERT(result == angle::Result::Continue);
+        }
     }
 }
 
@@ -2821,7 +3027,94 @@ CommandQueue2::QueueItem::State CommandQueue2::QueueItem::waitState(DynamicTimeo
     return state;
 }
 
-#endif  // SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+CommandQueue2::SubmitThreadTaskQueue::~SubmitThreadTaskQueue()
+{
+    ASSERT(!mSubmitThread.joinable());
+    ASSERT(mTaskQueue.empty());
+}
+
+void CommandQueue2::SubmitThreadTaskQueue::init()
+{
+    ASSERT(!mSubmitThread.joinable());
+    mSubmitThread = std::thread([this]() { processTaskQueue(); });
+}
+
+void CommandQueue2::SubmitThreadTaskQueue::destroy()
+{
+    if (mSubmitThread.joinable())
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mNeedExit = true;
+        mCondVar.unlockAndNotifyAll(lock);
+        mSubmitThread.join();
+    }
+}
+
+template <class F>
+void CommandQueue2::SubmitThreadTaskQueue::enqueue(F &&functor)
+{
+    ASSERT(mSubmitThread.joinable());
+    std::unique_lock<std::mutex> lock(mMutex);
+    mTaskQueue.emplace_back(std::forward<F>(functor));
+    mIsBusy = true;
+    mCondVar.unlockAndNotifyAll(lock);
+}
+
+void CommandQueue2::SubmitThreadTaskQueue::waitIdle()
+{
+    ASSERT(mSubmitThread.joinable());
+    ANGLE_TRACE_EVENT0("gpu.angle", "SubmitThreadTaskQueue::waitIdle");
+    std::unique_lock<std::mutex> lock(mMutex);
+
+    while (mIsBusy)
+    {
+        ASSERT(!mNeedExit);
+        mCondVar.wait(lock);
+    }
+}
+
+void CommandQueue2::SubmitThreadTaskQueue::processTaskQueue()
+{
+    for (;;)
+    {
+        QueueTask task;
+        if (!tryPopNextTask(&task))
+        {
+            break;
+        }
+        const angle::Result result = task.execute();
+        if (result != angle::Result::Continue)
+        {
+            UNREACHABLE();  // TODO: Investigate this case
+        }
+    }
+}
+
+bool CommandQueue2::SubmitThreadTaskQueue::tryPopNextTask(QueueTask *taskOut)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+
+    while (mTaskQueue.empty() && !mNeedExit)
+    {
+        mIsBusy = false;
+        mCondVar.notifyAll(lock);
+        mCondVar.wait(lock);
+    }
+
+    if (mTaskQueue.empty())
+    {
+        ASSERT(mNeedExit);
+        return false;
+    }
+
+    *taskOut = std::move(mTaskQueue.front());
+    mTaskQueue.pop_front();
+
+    return true;
+}
+#    endif  // SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+#endif      // SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
 
 }  // namespace vk
 }  // namespace rx
