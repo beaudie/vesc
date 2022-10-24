@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddc09766_a90ea157",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-24T20:02:36Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "43a0bd55_3448e333",
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07794c4f_26128f07",
@@ -84,6 +102,30 @@
       "writtenOn": "2022-10-15T01:55:40Z",
       "side": 1,
       "message": "This should really use the system\u0027s thread count. If you pass in the thread pool from the context, then you could query the thread count from that instead.",
+      "range": {
+        "startLine": 22,
+        "startChar": 19,
+        "endLine": 22,
+        "endChar": 30
+      },
+      "revId": "cf20473e0602f49ae72a1016bc8ec8060b27ed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e0ad26d_e584df56",
+        "filename": "src/image_util/AstcDecompressor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2022-10-24T20:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07794c4f_26128f07",
       "range": {
         "startLine": 22,
         "startChar": 19,
