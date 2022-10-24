@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df0babc2_0e941974",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ModifyStruct.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f54a8696_f704b65f",
+      "revId": "a44859bf814468043bf599534db5f6f06588879e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97dfcd0d_b8fb6361",
