@@ -668,6 +668,10 @@ class CommandQueue2 final : angle::NonCopyable
   public:
     // Single Context thread
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    void waitSubmitThreadIdle();  // Safe to call after destroy()
+#    endif
+
     angle::Result prepareNextSubmit(Context *context,
                                     bool hasProtectedContent,
                                     QueuePriority priority,
@@ -729,6 +733,9 @@ class CommandQueue2 final : angle::NonCopyable
                 return *mItem;
             }
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+            void setInSubmitThread();
+#    endif
             void setSubmitOK();
 
           private:
@@ -736,6 +743,9 @@ class CommandQueue2 final : angle::NonCopyable
             CommandQueue2 *mOwner;
             const QueueItemIndex mItemIndex;
             QueueItem *mItem;
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+            bool mIsInSubmitThread = false;
+#    endif
         };
 
       public:
@@ -797,10 +807,79 @@ class CommandQueue2 final : angle::NonCopyable
         mutable CondVarHelper mCondVar;
     };
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    class QueueTask final
+    {
+      public:
+        QueueTask() = default;
+
+        template <class F>
+        explicit QueueTask(F &&functor)
+        {
+            mPtr.reset(new Wrapper<std::remove_reference_t<F>>(std::forward<F>(functor)));
+        }
+
+        angle::Result execute() { return mPtr->execute(); }
+
+      private:
+        class Interface
+        {
+          public:
+            virtual ~Interface() = default;
+            virtual angle::Result execute() = 0;
+        };
+
+        template <class T>
+        class Wrapper final : public Interface
+        {
+          public:
+            template <class F>
+            Wrapper(F &&functor) : mFunctor(std::forward<F>(functor))
+            {}
+            virtual angle::Result execute() final override { return mFunctor(); }
+
+          private:
+            T mFunctor;
+        };
+
+      private:
+        std::unique_ptr<Interface> mPtr;
+    };
+
+    class SubmitThreadTaskQueue final : angle::NonCopyable
+    {
+      public:
+        ~SubmitThreadTaskQueue();
+
+        void init();
+        void destroy();
+
+        template <class F>
+        void enqueue(F &&functor);
+        void waitIdle();
+
+      private:
+        void processTaskQueue();
+        bool tryPopNextTask(QueueTask *taskOut);
+
+      private:
+        std::deque<QueueTask> mTaskQueue;
+        std::thread mSubmitThread;
+        std::mutex mMutex;
+        CondVarHelper mCondVar;
+        bool mIsBusy = false;
+        bool mNeedExit = false;
+    };
+#    endif  // SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+
     struct CmdsState
     {
         PersistentCommandPool pool;
         PrimaryCommandBuffer currentBuffer;
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+        std::vector<vk::PrimaryCommandBuffer> completedBuffersPush;
+        std::vector<vk::PrimaryCommandBuffer> completedBuffersPop;
+#    endif
     };
 
   private:
@@ -896,6 +975,11 @@ class CommandQueue2 final : angle::NonCopyable
     std::atomic<Serial> mLastSubmittedQueueSerial{Serial()};  // Multiple threads
     std::atomic<Serial> mCurrentQueueSerial{mQueueSerialFactory.generate()};  // Multiple threads
 
+#    if SVDT_ENABLE_VULKAN_SUBMIT_THREAD_TASK_QUEUE
+    SubmitThreadTaskQueue mSubmitThreadTaskQueue;
+    std::mutex mCompletedBuffersMutex;
+    bool mUseSubmitThread = false;
+#    endif
     angle::VulkanPerfCounters mPerfCounters;
 };
 #endif  // SVDT_ENABLE_VULKAN_COMMAND_QUEUE_2
