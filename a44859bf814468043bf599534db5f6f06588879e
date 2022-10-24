@@ -16,6 +16,57 @@
       "message": "Very cool! Thanks for wiring this up! lgtm",
       "revId": "a44859bf814468043bf599534db5f6f06588879e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5bbc11e_04b403d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-24T20:49:15Z",
+      "side": 1,
+      "message": "Looks great Alexey, nice work!",
+      "revId": "a44859bf814468043bf599534db5f6f06588879e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f54a8696_f704b65f",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ModifyStruct.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-24T20:49:15Z",
+      "side": 1,
+      "message": "Might be worth making this a static string.",
+      "revId": "a44859bf814468043bf599534db5f6f06588879e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97dfcd0d_b8fb6361",
+        "filename": "src/compiler/translator/tree_util/ReplaceClipCullDistanceVariable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-10-24T20:49:15Z",
+      "side": 1,
+      "message": "Can you tell me a bit more about this change? Why do we need to add a new declaration to the resized var?",
+      "revId": "a44859bf814468043bf599534db5f6f06588879e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
