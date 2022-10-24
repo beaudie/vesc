@@ -10,6 +10,7 @@
 #include "trace_fixture.h"
 
 #include "angle_trace_gl.h"
+#include "common/debug.h"
 
 #include <string>
 
@@ -67,6 +68,11 @@ void LoadBinaryData(const char *fileName)
         std::vector<uint8_t> compressedData(size);
         (void)fread(compressedData.data(), 1, size, fp);
         gBinaryData = gDecompressCallback(compressedData);
+        if (gBinaryData == nullptr)
+        {
+            // Error already printed by the callback
+            exit(1);
+        }
     }
     else
     {
