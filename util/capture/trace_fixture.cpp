@@ -67,6 +67,7 @@ void LoadBinaryData(const char *fileName)
         std::vector<uint8_t> compressedData(size);
         (void)fread(compressedData.data(), 1, size, fp);
         gBinaryData = gDecompressCallback(compressedData);
+        ASSERT(gBinaryData);
     }
     else
     {
