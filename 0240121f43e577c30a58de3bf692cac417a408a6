@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b58f062c_b94e6857",
+        "filename": "src/image_util/AstcDecompressorNoOp.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-25T01:24:35Z",
+      "side": 1,
+      "message": "super nit: we use `auto` only with complex nested templated types. Otherwise we prefer to be explicit about the types.",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 15
+      },
+      "revId": "0240121f43e577c30a58de3bf692cac417a408a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
