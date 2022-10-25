@@ -41,7 +41,6 @@ class ResourceUse final
     ~ResourceUse() = default;
 
     ResourceUse(const QueueSerial &queueSerial) { setQueueSerial(queueSerial); }
-    ResourceUse(const Serials &otherSerials) { mSerials = otherSerials; }
 
     // Copy constructor
     ResourceUse(const ResourceUse &other) : mSerials(other.mSerials) {}
@@ -114,7 +113,6 @@ class ResourceUse final
     }
 
   private:
-    // The most recent time of use in a VkQueue.
     Serials mSerials;
 };
 

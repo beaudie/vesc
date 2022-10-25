@@ -1218,6 +1218,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void clearAllGarbage();
     void dumpCommandStreamDiagnostics();
     angle::Result flushOutsideRenderPassCommands();
+    angle::Result flushOutsideRenderPassCommandsImpl();
     // Flush commands and end render pass without setting any dirty bits.
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
@@ -1306,7 +1307,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
     void generateOutsideRenderPassCommandsQueueSerial();
-    void generateRenderPassCommandsQueueSerial();
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1607,19 +1607,6 @@ ANGLE_INLINE void ContextVk::generateOutsideRenderPassCommandsQueueSerial()
     ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
     mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
     mOutsideRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
-}
-
-ANGLE_INLINE void ContextVk::generateRenderPassCommandsQueueSerial()
-{
-    // We reserve some serial number for outsideRenderPassCommands in case we have to flush.
-    ASSERT(mOutsideRenderPassCommands->getQueueSerial().valid());
-    mFirstReservedOutsideRenderPassSerial =
-        mRenderer->generateQueueSerial(mCurrentSerialIndex, kMaxReservedOutsideQueueSerials);
-    mReservedOutsideRenderPassSerialCount = kMaxReservedOutsideQueueSerials;
-
-    ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
-    mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
-    mRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
 }
 
 ANGLE_INLINE bool ContextVk::hasUnflushedUse(const vk::ResourceUse &use) const

@@ -1124,10 +1124,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void retainReadOnlyResource(ReadWriteResource *readWriteResource);
     void retainReadWriteResource(ReadWriteResource *readWriteResource);
 
-    void setQueueSerial(SerialIndex index, Serial serial)
-    {
-        mQueueSerial = QueueSerial(index, serial);
-    }
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     // Dumping the command stream is disabled by default.
@@ -1229,6 +1225,11 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     }
 
     void addCommandDiagnostics(ContextVk *contextVk);
+
+    void setQueueSerial(SerialIndex index, Serial serial)
+    {
+        mQueueSerial = QueueSerial(index, serial);
+    }
 
   private:
     angle::Result initializeCommandBuffer(Context *context);
@@ -1343,6 +1344,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   const PackedAttachmentIndex depthStencilAttachmentIndex,
                                   const PackedClearValuesArray &clearValues,
                                   const RenderPassSerial renderPassSerial,
+                                  const QueueSerial &queueSerial,
                                   RenderPassCommandBuffer **commandBufferOut);
 
     angle::Result endRenderPass(ContextVk *contextVk);
