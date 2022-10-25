@@ -165,22 +165,21 @@ class SharedBufferSuballocationGarbage
           mSuballocation(std::move(other.mSuballocation)),
           mBuffer(std::move(other.mBuffer))
     {}
-    SharedBufferSuballocationGarbage(SharedResourceUse &&use,
+    SharedBufferSuballocationGarbage(const ResourceUse &use,
                                      BufferSuballocation &&suballocation,
                                      Buffer &&buffer)
-        : mLifetime(std::move(use)),
-          mSuballocation(std::move(suballocation)),
-          mBuffer(std::move(buffer))
+        : mLifetime(use), mSuballocation(std::move(suballocation)), mBuffer(std::move(buffer))
     {}
     ~SharedBufferSuballocationGarbage() = default;
 
-    bool destroyIfComplete(RendererVk *renderer, Serial completedSerial);
-    bool usedInRecordedCommands() const { return mLifetime.usedInRecordedCommands(); }
+    bool destroyIfComplete(RendererVk *renderer);
+    bool usedInRecordedCommands(RendererVk *renderer) const;
+
     VkDeviceSize getSize() const { return mSuballocation.getSize(); }
     bool isSuballocated() const { return mSuballocation.isSuballocated(); }
 
   private:
-    SharedResourceUse mLifetime;
+    ResourceUse mLifetime;
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
