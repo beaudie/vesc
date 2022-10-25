@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49bf09a_90d50d81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-25T16:21:33Z",
+      "side": 1,
+      "message": "Then it sounds like this piece of code should live in the capture tool. You could test this entirely from the GL side; create a GL buffer, map it and see if you can mprotect it. It should amount to the same thing, don\u0027t you think?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "6692fd7fd3d26bea2fe25b33e7c97f8000833460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d4d68b5f_886d2261",
