@@ -357,9 +357,13 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result finishQueueSerial(Context *context,
                                     const QueueSerial &queueSerial,
                                     uint64_t timeout);
+    // Wait for finishCount command batches to finish.
+    angle::Result finishCommandBatch(Context *context, size_t finishCount, uint64_t timeout);
+    // Wait for finishSerials to finish.
     angle::Result finishResourceUse(Context *context,
                                     const ResourceUse &use,
                                     uint64_t timeout) override;
+    // Wait for all submitted commands to finish.
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
 
     angle::Result submitCommands(Context *context,
@@ -446,6 +450,7 @@ class CommandQueue final : public CommandQueueInterface
 
     // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
+    bool allInflightCommandsAreBeforeQueueSerial(const QueueSerial &submitQueueSerial);
 
     PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
     {
