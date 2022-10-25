@@ -745,6 +745,8 @@
 6528 PIXEL4ORXL GLES : dEQP-GLES3.functional.transform_feedback.random_full_array_capture.* = FAIL
 
 // Pixel 6 expectations
+// dEQP-GLES3.functional.transform_feedback.array_element* and dEQP-GLES3.functional.transform_feedback.random* tests are waived in Android CTS:
+// https://cs.android.com/android/platform/superproject/+/master:external/deqp/external/openglcts/data/mustpass/waivers/waivers.xml;l=68
 6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*float = FAIL
 6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*int = FAIL
 6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*mat2 = FAIL
