@@ -305,7 +305,7 @@ class RendererVk : angle::NonCopyable
         CollectGarbage(&sharedGarbage, garbageIn...);
         if (!sharedGarbage.empty())
         {
-            collectGarbage(std::move(use), std::move(sharedGarbage));
+            collectGarbage(use, std::move(sharedGarbage));
         }
     }
 
@@ -463,7 +463,7 @@ class RendererVk : angle::NonCopyable
                                  const vk::Semaphore *signalSemaphore,
                                  vk::GarbageList &&currentGarbage,
                                  vk::SecondaryCommandPools *commandPools,
-                                 const QueueSerial &submitSerialOut);
+                                 const QueueSerial &submitQueueSerial);
 
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
@@ -613,10 +613,6 @@ class RendererVk : angle::NonCopyable
 
     // The ResourceUse still have unfinished queue serial by vulkan.
     bool hasUnfinishedUse(const vk::ResourceUse &use) const;
-
-    // The ResourceUse still have unfinished queue serial by vulkan.
-    bool useInRunningCommands(const vk::ResourceUse &use) const;
-
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
 
@@ -898,18 +894,6 @@ ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
     else
     {
         return mCommandQueue.hasUnfinishedUse(use);
-    }
-}
-
-ANGLE_INLINE bool RendererVk::useInRunningCommands(const vk::ResourceUse &use) const
-{
-    if (isAsyncCommandQueueEnabled())
-    {
-        return mCommandProcessor.useInRunningCommands(use);
-    }
-    else
-    {
-        return mCommandQueue.useInRunningCommands(use);
     }
 }
 
