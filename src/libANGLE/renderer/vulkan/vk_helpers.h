@@ -91,7 +91,8 @@ class DynamicBuffer : angle::NonCopyable
 
     // This adds in-flight buffers to the mResourceUseList in the share group and then releases
     // them.
-    void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
+    void updateQueueSerialAndReleaseInFlightBuffers(ContextVk *contextVk,
+                                                    const QueueSerial &queueSerial);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
@@ -1118,15 +1119,14 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     bool hasGLMemoryBarrierIssued() const { return mHasGLMemoryBarrierIssued; }
 
-    ResourceUseList &&releaseResourceUseList();
-
     void retainResource(Resource *resource);
 
     void retainReadOnlyResource(ReadWriteResource *readWriteResource);
     void retainReadWriteResource(ReadWriteResource *readWriteResource);
 
-    void assignID(CommandBufferID id) { mID = id; }
-    CommandBufferID releaseID();
+    void resetQueueSerial() { mQueueSerial = QueueSerial(); }
+    void setQueueSerial(const QueueSerial &queueSerial) { mQueueSerial = queueSerial; }
+    const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -1159,9 +1159,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     void addCommandDiagnosticsCommon(std::ostringstream *out);
 
-    // Identifies the command buffer.
-    CommandBufferID mID;
-
     // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
     //  that occur w/ shared allocator between multiple CBHs.
     angle::PoolAllocator mAllocator;
@@ -1184,8 +1181,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
     bool mHasGLMemoryBarrierIssued;
 
     // Tracks resources used in the command buffer.
-    vk::ResourceUseList mResourceUseList;
     uint32_t mUsedBufferCount;
+
+    QueueSerial mQueueSerial;
 };
 
 class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCommon
@@ -1536,12 +1534,9 @@ class CommandBufferRecycler
 
     angle::Result getCommandBufferHelper(Context *context,
                                          CommandPool *commandPool,
-                                         CommandBufferHandleAllocator *freeCommandBuffers,
                                          CommandBufferHelperT **commandBufferHelperOut);
 
-    void recycleCommandBufferHelper(VkDevice device,
-                                    CommandBufferHandleAllocator *freeCommandBuffers,
-                                    CommandBufferHelperT **commandBuffer);
+    void recycleCommandBufferHelper(VkDevice device, CommandBufferHelperT **commandBuffer);
 
     void resetCommandBuffer(CommandBufferT &&commandBuffer);
 
@@ -2629,7 +2624,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
 {
-    return image.usedByCommandBuffer(mID);
+    return image.usedByCommandBuffer(mQueueSerial);
 }
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::isImageWithLayoutTransition(
