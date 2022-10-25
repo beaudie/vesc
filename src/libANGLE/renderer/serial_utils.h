@@ -168,7 +168,6 @@ class QueueSerial final
     QueueSerial(SerialIndex index, Serial serial) : mIndex(index), mSerial(serial)
     {
         ASSERT(index != kInvalidQueueSerialIndex);
-        ASSERT(serial.valid());
     }
     constexpr QueueSerial(const QueueSerial &other)  = default;
     QueueSerial &operator=(const QueueSerial &other) = default;

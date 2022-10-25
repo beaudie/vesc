@@ -439,18 +439,18 @@ angle::Result QueryVk::queryCounter(const gl::Context *context)
     return mQueryHelper.get().flushAndWriteTimestamp(contextVk);
 }
 
-bool QueryVk::hasUnflushedUse(ContextVk *contextVk) const
+bool QueryVk::hasUnsubmittedUse(ContextVk *contextVk) const
 {
     ASSERT(mQueryHelper.isReferenced());
 
-    if (contextVk->hasUnflushedUse(mQueryHelper.get()))
+    if (contextVk->hasUnsubmittedUse(mQueryHelper.get()))
     {
         return true;
     }
 
     for (const vk::Shared<vk::QueryHelper> &query : mStashedQueryHelpers)
     {
-        if (contextVk->hasUnflushedUse(query.get()))
+        if (contextVk->hasUnsubmittedUse(query.get()))
         {
             return true;
         }
@@ -525,12 +525,12 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
     // Note regarding time-elapsed: end should have been called after begin, so flushing when end
     // has pending work should flush begin too.
 
-    if (hasUnflushedUse(contextVk))
+    if (hasUnsubmittedUse(contextVk))
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::GetQueryResult));
 
-        ASSERT(!contextVk->hasUnflushedUse(mQueryHelperTimeElapsedBegin));
-        ASSERT(!contextVk->hasUnflushedUse(mQueryHelper.get()));
+        ASSERT(!contextVk->hasUnsubmittedUse(mQueryHelperTimeElapsedBegin));
+        ASSERT(!contextVk->hasUnsubmittedUse(mQueryHelper.get()));
     }
 
     // If the command buffer this query is being written to is still in flight and uses
@@ -558,7 +558,7 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
                                   "GPU stall due to waiting on uncompleted query");
 
             // Assert that the work has been sent to the GPU
-            ASSERT(!hasUnflushedUse(contextVk));
+            ASSERT(!hasUnsubmittedUse(contextVk));
             ANGLE_TRY(finishRunningCommands(contextVk));
         }
     }
