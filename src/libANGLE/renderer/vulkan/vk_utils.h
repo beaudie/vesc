@@ -21,6 +21,7 @@
 #include "common/backtrace_utils.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/HandleAllocator.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
@@ -185,6 +186,44 @@ struct Error
     uint32_t line;
 };
 
+// Because we release queue index when context becomes non-current, in order to use up all index
+// count, you will need to have 256 threads each has a context current. This is not a reasonable
+// usage case.
+static constexpr int32_t kMaxQueueSerialIndexCount = 256;
+class QueueSerialIndexAllocator final
+{
+  public:
+    QueueSerialIndexAllocator()
+    {
+        mFreeIndexBitSetArray.flip();
+        ASSERT(mFreeIndexBitSetArray.all());
+    }
+    SerialIndex allocate()
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        if (mFreeIndexBitSetArray.none())
+        {
+            return kInvalidQueueSerialIndex;
+        }
+        SerialIndex index = static_cast<SerialIndex>(mFreeIndexBitSetArray.first());
+        ASSERT(index < kMaxQueueSerialIndexCount);
+        mFreeIndexBitSetArray.reset(index);
+        return index;
+    }
+
+    void release(SerialIndex index)
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        ASSERT(index < kMaxQueueSerialIndexCount);
+        ASSERT(!mFreeIndexBitSetArray.test(index));
+        mFreeIndexBitSetArray.set(index);
+    }
+
+  private:
+    angle::BitSetArray<kMaxQueueSerialIndexCount> mFreeIndexBitSetArray;
+    std::mutex mMutex;
+};
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
@@ -203,9 +242,18 @@ class Context : angle::NonCopyable
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    SerialIndex getCurrentSerialIndex() const { return mCurrentSerialIndex; }
+    Serial getCurrentSerial() const { return mCurrentSerial; }
+
   protected:
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
+
+    // Per context queue serial
+    SerialIndex mCurrentSerialIndex;
+    Serial mCurrentSerial;
+    Serial mLastFlushedSerial;
+    Serial mLastSubmittedSerial;
 };
 
 class RenderPassDesc;
@@ -339,29 +387,29 @@ class GarbageAndQueueSerial final : angle::NonCopyable
   public:
     GarbageAndQueueSerial() {}
 
-    GarbageAndQueueSerial(GarbageList &&object, Serial serial)
-        : mObject(std::move(object)), mSerial(serial)
+    GarbageAndQueueSerial(GarbageList &&object, QueueSerial serial)
+        : mObject(std::move(object)), mQueueSerial(serial)
     {}
 
     GarbageAndQueueSerial(GarbageAndQueueSerial &&other)
-        : mObject(std::move(other.mObject)), mSerial(std::move(other.mSerial))
+        : mObject(std::move(other.mObject)), mQueueSerial(std::move(other.mQueueSerial))
     {}
     GarbageAndQueueSerial &operator=(GarbageAndQueueSerial &&other)
     {
-        mObject = std::move(other.mObject);
-        mSerial = std::move(other.mSerial);
+        mObject      = std::move(other.mObject);
+        mQueueSerial = std::move(other.mQueueSerial);
         return *this;
     }
 
-    Serial getSerial() const { return mSerial; }
-    void updateSerial(Serial newSerial) { mSerial = newSerial; }
+    QueueSerial getQueueSerial() const { return mQueueSerial; }
+    void updateSerial(Serial newSerial) { mQueueSerial.serial = newSerial; }
 
     const GarbageList &get() const { return mObject; }
     GarbageList &get() { return mObject; }
 
   private:
     GarbageList mObject;
-    Serial mSerial;
+    QueueSerial mQueueSerial;
 };
 
 // Houses multiple lists of garbage objects. Each sub-list has a different lifetime. They should be
@@ -403,7 +451,7 @@ class StagingBuffer final : angle::NonCopyable
   public:
     StagingBuffer();
     void release(ContextVk *contextVk);
-    void collectGarbage(RendererVk *renderer, Serial serial);
+    void collectGarbage(RendererVk *renderer, const QueueSerial &queueSerial);
     void destroy(RendererVk *renderer);
 
     angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
@@ -1173,6 +1221,7 @@ enum class RenderPassClosureReason
     CopyTextureOnCPU,
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
+    OutOfReservedQueueSerialForOutsideCommands,
 
     // UtilsVk
     PrepareForBlit,
