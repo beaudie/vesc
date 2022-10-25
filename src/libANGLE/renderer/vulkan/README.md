@@ -48,7 +48,11 @@ barriers are not actually recorded until `getOutsideRenderPassCommandBuffer` is 
    started RenderPass.
 
 After the back-end records commands to the primary buffer and we flush (e.g. on swap) or when we call
+<<<<<<< HEAD
 `RendererVk::finishQueueSerial`, ANGLE submits the primary command buffer to a `VkQueue`.
+=======
+`ContextVk::finishResourceUse`, ANGLE submits the primary command buffer to a `VkQueue`.
+>>>>>>> fe59a6a28 (Debug: Add per context queueSerial)
 
 See the [code][CommandAPIs] for more details.
 
