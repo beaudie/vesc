@@ -482,7 +482,7 @@ class RendererVk : angle::NonCopyable
                                  const vk::Semaphore *signalSemaphore,
                                  vk::GarbageList &&currentGarbage,
                                  vk::SecondaryCommandPools *commandPools,
-                                 const QueueSerial &submitSerialOut);
+                                 const QueueSerial &submitQueueSerial);
 
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
