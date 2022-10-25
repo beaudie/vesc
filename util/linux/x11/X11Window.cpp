@@ -378,6 +378,14 @@ void X11Window::destroy()
     if (mWindow)
     {
         XDestroyWindow(mDisplay, mWindow);
+        // There appears to be a race condition where XDestroyWindow+XCreateWindow ignores
+        // the new size (the same window normally gets reused but this only happens sometimes on
+        // some X11 versions). Wait until we get the destroy notification.
+        while (!mDestroyed)
+        {
+            messageLoop();
+            angle::Sleep(10);
+        }
         mWindow = 0;
     }
     if (mDisplay)
@@ -701,7 +709,8 @@ void X11Window::processEvent(const XEvent &xEvent)
             break;
 
         case DestroyNotify:
-            // We already received WM_DELETE_WINDOW
+            // Note: we already received WM_DELETE_WINDOW
+            mDestroyed = true;
             break;
 
         case ClientMessage:
