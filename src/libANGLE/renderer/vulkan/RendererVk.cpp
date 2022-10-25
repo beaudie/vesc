@@ -4847,7 +4847,7 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
                                                                     uint64_t timeout,
                                                                     VkResult *result)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForResourceUseToFinishWithUserTimeout");
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForResourceUseToFinishWithTimeout");
 
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
