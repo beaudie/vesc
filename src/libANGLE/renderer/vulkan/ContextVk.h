@@ -486,16 +486,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result flushImpl(const vk::Semaphore *semaphore,
                             RenderPassClosureReason renderPassClosureReason);
-    angle::Result flushAndGetSerial(const vk::Semaphore *semaphore,
-                                    Serial *submitSerialOut,
-                                    RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
-
-    Serial getLastCompletedQueueSerial() const { return mRenderer->getLastCompletedQueueSerial(); }
-
-    bool isSerialInUse(Serial serial) const;
 
     template <typename T>
     void addGarbage(T *object)
@@ -510,7 +503,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result checkCompletedCommands();
 
     // Wait for completion of batches until (at least) batch with given serial is finished.
-    angle::Result finishToSerial(Serial serial);
+    angle::Result finishResourceUse(const vk::ResourceUse &use);
 
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
@@ -1211,13 +1204,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         AllCommands,
     };
 
-    angle::Result submitFrame(const vk::Semaphore *signalSemaphore,
-                              Submit submission,
-                              Serial *submitSerialOut);
-    angle::Result submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut);
-    angle::Result submitCommands(const vk::Semaphore *signalSemaphore,
-                                 Submit submission,
-                                 Serial *submitSerialOut);
+    angle::Result submitFrame(const vk::Semaphore *signalSemaphore, Submit submission);
+    angle::Result submitFrameOutsideCommandBufferOnly();
+    angle::Result submitCommands(const vk::Semaphore *signalSemaphore, Submit submission);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *commandBuffer,
@@ -1318,6 +1307,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateStencilWriteWorkaround();
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
+
+    void generateQueueSerialForCommandBuffer(vk::CommandBufferHelperCommon *commandBufferHelper);
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1547,6 +1538,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // The latest serial used for a started render pass.
     vk::RenderPassSerial mCurrentRenderPassSerial;
     RenderPassSerialFactory mRenderPassSerialFactory;
+    QueueSerial mLastFlushedQueueSerial;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
@@ -1607,6 +1599,14 @@ ANGLE_INLINE void ContextVk::retainResource(vk::Resource *resource)
     {
         mOutsideRenderPassCommands->retainResource(resource);
     }
+}
+
+ANGLE_INLINE void ContextVk::generateQueueSerialForCommandBuffer(
+    vk::CommandBufferHelperCommon *commandBufferHelper)
+{
+    ASSERT(mCurrentQueueSerial.index != kInvalidQueueSerialIndex);
+    mCurrentQueueSerial.serial = mRenderer->generateQueueSerial(mCurrentQueueSerial.index);
+    commandBufferHelper->setQueueSerial(mCurrentQueueSerial);
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)
