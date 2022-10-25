@@ -82,7 +82,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer) {}
 
 angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEGLSyncObject)
 {
-    ASSERT(!mUse.getSerial().valid());
+    ASSERT(!mUse.getSerial(contextVk->getSerialIndex()).valid());
     return contextVk->onSyncObjectInit(this, isEGLSyncObject);
 }
 
@@ -120,7 +120,8 @@ angle::Result SyncHelper::clientWait(Context *context,
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
     VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+    ANGLE_TRY(renderer->waitForQueueSerialsWithUserTimeout(context, mUse.getQueueSerials(), timeout,
+                                                           &status));
 
     // Check for errors, but don't consider timeout as such.
     if (status != VK_TIMEOUT)
@@ -154,15 +155,15 @@ angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
     ANGLE_TRY(context->getRenderer()->checkCompletedCommands(context));
-    *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerial());
+    *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerials());
     return angle::Result::Continue;
 }
 
 angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassClosureReason reason)
 {
-    if (mUse.getSerial().valid())
+    if (mUse.getSerial(contextVk->getSerialIndex()).valid())
     {
-        ASSERT(!usedInRecordedCommands());
+        ASSERT(!usedInRecordedCommand(contextVk));
         return angle::Result::Continue;
     }
 
@@ -190,13 +191,14 @@ angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassC
 
         // If this was the context that issued the fence sync, no need to go over the other
         // contexts.
-        if (mUse.getSerial().valid())
+        if (mUse.getSerial(contextVk->getSerialIndex()).valid())
         {
             break;
         }
     }
 
-    ASSERT(mUse.getSerial().valid() && !usedInRecordedCommands());
+    ASSERT(mUse.getSerial(contextVk->getSerialIndex()).valid() &&
+           !usedInRecordedCommand(contextVk));
 
     return angle::Result::Continue;
 }
@@ -267,19 +269,13 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // Flush first because the fence comes after current pending set of commands.
     ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::SyncObjectWithFdInit));
 
-    ResourceUseList resourceUseList;
-    retain(&resourceUseList);
-    contextVk->getShareGroup()->acquireResourceUseList(std::move(resourceUseList));
-
-    Serial serialOut;
     // exportFd is exporting VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR type handle which
     // obeys copy semantics. This means that the fence must already be signaled or the work to
     // signal it is in the graphics pipeline at the time we export the fd. Thus we need to
     // EnsureSubmitted here.
-    ANGLE_TRY(renderer->queueSubmitOneOff(contextVk, vk::PrimaryCommandBuffer(),
-                                          contextVk->hasProtectedContent(),
-                                          contextVk->getPriority(), nullptr, 0, &fence.get(),
-                                          vk::SubmitPolicy::EnsureSubmitted, &serialOut));
+    ANGLE_TRY(renderer->queueSubmitOneOff(
+        contextVk, vk::PrimaryCommandBuffer(), contextVk->hasProtectedContent(),
+        contextVk->getPriority(), nullptr, 0, &fence.get(), vk::SubmitPolicy::EnsureSubmitted));
 
     VkFenceGetFdInfoKHR fenceGetFdInfo = {};
     fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
@@ -322,11 +318,11 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     }
 
     VkResult status = VK_SUCCESS;
-    if (mUse.getSerial().valid())
+    if (mUse.hasAnyValidQueueSerial())
     {
         // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForSerialWithUserTimeout(context, mUse.getSerial(), timeout, &status));
+        ANGLE_TRY(renderer->waitForQueueSerialsWithUserTimeout(context, mUse.getQueueSerials(),
+                                                               timeout, &status));
     }
     else
     {
@@ -373,9 +369,9 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
                                                bool *signaled)
 {
     // We've got a serial, check if the serial is still in use
-    if (mUse.getSerial().valid())
+    if (mUse.hasAnyValidQueueSerial())
     {
-        *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerial());
+        *signaled = !isCurrentlyInUse(context->getRenderer()->getLastCompletedQueueSerials());
         return angle::Result::Continue;
     }
 

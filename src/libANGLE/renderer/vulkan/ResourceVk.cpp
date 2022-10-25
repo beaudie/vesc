@@ -17,11 +17,9 @@ namespace vk
 {
 namespace
 {
-constexpr size_t kDefaultResourceUseCount = 4096;
-
-angle::Result FinishRunningCommands(ContextVk *contextVk, Serial serial)
+angle::Result FinishRunningCommands(ContextVk *contextVk, const QueueSerials &queueSerials)
 {
-    return contextVk->finishToSerial(serial);
+    return contextVk->finishToSerials(queueSerials);
 }
 
 template <typename T>
@@ -31,13 +29,13 @@ angle::Result WaitForIdle(ContextVk *contextVk,
                           RenderPassClosureReason reason)
 {
     // If there are pending commands for the resource, flush them.
-    if (resource->usedInRecordedCommands())
+    if (resource->usedInRecordedCommand(contextVk))
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr, reason));
     }
 
     // Make sure the driver is done with the resource.
-    if (resource->usedInRunningCommands(contextVk->getLastCompletedQueueSerial()))
+    if (resource->usedInRunningCommands(contextVk->getLastCompletedQueueSerials()))
     {
         if (debugMessage)
         {
@@ -46,7 +44,7 @@ angle::Result WaitForIdle(ContextVk *contextVk,
         ANGLE_TRY(resource->finishRunningCommands(contextVk));
     }
 
-    ASSERT(!resource->isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()));
+    ASSERT(!resource->isCurrentlyInUse(contextVk->getLastCompletedQueueSerials()));
 
     return angle::Result::Continue;
 }
@@ -76,7 +74,7 @@ Resource::~Resource()
 
 angle::Result Resource::finishRunningCommands(ContextVk *contextVk)
 {
-    return FinishRunningCommands(contextVk, mUse.getSerial());
+    return FinishRunningCommands(contextVk, mUse.getQueueSerials());
 }
 
 angle::Result Resource::waitForIdle(ContextVk *contextVk,
@@ -113,14 +111,16 @@ ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
 
 angle::Result ReadWriteResource::finishRunningCommands(ContextVk *contextVk)
 {
-    ASSERT(!mReadOnlyUse.usedInRecordedCommands());
-    return FinishRunningCommands(contextVk, mReadOnlyUse.getSerial());
+    ASSERT(!mReadOnlyUse.usedInRecordedCommand(contextVk->getSerialIndex(),
+                                               contextVk->getLastSubmittedSerial()));
+    return FinishRunningCommands(contextVk, mReadOnlyUse.getQueueSerials());
 }
 
 angle::Result ReadWriteResource::finishGPUWriteCommands(ContextVk *contextVk)
 {
-    ASSERT(!mReadWriteUse.usedInRecordedCommands());
-    return FinishRunningCommands(contextVk, mReadWriteUse.getSerial());
+    ASSERT(!mReadWriteUse.usedInRecordedCommand(contextVk->getSerialIndex(),
+                                                contextVk->getLastSubmittedSerial()));
+    return FinishRunningCommands(contextVk, mReadWriteUse.getQueueSerials());
 }
 
 angle::Result ReadWriteResource::waitForIdle(ContextVk *contextVk,
@@ -151,9 +151,10 @@ SharedGarbage &SharedGarbage::operator=(SharedGarbage &&rhs)
     return *this;
 }
 
-bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSerial)
+bool SharedGarbage::destroyIfComplete(RendererVk *renderer,
+                                      const QueueSerials &completedQueueSerials)
 {
-    if (mLifetime.isCurrentlyInUse(completedSerial))
+    if (mLifetime.isCurrentlyInUse(completedQueueSerials))
     {
         return false;
     }
@@ -168,55 +169,5 @@ bool SharedGarbage::destroyIfComplete(RendererVk *renderer, Serial completedSeri
     return true;
 }
 
-// ResourceUseList implementation.
-ResourceUseList::ResourceUseList()
-{
-    mResourceUses.reserve(kDefaultResourceUseCount);
-}
-
-ResourceUseList::ResourceUseList(ResourceUseList &&other)
-{
-    *this = std::move(other);
-    other.mResourceUses.reserve(kDefaultResourceUseCount);
-}
-
-ResourceUseList::~ResourceUseList()
-{
-    ASSERT(mResourceUses.empty());
-}
-
-ResourceUseList &ResourceUseList::operator=(ResourceUseList &&rhs)
-{
-    std::swap(mResourceUses, rhs.mResourceUses);
-    return *this;
-}
-
-void ResourceUseList::releaseResourceUses()
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.release();
-    }
-
-    mResourceUses.clear();
-}
-
-void ResourceUseList::releaseResourceUsesAndUpdateSerials(Serial serial)
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.releaseAndUpdateSerial(serial);
-    }
-
-    mResourceUses.clear();
-}
-
-void ResourceUseList::clearCommandBuffer(CommandBufferID commandBufferID)
-{
-    for (SharedResourceUse &use : mResourceUses)
-    {
-        use.clearCommandBuffer(commandBufferID);
-    }
-}
 }  // namespace vk
 }  // namespace rx

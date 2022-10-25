@@ -146,7 +146,6 @@ class RendererVk : angle::NonCopyable
     void notifyDeviceLost();
     bool isDeviceLost() const;
     bool hasSharedGarbage();
-    void releaseSharedResources(vk::ResourceUseList *resourceList);
 
     std::string getVendorString() const;
     std::string getRendererDescription() const;
@@ -297,8 +296,7 @@ class RendererVk : angle::NonCopyable
                                     const vk::Semaphore *waitSemaphore,
                                     VkPipelineStageFlags waitSemaphoreStageMasks,
                                     const vk::Fence *fence,
-                                    vk::SubmitPolicy submitPolicy,
-                                    Serial *serialOut);
+                                    vk::SubmitPolicy submitPolicy);
 
     template <typename... ArgsT>
     void collectGarbageAndReinit(vk::SharedResourceUse *use, ArgsT... garbageIn)
@@ -323,12 +321,12 @@ class RendererVk : angle::NonCopyable
         if (!sharedGarbage.empty())
         {
             vk::SharedGarbage garbage(std::move(use), std::move(sharedGarbage));
-            if (garbage.usedInRecordedCommands())
+            if (garbage.usedInRecordedCommands(getLastSubmittedQueueSerials()))
             {
                 std::unique_lock<std::mutex> lock(mGarbageMutex);
                 mPendingSubmissionGarbage.push(std::move(garbage));
             }
-            else if (!garbage.destroyIfComplete(this, getLastCompletedQueueSerial()))
+            else if (!garbage.destroyIfComplete(this, getLastCompletedQueueSerials()))
             {
                 std::unique_lock<std::mutex> lock(mGarbageMutex);
                 mSharedGarbage.push(std::move(garbage));
@@ -340,10 +338,10 @@ class RendererVk : angle::NonCopyable
                                      vk::BufferSuballocation &&suballocation,
                                      vk::Buffer &&buffer)
     {
-        if (use.isCurrentlyInUse(getLastCompletedQueueSerial()))
+        if (use.isCurrentlyInUse(getLastCompletedQueueSerials()))
         {
             std::unique_lock<std::mutex> lock(mGarbageMutex);
-            if (use.usedInRecordedCommands())
+            if (use.usedInRecordedCommands(getLastSubmittedQueueSerials()))
             {
                 mPendingSubmissionSuballocationGarbage.emplace(
                     std::move(use), std::move(suballocation), std::move(buffer));
@@ -386,15 +384,27 @@ class RendererVk : angle::NonCopyable
 
     uint64_t getMaxFenceWaitTimeNs() const;
 
-    ANGLE_INLINE Serial getLastCompletedQueueSerial() const
+    ANGLE_INLINE const vk::QueueSerials &getLastSubmittedQueueSerials() const
     {
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.getLastCompletedQueueSerial();
+            return mCommandProcessor.getLastSubmittedQueueSerials();
         }
         else
         {
-            return mCommandQueue.getLastCompletedQueueSerial();
+            return mCommandQueue.getLastSubmittedQueueSerials();
+        }
+    }
+
+    ANGLE_INLINE const vk::QueueSerials &getLastCompletedQueueSerials() const
+    {
+        if (isAsyncCommandQueueEnabled())
+        {
+            return mCommandProcessor.getLastCompletedQueueSerials();
+        }
+        else
+        {
+            return mCommandQueue.getLastCompletedQueueSerials();
         }
     }
 
@@ -467,6 +477,10 @@ class RendererVk : angle::NonCopyable
     bool getEnableValidationLayers() const { return mEnableValidationLayers; }
 
     vk::ResourceSerialFactory &getResourceSerialFactory() { return mResourceSerialFactory; }
+    vk::QueueSerialIndexAllocator &getQueueSerialIndexAllocator()
+    {
+        return mQueueSerialIndexAllocator;
+    }
 
     void setGlobalDebugAnnotator();
 
@@ -474,7 +488,7 @@ class RendererVk : angle::NonCopyable
 
     bool haveSameFormatFeatureBits(angle::FormatID formatID1, angle::FormatID formatID2) const;
 
-    void cleanupGarbage(Serial lastCompletedQueueSerial);
+    void cleanupGarbage(const vk::QueueSerials &lastCompletedQueueSerials);
     void cleanupCompletedCommandsGarbage();
     void cleanupPendingSubmissionGarbage();
 
@@ -486,14 +500,14 @@ class RendererVk : angle::NonCopyable
                               const vk::Semaphore *signalSemaphore,
                               vk::GarbageList &&currentGarbage,
                               vk::SecondaryCommandPools *commandPools,
-                              Serial *submitSerialOut);
+                              const vk::QueueSerial &submitQueueSerial);
 
     void handleDeviceLost();
-    angle::Result finishToSerial(vk::Context *context, Serial serial);
-    angle::Result waitForSerialWithUserTimeout(vk::Context *context,
-                                               Serial serial,
-                                               uint64_t timeout,
-                                               VkResult *result);
+    angle::Result finishToSerials(vk::Context *context, const vk::QueueSerials &serials);
+    angle::Result waitForQueueSerialsWithUserTimeout(vk::Context *context,
+                                                     const vk::QueueSerials &queueSerials,
+                                                     uint64_t timeout,
+                                                     VkResult *result);
     angle::Result finish(vk::Context *context, bool hasProtectedContent);
     angle::Result checkCompletedCommands(vk::Context *context);
 
@@ -621,6 +635,9 @@ class RendererVk : angle::NonCopyable
     {
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
+
+    void updateQueueSerialWithInfinite(vk::QueueSerials &queueSerials);
+    angle::Result newSharedFence(vk::Context *context, vk::SharedFence *sharedFenceOut);
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -814,7 +831,7 @@ class RendererVk : angle::NonCopyable
 
     struct PendingOneOffCommands
     {
-        Serial serial;
+        vk::SharedFence serial;
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
@@ -843,6 +860,7 @@ class RendererVk : angle::NonCopyable
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
+    vk::QueueSerialIndexAllocator mQueueSerialIndexAllocator;
 
     // Application executable information
     VkApplicationInfo mApplicationInfo;

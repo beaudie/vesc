@@ -147,10 +147,11 @@ VkResult BufferSuballocation::map(Context *context)
 }
 
 // SharedBufferSuballocationGarbage implementation.
-bool SharedBufferSuballocationGarbage::destroyIfComplete(RendererVk *renderer,
-                                                         Serial completedSerial)
+bool SharedBufferSuballocationGarbage::destroyIfComplete(
+    RendererVk *renderer,
+    const QueueSerials &lastCompletedQueueSerials)
 {
-    if (mLifetime.isCurrentlyInUse(completedSerial))
+    if (mLifetime.isCurrentlyInUse(lastCompletedQueueSerials))
     {
         return false;
     }

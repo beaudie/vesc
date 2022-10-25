@@ -184,6 +184,20 @@ struct Error
     uint32_t line;
 };
 
+using QueueSerialIndex                = uint32_t;
+constexpr size_t kMaxFastQueueSerials = 4;
+using QueueSerials                    = angle::FastMap<Serial, kMaxFastQueueSerials>;
+struct QueueSerial
+{
+    QueueSerialIndex index;
+    Serial serial;
+};
+
+bool HasValidQueueSerialAtIndex(const QueueSerials &serials, QueueSerialIndex index)
+{
+    return serials[index].valid();
+}
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
@@ -201,10 +215,18 @@ class Context : angle::NonCopyable
 
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
+    const QueueSerial &getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    const QueueSerialIndex &getSerialIndex() const { return mCurrentQueueSerial.index; }
+    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
 
   protected:
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
+
+    // Per context queue serial
+    AtomicSerialFactory mQueueSerialFactory;
+    QueueSerial mCurrentQueueSerial;
+    Serial mLastSubmittedSerial;
 };
 
 class RenderPassDesc;
@@ -300,20 +322,22 @@ class ObjectAndSerial final : angle::NonCopyable
   public:
     ObjectAndSerial() {}
 
-    ObjectAndSerial(ObjT &&object, Serial serial) : mObject(std::move(object)), mSerial(serial) {}
+    ObjectAndSerial(ObjT &&object, QueueSerial serial)
+        : mObject(std::move(object)), mQueueSerial(serial)
+    {}
 
     ObjectAndSerial(ObjectAndSerial &&other)
-        : mObject(std::move(other.mObject)), mSerial(std::move(other.mSerial))
+        : mObject(std::move(other.mObject)), mQueueSerial(std::move(other.mQueueSerial))
     {}
     ObjectAndSerial &operator=(ObjectAndSerial &&other)
     {
-        mObject = std::move(other.mObject);
-        mSerial = std::move(other.mSerial);
+        mObject      = std::move(other.mObject);
+        mQueueSerial = std::move(other.mQueueSerial);
         return *this;
     }
 
-    Serial getSerial() const { return mSerial; }
-    void updateSerial(Serial newSerial) { mSerial = newSerial; }
+    const QueueSerial &getQueueSerial() const { return mQueueSerial; }
+    void updateSerial(Serial newSerial) { mQueueSerial.serial = newSerial; }
 
     const ObjT &get() const { return mObject; }
     ObjT &get() { return mObject; }
@@ -323,12 +347,12 @@ class ObjectAndSerial final : angle::NonCopyable
     void destroy(VkDevice device)
     {
         mObject.destroy(device);
-        mSerial = Serial();
+        mQueueSerial.serial = Serial();
     }
 
   private:
     ObjT mObject;
-    Serial mSerial;
+    QueueSerial mQueueSerial;
 };
 
 // Reference to a deleted object. The object is due to be destroyed at some point in the future.
@@ -762,6 +786,8 @@ class Shared final : angle::NonCopyable
   private:
     RefCounted<T> *mRefCounted;
 };
+
+using SharedFence = Shared<Fence>;
 
 template <typename T>
 class Recycler final : angle::NonCopyable
