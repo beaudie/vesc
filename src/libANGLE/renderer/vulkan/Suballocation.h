@@ -185,6 +185,7 @@ class SharedBufferSuballocationGarbage
 
     bool destroyIfComplete(RendererVk *renderer);
     bool hasUnsubmittedUse(RendererVk *renderer) const;
+
     VkDeviceSize getSize() const { return mSuballocation.getSize(); }
     bool isSuballocated() const { return mSuballocation.isSuballocated(); }
 
