@@ -16,6 +16,23 @@
       "message": "Both extensions are written against ES 3.1, so I think it is okay to drop the extension check and just use the ES level:\nhttps://registry.khronos.org/OpenGL/extensions/EXT/EXT_texture_cube_map_array.txt\nhttps://registry.khronos.org/OpenGL/extensions/EXT/EXT_texture_buffer.txt",
       "revId": "ddb10dd4c913691408159b4ab70ecc61d1f8056b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc76a7ca_f33d8109",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-25T03:05:40Z",
+      "side": 1,
+      "message": "lpha",
+      "revId": "ddb10dd4c913691408159b4ab70ecc61d1f8056b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
