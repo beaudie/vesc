@@ -486,16 +486,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result flushImpl(const vk::Semaphore *semaphore,
                             RenderPassClosureReason renderPassClosureReason);
-    angle::Result flushAndGetSerial(const vk::Semaphore *semaphore,
-                                    Serial *submitSerialOut,
-                                    RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
-
-    Serial getLastCompletedQueueSerial() const { return mRenderer->getLastCompletedQueueSerial(); }
-
-    bool isSerialInUse(Serial serial) const;
 
     template <typename T>
     void addGarbage(T *object)
@@ -510,7 +503,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result checkCompletedCommands();
 
     // Wait for completion of batches until (at least) batch with given serial is finished.
-    angle::Result finishToSerial(Serial serial);
+    angle::Result finishToSerials(const vk::Serials &serials);
 
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
@@ -1211,13 +1204,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         AllCommands,
     };
 
-    angle::Result submitFrame(const vk::Semaphore *signalSemaphore,
-                              Submit submission,
-                              Serial *submitSerialOut);
-    angle::Result submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut);
-    angle::Result submitCommands(const vk::Semaphore *signalSemaphore,
-                                 Submit submission,
-                                 Serial *submitSerialOut);
+    angle::Result submitFrame(const vk::Semaphore *signalSemaphore, Submit submission);
+    angle::Result submitFrameOutsideCommandBufferOnly();
+    angle::Result submitCommands(const vk::Semaphore *signalSemaphore, Submit submission);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *commandBuffer,

@@ -20,6 +20,7 @@
 #include "common/PackedEnums.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/HandleAllocator.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
@@ -184,6 +185,113 @@ struct Error
     uint32_t line;
 };
 
+class SerialIndex final
+{
+  public:
+    SerialIndex() : mValue(-1) {}
+    constexpr explicit SerialIndex(int16_t value) : mValue(value) {}
+
+    constexpr SerialIndex(const SerialIndex &other)  = default;
+    SerialIndex &operator=(const SerialIndex &other) = default;
+
+    SerialIndex &operator++()
+    {
+        ++mValue;
+        return *this;
+    }
+
+    constexpr bool operator==(const SerialIndex &other) const { return mValue == other.mValue; }
+    constexpr bool operator!=(const SerialIndex &other) const { return mValue != other.mValue; }
+    constexpr bool operator<(size_t value) const { return mValue < static_cast<int16_t>(value); }
+    constexpr bool operator>=(size_t value) const { return mValue >= static_cast<int16_t>(value); }
+
+    constexpr int16_t getValue() const { return mValue; }
+
+  private:
+    int16_t mValue;
+    friend class SerialIndexAllocator;
+};
+static constexpr SerialIndex kInvalidSerialIndex = SerialIndex(-1);
+
+class SerialIndexAllocator final
+{
+  public:
+    SerialIndex allocate() { return SerialIndex(mAllocator.allocate() - 1); }
+    void release(SerialIndex index) { mAllocator.release(index.getValue() + 1); }
+
+  private:
+    gl::HandleAllocator mAllocator;
+};
+
+class QueueSerial final
+{
+  public:
+    QueueSerial() = default;
+    QueueSerial(SerialIndex i, Serial s) : index(i), serial(s) {}
+    constexpr QueueSerial(const QueueSerial &other)  = default;
+    QueueSerial &operator=(const QueueSerial &other) = default;
+
+    constexpr bool operator==(const QueueSerial &other) const
+    {
+        return index == other.index && serial == other.serial;
+    }
+    constexpr bool operator!=(const QueueSerial &other) const
+    {
+        return index != other.index || serial != other.serial;
+    }
+
+    constexpr bool valid() const { return serial.valid(); }
+
+    SerialIndex index;
+    Serial serial;
+};
+
+class Serials final
+{
+  public:
+    Serials() {}
+    ~Serials() {}
+
+    Serial &operator[](SerialIndex index)
+    {
+        if (index >= mData.size())
+        {
+            mData.resize(index.getValue() + 1, {});
+        }
+        return mData[index.getValue()];
+    }
+
+    const Serial &operator[](SerialIndex index) const
+    {
+        ASSERT(index < mData.size());
+        return mData[index.getValue()];
+    }
+
+    void clear() { mData.clear(); }
+
+    void set(const QueueSerial &queueSerial)
+    {
+        if (queueSerial.index >= mData.size())
+        {
+            mData.resize(queueSerial.index.getValue() + 1, {});
+        }
+        mData[queueSerial.index.getValue()] = queueSerial.serial;
+    }
+
+    void fill(Serial serial) { std::fill(mData.begin(), mData.end(), serial); }
+
+    bool empty() const { return mData.empty(); }
+    size_t size() const { return mData.size(); }
+    const Serial *data() const { return mData.data(); }
+
+    constexpr bool valid() const { return mData.size() > 0; }
+    constexpr bool valid(const SerialIndex &index) const { return index < mData.size(); }
+
+  private:
+    static constexpr size_t kMaxFastQueueSerials = 4;
+    angle::FastVector<Serial, kMaxFastQueueSerials> mData;
+};
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
@@ -202,9 +310,19 @@ class Context : angle::NonCopyable
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    const QueueSerial &getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    SerialIndex getSerialIndex() const { return mCurrentQueueSerial.index; }
+    Serial getCurrentSerial() const { return mCurrentQueueSerial.serial; }
+    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
+
   protected:
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
+
+    // Per context queue serial
+    AtomicSerialFactory mQueueSerialFactory;
+    QueueSerial mCurrentQueueSerial;
+    Serial mLastSubmittedSerial;
 };
 
 class RenderPassDesc;
@@ -300,20 +418,22 @@ class ObjectAndSerial final : angle::NonCopyable
   public:
     ObjectAndSerial() {}
 
-    ObjectAndSerial(ObjT &&object, Serial serial) : mObject(std::move(object)), mSerial(serial) {}
+    ObjectAndSerial(ObjT &&object, QueueSerial serial)
+        : mObject(std::move(object)), mQueueSerial(serial)
+    {}
 
     ObjectAndSerial(ObjectAndSerial &&other)
-        : mObject(std::move(other.mObject)), mSerial(std::move(other.mSerial))
+        : mObject(std::move(other.mObject)), mQueueSerial(std::move(other.mQueueSerial))
     {}
     ObjectAndSerial &operator=(ObjectAndSerial &&other)
     {
-        mObject = std::move(other.mObject);
-        mSerial = std::move(other.mSerial);
+        mObject      = std::move(other.mObject);
+        mQueueSerial = std::move(other.mQueueSerial);
         return *this;
     }
 
-    Serial getSerial() const { return mSerial; }
-    void updateSerial(Serial newSerial) { mSerial = newSerial; }
+    const QueueSerial &getQueueSerial() const { return mQueueSerial; }
+    void updateSerial(Serial newSerial) { mQueueSerial.serial = newSerial; }
 
     const ObjT &get() const { return mObject; }
     ObjT &get() { return mObject; }
@@ -323,12 +443,12 @@ class ObjectAndSerial final : angle::NonCopyable
     void destroy(VkDevice device)
     {
         mObject.destroy(device);
-        mSerial = Serial();
+        mQueueSerial.serial = Serial();
     }
 
   private:
     ObjT mObject;
-    Serial mSerial;
+    QueueSerial mQueueSerial;
 };
 
 // Reference to a deleted object. The object is due to be destroyed at some point in the future.
@@ -411,7 +531,7 @@ class StagingBuffer final : angle::NonCopyable
   public:
     StagingBuffer();
     void release(ContextVk *contextVk);
-    void collectGarbage(RendererVk *renderer, Serial serial);
+    void collectGarbage(RendererVk *renderer, const QueueSerial &queueSerial);
     void destroy(RendererVk *renderer);
 
     angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
@@ -762,6 +882,8 @@ class Shared final : angle::NonCopyable
   private:
     RefCounted<T> *mRefCounted;
 };
+
+using SharedFence = Shared<Fence>;
 
 template <typename T>
 class Recycler final : angle::NonCopyable

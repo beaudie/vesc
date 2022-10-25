@@ -1321,8 +1321,6 @@ void CommandBufferHelperCommon::resetImpl()
     mAllocator.push();
 
     mUsedBufferCount = 0;
-
-    ASSERT(mResourceUseList.empty());
 }
 
 void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
@@ -1339,7 +1337,7 @@ void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
     ASSERT(!usesBufferForWrite(*buffer));
     if (!buffer->usedByCommandBuffer(mID))
     {
-        buffer->retainReadOnly(mID, &mResourceUseList);
+        buffer->retainReadOnly(mID, mQueueSerial);
         mUsedBufferCount++;
     }
 }
@@ -1351,7 +1349,7 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
 {
     if (!buffer->writtenByCommandBuffer(mID))
     {
-        buffer->retainReadWrite(mID, &mResourceUseList);
+        buffer->retainReadWrite(mID, mQueueSerial);
         mUsedBufferCount++;
     }
 
@@ -1464,26 +1462,19 @@ void CommandBufferHelperCommon::addCommandDiagnosticsCommon(std::ostringstream *
     *out << "\\l";
 }
 
-ResourceUseList &&CommandBufferHelperCommon::releaseResourceUseList()
-{
-    // Update the resource uses to indicate they're no longer used by the command buffer.
-    mResourceUseList.clearCommandBuffer(mID);
-    return std::move(mResourceUseList);
-}
-
 void CommandBufferHelperCommon::retainResource(Resource *resource)
 {
-    resource->retainCommands(mID, &mResourceUseList);
+    resource->retainCommands(mID, mQueueSerial);
 }
 
 void CommandBufferHelperCommon::retainReadOnlyResource(ReadWriteResource *readWriteResource)
 {
-    readWriteResource->retainReadOnly(mID, &mResourceUseList);
+    readWriteResource->retainReadOnly(mID, mQueueSerial);
 }
 
 void CommandBufferHelperCommon::retainReadWriteResource(ReadWriteResource *readWriteResource)
 {
-    readWriteResource->retainReadWrite(mID, &mResourceUseList);
+    readWriteResource->retainReadWrite(mID, mQueueSerial);
 }
 
 CommandBufferID CommandBufferHelperCommon::releaseID()
@@ -1526,7 +1517,7 @@ void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
 {
     bool needLayoutTransition = false;
     imageReadImpl(contextVk, aspectFlags, imageLayout, image, &needLayoutTransition);
-    image->retainCommands(mID, &mResourceUseList);
+    image->retainCommands(mID, mQueueSerial);
 }
 
 void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
@@ -1698,7 +1689,7 @@ void RenderPassCommandBufferHelper::retainImage(ImageHelper *imageHelper)
 {
     if (!imageHelper->usedByCommandBuffer(mID))
     {
-        imageHelper->retainCommands(mID, &mResourceUseList);
+        imageHelper->retainCommands(mID, mQueueSerial);
     }
 }
 
@@ -1714,7 +1705,7 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
     // Because depthStencil buffer's read/write property can change while we build renderpass, we
     // defer the image layout changes until endRenderPass time or when images going away so that we
     // only insert layout change barrier once.
-    image->retainCommands(mID, &mResourceUseList);
+    image->retainCommands(mID, mQueueSerial);
 
     mDepthAttachment.init(image, level, layerStart, layerCount, VK_IMAGE_ASPECT_DEPTH_BIT);
     mStencilAttachment.init(image, level, layerStart, layerCount, VK_IMAGE_ASPECT_STENCIL_BIT);
@@ -1724,7 +1715,7 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
         // Note that the resolve depth/stencil image has the same level/layer index as the
         // depth/stencil image as currently it can only ever come from
         // multisampled-render-to-texture renderbuffers.
-        resolveImage->retainCommands(mID, &mResourceUseList);
+        resolveImage->retainCommands(mID, mQueueSerial);
 
         mDepthResolveAttachment.init(resolveImage, level, layerStart, layerCount,
                                      VK_IMAGE_ASPECT_DEPTH_BIT);
@@ -2500,6 +2491,9 @@ angle::Result CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::getCo
 
     GLuint handle = freeCommandBuffers->allocate();
     (*commandBufferHelperOut)->assignID({handle});
+
+    (*commandBufferHelperOut)->setQueueSerial(context->getCurrentQueueSerial());
+
     return angle::Result::Continue;
 }
 
@@ -2691,8 +2685,7 @@ angle::Result DynamicBuffer::allocate(Context *context,
 
     // The front of the free list should be the oldest. Thus if it is in use the rest of the
     // free list should be in use as well.
-    if (mBufferFreeList.empty() ||
-        mBufferFreeList.front()->isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
+    if (mBufferFreeList.empty() || mBufferFreeList.front()->isCurrentlyInUse(renderer))
     {
         ANGLE_TRY(allocateNewBuffer(context));
     }
@@ -2728,16 +2721,14 @@ void DynamicBuffer::release(RendererVk *renderer)
     }
 }
 
-void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk)
+void DynamicBuffer::updateQueueSerialAndReleaseInFlightBuffers(ContextVk *contextVk)
 {
-    ResourceUseList resourceUseList;
-
     for (std::unique_ptr<BufferHelper> &bufferHelper : mInFlightBuffers)
     {
         // This function is used only for internal buffers, and they are all read-only.
         // It's possible this may change in the future, but there isn't a good way to detect that,
         // unfortunately.
-        bufferHelper->retainReadOnlyOneOff(&resourceUseList);
+        bufferHelper->setReadOnlySerial(contextVk->getCurrentQueueSerial());
 
         // We only keep free buffers that have the same size. Note that bufferHelper's size is
         // suballocation's size. We need to use the whole block memory size here.
@@ -2751,8 +2742,6 @@ void DynamicBuffer::releaseInFlightBuffersToResourceUseList(ContextVk *contextVk
         }
     }
     mInFlightBuffers.clear();
-
-    contextVk->getShareGroup()->acquireResourceUseList(std::move(resourceUseList));
 }
 
 void DynamicBuffer::destroy(RendererVk *renderer)
@@ -3184,7 +3173,7 @@ angle::Result DescriptorPoolHelper::init(Context *context,
 
     if (mDescriptorPool.valid())
     {
-        ASSERT(!isCurrentlyInUse(renderer->getLastCompletedQueueSerial()));
+        ASSERT(!isCurrentlyInUse(renderer));
         mDescriptorPool.destroy(renderer->getDevice());
     }
 
@@ -3235,11 +3224,10 @@ bool DescriptorPoolHelper::allocateDescriptorSet(Context *context,
     // Try to reuse descriptorSet garbage first
     if (!mDescriptorSetGarbageList.empty())
     {
-        RendererVk *rendererVk          = context->getRenderer();
-        Serial lastCompletedQueueSerial = rendererVk->getLastCompletedQueueSerial();
+        RendererVk *rendererVk = context->getRenderer();
 
         DescriptorSetHelper &garbage = mDescriptorSetGarbageList.front();
-        if (!garbage.isCurrentlyInUse(lastCompletedQueueSerial))
+        if (!garbage.isCurrentlyInUse(rendererVk))
         {
             *descriptorSetsOut = garbage.getDescriptorSet();
             mDescriptorSetGarbageList.pop_front();
@@ -3420,7 +3408,6 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     // Eviction logic: Before we allocate a new pool, check to see if there is any existing pool is
     // not bound to program and is GPU compete. We destroy one pool in exchange for allocate a new
     // pool to keep total descriptorPool count under control.
-    Serial lastCompletedSerial = context->getRenderer()->getLastCompletedQueueSerial();
     for (size_t poolIndex = 0; poolIndex < mDescriptorPools.size();)
     {
         if (!mDescriptorPools[poolIndex]->get().valid())
@@ -3429,7 +3416,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
             continue;
         }
         if (!mDescriptorPools[poolIndex]->isReferenced() &&
-            !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(lastCompletedSerial))
+            !mDescriptorPools[poolIndex]->get().isCurrentlyInUse(context->getRenderer()))
         {
             mDescriptorPools[poolIndex]->get().destroy(context->getRenderer());
             mDescriptorPools.erase(mDescriptorPools.begin() + poolIndex);
@@ -3572,11 +3559,10 @@ void DynamicallyGrowingPool<Pool>::destroyEntryPool(VkDevice device)
 template <typename Pool>
 bool DynamicallyGrowingPool<Pool>::findFreeEntryPool(ContextVk *contextVk)
 {
-    Serial lastCompletedQueueSerial = contextVk->getLastCompletedQueueSerial();
     for (size_t poolIndex = 0; poolIndex < mPools.size(); ++poolIndex)
     {
         PoolResource &pool = mPools[poolIndex];
-        if (pool.freedCount == mPoolSize && !pool.isCurrentlyInUse(lastCompletedQueueSerial))
+        if (pool.freedCount == mPoolSize && !pool.isCurrentlyInUse(contextVk->getRenderer()))
         {
             mCurrentPool      = poolIndex;
             mCurrentFreeEntry = 0;
@@ -3605,9 +3591,7 @@ template <typename Pool>
 void DynamicallyGrowingPool<Pool>::onEntryFreed(ContextVk *contextVk, size_t poolIndex)
 {
     ASSERT(poolIndex < mPools.size() && mPools[poolIndex].freedCount < mPoolSize);
-    ResourceUseList resourceUseList;
-    mPools[poolIndex].retain(&resourceUseList);
-    contextVk->getShareGroup()->acquireResourceUseList(std::move(resourceUseList));
+    mPools[poolIndex].setSerial(contextVk->getCurrentQueueSerial());
     ++mPools[poolIndex].freedCount;
 }
 
@@ -3921,7 +3905,7 @@ void QueryHelper::writeTimestamp(ContextVk *contextVk,
 
 bool QueryHelper::hasSubmittedCommands() const
 {
-    return mUse.getSerial().valid();
+    return mUse.valid();
 }
 
 angle::Result QueryHelper::getUint64ResultNonBlocking(ContextVk *contextVk,
@@ -4536,7 +4520,7 @@ angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
         if (size <= getSize() &&
             (hostVisibility == MemoryHostVisibility::Visible) == isHostVisible())
         {
-            if (!isCurrentlyInUse(contextVk->getLastCompletedQueueSerial()))
+            if (!isCurrentlyInUse(renderer))
             {
                 initializeBarrierTracker(contextVk);
                 return angle::Result::Continue;
@@ -4631,16 +4615,16 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
 
         ANGLE_VK_TRY(context, commandBuffer.end());
 
-        Serial serial;
+        QueueSerial queueSerial;
         ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), false,
                                               egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                              vk::SubmitPolicy::AllowDeferred, &serial));
+                                              vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
-        stagingBuffer.collectGarbage(renderer, serial);
+        stagingBuffer.collectGarbage(renderer, queueSerial);
         // Update both SharedResourceUse objects, since mReadOnlyUse tracks when the buffer can be
         // destroyed, and mReadWriteUse tracks when the write has completed.
-        mReadOnlyUse.updateSerialOneOff(serial);
-        mReadWriteUse.updateSerialOneOff(serial);
+        mReadOnlyUse.setSerial(queueSerial);
+        mReadWriteUse.setSerial(queueSerial);
     }
     else if (isHostVisible())
     {
@@ -4717,7 +4701,7 @@ void BufferHelper::release(RendererVk *renderer)
     {
         renderer->collectSuballocationGarbage(mReadOnlyUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
-        if (mReadWriteUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
+        if (isCurrentlyInUseForWrite(renderer))
         {
             mReadWriteUse.release();
             mReadWriteUse.init();
@@ -4730,7 +4714,7 @@ void BufferHelper::releaseBufferAndDescriptorSetCache(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    if (mReadOnlyUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
+    if (isCurrentlyInUse(renderer))
     {
         mDescriptorSetCacheManager.releaseKeys(contextVk);
     }
@@ -5399,12 +5383,10 @@ void ImageHelper::collectViewGarbage(RendererVk *renderer, vk::ImageViewHelper *
     imageView->release(renderer, mImageAndViewGarbage);
     // If we do not have any ImageHelper::mUse retained in ResourceUseList, make a cloned copy of
     // ImageHelper::mUse and use it to free any garbage in mImageAndViewGarbage immediately.
-    if (!mUse.usedInRecordedCommands() && !mImageAndViewGarbage.empty())
+    if (!mImageAndViewGarbage.empty())
     {
-        // clone ImageHelper::mUse
-        rx::vk::SharedResourceUse clonedmUse;
-        clonedmUse.init();
-        clonedmUse.updateSerialOneOff(mUse.getSerial());
+        // make a copy of ImageHelper::mUse
+        rx::vk::SharedResourceUse clonedmUse(mUse);
         renderer->collectGarbage(std::move(clonedmUse), std::move(mImageAndViewGarbage));
     }
     ASSERT(mImageAndViewGarbage.size() <= 1000);
@@ -5550,16 +5532,16 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
 
     ANGLE_VK_TRY(context, commandBuffer.end());
 
-    Serial serial;
+    QueueSerial queueSerial;
     ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), hasProtectedContent,
                                           egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                          vk::SubmitPolicy::AllowDeferred, &serial));
+                                          vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
     if (isCompressedFormat)
     {
-        stagingBuffer.collectGarbage(renderer, serial);
+        stagingBuffer.collectGarbage(renderer, queueSerial);
     }
-    mUse.updateSerialOneOff(serial);
+    mUse.setSerial(queueSerial);
 
     return angle::Result::Continue;
 }
@@ -8617,10 +8599,10 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
     vk::DeviceScoped<vk::Fence> fence(rendererVk->getDevice());
     ANGLE_VK_TRY(displayVk, fence.get().init(rendererVk->getDevice(), fenceInfo));
 
-    Serial serial;
+    QueueSerial queueSerial;
     ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(primaryCommandBuffer), false,
                                             egl::ContextPriority::Medium, nullptr, 0, &fence.get(),
-                                            vk::SubmitPolicy::EnsureSubmitted, &serial));
+                                            vk::SubmitPolicy::EnsureSubmitted, &queueSerial));
 
     ANGLE_VK_TRY(displayVk,
                  fence.get().wait(rendererVk->getDevice(), rendererVk->getMaxFenceWaitTimeNs()));
@@ -8671,10 +8653,10 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
     vk::DeviceScoped<vk::Fence> fence(rendererVk->getDevice());
     ANGLE_VK_TRY(displayVk, fence.get().init(rendererVk->getDevice(), fenceInfo));
 
-    Serial serial;
+    QueueSerial queueSerial;
     ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(commandBuffer), false,
                                             egl::ContextPriority::Medium, nullptr, 0, &fence.get(),
-                                            vk::SubmitPolicy::EnsureSubmitted, &serial));
+                                            vk::SubmitPolicy::EnsureSubmitted, &queueSerial));
 
     ANGLE_VK_TRY(displayVk,
                  fence.get().wait(rendererVk->getDevice(), rendererVk->getMaxFenceWaitTimeNs()));
