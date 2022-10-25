@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90bb30a8_ea328d5e",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-10-25T13:54:20Z",
+      "side": 1,
+      "message": "Why is this needed, doesn\u0027t this prefix all tests in that binary?",
+      "range": {
+        "startLine": 68,
+        "startChar": 31,
+        "endLine": 68,
+        "endChar": 56
+      },
+      "revId": "a2b5a1a08f3d702df9ecf1080509a8c9485c76ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
