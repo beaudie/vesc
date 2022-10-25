@@ -164,7 +164,7 @@ angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassC
 {
     if (!mUse.valid())
     {
-        ASSERT(!contextVk->hasUnflushedUse(getResourceUse()));
+        // This could happen when sync object is initialized with a just started context.
         return angle::Result::Continue;
     }
 
@@ -187,18 +187,19 @@ angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassC
     // than one context to have flushes deferred at this time.  If necessary, the context could be
     // queried to know whether it's the one retaining the sync object, so only that would be
     // flushed.
+
+    // Cannot reach here from EGL syncs, because serial should already be valid.
     const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
     for (ContextVk *ctx : shareContextSet)
     {
-        if (ctx->hasUnflushedUse(mUse))
+        if (ctx->hasUnsubmittedUse(mUse))
         {
             ANGLE_TRY(ctx->flushCommandsAndEndRenderPassIfDeferredSyncInit(reason));
             break;
         }
     }
 
-    ASSERT(mUse.valid() && !contextVk->getRenderer()->hasUnsubmittedUse(mUse));
-
+    ASSERT(!contextVk->getRenderer()->hasUnsubmittedUse(mUse));
     return angle::Result::Continue;
 }
 

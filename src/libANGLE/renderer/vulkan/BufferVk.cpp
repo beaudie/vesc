@@ -671,7 +671,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         if (mBuffer.isCurrentlyInUseForWrite(contextVk->getRenderer()))
         {
             // If there are pending commands for the resource, flush them.
-            if (contextVk->hasUnflushedUse(mBuffer))
+            if (contextVk->hasUnsubmittedUse(mBuffer))
             {
                 ANGLE_TRY(
                     contextVk->flushImpl(nullptr, RenderPassClosureReason::BufferWriteThenMap));

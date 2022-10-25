@@ -68,12 +68,6 @@ class Serial final
 
     constexpr bool operator<(uint32_t value) const { return mValue < static_cast<uint64_t>(value); }
 
-    Serial &operator++()
-    {
-        mValue++;
-        return *this;
-    }
-
     // Useful for serialization.
     constexpr uint64_t getValue() const { return mValue; }
     constexpr bool valid() const { return mValue != kInvalid; }
@@ -81,6 +75,7 @@ class Serial final
   private:
     template <typename T>
     friend class SerialFactoryBase;
+    friend class RangedSerialFactory;
     friend class AtomicQueueSerial;
     constexpr explicit Serial(uint64_t value) : mValue(value) {}
     uint64_t mValue;
@@ -107,6 +102,38 @@ class AtomicQueueSerial final
 // Used as default/initial serial
 static constexpr Serial kZeroSerial = Serial();
 
+// The factory to generate a serial number within the range
+class RangedSerialFactory final : angle::NonCopyable
+{
+  public:
+    RangedSerialFactory() : mSerial(1), mCount(0) {}
+
+    void reset() { mCount = 0; }
+    bool empty() const { return mCount == 0; }
+    bool generate(Serial *serialOut)
+    {
+        if (mCount > 0)
+        {
+            uint64_t current = mSerial++;
+            ASSERT(mSerial > current);  // Integer overflow
+            *serialOut = Serial(current);
+            return true;
+        }
+        return false;
+    }
+
+  private:
+    template <typename T>
+    friend class SerialFactoryBase;
+    void initialize(uint64_t initialSerial, size_t count)
+    {
+        mSerial = initialSerial;
+        mCount  = count;
+    }
+    uint64_t mSerial;
+    size_t mCount;
+};
+
 template <typename SerialBaseType>
 class SerialFactoryBase final : angle::NonCopyable
 {
@@ -120,12 +147,12 @@ class SerialFactoryBase final : angle::NonCopyable
         return Serial(current);
     }
 
-    Serial generate(size_t count)
+    void reserve(RangedSerialFactory *rangeFactory, size_t count)
     {
         uint64_t current = mSerial;
         mSerial += count;
         ASSERT(mSerial > current);  // Integer overflow
-        return Serial(current);
+        rangeFactory->initialize(current, count);
     }
 
   private:
@@ -168,7 +195,6 @@ class QueueSerial final
     QueueSerial(SerialIndex index, Serial serial) : mIndex(index), mSerial(serial)
     {
         ASSERT(index != kInvalidQueueSerialIndex);
-        ASSERT(serial.valid());
     }
     constexpr QueueSerial(const QueueSerial &other)  = default;
     QueueSerial &operator=(const QueueSerial &other) = default;
