@@ -68,7 +68,7 @@ Resource::~Resource() {}
 
 bool Resource::usedInRunningCommands(RendererVk *renderer) const
 {
-    return renderer->useInRunningCommands(mUse);
+    return renderer->hasUnfinishedUse(mUse);
 }
 
 bool Resource::isCurrentlyInUse(RendererVk *renderer) const
@@ -108,7 +108,7 @@ ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
 // Determine if the driver has finished execution with this resource.
 bool ReadWriteResource::usedInRunningCommands(RendererVk *renderer) const
 {
-    return renderer->useInRunningCommands(mReadOnlyUse);
+    return renderer->hasUnfinishedUse(mReadOnlyUse);
 }
 
 bool ReadWriteResource::isCurrentlyInUse(RendererVk *renderer) const
