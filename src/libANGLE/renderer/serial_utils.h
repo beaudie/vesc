@@ -121,6 +121,59 @@ using SerialFactory           = SerialFactoryBase<uint64_t>;
 using AtomicSerialFactory     = SerialFactoryBase<std::atomic<uint64_t>>;
 using RenderPassSerialFactory = SerialFactoryBase<uint64_t>;
 
+// For backend that supports multiple queue serials, one queueue serial includes a Serial and an
+// index.
+class SerialIndex final
+{
+  public:
+    SerialIndex() : mValue(-1) {}
+    constexpr explicit SerialIndex(int16_t value) : mValue(value) {}
+
+    constexpr SerialIndex(const SerialIndex &other)  = default;
+    SerialIndex &operator=(const SerialIndex &other) = default;
+
+    SerialIndex &operator++()
+    {
+        ++mValue;
+        return *this;
+    }
+
+    constexpr bool operator==(const SerialIndex &other) const { return mValue == other.mValue; }
+    constexpr bool operator!=(const SerialIndex &other) const { return mValue != other.mValue; }
+    constexpr bool operator<(size_t value) const { return mValue < static_cast<int16_t>(value); }
+    constexpr bool operator>=(size_t value) const { return mValue >= static_cast<int16_t>(value); }
+
+    constexpr int16_t getValue() const { return mValue; }
+
+  private:
+    int16_t mValue;
+    friend class SerialIndexAllocator;
+};
+static constexpr SerialIndex kInvalidSerialIndex = SerialIndex(-1);
+
+// For backend that supports multiple queue serials, QueueSerial includes a Serial and an index.
+class QueueSerial final
+{
+  public:
+    QueueSerial() = default;
+    QueueSerial(SerialIndex i, Serial s) : index(i), serial(s) {}
+    constexpr QueueSerial(const QueueSerial &other)  = default;
+    QueueSerial &operator=(const QueueSerial &other) = default;
+
+    constexpr bool operator==(const QueueSerial &other) const
+    {
+        return index == other.index && serial == other.serial;
+    }
+    constexpr bool operator!=(const QueueSerial &other) const
+    {
+        return index != other.index || serial != other.serial;
+    }
+
+    constexpr bool valid() const { return serial.valid(); }
+
+    SerialIndex index;
+    Serial serial;
+};
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_

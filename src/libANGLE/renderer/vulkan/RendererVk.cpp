@@ -1316,14 +1316,6 @@ bool RendererVk::hasSharedGarbage()
            !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty();
 }
 
-void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
-{
-    // resource list may access same resources referenced by garbage collection so need to protect
-    // that access with a lock.
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
-    resourceList->releaseResourceUses();
-}
-
 void RendererVk::onDestroy(vk::Context *context)
 {
     if (isDeviceLost())
@@ -1350,8 +1342,8 @@ void RendererVk::onDestroy(vk::Context *context)
         }
     }
 
-    // Assigns an infinite "last completed" serial to force garbage to delete.
-    cleanupGarbage(Serial::Infinite());
+    // mCommandQueue.destroy should already set "last completed" serials to infinite.
+    cleanupGarbage();
     ASSERT(!hasSharedGarbage());
 
     for (PendingOneOffCommands &pending : mPendingOneOffCommands)
@@ -4417,33 +4409,37 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             VkPipelineStageFlags waitSemaphoreStageMasks,
                                             const vk::Fence *fence,
                                             vk::SubmitPolicy submitPolicy,
-                                            Serial *serialOut)
+                                            QueueSerial *queueSerialOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
 
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
-    Serial submitQueueSerial;
+    // mCurrentOneOffSubmitQueueSerial allocation is deferred so that we dont need to allocate in
+    // most usage cases.
+    if (mCurrentOneOffSubmitQueueSerial.index == kInvalidSerialIndex)
+    {
+        mCurrentOneOffSubmitQueueSerial.index = getSerialIndexAllocator().allocate();
+    }
+    mCurrentOneOffSubmitQueueSerial.serial = mOneOffSubmitQueueSerialFactory.generate();
+
     if (isAsyncCommandQueueEnabled())
     {
-        submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
         ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(
             context, hasProtectedContent, priority, primary.getHandle(), waitSemaphore,
-            waitSemaphoreStageMasks, fence, submitPolicy, submitQueueSerial));
+            waitSemaphoreStageMasks, fence, submitPolicy, mCurrentOneOffSubmitQueueSerial));
     }
     else
     {
-        submitQueueSerial = mCommandQueue.reserveSubmitSerial();
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(
             context, hasProtectedContent, priority, primary.getHandle(), waitSemaphore,
-            waitSemaphoreStageMasks, fence, submitPolicy, submitQueueSerial));
+            waitSemaphoreStageMasks, fence, submitPolicy, mCurrentOneOffSubmitQueueSerial));
     }
 
-    *serialOut = submitQueueSerial;
-
+    *queueSerialOut = mCurrentOneOffSubmitQueueSerial;
     if (primary.valid())
     {
-        mPendingOneOffCommands.push_back({*serialOut, std::move(primary)});
+        mPendingOneOffCommands.push_back({mCurrentOneOffSubmitQueueSerial, std::move(primary)});
     }
 
     return angle::Result::Continue;
@@ -4530,7 +4526,7 @@ void RendererVk::pruneOrphanedBufferBlocks()
     }
 }
 
-void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
+void RendererVk::cleanupGarbage()
 {
     std::unique_lock<std::mutex> lock(mGarbageMutex);
 
@@ -4538,7 +4534,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     while (!mSharedGarbage.empty())
     {
         vk::SharedGarbage &garbage = mSharedGarbage.front();
-        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        if (!garbage.destroyIfComplete(this))
         {
             break;
         }
@@ -4551,7 +4547,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     {
         vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
         VkDeviceSize garbageSize                      = garbage.getSize();
-        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        if (!garbage.destroyIfComplete(this))
         {
             break;
         }
@@ -4576,7 +4572,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 
 void RendererVk::cleanupCompletedCommandsGarbage()
 {
-    cleanupGarbage(getLastCompletedQueueSerial());
+    cleanupGarbage();
 }
 
 void RendererVk::cleanupPendingSubmissionGarbage()
@@ -4588,7 +4584,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     while (!mPendingSubmissionGarbage.empty())
     {
         vk::SharedGarbage &garbage = mPendingSubmissionGarbage.front();
-        if (!garbage.usedInRecordedCommands())
+        if (!garbage.usedInRecordedCommands(this))
         {
             mSharedGarbage.push(std::move(garbage));
         }
@@ -4608,7 +4604,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     {
         vk::SharedBufferSuballocationGarbage &suballocationGarbage =
             mPendingSubmissionSuballocationGarbage.front();
-        if (!suballocationGarbage.usedInRecordedCommands())
+        if (!suballocationGarbage.usedInRecordedCommands(this))
         {
             mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
@@ -4728,7 +4724,7 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
     }
 
     if (!mPendingOneOffCommands.empty() &&
-        mPendingOneOffCommands.front().serial < getLastCompletedQueueSerial())
+        isQueueSerialFinished(mPendingOneOffCommands.front().queueSerial))
     {
         *commandBufferOut = std::move(mPendingOneOffCommands.front().commandBuffer);
         mPendingOneOffCommands.pop_front();
@@ -4762,7 +4758,7 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
                                       const vk::Semaphore *signalSemaphore,
                                       vk::GarbageList &&currentGarbage,
                                       vk::SecondaryCommandPools *commandPools,
-                                      Serial *submitSerialOut)
+                                      const QueueSerial &submitQueueSerial)
 {
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
@@ -4773,21 +4769,17 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
 
     if (isAsyncCommandQueueEnabled())
     {
-        *submitSerialOut = mCommandProcessor.reserveSubmitSerial();
-
         ANGLE_TRY(mCommandProcessor.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
             signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
-            commandPools, *submitSerialOut));
+            commandPools, submitQueueSerial));
     }
     else
     {
-        *submitSerialOut = mCommandQueue.reserveSubmitSerial();
-
         ANGLE_TRY(mCommandQueue.submitFrame(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
             signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
-            commandPools, *submitSerialOut));
+            commandPools, submitQueueSerial));
     }
 
     waitSemaphores.clear();
@@ -4809,38 +4801,46 @@ void RendererVk::handleDeviceLost()
     }
 }
 
-angle::Result RendererVk::finishToSerial(vk::Context *context, Serial serial)
+angle::Result RendererVk::finishToSerials(vk::Context *context, const vk::Serials &serials)
 {
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.finishToSerial(context, serial, getMaxFenceWaitTimeNs()));
+        ANGLE_TRY(mCommandProcessor.finishToSerials(context, serials, getMaxFenceWaitTimeNs()));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.finishToSerial(context, serial, getMaxFenceWaitTimeNs()));
+        ANGLE_TRY(mCommandQueue.finishToSerials(context, serials, getMaxFenceWaitTimeNs()));
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::waitForSerialWithUserTimeout(vk::Context *context,
-                                                       Serial serial,
-                                                       uint64_t timeout,
-                                                       VkResult *result)
+angle::Result RendererVk::finishToQueueSerial(vk::Context *context, const QueueSerial &queueSerial)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForSerialWithUserTimeout");
+    vk::Serials serials;
+    serials.set(queueSerial);
+    return finishToSerials(context, serials);
+}
+
+angle::Result RendererVk::waitForSerialsWithUserTimeout(vk::Context *context,
+                                                        const vk::Serials &serials,
+                                                        uint64_t timeout,
+                                                        VkResult *result)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForSerialsWithUserTimeout");
 
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitForSerialWithUserTimeout(context, serial, timeout, result));
+        ANGLE_TRY(
+            mCommandProcessor.waitForSerialsWithUserTimeout(context, serials, timeout, result));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.waitForSerialWithUserTimeout(context, serial, timeout, result));
+        ANGLE_TRY(mCommandQueue.waitForSerialsWithUserTimeout(context, serials, timeout, result));
     }
 
     return angle::Result::Continue;
