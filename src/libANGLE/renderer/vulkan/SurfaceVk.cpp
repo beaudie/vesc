@@ -1658,12 +1658,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
 
     // Throttle the submissions to avoid getting too far ahead of the GPU.
-    Serial *swapSerial = &mSwapHistory.front();
+    const QueueSerial &swapSerial = mSwapHistory.front();
     mSwapHistory.next();
 
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(renderer->finishToSerial(contextVk, *swapSerial));
+        ANGLE_TRY(renderer->finishQueueSerial(contextVk, swapSerial));
     }
 
     SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
@@ -1749,15 +1749,15 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // with other functionality, especially counters used to validate said functionality.
     const bool shouldDrawOverlay = overlayHasEnabledWidget(contextVk);
 
-    ANGLE_TRY(contextVk->flushAndGetSerial(shouldDrawOverlay ? nullptr : presentSemaphore,
-                                           swapSerial, RenderPassClosureReason::EGLSwapBuffers));
+    ANGLE_TRY(contextVk->flushImpl(shouldDrawOverlay ? nullptr : presentSemaphore,
+                                   RenderPassClosureReason::EGLSwapBuffers));
 
     if (shouldDrawOverlay)
     {
         updateOverlay(contextVk);
         ANGLE_TRY(drawOverlay(contextVk, &image));
-        ANGLE_TRY(contextVk->flushAndGetSerial(presentSemaphore, swapSerial,
-                                               RenderPassClosureReason::AlreadySpecifiedElsewhere));
+        ANGLE_TRY(contextVk->flushImpl(presentSemaphore,
+                                       RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
 
     VkPresentInfoKHR presentInfo   = {};
@@ -1992,11 +1992,12 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
                 mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
                 return VK_ERROR_OUT_OF_DATE_KHR;
             }
-            Serial serial;
+
+            QueueSerial queueSerial;
             if (rendererVk->queueSubmitOneOff(
                     context, std::move(primaryCommandBuffer), false, egl::ContextPriority::Medium,
                     acquireImageSemaphore, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, nullptr,
-                    vk::SubmitPolicy::EnsureSubmitted, &serial) != angle::Result::Continue)
+                    vk::SubmitPolicy::EnsureSubmitted, &queueSerial) != angle::Result::Continue)
             {
                 mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
                 return VK_ERROR_OUT_OF_DATE_KHR;

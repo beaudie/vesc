@@ -121,6 +121,32 @@ using SerialFactory           = SerialFactoryBase<uint64_t>;
 using AtomicSerialFactory     = SerialFactoryBase<std::atomic<uint64_t>>;
 using RenderPassSerialFactory = SerialFactoryBase<uint64_t>;
 
+// For backend that supports multiple queue serials, QueueSerial includes a Serial and an index.
+using SerialIndex                                     = uint32_t;
+static constexpr SerialIndex kInvalidQueueSerialIndex = SerialIndex(-1);
+
+class QueueSerial final
+{
+  public:
+    QueueSerial() = default;
+    QueueSerial(SerialIndex i, Serial s) : index(i), serial(s) {}
+    constexpr QueueSerial(const QueueSerial &other)  = default;
+    QueueSerial &operator=(const QueueSerial &other) = default;
+
+    constexpr bool operator==(const QueueSerial &other) const
+    {
+        return index == other.index && serial == other.serial;
+    }
+    constexpr bool operator!=(const QueueSerial &other) const
+    {
+        return index != other.index || serial != other.serial;
+    }
+
+    constexpr bool valid() const { return serial.valid(); }
+
+    SerialIndex index;
+    Serial serial;
+};
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_
