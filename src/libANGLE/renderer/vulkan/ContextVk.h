@@ -1220,6 +1220,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void clearAllGarbage();
     void dumpCommandStreamDiagnostics();
     angle::Result flushOutsideRenderPassCommands();
+    angle::Result flushOutsideRenderPassCommandsImpl();
     // Flush commands and end render pass without setting any dirty bits.
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
