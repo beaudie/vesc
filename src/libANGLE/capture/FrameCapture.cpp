@@ -5776,6 +5776,8 @@ bool CoherentBufferTracker::canProtectDirectly(gl::Context *context)
 
 CoherentBufferTracker::CoherentBufferTracker()
 {
+    mUseShadowMemory = true;
+
     mPageSize = GetPageSize();
 
     mUseShadowMemory = false;
