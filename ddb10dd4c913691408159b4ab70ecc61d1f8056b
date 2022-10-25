@@ -33,6 +33,23 @@
       "message": "lpha",
       "revId": "ddb10dd4c913691408159b4ab70ecc61d1f8056b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f23d9b45_fe7f1057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-25T05:04:06Z",
+      "side": 1,
+      "message": "These failing tests are using ES 3.0. Since the CubeMapArray extension is written against 3.1, is it correct for them to request this extension at all?",
+      "revId": "ddb10dd4c913691408159b4ab70ecc61d1f8056b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
