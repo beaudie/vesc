@@ -110,7 +110,10 @@ class BufferVk : public BufferImpl
     }
 
     bool isBufferValid() const { return mBuffer.valid(); }
-    bool isCurrentlyInUse(ContextVk *contextVk) const;
+    bool isCurrentlyInUse(RendererVk *rendererVk) const
+    {
+        return mBuffer.isCurrentlyInUse(rendererVk);
+    }
 
     angle::Result mapImpl(ContextVk *contextVk, GLbitfield access, void **mapPtr);
     angle::Result mapRangeImpl(ContextVk *contextVk,
