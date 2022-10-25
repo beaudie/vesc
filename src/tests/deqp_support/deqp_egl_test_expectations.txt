@@ -121,10 +121,6 @@
 6277 ANDROID VULKAN : dEQP-EGL.functional.image.render_multiple_contexts.gles2_android_native_rgb8_read_pixels = FAIL
 6277 ANDROID VULKAN : dEQP-EGL.functional.image.render_multiple_contexts.gles2_android_native_rgb8_texture = FAIL
 
-// Pixel 6 Vulkan
-// These fail on the Android S bots, but pass on pre-release Android T drivers:
-6899 PIXEL6 VULKAN : dEQP-EGL.functional.query_context.*.rgb888_window = FAIL
-
 // render_sample_texture_array tests failing on some configurations on bots
 7506 ANDROID VULKAN : dEQP-EGL.functional.image.create.gles3_android_native_array_*_render_sample_texture_array = FAIL
 7506 ANDROID GLES : dEQP-EGL.functional.image.create.gles3_android_native_array_*_render_sample_texture_array = FAIL
