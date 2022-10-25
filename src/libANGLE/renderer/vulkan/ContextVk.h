@@ -486,14 +486,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result flushImpl(const vk::Semaphore *semaphore,
                             RenderPassClosureReason renderPassClosureReason);
-    angle::Result flushAndGetSerial(const vk::Semaphore *semaphore,
-                                    Serial *submitSerialOut,
-                                    RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
-
-    Serial getLastCompletedQueueSerial() const { return mRenderer->getLastCompletedQueueSerial(); }
 
     template <typename T>
     void addGarbage(T *object)
@@ -508,7 +503,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result checkCompletedCommands();
 
     // Wait for completion of batches until (at least) batch with given serial is finished.
-    angle::Result finishToSerial(Serial serial);
+    angle::Result finishResourceUse(const vk::ResourceUse &use);
 
     angle::Result getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                           vk::RenderPass **renderPassOut);
@@ -785,6 +780,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     vk::ComputePipelineFlags getComputePipelineFlags() const;
 
     angle::ImageLoadContext getImageLoadContext() const;
+
+    bool hasUnflushedUse(const vk::ResourceUse &use) const;
 
   private:
     // Dirty bits.
@@ -1209,13 +1206,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         AllCommands,
     };
 
-    angle::Result submitFrame(const vk::Semaphore *signalSemaphore,
-                              Submit submission,
-                              Serial *submitSerialOut);
-    angle::Result submitFrameOutsideCommandBufferOnly(Serial *submitSerialOut);
-    angle::Result submitCommands(const vk::Semaphore *signalSemaphore,
-                                 Submit submission,
-                                 Serial *submitSerialOut);
+    angle::Result submitFrame(const vk::Semaphore *signalSemaphore, Submit submission);
+    angle::Result submitCommands(const vk::Semaphore *signalSemaphore, Submit submission);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *commandBuffer,
@@ -1228,6 +1220,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void clearAllGarbage();
     void dumpCommandStreamDiagnostics();
     angle::Result flushOutsideRenderPassCommands();
+    angle::Result flushOutsideRenderPassCommandsImpl();
     // Flush commands and end render pass without setting any dirty bits.
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
@@ -1316,6 +1309,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void updateStencilWriteWorkaround();
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
+
+    void generateOutsideRenderPassCommandsQueueSerial();
+    void generateRenderPassCommandsQueueSerial();
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1545,6 +1541,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // The latest serial used for a started render pass.
     vk::RenderPassSerial mCurrentRenderPassSerial;
     RenderPassSerialFactory mRenderPassSerialFactory;
+
+    static constexpr size_t kMaxReservedOutsideQueueSerials = 15;
+    Serial mFirstReservedOutsideRenderPassSerial;
+    size_t mReservedOutsideRenderPassSerialCount;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
@@ -1605,6 +1605,33 @@ ANGLE_INLINE void ContextVk::retainResource(vk::Resource *resource)
     {
         mOutsideRenderPassCommands->retainResource(resource);
     }
+}
+
+ANGLE_INLINE void ContextVk::generateOutsideRenderPassCommandsQueueSerial()
+{
+    ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
+    mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
+    mOutsideRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
+}
+
+ANGLE_INLINE void ContextVk::generateRenderPassCommandsQueueSerial()
+{
+    // We reserve some serial number for outsideRenderPassCommands in case we have to flush.
+    ASSERT(mOutsideRenderPassCommands->getQueueSerial().valid());
+    mFirstReservedOutsideRenderPassSerial =
+        mRenderer->generateQueueSerial(mCurrentSerialIndex, kMaxReservedOutsideQueueSerials);
+    mReservedOutsideRenderPassSerialCount = kMaxReservedOutsideQueueSerials;
+
+    ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
+    mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
+    mRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
+}
+
+ANGLE_INLINE bool ContextVk::hasUnflushedUse(const vk::ResourceUse &use) const
+{
+    return mCurrentSerialIndex != kInvalidQueueSerialIndex &&
+           mCurrentSerialIndex < use.getSerials().size() &&
+           use.getSerial(mCurrentSerialIndex) > mLastFlushedSerial;
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)
