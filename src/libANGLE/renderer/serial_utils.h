@@ -68,6 +68,12 @@ class Serial final
 
     constexpr bool operator<(uint32_t value) const { return mValue < static_cast<uint64_t>(value); }
 
+    Serial &operator++()
+    {
+        mValue++;
+        return *this;
+    }
+
     // Useful for serialization.
     constexpr uint64_t getValue() const { return mValue; }
     constexpr bool valid() const { return mValue != kInvalid; }
@@ -110,6 +116,14 @@ class SerialFactoryBase final : angle::NonCopyable
     Serial generate()
     {
         uint64_t current = mSerial++;
+        ASSERT(mSerial > current);  // Integer overflow
+        return Serial(current);
+    }
+
+    Serial generate(size_t count)
+    {
+        uint64_t current = mSerial;
+        mSerial += count;
         ASSERT(mSerial > current);  // Integer overflow
         return Serial(current);
     }
@@ -157,8 +171,10 @@ class QueueSerial final
     Serial mSerial;
 };
 
-// For now we limit to only one queue serial
-constexpr size_t kMaxQueueSerialIndexCount = 1;
+// Because we release queue index when context becomes non-current, in order to use up all index
+// count, you will need to have 256 threads each has a context current. This is not a reasonable
+// usage case.
+static constexpr int32_t kMaxQueueSerialIndexCount = 256;
 // Fixed array of queue serials
 class QueueSerialFixedArray final
 {
