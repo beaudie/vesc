@@ -29,7 +29,7 @@ angle::Result WaitForIdle(ContextVk *contextVk,
                           RenderPassClosureReason reason)
 {
     // If there are pending commands for the resource, flush them.
-    if (contextVk->hasUnflushedUse(resource->getResourceUse()))
+    if (contextVk->hasUnsubmittedUse(resource->getResourceUse()))
     {
         ANGLE_TRY(contextVk->flushImpl(nullptr, reason));
     }
@@ -68,7 +68,7 @@ Resource::~Resource() {}
 
 bool Resource::usedInRunningCommands(RendererVk *renderer) const
 {
-    return renderer->useInRunningCommands(mUse);
+    return renderer->hasUnfinishedUse(mUse);
 }
 
 bool Resource::isCurrentlyInUse(RendererVk *renderer) const
@@ -108,7 +108,7 @@ ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
 // Determine if the driver has finished execution with this resource.
 bool ReadWriteResource::usedInRunningCommands(RendererVk *renderer) const
 {
-    return renderer->useInRunningCommands(mReadOnlyUse);
+    return renderer->hasUnfinishedUse(mReadOnlyUse);
 }
 
 bool ReadWriteResource::isCurrentlyInUse(RendererVk *renderer) const
@@ -129,7 +129,7 @@ angle::Result ReadWriteResource::finishRunningCommands(ContextVk *contextVk)
 
 angle::Result ReadWriteResource::finishGPUWriteCommands(ContextVk *contextVk)
 {
-    ASSERT(!contextVk->getRenderer()->hasUnsubmittedUse(mReadOnlyUse));
+    ASSERT(!contextVk->getRenderer()->hasUnsubmittedUse(mReadWriteUse));
     return FinishRunningCommands(contextVk, mReadWriteUse);
 }
 

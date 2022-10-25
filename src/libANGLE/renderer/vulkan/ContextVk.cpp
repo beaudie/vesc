@@ -1192,7 +1192,6 @@ angle::Result ContextVk::initialize()
     // render pass is deferred until begin time.
     ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mCurrentSerialIndex));
     generateOutsideRenderPassCommandsQueueSerial();
-    mReservedOutsideRenderPassSerialCount = 0;
 
     return angle::Result::Continue;
 }
@@ -1830,7 +1829,6 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
 
     mGraphicsPipelineTransition.reset();
 
-    // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
 
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
@@ -1842,14 +1840,15 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
         return angle::Result::Continue;
     }
 
-    // VK_EXT_transform_feedback disallows binding pipelines while transform feedback is active.
-    // If a new pipeline needs to be bound, the render pass should necessarily be broken (which
-    // implicitly pauses transform feedback), as resuming requires a barrier on the transform
-    // feedback counter buffer.
     if (mRenderPassCommands->started())
     {
+        // Update the queue serial for the pipeline object.
         mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
 
+        // VK_EXT_transform_feedback disallows binding pipelines while transform feedback is active.
+        // If a new pipeline needs to be bound, the render pass should necessarily be broken (which
+        // implicitly pauses transform feedback), as resuming requires a barrier on the transform
+        // feedback counter buffer.
         if (mRenderPassCommands->isTransformFeedbackActiveUnpaused())
         {
             ANGLE_TRY(
@@ -3097,6 +3096,12 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
 
     ASSERT(!mLastSubmittedSerial.valid() || mLastSubmittedSerial < mLastFlushedSerial);
     mLastSubmittedSerial = mLastFlushedSerial;
+
+    // Since we just did a submission, and each submission must tracked by a unique queueuSerial, we
+    // have to generate new queueSerial here. Note that queueSerial for RenderpassCommands is
+    // deferred until renderpass start time (to leave room for outsideRenderPassCommands). We only
+    // need to generate a new queueSerial for outsideRenderPassCommands here.
+    generateOutsideRenderPassCommandsQueueSerial();
 
     // Now that we have processed resourceUseList, some of pending garbage may no longer pending
     // and should be moved to garbage list.
@@ -6576,78 +6581,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         return angle::Result::Continue;
     }
 
-    if (mIsAnyHostVisibleBufferWritten)
-    {
-        // Make sure all writes to host-visible buffers are flushed.  We have no way of knowing
-        // whether any buffer will be mapped for readback in the future, and we can't afford to
-        // flush and wait on a one-pipeline-barrier command buffer on every map().
-        VkMemoryBarrier memoryBarrier = {};
-        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
-        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT | VK_ACCESS_HOST_WRITE_BIT;
-
-        const VkPipelineStageFlags supportedShaderStages =
-            (VK_PIPELINE_STAGE_VERTEX_SHADER_BIT |
-             VK_PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT |
-             VK_PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT |
-             VK_PIPELINE_STAGE_GEOMETRY_SHADER_BIT | VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT |
-             VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT) &
-            mRenderer->getSupportedVulkanPipelineStageMask();
-        const VkPipelineStageFlags bufferWriteStages =
-            VK_PIPELINE_STAGE_TRANSFER_BIT | supportedShaderStages |
-            (getFeatures().supportsTransformFeedbackExtension.enabled
-                 ? VK_PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT
-                 : 0);
-
-        mOutsideRenderPassCommands->getCommandBuffer().memoryBarrier(
-            bufferWriteStages, VK_PIPELINE_STAGE_HOST_BIT, &memoryBarrier);
-        mIsAnyHostVisibleBufferWritten = false;
-    }
-
-    if (mGpuEventsEnabled)
-    {
-        EventName eventName = GetTraceEventName("Primary", mPrimaryBufferEventCounter);
-        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
-                                TRACE_EVENT_PHASE_END, eventName));
-    }
-    ANGLE_TRY(flushOutsideRenderPassCommands());
-
-    // We must add the per context dynamic buffers into resourceUseList before submission so that
-    // they get retained properly until GPU completes. We do not add current buffer into
-    // resourceUseList since they never get reused or freed until context gets destroyed, at which
-    // time we always wait for GPU to finish before destroying the dynamic buffers.
-    ASSERT(mLastFlushedSerial.valid());
-    QueueSerial flushedQueueSerial(mCurrentSerialIndex, mLastFlushedSerial);
-    mDefaultUniformStorage.updateQueueSerialAndReleaseInFlightBuffers(this, flushedQueueSerial);
-
-    if (mHasInFlightStreamedVertexBuffers.any())
-    {
-        for (size_t attribIndex : mHasInFlightStreamedVertexBuffers)
-        {
-            mStreamedVertexBuffers[attribIndex].updateQueueSerialAndReleaseInFlightBuffers(
-                this, flushedQueueSerial);
-        }
-        mHasInFlightStreamedVertexBuffers.reset();
-    }
-
     ANGLE_TRY(submitCommands(signalSemaphore, Submit::AllCommands));
-
-    generateOutsideRenderPassCommandsQueueSerial();
-
-    mHasAnyCommandsPendingSubmission = false;
-    onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
-    // Since we just flushed, deferred flush is no longer deferred.
-    mHasDeferredFlush = false;
-
-    ASSERT(mWaitSemaphores.empty());
-    ASSERT(mWaitSemaphoreStageMasks.empty());
-
-    if (mGpuEventsEnabled)
-    {
-        EventName eventName = GetTraceEventName("Primary", ++mPrimaryBufferEventCounter);
-        ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
-                                TRACE_EVENT_PHASE_BEGIN, eventName));
-    }
 
     // Try to detect frame boundary for both on screen and offscreen usage by detecting
     // fush/finish/swap.
@@ -6668,6 +6602,10 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
 
     ANGLE_TRY(flushImpl(nullptr, renderPassClosureReason));
     ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
+
+    // When asyncSubmission is enabled, flushImpl may not trigger actual submisison. finish call
+    // will force empty the commandProcessor, which could move some pending garbage to garbage list.
+    mRenderer->cleanupPendingSubmissionGarbage();
 
     clearAllGarbage();
 
@@ -6755,24 +6693,17 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     timestampQuery.writeTimestampToPrimary(this, &commandBuffer);
     ANGLE_VK_TRY(this, commandBuffer.end());
 
-    // Create fence for the submission
-    VkFenceCreateInfo fenceInfo = {};
-    fenceInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags             = 0;
-
-    vk::DeviceScoped<vk::Fence> fence(device);
-    ANGLE_VK_TRY(this, fence.get().init(device, fenceInfo));
-
     QueueSerial submitSerial;
     ANGLE_TRY(mRenderer->queueSubmitOneOff(this, std::move(commandBuffer), hasProtectedContent(),
-                                           mContextPriority, nullptr, 0, &fence.get(),
+                                           mContextPriority, nullptr, 0, nullptr,
                                            vk::SubmitPolicy::EnsureSubmitted, &submitSerial));
+
     // Track it with the submitSerial.
     timestampQuery.retainCommands(submitSerial);
 
     // Wait for the submission to finish.  Given no semaphores, there is hope that it would execute
     // in parallel with what's already running on the GPU.
-    ANGLE_VK_TRY(this, fence.get().wait(device, mRenderer->getMaxFenceWaitTimeNs()));
+    ANGLE_TRY(mRenderer->finishQueueSerial(this, submitSerial));
 
     // Get the query results
     vk::QueryResult result(1);
@@ -6858,13 +6789,14 @@ angle::Result ContextVk::beginNewRenderPass(
     *renderPassSerialOut     = mCurrentRenderPassSerial;
 
     // Now generate queueSerial for the renderPass.
-    generateRenderPassCommandsQueueSerial();
+    QueueSerial renderPassQueueSerial;
+    generateRenderPassCommandsQueueSerial(&renderPassQueueSerial);
 
     mPerfCounters.renderPasses++;
-    ANGLE_TRY(mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
-                                                   renderPassAttachmentOps, colorAttachmentCount,
-                                                   depthStencilAttachmentIndex, clearValues,
-                                                   mCurrentRenderPassSerial, commandBufferOut));
+    ANGLE_TRY(mRenderPassCommands->beginRenderPass(
+        this, framebuffer, renderArea, renderPassDesc, renderPassAttachmentOps,
+        colorAttachmentCount, depthStencilAttachmentIndex, clearValues, mCurrentRenderPassSerial,
+        renderPassQueueSerial, commandBufferOut));
 
     if (mCurrentGraphicsPipeline)
     {
@@ -6940,18 +6872,34 @@ uint32_t ContextVk::getCurrentViewCount() const
     return drawFBO->getRenderPassDesc().viewCount();
 }
 
+angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
+{
+    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(reason));
+
+    // Skip submit call if there is nothing to submit
+    if (mHasDeferredFlush && mLastFlushedSerial > mLastSubmittedSerial)
+    {
+        // If we have deferred glFlush call in the middle of renderpass, flush them now.
+        ANGLE_TRY(flushImpl(nullptr, reason));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassClosureReason reason)
 {
     // Ensure we flush the RenderPass *after* the prior commands.
-    ANGLE_TRY(flushOutsideRenderPassCommands());
-    ASSERT(mOutsideRenderPassCommands->empty());
+    if (!mOutsideRenderPassCommands->empty())
+    {
+        ANGLE_TRY(flushOutsideRenderPassCommandsImpl());
+        ASSERT(mOutsideRenderPassCommands->empty());
+    }
 
     if (!mRenderPassCommands->started())
     {
         // Before we early out, make sure we generate a new serial for outside commands, since we
         // did not do so when we flushed outside commands.
         generateOutsideRenderPassCommandsQueueSerial();
-
         onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
         return angle::Result::Continue;
     }
@@ -6970,7 +6918,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
         EventName eventName = GetTraceEventName("RP", mPerfCounters.renderPasses);
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_BEGIN, eventName));
-        ANGLE_TRY(flushOutsideRenderPassCommands());
+        ANGLE_TRY(flushOutsideRenderPassCommandsImpl());
     }
 
     addOverlayUsedBuffersCount(mRenderPassCommands);
@@ -6992,15 +6940,17 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
-    ASSERT(!mLastFlushedSerial.valid() ||
-           mLastFlushedSerial < mRenderPassCommands->getQueueSerial().getSerial());
+    ASSERT(mLastFlushedSerial < mRenderPassCommands->getQueueSerial().getSerial());
     mLastFlushedSerial = mRenderPassCommands->getQueueSerial().getSerial();
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
                                                  &mRenderPassCommands));
 
-    // Clear reserved serials since they are smaller than renderpass command's serial.
-    mReservedOutsideRenderPassSerialCount = 0;
+    // We just flushed out renderPassCommands above, and any future use of outsideRenderPassCommands
+    // must have a queueSerial bigger than renderPassCommands. To ensure this ordering, we generate
+    // a new queueSerial for outsideRenderPassCommands here.
+    mOutsideRenderPassSerialFactory.reset();
+
     // Generate a new serial for outside commands.
     generateOutsideRenderPassCommandsQueueSerial();
 
@@ -7009,22 +6959,11 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
         EventName eventName = GetTraceEventName("RP", mPerfCounters.renderPasses);
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_END, eventName));
-        ANGLE_TRY(flushOutsideRenderPassCommands());
+        ANGLE_TRY(flushOutsideRenderPassCommandsImpl());
     }
 
     mHasAnyCommandsPendingSubmission = true;
-    return angle::Result::Continue;
-}
 
-angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
-{
-    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(reason));
-
-    if (mHasDeferredFlush)
-    {
-        // If we have deferred glFlush call in the middle of renderpass, flush them now.
-        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
-    }
     return angle::Result::Continue;
 }
 
@@ -7088,26 +7027,25 @@ angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper, bool isEGL
     if (isEGLSyncObject || !mRenderPassCommands->started())
     {
         ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::SyncObjectInit));
-
         if (mLastSubmittedSerial.valid())
         {
             syncHelper->retainCommands(QueueSerial(mCurrentSerialIndex, mLastSubmittedSerial));
         }
-        return angle::Result::Continue;
     }
+    else
+    {
+        // Otherwise we must have a started renderpass. The sync object will track the completion of
+        // this renderpass.
+        mRenderPassCommands->retainResource(syncHelper);
+        onRenderPassFinished(RenderPassClosureReason::SyncObjectInit);
 
-    // Otherwise we must have a started renderpass. The sync object will track the completion of
-    // this renderpass.
-    mRenderPassCommands->retainResource(syncHelper);
-
-    onRenderPassFinished(RenderPassClosureReason::SyncObjectInit);
-
-    // Mark the context as having a deffered flush.  This is later used to close the render pass and
-    // cause a submission in this context if another context wants to wait on the fence while the
-    // original context never issued a submission naturally.  Note that this also takes care of
-    // contexts that think they issued a submission (through glFlush) but that the submission got
-    // deferred (due to the deferFlushUntilEndRenderPass feature).
-    mHasDeferredFlush = true;
+        // Mark the context as having a deffered flush.  This is later used to close the render pass
+        // and cause a submission in this context if another context wants to wait on the fence
+        // while the original context never issued a submission naturally.  Note that this also
+        // takes care of contexts that think they issued a submission (through glFlush) but that the
+        // submission got deferred (due to the deferFlushUntilEndRenderPass feature).
+        mHasDeferredFlush = true;
+    }
 
     return angle::Result::Continue;
 }
@@ -7214,13 +7152,9 @@ angle::Result ContextVk::flushAndSubmitOutsideRenderPassCommands()
     return submitCommands(nullptr, Submit::OutsideRenderPassCommandsOnly);
 }
 
-angle::Result ContextVk::flushOutsideRenderPassCommands()
+angle::Result ContextVk::flushOutsideRenderPassCommandsImpl()
 {
-    if (mOutsideRenderPassCommands->empty())
-    {
-        return angle::Result::Continue;
-    }
-
+    ASSERT(!mOutsideRenderPassCommands->empty());
     addOverlayUsedBuffersCount(mOutsideRenderPassCommands);
 
     if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
@@ -7246,6 +7180,38 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     mHasAnyCommandsPendingSubmission = true;
 
     mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::flushOutsideRenderPassCommands()
+{
+    if (mOutsideRenderPassCommands->empty())
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
+    {
+        // We used up all reserved serials. In order to maintain serial order (outsideRenderPass
+        // must be smaller than renderpass), we also endRenderPass here as well. This is not
+        // expected to happen often in real world usage.
+        ANGLE_TRY(flushCommandsAndEndRenderPass(
+            RenderPassClosureReason::OutOfReservedQueueSerialForOutsideCommands));
+    }
+    else
+    {
+        ANGLE_TRY(flushOutsideRenderPassCommandsImpl());
+
+        // Since queueSerial is used to decide if a resource is being used or not, we have to
+        // generate a new queueSerial for outsideCommandBuffer since we just flushed
+        // outsideRenderPassCommands.
+        generateOutsideRenderPassCommandsQueueSerial();
+    }
+
+    ASSERT(!mRenderPassCommands->started() ||
+           mOutsideRenderPassCommands->getQueueSerial().getSerial() <
+               mRenderPassCommands->getQueueSerial().getSerial());
+
     return angle::Result::Continue;
 }
 

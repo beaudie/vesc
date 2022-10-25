@@ -41,7 +41,6 @@ class ResourceUse final
     ~ResourceUse() = default;
 
     ResourceUse(const QueueSerial &queueSerial) { setQueueSerial(queueSerial); }
-    ResourceUse(const Serials &otherSerials) { mSerials = otherSerials; }
 
     // Copy constructor
     ResourceUse(const ResourceUse &other) : mSerials(other.mSerials) {}
@@ -99,7 +98,6 @@ class ResourceUse final
     // Returns true if it contains a serial that is greater than
     bool operator>(const QueueSerial &queuSerial) const
     {
-        ASSERT(queuSerial.valid());
         return mSerials.size() > queuSerial.getIndex() &&
                mSerials[queuSerial.getIndex()] > queuSerial.getSerial();
     }
@@ -114,7 +112,6 @@ class ResourceUse final
     }
 
   private:
-    // The most recent time of use in a VkQueue.
     Serials mSerials;
 };
 

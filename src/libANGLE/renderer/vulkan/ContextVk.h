@@ -772,14 +772,14 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::ImageLoadContext getImageLoadContext() const;
 
-    bool hasUnflushedUse(const vk::ResourceUse &use) const;
-    bool hasUnflushedUse(const vk::Resource &resource) const
+    bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
+    bool hasUnsubmittedUse(const vk::Resource &resource) const
     {
-        return hasUnflushedUse(resource.getResourceUse());
+        return hasUnsubmittedUse(resource.getResourceUse());
     }
-    bool hasUnflushedUse(const vk::ReadWriteResource &resource) const
+    bool hasUnsubmittedUse(const vk::ReadWriteResource &resource) const
     {
-        return hasUnflushedUse(resource.getResourceUse());
+        return hasUnsubmittedUse(resource.getResourceUse());
     }
 
   private:
@@ -1218,6 +1218,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void clearAllGarbage();
     void dumpCommandStreamDiagnostics();
     angle::Result flushOutsideRenderPassCommands();
+    angle::Result flushOutsideRenderPassCommandsImpl();
     // Flush commands and end render pass without setting any dirty bits.
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
@@ -1306,7 +1307,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
     void generateOutsideRenderPassCommandsQueueSerial();
-    void generateRenderPassCommandsQueueSerial();
+    void generateRenderPassCommandsQueueSerial(QueueSerial *queueSerialOut);
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1538,8 +1539,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     RenderPassSerialFactory mRenderPassSerialFactory;
 
     static constexpr size_t kMaxReservedOutsideQueueSerials = 15;
-    Serial mFirstReservedOutsideRenderPassSerial;
-    size_t mReservedOutsideRenderPassSerialCount;
+    RangedSerialFactory mOutsideRenderPassSerialFactory;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
@@ -1605,27 +1605,36 @@ ANGLE_INLINE void ContextVk::retainResource(vk::Resource *resource)
 ANGLE_INLINE void ContextVk::generateOutsideRenderPassCommandsQueueSerial()
 {
     ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
+
+    // If there is reserved serial number, use that. Otherwise generate a new one.
+    Serial serial;
+    if (mOutsideRenderPassSerialFactory.generate(&serial))
+    {
+        mOutsideRenderPassCommands->setQueueSerial(mCurrentSerialIndex, serial);
+        return;
+    }
+
     mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
     mOutsideRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
 }
 
-ANGLE_INLINE void ContextVk::generateRenderPassCommandsQueueSerial()
+ANGLE_INLINE void ContextVk::generateRenderPassCommandsQueueSerial(QueueSerial *queueSerialOut)
 {
+    ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
+
     // We reserve some serial number for outsideRenderPassCommands in case we have to flush.
     ASSERT(mOutsideRenderPassCommands->getQueueSerial().valid());
-    mFirstReservedOutsideRenderPassSerial =
-        mRenderer->generateQueueSerial(mCurrentSerialIndex, kMaxReservedOutsideQueueSerials);
-    mReservedOutsideRenderPassSerialCount = kMaxReservedOutsideQueueSerials;
+    mRenderer->reserveQueueSerials(mCurrentSerialIndex, kMaxReservedOutsideQueueSerials,
+                                   &mOutsideRenderPassSerialFactory);
 
-    ASSERT(mCurrentSerialIndex != kInvalidQueueSerialIndex);
-    mCurrentSerial = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
-    mRenderPassCommands->setQueueSerial(mCurrentSerialIndex, mCurrentSerial);
+    mCurrentSerial  = mRenderer->generateQueueSerial(mCurrentSerialIndex, 1);
+    *queueSerialOut = QueueSerial(mCurrentSerialIndex, mCurrentSerial);
 }
 
-ANGLE_INLINE bool ContextVk::hasUnflushedUse(const vk::ResourceUse &use) const
+ANGLE_INLINE bool ContextVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
 {
     return mCurrentSerialIndex != kInvalidQueueSerialIndex &&
-           use > QueueSerial(mCurrentSerialIndex, mLastFlushedSerial);
+           use > QueueSerial(mCurrentSerialIndex, mLastSubmittedSerial);
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)
