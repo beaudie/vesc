@@ -46,6 +46,30 @@
       },
       "revId": "0240121f43e577c30a58de3bf692cac417a408a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e420f15_5a33e952",
+        "filename": "src/image_util/AstcDecompressorNoOp.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-25T18:03:00Z",
+      "side": 1,
+      "message": "I assume something else complained about `static AstcDecompressorNoOp instance; return \u0026instance;`?",
+      "parentUuid": "f0005829_75a8bdea",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 15
+      },
+      "revId": "0240121f43e577c30a58de3bf692cac417a408a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
