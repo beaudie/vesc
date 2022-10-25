@@ -20,6 +20,7 @@
 #include "common/PackedEnums.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/HandleAllocator.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
@@ -184,6 +185,38 @@ struct Error
     uint32_t line;
 };
 
+// Because we release queue index when context becomes non-current, in order to use up all index
+// count, you will need to have 256 threads each has a context current. This is not a reasonable
+// usage case.
+static constexpr int32_t kMaxQueueSerialIndexCount = 256;
+class QueueSerialIndexAllocator final
+{
+  public:
+    SerialIndex allocate()
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        SerialIndex index = mAllocator.allocate();
+        if (index > kMaxQueueSerialIndexCount)
+        {
+            mAllocator.release(index);
+            index = -1;
+        }
+        // The handle allocator allocates handles starting form 1. The index we want to return
+        // starts with 0. So we minus 1 here.
+        return index - 1;
+    }
+
+    void release(SerialIndex index)
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        mAllocator.release(index + 1);
+    }
+
+  private:
+    gl::HandleAllocator mAllocator;
+    std::mutex mMutex;
+};
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
@@ -202,9 +235,18 @@ class Context : angle::NonCopyable
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    const QueueSerial &getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    SerialIndex getSerialIndex() const { return mCurrentQueueSerial.index; }
+    Serial getCurrentSerial() const { return mCurrentQueueSerial.serial; }
+    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
+
   protected:
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
+
+    // Per context queue serial
+    QueueSerial mCurrentQueueSerial;
+    Serial mLastSubmittedSerial;
 };
 
 class RenderPassDesc;
@@ -300,20 +342,22 @@ class ObjectAndSerial final : angle::NonCopyable
   public:
     ObjectAndSerial() {}
 
-    ObjectAndSerial(ObjT &&object, Serial serial) : mObject(std::move(object)), mSerial(serial) {}
+    ObjectAndSerial(ObjT &&object, QueueSerial serial)
+        : mObject(std::move(object)), mQueueSerial(serial)
+    {}
 
     ObjectAndSerial(ObjectAndSerial &&other)
-        : mObject(std::move(other.mObject)), mSerial(std::move(other.mSerial))
+        : mObject(std::move(other.mObject)), mQueueSerial(std::move(other.mQueueSerial))
     {}
     ObjectAndSerial &operator=(ObjectAndSerial &&other)
     {
-        mObject = std::move(other.mObject);
-        mSerial = std::move(other.mSerial);
+        mObject      = std::move(other.mObject);
+        mQueueSerial = std::move(other.mQueueSerial);
         return *this;
     }
 
-    Serial getSerial() const { return mSerial; }
-    void updateSerial(Serial newSerial) { mSerial = newSerial; }
+    const QueueSerial &getQueueSerial() const { return mQueueSerial; }
+    void updateSerial(Serial newSerial) { mQueueSerial.serial = newSerial; }
 
     const ObjT &get() const { return mObject; }
     ObjT &get() { return mObject; }
@@ -323,12 +367,12 @@ class ObjectAndSerial final : angle::NonCopyable
     void destroy(VkDevice device)
     {
         mObject.destroy(device);
-        mSerial = Serial();
+        mQueueSerial.serial = Serial();
     }
 
   private:
     ObjT mObject;
-    Serial mSerial;
+    QueueSerial mQueueSerial;
 };
 
 // Reference to a deleted object. The object is due to be destroyed at some point in the future.
@@ -411,7 +455,7 @@ class StagingBuffer final : angle::NonCopyable
   public:
     StagingBuffer();
     void release(ContextVk *contextVk);
-    void collectGarbage(RendererVk *renderer, Serial serial);
+    void collectGarbage(RendererVk *renderer, const QueueSerial &queueSerial);
     void destroy(RendererVk *renderer);
 
     angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
@@ -760,6 +804,8 @@ class Shared final : angle::NonCopyable
   private:
     RefCounted<T> *mRefCounted;
 };
+
+using SharedFence = Shared<Fence>;
 
 template <typename T>
 class Recycler final : angle::NonCopyable

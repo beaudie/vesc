@@ -91,7 +91,7 @@ class DynamicBuffer : angle::NonCopyable
 
     // This adds in-flight buffers to the mResourceUseList in the share group and then releases
     // them.
-    void releaseInFlightBuffersToResourceUseList(ContextVk *contextVk);
+    void updateQueueSerialAndReleaseInFlightBuffers(ContextVk *contextVk);
 
     // This frees resources immediately.
     void destroy(RendererVk *renderer);
@@ -1118,8 +1118,6 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     bool hasGLMemoryBarrierIssued() const { return mHasGLMemoryBarrierIssued; }
 
-    ResourceUseList &&releaseResourceUseList();
-
     void retainResource(Resource *resource);
 
     void retainReadOnlyResource(ReadWriteResource *readWriteResource);
@@ -1127,6 +1125,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     void assignID(CommandBufferID id) { mID = id; }
     CommandBufferID releaseID();
+
+    void setQueueSerial(const QueueSerial &queueSerial) { mQueueSerial = queueSerial; }
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
@@ -1184,8 +1184,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
     bool mHasGLMemoryBarrierIssued;
 
     // Tracks resources used in the command buffer.
-    vk::ResourceUseList mResourceUseList;
     uint32_t mUsedBufferCount;
+
+    QueueSerial mQueueSerial;
 };
 
 class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCommon
