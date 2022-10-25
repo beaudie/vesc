@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4d68b5f_886d2261",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-10-25T16:08:44Z",
+      "side": 1,
+      "message": "In it\u0027s current state, this test also happens when capture is disabled on the build and during runtime. Suggestions on how to limit this are welcome.",
+      "revId": "6692fd7fd3d26bea2fe25b33e7c97f8000833460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
