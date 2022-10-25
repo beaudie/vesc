@@ -363,10 +363,13 @@ bool X11Window::initializeImpl(const std::string &name, int width, int height)
 
     XFlush(mDisplay);
 
-    mX      = 0;
-    mY      = 0;
-    mWidth  = width;
-    mHeight = height;
+    mX = 0;
+    mY = 0;
+
+    // On some X11 versions there appears to be a race condition where XDestroyWindow+XCreateWindow
+    // ignores the new size (the same window normally gets reused but this only happens sometimes)
+    // Explicitly trigger / wait for resize event to be safe.
+    resize(width, height);
 
     return true;
 }
@@ -378,6 +381,11 @@ void X11Window::destroy()
     if (mWindow)
     {
         XDestroyWindow(mDisplay, mWindow);
+        while (!mDestroyed)
+        {
+            messageLoop();
+            angle::Sleep(10);
+        }
         mWindow = 0;
     }
     if (mDisplay)
@@ -701,7 +709,8 @@ void X11Window::processEvent(const XEvent &xEvent)
             break;
 
         case DestroyNotify:
-            // We already received WM_DELETE_WINDOW
+            // Note: we already received WM_DELETE_WINDOW
+            mDestroyed = true;
             break;
 
         case ClientMessage:
