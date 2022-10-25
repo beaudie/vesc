@@ -5680,6 +5680,8 @@ void CoherentBuffer::removeProtection(PageSharingType sharingType)
 
 CoherentBufferTracker::CoherentBufferTracker()
 {
+    mUseShadowMemory = true;
+
     mPageSize = GetPageSize();
 
     PageFaultCallback callback = [this](uintptr_t address) { return handleWrite(address); };
