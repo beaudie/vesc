@@ -299,7 +299,6 @@ class CommandQueueInterface : angle::NonCopyable
                                             const ResourceUse &use,
                                             uint64_t timeout)          = 0;
     virtual angle::Result waitIdle(Context *context, uint64_t timeout) = 0;
-    virtual QueueSerial reserveSubmitSerial()                          = 0;
     virtual angle::Result submitCommands(
         Context *context,
         bool hasProtectedContent,
@@ -365,12 +364,14 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result finishQueueSerial(Context *context,
                                     const QueueSerial &queueSerial,
                                     uint64_t timeout);
+    // Wait for finishCount command batches to finish.
+    angle::Result finishCommandBatch(Context *context, size_t finishCount, uint64_t timeout);
+    // Wait for finishSerials to finish.
     angle::Result finishResourceUse(Context *context,
                                     const ResourceUse &use,
                                     uint64_t timeout) override;
+    // Wait for all submitted commands to finish.
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
-
-    QueueSerial reserveSubmitSerial() override;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -434,11 +435,7 @@ class CommandQueue final : public CommandQueueInterface
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     void resetPerFramePerfCounters();
 
-    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
     bool hasUnfinishedUse(const ResourceUse &use) const;
-    // The ResourceUse still have unfinished queue serial by vulkan.
-    bool useInRunningCommands(const ResourceUse &use) const;
-    // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const ResourceUse &use) const;
 
   private:
@@ -449,7 +446,11 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
+    size_t getBatchCountUpToSerials(const Serials &serials, Shared<Fence> **fenceToWaitOnOut);
+
+    // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
+    bool allInflightCommandsAreBeforeQueueSerial(const QueueSerial &submitQueueSerial);
 
     PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
     {
@@ -486,9 +487,7 @@ class CommandQueue final : public CommandQueueInterface
     PersistentCommandPool mProtectedPrimaryCommandPool;
 
     // Queue serial management.
-    AtomicSerialFactory mQueueSerialFactory;
     QueueSerialFixedArray mLastSubmittedSerials;
-    Serial mCurrentQueueSerial;
     // This queue serial can be read/write from different threads, so we need to use atomic
     // operations to access the underline value. Since we only do load/store on this value, it
     // should be just a normal uint64_t load/store on most platforms.
@@ -536,8 +535,6 @@ class CommandProcessor final : public Context, public CommandQueueInterface
                                     uint64_t timeout) override;
 
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
-
-    QueueSerial reserveSubmitSerial() override;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -602,12 +599,6 @@ class CommandProcessor final : public Context, public CommandQueueInterface
     {
         return mCommandQueue.hasUnfinishedUse(use);
     }
-
-    ANGLE_INLINE bool useInRunningCommands(const ResourceUse &use) const
-    {
-        return mCommandQueue.useInRunningCommands(use);
-    }
-
     bool hasUnsubmittedUse(const ResourceUse &use) const;
 
   private:
@@ -650,8 +641,8 @@ class CommandProcessor final : public Context, public CommandQueueInterface
     CommandQueue mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
-    // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
-    // CommandQueue occur in a separate thread.
+    // mLastSubmittedSerials in CommandQueue since submission from CommandProcessor to CommandQueue
+    // occur in a separate thread.
     QueueSerialFixedArray mLastSubmittedSerials;
 
     mutable std::mutex mQueueSerialMutex;
