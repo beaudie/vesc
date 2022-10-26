@@ -16,6 +16,24 @@
       "message": "Is this fixing a bug? Could you please add a regression test?",
       "revId": "8dbb509d01370d18028a781ab6053d5eeff07898",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c65007e_e61537eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-26T18:47:39Z",
+      "side": 1,
+      "message": "There\u0027s no bug to fix here. The intermediate variable seems unnecessary on MSL since the existing tests still pass on Metal with this change.",
+      "parentUuid": "7a7de06e_af4d17f6",
+      "revId": "8dbb509d01370d18028a781ab6053d5eeff07898",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
