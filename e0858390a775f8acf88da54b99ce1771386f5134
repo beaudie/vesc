@@ -37,6 +37,74 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97ea8ca5_64cee72c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5935,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:48:55Z",
+      "side": 1,
+      "message": "Is it possible that `mCoherentBufferTracker::mUseShadowMemory` is false? In that case, will we just add another CoherentBuffer without ShadowMemory, and its\u0027 start points at `realMapPointer`, is that the expected behavior?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9ce4643_cbb2865b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5967,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:48:55Z",
+      "side": 1,
+      "message": "Is this a typo? Did you intend to write: When `NOT` using shadow memory... ?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59bc97e_8282fe64",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7275,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:48:55Z",
+      "side": 1,
+      "message": "The comment here is a bit misleading, in the switch case block, we are only setting the corresponding buffer shadowDirty bit to true, we are not updating the shadow memory with real memory yet. Suggesting change it to `// when using shadow memory, we need to mark the buffer shadowDirty bit to true`.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cea312e_52d79b03",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7295,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:48:55Z",
+      "side": 1,
+      "message": "same as above, the comment suggesting changing the comment to `when using shadow memory, we need to mark all the buffer\u0027s shadowDirty bit to true` or something similar.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2c5b7b9_7b9be434",
         "filename": "src/libANGLE/capture/FrameCapture.h",
         "patchSetId": 8
