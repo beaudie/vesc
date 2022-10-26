@@ -105,6 +105,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e8e70dc_811ff410",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:50:21Z",
+      "side": 1,
+      "message": "Let\u0027s change `shadowMemory` to `mShadowMemory`.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2c5b7b9_7b9be434",
         "filename": "src/libANGLE/capture/FrameCapture.h",
         "patchSetId": 8
@@ -116,6 +133,23 @@
       "writtenOn": "2022-10-26T01:21:13Z",
       "side": 1,
       "message": "is there any reason we don\u0027t want to make `shadowDirty` a private class member?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcc27980_d6a5a4e5",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:50:21Z",
+      "side": 1,
+      "message": "I think class member should be prefixed with `m`, so let\u0027s change `shadowDirty` to `mShadowDirty`.",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
