@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c8a5fe_d9d3976a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-26T14:27:22Z",
+      "side": 1,
+      "message": "LGTM and matches the behavior of textureMultisampleANGLE above.",
+      "revId": "2624154dae0828efd720c84c82ef191619fb0a87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
