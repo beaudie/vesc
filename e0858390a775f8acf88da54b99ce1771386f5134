@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b098bc3_cebf1169",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5459,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:21:13Z",
+      "side": 1,
+      "message": "Should we remove this line?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795a391e_723b851a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5725,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:21:13Z",
+      "side": 1,
+      "message": "Can I ask where does `0xb400000000000000` come from?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2c5b7b9_7b9be434",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-26T01:21:13Z",
+      "side": 1,
+      "message": "is there any reason we don\u0027t want to make `shadowDirty` a private class member?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
