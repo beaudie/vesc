@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29929c8c_66e40de7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:21:34Z",
+      "side": 1,
+      "message": "An option to avoid the extra overhead of validation (if it turns out to be non-negligible) is for the spec not to mandate an error return value, but instead say \"if you use anything but these, PLS planes may lose their data\". It\u0027s not great for debugging though.\n\nWe could also say they _may_ return an error, and then make that check conditional to build-with-Chromium, but that\u0027s hacky.\n\nI\u0027m mostly concerned with the fact that every app is going to pay this validation cost even though WebGL is the only user in practice (for now at least).\n\nLet\u0027s hope measurements show it to be negligible :-S",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be7ec62a_539d535e",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 18
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:21:34Z",
+      "side": 1,
+      "message": "There\u0027s another thing to add here. We should disallow the depth/stencil attachment to be simultaneously bound as sampler. We support that in the Vulkan backend by juggling between writable and read-only layout for depth/stencil, but that can lead to render pass breaks.\n\nSee `ContextVk::updateActiveTextures` where we `flushCommandsAndEndRenderPass` for more context. Note that simultaneous read-only depth attachment (depth test without write) and sampler is not a feedback loop, which is otherwise disallowed in the spec.",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4fbe146_7c03823d",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:21:34Z",
+      "side": 1,
+      "message": "A little worried about CPU overhead here, have you made any measurements? My gut feeling says `inline` this function, along with everything that\u0027s called by the `if` inside it. That\u0027s usually how we deal with conditional stuff in the hot path:\n\n```\ninline func()\n{\n    if (inlinable_expression())\n    {\n        function_call_that_does_heavy_work();\n    }\n}\n```\n\nI\u0027d also keep an eye out on binary size with your current implementation and the inline one, how much does inlining save us on the CPU and hurt us in binary size?",
+      "range": {
+        "startLine": 62,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 47
+      },
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
