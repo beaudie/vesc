@@ -108,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9bc76b05_2ccfc705",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T22:37:12Z",
+      "side": 1,
+      "message": "Yeah the naming for Lavapipe would be ES1_VULKAN_Lavapipe or something similar to that. This CL just sets up Zink. Lavapipe is a Vulkan implementation, so it would use the Vulkan ICD interface/json file, it\u0027s not conflated with the Mesa EGL/GLES front-ends.",
+      "parentUuid": "8f257e42_70bcc943",
+      "range": {
+        "startLine": 894,
+        "startChar": 19,
+        "endLine": 894,
+        "endChar": 27
+      },
+      "revId": "12acf20926ff7d35c5b79dde0e4c97eda46b59ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "954b720e_ee835642",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 4
