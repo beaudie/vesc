@@ -1307,9 +1307,11 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->preserveAttachmentCount = 0;
     applicationSubpass->pPreserveAttachments    = nullptr;
 
-    // Specify rasterization order for color on the subpass.  This is required when the
-    // corresponding flag is set on the pipeline.
-    if (contextVk->getFeatures().supportsRasterizationOrderAttachmentAccess.enabled)
+    // Specify rasterization order for color on the subpass when available and
+    // there is framebuffer fetch.  This is required when the corresponding
+    // flag is set on the pipeline.
+    if (contextVk->getFeatures().supportsRasterizationOrderAttachmentAccess.enabled &&
+        desc.hasFramebufferFetch())
     {
         for (VkSubpassDescription &subpass : subpassDesc)
         {
@@ -3443,9 +3445,11 @@ void GraphicsPipelineDesc::initializePipelineFragmentOutputState(
             mSharedNonVertexInput.renderPass.getColorUnresolveAttachmentMask().count());
     }
 
-    // Specify rasterization order for color when available.  This allows implementation of coherent
-    // framebuffer fetch / advanced blend.
-    if (context->getFeatures().supportsRasterizationOrderAttachmentAccess.enabled)
+    // Specify rasterization order for color when available and there is
+    // framebuffer fetch.  This allows implementation of coherent framebuffer
+    // fetch / advanced blend.
+    if (context->getFeatures().supportsRasterizationOrderAttachmentAccess.enabled &&
+        getRenderPassFramebufferFetchMode())
     {
         stateOut->blendState.flags |=
             VK_PIPELINE_COLOR_BLEND_STATE_CREATE_RASTERIZATION_ORDER_ATTACHMENT_ACCESS_BIT_EXT;
