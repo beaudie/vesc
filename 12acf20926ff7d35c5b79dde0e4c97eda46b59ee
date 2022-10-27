@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a653ab1_a2538045",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T21:43:50Z",
+      "side": 1,
+      "message": "The \"VULKAN\" stands for the ANGLE Vulkan back-end.\n\nIf we wanted to be pedantic and consistent it would be like \n\nES1_Mesa_Zink\nES1_ANGLE_Vulkan\n\netc. I\u0027d at least prefer to leave that for a larger refactoring.",
+      "parentUuid": "eb9ebda3_c253d234",
+      "range": {
+        "startLine": 894,
+        "startChar": 19,
+        "endLine": 894,
+        "endChar": 27
+      },
+      "revId": "12acf20926ff7d35c5b79dde0e4c97eda46b59ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "954b720e_ee835642",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 4
@@ -83,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e86a0427_d54f5eb4",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T21:43:50Z",
+      "side": 1,
+      "message": "See other comment.",
+      "parentUuid": "954b720e_ee835642",
+      "range": {
+        "startLine": 103,
+        "startChar": 5,
+        "endLine": 103,
+        "endChar": 29
+      },
+      "revId": "12acf20926ff7d35c5b79dde0e4c97eda46b59ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7d3c45ce_2206a943",
         "filename": "util/EGLWindow.cpp",
         "patchSetId": 4
@@ -94,6 +142,30 @@
       "writtenOn": "2022-10-27T21:22:03Z",
       "side": 1,
       "message": "Maybe this answers my other questions.  To use Mesa at all, you have to use DRI?",
+      "range": {
+        "startLine": 160,
+        "startChar": 43,
+        "endLine": 160,
+        "endChar": 46
+      },
+      "revId": "12acf20926ff7d35c5b79dde0e4c97eda46b59ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bb55275_258b0e2b",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T21:43:50Z",
+      "side": 1,
+      "message": "Well, there\u0027s a few things that we have to do for Zink. In this file, we set some environment variables, and in another place, we point to a specific libEGL.so location we know is Zink\u0027s version. I\u0027m not sure how to do it any other way. ANGLE builds to outdir/libEGL.so and we can\u0027t copy Mesa into that location. Even if we did we\u0027d still be missing at least the loader override.",
+      "parentUuid": "7d3c45ce_2206a943",
       "range": {
         "startLine": 160,
         "startChar": 43,
