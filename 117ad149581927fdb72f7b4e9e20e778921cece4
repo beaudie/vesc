@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50ad142a_a23a775a",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "This function is now called by places that do not own the char* they\u0027re passing, so using a stack variable instead of a pointer avoids any memory issues.",
+      "parentUuid": "b6df59f2_072fbf26",
+      "range": {
+        "startLine": 816,
+        "startChar": 47,
+        "endLine": 816,
+        "endChar": 72
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c295e1f_70da729b",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-10-27T04:08:31Z",
       "side": 1,
       "message": "Can we rename this since it isn\u0027t a failure case?",
+      "range": {
+        "startLine": 911,
+        "startChar": 30,
+        "endLine": 911,
+        "endChar": 37
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db323a7b_d92a22e0",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c295e1f_70da729b",
       "range": {
         "startLine": 911,
         "startChar": 30,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68b623fa_f6f45f0b",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b96ff619_3786a928",
+      "range": {
+        "startLine": 914,
+        "startChar": 12,
+        "endLine": 914,
+        "endChar": 18
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c9fdcfd_f2a39ef2",
@@ -83,6 +155,30 @@
       "writtenOn": "2022-10-27T04:08:31Z",
       "side": 1,
       "message": "These should be handled in `TraceTestArg` now.",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 86
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52ca23dc_88d046e7",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c9fdcfd_f2a39ef2",
       "range": {
         "startLine": 107,
         "startChar": 0,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd52868b_56f45228",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fce81523_bf78300e",
+      "range": {
+        "startLine": 44,
+        "startChar": 7,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a34ba3e7_8c0f483b",
@@ -129,6 +249,30 @@
       "writtenOn": "2022-10-27T04:08:31Z",
       "side": 1,
       "message": "Aren\u0027t these redundant with the calls in the for loop above?",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 450,
+        "endChar": 45
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21752c3_34234074",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a34ba3e7_8c0f483b",
       "range": {
         "startLine": 449,
         "startChar": 0,
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "affd657e_6ca5bc50",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "068a0bfc_235b1bdc",
+      "range": {
+        "startLine": 487,
+        "startChar": 16,
+        "endLine": 487,
+        "endChar": 27
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f082eae7_15ade596",
@@ -185,6 +353,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8676e77_a36b7dfc",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Yes, I used the number of frames in the trace. I originally included this to see if I could get away with a lower frame limit and speed up testing, but found that it could result in incorrect results. For example, asphalt_9 rendered fine for a few frames before failing in its default configuration. A lower frame limit would miss this failure, which means it would miss a required extension.\n\nI\u0027ll remove this option as I believe it results in incorrect behavior.",
+      "parentUuid": "f082eae7_15ade596",
+      "range": {
+        "startLine": 616,
+        "startChar": 0,
+        "endLine": 616,
+        "endChar": 89
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8a7d98d_a60a61a7",
@@ -198,6 +390,30 @@
       "writtenOn": "2022-10-27T04:08:31Z",
       "side": 1,
       "message": "Did you mean to put this here?  It is also present a few lines below.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 37
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c25cb87_a0575ad0",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-27T19:31:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8a7d98d_a60a61a7",
       "range": {
         "startLine": 133,
         "startChar": 0,
