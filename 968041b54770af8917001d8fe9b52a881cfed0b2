@@ -22,6 +22,30 @@
       },
       "revId": "968041b54770af8917001d8fe9b52a881cfed0b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "505b0d3a_3001e47c",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-10-27T23:40:46Z",
+      "side": 1,
+      "message": "Hi,\n\nPlease email https://groups.google.com/g/angleproject with this question. I\u0027m pretty sure ANGLE builds correctly on the latest version of the iPhone simulator, as there are bots on ANGLE\u0027s waterfall testing this, but it\u0027s also possible we\u0027re building with an older iPhone SDK and not testing the most recent one.\n\nAlternatively, feel free to file a bug on anglebug.com and provide all needed details about how to reproduce the build failure.",
+      "parentUuid": "997e34a8_26b2b540",
+      "range": {
+        "startLine": 176,
+        "startChar": 10,
+        "endLine": 176,
+        "endChar": 15
+      },
+      "revId": "968041b54770af8917001d8fe9b52a881cfed0b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
