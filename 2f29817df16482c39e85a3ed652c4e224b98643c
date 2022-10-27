@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d71510d_d4570bf3",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:51:17Z",
+      "side": 1,
+      "message": "Can\u0027t happen, we don\u0027t accept this extension in the source shader.\n\nYou don\u0027t need any of the changes to this file, do you? `PIXEL_LOCAL_EXT` either",
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c3c109_360a25e4",
+        "filename": "src/compiler/translator/tree_ops/RewritePixelLocalStorage.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:51:17Z",
+      "side": 1,
+      "message": "please use EbpLow or EbpMedium, no need for these constants to be highp",
+      "range": {
+        "startLine": 279,
+        "startChar": 50,
+        "endLine": 279,
+        "endChar": 57
+      },
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0862a644_58710cf4",
+        "filename": "src/libANGLE/renderer/gl/PLSProgramCache.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:51:17Z",
+      "side": 1,
+      "message": "nit: put in anonymous namespace instead",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d15c1b95_3ef5fefa",
+        "filename": "src/libANGLE/renderer/gl/PLSProgramCache.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T04:51:17Z",
+      "side": 1,
+      "message": "nit: our style is:\n\n```\nconstexpr char kLoadPLSVertexShader[] \u003d R\"(#version 310 es\nvoid main()\n{\n...\n})\";\n```",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 56,
+        "endChar": 12
+      },
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
