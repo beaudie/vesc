@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ff5e62f_2a3f36dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T19:44:44Z",
+      "side": 1,
+      "message": "PTAL. This won\u0027t have any effect on the bots yet, but Shabi tested it locally and it ran a T-Rex trace.",
+      "revId": "12acf20926ff7d35c5b79dde0e4c97eda46b59ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
