@@ -34,6 +34,47 @@
       "parentUuid": "6af49a5f_243aa04e",
       "revId": "edd81b2f517311eb8f36753c5cb26ed107421623",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fbdb47e_a05276db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T20:39:52Z",
+      "side": 1,
+      "message": "Sadness",
+      "parentUuid": "450b2916_00322cb6",
+      "revId": "edd81b2f517311eb8f36753c5cb26ed107421623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44ef279b_f3f0d3f6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-27T20:39:52Z",
+      "side": 1,
+      "message": "Feel free to turn this into `isQualcomm`. We wouldn\u0027t want this on the proprietary driver either if every they support it.",
+      "range": {
+        "startLine": 3896,
+        "startChar": 9,
+        "endLine": 3896,
+        "endChar": 29
+      },
+      "revId": "edd81b2f517311eb8f36753c5cb26ed107421623",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
