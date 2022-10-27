@@ -1,6 +1,46 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "173554da_428be919",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "+1 to Yuxin\u0027s feedback, a few additional questoins/suggestions.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4b87400_eb8e0a58",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5682,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "For clarity and help folks not get nervous about this change, I think it would be worth checking whether it is enabled here, rather than inside the function, i.e.:\n```\nFrameCaptureShared *frameCaptureShared \u003d context-\u003egetShareGroup()-\u003egetFrameCaptureShared();\nif (frameCaptureShared-\u003eenabled())\n{\n    return frameCaptureShared-\u003emaybeGetShadowMemoryPointer(buffer, length, access);\n}\nelse\n{\n   return buffer-\u003egetMapPointer();\n}\n```",
+      "range": {
+        "startLine": 5682,
+        "startChar": 0,
+        "endLine": 5682,
+        "endChar": 96
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b098bc3_cebf1169",
@@ -20,6 +60,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e9f5d0b_090a742c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5462,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "typo: have",
+      "range": {
+        "startLine": 5462,
+        "startChar": 39,
+        "endLine": 5462,
+        "endChar": 42
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81c88473_3a11d957",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5586,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "This would be clearer as protectAll to compliment protectPageRange.",
+      "range": {
+        "startLine": 5586,
+        "startChar": 21,
+        "endLine": 5586,
+        "endChar": 28
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "795a391e_723b851a",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -31,6 +117,29 @@
       "writtenOn": "2022-10-26T01:21:13Z",
       "side": 1,
       "message": "Can I ask where does `0xb400000000000000` come from?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaca0049_41527cdf",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5915,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "Can you add a comment as to why this is placed here, regarding ordering of operation in `removeBuffer`?",
+      "range": {
+        "startLine": 5915,
+        "startChar": 0,
+        "endLine": 5915,
+        "endChar": 25
+      },
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -88,6 +197,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a240e4a9_36869cbd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7287,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "What\u0027s the distinction between `GLBufferSubData` and `GLCopyBufferSubData` regarding immediate update vs. deferred?",
+      "range": {
+        "startLine": 7287,
+        "startChar": 0,
+        "endLine": 7287,
+        "endChar": 58
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cea312e_52d79b03",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -99,6 +231,29 @@
       "writtenOn": "2022-10-26T01:48:55Z",
       "side": 1,
       "message": "same as above, the comment suggesting changing the comment to `when using shadow memory, we need to mark all the buffer\u0027s shadowDirty bit to true` or something similar.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85810b55_4ac06396",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7711,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T16:32:56Z",
+      "side": 1,
+      "message": "Do we need to check this per MakeCurrent, or could this be done when FrameCapture is initialized?",
+      "range": {
+        "startLine": 7711,
+        "startChar": 0,
+        "endLine": 7711,
+        "endChar": 62
+      },
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
