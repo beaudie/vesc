@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997e34a8_26b2b540",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2022-10-27T20:22:42Z",
+      "side": 1,
+      "message": "Hi there and sorry to chime in in an already discussed CL. I\u0027m seeing the following error when building with metal enabled though: \n\n```\n../../third_party/angle/src/libANGLE/renderer/metal/mtl_buffer_manager.mm:176:11: error: unknown type name \u0027uint8\u0027; did you mean \u0027uint\u0027?\n    const uint8 *src \u003d reinterpret_cast\u003cconst uint8 *\u003e(srcPtr);\n          ^~~~~\n          uint\n/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.5.sdk/usr/include/sys/types.h:92:33: note: \u0027uint\u0027 declared here\ntypedef unsigned int            uint;           /* Sys V compatibility */\n                                ^\n../../third_party/angle/src/libANGLE/renderer/metal/mtl_buffer_manager.mm:176:47: error: unknown type name \u0027uint8\u0027; did you mean \u0027uint\u0027?\n    const uint8 *src \u003d reinterpret_cast\u003cconst uint8 *\u003e(srcPtr);\n                                              ^~~~~\n                                              uint\n/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.5.sdk/usr/include/sys/types.h:92:33: note: \u0027uint\u0027 declared here\ntypedef unsigned int            uint;           /* Sys V compatibility */\n                                ^\n2 errors generated.\n```",
+      "range": {
+        "startLine": 176,
+        "startChar": 10,
+        "endLine": 176,
+        "endChar": 15
+      },
+      "revId": "968041b54770af8917001d8fe9b52a881cfed0b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
