@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f310561_ebf4d383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-27T22:12:15Z",
+      "side": 1,
+      "message": "If we find applications where raster ordering is an improvement, is there any chance of a future solution where we just advise applications to use the noncoherent version on Qualcomm, but still make the coherent extension accessible?",
+      "revId": "23c62d60058bc83a5f9d27a03f2a25a1ca4fb17f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
