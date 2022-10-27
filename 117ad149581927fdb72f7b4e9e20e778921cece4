@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6df59f2_072fbf26",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Can this remain a pointer or do we need to copy strings?",
+      "range": {
+        "startLine": 816,
+        "startChar": 47,
+        "endLine": 816,
+        "endChar": 72
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c295e1f_70da729b",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Can we rename this since it isn\u0027t a failure case?",
+      "range": {
+        "startLine": 911,
+        "startChar": 30,
+        "endLine": 911,
+        "endChar": 37
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96ff619_3786a928",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Can you move this return to the end of the gPrintExtensionsToFile block and remove the other one?",
+      "range": {
+        "startLine": 914,
+        "startChar": 12,
+        "endLine": 914,
+        "endChar": 18
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c9fdcfd_f2a39ef2",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "These should be handled in `TraceTestArg` now.",
+      "range": {
+        "startLine": 107,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 86
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fce81523_bf78300e",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "I\u0027m a bit leery of externing something that isn\u0027t POD but I don\u0027t have a better suggestion.",
+      "range": {
+        "startLine": 44,
+        "startChar": 7,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34ba3e7_8c0f483b",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Aren\u0027t these redundant with the calls in the for loop above?",
+      "range": {
+        "startLine": 449,
+        "startChar": 0,
+        "endLine": 450,
+        "endChar": 45
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "068a0bfc_235b1bdc",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Recursion in python - wicked.",
+      "range": {
+        "startLine": 487,
+        "startChar": 16,
+        "endLine": 487,
+        "endChar": 27
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f082eae7_15ade596",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "This one is probably useful to mention in the documentation as well.  For your passes, I think you used the number of frames in the trace?",
+      "range": {
+        "startLine": 616,
+        "startChar": 0,
+        "endLine": 616,
+        "endChar": 89
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a7d98d_a60a61a7",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-27T04:08:31Z",
+      "side": 1,
+      "message": "Did you mean to put this here?  It is also present a few lines below.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 37
+      },
+      "revId": "117ad149581927fdb72f7b4e9e20e778921cece4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
