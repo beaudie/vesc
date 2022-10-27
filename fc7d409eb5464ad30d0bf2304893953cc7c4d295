@@ -16,6 +16,24 @@
       "message": "PTAL. This CL compiles Mesa successfully on the bots:\n\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-test/9524/overview\n\nRight now it\u0027s disabled by default. Once this lands we can look into how to test it pre or post commit.",
       "revId": "fc7d409eb5464ad30d0bf2304893953cc7c4d295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f561197_9642ab6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-27T15:01:14Z",
+      "side": 1,
+      "message": "NB: Linux only for now.",
+      "parentUuid": "4ce7bad0_3f992874",
+      "revId": "fc7d409eb5464ad30d0bf2304893953cc7c4d295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
