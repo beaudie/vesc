@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8946868_ee5bdbec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-10-28T20:54:02Z",
+      "side": 1,
+      "message": "nit: Would you mind changing the commit message to:\n\nIt is a big improvement on Qualcomm open source driver, but since Qualcomm hardware isn\u0027t coherent, we will disable the rasterization order for Qualcomm driver regardless of fb fetch in the next commit, which brings back the gfxbench performance from \u003cbefore performance matrix\u003e to \u003cafter performance matrix\u003e",
+      "revId": "cc97eadfe6bbe2071b4edfd2bd4d5f56f297d5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1d434820_0de237d7",
