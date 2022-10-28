@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "273bf923_b1b43ba3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3093,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-28T22:13:49Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "09a56ab2_c5f59671",
+      "revId": "34977cc5ae8bb63e4c27fe30675b0ba9de722dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ed376fd_57f61f88",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-06T20:31:59Z",
       "side": 0,
       "message": "Please undo this removed newline",
+      "revId": "34977cc5ae8bb63e4c27fe30675b0ba9de722dce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41ee5ec1_928d1843",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3805,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2022-10-28T22:13:49Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "4ed376fd_57f61f88",
       "revId": "34977cc5ae8bb63e4c27fe30675b0ba9de722dce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
