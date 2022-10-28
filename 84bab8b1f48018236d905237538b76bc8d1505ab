@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "975e0155_839cdd4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-28T14:54:34Z",
+      "side": 1,
+      "message": "Yuxin, thanks for fixing this.  Looks like it needs one more tweak to satisfy the MSVC compile.",
+      "revId": "84bab8b1f48018236d905237538b76bc8d1505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a84ac8c_ca433eb1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3943,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-28T14:54:34Z",
+      "side": 1,
+      "message": "Hey Yuxin, I\u0027m having a hard time parsing this code visually.  Can you break it up a bit, here and below?  A few comments and a newline after each ASSERT helps a lot.\n\ni.e.:\n```\n                    // Look up the attribs used when the image was created\n                    auto eglImageIter \u003d resourceTracker-\u003egetTextureIDToImageTable().find(id.value);\n                    ASSERT(eglImageIter !\u003d resourceTracker-\u003egetTextureIDToImageTable().end());\n\n                    egl::ImageID eglImageID \u003d eglImageIter-\u003esecond;\n                    EGLImage eglImage       \u003d reinterpret_cast\u003cEGLImage\u003e(eglImageID.value);\n                    ASSERT(eglImage !\u003d nullptr);\n\n                    auto eglImageAttribIter \u003d\n                        resourceTracker-\u003egetImageToAttribTable().find(eglImage);\n                    ASSERT(eglImageAttribIter !\u003d resourceTracker-\u003egetImageToAttribTable().end());\n\n                    const egl::AttributeMap \u0026retrievedAttribs \u003d eglImageAttribIter-\u003esecond;\n                    \n                    // Create the image on demand\n                    CallCapture eglCreateImageKHRCall \u003d egl::CaptureCreateImageKHR(\n                        nullptr, true, nullptr, context-\u003eid(), EGL_GL_TEXTURE_2D_KHR,\n                        reinterpret_cast\u003cEGLClientBuffer\u003e(\n                            static_cast\u003cGLuint64\u003e(stagingTexId.value)),\n                        retrievedAttribs, eglImage);\n                        \n                    std::vector\u003cCallCapture\u003e eglCustomCreateImageKHRCall;\n                    CaptureCustomCreateEGLImage(\"CreateEGLImageKHR\", eglCreateImageKHRCall,\n                                                eglCustomCreateImageKHRCall);\n                    ASSERT(eglCustomCreateImageKHRCall.size() \u003e 0);\n\n                    Capture(setupCalls, std::move(eglCustomCreateImageKHRCall[0]));\n```",
+      "range": {
+        "startLine": 3935,
+        "startChar": 0,
+        "endLine": 3943,
+        "endChar": 91
+      },
+      "revId": "84bab8b1f48018236d905237538b76bc8d1505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
