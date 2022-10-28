@@ -46,6 +46,30 @@
       },
       "revId": "968041b54770af8917001d8fe9b52a881cfed0b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7c692dd_3c6c7d37",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2022-10-28T14:16:16Z",
+      "side": 1,
+      "message": "Alright, thanks for the quick feedback Kenneth. I\u0027ve uploaded a build fix here: https://chromium-review.googlesource.com/c/angle/angle/+/3989426",
+      "parentUuid": "505b0d3a_3001e47c",
+      "range": {
+        "startLine": 176,
+        "startChar": 10,
+        "endLine": 176,
+        "endChar": 15
+      },
+      "revId": "968041b54770af8917001d8fe9b52a881cfed0b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
