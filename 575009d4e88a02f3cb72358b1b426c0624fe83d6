@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "272d158e_15cd8e57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-10-28T14:34:17Z",
+      "side": 1,
+      "message": "Hey Roman, this isn\u0027t ready for use on the CI, but you might be able to play around with this with trigger.py if you want to do some experimentation.",
+      "revId": "575009d4e88a02f3cb72358b1b426c0624fe83d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
