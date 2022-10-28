@@ -4029,6 +4029,30 @@ TEST_P(ImageTestES3, RGBXAHBImportOcclusionQueryNotCounted)
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
 }
+
+// jasonjason
+TEST_P(ImageTestES3, RGBX8ANGLEUpload)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    constexpr const size_t kWidth = 16;
+    constexpr const size_t kHeight = 16;
+
+    GLTexture glTexture2D;
+    glBindTexture(GL_TEXTURE_2D, glTexture2D);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBX8_ANGLE, kWidth, kHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+    const std::vector<GLColor> kRedData(kWidth * kHeight, GLColor::red);
+
+    // THIS PASSES
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RGB, GL_UNSIGNED_BYTE, kRedData.data());
+    EXPECT_GL_NO_ERROR();
+
+    // THIS FAILS, IS THIS ALLOWED PER GL_ANGLE_rgbx_internal_format ?
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, kRedData.data());
+    EXPECT_GL_NO_ERROR();
+}
+
 #endif  // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
 
 // Test validatin of using EXT_yuv_target
