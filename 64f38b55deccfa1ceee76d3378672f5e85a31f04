@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b709dc21_e3bed95d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-28T16:12:03Z",
+      "side": 1,
+      "message": "`./angle_perftests` You can use the `--gtest_filter\u003d*null*` tests to strictly measure overhead coming from the front-end.",
+      "parentUuid": "141102cc_b4bab6b2",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be7ec62a_539d535e",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 18
@@ -108,6 +126,30 @@
       "side": 1,
       "message": "Here\u0027s the damage on binary size:\n\n```\n                                 Bytes    Multiplier\nOriginal                       9059176        1.0000\nAllowlist function             9070136        1.0012\nAllowlist function (inline)    9072888        1.0015\n\n```\n\n0.15% from adding an allow list. The inline vs not seems pretty negligible, so inline seems like a good idea.",
       "parentUuid": "f4fbe146_7c03823d",
+      "range": {
+        "startLine": 62,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 47
+      },
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1c79550_3e366829",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-28T16:12:03Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "be8ce1b3_9cde3623",
       "range": {
         "startLine": 62,
         "startChar": 14,
