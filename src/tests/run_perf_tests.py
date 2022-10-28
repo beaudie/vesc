@@ -358,12 +358,33 @@ def _run_tests(tests, args, extra_flags, env):
                      (test_index + 1, len(tests), test, args.samples_per_test,
                       args.trials_per_sample, trial_limit))
 
-        wall_times = []
+        test_results = []
         test_histogram_set = histogram_set.HistogramSet()
         for sample in range(args.samples_per_test):
             try:
-                test_status, sample_wall_times, sample_histogram = _run_perf(
-                    args, common_args, env, steps_per_trial)
+                if args.command == 'comparative':
+                    test_status_baseline, sample_wall_times_baseline, sample_histogram_baseline = _run_perf(
+                        args, common_args + args.baseline.split(), env, steps_per_trial)
+                    test_status_experiment, sample_wall_times_experiment, sample_histogram_experiment = _run_perf(
+                        args, common_args + args.experiment.split(), env, steps_per_trial)
+
+                    test_status = test_status_baseline if test_status_experiment == PASS else test_status_experiment
+                    sample_results = [
+                        experiment / baseline
+                        for (experiment, baseline
+                            ) in zip(sample_wall_times_experiment, sample_wall_times_baseline)
+                    ]
+                    result_units = 'rel_perf'
+
+                    # FIXME
+                    sample_histogram = sample_histogram_baseline
+
+                else:
+                    assert args.command == 'single'
+                    test_status, sample_results, sample_histogram = _run_perf(
+                        args, common_args, env, steps_per_trial)
+                    result_units = 'wall_time'
+
             except RuntimeError as e:
                 logging.error(e)
                 results.result_fail(test)
@@ -374,27 +395,27 @@ def _run_tests(tests, args, extra_flags, env):
                 results.result_skip(test)
                 break
 
-            if not sample_wall_times:
+            if not sample_results:
                 logging.error('Test %s failed to produce a sample output' % test)
                 results.result_fail(test)
                 break
 
-            logging.info('Test %d/%d Sample %d/%d wall_times: %s' %
+            logging.info('Test %d/%d Sample %d/%d %s: %s' %
                          (test_index + 1, len(tests), sample + 1, args.samples_per_test,
-                          str(sample_wall_times)))
+                          result_units, str(sample_results)))
 
-            if len(sample_wall_times) != args.trials_per_sample:
-                logging.error('Test %s failed to record some wall_times (expected %d, got %d)' %
-                              (test, args.trials_per_sample, len(sample_wall_times)))
+            if len(sample_results) != args.trials_per_sample:
+                logging.error('Test %s failed to record some results: expected %d, got %d' %
+                              (test, args.trials_per_sample, len(sample_results)))
                 results.result_fail(test)
                 break
 
-            wall_times += sample_wall_times
+            test_results += sample_results
             test_histogram_set.Merge(sample_histogram)
 
         if not results.has_result(test):
-            assert len(wall_times) == (args.samples_per_test * args.trials_per_sample)
-            stats = _wall_times_stats(wall_times)
+            assert len(test_results) == (args.samples_per_test * args.trials_per_sample)
+            stats = _wall_times_stats(test_results) if result_units == 'wall_time' else None
             if stats:
                 logging.info('Test %d/%d: %s: %s' % (test_index + 1, len(tests), test, stats))
             histograms.Merge(_merge_into_one_histogram(test_histogram_set))
@@ -512,7 +533,24 @@ def main():
         help='Attempt to mitigate variance between machines by splitting samples between shards.',
         action='store_true')
 
+    subparsers = parser.add_subparsers(dest='command')
+    subparsers.default = 'single'
+
+    single = subparsers.add_parser('single')
+    comparative = subparsers.add_parser('comparative')
+
+    comparative.add_argument('comparison_name', help='How to name the results in the output.')
+    comparative.add_argument(
+        '--baseline',
+        help='Flags to pass to ANGLE for the baseline measurement.',
+        default='--use-gl=native')
+    comparative.add_argument(
+        '--experiment', help='Flags to pass to ANGLE to the experimental measurement.', default='')
+
     args, extra_flags = parser.parse_known_args()
+
+    if args.command == 'comparative':
+        assert args.baseline != args.experiment
 
     if args.trace_tests:
         args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITE
