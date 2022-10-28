@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "141102cc_b4bab6b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-28T15:58:25Z",
+      "side": 1,
+      "message": "How can I verify the perf impact? Are there perf bots that run representative benchmarks?",
+      "parentUuid": "29929c8c_66e40de7",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be7ec62a_539d535e",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 18
@@ -31,6 +49,24 @@
       "writtenOn": "2022-10-27T04:21:34Z",
       "side": 1,
       "message": "There\u0027s another thing to add here. We should disallow the depth/stencil attachment to be simultaneously bound as sampler. We support that in the Vulkan backend by juggling between writable and read-only layout for depth/stencil, but that can lead to render pass breaks.\n\nSee `ContextVk::updateActiveTextures` where we `flushCommandsAndEndRenderPass` for more context. Note that simultaneous read-only depth attachment (depth test without write) and sampler is not a feedback loop, which is otherwise disallowed in the spec.",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b6ce628_1da2163f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 18
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-28T15:58:25Z",
+      "side": 1,
+      "message": "Thanks for catching that. I added your comment to https://docs.google.com/document/d/1BsXxar1gbJ_w-Xvy76VbgmLOgB3qON6BY6YB5LVOqwo/edit",
+      "parentUuid": "be7ec62a_539d535e",
       "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -48,6 +84,30 @@
       "writtenOn": "2022-10-27T04:21:34Z",
       "side": 1,
       "message": "A little worried about CPU overhead here, have you made any measurements? My gut feeling says `inline` this function, along with everything that\u0027s called by the `if` inside it. That\u0027s usually how we deal with conditional stuff in the hot path:\n\n```\ninline func()\n{\n    if (inlinable_expression())\n    {\n        function_call_that_does_heavy_work();\n    }\n}\n```\n\nI\u0027d also keep an eye out on binary size with your current implementation and the inline one, how much does inlining save us on the CPU and hurt us in binary size?",
+      "range": {
+        "startLine": 62,
+        "startChar": 14,
+        "endLine": 62,
+        "endChar": 47
+      },
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be8ce1b3_9cde3623",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-28T15:58:25Z",
+      "side": 1,
+      "message": "Here\u0027s the damage on binary size:\n\n```\n                                 Bytes    Multiplier\nOriginal                       9059176        1.0000\nAllowlist function             9070136        1.0012\nAllowlist function (inline)    9072888        1.0015\n\n```\n\n0.15% from adding an allow list. The inline vs not seems pretty negligible, so inline seems like a good idea.",
+      "parentUuid": "f4fbe146_7c03823d",
       "range": {
         "startLine": 62,
         "startChar": 14,
