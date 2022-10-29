@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69376f69_88d271ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-29T04:04:39Z",
+      "side": 1,
+      "message": "\u003e The new branches should get really good branch prediction\n\nThat was the plan 😊\n\n\u003e Here are the wall times from 2 runs on my MacBook\n\nTwo questions:\n\n- Have you locked any CPU clocks?\n- How repeatable are the runs?\n\nIt might very well be that you are at the whims of the kernel, laptop temperature etc, so the data isn\u0027t meaningful. Remind me to take some measurements on my side on Pixel 6 next week as well.",
+      "parentUuid": "da84ff5b_5de4c4b0",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be7ec62a_539d535e",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 18
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "Thanks for catching that. I added your comment to https://docs.google.com/document/d/1BsXxar1gbJ_w-Xvy76VbgmLOgB3qON6BY6YB5LVOqwo/edit",
       "parentUuid": "be7ec62a_539d535e",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9872d74_b33945eb",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 18
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-29T04:04:39Z",
+      "side": 1,
+      "message": "Thanks. You might also want to add at least an `ANGLE_PERF_WARNING` when we break the render pass (on `vulkan/`, and maybe `metal/`?) if PLS is active, that should help both us catching cases that should be banned, and developers understand why data is lost / performance is bad.",
+      "parentUuid": "3b6ce628_1da2163f",
       "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
