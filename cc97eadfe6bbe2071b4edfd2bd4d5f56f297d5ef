@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a2d6f361_bc8f276e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2022-10-29T17:20:52Z",
+      "side": 1,
+      "message": "This change alone fixes the performance regression for gfxbench.  But yeah, any workload using fb fetch can still potentially take the hit and that\u0027s why we want to disable the feature.",
+      "parentUuid": "a8946868_ee5bdbec",
+      "revId": "cc97eadfe6bbe2071b4edfd2bd4d5f56f297d5ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1d434820_0de237d7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 5

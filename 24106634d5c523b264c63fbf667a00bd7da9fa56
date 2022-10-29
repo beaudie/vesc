@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "422f8860_0ebc2274",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1146485
+      },
+      "writtenOn": "2022-10-29T17:20:52Z",
+      "side": 1,
+      "message": "I can\u0027t CQ+2.  Let\u0027s see if Auto-Submit helps.",
+      "revId": "24106634d5c523b264c63fbf667a00bd7da9fa56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
