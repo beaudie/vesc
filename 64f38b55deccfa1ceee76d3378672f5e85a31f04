@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2735b177_f8424bce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-29T05:39:12Z",
+      "side": 1,
+      "message": "\u003e Have you locked any CPU clocks?\n\nI ran with sudo ¯\\\\\\_(ツ)_/¯\n\n(When I didn\u0027t use sudo I got `Warning: setpriority failed in StabilizeCPUForBenchmarking`, so I assume _something_ is happening)\n\n\u003e How repeatable are the runs?\n\nI did another run of HEAD (Sheet 2) and got a geometric mean of 367 instead of 370. So within 1%.\n\n\u003e Remind me to take some measurements on my side on Pixel 6 next week as well.\n\nWill do!",
+      "parentUuid": "69376f69_88d271ca",
+      "revId": "64f38b55deccfa1ceee76d3378672f5e85a31f04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be7ec62a_539d535e",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 18
