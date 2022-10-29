@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49e48460_5e05536f",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-29T06:11:20Z",
+      "side": 1,
+      "message": "Yeah actually I\u0027m not sure which function does what, lol. I know there are query functions; one of them can see this stuff 😄\n\n\u003e Though I think I\u0027m familiar enough with ANGLE now that I can take on the task of moving it after.\n\n👍 at your leisure",
+      "parentUuid": "ac02ef6d_33e930e5",
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2c3c109_360a25e4",
