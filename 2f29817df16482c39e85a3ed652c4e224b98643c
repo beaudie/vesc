@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "615ce137_d0f42615",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-29T05:31:39Z",
+      "side": 1,
+      "message": "Ah ok, sounds like a plan. Definitely weird to run it before CollectVariables, though I understand why it was easier (you\u0027re trying to get the shader images reported as user-specified shader images, right?)\n\n---\n\nFWIW, we pass out information regarding additional interface variables we might have added through transformations out of the \"official\" list collected here. I actually think adding variables and collecting them here is just incorrect; for example the application could use `glGetProgramResourceIndex` to get info regarding these internal variables, but they should have been invisible.\n\nMoving the transformation after this pass could get a bit complicated nevertheless; like you might need to pass it to the backend to bind the shader images and that could work outside the knowledge of the frontend.",
+      "parentUuid": "72d8a363_10391fc8",
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2c3c109_360a25e4",
