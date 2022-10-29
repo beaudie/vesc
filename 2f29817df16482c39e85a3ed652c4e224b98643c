@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac02ef6d_33e930e5",
+        "filename": "src/compiler/translator/CollectVariables.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-10-29T05:53:51Z",
+      "side": 1,
+      "message": "TIL about `glGetProgramResourceIndex`\n\n.. Can `glGetActiveUniform` also find these internal variables?\n\n\u003e you might need to pass it to the backend to bind the shader images and that could work outside the knowledge of the frontend.\n\nYep, that\u0027s why I opted to do it before at first. Though I think I\u0027m familiar enough with ANGLE now that I can take on the task of moving it after.",
+      "parentUuid": "615ce137_d0f42615",
+      "revId": "2f29817df16482c39e85a3ed652c4e224b98643c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2c3c109_360a25e4",
