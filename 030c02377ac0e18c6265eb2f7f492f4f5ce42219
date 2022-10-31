@@ -51,6 +51,24 @@
       "parentUuid": "c6e393b1_dfddb737",
       "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aa163cd_896bd241",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-31T16:02:44Z",
+      "side": 1,
+      "message": "\u003e shader compilation is allowed to fail for any reason\n\nAny spec quotes? I\u0027m genuinely curious.\n\n---\n\nWhy does exposing 4/4 as max clip/cull distances not work?",
+      "parentUuid": "ea65148e_cf0083d8",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
