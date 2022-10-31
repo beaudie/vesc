@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eac191cd_087ccbd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-31T15:38:51Z",
+      "side": 1,
+      "message": "One of the new tests partly fails on macOS / OpenGL / AMD, will likely remain suppressed.",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
