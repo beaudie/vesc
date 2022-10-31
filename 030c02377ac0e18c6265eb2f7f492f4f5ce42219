@@ -87,6 +87,24 @@
       "parentUuid": "0aa163cd_896bd241",
       "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d17480a3_5006d3da",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-31T19:21:57Z",
+      "side": 1,
+      "message": "Ack `¯\\_(ツ)_/¯`",
+      "parentUuid": "fb139279_aa627483",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
