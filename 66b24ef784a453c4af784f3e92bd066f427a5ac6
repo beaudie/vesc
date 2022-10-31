@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83431679_ee7de9b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-31T15:00:11Z",
+      "side": 1,
+      "message": "@Yuly, can you confirm that Intel/Linux drivers have been updated since this was added in https://chromium-review.googlesource.com/c/1495229?",
+      "revId": "66b24ef784a453c4af784f3e92bd066f427a5ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
