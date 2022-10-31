@@ -397,6 +397,12 @@ EGLBoolean WGLWindow::destroyImageKHR(Image image)
     return EGL_FALSE;
 }
 
+EGLint WGLWindow::getError()
+{
+    std::cerr << "WGLWindow::getError not implemented.\n";
+    return EGL_SUCCESS;
+}
+
 WGLWindow::Surface WGLWindow::createPbufferSurface(const EGLint *attrib_list)
 {
     std::cerr << "WGLWindow::createPbufferSurface not implemented.\n";
