@@ -69,6 +69,24 @@
       "parentUuid": "ea65148e_cf0083d8",
       "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb139279_aa627483",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-31T16:18:40Z",
+      "side": 1,
+      "message": "\u003e Any spec quotes? I\u0027m genuinely curious.\n\nThat\u0027s what I was told during one of the recent WebGL meetings.\n\n---\n\n\u003e Why does exposing 4/4 as max clip/cull distances not work?\n\nBoth `GL_APPLE_clip_distance` and `GL_EXT_clip_cull_distance` extensions require a minimum of 8 clip distances. Arguably, simultaneous use of both outputs is a less important use case than, e.g., defining 6 clip planes to create a custom view frustum.",
+      "parentUuid": "0aa163cd_896bd241",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
