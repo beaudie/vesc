@@ -22,6 +22,30 @@
       },
       "revId": "1801152fd64d65d31c9a33ae539f3fecdf566308",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa1ae415_0fb64873",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2022-10-31T17:09:22Z",
+      "side": 1,
+      "message": "Passing it as a single string also allows turning gRequestedExtensions into a const char * if we have ANGLEPerfTest.cpp handle splitting it instead. No vector needed anymore.",
+      "parentUuid": "78f62f11_e5890a6f",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 14
+      },
+      "revId": "1801152fd64d65d31c9a33ae539f3fecdf566308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
