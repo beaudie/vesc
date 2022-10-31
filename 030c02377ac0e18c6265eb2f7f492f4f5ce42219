@@ -16,6 +16,23 @@
       "message": "One of the new tests partly fails on macOS / OpenGL / AMD, will likely remain suppressed.",
       "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6e393b1_dfddb737",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-10-31T15:43:33Z",
+      "side": 1,
+      "message": "This is not an OpenGL limitation, so I don\u0027t believe it\u0027s right for the translator to produce such an error.\n\nMy suggestion is to cap clip and cull distances in D3D to 4. It would be unfortunate when the app doesn\u0027t use one or the other, but I don\u0027t see a way around it.",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
