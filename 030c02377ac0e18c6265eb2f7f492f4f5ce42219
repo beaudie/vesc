@@ -33,6 +33,24 @@
       "message": "This is not an OpenGL limitation, so I don\u0027t believe it\u0027s right for the translator to produce such an error.\n\nMy suggestion is to cap clip and cull distances in D3D to 4. It would be unfortunate when the app doesn\u0027t use one or the other, but I don\u0027t see a way around it.",
       "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea65148e_cf0083d8",
+        "filename": "src/compiler/translator/ValidateClipCullDistance.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-10-31T15:58:49Z",
+      "side": 1,
+      "message": "ANGLE has a few D3D-specific limitations that slip into client contexts, like simultaneous use of constant color and constant alpha blend funcs or base mip level of compressed textures having to be a multiple of 4.\n\nIn this particular case, the difference between GL and D3D semantics is quite subtle. GL imposes only the total cap on clip and cull distances, effectively allowing `0 + 8`, `1 + 7`, `2 + 6`, `3 + 5`, and `4 + 4` combinations, while D3D implicitly restricts this to `0 + 8` and `4 + 4`, because it defines these vertex outputs as `float4` vectors and only two are allowed.\n\nGiven that the proposed limitation does not violate the explicit GL requirement of 8 clip, 8 cull, and 8 total distances and shader compilation is allowed to fail for any reason, I think it\u0027s reasonable to keep it as is.",
+      "parentUuid": "c6e393b1_dfddb737",
+      "revId": "030c02377ac0e18c6265eb2f7f492f4f5ce42219",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
