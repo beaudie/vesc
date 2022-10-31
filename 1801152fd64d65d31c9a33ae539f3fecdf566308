@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78f62f11_e5890a6f",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-10-31T15:20:55Z",
+      "side": 1,
+      "message": "Would it be possible to change `--request-ext` into a single string full of extensions, rather than a parameter provided repeatedly with individual strings?\nThat would allow you to use `ParseCStringArg`, allocate the vector in `ANGLEProcessPerfTestArgs`, move the string over one by one, then use `gRequestedExtensions` to track the vector.",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 14
+      },
+      "revId": "1801152fd64d65d31c9a33ae539f3fecdf566308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
