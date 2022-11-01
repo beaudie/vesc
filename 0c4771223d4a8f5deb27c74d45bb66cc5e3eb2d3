@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a11cb187_64a3db86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-01T17:47:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f200f9b0_f0247b29",
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "decb9e4e_1b0be3bf",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -48,6 +66,30 @@
       "writtenOn": "2022-11-01T16:55:23Z",
       "side": 1,
       "message": "Sheriff-o-matic is already described below, with some additional context which is missing here. If you intended to just make that more visible, maybe it could be restructured a bit (e.g. additional section and link to it).",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b662ac5_fab2a6c3",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-01T17:47:43Z",
+      "side": 1,
+      "message": "Should `Tips` be a TLDR-like segment? for all the `Task`s below, give a very short summary. \n\nIf so, I couldn\u0027t give a good summary for `Pre-commit try builders` though.",
+      "parentUuid": "4164abac_f219013a",
       "range": {
         "startLine": 29,
         "startChar": 31,
@@ -99,6 +141,54 @@
         "startChar": 1,
         "endLine": 32,
         "endChar": 4
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c86081_3ccdb3c3",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-01T17:47:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "40585053_bca4afa5",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 4
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48589561_9970de6d",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-01T17:47:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc7e19e4_426e2ad6",
+      "range": {
+        "startLine": 32,
+        "startChar": 173,
+        "endLine": 32,
+        "endChar": 175
       },
       "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
