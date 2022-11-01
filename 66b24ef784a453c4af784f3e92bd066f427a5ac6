@@ -16,6 +16,24 @@
       "message": "@Yuly, can you confirm that Intel/Linux drivers have been updated since this was added in https://chromium-review.googlesource.com/c/1495229?",
       "revId": "66b24ef784a453c4af784f3e92bd066f427a5ac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85b02c59_388224f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-01T15:54:33Z",
+      "side": 1,
+      "message": "Yes, we\u0027ve updated from Mesa 19.0.2 to 20.0.8.\nLet\u0027s see if it helped.",
+      "parentUuid": "83431679_ee7de9b4",
+      "revId": "66b24ef784a453c4af784f3e92bd066f427a5ac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
