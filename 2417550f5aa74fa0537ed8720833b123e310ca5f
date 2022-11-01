@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41b19880_7755f7b5",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 400,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T18:25:51Z",
+      "side": 1,
+      "message": "Works for me.  Done.",
+      "parentUuid": "2c8c5654_fdac7736",
+      "range": {
+        "startLine": 400,
+        "startChar": 18,
+        "endLine": 400,
+        "endChar": 26
+      },
+      "revId": "2417550f5aa74fa0537ed8720833b123e310ca5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b17f512_c1be08b0",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-01T14:28:28Z",
       "side": 1,
       "message": "please remove this, it\u0027ll just cause some spam.",
+      "range": {
+        "startLine": 402,
+        "startChar": 4,
+        "endLine": 402,
+        "endChar": 58
+      },
+      "revId": "2417550f5aa74fa0537ed8720833b123e310ca5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf53c06_9bc7a5b8",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T18:25:51Z",
+      "side": 1,
+      "message": "Interestingly, I get no output from this when I run from a windows command prompt, but I do when I run in Visual Studio debugger.\n\nI removed the print.",
+      "parentUuid": "9b17f512_c1be08b0",
       "range": {
         "startLine": 402,
         "startChar": 4,
