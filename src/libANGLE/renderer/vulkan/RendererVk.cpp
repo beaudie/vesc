@@ -4335,9 +4335,9 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk, const gl::Co
 
     if (context->getFrontendFeatures().enableCompressingPipelineCacheInThreadPool.enabled)
     {
-        // The function zlib_internal::GzipCompressHelper() can compress 10M pipeline cache data
-        // into about 2M, to save the time of compression, set kMaxTotalSize to 10M.
-        constexpr size_t kMaxTotalSize = 10 * 1024 * 1024;
+        // zlib compression ratio normally ranges from 2:1 to 5:1. Set kMaxTotalSize to 64M to
+        // ensure the size can fit into the 32MB blob cache limit on supported platforms.
+        constexpr size_t kMaxTotalSize = 64 * 1024 * 1024;
 
         // Create task to compress.
         auto compressAndStorePipelineCacheTask =

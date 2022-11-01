@@ -85,11 +85,10 @@
         },
         {
             "name": "enable_compressing_pipeline_cache_in_thread_pool",
-            "category": "Workarounds",
+            "category": "Features",
             "description": [
-                "Enable compressing pipeline cache in thread pool."
-            ],
-            "issue": "http://anglebug.com/4722"
+                "Enable compressing pipeline cache in thread pool on platforms with higher blob cache limit"
+            ]
         },
         {
             "name": "force_robust_resource_init",

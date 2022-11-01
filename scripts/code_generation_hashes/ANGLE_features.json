@@ -8,11 +8,11 @@
   "include/platform/FeaturesVk_autogen.h":
     "03f5b51f08b6cb4f831764aa4848f399",
   "include/platform/FrontendFeatures_autogen.h":
-    "feef0cafa2c452d4d90da239055b3576",
+    "e2b8fa8dc9497aef70c3c5fbad56a8c0",
   "include/platform/d3d_features.json":
     "5f4e8c4cc64f0cc1ef6e658d2e443aa2",
   "include/platform/frontend_features.json":
-    "3557f00d33837074a7a14b9813485936",
+    "5db18f4606755ffec088ccb125f4a3ab",
   "include/platform/gen_features.py":
     "062989f7a8f3ff3b383f98fc8908dc33",
   "include/platform/gl_features.json":

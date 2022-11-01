@@ -80,8 +80,12 @@ struct FrontendFeatures : FeatureSetBase
                                        &members, "http://anglebug.com/5750"};
 
     FeatureInfo enableCompressingPipelineCacheInThreadPool = {
-        "enableCompressingPipelineCacheInThreadPool", FeatureCategory::FrontendWorkarounds,
-        "Enable compressing pipeline cache in thread pool.", &members, "http://anglebug.com/4722"};
+        "enableCompressingPipelineCacheInThreadPool",
+        FeatureCategory::FrontendFeatures,
+        "Enable compressing pipeline cache in thread pool on platforms with higher blob cache "
+        "limit",
+        &members,
+    };
 
     FeatureInfo forceRobustResourceInit = {
         "forceRobustResourceInit", FeatureCategory::FrontendFeatures,
