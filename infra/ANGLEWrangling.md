@@ -25,6 +25,12 @@ If you're not an ANGLE team member, you can contact us on the public ANGLE proje
 
 [wrangler schedule]: https://rotations.corp.google.com/rotation/5080504293392384
 
+### Tips
+- For Post-commit CI builders, use [Sheriff-o-matic][ANGLESoM].
+- For Auto-Rollers,
+  - First, filter out the non-critical emails by a filter: “from:(*-autoroll
+    (Gerrit))”
+
 ## Task: Monitor ANGLE CI and Try Testers
 
 Your first job is to keep the ANGLE builders green and unblocked.
