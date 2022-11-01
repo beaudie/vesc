@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "339aeda7_b8f03c87",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T22:44:30Z",
+      "side": 1,
+      "message": "Do you know which function is bringing this in?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4a58bd3_0c13e556",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T22:44:30Z",
+      "side": 1,
+      "message": "Would be good to get @jmadill@chromium.org thoughts on this.  We\u0027ve done some tweaking of the context for things like packing, but this is a decent amount of work.  It is only called during `Context::initCaps()`, so probably okay to change state a bit and clean up.  It isn\u0027t mid-execution.",
+      "range": {
+        "startLine": 5696,
+        "startChar": 28,
+        "endLine": 5696,
+        "endChar": 46
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697e0f0d_b01bebc4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5716,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T22:44:30Z",
+      "side": 1,
+      "message": "Can you add a comment explaining each of these failures?  I think they are unlikely fallbacks for potentially catastrophic problems, like we can\u0027t allocate or map buffers.",
+      "range": {
+        "startLine": 5716,
+        "startChar": 0,
+        "endLine": 5716,
+        "endChar": 21
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "930ae733_ef07cfe5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 6049,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-01T22:44:30Z",
+      "side": 1,
+      "message": "This block of code is confusing.  I think it would be better to rename this to `shadowMemoryEnabled`.  Then the association with `enableShadowMemory` is clear.",
+      "range": {
+        "startLine": 6049,
+        "startChar": 32,
+        "endLine": 6049,
+        "endChar": 47
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
