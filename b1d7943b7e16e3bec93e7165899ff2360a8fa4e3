@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bf73431_bad9ca2c",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DeviceVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-01T16:06:15Z",
+      "side": 1,
+      "message": "nit: Since it\u0027s technically %ld, I suggest something less on the edge. 50?",
+      "range": {
+        "startLine": 32,
+        "startChar": 24,
+        "endLine": 32,
+        "endChar": 26
+      },
+      "revId": "b1d7943b7e16e3bec93e7165899ff2360a8fa4e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba9c794_85a355d4",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DeviceVkLinux.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-01T16:06:15Z",
+      "side": 1,
+      "message": "Is there nothing better than open/close? Like `access(2)`?",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 21
+      },
+      "revId": "b1d7943b7e16e3bec93e7165899ff2360a8fa4e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
