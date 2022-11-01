@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f8d88845_2d882599",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-01T18:22:06Z",
+      "side": 1,
+      "message": "What would be the purpose of a tldr? Maybe a list of links to self, sort of contents/outline? This doc could use an overhaul IMO but probably best to check with Jamie before committing to it.",
+      "parentUuid": "2b662ac5_fab2a6c3",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc7e19e4_426e2ad6",
         "filename": "infra/ANGLEWrangling.md",
         "patchSetId": 7
@@ -184,6 +208,30 @@
       "side": 1,
       "message": "Ack",
       "parentUuid": "fc7e19e4_426e2ad6",
+      "range": {
+        "startLine": 32,
+        "startChar": 173,
+        "endLine": 32,
+        "endChar": 175
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c53674_6c410459",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-01T18:22:06Z",
+      "side": 1,
+      "message": "There are a few more things in bold, attracting attention unnecessarily?",
+      "parentUuid": "48589561_9970de6d",
       "range": {
         "startLine": 32,
         "startChar": 173,
