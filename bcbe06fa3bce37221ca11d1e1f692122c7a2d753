@@ -22,6 +22,30 @@
       },
       "revId": "bcbe06fa3bce37221ca11d1e1f692122c7a2d753",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7070775a_bc31a1cb",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-01T08:24:36Z",
+      "side": 1,
+      "message": "Don, I\u0027ve also updated the bug number.",
+      "parentUuid": "9e3acecb_49d153d2",
+      "range": {
+        "startLine": 465,
+        "startChar": 16,
+        "endLine": 465,
+        "endChar": 25
+      },
+      "revId": "bcbe06fa3bce37221ca11d1e1f692122c7a2d753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
