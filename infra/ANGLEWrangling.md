@@ -25,6 +25,12 @@ If you're not an ANGLE team member, you can contact us on the public ANGLE proje
 
 [wrangler schedule]: https://rotations.corp.google.com/rotation/5080504293392384
 
+### Tips
+- For Post-commit CI builders, [Sheriff-o-matic][ANGLESoM] provides the outstanding issues to investigate.
+- For Auto-Rollers,
+  1. Open the [autoroll dashboard](https://autoroll.skia.org/) and put "angle" in **Filter**.  The dashboard provides the status of ANGLE related rollers.  Monitor their modes and numbers.
+  2. Filter out the non-critical emails by a filter: “**from:(*-autoroll (Gerrit))**”.  This improves the signal to noise ratio of your inbox, so the important emails, ex) "**The roll is failing consistently. Time to investigate.**", can stand out.
+
 ## Task: Monitor ANGLE CI and Try Testers
 
 Your first job is to keep the ANGLE builders green and unblocked.
