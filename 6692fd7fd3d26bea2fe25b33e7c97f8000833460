@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "24388043_64d8d864",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T16:06:06Z",
+      "side": 1,
+      "message": "Thanks for the recommendation. I was able to pull this off using ANGLE\u0027s internal API, doing calls on `Context` directly, in favor of using GL calls in `FrameCapture`. I also ran into issues using GL calls directly like not having extensions available and the uncertainty if this code runs on a native driver (which it must not).\nThis test is now part of the patch on FrameCapture.",
+      "parentUuid": "c49bf09a_90d50d81",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 25
+      },
+      "revId": "6692fd7fd3d26bea2fe25b33e7c97f8000833460",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d4d68b5f_886d2261",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
