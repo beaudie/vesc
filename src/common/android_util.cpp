@@ -9,7 +9,13 @@
 #include "common/android_util.h"
 #include "common/debug.h"
 
-#include <cstdint>
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    define ANGLE_CAN_SUPPORT_UNWIND_BACKTRACE
+// Header files to unwind the backtrace and extract the stack symbols from it.
+// (The headers below are not supported on Windows.)
+#    include <dlfcn.h>
+#    include <unwind.h>
+#endif
 
 #if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
 #    define ANGLE_AHARDWARE_BUFFER_SUPPORT
@@ -419,6 +425,127 @@ AHardwareBuffer *ClientBufferToAHardwareBuffer(EGLClientBuffer clientBuffer)
 {
     return OffsetPointer<AHardwareBuffer>(clientBuffer,
                                           -kAHardwareBufferToANativeWindowBufferOffset);
+}
+
+UnwindedBacktraceInfo::UnwindedBacktraceInfo() {}
+UnwindedBacktraceInfo::~UnwindedBacktraceInfo() {}
+
+void UnwindedBacktraceInfo::clear()
+{
+    mStackAddresses.clear();
+    mStackSymbols.clear();
+}
+void UnwindedBacktraceInfo::populateBacktraceInfo(void **stackAddressBuffer,
+                                                  size_t stackAddressCount)
+{
+#if defined(ANGLE_CAN_SUPPORT_UNWIND_BACKTRACE)
+    ASSERT(mStackAddresses.empty() && mStackSymbols.empty());
+
+    for (size_t i = 0; i < stackAddressCount; i++)
+    {
+        void *stackAddr = stackAddressBuffer[i];
+        mStackAddresses.push_back(stackAddr);
+
+        // Get the symbol if possible. dladdr() returns 0 on failure.
+        Dl_info dlInfo;
+        if (dladdr(stackAddr, &dlInfo) != 0 && dlInfo.dli_sname)
+        {
+            mStackSymbols.emplace_back(dlInfo.dli_sname);
+        }
+        else
+        {
+            mStackSymbols.emplace_back("unknown_symbol");
+        }
+    }
+
+    ASSERT(mStackAddresses.size() == mStackSymbols.size());
+#endif
+}
+
+void UnwindedBacktraceInfo::printBacktrace()
+{
+    // Return if no backtrace data is available.
+    if (mStackAddresses.empty())
+    {
+        return;
+    }
+
+    WARN() << "Backtrace start";
+    for (size_t i = 0; i < mStackAddresses.size(); i++)
+    {
+        WARN() << i << ":" << mStackAddresses[i] << " -> " << mStackSymbols[i];
+    }
+    WARN() << "Backtrace end";
+}
+
+std::vector<void *> UnwindedBacktraceInfo::getStackAddresses() const
+{
+    return mStackAddresses;
+}
+std::vector<std::string> UnwindedBacktraceInfo::getStackSymbols() const
+{
+    return mStackSymbols;
+}
+
+#if defined(ANGLE_CAN_SUPPORT_UNWIND_BACKTRACE)
+struct UnwindCallbackFnState
+{
+    UnwindCallbackFnState() : current(nullptr), end(nullptr) {}
+    UnwindCallbackFnState(void **current, void **end) : current(current), end(end) {}
+    void **current;
+    void **end;
+};
+
+// Unwind callback function, which is called until the end of stack is reached.
+_Unwind_Reason_Code unwindCallbackFn(struct _Unwind_Context *context, void *args)
+{
+    auto *state = reinterpret_cast<UnwindCallbackFnState *>(args);
+
+    // Get the instruction pointer.
+    uintptr_t ip = _Unwind_GetIP(context);
+    if (ip == 0)
+    {
+        return _URC_NO_REASON;
+    }
+
+    // The buffer is populated at the current location with the instruction pointer address. The
+    // current value is incremented to prepare for the next entry in the stack trace. Once "current"
+    // gets to "end", the callback should stop.
+    if (state->current == state->end)
+    {
+        return _URC_END_OF_STACK;
+    }
+
+    *state->current++ = reinterpret_cast<void *>(ip);
+    return _URC_NO_REASON;
+}
+
+// Size limit for the backtrace obtained from the device.
+constexpr uint32_t kMaxBacktraceSize = 16;
+
+UnwindedBacktraceInfo getSupportedBacktraceInfo()
+{
+    void *stackAddrBuffer[kMaxBacktraceSize];
+
+    UnwindCallbackFnState unwindFnState(stackAddrBuffer, stackAddrBuffer + kMaxBacktraceSize);
+    _Unwind_Backtrace(unwindCallbackFn, &unwindFnState);
+
+    // The number of the collected IPs is shown by how far "current" has moved.
+    auto stackAddressCount = static_cast<size_t>(unwindFnState.current - stackAddrBuffer);
+
+    UnwindedBacktraceInfo backtraceInfo;
+    backtraceInfo.populateBacktraceInfo(stackAddrBuffer, stackAddressCount);
+    return backtraceInfo;
+}
+#endif
+
+UnwindedBacktraceInfo getBacktraceInfo()
+{
+#if defined(ANGLE_ENABLE_UNWIND_BACKTRACE_SUPPORT) && defined(ANGLE_CAN_SUPPORT_UNWIND_BACKTRACE)
+    return getSupportedBacktraceInfo();
+#else
+    return {};
+#endif
 }
 }  // namespace android
 }  // namespace angle
