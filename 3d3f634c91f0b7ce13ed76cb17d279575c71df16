@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b6de90b_b64a40bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-01T16:11:00Z",
+      "side": 1,
+      "message": "Thank you, the change makes sense. Please add regression tests in `src/tests/gl_tests/GLSLTest.cpp` to ensure correctness of the patch + avoid future bugs. Much appreciated 😊",
+      "revId": "3d3f634c91f0b7ce13ed76cb17d279575c71df16",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
