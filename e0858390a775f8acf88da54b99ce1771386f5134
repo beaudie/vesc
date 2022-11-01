@@ -58,6 +58,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfc71cf0_091dab6b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5459,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b098bc3_cebf1169",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e9f5d0b_090a742c",
@@ -71,6 +89,30 @@
       "writtenOn": "2022-10-27T16:32:56Z",
       "side": 1,
       "message": "typo: have",
+      "range": {
+        "startLine": 5462,
+        "startChar": 39,
+        "endLine": 5462,
+        "endChar": 42
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0950de9f_ecaf2589",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5462,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e9f5d0b_090a742c",
       "range": {
         "startLine": 5462,
         "startChar": 39,
@@ -104,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdceeac0_e120b161",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5586,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81c88473_3a11d957",
+      "range": {
+        "startLine": 5586,
+        "startChar": 21,
+        "endLine": 5586,
+        "endChar": 28
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "795a391e_723b851a",
@@ -117,6 +183,24 @@
       "writtenOn": "2022-10-26T01:21:13Z",
       "side": 1,
       "message": "Can I ask where does `0xb400000000000000` come from?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1608c37_3b32baab",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5725,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Good catch. This is due to heap pointer tagging. I added an actual explanation for this and a TODO, since this will crash if it\u0027s run on an Android implementation where heap pointer tagging is not enabled.",
+      "parentUuid": "795a391e_723b851a",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -144,6 +228,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7132e712_4ae88426",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5915,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "The placement of this did actually not make sense, synchronization now happens before buffer management.",
+      "parentUuid": "eaca0049_41527cdf",
+      "range": {
+        "startLine": 5915,
+        "startChar": 0,
+        "endLine": 5915,
+        "endChar": 25
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97ea8ca5_64cee72c",
@@ -157,6 +265,24 @@
       "writtenOn": "2022-10-26T01:48:55Z",
       "side": 1,
       "message": "Is it possible that `mCoherentBufferTracker::mUseShadowMemory` is false? In that case, will we just add another CoherentBuffer without ShadowMemory, and its\u0027 start points at `realMapPointer`, is that the expected behavior?",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba56b111_19f2034f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5935,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Yes that behavior is expected in the case shadow memory is not used and the Vulkan memory can be protected directly.",
+      "parentUuid": "97ea8ca5_64cee72c",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -178,6 +304,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b640d8b8_d40e8fb8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5967,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "This comment was a bit misleading as it described the behavior from the opposite case. I now describe the behavior of this case using NOT.",
+      "parentUuid": "b9ce4643_cbb2865b",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c59bc97e_8282fe64",
@@ -191,6 +335,24 @@
       "writtenOn": "2022-10-26T01:48:55Z",
       "side": 1,
       "message": "The comment here is a bit misleading, in the switch case block, we are only setting the corresponding buffer shadowDirty bit to true, we are not updating the shadow memory with real memory yet. Suggesting change it to `// when using shadow memory, we need to mark the buffer shadowDirty bit to true`.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5eafd41_19363388",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7275,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c59bc97e_8282fe64",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -220,6 +382,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84da0e20_62ec7a35",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7287,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "This was determined by experimentation in the end2end tests. In the case of `GLCopyBufferSubData` synchronization needs to happen after `glFinish`, since the actual buffer won\u0027t be updated as early as after the API call. For `GLBufferSubData` updating as early as after the API call was not a problem. The unit tests for `GLCopyBufferSubData` also all conveniently do call `glFinish`.",
+      "parentUuid": "a240e4a9_36869cbd",
+      "range": {
+        "startLine": 7287,
+        "startChar": 0,
+        "endLine": 7287,
+        "endChar": 58
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cea312e_52d79b03",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
@@ -231,6 +417,24 @@
       "writtenOn": "2022-10-26T01:48:55Z",
       "side": 1,
       "message": "same as above, the comment suggesting changing the comment to `when using shadow memory, we need to mark all the buffer\u0027s shadowDirty bit to true` or something similar.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d76e0563_e84ad979",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7295,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cea312e_52d79b03",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -258,6 +462,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04744b5a_74bb9379",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7711,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Unfortunately at creation time of `FrameCapture` this was not available, since there was not context to acquire this information from. In the current version of the patch the test is run from withing the `Context` in `Context::initCaps`.",
+      "parentUuid": "85810b55_4ac06396",
+      "range": {
+        "startLine": 7711,
+        "startChar": 0,
+        "endLine": 7711,
+        "endChar": 62
+      },
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e8e70dc_811ff410",
@@ -271,6 +499,24 @@
       "writtenOn": "2022-10-26T01:50:21Z",
       "side": 1,
       "message": "Let\u0027s change `shadowMemory` to `mShadowMemory`.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59507d17_3b1a9e87",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e8e70dc_811ff410",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -305,6 +551,42 @@
       "writtenOn": "2022-10-26T01:50:21Z",
       "side": 1,
       "message": "I think class member should be prefixed with `m`, so let\u0027s change `shadowDirty` to `mShadowDirty`.",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "680654a8_f22654b1",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "I have made it private and added wrapper functions.",
+      "parentUuid": "d2c5b7b9_7b9be434",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e48c025_d5e0e340",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-01T15:29:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcc27980_d6a5a4e5",
       "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
