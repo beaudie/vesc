@@ -32,6 +32,8 @@ libangle_common_sources = [
   "src/common/angleutils.cpp",
   "src/common/angleutils.h",
   "src/common/apple_platform_utils.h",
+  "src/common/backtrace_utils.cpp",
+  "src/common/backtrace_utils.h",
   "src/common/bitset_utils.h",
   "src/common/debug.cpp",
   "src/common/debug.h",
