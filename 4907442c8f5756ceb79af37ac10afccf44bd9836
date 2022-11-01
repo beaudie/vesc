@@ -22,6 +22,30 @@
       },
       "revId": "4907442c8f5756ceb79af37ac10afccf44bd9836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95da949e_72b4c689",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-11-01T19:55:24Z",
+      "side": 1,
+      "message": "I hardcoded for testing, and I just realized that the frontend features is not controled by the feature overrides..probably not worth applying the overrides for frontend features?\n\nFor longer term, I\u0027m planning to move this into angle: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/third_party/chromiumos-overlay/media-libs/arc-mesa-virgl/files/angle/init.gpu.rc",
+      "parentUuid": "b94e7a02_7d9ae792",
+      "range": {
+        "startLine": 90,
+        "startChar": 65,
+        "endLine": 90,
+        "endChar": 107
+      },
+      "revId": "4907442c8f5756ceb79af37ac10afccf44bd9836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
