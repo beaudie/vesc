@@ -94,6 +94,30 @@
       },
       "revId": "4907442c8f5756ceb79af37ac10afccf44bd9836",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfde542e_9bf24644",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2022-11-01T20:49:31Z",
+      "side": 1,
+      "message": "Ah...I haven\u0027t tried that again but was just looking at RendererVK, and apparently I missed that the override for frontend features is at Display. I\u0027ll keep this one as is, and migrate the others later.",
+      "parentUuid": "8e9c4a2f_d6561451",
+      "range": {
+        "startLine": 90,
+        "startChar": 65,
+        "endLine": 90,
+        "endChar": 107
+      },
+      "revId": "4907442c8f5756ceb79af37ac10afccf44bd9836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
