@@ -186,6 +186,8 @@ class ConstantFoldingExpressionTest : public ConstantFoldingTest
   public:
     ConstantFoldingExpressionTest() {}
 
+    void evaluateIvec4(const std::string &ivec4Expression);
+    void evaluateVec4(const std::string &vec4Expression);
     void evaluateFloat(const std::string &floatExpression);
     void evaluateInt(const std::string &intExpression);
     void evaluateUint(const std::string &uintExpression);

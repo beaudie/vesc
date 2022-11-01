@@ -32,6 +32,16 @@ void ConstantFoldingExpressionTest::evaluate(const std::string &type, const std:
     compileAssumeSuccess(shaderStream.str());
 }
 
+void ConstantFoldingExpressionTest::evaluateIvec4(const std::string &ivec4Expression)
+{
+    evaluate("ivec4", ivec4Expression);
+}
+
+void ConstantFoldingExpressionTest::evaluateVec4(const std::string &ivec4Expression)
+{
+    evaluate("vec4", ivec4Expression);
+}
+
 void ConstantFoldingExpressionTest::evaluateFloat(const std::string &floatExpression)
 {
     evaluate("float", floatExpression);
