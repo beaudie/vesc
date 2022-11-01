@@ -126,6 +126,42 @@ config("angle_util_loader_headers_config") {
   include_dirs = [ ".." ]
 }
 
+angle_source_set("angle_backtrace_utils") {
+  sources = [
+    "backtrace_utils.cpp",
+    "backtrace_utils.h",
+  ]
+
+  if (is_win) {
+    sources += [ "windows/wgl_backtrace.cpp" ]
+  }
+
+  if (is_linux) {
+    sources += [ "linux/linux_backtrace.cpp" ]
+  }
+
+  if (is_fuchsia) {
+    sources += [ "fuchsia/fuchsia_backtrace.cpp" ]
+  }
+
+  if (is_ios) {
+    sources += [ "ios/ios_backtrace.cpp" ]
+  }
+
+  if (is_mac) {
+    sources += [ "osx/osx_backtrace.cpp" ]
+  }
+
+  if (is_android) {
+    sources += [ "android/android_backtrace.cpp" ]
+  }
+
+  deps = [
+    "$angle_root:angle_common",
+    "$angle_root:includes",
+  ]
+}
+
 angle_source_set("angle_util_loader_headers") {
   testonly = true
   sources = [

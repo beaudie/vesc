@@ -14,6 +14,7 @@
 #include <limits>
 #include <queue>
 
+#include "../../util/backtrace_utils.h"
 #include "GLSLANG/ShaderLang.h"
 #include "common/FixedVector.h"
 #include "common/Optional.h"

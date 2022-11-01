@@ -173,6 +173,11 @@ config("internal_config") {
     defines += [ "ANGLE_ENABLE_TRACE_EVENTS=1" ]
   }
 
+  # Enables unwind backtrace support for Android.
+  if (angle_enable_unwind_backtrace_support) {
+    defines += [ "ANGLE_ENABLE_UNWIND_BACKTRACE_SUPPORT=1" ]
+  }
+
   if (is_chromeos) {
     defines += [ "ANGLE_PLATFORM_CHROMEOS" ]
   }
