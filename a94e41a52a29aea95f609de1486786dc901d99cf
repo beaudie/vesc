@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169519a6_9ccaeab4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-02T01:45:27Z",
+      "side": 1,
+      "message": "nit: this change has nothing to do with the Vulkan backend",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c756c02_d86a727a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-02T01:45:27Z",
+      "side": 1,
+      "message": "Have you noticed the `PrintStackBacktrace` function? That function does essentially the same thing, except it also prints it to stdout.\n\nYou can put `UnwindBacktraceInfo` under `util/`, then add a function to fill that in per platform. You can leave the implementation on non-Android platforms empty, with a comment that implementation can be refactored out of `PrintStackBacktrace`",
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a3d2e19_fa0ef6e1",
+        "filename": "gni/angle.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-02T01:45:27Z",
+      "side": 1,
+      "message": "Instead of saying \"not supported on X\", I suggest \"only supported on Y\".\n\nIn this case, it\u0027s also less about the include headers, and more about different ways different operating systems generate a stack trace. You could just say \"this feature is only implemented on Android\".",
+      "range": {
+        "startLine": 240,
+        "startChar": 25,
+        "endLine": 240,
+        "endChar": 81
+      },
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
