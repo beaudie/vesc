@@ -150,6 +150,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f32a09fe_bd2af793",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-02T13:15:50Z",
+      "side": 1,
+      "message": "\u003e TLDR is the things to memorize before entering the shift. The lower part of the doc is the detailed version, which people can come back to search when needed.\n\nThis sounds like outline to me - instead of (partially) duplicating information we can make a list of links that point to the relevant sections down below in the doc.\n\nFor example, instead of saying \"For Post-commit CI builders\" and linking to Sheriff-o-matic we could link to the \"Post-commit CI builders\" section which has all info about Sheriff-o-matic.\n\nBut I\u0027m still not sure what you are trying to do, could you elaborate? Make Sheriff-o-matic more visible so that people use it more? I personally only looked at it a couple of times, I know Jamie has been advocating for it but given how it only works for a subset of builders I\u0027m (personally) kind of reluctant of using an additional tool when I already know how to do things without it. I wonder if that\u0027s how others feel too. Maybe we could describe what advantages it actually brings to the table compared to just looking at ci.chromium.org?",
+      "parentUuid": "a572c5f2_3ca9af91",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc7e19e4_426e2ad6",
         "filename": "infra/ANGLEWrangling.md",
         "patchSetId": 7
