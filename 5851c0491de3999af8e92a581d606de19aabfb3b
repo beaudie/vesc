@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd1e0c8_92bfceaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-02T13:47:13Z",
+      "side": 1,
+      "message": "Thanks for the fix. To save the bots some time, do you mind squashing this with the next change? The complexity is low enough not to warrant a split.",
+      "revId": "5851c0491de3999af8e92a581d606de19aabfb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
