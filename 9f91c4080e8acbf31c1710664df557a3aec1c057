@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f52ccf4_f4f3b0cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-02T23:56:45Z",
+      "side": 1,
+      "message": "There\u0027s a lot of generated code here. Would it help to separate that into a different CL again?",
+      "revId": "9f91c4080e8acbf31c1710664df557a3aec1c057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
