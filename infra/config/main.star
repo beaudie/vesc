@@ -227,12 +227,12 @@ def angle_builder(name, cpu):
 
         # Trace tests are only run on CQ if files in the capture folders change.
         location_regexp = [
-            ".+/[+]/DEPS",
-            ".+/[+]/src/libANGLE/capture/.+",
-            ".+/[+]/src/tests/angle_end2end_tests_expectations.txt",
-            ".+/[+]/src/tests/capture.+",
-            ".+/[+]/src/tests/egl_tests/.+",
-            ".+/[+]/src/tests/gl_tests/.+",
+            cq.location_filter(path_regexp = "DEPS"),
+            cq.location_filter(path_regexp = "src/libANGLE/capture/.+"),
+            cq.location_filter(path_regexp = "src/tests/angle_end2end_tests_expectations.txt"),
+            cq.location_filter(path_regexp = "src/tests/capture.+"),
+            cq.location_filter(path_regexp = "src/tests/egl_tests/.+"),
+            cq.location_filter(path_regexp = "src/tests/gl_tests/.+"),
         ]
     elif is_perf:
         test_mode = "compile_and_test"
@@ -344,7 +344,7 @@ def angle_builder(name, cpu):
             luci.cq_tryjob_verifier(
                 cq_group = "main",
                 builder = "angle:try/" + name,
-                location_regexp = location_regexp,
+                location_filters = location_regexp,
             )
 
 luci.bucket(
