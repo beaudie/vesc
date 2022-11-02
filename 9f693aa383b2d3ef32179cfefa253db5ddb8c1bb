@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e7ba9fb_77a6614a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 20
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-11-02T01:50:45Z",
+      "side": 1,
+      "message": "This change missed some files, can you please submit a followup change to fix these?\n\n```\nscripts/gl_angle_ext.xml:                \u003cenum name\u003d\"GL_PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE\"/\u003e\nscripts/gl_angle_ext.xml:        \u003cenum value\u003d\"0x96E3\" name\u003d\"GL_PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE\"/\u003e\nsrc/common/gl_enum_utils_autogen.cpp:                    return \"GL_PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE\";\nsrc/common/gl_enum_utils_autogen.cpp:    if (strcmp(str, \"GL_PIXEL_LOCAL_STORAGE_ACTIVE_ANGLE\") \u003d\u003d 0)\n```",
+      "revId": "9f693aa383b2d3ef32179cfefa253db5ddb8c1bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
