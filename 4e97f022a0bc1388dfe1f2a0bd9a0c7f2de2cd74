@@ -16,6 +16,24 @@
       "message": "Did you intend to use 2. instead of 1. here?",
       "revId": "4e97f022a0bc1388dfe1f2a0bd9a0c7f2de2cd74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc801634_f876bd2d",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-02T01:53:15Z",
+      "side": 1,
+      "message": "Drive by FYI, markdown renderers automatically numbers these correctly. We keep them all as `1.` so that if you add a step in the middle, you wouldn\u0027t have to go and increment every following step.",
+      "parentUuid": "b6da97e5_f14f01d9",
+      "revId": "4e97f022a0bc1388dfe1f2a0bd9a0c7f2de2cd74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
