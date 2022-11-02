@@ -174,6 +174,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b99893f_5afcb1a7",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-02T15:14:38Z",
+      "side": 1,
+      "message": "What I wanted was primarily the things to memorize.  The document is long already that my memory can\u0027t remember all, so I typically trying to find takeaways.\n\nPatchset 11 moves the tips into Roller section, so no more TLDR section.  let\u0027s see if that\u0027s better.   Thanks.",
+      "parentUuid": "f32a09fe_bd2af793",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc7e19e4_426e2ad6",
         "filename": "infra/ANGLEWrangling.md",
         "patchSetId": 7
