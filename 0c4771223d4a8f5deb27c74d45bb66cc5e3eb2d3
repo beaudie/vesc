@@ -126,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a572c5f2_3ca9af91",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-02T00:51:39Z",
+      "side": 1,
+      "message": "TLDR is the things to memorize before entering the shift.  The lower part of the doc is the detailed version, which people can come back to search when needed.  \n\nIf people don\u0027t feel this is helping, then I could just the `Auto-Rollers` part as another `Note`? (just like the \"If you need to suppress test failures...\" above)\n\nHow do you think?",
+      "parentUuid": "f8d88845_2d882599",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc7e19e4_426e2ad6",
         "filename": "infra/ANGLEWrangling.md",
         "patchSetId": 7
@@ -232,6 +256,30 @@
       "side": 1,
       "message": "There are a few more things in bold, attracting attention unnecessarily?",
       "parentUuid": "48589561_9970de6d",
+      "range": {
+        "startLine": 32,
+        "startChar": 173,
+        "endLine": 32,
+        "endChar": 175
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a3941c2_7230cf4a",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-02T00:51:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c53674_6c410459",
       "range": {
         "startLine": 32,
         "startChar": 173,
