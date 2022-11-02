@@ -159,6 +159,14 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
     else
     {
         ANGLE_VK_TRY(context, image->bindMemory(context->getDevice(), *deviceMemoryOut));
+        // repeat the same vkBindImageMemory call as image->bindMemory when called the first time
+        static int n_calls = 0;
+        if (n_calls == 0)
+        {
+            ANGLE_VK_TRY(context, vkBindImageMemory(context->getDevice(), image->getHandle(),
+                                                    deviceMemoryOut->getHandle(), 0));
+        }
+        n_calls++;
     }
 
     return angle::Result::Continue;
