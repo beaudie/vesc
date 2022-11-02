@@ -231,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6b46afc_740c132d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5725,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-02T01:11:32Z",
+      "side": 1,
+      "message": "Thank you. http://anglebug.com/7402 points to Immortal Trace, is that the bug ticket you intended to mention here?",
+      "parentUuid": "d1608c37_3b32baab",
+      "revId": "e0858390a775f8acf88da54b99ce1771386f5134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eaca0049_41527cdf",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 8
