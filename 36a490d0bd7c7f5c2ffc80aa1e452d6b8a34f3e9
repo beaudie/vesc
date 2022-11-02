@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "561ee080_81b8840e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5716,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-02T11:57:15Z",
+      "side": 1,
+      "message": "Consistently with the rest of `FrameCapture` I am not emitting `ERR()` in case of fatal failures of buffer map functions and only returning if the actual test failed, which is non-fatal. I added one comment when returning in case of test failure.",
+      "parentUuid": "697e0f0d_b01bebc4",
+      "range": {
+        "startLine": 5716,
+        "startChar": 0,
+        "endLine": 5716,
+        "endChar": 21
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "930ae733_ef07cfe5",
@@ -107,6 +131,30 @@
       "writtenOn": "2022-11-01T22:44:30Z",
       "side": 1,
       "message": "This block of code is confusing.  I think it would be better to rename this to `shadowMemoryEnabled`.  Then the association with `enableShadowMemory` is clear.",
+      "range": {
+        "startLine": 6049,
+        "startChar": 32,
+        "endLine": 6049,
+        "endChar": 47
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fbca7e1_359afb65",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 6049,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-02T11:57:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "930ae733_ef07cfe5",
       "range": {
         "startLine": 6049,
         "startChar": 32,
