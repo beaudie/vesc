@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d5d3c565_ce45e31e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-02T11:40:05Z",
+      "side": 1,
+      "message": "This is for `Context::bindBuffer`, used in the `canProtectDirectly` test.",
+      "parentUuid": "339aeda7_b8f03c87",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4a58bd3_0c13e556",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 12
