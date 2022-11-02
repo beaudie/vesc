@@ -773,7 +773,7 @@ deps = {
   'src/tests/restricted_traces/3d_pool_ball': {
       'packages': [
         {
-            'package': 'angle/traces/3d_pool_ball',
+            'package': 'experimental/google.com/srisser/angle/traces/3d_pool_ball',
             'version': 'version:1',
         },
       ],
@@ -783,7 +783,7 @@ deps = {
   'src/tests/restricted_traces/aliexpress': {
       'packages': [
         {
-            'package': 'angle/traces/aliexpress',
+            'package': 'experimental/google.com/srisser/angle/traces/aliexpress',
             'version': 'version:5',
         },
       ],
@@ -793,7 +793,7 @@ deps = {
   'src/tests/restricted_traces/altos_odyssey': {
       'packages': [
         {
-            'package': 'angle/traces/altos_odyssey',
+            'package': 'experimental/google.com/srisser/angle/traces/altos_odyssey',
             'version': 'version:1',
         },
       ],
@@ -803,7 +803,7 @@ deps = {
   'src/tests/restricted_traces/among_us': {
       'packages': [
         {
-            'package': 'angle/traces/among_us',
+            'package': 'experimental/google.com/srisser/angle/traces/among_us',
             'version': 'version:5',
         },
       ],
@@ -813,7 +813,7 @@ deps = {
   'src/tests/restricted_traces/angry_birds_2_1500': {
       'packages': [
         {
-            'package': 'angle/traces/angry_birds_2_1500',
+            'package': 'experimental/google.com/srisser/angle/traces/angry_birds_2_1500',
             'version': 'version:5',
         },
       ],
@@ -823,7 +823,7 @@ deps = {
   'src/tests/restricted_traces/angry_birds_2_launch': {
       'packages': [
         {
-            'package': 'angle/traces/angry_birds_2_launch',
+            'package': 'experimental/google.com/srisser/angle/traces/angry_birds_2_launch',
             'version': 'version:7',
         },
       ],
@@ -833,7 +833,7 @@ deps = {
   'src/tests/restricted_traces/animal_crossing': {
       'packages': [
         {
-            'package': 'angle/traces/animal_crossing',
+            'package': 'experimental/google.com/srisser/angle/traces/animal_crossing',
             'version': 'version:4',
         },
       ],
@@ -853,7 +853,7 @@ deps = {
   'src/tests/restricted_traces/arena_of_valor': {
       'packages': [
         {
-            'package': 'angle/traces/arena_of_valor',
+            'package': 'experimental/google.com/srisser/angle/traces/arena_of_valor',
             'version': 'version:5',
         },
       ],
@@ -863,7 +863,7 @@ deps = {
   'src/tests/restricted_traces/asphalt_8': {
       'packages': [
         {
-            'package': 'angle/traces/asphalt_8',
+            'package': 'experimental/google.com/srisser/angle/traces/asphalt_8',
             'version': 'version:5',
         },
       ],
@@ -883,7 +883,7 @@ deps = {
   'src/tests/restricted_traces/avakin_life': {
       'packages': [
         {
-            'package': 'angle/traces/avakin_life',
+            'package': 'experimental/google.com/srisser/angle/traces/avakin_life',
             'version': 'version:5',
         },
       ],
@@ -893,7 +893,7 @@ deps = {
   'src/tests/restricted_traces/aztec_ruins': {
       'packages': [
         {
-            'package': 'angle/traces/aztec_ruins',
+            'package': 'experimental/google.com/srisser/angle/traces/aztec_ruins',
             'version': 'version:5',
         },
       ],
@@ -903,7 +903,7 @@ deps = {
   'src/tests/restricted_traces/aztec_ruins_high': {
       'packages': [
         {
-            'package': 'angle/traces/aztec_ruins_high',
+            'package': 'experimental/google.com/srisser/angle/traces/aztec_ruins_high',
             'version': 'version:1',
         },
       ],
@@ -913,7 +913,7 @@ deps = {
   'src/tests/restricted_traces/badland': {
       'packages': [
         {
-            'package': 'angle/traces/badland',
+            'package': 'experimental/google.com/srisser/angle/traces/badland',
             'version': 'version:5',
         },
       ],
@@ -923,7 +923,7 @@ deps = {
   'src/tests/restricted_traces/basemark_gpu': {
       'packages': [
         {
-            'package': 'angle/traces/basemark_gpu',
+            'package': 'experimental/google.com/srisser/angle/traces/basemark_gpu',
             'version': 'version:1',
         },
       ],
@@ -933,7 +933,7 @@ deps = {
   'src/tests/restricted_traces/battle_of_polytopia': {
       'packages': [
         {
-            'package': 'angle/traces/battle_of_polytopia',
+            'package': 'experimental/google.com/srisser/angle/traces/battle_of_polytopia',
             'version': 'version:1',
         },
       ],
@@ -943,7 +943,7 @@ deps = {
   'src/tests/restricted_traces/beach_buggy_racing': {
       'packages': [
         {
-            'package': 'angle/traces/beach_buggy_racing',
+            'package': 'experimental/google.com/srisser/angle/traces/beach_buggy_racing',
             'version': 'version:5',
         },
       ],
@@ -953,7 +953,7 @@ deps = {
   'src/tests/restricted_traces/black_desert_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/black_desert_mobile',
+            'package': 'experimental/google.com/srisser/angle/traces/black_desert_mobile',
             'version': 'version:1',
         },
       ],
@@ -963,7 +963,7 @@ deps = {
   'src/tests/restricted_traces/blade_and_soul_revolution': {
       'packages': [
         {
-            'package': 'angle/traces/blade_and_soul_revolution',
+            'package': 'experimental/google.com/srisser/angle/traces/blade_and_soul_revolution',
             'version': 'version:1',
         },
       ],
@@ -973,7 +973,7 @@ deps = {
   'src/tests/restricted_traces/blockman_go': {
       'packages': [
         {
-            'package': 'angle/traces/blockman_go',
+            'package': 'experimental/google.com/srisser/angle/traces/blockman_go',
             'version': 'version:5',
         },
       ],
@@ -983,7 +983,7 @@ deps = {
   'src/tests/restricted_traces/botworld_adventure': {
       'packages': [
         {
-            'package': 'angle/traces/botworld_adventure',
+            'package': 'experimental/google.com/srisser/angle/traces/botworld_adventure',
             'version': 'version:1',
         },
       ],
@@ -993,7 +993,7 @@ deps = {
   'src/tests/restricted_traces/brawl_stars': {
       'packages': [
         {
-            'package': 'angle/traces/brawl_stars',
+            'package': 'experimental/google.com/srisser/angle/traces/brawl_stars',
             'version': 'version:5',
         },
       ],
@@ -1003,7 +1003,7 @@ deps = {
   'src/tests/restricted_traces/bricks_breaker_quest': {
       'packages': [
         {
-            'package': 'angle/traces/bricks_breaker_quest',
+            'package': 'experimental/google.com/srisser/angle/traces/bricks_breaker_quest',
             'version': 'version:5',
         },
       ],
@@ -1013,7 +1013,7 @@ deps = {
   'src/tests/restricted_traces/bridge_constructor_portal': {
       'packages': [
         {
-            'package': 'angle/traces/bridge_constructor_portal',
+            'package': 'experimental/google.com/srisser/angle/traces/bridge_constructor_portal',
             'version': 'version:1',
         },
       ],
@@ -1023,7 +1023,7 @@ deps = {
   'src/tests/restricted_traces/bubble_shooter': {
       'packages': [
         {
-            'package': 'angle/traces/bubble_shooter',
+            'package': 'experimental/google.com/srisser/angle/traces/bubble_shooter',
             'version': 'version:5',
         },
       ],
@@ -1033,7 +1033,7 @@ deps = {
   'src/tests/restricted_traces/bus_simulator_indonesia': {
       'packages': [
         {
-            'package': 'angle/traces/bus_simulator_indonesia',
+            'package': 'experimental/google.com/srisser/angle/traces/bus_simulator_indonesia',
             'version': 'version:5',
         },
       ],
@@ -1043,7 +1043,7 @@ deps = {
   'src/tests/restricted_traces/call_break_offline_card_game': {
       'packages': [
         {
-            'package': 'angle/traces/call_break_offline_card_game',
+            'package': 'experimental/google.com/srisser/angle/traces/call_break_offline_card_game',
             'version': 'version:5',
         },
       ],
@@ -1053,7 +1053,7 @@ deps = {
   'src/tests/restricted_traces/candy_crush_500': {
       'packages': [
         {
-            'package': 'angle/traces/candy_crush_500',
+            'package': 'experimental/google.com/srisser/angle/traces/candy_crush_500',
             'version': 'version:5',
         },
       ],
@@ -1063,7 +1063,7 @@ deps = {
   'src/tests/restricted_traces/candy_crush_soda_saga': {
       'packages': [
         {
-            'package': 'angle/traces/candy_crush_soda_saga',
+            'package': 'experimental/google.com/srisser/angle/traces/candy_crush_soda_saga',
             'version': 'version:5',
         },
       ],
@@ -1083,7 +1083,7 @@ deps = {
   'src/tests/restricted_traces/car_parking_multiplayer': {
       'packages': [
         {
-            'package': 'angle/traces/car_parking_multiplayer',
+            'package': 'experimental/google.com/srisser/angle/traces/car_parking_multiplayer',
             'version': 'version:5',
         },
       ],
@@ -1093,7 +1093,7 @@ deps = {
   'src/tests/restricted_traces/castlevania_sotn': {
       'packages': [
         {
-            'package': 'angle/traces/castlevania_sotn',
+            'package': 'experimental/google.com/srisser/angle/traces/castlevania_sotn',
             'version': 'version:1',
         },
       ],
@@ -1103,7 +1103,7 @@ deps = {
   'src/tests/restricted_traces/clash_of_clans': {
       'packages': [
         {
-            'package': 'angle/traces/clash_of_clans',
+            'package': 'experimental/google.com/srisser/angle/traces/clash_of_clans',
             'version': 'version:5',
         },
       ],
@@ -1113,7 +1113,7 @@ deps = {
   'src/tests/restricted_traces/clash_royale': {
       'packages': [
         {
-            'package': 'angle/traces/clash_royale',
+            'package': 'experimental/google.com/srisser/angle/traces/clash_royale',
             'version': 'version:5',
         },
       ],
@@ -1123,7 +1123,7 @@ deps = {
   'src/tests/restricted_traces/cod_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/cod_mobile',
+            'package': 'experimental/google.com/srisser/angle/traces/cod_mobile',
             'version': 'version:5',
         },
       ],
@@ -1133,7 +1133,7 @@ deps = {
   'src/tests/restricted_traces/coin_master': {
       'packages': [
         {
-            'package': 'angle/traces/coin_master',
+            'package': 'experimental/google.com/srisser/angle/traces/coin_master',
             'version': 'version:5',
         },
       ],
@@ -1143,7 +1143,7 @@ deps = {
   'src/tests/restricted_traces/command_and_conquer_rivals': {
       'packages': [
         {
-            'package': 'angle/traces/command_and_conquer_rivals',
+            'package': 'experimental/google.com/srisser/angle/traces/command_and_conquer_rivals',
             'version': 'version:5',
         },
       ],
@@ -1153,7 +1153,7 @@ deps = {
   'src/tests/restricted_traces/cookie_run_kingdom': {
       'packages': [
         {
-            'package': 'angle/traces/cookie_run_kingdom',
+            'package': 'experimental/google.com/srisser/angle/traces/cookie_run_kingdom',
             'version': 'version:5',
         },
       ],
@@ -1163,7 +1163,7 @@ deps = {
   'src/tests/restricted_traces/darkness_rises': {
       'packages': [
         {
-            'package': 'angle/traces/darkness_rises',
+            'package': 'experimental/google.com/srisser/angle/traces/darkness_rises',
             'version': 'version:1',
         },
       ],
@@ -1173,7 +1173,7 @@ deps = {
   'src/tests/restricted_traces/dead_by_daylight': {
       'packages': [
         {
-            'package': 'angle/traces/dead_by_daylight',
+            'package': 'experimental/google.com/srisser/angle/traces/dead_by_daylight',
             'version': 'version:2',
         },
       ],
@@ -1183,7 +1183,7 @@ deps = {
   'src/tests/restricted_traces/dead_cells': {
       'packages': [
         {
-            'package': 'angle/traces/dead_cells',
+            'package': 'experimental/google.com/srisser/angle/traces/dead_cells',
             'version': 'version:1',
         },
       ],
@@ -1193,7 +1193,7 @@ deps = {
   'src/tests/restricted_traces/dead_trigger_2': {
       'packages': [
         {
-            'package': 'angle/traces/dead_trigger_2',
+            'package': 'experimental/google.com/srisser/angle/traces/dead_trigger_2',
             'version': 'version:1',
         },
       ],
@@ -1203,7 +1203,7 @@ deps = {
   'src/tests/restricted_traces/disney_tsum_tsum': {
       'packages': [
         {
-            'package': 'angle/traces/disney_tsum_tsum',
+            'package': 'experimental/google.com/srisser/angle/traces/disney_tsum_tsum',
             'version': 'version:5',
         },
       ],
@@ -1213,7 +1213,7 @@ deps = {
   'src/tests/restricted_traces/dota_underlords': {
       'packages': [
         {
-            'package': 'angle/traces/dota_underlords',
+            'package': 'experimental/google.com/srisser/angle/traces/dota_underlords',
             'version': 'version:5',
         },
       ],
@@ -1223,7 +1223,7 @@ deps = {
   'src/tests/restricted_traces/dr_driving': {
       'packages': [
         {
-            'package': 'angle/traces/dr_driving',
+            'package': 'experimental/google.com/srisser/angle/traces/dr_driving',
             'version': 'version:5',
         },
       ],
@@ -1233,7 +1233,7 @@ deps = {
   'src/tests/restricted_traces/dragon_ball_legends': {
       'packages': [
         {
-            'package': 'angle/traces/dragon_ball_legends',
+            'package': 'experimental/google.com/srisser/angle/traces/dragon_ball_legends',
             'version': 'version:5',
         },
       ],
@@ -1243,7 +1243,7 @@ deps = {
   'src/tests/restricted_traces/dragon_mania_legends': {
       'packages': [
         {
-            'package': 'angle/traces/dragon_mania_legends',
+            'package': 'experimental/google.com/srisser/angle/traces/dragon_mania_legends',
             'version': 'version:1',
         },
       ],
@@ -1253,7 +1253,7 @@ deps = {
   'src/tests/restricted_traces/dragon_raja': {
       'packages': [
         {
-            'package': 'angle/traces/dragon_raja',
+            'package': 'experimental/google.com/srisser/angle/traces/dragon_raja',
             'version': 'version:5',
         },
       ],
@@ -1263,7 +1263,7 @@ deps = {
   'src/tests/restricted_traces/driver_overhead_2': {
       'packages': [
         {
-            'package': 'angle/traces/driver_overhead_2',
+            'package': 'experimental/google.com/srisser/angle/traces/driver_overhead_2',
             'version': 'version:2',
         },
       ],
@@ -1273,7 +1273,7 @@ deps = {
   'src/tests/restricted_traces/efootball_pes_2021': {
       'packages': [
         {
-            'package': 'angle/traces/efootball_pes_2021',
+            'package': 'experimental/google.com/srisser/angle/traces/efootball_pes_2021',
             'version': 'version:5',
         },
       ],
@@ -1283,7 +1283,7 @@ deps = {
   'src/tests/restricted_traces/egypt_1500': {
       'packages': [
         {
-            'package': 'angle/traces/egypt_1500',
+            'package': 'experimental/google.com/srisser/angle/traces/egypt_1500',
             'version': 'version:5',
         },
       ],
@@ -1293,7 +1293,7 @@ deps = {
   'src/tests/restricted_traces/eight_ball_pool': {
       'packages': [
         {
-            'package': 'angle/traces/eight_ball_pool',
+            'package': 'experimental/google.com/srisser/angle/traces/eight_ball_pool',
             'version': 'version:5',
         },
       ],
@@ -1303,7 +1303,7 @@ deps = {
   'src/tests/restricted_traces/eve_echoes': {
       'packages': [
         {
-            'package': 'angle/traces/eve_echoes',
+            'package': 'experimental/google.com/srisser/angle/traces/eve_echoes',
             'version': 'version:1',
         },
       ],
@@ -1313,7 +1313,7 @@ deps = {
   'src/tests/restricted_traces/extreme_car_driving_simulator': {
       'packages': [
         {
-            'package': 'angle/traces/extreme_car_driving_simulator',
+            'package': 'experimental/google.com/srisser/angle/traces/extreme_car_driving_simulator',
             'version': 'version:5',
         },
       ],
@@ -1323,7 +1323,7 @@ deps = {
   'src/tests/restricted_traces/fallout_shelter_online': {
       'packages': [
         {
-            'package': 'angle/traces/fallout_shelter_online',
+            'package': 'experimental/google.com/srisser/angle/traces/fallout_shelter_online',
             'version': 'version:5',
         },
       ],
@@ -1333,7 +1333,7 @@ deps = {
   'src/tests/restricted_traces/farm_heroes_saga': {
       'packages': [
         {
-            'package': 'angle/traces/farm_heroes_saga',
+            'package': 'experimental/google.com/srisser/angle/traces/farm_heroes_saga',
             'version': 'version:5',
         },
       ],
@@ -1343,7 +1343,7 @@ deps = {
   'src/tests/restricted_traces/fate_grand_order': {
       'packages': [
         {
-            'package': 'angle/traces/fate_grand_order',
+            'package': 'experimental/google.com/srisser/angle/traces/fate_grand_order',
             'version': 'version:5',
         },
       ],
@@ -1353,7 +1353,7 @@ deps = {
   'src/tests/restricted_traces/fifa_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/fifa_mobile',
+            'package': 'experimental/google.com/srisser/angle/traces/fifa_mobile',
             'version': 'version:5',
         },
       ],
@@ -1363,7 +1363,7 @@ deps = {
   'src/tests/restricted_traces/final_fantasy': {
       'packages': [
         {
-            'package': 'angle/traces/final_fantasy',
+            'package': 'experimental/google.com/srisser/angle/traces/final_fantasy',
             'version': 'version:5',
         },
       ],
@@ -1373,7 +1373,7 @@ deps = {
   'src/tests/restricted_traces/final_fantasy_brave_exvius': {
       'packages': [
         {
-            'package': 'angle/traces/final_fantasy_brave_exvius',
+            'package': 'experimental/google.com/srisser/angle/traces/final_fantasy_brave_exvius',
             'version': 'version:1',
         },
       ],
@@ -1383,7 +1383,7 @@ deps = {
   'src/tests/restricted_traces/fire_emblem_heroes': {
       'packages': [
         {
-            'package': 'angle/traces/fire_emblem_heroes',
+            'package': 'experimental/google.com/srisser/angle/traces/fire_emblem_heroes',
             'version': 'version:1',
         },
       ],
@@ -1393,7 +1393,7 @@ deps = {
   'src/tests/restricted_traces/five_nights_at_freddys': {
       'packages': [
         {
-            'package': 'angle/traces/five_nights_at_freddys',
+            'package': 'experimental/google.com/srisser/angle/traces/five_nights_at_freddys',
             'version': 'version:1',
         },
       ],
@@ -1403,7 +1403,7 @@ deps = {
   'src/tests/restricted_traces/free_fire': {
       'packages': [
         {
-            'package': 'angle/traces/free_fire',
+            'package': 'experimental/google.com/srisser/angle/traces/free_fire',
             'version': 'version:5',
         },
       ],
@@ -1413,7 +1413,7 @@ deps = {
   'src/tests/restricted_traces/free_fire_max': {
       'packages': [
         {
-            'package': 'angle/traces/free_fire_max',
+            'package': 'experimental/google.com/srisser/angle/traces/free_fire_max',
             'version': 'version:1',
         },
       ],
@@ -1423,7 +1423,7 @@ deps = {
   'src/tests/restricted_traces/gacha_club': {
       'packages': [
         {
-            'package': 'angle/traces/gacha_club',
+            'package': 'experimental/google.com/srisser/angle/traces/gacha_club',
             'version': 'version:1',
         },
       ],
@@ -1433,7 +1433,7 @@ deps = {
   'src/tests/restricted_traces/gardenscapes': {
       'packages': [
         {
-            'package': 'angle/traces/gardenscapes',
+            'package': 'experimental/google.com/srisser/angle/traces/gardenscapes',
             'version': 'version:5',
         },
       ],
@@ -1443,7 +1443,7 @@ deps = {
   'src/tests/restricted_traces/genshin_impact': {
       'packages': [
         {
-            'package': 'angle/traces/genshin_impact',
+            'package': 'experimental/google.com/srisser/angle/traces/genshin_impact',
             'version': 'version:5',
         },
       ],
@@ -1453,7 +1453,7 @@ deps = {
   'src/tests/restricted_traces/google_maps': {
       'packages': [
         {
-            'package': 'angle/traces/google_maps',
+            'package': 'experimental/google.com/srisser/angle/traces/google_maps',
             'version': 'version:5',
         },
       ],
@@ -1463,7 +1463,7 @@ deps = {
   'src/tests/restricted_traces/happy_color': {
       'packages': [
         {
-            'package': 'angle/traces/happy_color',
+            'package': 'experimental/google.com/srisser/angle/traces/happy_color',
             'version': 'version:5',
         },
       ],
@@ -1473,7 +1473,7 @@ deps = {
   'src/tests/restricted_traces/hay_day': {
       'packages': [
         {
-            'package': 'angle/traces/hay_day',
+            'package': 'experimental/google.com/srisser/angle/traces/hay_day',
             'version': 'version:5',
         },
       ],
@@ -1483,7 +1483,7 @@ deps = {
   'src/tests/restricted_traces/hearthstone': {
       'packages': [
         {
-            'package': 'angle/traces/hearthstone',
+            'package': 'experimental/google.com/srisser/angle/traces/hearthstone',
             'version': 'version:5',
         },
       ],
@@ -1493,7 +1493,7 @@ deps = {
   'src/tests/restricted_traces/higgs_domino_island': {
       'packages': [
         {
-            'package': 'angle/traces/higgs_domino_island',
+            'package': 'experimental/google.com/srisser/angle/traces/higgs_domino_island',
             'version': 'version:5',
         },
       ],
@@ -1503,7 +1503,7 @@ deps = {
   'src/tests/restricted_traces/hill_climb_racing': {
       'packages': [
         {
-            'package': 'angle/traces/hill_climb_racing',
+            'package': 'experimental/google.com/srisser/angle/traces/hill_climb_racing',
             'version': 'version:5',
         },
       ],
@@ -1513,18 +1513,8 @@ deps = {
   'src/tests/restricted_traces/homescapes': {
       'packages': [
         {
-            'package': 'angle/traces/homescapes',
+            'package': 'experimental/google.com/srisser/angle/traces/homescapes',
             'version': 'version:5',
-        },
-      ],
-      'dep_type': 'cipd',
-      'condition': 'checkout_angle_restricted_traces',
-  },
-  'src/tests/restricted_traces/hungry_shark_evolution': {
-      'packages': [
-        {
-            'package': 'angle/traces/hungry_shark_evolution',
-            'version': 'version:1',
         },
       ],
       'dep_type': 'cipd',
@@ -1533,7 +1523,7 @@ deps = {
   'src/tests/restricted_traces/idle_heroes': {
       'packages': [
         {
-            'package': 'angle/traces/idle_heroes',
+            'package': 'experimental/google.com/srisser/angle/traces/idle_heroes',
             'version': 'version:5',
         },
       ],
@@ -1543,7 +1533,7 @@ deps = {
   'src/tests/restricted_traces/jetpack_joyride': {
       'packages': [
         {
-            'package': 'angle/traces/jetpack_joyride',
+            'package': 'experimental/google.com/srisser/angle/traces/jetpack_joyride',
             'version': 'version:1',
         },
       ],
@@ -1553,7 +1543,7 @@ deps = {
   'src/tests/restricted_traces/junes_journey': {
       'packages': [
         {
-            'package': 'angle/traces/junes_journey',
+            'package': 'experimental/google.com/srisser/angle/traces/junes_journey',
             'version': 'version:5',
         },
       ],
@@ -1563,7 +1553,7 @@ deps = {
   'src/tests/restricted_traces/kartrider_rush': {
       'packages': [
         {
-            'package': 'angle/traces/kartrider_rush',
+            'package': 'experimental/google.com/srisser/angle/traces/kartrider_rush',
             'version': 'version:5',
         },
       ],
@@ -1573,7 +1563,7 @@ deps = {
   'src/tests/restricted_traces/klondike_adventures': {
       'packages': [
         {
-            'package': 'angle/traces/klondike_adventures',
+            'package': 'experimental/google.com/srisser/angle/traces/klondike_adventures',
             'version': 'version:5',
         },
       ],
@@ -1583,7 +1573,7 @@ deps = {
   'src/tests/restricted_traces/last_shelter_survival': {
       'packages': [
         {
-            'package': 'angle/traces/last_shelter_survival',
+            'package': 'experimental/google.com/srisser/angle/traces/last_shelter_survival',
             'version': 'version:1',
         },
       ],
@@ -1593,7 +1583,7 @@ deps = {
   'src/tests/restricted_traces/league_of_legends_wild_rift': {
       'packages': [
         {
-            'package': 'angle/traces/league_of_legends_wild_rift',
+            'package': 'experimental/google.com/srisser/angle/traces/league_of_legends_wild_rift',
             'version': 'version:5',
         },
       ],
@@ -1603,7 +1593,7 @@ deps = {
   'src/tests/restricted_traces/lego_legacy': {
       'packages': [
         {
-            'package': 'angle/traces/lego_legacy',
+            'package': 'experimental/google.com/srisser/angle/traces/lego_legacy',
             'version': 'version:5',
         },
       ],
@@ -1613,7 +1603,7 @@ deps = {
   'src/tests/restricted_traces/life_is_strange': {
       'packages': [
         {
-            'package': 'angle/traces/life_is_strange',
+            'package': 'experimental/google.com/srisser/angle/traces/life_is_strange',
             'version': 'version:1',
         },
       ],
@@ -1623,7 +1613,7 @@ deps = {
   'src/tests/restricted_traces/lineage_m': {
       'packages': [
         {
-            'package': 'angle/traces/lineage_m',
+            'package': 'experimental/google.com/srisser/angle/traces/lineage_m',
             'version': 'version:5',
         },
       ],
@@ -1633,7 +1623,7 @@ deps = {
   'src/tests/restricted_traces/lords_mobile': {
       'packages': [
         {
-            'package': 'angle/traces/lords_mobile',
+            'package': 'experimental/google.com/srisser/angle/traces/lords_mobile',
             'version': 'version:1',
         },
       ],
@@ -1643,7 +1633,7 @@ deps = {
   'src/tests/restricted_traces/ludo_king': {
       'packages': [
         {
-            'package': 'angle/traces/ludo_king',
+            'package': 'experimental/google.com/srisser/angle/traces/ludo_king',
             'version': 'version:5',
         },
       ],
@@ -1653,7 +1643,7 @@ deps = {
   'src/tests/restricted_traces/lumino_city': {
       'packages': [
         {
-            'package': 'angle/traces/lumino_city',
+            'package': 'experimental/google.com/srisser/angle/traces/lumino_city',
             'version': 'version:1',
         },
       ],
@@ -1663,7 +1653,7 @@ deps = {
   'src/tests/restricted_traces/magic_rush_heroes': {
       'packages': [
         {
-            'package': 'angle/traces/magic_rush_heroes',
+            'package': 'experimental/google.com/srisser/angle/traces/magic_rush_heroes',
             'version': 'version:1',
         },
       ],
@@ -1673,7 +1663,7 @@ deps = {
   'src/tests/restricted_traces/magic_tiles_3': {
       'packages': [
         {
-            'package': 'angle/traces/magic_tiles_3',
+            'package': 'experimental/google.com/srisser/angle/traces/magic_tiles_3',
             'version': 'version:5',
         },
       ],
@@ -1683,7 +1673,7 @@ deps = {
   'src/tests/restricted_traces/manhattan_10': {
       'packages': [
         {
-            'package': 'angle/traces/manhattan_10',
+            'package': 'experimental/google.com/srisser/angle/traces/manhattan_10',
             'version': 'version:5',
         },
       ],
@@ -1693,7 +1683,7 @@ deps = {
   'src/tests/restricted_traces/manhattan_31': {
       'packages': [
         {
-            'package': 'angle/traces/manhattan_31',
+            'package': 'experimental/google.com/srisser/angle/traces/manhattan_31',
             'version': 'version:5',
         },
       ],
@@ -1703,7 +1693,7 @@ deps = {
   'src/tests/restricted_traces/mario_kart_tour': {
       'packages': [
         {
-            'package': 'angle/traces/mario_kart_tour',
+            'package': 'experimental/google.com/srisser/angle/traces/mario_kart_tour',
             'version': 'version:5',
         },
       ],
@@ -1713,7 +1703,7 @@ deps = {
   'src/tests/restricted_traces/marvel_contest_of_champions': {
       'packages': [
         {
-            'package': 'angle/traces/marvel_contest_of_champions',
+            'package': 'experimental/google.com/srisser/angle/traces/marvel_contest_of_champions',
             'version': 'version:5',
         },
       ],
@@ -1723,7 +1713,7 @@ deps = {
   'src/tests/restricted_traces/marvel_strike_force': {
       'packages': [
         {
-            'package': 'angle/traces/marvel_strike_force',
+            'package': 'experimental/google.com/srisser/angle/traces/marvel_strike_force',
             'version': 'version:1',
         },
       ],
@@ -1733,7 +1723,7 @@ deps = {
   'src/tests/restricted_traces/messenger_lite': {
       'packages': [
         {
-            'package': 'angle/traces/messenger_lite',
+            'package': 'experimental/google.com/srisser/angle/traces/messenger_lite',
             'version': 'version:5',
         },
       ],
@@ -1743,7 +1733,7 @@ deps = {
   'src/tests/restricted_traces/minecraft': {
       'packages': [
         {
-            'package': 'angle/traces/minecraft',
+            'package': 'experimental/google.com/srisser/angle/traces/minecraft',
             'version': 'version:5',
         },
       ],
@@ -1753,7 +1743,7 @@ deps = {
   'src/tests/restricted_traces/mini_world': {
       'packages': [
         {
-            'package': 'angle/traces/mini_world',
+            'package': 'experimental/google.com/srisser/angle/traces/mini_world',
             'version': 'version:5',
         },
       ],
@@ -1763,7 +1753,7 @@ deps = {
   'src/tests/restricted_traces/mobile_legends': {
       'packages': [
         {
-            'package': 'angle/traces/mobile_legends',
+            'package': 'experimental/google.com/srisser/angle/traces/mobile_legends',
             'version': 'version:5',
         },
       ],
@@ -1773,7 +1763,7 @@ deps = {
   'src/tests/restricted_traces/monster_strike': {
       'packages': [
         {
-            'package': 'angle/traces/monster_strike',
+            'package': 'experimental/google.com/srisser/angle/traces/monster_strike',
             'version': 'version:1',
         },
       ],
@@ -1783,7 +1773,7 @@ deps = {
   'src/tests/restricted_traces/monument_valley': {
       'packages': [
         {
-            'package': 'angle/traces/monument_valley',
+            'package': 'experimental/google.com/srisser/angle/traces/monument_valley',
             'version': 'version:1',
         },
       ],
@@ -1793,7 +1783,7 @@ deps = {
   'src/tests/restricted_traces/mortal_kombat': {
       'packages': [
         {
-            'package': 'angle/traces/mortal_kombat',
+            'package': 'experimental/google.com/srisser/angle/traces/mortal_kombat',
             'version': 'version:2',
         },
       ],
@@ -1803,7 +1793,7 @@ deps = {
   'src/tests/restricted_traces/my_talking_tom2': {
       'packages': [
         {
-            'package': 'angle/traces/my_talking_tom2',
+            'package': 'experimental/google.com/srisser/angle/traces/my_talking_tom2',
             'version': 'version:5',
         },
       ],
@@ -1813,7 +1803,7 @@ deps = {
   'src/tests/restricted_traces/my_talking_tom_friends': {
       'packages': [
         {
-            'package': 'angle/traces/my_talking_tom_friends',
+            'package': 'experimental/google.com/srisser/angle/traces/my_talking_tom_friends',
             'version': 'version:5',
         },
       ],
@@ -1823,7 +1813,7 @@ deps = {
   'src/tests/restricted_traces/nba2k20_800': {
       'packages': [
         {
-            'package': 'angle/traces/nba2k20_800',
+            'package': 'experimental/google.com/srisser/angle/traces/nba2k20_800',
             'version': 'version:5',
         },
       ],
@@ -1833,7 +1823,7 @@ deps = {
   'src/tests/restricted_traces/ni_no_kuni': {
       'packages': [
         {
-            'package': 'angle/traces/ni_no_kuni',
+            'package': 'experimental/google.com/srisser/angle/traces/ni_no_kuni',
             'version': 'version:1',
         },
       ],
@@ -1843,7 +1833,7 @@ deps = {
   'src/tests/restricted_traces/nier_reincarnation': {
       'packages': [
         {
-            'package': 'angle/traces/nier_reincarnation',
+            'package': 'experimental/google.com/srisser/angle/traces/nier_reincarnation',
             'version': 'version:5',
         },
       ],
@@ -1853,7 +1843,7 @@ deps = {
   'src/tests/restricted_traces/octopath_traveler': {
       'packages': [
         {
-            'package': 'angle/traces/octopath_traveler',
+            'package': 'experimental/google.com/srisser/angle/traces/octopath_traveler',
             'version': 'version:1',
         },
       ],
@@ -1863,7 +1853,7 @@ deps = {
   'src/tests/restricted_traces/one_punch_man': {
       'packages': [
         {
-            'package': 'angle/traces/one_punch_man',
+            'package': 'experimental/google.com/srisser/angle/traces/one_punch_man',
             'version': 'version:5',
         },
       ],
@@ -1873,7 +1863,7 @@ deps = {
   'src/tests/restricted_traces/plants_vs_zombies_2': {
       'packages': [
         {
-            'package': 'angle/traces/plants_vs_zombies_2',
+            'package': 'experimental/google.com/srisser/angle/traces/plants_vs_zombies_2',
             'version': 'version:5',
         },
       ],
@@ -1883,7 +1873,7 @@ deps = {
   'src/tests/restricted_traces/pokemon_go': {
       'packages': [
         {
-            'package': 'angle/traces/pokemon_go',
+            'package': 'experimental/google.com/srisser/angle/traces/pokemon_go',
             'version': 'version:5',
         },
       ],
@@ -1893,7 +1883,7 @@ deps = {
   'src/tests/restricted_traces/pokemon_unite': {
       'packages': [
         {
-            'package': 'angle/traces/pokemon_unite',
+            'package': 'experimental/google.com/srisser/angle/traces/pokemon_unite',
             'version': 'version:5',
         },
       ],
@@ -1903,7 +1893,7 @@ deps = {
   'src/tests/restricted_traces/professional_baseball_spirits': {
       'packages': [
         {
-            'package': 'angle/traces/professional_baseball_spirits',
+            'package': 'experimental/google.com/srisser/angle/traces/professional_baseball_spirits',
             'version': 'version:5',
         },
       ],
@@ -1913,7 +1903,7 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_battle_royale': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_battle_royale',
+            'package': 'experimental/google.com/srisser/angle/traces/pubg_mobile_battle_royale',
             'version': 'version:5',
         },
       ],
@@ -1923,7 +1913,7 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_launch': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_launch',
+            'package': 'experimental/google.com/srisser/angle/traces/pubg_mobile_launch',
             'version': 'version:6',
         },
       ],
@@ -1933,7 +1923,7 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_lite': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_lite',
+            'package': 'experimental/google.com/srisser/angle/traces/pubg_mobile_lite',
             'version': 'version:5',
         },
       ],
@@ -1943,7 +1933,7 @@ deps = {
   'src/tests/restricted_traces/pubg_mobile_skydive': {
       'packages': [
         {
-            'package': 'angle/traces/pubg_mobile_skydive',
+            'package': 'experimental/google.com/srisser/angle/traces/pubg_mobile_skydive',
             'version': 'version:5',
         },
       ],
@@ -1953,7 +1943,7 @@ deps = {
   'src/tests/restricted_traces/puzzles_and_survival': {
       'packages': [
         {
-            'package': 'angle/traces/puzzles_and_survival',
+            'package': 'experimental/google.com/srisser/angle/traces/puzzles_and_survival',
             'version': 'version:1',
         },
       ],
@@ -1963,7 +1953,7 @@ deps = {
   'src/tests/restricted_traces/ragnarok_m_eternal_love': {
       'packages': [
         {
-            'package': 'angle/traces/ragnarok_m_eternal_love',
+            'package': 'experimental/google.com/srisser/angle/traces/ragnarok_m_eternal_love',
             'version': 'version:5',
         },
       ],
@@ -1973,7 +1963,7 @@ deps = {
   'src/tests/restricted_traces/raid_shadow_legends': {
       'packages': [
         {
-            'package': 'angle/traces/raid_shadow_legends',
+            'package': 'experimental/google.com/srisser/angle/traces/raid_shadow_legends',
             'version': 'version:5',
         },
       ],
@@ -1983,7 +1973,7 @@ deps = {
   'src/tests/restricted_traces/real_commando_secret_mission': {
       'packages': [
         {
-            'package': 'angle/traces/real_commando_secret_mission',
+            'package': 'experimental/google.com/srisser/angle/traces/real_commando_secret_mission',
             'version': 'version:5',
         },
       ],
@@ -1993,7 +1983,7 @@ deps = {
   'src/tests/restricted_traces/real_cricket_20': {
       'packages': [
         {
-            'package': 'angle/traces/real_cricket_20',
+            'package': 'experimental/google.com/srisser/angle/traces/real_cricket_20',
             'version': 'version:5',
         },
       ],
@@ -2003,7 +1993,7 @@ deps = {
   'src/tests/restricted_traces/real_gangster_crime': {
       'packages': [
         {
-            'package': 'angle/traces/real_gangster_crime',
+            'package': 'experimental/google.com/srisser/angle/traces/real_gangster_crime',
             'version': 'version:5',
         },
       ],
@@ -2013,7 +2003,7 @@ deps = {
   'src/tests/restricted_traces/real_racing3': {
       'packages': [
         {
-            'package': 'angle/traces/real_racing3',
+            'package': 'experimental/google.com/srisser/angle/traces/real_racing3',
             'version': 'version:1',
         },
       ],
@@ -2023,7 +2013,7 @@ deps = {
   'src/tests/restricted_traces/respawnables': {
       'packages': [
         {
-            'package': 'angle/traces/respawnables',
+            'package': 'experimental/google.com/srisser/angle/traces/respawnables',
             'version': 'version:1',
         },
       ],
@@ -2033,7 +2023,7 @@ deps = {
   'src/tests/restricted_traces/rise_of_kingdoms': {
       'packages': [
         {
-            'package': 'angle/traces/rise_of_kingdoms',
+            'package': 'experimental/google.com/srisser/angle/traces/rise_of_kingdoms',
             'version': 'version:5',
         },
       ],
@@ -2043,7 +2033,7 @@ deps = {
   'src/tests/restricted_traces/romancing_saga': {
       'packages': [
         {
-            'package': 'angle/traces/romancing_saga',
+            'package': 'experimental/google.com/srisser/angle/traces/romancing_saga',
             'version': 'version:5',
         },
       ],
@@ -2053,7 +2043,7 @@ deps = {
   'src/tests/restricted_traces/rope_hero_vice_town': {
       'packages': [
         {
-            'package': 'angle/traces/rope_hero_vice_town',
+            'package': 'experimental/google.com/srisser/angle/traces/rope_hero_vice_town',
             'version': 'version:5',
         },
       ],
@@ -2063,7 +2053,7 @@ deps = {
   'src/tests/restricted_traces/rush_royale': {
       'packages': [
         {
-            'package': 'angle/traces/rush_royale',
+            'package': 'experimental/google.com/srisser/angle/traces/rush_royale',
             'version': 'version:1',
         },
       ],
@@ -2073,7 +2063,7 @@ deps = {
   'src/tests/restricted_traces/saint_seiya_awakening': {
       'packages': [
         {
-            'package': 'angle/traces/saint_seiya_awakening',
+            'package': 'experimental/google.com/srisser/angle/traces/saint_seiya_awakening',
             'version': 'version:5',
         },
       ],
@@ -2083,7 +2073,7 @@ deps = {
   'src/tests/restricted_traces/sakura_school_simulator': {
       'packages': [
         {
-            'package': 'angle/traces/sakura_school_simulator',
+            'package': 'experimental/google.com/srisser/angle/traces/sakura_school_simulator',
             'version': 'version:5',
         },
       ],
@@ -2093,7 +2083,7 @@ deps = {
   'src/tests/restricted_traces/scary_teacher_3d': {
       'packages': [
         {
-            'package': 'angle/traces/scary_teacher_3d',
+            'package': 'experimental/google.com/srisser/angle/traces/scary_teacher_3d',
             'version': 'version:1',
         },
       ],
@@ -2103,7 +2093,7 @@ deps = {
   'src/tests/restricted_traces/scrabble_go': {
       'packages': [
         {
-            'package': 'angle/traces/scrabble_go',
+            'package': 'experimental/google.com/srisser/angle/traces/scrabble_go',
             'version': 'version:5',
         },
       ],
@@ -2113,7 +2103,7 @@ deps = {
   'src/tests/restricted_traces/shadow_fight_2': {
       'packages': [
         {
-            'package': 'angle/traces/shadow_fight_2',
+            'package': 'experimental/google.com/srisser/angle/traces/shadow_fight_2',
             'version': 'version:5',
         },
       ],
@@ -2123,7 +2113,7 @@ deps = {
   'src/tests/restricted_traces/shadow_fight_3': {
       'packages': [
         {
-            'package': 'angle/traces/shadow_fight_3',
+            'package': 'experimental/google.com/srisser/angle/traces/shadow_fight_3',
             'version': 'version:1',
         },
       ],
@@ -2133,7 +2123,7 @@ deps = {
   'src/tests/restricted_traces/shadowgun_legends': {
       'packages': [
         {
-            'package': 'angle/traces/shadowgun_legends',
+            'package': 'experimental/google.com/srisser/angle/traces/shadowgun_legends',
             'version': 'version:1',
         },
       ],
@@ -2143,7 +2133,7 @@ deps = {
   'src/tests/restricted_traces/sky_force_reloaded': {
       'packages': [
         {
-            'package': 'angle/traces/sky_force_reloaded',
+            'package': 'experimental/google.com/srisser/angle/traces/sky_force_reloaded',
             'version': 'version:1',
         },
       ],
@@ -2153,7 +2143,7 @@ deps = {
   'src/tests/restricted_traces/slingshot_test1': {
       'packages': [
         {
-            'package': 'angle/traces/slingshot_test1',
+            'package': 'experimental/google.com/srisser/angle/traces/slingshot_test1',
             'version': 'version:5',
         },
       ],
@@ -2163,7 +2153,7 @@ deps = {
   'src/tests/restricted_traces/slingshot_test2': {
       'packages': [
         {
-            'package': 'angle/traces/slingshot_test2',
+            'package': 'experimental/google.com/srisser/angle/traces/slingshot_test2',
             'version': 'version:5',
         },
       ],
@@ -2173,7 +2163,7 @@ deps = {
   'src/tests/restricted_traces/sniper_3d': {
       'packages': [
         {
-            'package': 'angle/traces/sniper_3d',
+            'package': 'experimental/google.com/srisser/angle/traces/sniper_3d',
             'version': 'version:5',
         },
       ],
@@ -2183,7 +2173,7 @@ deps = {
   'src/tests/restricted_traces/solar_smash': {
       'packages': [
         {
-            'package': 'angle/traces/solar_smash',
+            'package': 'experimental/google.com/srisser/angle/traces/solar_smash',
             'version': 'version:2',
         },
       ],
@@ -2193,7 +2183,7 @@ deps = {
   'src/tests/restricted_traces/sonic_the_hedgehog': {
       'packages': [
         {
-            'package': 'angle/traces/sonic_the_hedgehog',
+            'package': 'experimental/google.com/srisser/angle/traces/sonic_the_hedgehog',
             'version': 'version:5',
         },
       ],
@@ -2203,7 +2193,7 @@ deps = {
   'src/tests/restricted_traces/special_forces_group_2': {
       'packages': [
         {
-            'package': 'angle/traces/special_forces_group_2',
+            'package': 'experimental/google.com/srisser/angle/traces/special_forces_group_2',
             'version': 'version:1',
         },
       ],
@@ -2213,7 +2203,7 @@ deps = {
   'src/tests/restricted_traces/standoff_2': {
       'packages': [
         {
-            'package': 'angle/traces/standoff_2',
+            'package': 'experimental/google.com/srisser/angle/traces/standoff_2',
             'version': 'version:5',
         },
       ],
@@ -2223,7 +2213,7 @@ deps = {
   'src/tests/restricted_traces/star_wars_galaxy_of_heroes': {
       'packages': [
         {
-            'package': 'angle/traces/star_wars_galaxy_of_heroes',
+            'package': 'experimental/google.com/srisser/angle/traces/star_wars_galaxy_of_heroes',
             'version': 'version:1',
         },
       ],
@@ -2233,7 +2223,7 @@ deps = {
   'src/tests/restricted_traces/star_wars_kotor': {
       'packages': [
         {
-            'package': 'angle/traces/star_wars_kotor',
+            'package': 'experimental/google.com/srisser/angle/traces/star_wars_kotor',
             'version': 'version:1',
         },
       ],
@@ -2243,7 +2233,7 @@ deps = {
   'src/tests/restricted_traces/stardew_valley': {
       'packages': [
         {
-            'package': 'angle/traces/stardew_valley',
+            'package': 'experimental/google.com/srisser/angle/traces/stardew_valley',
             'version': 'version:1',
         },
       ],
@@ -2253,7 +2243,7 @@ deps = {
   'src/tests/restricted_traces/state_of_survival': {
       'packages': [
         {
-            'package': 'angle/traces/state_of_survival',
+            'package': 'experimental/google.com/srisser/angle/traces/state_of_survival',
             'version': 'version:1',
         },
       ],
@@ -2263,7 +2253,7 @@ deps = {
   'src/tests/restricted_traces/subway_princess_runner': {
       'packages': [
         {
-            'package': 'angle/traces/subway_princess_runner',
+            'package': 'experimental/google.com/srisser/angle/traces/subway_princess_runner',
             'version': 'version:5',
         },
       ],
@@ -2273,7 +2263,7 @@ deps = {
   'src/tests/restricted_traces/subway_surfers': {
       'packages': [
         {
-            'package': 'angle/traces/subway_surfers',
+            'package': 'experimental/google.com/srisser/angle/traces/subway_surfers',
             'version': 'version:5',
         },
       ],
@@ -2283,7 +2273,7 @@ deps = {
   'src/tests/restricted_traces/summoners_war': {
       'packages': [
         {
-            'package': 'angle/traces/summoners_war',
+            'package': 'experimental/google.com/srisser/angle/traces/summoners_war',
             'version': 'version:5',
         },
       ],
@@ -2293,7 +2283,7 @@ deps = {
   'src/tests/restricted_traces/super_mario_run': {
       'packages': [
         {
-            'package': 'angle/traces/super_mario_run',
+            'package': 'experimental/google.com/srisser/angle/traces/super_mario_run',
             'version': 'version:1',
         },
       ],
@@ -2303,7 +2293,7 @@ deps = {
   'src/tests/restricted_traces/survivor_io': {
       'packages': [
         {
-            'package': 'angle/traces/survivor_io',
+            'package': 'experimental/google.com/srisser/angle/traces/survivor_io',
             'version': 'version:1',
         },
       ],
@@ -2313,7 +2303,7 @@ deps = {
   'src/tests/restricted_traces/talking_tom_hero_dash': {
       'packages': [
         {
-            'package': 'angle/traces/talking_tom_hero_dash',
+            'package': 'experimental/google.com/srisser/angle/traces/talking_tom_hero_dash',
             'version': 'version:5',
         },
       ],
@@ -2323,7 +2313,7 @@ deps = {
   'src/tests/restricted_traces/temple_run_2': {
       'packages': [
         {
-            'package': 'angle/traces/temple_run_2',
+            'package': 'experimental/google.com/srisser/angle/traces/temple_run_2',
             'version': 'version:5',
         },
       ],
@@ -2333,7 +2323,7 @@ deps = {
   'src/tests/restricted_traces/temple_run_300': {
       'packages': [
         {
-            'package': 'angle/traces/temple_run_300',
+            'package': 'experimental/google.com/srisser/angle/traces/temple_run_300',
             'version': 'version:5',
         },
       ],
@@ -2353,7 +2343,7 @@ deps = {
   'src/tests/restricted_traces/the_gardens_between': {
       'packages': [
         {
-            'package': 'angle/traces/the_gardens_between',
+            'package': 'experimental/google.com/srisser/angle/traces/the_gardens_between',
             'version': 'version:1',
         },
       ],
@@ -2363,7 +2353,7 @@ deps = {
   'src/tests/restricted_traces/the_witcher_monster_slayer': {
       'packages': [
         {
-            'package': 'angle/traces/the_witcher_monster_slayer',
+            'package': 'experimental/google.com/srisser/angle/traces/the_witcher_monster_slayer',
             'version': 'version:1',
         },
       ],
@@ -2373,7 +2363,7 @@ deps = {
   'src/tests/restricted_traces/toon_blast': {
       'packages': [
         {
-            'package': 'angle/traces/toon_blast',
+            'package': 'experimental/google.com/srisser/angle/traces/toon_blast',
             'version': 'version:5',
         },
       ],
@@ -2383,7 +2373,7 @@ deps = {
   'src/tests/restricted_traces/township': {
       'packages': [
         {
-            'package': 'angle/traces/township',
+            'package': 'experimental/google.com/srisser/angle/traces/township',
             'version': 'version:5',
         },
       ],
@@ -2393,8 +2383,8 @@ deps = {
   'src/tests/restricted_traces/trex_200': {
       'packages': [
         {
-            'package': 'angle/traces/trex_200',
-            'version': 'version:5',
+            'package': 'experimental/google.com/srisser/angle/traces/trex_200',
+            'version': 'version:6',
         },
       ],
       'dep_type': 'cipd',
@@ -2403,7 +2393,7 @@ deps = {
   'src/tests/restricted_traces/uber': {
       'packages': [
         {
-            'package': 'angle/traces/uber',
+            'package': 'experimental/google.com/srisser/angle/traces/uber',
             'version': 'version:1',
         },
       ],
@@ -2413,7 +2403,7 @@ deps = {
   'src/tests/restricted_traces/war_planet_online': {
       'packages': [
         {
-            'package': 'angle/traces/war_planet_online',
+            'package': 'experimental/google.com/srisser/angle/traces/war_planet_online',
             'version': 'version:1',
         },
       ],
@@ -2423,7 +2413,7 @@ deps = {
   'src/tests/restricted_traces/whatsapp': {
       'packages': [
         {
-            'package': 'angle/traces/whatsapp',
+            'package': 'experimental/google.com/srisser/angle/traces/whatsapp',
             'version': 'version:5',
         },
       ],
@@ -2433,7 +2423,7 @@ deps = {
   'src/tests/restricted_traces/words_with_friends_2': {
       'packages': [
         {
-            'package': 'angle/traces/words_with_friends_2',
+            'package': 'experimental/google.com/srisser/angle/traces/words_with_friends_2',
             'version': 'version:5',
         },
       ],
@@ -2443,7 +2433,7 @@ deps = {
   'src/tests/restricted_traces/wordscapes': {
       'packages': [
         {
-            'package': 'angle/traces/wordscapes',
+            'package': 'experimental/google.com/srisser/angle/traces/wordscapes',
             'version': 'version:5',
         },
       ],
@@ -2453,7 +2443,7 @@ deps = {
   'src/tests/restricted_traces/world_cricket_championship_2': {
       'packages': [
         {
-            'package': 'angle/traces/world_cricket_championship_2',
+            'package': 'experimental/google.com/srisser/angle/traces/world_cricket_championship_2',
             'version': 'version:5',
         },
       ],
@@ -2463,7 +2453,7 @@ deps = {
   'src/tests/restricted_traces/world_of_kings': {
       'packages': [
         {
-            'package': 'angle/traces/world_of_kings',
+            'package': 'experimental/google.com/srisser/angle/traces/world_of_kings',
             'version': 'version:5',
         },
       ],
@@ -2473,7 +2463,7 @@ deps = {
   'src/tests/restricted_traces/world_of_tanks_blitz': {
       'packages': [
         {
-            'package': 'angle/traces/world_of_tanks_blitz',
+            'package': 'experimental/google.com/srisser/angle/traces/world_of_tanks_blitz',
             'version': 'version:5',
         },
       ],
@@ -2483,7 +2473,7 @@ deps = {
   'src/tests/restricted_traces/world_war_doh': {
       'packages': [
         {
-            'package': 'angle/traces/world_war_doh',
+            'package': 'experimental/google.com/srisser/angle/traces/world_war_doh',
             'version': 'version:5',
         },
       ],
@@ -2493,7 +2483,7 @@ deps = {
   'src/tests/restricted_traces/worms_zone_io': {
       'packages': [
         {
-            'package': 'angle/traces/worms_zone_io',
+            'package': 'experimental/google.com/srisser/angle/traces/worms_zone_io',
             'version': 'version:5',
         },
       ],
@@ -2503,7 +2493,7 @@ deps = {
   'src/tests/restricted_traces/zenonia_4': {
       'packages': [
         {
-            'package': 'angle/traces/zenonia_4',
+            'package': 'experimental/google.com/srisser/angle/traces/zenonia_4',
             'version': 'version:1',
         },
       ],
@@ -2513,7 +2503,7 @@ deps = {
   'src/tests/restricted_traces/zillow': {
       'packages': [
         {
-            'package': 'angle/traces/zillow',
+            'package': 'experimental/google.com/srisser/angle/traces/zillow',
             'version': 'version:5',
         },
       ],
@@ -2523,7 +2513,7 @@ deps = {
   'src/tests/restricted_traces/zombie_smasher': {
       'packages': [
         {
-            'package': 'angle/traces/zombie_smasher',
+            'package': 'experimental/google.com/srisser/angle/traces/zombie_smasher',
             'version': 'version:1',
         },
       ],

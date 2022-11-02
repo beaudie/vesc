@@ -1195,6 +1195,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
         {
             skipTest("http://anglebug.com/6658 Crashing in Vulkan backend");
         }
+
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
+        }
     }
 
     if (traceNameIs("township"))
@@ -1376,6 +1381,46 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
             skipTest(
                 "http://anglebug.com/7737 Programs fail to link on Intel Windows native driver, "
                 "citing MAX_UNIFORM_LOCATIONS exceeded");
+        }
+    }
+
+    if (traceNameIs("dr_driving"))
+    {
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
+        }
+    }
+
+    if (traceNameIs("sonic_the_hedgehog"))
+    {
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
+        }
+    }
+
+    if (traceNameIs("wordscapes"))
+    {
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
+        }
+    }
+
+    if (traceNameIs("zenonia_4"))
+    {
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
+        }
+    }
+
+    if (traceNameIs("zombie_smasher"))
+    {
+        if (IsWindows() && IsIntel() && !mParams->isANGLE())
+        {
+            skipTest("http://anglebug.com/7817 Fails with Intel GL drivers on Windows");
         }
     }
 
