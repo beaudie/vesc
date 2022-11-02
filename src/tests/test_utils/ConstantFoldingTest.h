@@ -189,6 +189,9 @@ class ConstantFoldingExpressionTest : public ConstantFoldingTest
     void evaluateFloat(const std::string &floatExpression);
     void evaluateInt(const std::string &intExpression);
     void evaluateUint(const std::string &uintExpression);
+
+  private:
+    void evaluate(const std::string &type, const std::string &expression);
 };
 
 }  // namespace sh
