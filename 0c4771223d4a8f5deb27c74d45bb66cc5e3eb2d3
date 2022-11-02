@@ -196,6 +196,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "542ad30e_d3f1122e",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-02T15:27:30Z",
+      "side": 1,
+      "message": "Yeah, the issue there IMO is that takeaways are subjective because they depend on what the reader already knows.. We could try to reorganize as high level + links to details in sections, but then \"high level\" might also vary from one person to another.",
+      "parentUuid": "9b99893f_5afcb1a7",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 59
+      },
+      "revId": "0c4771223d4a8f5deb27c74d45bb66cc5e3eb2d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc7e19e4_426e2ad6",
