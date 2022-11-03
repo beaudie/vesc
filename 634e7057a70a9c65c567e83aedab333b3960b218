@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2ee0e0_8fbe1be5",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-03T03:35:27Z",
+      "side": 1,
+      "message": "This is the one spot where we allocate memoryless planes. I think we would just need to somehow give the backend a hint that it\u0027s memoryless?",
+      "range": {
+        "startLine": 274,
+        "startChar": 21,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "634e7057a70a9c65c567e83aedab333b3960b218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

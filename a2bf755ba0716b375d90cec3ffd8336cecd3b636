@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab0af332_fe976600",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-03T03:35:27Z",
+      "side": 1,
+      "message": "I don\u0027t think we\u0027ve talked about it yet, but it would be super cool! Vulkan and Metal both could do something smart with memoryless planes, and it might not be very complicated either. All the testing should already be in place to make sure it works.",
+      "parentUuid": "ea1359a3_faf96eea",
+      "revId": "a2bf755ba0716b375d90cec3ffd8336cecd3b636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "75e1fca2_f219d663",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-11-03T02:23:12Z",
       "side": 1,
       "message": "nit: we don\u0027t do that.\n\nInstead, add an `enum class` and use proper names if bool is not clear (which usually isn\u0027t)",
+      "range": {
+        "startLine": 542,
+        "startChar": 33,
+        "endLine": 542,
+        "endChar": 66
+      },
+      "revId": "a2bf755ba0716b375d90cec3ffd8336cecd3b636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "320749a8_951629b6",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-03T03:35:27Z",
+      "side": 1,
+      "message": "Done (Not letting me get sloppy 😅)",
+      "parentUuid": "75e1fca2_f219d663",
       "range": {
         "startLine": 542,
         "startChar": 33,
