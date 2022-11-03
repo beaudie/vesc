@@ -39,6 +39,30 @@
       },
       "revId": "e8e8bbbcf0a652a4375dcbfbd76ffa1c7efc66a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50924979_76871a3d",
+        "filename": "src/libANGLE/renderer/vulkan/linux/DeviceVkLinux.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-11-03T10:34:01Z",
+      "side": 1,
+      "message": "Sure, added a comment.",
+      "parentUuid": "56d314e9_60d82344",
+      "range": {
+        "startLine": 31,
+        "startChar": 50,
+        "endLine": 31,
+        "endChar": 66
+      },
+      "revId": "e8e8bbbcf0a652a4375dcbfbd76ffa1c7efc66a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
