@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3262d21c_c1eb4e72",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-03T00:34:20Z",
+      "side": 1,
+      "message": "Removed. I added it since I had only tested it in a few functions in the Vulkan backend.",
+      "parentUuid": "169519a6_9ccaeab4",
+      "range": {
+        "startLine": 10,
+        "startChar": 11,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "7c756c02_d86a727a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8abb128_a19a68fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-03T00:34:20Z",
+      "side": 1,
+      "message": "Added `UnwindBacktraceInfo` and `getBacktraceInfo()` to `util/backtrace_utils.h`, along with their implementations in CPP files and the necessary BUILD arguments.",
+      "parentUuid": "7c756c02_d86a727a",
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a3d2e19_fa0ef6e1",
@@ -71,6 +113,30 @@
       "writtenOn": "2022-11-02T01:45:27Z",
       "side": 1,
       "message": "Instead of saying \"not supported on X\", I suggest \"only supported on Y\".\n\nIn this case, it\u0027s also less about the include headers, and more about different ways different operating systems generate a stack trace. You could just say \"this feature is only implemented on Android\".",
+      "range": {
+        "startLine": 240,
+        "startChar": 25,
+        "endLine": 240,
+        "endChar": 81
+      },
+      "revId": "a94e41a52a29aea95f609de1486786dc901d99cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e93070b2_7d589d07",
+        "filename": "gni/angle.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-03T00:34:20Z",
+      "side": 1,
+      "message": "Makes sense. Removed.",
+      "parentUuid": "0a3d2e19_fa0ef6e1",
       "range": {
         "startLine": 240,
         "startChar": 25,
