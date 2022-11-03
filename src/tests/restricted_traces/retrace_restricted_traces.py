@@ -276,12 +276,26 @@ def validate_single_trace(args, trace_binary, trace, additional_args, additional
     json_data = load_trace_json(trace)
     num_frames = get_num_frames(json_data)
     max_steps = min(args.limit, num_frames) if args.limit else num_frames
-    try:
-        run_test_suite(args, trace_binary, trace, max_steps, additional_args, additional_env)
-    except subprocess.CalledProcessError as e:
-        logging.error('There was a failure running "%s":\n%s' % (trace, e.output.decode()))
-        return False
-    return True
+    result = True
+
+    if args.restore_on_failure:
+        backup_path = "backup-{}".format(trace)
+        try:
+            backup_single_trace(trace, backup_path)
+            run_test_suite(args, trace_binary, trace, max_steps, additional_args, additional_env)
+        except subprocess.CalledProcessError as e:
+            logging.error('There was a failure running "%s":\n%s' % (trace, e.output.decode()))
+            restore_single_trace(trace, backup_path)
+            result = False
+        ensure_rmdir(backup_path)
+    else:
+        try:
+            run_test_suite(args, trace_binary, trace, max_steps, additional_args, additional_env)
+        except subprocess.CalledProcessError as e:
+            logging.error('There was a failure running "%s":\n%s' % (trace, e.output.decode()))
+            result = False
+
+    return result
 
 
 def validate_traces(args, traces):
@@ -590,6 +604,12 @@ def main():
         '-L', '--limit', '--frame-limit', type=int, help='Limits the number of tested frames.')
     validate_parser.add_argument(
         '--show-test-stdout', help='Log test output.', action='store_true', default=False)
+    validate_parser.add_argument(
+        '-R',
+        '--restore-on-failure',
+        help='Backup trace and restore on failure',
+        action='store_true',
+        default=False)
 
     interpret_parser = subparsers.add_parser(
         'interpret', help='Complete trace interpreter self-test.')
