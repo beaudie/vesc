@@ -1062,7 +1062,6 @@ void DisplayMtl::initializeExtensions() const
 
             // Raster order groups are required to make PLS coherent when using read_write textures.
             bool rasterOrderGroupsSupported = !mFeatures.disableRasterOrderGroups.enabled &&
-                                              !isAMD() && !isIntel() &&  // anglebug.com/7792
                                               [mMetalDevice areRasterOrderGroupsSupported];
             mPLSSynchronizationType = rasterOrderGroupsSupported
                                           ? ShFragmentSynchronizationType::RasterOrderGroups_Metal
