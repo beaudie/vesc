@@ -22,6 +22,30 @@
       },
       "revId": "634e7057a70a9c65c567e83aedab333b3960b218",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24443e1e_261fa87f",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-03T04:35:31Z",
+      "side": 1,
+      "message": "Maybe add a texture parameter in the PLS spec? Then users could also set it on memory backed planes if they want to (or just generally use it outside PLS 😊)",
+      "parentUuid": "ee2ee0e0_8fbe1be5",
+      "range": {
+        "startLine": 274,
+        "startChar": 21,
+        "endLine": 274,
+        "endChar": 33
+      },
+      "revId": "634e7057a70a9c65c567e83aedab333b3960b218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
