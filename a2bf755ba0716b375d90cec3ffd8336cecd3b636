@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea1359a3_faf96eea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-03T02:23:12Z",
+      "side": 1,
+      "message": "I don\u0027t recall if we talked about it, or if it was an issue before this change, but does the backend have a way to recognize which textures are being used to back the memoryless planes?\n\nThat would be helpful to let the Vulkan backend for example use lazy-allocated memory for these textures (although Chrome would absolutely ruin that with random interruptions of the render pass, but still)",
+      "revId": "a2bf755ba0716b375d90cec3ffd8336cecd3b636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e1fca2_f219d663",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-03T02:23:12Z",
+      "side": 1,
+      "message": "nit: we don\u0027t do that.\n\nInstead, add an `enum class` and use proper names if bool is not clear (which usually isn\u0027t)",
+      "range": {
+        "startLine": 542,
+        "startChar": 33,
+        "endLine": 542,
+        "endChar": 66
+      },
+      "revId": "a2bf755ba0716b375d90cec3ffd8336cecd3b636",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
