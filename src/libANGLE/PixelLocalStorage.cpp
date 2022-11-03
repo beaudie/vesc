@@ -267,7 +267,7 @@ void PixelLocalStoragePlane::ensureBackingTextureIfMemoryless(Context *context, 
         ASSERT(mMemorylessTextureID.value == 0);
 
         // Create a new texture that backs the memoryless plane.
-        context->genTextures(1, &mMemorylessTextureID);
+        mMemorylessTextureID = context->createTexture();
         {
             ScopedBindTexture2D scopedBindTexture2D(context, mMemorylessTextureID);
             context->bindTexture(TextureType::_2D, mMemorylessTextureID);
@@ -547,11 +547,14 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
     ~PixelLocalStorageImageLoadStore() override
     {
         ASSERT(mScratchFramebufferForClearing.value == 0);
+        ASSERT(mThrowawayTextureForMetal.value == 0);
     }
 
     void onContextObjectsLost() override
     {
-        mScratchFramebufferForClearing = FramebufferID();  // Let go of GL objects.
+        // Let go of GL objects.
+        mScratchFramebufferForClearing = FramebufferID();
+        mThrowawayTextureForMetal      = TextureID();
     }
 
     void onDeleteContextObjects(Context *context) override
@@ -560,6 +563,11 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
         {
             context->deleteFramebuffer(mScratchFramebufferForClearing);
             mScratchFramebufferForClearing = FramebufferID();
+        }
+        if (mThrowawayTextureForMetal.value != 0)
+        {
+            context->deleteTexture(mThrowawayTextureForMetal);
+            mThrowawayTextureForMetal = TextureID();
         }
     }
 
@@ -586,6 +594,22 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
                                        plsExtents.width);
         context->framebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
                                        plsExtents.height);
+
+        const Caps &caps = context->getCaps();
+        if (caps.maxColorAttachmentsWithActivePixelLocalStorage == 0)
+        {
+            if (mThrowawayTextureExtents != plsExtents)
+            {
+                context->deleteTexture(mThrowawayTextureForMetal);
+                mThrowawayTextureForMetal = context->createTexture();
+                ScopedBindTexture2D scopedBindTexture2D(context, mMemorylessTextureID);
+                context->texStorage2D(TextureType::_2D, 1, GL_RGBA8, plsExtents.width,
+                                      plsExtents.height);
+                mThrowawayTextureExtents = plsExtents;
+            }
+            context->framebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                          TextureTarget::_2D, mThrowawayTextureForMetal, 0);
+        }
 
         // Guard GL state and bind a scratch framebuffer in case we need to reallocate or clear any
         // PLS planes.
@@ -687,6 +711,12 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
         context->framebufferParameteri(GL_DRAW_FRAMEBUFFER, GL_FRAMEBUFFER_DEFAULT_HEIGHT,
                                        mSavedFramebufferDefaultHeight);
 
+        if (mThrowawayTextureForMetal.value)
+        {
+            context->framebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                                          TextureTarget::_2D, TextureID(), 0);
+        }
+
         // We need ALL_BARRIER_BITS during end() because GL_SHADER_IMAGE_ACCESS_BARRIER_BIT doesn't
         // synchronize all types of memory accesses that can happen after the barrier.
         context->memoryBarrier(GL_ALL_BARRIER_BITS);
@@ -701,6 +731,8 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
     // D3D and ES require us to pack all PLS formats into r32f, r32i, or r32ui images.
     const bool mNeedsR32Packing;
     FramebufferID mScratchFramebufferForClearing{};
+    TextureID mThrowawayTextureForMetal{};
+    Extents mThrowawayTextureExtents{};
 
     // Saved values to restore during onEnd().
     GLint mSavedFramebufferDefaultWidth;
