@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ed94a283_e2f59fb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1537962
+      },
+      "writtenOn": "2022-11-03T14:12:34Z",
+      "side": 1,
+      "message": "Android is just the lost ... Android ... gone astray :P\n\nBut indeed, if there is/was a shared class for Android and Linux proper we could share this implementation (in case there\u0027s a need).\n\nThanks for submitting!",
+      "parentUuid": "6f4a87df_afad7dee",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 5
+      },
+      "revId": "a4061771677f49d64d951e2b0f62df414b801250",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4980dc93_cc366d3a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
