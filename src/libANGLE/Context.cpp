@@ -544,6 +544,12 @@ egl::Error Context::initialize()
 {
     if (!mImplementation)
         return egl::Error(EGL_NOT_INITIALIZED, "native context creation failed");
+
+    initializeDefaultResources();
+    initRendererString();
+    initVersionStrings();
+    initExtensionStrings();
+
     return egl::NoError();
 }
 
@@ -880,11 +886,6 @@ egl::Error Context::makeCurrent(egl::Display *display,
 
     if (!mHasBeenCurrent)
     {
-        initializeDefaultResources();
-        initRendererString();
-        initVersionStrings();
-        initExtensionStrings();
-
         int width  = 0;
         int height = 0;
         if (drawSurface != nullptr)
