@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "51277465_a798b0d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-03T04:37:56Z",
+      "side": 1,
+      "message": "Another thing to consider for the future is to actually split the render pass part of this spec into its own GL_ANGLE_render_pass extension. That would be a generally good thing to have in GL",
+      "revId": "634e7057a70a9c65c567e83aedab333b3960b218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ee2ee0e0_8fbe1be5",
         "filename": "src/libANGLE/PixelLocalStorage.cpp",
         "patchSetId": 7
