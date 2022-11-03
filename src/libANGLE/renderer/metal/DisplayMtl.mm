@@ -1062,7 +1062,6 @@ void DisplayMtl::initializeExtensions() const
 
             // Raster order groups are required to make PLS coherent when using read_write textures.
             bool rasterOrderGroupsSupported = !mFeatures.disableRasterOrderGroups.enabled &&
-                                              !isAMD() && !isIntel() &&  // anglebug.com/7792
                                               [mMetalDevice areRasterOrderGroupsSupported];
             mPLSSynchronizationType = rasterOrderGroupsSupported
                                           ? ShFragmentSynchronizationType::RasterOrderGroups_Metal
@@ -1077,11 +1076,8 @@ void DisplayMtl::initializeExtensions() const
                           gl::IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
             mNativeCaps.maxPixelLocalStoragePlanes =
                 gl::IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES;
-            if (!isAMD())  // anglebug.com/7803
-            {
-                mNativeCaps.maxColorAttachmentsWithActivePixelLocalStorage =
-                    gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
-            }
+            mNativeCaps.maxColorAttachmentsWithActivePixelLocalStorage =
+                gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
             mNativeCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes =
                 gl::IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES +
                 gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
