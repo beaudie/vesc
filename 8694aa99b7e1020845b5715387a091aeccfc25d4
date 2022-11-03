@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b609f2ba_a3d5f874",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-03T14:19:48Z",
+      "side": 1,
+      "message": "Looks like CQ does not run end2end tests on bots with Apple GPUs, so there is no suppression to remove here.",
+      "parentUuid": "63dab57d_8bf5198d",
+      "revId": "8694aa99b7e1020845b5715387a091aeccfc25d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "df1fd96c_c0c4cfdf",
