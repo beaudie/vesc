@@ -16,6 +16,23 @@
       "message": "With this, GL_ANGLE_shader_pixel_local_storage_coherent is proven on every major vendor and every API, and applications can target the coherent version of the extension with confidence.",
       "revId": "4798af98b38978e6d49b7bfde2697aa94b03646d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "160753bc_e5894e8d",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-04T22:30:41Z",
+      "side": 1,
+      "message": "The comment seems to indicate this should be checking all attachments of the framebuffer - why is it only checking color attachment 0 here?",
+      "revId": "4798af98b38978e6d49b7bfde2697aa94b03646d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
