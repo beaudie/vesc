@@ -16,6 +16,24 @@
       "message": "LGTM as a speculative fix (though you could try a local Android-only fix to test that).\n\nI wonder if the fix for b/206733351 might be causing you a problem???  There\u0027s a race condition between SF, RenderEngine, and HWC which has resulted in the number of device extensions being greater than the number returned the first time the query is called.",
       "revId": "1ddaab97992f4ca534500e414db73bc16c07d5eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "895aa282_2c65e486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2022-11-04T18:05:27Z",
+      "side": 1,
+      "message": "You fixed that one on line 2361 with b/208937840. I\u0027m just extending that same pattern to the other enumerates.",
+      "parentUuid": "fddbf5e4_3b92c5c9",
+      "revId": "1ddaab97992f4ca534500e414db73bc16c07d5eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
