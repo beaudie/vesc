@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "071aa956_dfba0db2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-04T21:30:06Z",
+      "side": 1,
+      "message": "With this, GL_ANGLE_shader_pixel_local_storage_coherent is proven on every major vendor and every API, and applications can target the coherent version of the extension with confidence.",
+      "revId": "4798af98b38978e6d49b7bfde2697aa94b03646d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
