@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "244f1232_46ced9fa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-04T15:35:33Z",
+      "side": 1,
+      "message": "As discussed offline - uses SystemInfo to determine a policy based on device ID/platform. I suggest keeping this method and using it in an ASSERT to verify we made the right decision in the policy.",
+      "parentUuid": "b4a58bd3_0c13e556",
+      "range": {
+        "startLine": 5696,
+        "startChar": 28,
+        "endLine": 5696,
+        "endChar": 46
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "697e0f0d_b01bebc4",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 12

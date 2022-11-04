@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40b8bed8_89b6525b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5716,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-04T15:35:33Z",
+      "side": 1,
+      "message": "please add TODOs here with a link to a description of how we discussed implementing this return value modification without changing ANGLE internals.",
+      "range": {
+        "startLine": 5708,
+        "startChar": 0,
+        "endLine": 5716,
+        "endChar": 5
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f44056e_2bd5a434",
         "filename": "src/libANGLE/capture/FrameCapture.h",
         "patchSetId": 14
