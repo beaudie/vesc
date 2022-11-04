@@ -1048,6 +1048,8 @@ angle::Result FramebufferMtl::getReadableViewForRenderTarget(
 angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
                                                 mtl::RenderPassDesc *pDescOut)
 {
+    const gl::DrawBufferMask enabledDrawBuffers = getState().getEnabledDrawBuffers();
+
     mtl::RenderPassDesc &desc = *pDescOut;
 
     mRenderPassFirstColorAttachmentFormat = nullptr;
@@ -1062,7 +1064,7 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
         mtl::RenderPassColorAttachmentDesc &colorAttachment = desc.colorAttachments[colorIndexGL];
         const RenderTargetMtl *colorRenderTarget            = mColorRenderTargets[colorIndexGL];
 
-        if (colorRenderTarget)
+        if (colorRenderTarget && enabledDrawBuffers.test(colorIndexGL))
         {
             colorRenderTarget->toRenderPassAttachmentDesc(&colorAttachment);
 

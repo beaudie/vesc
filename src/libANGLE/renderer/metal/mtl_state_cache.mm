@@ -620,7 +620,7 @@ void RenderPipelineOutputDesc::updateEnabledDrawBuffers(gl::DrawBufferMask enabl
     {
         if (!enabledBuffers.test(colorIndex))
         {
-            this->colorAttachments[colorIndex].writeMask = MTLColorWriteMaskNone;
+            this->colorAttachments[colorIndex].reset(MTLPixelFormatInvalid, MTLColorWriteMaskNone);
         }
     }
 }
