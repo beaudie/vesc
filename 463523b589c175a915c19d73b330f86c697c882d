@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4e4fbe21_647c60ad",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-04T04:06:22Z",
+      "side": 1,
+      "message": "I\u0027m confused. glMemoryBarrier was only introduced in ES 3.1, so how would we get here with a client context of version ES 3.0, even with the ANGLE_pixel_local_storage extension enabled?",
+      "revId": "463523b589c175a915c19d73b330f86c697c882d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1258e82_be33b4bb",
         "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
         "patchSetId": 14
