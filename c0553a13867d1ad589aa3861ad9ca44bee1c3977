@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f44056e_2bd5a434",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-04T15:33:53Z",
+      "side": 1,
+      "message": "nit: real can be a vague term, maybe shadow vs GL memory? or shadow vs buffer memory?",
+      "range": {
+        "startLine": 440,
+        "startChar": 9,
+        "endLine": 440,
+        "endChar": 25
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06abf2cd_132c4de6",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-04T15:33:53Z",
+      "side": 1,
+      "message": "nit: please make all these values either initialized in the header or the constructor, as it is they\u0027re a bit mixed",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 32
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
