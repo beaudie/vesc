@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69394217_d5f901ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-04T04:20:05Z",
+      "side": 1,
+      "message": "I didn\u0027t have time to really review this, only skim it, so it would be ideal if Quyen and Gregg could review. Let me know if a second reviewer is needed though.\n\nCC\u0027ing Geoff and Alexey in case either has input.",
+      "revId": "463523b589c175a915c19d73b330f86c697c882d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4e4fbe21_647c60ad",
@@ -32,6 +49,24 @@
       "side": 1,
       "message": "Because `glPixelLocalStorageBarrierANGLE` turns around and calls `context-\u003ememoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)` internally (if the implementation uses shader images):\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/PixelLocalStorage.cpp;l\u003d674?q\u003dpixellocalstorage.cpp\u0026ss\u003dchromium",
       "parentUuid": "4e4fbe21_647c60ad",
+      "revId": "463523b589c175a915c19d73b330f86c697c882d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f6addd7_a9aa8ae6",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 14
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-04T04:20:05Z",
+      "side": 1,
+      "message": "I see, thanks.",
+      "parentUuid": "a3baaeb5_406de807",
       "revId": "463523b589c175a915c19d73b330f86c697c882d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
