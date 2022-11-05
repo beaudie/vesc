@@ -21,7 +21,7 @@ ANGLE_DISABLE_SUGGEST_OVERRIDE_WARNINGS
 
 // Other glslang includes.
 #include <SPIRV/GlslangToSpv.h>
-#include <StandAlone/ResourceLimits.h>
+#include <glslang/Public/ResourceLimits.h>
 
 // SPIR-V tools include for disassembly
 #include <spirv-tools/libspirv.hpp>
@@ -43,7 +43,7 @@ void Warmup()
 {
     EShMessages messages = static_cast<EShMessages>(EShMsgSpvRules | EShMsgVulkanRules);
 
-    const TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    const TBuiltInResource builtInResources(*GetDefaultResources());
     glslang::TShader warmUpShader(EShLangVertex);
 
     const char *kShaderString = R"(#version 450 core
@@ -110,7 +110,7 @@ void GlslangFinalize()
                                          const std::string &shaderSource,
                                          angle::spirv::Blob *spirvBlobOut)
 {
-    TBuiltInResource builtInResources(glslang::DefaultTBuiltInResource);
+    TBuiltInResource builtInResources(*GetDefaultResources());
     GetBuiltInResources(resources, &builtInResources);
 
     EShLanguage language = EShLangVertex;
