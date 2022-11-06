@@ -2265,7 +2265,7 @@ TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTest);
 #define PLATFORM(API, BACKEND) API##_##BACKEND()
-#define PLS_INSTANTIATE_RENDERING_TEST_AND(TEST, API, ...)                                         \
+#define PLS_INSTANTIATE_RENDERING_TEST_AND(TEST, API, ...)                                           \
     ANGLE_INSTANTIATE_TEST(                                                                        \
         TEST,                                                                                      \
         PLATFORM(API, D3D11) /* D3D coherent. */                                                   \
