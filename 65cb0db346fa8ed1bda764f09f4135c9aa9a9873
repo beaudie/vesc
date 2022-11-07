@@ -16,6 +16,24 @@
       "message": "I use a \"steps\" alignment to ensure that the replay only runs in groups of the numbers of steps in the trace. Can you instead update the warmup to align to the right number of steps?",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f426963c_d04110a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T15:04:07Z",
+      "side": 1,
+      "message": "You might need to also make sure the reset runs, not sure, but definitely the alignment thing needs to happen to make sure the reset function even makes sense. It only resets from the last frame to the first, it doesn\u0027t work if you try to reset from a middle frame.",
+      "parentUuid": "99b83698_a8031576",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
