@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34b125be_484aabcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-07T15:36:27Z",
+      "side": 1,
+      "message": "I\u0027m testing what would happen when this is rolled into Chromium in https://chromium-review.googlesource.com/c/chromium/src/+/4008163.\nSo far, it has discovered that 2 static initializers are removed, so this would need to be updated in ANGLE-\u003eChromium roll.\n\nLGTM if the test above doesn\u0027t discover other issues.\nGreat work!",
+      "revId": "335c165fb629d7a9aff802005526703d6e896b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dfc0c2f_e8de7230",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-07T15:36:27Z",
+      "side": 1,
+      "message": "Are these files still needed if glslang_wrapper.cpp is removed?",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 0
+      },
+      "revId": "335c165fb629d7a9aff802005526703d6e896b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
