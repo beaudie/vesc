@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb5a5a3_a8411984",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T15:46:05Z",
+      "side": 0,
+      "message": "Thanks for catching, done",
+      "parentUuid": "deaca57e_55d9ba78",
+      "range": {
+        "startLine": 730,
+        "startChar": 10,
+        "endLine": 730,
+        "endChar": 48
+      },
+      "revId": "b79c6bd34809e163c24dd01f1d2b397e3c3ae8bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a55ba03a_98e8cb32",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4730aef6_0263222e",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T15:46:05Z",
+      "side": 0,
+      "message": "That\u0027s in the glslang repo. There\u0027s some cleanup I need to do in glslang, but it\u0027s not this. I don\u0027t know if we are the only user of BUILD.gn in glslang, if we are, we can delete that too.",
+      "parentUuid": "a55ba03a_98e8cb32",
+      "range": {
+        "startLine": 734,
+        "startChar": 0,
+        "endLine": 736,
+        "endChar": 0
+      },
+      "revId": "b79c6bd34809e163c24dd01f1d2b397e3c3ae8bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29a8aa4e_b1427c3c",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-11-07T15:36:27Z",
       "side": 0,
       "message": "How is this related to glslang removal?\nSame question about other removals in this function below.",
+      "range": {
+        "startLine": 1093,
+        "startChar": 0,
+        "endLine": 1093,
+        "endChar": 52
+      },
+      "revId": "b79c6bd34809e163c24dd01f1d2b397e3c3ae8bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7263c4c_51d76e3b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T15:46:05Z",
+      "side": 0,
+      "message": "The `sink` is used to generate text to feed to glslang. The result was unused in the SPIR-V path, even though the code was generating some text anyway (like in this case).\n\nIt\u0027s removed because the results are unused.",
+      "parentUuid": "29a8aa4e_b1427c3c",
       "range": {
         "startLine": 1093,
         "startChar": 0,

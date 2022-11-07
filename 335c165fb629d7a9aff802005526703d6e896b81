@@ -39,6 +39,30 @@
       },
       "revId": "335c165fb629d7a9aff802005526703d6e896b81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b635d6fb_54357f1d",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T15:46:05Z",
+      "side": 1,
+      "message": "Yes, these files haven\u0027t been about glslang for a long time, but I haven\u0027t renamed them to avoid conflict with Samsung patches. It\u0027s not getting any development these days, so I might follow up with a rename.",
+      "parentUuid": "6dfc0c2f_e8de7230",
+      "range": {
+        "startLine": 934,
+        "startChar": 0,
+        "endLine": 936,
+        "endChar": 0
+      },
+      "revId": "335c165fb629d7a9aff802005526703d6e896b81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
