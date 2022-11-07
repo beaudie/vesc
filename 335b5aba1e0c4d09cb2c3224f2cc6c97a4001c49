@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "614aac0c_5b07908e",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-07T16:38:28Z",
+      "side": 0,
+      "message": "This was actually input, not output, dropped from here and made runTrial log stopping conditions when verbose logging.",
+      "range": {
+        "startLine": 615,
+        "startChar": 72,
+        "endLine": 615,
+        "endChar": 90
+      },
+      "revId": "335b5aba1e0c4d09cb2c3224f2cc6c97a4001c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
