@@ -7391,6 +7391,8 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
         FrameCapture *frameCapture = shareContext->getFrameCapture();
         ASSERT(frameCapture->getSetupCalls().empty());
 
+        mCapturedContextSetups.insert(shareContext->id().value);
+
         if (shareContext->id() == mainContext->id())
         {
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
@@ -7531,6 +7533,35 @@ void FrameCaptureShared::onDestroyContext(const gl::Context *context)
 
 void FrameCaptureShared::onMakeCurrent(const gl::Context *context, const egl::Surface *drawSurface)
 {
+
+    // A new context was added to the share set after MEC started, so we need to capture it's setup
+
+    if (mCaptureActive && usesMidExecutionCapture() &&
+        mCapturedContextSetups.find(context->id().value) == mCapturedContextSetups.end())
+    {
+        FrameCapture *frameCapture = context->getFrameCapture();
+
+        const gl::State &shareContextState = context->getState();
+        gl::State auxContextReplayState(
+            nullptr, nullptr, nullptr, nullptr, nullptr, shareContextState.getClientType(),
+            shareContextState.getClientVersion(), shareContextState.getProfileMask(), false, true,
+            true, true, false, EGL_CONTEXT_PRIORITY_MEDIUM_IMG, shareContextState.hasRobustAccess(),
+            shareContextState.hasProtectedContent());
+        auxContextReplayState.initializeForCapture(context);
+
+        CaptureMidExecutionSetup(context, &frameCapture->getSetupCalls(),
+                                 frameCapture->getStateResetHelper().getResetCalls(),
+                                 &mShareGroupSetupCalls, &mResourceIDToSetupCalls,
+                                 &mResourceTracker, auxContextReplayState,
+                                 mValidateSerializedState);
+
+        scanSetupCalls(frameCapture->getSetupCalls());
+
+        WriteAuxiliaryContextCppSetupReplay(mReplayWriter, mCompression, mOutDirectory, context,
+                                            mCaptureLabel, 1, frameCapture->getSetupCalls(),
+                                            &mBinaryData, mSerializeStateEnabled, *this);
+    }
+
     if (!drawSurface)
     {
         return;
