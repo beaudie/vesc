@@ -7391,6 +7391,8 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
         FrameCapture *frameCapture = shareContext->getFrameCapture();
         ASSERT(frameCapture->getSetupCalls().empty());
 
+        mCapturedContextSetups.insert(shareContext->id().value);
+
         if (shareContext->id() == mainContext->id())
         {
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
@@ -8069,7 +8071,8 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 // The SetupReplayContextXX() calls only exist if this is a mid-execution capture
                 // and we can only call them if they exist, so only output the calls if this is a
                 // MEC.
-                if (usesMidExecutionCapture())
+                if (usesMidExecutionCapture() && mCapturedContextSetups.find(context->id().value) !=
+                                                     mCapturedContextSetups.end())
                 {
                     out << "    "
                         << FmtSetupFunction(kNoPartId, shareContext->id(), FuncUsage::Call)
