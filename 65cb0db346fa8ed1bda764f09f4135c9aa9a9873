@@ -88,6 +88,24 @@
       "parentUuid": "7811c74a_799762cf",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc26cbcd_1e4f7d54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T15:22:05Z",
+      "side": 1,
+      "message": "TBH I don\u0027t follow how stepsPerformed can become unaligned, if stepsToRun is always aligned. The root cause would be one step before, where we should ensure we always run the right alignment of steps.",
+      "parentUuid": "3797c574_edeaa817",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
