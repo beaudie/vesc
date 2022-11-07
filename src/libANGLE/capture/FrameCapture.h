@@ -757,6 +757,7 @@ class FrameCaptureShared final : angle::NonCopyable
     gl::ContextID mWindowSurfaceContextID;
 
     std::vector<CallCapture> mShareGroupSetupCalls;
+    std::unordered_set<GLuint> mCapturedContextSetups;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
