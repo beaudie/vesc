@@ -39,6 +39,30 @@
       },
       "revId": "1e09aecff899fa6255d3d37d4f052035a5680d10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c51c34_3f9b4c6e",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2022-11-07T09:47:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7a139dcf_3e202c06",
+      "range": {
+        "startLine": 832,
+        "startChar": 47,
+        "endLine": 832,
+        "endChar": 64
+      },
+      "revId": "1e09aecff899fa6255d3d37d4f052035a5680d10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
