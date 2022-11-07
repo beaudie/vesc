@@ -52,6 +52,24 @@
       "parentUuid": "f426963c_d04110a3",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7811c74a_799762cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T15:12:37Z",
+      "side": 1,
+      "message": "Yeah, I have code that does this like you linked. Not sure but it might be missing in some cases.",
+      "parentUuid": "dcdfddd0_184f1576",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
