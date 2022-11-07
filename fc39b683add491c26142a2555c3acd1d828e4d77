@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f10e7f7_c1285040",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T20:29:15Z",
+      "side": 1,
+      "message": "Yes, and doing a survey of what transformations may not be needed now and can be removed.",
+      "parentUuid": "e33f1af9_3f011e36",
+      "revId": "fc39b683add491c26142a2555c3acd1d828e4d77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bfd40ca_e95e01d5",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-11-07T19:48:52Z",
       "side": 1,
       "message": "nit: You could remove this as an arg",
+      "range": {
+        "startLine": 1417,
+        "startChar": 27,
+        "endLine": 1417,
+        "endChar": 46
+      },
+      "revId": "fc39b683add491c26142a2555c3acd1d828e4d77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce304bc6_2c4a1ea7",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-07T20:29:15Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "8bfd40ca_e95e01d5",
       "range": {
         "startLine": 1417,
         "startChar": 27,
