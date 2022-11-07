@@ -114,6 +114,7 @@ class TracePerfTest : public ANGLERenderTest
   public:
     TracePerfTest(std::unique_ptr<const TracePerfParams> params);
 
+    void startTest() override;
     void initializeBenchmark() override;
     void destroyBenchmark() override;
     void drawBenchmark() override;
@@ -1392,6 +1393,15 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     if (gTraceTestValidation)
     {
         mStepsToRun = frameCount();
+    }
+}
+
+void TracePerfTest::startTest()
+{
+    if (mCurrentFrame != mStartFrame)
+    {
+        mTraceReplay->resetReplay();
+        mCurrentFrame = mStartFrame;
     }
 }
 
