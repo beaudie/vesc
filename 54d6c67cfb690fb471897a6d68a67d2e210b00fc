@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07c23fc1_4e56420c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T11:33:25Z",
+      "side": 1,
+      "message": "this is a bit confusing - it sounds like you\u0027re in the middle of the MEC function when the app creates a new context. Is that the case, or is this a Context that the app creates after MEC?\n\nIf the Context gets created / made current after MEC, I think the setup function should be basically empty aside from creation. Can you verify this?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "54d6c67cfb690fb471897a6d68a67d2e210b00fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44de0765_f640157e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T11:33:25Z",
+      "side": 1,
+      "message": "wrong issue?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "54d6c67cfb690fb471897a6d68a67d2e210b00fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
