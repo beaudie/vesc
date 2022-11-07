@@ -232,6 +232,24 @@
       "parentUuid": "5ca3450b_cf6b4d24",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55081adc_bb704c93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T17:34:06Z",
+      "side": 1,
+      "message": "I was thinking that if we\u0027re only running one trial, then we don\u0027t need to run reset. Though probably a few solutions would work specifically for --one-frame-only, you could imagine if in any situation where you\u0027re running one trial (counting warmup trials) then you won\u0027t be running reset, and you don\u0027t have to respect alignment.",
+      "parentUuid": "8516af57_bbfecbac",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
