@@ -250,6 +250,24 @@
       "parentUuid": "8516af57_bbfecbac",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5accaa0c_592594a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-07T17:45:07Z",
+      "side": 1,
+      "message": "Right, it will only blow up with multiple trials, something like `--steps-per-trial\u003d1 --trials\u003d2` or any situation where `--steps-per-trial\u003d1` and `gWarmupTrials` isn\u0027t 0 (can\u0027t tell the exact cases as it\u0027s conditional on a bunch of things). Anyways, seems exotic.",
+      "parentUuid": "55081adc_bb704c93",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
