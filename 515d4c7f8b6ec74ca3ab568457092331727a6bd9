@@ -33,6 +33,24 @@
       "message": "stamp",
       "revId": "515d4c7f8b6ec74ca3ab568457092331727a6bd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e00a158b_a8e8772a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-07T09:59:10Z",
+      "side": 1,
+      "message": "iOS suppressions will remain as they are caused by the Simulator not implementing `APPLE_clip_distance` (although exposing it).\n\nAdreno feature that disables `EXT_clip_cull_distance` will remain until ANGLE has workarounds for two major driver bugs there.\n\nAdjusted tests as requested.",
+      "parentUuid": "9a7ef4e4_491c7512",
+      "revId": "515d4c7f8b6ec74ca3ab568457092331727a6bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
