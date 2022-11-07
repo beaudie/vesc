@@ -124,6 +124,24 @@
       "parentUuid": "dc26cbcd_1e4f7d54",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f16d842_e987729a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T15:32:05Z",
+      "side": 1,
+      "message": "Looks right, I\u0027d suggest we only set `mRunning \u003d false` in `runTrial` if our current step count is modulo the step alignment, otherwise keep running steps.",
+      "parentUuid": "4aa019b6_2a7cc114",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
