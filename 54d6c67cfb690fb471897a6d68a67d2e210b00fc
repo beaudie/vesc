@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b93f4b1e_e03aa739",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-07T12:22:28Z",
+      "side": 1,
+      "message": "It is possible that a context is created before MEC was started, but never made current (or so it seems). In this case, at the start of MEC the setup will not be captured, and we have to capture things when the context is made current for the first time. \n\nThe other possibility is that the context was created after MEC started. In the case that brought me to the error I have \n\n```\nvoid SetupReplayContext2(void)\n{\n    eglMakeCurrent(EGL_NO_DISPLAY, gSurfaceMap2[0], gSurfaceMap2[0], gContextMap2[2]);\n    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);\n    glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, gTransformFeedbackMap[0]);\n    glViewport(0, 0, 1600, 720);\n    glScissor(0, 0, 1600, 720);\n    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);\n    VALIDATE_CHECKPOINT((const char *)\u0026gBinaryData[0]);\n}\n```",
+      "parentUuid": "07c23fc1_4e56420c",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "54d6c67cfb690fb471897a6d68a67d2e210b00fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44de0765_f640157e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-07T11:33:25Z",
       "side": 1,
       "message": "wrong issue?",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "54d6c67cfb690fb471897a6d68a67d2e210b00fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6863c28e_8a20362d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-07T12:22:28Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "44de0765_f640157e",
       "range": {
         "startLine": 26,
         "startChar": 0,
