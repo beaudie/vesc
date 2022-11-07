@@ -70,6 +70,24 @@
       "parentUuid": "dcdfddd0_184f1576",
       "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3797c574_edeaa817",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-07T15:16:27Z",
+      "side": 1,
+      "message": "Isn\u0027t it the code that I linked that is used here?\n\nIt is aligning `stepsToRun`, we need to align `stepsPerformed + stepsToRun` instead IIUC, so that after the next run we end up at the first frame.",
+      "parentUuid": "7811c74a_799762cf",
+      "revId": "65cb0db346fa8ed1bda764f09f4135c9aa9a9873",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
