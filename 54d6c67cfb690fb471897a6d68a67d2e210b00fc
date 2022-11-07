@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "804e424f_63fb5879",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-07T12:33:15Z",
+      "side": 1,
+      "message": "In the first case, if the context is created and never made current, what could possibly be present in the context in terms of stuff that needs to be MEC setup? Nothing, right?\n\nThe second case seems more interesting. In that case, you\u0027re not really in MEC anymore, right? The context is created after the capture point. So that could change the solution you have here. Although I am not sure how flexible our design is for contexts that get created during capture.",
+      "parentUuid": "b93f4b1e_e03aa739",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 0
+      },
+      "revId": "54d6c67cfb690fb471897a6d68a67d2e210b00fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "44de0765_f640157e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
