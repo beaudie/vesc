@@ -16,6 +16,69 @@
       "message": "Landing the autogen stuff to avoid rebase conflicts",
       "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbc6ed8_c67f2ae6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-08T18:44:40Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b824b3b_2aa24c07",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-08T18:44:40Z",
+      "side": 1,
+      "message": "pipelines",
+      "range": {
+        "startLine": 1034,
+        "startChar": 37,
+        "endLine": 1034,
+        "endChar": 45
+      },
+      "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74f2f1fe_28a4c53b",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-08T18:44:40Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 1049,
+        "startChar": 28,
+        "endLine": 1049,
+        "endChar": 36
+      },
+      "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
