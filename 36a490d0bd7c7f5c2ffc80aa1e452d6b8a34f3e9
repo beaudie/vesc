@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a660271f_e236520c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-08T15:40:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5d3c565_ce45e31e",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4a58bd3_0c13e556",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "As discussed offline - uses SystemInfo to determine a policy based on device ID/platform. I suggest keeping this method and using it in an ASSERT to verify we made the right decision in the policy.",
       "parentUuid": "b4a58bd3_0c13e556",
+      "range": {
+        "startLine": 5696,
+        "startChar": 28,
+        "endLine": 5696,
+        "endChar": 46
+      },
+      "revId": "36a490d0bd7c7f5c2ffc80aa1e452d6b8a34f3e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdbf50af_8d1331e8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5696,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-08T15:40:23Z",
+      "side": 1,
+      "message": "Solved this by creating a black list using the `angle::SystemInfo` manufacturer and model strings.",
+      "parentUuid": "244f1232_46ced9fa",
       "range": {
         "startLine": 5696,
         "startChar": 28,

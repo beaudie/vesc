@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "82171647_8b4058fa",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5716,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-08T15:40:23Z",
+      "side": 1,
+      "message": "Opened an issue in anglebug.com/7821",
+      "parentUuid": "40b8bed8_89b6525b",
+      "range": {
+        "startLine": 5708,
+        "startChar": 0,
+        "endLine": 5716,
+        "endChar": 5
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f44056e_2bd5a434",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3339e395_30af52bb",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-08T15:40:23Z",
+      "side": 1,
+      "message": "I went with `updateBufferMemory` and `mBufferStart`.",
+      "parentUuid": "5f44056e_2bd5a434",
+      "range": {
+        "startLine": 440,
+        "startChar": 9,
+        "endLine": 440,
+        "endChar": 25
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06abf2cd_132c4de6",
@@ -60,6 +108,30 @@
       "writtenOn": "2022-11-04T15:33:53Z",
       "side": 1,
       "message": "nit: please make all these values either initialized in the header or the constructor, as it is they\u0027re a bit mixed",
+      "range": {
+        "startLine": 465,
+        "startChar": 0,
+        "endLine": 480,
+        "endChar": 32
+      },
+      "revId": "c0553a13867d1ad589aa3861ad9ca44bee1c3977",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1db35e45_f81e39f9",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1491687
+      },
+      "writtenOn": "2022-11-08T15:40:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06abf2cd_132c4de6",
       "range": {
         "startLine": 465,
         "startChar": 0,
