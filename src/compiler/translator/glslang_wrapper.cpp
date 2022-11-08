@@ -21,7 +21,7 @@ ANGLE_DISABLE_SUGGEST_OVERRIDE_WARNINGS
 
 // Other glslang includes.
 #include <SPIRV/GlslangToSpv.h>
-#include <StandAlone/ResourceLimits.h>
+#include <glslang/Public/ResourceLimits.h>
 
 // SPIR-V tools include for disassembly
 #include <spirv-tools/libspirv.hpp>
