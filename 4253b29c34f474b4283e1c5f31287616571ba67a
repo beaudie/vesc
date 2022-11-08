@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b876fe57_c993c244",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-08T19:05:19Z",
+      "side": 1,
+      "message": "Oops, done",
+      "parentUuid": "5b824b3b_2aa24c07",
+      "range": {
+        "startLine": 1034,
+        "startChar": 37,
+        "endLine": 1034,
+        "endChar": 45
+      },
+      "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74f2f1fe_28a4c53b",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-11-08T18:44:40Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 1049,
+        "startChar": 28,
+        "endLine": 1049,
+        "endChar": 36
+      },
+      "revId": "4253b29c34f474b4283e1c5f31287616571ba67a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad584b28_ea83a8ac",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-08T19:05:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74f2f1fe_28a4c53b",
       "range": {
         "startLine": 1049,
         "startChar": 28,
