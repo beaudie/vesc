@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "468478a9_c22f4702",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 6069,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-08T16:21:50Z",
+      "side": 1,
+      "message": "the term black list is blacklisted. please use allow list, deny list, or block list.",
+      "range": {
+        "startLine": 6069,
+        "startChar": 51,
+        "endLine": 6069,
+        "endChar": 61
+      },
+      "revId": "738ab66e0732f4893311b773f45b95ccb7f85388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
