@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd36971_fc232978",
+        "filename": "scripts/update_chrome_angle.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-08T20:32:55Z",
+      "side": 1,
+      "message": "Should this be updated too?",
+      "revId": "bc1d49b51eb72d09396e493c78d9c04ee72a0c28",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
