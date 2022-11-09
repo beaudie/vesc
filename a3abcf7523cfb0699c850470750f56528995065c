@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "203fde7f_46647ef9",
+        "filename": "src/common/backtrace_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-09T20:27:13Z",
+      "side": 1,
+      "message": "Thanks. Added.\nAlso, common definitions moved to `backtrace_utils.h`.",
+      "parentUuid": "adbed57f_969455ec",
+      "revId": "a3abcf7523cfb0699c850470750f56528995065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b4c1168_8de0e210",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-09T15:18:57Z",
       "side": 1,
       "message": "`util/` shouldn\u0027t link with the library, it\u0027s for tests. Isn\u0027t it enough to link with the stuff in `common/`?",
+      "revId": "a3abcf7523cfb0699c850470750f56528995065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53bf982d_0c0a2406",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-09T20:27:13Z",
+      "side": 1,
+      "message": "It can compile without linking here, although `printBacktraceInfo()` could not be used in the ANGLE code implementation (outside tests). We can remove it from here. However, I was wondering where to add the `util/` files in the BUILD file. Should we add the files directly to `_util_sources` or use `:angle_backtrace_utils` to build another target?",
+      "parentUuid": "4b4c1168_8de0e210",
       "revId": "a3abcf7523cfb0699c850470750f56528995065c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
