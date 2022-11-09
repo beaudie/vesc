@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sstream>
 
+#include "common/debug.h"
 #include "util/test_utils.h"
 
 namespace angle
@@ -51,6 +52,8 @@ int gWarmupSteps  = std::numeric_limits<int>::max();
 
 namespace
 {
+int warmupTrialsFlag = -1;  // -1 means unset
+
 bool PerfTestArg(int *argc, char **argv, int argIndex)
 {
     return ParseFlag("--one-frame-only", argc, argv, argIndex, &gOneFrameOnly) ||
@@ -66,7 +69,7 @@ bool PerfTestArg(int *argc, char **argv, int argIndex)
            ParseIntArg("--steps-per-trial", argc, argv, argIndex, &gStepsPerTrial) ||
            ParseIntArg("--max-steps-performed", argc, argv, argIndex, &gMaxStepsPerformed) ||
            ParseIntArg("--fixed-test-time", argc, argv, argIndex, &gFixedTestTime) ||
-           ParseIntArg("--warmup-trials", argc, argv, argIndex, &gWarmupTrials) ||
+           ParseIntArg("--warmup-trials", argc, argv, argIndex, &warmupTrialsFlag) ||
            ParseIntArg("--warmup-steps", argc, argv, argIndex, &gWarmupSteps) ||
            ParseIntArg("--calibration-time", argc, argv, argIndex, &gCalibrationTimeSeconds) ||
            ParseIntArg("--trial-time", argc, argv, argIndex, &gTrialTimeSeconds) ||
@@ -113,6 +116,10 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
     {
         gStepsPerTrial = 1;
         gWarmupTrials  = 0;
+        if (warmupTrialsFlag > 0)
+        {
+            FATAL() << "--warmup-trials incompatible with --one-frame-only";
+        }
     }
 
     if (gCalibration)
@@ -122,7 +129,11 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 
     if (gMaxStepsPerformed > 0)
     {
-        gWarmupTrials     = 0;
+        gWarmupTrials = 0;
+        if (warmupTrialsFlag > 0)
+        {
+            FATAL() << "--warmup-trials incompatible with --max-steps-performed";
+        }
         gTestTrials       = 1;
         gTrialTimeSeconds = 36000;
     }
@@ -132,12 +143,21 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
         gTrialTimeSeconds = gFixedTestTime;
         gStepsPerTrial    = std::numeric_limits<int>::max();
         gTestTrials       = 1;
-        gWarmupTrials     = 0;
+        gWarmupTrials     = 0;  // Default, see warmupTrialsFlag below
     }
 
     if (gNoWarmup)
     {
         gWarmupTrials = 0;
+        if (warmupTrialsFlag > 0)
+        {
+            FATAL() << "--warmup-trials incompatible with --no-warmup";
+        }
+    }
+
+    if (warmupTrialsFlag >= 0)
+    {
+        gWarmupTrials = warmupTrialsFlag;
     }
 
     if (gTrialTimeSeconds == 0)
