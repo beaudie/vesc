@@ -129,6 +129,36 @@ class WaitableCompressEvent
     std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
 };
 
+enum MemAllocType
+{
+    MEM_ALLOC_NONE = 0,
+    MEM_ALLOC_TYPE_IMAGE,
+    MEM_ALLOC_TYPE_IMAGE_EXTERNAL,
+    MEM_ALLOC_TYPE_BUFFER,
+    MEM_ALLOC_TYPE_BUFFER_EXTERNAL,
+    MEM_ALLOC_TYPE_BUFFER_POOL,
+    MEM_ALLOC_TYPE_TOTAL,
+    MEM_ALLOC_TYPE_NUMBER_OF_ENUMS,
+};
+
+struct MemoryAllocLogInfo
+{
+    MemoryAllocLogInfo()
+        : id(0),
+          allocType(MemAllocType::MEM_ALLOC_NONE),
+          size(0),
+          offset(0),
+          handle(nullptr),
+          parentObject(nullptr)
+    {}
+    uint64_t id;
+    MemAllocType allocType;
+    VkDeviceSize size;
+    VkDeviceSize offset;
+    void *handle;
+    void *parentObject;  // remove?
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -622,6 +652,108 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
+    template <typename HandleT, typename ObjectT>
+    void onMemoryAllocLog(ObjectT *parentObject,
+                          HandleT handle,
+                          MemAllocType allocType,
+                          VkDeviceSize size,
+                          VkDeviceSize offset = 0)
+    {
+        // TODO: Make the ops atomic.
+        ++mTotalMemAllocations[allocType];
+        ++mTotalMemAllocations[MemAllocType::MEM_ALLOC_TYPE_TOTAL];
+        mTotalMemAllocationsSize[allocType] += size;
+        mTotalMemAllocationsSize[MemAllocType::MEM_ALLOC_TYPE_TOTAL] += size;
+
+        ++mActiveMemAllocations[allocType];
+        ++mActiveMemAllocations[MemAllocType::MEM_ALLOC_TYPE_TOTAL];
+        mActiveMemAllocationsSize[allocType] += size;
+        mActiveMemAllocationsSize[MemAllocType::MEM_ALLOC_TYPE_TOTAL] += size;
+
+        // Add the new allocation to the log
+        MemoryAllocLogInfo memAllocLogInfo;
+        memAllocLogInfo.id           = ++mMemAllocationID;
+        memAllocLogInfo.allocType    = allocType;
+        memAllocLogInfo.size         = size;
+        memAllocLogInfo.offset       = offset;
+        memAllocLogInfo.handle       = reinterpret_cast<void *>(handle);
+        memAllocLogInfo.parentObject = static_cast<void *>(parentObject);
+
+        mTestMemoryLog[angle::getBacktraceInfo()].push_back(memAllocLogInfo);
+
+        //        WARN() << "ID " << memAllocLogInfo.id << ": Allocation of size " <<
+        //        memAllocLogInfo.size
+        //               << " for object " << memAllocLogInfo.handle << " (" <<
+        //               memAllocLogInfo.parentObject
+        //               << ") " << mActiveMemAllocations[MemAllocType::MEM_ALLOC_TYPE_TOTAL] << " "
+        //               << mActiveMemAllocations[memAllocLogInfo.allocType];
+    }
+
+    template <typename HandleT>
+    void onMemoryDeallocLog(HandleT *handle, VkDeviceSize offset = 0)
+    {
+        for (auto &memLogPerBacktrace : mTestMemoryLog)
+        {
+            for (auto memLogIter = memLogPerBacktrace.second.begin();
+                 memLogIter != memLogPerBacktrace.second.end(); memLogIter++)
+            {
+                if (memLogIter->handle == static_cast<void *>(handle) &&
+                    memLogIter->offset == offset)
+                {
+                    // Object found
+                    // TODO: Make the ops atomic.
+                    // TODO: More efficient search?
+                    --mActiveMemAllocations[memLogIter->allocType];
+                    --mActiveMemAllocations[MemAllocType::MEM_ALLOC_TYPE_TOTAL];
+                    mActiveMemAllocationsSize[memLogIter->allocType] -= memLogIter->size;
+                    mActiveMemAllocationsSize[MemAllocType::MEM_ALLOC_TYPE_TOTAL] -=
+                        memLogIter->size;
+
+                    //                    WARN() << "ID " << memLogIter->id << ": Deallocation of
+                    //                    size "
+                    //                           << memLogIter->size << " for object " <<
+                    //                           memLogIter->handle << " ("
+                    //                           << memLogIter->parentObject << ") "
+                    //                           <<
+                    //                           mActiveMemAllocations[MemAllocType::MEM_ALLOC_TYPE_TOTAL]
+                    //                           << " "
+                    //                           << mActiveMemAllocations[memLogIter->allocType];
+
+                    memLogPerBacktrace.second.erase(memLogIter);
+                    break;
+                }
+            }
+        }
+    }
+
+    void printMemLog()
+    {
+        // Temporary function?
+        WARN() << "Total allocations:";
+        for (uint32_t i = 0; i < MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS; i++)
+        {
+            WARN() << "For " << static_cast<int>(i) << ": " << mTotalMemAllocations[i]
+                   << " | Size: " << mTotalMemAllocationsSize[i];
+        }
+
+        WARN() << "Active allocations:";
+        for (uint32_t i = 0; i < MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS; i++)
+        {
+            WARN() << "For " << static_cast<int>(i) << ": " << mActiveMemAllocations[i]
+                   << " | Size: " << mActiveMemAllocationsSize[i];
+        }
+
+        for (auto &memLogList : mTestMemoryLog)
+        {
+            for (auto &memLog : memLogList.second)
+            {
+                WARN() << memLog.id << " -> " << memLog.size << ", type "
+                       << static_cast<uint16_t>(memLog.allocType) << " <-- " << memLog.handle;
+                angle::printBacktraceInfo(memLogList.first);
+            }
+        }
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -872,6 +1004,15 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+
+    // Add memory leak counter variables here
+    uint64_t mMemAllocationID;
+    std::array<uint64_t, MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS> mActiveMemAllocations;
+    std::array<uint64_t, MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS> mTotalMemAllocations;
+    std::array<VkDeviceSize, MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS>
+        mActiveMemAllocationsSize;
+    std::array<VkDeviceSize, MemAllocType::MEM_ALLOC_TYPE_NUMBER_OF_ENUMS> mTotalMemAllocationsSize;
+    std::map<angle::BacktraceInfo, std::vector<MemoryAllocLogInfo>> mTestMemoryLog;
 };
 
 }  // namespace rx

@@ -63,6 +63,8 @@ void BufferBlock::destroy(RendererVk *renderer)
         unmap(device);
     }
 
+    renderer->onMemoryDeallocLog(mDeviceMemory.getHandle());  // initWithoutVirtualBlock()
+
     mVirtualBlock.destroy(device);
     mBuffer.destroy(device);
     mDeviceMemory.destroy(device);
@@ -89,6 +91,9 @@ angle::Result BufferBlock::init(Context *context,
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 
+    context->getRenderer()->onMemoryAllocLog(this, mDeviceMemory.getHandle(),
+                                             MemAllocType::MEM_ALLOC_TYPE_BUFFER, size);
+
     return angle::Result::Continue;
 }
 
@@ -109,6 +114,9 @@ void BufferBlock::initWithoutVirtualBlock(Context *context,
     mSize                = size;
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
+
+    context->getRenderer()->onMemoryAllocLog(this, mDeviceMemory.getHandle(),
+                                             MemAllocType::MEM_ALLOC_TYPE_BUFFER, size);
 }
 
 VkResult BufferBlock::map(const VkDevice device)
@@ -123,9 +131,29 @@ void BufferBlock::unmap(const VkDevice device)
     mMappedMemory = nullptr;
 }
 
-void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
+VkResult BufferBlock::allocate(RendererVk *renderer,
+                               VkDeviceSize size,
+                               VkDeviceSize alignment,
+                               VmaVirtualAllocation *allocationOut,
+                               VkDeviceSize *offsetOut)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    mCountRemainsEmpty = 0;
+    VkResult result    = mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+
+    if (result == VK_SUCCESS)
+    {
+        renderer->onMemoryAllocLog(this, mVirtualBlock.getHandle(),
+                                   MemAllocType::MEM_ALLOC_TYPE_BUFFER_POOL, size, *offsetOut);
+    }
+
+    return result;
+}
+
+void BufferBlock::free(RendererVk *renderer, VmaVirtualAllocation allocation, VkDeviceSize offset)
+{
+    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    renderer->onMemoryDeallocLog(mVirtualBlock.getHandle(), offset);  // allocate()
     mVirtualBlock.free(allocation, offset);
 }
 
