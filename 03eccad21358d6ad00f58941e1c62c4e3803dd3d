@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf515777_b845fc72",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-09T16:22:07Z",
+      "side": 0,
+      "message": "I think changing this silently broke restricted_trace_perf.py, previously `--fixed-test-time 10 --warmup-trials 1` resulted in gWarmupTrials first set to 0 then 1 (ordering mattered), now we first parse flags then set gWarmupTrials to 0.\n\nNot that I think it\u0027s a good idea to have behavior dependent on flags ordering.. but yeah, this happened.",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "03eccad21358d6ad00f58941e1c62c4e3803dd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
