@@ -123,9 +123,29 @@ void BufferBlock::unmap(const VkDevice device)
     mMappedMemory = nullptr;
 }
 
-void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
+VkResult BufferBlock::allocate(RendererVk *renderer,
+                               VkDeviceSize size,
+                               VkDeviceSize alignment,
+                               VmaVirtualAllocation *allocationOut,
+                               VkDeviceSize *offsetOut)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    mCountRemainsEmpty = 0;
+    VkResult result    = mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+
+    //    if (result == VK_SUCCESS)
+    //    {
+    //        renderer->onMemoryAllocLog(this, mVirtualBlock.getHandle(),
+    //                                   MemAllocType::MEM_ALLOC_TYPE_BUFFER_POOL, size);
+    //    }
+
+    return result;
+}
+
+void BufferBlock::free(RendererVk *renderer, VmaVirtualAllocation allocation, VkDeviceSize offset)
+{
+    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    //    renderer->onMemoryDeallocLog(this, offset);
     mVirtualBlock.free(allocation, offset);
 }
 

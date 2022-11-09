@@ -57,11 +57,14 @@ class BufferBlock final : angle::NonCopyable
     VkMemoryPropertyFlags getMemoryPropertyFlags() const;
     VkDeviceSize getMemorySize() const;
 
-    VkResult allocate(VkDeviceSize size,
+    VkResult allocate(RendererVk *renderer,
+                      VkDeviceSize size,
                       VkDeviceSize alignment,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
-    void free(VmaVirtualAllocation allocation, VkDeviceSize offset);
+    VmaVirtualBlock getHandle() const { return mVirtualBlock.getHandle(); }
+
+    void free(RendererVk *renderer, VmaVirtualAllocation allocation, VkDeviceSize offset);
     VkBool32 isEmpty();
 
     bool hasVirtualBlock() const { return mVirtualBlock.valid(); }
@@ -112,8 +115,7 @@ class BufferSuballocation final : angle::NonCopyable
 
     void destroy(RendererVk *renderer);
 
-    void init(VkDevice device,
-              BufferBlock *block,
+    void init(BufferBlock *block,
               VmaVirtualAllocation allocation,
               VkDeviceSize offset,
               VkDeviceSize size);
@@ -224,16 +226,6 @@ ANGLE_INLINE uint8_t *BufferBlock::getMappedMemory() const
     return mMappedMemory;
 }
 
-ANGLE_INLINE VkResult BufferBlock::allocate(VkDeviceSize size,
-                                            VkDeviceSize alignment,
-                                            VmaVirtualAllocation *allocationOut,
-                                            VkDeviceSize *offsetOut)
-{
-    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
-    mCountRemainsEmpty = 0;
-    return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
-}
-
 // BufferSuballocation implementation.
 ANGLE_INLINE BufferSuballocation::BufferSuballocation()
     : mBufferBlock(nullptr), mAllocation(VK_NULL_HANDLE), mOffset(0), mSize(0)
@@ -266,7 +258,7 @@ ANGLE_INLINE void BufferSuballocation::destroy(RendererVk *renderer)
         ASSERT(mBufferBlock);
         if (mBufferBlock->hasVirtualBlock())
         {
-            mBufferBlock->free(mAllocation, mOffset);
+            mBufferBlock->free(renderer, mAllocation, mOffset);
             mBufferBlock = nullptr;
         }
         else
@@ -283,8 +275,7 @@ ANGLE_INLINE void BufferSuballocation::destroy(RendererVk *renderer)
     }
 }
 
-ANGLE_INLINE void BufferSuballocation::init(VkDevice device,
-                                            BufferBlock *block,
+ANGLE_INLINE void BufferSuballocation::init(BufferBlock *block,
                                             VmaVirtualAllocation allocation,
                                             VkDeviceSize offset,
                                             VkDeviceSize size)

@@ -35,6 +35,9 @@ class BacktraceInfo
 
     void populateBacktraceInfo(void **stackAddressBuffer, size_t stackAddressCount);
 
+    bool operator<(const BacktraceInfo &rhs) const { return mStackAddresses < rhs.mStackAddresses; }
+    bool operator>(const BacktraceInfo &rhs) const { return mStackAddresses > rhs.mStackAddresses; }
+
   private:
     std::vector<void *> mStackAddresses;
     std::vector<std::string> mStackSymbols;
