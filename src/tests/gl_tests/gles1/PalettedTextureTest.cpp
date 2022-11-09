@@ -131,6 +131,11 @@ TEST_P(PalettedTextureTest, PalettedTextureSampling)
     EXPECT_PIXEL_COLOR_NEAR(24, 8, testImage.palette[1], 0);
     EXPECT_PIXEL_COLOR_NEAR(8, 24, testImage.palette[2], 0);
     EXPECT_PIXEL_COLOR_NEAR(24, 24, testImage.palette[3], 0);
+
+    for (int i = 0; i < 10; i++)
+    {
+        swapBuffers();
+    }
 }
 
 ANGLE_INSTANTIATE_TEST_ES1(PalettedTextureTest);
