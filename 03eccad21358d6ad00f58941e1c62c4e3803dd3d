@@ -46,6 +46,30 @@
       },
       "revId": "03eccad21358d6ad00f58941e1c62c4e3803dd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a97c700_6aa528e9",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-09T22:21:57Z",
+      "side": 0,
+      "message": "Is there any advantage of using `--fixed-test-time 10` over `--trial-time 10 --trials 1`? The former is no longer compatible with warmup settings but the latter is, and that\u0027s what we use in run_perf_tests.py. Maybe we should stop using `--fixed-test-time`? (and crash-or-better when `--fixed-test-time` is combined with `--warmup-trials` to prevent accidents)",
+      "parentUuid": "03117f4e_bfdcc5dc",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "03eccad21358d6ad00f58941e1c62c4e3803dd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
