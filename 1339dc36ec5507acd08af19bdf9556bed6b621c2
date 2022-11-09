@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "133182f4_37dd267b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-09T20:25:02Z",
+      "side": 1,
+      "message": "Please add a paragraph with a little more detail. \"Renamed provoking vertex enums to use _ANGLE suffix. The newly defined enums alias those from the desktop OpenGL extension. Updated tests to use the new enum names.\"",
+      "revId": "1339dc36ec5507acd08af19bdf9556bed6b621c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0dae3356_230c95cf",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-11-08T20:12:05Z",
       "side": 1,
       "message": "Updated enums that do not exist in OpenGL ES.",
+      "revId": "1339dc36ec5507acd08af19bdf9556bed6b621c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc41230_25a75e2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-09T20:25:02Z",
+      "side": 1,
+      "message": "lgtm",
       "revId": "1339dc36ec5507acd08af19bdf9556bed6b621c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
