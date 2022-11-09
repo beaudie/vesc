@@ -70,6 +70,30 @@
       },
       "revId": "03eccad21358d6ad00f58941e1c62c4e3803dd3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832f64a3_95fca445",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-09T22:38:24Z",
+      "side": 0,
+      "message": "Our previous time arguments were a cap, not something that would continue until *at least* an amount of time had passed.  I think that\u0027s still the case with `--trial-time`.\n\n`--fixed-test-time` is one of our convenience flags.  I believe the equivalent command would be:\n```\n--trial-time 10 --steps-per-trial 9999999 --trials 1 --warmup-trials 0\n```",
+      "parentUuid": "7a97c700_6aa528e9",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "03eccad21358d6ad00f58941e1c62c4e3803dd3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
