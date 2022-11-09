@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adbed57f_969455ec",
+        "filename": "src/common/backtrace_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-09T15:18:57Z",
+      "side": 1,
+      "message": "Instead of `ifdef`s, please have two files:\n\n- `backtrace_utils_noop.cpp` would implement the noop functions\n- `backtrace_utils_android.cpp` would implement the Android functions\n\nThe right file would be selected in `BUILD.gn`. See similar files around here, like `system_utils*`",
+      "revId": "a3abcf7523cfb0699c850470750f56528995065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b4c1168_8de0e210",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-09T15:18:57Z",
+      "side": 1,
+      "message": "`util/` shouldn\u0027t link with the library, it\u0027s for tests. Isn\u0027t it enough to link with the stuff in `common/`?",
+      "revId": "a3abcf7523cfb0699c850470750f56528995065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
