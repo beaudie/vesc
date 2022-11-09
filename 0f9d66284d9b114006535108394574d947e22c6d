@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef950d2c_101a9470",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-09T08:03:43Z",
+      "side": 1,
+      "message": "Did you mean `DrawRangeElements`?",
+      "range": {
+        "startLine": 15,
+        "startChar": 19,
+        "endLine": 15,
+        "endChar": 36
+      },
+      "revId": "0f9d66284d9b114006535108394574d947e22c6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
