@@ -69,6 +69,24 @@
       "parentUuid": "4b4c1168_8de0e210",
       "revId": "a3abcf7523cfb0699c850470750f56528995065c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf566d66_fd63c4db",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-10T22:42:55Z",
+      "side": 1,
+      "message": "Util files directly added to `_util_sources` and removed from the renderer BUILD.",
+      "parentUuid": "53bf982d_0c0a2406",
+      "revId": "a3abcf7523cfb0699c850470750f56528995065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
