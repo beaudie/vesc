@@ -81,10 +81,26 @@ angle::Result Query11::end(const gl::Context *context)
 
 angle::Result Query11::queryCounter(const gl::Context *context)
 {
-    // This doesn't do anything for D3D11 as we don't support timestamps
     ASSERT(getType() == gl::QueryType::Timestamp);
-    mResultSum = 0;
-    mPendingQueries.push_back(std::unique_ptr<QueryState>(new QueryState()));
+    if (!mRenderer->getFeatures().enableTimestampQueries.enabled)
+    {
+        mResultSum = 0;
+        return angle::Result::Continue;
+    }
+
+    Context11 *context11 = GetImplAs<Context11>(context);
+
+    D3D11_QUERY_DESC queryDesc;
+    queryDesc.MiscFlags = 0;
+    queryDesc.Query     = D3D11_QUERY_TIMESTAMP;
+
+    ANGLE_TRY(mRenderer->allocateResource(context11, queryDesc, &mActiveQuery->endTimestamp));
+
+    ANGLE_TRY(context11->checkDisjointQuery());
+    mRenderer->getDeviceContext()->End(mActiveQuery->endTimestamp.get());
+
+    mPendingQueries.push_back(std::move(mActiveQuery));
+    mActiveQuery = std::unique_ptr<QueryState>(new QueryState());
     return angle::Result::Continue;
 }
 
@@ -309,12 +325,52 @@ angle::Result Query11::testQuery(Context11 *context11, QueryState *queryState)
 
             case gl::QueryType::Timestamp:
             {
-                // D3D11 doesn't support GL timestamp queries as D3D timestamps are not guaranteed
-                // to have any sort of continuity outside of a disjoint timestamp query block, which
-                // GL depends on
-                ASSERT(!queryState->query.valid());
-                mResult              = 0;
-                queryState->finished = true;
+                if (!mRenderer->getFeatures().enableTimestampQueries.enabled)
+                {
+                    mResult              = 0;
+                    queryState->finished = true;
+                }
+                else
+                {
+                    ASSERT(queryState->endTimestamp.valid());
+                    HRESULT result = context11->checkDisjointQueryStatus();
+                    ANGLE_TRY_HR(context11, result, "Failed to get the data of an internal query");
+
+                    if (result == S_OK)
+                    {
+
+                        UINT64 timestamp     = 0;
+                        HRESULT timestampRes = context->GetData(queryState->endTimestamp.get(),
+                                                                &timestamp, sizeof(UINT64), 0);
+                        ANGLE_TRY_HR(context11, timestampRes,
+                                     "Failed to get the data of an internal query");
+
+                        if (timestampRes == S_OK)
+                        {
+                            queryState->finished = true;
+                            static_assert(sizeof(UINT64) == sizeof(unsigned long long),
+                                          "D3D UINT64 isn't 64 bits");
+
+                            timestamp = static_cast<uint64_t>(
+                                timestamp *
+                                (1000000000.0 /
+                                 static_cast<double>(context11->getDisjointFrequency())));
+
+                            angle::CheckedNumeric<UINT64> checkedTime(timestamp);
+                            if (checkedTime.IsValid())
+                            {
+                                mResult = checkedTime.ValueOrDie();
+                            }
+                            else
+                            {
+                                mResult = std::numeric_limits<GLuint64>::max();
+                                // If an overflow does somehow occur, there is no way the elapsed
+                                // time is accurate, so we generate a disjoint event
+                                context11->setGPUDisjoint();
+                            }
+                        }
+                    }
+                }
             }
             break;
 
