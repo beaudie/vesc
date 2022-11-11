@@ -526,6 +526,10 @@ void ANGLETestBase::initOSWindow()
     if (!mFixture->osWindow)
     {
         mFixture->osWindow = OSWindow::New();
+        if (!mFixture->osWindow)
+        {
+            FATAL() << "Failed to create a new window";
+        }
         mFixture->osWindow->disableErrorMessageDialog();
         if (!mFixture->osWindow->initialize(windowName.c_str(), 128, 128))
         {
