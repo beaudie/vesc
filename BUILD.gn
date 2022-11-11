@@ -202,6 +202,9 @@ config("internal_config") {
     if (angle_use_wayland) {
       defines += [ "ANGLE_USE_WAYLAND" ]
     }
+    if (angle_use_gbm) {
+      defines += [ "ANGLE_USE_GBM" ]
+    }
 
     if (angle_vulkan_display_mode == "simple") {
       defines += [ "ANGLE_VULKAN_DISPLAY_MODE_SIMPLE" ]
@@ -445,6 +448,8 @@ if (angle_has_build) {
 
 angle_static_library("angle_common") {
   sources = libangle_common_sources
+  defines = []
+
   if (angle_enable_cl) {
     sources += libangle_common_cl_sources
   }
@@ -459,6 +464,7 @@ angle_static_library("angle_common") {
   public_deps = [
     ":angle_abseil",
     ":includes",
+    "src/common/vulkan:angle_vulkan_headers",
   ]
   public_configs += [ ":angle_common_config" ]
   if (angle_has_build && use_fuzzing_engine) {
@@ -489,6 +495,10 @@ angle_static_library("angle_common") {
 
   if (is_apple) {
     frameworks = [ "Metal.framework" ]
+  }
+
+  if (angle_enable_vulkan) {
+    defines += [ "ANGLE_ENABLE_VULKAN" ]
   }
 }
 
