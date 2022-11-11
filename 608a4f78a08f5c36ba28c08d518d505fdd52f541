@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f08864c_9e1b8342",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-11-11T10:45:05Z",
+      "side": 1,
+      "message": "Here I directly used the tick value not a time (tick * 1000000000 / frequency) due to the latter will overflow. Maybe one solution is we record the first timestamp\u0027s tick value and make it as an offset. All timestamps\u0027s tick value need to minus this offset to get the time (tick - offset) * 1000000000 / frequency). How\u0027s your opinion?",
+      "revId": "608a4f78a08f5c36ba28c08d518d505fdd52f541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
