@@ -182,6 +182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d63e23dd_98d1a747",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorManagerRing.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-11T01:54:24Z",
+      "side": 1,
+      "message": "As per our discussion, it could be possible to remove this function altogether.",
+      "parentUuid": "815ac068_b215f6ca",
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96425c9b_1b40acd8",
@@ -300,6 +318,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9618ef77_315545b4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-11T01:54:24Z",
+      "side": 1,
+      "message": "Passed the allocator pointer alongside the Vulkan command pool pointer.",
+      "parentUuid": "563d56de_6b4b6e68",
+      "range": {
+        "startLine": 830,
+        "startChar": 17,
+        "endLine": 830,
+        "endChar": 55
+      },
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "122008f2_28bb9439",
@@ -323,6 +365,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8725338_029e1e24",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-11T01:54:24Z",
+      "side": 1,
+      "message": "Added the file `Allocators.md`.",
+      "parentUuid": "122008f2_28bb9439",
+      "range": {
+        "startLine": 1021,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 18
+      },
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93524d38_76a0915f",
@@ -336,6 +402,24 @@
       "writtenOn": "2022-10-31T21:07:09Z",
       "side": 1,
       "message": "ditto",
+      "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e40fd76_0d0a0b7d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-11T01:54:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93524d38_76a0915f",
       "revId": "ceb447d357f07dc71761affbe06e4fc9bc570dfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
