@@ -328,7 +328,6 @@ angle_source_set("angle_vulkan_backend") {
   }
 
   if (is_linux || is_chromeos) {
-    deps += [ "$angle_root/src/common/linux:angle_dma_buf" ]
     if (angle_use_gbm) {
       deps += [ "//third_party/minigbm" ]
     }
