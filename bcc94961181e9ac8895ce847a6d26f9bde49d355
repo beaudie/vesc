@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8299995b_8499aefd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-11-11T22:54:21Z",
+      "side": 1,
+      "message": "lgtm\n\nLet\u0027s get a second reviewer of this on Monday.",
+      "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
