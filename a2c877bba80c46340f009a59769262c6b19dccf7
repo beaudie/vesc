@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afbc99a4_179265c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-11-11T10:35:02Z",
+      "side": 1,
+      "message": "Hi Geoff, after offline sync with Xing. I will take over his PR https://chromium-review.googlesource.com/c/angle/angle/+/3694732 and update here.\nWhen coding this PR, I totally understand what you said about the multi-context switching. In this PR, we have a per-context D3D11_QUERY_TIMESTAMP_DISJOINT query. And the contexts changing won\u0027t end the current context\u0027s queries, which means the time may be not that precise. It may includes some noises like another context\u0027s commands time. We may need to collect some data about the noises\u0027 impact. Another concern you mentioned is the disjoint events frequency if we have a long running disjoint query. Sure, I can give some experiments. Please let me know whether my understanding is correct. And please give a high level review about the code. I will collect the data based on this PR and feedback to you when it\u0027s ready.",
+      "revId": "a2c877bba80c46340f009a59769262c6b19dccf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
