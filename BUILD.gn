@@ -921,6 +921,9 @@ angle_source_set("libANGLE_headers") {
   if (angle_enable_cl) {
     sources += libangle_cl_headers
   }
+  if (is_linux) {
+    deps = [ "$angle_root/src/common/linux:angle_dma_buf" ]
+  }
   public_deps = [
     ":angle_common",
     ":angle_translator_headers",
