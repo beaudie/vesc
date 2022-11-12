@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83ddfd9c_50f311c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-12T23:00:01Z",
+      "side": 1,
+      "message": "LGTM. This should work because `ContextVk::invalidateProgramExecutableHelper` calls `invalidateDefaultAttributes`, but would be nice to make sure this scenario is tested:\n\n- Set up 2 default attribs\n- Use program 1 that only uses 1 attrib\n- Change to program 2 that uses 2 attribs\n\nThis was first done in https://chromium-review.googlesource.com/c/angle/angle/+/1188951, but I don\u0027t see any test suppressions lifted :/\n\nHopefully something would fail if you remove that line.",
+      "revId": "e8aa9c086296b1d1187d4cee56341265242d727e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
