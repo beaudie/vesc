@@ -33,6 +33,24 @@
       "message": "Please feel free to take credit for writing this by adding yourself to the contacts section of the spec if you like.",
       "revId": "54a81c1f572a24188e2263e1f82ce5c23520253b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c9f1b5f_5979f8b0",
+        "filename": "extensions/ANGLE_provoking_vertex.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-14T20:27:07Z",
+      "side": 1,
+      "message": "The spec was almost completely borrowed from the desktop GL extensions.",
+      "parentUuid": "a0f09c41_95518e0b",
+      "revId": "54a81c1f572a24188e2263e1f82ce5c23520253b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
