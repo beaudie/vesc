@@ -4750,7 +4750,7 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
         invalidateCurrentGraphicsPipeline();
         // No additional work is needed here. We will update the pipeline desc
         // later.
-        invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
+        //        invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
         invalidateVertexAndIndexBuffers();
         bool useVertexBuffer = (executable->getMaxActiveAttribLocation() > 0);
         mNonIndexedDirtyBitsMask.set(DIRTY_BIT_VERTEX_BUFFERS, useVertexBuffer);
