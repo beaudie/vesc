@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8592229_a8352a8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-14T19:29:13Z",
+      "side": 1,
+      "message": "Nice! Really glad to see a spec for this.",
+      "revId": "54a81c1f572a24188e2263e1f82ce5c23520253b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0f09c41_95518e0b",
+        "filename": "extensions/ANGLE_provoking_vertex.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-14T19:29:13Z",
+      "side": 1,
+      "message": "Please feel free to take credit for writing this by adding yourself to the contacts section of the spec if you like.",
+      "revId": "54a81c1f572a24188e2263e1f82ce5c23520253b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
