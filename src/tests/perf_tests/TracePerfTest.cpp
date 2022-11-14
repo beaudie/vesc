@@ -1394,6 +1394,11 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     {
         mStepsToRun = frameCount();
     }
+
+    if (gWarmupSteps < 0)
+    {
+        mWarmupSteps = frameCount();
+    }
 }
 
 void TracePerfTest::startTest()
