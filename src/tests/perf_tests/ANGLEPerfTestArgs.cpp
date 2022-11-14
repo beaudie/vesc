@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sstream>
 
+#include "common/debug.h"
 #include "util/test_utils.h"
 
 namespace angle
@@ -40,6 +41,7 @@ bool gVsync                        = false;
 bool gOneFrameOnly                 = false;
 bool gNoWarmup                     = false;
 int gFixedTestTime                 = 0;
+int gFixedTestTimeWithWarmup       = 0;
 bool gTraceInterpreter             = false;
 const char *gPrintExtensionsToFile = nullptr;
 const char *gRequestedExtensions   = nullptr;
@@ -66,6 +68,8 @@ bool PerfTestArg(int *argc, char **argv, int argIndex)
            ParseIntArg("--steps-per-trial", argc, argv, argIndex, &gStepsPerTrial) ||
            ParseIntArg("--max-steps-performed", argc, argv, argIndex, &gMaxStepsPerformed) ||
            ParseIntArg("--fixed-test-time", argc, argv, argIndex, &gFixedTestTime) ||
+           ParseIntArg("--fixed-test-time-with-warmup", argc, argv, argIndex,
+                       &gFixedTestTimeWithWarmup) ||
            ParseIntArg("--warmup-trials", argc, argv, argIndex, &gWarmupTrials) ||
            ParseIntArg("--warmup-steps", argc, argv, argIndex, &gWarmupSteps) ||
            ParseIntArg("--calibration-time", argc, argv, argIndex, &gCalibrationTimeSeconds) ||
@@ -111,6 +115,9 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 
     if (gOneFrameOnly)
     {
+        // Ensure defaults were provided for params we're about to set
+        ASSERT(gStepsPerTrial == 0 && gWarmupTrials == 3);
+
         gStepsPerTrial = 1;
         gWarmupTrials  = 0;
     }
@@ -122,6 +129,9 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 
     if (gMaxStepsPerformed > 0)
     {
+        // Ensure defaults were provided for params we're about to set
+        ASSERT(gWarmupTrials == 3 && gTestTrials == 3 && gTrialTimeSeconds == 0);
+
         gWarmupTrials     = 0;
         gTestTrials       = 1;
         gTrialTimeSeconds = 36000;
@@ -129,10 +139,28 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 
     if (gFixedTestTime != 0)
     {
+        // Ensure defaults were provided for params we're about to set
+        ASSERT(gTrialTimeSeconds == 0 && gStepsPerTrial == 0 && gTestTrials == 3 &&
+               gWarmupTrials == 3);
+
         gTrialTimeSeconds = gFixedTestTime;
         gStepsPerTrial    = std::numeric_limits<int>::max();
         gTestTrials       = 1;
         gWarmupTrials     = 0;
+    }
+
+    if (gFixedTestTimeWithWarmup != 0)
+    {
+        // Ensure defaults were provided for params we're about to set
+        ASSERT(gTrialTimeSeconds == 0 && gStepsPerTrial == 0 && gTestTrials == 3 &&
+               gWarmupTrials == 3);
+
+        // This is equivalent to
+        // --trial-time X --steps-per-trial INF --trials 1 --warmup-trials 1
+        gTrialTimeSeconds = gFixedTestTimeWithWarmup;
+        gStepsPerTrial    = std::numeric_limits<int>::max();
+        gTestTrials       = 1;
+        gWarmupTrials     = 1;
     }
 
     if (gNoWarmup)

@@ -64,6 +64,7 @@ Several command-line arguments control how the tests run:
 * `--calibration-time`: Run each test calibration step in a fixed time. Defaults to 1 second.
 * `--trial-time x` or `--max-trial-time x`: Run each test trial under this max time. Defaults to 10 seconds.
 * `--fixed-test-time x`: Run the tests until this much time has elapsed.
+* `--fixed-test-time-with-warmup x`: Start with a warmup trial, then run the tests until this much time has elapsed.
 * `--trials`: Number of times to repeat testing. Defaults to 3.
 * `--no-finish`: Don't call glFinish after each test trial.
 * `--validation`: Enable serialization validation in the trace tests. Normally used with SwiftShader and retracing.
