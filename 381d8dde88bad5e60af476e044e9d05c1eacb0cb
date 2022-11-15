@@ -16,6 +16,24 @@
       "message": "why are the functions `valid()` and `destroy()` removed from the class?",
       "revId": "381d8dde88bad5e60af476e044e9d05c1eacb0cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba70e38e_10ace150",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-15T19:58:28Z",
+      "side": 1,
+      "message": "They are not been used.",
+      "parentUuid": "d6429193_0d32a874",
+      "revId": "381d8dde88bad5e60af476e044e9d05c1eacb0cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
