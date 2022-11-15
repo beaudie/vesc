@@ -16,6 +16,24 @@
       "message": "I did some limited testing on my Chromebook (general browsing + WebGL) and this _seems_ to work. I needed to remove the corresponding files from the BUILD 9https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/BUILD.gn;l\u003d165;drc\u003d5e95a4d9b7de93d727f12888145938b84812bea5) to get it compiling though.",
       "revId": "94ab712c03f185b06f83000eaf203a8c128714d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e419a542_d8e947db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-15T15:59:14Z",
+      "side": 1,
+      "message": "Whoops, this is what we get having no cros bots on the CQ",
+      "parentUuid": "bb0054fb_3a67192b",
+      "revId": "94ab712c03f185b06f83000eaf203a8c128714d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
