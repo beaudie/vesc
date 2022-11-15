@@ -16,6 +16,24 @@
       "message": "Does that fix the leak? Last time when I tried, it appears valgrind still reports leak and run all tests still crash. But maybe I did not fix it right.",
       "revId": "dbb2e0e50780f37cc1f9eef43b12e7b40b248552",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93331fa1_68eedb62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-15T17:07:39Z",
+      "side": 1,
+      "message": "Yes, valgrind seems to be happy about this CL (I only tested with --gtest_filter\u003dDrawTextureTest.ColorArrayDifferentTypes/ES1_Vulkan). Note that we need to delete both eglWindow AND osWindow, maybe you were just deleting one of these.\n\nRunning all tests will still crash, that\u0027s not due to leaks but because we don\u0027t destroy windows until process termination. There is a global cache keyed by `PlatformParameters` (`static std::map\u003cangle::PlatformParameters, TestFixture\u003e gFixtures`) and no cache eviction, so when running many different configs (such as running all tests) we eventually run out of X windows and crash.",
+      "parentUuid": "2cf7d8f3_f73db91d",
+      "revId": "dbb2e0e50780f37cc1f9eef43b12e7b40b248552",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
