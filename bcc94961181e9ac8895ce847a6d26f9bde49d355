@@ -56,6 +56,30 @@
       },
       "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbeb57e_001865f0",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-15T02:10:28Z",
+      "side": 1,
+      "message": "It could but this file seems to use the old style throughout. We may do a follow-up CL later.",
+      "parentUuid": "ba3d0bd3_af682923",
+      "range": {
+        "startLine": 660,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 19
+      },
+      "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
