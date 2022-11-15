@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c95cead_d13d86e7",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-15T22:41:41Z",
+      "side": 1,
+      "message": "Done. Also did the same for a few other instances, such as `BufferBlock::init()` and `BufferBlock::initWithoutVirtualBlock()`.",
+      "parentUuid": "49d9f2a2_3a11ccf5",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "24d83dc6_d9085a0d",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02d387ed_125e40d1",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-15T22:41:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24d83dc6_d9085a0d",
+      "range": {
+        "startLine": 142,
+        "startChar": 65,
+        "endLine": 142,
+        "endChar": 80
+      },
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c75d394_4ea0e86d",
@@ -71,6 +113,24 @@
       "writtenOn": "2022-11-15T15:25:55Z",
       "side": 1,
       "message": "No. `destroy` is called when the image needs to be destroyed right away (for example because the app is shutting down, and `vkQueueWaitIdel` is already called).",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c67e9174_0cc3ec3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5801,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-15T22:41:41Z",
+      "side": 1,
+      "message": "I see. Thanks for the clarification.",
+      "parentUuid": "5c75d394_4ea0e86d",
       "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
