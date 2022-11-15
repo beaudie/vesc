@@ -2314,6 +2314,9 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    MemoryAllocationType getMemoryAllocationType() const { return mMemoryAllocationType; }
+    VkDeviceSize getSize() const { return mSize; }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2625,6 +2628,10 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
 
     std::vector<vk::GarbageObject> mImageAndViewGarbage;
+
+    // Used for memory allocation tracking.
+    VkDeviceSize mSize;
+    MemoryAllocationType mMemoryAllocationType;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
