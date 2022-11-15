@@ -514,8 +514,8 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             ANGLE_TRACE_EVENT0("gpu.angle", "processTask::FlushAndQueueSubmit");
             // End command buffer
 
-            // Call submitFrame()
-            ANGLE_TRY(mCommandQueue.submitFrame(
+            // Call submitCommands()
+            ANGLE_TRY(mCommandQueue.submitCommands(
                 this, task->hasProtectedContent(), task->getPriority(), task->getWaitSemaphores(),
                 task->getWaitSemaphoreStageMasks(), task->getSemaphore(),
                 std::move(task->getGarbage()), std::move(task->getCommandBuffersToReset()),
@@ -732,7 +732,7 @@ VkResult CommandProcessor::present(egl::ContextPriority priority,
     return result;
 }
 
-angle::Result CommandProcessor::submitFrame(
+angle::Result CommandProcessor::submitCommands(
     Context *context,
     bool hasProtectedContent,
     egl::ContextPriority priority,
@@ -1091,7 +1091,7 @@ Serial CommandQueue::reserveSubmitSerial()
     return returnSerial;
 }
 
-angle::Result CommandQueue::submitFrame(
+angle::Result CommandQueue::submitCommands(
     Context *context,
     bool hasProtectedContent,
     egl::ContextPriority priority,
