@@ -3098,10 +3098,10 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
         garbage = std::move(mCurrentGarbage);
     }
 
-    ANGLE_TRY(mRenderer->submitFrame(this, hasProtectedContent(), mContextPriority,
-                                     std::move(mWaitSemaphores),
-                                     std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-                                     std::move(garbage), &mCommandPools, submitSerialOut));
+    ANGLE_TRY(mRenderer->submitCommands(this, hasProtectedContent(), mContextPriority,
+                                        std::move(mWaitSemaphores),
+                                        std::move(mWaitSemaphoreStageMasks), signalSemaphore,
+                                        std::move(garbage), &mCommandPools, submitSerialOut));
 
     getShareGroup()->releaseResourceUseLists(*submitSerialOut);
     // Now that we have processed resourceUseList, some of pending garbage may no longer pending

@@ -298,7 +298,7 @@ class CommandQueueInterface : angle::NonCopyable
                                          uint64_t timeout)             = 0;
     virtual angle::Result waitIdle(Context *context, uint64_t timeout) = 0;
     virtual Serial reserveSubmitSerial()                               = 0;
-    virtual angle::Result submitFrame(
+    virtual angle::Result submitCommands(
         Context *context,
         bool hasProtectedContent,
         egl::ContextPriority priority,
@@ -365,16 +365,16 @@ class CommandQueue final : public CommandQueueInterface
 
     Serial reserveSubmitSerial() override;
 
-    angle::Result submitFrame(Context *context,
-                              bool hasProtectedContent,
-                              egl::ContextPriority priority,
-                              const std::vector<VkSemaphore> &waitSemaphores,
-                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-                              const Semaphore *signalSemaphore,
-                              GarbageList &&currentGarbage,
-                              SecondaryCommandBufferList &&commandBuffersToReset,
-                              SecondaryCommandPools *commandPools,
-                              Serial submitQueueSerial) override;
+    angle::Result submitCommands(Context *context,
+                                 bool hasProtectedContent,
+                                 egl::ContextPriority priority,
+                                 const std::vector<VkSemaphore> &waitSemaphores,
+                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
+                                 const Semaphore *signalSemaphore,
+                                 GarbageList &&currentGarbage,
+                                 SecondaryCommandBufferList &&commandBuffersToReset,
+                                 SecondaryCommandPools *commandPools,
+                                 Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
                                     bool hasProtectedContent,
@@ -525,16 +525,16 @@ class CommandProcessor final : public Context, public CommandQueueInterface
 
     Serial reserveSubmitSerial() override;
 
-    angle::Result submitFrame(Context *context,
-                              bool hasProtectedContent,
-                              egl::ContextPriority priority,
-                              const std::vector<VkSemaphore> &waitSemaphores,
-                              const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-                              const Semaphore *signalSemaphore,
-                              GarbageList &&currentGarbage,
-                              SecondaryCommandBufferList &&commandBuffersToReset,
-                              SecondaryCommandPools *commandPools,
-                              Serial submitQueueSerial) override;
+    angle::Result submitCommands(Context *context,
+                                 bool hasProtectedContent,
+                                 egl::ContextPriority priority,
+                                 const std::vector<VkSemaphore> &waitSemaphores,
+                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
+                                 const Semaphore *signalSemaphore,
+                                 GarbageList &&currentGarbage,
+                                 SecondaryCommandBufferList &&commandBuffersToReset,
+                                 SecondaryCommandPools *commandPools,
+                                 Serial submitQueueSerial) override;
 
     angle::Result queueSubmitOneOff(Context *context,
                                     bool hasProtectedContent,
