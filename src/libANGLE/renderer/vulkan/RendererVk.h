@@ -129,6 +129,60 @@ class WaitableCompressEvent
     std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
 };
 
+// Used to designate memory allocation type for tracking purposes.
+enum class MemoryAllocationType
+{
+    Other          = 0,
+    Image          = 1,
+    ImageExternal  = 2,
+    Buffer         = 3,
+    BufferExternal = 4,
+    BufferPool     = 5,
+    Total          = 6,
+
+    InvalidEnum = 7,
+    EnumCount   = InvalidEnum,
+};
+
+constexpr const char *kMemoryAllocationTypeMessage[] = {
+    "Other", "Image", "ImageExternal", "Buffer", "BufferExternal", "BufferPool", "Total", "Invalid",
+};
+constexpr const uint32_t kMemoryAllocationTypeCount =
+    static_cast<uint32_t>(MemoryAllocationType::EnumCount);
+
+// Used to store memory allocation information for tracking purposes.
+struct MemoryAllocationInfo
+{
+    MemoryAllocationInfo()
+        : id(0), allocType(MemoryAllocationType::Other), handle(nullptr), size(0), offset(0)
+    {}
+    uint64_t id;
+    MemoryAllocationType allocType;
+    void *handle;
+    VkDeviceSize size;
+    VkDeviceSize offset;
+};
+
+class MemoryAllocInfoMapKey
+{
+  public:
+    MemoryAllocInfoMapKey() : handle(nullptr), offset(0) {}
+    MemoryAllocInfoMapKey(void *handle, VkDeviceSize offset) : handle(handle), offset(offset) {}
+
+    bool operator<(const MemoryAllocInfoMapKey &rhs) const
+    {
+        if (handle != rhs.handle)
+        {
+            return reinterpret_cast<uint64_t>(handle) < reinterpret_cast<uint64_t>(rhs.handle);
+        }
+        return offset < rhs.offset;
+    }
+
+  private:
+    void *handle;
+    VkDeviceSize offset;
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -623,6 +677,91 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
+    template <typename HandleT>
+    void onMemoryAlloc(HandleT handle,
+                       MemoryAllocationType allocType,
+                       VkDeviceSize size,
+                       VkDeviceSize offset = 0)
+    {
+        // TODO: Use ANGLE_ENABLE_MEMORY_ALLOC_LOGGING
+        // Make sure that offset is 0 except for suballocation.
+        ASSERT(allocType == MemoryAllocationType::BufferPool || offset == 0);
+        std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+
+        auto allocTypeIndex      = static_cast<uint32_t>(allocType);
+        auto allocTypeTotalIndex = static_cast<uint32_t>(MemoryAllocationType::Total);
+
+        mActiveMemoryAllocations[allocTypeIndex]++;
+        mActiveMemoryAllocationsSize[allocTypeIndex] += size;
+
+        mActiveMemoryAllocations[allocTypeTotalIndex]++;
+        mActiveMemoryAllocationsSize[allocTypeTotalIndex] += size;
+
+        mTotalMemoryAllocations[allocTypeIndex]++;
+        mTotalMemoryAllocationsSize[allocTypeIndex] += size;
+
+        mTotalMemoryAllocations[allocTypeTotalIndex]++;
+        mTotalMemoryAllocationsSize[allocTypeTotalIndex] += size;
+
+        // Add the new allocation to the memory tracker.
+        MemoryAllocationInfo memAllocLogInfo;
+        memAllocLogInfo.id        = ++mMemoryAllocationID;
+        memAllocLogInfo.allocType = allocType;
+        memAllocLogInfo.size      = size;
+        memAllocLogInfo.offset    = offset;
+        memAllocLogInfo.handle    = reinterpret_cast<void *>(handle);
+
+        MemoryAllocInfoMapKey memoryAllocInfoMapKey(memAllocLogInfo.handle, memAllocLogInfo.offset);
+        mMemoryAllocationTracker[angle::getBacktraceInfo()].insert(
+            std::make_pair(memoryAllocInfoMapKey, memAllocLogInfo));
+
+        //        WARN() << "[ALLOC] ID " << memAllocLogInfo.id << ": Allocation of size "
+        //               << memAllocLogInfo.size << " (Offset " << memAllocLogInfo.offset << ") for
+        //               object "
+        //               << memAllocLogInfo.handle
+        //               << " | Type: " << kMemoryAllocationTypeMessage[allocTypeIndex];
+    }
+
+    template <typename HandleT>
+    void onMemoryDealloc(HandleT handle, VkDeviceSize offset = 0)
+    {
+        // TODO: Use ANGLE_ENABLE_MEMORY_ALLOC_LOGGING
+        for (auto &memLogPerBacktrace : mMemoryAllocationTracker)
+        {
+            MemoryAllocInfoMapKey memoryAllocInfoMapKey(reinterpret_cast<void *>(handle), offset);
+            MemoryAllocInfoMap &memLogMap = memLogPerBacktrace.second;
+            std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+            if (memLogMap.find(memoryAllocInfoMapKey) != memLogMap.end())
+            {
+                // Object found; remove it from the allocation tracker.
+                MemoryAllocationInfo *memLogEntry = &memLogMap[memoryAllocInfoMapKey];
+
+                // Make sure that offset is 0 except for suballocation.
+                ASSERT(memLogEntry->allocType == MemoryAllocationType::BufferPool || offset == 0);
+
+                // Remove the new allocation from the memory tracker.
+                auto allocTypeIndex      = static_cast<uint32_t>(memLogEntry->allocType);
+                auto allocTypeTotalIndex = static_cast<uint32_t>(MemoryAllocationType::Total);
+
+                mActiveMemoryAllocations[allocTypeIndex]--;
+                mActiveMemoryAllocationsSize[allocTypeIndex] -= memLogEntry->size;
+
+                mActiveMemoryAllocations[allocTypeTotalIndex]--;
+                mActiveMemoryAllocationsSize[allocTypeTotalIndex] -= memLogEntry->size;
+
+                //                WARN() << "[DEALLOC] ID " << memLogEntry->id << ": Deallocation of
+                //                size "
+                //                       << memLogEntry->size << " (Offset " << memLogEntry->offset
+                //                       << ") for object "
+                //                       << memLogEntry->handle
+                //                       << " | Type: " <<
+                //                       kMemoryAllocationTypeMessage[allocTypeIndex];
+
+                memLogMap.erase(memoryAllocInfoMapKey);
+            }
+        }
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -874,6 +1013,19 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+
+    // For memory allocation tracking.
+    std::mutex mMemoryAllocationMutex;
+    uint64_t mMemoryAllocationID;
+
+    using MemoryAllocInfoMap = std::map<MemoryAllocInfoMapKey, MemoryAllocationInfo>;
+    std::map<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationTracker;
+
+    std::array<uint64_t, kMemoryAllocationTypeCount> mActiveMemoryAllocations;
+    std::array<VkDeviceSize, kMemoryAllocationTypeCount> mActiveMemoryAllocationsSize;
+
+    std::array<uint64_t, kMemoryAllocationTypeCount> mTotalMemoryAllocations;
+    std::array<VkDeviceSize, kMemoryAllocationTypeCount> mTotalMemoryAllocationsSize;
 };
 
 }  // namespace rx
