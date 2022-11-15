@@ -16,6 +16,29 @@
       "message": "Thanks!",
       "revId": "431cfef183fa99e25433774df107f647c1d0a747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad12ff3f_f90eb101",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-15T19:56:09Z",
+      "side": 1,
+      "message": "Could you please rename things to look like this? The current naming makes it very hard to follow who does what. I think I\u0027m beginning to understand why you have two classes, which hopefully the following naming reflects:\n\n```\nusing SecondaryCommandMemoryAllocator   \u003d XYZCommandMemoryAllocator;\nusing SecondaryCommandBlockPool         \u003d XYZCommandBlockPool;\nusing SecondaryCommandBlockAllocator    \u003d XYZCommandBlockAllocator;\n```\n\nWhere `XYZ` is either `Dedicated` or `Ring` (IIUC, the pool allocator is one allocator per CBH, but the ring allocator is shared? If so, `Shared` is better than `Ring`).\n\nI think that way it\u0027s clear that \"memory allocator\" is the generic memory allocator, while the block pool and allocator deal with blocks of memory.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 60
+      },
+      "revId": "431cfef183fa99e25433774df107f647c1d0a747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
