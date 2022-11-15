@@ -92,6 +92,26 @@ struct SkippedSyncvalMessage
     const char *messageContents2                      = "";
     bool isDueToNonConformantCoherentFramebufferFetch = false;
 };
+
+// Used to designate memory allocation type for tracking purposes.
+enum class MemoryAllocationType
+{
+    Other          = 0,
+    Image          = 1,
+    ImageExternal  = 2,
+    Buffer         = 3,
+    BufferExternal = 4,
+    BufferPool     = 5,
+
+    InvalidEnum = 6,
+    EnumCount   = InvalidEnum,
+};
+
+constexpr const char *kMemoryAllocationTypeMessage[] = {
+    "Other", "Image", "ImageExternal", "Buffer", "BufferExternal", "BufferPool", "Invalid",
+};
+constexpr const uint32_t kMemoryAllocationTypeCount =
+    static_cast<uint32_t>(MemoryAllocationType::EnumCount);
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -623,6 +643,27 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
+    void onMemoryAlloc(vk::MemoryAllocationType allocType, VkDeviceSize size)
+    {
+        // Add the new allocation to the allocation tracker.
+        auto allocTypeIndex = static_cast<uint32_t>(allocType);
+        mActiveMemoryAllocationsSize[allocTypeIndex] += size;
+        // WARN() << "[ALLOC] Total allocated memory: " <<
+        // mActiveMemoryAllocationsSize[allocTypeIndex]
+        //        << " Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+    }
+
+    void onMemoryDealloc(vk::MemoryAllocationType allocType, VkDeviceSize size)
+    {
+        // Remove the new allocation from the allocation tracker.
+        auto allocTypeIndex = static_cast<uint32_t>(allocType);
+
+        mActiveMemoryAllocationsSize[allocTypeIndex] -= size;
+        // WARN() << "[DEALC] Total allocated memory: " <<
+        // mActiveMemoryAllocationsSize[allocTypeIndex]
+        //        << " Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -874,6 +915,10 @@ class RendererVk : angle::NonCopyable
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
+
+    // For memory allocation tracking.
+    std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
+        mActiveMemoryAllocationsSize;
 };
 
 }  // namespace rx

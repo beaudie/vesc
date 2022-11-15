@@ -25,6 +25,10 @@ class RendererVk;
 
 namespace vk
 {
+
+// Used for memory allocation tracking.
+enum class MemoryAllocationType;
+
 angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
                                         EGLClientBuffer clientBuffer,
                                         VkMemoryPropertyFlags memoryProperties,
