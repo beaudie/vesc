@@ -824,14 +824,22 @@ void ANGLETestBase::ANGLETestTearDown()
         mFixture->eglWindow->destroySurface();
     }
 
-    // Check for quit message
     Event myEvent;
+    bool windowClosed = false;
     while (mFixture->osWindow->popEvent(&myEvent))
     {
         if (myEvent.Type == Event::EVENT_CLOSED)
         {
-            exit(0);
+            windowClosed = true;
         }
+    }
+
+    EGLWindow::Delete(&mFixture->eglWindow);
+    OSWindow::Delete(&mFixture->osWindow);
+
+    if (windowClosed)
+    {
+        exit(0);
     }
 }
 
