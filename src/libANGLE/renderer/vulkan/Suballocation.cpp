@@ -19,7 +19,9 @@ namespace rx
 namespace vk
 {
 // BufferBlock implementation.
-BufferBlock::BufferBlock() : mMemoryPropertyFlags(0), mSize(0), mMappedMemory(nullptr) {}
+BufferBlock::BufferBlock()
+    : mMemoryPropertyFlags(0), mSize(0), mAllocatedBufferSize(0), mMappedMemory(nullptr)
+{}
 
 BufferBlock::BufferBlock(BufferBlock &&other)
     : mVirtualBlock(std::move(other.mVirtualBlock)),
@@ -27,6 +29,7 @@ BufferBlock::BufferBlock(BufferBlock &&other)
       mDeviceMemory(std::move(other.mDeviceMemory)),
       mMemoryPropertyFlags(other.mMemoryPropertyFlags),
       mSize(other.mSize),
+      mAllocatedBufferSize(other.mAllocatedBufferSize),
       mMappedMemory(other.mMappedMemory),
       mSerial(other.mSerial),
       mCountRemainsEmpty(0)
@@ -39,6 +42,7 @@ BufferBlock &BufferBlock::operator=(BufferBlock &&other)
     std::swap(mDeviceMemory, other.mDeviceMemory);
     std::swap(mMemoryPropertyFlags, other.mMemoryPropertyFlags);
     std::swap(mSize, other.mSize);
+    std::swap(mAllocatedBufferSize, other.mAllocatedBufferSize);
     std::swap(mMappedMemory, other.mMappedMemory);
     std::swap(mSerial, other.mSerial);
     std::swap(mCountRemainsEmpty, other.mCountRemainsEmpty);
@@ -63,6 +67,8 @@ void BufferBlock::destroy(RendererVk *renderer)
         unmap(device);
     }
 
+    renderer->onMemoryDealloc(MemoryAllocationType::Buffer, mAllocatedBufferSize);
+
     mVirtualBlock.destroy(device);
     mBuffer.destroy(device);
     mDeviceMemory.destroy(device);
@@ -86,6 +92,7 @@ angle::Result BufferBlock::init(Context *context,
     mDeviceMemory        = std::move(deviceMemory);
     mMemoryPropertyFlags = memoryPropertyFlags;
     mSize                = size;
+    mAllocatedBufferSize = size;
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 
@@ -96,7 +103,8 @@ void BufferBlock::initWithoutVirtualBlock(Context *context,
                                           Buffer &buffer,
                                           DeviceMemory &deviceMemory,
                                           VkMemoryPropertyFlags memoryPropertyFlags,
-                                          VkDeviceSize size)
+                                          VkDeviceSize size,
+                                          VkDeviceSize allocatedBufferSize)
 {
     RendererVk *renderer = context->getRenderer();
     ASSERT(!mVirtualBlock.valid());
@@ -107,6 +115,7 @@ void BufferBlock::initWithoutVirtualBlock(Context *context,
     mDeviceMemory        = std::move(deviceMemory);
     mMemoryPropertyFlags = memoryPropertyFlags;
     mSize                = size;
+    mAllocatedBufferSize = allocatedBufferSize;
     mMappedMemory        = nullptr;
     mSerial              = renderer->getResourceSerialFactory().generateBufferSerial();
 }
@@ -121,6 +130,16 @@ void BufferBlock::unmap(const VkDevice device)
 {
     mDeviceMemory.unmap(device);
     mMappedMemory = nullptr;
+}
+
+VkResult BufferBlock::allocate(VkDeviceSize size,
+                               VkDeviceSize alignment,
+                               VmaVirtualAllocation *allocationOut,
+                               VkDeviceSize *offsetOut)
+{
+    std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
+    mCountRemainsEmpty = 0;
+    return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
 }
 
 void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)

@@ -1523,6 +1523,16 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = displayVk->getDevice();
 
+    if (mDepthStencilImage.valid())
+    {
+        renderer->onMemoryDealloc(mDepthStencilImage.getMemoryAllocationType(),
+                                  mDepthStencilImage.getSize());
+    }
+    if (mColorImageMS.valid())
+    {
+        renderer->onMemoryDealloc(mColorImageMS.getMemoryAllocationType(), mColorImageMS.getSize());
+    }
+
     mDepthStencilImage.destroy(renderer);
     mDepthStencilImageViews.destroy(device);
     mColorImageMS.destroy(renderer);
