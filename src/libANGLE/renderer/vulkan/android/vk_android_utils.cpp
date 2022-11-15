@@ -22,6 +22,10 @@ namespace rx
 {
 namespace vk
 {
+
+// Used for memory allocation tracking.
+enum class MemoryAllocationType;
+
 angle::Result GetClientBufferMemoryRequirements(ContextVk *contextVk,
                                                 const AHardwareBuffer *hardwareBuffer,
                                                 VkMemoryRequirements &memRequirements)
@@ -80,9 +84,10 @@ angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
     importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     importHardwareBufferInfo.buffer = hardwareBuffer;
 
-    ANGLE_TRY(AllocateBufferMemoryWithRequirements(
-        contextVk, memoryProperties, externalMemoryRequirements, &importHardwareBufferInfo, buffer,
-        memoryPropertyFlagsOut, deviceMemoryOut));
+    ANGLE_TRY(AllocateBufferMemoryWithRequirements(contextVk, MemoryAllocationType::BufferExternal,
+                                                   memoryProperties, externalMemoryRequirements,
+                                                   &importHardwareBufferInfo, buffer,
+                                                   memoryPropertyFlagsOut, deviceMemoryOut));
 
     functions.acquire(hardwareBuffer);
 
