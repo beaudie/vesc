@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d3c3ce_71b289fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-15T00:50:31Z",
+      "side": 1,
+      "message": "Updates:\n1) Resolved header config dependencies error.\n2) Removed line which added ANGLE_USE_GBM define. Let https://gerrit.sarc.samsung.com/c/angle/+/17051 change adds it because that will actually enable the gbm winsys.",
+      "revId": "0644986f5149afcf47a73dd157f68393fb0d4e78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
