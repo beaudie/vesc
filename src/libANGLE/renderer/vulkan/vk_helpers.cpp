@@ -2985,6 +2985,8 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
     ANGLE_TRY(block->init(context, buffer.get(), mVirtualBlockCreateFlags, deviceMemory.get(),
                           memoryPropertyFlagsOut, mSize));
+    context->getRenderer()->onMemoryAlloc(deviceMemory.get().getHandle(),
+                                          MemoryAllocationType::Buffer, mSize);
 
     if (mHostVisible)
     {
@@ -3043,6 +3045,8 @@ angle::Result BufferPool::allocateBuffer(Context *context,
 
         suballocation->initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
                                             memoryPropertyFlagsOut, alignedSize);
+        context->getRenderer()->onMemoryAlloc(deviceMemory.get().getHandle(),
+                                              MemoryAllocationType::Buffer, alignedSize);
         if (mHostVisible)
         {
             ANGLE_VK_TRY(context, suballocation->map(context));
@@ -3064,9 +3068,12 @@ angle::Result BufferPool::allocateBuffer(Context *context,
             continue;
         }
 
-        if (block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS)
+        if (block->allocate(context->getRenderer(), alignedSize, alignment, &allocation, &offset) ==
+            VK_SUCCESS)
         {
-            suballocation->init(context->getDevice(), block.get(), allocation, offset, alignedSize);
+            context->getRenderer()->onMemoryAlloc(
+                block->getHandle(), MemoryAllocationType::BufferPool, alignedSize, offset);
+            suballocation->init(block.get(), allocation, offset, alignedSize);
             return angle::Result::Continue;
         }
         ++iter;
@@ -3084,8 +3091,11 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         }
         else
         {
-            ANGLE_VK_TRY(context, block->allocate(alignedSize, alignment, &allocation, &offset));
-            suballocation->init(context->getDevice(), block.get(), allocation, offset, alignedSize);
+            ANGLE_VK_TRY(context, block->allocate(context->getRenderer(), alignedSize, alignment,
+                                                  &allocation, &offset));
+            context->getRenderer()->onMemoryAlloc(
+                block->getHandle(), MemoryAllocationType::BufferPool, alignedSize, offset);
+            suballocation->init(block.get(), allocation, offset, alignedSize);
             mBufferBlocks.push_back(std::move(block));
             mEmptyBufferBlocks.pop_back();
             mNumberOfNewBuffersNeededSinceLastPrune++;
@@ -3099,9 +3109,12 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     // Sub-allocate from the bufferBlock.
     std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
     ANGLE_VK_CHECK(context,
-                   block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS,
+                   block->allocate(context->getRenderer(), alignedSize, alignment, &allocation,
+                                   &offset) == VK_SUCCESS,
                    VK_ERROR_OUT_OF_DEVICE_MEMORY);
-    suballocation->init(context->getDevice(), block.get(), allocation, offset, alignedSize);
+    context->getRenderer()->onMemoryAlloc(block->getHandle(), MemoryAllocationType::BufferPool,
+                                          alignedSize, offset);
+    suballocation->init(block.get(), allocation, offset, alignedSize);
     mNumberOfNewBuffersNeededSinceLastPrune++;
 
     return angle::Result::Continue;
@@ -4431,7 +4444,8 @@ angle::Result BufferHelper::init(Context *context,
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), deviceMemory.get(),
                                         memoryPropertyFlagsOut, requestedCreateInfo.size);
-
+    context->getRenderer()->onMemoryAlloc(deviceMemory.get().getHandle(),
+                                          MemoryAllocationType::Buffer, requestedCreateInfo.size);
     if (isHostVisible())
     {
         uint8_t *ptrOut;
@@ -4475,7 +4489,9 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
 
     mSuballocation.initWithEntireBuffer(contextVk, buffer.get(), deviceMemory.get(),
                                         memoryPropertyFlagsOut, requestedCreateInfo.size);
-
+    contextVk->getRenderer()->onMemoryAlloc(deviceMemory.get().getHandle(),
+                                            MemoryAllocationType::BufferExternal,
+                                            requestedCreateInfo.size);
     if (isHostVisible())
     {
         uint8_t *ptrOut;
@@ -5372,6 +5388,8 @@ void ImageHelper::deriveExternalImageTiling(const void *createInfoChain)
 
 void ImageHelper::releaseImage(RendererVk *renderer)
 {
+    renderer->onMemoryDealloc(mDeviceMemory.getHandle());  // initMemory
+
     CollectGarbage(&mImageAndViewGarbage, &mImage, &mDeviceMemory);
     // Notify us if the application pattern causes the views to keep getting reallocated and create
     // infinite garbage
@@ -5578,6 +5596,9 @@ angle::Result ImageHelper::initMemory(Context *context,
     ANGLE_TRY(AllocateImageMemory(context, flags, &flags, nullptr, &mImage, &mDeviceMemory, &size));
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
+    context->getRenderer()->onMemoryAlloc(mDeviceMemory.getHandle(), MemoryAllocationType::Image,
+                                          size);
+
     RendererVk *renderer = context->getRenderer();
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -5622,6 +5643,10 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, flags, memoryRequirements, extraAllocationInfo[memoryPlane],
             bindImagePlaneMemoryInfoPtr, &mImage, &mDeviceMemory));
+
+        context->getRenderer()->onMemoryAlloc(mDeviceMemory.getHandle(),
+                                              MemoryAllocationType::ImageExternal,
+                                              memoryRequirements.size);
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
@@ -5773,6 +5798,7 @@ angle::Result ImageHelper::initReinterpretedLayerImageView(Context *context,
 
 void ImageHelper::destroy(RendererVk *renderer)
 {
+    releaseImage(renderer);  // TODO: Is it necessary to always release before destroy?
     // destroy any pending garbage objects (most likely from ImageViewHelper) at this point
     for (GarbageObject &object : mImageAndViewGarbage)
     {
