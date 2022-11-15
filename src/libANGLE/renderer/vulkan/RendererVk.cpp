@@ -3652,7 +3652,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, supportsExternalFenceFd,
         ExtensionFound(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME, deviceExtensionNames));
 
-#if defined(ANGLE_PLATFORM_ANDROID)
     if ((mFeatures.supportsExternalFenceCapabilities.enabled &&
          mFeatures.supportsExternalSemaphoreCapabilities.enabled) ||
         mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
@@ -3690,7 +3689,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                                 (mFeatures.supportsExternalFenceFd.enabled &&
                                  mFeatures.supportsExternalSemaphoreFd.enabled));
     }
-#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsShaderStencilExport,
