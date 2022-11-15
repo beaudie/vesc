@@ -843,6 +843,11 @@ angle::Result CommandProcessor::ensureNoPendingWork(Context *context)
     return waitForWorkComplete(context);
 }
 
+bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
+{
+    return use.serial > mLastSubmittedQueueSerial;
+}
+
 // CommandQueue implementation.
 CommandQueue::CommandQueue() : mCurrentQueueSerial(mQueueSerialFactory.generate()), mPerfCounters{}
 {}
@@ -976,7 +981,7 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
     }
 
     // Now clean up RendererVk garbage
-    renderer->cleanupGarbage(getLastCompletedQueueSerial());
+    renderer->cleanupGarbage();
 
     return angle::Result::Continue;
 }
@@ -1358,7 +1363,22 @@ VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
 
 bool CommandQueue::isBusy() const
 {
-    return mLastSubmittedQueueSerial > getLastCompletedQueueSerial();
+    return mLastSubmittedQueueSerial > mLastCompletedQueueSerial.getSerial();
+}
+
+bool CommandQueue::hasUnfinishedUse(const vk::ResourceUse &use) const
+{
+    return use.counter > 1 || use.serial > mLastCompletedQueueSerial.getSerial();
+}
+
+bool CommandQueue::useInRunningCommands(const vk::ResourceUse &use) const
+{
+    return use.serial > mLastCompletedQueueSerial.getSerial();
+}
+
+bool CommandQueue::hasUnsubmittedUse(const vk::ResourceUse &use) const
+{
+    return use.serial > mLastSubmittedQueueSerial;
 }
 
 // QueuePriorities:
