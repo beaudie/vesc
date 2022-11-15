@@ -1174,7 +1174,7 @@ void InitExtendedDynamicStateEXTFunctions(VkDevice device)
     GET_DEVICE_FUNC(vkCmdSetCullModeEXT);
     GET_DEVICE_FUNC(vkCmdSetDepthBoundsTestEnableEXT);
     GET_DEVICE_FUNC(vkCmdSetDepthCompareOpEXT);
-    GET_DEVICE_FUNC(vkCmdSetDepthTestEnableEXT);
+    //    GET_DEVICE_FUNC(vkCmdSetDepthTestEnableEXT);
     GET_DEVICE_FUNC(vkCmdSetDepthWriteEnableEXT);
     GET_DEVICE_FUNC(vkCmdSetFrontFaceEXT);
     GET_DEVICE_FUNC(vkCmdSetPrimitiveTopologyEXT);

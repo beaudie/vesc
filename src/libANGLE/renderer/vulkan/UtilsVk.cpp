@@ -1102,7 +1102,7 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     {
         commandBuffer->setCullMode(VK_CULL_MODE_NONE);
         commandBuffer->setFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        commandBuffer->setDepthTestEnable(VK_FALSE);
+        // commandBuffer->setDepthTestEnable(VK_FALSE);
         commandBuffer->setStencilTestEnable(VK_FALSE);
     }
     if (contextVk->getFeatures().supportsExtendedDynamicState2.enabled)
@@ -2233,9 +2233,9 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         contextVk->getRenderer()->getPhysicalDeviceFeatures().depthClamp == VK_TRUE;
     if (params.clearDepth)
     {
+        pipelineDesc.setDepthTestEnabled(true);
         if (!contextVk->getFeatures().supportsExtendedDynamicState.enabled)
         {
-            pipelineDesc.setDepthTestEnabled(true);
             pipelineDesc.setDepthWriteEnabled(true);
             pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         }
@@ -2295,7 +2295,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     if (params.clearDepth && contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        commandBuffer->setDepthTestEnable(VK_TRUE);
+        //        commandBuffer->setDepthTestEnable(VK_TRUE);
         commandBuffer->setDepthWriteEnable(VK_TRUE);
         commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
     }
@@ -2593,9 +2593,13 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask(), gl::DrawBufferMask());
     }
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
-    if (blitDepth && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+    if (blitDepth)
     {
         pipelineDesc.setDepthTestEnabled(VK_TRUE);
+    }
+    if (blitDepth && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
+    {
+        //        pipelineDesc.setDepthTestEnabled(VK_TRUE);
         pipelineDesc.setDepthWriteEnabled(VK_TRUE);
         pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
     }
@@ -2693,7 +2697,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     if (blitDepth && contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        commandBuffer->setDepthTestEnable(VK_TRUE);
+        //        commandBuffer->setDepthTestEnable(VK_TRUE);
         commandBuffer->setDepthWriteEnable(VK_TRUE);
         commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
     }
@@ -3653,9 +3657,13 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
         ANGLE_TRY(ensureUnresolveResourcesInitialized(contextVk, function, totalBindingCount));
 
-        if (params.unresolveDepth && !hasExtendedDynamicState)
+        if (params.unresolveDepth)
         {
             pipelineDesc.setDepthTestEnabled(VK_TRUE);
+        }
+        if (params.unresolveDepth && !hasExtendedDynamicState)
+        {
+            //            pipelineDesc.setDepthTestEnabled(VK_TRUE);
             pipelineDesc.setDepthWriteEnabled(VK_TRUE);
             pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         }
@@ -3721,7 +3729,7 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
         if (params.unresolveDepth && hasExtendedDynamicState)
         {
-            commandBuffer->setDepthTestEnable(VK_TRUE);
+            //            commandBuffer->setDepthTestEnable(VK_TRUE);
             commandBuffer->setDepthWriteEnable(VK_TRUE);
             commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
         }
@@ -3756,9 +3764,10 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         // Disable color and depth output, and only let stencil through.
         pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask(), gl::DrawBufferMask());
 
+        pipelineDesc.setDepthTestEnabled(VK_FALSE);
         if (!hasExtendedDynamicState)
         {
-            pipelineDesc.setDepthTestEnabled(VK_FALSE);
+            //            pipelineDesc.setDepthTestEnabled(VK_FALSE);
             pipelineDesc.setDepthWriteEnabled(VK_FALSE);
 
             SetStencilStateForWrite(&pipelineDesc);
@@ -3792,7 +3801,7 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
         if (hasExtendedDynamicState)
         {
-            commandBuffer->setDepthTestEnable(VK_FALSE);
+            //            commandBuffer->setDepthTestEnable(VK_FALSE);
             commandBuffer->setDepthWriteEnable(VK_FALSE);
 
             SetStencilDynamicStateForWrite(commandBuffer);
