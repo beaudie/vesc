@@ -2233,11 +2233,12 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         contextVk->getRenderer()->getPhysicalDeviceFeatures().depthClamp == VK_TRUE;
     if (params.clearDepth)
     {
+
+        pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         if (!contextVk->getFeatures().supportsExtendedDynamicState.enabled)
         {
             pipelineDesc.setDepthTestEnabled(true);
             pipelineDesc.setDepthWriteEnabled(true);
-            pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         }
         if (supportsDepthClamp)
         {
@@ -2297,7 +2298,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     {
         commandBuffer->setDepthTestEnable(VK_TRUE);
         commandBuffer->setDepthWriteEnable(VK_TRUE);
-        commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
+        //        commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
     }
 
     if (params.clearStencil)
@@ -2593,11 +2594,15 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         pipelineDesc.setColorWriteMasks(0, gl::DrawBufferMask(), gl::DrawBufferMask());
     }
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
+    if (blitDepth)
+    {
+        pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
+    }
     if (blitDepth && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
         pipelineDesc.setDepthTestEnabled(VK_TRUE);
         pipelineDesc.setDepthWriteEnabled(VK_TRUE);
-        pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
+        //        pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
     }
 
     if (blitStencil && !contextVk->getFeatures().supportsExtendedDynamicState.enabled)
@@ -2695,7 +2700,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     {
         commandBuffer->setDepthTestEnable(VK_TRUE);
         commandBuffer->setDepthWriteEnable(VK_TRUE);
-        commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
+        //        commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
     }
 
     if (blitStencil)
@@ -3653,11 +3658,15 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
 
         ANGLE_TRY(ensureUnresolveResourcesInitialized(contextVk, function, totalBindingCount));
 
+        if (params.unresolveDepth)
+        {
+            pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
+        }
         if (params.unresolveDepth && !hasExtendedDynamicState)
         {
             pipelineDesc.setDepthTestEnabled(VK_TRUE);
             pipelineDesc.setDepthWriteEnabled(VK_TRUE);
-            pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
+            //            pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         }
 
         if (unresolveStencilWithShaderExport && !hasExtendedDynamicState)
@@ -3723,7 +3732,7 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
         {
             commandBuffer->setDepthTestEnable(VK_TRUE);
             commandBuffer->setDepthWriteEnable(VK_TRUE);
-            commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
+            //            commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
         }
 
         if (unresolveStencilWithShaderExport)

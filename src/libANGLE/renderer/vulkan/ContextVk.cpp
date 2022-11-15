@@ -770,9 +770,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     if (getFeatures().supportsExtendedDynamicState.enabled)
     {
         mDynamicStateDirtyBits |= DirtyBits{
-            DIRTY_BIT_DYNAMIC_CULL_MODE,         DIRTY_BIT_DYNAMIC_FRONT_FACE,
-            DIRTY_BIT_DYNAMIC_DEPTH_TEST_ENABLE, DIRTY_BIT_DYNAMIC_DEPTH_WRITE_ENABLE,
-            DIRTY_BIT_DYNAMIC_DEPTH_COMPARE_OP,  DIRTY_BIT_DYNAMIC_STENCIL_TEST_ENABLE,
+            DIRTY_BIT_DYNAMIC_CULL_MODE,
+            DIRTY_BIT_DYNAMIC_FRONT_FACE,
+            DIRTY_BIT_DYNAMIC_DEPTH_TEST_ENABLE,
+            DIRTY_BIT_DYNAMIC_DEPTH_WRITE_ENABLE,
+            //            DIRTY_BIT_DYNAMIC_DEPTH_COMPARE_OP,
+            DIRTY_BIT_DYNAMIC_STENCIL_TEST_ENABLE,
             DIRTY_BIT_DYNAMIC_STENCIL_OP,
         };
 
@@ -957,7 +960,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_FRONT_FACE);
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_DEPTH_TEST_ENABLED);
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_DEPTH_MASK);
-        mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_DEPTH_FUNC);
+        //        mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_DEPTH_FUNC);
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_STENCIL_TEST_ENABLED);
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_STENCIL_FUNCS_FRONT);
         mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_STENCIL_FUNCS_BACK);
@@ -4524,15 +4527,15 @@ void ContextVk::updateDepthWriteEnabled(const gl::State &glState)
 
 void ContextVk::updateDepthFunc(const gl::State &glState)
 {
-    if (getFeatures().supportsExtendedDynamicState.enabled)
-    {
-        mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_COMPARE_OP);
-    }
-    else
-    {
-        mGraphicsPipelineDesc->updateDepthFunc(&mGraphicsPipelineTransition,
-                                               glState.getDepthStencilState());
-    }
+    //    if (getFeatures().supportsExtendedDynamicState.enabled)
+    //    {
+    //        mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_COMPARE_OP);
+    //    }
+    //    else
+    //    {
+    mGraphicsPipelineDesc->updateDepthFunc(&mGraphicsPipelineTransition,
+                                           glState.getDepthStencilState());
+    //    }
 }
 
 void ContextVk::updateStencilTestEnabled(const gl::State &glState)
