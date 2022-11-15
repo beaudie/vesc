@@ -225,6 +225,9 @@ class BufferVk : public BufferImpl
     // mapped from angle internal.
     VkDeviceSize mMappedOffset;
     VkDeviceSize mMappedLength;
+
+    // Used for memory allocation tracking (used for BufferExternal allocation type).
+    VkDeviceSize mAllocatedSize;
 };
 
 }  // namespace rx

@@ -268,7 +268,8 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mHasValidData(false),
       mIsMappedForWrite(false),
       mMappedOffset(0),
-      mMappedLength(0)
+      mMappedLength(0),
+      mAllocatedSize(0)
 {}
 
 BufferVk::~BufferVk() {}
@@ -285,6 +286,12 @@ void BufferVk::release(ContextVk *contextVk)
     RendererVk *renderer = contextVk->getRenderer();
     if (mBuffer.valid())
     {
+        if (isExternalBuffer() && mAllocatedSize != 0)
+        {
+            //            renderer->onMemoryDealloc(vk::MemoryAllocationType::BufferExternal,
+            //            mAllocatedSize);
+            mAllocatedSize = 0;
+        }
         mBuffer.releaseBufferAndDescriptorSetCache(contextVk);
     }
     if (mStagingBuffer.valid())
@@ -318,6 +325,8 @@ angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
     createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
+
+    mAllocatedSize = size;
 
     return mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer);
 }
