@@ -1102,7 +1102,7 @@ void ResetDynamicState(ContextVk *contextVk, vk::RenderPassCommandBuffer *comman
     {
         commandBuffer->setCullMode(VK_CULL_MODE_NONE);
         commandBuffer->setFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        commandBuffer->setDepthTestEnable(VK_FALSE);
+        // commandBuffer->setDepthTestEnable(VK_FALSE);
         commandBuffer->setStencilTestEnable(VK_FALSE);
     }
     if (contextVk->getFeatures().supportsExtendedDynamicState2.enabled)
@@ -2233,9 +2233,9 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         contextVk->getRenderer()->getPhysicalDeviceFeatures().depthClamp == VK_TRUE;
     if (params.clearDepth)
     {
+        pipelineDesc.setDepthTestEnabled(true);
         if (!contextVk->getFeatures().supportsExtendedDynamicState.enabled)
         {
-            pipelineDesc.setDepthTestEnabled(true);
             pipelineDesc.setDepthWriteEnabled(true);
             pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
         }
@@ -2295,7 +2295,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     if (params.clearDepth && contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
-        commandBuffer->setDepthTestEnable(VK_TRUE);
+        //        commandBuffer->setDepthTestEnable(VK_TRUE);
         commandBuffer->setDepthWriteEnable(VK_TRUE);
         commandBuffer->setDepthCompareOp(VK_COMPARE_OP_ALWAYS);
     }
