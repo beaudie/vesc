@@ -16,6 +16,46 @@
       "message": "lgtm\n\nLet\u0027s get a second reviewer of this on Monday.",
       "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5ed00c1_f1d14bb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1112145
+      },
+      "writtenOn": "2022-11-15T01:06:37Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba3d0bd3_af682923",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1112145
+      },
+      "writtenOn": "2022-11-15T01:06:37Z",
+      "side": 1,
+      "message": "Could the RAII GL object helper be used for program?",
+      "range": {
+        "startLine": 660,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 19
+      },
+      "revId": "bcc94961181e9ac8895ce847a6d26f9bde49d355",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
