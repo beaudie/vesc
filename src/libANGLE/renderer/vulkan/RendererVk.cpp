@@ -1260,7 +1260,8 @@ RendererVk::RendererVk()
       mValidationMessageCount(0),
       mCommandProcessor(this),
       mSupportedVulkanPipelineStageMask(0),
-      mSupportedVulkanShaderStageMask(0)
+      mSupportedVulkanShaderStageMask(0),
+      mMemoryAllocationID(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1269,6 +1270,12 @@ RendererVk::RendererVk()
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
     ASSERT(IsLittleEndian());
+
+    // Initialize memory tracking counters.
+    mActiveMemoryAllocations.fill(0);
+    mActiveMemoryAllocationsSize.fill(0);
+    mTotalMemoryAllocations.fill(0);
+    mTotalMemoryAllocationsSize.fill(0);
 }
 
 RendererVk::~RendererVk()
