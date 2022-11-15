@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6660b4e_bc497053",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-15T15:25:55Z",
+      "side": 1,
+      "message": "These should be `noop`ed when `ANGLE_ENABLE_MEMORY_ALLOC_LOGGING` is not defined, otherwise it\u0027s incurring a huge overhead.\n\nThen you wouldn\u0027t need the `ANGLE_DEBUG_MEM_LOG` macro either.",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49d9f2a2_3a11ccf5",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-15T15:25:55Z",
+      "side": 1,
+      "message": "For consistency, how about calling `onMemoryAlloc` here too? You can pass in the `MemoryAllocationType` to this function.",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24d83dc6_d9085a0d",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-15T15:25:55Z",
+      "side": 1,
+      "message": "nit: remove",
+      "range": {
+        "startLine": 142,
+        "startChar": 65,
+        "endLine": 142,
+        "endChar": 80
+      },
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c75d394_4ea0e86d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-15T15:25:55Z",
+      "side": 1,
+      "message": "No. `destroy` is called when the image needs to be destroyed right away (for example because the app is shutting down, and `vkQueueWaitIdel` is already called).",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
