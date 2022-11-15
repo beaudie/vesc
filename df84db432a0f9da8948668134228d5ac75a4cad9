@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e63e0a_56b03057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-15T17:39:59Z",
+      "side": 1,
+      "message": "Note the interesting prerequisite.  It affects Pixel 4 which only exposes 2.  It might also affect older Intel drivers, but does not repro locally.",
+      "revId": "df84db432a0f9da8948668134228d5ac75a4cad9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
