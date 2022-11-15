@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dea07a4_aa1f5afc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-15T00:55:13Z",
+      "side": 1,
+      "message": "I am seeing this improves gfxbench gl_driver2_off score by 1.4% on pixel 7 pro.",
+      "revId": "85c98a92bb763452133bd7b4580d80625bb2c75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
