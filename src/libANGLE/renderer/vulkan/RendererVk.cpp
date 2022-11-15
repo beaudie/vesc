@@ -1267,6 +1267,12 @@ RendererVk::RendererVk()
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
     ASSERT(IsLittleEndian());
+
+    // Allocation counters are initialized here to keep track of the size of the memory allocations.
+    for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
+    {
+        mActiveMemoryAllocationsSize[i] = 0;
+    }
 }
 
 RendererVk::~RendererVk()
@@ -1373,6 +1379,20 @@ void RendererVk::onDestroy(vk::Context *context)
         mCompressEvent->wait();
         mCompressEvent.reset();
     }
+
+    // When the renderer is being destroyed, check if all the allocated memory throughout the
+    // execution has been freed.
+    //    bool hasMemoryLeak = false;
+    for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
+    {
+        if (mActiveMemoryAllocationsSize[i] != 0)
+        {
+            //            hasMemoryLeak = true;
+            WARN() << "Memory allocation type " << vk::kMemoryAllocationTypeMessage[i]
+                   << " has a residue of " << mActiveMemoryAllocationsSize[i];
+        }
+    }
+    //    ASSERT(!hasMemoryLeak);
 
     mMemoryProperties.destroy();
     mPhysicalDevice = VK_NULL_HANDLE;
