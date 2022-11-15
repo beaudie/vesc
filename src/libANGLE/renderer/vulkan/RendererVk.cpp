@@ -1324,8 +1324,8 @@ void RendererVk::onDestroy(vk::Context *context)
         }
     }
 
-    // Assigns an infinite "last completed" serial to force garbage to delete.
-    cleanupGarbage(Serial::Infinite());
+    // mCommandQueue.destroy should already set "last completed" serials to infinite.
+    cleanupGarbage();
     ASSERT(!hasSharedGarbage());
 
     for (PendingOneOffCommands &pending : mPendingOneOffCommands)
@@ -4413,7 +4413,10 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
     if (primary.valid())
     {
-        mPendingOneOffCommands.push_back({*serialOut, std::move(primary)});
+        vk::SharedResourceUse sharedUse;
+        sharedUse.init();
+        sharedUse.updateSerialOneOff(submitQueueSerial);
+        mPendingOneOffCommands.push_back({submitQueueSerial, std::move(primary)});
     }
 
     return angle::Result::Continue;
@@ -4500,7 +4503,7 @@ void RendererVk::pruneOrphanedBufferBlocks()
     }
 }
 
-void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
+void RendererVk::cleanupGarbage()
 {
     std::unique_lock<std::mutex> lock(mGarbageMutex);
 
@@ -4508,7 +4511,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     while (!mSharedGarbage.empty())
     {
         vk::SharedGarbage &garbage = mSharedGarbage.front();
-        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        if (!garbage.destroyIfComplete(this))
         {
             break;
         }
@@ -4521,7 +4524,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
     {
         vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
         VkDeviceSize garbageSize                      = garbage.getSize();
-        if (!garbage.destroyIfComplete(this, lastCompletedQueueSerial))
+        if (!garbage.destroyIfComplete(this))
         {
             break;
         }
@@ -4546,7 +4549,7 @@ void RendererVk::cleanupGarbage(Serial lastCompletedQueueSerial)
 
 void RendererVk::cleanupCompletedCommandsGarbage()
 {
-    cleanupGarbage(getLastCompletedQueueSerial());
+    cleanupGarbage();
 }
 
 void RendererVk::cleanupPendingSubmissionGarbage()
@@ -4578,7 +4581,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     {
         vk::SharedBufferSuballocationGarbage &suballocationGarbage =
             mPendingSubmissionSuballocationGarbage.front();
-        if (!suballocationGarbage.usedInRecordedCommands())
+        if (!suballocationGarbage.hasUnsubmittedUse(this))
         {
             mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
@@ -4697,8 +4700,7 @@ angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
         ANGLE_VK_TRY(context, mOneOffCommandPool.init(mDevice, createInfo));
     }
 
-    if (!mPendingOneOffCommands.empty() &&
-        mPendingOneOffCommands.front().serial <= getLastCompletedQueueSerial())
+    if (!mPendingOneOffCommands.empty() && !hasUnfinishedUse(mPendingOneOffCommands.front().use))
     {
         *commandBufferOut = std::move(mPendingOneOffCommands.front().commandBuffer);
         mPendingOneOffCommands.pop_front();

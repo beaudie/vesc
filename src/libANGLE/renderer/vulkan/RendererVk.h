@@ -329,7 +329,7 @@ class RendererVk : angle::NonCopyable
                 std::unique_lock<std::mutex> lock(mGarbageMutex);
                 mPendingSubmissionGarbage.push(std::move(garbage));
             }
-            else if (!garbage.destroyIfComplete(this, getLastCompletedQueueSerial()))
+            else if (!garbage.destroyIfComplete(this))
             {
                 std::unique_lock<std::mutex> lock(mGarbageMutex);
                 mSharedGarbage.push(std::move(garbage));
@@ -341,7 +341,7 @@ class RendererVk : angle::NonCopyable
                                      vk::BufferSuballocation &&suballocation,
                                      vk::Buffer &&buffer)
     {
-        if (use.isCurrentlyInUse(getLastCompletedQueueSerial()))
+        if (hasUnfinishedUse(use))
         {
             std::unique_lock<std::mutex> lock(mGarbageMutex);
             if (use.usedInRecordedCommands())
@@ -386,18 +386,6 @@ class RendererVk : angle::NonCopyable
     bool isFramebufferFetchUsed() const { return mIsFramebufferFetchUsed; }
 
     uint64_t getMaxFenceWaitTimeNs() const;
-
-    ANGLE_INLINE Serial getLastCompletedQueueSerial() const
-    {
-        if (isAsyncCommandQueueEnabled())
-        {
-            return mCommandProcessor.getLastCompletedQueueSerial();
-        }
-        else
-        {
-            return mCommandQueue.getLastCompletedQueueSerial();
-        }
-    }
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
@@ -475,7 +463,7 @@ class RendererVk : angle::NonCopyable
 
     bool haveSameFormatFeatureBits(angle::FormatID formatID1, angle::FormatID formatID2) const;
 
-    void cleanupGarbage(Serial lastCompletedQueueSerial);
+    void cleanupGarbage();
     void cleanupCompletedCommandsGarbage();
     void cleanupPendingSubmissionGarbage();
 
@@ -621,6 +609,19 @@ class RendererVk : angle::NonCopyable
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
     {
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
+    }
+
+    // The ResourceUse still have unfinished queue serial by vulkan.
+    bool hasUnfinishedUse(const vk::ResourceUse &use) const;
+    bool hasUnfinishedUse(const vk::SharedResourceUse &sharedUse) const
+    {
+        return hasUnfinishedUse(sharedUse.getResourceUse());
+    }
+    // The ResourceUse still have queue serial not yet submitted to vulkan.
+    bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
+    bool hasUnsubmittedUse(const vk::SharedResourceUse &sharedUse) const
+    {
+        return hasUnsubmittedUse(sharedUse.getResourceUse());
     }
 
   private:
@@ -816,7 +817,23 @@ class RendererVk : angle::NonCopyable
 
     struct PendingOneOffCommands
     {
-        Serial serial;
+        PendingOneOffCommands(Serial serial, vk::PrimaryCommandBuffer &&command)
+        {
+            use.init();
+            use.updateSerialOneOff(serial);
+            commandBuffer = std::move(command);
+        }
+        PendingOneOffCommands(PendingOneOffCommands &&other)
+        {
+            use           = std::move(other.use);
+            commandBuffer = std::move(other.commandBuffer);
+        }
+        ~PendingOneOffCommands()
+        {
+            use.release();
+            ASSERT(!commandBuffer.valid());
+        }
+        vk::SharedResourceUse use;
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
@@ -876,6 +893,29 @@ class RendererVk : angle::NonCopyable
     vk::ExtensionNameList mEnabledDeviceExtensions;
 };
 
+ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
+{
+    if (isAsyncCommandQueueEnabled())
+    {
+        return mCommandProcessor.hasUnfinishedUse(use);
+    }
+    else
+    {
+        return mCommandQueue.hasUnfinishedUse(use);
+    }
+}
+
+ANGLE_INLINE bool RendererVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
+{
+    if (isAsyncCommandQueueEnabled())
+    {
+        return mCommandProcessor.hasUnsubmittedUse(use);
+    }
+    else
+    {
+        return mCommandQueue.hasUnsubmittedUse(use);
+    }
+}
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
