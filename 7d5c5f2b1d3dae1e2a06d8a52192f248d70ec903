@@ -16,6 +16,29 @@
       "message": "Example from trybot: https://chromium-swarm.appspot.com/task?id\u003d5e9b23910b405810",
       "revId": "7d5c5f2b1d3dae1e2a06d8a52192f248d70ec903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3202f8e5_7c0d649b",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-16T21:37:39Z",
+      "side": 1,
+      "message": "A bit worried that we might not reach this in some cases and cause slowdowns for other test suites.\nThis does not persist across reboots, does it?\nSo I guess, if this task fails, machine reboots, this is reset and other test suites would be fast.\nAnd if the tast doesn\u0027t fail, this line should be reached, and all will be well, too.",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 88
+      },
+      "revId": "7d5c5f2b1d3dae1e2a06d8a52192f248d70ec903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
