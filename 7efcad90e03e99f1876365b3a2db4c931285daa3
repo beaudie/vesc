@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a81dabf4_6fd5bc6e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-16T16:29:41Z",
+      "side": 1,
+      "message": "@cstout@google.com do you know how I could detect \"mesa\" in general?",
+      "revId": "7efcad90e03e99f1876365b3a2db4c931285daa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
