@@ -56,6 +56,30 @@
       },
       "revId": "7d5c5f2b1d3dae1e2a06d8a52192f248d70ec903",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ac2f18f_8f2da3fb",
+        "filename": "src/tests/run_perf_tests.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-16T21:59:21Z",
+      "side": 1,
+      "message": "Things can always go wrong of course (like hanging up mid-way and getting force-killed never reaching this line or `nvidia-smi` refusing to cooperate), but for normal Python execution, this `finally` block is executed even if an exception is raised by the code this context manager wraps.\n\nAlso confirmed that failure resets clocks (by rebooting I suppose) by running this modified (failing but not resetting clocks) task twice:\nhttps://chromium-swarm.appspot.com/task?id\u003d5e9b41b659017010",
+      "parentUuid": "3202f8e5_7c0d649b",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 88
+      },
+      "revId": "7d5c5f2b1d3dae1e2a06d8a52192f248d70ec903",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
