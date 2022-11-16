@@ -99,6 +99,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3e2a71_247991d7",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-16T01:48:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea73c527_7bd12ced",
+      "range": {
+        "startLine": 1394,
+        "startChar": 28,
+        "endLine": 1394,
+        "endChar": 30
+      },
+      "revId": "b9d5e21af45b35f17fc46d3c5d6f6c4fe2f19ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89914292_b22b7ee8",
