@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d505749_aaee32c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "Retitle to \"Remove get API for mLastCompletedQueueSerial\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c48557b4_68f30b2f",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
         "patchSetId": 6
@@ -26,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faa5321a_783319bf",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "This is intentionally renderer, because isCurrentlyInUse is asking all usages, not just limited to this context. \n\nThe other function usedInRecordedCommands() I still kept context, because it actually is supposedly to ask this context has an unflushed usage or not and if not, it calls flushImpl.",
+      "parentUuid": "c48557b4_68f30b2f",
+      "range": {
+        "startLine": 113,
+        "startChar": 26,
+        "endLine": 113,
+        "endChar": 46
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "339b7c1a_058df5f9",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 6
@@ -37,6 +84,116 @@
       "writtenOn": "2022-11-16T14:41:24Z",
       "side": 1,
       "message": "To make the names a bit more uniform, how about this?\n\n- `usedInCommands` (`|` of the next two?)\n- `usedInRunningCommands`\n- `usedInRecordedCommands`\n\n(Edit: I just saw that the last two names were exactly that in ResourceVk before this change, any reason why they are renamed? `isCurrentlyInUse` can also be kept instead of `hasUnfinishedUsed`)",
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36498e93_08e9728d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "useInRunningCommands is temporary kept here. It will be deleted in the following CL. And useInRecordedCommands will be renamed to hasUnFlushedUse(), so it will look like this:\nif (resource-\u003ehasUnFlushedUse(ctx))\n{\n   ... \n   ctx-\u003eflushImpl();\n)\n\n\nThe reason I renamed isCurrentlyInUse to hasUnfinishedUse() is because resource-\u003eisCurrentlyInUse(renderer) is a resource method, so it makes sense to read: \"resource is currently in use\". But when the function is moved to renderer, it no longer makes sense. renderer-\u003ehasUnfinishedUse(use) makes more sense when you read it.\n\nAlso, in the following CLs, I plan to remove ResourceVk::isCurrentlyInUse() and replace it with renderer-\u003ehasUnfinishedUse(use) directly. If you look at it, it is simply calling hasUnfinishedUse(use). The main reason I did not do it right now is to avoid excessive code diffs and make code review harder.",
+      "parentUuid": "339b7c1a_058df5f9",
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f359d21_3df8cfb4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "This will be deleted in later CLs. SharedResourceUse will be deleted. Only ResourceUse will be kept.",
+      "range": {
+        "startLine": 616,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 5
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44a3781a_fe12894b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "This will be deleted in the later CLs.",
+      "range": {
+        "startLine": 622,
+        "startChar": 4,
+        "endLine": 628,
+        "endChar": 5
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c70de61_d5c3c25a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "These will be deleted in following CLs.",
+      "range": {
+        "startLine": 831,
+        "startChar": 7,
+        "endLine": 849,
+        "endChar": 9
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05eb5feb_2bca1884",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-16T17:17:09Z",
+      "side": 1,
+      "message": "These function will eventually deleted in following CLs and replaced with renderer-\u003ehasUnfinishedUse(buffer), ctx-\u003ehasUnflushedUse(buffer) directly.",
+      "range": {
+        "startLine": 213,
+        "startChar": 9,
+        "endLine": 219,
+        "endChar": 25
+      },
       "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
