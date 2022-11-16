@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c48557b4_68f30b2f",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-16T14:41:24Z",
+      "side": 1,
+      "message": "Would it make sense to get a `vk::Context` instead? (Since later we are going to have \"per context\" serials)",
+      "range": {
+        "startLine": 113,
+        "startChar": 26,
+        "endLine": 113,
+        "endChar": 46
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "339b7c1a_058df5f9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-16T14:41:24Z",
+      "side": 1,
+      "message": "To make the names a bit more uniform, how about this?\n\n- `usedInCommands` (`|` of the next two?)\n- `usedInRunningCommands`\n- `usedInRecordedCommands`\n\n(Edit: I just saw that the last two names were exactly that in ResourceVk before this change, any reason why they are renamed? `isCurrentlyInUse` can also be kept instead of `hasUnfinishedUsed`)",
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
