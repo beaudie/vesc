@@ -3948,8 +3948,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, preferDeviceLocalMemoryHostVisible,
         canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
 
+    // Some dynamic states are broken on ARM driver r38p1-01eac0.
+    // Disable the supportsExtendedDynamicState feature for ARM driver version r38.
+    // http://b/259154249
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
-                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
+                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE &&
+                                (!isARM || armDriverVersion < ARMDriverVersion(38, 0, 0)));
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2,
                             mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE);
