@@ -720,7 +720,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // TODO(http://anglebug.com/5624): rework updateActiveTextures(), createPipelineLayout(),
     // handleDirtyGraphicsPipeline(), and ProgramPipelineVk::link().
-    void resetCurrentGraphicsPipeline() { mCurrentGraphicsPipeline = nullptr; }
+    void resetCurrentGraphicsPipeline()
+    {
+        mCurrentGraphicsPipeline        = nullptr;
+        mCurrentGraphicsPipelineShaders = nullptr;
+    }
 
     void onProgramExecutableReset(ProgramExecutableVk *executableVk);
 
@@ -1317,12 +1321,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
 
+    angle::Result createGraphicsPipeline();
+
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
 
     vk::RenderPassCommandBuffer *mRenderPassCommandBuffer;
 
     vk::PipelineHelper *mCurrentGraphicsPipeline;
+    vk::PipelineHelper *mCurrentGraphicsPipelineShaders;
+    vk::PipelineHelper *mCurrentGraphicsPipelineVertexInput;
+    vk::PipelineHelper *mCurrentGraphicsPipelineFragmentOutput;
     vk::PipelineHelper *mCurrentComputePipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
@@ -1336,6 +1345,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
     std::unique_ptr<vk::GraphicsPipelineDesc> mGraphicsPipelineDesc;
     vk::GraphicsPipelineTransitionBits mGraphicsPipelineTransition;
+
+    // Used when VK_EXT_graphics_pipeline_library is available, the vertex input and fragment output
+    // partial pipelines are created in the following caches.
+    VertexInputGraphicsPipelineCache mVertexInputGraphicsPipelineCache;
+    FragmentOutputGraphicsPipelineCache mFragmentOutputGraphicsPipelineCache;
 
     // These pools are externally synchronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
