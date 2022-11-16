@@ -34,6 +34,24 @@
       "parentUuid": "a81dabf4_6fd5bc6e",
       "revId": "7efcad90e03e99f1876365b3a2db4c931285daa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae17c3a_08640752",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-16T17:12:09Z",
+      "side": 1,
+      "message": "I was hoping to be able to detect mesa without having to enumerate all its drivers. It\u0027s fine for now where this is only used for Intel.",
+      "parentUuid": "49ece065_22852d82",
+      "revId": "7efcad90e03e99f1876365b3a2db4c931285daa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
