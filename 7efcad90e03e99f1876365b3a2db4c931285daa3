@@ -16,6 +16,24 @@
       "message": "@cstout@google.com do you know how I could detect \"mesa\" in general?",
       "revId": "7efcad90e03e99f1876365b3a2db4c931285daa3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ece065_22852d82",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1132329
+      },
+      "writtenOn": "2022-11-16T17:09:25Z",
+      "side": 1,
+      "message": "Check for driverID \u003d\u003d VK_DRIVER_ID_INTEL_OPEN_SOURCE_MESA ?\n\nhttps://github.com/KhronosGroup/Vulkan-Headers/blob/main/include/vulkan/vulkan_core.h#L5696",
+      "parentUuid": "a81dabf4_6fd5bc6e",
+      "revId": "7efcad90e03e99f1876365b3a2db4c931285daa3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
