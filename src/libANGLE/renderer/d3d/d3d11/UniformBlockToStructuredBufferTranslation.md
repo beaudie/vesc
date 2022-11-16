@@ -59,7 +59,6 @@ Other operator usage is unsupported. Example unsupported usages:
 
 | Operator On the Uniform Array Member    |                  examples                        |
 |             :------                     |                  :------                         |
-| indexing             | TYPE var = buf[INDEX];                                              |
 | method selector      | buf.length();   // Angle don’t support it, too.                     |
 | equality == !=       | TYPE var[NUMBER] = {…}; <br> if (var == buf);                       |
 | assignment =         | TYPE var[NUMBER] = {…}; <br> var = buf;                             |
