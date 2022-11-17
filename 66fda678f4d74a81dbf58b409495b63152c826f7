@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2033913f_10518000",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2022-11-17T13:35:46Z",
+      "side": 1,
+      "message": "what predicated this change? mVertexArray would only be nullptr before startup or after teardown.",
+      "range": {
+        "startLine": 2226,
+        "startChar": 4,
+        "endLine": 2226,
+        "endChar": 70
+      },
+      "revId": "66fda678f4d74a81dbf58b409495b63152c826f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
