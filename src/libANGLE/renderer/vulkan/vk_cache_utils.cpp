@@ -6047,6 +6047,52 @@ void SharedCacheKeyManager<SharedCacheKeyT>::assertAllEntriesDestroyed()
 template class SharedCacheKeyManager<SharedFramebufferCacheKey>;
 // Explict instantiate for DescriptorSetCacheManager
 template class SharedCacheKeyManager<SharedDescriptorSetCacheKey>;
+
+// PipelineCacheAccess implementation.
+std::unique_lock<std::mutex> PipelineCacheAccess::getLock()
+{
+    if (mMutex == nullptr)
+    {
+        return std::unique_lock<std::mutex>();
+    }
+
+    return std::unique_lock<std::mutex>(*mMutex);
+}
+
+angle::Result PipelineCacheAccess::createGraphicsPipeline(
+    vk::Context *context,
+    const VkGraphicsPipelineCreateInfo &createInfo,
+    vk::Pipeline *pipelineOut)
+{
+    std::unique_lock<std::mutex> lock = getLock();
+
+    ANGLE_VK_TRY(context,
+                 pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache));
+
+    return angle::Result::Continue;
+}
+
+angle::Result PipelineCacheAccess::createComputePipeline(
+    vk::Context *context,
+    const VkComputePipelineCreateInfo &createInfo,
+    vk::Pipeline *pipelineOut)
+{
+    std::unique_lock<std::mutex> lock = getLock();
+
+    ANGLE_VK_TRY(context,
+                 pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache));
+
+    return angle::Result::Continue;
+}
+
+void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
+{
+    ASSERT(mMutex != nullptr);
+
+    std::unique_lock<std::mutex> lock = getLock();
+
+    mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
+}
 }  // namespace vk
 
 // FramebufferCache implementation.
@@ -6227,52 +6273,6 @@ angle::Result RenderPassCache::getRenderPassWithOpsImpl(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-// PipelineCacheAccess implementation.
-std::unique_lock<std::mutex> PipelineCacheAccess::getLock()
-{
-    if (mMutex == nullptr)
-    {
-        return std::unique_lock<std::mutex>();
-    }
-
-    return std::unique_lock<std::mutex>(*mMutex);
-}
-
-angle::Result PipelineCacheAccess::createGraphicsPipeline(
-    vk::Context *context,
-    const VkGraphicsPipelineCreateInfo &createInfo,
-    vk::Pipeline *pipelineOut)
-{
-    std::unique_lock<std::mutex> lock = getLock();
-
-    ANGLE_VK_TRY(context,
-                 pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache));
-
-    return angle::Result::Continue;
-}
-
-angle::Result PipelineCacheAccess::createComputePipeline(
-    vk::Context *context,
-    const VkComputePipelineCreateInfo &createInfo,
-    vk::Pipeline *pipelineOut)
-{
-    std::unique_lock<std::mutex> lock = getLock();
-
-    ANGLE_VK_TRY(context,
-                 pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache));
-
-    return angle::Result::Continue;
-}
-
-void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
-{
-    ASSERT(mMutex != nullptr);
-
-    std::unique_lock<std::mutex> lock = getLock();
-
-    mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
-}
-
 // GraphicsPipelineCache implementation.
 template <typename Hash>
 void GraphicsPipelineCache<Hash>::destroy(RendererVk *rendererVk)
@@ -6310,7 +6310,7 @@ void GraphicsPipelineCache<Hash>::release(ContextVk *contextVk)
 template <typename Hash>
 angle::Result GraphicsPipelineCache<Hash>::createPipeline(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
@@ -6341,7 +6341,7 @@ angle::Result GraphicsPipelineCache<Hash>::createPipeline(
 template <typename Hash>
 angle::Result GraphicsPipelineCache<Hash>::linkLibraries(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::GraphicsPipelineDesc &desc,
     const vk::PipelineHelper &vertexInputPipeline,
     const vk::PipelineHelper &shadersPipeline,
@@ -6407,7 +6407,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::release(
     ContextVk *contextVk);
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::createPipeline(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
@@ -6418,7 +6418,7 @@ template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::
     vk::PipelineHelper **pipelineOut);
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescCompleteHash>::linkLibraries(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::GraphicsPipelineDesc &desc,
     const vk::PipelineHelper &vertexInputPipeline,
     const vk::PipelineHelper &shadersPipeline,
@@ -6435,7 +6435,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::releas
     ContextVk *contextVk);
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescVertexInputHash>::createPipeline(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
@@ -6453,7 +6453,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::destroy(
 template void GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::release(ContextVk *contextVk);
 template angle::Result GraphicsPipelineCache<GraphicsPipelineDescShadersHash>::createPipeline(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
@@ -6473,7 +6473,7 @@ template void GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::rel
 template angle::Result
 GraphicsPipelineCache<GraphicsPipelineDescFragmentOutputHash>::createPipeline(
     ContextVk *contextVk,
-    PipelineCacheAccess *pipelineCache,
+    vk::PipelineCacheAccess *pipelineCache,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const vk::ShaderModuleMap &shaders,
