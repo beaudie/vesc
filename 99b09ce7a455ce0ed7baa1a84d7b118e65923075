@@ -22,6 +22,30 @@
       },
       "revId": "99b09ce7a455ce0ed7baa1a84d7b118e65923075",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81f7217a_d3b1fe3a",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 18
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-17T04:23:45Z",
+      "side": 1,
+      "message": "Thanks for catching that!\n\nI went with `setRWTexture` to match other naming choices in this CL, as well as to make it clear that the texture is also for reading. If you prefer `setTextureForWrite` I\u0027m happy to change it back.",
+      "parentUuid": "bf557d9b_af5081e0",
+      "range": {
+        "startLine": 1603,
+        "startChar": 16,
+        "endLine": 1603,
+        "endChar": 26
+      },
+      "revId": "99b09ce7a455ce0ed7baa1a84d7b118e65923075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
