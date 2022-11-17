@@ -553,6 +553,10 @@ class TestBatch():
 
         returncode, output = child_processes_manager.RunSubprocess(
             run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+
+        if output and args.show_replay_stdout:
+            self.logger.info("Replay stdout: %s" % output)
+
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -563,9 +567,6 @@ class TestBatch():
             self.results.append(
                 GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
             return
-
-        if args.show_replay_stdout:
-            self.logger.info("Replay stdout: %s" % output)
 
         output_lines = output.splitlines()
         passes = []
