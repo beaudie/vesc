@@ -121,6 +121,72 @@ using SerialFactory           = SerialFactoryBase<uint64_t>;
 using AtomicSerialFactory     = SerialFactoryBase<std::atomic<uint64_t>>;
 using RenderPassSerialFactory = SerialFactoryBase<uint64_t>;
 
+// For backend that supports multiple queue serials, QueueSerial includes a Serial and an index.
+using SerialIndex                                     = uint32_t;
+static constexpr SerialIndex kInvalidQueueSerialIndex = SerialIndex(-1);
+
+class QueueSerial final
+{
+  public:
+    QueueSerial() : mIndex(kInvalidQueueSerialIndex) {}
+    QueueSerial(SerialIndex index, Serial serial) : mIndex(index), mSerial(serial)
+    {
+        ASSERT(index != kInvalidQueueSerialIndex);
+        ASSERT(serial.valid());
+    }
+    constexpr QueueSerial(const QueueSerial &other)  = default;
+    QueueSerial &operator=(const QueueSerial &other) = default;
+
+    constexpr bool operator==(const QueueSerial &other) const
+    {
+        return mIndex == other.mIndex && mSerial == other.mSerial;
+    }
+    constexpr bool operator!=(const QueueSerial &other) const
+    {
+        return mIndex != other.mIndex || mSerial != other.mSerial;
+    }
+
+    constexpr bool valid() const { return mSerial.valid(); }
+
+    SerialIndex getIndex() const { return mIndex; }
+    Serial getSerial() const { return mSerial; }
+
+  private:
+    SerialIndex mIndex;
+    Serial mSerial;
+};
+
+// For now we limit to only one queue serial
+static constexpr size_t kMaxQueueSerialIndexCount = 1;
+// Fixed array of queue serials
+class QueueSerialFixedArray final
+{
+  public:
+    QueueSerialFixedArray()  = default;
+    ~QueueSerialFixedArray() = default;
+
+    constexpr bool operator<(const QueueSerial &queueSerial) const
+    {
+        return mSerials[queueSerial.getIndex()] < queueSerial.getSerial();
+    }
+    constexpr bool operator>=(const QueueSerial &queueSerial) const
+    {
+        return mSerials[queueSerial.getIndex()] >= queueSerial.getSerial();
+    }
+
+    void setQueueSerial(const QueueSerial &queueSerial)
+    {
+        // Serial can only increase
+        ASSERT(queueSerial.getSerial() > mSerials[queueSerial.getIndex()]);
+        mSerials[queueSerial.getIndex()] = queueSerial.getSerial();
+    }
+    void fill(Serial serial) { std::fill(mSerials.begin(), mSerials.end(), serial); }
+    const Serial &operator[](SerialIndex index) const { return mSerials[index]; }
+    size_t size() const { return mSerials.size(); }
+
+  private:
+    std::array<Serial, kMaxQueueSerialIndexCount> mSerials;
+};
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_
