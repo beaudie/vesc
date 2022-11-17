@@ -669,7 +669,7 @@ angle::Result CreateGraphicsPipelineSubset(ContextVk *contextVk,
                                            vk::GraphicsPipelineTransitionBits transition,
                                            GraphicsPipelineSubsetRenderPass renderPass,
                                            Cache *cache,
-                                           PipelineCacheAccess *pipelineCache,
+                                           vk::PipelineCacheAccess *pipelineCache,
                                            vk::PipelineHelper **pipelineOut)
 {
     const vk::PipelineLayout unusedPipelineLayout;
@@ -1836,7 +1836,7 @@ angle::Result ContextVk::createGraphicsPipeline()
     ProgramExecutableVk *executableVk         = getExecutable();
     ASSERT(executableVk);
 
-    PipelineCacheAccess pipelineCache;
+    vk::PipelineCacheAccess pipelineCache;
     ANGLE_TRY(mRenderer->getPipelineCache(&pipelineCache));
 
     vk::PipelineHelper *oldGraphicsPipeline = mCurrentGraphicsPipeline;
@@ -2173,7 +2173,7 @@ angle::Result ContextVk::handleDirtyComputePipelineDesc()
 {
     if (mCurrentComputePipeline == nullptr)
     {
-        PipelineCacheAccess pipelineCache;
+        vk::PipelineCacheAccess pipelineCache;
         ANGLE_TRY(mRenderer->getPipelineCache(&pipelineCache));
 
         const gl::ProgramExecutable &glExecutable = *mState.getProgramExecutable();
