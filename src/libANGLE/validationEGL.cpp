@@ -1551,6 +1551,7 @@ bool ValidateCreateContextAttribute(const ValidationContext *val,
             break;
 
         case EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT:
+        case EGL_CONTEXT_OPENGL_ROBUST_ACCESS:
             if (!display->getExtensions().createContextRobustness)
             {
                 val->setError(EGL_BAD_ATTRIBUTE);
@@ -1813,6 +1814,7 @@ bool ValidateCreateContextAttributeValue(const ValidationContext *val,
         }
 
         case EGL_CONTEXT_OPENGL_ROBUST_ACCESS_EXT:
+        case EGL_CONTEXT_OPENGL_ROBUST_ACCESS:
             if (value != EGL_TRUE && value != EGL_FALSE)
             {
                 val->setError(EGL_BAD_ATTRIBUTE);
