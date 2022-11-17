@@ -16,6 +16,29 @@
       "message": "Jamie: PTAL. Thanks!",
       "revId": "e473e055edeb63bd39f15ac6357e7346d02d7967",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed321550_05aac449",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-17T18:41:34Z",
+      "side": 1,
+      "message": "I don\u0027t think you need the ext if you\u0027re validating the core one. You instead need a specific EGL version. We maybe don\u0027t need to check the EGL version, since I think we have a fixed 1.5, but you can omit the ext check from the core attrib.",
+      "range": {
+        "startLine": 1554,
+        "startChar": 0,
+        "endLine": 1559,
+        "endChar": 13
+      },
+      "revId": "e473e055edeb63bd39f15ac6357e7346d02d7967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
