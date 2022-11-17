@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "362b71d8_d5c27403",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-17T20:47:14Z",
+      "side": 1,
+      "message": "Wow, what a bug, thanks for fixing that.\n\nCC Peng who added this ending `nullptr` in https://chromium-review.googlesource.com/c/angle/angle/+/3264164. What was the reason Peng? Was it perhaps a misread of the spec that said the entries are NUL-terminated?\n\nIn the absence of a good reason, could you please remove those two lines too Jason?",
+      "revId": "4e945eb55d8c0388ffcf9f57dc009cb9be8ee1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
