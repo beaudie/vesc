@@ -71,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2c30695_ed5370f3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-17T04:47:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "faa5321a_783319bf",
+      "range": {
+        "startLine": 113,
+        "startChar": 26,
+        "endLine": 113,
+        "endChar": 46
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "339b7c1a_058df5f9",
@@ -102,6 +126,24 @@
       "side": 1,
       "message": "useInRunningCommands is temporary kept here. It will be deleted in the following CL. And useInRecordedCommands will be renamed to hasUnFlushedUse(), so it will look like this:\nif (resource-\u003ehasUnFlushedUse(ctx))\n{\n   ... \n   ctx-\u003eflushImpl();\n)\n\n\nThe reason I renamed isCurrentlyInUse to hasUnfinishedUse() is because resource-\u003eisCurrentlyInUse(renderer) is a resource method, so it makes sense to read: \"resource is currently in use\". But when the function is moved to renderer, it no longer makes sense. renderer-\u003ehasUnfinishedUse(use) makes more sense when you read it.\n\nAlso, in the following CLs, I plan to remove ResourceVk::isCurrentlyInUse() and replace it with renderer-\u003ehasUnfinishedUse(use) directly. If you look at it, it is simply calling hasUnfinishedUse(use). The main reason I did not do it right now is to avoid excessive code diffs and make code review harder.",
       "parentUuid": "339b7c1a_058df5f9",
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e4e0093_45c21fd1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-17T04:47:24Z",
+      "side": 1,
+      "message": "Thanks for the explanation. The negative names make the code a bit harder to understand, which is what I hope to avoid.\n\nHow about these?\n\n```\nrenderer-\u003ehasUseInRunningCommands(use)\nrenderer-\u003ehasUseInRecordedCommands(use)\nrenderer-\u003ehasUseInCommands(use)\n```\n\nOr:\n\n```\nrenderer-\u003ehasUsagePendingExecution(use)\nrenderer-\u003ehasUsagePendingFlush(use)\nrenderer-\u003ehasUsagePending(use)\n```",
+      "parentUuid": "36498e93_08e9728d",
       "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
