@@ -16,6 +16,24 @@
       "message": "crbug.com has me in a redirect login loop, and incognito mode is not fixing it.\nso posting on this CL instead of filing a bug.\n\nThis CL is breaking webgl2_conformance_metal_passthrough_tests on Intel GPU on Mac \n\nfirst failing build:\n\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Mac%20FYI%20Release%20(Intel)/34150/overview\n\nit\u0027s crashing in libGLESv2.dylib!rx::mtl::RenderCommandEncoder::encodeMetalEncoder()\n\nregression range:\nhttps://chromium.googlesource.com/chromium/src/+log/2fd4ff1d6d733a544c6440d727fffb2ff7cae38c%5E..088f1303534fdc40c3d79ff8dfa2482584e862aa?pretty\u003dfuller\u0026n\u003d\n\nhas an ANGLE roll which contains this single CL which touches the crash site.\nI\u0027ll create a revert",
       "revId": "4b084310d7bbb33631d58a461eb5814c12220926",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6cd9140_67023fc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-17T03:35:32Z",
+      "side": 1,
+      "message": "FYI, I noticed the same login loop when directly jumping to the bug (like http://anglebug.com/NNNN), but not when going to the main site (like anglebug.com). Try crbug.com only or https://bugs.chromium.org/p/chromium/issues/list",
+      "parentUuid": "6e35ee21_38288238",
+      "revId": "4b084310d7bbb33631d58a461eb5814c12220926",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
