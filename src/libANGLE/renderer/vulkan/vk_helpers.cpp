@@ -10197,6 +10197,21 @@ void ShaderProgramHelper::setShader(gl::ShaderType shaderType, RefCounted<Shader
     mShaders[shaderType].set(shader);
 }
 
+void ShaderProgramHelper::createMonolithicPipelineCreationTask(
+    ContextVk *contextVk,
+    PipelineCacheAccess *pipelineCache,
+    const GraphicsPipelineDesc &desc,
+    const PipelineLayout &pipelineLayout,
+    const SpecializationConstants &specConsts,
+    PipelineHelper *pipeline) const
+{
+    std::shared_ptr<CreateMonolithicPipelineTask> monolithicPipelineCreationTask =
+        std::make_shared<CreateMonolithicPipelineTask>(contextVk->getRenderer(), *pipelineCache,
+                                                       pipelineLayout, mShaders, specConsts, desc);
+
+    pipeline->setMonolithicPipelineCreationTask(std::move(monolithicPipelineCreationTask));
+}
+
 angle::Result ShaderProgramHelper::getOrCreateComputePipeline(
     ContextVk *contextVk,
     ComputePipelineCache *computePipelines,
@@ -10265,8 +10280,10 @@ angle::Result ShaderProgramHelper::getOrCreateComputePipeline(
         AddToPNextChain(&createInfo, &feedbackInfo);
     }
 
-    ANGLE_TRY(pipelineCache->createComputePipeline(contextVk, createInfo,
-                                                   &computePipeline->getPipeline()));
+    vk::Pipeline pipeline;
+    ANGLE_VK_TRY(contextVk, pipelineCache->createComputePipeline(contextVk, createInfo, &pipeline));
+
+    vk::CacheLookUpFeedback lookUpFeedback = CacheLookUpFeedback::None;
 
     if (supportsFeedback)
     {
@@ -10274,10 +10291,11 @@ angle::Result ShaderProgramHelper::getOrCreateComputePipeline(
             (feedback.flags & VK_PIPELINE_CREATION_FEEDBACK_APPLICATION_PIPELINE_CACHE_HIT_BIT) !=
             0;
 
-        computePipeline->setCacheLookUpFeedback(cacheHit ? CacheLookUpFeedback::Hit
-                                                         : CacheLookUpFeedback::Miss);
+        lookUpFeedback = cacheHit ? CacheLookUpFeedback::Hit : CacheLookUpFeedback::Miss;
         ApplyPipelineCreationFeedback(contextVk, feedback);
     }
+
+    computePipeline->setComputePipeline(std::move(pipeline), lookUpFeedback);
 
     *pipelineOut = computePipeline;
     return angle::Result::Continue;
