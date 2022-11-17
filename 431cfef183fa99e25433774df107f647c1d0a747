@@ -39,6 +39,30 @@
       },
       "revId": "431cfef183fa99e25433774df107f647c1d0a747",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ba9cf31_93541bfa",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-17T22:50:20Z",
+      "side": 1,
+      "message": "I agree. Thanks for the suggestions. Done.\n(I used `Shared` since the ring buffer allocator can be shared among multiple command buffer helpers.)",
+      "parentUuid": "ad12ff3f_f90eb101",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 60
+      },
+      "revId": "431cfef183fa99e25433774df107f647c1d0a747",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
