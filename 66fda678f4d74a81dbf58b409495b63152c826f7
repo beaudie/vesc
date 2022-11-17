@@ -46,6 +46,30 @@
       },
       "revId": "66fda678f4d74a81dbf58b409495b63152c826f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3facedd9_7c186c0b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-17T14:19:16Z",
+      "side": 1,
+      "message": "Gotcha. We could remove this if we manage to implement a proper fix for the support check.",
+      "parentUuid": "87d4d78c_5ad5c524",
+      "range": {
+        "startLine": 2226,
+        "startChar": 4,
+        "endLine": 2226,
+        "endChar": 70
+      },
+      "revId": "66fda678f4d74a81dbf58b409495b63152c826f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
