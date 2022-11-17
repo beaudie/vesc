@@ -1917,6 +1917,11 @@ angle::Result ContextVk::createGraphicsPipeline()
                 }
             }
 
+            // TODO: check if passing pipelineCache here is realistically blocking the main thread
+            // while the worker thread is creating a pipeline when
+            // preferMonolithicPipelinesOverLibraries.  If so, create vertex input and fragment
+            // output without a cache.
+
             // Recreate the vertex input subset if necessary
             ANGLE_TRY(CreateGraphicsPipelineSubset(
                 this, *mGraphicsPipelineDesc,
@@ -2160,7 +2165,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator 
 {
     ASSERT(mCurrentGraphicsPipeline);
 
-    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    const vk::Pipeline *pipeline = nullptr;
+    ANGLE_TRY(mCurrentGraphicsPipeline->updateAndGetPipeline(this, &pipeline));
+
+    mRenderPassCommandBuffer->bindGraphicsPipeline(*pipeline);
 
     return angle::Result::Continue;
 }
