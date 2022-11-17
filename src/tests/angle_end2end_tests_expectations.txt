@@ -36,6 +36,7 @@
 7854 OPENGL : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
 7854 GLES : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
 7854 D3D11 : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
+7854 GLES : MultithreadingTest.ProgramUseAndDestroyInTwoContexts/* = SKIP
 
 // Vulkan generic
 6641 VULKAN : UniformTest.UnusedStructInlineUniform/* = SKIP
