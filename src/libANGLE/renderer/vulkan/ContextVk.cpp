@@ -1833,6 +1833,8 @@ angle::Result ContextVk::createGraphicsPipeline()
     vk::PipelineHelper *oldGraphicsPipeline = mCurrentGraphicsPipeline;
 
     // Attempt to use an existing pipeline.
+    // TODO: This could be fast-linked, or monolithic coming from a thread (if GPL), see about who
+    // should handle swapping in the monolithic build and destroying the fast-link one.
     const vk::GraphicsPipelineDesc *descPtr = nullptr;
     ANGLE_TRY(executableVk->getGraphicsPipeline(this, vk::GraphicsPipelineSubset::Complete,
                                                 *mGraphicsPipelineDesc, glExecutable, &descPtr,
@@ -1890,6 +1892,11 @@ angle::Result ContextVk::createGraphicsPipeline()
                 }
             }
 
+            // TODO: check if passing pipelineCache here is realistically blocking the main thread
+            // while the worker thread is creating a pipeline when
+            // preferMonolithicPipelinesOverLibraries.  If so, create vertex input and fragment
+            // output without a cache.
+
             // Recreate the vertex input subset if necessary
             ANGLE_TRY(CreateGraphicsPipelineSubset(
                 this, *mGraphicsPipelineDesc,
@@ -1909,6 +1916,16 @@ angle::Result ContextVk::createGraphicsPipeline()
                 this, &pipelineCache, *mGraphicsPipelineDesc, glExecutable,
                 *mCurrentGraphicsPipelineVertexInput, *mCurrentGraphicsPipelineShaders,
                 *mCurrentGraphicsPipelineFragmentOutput, &descPtr, &mCurrentGraphicsPipeline));
+
+            // TODO: add a test where perma-switch to FFmode is tested with SwiftShader
+
+            // TODO: add a counter for how many times this is done, then add tests that switch
+            // between programs and draw, or switch between state and draw, then make sure (if the
+            // appropriate features are set) that the number of pipeline creation jobs is as
+            // expected.
+
+            // TODO: add a test that launches a job from one context, then releasing the
+            // program in another context in share group.
         }
     }
 
@@ -2133,7 +2150,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator 
 {
     ASSERT(mCurrentGraphicsPipeline);
 
-    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    const vk::Pipeline *pipeline = nullptr;
+    ANGLE_TRY(mCurrentGraphicsPipeline->updateAndGetPipeline(this, &pipeline));
+
+    mRenderPassCommandBuffer->bindGraphicsPipeline(*pipeline);
 
     return angle::Result::Continue;
 }

@@ -217,6 +217,17 @@ void GetPipelineCacheData(ContextVk *contextVk,
         cacheDataOut->clear();
     }
 }
+
+vk::SpecializationConstants MakeSpecConsts(ProgramTransformOptions transformOptions,
+                                           const vk::GraphicsPipelineDesc &desc)
+{
+    vk::SpecializationConstants specConsts;
+
+    specConsts.surfaceRotation = transformOptions.surfaceRotation;
+    specConsts.dither          = desc.getEmulatedDitherControl();
+
+    return specConsts;
+}
 }  // namespace
 
 DefaultUniformBlock::DefaultUniformBlock() = default;
@@ -1111,9 +1122,7 @@ angle::Result ProgramExecutableVk::createGraphicsPipelineImpl(
 
     // Set specialization constants.  These are also a part of GraphicsPipelineDesc, so that a
     // change in specialization constants also results in a new pipeline.
-    vk::SpecializationConstants specConsts;
-    specConsts.surfaceRotation = transformOptions.surfaceRotation;
-    specConsts.dither          = desc.getEmulatedDitherControl();
+    vk::SpecializationConstants specConsts = MakeSpecConsts(transformOptions, desc);
 
     // Pull in a compatible RenderPass.
     const vk::RenderPass *compatibleRenderPass = nullptr;
@@ -1224,6 +1233,18 @@ angle::Result ProgramExecutableVk::linkGraphicsPipelineLibraries(
     ANGLE_TRY(mCompleteGraphicsPipelines[programIndex].linkLibraries(
         contextVk, pipelineCache, desc, vertexInputPipeline, shadersPipeline,
         fragmentOutputPipeline, descPtrOut, pipelineOut));
+
+    // If monolithic pipelines are preferred over libraries, create a task so that it can be created
+    // asynchronously.
+    if (contextVk->getFeatures().preferMonolithicPipelinesOverLibraries.enabled)
+    {
+        vk::SpecializationConstants specConsts = MakeSpecConsts(transformOptions, desc);
+
+        mGraphicsProgramInfos[programIndex]
+            .getShaderProgram()
+            ->createMonolithicPipelineCreationTask(contextVk, pipelineCache, desc,
+                                                   getPipelineLayout(), specConsts, *pipelineOut);
+    }
 
     return angle::Result::Continue;
 }
