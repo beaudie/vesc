@@ -183,6 +183,13 @@ enum {
     AHARDWAREBUFFER_FORMAT_S8_UINT                  = 0x35,
 
     /**
+     * Corresponding formats:
+     *   Vulkan: VK_FORMAT_R8_UNORM
+     *   OpenGL ES: GL_R8
+     */
+    AHARDWAREBUFFER_FORMAT_R8_UNORM                 = 0x38,
+
+    /**
      * YUV 420 888 format.
      * Must have an even width and height. Can be accessed in OpenGL
      * shaders through an external sampler. Does not support mip-maps
@@ -257,6 +264,8 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
             return GL_DEPTH32F_STENCIL8;
         case AHARDWAREBUFFER_FORMAT_S8_UINT:
             return GL_STENCIL_INDEX8;
+        case AHARDWAREBUFFER_FORMAT_R8_UNORM:
+            return GL_R8;
         case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
         case AHARDWAREBUFFER_FORMAT_YV12:
         case AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED:
@@ -358,6 +367,8 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
 {
     switch (internalFormat)
     {
+        case GL_R8:
+            return AHARDWAREBUFFER_FORMAT_R8_UNORM;
         case GL_RGBA8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
         case GL_RGB8:
