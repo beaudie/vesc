@@ -22,6 +22,30 @@
       },
       "revId": "66fda678f4d74a81dbf58b409495b63152c826f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87d4d78c_5ad5c524",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2226,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-17T14:13:48Z",
+      "side": 1,
+      "message": "The call chain is \n\n```\nContext::initCaps()\n  getShareGroup()-\u003egetFrameCaptureShared()-\u003edetermineMemoryProtectionSupport(this);\n    mCoherentBufferTracker.canProtectDirectly(context); \n```\n\nIn `canProtectDirectly` a buffer is created and with this CL I also delete, because it is not actually used, and clobbers the state. As it would seem this action is done before the \"reals\" startup, and hence, `mVertexArray` is not yet set.",
+      "parentUuid": "2033913f_10518000",
+      "range": {
+        "startLine": 2226,
+        "startChar": 4,
+        "endLine": 2226,
+        "endChar": 70
+      },
+      "revId": "66fda678f4d74a81dbf58b409495b63152c826f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
