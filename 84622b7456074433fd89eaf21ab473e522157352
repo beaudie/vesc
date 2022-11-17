@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d880cc3c_4a8c67d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-17T16:00:10Z",
+      "side": 1,
+      "message": "LGTM, unfortunate that driver bugs hold us back from the simpler solution.",
+      "revId": "84622b7456074433fd89eaf21ab473e522157352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3b418e5_54699273",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-17T16:00:10Z",
+      "side": 1,
+      "message": "Small nit that I missed before: ASSERT that mMaxDrawBuffers \u003c\u003d 8?",
+      "revId": "84622b7456074433fd89eaf21ab473e522157352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
