@@ -16,6 +16,24 @@
       "message": "We don\u0027t even need this `#if`, could you please remove it? `supportsAndroidNativeFenceSync` will be false where there\u0027s no support.",
       "revId": "39bc90cc07233bbc27bfdf8ca9fa5f1291664bb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d065a1e9_7b73a31e",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 494,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-17T06:38:39Z",
+      "side": 1,
+      "message": "Thank you for the review 😊\nI removed the platform restriction and also updated the description too.",
+      "parentUuid": "3dd1874a_a0b2f41c",
+      "revId": "39bc90cc07233bbc27bfdf8ca9fa5f1291664bb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
