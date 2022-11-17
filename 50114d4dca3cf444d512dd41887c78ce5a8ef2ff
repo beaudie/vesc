@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c92aeb_3a44d41f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-17T06:58:03Z",
+      "side": 1,
+      "message": "@m.maiya@samsung.com\nThe build error from windows was because I included linux specific header file to the common header file. And it caused \"no such file \u003csys/time.h\u003e\".\nI updated patch-set to resolve. \nPlease vote for the dry-run.",
+      "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
