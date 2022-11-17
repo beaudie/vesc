@@ -1091,6 +1091,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     mVertexInputGraphicsPipelineCache.destroy(this);
     mFragmentOutputGraphicsPipelineCache.destroy(this);
 
+    mInterfacePipelinesCache.destroy(device);
+
     mUtils.destroy(this);
 
     mRenderPassCache.destroy(mRenderer);
@@ -1915,19 +1917,36 @@ angle::Result ContextVk::createGraphicsPipeline()
                 }
             }
 
+            // If blobs are reused between the pipeline libraries and the monolithic pipelines (so
+            // |mergeProgramPipelineCachesToGlobalCache| would be enabled because merging the
+            // pipelines would be beneficial), directly use the global cache for the vertex input
+            // and fragment output pipelines.  This _may_ cause stalls as the worker thread that
+            // creates pipelines is also holding the same lock.
+            //
+            // On the other hand, if there is not going to be any reuse of blobs, use a private
+            // pipeline cache to avoid the aforementioned potential stall.
+            vk::PipelineCacheAccess interfacePipelineCacheStorage;
+            vk::PipelineCacheAccess *interfacePipelineCache = &pipelineCache;
+            if (!getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
+            {
+                ANGLE_TRY(ensureInterfacePipelineCache());
+                interfacePipelineCacheStorage.init(&mInterfacePipelinesCache, nullptr);
+                interfacePipelineCache = &interfacePipelineCacheStorage;
+            }
+
             // Recreate the vertex input subset if necessary
             ANGLE_TRY(CreateGraphicsPipelineSubset(
                 this, *mGraphicsPipelineDesc,
                 mGraphicsPipelineLibraryTransition & kVertexInputTransitionBitsMask,
                 GraphicsPipelineSubsetRenderPass::Unused, &mVertexInputGraphicsPipelineCache,
-                &pipelineCache, &mCurrentGraphicsPipelineVertexInput));
+                interfacePipelineCache, &mCurrentGraphicsPipelineVertexInput));
 
             // Recreate the fragment output subset if necessary
             ANGLE_TRY(CreateGraphicsPipelineSubset(
                 this, *mGraphicsPipelineDesc,
                 mGraphicsPipelineLibraryTransition & kFragmentOutputTransitionBitsMask,
                 GraphicsPipelineSubsetRenderPass::Required, &mFragmentOutputGraphicsPipelineCache,
-                &pipelineCache, &mCurrentGraphicsPipelineFragmentOutput));
+                interfacePipelineCache, &mCurrentGraphicsPipelineFragmentOutput));
 
             // Link the three subsets into one pipeline.
             ANGLE_TRY(executableVk->linkGraphicsPipelineLibraries(
@@ -2174,7 +2193,10 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineBinding(DirtyBits::Iterator 
 {
     ASSERT(mCurrentGraphicsPipeline);
 
-    mRenderPassCommandBuffer->bindGraphicsPipeline(mCurrentGraphicsPipeline->getPipeline());
+    const vk::Pipeline *pipeline = nullptr;
+    ANGLE_TRY(mCurrentGraphicsPipeline->getPreferredPipeline(this, &pipeline));
+
+    mRenderPassCommandBuffer->bindGraphicsPipeline(*pipeline);
 
     return angle::Result::Continue;
 }
@@ -8032,5 +8054,24 @@ vk::ComputePipelineFlags ContextVk::getComputePipelineFlags() const
 angle::ImageLoadContext ContextVk::getImageLoadContext() const
 {
     return getRenderer()->getDisplay()->getImageLoadContext();
+}
+
+angle::Result ContextVk::ensureInterfacePipelineCache()
+{
+    if (!mInterfacePipelinesCache.valid())
+    {
+        VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
+        pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+
+        if (getFeatures().supportsPipelineCreationCacheControl.enabled)
+        {
+            pipelineCacheCreateInfo.flags |=
+                VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
+        }
+
+        ANGLE_VK_TRY(this, mInterfacePipelinesCache.init(getDevice(), pipelineCacheCreateInfo));
+    }
+
+    return angle::Result::Continue;
 }
 }  // namespace rx
