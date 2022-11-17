@@ -1821,8 +1821,6 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentGraphicsPipeline && mCurrentGraphicsPipeline->valid());
 
-    mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
-
     const VkPipeline newPipeline = mCurrentGraphicsPipeline->getPipeline().getHandle();
 
     // If there's no change in pipeline, avoid rebinding it later.  If the rebind is due to a new
@@ -1836,12 +1834,18 @@ angle::Result ContextVk::handleDirtyGraphicsPipelineDesc(DirtyBits::Iterator *di
     // If a new pipeline needs to be bound, the render pass should necessarily be broken (which
     // implicitly pauses transform feedback), as resuming requires a barrier on the transform
     // feedback counter buffer.
-    if (mRenderPassCommands->started() && mRenderPassCommands->isTransformFeedbackActiveUnpaused())
+    if (mRenderPassCommands->started())
     {
-        ANGLE_TRY(flushDirtyGraphicsRenderPass(
-            dirtyBitsIterator, dirtyBitMask, RenderPassClosureReason::PipelineBindWhileXfbActive));
+        mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
 
-        dirtyBitsIterator->setLaterBit(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
+        if (mRenderPassCommands->isTransformFeedbackActiveUnpaused())
+        {
+            ANGLE_TRY(
+                flushDirtyGraphicsRenderPass(dirtyBitsIterator, dirtyBitMask,
+                                             RenderPassClosureReason::PipelineBindWhileXfbActive));
+
+            dirtyBitsIterator->setLaterBit(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME);
+        }
     }
 
     // The pipeline needs to rebind because it's changed.
@@ -6836,10 +6840,17 @@ angle::Result ContextVk::beginNewRenderPass(
     *renderPassSerialOut     = mCurrentRenderPassSerial;
 
     mPerfCounters.renderPasses++;
-    return mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
-                                                renderPassAttachmentOps, colorAttachmentCount,
-                                                depthStencilAttachmentIndex, clearValues,
-                                                mCurrentRenderPassSerial, commandBufferOut);
+    ANGLE_TRY(mRenderPassCommands->beginRenderPass(this, framebuffer, renderArea, renderPassDesc,
+                                                   renderPassAttachmentOps, colorAttachmentCount,
+                                                   depthStencilAttachmentIndex, clearValues,
+                                                   mCurrentRenderPassSerial, commandBufferOut));
+
+    if (mCurrentGraphicsPipeline)
+    {
+        ASSERT(mCurrentGraphicsPipeline->valid());
+        mRenderPassCommands->retainResource(mCurrentGraphicsPipeline);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
