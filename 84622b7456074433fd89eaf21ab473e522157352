@@ -33,6 +33,24 @@
       "message": "Small nit that I missed before: ASSERT that mMaxDrawBuffers \u003c\u003d 8?",
       "revId": "84622b7456074433fd89eaf21ab473e522157352",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63c3947c_95ba9efd",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-17T16:54:25Z",
+      "side": 1,
+      "message": "PTAL. Also added similar assertions to other tests that rely on this variable.",
+      "parentUuid": "b3b418e5_54699273",
+      "revId": "84622b7456074433fd89eaf21ab473e522157352",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
