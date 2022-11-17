@@ -769,6 +769,11 @@ struct FeaturesVk : FeatureSetBase
         "Whether monolithic pipelines perform significantly better than libraries", &members,
         "https://anglebug.com/7369"};
 
+    FeatureInfo slowMonolithicPipelineCreationForTesting = {
+        "slowMonolithicPipelineCreationForTesting", FeatureCategory::VulkanWorkarounds,
+        "Artificially slow down async monolithic pipeline creation for threading testing", &members,
+        "https://anglebug.com/7369"};
+
     FeatureInfo syncMonolithicPipelinesToBlobCache = {
         "syncMonolithicPipelinesToBlobCache", FeatureCategory::VulkanWorkarounds,
         "Whether it's beneficial to store monolithic pipelines in the blob cache when "
