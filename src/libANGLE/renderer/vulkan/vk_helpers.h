@@ -1128,6 +1128,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
     void assignID(CommandBufferID id) { mID = id; }
     CommandBufferID releaseID();
 
+    CommandBufferHelperAllocator *getAllocator() { return &mCommandAllocator; }
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1135,7 +1137,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
 
-    void initializeImpl(Context *context, CommandPool *commandPool);
+    void initializeImpl(CommandPool *commandPool);
 
     void resetImpl();
 
@@ -1162,9 +1164,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
     // Identifies the command buffer.
     CommandBufferID mID;
 
-    // Allocator used by this class. Using a pool allocator per CBH to avoid threading issues
-    //  that occur w/ shared allocator between multiple CBHs.
-    angle::PoolAllocator mAllocator;
+    // Allocator used by this class.
+    CommandBufferHelperAllocator mCommandAllocator;
 
     // Barriers to be executed before the command buffer.
     PipelineBarrierArray mPipelineBarriers;
@@ -1194,13 +1195,16 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBufferHelper();
     ~OutsideRenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context, CommandPool *commandPool);
+    angle::Result initialize(CommandPool *commandPool, CommandsAllocator *commandsAllocator);
 
     angle::Result reset(Context *context);
 
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
+
+    void attachAllocator(CommandsAllocator *allocator);
+    CommandsAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1232,7 +1236,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     void addCommandDiagnostics(ContextVk *contextVk);
 
   private:
-    angle::Result initializeCommandBuffer(Context *context);
+    angle::Result initializeCommandBuffer();
 
     OutsideRenderPassCommandBuffer mCommandBuffer;
 };
@@ -1286,13 +1290,16 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBufferHelper();
     ~RenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context, CommandPool *commandPool);
+    angle::Result initialize(CommandPool *commandPool, CommandsAllocator *commandsAllocator);
 
     angle::Result reset(Context *context);
 
     RenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffers[mCurrentSubpass]; }
 
     bool empty() const { return !started(); }
+
+    void attachAllocator(CommandsAllocator *allocator);
+    CommandsAllocator *detachAllocator();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }
@@ -1436,7 +1443,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassSerial getRenderPassSerial() const { return mRenderPassSerial; }
 
   private:
-    angle::Result initializeCommandBuffer(Context *context);
+    angle::Result initializeCommandBuffer();
     angle::Result beginRenderPassCommandBuffer(ContextVk *contextVk);
     angle::Result endRenderPassCommandBuffer(ContextVk *contextVk);
 
@@ -1536,6 +1543,7 @@ class CommandBufferRecycler
 
     angle::Result getCommandBufferHelper(Context *context,
                                          CommandPool *commandPool,
+                                         CommandsAllocator *commandsAllocator,
                                          CommandBufferHandleAllocator *freeCommandBuffers,
                                          CommandBufferHelperT **commandBufferHelperOut);
 
