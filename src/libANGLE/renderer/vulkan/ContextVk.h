@@ -55,12 +55,6 @@ enum class GraphicsEventCmdBuf
     EnumCount   = 3,
 };
 
-enum class QueueSubmitType
-{
-    PerformQueueSubmit,
-    SkipQueueSubmit,
-};
-
 class UpdateDescriptorSetsBuilder final : angle::NonCopyable
 {
   public:
@@ -1227,8 +1221,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // flushCommandsAndEndRenderPass() and flushDirtyGraphicsRenderPass() will set the dirty bits
     // directly or through the iterator respectively.  Outside those two functions, this shouldn't
     // be called directly.
-    angle::Result flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit,
-                                                    RenderPassClosureReason reason);
     angle::Result flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                DirtyBits dirtyBitMask,
                                                RenderPassClosureReason reason);
