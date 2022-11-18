@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b14c7bb_a6f097db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-18T16:15:55Z",
+      "side": 1,
+      "message": "Some fixes Roman helped me with, getting back to a stable state on unlocked Android.\nOpen to suggestions if you don\u0027t like the mWarmupSteps approach.",
+      "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
