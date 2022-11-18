@@ -68,6 +68,12 @@ class Serial final
 
     constexpr bool operator<(uint32_t value) const { return mValue < static_cast<uint64_t>(value); }
 
+    Serial &operator++()
+    {
+        mValue++;
+        return *this;
+    }
+
     // Useful for serialization.
     constexpr uint64_t getValue() const { return mValue; }
     constexpr bool valid() const { return mValue != kInvalid; }
@@ -114,6 +120,14 @@ class SerialFactoryBase final : angle::NonCopyable
         return Serial(current);
     }
 
+    Serial generate(size_t count)
+    {
+        uint64_t current = mSerial;
+        mSerial += count;
+        ASSERT(mSerial > current);  // Integer overflow
+        return Serial(current);
+    }
+
   private:
     SerialBaseType mSerial;
 };
@@ -123,12 +137,12 @@ using AtomicSerialFactory     = SerialFactoryBase<std::atomic<uint64_t>>;
 using RenderPassSerialFactory = SerialFactoryBase<uint64_t>;
 
 // For backend that supports multiple queue serials, QueueSerial includes a Serial and an index.
-using SerialIndex                                     = uint32_t;
-static constexpr SerialIndex kInvalidQueueSerialIndex = SerialIndex(-1);
+using SerialIndex                              = uint32_t;
+constexpr SerialIndex kInvalidQueueSerialIndex = SerialIndex(-1);
 
 class QueueSerial;
-// For now we limit to only one queue serial
-constexpr size_t kMaxQueueSerialIndexCount = 1;
+// For now we only use one queue serial index
+constexpr size_t kMaxQueueSerialIndexCount = 256;
 // Fixed array of queue serials
 class QueueSerialFixedArray final
 {
