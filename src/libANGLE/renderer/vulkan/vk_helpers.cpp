@@ -67,8 +67,6 @@ constexpr gl::ShaderMap<PipelineStage> kPipelineStageShaderMap = {
     {gl::ShaderType::Compute, PipelineStage::ComputeShader},
 };
 
-constexpr size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
-
 struct ImageMemoryBarrierData
 {
     char name[44];
@@ -1304,24 +1302,19 @@ CommandBufferHelperCommon::CommandBufferHelperCommon()
 
 CommandBufferHelperCommon::~CommandBufferHelperCommon() {}
 
-void CommandBufferHelperCommon::initializeImpl(Context *context, CommandPool *commandPool)
+void CommandBufferHelperCommon::initializeImpl(CommandPool *commandPool)
 {
-    mAllocator.initialize(kDefaultPoolAllocatorPageSize, 1);
-    // Push a scope into the pool allocator so we can easily free and re-init on reset()
-    mAllocator.push();
-
-    mUsedBufferCount = 0;
-
-    mCommandPool = commandPool;
+    if (mAllocatorManager.initAndCheckIfPoolInitNeeded())
+    {
+        mUsedBufferCount = 0;
+        mCommandPool     = commandPool;
+    }
 }
 
 void CommandBufferHelperCommon::resetImpl()
 {
-    mAllocator.pop();
-    mAllocator.push();
-
+    mAllocatorManager.resetAllocator();
     mUsedBufferCount = 0;
-
     ASSERT(mResourceUseList.empty());
 }
 
@@ -1498,16 +1491,14 @@ OutsideRenderPassCommandBufferHelper::OutsideRenderPassCommandBufferHelper() {}
 
 OutsideRenderPassCommandBufferHelper::~OutsideRenderPassCommandBufferHelper() {}
 
-angle::Result OutsideRenderPassCommandBufferHelper::initialize(Context *context,
-                                                               CommandPool *commandPool)
+angle::Result OutsideRenderPassCommandBufferHelper::initialize(CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
-    return initializeCommandBuffer(context);
+    initializeImpl(commandPool);
+    return initializeCommandBuffer();
 }
-
-angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
+angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer()
 {
-    return mCommandBuffer.initialize(context, mCommandPool, false, &mAllocator);
+    return mCommandBuffer.initialize(mAllocatorManager.getAllocator());
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
@@ -1516,7 +1507,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
 
     // Reset and re-initialize the command buffer
     context->getRenderer()->resetOutsideRenderPassCommandBuffer(std::move(mCommandBuffer));
-    return initializeCommandBuffer(context);
+    return initializeCommandBuffer();
 }
 
 void OutsideRenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
@@ -1556,6 +1547,23 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
     return reset(context);
 }
 
+void OutsideRenderPassCommandBufferHelper::attachAllocator(CommandsAllocator *allocator)
+{
+    mAllocatorManager.attachAllocator(allocator);
+    getCommandBuffer().attachAllocator(mAllocatorManager.getAllocator());
+}
+
+CommandsAllocator *OutsideRenderPassCommandBufferHelper::detachAllocator()
+{
+    getCommandBuffer().detachAllocator(mAllocatorManager.getAllocator());
+    return mAllocatorManager.detachAllocator(getCommandBuffer().empty());
+}
+
+void OutsideRenderPassCommandBufferHelper::checkForRecycle()
+{
+    mAllocatorManager.checkForRecycle(&getCommandBuffer(), empty());
+}
+
 void OutsideRenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 {
     std::ostringstream out;
@@ -1587,15 +1595,14 @@ RenderPassCommandBufferHelper::~RenderPassCommandBufferHelper()
     mFramebuffer.setHandle(VK_NULL_HANDLE);
 }
 
-angle::Result RenderPassCommandBufferHelper::initialize(Context *context, CommandPool *commandPool)
+angle::Result RenderPassCommandBufferHelper::initialize(CommandPool *commandPool)
 {
-    initializeImpl(context, commandPool);
-    return initializeCommandBuffer(context);
+    initializeImpl(commandPool);
+    return initializeCommandBuffer();
 }
-
-angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer(Context *context)
+angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer()
 {
-    return getCommandBuffer().initialize(context, mCommandPool, true, &mAllocator);
+    return getCommandBuffer().initialize(mAllocatorManager.getAllocator());
 }
 
 angle::Result RenderPassCommandBufferHelper::reset(Context *context)
@@ -1636,7 +1643,7 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     // Reset the image views used for imageless framebuffer (if any)
     std::fill(mImageViews.begin(), mImageViews.end(), VK_NULL_HANDLE);
 
-    return initializeCommandBuffer(context);
+    return initializeCommandBuffer();
 }
 
 void RenderPassCommandBufferHelper::imageRead(ContextVk *contextVk,
@@ -2201,7 +2208,7 @@ angle::Result RenderPassCommandBufferHelper::nextSubpass(ContextVk *contextVk,
     ++mCurrentSubpass;
     ASSERT(mCurrentSubpass < kMaxSubpassCount);
 
-    ANGLE_TRY(initializeCommandBuffer(contextVk));
+    ANGLE_TRY(initializeCommandBuffer());
     ANGLE_TRY(beginRenderPassCommandBuffer(contextVk));
     markOpen();
 
@@ -2397,6 +2404,23 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
     mStencilAttachment.onRenderAreaGrowth(contextVk, mRenderArea);
 }
 
+void RenderPassCommandBufferHelper::attachAllocator(CommandsAllocator *allocator)
+{
+    mAllocatorManager.attachAllocator(allocator);
+    getCommandBuffer().attachAllocator(mAllocatorManager.getAllocator());
+}
+
+CommandsAllocator *RenderPassCommandBufferHelper::detachAllocator()
+{
+    getCommandBuffer().detachAllocator(mAllocatorManager.getAllocator());
+    return mAllocatorManager.detachAllocator(getCommandBuffer().empty());
+}
+
+void RenderPassCommandBufferHelper::checkForRecycle()
+{
+    mAllocatorManager.checkForRecycle(&getCommandBuffer(), empty());
+}
+
 void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
 {
     std::ostringstream out;
@@ -2489,7 +2513,7 @@ angle::Result CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::getCo
     {
         CommandBufferHelperT *commandBuffer = new CommandBufferHelperT();
         *commandBufferHelperOut             = commandBuffer;
-        ANGLE_TRY(commandBuffer->initialize(context, commandPool));
+        ANGLE_TRY(commandBuffer->initialize(commandPool));
     }
     else
     {
