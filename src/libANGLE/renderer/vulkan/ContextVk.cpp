@@ -6558,10 +6558,6 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
 
-    // We must set this to false before calling flushCommandsAndEndRenderPass to prevent it from
-    // calling back to flushImpl.
-    mHasDeferredFlush = false;
-
     // Avoid calling vkQueueSubmit() twice, since submitFrame() below will do that.
     ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit(renderPassClosureReason));
 
@@ -6639,6 +6635,8 @@ angle::Result ContextVk::flushAndGetSerial(const vk::Semaphore *signalSemaphore,
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
 
+    // Since we just flushed, deferred flush is no longer deferred.
+    mHasDeferredFlush = false;
     return angle::Result::Continue;
 }
 
@@ -6919,8 +6917,8 @@ uint32_t ContextVk::getCurrentViewCount() const
     return drawFBO->getRenderPassDesc().viewCount();
 }
 
-angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queueSubmit,
-                                                           RenderPassClosureReason reason)
+angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutQueueSubmit(
+    RenderPassClosureReason reason)
 {
     // Ensure we flush the RenderPass *after* the prior commands.
     ANGLE_TRY(flushOutsideRenderPassCommands());
@@ -6981,25 +6979,19 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassImpl(QueueSubmitType queue
     }
 
     mHasAnyCommandsPendingSubmission = true;
-
-    if (mHasDeferredFlush && queueSubmit == QueueSubmitType::PerformQueueSubmit)
-    {
-        // If we have deferred glFlush call in the middle of renderpass, flush them now.
-        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
-    }
-
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
 {
-    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit, reason);
-}
+    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit(reason));
 
-angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutQueueSubmit(
-    RenderPassClosureReason reason)
-{
-    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::SkipQueueSubmit, reason);
+    if (mHasDeferredFlush)
+    {
+        // If we have deferred glFlush call in the middle of renderpass, flush them now.
+        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
@@ -7008,7 +7000,13 @@ angle::Result ContextVk::flushDirtyGraphicsRenderPass(DirtyBits::Iterator *dirty
 {
     ASSERT(mRenderPassCommands->started());
 
-    ANGLE_TRY(flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit, reason));
+    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit(reason));
+
+    if (mHasDeferredFlush)
+    {
+        // If we have deferred glFlush call in the middle of renderpass, flush them now.
+        ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
+    }
 
     // Set dirty bits that need processing on new render pass on the dirty bits iterator that's
     // being processed right now.
@@ -7089,7 +7087,10 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassIfDeferredSyncInit(
         return angle::Result::Continue;
     }
 
-    return flushCommandsAndEndRenderPassImpl(QueueSubmitType::PerformQueueSubmit, reason);
+    ANGLE_TRY(flushCommandsAndEndRenderPassWithoutQueueSubmit(reason));
+    // If we have deferred glFlush call in the middle of renderpass, flush them now.
+    ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
+    return angle::Result::Continue;
 }
 
 void ContextVk::addCommandBufferDiagnostics(const std::string &commandBufferDiagnostics)
