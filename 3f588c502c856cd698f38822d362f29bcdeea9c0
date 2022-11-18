@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efff1e95_3b2538e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-18T01:02:32Z",
+      "side": 1,
+      "message": "Removed the logs.",
+      "parentUuid": "d6660b4e_bc497053",
+      "revId": "3f588c502c856cd698f38822d362f29bcdeea9c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49d9f2a2_3a11ccf5",
