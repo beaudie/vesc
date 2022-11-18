@@ -16,6 +16,23 @@
       "message": "Re-LGTM! I ran a few bots to make sure removing the `#if`s from RendererVk is fine",
       "revId": "a3996831edc8e80a3dd9c0706293d67ca56763ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c194bc97_e09bb18f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-11-18T17:10:10Z",
+      "side": 1,
+      "message": "src/tests/egl_tests/EGLSyncTest.cpp, Line 343\neglClientWait with a flush, expecting EGL_SIGNALED when query SYNC_STATUS, but getting EGL_UNSIGNALED.\n\nDoes this Linux platform/Vulkan driver signal Android syncs?",
+      "revId": "a3996831edc8e80a3dd9c0706293d67ca56763ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
