@@ -16,6 +16,98 @@
       "message": "Some fixes Roman helped me with, getting back to a stable state on unlocked Android.\nOpen to suggestions if you don\u0027t like the mWarmupSteps approach.",
       "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f1478a6_e8f716f7",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:30:21Z",
+      "side": 1,
+      "message": "Seems like all of these should be some kind of `defaultX` constants so that we can check e.g. `gWarmupTrials \u003d\u003d defaultWarmupTrials`",
+      "range": {
+        "startLine": 143,
+        "startChar": 15,
+        "endLine": 144,
+        "endChar": 33
+      },
+      "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5013c4_40bbda52",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:30:21Z",
+      "side": 1,
+      "message": "Should we make this a named constant and check for `gWarmupSteps \u003d\u003d {name}` instead of `gWarmupSteps \u003c 0`?",
+      "range": {
+        "startLine": 165,
+        "startChar": 28,
+        "endLine": 165,
+        "endChar": 30
+      },
+      "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41bd0e9a_72d9a735",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:30:21Z",
+      "side": 1,
+      "message": "Something like `else mWarmupSteps \u003d gWarmupSteps` seems to be missing?",
+      "range": {
+        "startLine": 1401,
+        "startChar": 4,
+        "endLine": 1401,
+        "endChar": 5
+      },
+      "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e37c72e6_bf443c6c",
+        "filename": "util/test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:30:21Z",
+      "side": 1,
+      "message": "Could you move this fix to its own CL as it\u0027s a broader issue?",
+      "range": {
+        "startLine": 53,
+        "startChar": 8,
+        "endLine": 53,
+        "endChar": 49
+      },
+      "revId": "65a22cc4614530a5dd276cb9b1150feadd0f8ffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
