@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56253758_00100753",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-18T01:59:08Z",
+      "side": 1,
+      "message": "You could add an `ASSERT(mActiveMemoryAllocationsSize[allocTypeIndex] \u003e\u003d size)` to catch accounting issues",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43f55e33_4344789e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-18T01:59:08Z",
+      "side": 1,
+      "message": "Could you please give a few traces like Genshin Impact, Asphalt 9 a try to make sure there is no CPU overhead? Atomics can sometimes cause havoc",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5679f47b_912cce83",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-18T01:59:08Z",
+      "side": 1,
+      "message": "nit: not used in this header",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b8fa6ac_16470801",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-18T01:59:08Z",
+      "side": 1,
+      "message": "nit: `mAllocationSize` and `getAllocationSize` to make it clear",
+      "range": {
+        "startLine": 2633,
+        "startChar": 17,
+        "endLine": 2633,
+        "endChar": 22
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
