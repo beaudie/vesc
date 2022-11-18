@@ -299,7 +299,6 @@ class CommandQueueInterface : angle::NonCopyable
                                             const ResourceUse &use,
                                             uint64_t timeout)          = 0;
     virtual angle::Result waitIdle(Context *context, uint64_t timeout) = 0;
-    virtual QueueSerial reserveSubmitSerial()                          = 0;
     virtual angle::Result submitCommands(
         Context *context,
         bool hasProtectedContent,
@@ -369,8 +368,6 @@ class CommandQueue final : public CommandQueueInterface
                                     const ResourceUse &use,
                                     uint64_t timeout) override;
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
-
-    QueueSerial reserveSubmitSerial() override;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -449,6 +446,9 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
+    size_t getBatchCountUpToSerials(const Serials &serials, Shared<Fence> **fenceToWaitOnOut);
+
+    // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
 
     PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
@@ -486,9 +486,7 @@ class CommandQueue final : public CommandQueueInterface
     PersistentCommandPool mProtectedPrimaryCommandPool;
 
     // Queue serial management.
-    AtomicSerialFactory mQueueSerialFactory;
     QueueSerialFixedArray mLastSubmittedSerials;
-    Serial mCurrentQueueSerial;
     // This queue serial can be read/write from different threads, so we need to use atomic
     // operations to access the underline value. Since we only do load/store on this value, it
     // should be just a normal uint64_t load/store on most platforms.
@@ -536,8 +534,6 @@ class CommandProcessor final : public Context, public CommandQueueInterface
                                     uint64_t timeout) override;
 
     angle::Result waitIdle(Context *context, uint64_t timeout) override;
-
-    QueueSerial reserveSubmitSerial() override;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
