@@ -1,6 +1,69 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "735b03d5_33c3ce2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "Overall nice change! Could you also double check that you caught all memory allocation code paths?",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04b99c52_0b0c0dad",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "mActiveMemoryAllocationsSize.fill(0)?",
+      "range": {
+        "startLine": 1274,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 5
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e836b3_79aa3a8c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "I think you can use ToUnderlying(allocType)\nAnd also sanity check Assert(size !\u003d 0);",
+      "range": {
+        "startLine": 650,
+        "startChar": 30,
+        "endLine": 650,
+        "endChar": 62
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56253758_00100753",
@@ -37,6 +100,70 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5245fa0d_54838e25",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "You probably want to run micro benchmark though. For example,write a simple test that repeated create/destroy a buffer ensure no perf regression.",
+      "parentUuid": "43f55e33_4344789e",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc0d90c_8e83116f",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "Could you add comment here describe the difference? \nwhat is mSize \"The memory size that user of this object think we have\", \nand what is mAllocatedBufferSize \"The memory size we actually allocated\".",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 38
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb23a93c_c92afd08",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "I think this can be done in ImageHelper::destroy() { if mImage.valid() ....} That way it is more reliable than doing it here.",
+      "range": {
+        "startLine": 1526,
+        "startChar": 4,
+        "endLine": 1534,
+        "endChar": 5
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5679f47b_912cce83",
         "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.h",
         "patchSetId": 13
@@ -65,6 +192,30 @@
       "writtenOn": "2022-11-18T01:59:08Z",
       "side": 1,
       "message": "nit: `mAllocationSize` and `getAllocationSize` to make it clear",
+      "range": {
+        "startLine": 2633,
+        "startChar": 17,
+        "endLine": 2633,
+        "endChar": 22
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43e91358_38f77239",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T17:40:42Z",
+      "side": 1,
+      "message": "+1. Also update comment to indicate exactly what this value means.",
+      "parentUuid": "4b8fa6ac_16470801",
       "range": {
         "startLine": 2633,
         "startChar": 17,
