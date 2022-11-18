@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e55a7e5_3ec0f810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-18T22:25:10Z",
+      "side": 1,
+      "message": "Although every compressed format extension spec mentions the \"sum of the offset and the sub-image width being equal to the image width\" exception to the \"width must be a multiple of the block size\" rule, neither dEQP nor ANGLE validation were covering that.\n\nExpanded end2end tests in this area and filed https://gitlab.khronos.org/Tracker/vk-gl-cts/-/issues/4119.",
+      "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
