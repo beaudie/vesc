@@ -1310,19 +1310,19 @@ bool RendererVk::hasSharedGarbage()
            !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty();
 }
 
-void RendererVk::releaseSharedResources(vk::ResourceUseList *resourceList)
-{
-    // resource list may access same resources referenced by garbage collection so need to protect
-    // that access with a lock.
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
-    resourceList->releaseResourceUses();
-}
-
 void RendererVk::onDestroy(vk::Context *context)
 {
     if (isDeviceLost())
     {
         handleDeviceLost();
+    }
+    else
+    {
+        // ToDo: OneoffSubmission is doing wait on fence directly which by pass the
+        // retireFinishedCommands logic and may leave mInFlightCommands non-empty. For now call
+        // finish here to ensure everything is finished. We should chnage OneOffSUbmission code go
+        // through the code path just like others.
+        (void)finish(context, false);
     }
 
     for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
@@ -4451,27 +4451,33 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
-    QueueSerial submitQueueSerial;
+    // Allocate a oneoff submitQueueSerial and generate a serial and then use it and release the
+    // index.
+    SerialIndex queueIndex;
+    Serial lastSubmittedSerial;
+    ANGLE_TRY(allocateQueueSerialIndex(&queueIndex, &lastSubmittedSerial));
+    QueueSerial submitQueueSerial(queueIndex, generateQueueSerial(queueIndex));
+
     if (isAsyncCommandQueueEnabled())
     {
-        submitQueueSerial = mCommandProcessor.reserveSubmitSerial();
         ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(
             context, hasProtectedContent, priority, primary.getHandle(), waitSemaphore,
             waitSemaphoreStageMasks, fence, submitPolicy, submitQueueSerial));
     }
     else
     {
-        submitQueueSerial = mCommandQueue.reserveSubmitSerial();
         ANGLE_TRY(mCommandQueue.queueSubmitOneOff(
             context, hasProtectedContent, priority, primary.getHandle(), waitSemaphore,
             waitSemaphoreStageMasks, fence, submitPolicy, submitQueueSerial));
     }
 
-    *queueSerialOut = submitQueueSerial;
+    // Immediately release the queue index since itis an one off use.
+    releaseQueueSerialIndex(queueIndex);
 
+    *queueSerialOut = submitQueueSerial;
     if (primary.valid())
     {
-        mPendingOneOffCommands.push_back({submitQueueSerial, std::move(primary)});
+        mPendingOneOffCommands.push_back({vk::ResourceUse(submitQueueSerial), std::move(primary)});
     }
 
     return angle::Result::Continue;
@@ -4790,7 +4796,7 @@ angle::Result RendererVk::submitCommands(
     const vk::Semaphore *signalSemaphore,
     vk::GarbageList &&currentGarbage,
     vk::SecondaryCommandPools *commandPools,
-    QueueSerial *submitSerialOut)
+    const QueueSerial &submitQueueSerial)
 {
     std::unique_lock<std::mutex> lock(mCommandQueueMutex);
 
@@ -4801,21 +4807,17 @@ angle::Result RendererVk::submitCommands(
 
     if (isAsyncCommandQueueEnabled())
     {
-        *submitSerialOut = mCommandProcessor.reserveSubmitSerial();
-
         ANGLE_TRY(mCommandProcessor.submitCommands(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
             signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
-            commandPools, *submitSerialOut));
+            commandPools, submitQueueSerial));
     }
     else
     {
-        *submitSerialOut = mCommandQueue.reserveSubmitSerial();
-
         ANGLE_TRY(mCommandQueue.submitCommands(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
             signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
-            commandPools, *submitSerialOut));
+            commandPools, submitQueueSerial));
     }
 
     waitSemaphores.clear();
@@ -5003,8 +5005,7 @@ angle::Result RendererVk::getCommandBufferImpl(vk::Context *context,
                                                CommandBufferHelperT **commandBufferHelperOut)
 {
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    return recycler->getCommandBufferHelper(context, commandPool, &mCommandBufferHandleAllocator,
-                                            commandBufferHelperOut);
+    return recycler->getCommandBufferHelper(context, commandPool, commandBufferHelperOut);
 }
 
 angle::Result RendererVk::getOutsideRenderPassCommandBufferHelper(
@@ -5033,8 +5034,7 @@ void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleOutsideRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(
-        device, &mCommandBufferHandleAllocator, commandBuffer);
+    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
 }
 
 void RendererVk::recycleRenderPassCommandBufferHelper(
@@ -5043,8 +5043,7 @@ void RendererVk::recycleRenderPassCommandBufferHelper(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleRenderPassCommandBufferHelper");
     std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
-    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(
-        device, &mCommandBufferHandleAllocator, commandBuffer);
+    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
 }
 
 void RendererVk::logCacheStats() const
@@ -5136,6 +5135,24 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     // Try not to exceed 1/64 of heap size to begin with.
     const VkDeviceSize heapSize = getMemoryProperties().getHeapSizeForMemoryType(memoryTypeIndex);
     return std::min(heapSize / 64, mPreferredLargeHeapBlockSize);
+}
+
+angle::Result RendererVk::allocateQueueSerialIndex(SerialIndex *indexOut, Serial *serialOut)
+{
+    SerialIndex index = mQueueSerialIndexAllocator.allocate();
+    if (index == kInvalidQueueSerialIndex)
+    {
+        return angle::Result::Stop;
+    }
+    *indexOut  = index;
+    *serialOut = isAsyncCommandQueueEnabled() ? mCommandProcessor.getLastSubmittedSerial(index)
+                                              : mCommandQueue.getLastSubmittedSerial(index);
+    return angle::Result::Continue;
+}
+
+void RendererVk::releaseQueueSerialIndex(SerialIndex index)
+{
+    mQueueSerialIndexAllocator.release(index);
 }
 
 namespace vk
