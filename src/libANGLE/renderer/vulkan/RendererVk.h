@@ -18,7 +18,6 @@
 #include <thread>
 
 #include "common/PackedEnums.h"
-#include "common/PoolAlloc.h"
 #include "common/WorkerThread.h"
 #include "common/angleutils.h"
 #include "common/vulkan/vk_headers.h"
@@ -514,10 +513,12 @@ class RendererVk : angle::NonCopyable
     angle::Result getOutsideRenderPassCommandBufferHelper(
         vk::Context *context,
         vk::CommandPool *commandPool,
+        vk::CommandsAllocator *commandsAllocator,
         vk::OutsideRenderPassCommandBufferHelper **commandBufferHelperOut);
     angle::Result getRenderPassCommandBufferHelper(
         vk::Context *context,
         vk::CommandPool *commandPool,
+        vk::CommandsAllocator *commandsAllocator,
         vk::RenderPassCommandBufferHelper **commandBufferHelperOut);
 
     void recycleOutsideRenderPassCommandBufferHelper(
@@ -655,6 +656,7 @@ class RendererVk : angle::NonCopyable
     template <typename CommandBufferHelperT, typename RecyclerT>
     angle::Result getCommandBufferImpl(vk::Context *context,
                                        vk::CommandPool *commandPool,
+                                       vk::CommandsAllocator *commandsAllocator,
                                        RecyclerT *recycler,
                                        CommandBufferHelperT **commandBufferHelperOut);
 
