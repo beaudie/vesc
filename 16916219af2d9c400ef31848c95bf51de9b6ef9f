@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "199b49f4_73f93687",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-18T16:42:12Z",
+      "side": 1,
+      "message": "Do we need to make it current when we kick off MEC (which sounds expensive) or can we insert a makeCurrent in the resulting trace?",
+      "revId": "16916219af2d9c400ef31848c95bf51de9b6ef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
