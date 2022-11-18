@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e9aecf2_013a58c1",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:13:02Z",
+      "side": 1,
+      "message": "This doesn\u0027t work because ANGLEProcessPerfTestArgs runs first, saves --render-test-output-dir as gRenderTestOutputDir and modifies argv",
+      "range": {
+        "startLine": 1232,
+        "startChar": 26,
+        "endLine": 1232,
+        "endChar": 53
+      },
+      "revId": "e495e7fdd058e5e0d85e5ae37190677c74a838e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
