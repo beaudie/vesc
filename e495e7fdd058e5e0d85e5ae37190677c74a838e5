@@ -46,6 +46,30 @@
       },
       "revId": "e495e7fdd058e5e0d85e5ae37190677c74a838e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0875a05f_7385e8b3",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-18T16:53:15Z",
+      "side": 1,
+      "message": "Not sure about the impact of artifact stuff, the way I noticed this was by using this arg in a WIP CL which started crashing because it became empty.",
+      "parentUuid": "5e2bccbe_a56f732b",
+      "range": {
+        "startLine": 1232,
+        "startChar": 26,
+        "endLine": 1232,
+        "endChar": 53
+      },
+      "revId": "e495e7fdd058e5e0d85e5ae37190677c74a838e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
