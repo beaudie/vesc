@@ -185,6 +185,40 @@ struct Error
     uint32_t line;
 };
 
+class QueueSerialIndexAllocator final
+{
+  public:
+    QueueSerialIndexAllocator()
+    {
+        mFreeIndexBitSetArray.flip();
+        ASSERT(mFreeIndexBitSetArray.all());
+    }
+    SerialIndex allocate()
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        if (mFreeIndexBitSetArray.none())
+        {
+            return kInvalidQueueSerialIndex;
+        }
+        SerialIndex index = static_cast<SerialIndex>(mFreeIndexBitSetArray.first());
+        ASSERT(index < kMaxQueueSerialIndexCount);
+        mFreeIndexBitSetArray.reset(index);
+        return index;
+    }
+
+    void release(SerialIndex index)
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        ASSERT(index < kMaxQueueSerialIndexCount);
+        ASSERT(!mFreeIndexBitSetArray.test(index));
+        mFreeIndexBitSetArray.set(index);
+    }
+
+  private:
+    angle::BitSetArray<kMaxQueueSerialIndexCount> mFreeIndexBitSetArray;
+    std::mutex mMutex;
+};
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
@@ -203,9 +237,19 @@ class Context : angle::NonCopyable
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
+    SerialIndex getCurrentSerialIndex() const { return mCurrentSerialIndex; }
+    Serial getCurrentSerial() const { return mCurrentSerial; }
+    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
+
   protected:
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
+
+    // Per context queue serial
+    SerialIndex mCurrentSerialIndex;
+    Serial mCurrentSerial;
+    Serial mLastFlushedSerial;
+    Serial mLastSubmittedSerial;
 };
 
 class RenderPassDesc;
@@ -1173,6 +1217,7 @@ enum class RenderPassClosureReason
     CopyTextureOnCPU,
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
+    OutOfReservedQueueSerialForOutsideCommands,
 
     // UtilsVk
     PrepareForBlit,

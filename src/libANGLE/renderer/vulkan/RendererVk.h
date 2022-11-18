@@ -144,7 +144,6 @@ class RendererVk : angle::NonCopyable
     void notifyDeviceLost();
     bool isDeviceLost() const;
     bool hasSharedGarbage();
-    void releaseSharedResources(vk::ResourceUseList *resourceList);
 
     std::string getVendorString() const;
     std::string getRendererDescription() const;
@@ -300,29 +299,22 @@ class RendererVk : angle::NonCopyable
                                     QueueSerial *queueSerialOut);
 
     template <typename... ArgsT>
-    void collectGarbageAndReinit(vk::SharedResourceUse *use, ArgsT... garbageIn)
+    void collectGarbage(const vk::ResourceUse &use, ArgsT... garbageIn)
     {
         std::vector<vk::GarbageObject> sharedGarbage;
         CollectGarbage(&sharedGarbage, garbageIn...);
         if (!sharedGarbage.empty())
         {
-            collectGarbage(std::move(*use), std::move(sharedGarbage));
+            collectGarbage(std::move(use), std::move(sharedGarbage));
         }
-        else
-        {
-            // Force releasing "use" even if no garbage was created.
-            use->release();
-        }
-        // Keep "use" valid.
-        use->init();
     }
 
-    void collectGarbage(vk::SharedResourceUse &&use, std::vector<vk::GarbageObject> &&sharedGarbage)
+    void collectGarbage(const vk::ResourceUse &use, vk::GarbageList &&sharedGarbage)
     {
         if (!sharedGarbage.empty())
         {
-            vk::SharedGarbage garbage(std::move(use), std::move(sharedGarbage));
-            if (garbage.hasUnsubmittedUse(this))
+            vk::SharedGarbage garbage(use, std::move(sharedGarbage));
+            if (hasUnsubmittedUse(use))
             {
                 std::unique_lock<std::mutex> lock(mGarbageMutex);
                 mPendingSubmissionGarbage.push(std::move(garbage));
@@ -335,7 +327,7 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    void collectSuballocationGarbage(vk::SharedResourceUse &use,
+    void collectSuballocationGarbage(const vk::ResourceUse &use,
                                      vk::BufferSuballocation &&suballocation,
                                      vk::Buffer &&buffer)
     {
@@ -344,16 +336,14 @@ class RendererVk : angle::NonCopyable
             std::unique_lock<std::mutex> lock(mGarbageMutex);
             if (hasUnsubmittedUse(use))
             {
-                mPendingSubmissionSuballocationGarbage.emplace(
-                    std::move(use), std::move(suballocation), std::move(buffer));
+                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
+                                                               std::move(buffer));
             }
             else
             {
                 mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(std::move(use), std::move(suballocation),
-                                              std::move(buffer));
+                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
             }
-            use.init();
         }
         else
         {
@@ -473,7 +463,7 @@ class RendererVk : angle::NonCopyable
                                  const vk::Semaphore *signalSemaphore,
                                  vk::GarbageList &&currentGarbage,
                                  vk::SecondaryCommandPools *commandPools,
-                                 QueueSerial *submitSerialOut);
+                                 const QueueSerial &submitSerialOut);
 
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
@@ -610,29 +600,21 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
+    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut, Serial *serialOut);
+    void releaseQueueSerialIndex(SerialIndex index);
+    Serial generateQueueSerial(SerialIndex index);
+    void reserveQueueSerials(SerialIndex index,
+                             size_t count,
+                             RangedSerialFactory *rangedSerialFactory);
+
     // The ResourceUse still have unfinished queue serial by vulkan.
     bool hasUnfinishedUse(const vk::ResourceUse &use) const;
-    bool hasUnfinishedUse(const vk::SharedResourceUse &sharedUse) const
-    {
-        ASSERT(sharedUse.valid());
-        return hasUnfinishedUse(sharedUse.getResourceUse());
-    }
 
     // The ResourceUse still have unfinished queue serial by vulkan.
     bool useInRunningCommands(const vk::ResourceUse &use) const;
-    bool useInRunningCommands(const vk::SharedResourceUse &sharedUse) const
-    {
-        ASSERT(sharedUse.valid());
-        return useInRunningCommands(sharedUse.getResourceUse());
-    }
 
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
-    bool hasUnsubmittedUse(const vk::SharedResourceUse &sharedUse) const
-    {
-        ASSERT(sharedUse.valid());
-        return hasUnsubmittedUse(sharedUse.getResourceUse());
-    }
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -827,26 +809,7 @@ class RendererVk : angle::NonCopyable
 
     struct PendingOneOffCommands
     {
-        PendingOneOffCommands(const QueueSerial &queueSerial, vk::PrimaryCommandBuffer &&command)
-        {
-            use.init();
-            use.updateSerialOneOff(queueSerial);
-            commandBuffer = std::move(command);
-        }
-        PendingOneOffCommands(PendingOneOffCommands &&other)
-        {
-            use           = std::move(other.use);
-            commandBuffer = std::move(other.commandBuffer);
-        }
-        ~PendingOneOffCommands()
-        {
-            if (use.valid())
-            {
-                use.release();
-            }
-            ASSERT(!commandBuffer.valid());
-        }
-        vk::SharedResourceUse use;
+        vk::ResourceUse use;
         vk::PrimaryCommandBuffer commandBuffer;
     };
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
@@ -860,7 +823,6 @@ class RendererVk : angle::NonCopyable
 
     // Command buffer pool management.
     std::mutex mCommandBufferRecyclerMutex;
-    vk::CommandBufferHandleAllocator mCommandBufferHandleAllocator;
     vk::CommandBufferRecycler<vk::OutsideRenderPassCommandBuffer,
                               vk::OutsideRenderPassCommandBufferHelper>
         mOutsideRenderPassCommandBufferRecycler;
@@ -875,6 +837,10 @@ class RendererVk : angle::NonCopyable
 
     // Tracks resource serials.
     vk::ResourceSerialFactory mResourceSerialFactory;
+
+    // QueueSerial generator
+    vk::QueueSerialIndexAllocator mQueueSerialIndexAllocator;
+    std::array<AtomicSerialFactory, kMaxQueueSerialIndexCount> mQueueSerialFactory;
 
     // Application executable information
     VkApplicationInfo mApplicationInfo;
@@ -905,6 +871,18 @@ class RendererVk : angle::NonCopyable
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
 };
+
+ANGLE_INLINE Serial RendererVk::generateQueueSerial(SerialIndex index)
+{
+    return mQueueSerialFactory[index].generate();
+}
+
+ANGLE_INLINE void RendererVk::reserveQueueSerials(SerialIndex index,
+                                                  size_t count,
+                                                  RangedSerialFactory *rangedSerialFactory)
+{
+    mQueueSerialFactory[index].reserve(rangedSerialFactory, count);
+}
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
 {
