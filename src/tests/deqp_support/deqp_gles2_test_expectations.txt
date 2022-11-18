@@ -194,6 +194,7 @@
 3531 MAC OPENGL INTEL : dEQP-GLES2.functional.fbo.render.color_clear.tex2d_rgb_depth_component16 = FAIL
 3531 MAC OPENGL INTEL : dEQP-GLES2.functional.fbo.render.color_clear.tex2d_rgb_stencil_index8 = FAIL
 3531 MAC OPENGL INTEL : dEQP-GLES2.functional.fbo.render.stencil_clear.tex2d_rgb_stencil_index8 = FAIL
+7838 MAC OPENGL INTEL : dEQP-GLES2.functional.shaders.function.global_variable_aliasing_* = FAIL
 
 // Mac AMD OpenGL specific
 2137 MAC OPENGL AMD : dEQP-GLES2.functional.clipping.point.wide_point_clip = FAIL
@@ -303,6 +304,7 @@
 
 6528 PIXEL4ORXL GLES : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_array_function_arg_vertex = FAIL
 6528 PIXEL4ORXL GLES : dEQP-GLES2.functional.shaders.struct.uniform.sampler_in_function_arg_vertex = FAIL
+7838 PIXEL4ORXL GLES : dEQP-GLES2.functional.shaders.function.global_variable_aliasing_* = FAIL
 
 6709 LINUX NVIDIA GTX1660 VULKAN : dEQP-GLES2.functional.shaders.random.all_features.fragment.13 = FAIL
 6709 LINUX NVIDIA GTX1660 VULKAN : dEQP-GLES2.functional.shaders.random.all_features.fragment.26 = FAIL
