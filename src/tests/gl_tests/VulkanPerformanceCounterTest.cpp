@@ -679,13 +679,6 @@ TEST_P(VulkanPerformanceCounterTest, SubmittingOutsideCommandBufferDoesNotCollec
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
     ++submitCommandsCount;
 
-    // When the preferSubmitAtFBOBoundary feature is enabled, the render pass closure causes an
-    // extra submission.
-    if (hasPreferSubmitAtFBOBoundary())
-    {
-        ++submitCommandsCount;
-    }
-
     // Verify counters.
     EXPECT_EQ(getPerfCounters().renderPasses, expectedRenderPassCount);
     EXPECT_EQ(getPerfCounters().vkQueueSubmitCallsTotal, submitCommandsCount);
