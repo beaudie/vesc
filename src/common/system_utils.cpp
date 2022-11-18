@@ -218,7 +218,11 @@ void *OpenSystemLibraryAndGetError(const char *libraryName,
                                    SearchType searchType,
                                    std::string *errorOut)
 {
-    std::string libraryWithExtension = std::string(libraryName) + "." + GetSharedLibraryExtension();
+    std::string libraryWithExtension = std::string(libraryName);
+    if (libraryWithExtension.find_last_of('.') == std::string::npos)
+    {
+        libraryWithExtension += GetSharedLibraryExtension();
+    }
 #if ANGLE_PLATFORM_IOS
     // On iOS, libraryWithExtension is a directory in which the library resides.
     // The actual library name doesn't have an extension at all.
