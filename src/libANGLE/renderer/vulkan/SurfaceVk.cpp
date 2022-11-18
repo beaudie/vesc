@@ -1653,13 +1653,13 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     RendererVk *renderer = contextVk->getRenderer();
 
     // Throttle the submissions to avoid getting too far ahead of the GPU.
-    QueueSerial *swapSerial = &mSwapHistory.front();
+    QueueSerial &swapSerial = mSwapHistory.front();
     mSwapHistory.next();
 
-    if (swapSerial->valid())
+    if (swapSerial.valid())
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(renderer->finishQueueSerial(contextVk, *swapSerial));
+        ANGLE_TRY(renderer->finishQueueSerial(contextVk, swapSerial));
     }
 
     SwapchainImage &image               = mSwapchainImages[mCurrentSwapchainImageIndex];
@@ -1745,16 +1745,20 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // with other functionality, especially counters used to validate said functionality.
     const bool shouldDrawOverlay = overlayHasEnabledWidget(contextVk);
 
-    ANGLE_TRY(contextVk->flushAndGetSerial(shouldDrawOverlay ? nullptr : presentSemaphore,
-                                           swapSerial, RenderPassClosureReason::EGLSwapBuffers));
+    ANGLE_TRY(contextVk->flushImpl(shouldDrawOverlay ? nullptr : presentSemaphore,
+                                   RenderPassClosureReason::EGLSwapBuffers));
 
     if (shouldDrawOverlay)
     {
         updateOverlay(contextVk);
         ANGLE_TRY(drawOverlay(contextVk, &image));
-        ANGLE_TRY(contextVk->flushAndGetSerial(presentSemaphore, swapSerial,
-                                               RenderPassClosureReason::AlreadySpecifiedElsewhere));
+        ANGLE_TRY(contextVk->flushImpl(presentSemaphore,
+                                       RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
+
+    // Now update swapSerial With last submitted queue serial
+    swapSerial =
+        QueueSerial(contextVk->getCurrentQueueSerialIndex(), contextVk->getLastSubmittedSerial());
 
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
