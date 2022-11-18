@@ -16,6 +16,23 @@
       "message": "I am seeing this improves gfxbench gl_driver2_off score by 1.4% on pixel 7 pro.",
       "revId": "85c98a92bb763452133bd7b4580d80625bb2c75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "151d7637_bc937363",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-18T19:25:01Z",
+      "side": 1,
+      "message": "Multiple failures in angle_deqp_gles3_vulkan_tests on Pixel 6\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1969/overview",
+      "revId": "85c98a92bb763452133bd7b4580d80625bb2c75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
