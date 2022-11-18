@@ -33,6 +33,24 @@
       "message": "Multiple failures in angle_deqp_gles3_vulkan_tests on Pixel 6\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/1969/overview",
       "revId": "85c98a92bb763452133bd7b4580d80625bb2c75d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "830f4c34_ff2e8f8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-18T20:23:40Z",
+      "side": 1,
+      "message": "Thanks Yuly, I will take a look.",
+      "parentUuid": "151d7637_bc937363",
+      "revId": "85c98a92bb763452133bd7b4580d80625bb2c75d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
