@@ -7,13 +7,8 @@
 // android_util.cpp: Utilities for the using the Android platform
 
 #include "common/android_util.h"
+#include "common/android_platform.h"
 #include "common/debug.h"
-
-#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
-#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
-// NDK header file for access to Android Hardware Buffers
-#    include <android/hardware_buffer.h>
-#endif
 
 // Taken from cutils/native_handle.h:
 // https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h
@@ -83,7 +78,7 @@ typedef struct ANativeWindowBuffer
  */
 enum {
 
-#ifndef ANGLE_AHARDWARE_BUFFER_SUPPORT
+#if (defined(ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL < 15)
     /**
      * Corresponding formats:
      *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM
@@ -113,13 +108,14 @@ enum {
      *   OpenGL ES: GL_RGB565
      */
     AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM             = 4,
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#endif
 
     AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM           = 5,
     AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM           = 6,
     AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM           = 7,
 
-#ifndef ANGLE_AHARDWARE_BUFFER_SUPPORT
+
+#if (defined(ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL < 16)
     /**
      * Corresponding formats:
      *   Vulkan: VK_FORMAT_R16G16B16A16_SFLOAT
@@ -139,7 +135,10 @@ enum {
      * the buffer size in bytes.
      */
     AHARDWAREBUFFER_FORMAT_BLOB                     = 0x21,
+#endif  // ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL < 16
 
+#if (defined(ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL < 17) || \
+    (defined(ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL < 28)
     /**
      * Corresponding formats:
      *   Vulkan: VK_FORMAT_D16_UNORM
@@ -181,7 +180,10 @@ enum {
      *   OpenGL ES: GL_STENCIL_INDEX8
      */
     AHARDWAREBUFFER_FORMAT_S8_UINT                  = 0x35,
+#endif
 
+#if (defined(ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL < 20) || \
+    (defined(ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL < 29)
     /**
      * YUV 420 888 format.
      * Must have an even width and height. Can be accessed in OpenGL
@@ -189,8 +191,17 @@ enum {
      * cube-maps or multi-layered textures.
      */
     AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420             = 0x23,
+#endif
 
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#if (defined(ANGLE_AHARDWAREBUFFER_NDK_BUILD_LEVEL) || \
+    (defined(ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL) && ANGLE_AHARDWAREBUFFER_PLATFORM_BUILD_LEVEL < 33)
+    /**
+     * Corresponding formats:
+     *   Vulkan: VK_FORMAT_R8_UNORM
+     *   OpenGL ES: GR_GL_R8
+     */
+    AHARDWAREBUFFER_FORMAT_R8_UNORM                 = 0x38,
+#endif
 
     AHARDWAREBUFFER_FORMAT_YV12                     = 0x32315659,
     AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED   = 0x22,
@@ -257,6 +268,8 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
             return GL_DEPTH32F_STENCIL8;
         case AHARDWAREBUFFER_FORMAT_S8_UINT:
             return GL_STENCIL_INDEX8;
+        case AHARDWAREBUFFER_FORMAT_R8_UNORM:
+            return GL_R8;
         case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
         case AHARDWAREBUFFER_FORMAT_YV12:
         case AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED:
@@ -286,7 +299,7 @@ ANativeWindowBuffer *ClientBufferToANativeWindowBuffer(EGLClientBuffer clientBuf
 uint64_t GetAHBUsage(int eglNativeBufferUsage)
 {
     uint64_t ahbUsage = 0;
-#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+#if defined(ANGLE_AHARDWAREBUFFER_TARGET_SUPPORT)
     if (eglNativeBufferUsage & EGL_NATIVE_BUFFER_USAGE_PROTECTED_BIT_ANDROID)
     {
         ahbUsage |= AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT;
@@ -299,7 +312,7 @@ uint64_t GetAHBUsage(int eglNativeBufferUsage)
     {
         ahbUsage |= AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE;
     }
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#endif  // ANGLE_AHARDWAREBUFFER_TARGET_SUPPORT
     return ahbUsage;
 }
 
@@ -309,7 +322,7 @@ EGLClientBuffer CreateEGLClientBufferFromAHardwareBuffer(int width,
                                                          int androidFormat,
                                                          int usage)
 {
-#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+#if defined(ANGLE_AHARDWAREBUFFER_TARGET_SUPPORT)
 
     // The height and width are number of pixels of size format
     AHardwareBuffer_Desc aHardwareBufferDescription = {};
@@ -330,7 +343,7 @@ EGLClientBuffer CreateEGLClientBufferFromAHardwareBuffer(int width,
     return AHardwareBufferToClientBuffer(aHardwareBuffer);
 #else
     return nullptr;
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+#endif  // ANGLE_AHARDWAREBUFFER_TARGET_SUPPORT
 }
 
 void GetANativeWindowBufferProperties(const ANativeWindowBuffer *buffer,
