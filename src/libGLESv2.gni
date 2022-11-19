@@ -29,6 +29,7 @@ libangle_common_sources = [
   "src/common/WorkerThread.h",
   "src/common/aligned_memory.cpp",
   "src/common/aligned_memory.h",
+  "src/common/android_platform.h",
   "src/common/android_util.cpp",
   "src/common/android_util.h",
   "src/common/angleutils.cpp",
