@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09ebb60d_a42e2e4e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7074,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-19T02:16:33Z",
+      "side": 1,
+      "message": "Why we do not have to check `if (mHasDeferredFlush)` here?",
+      "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
