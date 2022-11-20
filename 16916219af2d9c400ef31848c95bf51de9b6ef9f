@@ -34,6 +34,24 @@
       "parentUuid": "199b49f4_73f93687",
       "revId": "16916219af2d9c400ef31848c95bf51de9b6ef9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be9bb544_c82826cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-20T16:17:45Z",
+      "side": 1,
+      "message": "Switching to the main context before the validation point was, of course, nonsense, because then the main context would be serialized during validation, and this obviously fails comparison with the shared context that was capturing during trace upgrade.\n\nCurrently, we already inject a makeCurrent at the beginning of the setup routine, but this is not sufficient, because with that we get the default framebuffer in the context serialization during validation that is not there if the context is not current during serialization when running upgrade.",
+      "parentUuid": "94a7ca40_2336071a",
+      "revId": "16916219af2d9c400ef31848c95bf51de9b6ef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
