@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f8a3565_43470198",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T22:37:48Z",
+      "side": 1,
+      "message": "Ok (leaving open)",
+      "parentUuid": "f951aa88_f0c2fc84",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "30230b9d_135a6ce0",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 8
@@ -254,6 +272,24 @@
       "side": 1,
       "message": "The index generator guarantees that we never ever have an index bigger than that. I can add an assertion here if it concerns you.",
       "parentUuid": "8eb0fe8f_639d4a44",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43388f5c_1f887606",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T22:37:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a9eb0fd0_a2a6503a",
       "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
