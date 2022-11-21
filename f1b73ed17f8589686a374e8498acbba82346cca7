@@ -16,6 +16,24 @@
       "message": "I tested this change out on my local Windows+NVIDIA box (RTX 3090, driver version 526.98) with my application and it is crashing in `vkCmdDrawIndexed` with a NULL pointer dereference somewhere inside the NVIDIA Vulkan driver.\n\nIf I override the `supportsGraphicsPipelineLibrary` feature to `false`, my app runs fine. I tried enabling the Vulkan validation layers from SDK version 1.3.231 for my application to see if that would catch whatever is causing the crash and it did not.\n\nI\u0027m puzzled that the trybots did not complain, as I did find numerous `angle_end2end_tests` cases crashing with similar draw call stacks that could be reproducing the issue (though of course it\u0027s hard to tell without driver symbols):\n\n```\nColorMaskForDrawBuffersTest.Blit/ES3_Vulkan_AsyncCommandQueue\nColorMaskForDrawBuffersTest.Clear/ES3_Vulkan_AsyncCommandQueue\nColorMaskForDrawBuffersTest.DrawQuad/ES3_Vulkan_AsyncCommandQueue\nColorMaskForDrawBuffersTest.ScissoredClear/ES3_Vulkan_AsyncCommandQueue\nDrawBuffersTestES3.BlendWithDrawBufferAndFramebufferChanges/ES3_Vulkan_AsyncCommandQueue\nEXTBlendFuncExtendedDrawTest.FragColor/ES2_Vulkan\nGLSLTest_ES31.BuiltInsWithOutParameters/ES3_1_Vulkan\n```\nThe above tests all pass if I force `supportsGraphicsPipelineLibrary` off.\n\nDo ANGLE\u0027s Windows+NVIDIA trybots have the hardware and drivers to support `VK_EXT_graphics_pipeline_library`?",
       "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cf90a9a_5f3dc20e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T16:03:53Z",
+      "side": 1,
+      "message": "\u003e Do ANGLE\u0027s Windows+NVIDIA trybots have the hardware and drivers to support `VK_EXT_graphics_pipeline_library`?\n\nNo, our SwiftShader bot is the only one with support at the moment.\n\n---\n\nThanks for trying the change before it lands, I could limit it to SwiftShader for now, but we should definitely get to the bottom of this. What\u0027s the stack trace?",
+      "parentUuid": "41021c4b_65d9ac63",
+      "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
