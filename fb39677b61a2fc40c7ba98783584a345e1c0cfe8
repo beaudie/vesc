@@ -16,6 +16,23 @@
       "message": "Yuly: PTAL",
       "revId": "fb39677b61a2fc40c7ba98783584a345e1c0cfe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5cef84a_ac30e021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-21T13:18:15Z",
+      "side": 1,
+      "message": "Per crrev.com/c/4037886 this looks good, I\u0027ll submit.\nPlease follow up removing minigbm.",
+      "revId": "fb39677b61a2fc40c7ba98783584a345e1c0cfe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
