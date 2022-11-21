@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81a42627_1f451ba2",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T18:05:35Z",
+      "side": 1,
+      "message": "Drive by: Is `libraryName` just the name, or could it be a path? Because if it\u0027s a path, the check for `.` being in the name is not correct (because it could be in the dir name).\n\n(`.` not being in the name is not actually technically correct (I could name my lib `libShabi.Code.so.1`), but could be accepted as convention)",
+      "range": {
+        "startLine": 217,
+        "startChar": 47,
+        "endLine": 217,
+        "endChar": 58
+      },
+      "revId": "20056de3c77ebb7b931bee906ae6acb7ce05c06b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e75475bc_c8b5d6d0",
         "filename": "src/common/system_utils.cpp",
         "patchSetId": 6
