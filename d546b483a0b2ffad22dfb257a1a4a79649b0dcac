@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4671eca_1283874b",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "nit: Also `ASSERT(queueSerial.getIndex() \u003c mSerials.size())`",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab261ee5_c6cb6928",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "Note: the reason this was cached and set once is that `mLastCompletedQueueSerial` was atomic. If per my other comment you\u0027d need to make `mLastCompletedSerials` atomics, this code should also be adjusted.",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251389d3_2835d5b6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "Access to `mLastCompletedQueueSerial` is not protected by mutex, which is why it was atomic. I don\u0027t see any protection added for `mLastCompletedSerials`.\n\nIf I missed something and there\u0027s no longer a need for atomicity, please update the comment above.",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acbbf537_4094da36",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "nit: `CommandQueue::finishQueueSerial` also uses this trick. For uniformity, either remove `CommandQueue::finishQueueSerial` and call `finishResourceUse`, or add a `finishQueueSerial` to `CommandProcessor`",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30230b9d_135a6ce0",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "nit: `whose`",
+      "range": {
+        "startLine": 24,
+        "startChar": 40,
+        "endLine": 24,
+        "endChar": 45
+      },
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fa65456_26d1017c",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "Comment says it\u0027s an array of `QueueSerial`s, but it\u0027s actually an array of `Serial`s, which is a little hard to understand. How about this for the first sentence?\n\n\u003e Serials is an array of queue serials, which when paired with the index of the serials in the array result in QueueSerials.",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb0fe8f_639d4a44",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "There\u0027s no guarantee that `mSerials.size() \u003c\u003d serials.size()`",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "294e9761_bd3453e2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "nit: Another comment/ASSERT here that only one serial is possible now",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d34304ed_1bfb5976",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T17:51:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
