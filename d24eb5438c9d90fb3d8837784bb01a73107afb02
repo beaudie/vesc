@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23dbbbe3_20cb307c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Thanks! Currently, it seems that when the renderer object is being destroyed, the remaining allocated size for the current members of `MemoryAllocationType` is zero (checked using an assert in `RendererVk::onDestroy()`).",
+      "parentUuid": "735b03d5_33c3ce2b",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04b99c52_0b0c0dad",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-11-18T17:40:42Z",
       "side": 1,
       "message": "mActiveMemoryAllocationsSize.fill(0)?",
+      "range": {
+        "startLine": 1274,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 5
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828cc0b6_8e8c84c3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "It hits a compilation error: `overload resolution selected deleted operator \u0027\u003d\u0027`",
+      "parentUuid": "04b99c52_0b0c0dad",
       "range": {
         "startLine": 1274,
         "startChar": 4,
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead62a0a_149b172f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Thanks. Done.",
+      "parentUuid": "44e836b3_79aa3a8c",
+      "range": {
+        "startLine": 650,
+        "startChar": 30,
+        "endLine": 650,
+        "endChar": 62
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "56253758_00100753",
@@ -77,6 +143,24 @@
       "writtenOn": "2022-11-18T01:59:08Z",
       "side": 1,
       "message": "You could add an `ASSERT(mActiveMemoryAllocationsSize[allocTypeIndex] \u003e\u003d size)` to catch accounting issues",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24a14dcc_69f62a51",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56253758_00100753",
       "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -118,6 +202,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f6d654f8_0a90587f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "I will run tests to see if there is significant performance change.",
+      "parentUuid": "5245fa0d_54838e25",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "efc0d90c_8e83116f",
         "filename": "src/libANGLE/renderer/vulkan/Suballocation.h",
         "patchSetId": 13
@@ -129,6 +231,30 @@
       "writtenOn": "2022-11-18T17:40:42Z",
       "side": 1,
       "message": "Could you add comment here describe the difference? \nwhat is mSize \"The memory size that user of this object think we have\", \nand what is mAllocatedBufferSize \"The memory size we actually allocated\".",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 38
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9d6ecd_5031a978",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efc0d90c_8e83116f",
       "range": {
         "startLine": 94,
         "startChar": 4,
@@ -162,6 +288,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4119ef65_ea791d59",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb23a93c_c92afd08",
+      "range": {
+        "startLine": 1526,
+        "startChar": 4,
+        "endLine": 1534,
+        "endChar": 5
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5679f47b_912cce83",
@@ -175,6 +325,24 @@
       "writtenOn": "2022-11-18T01:59:08Z",
       "side": 1,
       "message": "nit: not used in this header",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b871a77_379a31a9",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Moved to the CPP file.",
+      "parentUuid": "5679f47b_912cce83",
       "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -216,6 +384,30 @@
       "side": 1,
       "message": "+1. Also update comment to indicate exactly what this value means.",
       "parentUuid": "4b8fa6ac_16470801",
+      "range": {
+        "startLine": 2633,
+        "startChar": 17,
+        "endLine": 2633,
+        "endChar": 22
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5031d4_0ebfdfd7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 2633,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T20:10:45Z",
+      "side": 1,
+      "message": "Name updated. Comments added.",
+      "parentUuid": "43e91358_38f77239",
       "range": {
         "startLine": 2633,
         "startChar": 17,
