@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5340447_7ea02286",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T20:24:15Z",
+      "side": 1,
+      "message": "Because inside setQueueSerial() there is assertion doing that.",
+      "parentUuid": "0c34d0ea_4bafb199",
+      "revId": "1a62f99695efcd5d082cb9fe74aeabdec8e79425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1415ec57_59d6e185",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-21T19:55:18Z",
       "side": 1,
       "message": "nit: is it a typo: so we can `not` do anything?",
+      "revId": "1a62f99695efcd5d082cb9fe74aeabdec8e79425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1d06df8_9160cd5e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T20:24:15Z",
+      "side": 1,
+      "message": "I think it means to be  \"we can do anything\". Because it is undefined behavior, we do not actually have to wait for anything to finish, we just return.",
+      "parentUuid": "1415ec57_59d6e185",
       "revId": "1a62f99695efcd5d082cb9fe74aeabdec8e79425",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
