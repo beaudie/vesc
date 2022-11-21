@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d86ef5d7_1f525bab",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-11-21T22:21:42Z",
+      "side": 1,
+      "message": "nit: Space?",
+      "range": {
+        "startLine": 1058,
+        "startChar": 96,
+        "endLine": 1058,
+        "endChar": 97
+      },
+      "revId": "4aad8e644f509c1e4cfa611cd344f0203cad84ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
