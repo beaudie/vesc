@@ -22,6 +22,30 @@
       },
       "revId": "1ed9721314f6fff0e9190b959c0b8fdafe624f17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbabd8e_7b824121",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1424,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-21T18:48:25Z",
+      "side": 1,
+      "message": "We need to keep this line for now because the main `gl.xml`, which is used for desktop GL bindings generation, has the same typo. Once it\u0027s fixed upstream and rolled into ANGLE, the extra line could be removed.",
+      "parentUuid": "21eeb9bb_b6b31a87",
+      "range": {
+        "startLine": 1424,
+        "startChar": 9,
+        "endLine": 1424,
+        "endChar": 13
+      },
+      "revId": "1ed9721314f6fff0e9190b959c0b8fdafe624f17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
