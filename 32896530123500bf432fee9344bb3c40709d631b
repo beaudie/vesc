@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "224b57a2_7807bd79",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 6991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T22:04:07Z",
+      "side": 1,
+      "message": "Why not call `flushCommandsAndEndRenderPass()` and avoid the duplicate code?",
+      "range": {
+        "startLine": 6985,
+        "startChar": 0,
+        "endLine": 6991,
+        "endChar": 5
+      },
+      "revId": "32896530123500bf432fee9344bb3c40709d631b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

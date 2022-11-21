@@ -34,6 +34,24 @@
       "parentUuid": "09ebb60d_a42e2e4e",
       "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ffe54e2_6c21a8e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-21T22:04:07Z",
+      "side": 1,
+      "message": "Also here, why not just call `flushCommandsAndEndRenderPass`?",
+      "parentUuid": "ee562b70_50541055",
+      "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
