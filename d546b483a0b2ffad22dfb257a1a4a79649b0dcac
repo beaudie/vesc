@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62c6015e_da577778",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "This can\u0027t possible here since index generation code guarantees that. But anyway, I added an assertion here just in case.",
+      "parentUuid": "e4671eca_1283874b",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab261ee5_c6cb6928",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87bba0bc_dbb2565b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "Exactly. The access here really does not need mutex, but atomics. And atomics here is simply just a load since it is uint64_t value. Originally when I added this AtomicQueueSerial, I was seeing tsan bot complains without use the atomic operation. But now for whatever reason the tsan bot is no longer complaining even without atomic. That is why I removed the atomic here to make code concise. My guess is that maybe tsan is fixed (that it is now aware of uint64_t itself is atomic anyway)? So my preference here is just keep it non-atomic here unless we see bot failure.",
+      "parentUuid": "251389d3_2835d5b6",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "acbbf537_4094da36",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 8
@@ -65,6 +101,24 @@
       "writtenOn": "2022-11-21T17:51:41Z",
       "side": 1,
       "message": "nit: `CommandQueue::finishQueueSerial` also uses this trick. For uniformity, either remove `CommandQueue::finishQueueSerial` and call `finishResourceUse`, or add a `finishQueueSerial` to `CommandProcessor`",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f951aa88_f0c2fc84",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "If possible, could we defer this clean up a bit later? I intentionally left it here to minimize the code diff and leave clean up to future CL once everything settles down. I think there are a bit more things we can clean up in this area. (I will leave this comment open and also make a personal notes so it wont forget).",
+      "parentUuid": "acbbf537_4094da36",
       "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -92,6 +146,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5fb904a_53f85639",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30230b9d_135a6ce0",
+      "range": {
+        "startLine": 24,
+        "startChar": 40,
+        "endLine": 24,
+        "endChar": 45
+      },
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fa65456_26d1017c",
@@ -105,6 +183,24 @@
       "writtenOn": "2022-11-21T17:51:41Z",
       "side": 1,
       "message": "Comment says it\u0027s an array of `QueueSerial`s, but it\u0027s actually an array of `Serial`s, which is a little hard to understand. How about this for the first sentence?\n\n\u003e Serials is an array of queue serials, which when paired with the index of the serials in the array result in QueueSerials.",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f31d6fc_b59ccbe2",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "Good sugestion.",
+      "parentUuid": "0fa65456_26d1017c",
       "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +224,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9eb0fd0_a2a6503a",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "The index generator guarantees that we never ever have an index bigger than that. I can add an assertion here if it concerns you.",
+      "parentUuid": "8eb0fe8f_639d4a44",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "294e9761_bd3453e2",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 8
@@ -139,6 +253,24 @@
       "writtenOn": "2022-11-21T17:51:41Z",
       "side": 1,
       "message": "nit: Another comment/ASSERT here that only one serial is possible now",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "965ea9b7_7dfe6535",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "294e9761_bd3453e2",
       "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -156,6 +288,24 @@
       "writtenOn": "2022-11-21T17:51:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1930c48b_420cd2e6",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T18:52:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d34304ed_1bfb5976",
       "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
