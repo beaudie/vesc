@@ -22,6 +22,30 @@
       },
       "revId": "fe3b0e389b03df91df6928b1ff8323746b7ef2d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6c88c0a_0ff88140",
+        "filename": "src/libANGLE/renderer/gl/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-21T14:47:17Z",
+      "side": 0,
+      "message": "I still see our Vulkan backend using minigbm to implement dma_buf imports.",
+      "parentUuid": "a7e81ac4_7c08092c",
+      "range": {
+        "startLine": 290,
+        "startChar": 17,
+        "endLine": 290,
+        "endChar": 36
+      },
+      "revId": "fe3b0e389b03df91df6928b1ff8323746b7ef2d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
