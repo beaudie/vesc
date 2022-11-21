@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17dcb6c3_71172a7d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 6563,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T17:39:09Z",
+      "side": 0,
+      "message": "This is one of the main reasons for this clean up:\n flushImpl calls flushAndGetSerial, \n which calls flushCommandsAndEndRenderPassWithoutQueueSubmit\n which calls  flushCommandsAndEndRenderPassImpl\n which checks mHasDeferredFlush and calls flushImpl\n \n\nYou can see how complicated this call sequences are. This CL makes it so that \"WithoutSubmit\" will actually not do any submission.",
+      "range": {
+        "startLine": 6563,
+        "startChar": 4,
+        "endLine": 6563,
+        "endChar": 30
+      },
+      "revId": "ea601d1e285ee6f0d38833f488bd9fc9bef24bcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
