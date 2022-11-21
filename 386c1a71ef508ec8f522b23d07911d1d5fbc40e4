@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "569d8759_43bf1a9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-21T21:16:59Z",
+      "side": 1,
+      "message": "Thank you for the reviews @lehoangquyen@chromium.org!\n\nAre we just waiting for a signoff on the translator parts now? (Is that something @kpiddington@apple.com can look at?)\n\nWho is able to +2 when ready?",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
