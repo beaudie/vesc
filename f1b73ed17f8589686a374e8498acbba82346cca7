@@ -34,6 +34,69 @@
       "parentUuid": "41021c4b_65d9ac63",
       "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d5e849_0fa9533f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T17:27:56Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3a7b31c_702a067f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T17:27:56Z",
+      "side": 1,
+      "message": "I guess these two pointers either both not null or both null? If yes, I think it will be more readable if you switch them to `if(mCurrentGraphicsPipeline\u003d\u003dnullptr) { ASSERT(descPtr\u003d\u003dnullptr);`, because the main subject of concern here is mCurrentGraphicsPipeline.",
+      "range": {
+        "startLine": 1857,
+        "startChar": 4,
+        "endLine": 1860,
+        "endChar": 52
+      },
+      "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a112fdb_384f33d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-21T17:27:56Z",
+      "side": 1,
+      "message": "transition bits really is a dirty bit. Can\u0027t we just call it dirty bits?",
+      "range": {
+        "startLine": 1347,
+        "startChar": 7,
+        "endLine": 1347,
+        "endChar": 22
+      },
+      "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
