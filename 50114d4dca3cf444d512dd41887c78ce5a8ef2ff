@@ -51,6 +51,46 @@
       "message": "Looks like wrong path for header file.\n\nERROR at //src/libANGLE/formatutils.h:20:15: Include not allowed.\n#    include \"common/linux/dma_buf_utils.h\"\n              ^---------------------------\nIt is not in any dependency of\n  //:libANGLE_headers\nThe include file is in the target(s):\n  //src/common/linux:angle_dma_buf\nwhich should somehow be reachable.",
       "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e8aa3de_ff4d2897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-21T14:58:43Z",
+      "side": 1,
+      "message": "You need to move this define into a more centralized place if you want to use it outside of the GL back-end. Right now it\u0027s only defined in angle_gl_backend_config. So please amend the CL do fix that. Other changes will also probably be necessary after that.",
+      "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71544017_bbd9e0ed",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-21T14:58:43Z",
+      "side": 1,
+      "message": "please place the ifdef section after the regular includes as per the style guide",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
