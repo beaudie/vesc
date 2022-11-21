@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25185fbd_b3629c54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-21T15:01:33Z",
+      "side": 1,
+      "message": "Actually, looks like the Android failure might be related.",
+      "revId": "20056de3c77ebb7b931bee906ae6acb7ce05c06b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e75475bc_c8b5d6d0",
