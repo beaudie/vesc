@@ -52,6 +52,24 @@
       "parentUuid": "ee562b70_50541055",
       "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5dd0e59_b6abe999",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7074,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-22T19:56:43Z",
+      "side": 1,
+      "message": "This one is a bit different, if I switch to flushCommandsAndEndRenderPass you will always end up calling flushCommandsAndEndRenderPassWithoutSubmit even if mHasDeferredFlush is false.",
+      "parentUuid": "8ffe54e2_6c21a8e9",
+      "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
