@@ -83,6 +83,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca8d33e_10c93e1c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-22T20:02:41Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "828cc0b6_8e8c84c3",
+      "range": {
+        "startLine": 1274,
+        "startChar": 4,
+        "endLine": 1277,
+        "endChar": 5
+      },
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44e836b3_79aa3a8c",
@@ -232,6 +256,24 @@
       "side": 1,
       "message": "Results from a few trace tests and a microbenchmark test: https://docs.google.com/spreadsheets/d/11javipl2dtEtECqG-TlZi7El6knh_l6r1dXgZ3_4U70/\n\nBased on the results, there are no significant changes to the performance after this CL.",
       "parentUuid": "f6d654f8_0a90587f",
+      "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d1dd016_a2342062",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 916,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-22T20:02:41Z",
+      "side": 1,
+      "message": "Thanks. Looks good!",
+      "parentUuid": "56aeaa4c_156085e7",
       "revId": "d24eb5438c9d90fb3d8837784bb01a73107afb02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
