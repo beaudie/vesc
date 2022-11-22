@@ -60,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da9a8767_0e5cfe21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-22T17:33:29Z",
+      "side": 1,
+      "message": "If the root cause is similar to https://anglebug.com/7840#c2\nI\u0027m trying to reland a previous CL by Lubosz https://crrev.com/c/4048025 which is a more general fix, hopefully we don\u0027t have to revert it this time.",
+      "parentUuid": "2f81c89c_91df78bd",
+      "revId": "280d8588120eeda384239b41c2c008937f5bd147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c27aa42b_bcacd374",
         "filename": "util/linux/x11/X11Window.cpp",
         "patchSetId": 2
