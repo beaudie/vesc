@@ -56,6 +56,30 @@
       },
       "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf52ffb9_63198081",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-22T20:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38d61b8a_fa1ebe0c",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 25
+      },
+      "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
