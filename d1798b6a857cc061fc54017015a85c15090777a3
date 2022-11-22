@@ -16,6 +16,46 @@
       "message": "Although every compressed format extension spec mentions the \"sum of the offset and the sub-image width being equal to the image width\" exception to the \"width must be a multiple of the block size\" rule, neither dEQP nor ANGLE validation were covering that.\n\nExpanded end2end tests in this area and filed https://gitlab.khronos.org/Tracker/vk-gl-cts/-/issues/4119.",
       "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee810c2_1b412493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-22T19:07:33Z",
+      "side": 1,
+      "message": "Wow nice stuff",
+      "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38d61b8a_fa1ebe0c",
+        "filename": "src/tests/gl_tests/CompressedTextureFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-22T19:07:33Z",
+      "side": 1,
+      "message": "nit: I would initialize this to something, doesn\u0027t matter what. I\u0027m sure some sanitizer will complain about uninitialized memory",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 25
+      },
+      "revId": "d1798b6a857cc061fc54017015a85c15090777a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
