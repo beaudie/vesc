@@ -16,6 +16,24 @@
       "message": "Here I directly used the tick value not a time (tick * 1000000000 / frequency) due to the latter will overflow. Maybe one solution is we record the first timestamp\u0027s tick value and make it as an offset. All timestamps\u0027s tick value need to minus this offset to get the time (tick - offset) * 1000000000 / frequency). How\u0027s your opinion?",
       "revId": "608a4f78a08f5c36ba28c08d518d505fdd52f541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c12c8f7_e6b6f42d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2022-11-22T20:56:40Z",
+      "side": 1,
+      "message": "frequency will be fairly close to 1ns in most cases. Maybe we use doubles? tick * (1000000000.0 / frequency)?\n\nThis would be similar to what we do in VK: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;l\u003d6765;drc\u003d7473aada23e43186bbbd4491f8f7f5630e34e109;bpv\u003d1;bpt\u003d1?q\u003dTimestamp%20f:angle%20f:vulkan\u0026ss\u003dchromium%2Fchromium%2Fsrc\n\nwhere timestampPeriod is a float which is the number of nanoseconds required for a timestamp query to be incremented by 1",
+      "parentUuid": "8f08864c_9e1b8342",
+      "revId": "608a4f78a08f5c36ba28c08d518d505fdd52f541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
