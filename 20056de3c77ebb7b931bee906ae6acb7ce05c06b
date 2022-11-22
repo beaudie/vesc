@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1763c67c_f8b52441",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2022-11-22T19:37:26Z",
+      "side": 1,
+      "message": "Right, there\u0027s a libGLESv2_angle.cr[.so] expected here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/BUILD.gn;drc\u003df62405c5ac3c94048540b47628b91a37495d65f3;l\u003d1255.",
+      "parentUuid": "25185fbd_b3629c54",
+      "revId": "20056de3c77ebb7b931bee906ae6acb7ce05c06b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "81a42627_1f451ba2",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e34eec_e0306900",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2022-11-22T19:37:26Z",
+      "side": 1,
+      "message": "No, it\u0027s just the library name. The `searchType` ends up determining the dir(s) used to search for it.",
+      "parentUuid": "81a42627_1f451ba2",
+      "range": {
+        "startLine": 217,
+        "startChar": 47,
+        "endLine": 217,
+        "endChar": 58
+      },
+      "revId": "20056de3c77ebb7b931bee906ae6acb7ce05c06b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e75475bc_c8b5d6d0",
@@ -54,6 +96,30 @@
       "writtenOn": "2022-11-21T15:01:00Z",
       "side": 1,
       "message": "please a comment with a mention that this is specifically to allow the global ANGLE environment variables to build ANGLE with the .2, .1, etc.",
+      "range": {
+        "startLine": 222,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 60
+      },
+      "revId": "20056de3c77ebb7b931bee906ae6acb7ce05c06b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44d3a920_abab6e3a",
+        "filename": "src/common/system_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2022-11-22T19:37:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e75475bc_c8b5d6d0",
       "range": {
         "startLine": 222,
         "startChar": 0,
