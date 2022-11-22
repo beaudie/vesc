@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04d3156f_336bd5ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-11-22T13:01:42Z",
+      "side": 1,
+      "message": "Argh. Sorry but I have another problem to report. 😞\n\nI tested this out on the Windows + AMD 22.11.1 drivers with an RX 6900 XT. This configuration does *not* have driver support for the VK_EXT_graphics_pipeline_library extension.\n\nSomehow this patch causes system memory usage to be significantly higher than without the patch. From a Visual Studio memory profile, I found the majority of the memory usage is coming from a driver call in rx::ProgramExecutableVk::createPipelineLayout (via glLinkProgram).\n\nI did an A/B test for the same revision of ANGLE with and without this change (patchset version 12), and here\u0027s what I observed after starting my app:\n\nBefore patch: 148MB system memory, 479MB GPU memory\nAfter patch: 655MB system memory, 479MB GPU memory\n\nSo the program\u0027s system memory usage is 4.4x larger with this patch for some reason. Any idea why the memory usage has changed so much?",
+      "revId": "a41f1de5572ded04882aa063be6d3f30b8e5b9e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
