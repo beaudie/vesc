@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea254dfd_c7043bf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1518892
+      },
+      "writtenOn": "2022-11-22T04:39:00Z",
+      "side": 1,
+      "message": "Thanks for the fix, that works for both the tests and for my app.",
+      "parentUuid": "45685c68_de867452",
+      "revId": "f1b73ed17f8589686a374e8498acbba82346cca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b3a7b31c_702a067f",
