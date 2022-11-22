@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "504c52e7_e9b63e1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-22T23:56:44Z",
+      "side": 1,
+      "message": "I tried this out and the start up hit was not noticeably worse than before.  It is already slower than we\u0027d like and affects gathering traces of games that don\u0027t wait for frames to finish rendering before continuing gameplay.",
+      "parentUuid": "be9bb544_c82826cd",
+      "revId": "16916219af2d9c400ef31848c95bf51de9b6ef9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe01dd11_a1dfc3da",
