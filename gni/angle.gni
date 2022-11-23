@@ -235,7 +235,12 @@ declare_args() {
 
   # Unwind backtrace support. This feature is currently only implemented
   # on Android for debugging purposes. Disabled by default.
-  angle_enable_unwind_backtrace_support = false
+  angle_enable_unwind_backtrace_support =
+      false  # Memory allocation logging support. This feature is for debug mode
+             # only.
+
+  # Disabled by default.
+  angle_enable_memory_alloc_logging = false
 
   # Disable the layers in ubsan builds because of really slow builds.
   # Vulkan Validation Layers require Android NDK API level 26, i.e. Oreo, due to
