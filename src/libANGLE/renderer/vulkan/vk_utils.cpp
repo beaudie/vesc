@@ -105,7 +105,8 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 
     // Add the new allocation for tracking.
     RendererVk *renderer = context->getRenderer();
-    renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize);
+    renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize,
+                            deviceMemoryOut->getHandle());
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
     // invalid values ensures our testing doesn't assume zero-initialized memory.
