@@ -111,6 +111,33 @@ constexpr const char *kMemoryAllocationTypeMessage[] = {
 };
 constexpr const uint32_t kMemoryAllocationTypeCount =
     static_cast<uint32_t>(MemoryAllocationType::EnumCount);
+
+// Used to store memory allocation information for tracking purposes.
+struct MemoryAllocationInfo
+{
+    MemoryAllocationInfo()
+        : id(0), allocType(MemoryAllocationType::Unspecified), handle(nullptr), size(0)
+    {}
+    uint64_t id;
+    MemoryAllocationType allocType;
+    void *handle;
+    VkDeviceSize size;
+};
+
+class MemoryAllocInfoMapKey
+{
+  public:
+    MemoryAllocInfoMapKey() : handle(nullptr) {}
+    MemoryAllocInfoMapKey(void *handle) : handle(handle) {}
+
+    bool operator<(const MemoryAllocInfoMapKey &rhs) const
+    {
+        return reinterpret_cast<uint64_t>(handle) < reinterpret_cast<uint64_t>(rhs.handle);
+    }
+
+  private:
+    void *handle;
+};
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -672,6 +699,21 @@ class RendererVk : angle::NonCopyable
         mActiveMemoryAllocationsSize[allocTypeIndex] -= size;
     }
 
+    template <typename HandleT>
+    void onMemoryAllocDebug(HandleT handle, vk::MemoryAllocationType allocType, VkDeviceSize size)
+    {
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+        onMemoryAllocDebugImpl(reinterpret_cast<void *>(handle), allocType, size);
+#endif
+    }
+    template <typename HandleT>
+    void onMemoryDeallocDebug(HandleT handle)
+    {
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+        onMemoryDeallocDebugImpl(reinterpret_cast<void *>(handle));
+#endif
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -698,7 +740,7 @@ class RendererVk : angle::NonCopyable
 
     // Query and cache supported fragment shading rates
     bool canSupportFragmentShadingRate(const vk::ExtensionNameList &deviceExtensionNames);
-    // Perfer host visiable device local via device local based on device type and heap size.
+    // Prefer host visible device local via device local based on device type and heap size.
     bool canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType deviceType);
 
     template <typename CommandBufferHelperT, typename RecyclerT>
@@ -706,6 +748,15 @@ class RendererVk : angle::NonCopyable
                                        vk::CommandPool *commandPool,
                                        RecyclerT *recycler,
                                        CommandBufferHelperT **commandBufferHelperOut);
+
+    // Collect information about memory allocations in debug mode.
+    void onMemoryAllocDebugImpl(void *handle,
+                                vk::MemoryAllocationType allocType,
+                                VkDeviceSize size);
+    void onMemoryDeallocDebugImpl(void *handle);
+
+    // Check for remaining memory allocations at the end of the renderer object.
+    void checkForRemainingMemoryAllocations();
 
     egl::Display *mDisplay;
 
@@ -933,8 +984,8 @@ class RendererVk : angle::NonCopyable
     // - Excludes TESSELLATION_CONTROL and TESSELLATION_EVALUATION if tessellation shaders are not
     //   supported.
     //
-    // Note that this mask can have bits set that don't correspond to valid stages, so it's strictly
-    // only useful for masking out unsupported stages in an otherwise valid set of stages.
+    // Note that this mask can have bits set that don't correspond to valid stages, so it's
+    // strictly only useful for masking out unsupported stages in an otherwise valid set of stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
 
@@ -947,6 +998,14 @@ class RendererVk : angle::NonCopyable
     // For memory allocation tracking.
     std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
         mActiveMemoryAllocationsSize;
+    std::array<std::atomic<uint64_t>, vk::kMemoryAllocationTypeCount> mActiveMemoryAllocationsCount;
+
+    // For memory allocation in debug mode.
+    std::mutex mMemoryAllocationMutex;
+    uint64_t mMemoryAllocationID;
+
+    using MemoryAllocInfoMap = std::map<vk::MemoryAllocInfoMapKey, vk::MemoryAllocationInfo>;
+    std::map<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationTracker;
 };
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const

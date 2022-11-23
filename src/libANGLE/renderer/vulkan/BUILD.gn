@@ -26,6 +26,9 @@ declare_args() {
   # Enable custom secondary command buffers for render pass commands only
   angle_enable_custom_vulkan_render_pass_cmd_buffers =
       angle_enable_custom_vulkan_cmd_buffers
+
+  # Enable memory allocation/deallocation logging (debug mode only)
+  angle_enable_memory_alloc_logging = false
 }
 
 _vulkan_backend_sources = [
@@ -262,6 +265,10 @@ config("angle_vulkan_backend_config") {
   }
   if (angle_enable_vulkan_validation_layers) {
     defines += [ "ANGLE_ENABLE_VULKAN_VALIDATION_LAYERS" ]
+  }
+  assert(is_debug || !angle_enable_memory_alloc_logging)
+  if (angle_enable_memory_alloc_logging) {
+    defines += [ "ANGLE_ENABLE_MEMORY_ALLOC_LOGGING" ]
   }
 }
 

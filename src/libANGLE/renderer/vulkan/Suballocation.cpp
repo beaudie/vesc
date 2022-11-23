@@ -74,6 +74,7 @@ void BufferBlock::destroy(RendererVk *renderer)
     }
 
     renderer->onMemoryDealloc(mMemoryAllocationType, mAllocatedBufferSize);
+    renderer->onMemoryDeallocDebug(mDeviceMemory.getHandle());
 
     mVirtualBlock.destroy(device);
     mBuffer.destroy(device);
