@@ -5186,7 +5186,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // open, such as invalidate or blit. Note that we always start a new command buffer
                 // because we currently can only support one open RenderPass at a time.
                 onRenderPassFinished(RenderPassClosureReason::FramebufferBindingChange);
-                if (getFeatures().preferSubmitAtFBOBoundary.enabled)
+                if (getFeatures().preferSubmitAtFBOBoundary.enabled &&
+                    mRenderPassCommands->started())
                 {
                     // This will behave as if user called glFlush, but the actual flush will be
                     // triggered at endRenderPass time.
@@ -7124,6 +7125,11 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
 {
+    // The main reason we have mHasDeferredFlush is not to break renderpass just because we want
+    // to issue a flush. So there must be a started RP if it is true. Otherwise we should just
+    // issue a flushImpl immediately instead of set mHasDeferredFlush to true.
+    ASSERT(!mHasDeferredFlush || mRenderPassCommands->started());
+
     ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(reason));
 
     if (mHasDeferredFlush)
