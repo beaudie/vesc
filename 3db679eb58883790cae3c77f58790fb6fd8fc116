@@ -52,6 +52,24 @@
       "parentUuid": "1c80a550_21376324",
       "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cdf8e70_c7b96ef3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-23T19:28:11Z",
+      "side": 1,
+      "message": "https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d6908, the code we added back in this CL was causing the same crash before, but we never investigated.",
+      "parentUuid": "645caba2_7ae11742",
+      "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
