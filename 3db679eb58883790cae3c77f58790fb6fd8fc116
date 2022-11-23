@@ -34,6 +34,24 @@
       "parentUuid": "786b251c_f7670840",
       "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "645caba2_7ae11742",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-23T19:23:40Z",
+      "side": 1,
+      "message": "I am working on a follow-up CL. If this is blocking I can revert it first. Please let me know what is preferred, thank you.",
+      "parentUuid": "1c80a550_21376324",
+      "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
