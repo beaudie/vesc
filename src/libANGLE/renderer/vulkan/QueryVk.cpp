@@ -483,14 +483,14 @@ angle::Result QueryVk::finishRunningCommands(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    if (mQueryHelper.get().usedInRunningCommands(renderer))
+    if (renderer->hasUnfinishedUse(mQueryHelper.get().getResourceUse()))
     {
         ANGLE_TRY(mQueryHelper.get().finishRunningCommands(contextVk));
     }
 
     for (vk::Shared<vk::QueryHelper> &query : mStashedQueryHelpers)
     {
-        if (query.get().usedInRunningCommands(renderer))
+        if (renderer->hasUnfinishedUse(query.get().getResourceUse()))
         {
             ANGLE_TRY(query.get().finishRunningCommands(contextVk));
         }

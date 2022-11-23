@@ -3513,7 +3513,7 @@ angle::Result ContextVk::checkCompletedGpuEvents()
     for (GpuEventQuery &eventQuery : mInFlightGpuEventQueries)
     {
         // Only check the timestamp query if the submission has finished.
-        if (eventQuery.queryHelper.usedInRunningCommands(mRenderer))
+        if (mRenderer->hasUnfinishedUse(eventQuery.queryHelper.getResourceUse()))
         {
             break;
         }
