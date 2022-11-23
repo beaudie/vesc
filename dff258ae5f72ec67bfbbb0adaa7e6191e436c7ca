@@ -69,6 +69,24 @@
       "parentUuid": "3d06db7e_1436753e",
       "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14664df9_e836bcc7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-11-23T15:48:28Z",
+      "side": 1,
+      "message": "Just to clarify: after this lands, try removing those 2 lines + the lines added in this CL?",
+      "parentUuid": "308bc037_17ab4324",
+      "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
