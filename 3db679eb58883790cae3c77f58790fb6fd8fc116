@@ -70,6 +70,24 @@
       "parentUuid": "645caba2_7ae11742",
       "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b3c06da_2f894fbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-23T20:20:04Z",
+      "side": 1,
+      "message": "I added back the test skip on Pixel 6 https://crrev.com/c/4053100. I will remove it after the follow-up CL is done.",
+      "parentUuid": "4cdf8e70_c7b96ef3",
+      "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
