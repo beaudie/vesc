@@ -111,6 +111,33 @@ constexpr const char *kMemoryAllocationTypeMessage[] = {
 };
 constexpr const uint32_t kMemoryAllocationTypeCount =
     static_cast<uint32_t>(MemoryAllocationType::EnumCount);
+
+// Used to store memory allocation information for tracking purposes.
+struct MemoryAllocationInfo
+{
+    MemoryAllocationInfo()
+        : id(0), allocType(MemoryAllocationType::Unspecified), handle(nullptr), size(0)
+    {}
+    uint64_t id;
+    MemoryAllocationType allocType;
+    void *handle;
+    VkDeviceSize size;
+};
+
+class MemoryAllocInfoMapKey
+{
+  public:
+    MemoryAllocInfoMapKey() : handle(nullptr) {}
+    MemoryAllocInfoMapKey(void *handle) : handle(handle) {}
+
+    bool operator<(const MemoryAllocInfoMapKey &rhs) const
+    {
+        return reinterpret_cast<uint64_t>(handle) < reinterpret_cast<uint64_t>(rhs.handle);
+    }
+
+  private:
+    void *handle;
+};
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -671,6 +698,59 @@ class RendererVk : angle::NonCopyable
         mActiveMemoryAllocationsSize[allocTypeIndex] -= size;
     }
 
+    template <typename HandleT>
+    void onMemoryAllocDebug(HandleT handle, vk::MemoryAllocationType allocType, VkDeviceSize size)
+    {
+        // TODO: Use ANGLE_ENABLE_MEMORY_ALLOC_LOGGING
+        std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+
+        auto allocTypeIndex = static_cast<uint32_t>(allocType);
+        mActiveMemoryAllocations[allocTypeIndex]++;
+
+        // Add the new allocation to the memory tracker.
+        vk::MemoryAllocationInfo memAllocLogInfo;
+        memAllocLogInfo.id        = ++mMemoryAllocationID;
+        memAllocLogInfo.allocType = allocType;
+        memAllocLogInfo.size      = size;
+        memAllocLogInfo.handle    = reinterpret_cast<void *>(handle);
+
+        vk::MemoryAllocInfoMapKey memoryAllocInfoMapKey(memAllocLogInfo.handle);
+        mMemoryAllocationTracker[angle::getBacktraceInfo()].insert(
+            std::make_pair(memoryAllocInfoMapKey, memAllocLogInfo));
+
+        WARN() << "[ALLOC] ID " << memAllocLogInfo.id << ": Allocation of size "
+               << memAllocLogInfo.size << " for object " << memAllocLogInfo.handle
+               << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+    }
+
+    template <typename HandleT>
+    void onMemoryDeallocDebug(HandleT handle)
+    {
+        // TODO: Use ANGLE_ENABLE_MEMORY_ALLOC_LOGGING
+        for (auto &memLogPerBacktrace : mMemoryAllocationTracker)
+        {
+            vk::MemoryAllocInfoMapKey memoryAllocInfoMapKey(reinterpret_cast<void *>(handle));
+            MemoryAllocInfoMap &memLogMap = memLogPerBacktrace.second;
+            std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+            if (memLogMap.find(memoryAllocInfoMapKey) != memLogMap.end())
+            {
+                // Object found; remove it from the allocation tracker.
+                vk::MemoryAllocationInfo *memLogEntry = &memLogMap[memoryAllocInfoMapKey];
+
+                // Remove the new allocation from the memory tracker.
+                auto allocTypeIndex = static_cast<uint32_t>(memLogEntry->allocType);
+
+                mActiveMemoryAllocations[allocTypeIndex]--;
+
+                WARN() << "[DEALLOC] ID " << memLogEntry->id << ": Deallocation of size "
+                       << memLogEntry->size << " for object " << memLogEntry->handle
+                       << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+
+                memLogMap.erase(memoryAllocInfoMapKey);
+            }
+        }
+    }
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -790,10 +870,10 @@ class RendererVk : angle::NonCopyable
     bool mDeviceLost;
 
     // We group garbage into four categories: mSharedGarbage is the garbage that has already
-    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmissionGarbage is
-    // the garbage that is still referenced in the recorded commands. suballocations have its own
-    // dedicated garbage list for performance optimization since they tend to be the most common
-    // garbage objects. All these four groups of garbage share the same mutex lock.
+    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmissionGarbage
+    // is the garbage that is still referenced in the recorded commands. suballocations have its
+    // own dedicated garbage list for performance optimization since they tend to be the most
+    // common garbage objects. All these four groups of garbage share the same mutex lock.
     std::mutex mGarbageMutex;
     vk::SharedGarbageList mSharedGarbage;
     vk::SharedGarbageList mPendingSubmissionGarbage;
@@ -802,12 +882,12 @@ class RendererVk : angle::NonCopyable
     // Total suballocation garbage size in bytes.
     VkDeviceSize mSuballocationGarbageSizeInBytes;
 
-    // Total bytes of suballocation that been destroyed since last prune call. This can be accessed
-    // without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
+    // Total bytes of suballocation that been destroyed since last prune call. This can be
+    // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
     // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
-    // operation. This can be accessed from different threads without mGarbageMutex, so that thread
-    // sanitizer won't complain.
+    // operation. This can be accessed from different threads without mGarbageMutex, so that
+    // thread sanitizer won't complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
     vk::FormatTable mFormatTable;
@@ -832,8 +912,8 @@ class RendererVk : angle::NonCopyable
     // Holds orphaned BufferBlocks when ShareGroup gets destroyed
     vk::BufferBlockPointerVector mOrphanedBufferBlocks;
 
-    // All access to the pipeline cache is done through EGL objects so it is thread safe to not use
-    // a lock.
+    // All access to the pipeline cache is done through EGL objects so it is thread safe to not
+    // use a lock.
     std::mutex mPipelineCacheMutex;
     vk::PipelineCache mPipelineCache;
     uint32_t mPipelineCacheVkUpdateTimeout;
@@ -844,8 +924,8 @@ class RendererVk : angle::NonCopyable
     std::string mLastValidationMessage;
     uint32_t mValidationMessageCount;
 
-    // Skipped validation messages.  The exact contents of the list depends on the availability of
-    // certain extensions.
+    // Skipped validation messages.  The exact contents of the list depends on the availability
+    // of certain extensions.
     std::vector<const char *> mSkippedValidationMessages;
     // Syncval skipped messages.  The exact contents of the list depends on the availability of
     // certain extensions.
@@ -929,11 +1009,13 @@ class RendererVk : angle::NonCopyable
     // where multiple stages are prespecified (for example with image layout transitions):
     //
     // - Excludes GEOMETRY if geometry shaders are not supported.
-    // - Excludes TESSELLATION_CONTROL and TESSELLATION_EVALUATION if tessellation shaders are not
+    // - Excludes TESSELLATION_CONTROL and TESSELLATION_EVALUATION if tessellation shaders are
+    // not
     //   supported.
     //
-    // Note that this mask can have bits set that don't correspond to valid stages, so it's strictly
-    // only useful for masking out unsupported stages in an otherwise valid set of stages.
+    // Note that this mask can have bits set that don't correspond to valid stages, so it's
+    // strictly only useful for masking out unsupported stages in an otherwise valid set of
+    // stages.
     VkPipelineStageFlags mSupportedVulkanPipelineStageMask;
     VkShaderStageFlags mSupportedVulkanShaderStageMask;
 
@@ -946,6 +1028,15 @@ class RendererVk : angle::NonCopyable
     // For memory allocation tracking.
     std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
         mActiveMemoryAllocationsSize;
+
+    // For memory allocation in debug mode.
+    std::mutex mMemoryAllocationMutex;
+    uint64_t mMemoryAllocationID;
+
+    using MemoryAllocInfoMap = std::map<vk::MemoryAllocInfoMapKey, vk::MemoryAllocationInfo>;
+    std::map<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationTracker;
+
+    std::array<uint64_t, vk::kMemoryAllocationTypeCount> mActiveMemoryAllocations;
 };
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const

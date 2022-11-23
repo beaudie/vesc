@@ -1258,7 +1258,8 @@ RendererVk::RendererVk()
       mValidationMessageCount(0),
       mCommandProcessor(this),
       mSupportedVulkanPipelineStageMask(0),
-      mSupportedVulkanShaderStageMask(0)
+      mSupportedVulkanShaderStageMask(0),
+      mMemoryAllocationID(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1273,6 +1274,12 @@ RendererVk::RendererVk()
     {
         mActiveMemoryAllocationsSize[i] = 0;
     }
+
+    // Initialize other memory tracking counters.
+    //    mActiveMemoryAllocations.fill(0);
+    //    mActiveMemoryAllocationsSize.fill(0);
+    //    mTotalMemoryAllocations.fill(0);
+    //    mTotalMemoryAllocationsSize.fill(0);
 }
 
 RendererVk::~RendererVk()
@@ -1379,6 +1386,8 @@ void RendererVk::onDestroy(vk::Context *context)
         mCompressEvent->wait();
         mCompressEvent.reset();
     }
+
+    // Add logging the remaining allocation sizes?
 
     mMemoryProperties.destroy();
     mPhysicalDevice = VK_NULL_HANDLE;

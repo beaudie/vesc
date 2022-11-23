@@ -82,6 +82,7 @@ void BufferBlock::destroy(RendererVk *renderer)
 
 angle::Result BufferBlock::init(Context *context,
                                 Buffer &buffer,
+                                MemoryAllocationType memoryAllocationType,
                                 vma::VirtualBlockCreateFlags flags,
                                 DeviceMemory &deviceMemory,
                                 VkMemoryPropertyFlags memoryPropertyFlags,
@@ -151,7 +152,7 @@ VkResult BufferBlock::allocate(VkDeviceSize size,
     return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
 }
 
-void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
+void BufferBlock::free(RendererVk *renderer, VmaVirtualAllocation allocation, VkDeviceSize offset)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
     mVirtualBlock.free(allocation, offset);

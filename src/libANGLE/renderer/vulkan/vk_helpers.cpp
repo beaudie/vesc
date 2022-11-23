@@ -2983,8 +2983,9 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
-    ANGLE_TRY(block->init(context, buffer.get(), mVirtualBlockCreateFlags, deviceMemory.get(),
-                          memoryPropertyFlagsOut, mSize));
+    ANGLE_TRY(block->init(context, buffer.get(), MemoryAllocationType::Buffer,
+                          mVirtualBlockCreateFlags, deviceMemory.get(), memoryPropertyFlagsOut,
+                          mSize));
 
     if (mHostVisible)
     {
