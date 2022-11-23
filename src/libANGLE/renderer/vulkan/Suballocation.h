@@ -38,6 +38,7 @@ class BufferBlock final : angle::NonCopyable
     void destroy(RendererVk *renderer);
     angle::Result init(Context *context,
                        Buffer &buffer,
+                       MemoryAllocationType memoryAllocationType,
                        vma::VirtualBlockCreateFlags flags,
                        DeviceMemory &deviceMemory,
                        VkMemoryPropertyFlags memoryPropertyFlags,
@@ -64,7 +65,9 @@ class BufferBlock final : angle::NonCopyable
                       VkDeviceSize alignment,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
-    void free(VmaVirtualAllocation allocation, VkDeviceSize offset);
+    VmaVirtualBlock getHandle() const { return mVirtualBlock.getHandle(); }
+
+    void free(RendererVk *renderer, VmaVirtualAllocation allocation, VkDeviceSize offset);
     VkBool32 isEmpty();
 
     bool hasVirtualBlock() const { return mVirtualBlock.valid(); }
@@ -267,7 +270,7 @@ ANGLE_INLINE void BufferSuballocation::destroy(RendererVk *renderer)
         ASSERT(mBufferBlock);
         if (mBufferBlock->hasVirtualBlock())
         {
-            mBufferBlock->free(mAllocation, mOffset);
+            mBufferBlock->free(renderer, mAllocation, mOffset);
             mBufferBlock = nullptr;
         }
         else

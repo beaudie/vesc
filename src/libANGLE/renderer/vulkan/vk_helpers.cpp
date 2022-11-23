@@ -2983,8 +2983,9 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
-    ANGLE_TRY(block->init(context, buffer.get(), mVirtualBlockCreateFlags, deviceMemory.get(),
-                          memoryPropertyFlagsOut, mSize));
+    ANGLE_TRY(block->init(context, buffer.get(), MemoryAllocationType::Buffer,
+                          mVirtualBlockCreateFlags, deviceMemory.get(), memoryPropertyFlagsOut,
+                          mSize));
 
     if (mHostVisible)
     {
@@ -5386,6 +5387,7 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     if (mMemoryAllocationType != MemoryAllocationType::InvalidEnum && mAllocationSize != 0)
     {
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize);
+        renderer->onMemoryDeallocDebug(mDeviceMemory.getHandle());
     }
 
     CollectGarbage(&mImageAndViewGarbage, &mImage, &mDeviceMemory);
@@ -5797,6 +5799,7 @@ void ImageHelper::destroy(RendererVk *renderer)
     if (mImage.valid())
     {
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize);
+        renderer->onMemoryDeallocDebug(mDeviceMemory.getHandle());
     }
 
     // destroy any pending garbage objects (most likely from ImageViewHelper) at this point
