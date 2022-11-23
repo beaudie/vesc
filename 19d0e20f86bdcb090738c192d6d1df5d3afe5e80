@@ -88,6 +88,24 @@
       "parentUuid": "b5dd0e59_b6abe999",
       "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf1a9c4_be496005",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 7074,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-23T18:00:41Z",
+      "side": 1,
+      "message": "I see what you mean (I thought you mean this entire function). Right, that works.",
+      "parentUuid": "b5dd0e59_b6abe999",
+      "revId": "19d0e20f86bdcb090738c192d6d1df5d3afe5e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
