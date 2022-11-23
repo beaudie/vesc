@@ -111,6 +111,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0ac2cfe_75847d33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-11-23T14:52:13Z",
+      "side": 1,
+      "message": "Yes that\u0027s right, but I didn\u0027t observe any difference because of that reordering. Did you?",
+      "parentUuid": "26d1e773_35bd1584",
+      "revId": "280d8588120eeda384239b41c2c008937f5bd147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c27aa42b_bcacd374",
