@@ -93,6 +93,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d1e773_35bd1584",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-23T14:49:32Z",
+      "side": 1,
+      "message": "https://crrev.com/c/4048661 was actually a bit more, because it places setting the windows size hint before XResizeWindow, before the size hint was added after this call.",
+      "parentUuid": "b28de0d1_42e26e14",
+      "revId": "280d8588120eeda384239b41c2c008937f5bd147",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c27aa42b_bcacd374",
