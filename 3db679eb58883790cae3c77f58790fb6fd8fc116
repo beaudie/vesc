@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "786b251c_f7670840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-11-23T16:37:49Z",
+      "side": 1,
+      "message": "Crashes on Pixel 6.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/2027/overview\nhttps://chromium-swarm.appspot.com/task?id\u003d5ebb8c0c9986be11\n11-23 04:35:03.575  9639  9639 F DEBUG   : backtrace:\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #00 pc 00000000017860dc  /vendor/lib64/egl/libGLES_mali.so (cmpbep_build_node+12) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #01 pc 0000000001789678  /vendor/lib64/egl/libGLES_mali.so (cmpbep_build_node1+24) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #02 pc 00000000016fe18c  /vendor/lib64/egl/libGLES_mali.so (cmpbe_adjust_precision_if_needed+252) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #03 pc 00000000017f6f34  /vendor/lib64/egl/libGLES_mali.so (spir2lir::SPIR2LIR::create_store(cmpbe_op, cmpbe_chunk_TPGE*, bool, bool, spir2lir::LIR_address const\u0026, cmpbe_node*)+180) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #04 pc 00000000017f74e8  /vendor/lib64/egl/libGLES_mali.so (spir2lir::SPIR2LIR::build_store(cmpbe_chunk_TYPE const*, bool, bool, bool, spir2lir::LIR_address, spir2lir::LIR_Value*)+376) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #05 pc 00000000017fa0f8  /vendor/lib64/egl/libGLES_mali.so (spir2lir::SPIR2LIR::expand_store_impl(spir2lir::LIR_Value*, spir2lir::LIR_Value const*, spir2lir::LIR_address const*, unsigned int, spv::StorageClass, bool, bool, cmpbe_chunk_TYPE const*, unsigned int, unsigned int)+1080) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #06 pc 00000000017fa3a0  /vendor/lib64/egl/libGLES_mali.so (spir2lir::SPIR2LIR::expand_store(unsigned int, unsigned int, bool, bool, spir2lir::LIR_Value*)+592) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #07 pc 00000000017e6ac0  /vendor/lib64/egl/libGLES_mali.so (spir2lir::SPIR2LIR::on_evaluate(spv::Op, unsigned int const*, unsigned int)+18784) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #08 pc 00000000017ebe68  /vendor/lib64/egl/libGLES_mali.so (SPIR_Parser::parse(unsigned int const*, unsigned int)+2024) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #09 pc 00000000017e915c  /vendor/lib64/egl/libGLES_mali.so (spirv_compile_shader+268) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #10 pc 0000000001690af0  /vendor/lib64/egl/libGLES_mali.so (cmpbe_v2_compile_multiple_shaders_internal+2352) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #11 pc 000000000151f2d0  /vendor/lib64/egl/libGLES_mali.so (gfx::compiler::compile_shaders(gfx::shader_set const\u0026, gfx::shader_set\u0026, hal::shader_language, gfx::shader_state const\u0026, gfx::pipeline_cache*, gfx::mem_allocator\u0026, bool*, unsigned long*)+7296) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #12 pc 0000000000770b0c  /vendor/lib64/egl/libGLES_mali.so (vulkan::graphics_pipeline::init(vulkan::device*, VkGraphicsPipelineCreateInfo const\u0026, gfx::host_mem_allocator const\u0026, gfx::host_mem_allocator\u0026)+7036) (BuildId: ae75a6e293b6843d)\n11-23 04:35:03.575  9639  9639 F DEBUG   :       #13 pc 000000000076eea0  /vendor/lib64/egl/libGLES_mali.so (vkCreateGraphicsPipelines+528) (BuildId: ae75a6e293b6843d)",
+      "revId": "3db679eb58883790cae3c77f58790fb6fd8fc116",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
