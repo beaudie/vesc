@@ -179,6 +179,12 @@ config("internal_config") {
   # Checks that unwind backtrace support for Android is enabled only for debug mode.
   assert(is_debug || !angle_enable_unwind_backtrace_support)
 
+  # Ensures that the memory allocation logging can only be enabled for debug mode.
+  assert(is_debug || !angle_enable_memory_alloc_logging)
+  if (angle_enable_memory_alloc_logging) {
+    defines += [ "ANGLE_ENABLE_MEMORY_ALLOC_LOGGING=1" ]
+  }
+
   if (is_chromeos) {
     defines += [ "ANGLE_PLATFORM_CHROMEOS" ]
   }
