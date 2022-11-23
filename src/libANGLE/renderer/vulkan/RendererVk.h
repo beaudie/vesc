@@ -653,24 +653,22 @@ class RendererVk : angle::NonCopyable
         return hasUnsubmittedUse(sharedUse.getResourceUse());
     }
 
-    void onMemoryAlloc(vk::MemoryAllocationType allocType, VkDeviceSize size)
+    // Memory statistics can be updated on allocation and deallocation.
+    template <typename HandleT>
+    void onMemoryAlloc(vk::MemoryAllocationType allocType, VkDeviceSize size, HandleT handle)
     {
-        ASSERT(allocType != vk::MemoryAllocationType::InvalidEnum && size != 0);
-
-        // Add the new allocation to the allocation tracker.
-        uint32_t allocTypeIndex = ToUnderlying(allocType);
-        mActiveMemoryAllocationsSize[allocTypeIndex] += size;
+        onMemoryAllocImpl(allocType, size, reinterpret_cast<void *>(handle));
     }
 
-    void onMemoryDealloc(vk::MemoryAllocationType allocType, VkDeviceSize size)
+    template <typename HandleT>
+    void onMemoryDealloc(vk::MemoryAllocationType allocType, VkDeviceSize size, HandleT handle)
     {
-        ASSERT(allocType != vk::MemoryAllocationType::InvalidEnum && size != 0);
-
-        // Remove the allocation from the allocation tracker.
-        uint32_t allocTypeIndex = ToUnderlying(allocType);
-        ASSERT(mActiveMemoryAllocationsSize[allocTypeIndex] >= size);
-        mActiveMemoryAllocationsSize[allocTypeIndex] -= size;
+        onMemoryDeallocImpl(allocType, size, reinterpret_cast<void *>(handle));
     }
+
+    // Allocation statistics functions below are currently used for debugging only.
+    VkDeviceSize getActiveMemoryAllocationsSize(uint32_t allocTypeIndex);
+    VkDeviceSize getActiveMemoryAllocationsCount(uint32_t allocTypeIndex);
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -698,7 +696,7 @@ class RendererVk : angle::NonCopyable
 
     // Query and cache supported fragment shading rates
     bool canSupportFragmentShadingRate(const vk::ExtensionNameList &deviceExtensionNames);
-    // Perfer host visiable device local via device local based on device type and heap size.
+    // Prefer host visible device local via device local based on device type and heap size.
     bool canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType deviceType);
 
     template <typename CommandBufferHelperT, typename RecyclerT>
@@ -706,6 +704,10 @@ class RendererVk : angle::NonCopyable
                                        vk::CommandPool *commandPool,
                                        RecyclerT *recycler,
                                        CommandBufferHelperT **commandBufferHelperOut);
+
+    // Collect information about memory allocations in debug mode.
+    void onMemoryAllocImpl(vk::MemoryAllocationType allocType, VkDeviceSize size, void *handle);
+    void onMemoryDeallocImpl(vk::MemoryAllocationType allocType, VkDeviceSize size, void *handle);
 
     egl::Display *mDisplay;
 
@@ -948,6 +950,14 @@ class RendererVk : angle::NonCopyable
     // For memory allocation tracking.
     std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
         mActiveMemoryAllocationsSize;
+    std::array<std::atomic<uint64_t>, vk::kMemoryAllocationTypeCount> mActiveMemoryAllocationsCount;
+
+    // For memory allocation in debug mode.
+    std::mutex mMemoryAllocationMutex;
+    uint64_t mMemoryAllocationID;
+
+    using MemoryAllocInfoMap = angle::HashMap<vk::MemoryAllocInfoMapKey, vk::MemoryAllocationInfo>;
+    angle::HashMap<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationTracker;
 };
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
