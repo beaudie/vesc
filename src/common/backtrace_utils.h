@@ -39,6 +39,8 @@ class BacktraceInfo
     std::vector<void *> getStackAddresses() const { return mStackAddresses; }
     std::vector<std::string> getStackSymbols() const { return mStackSymbols; }
 
+    bool operator<(const BacktraceInfo &rhs) const { return mStackAddresses < rhs.mStackAddresses; }
+
     void *getStackAddress(size_t index) const
     {
         ASSERT(index < mStackAddresses.size());
