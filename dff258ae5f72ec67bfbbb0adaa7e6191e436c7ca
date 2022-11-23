@@ -33,6 +33,24 @@
       "message": "Can this be removed instead?\n\n```\n    // http://anglebug.com/2796\n    \"UNASSIGNED-CoreValidation-Shader-PointSizeMissing\",\n```",
       "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d06db7e_1436753e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-11-23T15:43:06Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t know enough to know.  I\u0027m just trying to unblock the roller.  Will removing those lines unblock the roller?",
+      "parentUuid": "4b8af0c6_458dd35d",
+      "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
