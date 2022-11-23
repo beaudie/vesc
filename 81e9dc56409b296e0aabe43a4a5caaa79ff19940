@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9b3af0_7e9dfd07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-23T20:58:15Z",
+      "side": 1,
+      "message": "This change broke https://chromium-review.googlesource.com/c/angle/angle/+/3993363, which sometimes renders to read_write textures instead of attachments.\n\nAlexey, is there a specific issue I should be aware of? Would it be safe to *not* skip encoders that don\u0027t have an attachment, but *do* have a writable texture?",
+      "revId": "81e9dc56409b296e0aabe43a4a5caaa79ff19940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
