@@ -1258,7 +1258,8 @@ RendererVk::RendererVk()
       mValidationMessageCount(0),
       mCommandProcessor(this),
       mSupportedVulkanPipelineStageMask(0),
-      mSupportedVulkanShaderStageMask(0)
+      mSupportedVulkanShaderStageMask(0),
+      mMemoryAllocationID(0)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1271,7 +1272,8 @@ RendererVk::RendererVk()
     // Allocation counters are initialized here to keep track of the size of the memory allocations.
     for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
     {
-        mActiveMemoryAllocationsSize[i] = 0;
+        mActiveMemoryAllocationsSize[i]  = 0;
+        mActiveMemoryAllocationsCount[i] = 0;
     }
 }
 
@@ -1379,6 +1381,10 @@ void RendererVk::onDestroy(vk::Context *context)
         mCompressEvent->wait();
         mCompressEvent.reset();
     }
+
+    // When the renderer is being destroyed, check if all the allocated memory throughout the
+    // execution has been freed.
+    checkForUnfreedMemoryAllocations();
 
     mMemoryProperties.destroy();
     mPhysicalDevice = VK_NULL_HANDLE;
@@ -5027,6 +5033,81 @@ void RendererVk::logCacheStats() const
     {
         INFO() << "    CacheType " << cacheType++ << ": " << stats.getHitRatio();
     }
+}
+
+void RendererVk::onMemoryAllocDebugImpl(void *handle,
+                                        vk::MemoryAllocationType allocType,
+                                        VkDeviceSize size)
+{
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+    ASSERT(allocType != vk::MemoryAllocationType::InvalidEnum && size != 0);
+    std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+
+    uint32_t allocTypeIndex = ToUnderlying(allocType);
+    mActiveMemoryAllocationsCount[allocTypeIndex]++;
+
+    // Add the new allocation to the memory tracker.
+    vk::MemoryAllocationInfo memAllocLogInfo;
+    memAllocLogInfo.id        = ++mMemoryAllocationID;
+    memAllocLogInfo.allocType = allocType;
+    memAllocLogInfo.size      = size;
+    memAllocLogInfo.handle    = handle;
+
+    vk::MemoryAllocInfoMapKey memoryAllocInfoMapKey(memAllocLogInfo.handle);
+    mMemoryAllocationTracker[angle::getBacktraceInfo()].insert(
+        std::make_pair(memoryAllocInfoMapKey, memAllocLogInfo));
+
+    WARN() << "[ALLOC] ID " << memAllocLogInfo.id << ": Allocation of size " << memAllocLogInfo.size
+           << " for object " << memAllocLogInfo.handle
+           << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+#endif
+}
+
+void RendererVk::onMemoryDeallocDebugImpl(void *handle)
+{
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+    for (auto &memLogPerBacktrace : mMemoryAllocationTracker)
+    {
+        vk::MemoryAllocInfoMapKey memoryAllocInfoMapKey(handle);
+        MemoryAllocInfoMap &memLogMap = memLogPerBacktrace.second;
+        std::unique_lock<std::mutex> lock(mMemoryAllocationMutex);
+        if (memLogMap.find(memoryAllocInfoMapKey) != memLogMap.end())
+        {
+            // Object found; remove it from the allocation tracker.
+            vk::MemoryAllocationInfo *memLogEntry = &memLogMap[memoryAllocInfoMapKey];
+            ASSERT(memLogEntry->allocType != vk::MemoryAllocationType::InvalidEnum &&
+                   memLogEntry->size != 0);
+
+            // Remove the new allocation from the memory tracker.
+            uint32_t allocTypeIndex = ToUnderlying(memLogEntry->allocType);
+            mActiveMemoryAllocationsCount[allocTypeIndex]--;
+
+            WARN() << "[DEALLOC] ID " << memLogEntry->id << ": Deallocation of size "
+                   << memLogEntry->size << " for object " << memLogEntry->handle
+                   << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex];
+
+            memLogMap.erase(memoryAllocInfoMapKey);
+        }
+    }
+#endif
+}
+
+void RendererVk::checkForUnfreedMemoryAllocations()
+{
+#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)
+    bool hasUnfreedMemory = false;
+    for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
+    {
+        if (mActiveMemoryAllocationsSize[i] != 0)
+        {
+            hasUnfreedMemory = true;
+            INFO() << "Remaining allocation for Memory allocation type "
+                   << vk::kMemoryAllocationTypeMessage[i] << ": " << mActiveMemoryAllocationsSize[i]
+                   << " Count: " << mActiveMemoryAllocationsCount[i];
+        }
+    }
+    ASSERT(!hasUnfreedMemory);
+#endif
 }
 
 angle::Result RendererVk::getFormatDescriptorCountForVkFormat(ContextVk *contextVk,
