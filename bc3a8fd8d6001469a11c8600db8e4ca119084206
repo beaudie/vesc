@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a275de56_15d0ce63",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "cleanup",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f80534bf_57867aca",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "no need to do this in test code.\nuse class GLBuffter.",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8134456d_aa75c974",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "no need \"Id\"",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3d74d32_7467fd37",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "similar class to use. GLTexture",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dfbc4fa_65513d04",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "use `constexpr`, and name is kTextureWidth.",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb9d87c4_464b7ef7",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2022-11-23T19:45:35Z",
+      "side": 1,
+      "message": "similar for those",
+      "revId": "bc3a8fd8d6001469a11c8600db8e4ca119084206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
