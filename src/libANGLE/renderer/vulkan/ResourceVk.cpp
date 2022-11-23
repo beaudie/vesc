@@ -35,7 +35,7 @@ angle::Result WaitForIdle(ContextVk *contextVk,
     }
 
     // Make sure the driver is done with the resource.
-    if (resource->usedInRunningCommands(contextVk->getRenderer()))
+    if (contextVk->getRenderer()->hasUnfinishedUse(resource->getResourceUse()))
     {
         if (debugMessage)
         {
@@ -65,11 +65,6 @@ Resource &Resource::operator=(Resource &&rhs)
 }
 
 Resource::~Resource() {}
-
-bool Resource::usedInRunningCommands(RendererVk *renderer) const
-{
-    return renderer->useInRunningCommands(mUse);
-}
 
 bool Resource::isCurrentlyInUse(RendererVk *renderer) const
 {
@@ -103,12 +98,6 @@ ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
     mReadOnlyUse  = std::move(other.mReadOnlyUse);
     mReadWriteUse = std::move(other.mReadWriteUse);
     return *this;
-}
-
-// Determine if the driver has finished execution with this resource.
-bool ReadWriteResource::usedInRunningCommands(RendererVk *renderer) const
-{
-    return renderer->useInRunningCommands(mReadOnlyUse);
 }
 
 bool ReadWriteResource::isCurrentlyInUse(RendererVk *renderer) const

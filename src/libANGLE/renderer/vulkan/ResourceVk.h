@@ -143,9 +143,6 @@ class Resource : angle::NonCopyable
   public:
     virtual ~Resource();
 
-    // Determine if the driver has finished execution with this resource.
-    bool usedInRunningCommands(RendererVk *renderer) const;
-
     // Returns true if the resource is in use by ANGLE or the driver.
     bool isCurrentlyInUse(RendererVk *renderer) const;
 
@@ -188,9 +185,6 @@ class ReadWriteResource : public angle::NonCopyable
 {
   public:
     virtual ~ReadWriteResource();
-
-    // Determine if the driver has finished execution with this resource.
-    bool usedInRunningCommands(RendererVk *renderer) const;
 
     // Returns true if the resource is in use by ANGLE or the driver.
     bool isCurrentlyInUse(RendererVk *renderer) const;
