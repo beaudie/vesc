@@ -31,6 +31,7 @@
 #include "libANGLE/InfoLog.h"
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/ProgramLinkedResources.h"
+#include "libANGLE/ProgramStateData.h"
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
@@ -117,37 +118,6 @@ void LoadShInterfaceBlock(BinaryInputStream *stream, sh::InterfaceBlock *block);
 void WriteShaderVariableBuffer(BinaryOutputStream *stream, const ShaderVariableBuffer &var);
 void LoadShaderVariableBuffer(BinaryInputStream *stream, ShaderVariableBuffer *var);
 
-// Struct used for correlating uniforms/elements of uniform arrays to handles
-struct VariableLocation
-{
-    static constexpr unsigned int kUnused = GL_INVALID_INDEX;
-
-    VariableLocation();
-    VariableLocation(unsigned int arrayIndex, unsigned int index);
-
-    // If used is false, it means this location is only used to fill an empty space in an array,
-    // and there is no corresponding uniform variable for this location. It can also mean the
-    // uniform was optimized out by the implementation.
-    bool used() const { return (index != kUnused); }
-    void markUnused() { index = kUnused; }
-    void markIgnored() { ignored = true; }
-
-    bool operator==(const VariableLocation &other) const
-    {
-        return arrayIndex == other.arrayIndex && index == other.index;
-    }
-
-    // "arrayIndex" stores the index of the innermost GLSL array. It's zero for non-arrays.
-    unsigned int arrayIndex;
-    // "index" is an index of the variable. The variable contains the indices for other than the
-    // innermost GLSL arrays.
-    unsigned int index;
-
-    // If this location was bound to an unreferenced uniform.  Setting data on this uniform is a
-    // no-op.
-    bool ignored;
-};
-
 // Information about a variable binding.
 // Currently used by CHROMIUM_path_rendering
 struct BindingInfo
@@ -227,10 +197,12 @@ class ProgramState final : angle::NonCopyable
     const std::string &getLabel();
 
     Shader *getAttachedShader(ShaderType shaderType) const;
+    const ProgramStateData &getProgramStateData() const { return mProgramStateData; }
     const gl::ShaderMap<Shader *> &getAttachedShaders() const { return mAttachedShaders; }
+
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
-        return mTransformFeedbackVaryingNames;
+        return mProgramStateData.mTransformFeedbackVaryingNames;
     }
     GLint getTransformFeedbackBufferMode() const
     {
@@ -265,7 +237,12 @@ class ProgramState final : angle::NonCopyable
         return mExecutable->getSecondaryOutputLocations();
     }
     const std::vector<LinkedUniform> &getUniforms() const { return mExecutable->getUniforms(); }
-    const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
+
+    const std::vector<VariableLocation> &getUniformLocations() const
+    {
+        return mProgramStateData.mUniformLocations;
+    }
+
     const std::vector<InterfaceBlock> &getUniformBlocks() const
     {
         return mExecutable->getUniformBlocks();
@@ -274,7 +251,12 @@ class ProgramState final : angle::NonCopyable
     {
         return mExecutable->getShaderStorageBlocks();
     }
-    const std::vector<BufferVariable> &getBufferVariables() const { return mBufferVariables; }
+
+    const std::vector<BufferVariable> &getBufferVariables() const
+    {
+        return mProgramStateData.mBufferVariables;
+    }
+
     const std::vector<SamplerBinding> &getSamplerBindings() const
     {
         return mExecutable->getSamplerBindings();
@@ -283,7 +265,12 @@ class ProgramState final : angle::NonCopyable
     {
         return getExecutable().getImageBindings();
     }
-    const sh::WorkGroupSize &getComputeShaderLocalSize() const { return mComputeShaderLocalSize; }
+
+    const sh::WorkGroupSize &getComputeShaderLocalSize() const
+    {
+        return mProgramStateData.mComputeShaderLocalSize;
+    }
+
     const RangeUI &getDefaultUniformRange() const { return mExecutable->getDefaultUniformRange(); }
     const RangeUI &getSamplerUniformRange() const { return mExecutable->getSamplerUniformRange(); }
     const RangeUI &getImageUniformRange() const { return mExecutable->getImageUniformRange(); }
@@ -318,8 +305,8 @@ class ProgramState final : angle::NonCopyable
 
     GLuint getBufferVariableIndexFromName(const std::string &name) const;
 
-    int getNumViews() const { return mNumViews; }
-    bool usesMultiview() const { return mNumViews != -1; }
+    int getNumViews() const { return mProgramStateData.mNumViews; }
+    bool usesMultiview() const { return mProgramStateData.mNumViews != -1; }
 
     bool hasAttachedShader() const;
 
@@ -343,25 +330,32 @@ class ProgramState final : angle::NonCopyable
     }
 
     bool hasImages() const { return !getImageBindings().empty(); }
-    rx::SpecConstUsageBits getSpecConstUsageBits() const { return mSpecConstUsageBits; }
+
+    rx::SpecConstUsageBits getSpecConstUsageBits() const
+    {
+        return mProgramStateData.mSpecConstUsageBits;
+    }
 
     // A Program can only either be graphics or compute, but never both, so it
     // can answer isCompute() based on which shaders it has.
     bool isCompute() const { return mExecutable->hasLinkedShaderStage(ShaderType::Compute); }
 
-    const std::string &getLabel() const { return mLabel; }
+    const std::string &getLabel() const { return mProgramStateData.mLabel; }
 
-    uint32_t getLocationsUsedForXfbExtension() const { return mLocationsUsedForXfbExtension; }
+    uint32_t getLocationsUsedForXfbExtension() const
+    {
+        return mProgramStateData.mLocationsUsedForXfbExtension;
+    }
 
-    bool hasBinaryRetrieveableHint() const { return mBinaryRetrieveableHint; }
+    bool hasBinaryRetrieveableHint() const { return mProgramStateData.mBinaryRetrieveableHint; }
 
-    bool isSeparable() const { return mSeparable; }
+    bool isSeparable() const { return mProgramStateData.mSeparable; }
 
-    int getDrawIDLocation() const { return mDrawIDLocation; }
+    int getDrawIDLocation() const { return mProgramStateData.mDrawIDLocation; }
 
-    int getBaseVertexLocation() const { return mBaseVertexLocation; }
+    int getBaseVertexLocation() const { return mProgramStateData.mBaseVertexLocation; }
 
-    int getBaseInstanceLocation() const { return mBaseInstanceLocation; }
+    int getBaseInstanceLocation() const { return mProgramStateData.mBaseInstanceLocation; }
 
     ShaderType getAttachedTransformFeedbackStage() const;
 
@@ -376,35 +370,9 @@ class ProgramState final : angle::NonCopyable
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex);
 
-    std::string mLabel;
-
-    sh::WorkGroupSize mComputeShaderLocalSize;
-
     ShaderMap<Shader *> mAttachedShaders;
 
-    uint32_t mLocationsUsedForXfbExtension;
-    std::vector<std::string> mTransformFeedbackVaryingNames;
-
-    std::vector<VariableLocation> mUniformLocations;
-    std::vector<BufferVariable> mBufferVariables;
-
-    bool mBinaryRetrieveableHint;
-    bool mSeparable;
-    rx::SpecConstUsageBits mSpecConstUsageBits;
-
-    // ANGLE_multiview.
-    int mNumViews;
-
-    // GL_ANGLE_multi_draw
-    int mDrawIDLocation;
-
-    // GL_ANGLE_base_vertex_base_instance_shader_builtin
-    int mBaseVertexLocation;
-    int mBaseInstanceLocation;
-    // Cached value of base vertex and base instance
-    // need to reset them to zero if using non base vertex or base instance draw calls.
-    GLint mCachedBaseVertex;
-    GLuint mCachedBaseInstance;
+    ProgramStateData mProgramStateData;
 
     // Note that this has nothing to do with binding layout qualifiers that can be set for some
     // uniforms in GLES3.1+. It is used to pre-set the location of uniforms.
@@ -528,7 +496,7 @@ class Program final : public LabeledObject, public angle::Subject
     const std::vector<VariableLocation> &getUniformLocations() const
     {
         ASSERT(!mLinkingState);
-        return mState.mUniformLocations;
+        return mState.mProgramStateData.mUniformLocations;
     }
 
     const LinkedUniform &getUniformByIndex(GLuint index) const
