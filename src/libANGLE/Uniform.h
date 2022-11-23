@@ -96,6 +96,37 @@ struct BufferVariable : public sh::ShaderVariable, public ActiveVariable
     int topLevelArraySize;
 };
 
+// Struct used for correlating uniforms/elements of uniform arrays to handles
+struct VariableLocation
+{
+    static constexpr unsigned int kUnused = GL_INVALID_INDEX;
+
+    VariableLocation();
+    VariableLocation(unsigned int arrayIndex, unsigned int index);
+
+    // If used is false, it means this location is only used to fill an empty space in an array,
+    // and there is no corresponding uniform variable for this location. It can also mean the
+    // uniform was optimized out by the implementation.
+    bool used() const { return (index != kUnused); }
+    void markUnused() { index = kUnused; }
+    void markIgnored() { ignored = true; }
+
+    bool operator==(const VariableLocation &other) const
+    {
+        return arrayIndex == other.arrayIndex && index == other.index;
+    }
+
+    // "arrayIndex" stores the index of the innermost GLSL array. It's zero for non-arrays.
+    unsigned int arrayIndex;
+    // "index" is an index of the variable. The variable contains the indices for other than the
+    // innermost GLSL arrays.
+    unsigned int index;
+
+    // If this location was bound to an unreferenced uniform.  Setting data on this uniform is a
+    // no-op.
+    bool ignored;
+};
+
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
 // contain a group of shader variables, and have a GL buffer backed.
 struct ShaderVariableBuffer : public ActiveVariable
