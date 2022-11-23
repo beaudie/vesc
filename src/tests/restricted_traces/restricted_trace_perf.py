@@ -78,11 +78,7 @@ def run_async_command(args):
 
     try:
         async_process = subprocess.Popen(
-            args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            shell=True,
-            universal_newlines=True)
+            args, stdin=subprocess.PIPE, shell=True, universal_newlines=True)
     except subprocess.CalledProcessError as e:
         raise RuntimeError("command '{}' return with error (code {}): {}".format(
             e.cmd, e.returncode, e.output))
@@ -177,7 +173,7 @@ def get_trace_width(mode):
     return width
 
 
-def run_trace(trace, args):
+def run_trace(trace, frames, args):
     mode = get_mode(args)
     if mode != '':
         mode = '_' + mode
@@ -198,6 +194,11 @@ def run_trace(trace, args):
         adb_command += '--fixed-test-time-with-warmup\ ' + args.fixedtime + '\ '
     if args.minimizegpuwork:
         adb_command += '--minimize-gpu-work\ '
+    if args.single_pass:
+        # single-pass means we only want to run through all the frames once
+        assert args.maxsteps == '', 'Can\'t use single-pass with maxsteps'
+        assert args.fixedtime == '', 'Can\'t use single-pass with fixedtime'
+        adb_command += '--warmup-trials\ 0\ --trials\ 1\ --steps-per-trial\ ' + str(frames) + '\ '
     adb_command += '--verbose\ '
     adb_command += '--verbose-logging\"\ '
     adb_command += '-e org.chromium.native_test.NativeTestInstrumentationTestRunner.ShardNanoTimeout "1000000000000000000" '
@@ -241,7 +242,7 @@ def get_test_time():
 
 
 def get_gpu_memory(trace_duration):
-    # Pull the results from the device and parse
+    # Pull the results from the device and parse (awk NF removes blank lines)
     result = run_adb_command('shell cat /sdcard/Download/gpumem.txt | awk "NF"')
 
     # The gpumem script grabs snapshots of memory per process
@@ -595,6 +596,11 @@ def main():
         '--device', help='Which device to run the tests on (use serial)', default='')
     parser.add_argument(
         '--sleep', help='Add a sleep of this many seconds between each test)', type=int, default=0)
+    parser.add_argument(
+        '--single-pass',
+        help='Run through the trace once, no warmup',
+        action='store_true',
+        default=False)
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -729,6 +735,16 @@ def main():
 
                 test = trace.split(' ')[0]
 
+                frames = 0
+                if args.single_pass:
+                    logging.debug('Single pass detected')
+                    with open(os.path.join(test, test + '.json')) as f:
+                        # If we're running single-pass, look up the number of frames
+                        logging.debug('Opened %s' % str(f.name))
+                        trace_info = json.loads(f.read())
+                        frames = trace_info['TraceMetadata']['FrameEnd']
+                        logging.debug('Read out %i frames' % int(frames))
+
                 if args.power:
                     starting_power.get_power_data()
                     logging.debug('Starting GPU power: %i' % int(starting_power.gpu_power))
@@ -738,7 +754,7 @@ def main():
                                   int(starting_power.little_cpu_power))
 
                 logging.debug('Running %s' % test)
-                test_time = run_trace(test, args)
+                test_time = run_trace(test, frames, args)
 
                 if args.power:
                     ending_power.get_power_data()
