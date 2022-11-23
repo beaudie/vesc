@@ -296,6 +296,12 @@ struct FeaturesVk : FeatureSetBase
         "enablePrecisionQualifiers", FeatureCategory::VulkanFeatures,
         "Enable precision qualifiers in shaders", &members, "http://anglebug.com/3078"};
 
+    FeatureInfo enableSpirvPrecisionMatchingFixer = {
+        "enableSpirvPrecisionMatchingFixer", FeatureCategory::VulkanWorkarounds,
+        "Add SPIRV code to make sure precision between shader "
+        "stages match with each other",
+        &members, "angleproject:7488"};
+
     FeatureInfo preferAggregateBarrierCalls = {
         "preferAggregateBarrierCalls", FeatureCategory::VulkanWorkarounds,
         "Single barrier call is preferred over multiple calls with "

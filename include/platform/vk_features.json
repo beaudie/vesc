@@ -373,6 +373,15 @@
             "issue": "http://anglebug.com/3078"
         },
         {
+            "name": "enable_spirv_precision_matching_fixer",
+            "category": "Workarounds",
+            "description": [
+                "Add SPIRV code to make sure precision between shader ",
+                "stages match with each other"
+            ],
+            "issue": "angleproject:7488"
+        },
+        {
             "name": "prefer_aggregate_barrier_calls",
             "category": "Workarounds",
             "description": [

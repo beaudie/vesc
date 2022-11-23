@@ -115,6 +115,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::EnablePrecisionQualifiers, "enablePrecisionQualifiers"},
     {Feature::EnablePreRotateSurfaces, "enablePreRotateSurfaces"},
     {Feature::EnableProgramBinaryForCapture, "enableProgramBinaryForCapture"},
+    {Feature::EnableSpirvPrecisionMatchingFixer, "enableSpirvPrecisionMatchingFixer"},
     {Feature::ExpandIntegerPowExpressions, "expandIntegerPowExpressions"},
     {Feature::ExplicitlyEnablePerSampleShading, "explicitlyEnablePerSampleShading"},
     {Feature::ExposeNonConformantExtensionsAndVersions, "exposeNonConformantExtensionsAndVersions"},
