@@ -5186,7 +5186,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // open, such as invalidate or blit. Note that we always start a new command buffer
                 // because we currently can only support one open RenderPass at a time.
                 onRenderPassFinished(RenderPassClosureReason::FramebufferBindingChange);
-                if (getFeatures().preferSubmitAtFBOBoundary.enabled)
+                if (getFeatures().preferSubmitAtFBOBoundary.enabled &&
+                    mRenderPassCommands->started())
                 {
                     // This will behave as if user called glFlush, but the actual flush will be
                     // triggered at endRenderPass time.
