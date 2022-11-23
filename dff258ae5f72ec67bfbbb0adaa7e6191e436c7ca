@@ -87,6 +87,24 @@
       "parentUuid": "308bc037_17ab4324",
       "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "459b9267_3a88218c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-23T18:08:55Z",
+      "side": 1,
+      "message": "Just those 2 lines, but keep the ones added here. I suspect that old suppressed VU has gotten renamed to this new VU.",
+      "parentUuid": "14664df9_e836bcc7",
+      "revId": "dff258ae5f72ec67bfbbb0adaa7e6191e436c7ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
