@@ -34,6 +34,24 @@
       "parentUuid": "8f08864c_9e1b8342",
       "revId": "608a4f78a08f5c36ba28c08d518d505fdd52f541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8098c77_b8cb6c39",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Query11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2022-11-23T09:22:43Z",
+      "side": 1,
+      "message": "Thank you Geoff. It works.\nI also draft a chromium CL here https://chromium-review.googlesource.com/c/chromium/src/+/4050153. Please take a look whether it\u0027s in the right direction.",
+      "parentUuid": "0c12c8f7_e6b6f42d",
+      "revId": "608a4f78a08f5c36ba28c08d518d505fdd52f541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
