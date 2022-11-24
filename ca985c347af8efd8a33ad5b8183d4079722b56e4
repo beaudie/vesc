@@ -16,6 +16,24 @@
       "message": "Does this look good @lexa.knyazev@gmail.com?",
       "revId": "ca985c347af8efd8a33ad5b8183d4079722b56e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a58301d_0e11bbf8",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 20
+      },
+      "lineNbr": 1223,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-11-24T08:25:25Z",
+      "side": 1,
+      "message": "Metal validation messages say:\n\u003e Either set rendertargets in RenderPassDescriptor or set renderTargetWidth and renderTargetHeight.\n\u003e Either set rendertargets in RenderPassDescriptor or set defaultRasterSampleCount.\n\nSo I think the condition should be\n`hasAttachment || (mRenderPassDesc.defaultWidth !\u003d 0 \u0026\u0026 mRenderPassDesc.defaultHeight !\u003d 0)`\n\nMight as well add this just in case\n```\nASSERT(hasAttachment || objCRenderPassDesc.defaultRasterSampleCount !\u003d 0);\n```",
+      "parentUuid": "2417af68_607a631e",
+      "revId": "ca985c347af8efd8a33ad5b8183d4079722b56e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
