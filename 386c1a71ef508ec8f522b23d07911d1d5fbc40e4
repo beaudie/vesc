@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f2ab504_b804c698",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-24T02:13:31Z",
+      "side": 1,
+      "message": "The intent of this flag is to guarantee we test texture views with a different format, which we only use on devices with tier1 support. This flag makes sure we test it even if the device running the tests supports tier2. I was thinking we could keep it and use it on the bots.",
+      "parentUuid": "a94244d0_1f87db28",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19875b72_e4ff0ee5",
         "filename": "src/compiler/translator/TranslatorMetalDirect.h",
         "patchSetId": 19
@@ -83,6 +101,24 @@
       "writtenOn": "2022-11-22T19:26:21Z",
       "side": 1,
       "message": "Is it possible to hit this codepath with user / client GL commands? If so, we should try to return an error code instead of using Unimplemented.Though if it\u0027s in the translator, I suppose it\u0027s at compile time, not link time.",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f66e6563_ccb90aff",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-24T02:13:31Z",
+      "side": 1,
+      "message": "It shouldn\u0027t be possible! Shader images are a 3.1 feature and Metal currently only exposes a 3.0 context to clients. The only way we can hit this is when pixel local storage calls `context-\u003ebindImageTexture` internally.\n\nI was under the impression that Metal does not currently have plans to support ES 3.1 (?), but if it ever does, the hope was that these `UNIMPLEMENTED()` calls would very quickly point out the work that still needs to be completed.",
+      "parentUuid": "19875b72_e4ff0ee5",
       "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -106,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15660e2a_aa94894f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-24T02:13:31Z",
+      "side": 1,
+      "message": "The backend *sometimes* sets `maxPixelLocalStoragePlanes`. Maybe this is poor design, but the way it works currently is:\n\nIf backend leaves `maxPixelLocalStoragePlanes` as 0, then the frontend initializes pixel local storage caps based on standard GL queries on shader image state.\n\nIf the backend wants custom pixel local storage caps, it is responsible to initialize everything, and the frontend knows the caps are already initialized because `maxPixelLocalStoragePlanes` is nonzero.\n\nI tried to update the comment to capture this.",
+      "parentUuid": "d697b4ef_09841704",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fde82ba_b35663dc",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 19
@@ -117,6 +171,24 @@
       "writtenOn": "2022-11-22T19:26:21Z",
       "side": 1,
       "message": "Can / should we do a clamp here, instead of an assert?",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed26131_e180c9b5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 4302,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-24T02:13:31Z",
+      "side": 1,
+      "message": "We can\u0027t clamp because that would impact other caps. Added a comment.",
+      "parentUuid": "0fde82ba_b35663dc",
       "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
