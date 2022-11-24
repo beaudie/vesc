@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4951d4b1_165d11f4",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:51:04Z",
+      "side": 1,
+      "message": "naming nit: how about `varyings_require_matching_precision_in_spirv`? To tell what the workaround is about, rather than what it enables internally.",
+      "range": {
+        "startLine": 376,
+        "startChar": 21,
+        "endLine": 376,
+        "endChar": 58
+      },
+      "revId": "e39fe845d7a59cba4bc95e0ae880d31b3b295a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72594a60_1a447352",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:51:04Z",
+      "side": 1,
+      "message": "This should be a link, see other workarounds",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 39
+      },
+      "revId": "e39fe845d7a59cba4bc95e0ae880d31b3b295a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
