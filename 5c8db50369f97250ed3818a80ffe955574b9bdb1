@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f521a3cb_48389420",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-24T01:01:06Z",
+      "side": 1,
+      "message": "Would you mind adding some comments within the test that shows where does the mismatch happen?",
+      "revId": "5c8db50369f97250ed3818a80ffe955574b9bdb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
