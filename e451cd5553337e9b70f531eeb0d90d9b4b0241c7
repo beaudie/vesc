@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2031310_b71d201f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T19:23:50Z",
+      "side": 1,
+      "message": "Generally speaking, how do you deal with context changes resulting in different serials?\n\nTake this test for example:\n\n- Make context 1 current on thread 1 -\u003e gets queue index 0\n- Make context 2 current on thread 2 -\u003e gets queue index 1\n- On thread 2:\n  * Make a small submission \u003c- Queue index 0 now has last submitted serial 0\n- On thread 1:\n  * Wait for thread 2\n  * Make numerous submissions \u003c- Queue index 1 now has last submitted serial N\n  * Write to buffer B \u003c- Buffer B gets serial N+1\n- Make context 1 and 2 uncurrent\n- Make context 2 current on any thread -\u003e gets queue index 0\n- Make context 1 current on another thread -\u003e gets queue index 1\n- Map buffer B on context 1\n\nIIUC, once context 1 is made current again and gets queue index 1, it thinks that its last submitted serial is 0, while buffer B thinks its last used in submission N+1. Then the \"map\" operation is not going to wait for anything.\n\nDid I misunderstand something?",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b2eb0f8d_0ea81348",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 23
