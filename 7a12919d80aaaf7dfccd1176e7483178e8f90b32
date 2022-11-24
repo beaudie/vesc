@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f86940e_a38c113f",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:25:08Z",
+      "side": 1,
+      "message": "If you move this to vulkan/BUILD.gn, toggle it doesn\u0027t result in everything getting rebuilt.",
+      "revId": "7a12919d80aaaf7dfccd1176e7483178e8f90b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec33dcd8_6f507752",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:25:08Z",
+      "side": 1,
+      "message": "nit: these belong in `vk_utils`",
+      "revId": "7a12919d80aaaf7dfccd1176e7483178e8f90b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b85e1579_415dd847",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:25:08Z",
+      "side": 1,
+      "message": "`#if`s make it easy for code to rot, as we don\u0027t build with all possible flags. My suggestion is to do something like this:\n\n```\n    template \u003ctypename HandleT\u003e\n    void onMemoryAlloc(vk::MemoryAllocationType allocType, VkDeviceSize size, HandleT handle)\n    {\n        onMemoryAllocDebugImpl(allocType, size, reinterpret_cast\u003cvoid *\u003e(handle));\n    }\n```\n\nThen in RendererVk.cpp, do this:\n\n```\n// anonymous namespace\nconstexpr bool kDebugMemoryAllocations \u003d false;\n#if defined(ANGLE_ENABLE_MEMORY_ALLOC_LOGGING)\nconstexpr bool kDebugMemoryAllocationLogs \u003d true;\n#else\nconstexpr bool kDebugMemoryAllocationLogs \u003d false;\n#endif\n\nvoid RendererVk::onMemoryAllocDebugImpl(...)\n{\n    if (kDebugMemoryAllocationLogs)\n    {\n        // What\u0027s in onMemoryAllocDebugImpl now\n    }\n    else if (kDebugMemoryAllocations)\n    {\n        // What\u0027s in the #else part here now\n    }\n}\n```\n\nThen all paths go through the compiler (so there won\u0027t be build errors in the future), the `#if` is contained to a single place, and there\u0027s no performance penalty. As a bonus, we can also easily toggle tracking on and off too.",
+      "revId": "7a12919d80aaaf7dfccd1176e7483178e8f90b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a3fd54_bf707a17",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:25:08Z",
+      "side": 1,
+      "message": "Instead, make this a function that\u0027s private to RendererVk.cpp (anonymous namespace).",
+      "range": {
+        "startLine": 755,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 50
+      },
+      "revId": "7a12919d80aaaf7dfccd1176e7483178e8f90b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a20e019_09efff69",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T16:25:08Z",
+      "side": 1,
+      "message": "nit: `angle::HashMap`",
+      "range": {
+        "startLine": 1010,
+        "startChar": 31,
+        "endLine": 1010,
+        "endChar": 39
+      },
+      "revId": "7a12919d80aaaf7dfccd1176e7483178e8f90b32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
