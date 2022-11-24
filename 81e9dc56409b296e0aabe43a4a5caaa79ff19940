@@ -34,6 +34,24 @@
       "parentUuid": "3e9b3af0_7e9dfd07",
       "revId": "81e9dc56409b296e0aabe43a4a5caaa79ff19940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "791c0801_d46da4ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-24T02:14:28Z",
+      "side": 1,
+      "message": "Ah, good suggestion. Thank you Alexey. Updated: https://chromium-review.googlesource.com/c/angle/angle/+/3993363/20/src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+      "parentUuid": "43ca5b12_1e928a73",
+      "revId": "81e9dc56409b296e0aabe43a4a5caaa79ff19940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
