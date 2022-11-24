@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2ee226_7b09dc80",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-24T19:18:26Z",
+      "side": 1,
+      "message": "This works currently because we always flush on context unmake-current. Please note that in the comment.",
+      "revId": "cb789e6e961ed54536cc1954d9db28d765902b33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
