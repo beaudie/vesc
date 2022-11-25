@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c4c49fc_88c592ac",
+        "filename": "util/linux/x11/X11Window.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-25T20:28:07Z",
+      "side": 1,
+      "message": "Something I just encountered is that with XSetWMNormalHints, it\u0027s no longer possible to resize the window on X11. This is (occasionally) useful to test swapchain recreation code for example by running `./hello_triangle` and dragging a window corner.\n\nIs there a way to achieve what\u0027s necessary while allowing user resizing?",
+      "revId": "c86f0988e0394e9381394796fe19e82a2bbc2d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
