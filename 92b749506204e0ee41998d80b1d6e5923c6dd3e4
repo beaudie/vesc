@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1e9d20_6ae122c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1563157
+      },
+      "writtenOn": "2022-11-26T14:47:10Z",
+      "side": 1,
+      "message": "soon2849 \n관리자",
+      "revId": "92b749506204e0ee41998d80b1d6e5923c6dd3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
