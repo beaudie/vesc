@@ -33,6 +33,24 @@
       "message": "Could you please move these 2 statements down below the last insertion into mEnabledInstanceExtensions (line 1594) as well?",
       "revId": "8f6d739d62fa78c1e2cb7937fc26e1b7d12480df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea42fe9_3a5b0538",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-28T18:03:38Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t see the comment on the other change. Moving this doesn\u0027t matter much, `VerifyExtensionsPresent` is checking we didn\u0027t insert something that doesn\u0027t exist, and everything else below is already checking for existence.\n\nIt would just make things cleaner IMO, but no big deal.",
+      "parentUuid": "5d61bb6f_1ad1f1e3",
+      "revId": "8f6d739d62fa78c1e2cb7937fc26e1b7d12480df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
