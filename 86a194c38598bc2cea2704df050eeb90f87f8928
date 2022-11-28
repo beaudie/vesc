@@ -16,6 +16,23 @@
       "message": "Ahmed",
       "revId": "86a194c38598bc2cea2704df050eeb90f87f8928",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2490734_f4e86f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1563373
+      },
+      "writtenOn": "2022-11-28T21:57:17Z",
+      "side": 1,
+      "message": "block all user",
+      "revId": "86a194c38598bc2cea2704df050eeb90f87f8928",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
