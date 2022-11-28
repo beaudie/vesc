@@ -194,6 +194,7 @@ void CommandProcessorTask::initTask()
     mPresentInfo.pImageIndices      = nullptr;
     mPresentInfo.pNext              = nullptr;
     mPresentInfo.pWaitSemaphores    = nullptr;
+    mPresentFence                   = VK_NULL_HANDLE;
     mOneOffCommandBufferVk          = VK_NULL_HANDLE;
     mPriority                       = egl::ContextPriority::Medium;
     mHasProtectedContent            = false;
@@ -227,7 +228,7 @@ void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
     }
 
     mPresentInfo.sType = other.sType;
-    mPresentInfo.pNext = other.pNext;
+    mPresentInfo.pNext = nullptr;
 
     if (other.swapchainCount > 0)
     {
@@ -271,8 +272,27 @@ void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
                 mPresentRegions.pNext          = presentRegions->pNext;
                 mPresentRegions.swapchainCount = 1;
                 mPresentRegions.pRegions       = &mPresentRegion;
-                mPresentInfo.pNext             = &mPresentRegions;
-                pNext                          = const_cast<void *>(presentRegions->pNext);
+                AddToPNextChain(&mPresentInfo, &mPresentRegions);
+                pNext = const_cast<void *>(presentRegions->pNext);
+                break;
+            }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch"
+            case VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT:
+#pragma clang diagnostic pop
+            {
+                const VkSwapchainPresentFenceInfoEXT *presentFenceInfo =
+                    reinterpret_cast<VkSwapchainPresentFenceInfoEXT *>(pNext);
+                ASSERT(presentFenceInfo->swapchainCount == 1);
+                mPresentFence = presentFenceInfo->pFences[0];
+
+                mPresentFenceInfo.sType =
+                    (VkStructureType)VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT;
+                mPresentFenceInfo.pNext          = nullptr;
+                mPresentFenceInfo.swapchainCount = 1;
+                mPresentFenceInfo.pFences        = &mPresentFence;
+                AddToPNextChain(&mPresentInfo, &mPresentFenceInfo);
+                pNext = const_cast<void *>(presentFenceInfo->pNext);
                 break;
             }
             default:

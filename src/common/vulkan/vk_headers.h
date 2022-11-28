@@ -46,6 +46,131 @@ typedef struct VkMultisampledRenderToSingleSampledInfoGOOGLEX
 } VkMultisampledRenderToSingleSampledInfoGOOGLEX;
 #endif /* VK_GOOGLEX_multisampled_render_to_single_sampled */
 
+#if !defined(VK_EXT_surface_maintenance1)
+#    define VK_EXT_surface_maintenance1 1
+#    define VK_EXT_SURFACE_MAINTENANCE_1_SPEC_VERSION 1
+#    define VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME "VK_EXT_surface_maintenance1"
+
+typedef enum VkPresentScalingFlagBitsEXT
+{
+    VK_PRESENT_SCALING_ONE_TO_ONE_BIT_EXT           = 0x00000001,
+    VK_PRESENT_SCALING_ASPECT_RATIO_STRETCH_BIT_EXT = 0x00000002,
+    VK_PRESENT_SCALING_STRETCH_BIT_EXT              = 0x00000004,
+    VK_PRESENT_SCALING_FLAG_BITS_MAX_ENUM_EXT       = 0x7FFFFFFF
+} VkPresentScalingFlagBitsEXT;
+typedef VkFlags VkPresentScalingFlagsEXT;
+
+typedef enum VkPresentGravityFlagBitsEXT
+{
+    VK_PRESENT_GRAVITY_MIN_BIT_EXT            = 0x00000001,
+    VK_PRESENT_GRAVITY_MAX_BIT_EXT            = 0x00000002,
+    VK_PRESENT_GRAVITY_CENTERED_BIT_EXT       = 0x00000004,
+    VK_PRESENT_GRAVITY_FLAG_BITS_MAX_ENUM_EXT = 0x7FFFFFFF
+} VkPresentGravityFlagBitsEXT;
+typedef VkFlags VkPresentGravityFlagsEXT;
+typedef struct VkSurfacePresentModeEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    VkPresentModeKHR presentMode;
+} VkSurfacePresentModeEXT;
+
+typedef struct VkSurfacePresentScalingCapabilitiesEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    VkPresentScalingFlagsEXT supportedPresentScaling;
+    VkPresentGravityFlagsEXT supportedPresentGravityX;
+    VkPresentGravityFlagsEXT supportedPresentGravityY;
+    VkExtent2D minScaledImageExtent;
+    VkExtent2D maxScaledImageExtent;
+} VkSurfacePresentScalingCapabilitiesEXT;
+
+typedef struct VkSurfacePresentModeCompatibilityEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    uint32_t presentModeCount;
+    VkPresentModeKHR *pPresentModes;
+} VkSurfacePresentModeCompatibilityEXT;
+#endif /* VK_EXT_surface_maintenance1 */
+
+#if !defined(VK_EXT_swapchain_maintenance1)
+#    define VK_EXT_swapchain_maintenance1 1
+#    define VK_EXT_SWAPCHAIN_MAINTENANCE_1_SPEC_VERSION 1
+#    define VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME "VK_EXT_swapchain_maintenance1"
+#    define VK_SWAPCHAIN_CREATE_DEFERRED_MEMORY_ALLOCATION_BIT_EXT 0x00000008
+typedef struct VkPhysicalDeviceSwapchainMaintenance1FeaturesEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    VkBool32 swapchainMaintenance1;
+} VkPhysicalDeviceSwapchainMaintenance1FeaturesEXT;
+
+typedef struct VkSwapchainPresentFenceInfoEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    uint32_t swapchainCount;
+    const VkFence *pFences;
+} VkSwapchainPresentFenceInfoEXT;
+
+typedef struct VkSwapchainPresentModesCreateInfoEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    uint32_t presentModeCount;
+    const VkPresentModeKHR *pPresentModes;
+} VkSwapchainPresentModesCreateInfoEXT;
+
+typedef struct VkSwapchainPresentModeInfoEXT
+{
+    VkStructureType sType;
+    void *pNext;
+    uint32_t swapchainCount;
+    const VkPresentModeKHR *pPresentModes;
+} VkSwapchainPresentModeInfoEXT;
+
+typedef struct VkSwapchainPresentScalingCreateInfoEXT
+{
+    VkStructureType sType;
+    const void *pNext;
+    VkPresentScalingFlagsEXT scalingBehavior;
+    VkPresentGravityFlagsEXT presentGravityX;
+    VkPresentGravityFlagsEXT presentGravityY;
+} VkSwapchainPresentScalingCreateInfoEXT;
+
+typedef struct VkReleaseSwapchainImagesInfoEXT
+{
+    VkStructureType sType;
+    const void *pNext;
+    VkSwapchainKHR swapchain;
+    uint32_t imageIndexCount;
+    const uint32_t *pImageIndices;
+} VkReleaseSwapchainImagesInfoEXT;
+
+#    define VK_STRUCTURE_TYPE_SURFACE_PRESENT_MODE_EXT 1000274000
+#    define VK_STRUCTURE_TYPE_SURFACE_PRESENT_SCALING_CAPABILITIES_EXT 1000274001
+#    define VK_STRUCTURE_TYPE_SURFACE_PRESENT_MODE_COMPATIBILITY_EXT 1000274002
+#    define VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SWAPCHAIN_MAINTENANCE_1_FEATURES_EXT 1000275000
+#    define VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT 1000275001
+#    define VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODES_CREATE_INFO_EXT 1000275002
+#    define VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODE_INFO_EXT 1000275003
+#    define VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_SCALING_CREATE_INFO_EXT 1000275004
+#    define VK_STRUCTURE_TYPE_RELEASE_SWAPCHAIN_IMAGES_INFO_EXT 1000275005
+
+typedef VkResult(VKAPI_PTR *PFN_vkReleaseSwapchainImagesEXT)(
+    VkDevice device,
+    const VkReleaseSwapchainImagesInfoEXT *pReleaseInfo);
+
+#    ifndef VK_NO_PROTOTYPES
+extern "C" {
+VKAPI_ATTR VkResult VKAPI_CALL
+vkReleaseSwapchainImagesEXT(VkDevice device, const VkReleaseSwapchainImagesInfoEXT *pReleaseInfo);
+}
+#    endif
+#endif /* VK_EXT_swapchain_maintenance1 */
+
 #if !defined(ANGLE_SHARED_LIBVULKAN)
 
 namespace rx
