@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28117385_44a7b9c2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T19:39:43Z",
+      "side": 1,
+      "message": "Thank you Charlie for the detailed write up.\n\nIs it possible to attach the link to a design doc (if there is a one) in the description?",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85a8ca1d_ab982f94",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6715,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T19:39:43Z",
+      "side": 1,
+      "message": "comment here is confusing, is there a call to `submitFrame()` later in this function?",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99a90546_96436102",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T19:39:43Z",
+      "side": 1,
+      "message": "Shall we update the comments now? Since how `reference count` and `serial` work have changed.",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
