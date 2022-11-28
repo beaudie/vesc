@@ -51,6 +51,24 @@
       "parentUuid": "56e6cdbc_090c50b7",
       "revId": "0b3e96623ab33ceb1f619476cbad0c76f7ac893f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d76f18b_97eb588f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2022-11-28T17:34:45Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4060238 for moving the `nullptr` to end.\n\nI think the current position of the sort is okay. IIUC, just `instanceExtensionNames` (the ones available from the Vulkan implementation) needs to be sorted so that it can be used with `ExtensionFound(..., instanceExtensionNames)` (since that function uses `std::binary_search()`). The added extensions are added into `mEnabledInstanceExtensions` which does not necessarily need to be sorted.",
+      "parentUuid": "3a287985_4419cfd9",
+      "revId": "0b3e96623ab33ceb1f619476cbad0c76f7ac893f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
