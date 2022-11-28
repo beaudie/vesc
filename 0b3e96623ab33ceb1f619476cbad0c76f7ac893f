@@ -33,6 +33,24 @@
       "message": "I noticed there\u0027s also this bug:\n\n```\n    if (std::find(mEnabledInstanceExtensions.begin(), mEnabledInstanceExtensions.end(),\n                  VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) !\u003d\n        mEnabledInstanceExtensions.end())\n```\n\nIf VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME is not there, pretty sure this will hit the nullptr that\u0027s added.\n\nAlso, there\u0027s code now _after_ the sort that\u0027s adding more extensions after the nullptr was added.\n\nCould you or @penghuang@chromium.org please follow up by moving the sort to later, as well as adding the nullptr to after the above the instance is initialized?",
       "revId": "0b3e96623ab33ceb1f619476cbad0c76f7ac893f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a287985_4419cfd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-28T17:12:17Z",
+      "side": 1,
+      "message": "`s/after the above the instance is initialized/end of the function`",
+      "parentUuid": "56e6cdbc_090c50b7",
+      "revId": "0b3e96623ab33ceb1f619476cbad0c76f7ac893f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
