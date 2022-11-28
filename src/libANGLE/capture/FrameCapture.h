@@ -205,7 +205,6 @@ using TrackedResourceArray =
 
 enum class ShaderProgramType
 {
-    NoneType,
     ShaderType,
     ProgramType
 };
