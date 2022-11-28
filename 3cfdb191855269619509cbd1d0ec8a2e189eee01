@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "020fc3fe_dc3d60a0",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-28T16:44:48Z",
+      "side": 1,
+      "message": "what\u0027s the extension of this file? shouldn\u0027t this be winext()? I\u0027m concerned it may not work in some developer setups.",
+      "range": {
+        "startLine": 140,
+        "startChar": 52,
+        "endLine": 140,
+        "endChar": 59
+      },
+      "revId": "3cfdb191855269619509cbd1d0ec8a2e189eee01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
