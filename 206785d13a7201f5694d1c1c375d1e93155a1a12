@@ -119,6 +119,24 @@
       "message": "@sywow.choi@samsung.com please fix bot failures and ping for retry",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "059f5c82_c2d96ebd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-11-28T16:24:58Z",
+      "side": 1,
+      "message": "\"2) I guess kColorFormats\u003d{GL_BGRA8_EXT} will return ARGB8888 by default. But the Weston\u0027s default format is XRGB8888(Not sure need check again..).\"\n\nThere are no X8 in the Vulkan formats, Blending should be off anyway. This should map to VK_FORMAT_A8B8G8R8_UNORM_PACK32VK_FORMAT_A8B8G8R8_UNORM_PACK32 or VK_FORMAT_A8B8G8R8_SRGB_PACK32 as I understand it.",
+      "parentUuid": "f36344de_54346585",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
