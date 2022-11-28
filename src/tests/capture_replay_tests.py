@@ -137,7 +137,7 @@ class ChildProcessesManager():
 
     @classmethod
     def _GetNinjaAbsolutePaths(self):
-        return os.path.join('third_party', 'ninja', winext('ninja', 'exe'))
+        return os.path.join('third_party', 'ninja', 'ninja')
 
     def __init__(self, args, logger, ninja_lock):
         # a dictionary of Subprocess, with pid as key
