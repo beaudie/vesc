@@ -761,6 +761,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDevicePipelineRobustnessFeaturesEXT mPipelineRobustnessFeatures;
     VkPhysicalDeviceRasterizationOrderAttachmentAccessFeaturesEXT
         mRasterizationOrderAttachmentAccessFeatures;
+    VkPhysicalDeviceSwapchainMaintenance1FeaturesEXT mSwapchainMaintenance1FeaturesEXT;
     VkPhysicalDeviceDrmPropertiesEXT mDrmProperties;
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
