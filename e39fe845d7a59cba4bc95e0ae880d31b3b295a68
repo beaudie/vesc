@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ec9ef4_fe7477ce",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T18:41:46Z",
+      "side": 1,
+      "message": "Sure, I have updated the feature name.",
+      "parentUuid": "4951d4b1_165d11f4",
+      "range": {
+        "startLine": 376,
+        "startChar": 21,
+        "endLine": 376,
+        "endChar": 58
+      },
+      "revId": "e39fe845d7a59cba4bc95e0ae880d31b3b295a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72594a60_1a447352",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-24T16:51:04Z",
       "side": 1,
       "message": "This should be a link, see other workarounds",
+      "range": {
+        "startLine": 382,
+        "startChar": 22,
+        "endLine": 382,
+        "endChar": 39
+      },
+      "revId": "e39fe845d7a59cba4bc95e0ae880d31b3b295a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a229f2a6_857d10b8",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T18:41:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72594a60_1a447352",
       "range": {
         "startLine": 382,
         "startChar": 22,
