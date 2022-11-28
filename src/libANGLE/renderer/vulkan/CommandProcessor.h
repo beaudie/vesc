@@ -178,6 +178,9 @@ class CommandProcessorTask
     VkPresentRegionsKHR mPresentRegions;
     std::vector<VkRectLayerKHR> mRects;
 
+    VkSwapchainPresentFenceInfoEXT mPresentFenceInfo;
+    VkFence mPresentFence;
+
     // Used by OneOffQueueSubmit
     VkCommandBuffer mOneOffCommandBufferVk;
     const Semaphore *mOneOffWaitSemaphore;
