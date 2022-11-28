@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f0e5a2b_1bf879c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-28T18:00:07Z",
+      "side": 1,
+      "message": "Thank you!",
+      "revId": "8f6d739d62fa78c1e2cb7937fc26e1b7d12480df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d61bb6f_1ad1f1e3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1572,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-28T18:00:07Z",
+      "side": 1,
+      "message": "Could you please move these 2 statements down below the last insertion into mEnabledInstanceExtensions (line 1594) as well?",
+      "revId": "8f6d739d62fa78c1e2cb7937fc26e1b7d12480df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
