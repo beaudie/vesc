@@ -143,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d3f680a_d56183b6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-28T18:53:47Z",
+      "side": 1,
+      "message": "By optimization, I meant the attempt to use a bitset array. My point exactly is that since the normal case has 2 or 3 contexts, you could just use an array (FastVector) of them instead of a bitset to track things. Then you won\u0027t need this sort of strange templating. That also reduces one variation to test for (like, right now the else case is untested)",
+      "parentUuid": "efc87e6a_6ac1356c",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1040,
+        "endChar": 37
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8e38af8_d8d1dd43",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
