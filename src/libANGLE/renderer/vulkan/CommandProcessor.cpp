@@ -269,7 +269,7 @@ void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
                 mPresentRegion.pRectangles = mRects.data();
 
                 mPresentRegions.sType          = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR;
-                mPresentRegions.pNext          = presentRegions->pNext;
+                mPresentRegions.pNext          = nullptr;
                 mPresentRegions.swapchainCount = 1;
                 mPresentRegions.pRegions       = &mPresentRegion;
                 AddToPNextChain(&mPresentInfo, &mPresentRegions);
@@ -293,6 +293,25 @@ void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
                 mPresentFenceInfo.pFences        = &mPresentFence;
                 AddToPNextChain(&mPresentInfo, &mPresentFenceInfo);
                 pNext = const_cast<void *>(presentFenceInfo->pNext);
+                break;
+            }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wswitch"
+            case VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_MODE_INFO_EXT:
+#pragma clang diagnostic pop
+            {
+                const VkSwapchainPresentModeInfoEXT *presentModeInfo =
+                    reinterpret_cast<VkSwapchainPresentModeInfoEXT *>(pNext);
+                ASSERT(presentModeInfo->swapchainCount == 1);
+                mPresentMode = presentModeInfo->pPresentModes[0];
+
+                mPresentModeInfo.sType =
+                    (VkStructureType)VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT;
+                mPresentModeInfo.pNext          = nullptr;
+                mPresentModeInfo.swapchainCount = 1;
+                mPresentModeInfo.pPresentModes  = &mPresentMode;
+                AddToPNextChain(&mPresentInfo, &mPresentModeInfo);
+                pNext = const_cast<void *>(presentModeInfo->pNext);
                 break;
             }
             default:
