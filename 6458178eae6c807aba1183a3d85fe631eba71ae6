@@ -16,6 +16,24 @@
       "message": "Failures in VulkanPerformanceCounterTest.* on Pixel 6.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-test/2035/overview",
       "revId": "6458178eae6c807aba1183a3d85fe631eba71ae6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0c69db3_fcd80107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T17:45:20Z",
+      "side": 1,
+      "message": "Thanks Yuly. Will take a look today.",
+      "parentUuid": "fe842d6d_35eb1a23",
+      "revId": "6458178eae6c807aba1183a3d85fe631eba71ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
