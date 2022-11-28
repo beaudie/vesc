@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "309a2efe_5b17f11c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "makeCurrent will sync the lastSubmittedQueueSerial back. See ContextVk::allocateQueueSerialIndex() implementation. So it will have the same view regarding to lastSubmittedQueueSerial.\n\nNote that in this case, after write to bufferB, bufferB\u0027s mReadWriteUse will have QueueSerial\u003d{1, N+1}. Then when ctx1 gets index1, it calls map(). It sees mReadWriteUse and will wait for this QueueSerial{1,N+1} to finish, regarless which ctx submitted it.\n\nAs to who did queueSubmit the bufferWrite to vulkan, when ctx2 becomes uncurrent it will flush out all commands.",
+      "parentUuid": "a2031310_b71d201f",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b2eb0f8d_0ea81348",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 23
@@ -60,6 +78,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "332a0cd8_dc8eec5a",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Use FastVector requires us to protected the access with a lock, since FastVector may reallocate the storage. We can design a way to avoid mutex lock by keeping the previous storage (i.e., sort of stash away the old storage while keep allocating bigger storage). But I want to reserve that until we find a reasonable real world usage case that we have to support. I don\u0027t believe any real usage will ever have 256 threads and each thread has an active context (IMHO, this number likely can be much smaller, but I just a bit safe here).\n\nWill update the comment in next update with \"...not a reasonable usage case, and context creation will fail if exceeds).",
+      "parentUuid": "b2eb0f8d_0ea81348",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b562b6a7_b99216b6",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
@@ -71,6 +107,30 @@
       "writtenOn": "2022-11-24T19:11:53Z",
       "side": 1,
       "message": "I suggest not trying to optimize for the crazy case of hundreds of threads, and avoid templatizing this. That would also help with removing the `kMaxQueueSerialIndexCount` limit.\n\nIn the `retireFinishedCommands` function, just have an `angle::FastVector` where you append the finished serials, and then iterate that. No need for a bitset.",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1040,
+        "endChar": 37
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efc87e6a_6ac1356c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "This is not try to optimize \"crazy case of hundreds of threads\", but try to optimize the less than 64 threads case (for example, 2 or 3 contexts which is very reasonable usage case).",
+      "parentUuid": "b562b6a7_b99216b6",
       "range": {
         "startLine": 1035,
         "startChar": 0,
@@ -123,6 +183,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1d084d3_1e87910e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "This is oneOff submission code path. Without a fence, it makes mInFlightCommands related code more complicated. I am actually not sure if this is required or not, but I am not seeing any reason to not consistently have a fence.\n\nMy guess is that \"no fence\" was necessary because of previously the normal submission has to do deferred queueSerial generation. With this new queueSerial tracking, oneoff submission is almost identical to normal submission (except it gets its own queueIndex). The oneOff submisison code path will be further simplified in the follow up CL, see https://chromium-review.googlesource.com/c/angle/angle/+/4053261",
+      "parentUuid": "e37f864c_c58e8b69",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "012a1660_0ab5e21c",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
@@ -163,6 +241,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c142cab_f3b8c25a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5458,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "On context destrouction, you will hit assertion if you turn it into assertion. We might able to turn it into assertion this in future if we are willing to dig more into the call sequence during context destruction.",
+      "parentUuid": "4348c29b_31552697",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59be84d3_2bc86a3d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 23
@@ -174,6 +270,24 @@
       "writtenOn": "2022-11-24T19:11:53Z",
       "side": 1,
       "message": "Can\u0027t this be an ASSERT?",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca5dd9e3_670eb602",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5506,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Same as the other comment. Something to do with context init/destroy.",
+      "parentUuid": "59be84d3_2bc86a3d",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -290,6 +404,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f09eb9d6_008359d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7391,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Either way should work, I think. The reason I did it here is because flushCommandsAndEndRenderPass also calls flushOutsideRPCommands. Since this is a more heavy handed code path, so might just do it early and take early out.\n\nRegarding test, right, I will add a test. The way I have tested so far is essentially reduce kMaxReservedOutsideQueueSerials to 1 and there are a few tests failed, including SubmittingOutsideCommandBufferDoesNotCollectRenderPassGarbage, because it is rely on the implementation detail how we do the flush/submit. Yes, it is my plan to expand the test to cover this.",
+      "parentUuid": "06b73004_c6e3079e",
+      "range": {
+        "startLine": 7384,
+        "startChar": 0,
+        "endLine": 7391,
+        "endChar": 5
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f086020_0769658f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 23
@@ -353,6 +491,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28615b30_955d7579",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "mCurrentQueueSerialIndex sounds fine to me.",
+      "parentUuid": "5b475f15_8a4b3fb6",
+      "range": {
+        "startLine": 1634,
+        "startChar": 51,
+        "endLine": 1634,
+        "endChar": 70
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6b7bae50_4139518c",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
         "patchSetId": 23
@@ -387,6 +549,30 @@
       "writtenOn": "2022-11-24T19:11:53Z",
       "side": 1,
       "message": "nit: this function could probably use a better name now (in a follow up)",
+      "range": {
+        "startLine": 161,
+        "startChar": 9,
+        "endLine": 161,
+        "endChar": 23
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fa3b57a_8f6f6bff",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Totally agree. That is also in my plan of follow up CLs.",
+      "parentUuid": "fd3cd1fd_97c127fe",
       "range": {
         "startLine": 161,
         "startChar": 9,
@@ -479,6 +665,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df065a4b_8fe5750b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Context creation will fail. See the other comment about max allowed current context being 256.",
+      "parentUuid": "68b47a40_1ccfecd2",
+      "range": {
+        "startLine": 204,
+        "startChar": 0,
+        "endLine": 207,
+        "endChar": 9
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "264fd3d3_be1440d8",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 23
@@ -490,6 +700,24 @@
       "writtenOn": "2022-11-24T19:11:53Z",
       "side": 1,
       "message": "You could use a pair of bitset (for smaller indices) and a free list so you\u0027re not limited to `kMaxQueueSerialIndexCount`.",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2269902_80fc2e0c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T18:47:52Z",
+      "side": 1,
+      "message": "Same as the other comment.",
+      "parentUuid": "264fd3d3_be1440d8",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
