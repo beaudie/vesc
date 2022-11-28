@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca10d93a_4a253873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-28T06:39:06Z",
+      "side": 1,
+      "message": "I moved \u0027angle_dma_buf\u0027 to \u0027angle_common\u0027.",
+      "revId": "79ed5b1e864bb1fdbaab3d81132079eae57af32b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

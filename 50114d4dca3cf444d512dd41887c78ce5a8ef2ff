@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c21065b_9d07f769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-28T06:39:06Z",
+      "side": 1,
+      "message": "Thank you for the review!\nI moved the define to the more centralized place. But it\u0027ll cause merge conflict with (https://chromium-review.googlesource.com/c/angle/angle/+/3596045). I\u0027ll lave a comment for the information if it\u0027s neccessary.",
+      "parentUuid": "0e8aa3de_ff4d2897",
+      "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71544017_bbd9e0ed",
@@ -100,6 +118,30 @@
       "writtenOn": "2022-11-21T14:58:43Z",
       "side": 1,
       "message": "please place the ifdef section after the regular includes as per the style guide",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "50114d4dca3cf444d512dd41887c78ce5a8ef2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e2e9eb_b910ba8c",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-28T06:39:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71544017_bbd9e0ed",
       "range": {
         "startLine": 19,
         "startChar": 0,
