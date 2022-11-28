@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2007c48f_55a7471f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-28T23:01:41Z",
+      "side": 1,
+      "message": "Would you mind elaborating why we need to reserve a range of serials for `outsideRenderPassCommands`? It is not clear to me why we can\u0027t generate a new queueSerial for `outsideRenderPassCommand` when we need to. Is it because we have to make sure the queueSerials used in `outsideRenderPassCommands` have to be smaller than the `RenderPassCommands`?",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2031310_b71d201f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 23
