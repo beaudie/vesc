@@ -184,6 +184,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dff165a8_e1c68651",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T21:20:29Z",
+      "side": 1,
+      "message": "For this one, fastVector probably should perform as good as bitmask. The main reason I used bitmask here is for symetrical with getBatchCountUpToSerials. In that function, if you look, I am trying to avoid a nested for loop. I I am using the bitmask to bail out early when I have found a command that satisfies all serials in the mUse. What I am thinking in the follow up CL is to pass that bitmask directly to here. But anway, I can switch to festvector here and revsit it in follow up CL if necessary.",
+      "parentUuid": "3d3f680a_d56183b6",
+      "range": {
+        "startLine": 1035,
+        "startChar": 0,
+        "endLine": 1040,
+        "endChar": 37
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8e38af8_d8d1dd43",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
