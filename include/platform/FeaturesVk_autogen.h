@@ -794,6 +794,12 @@ struct FeaturesVk : FeatureSetBase
         "VkDevice supports the VK_EXT_pipeline_protected_access extension", &members,
         "https://anglebug.com/7714"};
 
+    FeatureInfo supportsSwapchainMaintenance1 = {
+        "supportsSwapchainMaintenance1", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_EXT_surface_maintenance1 and VK_EXT_swapchain_maintenance1 "
+        "extensions",
+        &members, "https://anglebug.com/7847"};
+
     FeatureInfo preferSubmitOnAnySamplesPassedQueryEnd = {
         "preferSubmitOnAnySamplesPassedQueryEnd", FeatureCategory::VulkanWorkarounds,
         "Submit commands to driver when last GL_ANY_SAMPLES_PASSED query is made for performance "
