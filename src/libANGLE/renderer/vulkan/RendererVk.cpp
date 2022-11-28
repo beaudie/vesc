@@ -4799,13 +4799,16 @@ angle::Result RendererVk::submitCommands(
         std::move(mRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
     };
 
+    const VkSemaphore signalVkSemaphore =
+        signalSemaphore ? signalSemaphore->getHandle() : VK_NULL_HANDLE;
+
     if (isAsyncCommandQueueEnabled())
     {
         *submitSerialOut = mCommandProcessor.reserveSubmitSerial();
 
         ANGLE_TRY(mCommandProcessor.submitCommands(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
+            signalVkSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
             commandPools, *submitSerialOut));
     }
     else
@@ -4814,7 +4817,7 @@ angle::Result RendererVk::submitCommands(
 
         ANGLE_TRY(mCommandQueue.submitCommands(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
+            signalVkSemaphore, std::move(currentGarbage), std::move(commandBuffersToReset),
             commandPools, *submitSerialOut));
     }
 
