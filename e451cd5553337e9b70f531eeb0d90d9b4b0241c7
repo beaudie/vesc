@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6dd9927a_fec1b3c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T23:49:50Z",
+      "side": 1,
+      "message": "All queueSerial send to CommandQueue must maintain order (i.e, monotonically incrementing). This is similar to wall clock time, that future time must be bigger than current time. For ANGLE, we have two command buffers, one is outsideRPCommands and another is RPCommands. OutsideRP always get submitted before RPCommands. Once we create a RPCommands, we generate a serial number for RPCommands, lets say RPCommands get serial number 12, and outsideRPCommands gets serial number 11. Now if you submit outsideRPCommands *without* submit RPCommands, what will be the new outsideRPCommands\u0027s serial be? It must be \u003c12, but there is no number left since it just used 11. The only choice now is to endRP and submit RP as well. EndRP has performance cost since GPU will have to flush out tile memory etc. In order to avoid this situation, when we generate a serial for RPCommand, we reserve a range of serials for outsideRPCommands. Lets say RPCommdns get 28 and outsideRPCommands have 11, and we have 12,13,...,27 reserved but unused. Now if you have to submit outsideRPCommands, you can submit 11, get 12, and submit 12, get 13,..., while we still keep all submission serial monotonically incrementing and outsideRPCommdns use smaller serial than corresponding RPCommands. If you keep subitting outsideRPCommands, and uses up all reserved serial, then you will have to endRP and submit RPCommands as well. But that is expected to be very rare, close to impossible in real usage case.\n(Feel free to ping me off line if you need more explanation).",
+      "parentUuid": "2007c48f_55a7471f",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a2031310_b71d201f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 23

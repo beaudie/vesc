@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69860cff_ec9de67c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 22
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-28T23:49:50Z",
+      "side": 1,
+      "message": "Sent to you the ddoc link.",
+      "parentUuid": "28117385_44a7b9c2",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85a8ca1d_ab982f94",
