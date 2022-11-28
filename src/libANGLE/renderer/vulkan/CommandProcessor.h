@@ -192,6 +192,9 @@ class CommandProcessorTask
     VkSwapchainPresentFenceInfoEXT mPresentFenceInfo;
     VkFence mPresentFence;
 
+    VkSwapchainPresentModeInfoEXT mPresentModeInfo;
+    VkPresentModeKHR mPresentMode;
+
     // Used by OneOffQueueSubmit
     VkCommandBuffer mOneOffCommandBufferVk;
     const Semaphore *mOneOffWaitSemaphore;
