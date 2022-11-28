@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "840f69c7_e61daff9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-11-28T23:48:56Z",
+      "side": 1,
+      "message": "I don\u0027t understand.  If there are n swapchain images, and if some are presented, but never acquired again, how can the history grow indefinitely?",
+      "range": {
+        "startLine": 1944,
+        "startChar": 7,
+        "endLine": 1945,
+        "endChar": 36
+      },
+      "revId": "d354720c8158f20d4fd101035258c056e0cbd950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
