@@ -69,6 +69,24 @@
       "parentUuid": "f0a9b1c7_a3e09c45",
       "revId": "a9c6bd90681ea9c727b9dd804ae328877d5d6133",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb48bce1_131c9cad",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-29T18:12:49Z",
+      "side": 1,
+      "message": "Done. Also added an assertion that would catch this.",
+      "parentUuid": "b5517ef0_e1a80c3b",
+      "revId": "a9c6bd90681ea9c727b9dd804ae328877d5d6133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
