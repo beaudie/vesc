@@ -137,6 +137,24 @@
       "parentUuid": "f36344de_54346585",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06fa628c_4105a646",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-29T06:45:26Z",
+      "side": 1,
+      "message": "@Jeff\n\u003e There are no X8 in the Vulkan formats, Blending should be off anyway. This should map to VK_FORMAT_A8B8G8R8_UNORM_PACK32VK_FORMAT_A8B8G8R8_UNORM_PACK32 or VK_FORMAT_A8B8G8R8_SRGB_PACK32 as I understand it.\n\nYou\u0027re right. But I meant the fourcc code. \nIf we use GL_BGRA8_EXT internal format to generate config sets and remove the overwriting part from https://chromium-review.googlesource.com/c/angle/angle/+/3596045/44/src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp#81, the problem will be occurred because the current \u0027GLInternalFormatToGbmFourCCFormat()\u0027 returns GBM_FORMAT_ARGB8888(\u0027AR24\u0027), which has different fourcc code from GBM_FORMAT_XRGB8888(\u0027XR24\u0027). \nThe configs\u0027s visual id will be set as ARGB8888. And also Weston fails to find matched config set at the first time with default fourcc code, XRGB8888. \n### weston-8.0.0/libweston/renderer-gl/egl-glue.c +260\n``` c\nstatic bool\negl_config_pixel_format_matches(struct gl_renderer *gr,\n»   »   »   »   EGLConfig config,\n»   »   »   »   const struct pixel_format_info *pinfo)\n{\n»   static const EGLint attribs[4] \u003d {\n»   »   EGL_ALPHA_SIZE, EGL_RED_SIZE, EGL_GREEN_SIZE, EGL_BLUE_SIZE\n»   };\n»   const int *argb[4] \u003d {\n»   »   \u0026pinfo-\u003ebits.a, \u0026pinfo-\u003ebits.r, \u0026pinfo-\u003ebits.g, \u0026pinfo-\u003ebits.b\n»   };\n»   unsigned i;\n»   EGLint value;\n\n»   if (gr-\u003eplatform \u003d\u003d EGL_PLATFORM_GBM_KHR) {\n»   »   if (!eglGetConfigAttrib(gr-\u003eegl_display, config,\n»   »   »   »   »   EGL_NATIVE_VISUAL_ID, \u0026value))\n»   »   »   return false;\n\n»   »   return ((uint32_t)value) \u003d\u003d pinfo-\u003eformat;\n»   }\n\n»   for (i \u003d 0; i \u003c 4; i++) {\n»   »   if (!eglGetConfigAttrib(gr-\u003eegl_display, config,\n»   »   »   »   »   attribs[i], \u0026value))\n»   »   »   return false;\n»   »   if (value !\u003d *argb[i])\n»   »   »   return false;\n»   }\n\n»   return true;\n}\n```",
+      "parentUuid": "059f5c82_c2d96ebd",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
