@@ -155,6 +155,24 @@
       "parentUuid": "059f5c82_c2d96ebd",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f41e4dbc_22b7dba3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-11-29T18:17:02Z",
+      "side": 1,
+      "message": "Then I should fix our configs\n\nfrom:\n\negl::ConfigSet DisplayVkGbm::generateConfigs()\n{\n    // Formats and Depth-Stencil for KITT2 project - DPU compatible.\n    const std::array\u003cGLenum, 3\u003e kColorFormats \u003d {GL_BGRA8_EXT, GL_RGB565, GL_RGB10_A2};\n\n\nto:\n\negl::ConfigSet DisplayVkGbm::generateConfigs()\n{\n    // Formats and Depth-Stencil for KITT2 project - DPU compatible.\n    const std::array\u003cGLenum, 3\u003e kColorFormats \u003d {GL_BGRX8_ANGLEX, GL_RGB565, GL_RGB10_A2};\n    \n    \n    yes? Then we get the correct mapping:\n    \n           case GL_BGRX8_ANGLEX:\n            return GBM_FORMAT_XRGB8888;\n            \n    Or should it be:\n    \n        case GL_RGBX8_ANGLE:\n            return GBM_FORMAT_XBGR8888;",
+      "parentUuid": "06fa628c_4105a646",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
