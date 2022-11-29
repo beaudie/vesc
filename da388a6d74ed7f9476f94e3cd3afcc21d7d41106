@@ -147,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1edd251_5a9e4274",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T15:05:15Z",
+      "side": 1,
+      "message": "Removed this",
+      "parentUuid": "aa7625c5_bb8d688c",
+      "range": {
+        "startLine": 150,
+        "startChar": 30,
+        "endLine": 151,
+        "endChar": 43
+      },
+      "revId": "da388a6d74ed7f9476f94e3cd3afcc21d7d41106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7bbe513_a02ab373",

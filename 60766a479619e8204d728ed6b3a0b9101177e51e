@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9dc3ed2_f2525209",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T15:05:15Z",
+      "side": 1,
+      "message": "Bit of a mess, but this turned out to be necessary in the end. I couldn\u0027t remove the requirement from the spec because there is an implementations that enforces it. However, that implementation only fails link and not compile. I made it so that compilation doesn\u0027t fail if neither gl_Position and gl_PointSize are redeclared, and forwent failing link.",
+      "revId": "60766a479619e8204d728ed6b3a0b9101177e51e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
