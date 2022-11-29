@@ -22,6 +22,30 @@
       },
       "revId": "3cfdb191855269619509cbd1d0ec8a2e189eee01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe467629_8dd37141",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1366072
+      },
+      "writtenOn": "2022-11-29T02:00:23Z",
+      "side": 1,
+      "message": "I have seen many places that append \".exe\" in other projects, too. But I couldn\u0027t reproduce failures for missing \".exe\". \nIs that for old Windows versions, maybe?\n\nAt least, windows builders work without .exe.\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8796271503722932017/+/u/GLES_2.0_trace_tests/stdout#L2059_0",
+      "parentUuid": "020fc3fe_dc3d60a0",
+      "range": {
+        "startLine": 140,
+        "startChar": 52,
+        "endLine": 140,
+        "endChar": 59
+      },
+      "revId": "3cfdb191855269619509cbd1d0ec8a2e189eee01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
