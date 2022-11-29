@@ -46,6 +46,30 @@
       },
       "revId": "6b3e4d8b084a338e3625c91288339dc990f6965f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "003a87cb_5d2d91ae",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:54:37Z",
+      "side": 1,
+      "message": "Yeah, it hits this block:\n```\n    if (gMaxStepsPerformed \u003e 0)\n    {\n        // Ensure defaults were provided for params we\u0027re about to set\n        ASSERT(gWarmupTrials \u003d\u003d kDefaultWarmupTrials \u0026\u0026 gTestTrials \u003d\u003d kDefaultTestTrials \u0026\u0026\n               gTrialTimeSeconds \u003d\u003d kDefaultTrialTimeSeconds);\n\n        gWarmupTrials     \u003d 0;\n        gTestTrials       \u003d 1;\n        gTrialTimeSeconds \u003d 36000;\n    }\n```",
+      "parentUuid": "b2f4cba0_65289cf5",
+      "range": {
+        "startLine": 383,
+        "startChar": 0,
+        "endLine": 385,
+        "endChar": 9
+      },
+      "revId": "6b3e4d8b084a338e3625c91288339dc990f6965f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
