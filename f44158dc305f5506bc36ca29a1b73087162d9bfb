@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3186a189_0fb4c900",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-29T14:04:05Z",
+      "side": 1,
+      "message": "isn\u0027t there operator overloads defined for ShaderProgramID? I believe you can use ResourceSet::count or ResourceSet::find to answer this query and the one below. If there\u0027s a compile error with that we should be able to fix it.",
+      "range": {
+        "startLine": 1496,
+        "startChar": 0,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "f44158dc305f5506bc36ca29a1b73087162d9bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
