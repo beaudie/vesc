@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "18f17037_45781c5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-29T17:59:27Z",
+      "side": 1,
+      "message": "\u003e I expected to see an extra submission between the end of render pass and before the image-\u003ebuffer copy for glReadPixels.\nThe way we implement this preferSubmitAtFBOBoundary is with \"mHasDeferredFlush\".  It does not mean we always trigger a flush at end of RP. In this case there is only one RP, and one framebuffer, so mHasDeferredFlush will never set to true (with my fix in ContextVk in this patch),thus no extra flush here.",
+      "parentUuid": "cbc02843_5be9c67d",
+      "revId": "a9c6bd90681ea9c727b9dd804ae328877d5d6133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0a9b1c7_a3e09c45",
         "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-11-29T15:21:08Z",
       "side": 1,
       "message": "Please add a counter to this loop, and assert later that it\u0027s at least 2 (i.e. it\u0027s not flushing the texture too early). I looked at the test in RenderDoc with `preferSubmitAtFBOBoundary`, and right now (before this change) there\u0027s a submission right after the first iteration! We should make sure to catch that in the future.",
+      "revId": "a9c6bd90681ea9c727b9dd804ae328877d5d6133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5517ef0_e1a80c3b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-29T17:59:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0a9b1c7_a3e09c45",
       "revId": "a9c6bd90681ea9c727b9dd804ae328877d5d6133",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
