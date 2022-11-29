@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a823c31b_bcd9bab9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7731,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-29T10:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "915b6ec1_2b0f375d",
+      "range": {
+        "startLine": 7731,
+        "startChar": 0,
+        "endLine": 7731,
+        "endChar": 64
+      },
+      "revId": "f72617806c114e926f87bd692c75b40ef4db13e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dadf2933_c73c8b62",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-11-28T15:59:25Z",
       "side": 1,
       "message": "Can we rename this to\n```\n// Track which Contexts were created before MEC, requiring setup for replay\nmSetupRequiredContexts`\n```",
+      "range": {
+        "startLine": 760,
+        "startChar": 31,
+        "endLine": 760,
+        "endChar": 53
+      },
+      "revId": "f72617806c114e926f87bd692c75b40ef4db13e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "640be394_128231b2",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-29T10:01:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dadf2933_c73c8b62",
       "range": {
         "startLine": 760,
         "startChar": 31,
