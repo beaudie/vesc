@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b05fada3_04e8f5f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-11-29T16:19:03Z",
+      "side": 1,
+      "message": "Time for the weekly ping 😊\n\n@kbr@chromium.org @gman@chromium.org @kpiddington@apple.com can I have some help getting this change landed?",
+      "revId": "b65d23fd71ed1c36228a8936d0e1acc3d45dd7d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
