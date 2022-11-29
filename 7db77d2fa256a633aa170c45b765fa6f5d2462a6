@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ba51dd9b_8153925f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-29T17:48:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "725fa06d_7e97bda0",
+      "revId": "7db77d2fa256a633aa170c45b765fa6f5d2462a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "0f07367e_c206aa19",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -48,6 +66,30 @@
       "writtenOn": "2022-11-29T02:34:25Z",
       "side": 1,
       "message": "You should probably wrap this with `mOptions.useSpirvVaryingPrecisionFixer`, similar to `writeOutputPrologue`, to be future proof.",
+      "range": {
+        "startLine": 3428,
+        "startChar": 0,
+        "endLine": 3429,
+        "endChar": 61
+      },
+      "revId": "7db77d2fa256a633aa170c45b765fa6f5d2462a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6b997c9_70ecbd68",
+        "filename": "src/libANGLE/renderer/glslang_wrapper_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3429,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-29T17:48:11Z",
+      "side": 1,
+      "message": "This function won\u0027t be called, because of this if condition: https://crrev.com/c/4054100/4/src/libANGLE/renderer/glslang_wrapper_utils.cpp#3322. But I agree it is clearer and easier to read if we wrap it with the `mOptions.useSpirvVaryingPrecisionFixer`.",
+      "parentUuid": "b81c151a_8372823f",
       "range": {
         "startLine": 3428,
         "startChar": 0,
