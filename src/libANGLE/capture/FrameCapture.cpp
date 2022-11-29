@@ -5159,7 +5159,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     if (savedUnpackAlignment != currentUnpackState.alignment)
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
-        currentUnpackState.alignment = savedUnpackAlignment;
+        replayState.setUnpackAlignment(savedUnpackAlignment);
     }
 
     if (validationEnabled)
