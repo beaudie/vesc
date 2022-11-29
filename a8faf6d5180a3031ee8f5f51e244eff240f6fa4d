@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f91e688_f2d203c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "LGTM but I marked a few other spots that should probably also be updated.",
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1fd9a99_37cfe46c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "Probably should update this one too?",
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a36916c_63a7303b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 3907,
+        "startChar": 25,
+        "endLine": 3907,
+        "endChar": 26
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74319a93_ac6bdc48",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4253,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 4253,
+        "startChar": 0,
+        "endLine": 4253,
+        "endChar": 60
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa3fab8_53e7ea35",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 4392,
+        "startChar": 0,
+        "endLine": 4392,
+        "endChar": 41
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "718aaee3_6159d5be",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5050,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-29T14:10:02Z",
+      "side": 1,
+      "message": "Here too",
+      "range": {
+        "startLine": 5050,
+        "startChar": 0,
+        "endLine": 5050,
+        "endChar": 65
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
