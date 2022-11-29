@@ -131,6 +131,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a954ca8d_5ec0eb01",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T16:13:50Z",
+      "side": 1,
+      "message": "As long as context creation fails with a clear message (please add an ERR() log if not already), we can defer that to after your work is finished.\n\nThat said, the solution is quite simple IMO. You can create a `SafeFastVector` that:\n\n- For index\u003cN, uses an embedded std::array\n- For index\u003e\u003dN, uses a std::vector at index-N, and all access to the vector is protected by a mutex.\n\nSo for the normal case of context count \u003c N, there\u0027s no mutex used, at the same time we are not bound by any artificial limits (and the size() would also be smaller in the normal case)",
+      "parentUuid": "332a0cd8_dc8eec5a",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12aaad03_23e34b48",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
@@ -301,6 +319,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64f39348_4778c17a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T16:13:50Z",
+      "side": 1,
+      "message": "Thanks, a comment would be helpful.",
+      "parentUuid": "c1d084d3_1e87910e",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "012a1660_0ab5e21c",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 23
@@ -359,6 +395,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff1e672a_483778ab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T16:13:50Z",
+      "side": 1,
+      "message": "Sounds like a bug. The context being destroyed is becoming momentarily current on destruction, if the index is not invalid, it could mean that the queue serial index was never given back.\n\nLooking at `Display::makeCurrent`, it could also be that a context that\u0027s current is being set to current again, and that\u0027s causing this. If so, you should be able to reproduce the assert with a test that calls `eglMakeCurrent` twice with the same parameters (or at least the same context). If that\u0027s the case, this might be enough to fix it:\n\n```\n     if (context !\u003d nullptr)\n     {\n-        ANGLE_TRY(context-\u003emakeCurrent(this, drawSurface, readSurface));\n         if (contextChanged)\n         {\n+            ANGLE_TRY(context-\u003emakeCurrent(this, drawSurface, readSurface));\n             context-\u003eaddRef();\n         }\n     }\n```",
+      "parentUuid": "6c142cab_f3b8c25a",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59be84d3_2bc86a3d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 23
@@ -388,6 +442,24 @@
       "side": 1,
       "message": "Same as the other comment. Something to do with context init/destroy.",
       "parentUuid": "59be84d3_2bc86a3d",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96798574_97bf0fc7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T16:13:50Z",
+      "side": 1,
+      "message": "It could be because `Context::onDestroy` is calling `unMakeCurrent` unconditionally but the context may not be current. Could probably be fixed by tracking whether context is current and avoiding the call when unnecessary. (Similar to `mHasBeenCurrent`)",
+      "parentUuid": "ca5dd9e3_670eb602",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -516,6 +588,30 @@
       "side": 1,
       "message": "Either way should work, I think. The reason I did it here is because flushCommandsAndEndRenderPass also calls flushOutsideRPCommands. Since this is a more heavy handed code path, so might just do it early and take early out.\n\nRegarding test, right, I will add a test. The way I have tested so far is essentially reduce kMaxReservedOutsideQueueSerials to 1 and there are a few tests failed, including SubmittingOutsideCommandBufferDoesNotCollectRenderPassGarbage, because it is rely on the implementation detail how we do the flush/submit. Yes, it is my plan to expand the test to cover this.",
       "parentUuid": "06b73004_c6e3079e",
+      "range": {
+        "startLine": 7384,
+        "startChar": 0,
+        "endLine": 7391,
+        "endChar": 5
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b21e177_49392e74",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-29T16:13:50Z",
+      "side": 1,
+      "message": "\u003e Either way should work, I think. The reason I did it here is because flushCommandsAndEndRenderPass also calls flushOutsideRPCommands.\n\nThat\u0027s exactly the problem, `flushCommandsAndEndRenderPass` calls `flushOutsideRPCommands`, which is this function itself, hence infinite recursion (unless somehow mOutsideRenderPassSerialFactory.empty() is stopping it?)",
+      "parentUuid": "f09eb9d6_008359d3",
       "range": {
         "startLine": 7384,
         "startChar": 0,
