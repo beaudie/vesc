@@ -53,7 +53,7 @@ SurfaceImpl *DisplayVkGbm::createWindowSurfaceVk(const egl::SurfaceState &state,
 
 egl::ConfigSet DisplayVkGbm::generateConfigs()
 {
-    const std::array<GLenum, 1> kColorFormats = {GL_BGRA8_EXT};
+    const std::array<GLenum, 1> kColorFormats = {GL_BGRX8_ANGLEX};
 
     std::vector<GLenum> depthStencilFormats(
         egl_vk::kConfigDepthStencilFormats,
