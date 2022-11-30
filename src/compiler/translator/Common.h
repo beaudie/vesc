@@ -17,8 +17,13 @@
 
 #include "common/angleutils.h"
 #include "common/debug.h"
-#include "common/third_party/smhasher/src/PMurHash.h"
 #include "compiler/translator/PoolAlloc.h"
+
+#if defined(ANGLE_USE_STD_HASH)
+#    include <string_view>
+#else
+#    include "common/third_party/smhasher/src/PMurHash.h"
+#endif
 
 namespace sh
 {
@@ -36,15 +41,31 @@ constexpr TSourceLoc kNoSourceLoc{-1, -1, -1, -1};
 //
 // Put POOL_ALLOCATOR_NEW_DELETE in base classes to make them use this scheme.
 //
-#define POOL_ALLOCATOR_NEW_DELETE                                                    \
-    void *operator new(size_t s) { return GetGlobalPoolAllocator()->allocate(s); }   \
-    void *operator new(size_t, void *_Where) { return (_Where); }                    \
-    void operator delete(void *) {}                                                  \
-    void operator delete(void *, void *) {}                                          \
-    void *operator new[](size_t s) { return GetGlobalPoolAllocator()->allocate(s); } \
-    void *operator new[](size_t, void *_Where) { return (_Where); }                  \
-    void operator delete[](void *) {}                                                \
-    void operator delete[](void *, void *) {}
+#define POOL_ALLOCATOR_NEW_DELETE                     \
+    void *operator new(size_t s)                      \
+    {                                                 \
+        return GetGlobalPoolAllocator()->allocate(s); \
+    }                                                 \
+    void *operator new(size_t, void *_Where)          \
+    {                                                 \
+        return (_Where);                              \
+    }                                                 \
+    void operator delete(void *)                      \
+    {}                                                \
+    void operator delete(void *, void *)              \
+    {}                                                \
+    void *operator new[](size_t s)                    \
+    {                                                 \
+        return GetGlobalPoolAllocator()->allocate(s); \
+    }                                                 \
+    void *operator new[](size_t, void *_Where)        \
+    {                                                 \
+        return (_Where);                              \
+    }                                                 \
+    void operator delete[](void *)                    \
+    {}                                                \
+    void operator delete[](void *, void *)            \
+    {}
 
 //
 // Pool version of string.
@@ -248,7 +269,13 @@ struct hash<sh::TString>
 {
     size_t operator()(const sh::TString &s) const
     {
+// TODO(b/260426695): Determine if std::hash<std::string_view> is consistently fast enough.
+#if defined(ANGLE_USE_STD_HASH)
+        auto v = std::string_view(s.data(), static_cast<int>(s.length()));
+        return std::hash<std::string_view>{}(v);
+#else
         return angle::PMurHash32(0, s.data(), static_cast<int>(s.length()));
+#endif
     }
 };
 }  // namespace std
