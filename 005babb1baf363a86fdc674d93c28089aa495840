@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87c58a7e_33f2ef45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-30T00:49:37Z",
+      "side": 1,
+      "message": "crrev.com/cl/4038095 is directing to `404 page not found`",
+      "revId": "005babb1baf363a86fdc674d93c28089aa495840",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
