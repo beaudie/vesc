@@ -12,12 +12,12 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
 #include "common/angleutils.h"
 #include "common/debug.h"
-#include "common/third_party/smhasher/src/PMurHash.h"
 #include "compiler/translator/PoolAlloc.h"
 
 namespace sh
@@ -248,7 +248,8 @@ struct hash<sh::TString>
 {
     size_t operator()(const sh::TString &s) const
     {
-        return angle::PMurHash32(0, s.data(), static_cast<int>(s.length()));
+        auto v = std::string_view(s.data(), static_cast<int>(s.length()));
+        return std::hash<std::string_view>{}(v);
     }
 };
 }  // namespace std
