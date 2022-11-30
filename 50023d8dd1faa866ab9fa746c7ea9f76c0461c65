@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1710659b_55cd3da6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-30T20:26:08Z",
+      "side": 1,
+      "message": "Had a bored moment to do this. I ran the summoners and sonic traces with no visible performance change on Pixel 6. Unfortunately, AGI is not working for me at the moment, so I can\u0027t really tell how much this affected the counters. I\u0027ll follow up another time with an optimization to the vertex attributes which follows from the same spec language.\n\nThat said, it\u0027s a change in an obviously good direction, even if it doesn\u0027t show at the moment.",
+      "revId": "50023d8dd1faa866ab9fa746c7ea9f76c0461c65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
