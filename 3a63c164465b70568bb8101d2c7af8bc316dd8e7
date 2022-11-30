@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3633ad2_acb7da75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Good idea, added doc with a couple simple examples.",
+      "parentUuid": "725a3adf_57e6939e",
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89855d44_fc7cd92d",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-09-08T03:52:10Z",
       "side": 1,
       "message": "Can you add a quick comment explaining this, it isn\u0027t obvious when reading the code.  A new variable or function could be helpful, with a descriptive name.",
+      "range": {
+        "startLine": 1529,
+        "startChar": 8,
+        "endLine": 1529,
+        "endChar": 62
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b79010_f69b8ebd",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Done\n\nstartCallIndex is an offset into the frame calls where the replay starts.",
+      "parentUuid": "89855d44_fc7cd92d",
       "range": {
         "startLine": 1529,
         "startChar": 8,
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86831687_e71c62a8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5339,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "This function works because we check it right at the beginning of the frame. If we aren\u0027t using specific FBO or draw call captures, the zero fbo/draw count will match the zero current count of the start of the frame and then we\u0027ll start capturing.\n\nI changed this function to make it more invariant, but I don\u0027t know if it\u0027ll actually lead to fewer bugs as it\u0027s possible I got something wrong, PTAL.",
+      "parentUuid": "4ced58b9_bc8a59ee",
+      "range": {
+        "startLine": 5338,
+        "startChar": 48,
+        "endLine": 5339,
+        "endChar": 49
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ec345c9_ed651b32",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
@@ -77,6 +143,30 @@
       "writtenOn": "2022-09-08T03:52:10Z",
       "side": 1,
       "message": "Could this be moved to a member named `trackFBOandDrawCount(entrypoint)` or similar?",
+      "range": {
+        "startLine": 6807,
+        "startChar": 0,
+        "endLine": 6816,
+        "endChar": 5
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1973d8_1ff4f8b8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6816,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ec345c9_ed651b32",
       "range": {
         "startLine": 6807,
         "startChar": 0,
@@ -100,6 +190,30 @@
       "writtenOn": "2022-09-08T03:52:10Z",
       "side": 1,
       "message": "This could be `shouldStartMidFrameCapture()`",
+      "range": {
+        "startLine": 6818,
+        "startChar": 8,
+        "endLine": 6818,
+        "endChar": 50
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b807c05a_f079d445",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6818,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "removed the !isCaptureActive so no need for the new function.",
+      "parentUuid": "13709c0b_fcaea244",
       "range": {
         "startLine": 6818,
         "startChar": 8,
@@ -135,6 +249,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd577722_373908df",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6823,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "I think that\u0027ll just make the code harder to read. LMKWYT",
+      "parentUuid": "a4af0cc5_ad686397",
+      "range": {
+        "startLine": 6823,
+        "startChar": 13,
+        "endLine": 6823,
+        "endChar": 70
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0df4efb6_8698bf10",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 2
@@ -146,6 +284,30 @@
       "writtenOn": "2022-09-08T03:52:10Z",
       "side": 1,
       "message": "Can this be encapsulated in `shouldEndDrawCapture()` or `shouldEndMidFrameCapture()`?",
+      "range": {
+        "startLine": 6900,
+        "startChar": 8,
+        "endLine": 6900,
+        "endChar": 64
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7191a58d_bd7a7214",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "I think that\u0027ll just make the code harder to read. LMKWYT",
+      "parentUuid": "0df4efb6_8698bf10",
       "range": {
         "startLine": 6900,
         "startChar": 8,
@@ -179,6 +341,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f43df9ef_1a0dbc20",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7293,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b809a95d_f5b61e4a",
+      "range": {
+        "startLine": 7292,
+        "startChar": 12,
+        "endLine": 7293,
+        "endChar": 34
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bda7ef2_079d6150",
@@ -202,6 +388,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "536964b2_f309a5b5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Updated with a helper function which should be self-documenting.",
+      "parentUuid": "7bda7ef2_079d6150",
+      "range": {
+        "startLine": 7312,
+        "startChar": 8,
+        "endLine": 7312,
+        "endChar": 79
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51fb9b2a_19b9969c",
@@ -215,6 +425,30 @@
       "writtenOn": "2022-09-08T03:52:10Z",
       "side": 1,
       "message": "Looks like this is common, could be moved to a helper.  Maybe the function name can describe the logic being applied.",
+      "range": {
+        "startLine": 8057,
+        "startChar": 9,
+        "endLine": 8057,
+        "endChar": 78
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "556a84b2_7edbd9be",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8057,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T16:16:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51fb9b2a_19b9969c",
       "range": {
         "startLine": 8057,
         "startChar": 9,
