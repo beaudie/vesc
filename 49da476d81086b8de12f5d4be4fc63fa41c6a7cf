@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fc24b45_eb5aae45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-30T21:35:11Z",
+      "side": 1,
+      "message": "Adding Roman who also had opinions on reduced precision in trace diffs.\n\nI would rather have a controlled set of known tests/platform/GPU combinations that we allow to vary.  I prefer having a human in the loop deciding if the changes are acceptably minor.  I think most of us are okay glancing at a screenshot diff and accepting/declining changes.  But it would be nice to remove the skips in TracePerfTest.cpp.\n\nMaybe we add a follow on project to connect an expectations file to this?",
+      "revId": "49da476d81086b8de12f5d4be4fc63fa41c6a7cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

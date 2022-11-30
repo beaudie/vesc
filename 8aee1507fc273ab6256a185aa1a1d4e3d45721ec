@@ -122,6 +122,30 @@
       },
       "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d0ffc57_7310d003",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-11-30T21:35:11Z",
+      "side": 1,
+      "message": "Can we start with \"1\"?  I think that would catch most of the flakes I\u0027m seeing here:\nhttps://ci.chromium.org/p/angle/builders/ci/win-test?limit\u003d200\n\nAlthough it depends how much variation there was in the tests we\u0027re already skipping.",
+      "parentUuid": "4354b4ca_c0888904",
+      "range": {
+        "startLine": 59,
+        "startChar": 24,
+        "endLine": 59,
+        "endChar": 26
+      },
+      "revId": "8aee1507fc273ab6256a185aa1a1d4e3d45721ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
