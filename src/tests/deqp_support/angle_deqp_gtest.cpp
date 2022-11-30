@@ -20,7 +20,7 @@
 #include "common/platform.h"
 #include "common/string_utils.h"
 #include "common/system_utils.h"
-#include "common/third_party/base/anglebase/no_destructor.h"
+#include "common/base/anglebase/no_destructor.h"
 #include "platform/PlatformMethods.h"
 #include "tests/test_utils/runner/TestSuite.h"
 #include "util/OSWindow.h"
