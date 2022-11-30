@@ -209,6 +209,24 @@
       "parentUuid": "31cbe17b_6fdf3589",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f43816c_fa266b08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-11-30T22:58:06Z",
+      "side": 1,
+      "message": "I have the patch, but proxy issues blocking upload",
+      "parentUuid": "0bd31465_94e6ee42",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
