@@ -191,6 +191,24 @@
       "parentUuid": "f41e4dbc_22b7dba3",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd31465_94e6ee42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-30T01:05:59Z",
+      "side": 1,
+      "message": "The code diff for test 2 as below.\n```c\ndiff --git a/src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp b/src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp\nindex fc8f5792b..ae99a47c1 100644\n--- a/src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp\n+++ b/src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp\n@@ -60,7 +60,7 @@ egl::ConfigSet DisplayVkGbm::generateConfigs()\n         return {};  // No configuration supported\n     }\n\n-    const std::array\u003cGLenum, 1\u003e kColorFormats \u003d {GL_BGRA8_EXT};\n+    const std::array\u003cGLenum, 1\u003e kColorFormats \u003d {GL_BGRX8_ANGLEX};\n\n     std::vector\u003cGLenum\u003e depthStencilFormats(\n         egl_vk::kConfigDepthStencilFormats,\n@@ -75,12 +75,6 @@ egl::ConfigSet DisplayVkGbm::generateConfigs()\n         egl_vk::GenerateConfigs(kColorFormats.data(), kColorFormats.size(),\n                                 depthStencilFormats.data(), depthStencilFormats.size(), this);\n\n-    for (std::pair\u003cconst EGLint, egl::Config\u003e \u0026cfgEntry : cfgSet)\n-    {\n-        egl::Config \u0026cfg   \u003d cfgEntry.second;\n-        cfg.nativeVisualID \u003d DRM_FORMAT_XRGB8888;\n-    }\n-\n     return cfgSet;\n }\n\n```",
+      "parentUuid": "31cbe17b_6fdf3589",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
