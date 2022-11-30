@@ -33,6 +33,24 @@
       "message": "Sorry, I\u0027m missing something - validation shouldn\u0027t emit any files. What preceded this fix?",
       "revId": "55d4e1499edd40fd1b56c0ff9fac80b478056464",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f82f283_875c26cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-11-30T07:51:56Z",
+      "side": 1,
+      "message": "Every time I run validation and a trace fails I end up with missing json files in the original work directory, or at least it seems so to me. Usually I then have to run \"restore\" to get a working version back.",
+      "parentUuid": "c85ac89a_3c7553c0",
+      "revId": "55d4e1499edd40fd1b56c0ff9fac80b478056464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
