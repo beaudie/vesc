@@ -22,7 +22,7 @@
 #include "common/utilities.h"
 #include "test_utils/runner/TestSuite.h"
 #include "third_party/perf/perf_test.h"
-#include "third_party/trace_event/trace_event.h"
+#include "common/base/anglebase/trace_event/trace_event.h"
 #include "util/shader_utils.h"
 #include "util/test_utils.h"
 
