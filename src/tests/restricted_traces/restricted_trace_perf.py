@@ -568,7 +568,11 @@ def percent(x):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--filter', help='Trace filter. Defaults to all.', default='*')
+    parser.add_argument(
+        '-f',
+        '--filter',
+        help='Trace filter. Defaults to all. Specify multiple traces with \':\' between them',
+        default='*')
     parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
     parser.add_argument(
         '--renderer', help='Which renderer to use: native, vulkan, or both.', default='both')
@@ -623,7 +627,16 @@ def main():
     trace_and_version = traces['traces']
     traces = [i.split(' ',)[0] for i in trace_and_version]
 
-    failures = []
+    # If multiple traces are listed in the filter, split it up
+    traces_filtered = []
+    if args.filter != '':
+        trace_filter_split = args.filter.split(':')
+        if len(trace_filter_split) > 1:
+            traces_filtered += trace_filter_split
+        else:
+            traces_filtered += [args.filter]
+    else:
+        traces_filtered = traces
 
     mode = get_mode(args)
     trace_width = get_trace_width(mode)
@@ -717,7 +730,8 @@ def main():
         for i in range(int(args.loop_count)):
             print("\nStarting run %i with %s at %s\n" %
                   (i + 1, renderer, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-            for trace in fnmatch.filter(traces, args.filter):
+
+            for trace in traces_filtered:
                 # Remove any previous perf results
                 cleanup()
 
