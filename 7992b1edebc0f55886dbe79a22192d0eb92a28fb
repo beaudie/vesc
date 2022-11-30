@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "351c620f_099d37a7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 6715,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-30T01:21:27Z",
+      "side": 1,
+      "message": "Comment updated.",
+      "parentUuid": "85a8ca1d_ab982f94",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99a90546_96436102",
@@ -66,6 +84,42 @@
       "writtenOn": "2022-11-28T19:39:43Z",
       "side": 1,
       "message": "Shall we update the comments now? Since how `reference count` and `serial` work have changed.",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "484d9dbd_3e3bcf85",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-30T01:21:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99a90546_96436102",
+      "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fbeab9b_6c5e7677",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-30T01:21:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99a90546_96436102",
       "revId": "7992b1edebc0f55886dbe79a22192d0eb92a28fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
