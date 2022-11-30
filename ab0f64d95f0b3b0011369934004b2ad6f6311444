@@ -51,6 +51,24 @@
       "parentUuid": "6e686eed_2fd3c0ba",
       "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8edef822_c20ae0a5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-11-30T18:12:16Z",
+      "side": 1,
+      "message": "Thank you Shabi. I meant why we can\u0027t keep signalSemaphore as a Semaphore pointer, and do the nullptr check.",
+      "parentUuid": "5a702806_529f902c",
+      "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
