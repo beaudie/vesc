@@ -173,6 +173,24 @@
       "parentUuid": "06fa628c_4105a646",
       "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31cbe17b_6fdf3589",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-11-30T01:03:35Z",
+      "side": 1,
+      "message": "@Jeff\nCorrect. The `GL_BGRX8_ANGLEX` format should also be added to the `kColorFormats` list. (But not specific to our internal project.)\n\nAnd below are some test results. (Removed overwriting nativevisualID parts.)\n\n1.\n``` c\nconst std::array\u003cGLenum, 1\u003e kColorFormats \u003d {GL_BGRA8_EXT};\n```\n\n* Weston log:\n\u003e [12:08:07.064] Unable to use first choice EGL config with XRGB8888, succeeded with alternate ARGB8888.\n\n2.\n``` c\nconst std::array\u003cGLenum, 1\u003e kColorFormats \u003d {GL_BGRX8_ANGLEX};\n```\n* Weston log:\n\u003e [12:09:56.485] Chosen EGL config details: id:   1 rgba: 8 8 8 0 buf: 24 dep:  0 stcl: 0 int: 0-1 type: win|pbf vis_id: XRGB8888 (0x34325258)\n\nWeston compositor has a fallback logic. But to satisfy exact expectation of Weston compositor, it seems that we need to add `GL_BGRX8_ANGLEX` format to the list.",
+      "parentUuid": "f41e4dbc_22b7dba3",
+      "revId": "206785d13a7201f5694d1c1c375d1e93155a1a12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
