@@ -1267,6 +1267,29 @@ void checkForRemainingMemoryAllocations(RendererVk *renderer)
         }
     }
 }
+
+// Log memory heap stats if needed.
+void logMemoryHeapStats(RendererVk *renderer)
+{
+    if (kDebugMemoryAllocationLogs)
+    {
+        VkPhysicalDeviceMemoryProperties memoryPropertiesOut;
+        vkGetPhysicalDeviceMemoryProperties(renderer->getPhysicalDevice(), &memoryPropertiesOut);
+
+        INFO() << "Available memory heaps:";
+        for (uint32_t i = 0; i < memoryPropertiesOut.memoryHeapCount; i++)
+        {
+            INFO() << i << " | Size : " << memoryPropertiesOut.memoryHeaps[i].size
+                   << " | Flags: " << memoryPropertiesOut.memoryHeaps[i].flags;
+        }
+        INFO() << "Available memory types:";
+        for (uint32_t i = 0; i < memoryPropertiesOut.memoryTypeCount; i++)
+        {
+            INFO() << i << " | Heap index: " << memoryPropertiesOut.memoryTypes[i].heapIndex
+                   << " | Property flags: " << memoryPropertiesOut.memoryTypes[i].propertyFlags;
+        }
+    }
+}
 }  // namespace
 
 // RendererVk implementation.
@@ -3079,6 +3102,9 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         mSupportedVulkanShaderStageMask |= VK_SHADER_STAGE_GEOMETRY_BIT;
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
+
+    // Log the memory heap stats when the device has been initialized.
+    logMemoryHeapStats(this);
 
     return angle::Result::Continue;
 }
