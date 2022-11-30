@@ -33,6 +33,24 @@
       "message": "why we can\u0027t do the nullptr check for `Semaphore*` here:\n```\nif (signalSemaphore !\u003d nullptr)\n{\n   ...\n}\n```",
       "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a702806_529f902c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-30T02:48:48Z",
+      "side": 1,
+      "message": "Because `signalSemaphore` is no longer a pointer. It\u0027s a Vulkan handle now.",
+      "parentUuid": "6e686eed_2fd3c0ba",
+      "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
