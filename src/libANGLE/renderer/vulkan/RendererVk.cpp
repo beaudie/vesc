@@ -1252,6 +1252,27 @@ void checkForRemainingMemoryAllocations(RendererVk *renderer)
                        << " | Count: " << renderer->getActiveMemoryAllocationsCount(i);
             }
         }
+
+        // Add heap stats?
+        VkPhysicalDeviceMemoryProperties memoryPropertiesOut;
+        if (renderer->getDevice())
+        {
+            vkGetPhysicalDeviceMemoryProperties(renderer->getPhysicalDevice(),
+                                                &memoryPropertiesOut);
+
+            WARN() << "Memory heaps";
+            for (uint32_t i = 0; i < memoryPropertiesOut.memoryHeapCount; i++)
+            {
+                WARN() << i << " " << memoryPropertiesOut.memoryHeaps[i].size << " "
+                       << memoryPropertiesOut.memoryHeaps[i].flags;
+            }
+            WARN() << "Memory types";
+            for (uint32_t i = 0; i < memoryPropertiesOut.memoryTypeCount; i++)
+            {
+                WARN() << i << " " << memoryPropertiesOut.memoryTypes[i].heapIndex << " "
+                       << memoryPropertiesOut.memoryTypes[i].propertyFlags;
+            }
+        }
     }
 }
 }  // namespace
