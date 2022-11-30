@@ -7096,7 +7096,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     {
         // Before we early out, make sure we generate a new serial for outside commands, since we
         // did not do so when we flushed outside commands.
-        generateOutsideRenderPassCommandsQueueSerial();
+        // generateOutsideRenderPassCommandsQueueSerial();
 
         onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
         return angle::Result::Continue;
@@ -7376,15 +7376,6 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     flushDescriptorSetUpdates();
 
-    if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
-    {
-        // We used up all reserved serials. In order to maintain serial order (outsideRenderPass
-        // must be smaller than renderpass), we also endRenderPass here as well. This is not
-        // expected to happen often in real world usage.
-        return flushCommandsAndEndRenderPass(
-            RenderPassClosureReason::OutOfReservedQueueSerialForOutsideCommands);
-    }
-
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
     ASSERT(!mLastFlushedSerial.valid() ||
@@ -7393,6 +7384,15 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
                                                 &mOutsideRenderPassCommands));
+
+    if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
+    {
+        // We used up all reserved serials. In order to maintain serial order (outsideRenderPass
+        // must be smaller than renderpass), we also endRenderPass here as well. This is not
+        // expected to happen often in real world usage.
+        return flushCommandsAndEndRenderPass(
+            RenderPassClosureReason::OutOfReservedQueueSerialForOutsideCommands);
+    }
 
     // Since queueSerial is used to decide if a resource is being used or not, we have to
     // generate a new queueSerial for outsideCommandBuffer since we just flushed
