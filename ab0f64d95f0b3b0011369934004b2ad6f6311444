@@ -69,6 +69,24 @@
       "parentUuid": "5a702806_529f902c",
       "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84823022_fe7a4b2b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-11-30T19:14:28Z",
+      "side": 1,
+      "message": "Typically, we pass whatever to functions by pointers because they consume them and don\u0027t keep a reference after that. So if the caller e.g. uses a local variable and passes in the pointer, it\u0027s ok. If the callee wants to remember what was given, either it has to copy it (Method 1), or the caller has to make sure the pointer lives after the call (Method 2).\n\nIn this case, there are two possible callers to this function:\n\n- Without asyncCommandQueue, there is a chain of calls going through CommandQueue and ending up here. In that case, using a pointer is fine.\n- With asyncCommandQueue, the caller\u0027s data gets copied to a \"task\" structure, and is later referenced by the thread.\n\nIn the latter case, we used to keep a pointer in the task structure, which worked because the passed in pointer lived in SurfaceVk in a fixed array (i.e. Method 2). In this change, that\u0027s no longer true so the thread can no longer reference the semaphore through a pointer. Instead, the Vulkan handle is copied (i.e. Method 1)",
+      "parentUuid": "8edef822_c20ae0a5",
+      "revId": "ab0f64d95f0b3b0011369934004b2ad6f6311444",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
