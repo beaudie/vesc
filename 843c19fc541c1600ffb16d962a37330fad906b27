@@ -122,6 +122,30 @@
       },
       "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78e2b523_a967c822",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T17:00:59Z",
+      "side": 1,
+      "message": "It does seem to affect by and large a few traces on Intel. Maybe a certain type of GL call pattern causes this. Without digging into it further, it seems advantageous to apply the inexact matching to Intel only, as long as we have exact matching on other platforms I\u0027m certainly open to future work to make this more maintainable, or more strict.",
+      "parentUuid": "6e59c539_756f3e5b",
+      "range": {
+        "startLine": 325,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 77
+      },
+      "revId": "843c19fc541c1600ffb16d962a37330fad906b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -142,6 +142,30 @@
       },
       "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797cdf22_d960a705",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-11-30T17:00:59Z",
+      "side": 0,
+      "message": "Amirali\u0027s bug seems to affect non-Intel. As long as one platform catches the bug we\u0027re good.",
+      "parentUuid": "0f1a13a9_add28bc0",
+      "range": {
+        "startLine": 762,
+        "startChar": 0,
+        "endLine": 762,
+        "endChar": 72
+      },
+      "revId": "cbab97d4037f7e8188923f58dd15d50b35b448eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
