@@ -708,6 +708,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df8e4949_562d5866",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7109,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-30T02:02:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd505484_28811255",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89043b80_77ad81bd",
@@ -816,6 +834,30 @@
       "side": 1,
       "message": "\u003e Either way should work, I think. The reason I did it here is because flushCommandsAndEndRenderPass also calls flushOutsideRPCommands.\n\nThat\u0027s exactly the problem, `flushCommandsAndEndRenderPass` calls `flushOutsideRPCommands`, which is this function itself, hence infinite recursion (unless somehow mOutsideRenderPassSerialFactory.empty() is stopping it?)",
       "parentUuid": "f09eb9d6_008359d3",
+      "range": {
+        "startLine": 7384,
+        "startChar": 0,
+        "endLine": 7391,
+        "endChar": 5
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7ce9a9c_79aa8f55",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 7391,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-11-30T02:02:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b21e177_49392e74",
       "range": {
         "startLine": 7384,
         "startChar": 0,
