@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "509f4214_d9d9962f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-01T09:17:13Z",
+      "side": 1,
+      "message": "This is the final workaround before we have pixel local storage working coherently across the board!",
+      "revId": "3f63d1e2a4c5098bf86d6afbc95185366acd688b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
