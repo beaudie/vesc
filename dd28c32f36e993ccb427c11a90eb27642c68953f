@@ -16,6 +16,24 @@
       "message": "typo: `submisison` ----\u003e `submission`.",
       "revId": "dd28c32f36e993ccb427c11a90eb27642c68953f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9431433_9002ddf8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:48:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7fe1f551_1134f1b7",
+      "revId": "dd28c32f36e993ccb427c11a90eb27642c68953f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
