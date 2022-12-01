@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2f6f0b8_11ef4697",
+        "filename": "src/tests/run_angle_android_test.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-01T00:43:39Z",
+      "side": 0,
+      "message": "Rather than replace `angle_perftests`, I think you need to add a third option.  The perf tests live on, the trace tests were split out.",
+      "range": {
+        "startLine": 31,
+        "startChar": 54,
+        "endLine": 31,
+        "endChar": 69
+      },
+      "revId": "2ecb3217972ba1ae4c942b5eae9a9d102065cadb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
