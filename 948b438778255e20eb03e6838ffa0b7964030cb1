@@ -16,6 +16,24 @@
       "message": "Drive by:\n\nBut is it as fast?",
       "revId": "948b438778255e20eb03e6838ffa0b7964030cb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "513b79df_a1d91b5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1106289
+      },
+      "writtenOn": "2022-12-01T04:45:33Z",
+      "side": 1,
+      "message": "Fair question. It is implementation-dependent, but at least for GCC it is based on the same algorithm as the one I\u0027m replacing (https://stackoverflow.com/questions/19411742/what-is-the-default-hash-function-used-in-c-stdunordered-map), while libc++ uses CityHash, developed by Google, which is claimed to have higher throughput.",
+      "parentUuid": "18a7dbd9_614ddbfa",
+      "revId": "948b438778255e20eb03e6838ffa0b7964030cb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
