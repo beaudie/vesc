@@ -16,6 +16,23 @@
       "message": "Do you mean the `latter` excludes the case?",
       "revId": "8b2a4f387a16e6b3496db5e0df2d8ee1b7476ce1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00147e04_a7e3fdf2",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T19:03:46Z",
+      "side": 1,
+      "message": "Please turn into ASSERT then (same with the stashed queries)",
+      "revId": "8b2a4f387a16e6b3496db5e0df2d8ee1b7476ce1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
