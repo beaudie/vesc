@@ -3263,7 +3263,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
     // have to generate new queueSerial here. Note that queueSerial for RenderpassCommands is
     // deferred until renderpass start time (to leave room for outsideRenderPassCommands). We only
     // need to generate a new queueSerial for outsideRenderPassCommands here.
-    generateOutsideRenderPassCommandsQueueSerial();
+    // generateOutsideRenderPassCommandsQueueSerial();
 
     // Now that we have processed resourceUseList, some of pending garbage may no longer pending
     // and should be moved to garbage list.
