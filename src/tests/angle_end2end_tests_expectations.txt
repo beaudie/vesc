@@ -149,6 +149,20 @@
 7293 INTEL VULKAN : StateChangeTestES3.PolygonOffset/* = SKIP
 7465 WIN INTEL VULKAN : TextureSampleShadingTest.Basic/ES3_1_Vulkan_AsyncCommandQueue = SKIP
 7497 LINUX INTEL VULKAN : EGLBufferAgeTest.QueryBufferAge/* = SKIP
+// Failures on Intel Comet Lake S UHD Graphics 630 (8086:9bc5-31.0.101.2111)
+7865 WIN INTEL VULKAN : ImageTest.ANGLEExtensionAvailability/* = SKIP
+7865 WIN INTEL VULKAN : ImageTest.Source3DTargetExternal/* = SKIP
+7865 WIN INTEL VULKAN : ImageTest.Source3DTargetExternal_Colorspace/* = SKIP
+7865 WIN INTEL VULKAN : ImageTest.Source3DTargetTexture/* = SKIP
+7865 WIN INTEL VULKAN : ImageTest.Source3DTargetTexture_Colorspace/* = SKIP
+7865 WIN INTEL VULKAN : ImageTestES3.Source3DTargetExternalESSL3/* = SKIP
+7865 WIN INTEL VULKAN : ImageTestES3.Source3DTargetExternalESSL3_Colorspace/* = SKIP
+7866 WIN INTEL VULKAN : VulkanPerformanceCounterTest.PipelineCacheIsWarmedUpAtLinkTime/* = SKIP
+7866 WIN INTEL VULKAN : VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinary/* = SKIP
+7866 WIN INTEL VULKAN : VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinaryTwice/* = SKIP
+7866 WIN INTEL VULKAN : GLSLTest_ES3.MaxVaryingWithFeedbackAndGLline/* = SKIP
+7866 WIN INTEL VULKAN : RobustBufferAccessBehaviorTest.OutOfBoundsIndexBuffers/* = SKIP
+7866 WIN INTEL VULKAN : VertexAttributeCachingTest.BufferMulticachingWithOneUnchangedAttrib/ES3_Vulkan_AsyncCommandQueue = SKIP
 
 // Linux AMD
 6855 LINUX AMD OPENGL : ClearTestES3.ClearMaxAttachmentsAfterDraw/* = SKIP
