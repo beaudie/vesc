@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a447d358_7ad6f1b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:52:04Z",
+      "side": 1,
+      "message": "you are right. Thanks.",
+      "parentUuid": "f3618f27_ffc25e2f",
+      "revId": "8b2a4f387a16e6b3496db5e0df2d8ee1b7476ce1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00147e04_a7e3fdf2",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-01T19:03:46Z",
       "side": 1,
       "message": "Please turn into ASSERT then (same with the stashed queries)",
+      "revId": "8b2a4f387a16e6b3496db5e0df2d8ee1b7476ce1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e4e55d_2e657b12",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:52:04Z",
+      "side": 1,
+      "message": "Caller has an assert. See here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/QueryVk.cpp;l\u003d561",
+      "parentUuid": "00147e04_a7e3fdf2",
       "revId": "8b2a4f387a16e6b3496db5e0df2d8ee1b7476ce1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
