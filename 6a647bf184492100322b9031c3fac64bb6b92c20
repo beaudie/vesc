@@ -33,6 +33,29 @@
       "message": "LGTM. Before land, could you also check with folks to ensure this solves their needs?",
       "revId": "6a647bf184492100322b9031c3fac64bb6b92c20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5038e704_b77ba974",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T19:18:14Z",
+      "side": 1,
+      "message": "Please move these to the source file that uses them and put them in the anonymous namespace. You\u0027ll have a better time playing with them if they don\u0027t trigger building so many files.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 6
+      },
+      "revId": "6a647bf184492100322b9031c3fac64bb6b92c20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
