@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6189e186_56900c1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "I think having at least a smoketest for \u003e64 contexts is good, should be simple enough to add right to this CL.",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "052e3711_1deb326c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Can be untemplatized now",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a77a04f_09997b73",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "I\u0027m curious, have you checked how close to this number we get to in the traces? We do break the outside-RP commands quite a lot. If the traces get close to this number, we could double or quadruple this to be safe.\n\nI forgot the details, but the serial is incremented per outside RP secondary command buffer, right?",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

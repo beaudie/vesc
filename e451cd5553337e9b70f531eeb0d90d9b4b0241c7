@@ -520,6 +520,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "501ff111_ded99d25",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "56982550_3bfc9a51",
+      "range": {
+        "startLine": 1503,
+        "startChar": 0,
+        "endLine": 1511,
+        "endChar": 30
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4348c29b_31552697",
@@ -591,6 +615,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87d7e05e_e8ac5ea3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Ack, as long as it\u0027s not forgotten",
+      "parentUuid": "20a963d5_116e8da0",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59be84d3_2bc86a3d",
@@ -658,6 +700,24 @@
       "side": 1,
       "message": "Same as the other comment. Lets defer this to follow up CL.",
       "parentUuid": "96798574_97bf0fc7",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8516c463_bef98372",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "66fe5df3_ab932f00",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1109,6 +1169,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5344b58c_bec355f9",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5fa3b57a_8f6f6bff",
+      "range": {
+        "startLine": 161,
+        "startChar": 9,
+        "endLine": 161,
+        "endChar": 23
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4dcf6a1_83825a20",
@@ -1175,6 +1259,24 @@
       "side": 1,
       "message": "Some test will be break if you do that.",
       "parentUuid": "3b38ce32_2def84d2",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef45c92_e0a0fb0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T16:47:09Z",
+      "side": 1,
+      "message": "Do what? Increment the serial?\n\nI just meant to update the comment here about what the downside of not incrementing the serial is.",
+      "parentUuid": "73e15d8c_846dce0a",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
