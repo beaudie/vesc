@@ -371,6 +371,7 @@ libangle_headers = [
 ]
 
 libangle_sources = [
+  "src/libANGLE/ANGLEShaderProgramVersion.cpp",
   "src/libANGLE/AttributeMap.cpp",
   "src/libANGLE/BlobCache.cpp",
   "src/libANGLE/Buffer.cpp",
