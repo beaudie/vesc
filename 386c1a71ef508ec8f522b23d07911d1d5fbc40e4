@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95fbfcdc_b64f420e",
+        "filename": "include/platform/FeaturesMtl_autogen.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-01T06:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f2ab504_b804c698",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19875b72_e4ff0ee5",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "It shouldn\u0027t be possible! Shader images are a 3.1 feature and Metal currently only exposes a 3.0 context to clients. The only way we can hit this is when pixel local storage calls `context-\u003ebindImageTexture` internally.\n\nI was under the impression that Metal does not currently have plans to support ES 3.1 (?), but if it ever does, the hope was that these `UNIMPLEMENTED()` calls would very quickly point out the work that still needs to be completed.",
       "parentUuid": "19875b72_e4ff0ee5",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477a2d18_fef83717",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-01T06:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f66e6563_ccb90aff",
       "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -158,6 +194,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c326c34_10383c3f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 4243,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-01T06:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15660e2a_aa94894f",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fde82ba_b35663dc",
@@ -189,6 +243,24 @@
       "side": 1,
       "message": "We can\u0027t clamp because that would impact other caps. Added a comment.",
       "parentUuid": "0fde82ba_b35663dc",
+      "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "979b71d0_31b43ec8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 4302,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-01T06:01:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fed26131_e180c9b5",
       "revId": "386c1a71ef508ec8f522b23d07911d1d5fbc40e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
