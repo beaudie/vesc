@@ -16,6 +16,24 @@
       "message": "Adding Roman who also had opinions on reduced precision in trace diffs.\n\nI would rather have a controlled set of known tests/platform/GPU combinations that we allow to vary.  I prefer having a human in the loop deciding if the changes are acceptably minor.  I think most of us are okay glancing at a screenshot diff and accepting/declining changes.  But it would be nice to remove the skips in TracePerfTest.cpp.\n\nMaybe we add a follow on project to connect an expectations file to this?",
       "revId": "49da476d81086b8de12f5d4be4fc63fa41c6a7cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5d0473_058f012f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-01T15:12:53Z",
+      "side": 1,
+      "message": "Actually, maybe I\u0027ll go ahead and remove the traces from Win-Intel. It\u0027s flaky and seems to cause more trouble than it\u0027s worth maintaining, as this CL seems to have a lot of potential for churn.",
+      "parentUuid": "8fc24b45_eb5aae45",
+      "revId": "49da476d81086b8de12f5d4be4fc63fa41c6a7cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
