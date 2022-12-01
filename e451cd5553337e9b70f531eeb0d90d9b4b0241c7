@@ -130,6 +130,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fa7b49a_33e3153b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:45:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "309a2efe_5b17f11c",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2eb0f8d_0ea81348",
@@ -1122,6 +1140,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93cfbd71_e48b50b5",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 23
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:45:45Z",
+      "side": 1,
+      "message": "There are quite a few tests in MultithreadingTest* doing exact that. I also added two new tests in the next CL.",
+      "parentUuid": "6b7bae50_4139518c",
+      "range": {
+        "startLine": 23,
+        "startChar": 13,
+        "endLine": 23,
+        "endChar": 33
+      },
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd3cd1fd_97c127fe",
@@ -1277,6 +1319,24 @@
       "side": 1,
       "message": "Do what? Increment the serial?\n\nI just meant to update the comment here about what the downside of not incrementing the serial is.",
       "parentUuid": "73e15d8c_846dce0a",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7233f59d_11634d3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1500,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:45:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ef45c92_e0a0fb0e",
       "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

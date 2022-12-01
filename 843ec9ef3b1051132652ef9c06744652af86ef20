@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75e21d2_fa489f47",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:45:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "052e3711_1deb326c",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a77a04f_09997b73",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-12-01T16:47:09Z",
       "side": 1,
       "message": "I\u0027m curious, have you checked how close to this number we get to in the traces? We do break the outside-RP commands quite a lot. If the traces get close to this number, we could double or quadruple this to be safe.\n\nI forgot the details, but the serial is incremented per outside RP secondary command buffer, right?",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "454164ea_e83f7f7a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-01T23:45:45Z",
+      "side": 1,
+      "message": "My local test on pixel 6 shows not hitting the case (endRP due to out of reserved serials). I also added a perf warning for this.\n\nI only generate renderpass queueserial when it starts, that likely helps. Most of these break outsideRPCommands are in between renderpass anyway (like texture upload, read pixels etc).",
+      "parentUuid": "8a77a04f_09997b73",
       "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
