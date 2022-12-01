@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ebb9f44_1190911b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-01T15:06:34Z",
+      "side": 1,
+      "message": "I presume all this has to do with Google3? LGTM, but I don\u0027t really know if code from Chromium doesn\u0027t constitute as third_party",
+      "revId": "af6117fcb10057ab66b83f5c3cb98da8d372056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
