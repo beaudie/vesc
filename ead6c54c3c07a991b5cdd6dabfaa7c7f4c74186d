@@ -16,6 +16,23 @@
       "message": "Change GBM config to format used by Weston compositor",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01ea9ce7_f6a5c345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-01T16:46:30Z",
+      "side": 1,
+      "message": "Background:\nSungyong noted that Weston looks for this format first BGRX, and then looks for BGRA. This caused some extra effort. So we are switching out for its default.",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
