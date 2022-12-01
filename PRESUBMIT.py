@@ -426,6 +426,59 @@ def _CheckCommentBeforeTestInTestFiles(input_api, output_api):
     return []
 
 
+def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
+    """Requires an update to ANGLE_PROGRAM_VERSION when files affect data used in serializing and deserializing shader programs get changed"""
+
+    def programSerializeDeserializeFiles(f):
+        return input_api.FilterSourceFile(
+            f,
+            files_to_check=(r'^src/libANGLE/Program.+\.h$', r'^src/libANGLE/Program.+\.cpp$',
+                            r'^src/libANGLE/renderer/Program.+\.h$',
+                            r'^src/libANGLE/renderer/Program.+\.cpp$',
+                            r'^src/libANGLE/renderer/vulkan/Program.+\.h$',
+                            r'^src/libANGLE/renderer/vulkan/Program.+\.cpp$',
+                            r'^src/libANGLE/renderer/gl/Program.+\.h$',
+                            r'^src/libANGLE/renderer/gl/Program.+\.cpp$',
+                            r'^src/libANGLE/renderer/metal/Program.+\.h$',
+                            r'^src/libANGLE/renderer/metal/Program.+\.cpp$',
+                            r'^src/libANGLE/renderer/d3d/Program.+\.h$',
+                            r'^src/libANGLE/renderer/d3d/Program.+\.cpp$'))
+
+    programSerializeDeserializeFile_changed = input_api.AffectedSourceFiles(
+        programSerializeDeserializeFiles)
+
+    #print(programSerializeDeserializeFile_changed)
+
+    # Files of interest did not change, we are good.
+    if len(programSerializeDeserializeFile_changed) == 0:
+        return []
+
+    # Skip this check for reverts and rolls.
+    git_output = input_api.change.DescriptionText()
+    multiple_commits = _SplitIntoMultipleCommits(git_output)
+    for commit in multiple_commits:
+        if commit.startswith('Revert') or commit.startswith('Roll'):
+            return []
+
+    # If the file changed, check that ANGLE_PROGRAM_VERSION also changed.
+    def angleProgramVersionFile(f):
+        return input_api.FilterSourceFile(
+            f, files_to_check=(r'^src/libANGLE/ANGLEShaderProgramVersion.cpp'))
+
+    angleProgramVersionFile_changed = input_api.AffectedSourceFiles(angleProgramVersionFile)
+
+    diffs = '\n'.join(f.GenerateScmDiff() for f in angleProgramVersionFile_changed)
+
+    versions = dict(re.findall(r'^([-+])#define ANGLE_PROGRAM_VERSION\s+(\d+)', diffs, re.M))
+
+    if len(versions) != 2 or int(versions['+']) <= int(versions['-']):
+        return [
+            output_api.PresubmitError(
+                'ANGLE_PROGRAM_VERSION should be incremented when Program.* change.')
+        ]
+    return []
+
+
 def _CheckShaderVersionInShaderLangHeader(input_api, output_api):
     """Requires an update to ANGLE_SH_VERSION when ShaderLang.h or ShaderVars.h change."""
 
@@ -490,6 +543,7 @@ def CheckChangeOnUpload(input_api, output_api):
     results.extend(_CheckTabsInSourceFiles(input_api, output_api))
     results.extend(_CheckNonAsciiInSourceFiles(input_api, output_api))
     results.extend(_CheckCommentBeforeTestInTestFiles(input_api, output_api))
+    results.extend(_CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api))
     results.extend(_CheckShaderVersionInShaderLangHeader(input_api, output_api))
     results.extend(_CheckCodeGeneration(input_api, output_api))
     results.extend(_CheckChangeHasBugField(input_api, output_api))
