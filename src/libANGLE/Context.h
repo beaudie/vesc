@@ -368,6 +368,7 @@ using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>
 class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
 {
   public:
+    static const int ANGLE_PROGRAM_VERSION;
     Context(egl::Display *display,
             const egl::Config *config,
             const Context *shareContext,
