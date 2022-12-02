@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "58010ddd_f7e361fb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T20:03:35Z",
+      "side": 1,
+      "message": "Heh, yes.  Weird slip.",
+      "parentUuid": "6edcf97a_a9c90c50",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "bae22438_35e4fdb5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2022-12-02T18:39:15Z",
       "side": 1,
       "message": "By reading the existing code: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/capture/FrameCapture.h;l\u003d198; my understanding for `mResourcesToRegen` is to store resource that the app deleted after we start capturing. So when we create the code to get back to the initial state of replay, we can regenerate them, is that correct?\n\nAnd here what this code does is: if we find out in the middle of the capture, we are generating the resource that was added to `mResourcesToRegen`, then in the code we add to get back to the initial state of replay, we need to first delete and then generate them, is that right?\n\nThat means before this change, we always assumes that the resource app deletes after we start capturing will be recreated during the middle of the capture, and that assumption was not right and this CL is fixing it, am I reading it right?",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfdfed36_c77ffb24",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8089,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T20:03:35Z",
+      "side": 1,
+      "message": "Yes, each of your points is a correct read.  Before this CL we\u0027ve been relying on the app to recreate the starting resource after deleting it.  We may have been sheltered by not supporting reset of Shaders/Programs at all (which is why this is a precursor to the next CL).\n\nThe particular app I\u0027m testing will delete a starting program right in the middle of the frame range and never recreate it.  Without this fix, we would try to delete it *again*, causing errors.",
+      "parentUuid": "82fe6a2b_1e25e642",
       "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
