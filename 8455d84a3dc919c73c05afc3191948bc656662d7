@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6edcf97a_a9c90c50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-02T18:39:15Z",
+      "side": 1,
+      "message": "is this a typo? do you mean: track which `resources` need to be deleted?",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bae22438_35e4fdb5",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-12-02T07:14:46Z",
       "side": 1,
       "message": "Further enhancement required before we can land a trace using the shader reset CL.\n\nIn this case, the app is simply deleting a program that was created in MEC.  It doesn\u0027t create a new one to replace it.  Without changes, we throw errors when trying to delete resources that have already been deleted.\n\nTo support this, we have to detect and react when a resource has been deleted but not recreated.",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82fe6a2b_1e25e642",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8089,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-02T18:39:15Z",
+      "side": 1,
+      "message": "By reading the existing code: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/capture/FrameCapture.h;l\u003d198; my understanding for `mResourcesToRegen` is to store resource that the app deleted after we start capturing. So when we create the code to get back to the initial state of replay, we can regenerate them, is that correct?\n\nAnd here what this code does is: if we find out in the middle of the capture, we are generating the resource that was added to `mResourcesToRegen`, then in the code we add to get back to the initial state of replay, we need to first delete and then generate them, is that right?\n\nThat means before this change, we always assumes that the resource app deletes after we start capturing will be recreated during the middle of the capture, and that assumption was not right and this CL is fixing it, am I reading it right?",
       "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
