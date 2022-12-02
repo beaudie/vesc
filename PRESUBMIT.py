@@ -425,7 +425,6 @@ def _CheckCommentBeforeTestInTestFiles(input_api, output_api):
         ]
     return []
 
-
 def _CheckShaderVersionInShaderLangHeader(input_api, output_api):
     """Requires an update to ANGLE_SH_VERSION when ShaderLang.h or ShaderVars.h change."""
 

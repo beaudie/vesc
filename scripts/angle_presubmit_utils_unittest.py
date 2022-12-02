@@ -352,7 +352,6 @@ class GClientFileExistenceCheck(unittest.TestCase):
             errors = self.run_gclient_presubmit(str(inner), str(cwd))
             self.assertEqual(len(errors), 0)
 
-
 class CheckShaderVersionInShaderLangHeaderTest(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
