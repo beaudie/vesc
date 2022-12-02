@@ -428,11 +428,12 @@ def _CheckCommentBeforeTestInTestFiles(input_api, output_api):
 
 def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
     """Requires an update to ANGLE_PROGRAM_VERSION when files affect data used in serializing and deserializing shader programs get changed"""
+    print("Yuxin Debug _CheckANGLEProgramSerializeDeserializeDataVersion is called")
 
     def programSerializeDeserializeFiles(f):
         return input_api.FilterSourceFile(
             f,
-            files_to_check=(r'^src/libANGLE/Program.+\.h$', r'^src/libANGLE/Program.+\.cpp$',
+            files_to_check=(r'^src/libANGLE/Program.\.h$', r'^src/libANGLE/Program.+\.cpp$',
                             r'^src/libANGLE/renderer/Program.+\.h$',
                             r'^src/libANGLE/renderer/Program.+\.cpp$',
                             r'^src/libANGLE/renderer/vulkan/Program.+\.h$',
@@ -447,7 +448,7 @@ def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
     programSerializeDeserializeFile_changed = input_api.AffectedSourceFiles(
         programSerializeDeserializeFiles)
 
-    #print(programSerializeDeserializeFile_changed)
+    print(programSerializeDeserializeFile_changed)
 
     # Files of interest did not change, we are good.
     if len(programSerializeDeserializeFile_changed) == 0:
@@ -470,6 +471,8 @@ def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
     diffs = '\n'.join(f.GenerateScmDiff() for f in angleProgramVersionFile_changed)
 
     versions = dict(re.findall(r'^([-+])#define ANGLE_PROGRAM_VERSION\s+(\d+)', diffs, re.M))
+
+    print(versions)
 
     if len(versions) != 2 or int(versions['+']) <= int(versions['-']):
         return [
