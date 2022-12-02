@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5e27710_2e0a430b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T00:01:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d505749_aaee32c0",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 46
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c48557b4_68f30b2f",
@@ -207,6 +231,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5194e366_d3cd1a97",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T00:01:44Z",
+      "side": 1,
+      "message": "Removed in https://chromium-review.googlesource.com/c/angle/angle/+/4038096",
+      "parentUuid": "7f359d21_3df8cfb4",
+      "range": {
+        "startLine": 616,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 5
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "44a3781a_fe12894b",
@@ -220,6 +268,30 @@
       "writtenOn": "2022-11-16T17:17:09Z",
       "side": 1,
       "message": "This will be deleted in the later CLs.",
+      "range": {
+        "startLine": 622,
+        "startChar": 4,
+        "endLine": 628,
+        "endChar": 5
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b390337a_28f60bda",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T00:01:44Z",
+      "side": 1,
+      "message": "Removed in https://chromium-review.googlesource.com/c/angle/angle/+/4053262/5",
+      "parentUuid": "44a3781a_fe12894b",
       "range": {
         "startLine": 622,
         "startChar": 4,
@@ -253,6 +325,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93b8740d_96172714",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T00:01:44Z",
+      "side": 1,
+      "message": "Removed in https://chromium-review.googlesource.com/c/angle/angle/+/4038096",
+      "parentUuid": "5c70de61_d5c3c25a",
+      "range": {
+        "startLine": 831,
+        "startChar": 7,
+        "endLine": 849,
+        "endChar": 9
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "05eb5feb_2bca1884",
@@ -266,6 +362,30 @@
       "writtenOn": "2022-11-16T17:17:09Z",
       "side": 1,
       "message": "These function will eventually deleted in following CLs and replaced with renderer-\u003ehasUnfinishedUse(buffer), ctx-\u003ehasUnflushedUse(buffer) directly.",
+      "range": {
+        "startLine": 213,
+        "startChar": 9,
+        "endLine": 219,
+        "endChar": 25
+      },
+      "revId": "4f5066c5401fd38d10b5fc10b7288b76e01df2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b8605eb_d81cc395",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T00:01:44Z",
+      "side": 1,
+      "message": "Removed in https://chromium-review.googlesource.com/c/angle/angle/+/4053262/8",
+      "parentUuid": "05eb5feb_2bca1884",
       "range": {
         "startLine": 213,
         "startChar": 9,
