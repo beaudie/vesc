@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0bd33c_1fde5b61",
+        "filename": "android/AndroidManifest.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T18:29:30Z",
+      "side": 1,
+      "message": "This should probably should be in `./android/AndroidManifest.xml.jinja2`\n\nBut I can see that a number of changes have landed in `./android/AndroidManifest.xml`\n\nThis means different manifests are used between Android and Chrome builds.  This is a problem, I\u0027ll file a follow up bug.\n\nI don\u0027t think we need to hold this CL up though.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 44
+      },
+      "revId": "39815ec0670cbfcfb4e7c9cd95562f26e8aa0fab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
