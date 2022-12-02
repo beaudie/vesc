@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a681f172_27518f7a",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T19:04:12Z",
+      "side": 1,
+      "message": "Ack, refactoring duplicate code",
+      "parentUuid": "7f9aca28_e9ebe2a5",
+      "range": {
+        "startLine": 177,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 51
+      },
+      "revId": "50023d8dd1faa866ab9fa746c7ea9f76c0461c65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b551535f_043c681d",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-12-02T18:54:21Z",
       "side": 1,
       "message": "This doesn\u0027t seem related to color or texcoords?",
+      "range": {
+        "startLine": 335,
+        "startChar": 21,
+        "endLine": 335,
+        "endChar": 35
+      },
+      "revId": "50023d8dd1faa866ab9fa746c7ea9f76c0461c65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59100544_5c52297a",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T19:04:12Z",
+      "side": 1,
+      "message": "It\u0027s not, but I happened to notice that despite being \"position\", these use nothing but mediump things. Including the 0/1/-1 values in drawTextureVertices above (and normalized uniform values, which seriously don\u0027t need that much precision)",
+      "parentUuid": "b551535f_043c681d",
       "range": {
         "startLine": 335,
         "startChar": 21,
