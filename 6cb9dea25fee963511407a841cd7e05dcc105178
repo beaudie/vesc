@@ -16,6 +16,46 @@
       "message": "Thanks",
       "revId": "6cb9dea25fee963511407a841cd7e05dcc105178",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55bec018_0dd783fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T15:59:36Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "6cb9dea25fee963511407a841cd7e05dcc105178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edb8f6c9_bf2ec07e",
+        "filename": "src/libANGLE/renderer/vulkan/BUILD.gn",
+        "patchSetId": 13
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T15:59:36Z",
+      "side": 1,
+      "message": "nit: if you use `angle_debug_layers_enabled` here, then this could be enabled in release+assert(+symbols) builds too",
+      "range": {
+        "startLine": 268,
+        "startChar": 9,
+        "endLine": 268,
+        "endChar": 17
+      },
+      "revId": "6cb9dea25fee963511407a841cd7e05dcc105178",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
