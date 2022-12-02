@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7e0dad4_ce2d5a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-02T00:27:01Z",
+      "side": 1,
+      "message": "Stephen, IIRC there some \"TYPELESS\" texture flags that had to set in order to support shader images. After this change is it possible that some of those are no longer necessary? Can I disable them and see if it helps performance?",
+      "revId": "0d23eff8dfe6ce437b1d7cbb931bcabd0dc6070f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
