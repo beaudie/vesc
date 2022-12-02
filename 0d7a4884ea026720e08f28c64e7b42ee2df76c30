@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8b55da_3bf545f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T17:51:48Z",
+      "side": 1,
+      "message": "This broke the ANGLE to Android roller:\n\nerror: external/angle/Android.bp:6474:1: module \"external_angle_license\": module source path \"external/angle/src/common/third_party/smhasher/LICENSE\" does not exist\n\nhttps://android-review.git.corp.google.com/c/platform/external/angle/+/2323099\n\nI\u0027ll upload a follow up.",
+      "revId": "0d7a4884ea026720e08f28c64e7b42ee2df76c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
