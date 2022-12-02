@@ -3440,6 +3440,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                              mPhysicalDeviceProperties.deviceName);
     const bool isQualcommProprietary = isQualcomm && !isQualcommOpenSource;
 
+    const bool isMesaVenus = mDriverProperties.driverID == VK_DRIVER_ID_MESA_VENUS;
+
     // Parse the ARM driver version to be readable/comparable
     const ARMDriverVersion armDriverVersion =
         ParseARMDriverVersion(mPhysicalDeviceProperties.driverVersion);
@@ -4067,7 +4069,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, mergeProgramPipelineCachesToGlobalCache,
                             !mFeatures.supportsGraphicsPipelineLibrary.enabled);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, true);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, false);
 
     // Sync monolithic pipelines to the blob cache occasionally on platforms that would benefit from
     // it:
