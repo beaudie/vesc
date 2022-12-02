@@ -86,6 +86,23 @@
       "parentUuid": "8a77a04f_09997b73",
       "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df1254ef_3cfb9c94",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T16:13:24Z",
+      "side": 1,
+      "message": "What happened here?",
+      "revId": "843ec9ef3b1051132652ef9c06744652af86ef20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
