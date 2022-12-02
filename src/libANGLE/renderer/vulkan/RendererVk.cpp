@@ -3407,6 +3407,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                              mPhysicalDeviceProperties.deviceName);
     const bool isQualcommProprietary = isQualcomm && !isQualcommOpenSource;
 
+    const bool isMesaVenus = mDriverProperties.driverID == VK_DRIVER_ID_MESA_VENUS;
+
     // Parse the ARM driver version to be readable/comparable
     const ARMDriverVersion armDriverVersion =
         ParseARMDriverVersion(mPhysicalDeviceProperties.driverVersion);
@@ -4013,7 +4015,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             !isARM && !isPowerVR && !isQualcommProprietary &&
                                 !(IsLinux() && isIntel) && !(IsChromeOS() && isSwiftShader));
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, true);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, isMesaVenus);
 
     // On ARM, dynamic state for stencil write mask doesn't work correctly in the presence of
     // discard or alpha to coverage, if the static state provided when creating the pipeline has a
