@@ -86,6 +86,24 @@
       "parentUuid": "82fe6a2b_1e25e642",
       "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88be09fe_2b19c463",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8089,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-02T21:51:28Z",
+      "side": 1,
+      "message": "Got it, thank you Cody.",
+      "parentUuid": "bfdfed36_c77ffb24",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
