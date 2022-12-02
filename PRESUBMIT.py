@@ -465,6 +465,8 @@ def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
 
     angleProgramVersionFile_changed = input_api.AffectedSourceFiles(angleProgramVersionFile)
 
+    print(angleProgramVersionFile_changed)
+
     diffs = '\n'.join(f.GenerateScmDiff() for f in angleProgramVersionFile_changed)
 
     # if this file is newly added, skip the check
@@ -473,8 +475,6 @@ def _CheckANGLEProgramSerializeDeserializeDataVersion(input_api, output_api):
         return []
 
     versions = dict(re.findall(r'^([-+])#define ANGLE_PROGRAM_VERSION\s+(\d+)', diffs, re.M))
-
-    print(versions)
 
     if len(versions) != 2 or int(versions['+']) <= int(versions['-']):
         return [
