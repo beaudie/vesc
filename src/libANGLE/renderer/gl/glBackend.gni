@@ -1,0 +1,207 @@
+import("../../../../gni/angle.gni")
+
+declare_args() {
+  angle_enable_gl_null = true
+}
+
+gl_backend_dir = "$angle_root/src/libANGLE/renderer/gl"
+
+gl_backend_sources = [
+  "$gl_backend_dir/BlitGL.cpp",
+  "$gl_backend_dir/BlitGL.h",
+  "$gl_backend_dir/BufferGL.cpp",
+  "$gl_backend_dir/BufferGL.h",
+  "$gl_backend_dir/ClearMultiviewGL.cpp",
+  "$gl_backend_dir/ClearMultiviewGL.h",
+  "$gl_backend_dir/CompilerGL.cpp",
+  "$gl_backend_dir/CompilerGL.h",
+  "$gl_backend_dir/ContextGL.cpp",
+  "$gl_backend_dir/ContextGL.h",
+  "$gl_backend_dir/DispatchTableGL_autogen.cpp",
+  "$gl_backend_dir/DispatchTableGL_autogen.h",
+  "$gl_backend_dir/DisplayGL.cpp",
+  "$gl_backend_dir/DisplayGL.h",
+  "$gl_backend_dir/FenceNVGL.cpp",
+  "$gl_backend_dir/FenceNVGL.h",
+  "$gl_backend_dir/FramebufferGL.cpp",
+  "$gl_backend_dir/FramebufferGL.h",
+  "$gl_backend_dir/FunctionsGL.cpp",
+  "$gl_backend_dir/FunctionsGL.h",
+  "$gl_backend_dir/ImageGL.cpp",
+  "$gl_backend_dir/ImageGL.h",
+  "$gl_backend_dir/MemoryObjectGL.cpp",
+  "$gl_backend_dir/MemoryObjectGL.h",
+  "$gl_backend_dir/PLSProgramCache.cpp",
+  "$gl_backend_dir/PLSProgramCache.h",
+  "$gl_backend_dir/ProgramGL.cpp",
+  "$gl_backend_dir/ProgramGL.h",
+  "$gl_backend_dir/ProgramPipelineGL.cpp",
+  "$gl_backend_dir/ProgramPipelineGL.h",
+  "$gl_backend_dir/QueryGL.cpp",
+  "$gl_backend_dir/QueryGL.h",
+  "$gl_backend_dir/RenderbufferGL.cpp",
+  "$gl_backend_dir/RenderbufferGL.h",
+  "$gl_backend_dir/RendererGL.cpp",
+  "$gl_backend_dir/RendererGL.h",
+  "$gl_backend_dir/SamplerGL.cpp",
+  "$gl_backend_dir/SamplerGL.h",
+  "$gl_backend_dir/SemaphoreGL.cpp",
+  "$gl_backend_dir/SemaphoreGL.h",
+  "$gl_backend_dir/ShaderGL.cpp",
+  "$gl_backend_dir/ShaderGL.h",
+  "$gl_backend_dir/StateManagerGL.cpp",
+  "$gl_backend_dir/StateManagerGL.h",
+  "$gl_backend_dir/SurfaceGL.cpp",
+  "$gl_backend_dir/SurfaceGL.h",
+  "$gl_backend_dir/SyncGL.cpp",
+  "$gl_backend_dir/SyncGL.h",
+  "$gl_backend_dir/TextureGL.cpp",
+  "$gl_backend_dir/TextureGL.h",
+  "$gl_backend_dir/TransformFeedbackGL.cpp",
+  "$gl_backend_dir/TransformFeedbackGL.h",
+  "$gl_backend_dir/VertexArrayGL.cpp",
+  "$gl_backend_dir/VertexArrayGL.h",
+  "$gl_backend_dir/formatutilsgl.cpp",
+  "$gl_backend_dir/formatutilsgl.h",
+  "$gl_backend_dir/functionsgl_enums.h",
+  "$gl_backend_dir/functionsgl_typedefs.h",
+  "$gl_backend_dir/renderergl_utils.cpp",
+  "$gl_backend_dir/renderergl_utils.h",
+]
+
+if (is_win) {
+  gl_backend_sources += [
+    "$gl_backend_dir/../../../third_party/khronos/GL/wglext.h",
+    "$gl_backend_dir/wgl/ContextWGL.cpp",
+    "$gl_backend_dir/wgl/ContextWGL.h",
+    "$gl_backend_dir/wgl/D3DTextureSurfaceWGL.cpp",
+    "$gl_backend_dir/wgl/D3DTextureSurfaceWGL.h",
+    "$gl_backend_dir/wgl/DXGISwapChainWindowSurfaceWGL.cpp",
+    "$gl_backend_dir/wgl/DXGISwapChainWindowSurfaceWGL.h",
+    "$gl_backend_dir/wgl/DisplayWGL.cpp",
+    "$gl_backend_dir/wgl/DisplayWGL.h",
+    "$gl_backend_dir/wgl/FunctionsWGL.cpp",
+    "$gl_backend_dir/wgl/FunctionsWGL.h",
+    "$gl_backend_dir/wgl/PbufferSurfaceWGL.cpp",
+    "$gl_backend_dir/wgl/PbufferSurfaceWGL.h",
+    "$gl_backend_dir/wgl/RendererWGL.cpp",
+    "$gl_backend_dir/wgl/RendererWGL.h",
+    "$gl_backend_dir/wgl/SurfaceWGL.h",
+    "$gl_backend_dir/wgl/WindowSurfaceWGL.cpp",
+    "$gl_backend_dir/wgl/WindowSurfaceWGL.h",
+    "$gl_backend_dir/wgl/functionswgl_typedefs.h",
+    "$gl_backend_dir/wgl/wgl_utils.cpp",
+    "$gl_backend_dir/wgl/wgl_utils.h",
+  ]
+}
+
+if (angle_use_x11) {
+  gl_backend_sources += [
+    "$gl_backend_dir/glx/DisplayGLX.cpp",
+    "$gl_backend_dir/glx/DisplayGLX.h",
+    "$gl_backend_dir/glx/FunctionsGLX.cpp",
+    "$gl_backend_dir/glx/FunctionsGLX.h",
+    "$gl_backend_dir/glx/PbufferSurfaceGLX.cpp",
+    "$gl_backend_dir/glx/PbufferSurfaceGLX.h",
+    "$gl_backend_dir/glx/PixmapSurfaceGLX.cpp",
+    "$gl_backend_dir/glx/PixmapSurfaceGLX.h",
+    "$gl_backend_dir/glx/RendererGLX.cpp",
+    "$gl_backend_dir/glx/RendererGLX.h",
+    "$gl_backend_dir/glx/SurfaceGLX.h",
+    "$gl_backend_dir/glx/WindowSurfaceGLX.cpp",
+    "$gl_backend_dir/glx/WindowSurfaceGLX.h",
+    "$gl_backend_dir/glx/functionsglx_typedefs.h",
+    "$gl_backend_dir/glx/glx_utils.cpp",
+    "$gl_backend_dir/glx/glx_utils.h",
+    "$gl_backend_dir/glx/platform_glx.h",
+  ]
+}
+
+if (is_android || is_linux || is_chromeos) {
+  gl_backend_sources += [
+    "$gl_backend_dir/egl/ContextEGL.cpp",
+    "$gl_backend_dir/egl/ContextEGL.h",
+    "$gl_backend_dir/egl/DeviceEGL.cpp",
+    "$gl_backend_dir/egl/DeviceEGL.h",
+    "$gl_backend_dir/egl/DisplayEGL.cpp",
+    "$gl_backend_dir/egl/DisplayEGL.h",
+    "$gl_backend_dir/egl/DmaBufImageSiblingEGL.cpp",
+    "$gl_backend_dir/egl/DmaBufImageSiblingEGL.h",
+    "$gl_backend_dir/egl/ExternalImageSiblingEGL.h",
+    "$gl_backend_dir/egl/FunctionsEGL.cpp",
+    "$gl_backend_dir/egl/FunctionsEGL.h",
+    "$gl_backend_dir/egl/FunctionsEGLDL.cpp",
+    "$gl_backend_dir/egl/FunctionsEGLDL.h",
+    "$gl_backend_dir/egl/ImageEGL.cpp",
+    "$gl_backend_dir/egl/ImageEGL.h",
+    "$gl_backend_dir/egl/PbufferSurfaceEGL.cpp",
+    "$gl_backend_dir/egl/PbufferSurfaceEGL.h",
+    "$gl_backend_dir/egl/RendererEGL.cpp",
+    "$gl_backend_dir/egl/RendererEGL.h",
+    "$gl_backend_dir/egl/SurfaceEGL.cpp",
+    "$gl_backend_dir/egl/SurfaceEGL.h",
+    "$gl_backend_dir/egl/SyncEGL.cpp",
+    "$gl_backend_dir/egl/SyncEGL.h",
+    "$gl_backend_dir/egl/WindowSurfaceEGL.cpp",
+    "$gl_backend_dir/egl/WindowSurfaceEGL.h",
+    "$gl_backend_dir/egl/egl_utils.cpp",
+    "$gl_backend_dir/egl/egl_utils.h",
+    "$gl_backend_dir/egl/functionsegl_typedefs.h",
+  ]
+}
+
+if (is_android) {
+  gl_backend_sources += [
+    "$gl_backend_dir/egl/android/DisplayAndroid.cpp",
+    "$gl_backend_dir/egl/android/DisplayAndroid.h",
+    "$gl_backend_dir/egl/android/NativeBufferImageSiblingAndroid.cpp",
+    "$gl_backend_dir/egl/android/NativeBufferImageSiblingAndroid.h",
+  ]
+}
+
+if (angle_enable_cgl) {
+  gl_backend_sources += [
+    "$gl_backend_dir/cgl/ContextCGL.cpp",
+    "$gl_backend_dir/cgl/ContextCGL.h",
+    "$gl_backend_dir/cgl/DeviceCGL.cpp",
+    "$gl_backend_dir/cgl/DeviceCGL.h",
+    "$gl_backend_dir/cgl/DisplayCGL.h",
+    "$gl_backend_dir/cgl/DisplayCGL.mm",
+    "$gl_backend_dir/cgl/IOSurfaceSurfaceCGL.cpp",
+    "$gl_backend_dir/cgl/IOSurfaceSurfaceCGL.h",
+    "$gl_backend_dir/cgl/PbufferSurfaceCGL.cpp",
+    "$gl_backend_dir/cgl/PbufferSurfaceCGL.h",
+    "$gl_backend_dir/cgl/RendererCGL.cpp",
+    "$gl_backend_dir/cgl/RendererCGL.h",
+    "$gl_backend_dir/cgl/WindowSurfaceCGL.h",
+    "$gl_backend_dir/cgl/WindowSurfaceCGL.mm",
+  ]
+}
+
+if (angle_enable_eagl) {
+  gl_backend_sources += [
+    "$gl_backend_dir/eagl/ContextEAGL.cpp",
+    "$gl_backend_dir/eagl/ContextEAGL.h",
+    "$gl_backend_dir/eagl/DeviceEAGL.cpp",
+    "$gl_backend_dir/eagl/DeviceEAGL.h",
+    "$gl_backend_dir/eagl/DisplayEAGL.h",
+    "$gl_backend_dir/eagl/DisplayEAGL.mm",
+    "$gl_backend_dir/eagl/FunctionsEAGL.h",
+    "$gl_backend_dir/eagl/FunctionsEAGL.mm",
+    "$gl_backend_dir/eagl/IOSurfaceSurfaceEAGL.h",
+    "$gl_backend_dir/eagl/IOSurfaceSurfaceEAGL.mm",
+    "$gl_backend_dir/eagl/PbufferSurfaceEAGL.cpp",
+    "$gl_backend_dir/eagl/PbufferSurfaceEAGL.h",
+    "$gl_backend_dir/eagl/RendererEAGL.cpp",
+    "$gl_backend_dir/eagl/RendererEAGL.h",
+    "$gl_backend_dir/eagl/WindowSurfaceEAGL.h",
+    "$gl_backend_dir/eagl/WindowSurfaceEAGL.mm",
+  ]
+}
+
+if (angle_enable_gl_null) {
+  gl_backend_sources += [
+    "$gl_backend_dir/null_functions.cpp",
+    "$gl_backend_dir/null_functions.h",
+  ]
+}
