@@ -29,6 +29,16 @@ int GetANGLECommitHashSize()
     return ANGLE_COMMIT_HASH_SIZE;
 }
 
+const char *GetANGLEShaderProgramVersion()
+{
+    return ANGLE_PROGRAM_VERSION;
+}
+
+int GetANGLEShaderProgramVersionHashSize()
+{
+    return ANGLE_PROGRAM_VERSION_HASH_SIZE;
+}
+
 bool GetANGLEHasBinaryLoading()
 {
 #ifdef ANGLE_HAS_BINARY_LOADING
