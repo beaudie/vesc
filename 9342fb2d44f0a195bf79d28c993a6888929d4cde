@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d162ef09_b1b351ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-12-02T17:58:58Z",
+      "side": 1,
+      "message": "Oppo discovered we weren\u0027t setting this value, which causes an unjustified security concern.  I\u0027ll fix this upstream, and then may have to create it on the `tm-dev` branch too.",
+      "revId": "9342fb2d44f0a195bf79d28c993a6888929d4cde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
