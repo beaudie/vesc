@@ -33,6 +33,23 @@
       "message": "This might be resolved with rolling the latest Chromium DEPS.  Pausing this CL until we can try it.\n\nOur upstream CI doesn\u0027t actually install the ANGLE APK, which is why the initial commit passed.",
       "revId": "05fe81560e212657da87310fa94deaeeed236431",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f049af7_fac8e9f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2022-12-02T23:02:02Z",
+      "side": 1,
+      "message": "Once the Chromium into ANGLE AutoRoll happened, the problem disappeared.  Therefore, I\u0027m going to abandon this.",
+      "revId": "05fe81560e212657da87310fa94deaeeed236431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
