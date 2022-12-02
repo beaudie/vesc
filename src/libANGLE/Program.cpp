@@ -3602,8 +3602,7 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
 {
     BinaryOutputStream stream;
 
-    stream.writeBytes(reinterpret_cast<const unsigned char *>(angle::GetANGLECommitHash()),
-                      angle::GetANGLECommitHashSize());
+    stream.writeInt(Context::ANGLE_PROGRAM_VERSION);
 
     // nullptr context is supported when computing binary length.
     if (context)
@@ -3697,9 +3696,8 @@ angle::Result Program::deserialize(const Context *context,
                                    BinaryInputStream &stream,
                                    InfoLog &infoLog)
 {
-    std::vector<uint8_t> commitString(angle::GetANGLECommitHashSize(), 0);
-    stream.readBytes(commitString.data(), commitString.size());
-    if (memcmp(commitString.data(), angle::GetANGLECommitHash(), commitString.size()) != 0)
+    int angleProgramVersion = stream.readInt<int>();
+    if (angleProgramVersion != Context::ANGLE_PROGRAM_VERSION)
     {
         infoLog << "Invalid program binary version.";
         return angle::Result::Stop;
