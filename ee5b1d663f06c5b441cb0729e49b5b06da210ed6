@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14641c3c_9ddaec25",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T18:12:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "545d225e_b1611915",
+      "revId": "ee5b1d663f06c5b441cb0729e49b5b06da210ed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21be8766_f583781e",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-12-02T05:37:33Z",
       "side": 1,
       "message": "nit: constexpr constant with a name + explain where it\u0027s coming from",
+      "range": {
+        "startLine": 719,
+        "startChar": 77,
+        "endLine": 719,
+        "endChar": 79
+      },
+      "revId": "ee5b1d663f06c5b441cb0729e49b5b06da210ed6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bf148d8_e729bba0",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T18:12:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21be8766_f583781e",
       "range": {
         "startLine": 719,
         "startChar": 77,
