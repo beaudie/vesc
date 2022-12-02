@@ -353,6 +353,77 @@ class GClientFileExistenceCheck(unittest.TestCase):
             self.assertEqual(len(errors), 0)
 
 
+class CheckProgramSerializeDeserializeDataVersionChangeTest(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(CheckProgramSerializeDeserializeDataVersionChangeTest,
+              self).__init__(*args, **kwargs)
+        self.output_api = OutputAPI_mock()
+
+    def run_program_version_check_persubmit(self, commit_msg, diffs):
+        affected_files = [AffectedFile_mock(diff) for diff in diffs]
+        input_api = InputAPI_mock(commit_msg, affected_files)
+        return PRESUBMIT._CheckANGLEProgramSerializeDeserializeDataVersion(
+            input_api, self.output_api)
+
+    def test_program_files_not_changed(self):
+        errors = self.run_program_version_check_persubmit('', [])
+        self.assertEqual(len(errors), 0)
+
+    def test_program_files_changed_with_version_change(self):
+        program_version_diff = """-#define ANGLE_PROGRAM_VERSION 100
++#define ANGLE_PROGRAM_VERSION 101
+"""
+
+        program_files_diff = """-any change"""
+
+        errors = self.run_program_version_check_persubmit(
+            '', [program_version_diff, program_files_diff])
+        self.assertEqual(len(errors), 0)
+
+    def test_program_files_changed_with_no_version_change(self):
+        program_files_diff = """+some change"""
+
+        errors = self.run_program_version_check_persubmit('', [program_files_diff])
+        self.assertEqual(
+            errors[0],
+            self.output_api.PresubmitError(
+                'ANGLE_PROGRAM_VERSION should be incremented when Program.* change.'))
+
+    def test_program_files_changed_with_version_cosmetic_change(self):
+        program_version_diff = """-#define ANGLE_PROGRAM_VERSION 100
++#define ANGLE_PROGRAM_VERSION 100"""
+        program_files_diff = """+some change"""
+
+        errors = self.run_program_version_check_persubmit(
+            '', [program_version_diff, program_files_diff])
+        self.assertEqual(
+            errors[0],
+            self.output_api.PresubmitError(
+                'ANGLE_PROGRAM_VERSION should be incremented when Program.* change.'))
+
+    def test_program_files_changed_with_version_decrement(self):
+        program_version_diff = """-#define ANGLE_PROGRAM_VERSION 100
++#define ANGLE_PROGRAM_VERSION 99"""
+        program_files_diff = """+some change"""
+
+        errors = self.run_program_version_check_persubmit(
+            '', [program_version_diff, program_files_diff])
+        self.assertEqual(
+            errors[0],
+            self.output_api.PresubmitError(
+                'ANGLE_PROGRAM_VERSION should be incremented when Program.* change.'))
+
+    def test_skip_test_for_revert(self):
+        program_version_diff = """-#define ANGLE_PROGRAM_VERSION 100
++#define ANGLE_PROGRAM_VERSION 99"""
+        program_files_diff = """+some change"""
+
+        errors = self.run_program_version_check_persubmit(
+            'Revert', [program_version_diff, program_files_diff])
+        self.assertEqual(len(errors), 0)
+
+
 class CheckShaderVersionInShaderLangHeaderTest(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
