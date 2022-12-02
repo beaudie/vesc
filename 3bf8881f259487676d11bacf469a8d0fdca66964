@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2a107aa_fcd2010c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7787,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-02T10:23:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4daa534_2dab2249",
+      "range": {
+        "startLine": 7787,
+        "startChar": 12,
+        "endLine": 7787,
+        "endChar": 34
+      },
+      "revId": "3bf8881f259487676d11bacf469a8d0fdca66964",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "04b582d3_bb2ddcbc",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-12-01T18:29:54Z",
       "side": 1,
       "message": "Does this comment need to be updated as:\n```\nOnly call SetupReplayContext for secondary contexts that were current before MEC started\n```",
+      "range": {
+        "startLine": 8470,
+        "startChar": 0,
+        "endLine": 8473,
+        "endChar": 53
+      },
+      "revId": "3bf8881f259487676d11bacf469a8d0fdca66964",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af3bd267_cb4b64c5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8473,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-02T10:23:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04b582d3_bb2ddcbc",
       "range": {
         "startLine": 8470,
         "startChar": 0,
