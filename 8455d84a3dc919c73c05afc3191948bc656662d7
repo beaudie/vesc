@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bae22438_35e4fdb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T07:14:46Z",
+      "side": 1,
+      "message": "Further enhancement required before we can land a trace using the shader reset CL.\n\nIn this case, the app is simply deleting a program that was created in MEC.  It doesn\u0027t create a new one to replace it.  Without changes, we throw errors when trying to delete resources that have already been deleted.\n\nTo support this, we have to detect and react when a resource has been deleted but not recreated.",
+      "revId": "8455d84a3dc919c73c05afc3191948bc656662d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
