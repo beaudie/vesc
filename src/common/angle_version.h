@@ -8,6 +8,8 @@
 #ifndef COMMON_ANGLE_VERSION_H_
 #define COMMON_ANGLE_VERSION_H_
 
+#include "ANGLEShaderProgramVersion.h"
+#include "GLSLANG/ShaderLang.h"
 #include "angle_commit.h"
 
 #define ANGLE_MAJOR_VERSION 2
