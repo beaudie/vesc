@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6218ecbf_a40cbc2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T19:45:29Z",
+      "side": 1,
+      "message": "FYI, the presubmit unit tests are not automatically run, you\u0027d need to verify that locally",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "43a48f06_27db2b41",
@@ -139,6 +156,52 @@
       "writtenOn": "2022-12-02T19:44:05Z",
       "side": 1,
       "message": "MemoryBuffer really seems unnecessary",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7c8bba6_8576d2f9",
+        "filename": "scripts/angle_presubmit_utils_unittest.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T19:45:29Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 406,
+        "startChar": 34,
+        "endLine": 406,
+        "endChar": 35
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "959361c6_d2ef33d4",
+        "filename": "scripts/angle_presubmit_utils_unittest.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-02T19:45:29Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 418,
+        "startChar": 34,
+        "endLine": 418,
+        "endChar": 35
+      },
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
