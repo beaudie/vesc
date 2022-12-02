@@ -113,7 +113,7 @@ void MemoryProgramCache::ComputeHash(const Context *context,
     }
 
     // Add some ANGLE metadata and Context properties, such as version and back-end.
-    hashStream << angle::GetANGLECommitHash() << context->getClientMajorVersion()
+    hashStream << Context::ANGLE_PROGRAM_VERSION << context->getClientMajorVersion()
                << context->getClientMinorVersion() << context->getString(GL_RENDERER);
 
     // Hash pre-link program properties.
