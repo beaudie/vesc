@@ -291,14 +291,6 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
     copyPresentInfo(presentInfo);
 }
 
-void CommandProcessorTask::initResourceUseToFinish(const ResourceUse &use)
-{
-    // Note: sometimes the serial is not valid and that's okay, the finish will early exit in the
-    // TaskProcessor::finishResourceUse
-    mTask                = CustomTask::FinishResourceUse;
-    mResourceUseToFinish = use;
-}
-
 void CommandProcessorTask::initWaitIdle()
 {
     mTask = CustomTask::WaitIdle;
@@ -365,7 +357,6 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mCommandPools, rhs.mCommandPools);
     std::swap(mGarbage, rhs.mGarbage);
     std::swap(mCommandBuffersToReset, rhs.mCommandBuffersToReset);
-    std::swap(mResourceUseToFinish, rhs.mResourceUseToFinish);
     std::swap(mSubmitQueueSerial, rhs.mSubmitQueueSerial);
     std::swap(mPriority, rhs.mPriority);
     std::swap(mHasProtectedContent, rhs.mHasProtectedContent);
@@ -570,12 +561,6 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             ANGLE_TRY(mCommandQueue.checkCompletedCommands(this));
             break;
         }
-        case CustomTask::FinishResourceUse:
-        {
-            ANGLE_TRY(mCommandQueue.finishResourceUse(this, task->getResourceUseToFinish(),
-                                                      mRenderer->getMaxFenceWaitTimeNs()));
-            break;
-        }
         case CustomTask::WaitIdle:
         {
             ANGLE_TRY(mCommandQueue.waitIdle(this, mRenderer->getMaxFenceWaitTimeNs()));
@@ -692,21 +677,32 @@ bool CommandProcessor::isBusy() const
 }
 
 // Wait until all commands up to and including serial have been processed
+angle::Result CommandProcessor::finishQueueSerial(Context *context,
+                                                  const QueueSerial &queueSerial,
+                                                  uint64_t timeout)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishQueueSerial");
+    // If we still have inflight commands in processor that references this queueSerial, Wait until
+    // the worker is idle.
+    if (mCommandQueue.hasUnsubmittedUse(queueSerial))
+    {
+        ANGLE_TRY(waitForWorkComplete(context));
+    }
+    return mCommandQueue.finishQueueSerial(context, queueSerial, timeout);
+}
+
 angle::Result CommandProcessor::finishResourceUse(Context *context,
                                                   const ResourceUse &use,
                                                   uint64_t timeout)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishResourceUse");
-
-    ANGLE_TRY(checkAndPopPendingError(context));
-
-    CommandProcessorTask task;
-    task.initResourceUseToFinish(use);
-    queueCommand(std::move(task));
-
-    // Wait until the worker is idle. At that point we know that the finishResourceUse command has
-    // completed executing, including any associated state cleanup.
-    return waitForWorkComplete(context);
+    // If we still have inflight commands in processor that references this queueSerial, wait until
+    // the worker is idle.
+    if (mCommandQueue.hasUnsubmittedUse(use))
+    {
+        ANGLE_TRY(waitForWorkComplete(context));
+    }
+    return mCommandQueue.finishResourceUse(context, use, timeout);
 }
 
 angle::Result CommandProcessor::waitIdle(Context *context, uint64_t timeout)
@@ -1485,6 +1481,11 @@ bool CommandQueue::hasUnfinishedUse(const vk::ResourceUse &use) const
 bool CommandQueue::hasUnsubmittedUse(const vk::ResourceUse &use) const
 {
     return use > mLastSubmittedSerials;
+}
+
+bool CommandQueue::hasUnsubmittedUse(const QueueSerial &queueSerial) const
+{
+    return queueSerial > mLastSubmittedSerials;
 }
 
 size_t CommandQueue::getBatchCountUpToSerials(RendererVk *renderer,
