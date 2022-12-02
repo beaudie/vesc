@@ -34,6 +34,24 @@
       "parentUuid": "bd8b55da_3bf545f8",
       "revId": "0d7a4884ea026720e08f28c64e7b42ee2df76c30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e069be_ff1067a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T20:39:22Z",
+      "side": 1,
+      "message": "Still trying to land the roll, but I think the `smhasher` problem is solved.",
+      "parentUuid": "c38dc114_ca240bbc",
+      "revId": "0d7a4884ea026720e08f28c64e7b42ee2df76c30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
