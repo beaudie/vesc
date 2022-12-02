@@ -220,6 +220,8 @@ class ProgramAliasedBindings final : angle::NonCopyable
 
 class ProgramState final : angle::NonCopyable
 {
+    // Yuxin Debug make some change in Program file, but don't change ANGLE_PROGRAM_VERSION, see if
+    // the presubmit script fails.
   public:
     ProgramState();
     ~ProgramState();
