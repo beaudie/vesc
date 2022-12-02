@@ -208,6 +208,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f3700e0b_f2ec4e1d",
+        "filename": "src/libANGLE/ANGLEShaderProgramVersion.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-02T20:08:34Z",
+      "side": 1,
+      "message": "Is the intent that we hand modify this on every CL that touches these files?  I don\u0027t think that\u0027s going to scale well.  Can we autogenerate this before turning on the presubmit?",
+      "range": {
+        "startLine": 15,
+        "startChar": 19,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7800ada_00dc959e",
         "filename": "src/libANGLE/MemoryProgramCache.cpp",
         "patchSetId": 7
