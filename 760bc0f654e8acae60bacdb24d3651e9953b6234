@@ -16,6 +16,24 @@
       "message": "nit: typo: proerly -- \u003e properly",
       "revId": "760bc0f654e8acae60bacdb24d3651e9953b6234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3fb2d2d_1e680209",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-02T19:22:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96670ced_40ff122e",
+      "revId": "760bc0f654e8acae60bacdb24d3651e9953b6234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
