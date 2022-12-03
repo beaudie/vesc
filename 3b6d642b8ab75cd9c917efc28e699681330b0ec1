@@ -77,6 +77,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26a924cb_6c90d4f9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "In `Program::serialize()`, we are writing the `Context-\u003egetClientVersion().major` and `Context-\u003egetClientVersion().minor` into the binary blob data. We are also doing some condition check with `Context`: e.g. https://cs.android.com/android/platform/superproject/+/master:external/angle/src/libANGLE/Program.cpp;l\u003d3657. So I would think it makes sense to update the version number if these data member changed (name, data type, etc.) But when that happens we will also update the `Program::serialize()` code so it might be fine to skip Context.* check.",
+      "parentUuid": "97584ca9_75383155",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78418133_0a041403",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -94,6 +112,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ff98c26c_d17ad986",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "In these if statement checks:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3650\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3657\n\nThe code path goes through the State and Display class. e.g. `mDisplay-\u003egetFrontendFeatures();` is called on line 3650.\n\nSimilar to the above comment, if we ever change the the members in Display and State, we will update the `Program::Serialize()` and `Program::Deserialize()` code, too. So checking if `Program.h/.cpp` change should be good enough.",
+      "parentUuid": "78418133_0a041403",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "344a6a25_05e9bcf9",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -105,6 +141,24 @@
       "writtenOn": "2022-12-02T19:44:05Z",
       "side": 1,
       "message": "What\u0027s used from Compiler.h?",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e42cdd0_77c1766a",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "When writing `mState.mSpecConstUsageBits.bits()` into stream, https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3632. I realize the `SpecConstUsageBits` used here is under namespace `rx`, so I should include `src/libANGLE/renderer/renderer_utils.h` instead.",
+      "parentUuid": "344a6a25_05e9bcf9",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -145,6 +199,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d75f8f99_d2d67723",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "It is possible that we are writing `context-\u003egetShareGroup()-\u003egetFrameCaptureShared()-\u003egetProgramSources(id())` into the stream: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3675.\n\nWe are also doing the if condition check in FrameCapture: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3657.",
+      "parentUuid": "38e2216c_8927c541",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ec31ba3a_c832eeb1",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -156,6 +228,24 @@
       "writtenOn": "2022-12-02T19:44:05Z",
       "side": 1,
       "message": "MemoryBuffer really seems unnecessary",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a93232a3_6a1401a9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "I am thinking if the implementation of `binaryOut-\u003eresize()` changed: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3683, we should invalidate the cache.\n\nBut now thinking again, `binaryOut-\u003eresize()` only affects `serialize()`, and how it implements shouldn\u0027t affect the total size of the binary blob cache (which is determined by stream.length()).\n\nI will remove it.",
+      "parentUuid": "ec31ba3a_c832eeb1",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -183,6 +273,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b40a9c9_787244d4",
+        "filename": "scripts/angle_presubmit_utils_unittest.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "Thank you for catching that!",
+      "parentUuid": "d7c8bba6_8576d2f9",
+      "range": {
+        "startLine": 406,
+        "startChar": 34,
+        "endLine": 406,
+        "endChar": 35
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "959361c6_d2ef33d4",
@@ -196,6 +310,30 @@
       "writtenOn": "2022-12-02T19:45:29Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 418,
+        "startChar": 34,
+        "endLine": 418,
+        "endChar": 35
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6396f5cc_f63ca56f",
+        "filename": "scripts/angle_presubmit_utils_unittest.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-03T00:25:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "959361c6_d2ef33d4",
       "range": {
         "startLine": 418,
         "startChar": 34,
