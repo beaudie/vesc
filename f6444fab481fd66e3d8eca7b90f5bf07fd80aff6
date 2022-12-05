@@ -34,6 +34,24 @@
       "parentUuid": "c313b702_7670bd98",
       "revId": "f6444fab481fd66e3d8eca7b90f5bf07fd80aff6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d71cf2f6_24d60dd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-05T14:32:53Z",
+      "side": 1,
+      "message": "No, Chromium recipe doesn\u0027t have a mechanism to turn off \"without patch\" retries. We do turn off \"with patch\" retries.",
+      "parentUuid": "5cdd5ef0_0b982ac7",
+      "revId": "f6444fab481fd66e3d8eca7b90f5bf07fd80aff6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
