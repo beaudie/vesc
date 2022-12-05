@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24cae3cc_561ff12f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-05T16:01:03Z",
+      "side": 1,
+      "message": "LGTM, but let me know what you think about the other solution (adding includes to Skia targets) before landing.",
+      "revId": "366857b4ea4a013d6450af597b3720d942e4f394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
