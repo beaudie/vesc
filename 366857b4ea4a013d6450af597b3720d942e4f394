@@ -16,6 +16,24 @@
       "message": "LGTM, but let me know what you think about the other solution (adding includes to Skia targets) before landing.",
       "revId": "366857b4ea4a013d6450af597b3720d942e4f394",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9060a32_d8912bcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-12-05T16:06:35Z",
+      "side": 1,
+      "message": "Ah, yes. Agreed - that\u0027s cleaner and more explicit about what\u0027s going on. I\u0027ll land that fix as part of a manual roll. Thanks!",
+      "parentUuid": "24cae3cc_561ff12f",
+      "revId": "366857b4ea4a013d6450af597b3720d942e4f394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
