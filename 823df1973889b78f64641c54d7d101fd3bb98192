@@ -22,6 +22,30 @@
       },
       "revId": "823df1973889b78f64641c54d7d101fd3bb98192",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dffa4a2_16a5fc57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-05T21:52:35Z",
+      "side": 1,
+      "message": "Snipet from https://en.cppreference.com/w/cpp/atomic/memory_order\n\"Writes to data-dependent variables in other threads that release the same atomic variable are visible in the current thread.\". That is exactly what I need here.\n\nIn reality, this atomic is not even needed. What this try to protect here is another thread allocate a new index that is 64, and use it in a mUse. Then this mUse gets passed into this thread and end up in GetBatchCountUpToSerials() but this thread reads mLargestIndexEverAllocated and got 63. The chance of this actual can happen is zero. You have to go through at least the submitQueueMutex, and mutex lock will insert some memory ordering instructions anyway. But anyway, without atomic, tsan might still coimplain, and atomic does not hurt on 64bit platform anyway.",
+      "parentUuid": "2e9ff76e_b4db64a8",
+      "range": {
+        "startLine": 231,
+        "startChar": 52,
+        "endLine": 231,
+        "endChar": 72
+      },
+      "revId": "823df1973889b78f64641c54d7d101fd3bb98192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
