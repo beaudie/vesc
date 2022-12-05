@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/gl/ProgramGL.h"
 
+#include "common/Uniform.h"
 #include "common/WorkerThread.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
@@ -16,7 +17,6 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/ProgramLinkedResources.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/gl/ContextGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"

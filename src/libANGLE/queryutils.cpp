@@ -10,6 +10,7 @@
 
 #include <algorithm>
 
+#include "common/Uniform.h"
 #include "common/utilities.h"
 
 #include "libANGLE/Buffer.h"
@@ -27,7 +28,6 @@
 #include "libANGLE/Shader.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VertexAttribute.h"
 #include "libANGLE/queryconversions.h"
 

@@ -78,7 +78,6 @@ angle_translator_sources = [
   "src/compiler/translator/QualifierTypes.h",
   "src/compiler/translator/Severity.h",
   "src/compiler/translator/ShaderLang.cpp",
-  "src/compiler/translator/ShaderVars.cpp",
   "src/compiler/translator/StaticType.h",
   "src/compiler/translator/Symbol.cpp",
   "src/compiler/translator/Symbol.h",

@@ -13,7 +13,7 @@
 
 #include "common/Color.h"
 #include "common/FixedVector.h"
-#include "libANGLE/Uniform.h"
+#include "common/Uniform.h"
 #include "libANGLE/renderer/ShaderInterfaceVariableInfoMap.h"
 #include "libANGLE/renderer/vulkan/ResourceVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"

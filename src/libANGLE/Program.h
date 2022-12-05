@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "common/Optional.h"
+#include "common/Uniform.h"
 #include "common/angleutils.h"
 #include "common/mathutil.h"
 #include "common/utilities.h"
@@ -32,7 +33,6 @@
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/RefCountObject.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/angletypes.h"
 
 namespace rx

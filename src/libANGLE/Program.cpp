@@ -24,7 +24,6 @@
 #include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/ResourceManager.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/Version.h"
 #include "libANGLE/capture/FrameCapture.h"

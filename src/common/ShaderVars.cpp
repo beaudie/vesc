@@ -7,8 +7,6 @@
 //  Methods for GL variable types (varyings, uniforms, etc)
 //
 
-#include <GLSLANG/ShaderLang.h>
-
 #include "common/debug.h"
 #include "common/utilities.h"
 

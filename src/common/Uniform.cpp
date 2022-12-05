@@ -4,7 +4,7 @@
 // found in the LICENSE file.
 //
 
-#include "libANGLE/Uniform.h"
+#include "common/Uniform.h"
 
 #include <cstring>
 
@@ -15,7 +15,7 @@ ActiveVariable::ActiveVariable() {}
 
 ActiveVariable::~ActiveVariable() {}
 
-ActiveVariable::ActiveVariable(const ActiveVariable &rhs) = default;
+ActiveVariable::ActiveVariable(const ActiveVariable &rhs)            = default;
 ActiveVariable &ActiveVariable::operator=(const ActiveVariable &rhs) = default;
 
 void ActiveVariable::setActive(ShaderType shaderType, bool used)
@@ -94,12 +94,12 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
     sh::ShaderVariable::operator=(uniform);
-    ActiveVariable::operator    =(uniform);
-    typeInfo                    = uniform.typeInfo;
-    bufferIndex                 = uniform.bufferIndex;
-    blockInfo                   = uniform.blockInfo;
-    outerArraySizes             = uniform.outerArraySizes;
-    outerArrayOffset            = uniform.outerArrayOffset;
+    ActiveVariable::operator=(uniform);
+    typeInfo         = uniform.typeInfo;
+    bufferIndex      = uniform.bufferIndex;
+    blockInfo        = uniform.blockInfo;
+    outerArraySizes  = uniform.outerArraySizes;
+    outerArrayOffset = uniform.outerArrayOffset;
     return *this;
 }
 

@@ -4,6 +4,7 @@
 import("../gni/angle.gni")
 
 libangle_common_sources = [
+  "src/common/BinaryStream.h",
   "src/common/CircularBuffer.h",
   "src/common/Color.h",
   "src/common/Color.inc",
@@ -21,8 +22,11 @@ libangle_common_sources = [
   "src/common/PackedGLEnums_autogen.h",
   "src/common/PoolAlloc.cpp",
   "src/common/PoolAlloc.h",
+  "src/common/ShaderVars.cpp",
   "src/common/Spinlock.h",
   "src/common/SynchronizedValue.h",
+  "src/common/Uniform.cpp",
+  "src/common/Uniform.h",
   "src/common/WorkerThread.cpp",
   "src/common/WorkerThread.h",
   "src/common/aligned_memory.cpp",
@@ -224,7 +228,6 @@ libangle_includes = [
 
 libangle_headers = [
   "src/libANGLE/AttributeMap.h",
-  "src/libANGLE/BinaryStream.h",
   "src/libANGLE/BlobCache.h",
   "src/libANGLE/Buffer.h",
   "src/libANGLE/Caps.h",
@@ -290,7 +293,6 @@ libangle_headers = [
   "src/libANGLE/Texture.h",
   "src/libANGLE/Thread.h",
   "src/libANGLE/TransformFeedback.h",
-  "src/libANGLE/Uniform.h",
   "src/libANGLE/VaryingPacking.h",
   "src/libANGLE/Version.h",
   "src/libANGLE/Version.inc",
@@ -420,7 +422,6 @@ libangle_sources = [
   "src/libANGLE/Texture.cpp",
   "src/libANGLE/Thread.cpp",
   "src/libANGLE/TransformFeedback.cpp",
-  "src/libANGLE/Uniform.cpp",
   "src/libANGLE/VaryingPacking.cpp",
   "src/libANGLE/VertexArray.cpp",
   "src/libANGLE/VertexAttribute.cpp",

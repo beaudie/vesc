@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
 
 #include "common/MemoryBuffer.h"
+#include "common/Uniform.h"
 #include "common/bitset_utils.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
@@ -17,7 +18,6 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramLinkedResources.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/features.h"
 #include "libANGLE/queryconversions.h"

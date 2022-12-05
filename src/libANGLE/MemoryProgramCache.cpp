@@ -16,12 +16,12 @@
 #include <GLSLANG/ShaderVars.h>
 #include <anglebase/sha1.h>
 
+#include "common/BinaryStream.h"
+#include "common/Uniform.h"
 #include "common/angle_version_info.h"
 #include "common/utilities.h"
-#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/capture/FrameCapture.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/renderer/ProgramImpl.h"

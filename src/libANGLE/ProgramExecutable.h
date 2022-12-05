@@ -9,12 +9,12 @@
 #ifndef LIBANGLE_PROGRAMEXECUTABLE_H_
 #define LIBANGLE_PROGRAMEXECUTABLE_H_
 
-#include "BinaryStream.h"
+#include "common/BinaryStream.h"
+#include "common/Uniform.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/InfoLog.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/Shader.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/angletypes.h"
 

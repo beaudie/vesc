@@ -20,10 +20,10 @@
 #include <GLSLANG/ShaderLang.h>
 #include "angle_gl.h"
 
+#include "common/BinaryStream.h"
 #include "common/MemoryBuffer.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
-#include "libANGLE/BinaryStream.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Debug.h"

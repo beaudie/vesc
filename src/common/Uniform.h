@@ -10,12 +10,12 @@
 #include <string>
 #include <vector>
 
+#include "GLSLANG/ShaderVars.h"
 #include "angle_gl.h"
 #include "common/MemoryBuffer.h"
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "compiler/translator/blocklayout.h"
-#include "libANGLE/angletypes.h"
 
 namespace gl
 {

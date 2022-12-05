@@ -10,6 +10,7 @@
 
 #include <cstdint>
 
+#include "common/Uniform.h"
 #include "common/mathutil.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
@@ -22,7 +23,6 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/Texture.h"
-#include "libANGLE/Uniform.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/validationES.h"
