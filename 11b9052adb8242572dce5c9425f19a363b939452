@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fef79052_a4197306",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-05T19:10:01Z",
+      "side": 1,
+      "message": "LGTM. Would \"--no-warmup\" more explicit for what it is doing?",
+      "revId": "11b9052adb8242572dce5c9425f19a363b939452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
