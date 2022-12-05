@@ -69,6 +69,24 @@
       "message": "This also appears to break Skia builds on Windows: https://logs.chromium.org/logs/skia/5efa1bbc01c89e11/+/steps/ninja/0/stdout\n\nIt looks like our GN target that depends on \":libEGL\" no longer has visibility into the EGL include directory. From looking at the before/after of the GN file. \"libEGL\" used to add \":includes\" to public_deps, but now it only adds it to deps?",
       "revId": "aaee3c23c1d8e5217df07a4299ed58146c56c478",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc2654c1_20a70891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-05T16:00:13Z",
+      "side": 1,
+      "message": "Not an intended change but I could see that it\u0027d be better for you to manually include ANGLE\u0027s \"includes\" target. Just because we provide a library doesn\u0027t necessarily mean that other users of ANGLE want to use ANGLE\u0027s copies of the GLES/EGL headers. WDYT?",
+      "parentUuid": "a15b0002_dc86f9de",
+      "revId": "aaee3c23c1d8e5217df07a4299ed58146c56c478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
