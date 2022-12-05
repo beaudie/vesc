@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab47867d_870971c4",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-05T17:30:01Z",
+      "side": 1,
+      "message": "I believe dma_bufs are strictly supported by linux platforms.",
+      "parentUuid": "66733ab9_43cbc65c",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 0
+      },
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6995c07e_22f2450b",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 6
