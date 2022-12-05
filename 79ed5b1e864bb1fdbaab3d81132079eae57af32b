@@ -67,6 +67,23 @@
       "message": "@m.maiya@samsung.com\n\nPlease give a vote. \nI could build successfully for both linux and android.",
       "revId": "79ed5b1e864bb1fdbaab3d81132079eae57af32b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b594208e_f491ffcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-05T00:13:13Z",
+      "side": 1,
+      "message": "I need to do rebase.\nI\u0027ll rebase and re-build for linux and android.",
+      "revId": "79ed5b1e864bb1fdbaab3d81132079eae57af32b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
