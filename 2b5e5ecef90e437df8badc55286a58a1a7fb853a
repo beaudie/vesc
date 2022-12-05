@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2fbf456_9520643e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-05T01:32:15Z",
+      "side": 1,
+      "message": "@m.maiya@samsung.com\n\nI rebased and tested linux/android build and running applications with our board.\nPlease give a vote.",
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
