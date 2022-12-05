@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e9ff76e_b4db64a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T21:06:48Z",
+      "side": 1,
+      "message": "I don\u0027t recall all the details, but I suspect this should be acquire. Looks like consume is only about compiler moving things around, and not dealing with the cache etc.\n\nOr maybe just return the value and let it be a full memory order",
+      "range": {
+        "startLine": 231,
+        "startChar": 52,
+        "endLine": 231,
+        "endChar": 72
+      },
+      "revId": "823df1973889b78f64641c54d7d101fd3bb98192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
