@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3dcf377_ffbb5393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T22:47:15Z",
+      "side": 1,
+      "message": "My testing again didn\u0027t show any difference, and still no luck with AGI to check the counters.\n\nBut again it\u0027s an obvious better-than-before change. The programs are already being compiled separately based on whether each texture unit is enabled or not, so doing more optimizations with that information doesn\u0027t lead to more programs, just better shaders.",
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
