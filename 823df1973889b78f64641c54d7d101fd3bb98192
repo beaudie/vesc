@@ -46,6 +46,30 @@
       },
       "revId": "823df1973889b78f64641c54d7d101fd3bb98192",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d804d2_496d458b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T22:03:50Z",
+      "side": 1,
+      "message": "Ack, consume should be fine.",
+      "parentUuid": "5dffa4a2_16a5fc57",
+      "range": {
+        "startLine": 231,
+        "startChar": 52,
+        "endLine": 231,
+        "endChar": 72
+      },
+      "revId": "823df1973889b78f64641c54d7d101fd3bb98192",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
