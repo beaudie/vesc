@@ -16,6 +16,24 @@
       "message": "When I tested with the same code on our environment (Linux Wayland Vulkan + Linux GBM Vulkan), there was no such error.\nBut it seems to be restrict access for Windows platform.\n\n@syoussefi@chromium.org\nShould we restrict access to this extension for Windows ?\nWhen I see SyncWaitFd(), there is no implementation for Windows.\nOr, isn\u0027t the function, SyncWaitFd(), called by windows?",
       "revId": "5fd5dc92e7c35a46ef99e588661ccf8a1a300ed3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9581635c_3e58db7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-05T17:13:30Z",
+      "side": 1,
+      "message": "No it seems we need to add back some form of #if that restricts to just platforms that support the android sync FD.",
+      "parentUuid": "622ca5ce_fedbf7e2",
+      "revId": "5fd5dc92e7c35a46ef99e588661ccf8a1a300ed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
