@@ -52,6 +52,23 @@
       "parentUuid": "be65c9da_c5e15a8a",
       "revId": "aaee3c23c1d8e5217df07a4299ed58146c56c478",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15b0002_dc86f9de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2022-12-05T15:14:17Z",
+      "side": 1,
+      "message": "This also appears to break Skia builds on Windows: https://logs.chromium.org/logs/skia/5efa1bbc01c89e11/+/steps/ninja/0/stdout\n\nIt looks like our GN target that depends on \":libEGL\" no longer has visibility into the EGL include directory. From looking at the before/after of the GN file. \"libEGL\" used to add \":includes\" to public_deps, but now it only adds it to deps?",
+      "revId": "aaee3c23c1d8e5217df07a4299ed58146c56c478",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
