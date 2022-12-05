@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d36c71f_b0910e9a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-05T11:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1fd9a99_37cfe46c",
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1a36916c_63a7303b",
@@ -82,6 +100,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd51fc94_bdf8c25b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3907,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-05T11:38:51Z",
+      "side": 1,
+      "message": "Actually, in this case (packState) the value is only used locally, and passed directly into `get(Compressed)TexImage` so there is no need to set it in the replay state like the PixelUnpackState alignment value.",
+      "parentUuid": "646a9a21_5421364a",
+      "range": {
+        "startLine": 3907,
+        "startChar": 25,
+        "endLine": 3907,
+        "endChar": 26
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74319a93_ac6bdc48",
@@ -105,6 +147,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0eb8c6d_5af18516",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4253,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-05T11:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74319a93_ac6bdc48",
+      "range": {
+        "startLine": 4253,
+        "startChar": 0,
+        "endLine": 4253,
+        "endChar": 60
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cfa3fab8_53e7ea35",
@@ -118,6 +184,30 @@
       "writtenOn": "2022-11-29T14:10:02Z",
       "side": 1,
       "message": "Here too",
+      "range": {
+        "startLine": 4392,
+        "startChar": 0,
+        "endLine": 4392,
+        "endChar": 41
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cc5923_9cc64864",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4392,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-05T11:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfa3fab8_53e7ea35",
       "range": {
         "startLine": 4392,
         "startChar": 0,
@@ -165,6 +255,30 @@
       "side": 1,
       "message": "Same here",
       "parentUuid": "718aaee3_6159d5be",
+      "range": {
+        "startLine": 5050,
+        "startChar": 0,
+        "endLine": 5050,
+        "endChar": 65
+      },
+      "revId": "a8faf6d5180a3031ee8f5f51e244eff240f6fa4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c71e322_2067bfef",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5050,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-05T11:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8d46d4d_e1c404ae",
       "range": {
         "startLine": 5050,
         "startChar": 0,
