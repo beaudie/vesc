@@ -16,6 +16,52 @@
       "message": "@m.maiya@samsung.com\n\nI rebased and tested linux/android build and running applications with our board.\nPlease give a vote.",
       "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66733ab9_43cbc65c",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-05T14:36:22Z",
+      "side": 1,
+      "message": "Please move these out of the /linux/ folder, or if they only work on Linux, please move them behind a flag that gates them to the right platform(s).",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 0
+      },
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6995c07e_22f2450b",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-05T14:36:22Z",
+      "side": 1,
+      "message": "reference.",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 12
+      },
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
