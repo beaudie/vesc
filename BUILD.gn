@@ -1539,6 +1539,8 @@ template("libEGL_shared_template") {
       ":libEGL_egl_loader",
     ]
 
+    public_deps = [ ":includes" ]
+
     sources += invoker.sources
 
     if (is_win) {
