@@ -95,6 +95,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "538b9c93_bc64fb80",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T15:29:57Z",
+      "side": 1,
+      "message": "That\u0027s right, if the interface to these change, the `Program::serialize()` function would have to be adapted. At least the checks you mentioned don\u0027t warrant a need for a version bump if Context.* change.",
+      "parentUuid": "26a924cb_6c90d4f9",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78418133_0a041403",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -130,6 +148,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "055461d1_fb0d4dad",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T15:29:57Z",
+      "side": 1,
+      "message": "Yes, also similar",
+      "parentUuid": "ff98c26c_d17ad986",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "344a6a25_05e9bcf9",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -159,6 +195,24 @@
       "side": 1,
       "message": "When writing `mState.mSpecConstUsageBits.bits()` into stream, https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3632. I realize the `SpecConstUsageBits` used here is under namespace `rx`, so I should include `src/libANGLE/renderer/renderer_utils.h` instead.",
       "parentUuid": "344a6a25_05e9bcf9",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e869eb16_42c18790",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-05T15:29:57Z",
+      "side": 1,
+      "message": "I took a look and, spec const usage is actually no longer used anywhere! I removed a lot of the spec consts in go/vangle-with-pipeline-libraries#heading\u003dh.thcqjveobs3d and evidently missed this clean up.\n\nCurrently, SpecConstUsage only has Rotation and Dither, the former is always set and the latter is redundant with the backend feature flag, so the code never checks for it.\n\nWould you be able to rip that out entirely? Then you can remove this dependency (your choice whether you\u0027d do that before or after this change)",
+      "parentUuid": "8e42cdd0_77c1766a",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
