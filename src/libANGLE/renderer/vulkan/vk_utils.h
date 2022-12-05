@@ -227,11 +227,14 @@ class QueueSerialIndexAllocator final
         }
     }
 
-    size_t getLarrgestAllocatedIndex() const { return mLargestAllocatedIndex; }
+    size_t getLarrgestAllocatedIndex() const
+    {
+        return mLargestAllocatedIndex.load(std::memory_order_consume);
+    }
 
   private:
     angle::BitSetArray<kMaxQueueSerialIndexCount> mFreeIndexBitSetArray;
-    size_t mLargestAllocatedIndex;
+    std::atomic<size_t> mLargestAllocatedIndex;
     std::mutex mMutex;
 };
 
