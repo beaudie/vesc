@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "4df62bcb_f56b47b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-06T20:41:25Z",
+      "side": 1,
+      "message": "It\u0027s OK, let\u0027s go ahead with this change.",
+      "parentUuid": "96cd6438_3b71fadb",
+      "revId": "cfa5fa247b9162eaaa0e1b151e1718753750cd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "2ca93a48_fd035886",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
