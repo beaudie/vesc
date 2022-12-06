@@ -3725,6 +3725,18 @@ bool GetQueryParameterInfo(const State &glState,
                 return true;
         }
     }
+    // Check for ES2.0+ parameter names
+    if (glState.getClientVersion() >= Version(2, 0))
+    {
+        switch (pname)
+        {
+            case GL_FETCH_PER_SAMPLE_ARM:
+            case GL_FRAGMENT_SHADER_FRAMEBUFFER_FETCH_MRT_ARM:
+                *type      = GL_BOOL;
+                *numParams = 1;
+                return true;
+        }
+    }
 
     if (glState.getClientVersion() < Version(3, 0))
     {

@@ -1082,6 +1082,7 @@ enum TQualifier
     // built-ins written by the shader_framebuffer_fetch extension(s)
     EvqLastFragColor,
     EvqLastFragData,
+    EvqLastFragColorARM,
 
     // GLSL ES 3.0 vertex output and fragment input
     EvqSmooth,         // Incomplete qualifier, smooth is the default
