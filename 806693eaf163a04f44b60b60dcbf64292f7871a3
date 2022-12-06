@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd976e94_b55a1dd0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-06T15:46:06Z",
+      "side": 1,
+      "message": "I\u0027ll remove this before submission. But for discussion\u0027s sake:\n\nBasically we need to make sure the main thread is not blocked on the worker thread because of the mutex held for pipeline creation. On drivers that don\u0027t reuse the blobs from the partial pipelines in the monolithic pipeline, it\u0027s a no-brainer, we should just use a separate cache for these. Otherwise, cost/benefit analysis should be done. Perhaps I should just put this under a feature?",
+      "revId": "806693eaf163a04f44b60b60dcbf64292f7871a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
