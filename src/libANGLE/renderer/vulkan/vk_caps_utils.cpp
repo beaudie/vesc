@@ -104,24 +104,24 @@ bool GetTextureSRGBOverrideSupport(const RendererVk *rendererVk,
     // format. If the given linear format is NOT supported, we don't care about its corresponding
     // nonlinear format.
     std::vector<GLenum> optionalLinearFormats     = {GL_RGB8,
-                                                     GL_RGBA8,
-                                                     GL_COMPRESSED_RGB8_ETC2,
-                                                     GL_COMPRESSED_RGBA8_ETC2_EAC,
-                                                     GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
-                                                     GL_COMPRESSED_RGBA_ASTC_4x4,
-                                                     GL_COMPRESSED_RGBA_ASTC_5x4,
-                                                     GL_COMPRESSED_RGBA_ASTC_5x5,
-                                                     GL_COMPRESSED_RGBA_ASTC_6x5,
-                                                     GL_COMPRESSED_RGBA_ASTC_6x6,
-                                                     GL_COMPRESSED_RGBA_ASTC_8x5,
-                                                     GL_COMPRESSED_RGBA_ASTC_8x6,
-                                                     GL_COMPRESSED_RGBA_ASTC_8x8,
-                                                     GL_COMPRESSED_RGBA_ASTC_10x5,
-                                                     GL_COMPRESSED_RGBA_ASTC_10x6,
-                                                     GL_COMPRESSED_RGBA_ASTC_10x8,
-                                                     GL_COMPRESSED_RGBA_ASTC_10x10,
-                                                     GL_COMPRESSED_RGBA_ASTC_12x10,
-                                                     GL_COMPRESSED_RGBA_ASTC_12x12};
+                                                 GL_RGBA8,
+                                                 GL_COMPRESSED_RGB8_ETC2,
+                                                 GL_COMPRESSED_RGBA8_ETC2_EAC,
+                                                 GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2,
+                                                 GL_COMPRESSED_RGBA_ASTC_4x4,
+                                                 GL_COMPRESSED_RGBA_ASTC_5x4,
+                                                 GL_COMPRESSED_RGBA_ASTC_5x5,
+                                                 GL_COMPRESSED_RGBA_ASTC_6x5,
+                                                 GL_COMPRESSED_RGBA_ASTC_6x6,
+                                                 GL_COMPRESSED_RGBA_ASTC_8x5,
+                                                 GL_COMPRESSED_RGBA_ASTC_8x6,
+                                                 GL_COMPRESSED_RGBA_ASTC_8x8,
+                                                 GL_COMPRESSED_RGBA_ASTC_10x5,
+                                                 GL_COMPRESSED_RGBA_ASTC_10x6,
+                                                 GL_COMPRESSED_RGBA_ASTC_10x8,
+                                                 GL_COMPRESSED_RGBA_ASTC_10x10,
+                                                 GL_COMPRESSED_RGBA_ASTC_12x10,
+                                                 GL_COMPRESSED_RGBA_ASTC_12x12};
     std::vector<GLenum> optionalS3TCLinearFormats = {
         GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,
         GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT};
@@ -935,6 +935,8 @@ void RendererVk::ensureCapsInitialized() const
         // Enable GL_EXT_shader_framebuffer_fetch
         // gl::IMPLEMENTATION_MAX_DRAW_BUFFERS is used to support the extension.
         mNativeExtensions.shaderFramebufferFetchEXT =
+            mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+        mNativeExtensions.shaderFramebufferFetchARM =
             mNativeCaps.maxDrawBuffers >= gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
     }
 
