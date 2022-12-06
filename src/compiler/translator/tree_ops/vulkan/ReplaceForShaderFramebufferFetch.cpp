@@ -50,6 +50,7 @@ class InputAttachmentReferenceTraverser : public TIntermTraverser
 
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override;
     bool visitBinary(Visit visit, TIntermBinary *node) override;
+    void visitSymbol(TIntermSymbol *node) override;
 
   private:
     void setInputAttachmentIndex(unsigned int index);
@@ -183,6 +184,19 @@ bool InputAttachmentReferenceTraverser::visitBinary(Visit visit, TIntermBinary *
     }
 
     return true;
+}
+
+void InputAttachmentReferenceTraverser::visitSymbol(TIntermSymbol *symbol)
+{
+    if (symbol->getName() != "gl_LastFragColorARM")
+    {
+        return;
+    }
+
+    const unsigned int inputAttachmentIdx =
+        std::max(0, symbol->getType().getLayoutQualifier().location);
+    setInputAttachmentIndex(inputAttachmentIdx);
+    mDeclaredSym->emplace(inputAttachmentIdx, symbol);
 }
 
 bool ReplaceVariableTraverser::visitDeclaration(Visit visit, TIntermDeclaration *node)
@@ -671,6 +685,71 @@ bool ReplaceInOutUtils::loadInputAttachmentData()
     return true;
 }
 
+class ReplaceGlLastFragColorUtils : public ReplaceSubpassInputUtils
+{
+  public:
+    ReplaceGlLastFragColorUtils(TCompiler *compiler,
+                                TSymbolTable *symbolTable,
+                                TIntermBlock *root,
+                                std::vector<ShaderVariable> *uniforms,
+                                const bool usedNonConstIndex,
+                                const InputAttachmentIdxSet &constIndices,
+                                const std::map<unsigned int, TIntermSymbol *> &declaredVarVec)
+        : ReplaceSubpassInputUtils(compiler,
+                                   symbolTable,
+                                   root,
+                                   uniforms,
+                                   usedNonConstIndex,
+                                   constIndices,
+                                   declaredVarVec)
+    {}
+
+    bool declareSubpassInputVariables() override;
+    bool loadInputAttachmentData() override;
+};
+
+bool ReplaceGlLastFragColorUtils::declareSubpassInputVariables()
+{
+    for (auto declaredVar : mDeclaredVarVec)
+    {
+        const unsigned int inputAttachmentIndex = declaredVar.first;
+        if (mConstIndices.test(inputAttachmentIndex))
+        {
+            if (!declareSubpassInputVariableImpl(declaredVar.second, inputAttachmentIndex))
+            {
+                return false;
+            }
+
+            addInputAttachmentUniform(inputAttachmentIndex);
+        }
+    }
+
+    return true;
+}
+
+bool ReplaceGlLastFragColorUtils::loadInputAttachmentData()
+{
+    TIntermNode *loadInputAttachmentBlock = new TIntermBlock();
+
+    for (auto declaredVar : mDeclaredVarVec)
+    {
+        const unsigned int inputAttachmentIndex = declaredVar.first;
+        if (mConstIndices.test(inputAttachmentIndex))
+        {
+            loadInputAttachmentBlock->getAsBlock()->appendStatement(loadInputAttachmentDataImpl(
+                kArraySizeZero, inputAttachmentIndex, mDataLoadVarList[kArraySizeZero]));
+        }
+    }
+
+    ASSERT(loadInputAttachmentBlock->getChildCount() > 0);
+    if (!RunAtTheBeginningOfShader(mCompiler, mRoot, loadInputAttachmentBlock))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 [[nodiscard]] bool ReplaceInOutVariables(TCompiler *compiler,
                                          TIntermBlock *root,
                                          TSymbolTable *symbolTable,
@@ -743,4 +822,76 @@ bool ReplaceInOutUtils::loadInputAttachmentData()
     return replaceTraverser.updateTree(compiler, root);
 }
 
+[[nodiscard]] bool ReplaceLastFragColor(TCompiler *compiler,
+                                        TIntermBlock *root,
+                                        TSymbolTable *symbolTable,
+                                        std::vector<ShaderVariable> *uniforms)
+{
+    // Common variables
+    InputAttachmentIdxSet constIndices;
+    std::map<unsigned int, TIntermSymbol *> glLastFragColorUsageMap;
+    unsigned int maxInputAttachmentIndex = 0;
+    bool usedNonConstIndex               = false;
+
+    // Get informations for gl_LastFragColor
+    InputAttachmentReferenceTraverser informationTraverser(
+        &glLastFragColorUsageMap, &maxInputAttachmentIndex, &constIndices, &usedNonConstIndex);
+    root->traverse(&informationTraverser);
+    if (constIndices.none() && !usedNonConstIndex)
+    {
+        // No references of gl_LastFragColor
+        return true;
+    }
+
+    // Declare subpassInput uniform variables
+    ReplaceGlLastFragColorUtils replaceSubpassInputUtils(compiler, symbolTable, root, uniforms,
+                                                         usedNonConstIndex, constIndices,
+                                                         glLastFragColorUsageMap);
+    if (!replaceSubpassInputUtils.declareSubpassInputVariables())
+    {
+        return false;
+    }
+
+    // Declare the variables which store the result of subpassLoad function
+    const TVariable *glLastFragColorVar = nullptr;
+    if (glLastFragColorUsageMap.size() > 0)
+    {
+        glLastFragColorVar = &glLastFragColorUsageMap.begin()->second->variable();
+    }
+    else
+    {
+        glLastFragColorVar = static_cast<const TVariable *>(
+            symbolTable->findBuiltIn(ImmutableString("gl_LastFragColorARM"), 200));
+    }
+    if (!glLastFragColorVar)
+    {
+        return false;
+    }
+
+    ImmutableString loadVarName("ANGLELastFragData");
+    TType *loadVarType = new TType(glLastFragColorVar->getType());
+    loadVarType->setQualifier(EvqGlobal);
+
+    TVariable *loadVar =
+        new TVariable(symbolTable, loadVarName, loadVarType, SymbolType::AngleInternal);
+    replaceSubpassInputUtils.declareVariablesForFetch(kInputAttachmentZero, loadVar);
+
+    replaceSubpassInputUtils.submitNewDeclaration();
+
+    // 3) Add the routine for reading InputAttachment data
+    if (!replaceSubpassInputUtils.loadInputAttachmentData())
+    {
+        return false;
+    }
+
+    // 4) Replace gl_LastFragData with ANGLELastFragData
+    ReplaceVariableTraverser replaceTraverser(glLastFragColorVar, new TIntermSymbol(loadVar));
+    root->traverse(&replaceTraverser);
+    if (!replaceTraverser.updateTree(compiler, root))
+    {
+        return false;
+    }
+
+    return true;
+}
 }  // namespace sh
