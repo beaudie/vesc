@@ -120,6 +120,13 @@ bool InputAttachmentReferenceTraverser::visitDeclaration(Visit visit, TIntermDec
 
         mDeclaredSym->emplace(inputAttachmentIdx, symbol);
     }
+    else if (symbol->getType().getQualifier() == EvqLastFragColor)
+    {
+        const unsigned int inputAttachmentIdx =
+            std::max(0, symbol->getType().getLayoutQualifier().location);
+        setInputAttachmentIndex(inputAttachmentIdx);
+        mDeclaredSym->emplace(inputAttachmentIdx, symbol);
+    }
 
     return true;
 }

@@ -28,6 +28,12 @@ struct ShaderVariable;
                                        TSymbolTable *symbolTable,
                                        std::vector<ShaderVariable> *uniforms);
 
+// Same as ReplaceLastFragData, but replacing gl_LastFragColorARM with ANGLELastFragData[0].
+[[nodiscard]] bool ReplaceLastFragDataARM(TCompiler *compiler,
+                                          TIntermBlock *root,
+                                          TSymbolTable *symbolTable,
+                                          std::vector<ShaderVariable> *uniforms);
+
 // Similar to "ANGLELastFragData", but the difference is the variable for loading a framebuffer
 // data. The variable decorated with a inout qualifier will be replaced to the variable decorated
 // with a out qualifier. And this variable will be used to load the framebuffer data.
