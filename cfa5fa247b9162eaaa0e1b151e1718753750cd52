@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "96cd6438_3b71fadb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-06T20:04:31Z",
+      "side": 1,
+      "message": "Done.\n\nIt doesn\u0027t move the needle on the use cases I\u0027ve tried. If you want to hold off until we have meaningful results I\u0027m fine with that too.",
+      "parentUuid": "b6d2d4c4_71578b2f",
+      "revId": "cfa5fa247b9162eaaa0e1b151e1718753750cd52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "2ca93a48_fd035886",
