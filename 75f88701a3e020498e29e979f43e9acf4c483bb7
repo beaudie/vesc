@@ -67,6 +67,23 @@
       "message": "@Sungyong you might need to rebase on tip",
       "revId": "75f88701a3e020498e29e979f43e9acf4c483bb7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2768e73c_1273397b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-06T23:39:22Z",
+      "side": 1,
+      "message": "Below change needs to be resolved. \n\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4027707/5\n\nI\u0027ll leave comment after finishing the review.\nThank you!",
+      "revId": "75f88701a3e020498e29e979f43e9acf4c483bb7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
