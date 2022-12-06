@@ -174,8 +174,8 @@ struct ShaderVariable
     bool isSameNameAtLinkTime(const ShaderVariable &other) const;
 
     // NOTE: When adding new members, the following functions also need to be updated:
-    // gl::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
-    // gl::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
+    // sh::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
+    // sh::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
 
     GLenum type;
     GLenum precision;
@@ -243,8 +243,8 @@ struct ShaderVariable
                                   bool matchName) const;
 
     // NOTE: When adding new members, the following functions also need to be updated:
-    // gl::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
-    // gl::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
+    // sh::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
+    // sh::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
 
     int flattenedOffsetInParentArrays;
 };

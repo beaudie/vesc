@@ -566,7 +566,7 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
         for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
         {
             sh::BlockMemberInfo blockInfo;
-            gl::LoadBlockMemberInfo(stream, &blockInfo);
+            sh::LoadBlockMemberInfo(stream, &blockInfo);
             mDefaultUniformBlocks[shaderType]->uniformLayout.push_back(blockInfo);
         }
     }
@@ -683,7 +683,7 @@ void ProgramExecutableVk::save(ContextVk *contextVk,
         {
             sh::BlockMemberInfo &blockInfo =
                 mDefaultUniformBlocks[shaderType]->uniformLayout[uniformIndex];
-            gl::WriteBlockMemberInfo(stream, blockInfo);
+            sh::WriteBlockMemberInfo(stream, blockInfo);
         }
     }
 

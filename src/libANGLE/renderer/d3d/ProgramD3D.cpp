@@ -1068,7 +1068,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
              ++image2DUniformIndex)
         {
             sh::ShaderVariable image2Duniform;
-            gl::LoadShaderVar(stream, &image2Duniform);
+            sh::LoadShaderVar(stream, &image2Duniform);
             mImage2DUniforms[shaderType].push_back(image2Duniform);
         }
     }
@@ -1392,7 +1392,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(mImage2DUniforms[shaderType].size());
         for (const sh::ShaderVariable &image2DUniform : mImage2DUniforms[shaderType])
         {
-            gl::WriteShaderVar(stream, image2DUniform);
+            sh::WriteShaderVar(stream, image2DUniform);
         }
     }
 

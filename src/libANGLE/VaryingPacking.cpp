@@ -12,6 +12,7 @@
 #include "libANGLE/VaryingPacking.h"
 
 #include "common/utilities.h"
+#include "compiler/translator/CompiledShaderState.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/ProgramExecutable.h"
 #include "libANGLE/Shader.h"
@@ -86,7 +87,7 @@ bool ComparePackedVarying(const PackedVarying &x, const PackedVarying &y)
     }
 
     // Otherwise order by variable
-    return gl::CompareShaderVar(*px, *py);
+    return sh::CompareShaderVar(*px, *py);
 }
 
 bool InterfaceVariablesMatch(const sh::ShaderVariable &front, const sh::ShaderVariable &back)

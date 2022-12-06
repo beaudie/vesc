@@ -690,7 +690,7 @@ void ProgramMtl::saveDefaultUniformBlocksInfo(gl::BinaryOutputStream *stream)
         {
             sh::BlockMemberInfo &blockInfo =
                 mDefaultUniformBlocks[shaderType].uniformLayout[uniformIndex];
-            gl::WriteBlockMemberInfo(stream, blockInfo);
+            sh::WriteBlockMemberInfo(stream, blockInfo);
         }
     }
 
@@ -714,7 +714,7 @@ angle::Result ProgramMtl::loadDefaultUniformBlocksInfo(const gl::Context *glCont
         for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
         {
             sh::BlockMemberInfo blockInfo;
-            gl::LoadBlockMemberInfo(stream, &blockInfo);
+            sh::LoadBlockMemberInfo(stream, &blockInfo);
             mDefaultUniformBlocks[shaderType].uniformLayout.push_back(blockInfo);
         }
     }
