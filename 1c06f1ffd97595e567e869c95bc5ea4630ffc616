@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45b16573_42425419",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-06T15:56:44Z",
+      "side": 1,
+      "message": "nit: ForTesting really necessary?",
+      "range": {
+        "startLine": 772,
+        "startChar": 16,
+        "endLine": 772,
+        "endChar": 56
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2366cf9_b28dca67",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-06T15:56:44Z",
+      "side": 1,
+      "message": "nit: getPreferredPipelineBlocking? Just a thought.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 40,
+        "endLine": 2188,
+        "endChar": 60
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548c5555_9adeac9d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-06T15:56:44Z",
+      "side": 1,
+      "message": "looks like an unrelated change? Not sure why this is necessary, it seems unwise to do any work if there\u0027s some kind of driver crash.",
+      "range": {
+        "startLine": 3261,
+        "startChar": 4,
+        "endLine": 3261,
+        "endChar": 12
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd8a40ad_077a6429",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-06T15:56:44Z",
+      "side": 1,
+      "message": "also is this shared ownership or unique ownership?",
+      "range": {
+        "startLine": 1385,
+        "startChar": 13,
+        "endLine": 1385,
+        "endChar": 37
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe38509c_98a0dc49",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-06T15:56:44Z",
+      "side": 1,
+      "message": "confused why both the share group and this class have a pointer to the task. is this shared ownership? if so, can you simplify it to unique ownership?",
+      "range": {
+        "startLine": 1391,
+        "startChar": 4,
+        "endLine": 1391,
+        "endChar": 75
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
