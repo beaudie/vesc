@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "110c1793_77392ca0",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-06T08:48:47Z",
+      "side": 1,
+      "message": "Thank you for the advice 😊\nI choosed to move out of the /linux/ folder.\n\nBefore we add `GLInternalFormatToGbmFourCCFormat()` and use, all the defines and functions were only used by gl/vulkan renderer. But after adding the function and using from GetNativeID() of formatutils.h, the dependency from `angle_common` to `angle_dma_buf` should be created. But in this case, the circular dependency problem occurs. To fix this, I moved them into the common part of angle.",
+      "parentUuid": "ab47867d_870971c4",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 0
+      },
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6995c07e_22f2450b",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 6
@@ -78,6 +102,30 @@
       "writtenOn": "2022-12-05T14:36:22Z",
       "side": 1,
       "message": "reference.",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 12
+      },
+      "revId": "2b5e5ecef90e437df8badc55286a58a1a7fb853a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "477913fb_1d08cb09",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-06T08:48:47Z",
+      "side": 1,
+      "message": "Thank you for the reference!",
+      "parentUuid": "6995c07e_22f2450b",
       "range": {
         "startLine": 100,
         "startChar": 4,
