@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd55019b_83c1440f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-06T19:57:03Z",
+      "side": 1,
+      "message": "Thanks Shabi for the work.\n\nWould you mind linking to docs/design docs on this change if there is any? It would be helpful if there is any docs explaning:\n\n1. Why we need the monolithic pipeline extension/feature?\n2. Why there is performance lost with the use the `VK_EXT_graphics_pipeline_library`?\n3. How does the the monolithic pipeline help gain back the performance loss?",
+      "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e9d37940_b688f369",
@@ -14,6 +31,23 @@
       "writtenOn": "2022-12-06T16:55:08Z",
       "side": 1,
       "message": "Windows failure was due to monolithic pipeline cache sync accidentally enabled on windows/intel which is buggy.",
+      "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9633a37_d27605e1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 4099,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-06T19:57:03Z",
+      "side": 1,
+      "message": "which extension does `this extension` refer to? is it `preferMonolithicPipelinesOverLibraries`?",
       "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
