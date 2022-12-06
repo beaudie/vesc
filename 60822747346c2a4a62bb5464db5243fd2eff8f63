@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea30dc3_08109420",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-06T01:42:22Z",
+      "side": 1,
+      "message": "LGTM, this is either a VVL issue or a spec issue.",
+      "revId": "60822747346c2a4a62bb5464db5243fd2eff8f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
