@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "90ae0d3b_1242be10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-06T20:02:11Z",
+      "side": 1,
+      "message": "go/vangle-with-pipeline-libraries is the doc. It\u0027s not very useful in the commit message since it\u0027s not publicly available, but you\u0027re hinting at a good point, I should add something under `doc/` for this.\n\nTL;DR answers to your questions:\n\n1. Because SPIR-V -\u003e assembly compilation is expensive, and we want that separated from most state so that it can be done earlier.\n2. Because there\u0027s less information during said compilation, the driver may not be able to do as well a job\n3. By optimizer better given the full picture\n\nInteresting reading here: https://www.khronos.org/blog/reducing-draw-time-hitching-with-vk-ext-graphics-pipeline-library",
+      "parentUuid": "dd55019b_83c1440f",
+      "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e9d37940_b688f369",
