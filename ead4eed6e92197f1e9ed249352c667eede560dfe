@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6eee9a8_3952cacb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T14:22:10Z",
+      "side": 1,
+      "message": "GL_CLEAR in GL is about logic op (GLES1, or desktop GL). I added GL_LOGIC_OP_CLEAR_ANGLE to expose logic op in GLES2+ (mostly for internal implementation reasons), which is why they alias.\n\nIdeally we would have had GL_LOAD_OP_X and GL_STORE_OP_X symbols, but since all the other ops are overloads of other GL enums, this should be fine.",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
