@@ -967,10 +967,9 @@ class BufferPool : angle::NonCopyable
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
-enum class BufferAccess
+mQueueSerialMutexenum class BufferAccess
 {
-    Read,
-    Write,
+    Read, Write,
 };
 
 // Stores clear value In packed attachment index
