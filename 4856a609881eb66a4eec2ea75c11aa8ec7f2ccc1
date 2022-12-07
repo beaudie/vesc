@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dbc3afe_0120a220",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-07T20:40:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f58cf10_ecd8b902",
+      "range": {
+        "startLine": 212,
+        "startChar": 15,
+        "endLine": 212,
+        "endChar": 32
+      },
+      "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d70365f_51a163bb",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-12-07T20:00:50Z",
       "side": 1,
       "message": "You can ASSERT this, we make sure early on to split declarations.",
+      "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a993f9d_5ccfa9da",
+        "filename": "src/compiler/translator/tree_ops/DeclarePerVertexBlocks.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-07T20:40:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d70365f_51a163bb",
       "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
