@@ -16,6 +16,23 @@
       "message": "LGTM2",
       "revId": "448a7d91e6f2645249ac98009eb99059d27dd3b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f3b8b0_466b17ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-07T19:32:41Z",
+      "side": 1,
+      "message": "Upgrading mine to +2",
+      "revId": "448a7d91e6f2645249ac98009eb99059d27dd3b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
