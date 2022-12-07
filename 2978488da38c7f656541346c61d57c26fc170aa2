@@ -52,6 +52,24 @@
       "parentUuid": "36f21042_3df2d6ad",
       "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c43374a4_863d66b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T17:44:22Z",
+      "side": 1,
+      "message": "Re: perf test, unfortunately this didn\u0027t come with a dedicated perf test: anglebug.com/3136#c6\n\nIf you don\u0027t recall what you used for optimization, I guess the traces would be our best bet right now. There\u0027s also `VulkanCommandBufferPerf`, but it\u0027s unlikely to be comprehensive.",
+      "parentUuid": "535ff6ee_c75e1a76",
+      "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
