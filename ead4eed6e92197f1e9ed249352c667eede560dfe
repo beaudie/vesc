@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8f3b48e_de4b2677",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-07T05:09:37Z",
+      "side": 1,
+      "message": "Thoughts on this?\n\nI think we should either\n* Take this CL and alias the values\n* Or rename it to something without a collision, like `GL_PIXEL_LOCAL_STORAGE_OP_CLEAR_ANGLE`",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
