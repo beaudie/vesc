@@ -33,6 +33,23 @@
       "message": "Thoughts on this?\n\nI think we should either\n* Take this CL and alias the values\n* Or rename it to something without a collision, like `GL_PIXEL_LOCAL_STORAGE_OP_CLEAR_ANGLE`",
       "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3045f17a_704c5f09",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-07T21:28:45Z",
+      "side": 1,
+      "message": "lgtm if this looks OK to Shabi.",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
