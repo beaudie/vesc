@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efc456b3_2435c217",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T20:00:50Z",
+      "side": 1,
+      "message": "LGTM as long as tests pass",
+      "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f58cf10_ecd8b902",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T20:00:50Z",
+      "side": 1,
+      "message": "nit: please use `!\u003d 0` to avoid implicit cast to bool.",
+      "range": {
+        "startLine": 212,
+        "startChar": 15,
+        "endLine": 212,
+        "endChar": 32
+      },
+      "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d70365f_51a163bb",
+        "filename": "src/compiler/translator/tree_ops/DeclarePerVertexBlocks.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T20:00:50Z",
+      "side": 1,
+      "message": "You can ASSERT this, we make sure early on to split declarations.",
+      "revId": "4856a609881eb66a4eec2ea75c11aa8ec7f2ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
