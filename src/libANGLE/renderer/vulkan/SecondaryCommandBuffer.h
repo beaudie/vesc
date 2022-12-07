@@ -104,8 +104,9 @@ enum class CommandID : uint16_t
     WriteTimestamp,
 };
 
-#define VERIFY_4_BYTE_ALIGNMENT(StructName) \
-    static_assert((sizeof(StructName) % 4) == 0, "Check StructName alignment");
+#define VERIFY_8_BYTE_ALIGNMENT(StructName)                                     \
+    static_assert((sizeof(StructName) % 8) == 0, "Check StructName alignment"); \
+    static_assert(alignof(StructName) <= 8, "Check StructName alignment")
 
 // Structs to encapsulate parameters for different commands
 // This makes it easy to know the size of params & to copy params
@@ -116,14 +117,16 @@ struct BeginQueryParams
     VkQueryPool queryPool;
     uint32_t query;
     VkQueryControlFlags flags;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(BeginQueryParams)
+VERIFY_8_BYTE_ALIGNMENT(BeginQueryParams);
 
 struct BeginTransformFeedbackParams
 {
     uint32_t bufferCount;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(BeginTransformFeedbackParams)
+VERIFY_8_BYTE_ALIGNMENT(BeginTransformFeedbackParams);
 
 struct BindDescriptorSetParams
 {
@@ -133,7 +136,7 @@ struct BindDescriptorSetParams
     uint32_t descriptorSetCount;
     uint32_t dynamicOffsetCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(BindDescriptorSetParams)
+VERIFY_8_BYTE_ALIGNMENT(BindDescriptorSetParams);
 
 struct BindIndexBufferParams
 {
@@ -141,20 +144,21 @@ struct BindIndexBufferParams
     VkDeviceSize offset;
     VkIndexType indexType;
 };
-VERIFY_4_BYTE_ALIGNMENT(BindIndexBufferParams)
+VERIFY_8_BYTE_ALIGNMENT(BindIndexBufferParams);
 
 struct BindPipelineParams
 {
     VkPipeline pipeline;
 };
-VERIFY_4_BYTE_ALIGNMENT(BindPipelineParams)
+VERIFY_8_BYTE_ALIGNMENT(BindPipelineParams);
 
 struct BindTransformFeedbackBuffersParams
 {
     // ANGLE always has firstBinding of 0 so not storing that currently
     uint32_t bindingCount;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(BindTransformFeedbackBuffersParams)
+VERIFY_8_BYTE_ALIGNMENT(BindTransformFeedbackBuffersParams);
 
 using BindVertexBuffersParams  = BindTransformFeedbackBuffersParams;
 using BindVertexBuffers2Params = BindVertexBuffersParams;
@@ -166,7 +170,7 @@ struct BlitImageParams
     VkFilter filter;
     VkImageBlit region;
 };
-VERIFY_4_BYTE_ALIGNMENT(BlitImageParams)
+VERIFY_8_BYTE_ALIGNMENT(BlitImageParams);
 
 struct BufferBarrierParams
 {
@@ -174,14 +178,15 @@ struct BufferBarrierParams
     VkPipelineStageFlags dstStageMask;
     VkBufferMemoryBarrier bufferMemoryBarrier;
 };
-VERIFY_4_BYTE_ALIGNMENT(BufferBarrierParams)
+VERIFY_8_BYTE_ALIGNMENT(BufferBarrierParams);
 
 struct ClearAttachmentsParams
 {
     uint32_t attachmentCount;
+    uint32_t pad;
     VkClearRect rect;
 };
-VERIFY_4_BYTE_ALIGNMENT(ClearAttachmentsParams)
+VERIFY_8_BYTE_ALIGNMENT(ClearAttachmentsParams);
 
 struct ClearColorImageParams
 {
@@ -190,7 +195,7 @@ struct ClearColorImageParams
     VkClearColorValue color;
     VkImageSubresourceRange range;
 };
-VERIFY_4_BYTE_ALIGNMENT(ClearColorImageParams)
+VERIFY_8_BYTE_ALIGNMENT(ClearColorImageParams);
 
 struct ClearDepthStencilImageParams
 {
@@ -199,7 +204,7 @@ struct ClearDepthStencilImageParams
     VkClearDepthStencilValue depthStencil;
     VkImageSubresourceRange range;
 };
-VERIFY_4_BYTE_ALIGNMENT(ClearDepthStencilImageParams)
+VERIFY_8_BYTE_ALIGNMENT(ClearDepthStencilImageParams);
 
 struct CopyBufferParams
 {
@@ -207,7 +212,7 @@ struct CopyBufferParams
     VkBuffer destBuffer;
     uint32_t regionCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(CopyBufferParams)
+VERIFY_8_BYTE_ALIGNMENT(CopyBufferParams);
 
 struct CopyBufferToImageParams
 {
@@ -216,7 +221,7 @@ struct CopyBufferToImageParams
     VkImageLayout dstImageLayout;
     VkBufferImageCopy region;
 };
-VERIFY_4_BYTE_ALIGNMENT(CopyBufferToImageParams)
+VERIFY_8_BYTE_ALIGNMENT(CopyBufferToImageParams);
 
 struct CopyImageParams
 {
@@ -226,7 +231,7 @@ struct CopyImageParams
     VkImageLayout dstImageLayout;
     VkImageCopy region;
 };
-VERIFY_4_BYTE_ALIGNMENT(CopyImageParams)
+VERIFY_8_BYTE_ALIGNMENT(CopyImageParams);
 
 struct CopyImageToBufferParams
 {
@@ -235,49 +240,51 @@ struct CopyImageToBufferParams
     VkBuffer dstBuffer;
     VkBufferImageCopy region;
 };
-VERIFY_4_BYTE_ALIGNMENT(CopyImageToBufferParams)
+VERIFY_8_BYTE_ALIGNMENT(CopyImageToBufferParams);
 
 // This is a common struct used by both begin & insert DebugUtilsLabelEXT() functions
 struct DebugUtilsLabelParams
 {
     float color[4];
 };
-VERIFY_4_BYTE_ALIGNMENT(DebugUtilsLabelParams)
+VERIFY_8_BYTE_ALIGNMENT(DebugUtilsLabelParams);
 
 struct DispatchParams
 {
     uint32_t groupCountX;
     uint32_t groupCountY;
     uint32_t groupCountZ;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(DispatchParams)
+VERIFY_8_BYTE_ALIGNMENT(DispatchParams);
 
 struct DispatchIndirectParams
 {
     VkBuffer buffer;
     VkDeviceSize offset;
 };
-VERIFY_4_BYTE_ALIGNMENT(DispatchIndirectParams)
+VERIFY_8_BYTE_ALIGNMENT(DispatchIndirectParams);
 
 struct DrawParams
 {
     uint32_t vertexCount;
     uint32_t firstVertex;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawParams);
 
 struct DrawIndexedParams
 {
     uint32_t indexCount;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedParams);
 
 struct DrawIndexedBaseVertexParams
 {
     uint32_t indexCount;
     uint32_t vertexOffset;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedBaseVertexParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedBaseVertexParams);
 
 struct DrawIndexedIndirectParams
 {
@@ -286,22 +293,23 @@ struct DrawIndexedIndirectParams
     uint32_t drawCount;
     uint32_t stride;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedIndirectParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedIndirectParams);
 
 struct DrawIndexedInstancedParams
 {
     uint32_t indexCount;
     uint32_t instanceCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedInstancedParams);
 
 struct DrawIndexedInstancedBaseVertexParams
 {
     uint32_t indexCount;
     uint32_t instanceCount;
     uint32_t vertexOffset;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexParams);
 
 struct DrawIndexedInstancedBaseVertexBaseInstanceParams
 {
@@ -310,8 +318,9 @@ struct DrawIndexedInstancedBaseVertexBaseInstanceParams
     uint32_t firstIndex;
     int32_t vertexOffset;
     uint32_t firstInstance;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexBaseInstanceParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexBaseInstanceParams);
 
 struct DrawIndirectParams
 {
@@ -320,15 +329,16 @@ struct DrawIndirectParams
     uint32_t drawCount;
     uint32_t stride;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawIndirectParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawIndirectParams);
 
 struct DrawInstancedParams
 {
     uint32_t vertexCount;
     uint32_t instanceCount;
     uint32_t firstVertex;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawInstancedParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawInstancedParams);
 
 struct DrawInstancedBaseInstanceParams
 {
@@ -337,7 +347,7 @@ struct DrawInstancedBaseInstanceParams
     uint32_t firstVertex;
     uint32_t firstInstance;
 };
-VERIFY_4_BYTE_ALIGNMENT(DrawInstancedBaseInstanceParams)
+VERIFY_8_BYTE_ALIGNMENT(DrawInstancedBaseInstanceParams);
 
 // A special struct used with commands that don't have params
 struct EmptyParams
@@ -348,13 +358,14 @@ struct EndQueryParams
     VkQueryPool queryPool;
     uint32_t query;
 };
-VERIFY_4_BYTE_ALIGNMENT(EndQueryParams)
+VERIFY_8_BYTE_ALIGNMENT(EndQueryParams);
 
 struct EndTransformFeedbackParams
 {
     uint32_t bufferCount;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(EndTransformFeedbackParams)
+VERIFY_8_BYTE_ALIGNMENT(EndTransformFeedbackParams);
 
 struct FillBufferParams
 {
@@ -363,15 +374,16 @@ struct FillBufferParams
     VkDeviceSize size;
     uint32_t data;
 };
-VERIFY_4_BYTE_ALIGNMENT(FillBufferParams)
+VERIFY_8_BYTE_ALIGNMENT(FillBufferParams);
 
 struct ImageBarrierParams
 {
     VkPipelineStageFlags srcStageMask;
     VkPipelineStageFlags dstStageMask;
     VkImageMemoryBarrier imageMemoryBarrier;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(ImageBarrierParams)
+VERIFY_8_BYTE_ALIGNMENT(ImageBarrierParams);
 
 struct MemoryBarrierParams
 {
@@ -379,13 +391,14 @@ struct MemoryBarrierParams
     VkPipelineStageFlags dstStageMask;
     VkMemoryBarrier memoryBarrier;
 };
-VERIFY_4_BYTE_ALIGNMENT(MemoryBarrierParams)
+VERIFY_8_BYTE_ALIGNMENT(MemoryBarrierParams);
 
 struct NextSubpassParams
 {
     VkSubpassContents subpassContents;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(NextSubpassParams)
+VERIFY_8_BYTE_ALIGNMENT(NextSubpassParams);
 
 struct PipelineBarrierParams
 {
@@ -396,7 +409,7 @@ struct PipelineBarrierParams
     uint32_t bufferMemoryBarrierCount;
     uint32_t imageMemoryBarrierCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(PipelineBarrierParams)
+VERIFY_8_BYTE_ALIGNMENT(PipelineBarrierParams);
 
 struct PushConstantsParams
 {
@@ -405,14 +418,14 @@ struct PushConstantsParams
     uint32_t offset;
     uint32_t size;
 };
-VERIFY_4_BYTE_ALIGNMENT(PushConstantsParams)
+VERIFY_8_BYTE_ALIGNMENT(PushConstantsParams);
 
 struct ResetEventParams
 {
     VkEvent event;
     VkPipelineStageFlags stageMask;
 };
-VERIFY_4_BYTE_ALIGNMENT(ResetEventParams)
+VERIFY_8_BYTE_ALIGNMENT(ResetEventParams);
 
 struct ResetQueryPoolParams
 {
@@ -420,7 +433,7 @@ struct ResetQueryPoolParams
     uint32_t firstQuery;
     uint32_t queryCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(ResetQueryPoolParams)
+VERIFY_8_BYTE_ALIGNMENT(ResetQueryPoolParams);
 
 struct ResolveImageParams
 {
@@ -428,108 +441,121 @@ struct ResolveImageParams
     VkImage dstImage;
     VkImageResolve region;
 };
-VERIFY_4_BYTE_ALIGNMENT(ResolveImageParams)
+VERIFY_8_BYTE_ALIGNMENT(ResolveImageParams);
 
 struct SetBlendConstantsParams
 {
     float blendConstants[4];
 };
-VERIFY_4_BYTE_ALIGNMENT(SetBlendConstantsParams)
+VERIFY_8_BYTE_ALIGNMENT(SetBlendConstantsParams);
 
 struct SetCullModeParams
 {
     VkCullModeFlags cullMode;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetCullModeParams)
+VERIFY_8_BYTE_ALIGNMENT(SetCullModeParams);
 
 struct SetDepthBiasParams
 {
     float depthBiasConstantFactor;
     float depthBiasClamp;
     float depthBiasSlopeFactor;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetDepthBiasParams)
+VERIFY_8_BYTE_ALIGNMENT(SetDepthBiasParams);
 
 struct SetDepthBiasEnableParams
 {
     VkBool32 depthBiasEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetDepthBiasEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetDepthBiasEnableParams);
 
 struct SetDepthCompareOpParams
 {
     VkCompareOp depthCompareOp;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetDepthCompareOpParams)
+VERIFY_8_BYTE_ALIGNMENT(SetDepthCompareOpParams);
 
 struct SetDepthTestEnableParams
 {
     VkBool32 depthTestEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetDepthTestEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetDepthTestEnableParams);
 
 struct SetDepthWriteEnableParams
 {
     VkBool32 depthWriteEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetDepthWriteEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetDepthWriteEnableParams);
 
 struct SetEventParams
 {
     VkEvent event;
     VkPipelineStageFlags stageMask;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetEventParams)
+VERIFY_8_BYTE_ALIGNMENT(SetEventParams);
 
 struct SetFragmentShadingRateParams
 {
     uint16_t fragmentWidth;
     uint16_t fragmentHeight;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetFragmentShadingRateParams)
+VERIFY_8_BYTE_ALIGNMENT(SetFragmentShadingRateParams);
 
 struct SetFrontFaceParams
 {
     VkFrontFace frontFace;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetFrontFaceParams)
+VERIFY_8_BYTE_ALIGNMENT(SetFrontFaceParams);
 
 struct SetLineWidthParams
 {
     float lineWidth;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetLineWidthParams)
+VERIFY_8_BYTE_ALIGNMENT(SetLineWidthParams);
 
 struct SetLogicOpParams
 {
     VkLogicOp logicOp;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetLogicOpParams)
+VERIFY_8_BYTE_ALIGNMENT(SetLogicOpParams);
 
 struct SetPrimitiveRestartEnableParams
 {
     VkBool32 primitiveRestartEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetPrimitiveRestartEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetPrimitiveRestartEnableParams);
 
 struct SetRasterizerDiscardEnableParams
 {
     VkBool32 rasterizerDiscardEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetRasterizerDiscardEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetRasterizerDiscardEnableParams);
 
 struct SetScissorParams
 {
     VkRect2D scissor;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetScissorParams)
+VERIFY_8_BYTE_ALIGNMENT(SetScissorParams);
 
 struct SetStencilCompareMaskParams
 {
     uint16_t compareFrontMask;
     uint16_t compareBackMask;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetStencilCompareMaskParams)
+VERIFY_8_BYTE_ALIGNMENT(SetStencilCompareMaskParams);
 
 struct SetStencilOpParams
 {
@@ -538,34 +564,38 @@ struct SetStencilOpParams
     uint32_t passOp : 3;
     uint32_t depthFailOp : 3;
     uint32_t compareOp : 3;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetStencilOpParams)
+VERIFY_8_BYTE_ALIGNMENT(SetStencilOpParams);
 
 struct SetStencilReferenceParams
 {
     uint16_t frontReference;
     uint16_t backReference;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetStencilReferenceParams)
+VERIFY_8_BYTE_ALIGNMENT(SetStencilReferenceParams);
 
 struct SetStencilTestEnableParams
 {
     VkBool32 stencilTestEnable;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetStencilTestEnableParams)
+VERIFY_8_BYTE_ALIGNMENT(SetStencilTestEnableParams);
 
 struct SetStencilWriteMaskParams
 {
     uint16_t writeFrontMask;
     uint16_t writeBackMask;
+    uint32_t pad;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetStencilWriteMaskParams)
+VERIFY_8_BYTE_ALIGNMENT(SetStencilWriteMaskParams);
 
 struct SetViewportParams
 {
     VkViewport viewport;
 };
-VERIFY_4_BYTE_ALIGNMENT(SetViewportParams)
+VERIFY_8_BYTE_ALIGNMENT(SetViewportParams);
 
 struct WaitEventsParams
 {
@@ -576,7 +606,7 @@ struct WaitEventsParams
     uint32_t bufferMemoryBarrierCount;
     uint32_t imageMemoryBarrierCount;
 };
-VERIFY_4_BYTE_ALIGNMENT(WaitEventsParams)
+VERIFY_8_BYTE_ALIGNMENT(WaitEventsParams);
 
 struct WriteTimestampParams
 {
@@ -584,15 +614,16 @@ struct WriteTimestampParams
     VkQueryPool queryPool;
     uint32_t query;
 };
-VERIFY_4_BYTE_ALIGNMENT(WriteTimestampParams)
+VERIFY_8_BYTE_ALIGNMENT(WriteTimestampParams);
 
 // Header for every cmd in custom cmd buffer
 struct CommandHeader
 {
     CommandID id;
     uint16_t size;
+    uint32_t pad;
 };
-static_assert(sizeof(CommandHeader) == 4, "Check CommandHeader size");
+VERIFY_8_BYTE_ALIGNMENT(CommandHeader);
 
 template <typename DestT, typename T>
 ANGLE_INLINE DestT *Offset(T *ptr, size_t bytes)
@@ -871,11 +902,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Traverse the list of commands and build a summary for diagnostics.
     std::string dumpCommands(const char *separator) const;
 
-    // Pool Alloc uses 16kB pages w/ 16byte header = 16368bytes. To minimize waste
-    //  using a 16368/12 = 1364. Also better perf than 1024 due to fewer block allocations
-    static constexpr size_t kBlockSize = 1364;
-    // Make sure block size is 4-byte aligned to avoid Android errors
-    static_assert((kBlockSize % 4) == 0, "Check kBlockSize alignment");
+    // Pool Alloc uses 16kB pages w/ 32byte header = 16352bytes. To minimize waste use
+    // roundUp(16352/12, 8) = 1368. Also better perf than 1024 due to fewer block allocations
+    static constexpr size_t kBlockSize = 1368;
+    // Make sure block size is 8-byte aligned to avoid alignment errors
+    static_assert((kBlockSize % 8) == 0, "Check kBlockSize alignment");
 
     // Initialize the SecondaryCommandBuffer by setting the allocator it will use
     angle::Result initialize(vk::Context *context,
@@ -937,6 +968,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         mCurrentWritePointer += allocationSize;
         // Set next cmd header to Invalid (0) so cmd sequence will be terminated
         reinterpret_cast<CommandHeader *>(mCurrentWritePointer)->id = CommandID::Invalid;
+        ASSERT(reinterpret_cast<uintptr_t>(mCurrentWritePointer) % 8 == 0);
         return Offset<StructType>(header, sizeof(CommandHeader));
     }
     ANGLE_INLINE void allocateNewBlock(size_t blockSize = kBlockSize)
@@ -945,6 +977,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         mCurrentWritePointer   = mAllocator->fastAllocate(blockSize);
         mCurrentBytesRemaining = blockSize;
         mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
+        ASSERT(reinterpret_cast<uintptr_t>(mCurrentWritePointer) % 8 == 0);
     }
 
     // Allocate and initialize memory for given commandID & variable param size, setting
@@ -956,7 +989,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                          uint8_t **variableDataPtr)
     {
         constexpr size_t fixedAllocationSize = sizeof(StructType) + sizeof(CommandHeader);
-        const size_t allocationSize          = fixedAllocationSize + variableSize;
+        const size_t allocationSize = roundUp<size_t>(fixedAllocationSize + variableSize, 8);
         // Make sure we have enough room to mark follow-on header "Invalid"
         const size_t requiredSize = allocationSize + sizeof(CommandHeader);
         if (mCurrentBytesRemaining < requiredSize)
@@ -966,9 +999,9 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                 allocateNewBlock();
             else
             {
-                // Make sure allocation is 4-byte aligned
-                const size_t alignedSize = roundUpPow2<size_t>(requiredSize, 4);
-                ASSERT((alignedSize % 4) == 0);
+                // Make sure allocation is 8-byte aligned
+                const size_t alignedSize = roundUpPow2<size_t>(requiredSize, 8);
+                ASSERT((alignedSize % 8) == 0);
                 allocateNewBlock(alignedSize);
             }
         }
@@ -1035,7 +1068,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::commonDebugUtilsLabel(CommandID cmd,
 {
     uint8_t *writePtr;
     const size_t stringSize        = strlen(label.pLabelName) + 1;
-    const size_t alignedStringSize = roundUpPow2<size_t>(stringSize, 4);
+    const size_t alignedStringSize = roundUpPow2<size_t>(stringSize, 8);
     DebugUtilsLabelParams *paramStruct =
         initCommand<DebugUtilsLabelParams>(cmd, alignedStringSize, &writePtr);
     paramStruct->color[0] = label.color[0];
