@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d743a036_8d060532",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-07T22:51:36Z",
+      "side": 1,
+      "message": "If we want to do that, we can!\n\n`GL_LOAD_OP_CLEAR_ANGLE`\n`GL_LOAD_OP_PRESERVE_ANGLE`\n`GL_LOAD_OP_DONT_CARE_ANGLE`\n`GL_STORE_OP_PRESERVE_ANGLE`\n`GL_STORE_OP_DONT_CARE_ANGLE`\n\nOr\n\n`GL_LOAD_OP_CLEAR_ANGLE`\n`GL_LOAD_STORE_OP_PRESERVE_ANGLE`\n`GL_LOAD_STORE_OP_DONT_CARE_ANGLE`\n\nOr something.\n\nI\u0027m fine with either way personally. While we\u0027re at it it would be nice to make it as ideal as possible.\n\n(Also, I had a question I added as a comment.)",
+      "parentUuid": "b6eee9a8_3952cacb",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
@@ -48,6 +66,23 @@
       "writtenOn": "2022-12-07T21:28:45Z",
       "side": 1,
       "message": "lgtm if this looks OK to Shabi.",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cfb0f43_1ad91153",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-07T22:51:36Z",
+      "side": 1,
+      "message": "Is this the correct way to handle the non-contiguous value in `GL_CLEAR_ANGLE`?",
       "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
