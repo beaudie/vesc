@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed33e82d_8f9f9e1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T02:41:43Z",
+      "side": 1,
+      "message": "I think the blog post touched upon this as well. It\u0027s a complicated problem, for sure, and VK_EXT_graphics_pipeline_library itself feels like a band aid. A better solution can exist, but sort of requires hardware redesigns.\n\nSo originally we had monolithic pipelines build _on the main thread_ at draw time. The problem with that is that it causes hitching. With pipeline libraries, the slow part of the pipeline (shaders) is built at link time, and the fast part (vertex input, fragment output) is built at draw time and linked in. This fixes the hitching, but causes another problem; the linked pipelines are not as fast as monolithic pipelines.\n\nSo what this change does is to create the monolithic pipeline _in a background thread_, and swap in the handle whenever it\u0027s ready. If it takes a long time, it doesn\u0027t matter much, because the linked pipeline still works (like, say at 90% speed), and the app regains its optimal pipelines over time and reach its max speed.\n\nIf you wish things were simpler, welcome to the club.",
+      "parentUuid": "bc778cd1_acb28a43",
+      "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e9d37940_b688f369",
