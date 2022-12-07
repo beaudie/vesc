@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db304b78_0b9ea39b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-07T17:04:12Z",
+      "side": 1,
+      "message": "PTAL Shabi. I can finesse this solution a bit to use more 32-bit values and fewer explicit \"pad\" values. Any required perf tests that would be good for this?",
+      "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
