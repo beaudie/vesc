@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81f9486_11fd0e69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-07T21:42:05Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/angle/builders/try/win-exp-test/6/overview is mostly green, time to land this.\nThe same angle_restricted_trace_gold_tests fail each build, even though I triage them as positive each time.\nLooks like they produce random results.\nI\u0027ll see how it behaves on CI and maybe skip them.",
+      "revId": "f103e8dd10a760116eab57cf0926bcd1715ddb54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
