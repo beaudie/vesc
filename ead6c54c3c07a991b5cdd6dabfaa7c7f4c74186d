@@ -101,6 +101,24 @@
       "message": "@sywow.choi@samsung.com - Mohan pointed out that if we use a RGBX, that ANGLE will fill/copy the \"X\" channel with \"1\", because vulkan uses RGBA, and alpha needs to be \"1\" for any blit.\nSo we need to look at this cost verses the cost of using GL_BGRA8 and Wayland retrying config selection.",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dcf1ce1_0b81c84d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-07T01:09:53Z",
+      "side": 1,
+      "message": "Actually I couldn\u0027t fully understand. \nDo you mean that the {Write|Read}Color\u003cR8G8B8X8, GLfloat\u003e function is different from {Write|Read}Color\u003cR8B8G8A8, GLfloat\u003e function ?\n\n```c\nvoid B8G8R8A8::readColor(gl::ColorUI *dst, const B8G8R8A8 *src)\n{\n    dst-\u003ered   \u003d src-\u003eR;\n    dst-\u003egreen \u003d src-\u003eG;\n    dst-\u003eblue  \u003d src-\u003eB;\n    dst-\u003ealpha \u003d src-\u003eA;\n}\n```\n\n```c\nvoid B8G8R8X8::writeColor(B8G8R8X8 *dst, const gl::ColorF *src)\n{\n    dst-\u003eR \u003d gl::floatToNormalized\u003cuint8_t\u003e(src-\u003ered);\n    dst-\u003eG \u003d gl::floatToNormalized\u003cuint8_t\u003e(src-\u003egreen);\n    dst-\u003eB \u003d gl::floatToNormalized\u003cuint8_t\u003e(src-\u003eblue);\n    dst-\u003eX \u003d 255;\n}\n```",
+      "parentUuid": "0544e6ff_2792a1a2",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
