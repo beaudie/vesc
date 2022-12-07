@@ -967,12 +967,6 @@ class BufferPool : angle::NonCopyable
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
-enum class BufferAccess
-{
-    Read,
-    Write,
-};
-
 // Stores clear value In packed attachment index
 class PackedClearValuesArray final
 {
@@ -1829,7 +1823,6 @@ class ImageHelper final : public Resource, public angle::Subject
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
     void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
-    void collectViewGarbage(RendererVk *renderer, vk::ImageViewHelper *imageView);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -1849,7 +1842,6 @@ class ImageHelper final : public Resource, public angle::Subject
                              GLint samples,
                              bool isRobustResourceInitEnabled);
     void resetImageWeakReference();
-    void releaseImageAndViewGarbage(RendererVk *renderer);
 
     const Image &getImage() const { return mImage; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
@@ -2613,8 +2605,6 @@ class ImageHelper final : public Resource, public angle::Subject
     gl::TexLevelArray<LevelContentDefinedMask> mContentDefined;
     gl::TexLevelArray<LevelContentDefinedMask> mStencilContentDefined;
 
-    std::vector<vk::GarbageObject> mImageAndViewGarbage;
-
     // Used for memory allocation tracking.
     // Memory size allocated for the image in the memory during the initialization.
     VkDeviceSize mAllocationSize;
@@ -2828,7 +2818,7 @@ class ImageViewHelper final : angle::NonCopyable
 
     bool isImageViewGarbageEmpty() const;
 
-    void release(RendererVk *renderer, std::vector<vk::GarbageObject> &garbage);
+    void release(RendererVk *renderer, const ResourceUse &use);
 
   private:
     ImageView &getReadImageView()
