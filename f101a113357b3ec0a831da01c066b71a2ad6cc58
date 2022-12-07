@@ -16,6 +16,23 @@
       "message": "PTAL Yuly, we can remove one set of builders.",
       "revId": "f101a113357b3ec0a831da01c066b71a2ad6cc58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "114578e8_788bdb83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-07T17:01:17Z",
+      "side": 1,
+      "message": "Looks like this slowed down the tests by 35% or so. Still faster than using a separate builder but I\u0027ll need to add more sharding to compensate for the timeouts.",
+      "revId": "f101a113357b3ec0a831da01c066b71a2ad6cc58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
