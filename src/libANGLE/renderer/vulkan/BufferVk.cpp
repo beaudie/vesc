@@ -642,6 +642,7 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
                                      GLbitfield access,
                                      void **mapPtr)
 {
+    RendererVk *renderer = contextVk->getRenderer();
     ASSERT(mBuffer.valid());
 
     // Record map call parameters in case this call is from angle internal (the access/offset/length
@@ -670,13 +671,13 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         // Concurrent reads from CPU and GPU is allowed.
         if (mBuffer.isCurrentlyInUseForWrite(contextVk->getRenderer()))
         {
-            // If there are pending commands for the resource, flush them.
-            if (contextVk->hasUnsubmittedUse(mBuffer))
+            // If there are unflushed write commands for the resource, flush them.
+            if (contextVk->hasUnsubmittedUse(mBuffer.getWriteResourceUse()))
             {
                 ANGLE_TRY(
                     contextVk->flushImpl(nullptr, RenderPassClosureReason::BufferWriteThenMap));
             }
-            ANGLE_TRY(mBuffer.finishGPUWriteCommands(contextVk));
+            ANGLE_TRY(renderer->finishResourceUse(contextVk, mBuffer.getWriteResourceUse()));
         }
         if (hostVisible)
         {

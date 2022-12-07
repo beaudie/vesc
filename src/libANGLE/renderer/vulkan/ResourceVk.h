@@ -186,9 +186,6 @@ class ReadWriteResource : public angle::NonCopyable
     bool isCurrentlyInUse(RendererVk *renderer) const;
     bool isCurrentlyInUseForWrite(RendererVk *renderer) const;
 
-    // Ensures the GPU write commands is completed.
-    angle::Result finishGPUWriteCommands(ContextVk *contextVk);
-
     // Complete all recorded and in-flight commands involving this resource
     angle::Result waitForIdle(ContextVk *contextVk,
                               const char *debugMessage,
