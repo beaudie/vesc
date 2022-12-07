@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97e6c4d1_100acf67",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Yes, that will for sure work. Thank you.\n\nI removed the change in `PRESUBMIT.py`, as Cody has suggested, I implemented the version hash in a script that can be ran in Android build, too: https://crrev.com/c/4072215/14/src/program_serialize_data_version.py. With that we no longer need the check in `PRESUBMIT.py`. Does that sound good to you?",
+      "parentUuid": "43a48f06_27db2b41",
+      "range": {
+        "startLine": 438,
+        "startChar": 31,
+        "endLine": 438,
+        "endChar": 72
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "97584ca9_75383155",
         "filename": "PRESUBMIT.py",
         "patchSetId": 7
@@ -107,6 +131,24 @@
       "side": 1,
       "message": "That\u0027s right, if the interface to these change, the `Program::serialize()` function would have to be adapted. At least the checks you mentioned don\u0027t warrant a need for a version bump if Context.* change.",
       "parentUuid": "26a924cb_6c90d4f9",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "806af0ea_a5f908f0",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "538b9c93_bc64fb80",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -164,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87860288_378355e4",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "055461d1_fb0d4dad",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "344a6a25_05e9bcf9",
@@ -217,6 +277,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16bcd71e_c5228152",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Ok, thank you for the info! I will remove the spec const in a follow-up CL.",
+      "parentUuid": "e869eb16_42c18790",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "491dea8e_69c66f10",
@@ -230,6 +308,24 @@
       "writtenOn": "2022-12-02T19:44:05Z",
       "side": 1,
       "message": "You could be conservative and add include/GLSLANG/ShaderLang.h and include/GLSLANG/ShaderVars.h, though you could make it simpler for us and include `ANGLE_SH_VERSION` (which increments with those files) in the blob and verify it on reload.",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5fc7fb_4490e880",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "That is a good point. Thank you Shabi.\n\nI have made the corresponding change in:\nhttps://crrev.com/c/4072215/15/BUILD.gn#878\nhttps://crrev.com/c/4072215/15/src/common/angle_version.h#12\nhttps://crrev.com/c/4072215/15/src/common/angle_version_info.h#20\nhttps://crrev.com/c/4072215/15/src/common/angle_version_info.cpp#42\nhttps://crrev.com/c/4072215/15/src/libANGLE/MemoryProgramCache.cpp#116\nhttps://crrev.com/c/4072215/15/src/libANGLE/Program.cpp#3609\nhttps://crrev.com/c/4072215/15/src/libANGLE/Program.cpp#3714",
+      "parentUuid": "491dea8e_69c66f10",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -300,6 +396,24 @@
       "side": 1,
       "message": "I am thinking if the implementation of `binaryOut-\u003eresize()` changed: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3683, we should invalidate the cache.\n\nBut now thinking again, `binaryOut-\u003eresize()` only affects `serialize()`, and how it implements shouldn\u0027t affect the total size of the binary blob cache (which is determined by stream.length()).\n\nI will remove it.",
       "parentUuid": "ec31ba3a_c832eeb1",
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "971637a8_b77f4855",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a93232a3_6a1401a9",
       "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -471,6 +585,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99cdc550_363e07d2",
+        "filename": "src/libANGLE/ANGLEShaderProgramVersion.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "I have implemented the logic in a new script: https://crrev.com/c/4072215/14/src/program_serialize_data_version.py. How it works is similar to how `commid_id.py` is ran. It will generate a header file with below content in `out/\u003cBuildTarget\u003e/gen/angle/`:\n```\n#define ANGLE_PROGRAM_VERSION \"051ea2087b915a68b67e805fb16b939b\"\n#define ANGLE_PROGRAM_VERSION_HASH_SIZE 16\n```\n\nAnd in program serialization / deserialization / cache key generation, we will retrieve these values from below functions in `src/common/angle_version_info.h`:\n```\nconst char *GetANGLEShaderProgramVersion();\nint GetANGLEShaderProgramVersionHashSize();\n```",
+      "parentUuid": "f5618475_e626a6bb",
+      "range": {
+        "startLine": 15,
+        "startChar": 19,
+        "endLine": 15,
+        "endChar": 40
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7800ada_00dc959e",
         "filename": "src/libANGLE/MemoryProgramCache.cpp",
         "patchSetId": 7
@@ -482,6 +620,30 @@
       "writtenOn": "2022-12-02T19:44:05Z",
       "side": 1,
       "message": "Context is a weird place for this. Perhaps you can do something similar to `GetANGLECommitHash` and have the version be around the same place, and retrieved by a helper function.",
+      "range": {
+        "startLine": 116,
+        "startChar": 18,
+        "endLine": 116,
+        "endChar": 48
+      },
+      "revId": "3b6d642b8ab75cd9c917efc28e699681330b0ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6cdb551_93cab3d8",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-07T00:10:18Z",
+      "side": 1,
+      "message": "Thank you Shabi. I have made const to be generated by a new script and then retrieve them through functions similar to `GetANGLECommitHash`: https://chromium-review.googlesource.com/c/angle/angle/+/4072215/comment/f3700e0b_f2ec4e1d/.",
+      "parentUuid": "e7800ada_00dc959e",
       "range": {
         "startLine": 116,
         "startChar": 18,
