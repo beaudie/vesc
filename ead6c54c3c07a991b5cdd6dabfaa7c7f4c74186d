@@ -119,6 +119,24 @@
       "parentUuid": "0544e6ff_2792a1a2",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bae202c_d22fa0d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T02:52:38Z",
+      "side": 1,
+      "message": "It\u0027s not just that. There are all sorts of copies, clears, data uploads etc where we have to take care to keep the emulated alpha channel as 1.0. A lot of that doesn\u0027t apply to the swapchain image though, as access to those images is very limited in GL.\n\nIf Wayland supports RGBA, you might as well use it, but to be honest, I doubt you\u0027d pay any real costs with RGBX either; most likely the difference would be the first render pass using the swapchain image having LOAD_OP_CLEAR instead of LOAD_OP_DONT_CARE, which is entirely free on some hardware, and is typically very cheap on others due to framebuffer compression.\n\nDo measure before going through hoops!",
+      "parentUuid": "3dcf1ce1_0b81c84d",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
