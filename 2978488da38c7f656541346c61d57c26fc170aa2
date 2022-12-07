@@ -16,6 +16,24 @@
       "message": "PTAL Shabi. I can finesse this solution a bit to use more 32-bit values and fewer explicit \"pad\" values. Any required perf tests that would be good for this?",
       "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f21042_3df2d6ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T17:16:23Z",
+      "side": 1,
+      "message": "\u003e I can finesse this solution a bit to use more 32-bit values and fewer explicit \"pad\" values.\n\nThat would be good, some commands are practically doubled now (like a lot of Set* commands for dynamic state).\n\n---\n\n\u003e Any required perf tests that would be good for this?\n\nYou\u0027re probably the best person to answer this; remember you were working with Tobin to make sure this is fast?",
+      "parentUuid": "db304b78_0b9ea39b",
+      "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
