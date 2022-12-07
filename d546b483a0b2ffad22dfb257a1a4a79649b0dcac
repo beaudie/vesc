@@ -195,6 +195,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e098848_98d45ef2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4809,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-07T20:32:20Z",
+      "side": 1,
+      "message": "Added finishedQueueSerial to CommandProcessor in this follow up CL\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4072223",
+      "parentUuid": "6f8a3565_43470198",
+      "revId": "d546b483a0b2ffad22dfb257a1a4a79649b0dcac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30230b9d_135a6ce0",
