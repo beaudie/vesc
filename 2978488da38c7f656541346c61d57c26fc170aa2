@@ -34,6 +34,24 @@
       "parentUuid": "db304b78_0b9ea39b",
       "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "535ff6ee_c75e1a76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-07T17:20:05Z",
+      "side": 1,
+      "message": "\u003e That would be good, some commands are practically doubled now (like a lot of Set* commands for dynamic state).\n\nTo clarify: I could replace 16 with 32-bit values and 32 with 64-bit. I can\u0027t fix the doubling.\n\nAn alternate solution would align every read and write to the size of the type, which could pack sequential 4-byte values better, but might actually perform worse in practice due to the extra logic.",
+      "parentUuid": "36f21042_3df2d6ad",
+      "revId": "2978488da38c7f656541346c61d57c26fc170aa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
