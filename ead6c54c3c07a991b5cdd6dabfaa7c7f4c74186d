@@ -84,6 +84,23 @@
       "message": "Ready to land",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0544e6ff_2792a1a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-07T00:49:14Z",
+      "side": 1,
+      "message": "@sywow.choi@samsung.com - Mohan pointed out that if we use a RGBX, that ANGLE will fill/copy the \"X\" channel with \"1\", because vulkan uses RGBA, and alpha needs to be \"1\" for any blit.\nSo we need to look at this cost verses the cost of using GL_BGRA8 and Wayland retrying config selection.",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
