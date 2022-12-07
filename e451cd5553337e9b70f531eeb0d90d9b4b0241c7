@@ -651,6 +651,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "682d2da3_75b53f60",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 5458,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-07T20:55:40Z",
+      "side": 1,
+      "message": "FYI, bug filed to tracking this\nhttps://b.corp.google.com/issues/261200586",
+      "parentUuid": "87d7e05e_e8ac5ea3",
+      "revId": "e451cd5553337e9b70f531eeb0d90d9b4b0241c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59be84d3_2bc86a3d",
