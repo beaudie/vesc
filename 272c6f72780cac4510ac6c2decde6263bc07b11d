@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed657e9e_0028b26b",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-07T21:58:17Z",
+      "side": 1,
+      "message": "Given `finishResourceUse` above on `mQueryHelper`, this can be `hasUnfinishedUse`?",
+      "range": {
+        "startLine": 474,
+        "startChar": 27,
+        "endLine": 474,
+        "endChar": 44
+      },
+      "revId": "272c6f72780cac4510ac6c2decde6263bc07b11d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
