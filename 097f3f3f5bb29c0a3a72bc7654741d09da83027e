@@ -16,6 +16,23 @@
       "message": "Hi Yuly, PTAL. Thanks",
       "revId": "097f3f3f5bb29c0a3a72bc7654741d09da83027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e52bc8a1_bc9baacc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-08T16:52:18Z",
+      "side": 1,
+      "message": "Let me see if I can test this on Chromium CQ in crrev.com/c/4088746",
+      "revId": "097f3f3f5bb29c0a3a72bc7654741d09da83027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
