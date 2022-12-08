@@ -173,6 +173,24 @@
       "parentUuid": "3bb7b35e_d159a967",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bd0704f_ac695a88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-08T15:27:52Z",
+      "side": 1,
+      "message": "I\u0027m just sharing the information given me. We just need to decide if there is extra work with BGRX or extra work with BGRA, and go with the best one.",
+      "parentUuid": "04ecc330_a781e966",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
