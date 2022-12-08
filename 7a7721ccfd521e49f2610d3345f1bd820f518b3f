@@ -16,6 +16,69 @@
       "message": "Building on the previous work that made the semaphore clean up be fence-based, now the fence is directly coming from present itself so it\u0027s even simpler.",
       "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a6f525e_ee6ff906",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-08T23:52:25Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dbeecd9_bdc33b19",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-08T23:52:25Z",
+      "side": 1,
+      "message": "Are we always disabling VVL with this change?",
+      "range": {
+        "startLine": 958,
+        "startChar": 4,
+        "endLine": 958,
+        "endChar": 5
+      },
+      "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cf6812f_ed2473c1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-08T23:52:25Z",
+      "side": 1,
+      "message": "It will be nice if you could add a comment in the else clause that fence will be inferred and set at ANI call",
+      "range": {
+        "startLine": 1910,
+        "startChar": 4,
+        "endLine": 1910,
+        "endChar": 8
+      },
+      "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
