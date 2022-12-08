@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80646aa6_f2824e8a",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T18:40:55Z",
+      "side": 1,
+      "message": "`slowMonolithicPipelineCreation` sounds like it\u0027s saying the driver is slow (so we have to do something special). The flag is entirely there for testing. I renamed it to `slowDown...ForTesting` which should hopefully read better.",
+      "parentUuid": "45b16573_42425419",
+      "range": {
+        "startLine": 772,
+        "startChar": 16,
+        "endLine": 772,
+        "endChar": 56
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2366cf9_b28dca67",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-06T15:56:44Z",
       "side": 1,
       "message": "nit: getPreferredPipelineBlocking? Just a thought.",
+      "range": {
+        "startLine": 2188,
+        "startChar": 40,
+        "endLine": 2188,
+        "endChar": 60
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c592820_d3f1332d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T18:40:55Z",
+      "side": 1,
+      "message": "It\u0027s not blocking, but I like `getPreferredPipeline`, done.",
+      "parentUuid": "e2366cf9_b28dca67",
       "range": {
         "startLine": 2188,
         "startChar": 40,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54b21d6d_76b4c8a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T18:40:55Z",
+      "side": 1,
+      "message": "It\u0027s not so much about stopping or continuing work, as it\u0027s about returning VkResult for the thread. I didn\u0027t early out here because what happens after is trivial accounting, and it\u0027s harmless even if error happens.\n\nFWIW, if the error comes from a thread, it\u0027s not like we are stopping the main thread anyway until it sees the result.",
+      "parentUuid": "548c5555_9adeac9d",
+      "range": {
+        "startLine": 3261,
+        "startChar": 4,
+        "endLine": 3261,
+        "endChar": 12
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd8a40ad_077a6429",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e855642d_1a45db01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T18:40:55Z",
+      "side": 1,
+      "message": "Unique. This is just deferred for cleanup because there\u0027s a bug currently with garbage collection. It\u0027ll go away with anglebug.com/7862",
+      "parentUuid": "fd8a40ad_077a6429",
+      "range": {
+        "startLine": 1385,
+        "startChar": 13,
+        "endLine": 1385,
+        "endChar": 37
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe38509c_98a0dc49",
@@ -106,6 +202,30 @@
       "writtenOn": "2022-12-06T15:56:44Z",
       "side": 1,
       "message": "confused why both the share group and this class have a pointer to the task. is this shared ownership? if so, can you simplify it to unique ownership?",
+      "range": {
+        "startLine": 1391,
+        "startChar": 4,
+        "endLine": 1391,
+        "endChar": 75
+      },
+      "revId": "1c06f1ffd97595e567e869c95bc5ea4630ffc616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b192da1b_e29fe532",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T18:40:55Z",
+      "side": 1,
+      "message": "They don\u0027t. The task and everything else is owned by the PipelineHelper. ShareGroup only keeps a reference to a `angle::WaitableEvent`, which it uses to know if any task is in progress or not.",
+      "parentUuid": "fe38509c_98a0dc49",
       "range": {
         "startLine": 1391,
         "startChar": 4,
