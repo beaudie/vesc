@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc86122e_0fb3b86b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T00:24:52Z",
+      "side": 1,
+      "message": "General reply to your comments. The primary reason we\u0027re doing this is to help you avoid merge conflicts. The ring buffer allocator is pretty much taken as-is from Samsung\u0027s patches from a while ago, we haven\u0027t (and don\u0027t really intend to) make significant modifications to that at the moment.\n\nThe review comments are good, though I suspect it\u0027ll fall on Samsung itself to address them.",
+      "parentUuid": "2a45b267_27900119",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e0dccc9_30d51ca4",
