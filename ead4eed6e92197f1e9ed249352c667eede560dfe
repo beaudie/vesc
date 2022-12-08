@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d32e6f0_24dcf938",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T02:46:56Z",
+      "side": 1,
+      "message": "Ok, if you are up to it, you might as well mirror VkAttachmentLoadOp and VkAttachmentStoreOp:\n\n```\nGL_LOAD_OP_CLEAR_ANGLE\nGL_LOAD_OP_LOAD_ANGLE\nGL_LOAD_OP_DONT_CARE_ANGLE\nGL_STORE_OP_STORE_ANGLE\nGL_STORE_OP_DONT_CARE_ANGLE\nGL_STORE_OP_NONE_ANGLE\n```\n\n(don\u0027t forget STORE_OP_NONE). Do you have enough enums?",
+      "parentUuid": "d743a036_8d060532",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
@@ -83,6 +101,24 @@
       "writtenOn": "2022-12-07T22:51:36Z",
       "side": 1,
       "message": "Is this the correct way to handle the non-contiguous value in `GL_CLEAR_ANGLE`?",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd9b5489_1d8b2d20",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-08T02:46:56Z",
+      "side": 1,
+      "message": "No idea, sorry! As long is it works with autogen, :shrug:",
+      "parentUuid": "8cfb0f43_1ad91153",
       "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
