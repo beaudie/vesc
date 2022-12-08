@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d917c8ed_250122ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-08T07:20:15Z",
+      "side": 1,
+      "message": "The range I\u0027ve been using has 16 enums: https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/main/xml/gl.xml\n\nIt\u0027s barely enough if we recycle `GL_DONT_CARE` (which I actually kind of like, but wouldn\u0027t mind changing either).\n\nI also have not added `GL_STORE_OP_NONE_ANGLE` yet. What behavior would we want for this op, and how would it differ from `GL_DONT_CARE`?",
+      "parentUuid": "5d32e6f0_24dcf938",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "No idea, sorry! As long is it works with autogen, :shrug:",
       "parentUuid": "8cfb0f43_1ad91153",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8308326e_5c4aea2d",
+        "filename": "scripts/gl_angle_ext.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-08T07:20:15Z",
+      "side": 1,
+      "message": "Works for me",
+      "parentUuid": "fd9b5489_1d8b2d20",
       "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
