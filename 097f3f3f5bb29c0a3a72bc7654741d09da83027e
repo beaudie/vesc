@@ -33,6 +33,23 @@
       "message": "Let me see if I can test this on Chromium CQ in crrev.com/c/4088746",
       "revId": "097f3f3f5bb29c0a3a72bc7654741d09da83027e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "178d597e_1a14b7ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-08T18:52:23Z",
+      "side": 1,
+      "message": "All checks passed in https://chromium-review.googlesource.com/c/chromium/src/+/4088746, I\u0027ll submit.",
+      "revId": "097f3f3f5bb29c0a3a72bc7654741d09da83027e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
