@@ -4577,7 +4577,17 @@ void PipelineHelper::destroy(VkDevice device)
 
 void PipelineHelper::release(ContextVk *contextVk)
 {
-    contextVk->addGarbage(&mPipeline);
+    RendererVk *renderer = contextVk->getRenderer();
+    if (renderer->hasUnfinishedUse(mUse))
+    {
+        GarbageList garbageList;
+        garbageList.emplace_back(GetGarbage(&mPipeline));
+        renderer->collectGarbage(mUse, std::move(garbageList));
+    }
+    else
+    {
+        mPipeline.destroy(renderer->getDevice());
+    }
     mCacheLookUpFeedback = CacheLookUpFeedback::None;
 }
 
