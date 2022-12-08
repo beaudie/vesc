@@ -174,10 +174,10 @@ ANGLE_INLINE void Resource::retainCommands(const QueueSerial &queueSerial)
 
 // Similar to |Resource| above, this tracks object usage. This includes additional granularity to
 // track whether an object is used for read-only or read/write access.
-class ReadWriteResource : public angle::NonCopyable
+class ReadWriteResource : public Resource
 {
   public:
-    virtual ~ReadWriteResource();
+    virtual ~ReadWriteResource() override;
 
     // Complete all recorded and in-flight commands involving this resource
     angle::Result waitForIdle(ContextVk *contextVk,
@@ -192,7 +192,6 @@ class ReadWriteResource : public angle::NonCopyable
     bool usedByCommandBuffer(const QueueSerial &commandBufferQueueSerial) const;
     bool writtenByCommandBuffer(const QueueSerial &commandBufferQueueSerial) const;
 
-    const ResourceUse &getResourceUse() const { return mReadOnlyUse; }
     const ResourceUse &getWriteResourceUse() const { return mReadWriteUse; }
 
   protected:
@@ -200,27 +199,25 @@ class ReadWriteResource : public angle::NonCopyable
     ReadWriteResource(ReadWriteResource &&other);
     ReadWriteResource &operator=(ReadWriteResource &&other);
 
-    // Track any use of the object. Always updated on every retain call.
-    ResourceUse mReadOnlyUse;
     // Track read/write use of the object. Only updated for retainReadWrite().
     ResourceUse mReadWriteUse;
 };
 
 ANGLE_INLINE void ReadWriteResource::retainReadOnly(const QueueSerial &queueSerial)
 {
-    mReadOnlyUse.setQueueSerial(queueSerial);
+    mUse.setQueueSerial(queueSerial);
 }
 
 ANGLE_INLINE void ReadWriteResource::retainReadWrite(const QueueSerial &queueSerial)
 {
-    mReadOnlyUse.setQueueSerial(queueSerial);
+    mUse.setQueueSerial(queueSerial);
     mReadWriteUse.setQueueSerial(queueSerial);
 }
 
 ANGLE_INLINE bool ReadWriteResource::usedByCommandBuffer(
     const QueueSerial &commandBufferQueueSerial) const
 {
-    return mReadOnlyUse.usedByCommandBuffer(commandBufferQueueSerial);
+    return mUse.usedByCommandBuffer(commandBufferQueueSerial);
 }
 
 ANGLE_INLINE bool ReadWriteResource::writtenByCommandBuffer(
