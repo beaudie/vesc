@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "135afb4a_80ff9642",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-08T17:46:02Z",
+      "side": 1,
+      "message": "Where do we define the `mQueueSerialMutexenum`?",
+      "revId": "dc9c71e968536952cf4531d8a8038db70c3e9059",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
