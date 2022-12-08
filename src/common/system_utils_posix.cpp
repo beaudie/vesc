@@ -143,6 +143,9 @@ std::string GetModuleDirectoryAndGetError(std::string *errorOut)
     std::string moduleName       = GetModulePath(&placeholderSymbol);
     if (!moduleName.empty())
     {
+        auto first_space = moduleName.find_first_of(' ');
+        if (first_space != std::string::npos)
+            moduleName = moduleName.substr(0, first_space);
         directory = moduleName.substr(0, moduleName.find_last_of('/') + 1);
     }
 
