@@ -81,7 +81,7 @@ ReadWriteResource::~ReadWriteResource() {}
 
 ReadWriteResource &ReadWriteResource::operator=(ReadWriteResource &&other)
 {
-    mReadOnlyUse  = std::move(other.mReadOnlyUse);
+    Resource::operator=(std::move(other));
     mReadWriteUse = std::move(other.mReadWriteUse);
     return *this;
 }
@@ -90,7 +90,7 @@ angle::Result ReadWriteResource::waitForIdle(ContextVk *contextVk,
                                              const char *debugMessage,
                                              RenderPassClosureReason reason)
 {
-    return WaitForIdle(contextVk, this, debugMessage, reason);
+    return Resource::waitForIdle(contextVk, debugMessage, reason);
 }
 
 // SharedGarbage implementation.
