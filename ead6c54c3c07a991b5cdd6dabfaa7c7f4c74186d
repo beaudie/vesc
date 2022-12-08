@@ -155,6 +155,24 @@
       "parentUuid": "5bae202c_d22fa0d8",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ecc330_a781e966",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-08T08:51:44Z",
+      "side": 1,
+      "message": "Never mind my second question. Thank you.",
+      "parentUuid": "3bb7b35e_d159a967",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
