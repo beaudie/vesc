@@ -137,6 +137,24 @@
       "parentUuid": "3dcf1ce1_0b81c84d",
       "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb7b35e_d159a967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-08T01:41:25Z",
+      "side": 1,
+      "message": "Thank you for the information. I should have to study and be more careful before writing comment and uploading the patches. I will heed your advice.\nBut I still can\u0027t catch up your comment.\n1. Regardless of this patch, Wayland will use BGRA.\n2. What is the `difference` here ?",
+      "parentUuid": "5bae202c_d22fa0d8",
+      "revId": "ead6c54c3c07a991b5cdd6dabfaa7c7f4c74186d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
