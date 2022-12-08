@@ -1,0 +1,566 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a45b267_27900119",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "thanks amirali for taking this up\n\nquite a large change, still going through it but thought i would post the comments i have so far",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e0dccc9_30d51ca4",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "mind adding a short blurb explaining the logic?",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8563638_ba1d71d8",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "mind adding a short blurb explaining the logic?",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64494d4b_a1666b0d",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "what is the basis for these `3` or `6` magic numbers?",
+      "range": {
+        "startLine": 109,
+        "startChar": 12,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e33976_0da8ec53",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "this could definitely use a note describing terminology and intent",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb85d8e6_99da7669",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "im not quite sure about purpose of this method, a small note might help?",
+      "range": {
+        "startLine": 130,
+        "startChar": 26,
+        "endLine": 130,
+        "endChar": 44
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e53016f_f8128828",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "is there a reason to call this before alloc\u0027ing new fragment? otherwise we can batch these calls at the end",
+      "range": {
+        "startLine": 139,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3f3b75c_c614f22e",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "1. could rename this to `newFragmentBegin`\n2. can declare variable outside the `if(...)` so it can be used throughout the method",
+      "range": {
+        "startLine": 146,
+        "startChar": 23,
+        "endLine": 146,
+        "endChar": 29
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8149cb7c_6ef04fcb",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "1. any reason we set these states after letting listeners know about new fragment allocation?\n2. there seems to be a strict ordering of notifications to listeners, how is this enforced outside of code reviews? is there a way to make it less fragile?",
+      "range": {
+        "startLine": 174,
+        "startChar": 1,
+        "endLine": 176,
+        "endChar": 42
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee247a76_5bac3d26",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "would really help if there was a short note on what each condition is checking for",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e82c6542_3d0bcd96",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "does this mean it is `ensured` that something is true or does it mean calling `resetPointers` ensures something?",
+      "range": {
+        "startLine": 201,
+        "startChar": 11,
+        "endLine": 201,
+        "endChar": 66
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42fc9443_0860c4aa",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "this returns the number of `what` allocated in the buffer? is it number of fragments or bytes?",
+      "range": {
+        "startLine": 227,
+        "startChar": 30,
+        "endLine": 227,
+        "endChar": 53
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f47487b_b520d255",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "no auto, only explicit types",
+      "range": {
+        "startLine": 281,
+        "startChar": 10,
+        "endLine": 281,
+        "endChar": 15
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7456988d_5b1fd5a7",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "i see something being reset but what exactly is being released or updated here?",
+      "range": {
+        "startLine": 288,
+        "startChar": 33,
+        "endLine": 288,
+        "endChar": 49
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acefa50d_7b0bdf61",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "seems unused, can it be removed?",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8f58f5_b8bcba76",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "any reason to not use ANGLE\u0027s subject-observer model instead of creating a new one?\n\nwe can have types like `SharedCommandBlockPool` be observers and types like `RingBufferAllocator` be the subject",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e87b3d22_8897451a",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "any plans to add unit tests or white box tests for `RingBufferAllocatorBuffer`, `RingBufferCheckPoint` and `RingBufferAllocator`?",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0f6c0f0_d4f9350d",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "`RingBufferAllocatorCheckPoint` for consistency with `RingBufferAllocatorBuffer`?",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f45615_de824e80",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "too many `f`s",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 25
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ce2b117_a733bca2",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "could you add a small blurb on how this `kBaseOffset` is being used?",
+      "range": {
+        "startLine": 49,
+        "startChar": 30,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36c23602_524617bb",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "any perf test data that can show the win of using this type instead of pool allocators?",
+      "range": {
+        "startLine": 71,
+        "startChar": 6,
+        "endLine": 71,
+        "endChar": 26
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c3c523d_d745f6e0",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "do we have data to show this is the likely branch?",
+      "range": {
+        "startLine": 91,
+        "startChar": 12,
+        "endLine": 91,
+        "endChar": 24
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15ad006a_158e95c6",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "might be better to not use `old`, doesn\u0027t `mFreeBuffers` suffice?",
+      "range": {
+        "startLine": 120,
+        "startChar": 43,
+        "endLine": 120,
+        "endChar": 54
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126264c4_caa0b734",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "would be really helpful if we have one-liners stating the intent/purpose of these member vars",
+      "range": {
+        "startLine": 120,
+        "startChar": 4,
+        "endLine": 134,
+        "endChar": 35
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82bcca8e_07c6c410",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "this class has no `push` but has a `pop`? can it be renamed to something more meaningful?",
+      "range": {
+        "startLine": 144,
+        "startChar": 25,
+        "endLine": 144,
+        "endChar": 28
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0690459_9f153d3d",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-08T00:03:54Z",
+      "side": 1,
+      "message": "is manipulating atomics so prohibitive on performance that it needs to be compiled out on release builds? if no data to backup that claim, would much rather have member present always and `ASSERT` macro will take care of doing the right thing based on build type",
+      "range": {
+        "startLine": 149,
+        "startChar": 4,
+        "endLine": 149,
+        "endChar": 39
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
