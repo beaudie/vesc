@@ -56,7 +56,8 @@ Resource::Resource(Resource &&other) : Resource()
 
 Resource &Resource::operator=(Resource &&rhs)
 {
-    std::swap(mUse, rhs.mUse);
+    mUse = rhs.mUse;
+    rhs.mUse.reset();
     return *this;
 }
 
