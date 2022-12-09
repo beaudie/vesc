@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec9e4587_53990cbe",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T18:11:39Z",
+      "side": 1,
+      "message": "Oops, I should take a look and remove hacks. (undid this one)",
+      "parentUuid": "8dbeecd9_bdc33b19",
+      "range": {
+        "startLine": 958,
+        "startChar": 4,
+        "endLine": 958,
+        "endChar": 5
+      },
+      "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cf6812f_ed2473c1",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-12-08T23:52:25Z",
       "side": 1,
       "message": "It will be nice if you could add a comment in the else clause that fence will be inferred and set at ANI call",
+      "range": {
+        "startLine": 1910,
+        "startChar": 4,
+        "endLine": 1910,
+        "endChar": 8
+      },
+      "revId": "7a7721ccfd521e49f2610d3345f1bd820f518b3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "628e4f32_4c980079",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T18:11:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cf6812f_ed2473c1",
       "range": {
         "startLine": 1910,
         "startChar": 4,
