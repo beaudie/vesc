@@ -34,6 +34,24 @@
       "parentUuid": "7c502b3e_1c1dff3a",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0fb503a_3a9fefc8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-09T04:00:02Z",
+      "side": 1,
+      "message": "This problem sometimes doesn\u0027t happen. However, the frequency of occurrence is very high. I\u0027m testing with GBM winsys + Vulkan + Linux  environment on my board.",
+      "parentUuid": "66e23e91_556a9246",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
