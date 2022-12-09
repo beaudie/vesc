@@ -83,13 +83,10 @@ size_t GetBatchCountUpToSerials(std::vector<CommandBatch> &inFlightCommands,
     BitSetArrayT serialBitMaskToFinish;
     for (SerialIndex i = 0; i < serials.size(); i++)
     {
-        if (serials[i].valid())
+        ASSERT(serials[i] <= lastSubmittedSerials[i]);
+        if (serials[i] > lastCompletedSerials[i])
         {
-            ASSERT(serials[i] <= lastSubmittedSerials[i]);
-            if (serials[i] > lastCompletedSerials[i])
-            {
-                serialBitMaskToFinish.set(i);
-            }
+            serialBitMaskToFinish.set(i);
         }
     }
 
@@ -887,7 +884,7 @@ void CommandQueue::destroy(Context *context)
     RendererVk *renderer = context->getRenderer();
 
     // Assigns an infinite "last completed" serial to force garbage to delete.
-    mLastCompletedSerials.fill(Serial::Infinite());
+    mLastCompletedSerials.fill(SequentialSerial::Infinite());
     (void)clearAllGarbage(renderer);
 
     mPrimaryCommands.destroy(renderer->getDevice());
@@ -964,7 +961,7 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
 
     // First store the last completed queue serial value into a local variable and then update
     // mLastCompletedQueueSerial once in the end.
-    angle::FastMap<Serial, kMaxFastQueueSerials> lastCompletedQueueSerials;
+    angle::FastMap<SequentialSerial, kMaxFastQueueSerials> lastCompletedQueueSerials;
     for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
     {
         CommandBatch &batch = mInFlightCommands[commandIndex];
@@ -991,10 +988,7 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
 
     for (SerialIndex index = 0; index < lastCompletedQueueSerials.size(); index++)
     {
-        if (lastCompletedQueueSerials[index].valid())
-        {
-            mLastCompletedSerials.setQueueSerial(index, lastCompletedQueueSerials[index]);
-        }
+        mLastCompletedSerials.setQueueSerial(index, lastCompletedQueueSerials[index]);
     }
 
     auto beginIter = mInFlightCommands.begin();
@@ -1097,7 +1091,6 @@ bool CommandQueue::allInFlightCommandsAreAfterSerials(const Serials &serials)
     for (const CommandBatch &batch : mInFlightCommands)
     {
         if (batch.queueSerial.getIndex() < serials.size() &&
-            serials[batch.queueSerial.getIndex()].valid() &&
             batch.queueSerial.getSerial() <= serials[batch.queueSerial.getIndex()])
         {
             return false;

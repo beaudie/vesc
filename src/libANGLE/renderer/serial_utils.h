@@ -82,59 +82,6 @@ class Serial final
     static constexpr uint64_t kInvalid = 0;
 };
 
-// Defines class to track the queue serial that can be load/store from multiple threads atomically.
-class AtomicQueueSerial final
-{
-  public:
-    constexpr AtomicQueueSerial() : mValue(kInvalid) { ASSERT(mValue.is_lock_free()); }
-    AtomicQueueSerial &operator=(const Serial &other)
-    {
-        mValue.store(other.mValue, std::memory_order_release);
-        return *this;
-    }
-    Serial getSerial() const { return Serial(mValue.load(std::memory_order_consume)); }
-
-  private:
-    std::atomic<uint64_t> mValue;
-    static constexpr uint64_t kInvalid = 0;
-};
-
-// Used as default/initial serial
-static constexpr Serial kZeroSerial = Serial();
-
-// The factory to generate a serial number within the range [mSerial, mSerial+mCount}
-class RangedSerialFactory final : angle::NonCopyable
-{
-  public:
-    RangedSerialFactory() : mSerial(0), mCount(0) {}
-
-    void reset() { mCount = 0; }
-    bool empty() const { return mCount == 0; }
-    bool generate(Serial *serialOut)
-    {
-        if (mCount > 0)
-        {
-            uint64_t current = mSerial++;
-            ASSERT(mSerial > current);  // Integer overflow
-            *serialOut = Serial(current);
-            mCount--;
-            return true;
-        }
-        return false;
-    }
-
-  private:
-    template <typename T>
-    friend class SerialFactoryBase;
-    void initialize(uint64_t initialSerial, size_t count)
-    {
-        mSerial = initialSerial;
-        mCount  = count;
-    }
-    uint64_t mSerial;
-    size_t mCount;
-};
-
 template <typename SerialBaseType>
 class SerialFactoryBase final : angle::NonCopyable
 {
@@ -148,6 +95,129 @@ class SerialFactoryBase final : angle::NonCopyable
         return Serial(current);
     }
 
+  private:
+    SerialBaseType mSerial;
+};
+
+using SerialFactory = SerialFactoryBase<uint64_t>;
+
+// Class SequentialSerial defines serial number that could only monotonically increment and 0 is
+// also valid.
+class SequentialSerial final
+{
+  public:
+    constexpr SequentialSerial() : mValue(0) {}
+    constexpr SequentialSerial(const SequentialSerial &other)  = default;
+    SequentialSerial &operator=(const SequentialSerial &other) = default;
+
+    static constexpr SequentialSerial Infinite()
+    {
+        return SequentialSerial(std::numeric_limits<uint64_t>::max());
+    }
+
+    constexpr bool operator==(const SequentialSerial &other) const
+    {
+        return mValue == other.mValue;
+    }
+    constexpr bool operator==(uint32_t value) const
+    {
+        return mValue == static_cast<uint64_t>(value);
+    }
+    constexpr bool operator!=(const SequentialSerial &other) const
+    {
+        return mValue != other.mValue;
+    }
+    constexpr bool operator>(const SequentialSerial &other) const { return mValue > other.mValue; }
+    constexpr bool operator>=(const SequentialSerial &other) const
+    {
+        return mValue >= other.mValue;
+    }
+    constexpr bool operator<(const SequentialSerial &other) const { return mValue < other.mValue; }
+    constexpr bool operator<=(const SequentialSerial &other) const
+    {
+        return mValue <= other.mValue;
+    }
+
+    constexpr bool operator<(uint32_t value) const { return mValue < static_cast<uint64_t>(value); }
+
+    // Useful for serialization.
+    constexpr uint64_t getValue() const { return mValue; }
+
+  private:
+    friend class AtomicSerialFactory;
+    friend class RangedSerialFactory;
+    friend class AtomicQueueSerial;
+    constexpr explicit SequentialSerial(uint64_t value) : mValue(value) {}
+    uint64_t mValue;
+};
+
+// Defines class to track the queue serial that can be load/store from multiple threads atomically.
+class AtomicQueueSerial final
+{
+  public:
+    constexpr AtomicQueueSerial() : mValue(kInvalid) { ASSERT(mValue.is_lock_free()); }
+    AtomicQueueSerial &operator=(const SequentialSerial &other)
+    {
+        mValue.store(other.mValue, std::memory_order_release);
+        return *this;
+    }
+    SequentialSerial getSerial() const
+    {
+        return SequentialSerial(mValue.load(std::memory_order_consume));
+    }
+
+  private:
+    std::atomic<uint64_t> mValue;
+    static constexpr uint64_t kInvalid = 0;
+};
+
+// Used as default/initial serial
+static constexpr SequentialSerial kZeroSerial = SequentialSerial();
+
+// The factory to generate a serial number within the range [mSerial, mSerial+mCount}
+class RangedSerialFactory final : angle::NonCopyable
+{
+  public:
+    RangedSerialFactory() : mSerial(0), mCount(0) {}
+
+    void reset() { mCount = 0; }
+    bool empty() const { return mCount == 0; }
+    bool generate(SequentialSerial *serialOut)
+    {
+        if (mCount > 0)
+        {
+            uint64_t current = mSerial++;
+            ASSERT(mSerial > current);  // Integer overflow
+            *serialOut = SequentialSerial(current);
+            mCount--;
+            return true;
+        }
+        return false;
+    }
+
+  private:
+    friend class AtomicSerialFactory;
+    void initialize(uint64_t initialSerial, size_t count)
+    {
+        mSerial = initialSerial;
+        mCount  = count;
+    }
+    uint64_t mSerial;
+    size_t mCount;
+};
+
+class AtomicSerialFactory final : angle::NonCopyable
+{
+  public:
+    AtomicSerialFactory() : mSerial(1) {}
+
+    SequentialSerial generate()
+    {
+        uint64_t current = mSerial++;
+        ASSERT(mSerial > current);  // Integer overflow
+        return SequentialSerial(current);
+    }
+
     void reserve(RangedSerialFactory *rangeFactory, size_t count)
     {
         uint64_t current = mSerial;
@@ -157,11 +227,8 @@ class SerialFactoryBase final : angle::NonCopyable
     }
 
   private:
-    SerialBaseType mSerial;
+    std::atomic<uint64_t> mSerial;
 };
-
-using SerialFactory       = SerialFactoryBase<uint64_t>;
-using AtomicSerialFactory = SerialFactoryBase<std::atomic<uint64_t>>;
 
 // For backend that supports multiple queue serials, QueueSerial includes a Serial and an index.
 using SerialIndex                                     = uint32_t;
@@ -179,10 +246,10 @@ class AtomicQueueSerialFixedArray final
     AtomicQueueSerialFixedArray()  = default;
     ~AtomicQueueSerialFixedArray() = default;
 
-    void setQueueSerial(SerialIndex index, Serial serial);
+    void setQueueSerial(SerialIndex index, SequentialSerial serial);
     void setQueueSerial(const QueueSerial &queueSerial);
-    void fill(Serial serial) { std::fill(mSerials.begin(), mSerials.end(), serial); }
-    Serial operator[](SerialIndex index) const { return mSerials[index].getSerial(); }
+    void fill(SequentialSerial serial) { std::fill(mSerials.begin(), mSerials.end(), serial); }
+    SequentialSerial operator[](SerialIndex index) const { return mSerials[index].getSerial(); }
     size_t size() const { return mSerials.size(); }
 
   private:
@@ -193,7 +260,7 @@ class QueueSerial final
 {
   public:
     QueueSerial() : mIndex(kInvalidQueueSerialIndex) {}
-    QueueSerial(SerialIndex index, Serial serial) : mIndex(index), mSerial(serial)
+    QueueSerial(SerialIndex index, SequentialSerial serial) : mIndex(index), mSerial(serial)
     {
         ASSERT(index != kInvalidQueueSerialIndex);
     }
@@ -218,17 +285,18 @@ class QueueSerial final
         return mSerial <= serials[mIndex];
     }
 
-    constexpr bool valid() const { return mSerial.valid(); }
+    constexpr bool valid() const { return mIndex != kInvalidQueueSerialIndex; }
 
     SerialIndex getIndex() const { return mIndex; }
-    Serial getSerial() const { return mSerial; }
+    SequentialSerial getSerial() const { return mSerial; }
 
   private:
     SerialIndex mIndex;
-    Serial mSerial;
+    SequentialSerial mSerial;
 };
 
-ANGLE_INLINE void AtomicQueueSerialFixedArray::setQueueSerial(SerialIndex index, Serial serial)
+ANGLE_INLINE void AtomicQueueSerialFixedArray::setQueueSerial(SerialIndex index,
+                                                              SequentialSerial serial)
 {
     ASSERT(index != kInvalidQueueSerialIndex);
     ASSERT(index < mSerials.size());

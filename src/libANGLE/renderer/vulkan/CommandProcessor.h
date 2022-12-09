@@ -424,7 +424,10 @@ class CommandQueue final : public CommandQueueInterface
     bool hasUnfinishedUse(const ResourceUse &use) const;
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const ResourceUse &use) const;
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+    SequentialSerial getLastSubmittedSerial(SerialIndex index) const
+    {
+        return mLastSubmittedSerials[index];
+    }
 
   private:
     void releaseToCommandBatch(bool hasProtectedContent,
@@ -594,7 +597,10 @@ class CommandProcessor final : public Context, public CommandQueueInterface
     }
 
     bool hasUnsubmittedUse(const ResourceUse &use) const;
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+    SequentialSerial getLastSubmittedSerial(SerialIndex index) const
+    {
+        return mLastSubmittedSerials[index];
+    }
 
   private:
     bool hasPendingError() const

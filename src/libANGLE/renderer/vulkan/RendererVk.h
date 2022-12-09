@@ -619,13 +619,13 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
-    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut, Serial *serialOut);
+    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut, SequentialSerial *serialOut);
     size_t getLargestQueueSerialIndexEverAllocated() const
     {
         return mQueueSerialIndexAllocator.getLargestIndexEverAllocated();
     }
     void releaseQueueSerialIndex(SerialIndex index);
-    Serial generateQueueSerial(SerialIndex index);
+    SequentialSerial generateQueueSerial(SerialIndex index);
     void reserveQueueSerials(SerialIndex index,
                              size_t count,
                              RangedSerialFactory *rangedSerialFactory);
@@ -927,7 +927,7 @@ class RendererVk : angle::NonCopyable
     angle::HashMap<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationTracker;
 };
 
-ANGLE_INLINE Serial RendererVk::generateQueueSerial(SerialIndex index)
+ANGLE_INLINE SequentialSerial RendererVk::generateQueueSerial(SerialIndex index)
 {
     return mQueueSerialFactory[index].generate();
 }

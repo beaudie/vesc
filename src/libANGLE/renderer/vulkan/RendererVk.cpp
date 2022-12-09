@@ -4512,7 +4512,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     // Allocate a oneoff submitQueueSerial and generate a serial and then use it and release the
     // index.
     SerialIndex queueIndex;
-    Serial lastSubmittedSerial;
+    SequentialSerial lastSubmittedSerial;
     ANGLE_TRY(allocateQueueSerialIndex(&queueIndex, &lastSubmittedSerial));
     QueueSerial submitQueueSerial(queueIndex, generateQueueSerial(queueIndex));
 
@@ -5307,7 +5307,8 @@ VkDeviceSize RendererVk::getPreferedBufferBlockSize(uint32_t memoryTypeIndex) co
     return std::min(heapSize / 64, mPreferredLargeHeapBlockSize);
 }
 
-angle::Result RendererVk::allocateQueueSerialIndex(SerialIndex *indexOut, Serial *serialOut)
+angle::Result RendererVk::allocateQueueSerialIndex(SerialIndex *indexOut,
+                                                   SequentialSerial *serialOut)
 {
     SerialIndex index = mQueueSerialIndexAllocator.allocate();
     if (index == kInvalidQueueSerialIndex)

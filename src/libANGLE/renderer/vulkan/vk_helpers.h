@@ -1226,7 +1226,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
 
     void addCommandDiagnostics(ContextVk *contextVk);
 
-    void setQueueSerial(SerialIndex index, Serial serial)
+    void setQueueSerial(SerialIndex index, SequentialSerial serial)
     {
         mQueueSerial = QueueSerial(index, serial);
     }

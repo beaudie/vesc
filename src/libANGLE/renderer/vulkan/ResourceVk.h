@@ -28,7 +28,7 @@ static constexpr size_t kMaxFastQueueSerials = 4;
 // renderer at garbage collection time, we will make a copy. The array size is expected to be small.
 // But in future if we run into situation that array size is too big, we can change to packed array
 // of QueueSerials.
-using Serials = angle::FastVector<Serial, kMaxFastQueueSerials>;
+using Serials = angle::FastVector<SequentialSerial, kMaxFastQueueSerials>;
 
 // Tracks how a resource is used by ANGLE and by a VkQueue. The serial indicates the most recent use
 // of a resource in the VkQueue. We use the monotonically incrementing serial number to determine if
@@ -65,10 +65,9 @@ class ResourceUse final
 
     ANGLE_INLINE const Serials &getSerials() const { return mSerials; }
 
-    ANGLE_INLINE void setSerial(SerialIndex index, Serial serial)
+    ANGLE_INLINE void setSerial(SerialIndex index, SequentialSerial serial)
     {
         ASSERT(index != kInvalidQueueSerialIndex);
-        ASSERT(serial.valid());
         if (mSerials.size() <= index)
         {
             mSerials.resize(index + 1);
