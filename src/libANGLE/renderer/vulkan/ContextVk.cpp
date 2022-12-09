@@ -3243,15 +3243,14 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
         garbage = std::move(mCurrentGarbage);
     }
 
-    ASSERT(mLastFlushedSerial.valid());
-    ASSERT(!mLastSubmittedSerial.valid() || mLastFlushedSerial > mLastSubmittedSerial);
+    ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
 
     ANGLE_TRY(mRenderer->submitCommands(
         this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
         std::move(mWaitSemaphoreStageMasks), signalSemaphore, std::move(garbage), &mCommandPools,
         QueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial)));
 
-    ASSERT(!mLastSubmittedSerial.valid() || mLastSubmittedSerial < mLastFlushedSerial);
+    ASSERT(mLastSubmittedSerial < mLastFlushedSerial);
     mLastSubmittedSerial = mLastFlushedSerial;
 
     // Now that we have processed resourceUseList, some of pending garbage may no longer pending
@@ -6712,7 +6711,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // Avoid calling vkQueueSubmit() twice, since submitCommands() below will do that.
         ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(renderPassClosureReason));
     }
-    else if (mLastFlushedSerial.valid() && mLastFlushedSerial != mLastSubmittedSerial)
+    else if (mLastFlushedSerial != mLastSubmittedSerial)
     {
         // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
         ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
@@ -6768,7 +6767,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     // they get retained properly until GPU completes. We do not add current buffer into
     // resourceUseList since they never get reused or freed until context gets destroyed, at which
     // time we always wait for GPU to finish before destroying the dynamic buffers.
-    ASSERT(mLastFlushedSerial.valid());
     QueueSerial flushedQueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial);
     mDefaultUniformStorage.updateQueueSerialAndReleaseInFlightBuffers(this, flushedQueueSerial);
 
@@ -7132,8 +7130,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
-    ASSERT(!mLastFlushedSerial.valid() ||
-           mLastFlushedSerial < mRenderPassCommands->getQueueSerial().getSerial());
+    ASSERT(mLastFlushedSerial < mRenderPassCommands->getQueueSerial().getSerial());
     mLastFlushedSerial = mRenderPassCommands->getQueueSerial().getSerial();
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
@@ -7230,11 +7227,7 @@ angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper, bool isEGL
     if (isEGLSyncObject || !mRenderPassCommands->started())
     {
         ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::SyncObjectInit));
-
-        if (mLastSubmittedSerial.valid())
-        {
-            syncHelper->retainCommands(QueueSerial(mCurrentQueueSerialIndex, mLastSubmittedSerial));
-        }
+        syncHelper->retainCommands(QueueSerial(mCurrentQueueSerialIndex, mLastSubmittedSerial));
         return angle::Result::Continue;
     }
 
@@ -7372,8 +7365,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
-    ASSERT(!mLastFlushedSerial.valid() ||
-           mLastFlushedSerial <= mOutsideRenderPassCommands->getQueueSerial().getSerial());
+    ASSERT(mLastFlushedSerial <= mOutsideRenderPassCommands->getQueueSerial().getSerial());
     mLastFlushedSerial = mOutsideRenderPassCommands->getQueueSerial().getSerial();
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
