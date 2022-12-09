@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ae294fb_97e123da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1255015
+      },
+      "writtenOn": "2022-12-09T03:58:12Z",
+      "side": 1,
+      "message": "glinux and arch Linux, at least.",
+      "parentUuid": "33c52b08_df864974",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 40
+      },
+      "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "9fa94ab0_b2825e6f",
@@ -54,6 +78,24 @@
       "writtenOn": "2022-12-09T03:32:44Z",
       "side": 1,
       "message": "And what if there\u0027s space in the name?",
+      "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10fd53fa_d59e583c",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1255015
+      },
+      "writtenOn": "2022-12-09T03:58:12Z",
+      "side": 1,
+      "message": "good point. I\u0027m not sure how we should be detecting that actually.\n\nI wasn\u0027t able to replicate dladdr including the flags for any other small binaries I built, and can\u0027t find any documentation online saying that it does that. but when I put a printf in this function I modified, sure enough it has the flags included, and this happens on multiple systems with an otherwise tip-of-tree release build\n\nI intend to go pull out gdb in a bit to check as well, but i get the same failure to load vulkan libraries for stable builds on Linux as I do on the unpatched tip of tree build.",
+      "parentUuid": "15106a69_555ad7f6",
       "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
