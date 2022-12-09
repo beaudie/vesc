@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c90b964_7ab76274",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-09T07:11:56Z",
+      "side": 1,
+      "message": "Ok, that makes sense, and I see the value in wanting optimized read-only pixel local storage.\n\nI added STORE_OP_NONE to https://docs.google.com/document/d/1BsXxar1gbJ_w-Xvy76VbgmLOgB3qON6BY6YB5LVOqwo/edit\n\nSupporting this will take a decent amount of spec and testing work though. Would you be ok landing this change as-is and putting of STORE_OP_NONE for a future change?",
+      "parentUuid": "3ec31e26_1451e05b",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
