@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7965a572_42a90014",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T18:14:04Z",
+      "side": 1,
+      "message": "I\u0027ll be adding tests; in the meantime, please review.\n\nThere is no functional change to the desc set builder class, it\u0027s just moved to the share group.",
+      "revId": "ffb9e3ace88199645803b2f5c2a8ff49f7f5885d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
