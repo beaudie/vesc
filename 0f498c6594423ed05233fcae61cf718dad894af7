@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33c52b08_df864974",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T03:32:44Z",
+      "side": 1,
+      "message": "That shouldn\u0027t be AFAIU, what platform is this happening on?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 40
+      },
+      "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa94ab0_b2825e6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T03:32:44Z",
+      "side": 1,
+      "message": "Driving by!",
+      "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15106a69_555ad7f6",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T03:32:44Z",
+      "side": 1,
+      "message": "And what if there\u0027s space in the name?",
+      "revId": "0f498c6594423ed05233fcae61cf718dad894af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
