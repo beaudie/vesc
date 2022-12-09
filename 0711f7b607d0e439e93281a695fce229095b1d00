@@ -70,6 +70,24 @@
       "parentUuid": "e0fb503a_3a9fefc8",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b149b08_e157a06b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-09T12:54:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure how old our Intel Linux drivers are, could be a driver bug. You can skip this on Intel and file a bug for following up later after we upgrade.",
+      "parentUuid": "4c20fda8_cf57e584",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
