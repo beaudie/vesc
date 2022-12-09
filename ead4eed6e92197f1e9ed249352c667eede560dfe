@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ec31e26_1451e05b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T02:55:18Z",
+      "side": 1,
+      "message": "Ack, GL_DONT_CARE for both ops is fine with me.\n\nRegarding NONE, in Vulkan at least:\n\n- STORE, if unnecessary, is inefficient because on tilers it would lead to a lot of wasted bandwidth\n- DONT_CARE **is technically a write operation**, and can lead to corruption (although rare), and also forces us to synchronize for no reason\n- NONE means \"I promise I didn\u0027t modify it in the render pass, no need to store back to memory, but also leave the memory contents valid\". It\u0027s useful in combination with LOAD_OP_LOAD, like a read-only depth/stencil that you use for testing and you don\u0027t want to store, but also don\u0027t want to invalidate.",
+      "parentUuid": "d917c8ed_250122ed",
+      "revId": "ead4eed6e92197f1e9ed249352c667eede560dfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d8f3b48e_de4b2677",
