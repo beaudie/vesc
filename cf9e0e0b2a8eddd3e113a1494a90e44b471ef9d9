@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "30d653fd_e73b45a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-09T23:06:04Z",
+      "side": 1,
+      "message": "bug number updated.",
+      "parentUuid": "1c7d3e84_401f245f",
+      "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "25dd001b_fb6894e8",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-09T03:27:38Z",
       "side": 1,
       "message": "We talked about this at length before. We ended up with the current implementation because it\u0027s less confusing. `mReadOnlyUse` and `mReadWriteUse` are clearer than `mUse` and `mReadWriteUse`",
+      "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a7fb01d_d2e88965",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-09T23:06:04Z",
+      "side": 1,
+      "message": "Every time I look at these variables, it confuses me:\n\nmReadOnlyUse actually manes any usage, read or write.\nmReadWriteUse actually means write usage.\n\nDo you agree that this is confusing?\n    \nSince Resource class\u0027s mUse means any access, subclass ReadWriteResource from Resource class makes more sense now since mUse means exact same thing in both classes.\n\nI understood we have gone through length discussion before. I am hoping that over the time people may reflect a bit more and realize the unreasonableness here.",
+      "parentUuid": "25dd001b_fb6894e8",
       "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
