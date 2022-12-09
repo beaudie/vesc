@@ -16,6 +16,23 @@
       "message": "Tests added. I kept hitting a different concurrent read bug, but I managed to get something that was only depending on this bug :-S",
       "revId": "d7716eb54da9aca51aa532b2f65a88268497c400",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1da1547b_25408299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-09T21:10:36Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "d7716eb54da9aca51aa532b2f65a88268497c400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
