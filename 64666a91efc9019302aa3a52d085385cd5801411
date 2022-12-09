@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef8c9cb5_47b0ae5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-09T15:06:01Z",
+      "side": 1,
+      "message": "Jamie, PTAL.\nI hope the retries would be enough and I won\u0027t have to remove the suite like on older Win Intel.",
+      "revId": "64666a91efc9019302aa3a52d085385cd5801411",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
