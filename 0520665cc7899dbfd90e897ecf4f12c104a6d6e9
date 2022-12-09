@@ -22,6 +22,30 @@
       },
       "revId": "0520665cc7899dbfd90e897ecf4f12c104a6d6e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1723414d_6f624557",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4590,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-09T21:42:53Z",
+      "side": 1,
+      "message": "Modified collectGarbage to handle early destroy of objects if object already finished.",
+      "parentUuid": "b20f9b4c_cab52645",
+      "range": {
+        "startLine": 4581,
+        "startChar": 0,
+        "endLine": 4590,
+        "endChar": 5
+      },
+      "revId": "0520665cc7899dbfd90e897ecf4f12c104a6d6e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
