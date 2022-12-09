@@ -111,6 +111,23 @@ class ResourceUse final
                    commandBufferQueueSerial.getSerial();
     }
 
+    // Merge other's serials into this object.
+    ANGLE_INLINE void merge(const ResourceUse &other)
+    {
+        if (mSerials.size() < other.mSerials.size())
+        {
+            mSerials.resize(other.mSerials.size());
+        }
+
+        for (SerialIndex i = 0; i < other.mSerials.size(); ++i)
+        {
+            if (mSerials[i] < other.mSerials[i])
+            {
+                mSerials[i] = other.mSerials[i];
+            }
+        }
+    }
+
   private:
     // The most recent time of use in a VkQueue.
     Serials mSerials;
@@ -157,6 +174,8 @@ class Resource : angle::NonCopyable
     }
 
     const ResourceUse &getResourceUse() const { return mUse; }
+
+    void mergeResourceUse(const ResourceUse &use) { mUse.merge(use); }
 
   protected:
     Resource();
