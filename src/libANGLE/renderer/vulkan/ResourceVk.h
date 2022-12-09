@@ -68,10 +68,10 @@ class ResourceUse final
     ANGLE_INLINE void setSerial(SerialIndex index, Serial serial)
     {
         ASSERT(index != kInvalidQueueSerialIndex);
-        ASSERT(serial.valid());
+        ASSERT(serial != kZeroSerial);
         if (mSerials.size() <= index)
         {
-            mSerials.resize(index + 1);
+            mSerials.resize(index + 1, kZeroSerial);
         }
         mSerials[index] = serial;
     }
