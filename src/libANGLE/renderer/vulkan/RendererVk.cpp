@@ -1268,6 +1268,18 @@ void checkForRemainingMemoryAllocations(RendererVk *renderer)
             }
         }
     }
+    else if (kTrackMemoryAllocation)
+    {
+        for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
+        {
+            if (renderer->getActiveMemoryAllocationsSize(i) != 0)
+            {
+                INFO() << "Remaining allocated size for memory allocation type ("
+                       << vk::kMemoryAllocationTypeMessage[i]
+                       << "): " << renderer->getActiveMemoryAllocationsSize(i);
+            }
+        }
+    }
 }
 }  // namespace
 
@@ -1402,7 +1414,10 @@ void RendererVk::onDestroy(vk::Context *context)
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
     // throughout the execution has been freed.
-    checkForRemainingMemoryAllocations(this);
+    if (kDebugMemoryAllocationLogs)
+    {
+        checkForRemainingMemoryAllocations(this);
+    }
 
     if (mDevice)
     {
@@ -5186,9 +5201,14 @@ void RendererVk::onMemoryDeallocImpl(vk::MemoryAllocationType allocType,
     }
 }
 
+void RendererVk::logMemoryStatsAtError()
+{
+    checkForRemainingMemoryAllocations(this);
+}
+
 VkDeviceSize RendererVk::getActiveMemoryAllocationsSize(uint32_t allocTypeIndex)
 {
-    if (kDebugMemoryAllocationLogs)
+    if (kTrackMemoryAllocation)
     {
         return mActiveMemoryAllocationsSize[allocTypeIndex];
     }
