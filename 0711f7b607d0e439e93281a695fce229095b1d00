@@ -52,6 +52,24 @@
       "parentUuid": "66e23e91_556a9246",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c20fda8_cf57e584",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-09T04:04:24Z",
+      "side": 1,
+      "message": "Although my environment is not same with the Intel GPU + Linux case,\nthe same problem occurred. So I\u0027m looking into code and testing with my environment first.",
+      "parentUuid": "e0fb503a_3a9fefc8",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
