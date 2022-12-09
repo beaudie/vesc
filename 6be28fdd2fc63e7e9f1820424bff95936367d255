@@ -16,6 +16,23 @@
       "message": "Hi Shahbaz, PTAL. Thanks",
       "revId": "6be28fdd2fc63e7e9f1820424bff95936367d255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f38921f8_4045c528",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T14:55:44Z",
+      "side": 1,
+      "message": "If GetExecutablePath always works, why not use it unconditionally? And if it doesn\u0027t, then this is not correct?\n\nIt\u0027s fine as a stop-gap measure, but why is Chrome even doing this? `ps -A` doesn\u0027t show the command line args for Chrome (despite doing this), and `ps x` shows it for every process (regardless). It looks like all Chrome really wants to do is change `/proc/self/exe` to `chrome`, could we try to make it _not_ append arguments to argv[0]?\n\n\u003e // On non-Mac Unix platforms, we exec ourselves from /proc/self/exe, but that\n\u003e // makes the process name that shows up in \"ps\" etc. for the child processes\n\u003e // show as \"exe\" instead of \"chrome\" or something reasonable. This function\n\u003e // will try to fix it so the \"effective\" command line shows up instead.",
+      "revId": "6be28fdd2fc63e7e9f1820424bff95936367d255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
