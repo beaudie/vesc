@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25dd001b_fb6894e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T03:27:38Z",
+      "side": 1,
+      "message": "We talked about this at length before. We ended up with the current implementation because it\u0027s less confusing. `mReadOnlyUse` and `mReadWriteUse` are clearer than `mUse` and `mReadWriteUse`",
+      "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
