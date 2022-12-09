@@ -6506,6 +6506,8 @@ void ContextVk::handleError(VkResult errorCode,
         handleDeviceLost();
     }
 
+    getRenderer()->logMemoryStatsAtError();
+
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 

@@ -1268,6 +1268,18 @@ void checkForRemainingMemoryAllocations(RendererVk *renderer)
             }
         }
     }
+    else if (kTrackMemoryAllocation)
+    {
+        for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
+        {
+            if (renderer->getActiveMemoryAllocationsSize(i) != 0)
+            {
+                INFO() << "Remaining allocated size for memory allocation type ("
+                       << vk::kMemoryAllocationTypeMessage[i]
+                       << "): " << renderer->getActiveMemoryAllocationsSize(i);
+            }
+        }
+    }
 }
 }  // namespace
 
@@ -5186,9 +5198,14 @@ void RendererVk::onMemoryDeallocImpl(vk::MemoryAllocationType allocType,
     }
 }
 
+void RendererVk::logMemoryStatsAtError()
+{
+    checkForRemainingMemoryAllocations(this);
+}
+
 VkDeviceSize RendererVk::getActiveMemoryAllocationsSize(uint32_t allocTypeIndex)
 {
-    if (kDebugMemoryAllocationLogs)
+    if (kTrackMemoryAllocation)
     {
         return mActiveMemoryAllocationsSize[allocTypeIndex];
     }
