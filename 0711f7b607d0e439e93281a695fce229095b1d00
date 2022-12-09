@@ -16,6 +16,24 @@
       "message": "It seems that signal was generated properly because `vkWaitForFences()` finished with `VK_SUCCESS` result.\nBut the problem is that `isCurrentlyInUse(getLastCompletedQueueSerial())` still returns true, which results in `EGL_UNSIGNALED_KHR` to the client.\nNeed more investigation about this.",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66e23e91_556a9246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-09T03:34:40Z",
+      "side": 1,
+      "message": "Did this just start to happen? FYI @cclao@google.com",
+      "parentUuid": "7c502b3e_1c1dff3a",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
