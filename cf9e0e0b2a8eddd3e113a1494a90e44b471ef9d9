@@ -87,6 +87,24 @@
       "parentUuid": "4a7fb01d_d2e88965",
       "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d05628be_a6763d02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-10T02:28:02Z",
+      "side": 1,
+      "message": "Thanks Shabi for the agreement!",
+      "parentUuid": "157d31ed_70594137",
+      "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
