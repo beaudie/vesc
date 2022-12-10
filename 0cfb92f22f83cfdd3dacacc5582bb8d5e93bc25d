@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df4baa50_cc9d619a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-10T00:14:22Z",
+      "side": 1,
+      "message": "Yea, was a bit lazy to create new bug. But just created a new bug and updated the number here.",
+      "parentUuid": "42622ae9_fcfa47d6",
+      "revId": "0cfb92f22f83cfdd3dacacc5582bb8d5e93bc25d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8c59370_f3ec8f31",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-12-09T18:29:40Z",
       "side": 1,
       "message": "why do we no longer check `if (contextVk-\u003egetCurrentQueueSerialIndex() !\u003d kInvalidaQueueSerialIndex)` here?",
+      "revId": "0cfb92f22f83cfdd3dacacc5582bb8d5e93bc25d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14eb2397_26a89bf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-10T00:14:22Z",
+      "side": 1,
+      "message": "Because mergeResourceUse does not care if context state. It only cares about mUse. SO there is no need to check if here.",
+      "parentUuid": "c8c59370_f3ec8f31",
       "revId": "0cfb92f22f83cfdd3dacacc5582bb8d5e93bc25d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
