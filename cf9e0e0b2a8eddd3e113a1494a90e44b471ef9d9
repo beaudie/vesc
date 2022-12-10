@@ -69,6 +69,24 @@
       "parentUuid": "25dd001b_fb6894e8",
       "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "157d31ed_70594137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-10T01:05:48Z",
+      "side": 1,
+      "message": "Huh ok, if `mReadOnlyUse` actually means any use, then `mUse` is fine. TBH, I\u0027d call the other one `mWriteUse` too, but I lost that battle, because _technically_ something that\u0027s writable can also be read.",
+      "parentUuid": "4a7fb01d_d2e88965",
+      "revId": "cf9e0e0b2a8eddd3e113a1494a90e44b471ef9d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
