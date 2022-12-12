@@ -140,6 +140,24 @@
       "message": "which extension does `this extension` refer to? is it `preferMonolithicPipelinesOverLibraries`?",
       "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e695d158_29e3614e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 4099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-12T20:05:30Z",
+      "side": 1,
+      "message": "VK_EXT_graphics_pipeline_library. I made that explicit.",
+      "parentUuid": "f9633a37_d27605e1",
+      "revId": "28fbd187c671a99977934fc3518f69e3533e2939",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
