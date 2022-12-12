@@ -291,7 +291,7 @@ vk::ResourceAccess GetColorAccess(const gl::State &state,
 
     const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
     uint8_t colorMask                      = gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(
-                             colorIndexGL, blendStateExt.getColorMaskBits());
+        colorIndexGL, blendStateExt.getColorMaskBits());
     if (emulatedAlphaMask[colorIndexGL])
     {
         colorMask &= ~VK_COLOR_COMPONENT_A_BIT;
@@ -6500,6 +6500,11 @@ void ContextVk::handleError(VkResult errorCode,
     std::stringstream errorStream;
     errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
                 << ".";
+
+    if (getRenderer() != nullptr)
+    {
+        getRenderer()->logMemoryStatsOnError();
+    }
 
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {

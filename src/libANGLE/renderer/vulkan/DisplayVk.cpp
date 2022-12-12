@@ -586,6 +586,11 @@ void DisplayVk::handleError(VkResult result,
     mSavedError.function  = function;
     mSavedError.line      = line;
 
+    if (getRenderer() != nullptr)
+    {
+        getRenderer()->logMemoryStatsOnError();
+    }
+
     if (result == VK_ERROR_DEVICE_LOST)
     {
         WARN() << "Internal Vulkan error (" << result << "): " << VulkanResultString(result)
@@ -597,6 +602,11 @@ void DisplayVk::handleError(VkResult result,
 // TODO(jmadill): Remove this. http://anglebug.com/3041
 egl::Error DisplayVk::getEGLError(EGLint errorCode)
 {
+    if (getRenderer() != nullptr)
+    {
+        getRenderer()->logMemoryStatsOnError();
+    }
+
     std::stringstream errorStream;
     errorStream << "Internal Vulkan error (" << mSavedError.errorCode
                 << "): " << VulkanResultString(mSavedError.errorCode) << ", in " << mSavedError.file
