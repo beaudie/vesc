@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "153a46ce_a730fc55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Thank you Mohan for the comments. A few of them have been addressed. However, we greatly appreciate Samsung\u0027s help in updating the code regarding the rest.",
+      "parentUuid": "cc86122e_0fb3b86b",
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e0dccc9_30d51ca4",
@@ -179,6 +197,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da3805f_4483e20c",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3f3b75c_c614f22e",
+      "range": {
+        "startLine": 146,
+        "startChar": 23,
+        "endLine": 146,
+        "endChar": 29
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8149cb7c_6ef04fcb",
@@ -288,6 +330,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "429ecb76_3f7d27fb",
+        "filename": "src/common/RingBufferAllocator.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f47487b_b520d255",
+      "range": {
+        "startLine": 281,
+        "startChar": 10,
+        "endLine": 281,
+        "endChar": 15
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7456988d_5b1fd5a7",
@@ -324,6 +390,30 @@
       "writtenOn": "2022-12-08T00:03:54Z",
       "side": 1,
       "message": "seems unused, can it be removed?",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 41
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "458daee0_fc196174",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acefa50d_7b0bdf61",
       "range": {
         "startLine": 16,
         "startChar": 8,
@@ -397,6 +487,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c95aa1_7881d9f6",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0f6c0f0_d4f9350d",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 27
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0f45615_de824e80",
@@ -410,6 +524,30 @@
       "writtenOn": "2022-12-08T00:03:54Z",
       "side": 1,
       "message": "too many `f`s",
+      "range": {
+        "startLine": 42,
+        "startChar": 13,
+        "endLine": 42,
+        "endChar": 25
+      },
+      "revId": "ed9ca36042cecb7809081c351a8256bc6a1a0c5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aeca5ea_907e5da3",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T18:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0f45615_de824e80",
       "range": {
         "startLine": 42,
         "startChar": 13,
