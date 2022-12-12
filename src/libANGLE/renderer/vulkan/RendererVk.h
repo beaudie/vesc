@@ -668,6 +668,8 @@ class RendererVk : angle::NonCopyable
         onMemoryDeallocImpl(allocType, size, reinterpret_cast<void *>(handle));
     }
 
+    void logMemoryStatsAtError();
+
     // Allocation statistics functions below are currently used for debugging only.
     VkDeviceSize getActiveMemoryAllocationsSize(uint32_t allocTypeIndex);
     VkDeviceSize getActiveMemoryAllocationsCount(uint32_t allocTypeIndex);
