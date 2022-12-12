@@ -1325,13 +1325,6 @@ void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
     {
         mPipelineBarrierMask.set(readStage);
     }
-
-    ASSERT(!usesBufferForWrite(*buffer));
-    if (!buffer->usedByCommandBuffer(mQueueSerial))
-    {
-        buffer->setQueueSerial(mQueueSerial);
-        mUsedBufferCount++;
-    }
 }
 
 void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
@@ -1517,6 +1510,37 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
+}
+
+void OutsideRenderPassCommandBufferHelper::bufferRead(ContextVk *contextVk,
+                                                      VkAccessFlags readAccessType,
+                                                      PipelineStage readStage,
+                                                      BufferHelper *buffer)
+{
+    CommandBufferHelperCommon::bufferRead(contextVk, readAccessType, readStage, buffer);
+
+    ASSERT(!buffer->writtenByCommandBuffer(mQueueSerial));
+
+    if (contextVk->hasStartedRenderPass())
+    {
+        // A buffer could have read accessed by both renderPassCommands and
+        // outsideRenderPassCommands and there is no need to endRP or flush. In this case, the
+        // renderPassCommands' read will override the outsideRenderPassCommands' read, since its
+        // queueSerial must be greater than outsideRP.
+        const QueueSerial &renderPassQueueSerial =
+            contextVk->getStartedRenderPassCommands().getQueueSerial();
+        if (buffer->usedByCommandBuffer(renderPassQueueSerial))
+        {
+            ASSERT(!buffer->writtenByCommandBuffer(renderPassQueueSerial));
+            return;
+        }
+    }
+
+    if (!buffer->usedByCommandBuffer(mQueueSerial))
+    {
+        buffer->setQueueSerial(mQueueSerial);
+        mUsedBufferCount++;
+    }
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1725,6 +1749,21 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
                                      VK_IMAGE_ASPECT_DEPTH_BIT);
         mStencilResolveAttachment.init(resolveImage, level, layerStart, layerCount,
                                        VK_IMAGE_ASPECT_STENCIL_BIT);
+    }
+}
+
+void RenderPassCommandBufferHelper::bufferRead(ContextVk *contextVk,
+                                               VkAccessFlags readAccessType,
+                                               PipelineStage readStage,
+                                               BufferHelper *buffer)
+{
+    CommandBufferHelperCommon::bufferRead(contextVk, readAccessType, readStage, buffer);
+
+    ASSERT(!usesBufferForWrite(*buffer));
+    if (!buffer->usedByCommandBuffer(mQueueSerial))
+    {
+        buffer->setQueueSerial(mQueueSerial);
+        mUsedBufferCount++;
     }
 }
 

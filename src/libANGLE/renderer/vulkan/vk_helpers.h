@@ -1182,6 +1182,11 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageLayout imageLayout,
                     ImageHelper *image);
 
+    void bufferRead(ContextVk *contextVk,
+                    VkAccessFlags readAccessType,
+                    PipelineStage readStage,
+                    BufferHelper *buffer);
+
     angle::Result flushToPrimary(Context *context, PrimaryCommandBuffer *primary);
 
     void setGLMemoryBarrierIssued()
@@ -1279,6 +1284,11 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
                     ImageHelper *image);
+
+    void bufferRead(ContextVk *contextVk,
+                    VkAccessFlags readAccessType,
+                    PipelineStage readStage,
+                    BufferHelper *buffer);
 
     void colorImagesDraw(gl::LevelIndex level,
                          uint32_t layerStart,

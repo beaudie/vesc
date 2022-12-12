@@ -73,6 +73,7 @@ class ResourceUse final
         {
             mSerials.resize(index + 1, kZeroSerial);
         }
+        ASSERT(mSerials[index] <= serial);
         mSerials[index] = serial;
     }
 
