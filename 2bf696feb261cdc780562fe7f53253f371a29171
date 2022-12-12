@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5be5a963_d13e31b7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-12T21:27:18Z",
+      "side": 1,
+      "message": "Super nit: `OnError`",
+      "range": {
+        "startLine": 671,
+        "startChar": 23,
+        "endLine": 671,
+        "endChar": 25
+      },
+      "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
