@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93d52f2b_01f7d115",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-12T22:18:02Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6f01853458ce110d8e1dbb90ca86317ce9f27e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6aea6e1c_22a15cdd",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "That is impossible though by design. You can\u0027t draw with a (complete) pipeline if any of the partial pipelines are not there anymore:\n\n- For shaders, it means the GL program is destroyed\n- For vertex input / fragment output, it means the context is destroyed.\n\nSo this is really only protecting against a case where the GL program is destroyed followed by a flush of commands that use that program. This just needs to keep the partial pipelines alive as long as the complete pipeline itself.\n\nUsing ref counting is a nice idea, but a much bigger surgery. Would you mind leaving that as a future refactoring?",
       "parentUuid": "6aea6e1c_22a15cdd",
+      "range": {
+        "startLine": 4604,
+        "startChar": 4,
+        "endLine": 4606,
+        "endChar": 51
+      },
+      "revId": "6f01853458ce110d8e1dbb90ca86317ce9f27e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29cadcc3_d9f4412b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4606,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-12T22:18:02Z",
+      "side": 1,
+      "message": "future CL is fine. If GPU is not directly accessing partial pipelines, a refcount (smart pointer) is just conceptually simpler and robust. With that, the partial pipeline even do not need to be a Resource object.",
+      "parentUuid": "f631fcec_ddb4136e",
       "range": {
         "startLine": 4604,
         "startChar": 4,
