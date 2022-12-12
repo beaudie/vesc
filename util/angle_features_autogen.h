@@ -255,6 +255,7 @@ enum class Feature
     SupportsIndexTypeUint8,
     SupportsLockSurfaceExtension,
     SupportsLogicOpDynamicState,
+    SupportsMemoryBudget,
     SupportsMultiDrawIndirect,
     SupportsMultisampledRenderToSingleSampled,
     SupportsMultisampledRenderToSingleSampledGOOGLEX,
