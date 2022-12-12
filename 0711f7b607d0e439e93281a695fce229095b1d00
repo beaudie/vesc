@@ -124,6 +124,24 @@
       "parentUuid": "2fb21def_20588958",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf8e95db_5089045b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-12T23:28:10Z",
+      "side": 1,
+      "message": "My pleasure 😊\n\nI didn\u0027t use a debugging tool when looking at the code, so I can\u0027t capture a standardized stack trace, but the call sequence I found is as follows.\n\neglCreateSyncKHR(..., EGL_SYNC_NATIVE_FENCE_ANDROID, ...);\ngl APIs...\neglClientWaitSyncKHR(..., EGL_SYNC_FLUSH_COMMANDS_BIT_KHR, ...);\n- vkWaitForFences\n- rx::vk::Fence::wait\n- rx::vk::CommandQueue::waitForResourceUseToFinishWithUserTimeout\n- rx::vk::SyncHelperNativeFence::clientWait\n- rx::vk::clientWait\n- egl::Sync::clientWait",
+      "parentUuid": "a6527871_97faeb11",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
