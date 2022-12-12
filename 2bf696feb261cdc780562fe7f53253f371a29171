@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e0e1499_ecacd902",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-12T21:45:42Z",
+      "side": 1,
+      "message": "This message and data seems inconsistent: getActiveMemoryAllocationsSize() returns the actual bytes allocated, not how many bytes remains as indicated by INFO message. Same thing applies to the line 1271 to 1281.",
+      "range": {
+        "startLine": 1264,
+        "startChar": 16,
+        "endLine": 1267,
+        "endChar": 87
+      },
+      "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5be5a963_d13e31b7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
