@@ -413,6 +413,8 @@ void CommandProcessor::handleError(VkResult errorCode,
     errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
                 << ".";
 
+    getRenderer()->logMemoryStatsOnError();
+
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {
         WARN() << errorStream.str();
