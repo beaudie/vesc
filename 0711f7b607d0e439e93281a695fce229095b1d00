@@ -106,6 +106,24 @@
       "parentUuid": "9b149b08_e157a06b",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6527871_97faeb11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-12T16:15:04Z",
+      "side": 1,
+      "message": "@sywow.choi@samsung.com thanks for debugging this. May I ask who is calling `vkWaitForFences()` (i.e. stack trace)?",
+      "parentUuid": "2fb21def_20588958",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
