@@ -1302,6 +1302,10 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
         ANGLE_VK_TRY(context, *result);
     }
 
+    // Clean up finished batches.
+    ANGLE_TRY(retireFinishedCommands(context, finishCount));
+    ASSERT(allInFlightCommandsAreAfterSerials(use.getSerials()));
+
     return angle::Result::Continue;
 }
 

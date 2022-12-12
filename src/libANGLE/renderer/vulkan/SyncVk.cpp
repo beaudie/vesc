@@ -325,11 +325,11 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     else
     {
         // We need to wait on the file descriptor
-
         status = SyncWaitFd(mNativeFenceFd, timeout);
         if (status != VK_TIMEOUT)
         {
             ANGLE_VK_TRY(contextVk, status);
+            ANGLE_TRY(renderer->checkCompletedCommands(context));
         }
     }
 
@@ -366,10 +366,11 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
                                                ContextVk *contextVk,
                                                bool *signaled)
 {
+    RendererVk *renderer = context->getRenderer();
     // We've got a serial, check if the serial is still in use
     if (mUse.valid())
     {
-        *signaled = !context->getRenderer()->hasUnfinishedUse(getResourceUse());
+        *signaled = !renderer->hasUnfinishedUse(getResourceUse());
         return angle::Result::Continue;
     }
 
@@ -378,6 +379,7 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
     if (result != VK_TIMEOUT)
     {
         ANGLE_VK_TRY(context, result);
+        ANGLE_TRY(renderer->checkCompletedCommands(context));
     }
     *signaled = (result == VK_SUCCESS);
     return angle::Result::Continue;
