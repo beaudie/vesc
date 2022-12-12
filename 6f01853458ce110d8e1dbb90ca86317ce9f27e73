@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6aea6e1c_22a15cdd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4606,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-12T21:51:48Z",
+      "side": 1,
+      "message": "Instead of weak pointer here and then use mUse to keep them alive, why not just refcounting these linked library, that way it is safer and simpler. Otherwise you could have theoretical case that someone check the mUse and see it is done and destroy the libray but did not check PipelineHelper and still keeps PipelineHelper around and use it later. If any librray must keep alive until all pipeline goes away, have pipeline retain it directly using refcount is a better choice, IMO.",
+      "range": {
+        "startLine": 4604,
+        "startChar": 4,
+        "endLine": 4606,
+        "endChar": 51
+      },
+      "revId": "6f01853458ce110d8e1dbb90ca86317ce9f27e73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
