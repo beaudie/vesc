@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c06943a_2de0d424",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T23:46:58Z",
+      "side": 1,
+      "message": "Why don\u0027t we use `uint64_t` instead of `uint32_t` here?",
+      "range": {
+        "startLine": 57,
+        "startChar": 30,
+        "endLine": 57,
+        "endChar": 38
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4cb0a5b_9d461cab",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-12T23:46:58Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 108,
+        "startChar": 30,
+        "endLine": 108,
+        "endChar": 38
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
