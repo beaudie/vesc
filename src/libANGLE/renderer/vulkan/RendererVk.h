@@ -110,6 +110,13 @@ constexpr const char *kMemoryAllocationTypeMessage[] = {
 };
 constexpr const uint32_t kMemoryAllocationTypeCount =
     static_cast<uint32_t>(MemoryAllocationType::EnumCount);
+
+// Used to select the severity for memory allocation logs.
+enum class MemoryLogSeverity
+{
+    INFO,
+    WARN,
+};
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -667,6 +674,8 @@ class RendererVk : angle::NonCopyable
     {
         onMemoryDeallocImpl(allocType, size, reinterpret_cast<void *>(handle));
     }
+
+    void logMemoryStatsOnError();
 
     // Allocation statistics functions below are currently used for debugging only.
     VkDeviceSize getActiveMemoryAllocationsSize(uint32_t allocTypeIndex);

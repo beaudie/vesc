@@ -1252,8 +1252,9 @@ ANGLE_INLINE gl::ShadingRate GetShadingRateFromVkExtent(const VkExtent2D &extent
     return gl::ShadingRate::_1x1;
 }
 
-// Check for remaining memory allocations at the end of the renderer object.
-void checkForRemainingMemoryAllocations(RendererVk *renderer)
+// Check for currently allocated memory. It is used at the end of the renderer object and when there
+// is an allocation error (from ANGLE_VK_TRY()).
+void checkForCurrentMemoryAllocations(RendererVk *renderer)
 {
     if (kDebugMemoryAllocationLogs)
     {
@@ -1261,12 +1262,106 @@ void checkForRemainingMemoryAllocations(RendererVk *renderer)
         {
             if (renderer->getActiveMemoryAllocationsSize(i) != 0)
             {
-                INFO() << "Remaining allocated size for memory allocation type ("
+                INFO() << "Currently allocated size for memory allocation type ("
                        << vk::kMemoryAllocationTypeMessage[i]
                        << "): " << renderer->getActiveMemoryAllocationsSize(i)
                        << " | Count: " << renderer->getActiveMemoryAllocationsCount(i);
             }
         }
+    }
+    else if (kTrackMemoryAllocation)
+    {
+        for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
+        {
+            if (renderer->getActiveMemoryAllocationsSize(i) != 0)
+            {
+                INFO() << "Currently allocated size for memory allocation type ("
+                       << vk::kMemoryAllocationTypeMessage[i]
+                       << "): " << renderer->getActiveMemoryAllocationsSize(i);
+            }
+        }
+    }
+}
+
+// Output memory log stream based on level of severity.
+void outputMemoryLogStream(std::stringstream &outStream, vk::MemoryLogSeverity severity)
+{
+    if (kTrackMemoryAllocation)
+    {
+        switch (severity)
+        {
+            case vk::MemoryLogSeverity::INFO:
+                INFO() << outStream.str();
+                break;
+            case vk::MemoryLogSeverity::WARN:
+                WARN() << outStream.str();
+                break;
+            default:
+                UNREACHABLE();
+                break;
+        }
+    }
+}
+
+// Log memory heap stats, including budget and usage.
+void logMemoryHeapStats(RendererVk *renderer, vk::MemoryLogSeverity severity)
+{
+    if (kTrackMemoryAllocation)
+    {
+        // Log stream for the messages.
+        std::stringstream outStream;
+
+        // VkPhysicalDeviceMemoryProperties2KHR enables the use of memory budget properties if
+        // supported.
+        VkPhysicalDeviceMemoryProperties2KHR memoryProperties;
+        memoryProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2_KHR;
+        memoryProperties.pNext = nullptr;
+
+        VkPhysicalDeviceMemoryBudgetPropertiesEXT memoryBudgetProperties;
+        memoryBudgetProperties.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT;
+        memoryBudgetProperties.pNext = nullptr;
+
+        if (renderer->getFeatures().supportsMemoryBudget.enabled)
+        {
+            vk::AddToPNextChain(&memoryProperties, &memoryBudgetProperties);
+        }
+
+        vkGetPhysicalDeviceMemoryProperties2KHR(renderer->getPhysicalDevice(), &memoryProperties);
+
+        // Log memory heap information.
+        outStream << "Memory heap info" << std::endl;
+
+        outStream << "* Available memory heaps:" << std::endl;
+        for (uint32_t i = 0; i < memoryProperties.memoryProperties.memoryHeapCount; i++)
+        {
+            outStream << i << " | Size : " << memoryProperties.memoryProperties.memoryHeaps[i].size
+                      << " | Flags: " << memoryProperties.memoryProperties.memoryHeaps[i].flags
+                      << std::endl;
+        }
+
+        outStream << "* Available memory types:" << std::endl;
+        for (uint32_t i = 0; i < memoryProperties.memoryProperties.memoryTypeCount; i++)
+        {
+            outStream << i << " | Heap index: "
+                      << memoryProperties.memoryProperties.memoryTypes[i].heapIndex
+                      << " | Property flags: "
+                      << memoryProperties.memoryProperties.memoryTypes[i].propertyFlags
+                      << std::endl;
+        }
+
+        if (renderer->getFeatures().supportsMemoryBudget.enabled)
+        {
+            outStream << "* Available memory budget and usage:" << std::endl;
+            for (uint32_t i = 0; i < VK_MAX_MEMORY_HEAPS; i++)
+            {
+                outStream << i << " | Heap budget: " << memoryBudgetProperties.heapBudget[i]
+                          << " | Heap usage: " << memoryBudgetProperties.heapUsage[i] << std::endl;
+            }
+        }
+
+        // Output the log stream based on the level of severity.
+        outputMemoryLogStream(outStream, severity);
     }
 }
 }  // namespace
@@ -1394,7 +1489,10 @@ void RendererVk::onDestroy(vk::Context *context)
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
     // throughout the execution has been freed.
-    checkForRemainingMemoryAllocations(this);
+    if (kDebugMemoryAllocationLogs)
+    {
+        checkForCurrentMemoryAllocations(this);
+    }
 
     if (mDevice)
     {
@@ -3090,6 +3188,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
     mSupportedVulkanPipelineStageMask = ~unsupportedStages;
 
+    // Log the memory heap stats when the device has been initialized.
+    if (kDebugMemoryAllocationLogs)
+    {
+        logMemoryHeapStats(this, vk::MemoryLogSeverity::INFO);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -3926,6 +4030,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Whether non-conformant configurations and extensions should be exposed.
     ANGLE_FEATURE_CONDITION(&mFeatures, exposeNonConformantExtensionsAndVersions,
                             kExposeNonConformantExtensionsAndVersions);
+
+    // Memory budget extension works on all platforms except Swiftshader.
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsMemoryBudget, !isSwiftShader);
 
     // Disabled by default. Only enable it for experimental purpose, as this will cause various
     // tests to fail.
@@ -5204,9 +5311,15 @@ void RendererVk::onMemoryDeallocImpl(vk::MemoryAllocationType allocType,
     }
 }
 
+void RendererVk::logMemoryStatsOnError()
+{
+    checkForCurrentMemoryAllocations(this);
+    logMemoryHeapStats(this, vk::MemoryLogSeverity::WARN);
+}
+
 VkDeviceSize RendererVk::getActiveMemoryAllocationsSize(uint32_t allocTypeIndex)
 {
-    if (kDebugMemoryAllocationLogs)
+    if (kTrackMemoryAllocation)
     {
         return mActiveMemoryAllocationsSize[allocTypeIndex];
     }

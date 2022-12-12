@@ -53,6 +53,13 @@
             "issue": "https://anglebug.com/7308"
         },
         {
+            "name": "supports_memory_budget",
+            "category": "Features",
+            "description": [
+                "Memory budget can be obtained using vkGetPhysicalDeviceMemoryProperties2KHR."
+            ]
+        },
+        {
             "name": "supports_renderpass2",
             "category": "Features",
             "description": [
