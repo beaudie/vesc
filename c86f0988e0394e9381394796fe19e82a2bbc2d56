@@ -16,6 +16,24 @@
       "message": "Something I just encountered is that with XSetWMNormalHints, it\u0027s no longer possible to resize the window on X11. This is (occasionally) useful to test swapchain recreation code for example by running `./hello_triangle` and dragging a window corner.\n\nIs there a way to achieve what\u0027s necessary while allowing user resizing?",
       "revId": "c86f0988e0394e9381394796fe19e82a2bbc2d56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cab1c65_5d511d46",
+        "filename": "util/linux/x11/X11Window.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-12-12T15:17:42Z",
+      "side": 1,
+      "message": "So I\u0027m kind of skeptical about the necessity for max_width/height here.\nhttps://crrev.com/c/3507514 (which is what I relanded where this is coming from) suggests that it was required for a test to pass but I didn\u0027t look into why. If we removed max_* settings (or increased it to a larger value) it would allow to manually make the window bigger.\n\nFrom what I found min_* stuff *is* necessary in most of our use cases though - it seems to be the only option that enables making the window bigger than the screen as otherwise it gets clamped by the window manager. IIUC on Windows this is taken care of by setting up a parent/child window with parent getting clamped and child remaining the full size but we don\u0027t do this on Linux.",
+      "parentUuid": "9c4c49fc_88c592ac",
+      "revId": "c86f0988e0394e9381394796fe19e82a2bbc2d56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
