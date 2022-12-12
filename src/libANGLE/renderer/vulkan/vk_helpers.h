@@ -1055,17 +1055,11 @@ class CommandBufferHelperCommon : angle::NonCopyable
   public:
     CommandPool *getCommandPool() { return mCommandPool; }
 
-    void bufferRead(ContextVk *contextVk,
-                    VkAccessFlags readAccessType,
-                    PipelineStage readStage,
-                    BufferHelper *buffer);
     void bufferWrite(ContextVk *contextVk,
                      VkAccessFlags writeAccessType,
                      PipelineStage writeStage,
                      BufferHelper *buffer);
 
-    bool usesBuffer(const BufferHelper &buffer) const;
-    bool usesBufferForWrite(const BufferHelper &buffer) const;
     size_t getUsedBuffersCount() const { return mUsedBufferCount; }
 
     void executeBarriers(const angle::FeaturesVk &features, PrimaryCommandBuffer *primary);
@@ -1182,6 +1176,14 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageLayout imageLayout,
                     ImageHelper *image);
 
+    void bufferRead(ContextVk *contextVk,
+                    VkAccessFlags readAccessType,
+                    PipelineStage readStage,
+                    BufferHelper *buffer);
+
+    bool usesBuffer(const BufferHelper &buffer) const;
+    bool usesBufferForWrite(const BufferHelper &buffer) const;
+
     angle::Result flushToPrimary(Context *context, PrimaryCommandBuffer *primary);
 
     void setGLMemoryBarrierIssued()
@@ -1279,6 +1281,14 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                     VkImageAspectFlags aspectFlags,
                     ImageLayout imageLayout,
                     ImageHelper *image);
+
+    void bufferRead(ContextVk *contextVk,
+                    VkAccessFlags readAccessType,
+                    PipelineStage readStage,
+                    BufferHelper *buffer);
+
+    bool usesBuffer(const BufferHelper &buffer) const;
+    bool usesBufferForWrite(const BufferHelper &buffer) const;
 
     void colorImagesDraw(gl::LevelIndex level,
                          uint32_t layerStart,

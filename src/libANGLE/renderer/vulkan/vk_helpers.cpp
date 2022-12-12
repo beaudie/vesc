@@ -1315,25 +1315,6 @@ void CommandBufferHelperCommon::resetImpl()
     mUsedBufferCount = 0;
 }
 
-void CommandBufferHelperCommon::bufferRead(ContextVk *contextVk,
-                                           VkAccessFlags readAccessType,
-                                           PipelineStage readStage,
-                                           BufferHelper *buffer)
-{
-    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
-    if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
-    {
-        mPipelineBarrierMask.set(readStage);
-    }
-
-    ASSERT(!usesBufferForWrite(*buffer));
-    if (!buffer->usedByCommandBuffer(mQueueSerial))
-    {
-        buffer->setQueueSerial(mQueueSerial);
-        mUsedBufferCount++;
-    }
-}
-
 void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
                                             VkAccessFlags writeAccessType,
                                             PipelineStage writeStage,
@@ -1358,16 +1339,6 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     {
         contextVk->onHostVisibleBufferWrite();
     }
-}
-
-bool CommandBufferHelperCommon::usesBuffer(const BufferHelper &buffer) const
-{
-    return buffer.usedByCommandBuffer(mQueueSerial);
-}
-
-bool CommandBufferHelperCommon::usesBufferForWrite(const BufferHelper &buffer) const
-{
-    return buffer.writtenByCommandBuffer(mQueueSerial);
 }
 
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
@@ -1517,6 +1488,49 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
+}
+
+void OutsideRenderPassCommandBufferHelper::bufferRead(ContextVk *contextVk,
+                                                      VkAccessFlags readAccessType,
+                                                      PipelineStage readStage,
+                                                      BufferHelper *buffer)
+{
+    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
+    if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
+    {
+        mPipelineBarrierMask.set(readStage);
+    }
+
+    ASSERT(!buffer->writtenByCommandBuffer(mQueueSerial));
+
+    if (contextVk->hasStartedRenderPass())
+    {
+        // A buffer could have read accessed by both renderPassCommands and
+        // outsideRenderPassCommands and there is no need to endRP or flush. In this case, the
+        // renderPassCommands' read will override the outsideRenderPassCommands' read, since its
+        // queueSerial must be greater than outsideRP.
+        if (contextVk->getStartedRenderPassCommands().usesBuffer(*buffer))
+        {
+            ASSERT(!contextVk->getStartedRenderPassCommands().usesBufferForWrite(*buffer));
+            return;
+        }
+    }
+
+    if (!buffer->usedByCommandBuffer(mQueueSerial))
+    {
+        buffer->setQueueSerial(mQueueSerial);
+        mUsedBufferCount++;
+    }
+}
+
+bool OutsideRenderPassCommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
+{
+    return buffer.usedByCommandBuffer(mQueueSerial);
+}
+
+bool OutsideRenderPassCommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
+{
+    return buffer.writtenByCommandBuffer(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -1726,6 +1740,35 @@ void RenderPassCommandBufferHelper::depthStencilImagesDraw(gl::LevelIndex level,
         mStencilResolveAttachment.init(resolveImage, level, layerStart, layerCount,
                                        VK_IMAGE_ASPECT_STENCIL_BIT);
     }
+}
+
+void RenderPassCommandBufferHelper::bufferRead(ContextVk *contextVk,
+                                               VkAccessFlags readAccessType,
+                                               PipelineStage readStage,
+                                               BufferHelper *buffer)
+{
+    VkPipelineStageFlagBits stageBits = kPipelineStageFlagBitMap[readStage];
+    if (buffer->recordReadBarrier(readAccessType, stageBits, &mPipelineBarriers[readStage]))
+    {
+        mPipelineBarrierMask.set(readStage);
+    }
+
+    ASSERT(!usesBufferForWrite(*buffer));
+    if (!usesBuffer(*buffer))
+    {
+        buffer->setQueueSerial(mQueueSerial);
+        mUsedBufferCount++;
+    }
+}
+
+bool RenderPassCommandBufferHelper::usesBuffer(const BufferHelper &buffer) const
+{
+    return buffer.usedByCommandBuffer(mQueueSerial);
+}
+
+bool RenderPassCommandBufferHelper::usesBufferForWrite(const BufferHelper &buffer) const
+{
+    return buffer.writtenByCommandBuffer(mQueueSerial);
 }
 
 void RenderPassCommandBufferHelper::onColorAccess(PackedAttachmentIndex packedAttachmentIndex,
@@ -5181,10 +5224,10 @@ angle::Result ImageHelper::initExternal(Context *context,
         VkSamplerYcbcrRange colorRange                = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
         VkFilter chromaFilter                         = kDefaultYCbCrChromaFilter;
         VkComponentMapping components                 = {
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
-            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
+                            VK_COMPONENT_SWIZZLE_IDENTITY,
         };
 
         // Create the VkSamplerYcbcrConversion to associate with image views and samplers
