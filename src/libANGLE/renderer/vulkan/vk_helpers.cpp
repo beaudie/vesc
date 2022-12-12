@@ -3581,6 +3581,7 @@ void DynamicallyGrowingPool<Pool>::onEntryFreed(ContextVk *contextVk,
                                                 const ResourceUse &use)
 {
     ASSERT(poolIndex < mPools.size() && mPools[poolIndex].freedCount < mPoolSize);
+    ASSERT(!contextVk->getRenderer()->hasUnfinishedUse(use));
     mPools[poolIndex].mergeResourceUse(use);
     ++mPools[poolIndex].freedCount;
 }
