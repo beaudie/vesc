@@ -88,6 +88,24 @@
       "parentUuid": "4c20fda8_cf57e584",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fb21def_20588958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-12T04:15:46Z",
+      "side": 1,
+      "message": "Thank you for the good suggestion. But the same phenomenon had occurred with our driver too. I think the Serial is not properly cleaned up after waiting the fence command.\nI uploaded the new patch for this:\n\u003e 4095880: Vulkan: Clean up finished batches after waiting fence command | https://chromium-review.googlesource.com/c/angle/angle/+/4095880\n\nAfter I apply above change, I could clear the error with our driver.",
+      "parentUuid": "9b149b08_e157a06b",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
