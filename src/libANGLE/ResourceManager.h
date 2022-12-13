@@ -257,7 +257,7 @@ class SamplerManager : public TypedResourceManager<Sampler, SamplerManager, Samp
 class SyncManager : public TypedResourceManager<Sync, SyncManager, GLuint>
 {
   public:
-    GLuint createSync(rx::GLImplFactory *factory);
+    SyncID createSync(rx::GLImplFactory *factory);
     Sync *getSync(GLuint handle) const;
 
     static void DeleteObject(const Context *context, Sync *sync);
