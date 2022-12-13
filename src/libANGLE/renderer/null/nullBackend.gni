@@ -1,0 +1,48 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../../../../gni/angle.gni")
+
+null_backend_dir = "$angle_root/src/libANGLE/renderer/null"
+
+null_backend_sources = [
+  "$null_backend_dir/BufferNULL.cpp",
+  "$null_backend_dir/BufferNULL.h",
+  "$null_backend_dir/CompilerNULL.cpp",
+  "$null_backend_dir/CompilerNULL.h",
+  "$null_backend_dir/ContextNULL.cpp",
+  "$null_backend_dir/ContextNULL.h",
+  "$null_backend_dir/DeviceNULL.cpp",
+  "$null_backend_dir/DeviceNULL.h",
+  "$null_backend_dir/DisplayNULL.cpp",
+  "$null_backend_dir/DisplayNULL.h",
+  "$null_backend_dir/FenceNVNULL.cpp",
+  "$null_backend_dir/FenceNVNULL.h",
+  "$null_backend_dir/FramebufferNULL.cpp",
+  "$null_backend_dir/FramebufferNULL.h",
+  "$null_backend_dir/ImageNULL.cpp",
+  "$null_backend_dir/ImageNULL.h",
+  "$null_backend_dir/ProgramNULL.cpp",
+  "$null_backend_dir/ProgramNULL.h",
+  "$null_backend_dir/ProgramPipelineNULL.cpp",
+  "$null_backend_dir/ProgramPipelineNULL.h",
+  "$null_backend_dir/QueryNULL.cpp",
+  "$null_backend_dir/QueryNULL.h",
+  "$null_backend_dir/RenderbufferNULL.cpp",
+  "$null_backend_dir/RenderbufferNULL.h",
+  "$null_backend_dir/SamplerNULL.cpp",
+  "$null_backend_dir/SamplerNULL.h",
+  "$null_backend_dir/ShaderNULL.cpp",
+  "$null_backend_dir/ShaderNULL.h",
+  "$null_backend_dir/SurfaceNULL.cpp",
+  "$null_backend_dir/SurfaceNULL.h",
+  "$null_backend_dir/SyncNULL.cpp",
+  "$null_backend_dir/SyncNULL.h",
+  "$null_backend_dir/TextureNULL.cpp",
+  "$null_backend_dir/TextureNULL.h",
+  "$null_backend_dir/TransformFeedbackNULL.cpp",
+  "$null_backend_dir/TransformFeedbackNULL.h",
+  "$null_backend_dir/VertexArrayNULL.cpp",
+  "$null_backend_dir/VertexArrayNULL.h",
+]
