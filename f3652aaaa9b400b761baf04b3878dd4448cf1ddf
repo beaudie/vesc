@@ -33,6 +33,46 @@
       "message": "Needs dry run?",
       "revId": "f3652aaaa9b400b761baf04b3878dd4448cf1ddf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "416c7590_d36f8510",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T17:58:59Z",
+      "side": 1,
+      "message": "Overall LGTM with one comment.",
+      "revId": "f3652aaaa9b400b761baf04b3878dd4448cf1ddf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b1f2d29_8d8019ba",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T17:58:59Z",
+      "side": 1,
+      "message": "To minimize impact of potentially doing extra work in this function while in middle of draw call, you could just call retireFinishedCommands without the garbage clean up.",
+      "range": {
+        "startLine": 1306,
+        "startChar": 14,
+        "endLine": 1306,
+        "endChar": 53
+      },
+      "revId": "f3652aaaa9b400b761baf04b3878dd4448cf1ddf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
