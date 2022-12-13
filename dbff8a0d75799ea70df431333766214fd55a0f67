@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcb02185_121e75e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T21:40:58Z",
+      "side": 1,
+      "message": "Eventually `PackParam` should be fixed IMO not to produce 32 bit numbers if it\u0027s taking the pointer as ID.",
+      "revId": "dbff8a0d75799ea70df431333766214fd55a0f67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30fc0879_50430f6d",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T21:40:58Z",
+      "side": 1,
+      "message": "Dropping the upper 32 bits on 64-bit archs seems problematic. Looks like this is a pre-existing problem with EGLImages too in `PackParam`. Why is that function casting a pointer to `GLuint`?",
+      "range": {
+        "startLine": 2381,
+        "startChar": 39,
+        "endLine": 2381,
+        "endChar": 47
+      },
+      "revId": "dbff8a0d75799ea70df431333766214fd55a0f67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
