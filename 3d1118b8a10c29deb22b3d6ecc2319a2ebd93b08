@@ -89,6 +89,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aefb99d8_96d3e62f",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T22:13:57Z",
+      "side": 1,
+      "message": "ResourceSerial is wrong name IMO. It has nothing to do with resource, and resource name is a bit over used. ObjectSerial is better. But uniqueSerial is exactly what it does: it provides an uniqueue serial number for identification purpose. Long term weprobably should lift this piece of code from vulkan backend to here so that we will have FramebufferSerial, ProgramSerial etc.\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/vk_utils.h#913",
+      "parentUuid": "17e2d7e5_d86a535a",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c06943a_2de0d424",
