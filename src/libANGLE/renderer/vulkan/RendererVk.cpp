@@ -230,6 +230,10 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
     // http://anglebug.com/7729
     "VUID-vkDestroySemaphore-semaphore-01137",
+<<<<<<< PATCH SET (081f9b Revert "Suppress VUID-vkCmdDraw-None-06887")
+    // http://anglebug.com/7843
+    "VUID-VkGraphicsPipelineCreateInfo-Vertex-07722",
+=======
     "VUID-vkDestroySemaphore-semaphore-05149",
     // https://issuetracker.google.com/303219657
     "VUID-VkGraphicsPipelineCreateInfo-pStages-00738",
@@ -240,6 +244,7 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/8394
     "VUID-vkCmdDraw-None-09000",
     "VUID-vkCmdDrawIndexed-None-09002",
+>>>>>>> BASE      (f8dac4 Fix upload_results_to_perf_dashboard usage)
     // http://anglebug.com/7865
     "VUID-VkDescriptorImageInfo-imageView-06711",
     "VUID-VkDescriptorImageInfo-descriptorType-06713",
