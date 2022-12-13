@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17e2d7e5_d86a535a",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T19:43:06Z",
+      "side": 1,
+      "message": "👍\n\nAfterwards, could we `s/UniqueSerial/ResourceSerial` (or `ObjectSerial`?) Because technically every serial is unique, so that doesn\u0027t really give any information.",
+      "parentUuid": "e8924482_105189b4",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c06943a_2de0d424",
