@@ -178,6 +178,24 @@
       "parentUuid": "005bfbd6_636b99a1",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54988ef8_2f9fbbf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T00:51:00Z",
+      "side": 1,
+      "message": "We have that, and in `SyncHelperNativeFence::clientWait`, we have:\n\n```\n    if (mUse.valid())\n    {\n        // We have a valid serial to wait on\n        ANGLE_TRY(\n            renderer-\u003ewaitForResourceUseToFinishWithUserTimeout(context, mUse, timeout, \u0026status));\n    }\n    else\n    {\n        // We need to wait on the file descriptor\n\n        status \u003d SyncWaitFd(mNativeFenceFd, timeout);\n        if (status !\u003d VK_TIMEOUT)\n        {\n            ANGLE_VK_TRY(contextVk, status);\n        }\n    }\n```\n\nSo there are 3 paths that can lead to the app knowing the fence is signaled. What you fixed was the `if` path in `SyncHelperNativeFence::clientWait`. The `else` path still suffers from the same problem, as well as `SyncHelperNativeFence::getStatus` as you pointed out. The solution is to call `checkCompletedCommands` from `getStatus` (when `result \u003d\u003d VK_SUCCESS`), and also in the `else` path in `clientWait`.",
+      "parentUuid": "35121fd9_41a96b1b",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
