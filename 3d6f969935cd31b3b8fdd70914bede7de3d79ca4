@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78700460_5092aa25",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1517582
+      },
+      "writtenOn": "2022-12-13T22:09:08Z",
+      "side": 1,
+      "message": "I\u0027d suggest an early return instead of this nesting (https://goto.google.com/tott-455).",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1289,
+        "endChar": 31
+      },
+      "revId": "3d6f969935cd31b3b8fdd70914bede7de3d79ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55d22068_198483ab",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1517582
+      },
+      "writtenOn": "2022-12-13T22:09:08Z",
+      "side": 1,
+      "message": "If we do this on OOM, it would be better to log as warning or error. Would it make sense to pass in the logging stream as a param?",
+      "range": {
+        "startLine": 1310,
+        "startChar": 8,
+        "endLine": 1310,
+        "endChar": 14
+      },
+      "revId": "3d6f969935cd31b3b8fdd70914bede7de3d79ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
