@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8403ccea_33b6f5fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T21:11:06Z",
+      "side": 1,
+      "message": "Mostly removing unnecessary code. Some SPIR-V transformer options are removed now that this code lives in vulkan/, because the values (i.e. the set indices) are constant.",
+      "revId": "d69c5b732ba7a2bf5e404d602bf18b34f681278d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
