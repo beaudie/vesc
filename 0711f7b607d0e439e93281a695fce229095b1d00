@@ -160,6 +160,24 @@
       "parentUuid": "bf8e95db_5089045b",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35121fd9_41a96b1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-13T00:46:07Z",
+      "side": 1,
+      "message": "BTW, in that case, `eglGetSyncAttribKHR(...,EGL_SYNC_STATUS_KHR,...)` will return `EGL_SIGNALED_KHR` value to the parameter which is expected and right because it\u0027ll use `poll` instead of checking the serial.\n\n```c\nangle::Result SyncHelperNativeFence::getStatus(Context *context,\n                                               ContextVk *contextVk,\n                                               bool *signaled)\n{\n    // We\u0027ve got a serial, check if the serial is still in use\n    if (mUse.valid())\n    {\n        *signaled \u003d !context-\u003egetRenderer()-\u003ehasUnfinishedUse(getResourceUse());\n        return angle::Result::Continue;\n    }\n\n    // We don\u0027t have a serial, check status of the file descriptor\n    VkResult result \u003d SyncWaitFd(mNativeFenceFd, 0);\n    if (result !\u003d VK_TIMEOUT)\n    {\n        ANGLE_VK_TRY(context, result);\n    }\n    *signaled \u003d (result \u003d\u003d VK_SUCCESS);\n    return angle::Result::Continue;\n}\n```\n\nAm I missing other scenario ?",
+      "parentUuid": "005bfbd6_636b99a1",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
