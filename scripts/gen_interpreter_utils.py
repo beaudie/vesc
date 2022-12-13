@@ -38,7 +38,11 @@ namespace angle
 CallCapture ParseCallCapture(const Token &nameToken, size_t numParamTokens, const Token *paramTokens, const TraceShaderMap &shaders)
 {{
 {cases}
-    ASSERT(numParamTokens == 0);
+    if (numParamTokens > 0)
+    {{
+        printf("Expected zero parameter tokens for %s\\n", nameToken);
+        UNREACHABLE();
+    }}
     return CallCapture(nameToken, ParamBuffer());
 }}
 }}  // namespace angle

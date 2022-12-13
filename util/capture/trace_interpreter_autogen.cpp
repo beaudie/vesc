@@ -6119,6 +6119,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(FenceSync)>(paramTokens, shaders);
         return CallCapture("FenceSync", std::move(params));
     }
+    if (strcmp(nameToken, "FenceSync2") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(FenceSync2)>(paramTokens, shaders);
+        return CallCapture("FenceSync2", std::move(params));
+    }
     if (strcmp(nameToken, "InitializeReplay") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(InitializeReplay)>(paramTokens, shaders);
@@ -6128,6 +6133,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
     {
         ParamBuffer params = ParseParameters<decltype(InitializeReplay2)>(paramTokens, shaders);
         return CallCapture("InitializeReplay2", std::move(params));
+    }
+    if (strcmp(nameToken, "InitializeReplay3") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(InitializeReplay3)>(paramTokens, shaders);
+        return CallCapture("InitializeReplay3", std::move(params));
     }
     if (strcmp(nameToken, "MapBufferOES") == 0)
     {
@@ -6277,7 +6287,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
         return CallCapture("ValidateSerializedState", std::move(params));
     }
 
-    ASSERT(numParamTokens == 0);
+    if (numParamTokens > 0)
+    {
+        printf("Expected zero parameter tokens for %s\n", nameToken);
+        UNREACHABLE();
+    }
     return CallCapture(nameToken, ParamBuffer());
 }
 }  // namespace angle
