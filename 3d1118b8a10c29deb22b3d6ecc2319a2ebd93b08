@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1215c92f_1b706ffc",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T01:09:57Z",
+      "side": 1,
+      "message": "I think this is not been used, will be removed in next update. Same with the other comment. Probbaly some leftover from old code.",
+      "parentUuid": "6c06943a_2de0d424",
+      "range": {
+        "startLine": 57,
+        "startChar": 30,
+        "endLine": 57,
+        "endChar": 38
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4cb0a5b_9d461cab",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 7
