@@ -6119,6 +6119,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(FenceSync)>(paramTokens, shaders);
         return CallCapture("FenceSync", std::move(params));
     }
+    if (strcmp(nameToken, "FenceSync2") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(FenceSync2)>(paramTokens, shaders);
+        return CallCapture("FenceSync2", std::move(params));
+    }
     if (strcmp(nameToken, "InitializeReplay") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(InitializeReplay)>(paramTokens, shaders);
@@ -6128,6 +6133,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
     {
         ParamBuffer params = ParseParameters<decltype(InitializeReplay2)>(paramTokens, shaders);
         return CallCapture("InitializeReplay2", std::move(params));
+    }
+    if (strcmp(nameToken, "InitializeReplay3") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(InitializeReplay3)>(paramTokens, shaders);
+        return CallCapture("InitializeReplay3", std::move(params));
     }
     if (strcmp(nameToken, "MapBufferOES") == 0)
     {
@@ -6340,6 +6350,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
         DispatchCallCapture(FenceSync, captures);
         return;
     }
+    if (call.customFunctionName == "FenceSync2")
+    {
+        DispatchCallCapture(FenceSync2, captures);
+        return;
+    }
     if (call.customFunctionName == "InitializeReplay")
     {
         DispatchCallCapture(InitializeReplay, captures);
@@ -6348,6 +6363,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "InitializeReplay2")
     {
         DispatchCallCapture(InitializeReplay2, captures);
+        return;
+    }
+    if (call.customFunctionName == "InitializeReplay3")
+    {
+        DispatchCallCapture(InitializeReplay3, captures);
         return;
     }
     if (call.customFunctionName == "MapBufferOES")
