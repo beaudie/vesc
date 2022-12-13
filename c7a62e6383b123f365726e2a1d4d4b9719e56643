@@ -33,6 +33,24 @@
       "message": "I think this really means you didn\u0027t get rid of the validity check. Since this is still necessary, how about keeping `valid()`, but turn the `if`s into `ASSERT`s wherever it makes sense?",
       "revId": "c7a62e6383b123f365726e2a1d4d4b9719e56643",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6ce0906_5372de9d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T18:57:10Z",
+      "side": 1,
+      "message": "This has nothing to do with if a serial is valid or not, it is about if this queue index being set or not. I want to use the bitmask to indicate a serial index is been used or not, but that was shot down. \n\nThe other way is to change it to if(lastCompletedQueueSerials[index] \u003e\u003d mLastCompletedSerials[index])\n\nOr I can still switch to use bitmask but not use the template, just use a run time if check. Since FastMap also contains a if check anyway, so performance wise it is still the same, even though slightly less than template (which effectively removes the if check).\n\nOr leave it as it is, check again kZeroSerial, with added comment.",
+      "parentUuid": "046f5dc6_6ff411f8",
+      "revId": "c7a62e6383b123f365726e2a1d4d4b9719e56643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
