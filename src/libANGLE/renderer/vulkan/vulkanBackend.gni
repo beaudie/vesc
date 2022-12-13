@@ -1,0 +1,228 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+import("../../../../gni/angle.gni")
+
+vulkan_backend_dir = "$angle_root/src/libANGLE/renderer/vulkan"
+
+vulkan_backend_sources = [
+  "$vulkan_backend_dir/AllocatorHelperPool.cpp",
+  "$vulkan_backend_dir/AllocatorHelperPool.h",
+  "$vulkan_backend_dir/AllocatorHelperRing.cpp",
+  "$vulkan_backend_dir/AllocatorHelperRing.h",
+  "$vulkan_backend_dir/BufferVk.cpp",
+  "$vulkan_backend_dir/BufferVk.h",
+  "$vulkan_backend_dir/CommandProcessor.cpp",
+  "$vulkan_backend_dir/CommandProcessor.h",
+  "$vulkan_backend_dir/CompilerVk.cpp",
+  "$vulkan_backend_dir/CompilerVk.h",
+  "$vulkan_backend_dir/ContextVk.cpp",
+  "$vulkan_backend_dir/ContextVk.h",
+  "$vulkan_backend_dir/DebugAnnotatorVk.cpp",
+  "$vulkan_backend_dir/DebugAnnotatorVk.h",
+  "$vulkan_backend_dir/DeviceVk.cpp",
+  "$vulkan_backend_dir/DeviceVk.h",
+  "$vulkan_backend_dir/DisplayVk.cpp",
+  "$vulkan_backend_dir/DisplayVk.h",
+  "$vulkan_backend_dir/DisplayVk_api.h",
+  "$vulkan_backend_dir/FenceNVVk.cpp",
+  "$vulkan_backend_dir/FenceNVVk.h",
+  "$vulkan_backend_dir/FramebufferVk.cpp",
+  "$vulkan_backend_dir/FramebufferVk.h",
+  "$vulkan_backend_dir/GlslangWrapperVk.cpp",
+  "$vulkan_backend_dir/GlslangWrapperVk.h",
+  "$vulkan_backend_dir/ImageVk.cpp",
+  "$vulkan_backend_dir/ImageVk.h",
+  "$vulkan_backend_dir/MemoryObjectVk.cpp",
+  "$vulkan_backend_dir/MemoryObjectVk.h",
+  "$vulkan_backend_dir/OverlayVk.cpp",
+  "$vulkan_backend_dir/OverlayVk.h",
+  "$vulkan_backend_dir/PersistentCommandPool.cpp",
+  "$vulkan_backend_dir/PersistentCommandPool.h",
+  "$vulkan_backend_dir/ProgramExecutableVk.cpp",
+  "$vulkan_backend_dir/ProgramExecutableVk.h",
+  "$vulkan_backend_dir/ProgramPipelineVk.cpp",
+  "$vulkan_backend_dir/ProgramPipelineVk.h",
+  "$vulkan_backend_dir/ProgramVk.cpp",
+  "$vulkan_backend_dir/ProgramVk.h",
+  "$vulkan_backend_dir/QueryVk.cpp",
+  "$vulkan_backend_dir/QueryVk.h",
+  "$vulkan_backend_dir/RenderTargetVk.cpp",
+  "$vulkan_backend_dir/RenderTargetVk.h",
+  "$vulkan_backend_dir/RenderbufferVk.cpp",
+  "$vulkan_backend_dir/RenderbufferVk.h",
+  "$vulkan_backend_dir/RendererVk.cpp",
+  "$vulkan_backend_dir/RendererVk.h",
+  "$vulkan_backend_dir/ResourceVk.cpp",
+  "$vulkan_backend_dir/ResourceVk.h",
+  "$vulkan_backend_dir/SamplerVk.cpp",
+  "$vulkan_backend_dir/SamplerVk.h",
+  "$vulkan_backend_dir/SecondaryCommandBuffer.cpp",
+  "$vulkan_backend_dir/SecondaryCommandBuffer.h",
+  "$vulkan_backend_dir/SemaphoreVk.cpp",
+  "$vulkan_backend_dir/SemaphoreVk.h",
+  "$vulkan_backend_dir/ShaderVk.cpp",
+  "$vulkan_backend_dir/ShaderVk.h",
+  "$vulkan_backend_dir/Suballocation.cpp",
+  "$vulkan_backend_dir/Suballocation.h",
+  "$vulkan_backend_dir/SurfaceVk.cpp",
+  "$vulkan_backend_dir/SurfaceVk.h",
+  "$vulkan_backend_dir/SyncVk.cpp",
+  "$vulkan_backend_dir/SyncVk.h",
+  "$vulkan_backend_dir/TextureVk.cpp",
+  "$vulkan_backend_dir/TextureVk.h",
+  "$vulkan_backend_dir/TransformFeedbackVk.cpp",
+  "$vulkan_backend_dir/TransformFeedbackVk.h",
+  "$vulkan_backend_dir/UtilsVk.cpp",
+  "$vulkan_backend_dir/UtilsVk.h",
+  "$vulkan_backend_dir/VertexArrayVk.cpp",
+  "$vulkan_backend_dir/VertexArrayVk.h",
+  "$vulkan_backend_dir/VkImageImageSiblingVk.cpp",
+  "$vulkan_backend_dir/VkImageImageSiblingVk.h",
+  "$vulkan_backend_dir/VulkanSecondaryCommandBuffer.cpp",
+  "$vulkan_backend_dir/VulkanSecondaryCommandBuffer.h",
+  "$vulkan_backend_dir/android/vk_android_utils.cpp",
+  "$vulkan_backend_dir/android/vk_android_utils.h",
+  "$vulkan_backend_dir/vk_cache_utils.cpp",
+  "$vulkan_backend_dir/vk_cache_utils.h",
+  "$vulkan_backend_dir/vk_caps_utils.cpp",
+  "$vulkan_backend_dir/vk_caps_utils.h",
+  "$vulkan_backend_dir/vk_command_buffer_utils.h",
+  "$vulkan_backend_dir/vk_format_table_autogen.cpp",
+  "$vulkan_backend_dir/vk_format_utils.cpp",
+  "$vulkan_backend_dir/vk_format_utils.h",
+  "$vulkan_backend_dir/vk_helpers.cpp",
+  "$vulkan_backend_dir/vk_helpers.h",
+  "$vulkan_backend_dir/vk_internal_shaders_autogen.cpp",
+  "$vulkan_backend_dir/vk_internal_shaders_autogen.h",
+  "$vulkan_backend_dir/vk_mandatory_format_support_table_autogen.cpp",
+  "$vulkan_backend_dir/vk_utils.cpp",
+  "$vulkan_backend_dir/vk_utils.h",
+  "$vulkan_backend_dir/vk_wrapper.h",
+]
+
+if (angle_enable_cl) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/CLCommandQueueVk.cpp",
+    "$vulkan_backend_dir/CLCommandQueueVk.h",
+    "$vulkan_backend_dir/CLContextVk.cpp",
+    "$vulkan_backend_dir/CLContextVk.h",
+    "$vulkan_backend_dir/CLDeviceVk.cpp",
+    "$vulkan_backend_dir/CLDeviceVk.h",
+    "$vulkan_backend_dir/CLEventVk.cpp",
+    "$vulkan_backend_dir/CLEventVk.h",
+    "$vulkan_backend_dir/CLKernelVk.cpp",
+    "$vulkan_backend_dir/CLKernelVk.h",
+    "$vulkan_backend_dir/CLMemoryVk.cpp",
+    "$vulkan_backend_dir/CLMemoryVk.h",
+    "$vulkan_backend_dir/CLPlatformVk.cpp",
+    "$vulkan_backend_dir/CLPlatformVk.h",
+    "$vulkan_backend_dir/CLProgramVk.cpp",
+    "$vulkan_backend_dir/CLProgramVk.h",
+    "$vulkan_backend_dir/CLSamplerVk.cpp",
+    "$vulkan_backend_dir/CLSamplerVk.h",
+    "$vulkan_backend_dir/cl_types.h",
+  ]
+}
+
+if (angle_use_vulkan_null_display) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/null/DisplayVkNull.cpp",
+    "$vulkan_backend_dir/null/DisplayVkNull.h",
+  ]
+}
+
+if (is_linux || is_chromeos) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/linux/DeviceVkLinux.cpp",
+    "$vulkan_backend_dir/linux/DeviceVkLinux.h",
+    "$vulkan_backend_dir/linux/DisplayVkLinux.cpp",
+    "$vulkan_backend_dir/linux/DisplayVkLinux.h",
+    "$vulkan_backend_dir/linux/DmaBufImageSiblingVkLinux.cpp",
+    "$vulkan_backend_dir/linux/DmaBufImageSiblingVkLinux.h",
+    "$vulkan_backend_dir/linux/display/DisplayVkSimple.cpp",
+    "$vulkan_backend_dir/linux/display/DisplayVkSimple.h",
+    "$vulkan_backend_dir/linux/display/WindowSurfaceVkSimple.cpp",
+    "$vulkan_backend_dir/linux/display/WindowSurfaceVkSimple.h",
+    "$vulkan_backend_dir/linux/headless/DisplayVkHeadless.cpp",
+    "$vulkan_backend_dir/linux/headless/DisplayVkHeadless.h",
+    "$vulkan_backend_dir/linux/headless/WindowSurfaceVkHeadless.cpp",
+    "$vulkan_backend_dir/linux/headless/WindowSurfaceVkHeadless.h",
+  ]
+}
+
+if (is_android) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/android/AHBFunctions.cpp",
+    "$vulkan_backend_dir/android/AHBFunctions.h",
+    "$vulkan_backend_dir/android/DisplayVkAndroid.cpp",
+    "$vulkan_backend_dir/android/DisplayVkAndroid.h",
+    "$vulkan_backend_dir/android/HardwareBufferImageSiblingVkAndroid.cpp",
+    "$vulkan_backend_dir/android/HardwareBufferImageSiblingVkAndroid.h",
+    "$vulkan_backend_dir/android/WindowSurfaceVkAndroid.cpp",
+    "$vulkan_backend_dir/android/WindowSurfaceVkAndroid.h",
+  ]
+}
+
+if (is_win) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/win32/DisplayVkWin32.cpp",
+    "$vulkan_backend_dir/win32/DisplayVkWin32.h",
+    "$vulkan_backend_dir/win32/WindowSurfaceVkWin32.cpp",
+    "$vulkan_backend_dir/win32/WindowSurfaceVkWin32.h",
+  ]
+}
+
+if (angle_use_x11) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/linux/xcb/DisplayVkXcb.cpp",
+    "$vulkan_backend_dir/linux/xcb/DisplayVkXcb.h",
+    "$vulkan_backend_dir/linux/xcb/WindowSurfaceVkXcb.cpp",
+    "$vulkan_backend_dir/linux/xcb/WindowSurfaceVkXcb.h",
+  ]
+}
+
+if (angle_use_wayland) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/linux/wayland/DisplayVkWayland.cpp",
+    "$vulkan_backend_dir/linux/wayland/DisplayVkWayland.h",
+    "$vulkan_backend_dir/linux/wayland/WindowSurfaceVkWayland.cpp",
+    "$vulkan_backend_dir/linux/wayland/WindowSurfaceVkWayland.h",
+  ]
+}
+
+if (angle_use_gbm) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/linux/gbm/DisplayVkGbm.cpp",
+    "$vulkan_backend_dir/linux/gbm/DisplayVkGbm.h",
+  ]
+}
+
+if (is_fuchsia) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/fuchsia/DisplayVkFuchsia.cpp",
+    "$vulkan_backend_dir/fuchsia/DisplayVkFuchsia.h",
+    "$vulkan_backend_dir/fuchsia/WindowSurfaceVkFuchsia.cpp",
+    "$vulkan_backend_dir/fuchsia/WindowSurfaceVkFuchsia.h",
+  ]
+}
+
+if (is_ggp) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/ggp/DisplayVkGGP.cpp",
+    "$vulkan_backend_dir/ggp/DisplayVkGGP.h",
+    "$vulkan_backend_dir/ggp/WindowSurfaceVkGGP.cpp",
+    "$vulkan_backend_dir/ggp/WindowSurfaceVkGGP.h",
+  ]
+}
+
+if (is_mac) {
+  vulkan_backend_sources += [
+    "$vulkan_backend_dir/mac/DisplayVkMac.h",
+    "$vulkan_backend_dir/mac/DisplayVkMac.mm",
+    "$vulkan_backend_dir/mac/IOSurfaceSurfaceVkMac.h",
+    "$vulkan_backend_dir/mac/IOSurfaceSurfaceVkMac.mm",
+    "$vulkan_backend_dir/mac/WindowSurfaceVkMac.h",
+    "$vulkan_backend_dir/mac/WindowSurfaceVkMac.mm",
+  ]
+}
