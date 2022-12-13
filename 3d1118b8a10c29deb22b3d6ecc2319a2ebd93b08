@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd206f35_914b6eaf",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T15:20:17Z",
+      "side": 1,
+      "message": "This looks redundant with `ResourceSerial`, which serves the same purpose. I think you just need to augment `ResourceSerial` if necessary and use that.",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "3d1118b8a10c29deb22b3d6ecc2319a2ebd93b08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c06943a_2de0d424",
         "filename": "src/libANGLE/renderer/serial_utils.h",
         "patchSetId": 7
