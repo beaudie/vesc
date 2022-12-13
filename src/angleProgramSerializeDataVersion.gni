@@ -1,0 +1,30 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("libANGLE/renderer/d3d/d3dBackend.gni")
+import("libANGLE/renderer/gl/glBackend.gni")
+import("libANGLE/renderer/metal/metalBackend.gni")
+import("libANGLE/renderer/null/nullBackend.gni")
+import("libANGLE/renderer/vulkan/vulkanBackend.gni")
+import("libGLESv2.gni")
+
+angle_code_affecting_program_serialize = [
+  libangle_capture_sources,
+  libangle_common_sources,
+  libangle_headers,
+  libangle_sources,
+  libangle_includes,
+  vulkan_backend_sources,
+  d3d_shared_sources,
+  null_backend_sources,
+  metal_backend_sources,
+]
+
+if (angle_enable_d3d9) {
+  angle_code_affecting_program_serialize += d3d9_backend_sources
+}
+
+if (angle_enable_d3d11) {
+  angle_code_affecting_program_serialize += d3d11_backend_sources
+}
