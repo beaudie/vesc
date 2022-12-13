@@ -50,7 +50,7 @@ class TraceInterpreter : public TraceReplayInterface
 };
 
 constexpr size_t kMaxTokenSize  = 100;
-constexpr size_t kMaxParameters = 20;
+constexpr size_t kMaxParameters = 21;
 using Token                     = char[kMaxTokenSize];
 
 CallCapture ParseCallCapture(const Token &nameToken,

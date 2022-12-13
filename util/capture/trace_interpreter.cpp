@@ -202,7 +202,7 @@ class Parser : angle::NonCopyable
                 // Skip casts.
                 if (peek() == ',' || (peek() == ')' && mIndex != tokenStart))
                 {
-                    ASSERT(numParams <= kMaxParameters);
+                    ASSERT(numParams < kMaxParameters);
                     Token &token = paramTokens[numParams++];
 
                     memcpy(token, &mStream[tokenStart], mIndex - tokenStart);
@@ -507,7 +507,7 @@ void TraceInterpreter::setupReplay()
 
     if (mTraceFunctions.count("SetupReplay") == 0)
     {
-        printf("Did not find a SetupReplay function to run among %zu parsed functions.",
+        printf("Did not find a SetupReplay function to run among %zu parsed functions.\n",
                mTraceFunctions.size());
         exit(1);
     }

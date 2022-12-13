@@ -956,7 +956,7 @@ void WriteInitReplayCall(bool compression,
     }
 
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
-    out << "    InitializeReplay2(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+    out << "    InitializeReplay3(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
         << readBufferSize << ", " << contextID;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
@@ -2206,6 +2206,10 @@ bool IsSharedObjectResource(ResourceIDType type)
             // 2.6.7 Sampler Objects: Sampler objects may be shared
             return true;
 
+        case ResourceIDType::Sync:
+            // 2.6.13 Sync Objects: Sync objects may be shared.
+            return true;
+
         case ResourceIDType::Texture:
             // 2.6.6 Texture Objects: Texture objects may be shared
             return true;
@@ -2230,7 +2234,7 @@ bool IsSharedObjectResource(ResourceIDType type)
             // Return false for all EGL object types.
             return false;
 
-        case ResourceIDType::InvalidEnum:
+        case ResourceIDType::EnumCount:
         default:
             ERR() << "Unhandled ResourceIDType= " << static_cast<int>(type);
             UNREACHABLE();
