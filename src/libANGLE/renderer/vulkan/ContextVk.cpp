@@ -720,7 +720,7 @@ void ContextVk::flushDescriptorSetUpdates()
     mPerfCounters.writeDescriptorSets +=
         mShareGroupVk->getUpdateDescriptorSetsBuilder()->flushDescriptorSetUpdates(getDevice());
 }
-
+// test to see the file hash will change
 ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason)
 {
     pauseRenderPassQueriesIfActive();
