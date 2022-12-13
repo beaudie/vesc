@@ -51,6 +51,24 @@
       "parentUuid": "046f5dc6_6ff411f8",
       "revId": "c7a62e6383b123f365726e2a1d4d4b9719e56643",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7ae7746_d7244075",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-13T19:40:39Z",
+      "side": 1,
+      "message": "\u003e This has nothing to do with if a serial is valid or not\n\nOk, what about the change in `ContextVk::onSyncObjectInit`, isn\u0027t the equivalent to `valid()`?\n\nI mean, I get that validity check is no longer necessary in many cases (which is good), but doesn\u0027t look it\u0027s entirely avoidable?",
+      "parentUuid": "a6ce0906_5372de9d",
+      "revId": "c7a62e6383b123f365726e2a1d4d4b9719e56643",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
