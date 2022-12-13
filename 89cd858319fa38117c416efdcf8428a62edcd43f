@@ -16,6 +16,24 @@
       "message": "Didn\u0027t this conflict with https://chromium-review.googlesource.com/c/angle/angle/+/4098744? Build might be broken after this landed",
       "revId": "89cd858319fa38117c416efdcf8428a62edcd43f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0a8b5d8_3b55bd8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-13T00:52:23Z",
+      "side": 1,
+      "message": "That is what I thought as well and I actually tried it locally and it build fine. The reason is that your CL uses CommandBufferHelper::retainResource() and I did not change that. CommandBufferHelper::retainResource() still sort of makes sense, that is why I did not change it in my CL.",
+      "parentUuid": "293adf2c_2bde72a5",
+      "revId": "89cd858319fa38117c416efdcf8428a62edcd43f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
