@@ -2378,7 +2378,7 @@ static bool ValidateObjectPtrName(const Context *context,
                                   angle::EntryPoint entryPoint,
                                   const void *ptr)
 {
-    if (context->getSync(reinterpret_cast<GLsync>(const_cast<void *>(ptr))) == nullptr)
+    if (!context->getSync({static_cast<uint32_t>(reinterpret_cast<uintptr_t>(ptr))}))
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kInvalidSyncPointer);
         return false;
