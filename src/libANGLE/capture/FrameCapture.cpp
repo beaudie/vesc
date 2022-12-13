@@ -2206,6 +2206,10 @@ bool IsSharedObjectResource(ResourceIDType type)
             // 2.6.7 Sampler Objects: Sampler objects may be shared
             return true;
 
+        case ResourceIDType::Sync:
+            // 2.6.13 Sync Objects: Sync objects may be shared.
+            return true;
+
         case ResourceIDType::Texture:
             // 2.6.6 Texture Objects: Texture objects may be shared
             return true;
@@ -2231,7 +2235,6 @@ bool IsSharedObjectResource(ResourceIDType type)
             return false;
 
         case ResourceIDType::InvalidEnum:
-        default:
             ERR() << "Unhandled ResourceIDType= " << static_cast<int>(type);
             UNREACHABLE();
             return false;
