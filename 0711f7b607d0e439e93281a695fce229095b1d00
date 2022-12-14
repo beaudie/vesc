@@ -232,6 +232,24 @@
       "parentUuid": "dddf875d_9a73d8aa",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aef40d73_704c8b1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-14T03:27:16Z",
+      "side": 1,
+      "message": "Thank you for the feedback 😊\nI choosed to update patchset:\n\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4095880\nModified description too.",
+      "parentUuid": "7fb36da0_d35b0965",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
