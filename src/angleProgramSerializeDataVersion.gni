@@ -1,0 +1,58 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("libANGLE/renderer/d3d/d3dBackend.gni")
+import("libANGLE/renderer/gl/glBackend.gni")
+import("libANGLE/renderer/metal/metalBackend.gni")
+import("libANGLE/renderer/null/nullBackend.gni")
+import("libANGLE/renderer/vulkan/vulkanBackend.gni")
+import("libGLESv2.gni")
+
+angle_code_affecting_program_serialize = libangle_common_sources
+angle_code_affecting_program_serialize += libangle_headers
+angle_code_affecting_program_serialize += libangle_sources
+angle_code_affecting_program_serialize += libangle_includes
+
+vulkan_backend_dir = "src/libANGLE/renderer/vulkan/"
+foreach(item, vulkan_backend_sources) {
+  angle_code_affecting_program_serialize += [ vulkan_backend_dir + item ]
+}
+
+gl_backend_dir = "src/libANGLE/renderer/gl/"
+foreach(item, gl_backend_sources) {
+  angle_code_affecting_program_serialize += [ gl_backend_dir + item ]
+}
+
+d3d_backend_dir = "src/libANGLE/renderer/d3d/"
+foreach(item, d3d_shared_sources) {
+  angle_code_affecting_program_serialize += [ d3d_backend_dir + item ]
+}
+
+if (angle_enable_d3d9) {
+  foreach(item, d3d9_backend_sources) {
+    angle_code_affecting_program_serialize += [ d3d_backend_dir + item ]
+  }
+}
+
+if (angle_enable_d3d11) {
+  foreach(item, d3d11_backend_sources) {
+    angle_code_affecting_program_serialize += [ d3d_backend_dir + item ]
+  }
+}
+
+null_backend_dir = "src/libANGLE/renderer/null/"
+foreach(item, null_backend_sources) {
+  angle_code_affecting_program_serialize += [ null_backend_dir + item ]
+}
+
+metal_backend_dir = "src/libANGLE/renderer/metal/"
+foreach(item, metal_backend_sources) {
+  angle_code_affecting_program_serialize += [ metal_backend_dir + item ]
+}
+
+if (angle_has_frame_capture) {
+  foreach(item, libangle_capture_sources) {
+    angle_code_affecting_program_serialize += libangle_capture_sources
+  }
+}
