@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeda4624_f2e5f779",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-14T01:06:51Z",
+      "side": 1,
+      "message": "(the \"missing\" half of the change relative to the AOSP change [https://android-review.git.corp.google.com/c/platform/external/angle/+/2171942] is in Android.bp, which isn\u0027t present in this tree.)",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
