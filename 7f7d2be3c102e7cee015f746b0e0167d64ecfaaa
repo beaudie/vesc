@@ -52,6 +52,46 @@
       "parentUuid": "3db27d08_00feecad",
       "revId": "7f7d2be3c102e7cee015f746b0e0167d64ecfaaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad0cd980_0c507653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 44
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-14T03:33:43Z",
+      "side": 1,
+      "message": "Just a note not to be forgotten.",
+      "revId": "7f7d2be3c102e7cee015f746b0e0167d64ecfaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e88a82a_c837c455",
+        "filename": "src/libANGLE/renderer/vulkan/linux/gbm/DisplayVkGbm.cpp",
+        "patchSetId": 44
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-14T03:33:43Z",
+      "side": 1,
+      "message": "This overwriting code is not needed if below patch is submitted.\n\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4022963",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 5
+      },
+      "revId": "7f7d2be3c102e7cee015f746b0e0167d64ecfaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
