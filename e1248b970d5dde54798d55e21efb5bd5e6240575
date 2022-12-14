@@ -16,6 +16,23 @@
       "message": "Gregg, Jonah: please review. Thanks.",
       "revId": "e1248b970d5dde54798d55e21efb5bd5e6240575",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "554a3903_babbe87a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-14T01:39:37Z",
+      "side": 1,
+      "message": "Going to need a carve-out for compressed textures at least. Will work more on this.",
+      "revId": "e1248b970d5dde54798d55e21efb5bd5e6240575",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
