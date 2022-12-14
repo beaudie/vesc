@@ -214,6 +214,24 @@
       "parentUuid": "54988ef8_2f9fbbf6",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fb36da0_d35b0965",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-14T02:35:26Z",
+      "side": 1,
+      "message": "That diff is exactly what I had in mind! Please do upload that as a CL. You could make that a separate CL from https://chromium-review.googlesource.com/c/angle/angle/+/4095880, if that makes things any easier",
+      "parentUuid": "dddf875d_9a73d8aa",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
