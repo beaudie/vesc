@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc41671c_b62ad1e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-14T23:02:07Z",
+      "side": 1,
+      "message": "I think the carve-out for compressed textures has resolved the earlier test failures.\n\nNot 100% sure we want to land this, per comments on the linked bug, but let\u0027s keep it up for consideration.",
+      "revId": "c6bb42bdddaed828e7538619616abd599871d4b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
