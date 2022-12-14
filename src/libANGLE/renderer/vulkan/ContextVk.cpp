@@ -291,7 +291,7 @@ vk::ResourceAccess GetColorAccess(const gl::State &state,
 
     const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
     uint8_t colorMask                      = gl::BlendStateExt::ColorMaskStorage::GetValueIndexed(
-                             colorIndexGL, blendStateExt.getColorMaskBits());
+        colorIndexGL, blendStateExt.getColorMaskBits());
     if (emulatedAlphaMask[colorIndexGL])
     {
         colorMask &= ~VK_COLOR_COMPONENT_A_BIT;
@@ -2254,11 +2254,10 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
 
     if (executable->hasTextures())
     {
-        UpdatePreCacheActiveTextures(executable->getSamplerBindings(),
+        ProgramExecutableVk *executableVk = getExecutable();
+        UpdatePreCacheActiveTextures(*executable, *executableVk, executable->getSamplerBindings(),
                                      executable->getActiveSamplersMask(), mActiveTextures,
                                      mState.getSamplers(), &mActiveTexturesDesc);
-
-        ProgramExecutableVk *executableVk = getExecutable();
 
         ANGLE_TRY(executableVk->updateTexturesDescriptorSet(
             this, *executable, mActiveTextures, mState.getSamplers(),
