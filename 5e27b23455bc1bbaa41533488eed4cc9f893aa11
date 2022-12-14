@@ -16,6 +16,24 @@
       "message": "With asserts disabled (e.g., in production builds), this would crash ANGLE. Is it intended?",
       "revId": "5e27b23455bc1bbaa41533488eed4cc9f893aa11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88db64f_03f60807",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1112145
+      },
+      "writtenOn": "2022-12-14T00:14:13Z",
+      "side": 1,
+      "message": "It\u0027s intended to crash in Debug builds, but return an error in Production builds.",
+      "parentUuid": "2f6bc1ba_fdc3f053",
+      "revId": "5e27b23455bc1bbaa41533488eed4cc9f893aa11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
