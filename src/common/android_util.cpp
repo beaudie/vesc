@@ -74,124 +74,21 @@ typedef struct ANativeWindowBuffer
 // Taken from android/hardware_buffer.h
 // https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativewindow/include/android/hardware_buffer.h
 
-// AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM,
-// AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM formats were deprecated and re-added explicitly.
+// AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM and AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM
+// formats were deprecated and re-added explicitly.
+
+// AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM, AHARDWAREBUFFER_FORMAT_YV12, and
+// AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED formats are only defined in
+// the VNDK but ANGLE builds with NDK.
 
 // clang-format off
 /**
  * Buffer pixel formats.
  */
 enum {
-
-#ifndef ANGLE_AHARDWARE_BUFFER_SUPPORT
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM
-     *   OpenGL ES: GL_RGBA8
-     */
-    AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM           = 1,
-
-    /**
-     * 32 bits per pixel, 8 bits per channel format where alpha values are
-     * ignored (always opaque).
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM
-     *   OpenGL ES: GL_RGB8
-     */
-    AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM           = 2,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_R8G8B8_UNORM
-     *   OpenGL ES: GL_RGB8
-     */
-    AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM             = 3,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_R5G6B5_UNORM_PACK16
-     *   OpenGL ES: GL_RGB565
-     */
-    AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM             = 4,
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
-
     AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM           = 5,
     AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM           = 6,
     AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM           = 7,
-
-#ifndef ANGLE_AHARDWARE_BUFFER_SUPPORT
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_R16G16B16A16_SFLOAT
-     *   OpenGL ES: GL_RGBA16F
-     */
-    AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT       = 0x16,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_A2B10G10R10_UNORM_PACK32
-     *   OpenGL ES: GL_RGB10_A2
-     */
-    AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM        = 0x2b,
-
-    /**
-     * An opaque binary blob format that must have height 1, with width equal to
-     * the buffer size in bytes.
-     */
-    AHARDWAREBUFFER_FORMAT_BLOB                     = 0x21,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_D16_UNORM
-     *   OpenGL ES: GL_DEPTH_COMPONENT16
-     */
-    AHARDWAREBUFFER_FORMAT_D16_UNORM                = 0x30,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_X8_D24_UNORM_PACK32
-     *   OpenGL ES: GL_DEPTH_COMPONENT24
-     */
-    AHARDWAREBUFFER_FORMAT_D24_UNORM                = 0x31,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_D24_UNORM_S8_UINT
-     *   OpenGL ES: GL_DEPTH24_STENCIL8
-     */
-    AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT        = 0x32,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_D32_SFLOAT
-     *   OpenGL ES: GL_DEPTH_COMPONENT32F
-     */
-    AHARDWAREBUFFER_FORMAT_D32_FLOAT                = 0x33,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_D32_SFLOAT_S8_UINT
-     *   OpenGL ES: GL_DEPTH32F_STENCIL8
-     */
-    AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT        = 0x34,
-
-    /**
-     * Corresponding formats:
-     *   Vulkan: VK_FORMAT_S8_UINT
-     *   OpenGL ES: GL_STENCIL_INDEX8
-     */
-    AHARDWAREBUFFER_FORMAT_S8_UINT                  = 0x35,
-
-    /**
-     * YUV 420 888 format.
-     * Must have an even width and height. Can be accessed in OpenGL
-     * shaders through an external sampler. Does not support mip-maps
-     * cube-maps or multi-layered textures.
-     */
-    AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420             = 0x23,
-
-#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
-
     AHARDWAREBUFFER_FORMAT_YV12                     = 0x32315659,
     AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED   = 0x22,
 };
@@ -225,6 +122,7 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
     *isYUV = false;
     switch (pixelFormat)
     {
+#if __ANDROID_API__ >= 26
         case AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM:
             return GL_RGBA8;
         case AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM:
@@ -233,12 +131,14 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
             return GL_RGB8;
         case AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM:
             return GL_RGB565;
+#endif  // #if __ANDROID_API__ >= 26
         case AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM:
             return GL_BGRA8_EXT;
         case AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM:
             return GL_RGB5_A1;
         case AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM:
             return GL_RGBA4;
+#if __ANDROID_API__ >= 29
         case AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT:
             return GL_RGBA16F;
         case AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM:
@@ -257,7 +157,10 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
             return GL_DEPTH32F_STENCIL8;
         case AHARDWAREBUFFER_FORMAT_S8_UINT:
             return GL_STENCIL_INDEX8;
+#endif  // __ANDROID_API__  >= 29
+#if __ANDROID_API__ >= 30
         case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
+#endif  // __ANDROID_API__ >= 30
         case AHARDWAREBUFFER_FORMAT_YV12:
         case AHARDWAREBUFFER_FORMAT_IMPLEMENTATION_DEFINED:
             *isYUV = true;
@@ -358,12 +261,14 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
 {
     switch (internalFormat)
     {
+#if __ANDROID_API__ >= 26
         case GL_RGBA8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
         case GL_RGB8:
             return AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
         case GL_RGB565:
             return AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM;
+#endif  // __ANDROID_API__ >= 26
         case GL_BGRA8_EXT:
             return AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM;
         case GL_RGB5_A1:
@@ -371,6 +276,7 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
         case GL_RGBA4:
             return AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM;
         case GL_RGBA16F:
+#if __ANDROID_API__ >= 29
             return AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT;
         case GL_RGB10_A2:
             return AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM;
@@ -388,6 +294,7 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
             return AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT;
         case GL_STENCIL_INDEX8:
             return AHARDWAREBUFFER_FORMAT_S8_UINT;
+#endif  // __ANDROID_API__ >= 29
         default:
             WARN() << "Unknown internalFormat: " << internalFormat << ". Treating as 0";
             return 0;
