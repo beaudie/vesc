@@ -63,6 +63,30 @@
       },
       "revId": "dbff8a0d75799ea70df431333766214fd55a0f67",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0409d3d_f0aeb176",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2381,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-14T16:06:06Z",
+      "side": 1,
+      "message": "Note: I probably should make a helper function for these casts that verifies they don\u0027t discard bits.",
+      "parentUuid": "851407a6_0b54102d",
+      "range": {
+        "startLine": 2381,
+        "startChar": 39,
+        "endLine": 2381,
+        "endChar": 47
+      },
+      "revId": "dbff8a0d75799ea70df431333766214fd55a0f67",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
