@@ -1223,6 +1223,7 @@ void DisplayMtl::initializeFeatures()
            !mFeatures.alwaysUseSharedStorageModeForBuffers.enabled);
 
     ANGLE_FEATURE_CONDITION((&mFeatures), uploadDataToIosurfacesWithStagingBuffers, isAMD());
+    ANGLE_FEATURE_CONDITION((&mFeatures), forceUploadingTextureDataWithStagingBuffers, true);
 
     ApplyFeatureOverrides(&mFeatures, getState());
 }
