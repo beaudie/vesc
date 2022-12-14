@@ -299,6 +299,14 @@
                 "Disable raster order groups in order to test pixel local storage memory barriers"
             ],
             "issue": "http://anglebug.com/7279"
+        },
+        {
+            "name": "force_uploading_texture_data_with_staging_buffers",
+            "category": "Workarounds",
+            "description": [
+                "Use a staging buffer all the time when uploading data to textures."
+            ],
+            "issue": "http://crbug.com/1380790"
         }
     ]
 }

@@ -531,6 +531,9 @@ angle::Result UploadTextureContents(const gl::Context *context,
 
     bool forceStagedUpload =
         texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled;
+    // crbug.com/1380790: forceStagedUpload must be forced to true all the time
+    // to achieve parity with the OpenGL backend on MotionMark's Images test.
+    forceStagedUpload |= features.forceUploadingTextureDataWithStagingBuffers.enabled;
     if (texture->isCPUAccessible() && !forceStagedUpload)
     {
         // If texture is CPU accessible, just call replaceRegion() directly.
