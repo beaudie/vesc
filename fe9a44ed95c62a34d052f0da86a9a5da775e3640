@@ -33,6 +33,24 @@
       "message": "yeah, i didn\u0027t know what to do about a chromium bug. should i really file one, just to add it here? or do you write \"Bug: N/A\" or something?",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f31eb16d_aa13e062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-14T18:53:48Z",
+      "side": 1,
+      "message": "You can use `Bug: b/12345678` to refer to a buganizer entry.\n\n`Bug: None` would also work, but prefer to have something we can refer back to.",
+      "parentUuid": "cd11a17c_9a386921",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
