@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9c79355_518fe8f5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-14T22:49:18Z",
+      "side": 1,
+      "message": "This `constexpr` flag is used for compiler optimization. In the case this flag is set to `false`, this function would be compiled into an empty block.",
+      "parentUuid": "78700460_5092aa25",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1289,
+        "endChar": 31
+      },
+      "revId": "3d6f969935cd31b3b8fdd70914bede7de3d79ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55d22068_198483ab",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-13T22:09:08Z",
       "side": 1,
       "message": "If we do this on OOM, it would be better to log as warning or error. Would it make sense to pass in the logging stream as a param?",
+      "range": {
+        "startLine": 1310,
+        "startChar": 8,
+        "endLine": 1310,
+        "endChar": 14
+      },
+      "revId": "3d6f969935cd31b3b8fdd70914bede7de3d79ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37054288_b562716c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-14T22:49:18Z",
+      "side": 1,
+      "message": "Thank you for the suggestion. Added a `stringstream` in `logMemoryHeapStats()` to be logged, the severity of which is selected based on an input argument of type `vk::MemoryLogSeverity`.",
+      "parentUuid": "55d22068_198483ab",
       "range": {
         "startLine": 1310,
         "startChar": 8,

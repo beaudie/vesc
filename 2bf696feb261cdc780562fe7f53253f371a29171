@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "361df8a9_544f119d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-14T22:49:18Z",
+      "side": 1,
+      "message": "The original intention was how much allocated memory remains at the end of the renderer object. Changed to _currently allocated memory_.",
+      "parentUuid": "1e0e1499_ecacd902",
+      "range": {
+        "startLine": 1264,
+        "startChar": 16,
+        "endLine": 1267,
+        "endChar": 87
+      },
+      "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5386e6e0_bf23cfe8",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-12-12T22:49:36Z",
       "side": 1,
       "message": "Can we also use the `VK_EXT_memory_budget`[1] extension to query the current memory usage per memory heap if the extension is available and `VkPhysicalDeviceMemoryProperties::memoryHeaps[*]::size` to query the actual size of each memory heaps?\n\n[1] https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkPhysicalDeviceMemoryBudgetPropertiesEXT.html",
+      "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6be6bf2e_50469b9f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-14T22:49:18Z",
+      "side": 1,
+      "message": "Thank you for the suggestion. Added in the function `logMemoryHeapStats()`.",
+      "parentUuid": "5386e6e0_bf23cfe8",
       "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -71,6 +113,30 @@
       "writtenOn": "2022-12-12T21:27:18Z",
       "side": 1,
       "message": "Super nit: `OnError`",
+      "range": {
+        "startLine": 671,
+        "startChar": 23,
+        "endLine": 671,
+        "endChar": 25
+      },
+      "revId": "2bf696feb261cdc780562fe7f53253f371a29171",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b1441c8_c93418ae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2022-12-14T22:49:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5be5a963_d13e31b7",
       "range": {
         "startLine": 671,
         "startChar": 23,
