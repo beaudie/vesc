@@ -196,6 +196,24 @@
       "parentUuid": "35121fd9_41a96b1b",
       "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dddf875d_9a73d8aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-14T01:31:17Z",
+      "side": 1,
+      "message": "Thank you for the kind explanation.\nThen we need to add below code too.\nAre you going to make another patch ?\nOr do I update patchset of https://chromium-review.googlesource.com/c/angle/angle/+/4095880 ?\n\nIf there are anything that I have to do, please let me know.\n\n```c\ndiff --git a/src/libANGLE/renderer/vulkan/SyncVk.cpp b/src/libANGLE/renderer/vulkan/SyncVk.cpp\nindex 1dd85d51d..6b802c09c 100644\n--- a/src/libANGLE/renderer/vulkan/SyncVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/SyncVk.cpp\n@@ -325,11 +325,11 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,\n     else\n     {\n         // We need to wait on the file descriptor\n-\n         status \u003d SyncWaitFd(mNativeFenceFd, timeout);\n         if (status !\u003d VK_TIMEOUT)\n         {\n             ANGLE_VK_TRY(contextVk, status);\n+            ANGLE_TRY(renderer-\u003echeckCompletedCommands(context));\n         }\n     }\n\n@@ -366,10 +366,11 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,\n                                                ContextVk *contextVk,\n                                                bool *signaled)\n {\n+    RendererVk *renderer \u003d context-\u003egetRenderer();\n     // We\u0027ve got a serial, check if the serial is still in use\n     if (mUse.valid())\n     {\n-        *signaled \u003d !context-\u003egetRenderer()-\u003ehasUnfinishedUse(getResourceUse());\n+        *signaled \u003d !renderer-\u003ehasUnfinishedUse(getResourceUse());\n         return angle::Result::Continue;\n     }\n\n@@ -378,6 +379,7 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,\n     if (result !\u003d VK_TIMEOUT)\n     {\n         ANGLE_VK_TRY(context, result);\n+        ANGLE_TRY(renderer-\u003echeckCompletedCommands(context));\n     }\n     *signaled \u003d (result \u003d\u003d VK_SUCCESS);\n     return angle::Result::Continue;\n```",
+      "parentUuid": "54988ef8_2f9fbbf6",
+      "revId": "0711f7b607d0e439e93281a695fce229095b1d00",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
