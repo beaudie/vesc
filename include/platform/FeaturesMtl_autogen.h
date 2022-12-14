@@ -268,6 +268,11 @@ struct FeaturesMtl : FeatureSetBase
         "disableRasterOrderGroups", FeatureCategory::MetalFeatures,
         "Disable raster order groups in order to test pixel local storage memory barriers",
         &members, "http://anglebug.com/7279"};
+
+    FeatureInfo forceUploadingTextureDataWithStagingBuffers = {
+        "forceUploadingTextureDataWithStagingBuffers", FeatureCategory::MetalWorkarounds,
+        "Use a staging buffer all the time when uploading data to textures.", &members,
+        "http://crbug.com/1380790"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
