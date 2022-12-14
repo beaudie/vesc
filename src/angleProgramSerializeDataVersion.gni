@@ -1,0 +1,52 @@
+# Copyright 2022 The ANGLE Project Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("../gni/angle.gni")
+
+angle_code_affecting_program_serialize = [
+  "src/libANGLE/ProgramLinkedResources.cpp",
+  "src/libANGLE/ProgramExecutable.h",
+  "src/libANGLE/Uniform.h",
+  "src/libANGLE/Shader.h",
+  "src/libANGLE/Shader.cpp",
+  "src/libANGLE/ProgramLinkedResources.h",
+  "src/libANGLE/ProgramPipeline.cpp",
+  "src/libANGLE/Program.h",
+  "src/libANGLE/Program.cpp",
+  "src/libANGLE/ProgramExecutable.cpp",
+  "src/libANGLE/Program_unittest.cpp",
+  "src/libANGLE/ProgramPipeline.h",
+  "src/libANGLE/renderer/renderer_utils.h",
+  "src/libANGLE/renderer/ProgramPipelineImpl.cpp",
+  "src/libANGLE/renderer/ProgramImpl_mock.h",
+  "src/libANGLE/renderer/ProgramPipelineImpl.h",
+  "src/libANGLE/renderer/ProgramImpl.cpp",
+  "src/libANGLE/renderer/ProgramImpl.h",
+  "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+  "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+  "src/libANGLE/renderer/vulkan/ProgramPipelineVk.h",
+  "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+  "src/libANGLE/renderer/vulkan/ProgramVk.h",
+  "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+  "src/libANGLE/renderer/gl/ProgramGL.cpp",
+  "src/libANGLE/renderer/gl/ProgramPipelineGL.h",
+  "src/libANGLE/renderer/gl/ProgramGL.h",
+  "src/libANGLE/renderer/gl/ProgramPipelineGL.cpp",
+  "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+  "src/libANGLE/renderer/d3d/ProgramD3D.h",
+  "src/libANGLE/renderer/null/ProgramPipelineNULL.h",
+  "src/libANGLE/renderer/null/ProgramNULL.cpp",
+  "src/libANGLE/renderer/null/ProgramPipelineNULL.cpp",
+  "src/libANGLE/renderer/null/ProgramNULL.h",
+  "src/libANGLE/renderer/metal/ProgramMtl.h",
+  "src/libANGLE/renderer/metal/ProgramMtl.mm",
+  "include/platform/FrontendFeatures_autogen.h",
+  "include/platform/Feature.h",
+  "src/common/PackedEnums.h",
+]
+
+if (angle_has_frame_capture) {
+  angle_code_affecting_program_serialize +=
+      [ "src/libANGLE/capture/FrameCapture.h" ]
+}
