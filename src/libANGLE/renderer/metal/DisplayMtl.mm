@@ -27,6 +27,7 @@
 #include "libANGLE/renderer/metal/mtl_common.h"
 #include "libANGLE/renderer/metal/shaders/mtl_default_shaders_src_autogen.inc"
 #include "libANGLE/trace.h"
+#include "mtl_command_buffer.h"
 #include "platform/PlatformMethods.h"
 
 #ifdef ANGLE_METAL_XCODE_BUILDS_SHADERS
@@ -319,6 +320,16 @@ egl::Error DisplayMtl::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
+egl::Error DisplayMtl::waitUntilWorkScheduled()
+{
+    for (auto context : mState.contextSet)
+    {
+        auto contextMtl = GetImplAs<ContextMtl>(context);
+        contextMtl->flushCommandBuffer(mtl::WaitUntilScheduled);
+    }
+    return egl::NoError();
+}
+
 SurfaceImpl *DisplayMtl::createWindowSurface(const egl::SurfaceState &state,
                                              EGLNativeWindowType window,
                                              const egl::AttributeMap &attribs)
@@ -453,6 +464,7 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup   = true;
     outExtensions->displaySemaphoreShareGroup = true;
     outExtensions->mtlTextureClientBuffer     = true;
+    outExtensions->waitUntilWorkScheduled     = true;
 
     if (mFeatures.hasEvents.enabled)
     {
