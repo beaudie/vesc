@@ -158,6 +158,10 @@ GLenum GetPixelFormatInfo(int pixelFormat, bool *isYUV)
         case AHARDWAREBUFFER_FORMAT_S8_UINT:
             return GL_STENCIL_INDEX8;
 #endif  // __ANDROID_API__  >= 29
+#if __ANDROID_API__ >= 34
+        case AHARDWAREBUFFER_FORMAT_R8_UNORM:
+            return GL_R8;
+#endif  // __ANDROID_API__  >= 34
 #if __ANDROID_API__ >= 30
         case AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420:
 #endif  // __ANDROID_API__ >= 30
@@ -295,6 +299,10 @@ int GLInternalFormatToNativePixelFormat(GLenum internalFormat)
         case GL_STENCIL_INDEX8:
             return AHARDWAREBUFFER_FORMAT_S8_UINT;
 #endif  // __ANDROID_API__ >= 29
+#if __ANDROID_API__ >= 34
+        case GL_R8:
+            return AHARDWAREBUFFER_FORMAT_R8_UNORM;
+#endif  // __ANDROID_API__ >= 34
         default:
             WARN() << "Unknown internalFormat: " << internalFormat << ". Treating as 0";
             return 0;
