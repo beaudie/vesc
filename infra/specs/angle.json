@@ -1174,7 +1174,7 @@
         "args": [
           "--log=debug",
           "interpret",
-          "trex_200",
+          "among_us:trex_200",
           "-L=2",
           "--show-test-stdout"
         ],
@@ -1984,7 +1984,7 @@
         "args": [
           "--log=debug",
           "interpret",
-          "trex_200",
+          "among_us:trex_200",
           "-L=2",
           "--show-test-stdout"
         ],
@@ -3967,7 +3967,7 @@
         "args": [
           "--log=debug",
           "interpret",
-          "trex_200",
+          "among_us:trex_200",
           "-L=2",
           "--show-test-stdout"
         ],
@@ -4189,7 +4189,7 @@
         "args": [
           "--log=debug",
           "interpret",
-          "trex_200",
+          "among_us:trex_200",
           "-L=2",
           "--show-test-stdout"
         ],
@@ -4979,7 +4979,7 @@
         "args": [
           "--log=debug",
           "interpret",
-          "trex_200",
+          "among_us:trex_200",
           "-L=2",
           "--show-test-stdout"
         ],
