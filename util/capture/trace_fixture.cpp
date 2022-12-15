@@ -167,6 +167,7 @@ void UpdateCurrentProgram(GLuint program)
 uint8_t *gBinaryData;
 uint8_t *gReadBuffer;
 uint8_t *gClientArrays[kMaxClientArrays];
+GLuint *gResourceIDBuffer;
 SyncResourceMap gSyncMap;
 ContextMap gContextMap;
 GLuint gShareContextId;
@@ -223,6 +224,7 @@ GLuint *AllocateZeroedUints(size_t count)
 void InitializeReplay3(const char *binaryDataFileName,
                        size_t maxClientArraySize,
                        size_t readBufferSize,
+                       size_t resourceIDBufferSize,
                        GLuint contextId,
                        uint32_t maxBuffer,
                        uint32_t maxContext,
@@ -248,7 +250,8 @@ void InitializeReplay3(const char *binaryDataFileName,
                       maxShaderProgram, maxSurface, maxTexture, maxTransformFeedback,
                       maxVertexArray);
 
-    gSyncMap2 = AllocateZeroedValues<GLsync>(maxSync);
+    gSyncMap2         = AllocateZeroedValues<GLsync>(maxSync);
+    gResourceIDBuffer = AllocateZeroedUints(resourceIDBufferSize);
 }
 
 void InitializeReplay2(const char *binaryDataFileName,
@@ -339,6 +342,7 @@ void FinishReplay()
         delete[] clientArray;
     }
     delete[] gReadBuffer;
+    delete[] gResourceIDBuffer;
 
     delete[] gBufferMap;
     delete[] gContextMap2;
@@ -384,6 +388,11 @@ void UpdateClientBufferDataWithOffset(GLuint bufferID,
 {
     uintptr_t dest = reinterpret_cast<uintptr_t>(gMappedBufferData[gBufferMap[bufferID]]) + offset;
     memcpy(reinterpret_cast<void *>(dest), source, size);
+}
+
+void UpdateResourceIDBuffer(int resourceIndex, GLuint id)
+{
+    gResourceIDBuffer[resourceIndex] = id;
 }
 
 void UpdateBufferID(GLuint id, GLsizei readBufferOffset)
