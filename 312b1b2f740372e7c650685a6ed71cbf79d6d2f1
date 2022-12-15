@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4451e2eb_069157dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-15T19:03:30Z",
+      "side": 1,
+      "message": "Awesome work Gregg - can we polish this up and get it ready for review? It looks like this primitive\u0027s going to be needed for the dual-GPU work, too.",
+      "revId": "312b1b2f740372e7c650685a6ed71cbf79d6d2f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
