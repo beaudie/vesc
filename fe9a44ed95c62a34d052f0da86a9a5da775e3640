@@ -123,6 +123,24 @@
       "parentUuid": "f280edfd_c2dd214c",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b93ce4b_63f74f02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-15T18:55:08Z",
+      "side": 1,
+      "message": "Cody point out to me that the Android.bp is generated from script\nhttps://chromium.googlesource.com/angle/angle/+/HEAD/scripts/roll_aosp.sh\nMaybe the script also needs to add riscv64?",
+      "parentUuid": "32015d6d_791b882e",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
