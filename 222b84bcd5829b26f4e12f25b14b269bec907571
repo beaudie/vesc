@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "423def62_fd7653fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "what\u0027s coming in future parts?",
+      "range": {
+        "startLine": 7,
+        "startChar": 65,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26018584_fb9f298a",
         "filename": "/COMMIT_MSG",
         "patchSetId": 36
@@ -37,6 +60,46 @@
       "writtenOn": "2022-12-15T05:23:16Z",
       "side": 1,
       "message": "LGTM with some questions/nits, will give Jamie a chance to +2",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cb41025_e5163572",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "nit: comments would help future maintenance",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36a99df1_bfd126bf",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "nit: use rebase_path instead of the foreach, same for all the others in this file",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
       "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -89,6 +152,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25e3edbc_50a61a77",
+        "filename": "src/libANGLE/renderer/vulkan/vulkanBackend.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "for all these files, use dash_style.gni, to match the Chromium usages.",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a8ca43b_27d94945",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 36
@@ -105,6 +185,76 @@
         "startChar": 0,
         "endLine": 677,
         "endChar": 40
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aced689e_7b59b042",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "aside: What\u0027s this about JSON? JSON is a bit of a hairy format to write generated code in, have you considered other alternatives?",
+      "parentUuid": "2a8ca43b_27d94945",
+      "range": {
+        "startLine": 677,
+        "startChar": 0,
+        "endLine": 677,
+        "endChar": 40
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d031f29_98c8cdcd",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "nit: i think you can use if not file, but why are you getting empty strings here anyway? seems like a bug if you get them, maybe this should be assert the strings aren\u0027t empty.",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2816d6c3_5a76d83d",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2022-12-15T15:33:03Z",
+      "side": 1,
+      "message": "Please use python\u0027s argparse library for argument handling.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 0
       },
       "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
