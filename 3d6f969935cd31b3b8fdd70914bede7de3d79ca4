@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "636733e3_a0462f16",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-15T01:23:42Z",
+      "side": 1,
+      "message": "That\u0027s orthogonal though, you could do:\n\n```\nif (!k..)\n    return;\n\ndo_work();\n```\n\nAnd `do_work()` would still get dead-code eliminated.",
+      "parentUuid": "e9c79355_518fe8f5",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1289,
+        "endChar": 31
+      },
+      "revId": "3d6f969935cd31b3b8fdd70914bede7de3d79ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55d22068_198483ab",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 6
