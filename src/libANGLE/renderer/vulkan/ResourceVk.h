@@ -104,9 +104,9 @@ class ResourceUse final
 
     bool usedByCommandBuffer(const QueueSerial &commandBufferQueueSerial) const
     {
+        ASSERT(commandBufferQueueSerial.valid());
         // Return true if we have the exact queue serial in the array.
-        return commandBufferQueueSerial.valid() &&
-               mSerials.size() > commandBufferQueueSerial.getIndex() &&
+        return mSerials.size() > commandBufferQueueSerial.getIndex() &&
                mSerials[commandBufferQueueSerial.getIndex()] ==
                    commandBufferQueueSerial.getSerial();
     }

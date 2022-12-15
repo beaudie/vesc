@@ -3215,15 +3215,6 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
         return;
     }
 
-    gl::RunningGraphWidget *widget =
-        overlay->getRunningGraphWidget(gl::WidgetId::VulkanRenderPassBufferCount);
-    size_t buffersCount = commandBuffer->getUsedBuffersCount();
-    if (buffersCount > 0)
-    {
-        widget->add(buffersCount);
-        widget->next();
-    }
-
     {
         gl::RunningGraphWidget *textureDescriptorCacheSize =
             overlay->getRunningGraphWidget(gl::WidgetId::VulkanTextureDescriptorCacheSize);
