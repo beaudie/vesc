@@ -6238,6 +6238,12 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(UpdateRenderbufferID)>(paramTokens, shaders);
         return CallCapture("UpdateRenderbufferID", std::move(params));
     }
+    if (strcmp(nameToken, "UpdateResourceIDBuffer") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<decltype(UpdateResourceIDBuffer)>(paramTokens, shaders);
+        return CallCapture("UpdateResourceIDBuffer", std::move(params));
+    }
     if (strcmp(nameToken, "UpdateSamplerID") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(UpdateSamplerID)>(paramTokens, shaders);
@@ -6463,6 +6469,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "UpdateRenderbufferID")
     {
         DispatchCallCapture(UpdateRenderbufferID, captures);
+        return;
+    }
+    if (call.customFunctionName == "UpdateResourceIDBuffer")
+    {
+        DispatchCallCapture(UpdateResourceIDBuffer, captures);
         return;
     }
     if (call.customFunctionName == "UpdateSamplerID")
