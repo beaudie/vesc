@@ -141,6 +141,24 @@
       "parentUuid": "32015d6d_791b882e",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420d27b2_6b23658f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T19:05:58Z",
+      "side": 1,
+      "message": "+roman and geoff\n\nChanging our Android.bp is a bit tricky.  You\u0027ll also need to change:\nhttps://chromium.googlesource.com/angle/angle/+/HEAD/scripts/generate_android_bp.py\n\nElliott, do you have a diff of what the Android.bp should look like, and we can help update upstream?",
+      "parentUuid": "1b93ce4b_63f74f02",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
