@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1751292e_b41ecc8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "The original idea was to break the task into 3 subtasks as Shabi adviced: https://anglebug.com/4981#c9. In this CL we are changing from the git hash to the hash of code files that affect program serialization, but we are generating hashes more than we need. In future changes, I will experiment with generating hashes from a smaller range of files.",
+      "parentUuid": "423def62_fd7653fe",
+      "range": {
+        "startLine": 7,
+        "startChar": 65,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26018584_fb9f298a",
         "filename": "/COMMIT_MSG",
         "patchSetId": 36
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-15T05:23:16Z",
       "side": 1,
       "message": "You might want to reword this since we are hashing much more than what affects program serialization/deserialization.  It is a conservative jumping off point though, and better than relying on the git hash, for sure.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "720683bd_8af5ce4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Got it, I have added more information in the CL description.",
+      "parentUuid": "26018584_fb9f298a",
       "range": {
         "startLine": 7,
         "startChar": 0,
@@ -81,6 +129,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd4d5c5_26c95d46",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cb41025_e5163572",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "36a99df1_bfd126bf",
@@ -94,6 +160,30 @@
       "writtenOn": "2022-12-15T15:33:03Z",
       "side": 1,
       "message": "nit: use rebase_path instead of the foreach, same for all the others in this file",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b60c37_45832f6f",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36a99df1_bfd126bf",
       "range": {
         "startLine": 17,
         "startChar": 0,
@@ -129,6 +219,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2dd9b58_0679c8ca",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "I adapted from the existing build configuration: https://crsrc.org/c/third_party/angle/src/libANGLE/renderer/d3d/BUILD.gn;l\u003d75, just to make sure the files I use for hash value calculation is consistent with the files that are compiled and built.",
+      "parentUuid": "3f959a59_b71f8dfa",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 24
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ff9f09b_d3c56e0e",
         "filename": "src/common/angle_version.h",
         "patchSetId": 36
@@ -152,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a37962bd_567cbfc2",
+        "filename": "src/common/angle_version.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "That file will be generated under `$root_build_dir/gen/angle/ANGLEShaderProgramVersion.h` during compilation: e.g. `out/LinuxDebug/gen/angle/ANGLEShaderProgramVersion.h`. I think all the build output directories are excluded from .git by default. \n\nIn ANGLE repository, we don\u0027t track `angle_commit.h`, either: https://source.chromium.org/search?q\u003dangle_commit.h\u0026sq\u003d\u0026ss\u003dchromium%2Fchromium%2Fsrc:third_party%2Fangle%2F.\n\nIn Android repository, I believe the file `ANGLEShaderProgramVersion.h` will be generated when building.",
+      "parentUuid": "7ff9f09b_d3c56e0e",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25e3edbc_50a61a77",
         "filename": "src/libANGLE/renderer/vulkan/vulkanBackend.gni",
         "patchSetId": 36
@@ -163,6 +301,24 @@
       "writtenOn": "2022-12-15T15:33:03Z",
       "side": 1,
       "message": "for all these files, use dash_style.gni, to match the Chromium usages.",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f91794b4_358d101a",
+        "filename": "src/libANGLE/renderer/vulkan/vulkanBackend.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25e3edbc_50a61a77",
       "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -216,6 +372,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5ec61123_26f887b7",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "To Cody: The plan is to narrow it down. This change creates a base where we can revert back to if narrowing down file lists cause problems. \n\nTo Jamie: Cody is referring to step 3. in this comment: https://anglebug.com/4981#c9. If we can make ProgramState autogenerated by Json file, then we only need to hash over the Json file to detect any changes in ProgramState. Would you mind elaborating more on ` JSON is a bit of a hairy format to write generated code in`?",
+      "parentUuid": "aced689e_7b59b042",
+      "range": {
+        "startLine": 677,
+        "startChar": 0,
+        "endLine": 677,
+        "endChar": 40
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1d031f29_98c8cdcd",
         "filename": "src/program_serialize_data_version.py",
         "patchSetId": 36
@@ -227,6 +407,30 @@
       "writtenOn": "2022-12-15T15:33:03Z",
       "side": 1,
       "message": "nit: i think you can use if not file, but why are you getting empty strings here anyway? seems like a bug if you get them, maybe this should be assert the strings aren\u0027t empty.",
+      "range": {
+        "startLine": 21,
+        "startChar": 10,
+        "endLine": 21,
+        "endChar": 22
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "472cf24a_300b2e80",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Because `gn write_file` leaves a new line at the end, and when I use `input_files.read().split(\u0027\\n\u0027)` to parse the generated `write_file` result, there is an empty item left at the end of the list. \n\nI made the change to remove the last empty element from the list: https://crrev.com/c/4072215/36..37/src/program_serialize_data_version.py#44, and add an assert to make sure the item in the list are not empty.",
+      "parentUuid": "1d031f29_98c8cdcd",
       "range": {
         "startLine": 21,
         "startChar": 10,
@@ -262,6 +466,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2937a86f_f73a1128",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Thank you Jamie for pointing out the argparse library, I have changed the script to use argparse for arguments enforcement check and printing help message.",
+      "parentUuid": "2816d6c3_5a76d83d",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 0
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "43735ba6_4b7bd7e2",
         "filename": "src/program_serialize_data_version.py",
         "patchSetId": 36
@@ -273,6 +501,30 @@
       "writtenOn": "2022-12-15T05:23:16Z",
       "side": 1,
       "message": "This can be cleaned up",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c521387f_c06feb96",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-15T22:34:22Z",
+      "side": 1,
+      "message": "Thank you for catching it!",
+      "parentUuid": "43735ba6_4b7bd7e2",
       "range": {
         "startLine": 35,
         "startChar": 0,
