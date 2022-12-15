@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40bf5039_71d5169e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1504,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T02:59:17Z",
+      "side": 1,
+      "message": "Yep, switched to count.",
+      "parentUuid": "3186a189_0fb4c900",
+      "range": {
+        "startLine": 1496,
+        "startChar": 0,
+        "endLine": 1504,
+        "endChar": 0
+      },
+      "revId": "f44158dc305f5506bc36ca29a1b73087162d9bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c26cc9f9_fde496cc",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-11-30T01:07:27Z",
       "side": 1,
       "message": "what is the difference between the `trackedShaderPrograms` retrieved here and the `trackedShaderPrograms` retrieved on line 4163 above?",
+      "revId": "f44158dc305f5506bc36ca29a1b73087162d9bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f33a1021_bdda1df4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4222,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T02:59:17Z",
+      "side": 1,
+      "message": "No difference, they\u0027re just in different scopes.  I went ahead and moved it out and reduced the duplication.\n\nProbably something that should be done generally as part of a project to improve MEC overhead.  The time between triggering the capture and rendering the next frame can really screw up games that don\u0027t wait for frames to complete before advancing state.",
+      "parentUuid": "c26cc9f9_fde496cc",
       "revId": "f44158dc305f5506bc36ca29a1b73087162d9bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
