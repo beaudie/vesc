@@ -105,6 +105,24 @@
       "parentUuid": "eeda4624_f2e5f779",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32015d6d_791b882e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-15T18:41:11Z",
+      "side": 1,
+      "message": "i don\u0027t think that can be true (from what i\u0027ve been learning on the zlib bug!), because AOSP has third_party/zlib which chromium doesn\u0027t? so there\u0027s at least that quite major (looking at the number of times it\u0027s referenced in the .bp file) difference between the builds?\n\n(but if that is true, let me know now, and i\u0027ll stop looking at how to change the .bp file so you can just use the platform\u0027s zlib, which will obviously need to be done differently if there\u0027s auto-generation going on! :-) )",
+      "parentUuid": "f280edfd_c2dd214c",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
