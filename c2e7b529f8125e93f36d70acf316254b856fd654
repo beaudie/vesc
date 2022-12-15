@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65057c21_c744a7e6",
+        "filename": "doc/CaptureAndReplay.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "This is helpful.  I thought you had to specify both draw and fbo for this to work, but they are independent.",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 67
+      },
+      "revId": "c2e7b529f8125e93f36d70acf316254b856fd654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61ee9bc_0f2d80f5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5534,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "This first check seems redundant if you are checking for `mCaptureStartFrame - 1` in the next section.",
+      "range": {
+        "startLine": 5534,
+        "startChar": 11,
+        "endLine": 5534,
+        "endChar": 43
+      },
+      "revId": "c2e7b529f8125e93f36d70acf316254b856fd654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f845f501_7ecf07f5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7973,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "Nice cleanup!",
+      "range": {
+        "startLine": 7972,
+        "startChar": 0,
+        "endLine": 7973,
+        "endChar": 1
+      },
+      "revId": "c2e7b529f8125e93f36d70acf316254b856fd654",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

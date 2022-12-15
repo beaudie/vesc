@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7e9c1c_3da585cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "I tried to use this today to capture a trace of an app crashing in the first frame.\n\nNaively I\u0027m trying to start capture at the beginning and end at a certain draw (or right before it).  I can\u0027t seem to get it to work.",
+      "parentUuid": "725a3adf_57e6939e",
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89855d44_fc7cd92d",
@@ -271,6 +289,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5993c6_3c058154",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6823,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "Looks fine now.",
+      "parentUuid": "fd577722_373908df",
+      "range": {
+        "startLine": 6823,
+        "startChar": 13,
+        "endLine": 6823,
+        "endChar": 70
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0df4efb6_8698bf10",
@@ -308,6 +350,30 @@
       "side": 1,
       "message": "I think that\u0027ll just make the code harder to read. LMKWYT",
       "parentUuid": "0df4efb6_8698bf10",
+      "range": {
+        "startLine": 6900,
+        "startChar": 8,
+        "endLine": 6900,
+        "endChar": 64
+      },
+      "revId": "3a63c164465b70568bb8101d2c7af8bc316dd8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b84db454_6c7b39f4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6900,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T06:08:15Z",
+      "side": 1,
+      "message": "Looks fine now.",
+      "parentUuid": "7191a58d_bd7a7214",
       "range": {
         "startLine": 6900,
         "startChar": 8,
