@@ -6,7 +6,7 @@
   "scripts/entry_point_packed_gl_enums.json":
     "0b13d76828835cc00f0e5dcbb5e79d72",
   "scripts/generate_entry_points.py":
-    "c12ed4740c8d2965c7aff03116a039a8",
+    "0d3545849fca989709b69afcde6322a6",
   "scripts/gl_angle_ext.xml":
     "e42890bf014f4d4b7ebc07112bbb9764",
   "scripts/registry_xml.py":
@@ -192,5 +192,5 @@
   "third_party/OpenGL-Registry/src/xml/wgl.xml":
     "eae784bf4d1b983a42af5671b140b7c4",
   "util/capture/frame_capture_replay_autogen.cpp":
-    "46b22eb7c0caea5288f014bde46832d1"
+    "9da96b75179ab86e912cebf3d864e50e"
 }
