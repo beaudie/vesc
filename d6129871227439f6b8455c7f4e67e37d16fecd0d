@@ -22,6 +22,30 @@
       },
       "revId": "d6129871227439f6b8455c7f4e67e37d16fecd0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5727caec_c178f1b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-15T17:25:33Z",
+      "side": 1,
+      "message": "(You are right with imageRead.)\nIt will be simpler, but I want to catch this kind of issues so that we cna understand why and fix the root cause instead of hide it in low level code. There is also performance benefit doing it in higher level code since this setQueueSerial is a high traffic code path (std::max eats one if check).",
+      "parentUuid": "2a04a10a_9a2a1d36",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "d6129871227439f6b8455c7f4e67e37d16fecd0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
