@@ -3235,6 +3235,8 @@ bool ValidateMakeCurrent(const ValidationContext *val,
     bool noRead    = readSurfaceID.value == 0;
     bool noContext = contextID.value == 0;
 
+    printf("MakeCurrent: %p %d %d\n", display, drawSurfaceID.value, contextID.value);
+
     if (noContext && (!noDraw || !noRead))
     {
         val->setError(EGL_BAD_MATCH, "If ctx is EGL_NO_CONTEXT, surfaces must be EGL_NO_SURFACE");
