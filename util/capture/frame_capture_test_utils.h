@@ -383,6 +383,16 @@ void DispatchCallCapture(Fn *fn, const Captures &cap)
           Arg<Fn, 15>(cap), Arg<Fn, 16>(cap), Arg<Fn, 17>(cap), Arg<Fn, 18>(cap), Arg<Fn, 19>(cap),
           Arg<Fn, 20>(cap));
 }
+
+template <typename Fn, EnableIfNArgs<Fn, 22> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
+          Arg<Fn, 5>(cap), Arg<Fn, 6>(cap), Arg<Fn, 7>(cap), Arg<Fn, 8>(cap), Arg<Fn, 9>(cap),
+          Arg<Fn, 10>(cap), Arg<Fn, 11>(cap), Arg<Fn, 12>(cap), Arg<Fn, 13>(cap), Arg<Fn, 14>(cap),
+          Arg<Fn, 15>(cap), Arg<Fn, 16>(cap), Arg<Fn, 17>(cap), Arg<Fn, 18>(cap), Arg<Fn, 19>(cap),
+          Arg<Fn, 20>(cap), Arg<Fn, 21>(cap));
+}
 }  // namespace angle
 
 #endif  // UTIL_CAPTURE_FRAME_CAPTURE_TEST_UTILS_H_
