@@ -87,6 +87,24 @@
       "parentUuid": "a6d32b4b_d8300111",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f280edfd_c2dd214c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-15T17:27:58Z",
+      "side": 1,
+      "message": "I think Android.bp is auto generated from gn args. Once the auto roll happened, lets verify that in aosp.",
+      "parentUuid": "eeda4624_f2e5f779",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
