@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a04a10a_9a2a1d36",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-15T02:52:14Z",
+      "side": 1,
+      "message": "If it weren\u0027t for `ImageLayout`, we would have had the same problem with sampled images.\n\nWould it be simpler to just make `setQueueSerial` take `std::max` of input and current? Then you wouldn\u0027t need to special-case buffer reads",
+      "range": {
+        "startLine": 12,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 61
+      },
+      "revId": "d6129871227439f6b8455c7f4e67e37d16fecd0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
