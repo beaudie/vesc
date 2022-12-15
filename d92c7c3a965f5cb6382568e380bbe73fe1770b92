@@ -50,6 +50,24 @@
       "message": "I don\u0027t understand what\u0027s the purpose with \"render passes without attachments\"?\nIf there\u0027s an ANGLE/OpenGL feature that depends on \"render passes without attachments\", it must have a fallback to run the feature for platforms where this is false. This patch does not add the fallback.\nThis means that either:\n a) We don\u0027t have such ANGLE / OpenGL feature\n b) We have such a feature, but the fallback is triggered on different Features capability check.\n \nIn either case, we don\u0027t need a new feature capability.",
       "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe7782b9_3ba04863",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-15T16:23:40Z",
+      "side": 1,
+      "message": "In GLES, a Framebuffer can have no attachments, in which case rendering is done to a rectangle with the framebuffer\u0027s \"default width/height\".\n\nThe feature here _does_ make sense, because the code would use this feature to decide if it should or shouldn\u0027t take the fallback path (be it done in this CL, or in the future). The feature also shows up in chrome://gpu, so you can tell if the workaround is in effect. It can also be overriden in tests, so you can test the fallback path on hardware that doesn\u0027t need it.",
+      "parentUuid": "830e5f51_d195d7d0",
+      "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
