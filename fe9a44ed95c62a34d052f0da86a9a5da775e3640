@@ -195,6 +195,24 @@
       "parentUuid": "1d6a4f47_30d5c66a",
       "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d8e582_0d65e6f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-12-15T22:48:30Z",
+      "side": 1,
+      "message": "Thanks Elliott, I left a couple of comments on https://r.android.com/2360448 as I don\u0027t fully understand how it works, could you have a look?",
+      "parentUuid": "320c640a_5604b283",
+      "revId": "fe9a44ed95c62a34d052f0da86a9a5da775e3640",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
