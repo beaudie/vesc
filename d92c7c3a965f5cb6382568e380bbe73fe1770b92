@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7747cc33_dba4aacd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-12-15T00:42:11Z",
+      "side": 1,
+      "message": "In preparation for next Webkit-\u003eANGLE merge up",
+      "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
