@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa57cfc2_d60d42f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-15T17:50:29Z",
+      "side": 1,
+      "message": "This somehow affected star_wars_kotor and the diff doesn\u0027t look good to me:\nhttps://angle-gold.skia.org/diff?grouping\u003dname%3Dstar_wars_kotor%26source_type%3Dangle\u0026left\u003d45b5e4e9ec07ca6c9860d3dbf38aef58\u0026right\u003d1ee1a39cc35741db114930c1fb17d22a\nNotice the read underlines below \"COMBAT MODE ENGAGED\".",
+      "revId": "001ba94e3d7ccfcc4de4b5fee6a14b2fa7159832",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
