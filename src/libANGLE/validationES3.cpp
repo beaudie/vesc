@@ -4799,7 +4799,8 @@ bool ValidateClientWaitSync(const Context *context,
     if (!clientWaitSync)
     {
         context->validationError(entryPoint, GL_INVALID_VALUE, kSyncMissing);
-        return false;
+        ANGLE_CRASH();
+        // return false;
     }
 
     return true;
