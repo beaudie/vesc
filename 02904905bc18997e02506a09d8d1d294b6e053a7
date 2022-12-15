@@ -67,6 +67,24 @@
       "message": "thanks, merging this",
       "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8efda9df_48be6500",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-15T23:27:28Z",
+      "side": 1,
+      "message": "@sywow.choi@samsung.com you left this comment earlier -\n```\nBelow change needs to be resolved.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4027707/5\n\nI\u0027ll leave comment after finishing the review.\n```\nwas waiting for comment from you, anyways i have submitted for merge and once this merges will submit the rest in this chain as well",
+      "parentUuid": "ab7aa757_01a159de",
+      "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
