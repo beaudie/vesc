@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26018584_fb9f298a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 36
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "You might want to reword this since we are hashing much more than what affects program serialization/deserialization.  It is a conservative jumping off point though, and better than relying on the git hash, for sure.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 38
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bebd0e9_d701d1c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 36
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "LGTM with some questions/nits, will give Jamie a chance to +2",
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f959a59_b71f8dfa",
+        "filename": "src/angleProgramSerializeDataVersion.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "How are you choosing to selectively add some backends?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 24
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ff9f09b_d3c56e0e",
+        "filename": "src/common/angle_version.h",
+        "patchSetId": 36
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "This file appears to be missing from the check in.  I know that mirrors what we do with `angle_commit.h`.  Maybe it is best to keep it out until we narrow down the file list that affects it.  But after that, I think it would be good to track.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 25
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a8ca43b_27d94945",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 36
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "I know this is just a jumping off point, but it seems like you are hashing the entire project.  Is the plan to keep it this way, or narrow it down?  Or will you wait until moving state to a JSON file before reducing the file list?",
+      "range": {
+        "startLine": 677,
+        "startChar": 0,
+        "endLine": 677,
+        "endChar": 40
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43735ba6_4b7bd7e2",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 36
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-15T05:23:16Z",
+      "side": 1,
+      "message": "This can be cleaned up",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 22
+      },
+      "revId": "222b84bcd5829b26f4e12f25b14b269bec907571",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
