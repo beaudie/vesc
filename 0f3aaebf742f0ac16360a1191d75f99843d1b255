@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3039376f_34188ce9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-15T02:23:53Z",
+      "side": 1,
+      "message": "thanks! do you have regular syncs to AOSP? if so, any idea when the next one will be?\n\nif not, is there a doc about how to do that? or should i just cherrypick this one CL?",
+      "revId": "0f3aaebf742f0ac16360a1191d75f99843d1b255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
