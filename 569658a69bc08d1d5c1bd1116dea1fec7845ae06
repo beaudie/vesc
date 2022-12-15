@@ -16,6 +16,24 @@
       "message": "For this to pass and be merged, the new \nhttps://chromium-review.googlesource.com/c/angle/angle/+/4095880\nNeeds to be merged first - correct?",
       "revId": "569658a69bc08d1d5c1bd1116dea1fec7845ae06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "131009b8_d1a6170b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-15T23:07:18Z",
+      "side": 1,
+      "message": "@j.vigil@samsung.com\n\nYou\u0027re right. Thank you.\nI removed this from the \u0027submitted together\u0027 list.",
+      "parentUuid": "ed6ceca2_a5b9d36e",
+      "revId": "569658a69bc08d1d5c1bd1116dea1fec7845ae06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
