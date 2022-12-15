@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "851f4342_9e0dacde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2022-12-15T18:34:41Z",
+      "side": 1,
+      "message": "Looks ready. Need a dry run for latest patch?",
+      "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
