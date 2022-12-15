@@ -68,6 +68,23 @@
       "message": "@sywow.choi@samsung.com please make sure to run `git cl format` on your patch before uploading",
       "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87aa0de8_9eb76fe6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-15T23:31:07Z",
+      "side": 1,
+      "message": "Hmm.. I had run that command but I couldn\u0027t find errors for me.\nI\u0027ll check with \u0027git cl upload\u0027 made any warnings for me.",
+      "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
