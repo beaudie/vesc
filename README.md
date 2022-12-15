@@ -47,7 +47,7 @@ the browsers. Having one shader validator helps to ensure that a consistent set 
 are accepted across browsers and platforms. The shader translator can be used to translate shaders
 to other shading languages, and to optionally apply shader modifications to work around bugs or
 quirks in the native graphics drivers. The translator targets Desktop GLSL, Vulkan GLSL, Direct3D
-HLSL, and even ESSL for native GLES2 platforms.
+HLSL and even ESSL for native GLES2 platforms.
 
 ## Sources
 
