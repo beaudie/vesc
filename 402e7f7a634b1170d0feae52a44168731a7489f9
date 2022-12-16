@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0bfac54_2d43741a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-12-16T23:49:00Z",
+      "side": 1,
+      "message": "Another breakage caused by this CL, this time in some fancy Chromium build:\n\nhttps://ci.chromium.org/ui/p/chromium/builders/try/android-binary-size/1332533/overview\n\n```\nld.lld: error: undefined symbol: angle::DrmFourCCFormatToGLInternalFormat(int, bool*)\n\u003e\u003e\u003e referenced by DmaBufImageSiblingEGL.cpp:27 (../../third_party/angle/src/libANGLE/renderer/gl/egl/DmaBufImageSiblingEGL.cpp:27)\n\u003e\u003e\u003e               thinlto-cache/llvmcache-EC642FC06291CA452F65B3F2F3296A07C977F305:(rx::DmaBufImageSiblingEGL::DmaBufImageSiblingEGL(egl::AttributeMap const\u0026))\n```\n\n\nBlocking ANGLE-\u003eChromium rolls, e.g. https://crrev.com/c/4114731",
+      "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ce83765_4eb4dff8",
