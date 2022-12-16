@@ -85,6 +85,20 @@
 6399 : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/* = CRASH
 6335 DEBUG : VulkanExternalImageTest.ShouldImportSemaphoreOpaqueFd/* = CRASH
 
+# Incorrect AST in replay
+4452 : ClipDistanceAPPLETest.FragmentShader/* = SKIP_FOR_CAPTURE
+4452 : ClipDistanceAPPLETest.OneClipDistance/* = SKIP_FOR_CAPTURE
+4452 : ClipDistanceAPPLETest.EachClipDistance/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.SizeCheck/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.SizeCheckCombined/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.OneClipDistance/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.OneCullDistance/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.EachClipDistance/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.ClipInterpolation/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.CullInterpolation/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.ClipCullInterpolation/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.FourClipDistances/* = SKIP_FOR_CAPTURE
+4452 : ClipCullDistanceEXTTest.FourCullDistances/* = SKIP_FOR_CAPTURE
 
 # Skip because Timeout
 
