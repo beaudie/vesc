@@ -102,6 +102,24 @@
       "message": "@sywow.choi@samsung.com make sure to run `git cl format` on each change uploading",
       "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5380aa7e_6dd0554a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-16T00:00:32Z",
+      "side": 1,
+      "message": "I forgot that. Sorry about that 😂\nThank you always.",
+      "parentUuid": "8efda9df_48be6500",
+      "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
