@@ -16,6 +16,29 @@
       "message": "Awesome thx.",
       "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ce83765_4eb4dff8",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-12-16T21:04:04Z",
+      "side": 1,
+      "message": "This fails in ANGLE-\u003eAndroid rolls where we hit this path bug also line 487\n\n```\nERROR at //BUILD.gn:500:5: Replacing nonempty list.\ndefines \u003d [ \"ANGLE_ENABLE_VULKAN\" ]\n^------\nThis overwrites a previously-defined nonempty list with another nonempty list.\nSee //BUILD.gn:487:15: for previous definition\ndefines \u003d [ \"ANGLE_EXPOSE_NON_CONFORMANT_EXTENSIONS_AND_VERSIONS\" ]\n^-------------------------------------------------------\nDid you mean to append/modify instead? If you really want to overwrite, do:\nfoo \u003d []\nbefore reassigning.\n```",
+      "range": {
+        "startLine": 501,
+        "startChar": 17,
+        "endLine": 501,
+        "endChar": 36
+      },
+      "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
