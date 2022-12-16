@@ -16,6 +16,23 @@
       "message": "@m.maiya@samsung.com\n\nI rebased it.\nCan we submit this?",
       "revId": "3f783e5a18a54031c6569dedf38e23ef985c7cca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8bb5160_e5065b89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-16T21:56:56Z",
+      "side": 1,
+      "message": "thanks, landing this",
+      "revId": "3f783e5a18a54031c6569dedf38e23ef985c7cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
