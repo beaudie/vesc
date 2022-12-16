@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6918d7f6_8100d66b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2022-12-16T15:59:35Z",
+      "side": 1,
+      "message": "This appears to be breaking Android rolls, example: https://r.android.com/2361961\n\n```\nFAILED: out/soong/.intermediates/external/angle/angle_program_version_id/android_arm64_armv8-2a_cortex-a55/gen/ANGLEShaderProgramVersion.h\n```",
+      "revId": "c303758fbc8d23266be578fae246e5687656b4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
