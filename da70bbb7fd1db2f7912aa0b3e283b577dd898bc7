@@ -33,6 +33,24 @@
       "message": "If someone issues a glFlush, which calls flushCommandBuffer(mtl::NoWait), and then calls eglWaitUntilWorkScheduledANGLE - it seems that the command buffer won\u0027t be ready, and it won\u0027t do the needed wait. Do you think this is something that should be fixed?\n\nIf so - I think we should add a TODO describing the scenario, land this, and iterate on it. This is already a great step forward.\n\nTo address the TODO I think we\u0027d need a dirty bit to know whether we\u0027ve completed a flushCommandBuffer with WaitUntilScheduled against each context. If not, we might need to forcibly allocate an empty one and commit it with waitUntilScheduled. Do you think that\u0027d work?",
       "revId": "da70bbb7fd1db2f7912aa0b3e283b577dd898bc7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41d62876_46466164",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-12-16T18:22:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d07a608b_72bc35fa",
+      "revId": "da70bbb7fd1db2f7912aa0b3e283b577dd898bc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
