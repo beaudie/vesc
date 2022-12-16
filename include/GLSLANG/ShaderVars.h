@@ -15,10 +15,19 @@
 #include <string>
 #include <vector>
 
+namespace gl
+{
+class BinaryOutputStream;
+class BinaryInputStream;
+}  // namespace gl
+
 namespace sh
 {
 // GLenum alias
 typedef unsigned int GLenum;
+
+using BinaryBlob = std::vector<uint32_t>;
+struct BlockMemberInfo;
 
 // Varying interpolation qualifier, see section 4.3.9 of the ESSL 3.00.4 spec
 enum InterpolationType
@@ -174,8 +183,8 @@ struct ShaderVariable
     bool isSameNameAtLinkTime(const ShaderVariable &other) const;
 
     // NOTE: When adding new members, the following functions also need to be updated:
-    // gl::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
-    // gl::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
+    // sh::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
+    // sh::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
 
     GLenum type;
     GLenum precision;
@@ -243,8 +252,8 @@ struct ShaderVariable
                                   bool matchName) const;
 
     // NOTE: When adding new members, the following functions also need to be updated:
-    // gl::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
-    // gl::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
+    // sh::WriteShaderVar(BinaryOutputStream *stream, const sh::ShaderVariable &var)
+    // sh::LoadShaderVar(BinaryInputStream *stream, sh::ShaderVariable *var)
 
     int flattenedOffsetInParentArrays;
 };
@@ -326,6 +335,65 @@ struct WorkGroupSize
 inline constexpr WorkGroupSize::WorkGroupSize(int initialSize)
     : localSizeQualifiers{initialSize, initialSize, initialSize}
 {}
+
+bool CompareShaderVar(const ShaderVariable &x, const ShaderVariable &y);
+
+// Helper functions for serializing shader variables
+void WriteBlockMemberInfo(gl::BinaryOutputStream *stream, const BlockMemberInfo &var);
+void LoadBlockMemberInfo(gl::BinaryInputStream *stream, BlockMemberInfo *var);
+
+void WriteShaderVar(gl::BinaryOutputStream *stream, const ShaderVariable &var);
+void LoadShaderVar(gl::BinaryInputStream *stream, ShaderVariable *var);
+
+void WriteShInterfaceBlock(gl::BinaryOutputStream *stream, const InterfaceBlock &block);
+void LoadShInterfaceBlock(gl::BinaryInputStream *stream, InterfaceBlock *block);
+
+struct CompiledShaderState
+{
+    CompiledShaderState();
+    ~CompiledShaderState();
+
+    void serialize(gl::BinaryOutputStream &stream, GLenum shaderType) const;
+    void deserialize(gl::BinaryInputStream &stream, GLenum shaderType);
+
+    int shaderVersion;
+    std::string translatedSource;
+    BinaryBlob compiledBinary;
+    WorkGroupSize localSize;
+
+    std::vector<ShaderVariable> inputVaryings;
+    std::vector<ShaderVariable> outputVaryings;
+    std::vector<ShaderVariable> uniforms;
+    std::vector<InterfaceBlock> uniformBlocks;
+    std::vector<InterfaceBlock> shaderStorageBlocks;
+    std::vector<ShaderVariable> allAttributes;
+    std::vector<ShaderVariable> activeAttributes;
+    std::vector<ShaderVariable> activeOutputVariables;
+
+    bool hasDiscard;
+    bool enablesPerSampleShading;
+    uint32_t advancedBlendEquationBits;
+    uint32_t specConstUsageBits;
+
+    // ANGLE_multiview.
+    int numViews;
+
+    // Geometry Shader
+    bool hasValidGeometryShaderInputPrimitiveType;
+    uint8_t geometryShaderInputPrimitiveType;
+    bool hasValidGeometryShaderOutputPrimitiveType;
+    uint8_t geometryShaderOutputPrimitiveType;
+    bool hasValidGeometryShaderMaxVertices;
+    int geometryShaderMaxVertices;
+    int geometryShaderInvocations;
+
+    // Tessellation Shader
+    int tessControlShaderVertices;
+    GLenum tessGenMode;
+    GLenum tessGenSpacing;
+    GLenum tessGenVertexOrder;
+    GLenum tessGenPointMode;
+};
 
 }  // namespace sh
 
