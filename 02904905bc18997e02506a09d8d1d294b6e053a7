@@ -120,6 +120,24 @@
       "parentUuid": "8efda9df_48be6500",
       "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f500a0f9_9cc2c11b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-16T00:21:30Z",
+      "side": 1,
+      "message": "@m.maiya@samsung.com\n\nWith the latest clang-format tool, below diff is generated and it belongs to 4ece3b08fa. Should I make an another change for below ?\n\n```c\n[sywow.choi@Tayo angle_tmp_updstream]$ git d\ndiff --git a/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp b/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\nindex 04e343c72..1c603838e 100644\n--- a/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\n+++ b/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\n@@ -528,10 +528,10 @@ angle::Result DmaBufImageSiblingVkLinux::initWithFormat(DisplayVk *displayVk,\n         const VkSamplerYcbcrModelConversion model \u003d GetYcbcrModel(mAttribs);\n         const VkSamplerYcbcrRange range           \u003d GetYcbcrRange(mAttribs);\n         const VkComponentMapping components       \u003d {\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n         };\n\n         ANGLE_VK_CHECK(displayVk, renderer-\u003egetFeatures().supportsYUVSamplerConversion.enabled,\n```",
+      "parentUuid": "c3b42c57_94a835ea",
+      "revId": "02904905bc18997e02506a09d8d1d294b6e053a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
