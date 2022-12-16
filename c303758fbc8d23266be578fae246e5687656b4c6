@@ -16,6 +16,23 @@
       "message": "This appears to be breaking Android rolls, example: https://r.android.com/2361961\n\n```\nFAILED: out/soong/.intermediates/external/angle/angle_program_version_id/android_arm64_armv8-2a_cortex-a55/gen/ANGLEShaderProgramVersion.h\n```",
       "revId": "c303758fbc8d23266be578fae246e5687656b4c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cce4ab82_41d80ca9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1171114
+      },
+      "writtenOn": "2022-12-16T21:09:26Z",
+      "side": 1,
+      "message": "Also seems to have broken Windows deterministic. First failure:\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Windows%20deterministic/21081/overview\n\n```\n$ diff b/s/w/ir/cache/builder/src/out/Release/toolchain.ninja  b/s/w/ir/cache/builder/src/out/Release.2/toolchain.ninja\n54967c54967\n\u003c   command \u003d C$:/b/s/w/ir/cipd_bin_packages/cpython3/bin/python3.exe ../../third_party/angle/src/program_serialize_data_version.py gen/angle/ANGLEShaderProgramVersion.h ../../out/Release/gen/angle_code_affecting_program_serialize\n---\n\u003e   command \u003d C$:/b/s/w/ir/cipd_bin_packages/cpython3/bin/python3.exe ../../third_party/angle/src/program_serialize_data_version.py gen/angle/ANGLEShaderProgramVersion.h ../../out/Release.2/gen/angle_code_affecting_program_serialize\n```",
+      "revId": "c303758fbc8d23266be578fae246e5687656b4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
