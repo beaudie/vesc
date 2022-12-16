@@ -63,6 +63,30 @@
       },
       "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5c6c1af_9a952b79",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-16T21:17:06Z",
+      "side": 1,
+      "message": "@romanl i think the intent is to append. given Sungyong will be offline for a couple of days and that we can fixe the roll with trivial change, do you want me to upload the change from `\u003d` to `+\u003d` or would you be able to do that?",
+      "parentUuid": "215e37aa_ddc13d4a",
+      "range": {
+        "startLine": 501,
+        "startChar": 17,
+        "endLine": 501,
+        "endChar": 36
+      },
+      "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
