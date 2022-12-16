@@ -87,6 +87,30 @@
       },
       "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f85c4f8a_52e865f0",
+        "filename": "BUILD.gn",
+        "patchSetId": 10
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-16T21:17:58Z",
+      "side": 1,
+      "message": "\u003e https://groups.google.com/a/google.com/g/angle-bots/c/MmHLOuopOk0/m/_BdMZ28pAgAJ\n\ni get a 403 error with this link so do not know what it was supposed to link to",
+      "parentUuid": "b5c6c1af_9a952b79",
+      "range": {
+        "startLine": 501,
+        "startChar": 17,
+        "endLine": 501,
+        "endChar": 36
+      },
+      "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
