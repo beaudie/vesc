@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "211ddf5e_51ed9069",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-16T19:24:07Z",
+      "side": 1,
+      "message": "shabi, jamie - this is the refactor being proposed before we add support for `glShaderBinary` - PTAL",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
