@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51f6ddca_50782fb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-16T18:27:31Z",
+      "side": 1,
+      "message": "Filed https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7893 instead.",
+      "revId": "214742be91b89087dd26acbae09a070a91730ecc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
