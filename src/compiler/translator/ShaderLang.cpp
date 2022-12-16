@@ -65,6 +65,29 @@ const std::vector<VarT> *GetShaderVariables(const ShHandle handle)
     return GetVariableList<VarT>(compiler);
 }
 
+template <typename VarT>
+std::vector<VarT> GetActiveShaderVariables(const std::vector<VarT> *variableList)
+{
+    ASSERT(variableList);
+    std::vector<VarT> result;
+    for (size_t varIndex = 0; varIndex < variableList->size(); varIndex++)
+    {
+        const VarT &var = variableList->at(varIndex);
+        if (var.active)
+        {
+            result.push_back(var);
+        }
+    }
+    return result;
+}
+
+template <typename VarT>
+const std::vector<VarT> &GetShaderVariables(const std::vector<VarT> *variableList)
+{
+    ASSERT(variableList);
+    return *variableList;
+}
+
 #ifdef ANGLE_ENABLE_HLSL
 TranslatorHLSL *GetTranslatorHLSLFromHandle(ShHandle handle)
 {
@@ -460,6 +483,144 @@ const BinaryBlob &GetObjectBinaryBlob(const ShHandle handle)
 
     TInfoSink &infoSink = compiler->getInfoSink();
     return infoSink.obj.getBinary();
+}
+
+void GetCompiledShaderState(const ShHandle handle, CompiledShaderState *compiledShaderStateOut)
+{
+    TCompiler *compiler = sh::GetCompilerFromHandle(handle);
+    if (compiler == nullptr)
+    {
+        return;
+    }
+
+    TInfoSink &infoSink = compiler->getInfoSink();
+    // TODO: Update compiler->getOutputType() from SH_GLSL_450_CORE_OUTPUT to SH_SPIRV_VULKAN_OUTPUT
+    if (infoSink.obj.isBinary())
+    {
+        compiledShaderStateOut->compiledBinary = infoSink.obj.getBinary();
+    }
+    else
+    {
+        compiledShaderStateOut->translatedSource = infoSink.obj.str();
+    }
+
+    // Gather the shader information
+    compiledShaderStateOut->shaderVersion = compiler->getShaderVersion();
+
+    compiledShaderStateOut->uniforms            = compiler->getUniforms();
+    compiledShaderStateOut->uniformBlocks       = compiler->getUniformBlocks();
+    compiledShaderStateOut->shaderStorageBlocks = compiler->getShaderStorageBlocks();
+    compiledShaderStateOut->specConstUsageBits  = compiler->getSpecConstUsageBits().bits();
+
+    switch (compiler->getShaderType())
+    {
+        case GL_COMPUTE_SHADER:
+        {
+            compiledShaderStateOut->allAttributes = compiler->getAttributes();
+            compiledShaderStateOut->activeAttributes =
+                GetActiveShaderVariables(&compiledShaderStateOut->allAttributes);
+            compiledShaderStateOut->localSize = compiler->getComputeShaderLocalSize();
+            break;
+        }
+        case GL_VERTEX_SHADER:
+        {
+            compiledShaderStateOut->outputVaryings = compiler->getOutputVaryings();
+            compiledShaderStateOut->allAttributes  = compiler->getAttributes();
+            compiledShaderStateOut->activeAttributes =
+                GetActiveShaderVariables(&compiledShaderStateOut->allAttributes);
+            compiledShaderStateOut->numViews = compiler->getNumViews();
+            break;
+        }
+        case GL_FRAGMENT_SHADER:
+        {
+            compiledShaderStateOut->allAttributes = compiler->getAttributes();
+            compiledShaderStateOut->activeAttributes =
+                GetActiveShaderVariables(&compiledShaderStateOut->allAttributes);
+            compiledShaderStateOut->inputVaryings = compiler->getInputVaryings();
+            // TODO(jmadill): Figure out why we only sort in the FS, and if we need to.
+            std::sort(compiledShaderStateOut->inputVaryings.begin(),
+                      compiledShaderStateOut->inputVaryings.end(), CompareShaderVar);
+            compiledShaderStateOut->activeOutputVariables =
+                GetActiveShaderVariables(&compiler->getOutputVariables());
+            compiledShaderStateOut->hasDiscard =
+                compiler->getShaderType() == GL_FRAGMENT_SHADER && compiler->hasDiscard();
+            compiledShaderStateOut->enablesPerSampleShading = compiler->enablesPerSampleShading();
+            compiledShaderStateOut->advancedBlendEquationBits =
+                compiler->getAdvancedBlendEquations().bits();
+            break;
+        }
+        case GL_GEOMETRY_SHADER:
+        {
+            compiledShaderStateOut->inputVaryings  = compiler->getInputVaryings();
+            compiledShaderStateOut->outputVaryings = compiler->getOutputVaryings();
+
+            // Optional values
+            compiledShaderStateOut->hasValidGeometryShaderInputPrimitiveType =
+                compiler->getGeometryShaderInputPrimitiveType() != EptUndefined;
+            if (compiledShaderStateOut->hasValidGeometryShaderInputPrimitiveType)
+            {
+                compiledShaderStateOut->geometryShaderInputPrimitiveType = static_cast<uint8_t>(
+                    gl::FromGLenum<gl::PrimitiveMode>(GetGeometryShaderPrimitiveTypeEnum(
+                        compiler->getGeometryShaderInputPrimitiveType())));
+            }
+            compiledShaderStateOut->hasValidGeometryShaderOutputPrimitiveType =
+                compiler->getGeometryShaderOutputPrimitiveType() != EptUndefined;
+            if (compiledShaderStateOut->hasValidGeometryShaderOutputPrimitiveType)
+            {
+                compiledShaderStateOut->geometryShaderOutputPrimitiveType = static_cast<uint8_t>(
+                    gl::FromGLenum<gl::PrimitiveMode>(GetGeometryShaderPrimitiveTypeEnum(
+                        compiler->getGeometryShaderOutputPrimitiveType())));
+            }
+            compiledShaderStateOut->hasValidGeometryShaderMaxVertices =
+                compiler->getGeometryShaderMaxVertices() >= 0;
+            if (compiledShaderStateOut->hasValidGeometryShaderMaxVertices)
+            {
+                compiledShaderStateOut->geometryShaderMaxVertices =
+                    compiler->getGeometryShaderMaxVertices();
+            }
+
+            compiledShaderStateOut->geometryShaderInvocations =
+                compiler->getGeometryShaderInvocations();
+            break;
+        }
+        case GL_TESS_CONTROL_SHADER:
+        {
+            compiledShaderStateOut->inputVaryings  = compiler->getInputVaryings();
+            compiledShaderStateOut->outputVaryings = compiler->getOutputVaryings();
+            compiledShaderStateOut->tessControlShaderVertices =
+                compiler->getTessControlShaderOutputVertices();
+            break;
+        }
+        case GL_TESS_EVALUATION_SHADER:
+        {
+            compiledShaderStateOut->inputVaryings  = compiler->getInputVaryings();
+            compiledShaderStateOut->outputVaryings = compiler->getOutputVaryings();
+            if (compiler->getTessEvaluationShaderInputPrimitiveType() != EtetUndefined)
+            {
+                compiledShaderStateOut->tessGenMode = GetTessellationShaderTypeEnum(
+                    compiler->getTessEvaluationShaderInputPrimitiveType());
+            }
+            if (compiler->getTessEvaluationShaderInputVertexSpacingType() != EtetUndefined)
+            {
+                compiledShaderStateOut->tessGenSpacing = GetTessellationShaderTypeEnum(
+                    compiler->getTessEvaluationShaderInputVertexSpacingType());
+            }
+            if (compiler->getTessEvaluationShaderInputOrderingType() != EtetUndefined)
+            {
+                compiledShaderStateOut->tessGenVertexOrder = GetTessellationShaderTypeEnum(
+                    compiler->getTessEvaluationShaderInputOrderingType());
+            }
+            if (compiler->getTessEvaluationShaderInputPointType() != EtetUndefined)
+            {
+                compiledShaderStateOut->tessGenPointMode = GetTessellationShaderTypeEnum(
+                    compiler->getTessEvaluationShaderInputPointType());
+            }
+            break;
+        }
+
+        default:
+            UNREACHABLE();
+    }
 }
 
 const std::map<std::string, std::string> *GetNameHashingMap(const ShHandle handle)
