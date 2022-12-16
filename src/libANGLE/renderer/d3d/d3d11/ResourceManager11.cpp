@@ -270,6 +270,63 @@ DXGI_FORMAT GetTypedDepthStencilFormat(DXGI_FORMAT dxgiFormat)
     }
 }
 
+DXGI_FORMAT GetTypedColorFormatForClearing(DXGI_FORMAT dxgiFormat)
+{
+    switch (dxgiFormat)
+    {
+        case DXGI_FORMAT_R32G32B32A32_TYPELESS:
+            return DXGI_FORMAT_R32G32B32A32_FLOAT;
+        case DXGI_FORMAT_R32G32B32_TYPELESS:
+            return DXGI_FORMAT_R32G32B32_FLOAT;
+        case DXGI_FORMAT_R16G16B16A16_TYPELESS:
+            return DXGI_FORMAT_R16G16B16A16_FLOAT;
+        case DXGI_FORMAT_R32G32_TYPELESS:
+            return DXGI_FORMAT_R32G32_FLOAT;
+        case DXGI_FORMAT_R10G10B10A2_TYPELESS:
+            return DXGI_FORMAT_R10G10B10A2_UNORM;
+        case DXGI_FORMAT_R8G8B8A8_TYPELESS:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case DXGI_FORMAT_R16G16_TYPELESS:
+            return DXGI_FORMAT_R16G16_FLOAT;
+        case DXGI_FORMAT_R32_TYPELESS:
+            return DXGI_FORMAT_R32_FLOAT;
+        case DXGI_FORMAT_R8G8_TYPELESS:
+            return DXGI_FORMAT_R8G8_UNORM;
+        case DXGI_FORMAT_R16_TYPELESS:
+            return DXGI_FORMAT_R16_FLOAT;
+        case DXGI_FORMAT_R8_TYPELESS:
+            return DXGI_FORMAT_R8_UNORM;
+        case DXGI_FORMAT_BC1_TYPELESS:
+            return DXGI_FORMAT_BC1_UNORM;
+        case DXGI_FORMAT_BC2_TYPELESS:
+            return DXGI_FORMAT_BC2_UNORM;
+        case DXGI_FORMAT_BC3_TYPELESS:
+            return DXGI_FORMAT_BC3_UNORM;
+        case DXGI_FORMAT_BC4_TYPELESS:
+            return DXGI_FORMAT_BC4_UNORM;
+        case DXGI_FORMAT_BC5_TYPELESS:
+            return DXGI_FORMAT_BC5_UNORM;
+        case DXGI_FORMAT_B8G8R8A8_TYPELESS:
+            return DXGI_FORMAT_B8G8R8A8_UNORM;
+        case DXGI_FORMAT_B8G8R8X8_TYPELESS:
+            return DXGI_FORMAT_B8G8R8X8_UNORM;
+        case DXGI_FORMAT_BC6H_TYPELESS:
+            return DXGI_FORMAT_BC6H_UF16;
+        case DXGI_FORMAT_BC7_TYPELESS:
+            return DXGI_FORMAT_BC7_UNORM;
+        case DXGI_FORMAT_R32G8X24_TYPELESS:
+        case DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS:
+        case DXGI_FORMAT_X32_TYPELESS_G8X24_UINT:
+        case DXGI_FORMAT_R24G8_TYPELESS:
+        case DXGI_FORMAT_R24_UNORM_X8_TYPELESS:
+        case DXGI_FORMAT_X24_TYPELESS_G8_UINT:
+            UNREACHABLE();
+            [[fallthrough]];
+        default:
+            return dxgiFormat;
+    }
+}
+
 template <typename DescT, typename ResourceT>
 angle::Result ClearResource(d3d::Context *context,
                             Renderer11 *renderer,
@@ -322,8 +379,26 @@ angle::Result ClearResource(d3d::Context *context,
     {
         ASSERT((desc->BindFlags & D3D11_BIND_RENDER_TARGET) != 0);
         d3d11::RenderTargetView rtv;
-        ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
-
+        DXGI_FORMAT formatForClearing = GetTypedColorFormatForClearing(desc->Format);
+        if (formatForClearing != desc->Format)
+        {
+            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+            rtvDesc.Format = formatForClearing;
+            if (desc->SampleDesc.Count == 0)
+            {
+                rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+                rtvDesc.Texture2D.MipSlice = 0;
+            }
+            else
+            {
+                rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2DMS;
+            }
+            ANGLE_TRY(renderer->allocateResource(context, rtvDesc, texture, &rtv));
+        }
+        else
+        {
+            ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+        }
         deviceContext->ClearRenderTargetView(rtv.get(), kDebugColorInitClearValue);
     }
 
@@ -342,7 +417,21 @@ angle::Result ClearResource(d3d::Context *context,
     ASSERT((desc->BindFlags & D3D11_BIND_RENDER_TARGET) != 0);
 
     d3d11::RenderTargetView rtv;
-    ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+    DXGI_FORMAT formatForClearing = GetTypedColorFormatForClearing(desc->Format);
+    if (formatForClearing != desc->Format)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format                = GetTypedColorFormatForClearing(desc->Format);
+        rtvDesc.Texture3D.MipSlice    = 0;
+        rtvDesc.Texture3D.FirstWSlice = 0;
+        rtvDesc.Texture3D.WSize       = desc->Depth;
+        rtvDesc.ViewDimension         = D3D11_RTV_DIMENSION_TEXTURE3D;
+        ANGLE_TRY(renderer->allocateResource(context, rtvDesc, texture, &rtv));
+    }
+    else
+    {
+        ANGLE_TRY(renderer->allocateResourceNoDesc(context, texture, &rtv));
+    }
 
     deviceContext->ClearRenderTargetView(rtv.get(), kDebugColorInitClearValue);
     return angle::Result::Continue;
