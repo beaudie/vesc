@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "25dec74f_e3c8c5db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-16T17:53:03Z",
+      "side": 1,
+      "message": "yeah, i didn\u0027t realize you didn\u0027t need cpufeatures for anything else.",
+      "range": {
+        "startLine": 11,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "b4b61e24c48cb19ea13dae8bbf137a57ec2f1401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4451c29e_3cce8e58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-16T17:53:03Z",
+      "side": 1,
+      "message": "ah, so that probably answers my question on the AOSP changes about \"should we just have a library that includes zlib *and* the compression_utils for angle?\" :-)",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "b4b61e24c48cb19ea13dae8bbf137a57ec2f1401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8abb535e_cb33565b",
