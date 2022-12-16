@@ -304,6 +304,7 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
                                                    gl::DrawElementsType indexType,
                                                    size_t indexCount,
                                                    const void *sourcePointer,
+                                                   VkDeviceSize *bufferOffsetOut,
                                                    BufferBindingDirty *bindingDirty)
 {
     ASSERT(!mState.getElementArrayBuffer() || indexType == gl::DrawElementsType::UnsignedByte);
@@ -317,6 +318,10 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
     if (indexCount == kStreamIndexBufferCachedIndexCount &&
         indexType == gl::DrawElementsType::UnsignedShort)
     {
+        // Cached index buffers' offset is always 0
+        ASSERT(bufferOffsetOut);
+        *bufferOffsetOut = 0;
+
         for (std::unique_ptr<vk::BufferHelper> &buffer : mCachedStreamIndexBuffers)
         {
             void *ptr = buffer->getMappedMemory();
@@ -664,7 +669,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             BufferVk *bufferVk                  = vk::GetImpl(bufferGL);
             const angle::Format &intendedFormat = vertexFormat.getIntendedFormat();
             bool bindingIsAligned               = BindingIsAligned(
-                              binding, intendedFormat, intendedFormat.channelCount, attrib.relativeOffset);
+                binding, intendedFormat, intendedFormat.channelCount, attrib.relativeOffset);
 
             if (renderer->getFeatures().compressVertexData.enabled &&
                 gl::IsStaticBufferUsage(bufferGL->getUsage()) &&

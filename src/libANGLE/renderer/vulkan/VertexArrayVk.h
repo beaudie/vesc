@@ -110,6 +110,7 @@ class VertexArrayVk : public VertexArrayImpl
                                         gl::DrawElementsType indexType,
                                         size_t indexCount,
                                         const void *sourcePointer,
+                                        VkDeviceSize *bufferOffsetOut,
                                         BufferBindingDirty *bufferBindingDirty);
 
     const gl::AttributesMask &getStreamingVertexAttribsMask() const
