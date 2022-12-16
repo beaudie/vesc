@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74fc6be9_5af352ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-16T17:38:28Z",
+      "side": 1,
+      "message": "Thanks, since we had a copy of these enums anyway, this is strictly an improvement.",
+      "revId": "4d529365fdb400722a1ba0b25beb6d0dcf70a4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
