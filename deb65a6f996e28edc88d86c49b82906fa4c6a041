@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b1657c4_4d607bf9",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1004789
+      },
+      "writtenOn": "2022-12-16T20:01:18Z",
+      "side": 1,
+      "message": "anyone know why \"28\" was chosen here?\n\nAndroid\u0027s been using chromium zlib since Q, so i\u0027m looking into whether/how we can switch angle-in-AOSP over to just reusing that [if only to get you out of the CVE backport business], and i\u0027m guessing that it\u0027s only angle-in-chromium that cares, and angle-in-AOSP is fine using whatever OS it\u0027s building for? (which would make the zlib changes easier, and less fragile.)",
+      "revId": "deb65a6f996e28edc88d86c49b82906fa4c6a041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
