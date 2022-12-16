@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "729ac86e_28219b04",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 2600,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-16T01:21:27Z",
+      "side": 1,
+      "message": "\u003e I think returning angle::Result::Incomplete is intended for these cases?\n\nNack, please avoid `angle::Result::Incomplete`. It was a mistake to include it, and we\u0027d eventually like to get rid of it.",
+      "parentUuid": "f20050ec_b72f12c1",
+      "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "830e5f51_d195d7d0",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 3
