@@ -103,6 +103,24 @@
       "parentUuid": "87aa0de8_9eb76fe6",
       "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4498abb4_77e0e5fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-16T01:25:57Z",
+      "side": 1,
+      "message": "Thank you.\nWith the latest clang-format tool, below diff is generated and it belongs to 4ece3b08fa. Should I make an another change for below ?\n\n```c\ndiff --git a/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp b/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\nindex 04e343c72..1c603838e 100644\n--- a/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\n+++ b/src/libANGLE/renderer/vulkan/linux/DmaBufImageSiblingVkLinux.cpp\n@@ -528,10 +528,10 @@ angle::Result DmaBufImageSiblingVkLinux::initWithFormat(DisplayVk *displayVk,\n         const VkSamplerYcbcrModelConversion model \u003d GetYcbcrModel(mAttribs);\n         const VkSamplerYcbcrRange range           \u003d GetYcbcrRange(mAttribs);\n         const VkComponentMapping components       \u003d {\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n-                  VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n+            VK_COMPONENT_SWIZZLE_IDENTITY,\n         };\n\n         ANGLE_VK_CHECK(displayVk, renderer-\u003egetFeatures().supportsYUVSamplerConversion.enabled,\n```",
+      "parentUuid": "fd6d339c_aa1aca4c",
+      "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
