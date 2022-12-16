@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f216322f_41fc7192",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-16T03:16:44Z",
+      "side": 1,
+      "message": "@m.maiya@samsung.com\n\nI amended to fix the format.",
+      "revId": "1286f9723d0c9ae905827000c02d8713cafdb511",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
