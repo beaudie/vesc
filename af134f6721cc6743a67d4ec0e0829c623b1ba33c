@@ -16,6 +16,23 @@
       "message": "shabi, jamie - this is the refactor being proposed before we add support for `glShaderBinary` - PTAL",
       "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5794fa6_52c862a8",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-17T03:14:08Z",
+      "side": 1,
+      "message": "High-level comment:\n\nShaderLang.h and ShaderVar.h are the interface to the compiler; they are versioned and it\u0027s best to make it as minimal as possible. These helpers belong in `common/`, and they can retrieve all the information they need from the compiler.\n\nIOW, these don\u0027t belong in the public interface of the compiler.",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
