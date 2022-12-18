@@ -75,12 +75,21 @@ constexpr uint32_t kPreferredDefaultUniformBufferSize = 64 * 1024u;
 
 // Update the pipeline cache every this many swaps.
 constexpr uint32_t kPipelineCacheVkUpdatePeriod = 60;
-// Per the Vulkan specification, as long as Vulkan 1.1+ is returned by vkEnumerateInstanceVersion,
-// ANGLE must indicate the highest version of Vulkan functionality that it uses.  The Vulkan
-// validation layers will issue messages for any core functionality that requires a higher version.
-// This value must be increased whenever ANGLE starts using functionality from a newer core
-// version of Vulkan.
-constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_1;
+// Per the Vulkan specification, ANGLE must indicate the highest version of Vulkan functionality
+// that it uses.  The Vulkan validation layers will issue messages for any core functionality that
+// requires a higher version.  This value must be increased whenever ANGLE starts using
+// functionality from a newer core version of Vulkan.
+constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_2;
+
+bool IsVulkan11(const VkPhysicalDeviceProperties &physicalDeviceProperties)
+{
+    return physicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0);
+}
+
+bool IsVulkan12(const VkPhysicalDeviceProperties &physicalDeviceProperties)
+{
+    return physicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 2, 0);
+}
 
 bool IsQualcommOpenSource(uint32_t vendorId, uint32_t driverId, const char *deviceName)
 {
@@ -1669,15 +1678,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             ANGLE_SCOPED_DISABLE_MSAN();
             ANGLE_VK_TRY(displayVk, enumerateInstanceVersion(&apiVersion));
         }
-        if ((VK_VERSION_MAJOR(apiVersion) > 1) || (VK_VERSION_MINOR(apiVersion) >= 1))
+        if ((VK_VERSION_MAJOR(apiVersion) > 1) || (VK_VERSION_MINOR(apiVersion) >= 2))
         {
             // This is the highest version of core Vulkan functionality that ANGLE uses.
             mApiVersion = kPreferredVulkanAPIVersion;
         }
         else
         {
-            // Since only 1.0 instance-level functionality is available, this must set to 1.0.
-            mApiVersion = VK_API_VERSION_1_0;
+            // Since only 1.0 or 1.1 instance-level functionality is available, this is set to
+            // whatever was available.
+            mApiVersion = apiVersion;
         }
     }
     mApplicationInfo.apiVersion = mApiVersion;
@@ -2220,7 +2230,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     }
 
     // Query protected memory features and properties
-    if (mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
+    if (IsVulkan11(mPhysicalDeviceProperties))
     {
         vk::AddToPNextChain(&deviceFeatures, &mProtectedMemoryFeatures);
         vk::AddToPNextChain(&deviceProperties, &mProtectedMemoryProperties);
@@ -2228,7 +2238,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 
     // Query host query reset features
     if (ExtensionFound(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME, deviceExtensionNames) ||
-        mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 2, 0))
+        IsVulkan12(mPhysicalDeviceProperties))
     {
         vk::AddToPNextChain(&deviceFeatures, &mHostQueryResetFeatures);
     }
@@ -2318,7 +2328,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 
     if (ExtensionFound(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME,
                        deviceExtensionNames) ||
-        mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 2, 0))
+        IsVulkan12(mPhysicalDeviceProperties))
     {
         vk::AddToPNextChain(&deviceFeatures, &mSeparateDepthStencilLayoutsFeatures);
     }
@@ -2489,7 +2499,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
 
     // Enable KHR_MAINTENANCE1 to support viewport flipping.
-    if (mPhysicalDeviceProperties.apiVersion < VK_MAKE_VERSION(1, 1, 0))
+    if (IsVulkan11(mPhysicalDeviceProperties))
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
     }
@@ -2826,7 +2836,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     if (getFeatures().supportsHostQueryReset.enabled)
     {
-        mEnabledDeviceExtensions.push_back(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
+        if (!IsVulkan12(mPhysicalDeviceProperties))
+        {
+            mEnabledDeviceExtensions.push_back(VK_EXT_HOST_QUERY_RESET_EXTENSION_NAME);
+        }
         vk::AddToPNextChain(&mEnabledFeatures, &mHostQueryResetFeatures);
     }
 
@@ -2937,7 +2950,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     if (getFeatures().supportsSeparateDepthStencilLayouts.enabled)
     {
-        mEnabledDeviceExtensions.push_back(VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME);
+        if (!IsVulkan12(mPhysicalDeviceProperties))
+        {
+            mEnabledDeviceExtensions.push_back(
+                VK_KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME);
+        }
         vk::AddToPNextChain(&mEnabledFeatures, &mSeparateDepthStencilLayoutsFeatures);
     }
 
@@ -3657,7 +3674,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 #if defined(ANGLE_PLATFORM_ANDROID)
     if ((mFeatures.supportsExternalFenceCapabilities.enabled &&
          mFeatures.supportsExternalSemaphoreCapabilities.enabled) ||
-        mPhysicalDeviceProperties.apiVersion >= VK_MAKE_VERSION(1, 1, 0))
+        IsVulkan11(mPhysicalDeviceProperties))
     {
         VkExternalFenceProperties externalFenceProperties = {};
         externalFenceProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES;
