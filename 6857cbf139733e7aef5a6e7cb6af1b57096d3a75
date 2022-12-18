@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d80719d_69a1e2d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-18T18:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8378f4be_2e5b20d3",
+      "revId": "6857cbf139733e7aef5a6e7cb6af1b57096d3a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b401d04e_64cd3a29",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-12-17T01:39:01Z",
       "side": 1,
       "message": "Please put this in a helper, this function is gigantic as it is.",
+      "range": {
+        "startLine": 855,
+        "startChar": 0,
+        "endLine": 883,
+        "endChar": 9
+      },
+      "revId": "6857cbf139733e7aef5a6e7cb6af1b57096d3a75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5fb0aa_ef7638c6",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-18T18:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b401d04e_64cd3a29",
       "range": {
         "startLine": 855,
         "startChar": 0,
