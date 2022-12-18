@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a07e359_27d5b0e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-18T15:36:44Z",
+      "side": 1,
+      "message": "With below patch, I could successfully build angle for android/linux/win and also build angle through chromium repo.\n\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4113745",
+      "parentUuid": "c0bfac54_2d43741a",
+      "revId": "402e7f7a634b1170d0feae52a44168731a7489f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ce83765_4eb4dff8",
