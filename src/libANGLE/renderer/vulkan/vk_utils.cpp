@@ -1134,9 +1134,9 @@ void InitExternalMemoryHostFunctions(VkInstance instance)
     GET_INSTANCE_FUNC(vkGetMemoryHostPointerPropertiesEXT);
 }
 
-void InitHostQueryResetFunctions(VkInstance instance)
+void InitHostQueryResetFunctions(VkDevice device)
 {
-    GET_INSTANCE_FUNC(vkGetMemoryHostPointerPropertiesEXT);
+    GET_DEVICE_FUNC(vkResetQueryPoolEXT);
 }
 
 // VK_KHR_get_memory_requirements2
@@ -1226,6 +1226,86 @@ void InitGetPastPresentationTimingGoogleFunction(VkDevice device)
 #    undef GET_DEVICE_FUNC
 
 #endif  // !defined(ANGLE_SHARED_LIBVULKAN)
+
+#define ASSIGN_FROM_CORE(vkName, EXT)              \
+    do                                             \
+    {                                              \
+        /* The core entry point must be present */ \
+        ASSERT(vkName != nullptr);                 \
+        vkName##EXT = vkName;                      \
+    } while (0)
+
+void InitGetPhysicalDeviceProperties2KHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkGetPhysicalDeviceProperties2, KHR);
+    ASSIGN_FROM_CORE(vkGetPhysicalDeviceFeatures2, KHR);
+    ASSIGN_FROM_CORE(vkGetPhysicalDeviceMemoryProperties2, KHR);
+}
+
+void InitExternalFenceCapabilitiesFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkGetPhysicalDeviceExternalFenceProperties, KHR);
+}
+
+void InitExternalSemaphoreCapabilitiesFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkGetPhysicalDeviceExternalSemaphoreProperties, KHR);
+}
+
+void InitSamplerYcbcrKHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCreateSamplerYcbcrConversion, KHR);
+    ASSIGN_FROM_CORE(vkDestroySamplerYcbcrConversion, KHR);
+}
+
+void InitGetMemoryRequirements2KHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkGetBufferMemoryRequirements2, KHR);
+    ASSIGN_FROM_CORE(vkGetImageMemoryRequirements2, KHR);
+}
+
+void InitBindMemory2KHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkBindBufferMemory2, KHR);
+    ASSIGN_FROM_CORE(vkBindImageMemory2, KHR);
+}
+
+void InitHostQueryResetFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkResetQueryPool, EXT);
+}
+
+void InitRenderPass2KHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCreateRenderPass2, KHR);
+}
+
+void InitExtendedDynamicStateEXTFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCmdBindVertexBuffers2, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetCullMode, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthBoundsTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthCompareOp, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthWriteEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetFrontFace, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetPrimitiveTopology, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetScissorWithCount, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetStencilOp, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetStencilTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetViewportWithCount, EXT);
+}
+
+void InitExtendedDynamicState2EXTFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCmdSetDepthBiasEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetPrimitiveRestartEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetRasterizerDiscardEnable, EXT);
+
+    // vkCmdSetLogicOpEXT and vkCmdSetPatchControlPointsEXT are not promoted to core.
+}
+
+#undef ASSIGN_FROM_CORE
 
 GLenum CalculateGenerateMipmapFilter(ContextVk *contextVk, angle::FormatID formatID)
 {
