@@ -16,6 +16,23 @@
       "message": "+Solti to watch for android test result.",
       "revId": "2577c52a49ef037d616dbba4aed6204cd032cec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35afae56_6de2d431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-19T18:16:28Z",
+      "side": 1,
+      "message": "+2 since Solti is OOO",
+      "revId": "2577c52a49ef037d616dbba4aed6204cd032cec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
