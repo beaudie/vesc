@@ -141,6 +141,24 @@
       "parentUuid": "3049b06d_310da712",
       "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78b68574_9e974b79",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-19T22:35:31Z",
+      "side": 1,
+      "message": "this was one such error -\n```\n[237/1503] SOLINK ./libfeature_support_angle.cr.so\nFAILED: libfeature_support_angle.cr.so libfeature_support_angle.cr.so.TOC lib.unstripped/libfeature_support_angle.cr.so\npython3 \"../../build/toolchain/gcc_solink_wrapper.py\" --readelf\u003d\"../../third_party/llvm-build/Releas...(too long)\nld.lld: error: undefined symbol: sh::ShaderVariable::getArraySizeProduct() const\n\u003e\u003e\u003e referenced by CompiledShaderState.cpp:49 (../../src/common/CompiledShaderState.cpp:49)\n\u003e\u003e\u003e               angle_common/CompiledShaderState.o:(gl::CompareShaderVar(sh::ShaderVariable const\u0026, sh::ShaderVariable const\u0026)) in archive obj/libangle_common.a\n```",
+      "parentUuid": "51ba35fd_1fd2c620",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
