@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a40f79ed_95ef21ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-19T21:52:50Z",
+      "side": 1,
+      "message": "There is a new build error in ANGLE to Chromium roller:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4116089?tab\u003dchecks.\n\nLooks like `android-binary-size` build needs to include vulkan header but the dependency is ruled out by `angle_enable_vulkan`",
+      "revId": "e265b318d9fb987b81ca6d3c7cbaf50049f133a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
