@@ -385,6 +385,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     bool isCurrentRenderEncoderSerial(uint64_t serial);
 
+    void addNewCommandBufferToWaitOnIfNeeded();
+
     const mtl::ContextDevice &getMetalDevice() const { return mContextDevice; }
 
     angle::Result copy2DTextureSlice0Level0ToWorkTexture(const mtl::TextureRef &srcTexture);
@@ -591,7 +593,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     gl::AttributesMask mDirtyDefaultAttribsMask;
     DirtyBits mDirtyBits;
 
-    uint32_t mRenderPassesSinceFlush = 0;
+    uint32_t mRenderPassesSinceFlush                                    = 0;
+    mtl::CommandBufferFinishOperation mLastCommandBufferFinishOperation = mtl::WaitUntilScheduled;
 
     // State
     mtl::RenderPipelineDesc mRenderPipelineDesc;

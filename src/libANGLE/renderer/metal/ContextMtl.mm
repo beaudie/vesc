@@ -805,9 +805,9 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
         size_t outIndexCount      = 0;
         gl::PrimitiveMode newMode = gl::PrimitiveMode::InvalidEnum;
         drawIdxBuffer             = mProvokingVertexHelper.preconditionIndexBuffer(
-                        mtl::GetImpl(context), idxBuffer, count, convertedOffset,
-                        mState.isPrimitiveRestartEnabled(), mode, convertedType, outIndexCount,
-                        provokingVertexAdditionalOffset, newMode);
+            mtl::GetImpl(context), idxBuffer, count, convertedOffset,
+            mState.isPrimitiveRestartEnabled(), mode, convertedType, outIndexCount,
+            provokingVertexAdditionalOffset, newMode);
         if (!drawIdxBuffer)
         {
             return angle::Result::Stop;
@@ -1779,7 +1779,8 @@ void ContextMtl::flushCommandBuffer(mtl::CommandBufferFinishOperation operation)
 
     endEncoding(true);
     mCmdBuffer.commit(operation);
-    mRenderPassesSinceFlush = 0;
+    mRenderPassesSinceFlush           = 0;
+    mLastCommandBufferFinishOperation = operation;
 }
 
 void ContextMtl::flushCommandBufferIfNeeded()
@@ -1814,8 +1815,19 @@ void ContextMtl::present(const gl::Context *context, id<CAMetalDrawable> present
     mRenderPassesSinceFlush = 0;
 }
 
+void ContextMtl::addNewCommandBufferToWaitOnIfNeeded()
+{
+    bool lastCommandBufferNotWaitedOn = mLastCommandBufferFinishOperation == mtl::NoWait;
+    bool haveCommandBuffer            = mCmdBuffer.ready();
+    if (lastCommandBufferNotWaitedOn && !haveCommandBuffer)
+    {
+        ensureCommandBufferReady();
+    }
+}
+
 angle::Result ContextMtl::finishCommandBuffer()
 {
+    addNewCommandBufferToWaitOnIfNeeded();
     flushCommandBuffer(mtl::WaitUntilFinished);
     return angle::Result::Continue;
 }
