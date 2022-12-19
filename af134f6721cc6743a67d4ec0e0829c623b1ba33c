@@ -69,6 +69,24 @@
       "parentUuid": "ec972b36_34ce75d5",
       "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bce43868_ac446666",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-19T19:21:12Z",
+      "side": 1,
+      "message": "thanks shabi, got more specific info -\n```\nSo PS2 was the patch where we added the new CompiledShaderState object to the\ncommon/ folder, which didn\u0027t work...\n\nWe can move all the helpers + the new struct to common if we can include \nShaderLang.h + ShaderVars.h in a common header. This is currently not allowed.\n```",
+      "parentUuid": "22a527aa_36d2eb30",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
