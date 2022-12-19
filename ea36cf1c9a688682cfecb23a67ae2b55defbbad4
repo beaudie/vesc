@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5449e5d4_37db1f0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-19T20:32:07Z",
+      "side": 1,
+      "message": "Oops, this was supposed to say VK_KHR_separate_depth_stencil_layouts",
+      "range": {
+        "startLine": 7,
+        "startChar": 20,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "ea36cf1c9a688682cfecb23a67ae2b55defbbad4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
