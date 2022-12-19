@@ -33,6 +33,23 @@
       "message": "Also seems to have broken Windows deterministic. First failure:\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/Windows%20deterministic/21081/overview\n\n```\n$ diff b/s/w/ir/cache/builder/src/out/Release/toolchain.ninja  b/s/w/ir/cache/builder/src/out/Release.2/toolchain.ninja\n54967c54967\n\u003c   command \u003d C$:/b/s/w/ir/cipd_bin_packages/cpython3/bin/python3.exe ../../third_party/angle/src/program_serialize_data_version.py gen/angle/ANGLEShaderProgramVersion.h ../../out/Release/gen/angle_code_affecting_program_serialize\n---\n\u003e   command \u003d C$:/b/s/w/ir/cipd_bin_packages/cpython3/bin/python3.exe ../../third_party/angle/src/program_serialize_data_version.py gen/angle/ANGLEShaderProgramVersion.h ../../out/Release.2/gen/angle_code_affecting_program_serialize\n```",
       "revId": "c303758fbc8d23266be578fae246e5687656b4c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3432a20_f83c4830",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 38
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305348
+      },
+      "writtenOn": "2022-12-19T18:51:05Z",
+      "side": 1,
+      "message": "Thank you for reverting, this is also breaking the automatic roller of ANGLE into Skia:\n\n\nERROR at //third_party/externals/angle2/src/libANGLE/renderer/vulkan/vulkan_backend.gni:194:5: Undefined identifier\nif (angle_use_gbm) {\n    ^------------\nSee //third_party/externals/angle2/src/angle_program_serialize_data_version.gni:15:1: whence it was imported.\nimport(\"libANGLE/renderer/vulkan/vulkan_backend.gni\")\n^---------------------------------------------------\nSee //third_party/externals/angle2/BUILD.gn:97:1: whence it was imported.\nimport(\"src/angle_program_serialize_data_version.gni\")\n^----------------------------------------------------\nSee //third_party/angle2/BUILD.gn:11:5: which caused the file to be included.\n    \"//third_party/externals/angle2:includes\",\n    ^----------------------------------------",
+      "revId": "c303758fbc8d23266be578fae246e5687656b4c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
