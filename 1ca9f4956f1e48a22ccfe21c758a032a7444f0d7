@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e572d4cc_aa9d0943",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-19T22:25:12Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org Could you please CR+2?",
+      "revId": "1ca9f4956f1e48a22ccfe21c758a032a7444f0d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
