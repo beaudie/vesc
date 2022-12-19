@@ -51,6 +51,24 @@
       "parentUuid": "d5794fa6_52c862a8",
       "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a527aa_36d2eb30",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-19T19:17:38Z",
+      "side": 1,
+      "message": "I\u0027ll have to try it to see. src/common/utilities.h includes GLSLANG/ShaderLang.h, so there shouldn\u0027t be a problem with the _public interface_ of the translator.\n\nYou shouldn\u0027t need TCompiler and such types though; the function sin ShaderLang.h should give you all the information that you need. That was actually the main point of my comment; that this code shouldn\u0027t need to look at the internals of the translator, but use the public API instead.\n\nI\u0027ll give PS1 a try today and let you know.",
+      "parentUuid": "ec972b36_34ce75d5",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
