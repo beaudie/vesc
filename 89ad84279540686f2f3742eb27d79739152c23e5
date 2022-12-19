@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc6c40bf_b5fc825a",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-19T19:38:17Z",
+      "side": 1,
+      "message": "Added a comment plus named variable to hopefully make it clear.",
+      "parentUuid": "750ec1de_adb85ebb",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 44
+      },
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f783002c_3895d79d",
@@ -88,6 +112,30 @@
       "writtenOn": "2022-12-19T16:55:44Z",
       "side": 1,
       "message": "Same here, looks equivalent.",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 86
+      },
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8831208d_53ef1ead",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-19T19:38:17Z",
+      "side": 1,
+      "message": "Same.",
+      "parentUuid": "f783002c_3895d79d",
       "range": {
         "startLine": 284,
         "startChar": 0,
