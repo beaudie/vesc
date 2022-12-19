@@ -33,6 +33,24 @@
       "message": "High-level comment:\n\nShaderLang.h and ShaderVar.h are the interface to the compiler; they are versioned and it\u0027s best to make it as minimal as possible. These helpers belong in `common/`, and they can retrieve all the information they need from the compiler.\n\nIOW, these don\u0027t belong in the public interface of the compiler.",
       "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec972b36_34ce75d5",
+        "filename": "include/GLSLANG/ShaderVars.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-19T18:50:13Z",
+      "side": 1,
+      "message": "\u003e These helpers belong in common\n\nthat was the intent and gave it a try in PS1 -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4080998/1\n\ni believe it triggered a bunch of compiler errors and the consensus was there were a bunch of other includes that needed to be brought in along with this header (like TCompiler types and such) and the latest patchset is the minimal change that we got working.\n\ncould you take a look at PS1 and provide some suggestions on fixing compiler errors?",
+      "parentUuid": "d5794fa6_52c862a8",
+      "revId": "af134f6721cc6743a67d4ec0e0829c623b1ba33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
