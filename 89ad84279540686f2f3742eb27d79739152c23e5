@@ -33,6 +33,69 @@
       "message": "Ping, ICYMI",
       "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "417c40e1_5dd614e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-19T16:55:44Z",
+      "side": 1,
+      "message": "LGTM, thanks Shabi!",
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "750ec1de_adb85ebb",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-19T16:55:44Z",
+      "side": 1,
+      "message": "Had to stare at this a bit, but it looks equivalent.  Would be worth a spec or extension quote at some point to understand what\u0027s being applied.",
+      "range": {
+        "startLine": 278,
+        "startChar": 0,
+        "endLine": 279,
+        "endChar": 44
+      },
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f783002c_3895d79d",
+        "filename": "src/libANGLE/GLES1Shaders.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2022-12-19T16:55:44Z",
+      "side": 1,
+      "message": "Same here, looks equivalent.",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 287,
+        "endChar": 86
+      },
+      "revId": "89ad84279540686f2f3742eb27d79739152c23e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
