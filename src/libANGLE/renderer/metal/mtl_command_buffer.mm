@@ -623,14 +623,28 @@ void CommandBuffer::commit(CommandBufferFinishOperation operation)
     std::lock_guard<std::mutex> lg(mLock);
     if (commitImpl())
     {
-        if (operation == WaitUntilScheduled)
-        {
-            [get() waitUntilScheduled];
-        }
-        else if (operation == WaitUntilFinished)
-        {
-            [get() waitUntilCompleted];
-        }
+        wait(operation);
+    }
+}
+
+void CommandBuffer::wait(CommandBufferFinishOperation operation)
+{
+    ASSERT(mCommitted);
+
+    // NOTE: A CommandBuffer is valid forever under current conditions (2022-12-22)
+    // except before the call to restart.
+    if (!valid())
+    {
+        return;
+    }
+
+    if (operation == WaitUntilScheduled)
+    {
+        [get() waitUntilScheduled];
+    }
+    else if (operation == WaitUntilFinished)
+    {
+        [get() waitUntilCompleted];
     }
 }
 
@@ -838,6 +852,7 @@ void CommandBuffer::invalidateActiveCommandEncoder(CommandEncoder *encoder)
 void CommandBuffer::cleanup()
 {
     mActiveCommandEncoder = nullptr;
+    // mLastCommandBuffer.set(get());
 
     ParentClass::set(nil);
 }

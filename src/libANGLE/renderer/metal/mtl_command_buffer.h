@@ -114,6 +114,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     // and hasn't been restarted.
     bool ready() const;
     void commit(CommandBufferFinishOperation operation);
+    void wait(CommandBufferFinishOperation operation);
 
     void present(id<CAMetalDrawable> presentationDrawable);
 
