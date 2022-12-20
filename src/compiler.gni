@@ -32,6 +32,7 @@ angle_translator_sources = [
   "src/compiler/translator/CollectVariables.cpp",
   "src/compiler/translator/CollectVariables.h",
   "src/compiler/translator/Common.h",
+  "src/compiler/translator/CompiledShaderState.cpp",
   "src/compiler/translator/Compiler.cpp",
   "src/compiler/translator/Compiler.h",
   "src/compiler/translator/ConstantUnion.cpp",
