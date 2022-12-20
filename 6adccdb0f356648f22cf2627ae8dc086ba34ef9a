@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "6adccdb0f356648f22cf2627ae8dc086ba34ef9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0f8ba5d_36ea95bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-20T00:46:49Z",
+      "side": 1,
+      "message": "Thanks Gregg for your review! Will try to get feedback from Apple folks before CQ\u0027ing.",
+      "revId": "6adccdb0f356648f22cf2627ae8dc086ba34ef9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
