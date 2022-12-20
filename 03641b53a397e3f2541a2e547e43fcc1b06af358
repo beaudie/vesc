@@ -16,6 +16,23 @@
       "message": "Good find. A test would be great, but I\u0027m not sure how to go about it. Maybe a performance benchmark or unit test. Jamie, any ideas?\n\nThis LGTM but you\u0027ll probably need a +1 from someone actually on the ANGLE team.",
       "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "949b353b_4ec683e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-20T06:30:36Z",
+      "side": 1,
+      "message": "ComputeShaderTest.AtomicFunctionsReturnWithUnsigned/ES3_1_D3D11 is failing with this extension:\n\nWarning: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\d3d\\d3d11\\ResourceManager11.cpp, allocate:404. Internal D3D11 error: HRESULT: 0x80070057: Error allocating RenderTargetView\n\n```\nHRESULT: 0x80070057 (2147942487)\nName: E_INVALIDARG\nDescription: An invalid parameter was passed to the returning function\nSeverity code: Failed\nFacility Code: FACILITY_WIN32 (7)\nError Code: 0x0057 (87)\n```\n\nIs it sometimes invalid to create a texture with both `D3D11_BIND_UNORDERED_ACCESS` and `D3D11_BIND_RENDER_TARGET`?",
+      "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
