@@ -463,6 +463,7 @@ angle_static_library("angle_common") {
   public_deps = [
     ":angle_abseil",
     ":includes",
+    "src/common/vulkan:angle_vulkan_headers",
   ]
   public_configs += [ ":angle_common_config" ]
   if (angle_has_build && use_fuzzing_engine) {
@@ -495,12 +496,8 @@ angle_static_library("angle_common") {
     frameworks = [ "Metal.framework" ]
   }
 
-  if (is_linux || is_chromeos || is_android) {
-    sources += libangle_dma_buf_util_sources
-    if (angle_enable_vulkan) {
-      defines += [ "ANGLE_ENABLE_VULKAN" ]
-      public_deps += [ "src/common/vulkan:angle_vulkan_headers" ]
-    }
+  if (angle_enable_vulkan) {
+    defines += [ "ANGLE_ENABLE_VULKAN" ]
   }
 }
 
