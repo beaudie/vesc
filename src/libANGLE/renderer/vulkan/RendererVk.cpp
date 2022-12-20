@@ -1565,19 +1565,45 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
-    bool canLoadDebugUtils = true;
+    mDisplay                         = display;
+    const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
+    angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
+                                                           ChooseICDFromAttribs(attribs));
+    mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
+    mEnabledICD             = scopedEnvironment.getEnabledICD();
+
+    bool canLoadDebugUtils   = true;
+    const bool isSwiftShader = (mEnabledICD == angle::vk::ICD::SwiftShader);
+
+    PFN_vkGetInstanceProcAddr getInstanceProcAddr = nullptr;
+    if (isSwiftShader)
+    {
+        ANGLE_SCOPED_DISABLE_MSAN();
+        mLibVulkanLibrary = angle::vk::OpenLibSwiftShaderVulkan();
+
+        if (mLibVulkanLibrary)
+        {
+            getInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(
+                angle::GetLibrarySymbol(mLibVulkanLibrary, "vkGetInstanceProcAddr"));
+        }
+    }
+
 #if defined(ANGLE_SHARED_LIBVULKAN)
+    if (!getInstanceProcAddr)
     {
         ANGLE_SCOPED_DISABLE_MSAN();
         mLibVulkanLibrary = angle::vk::OpenLibVulkan();
         ANGLE_VK_CHECK(displayVk, mLibVulkanLibrary, VK_ERROR_INITIALIZATION_FAILED);
 
-        PFN_vkGetInstanceProcAddr vulkanLoaderGetInstanceProcAddr =
-            reinterpret_cast<PFN_vkGetInstanceProcAddr>(
-                angle::GetLibrarySymbol(mLibVulkanLibrary, "vkGetInstanceProcAddr"));
+        getInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(
+            angle::GetLibrarySymbol(mLibVulkanLibrary, "vkGetInstanceProcAddr"));
+    }
+#endif  // defined(ANGLE_SHARED_LIBVULKAN)
 
+    if (getInstanceProcAddr)
+    {
         // Set all vk* function ptrs
-        volkInitializeCustom(vulkanLoaderGetInstanceProcAddr);
+        volkInitializeCustom(getInstanceProcAddr);
 
         uint32_t ver = volkGetInstanceVersion();
         if (!IsAndroid() && VK_API_VERSION_MAJOR(ver) == 1 &&
@@ -1589,14 +1615,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             canLoadDebugUtils = false;
         }
     }
-#endif  // defined(ANGLE_SHARED_LIBVULKAN)
-
-    mDisplay                         = display;
-    const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
-    angle::vk::ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseValidationLayers(attribs),
-                                                           ChooseICDFromAttribs(attribs));
-    mEnableValidationLayers = scopedEnvironment.canEnableValidationLayers();
-    mEnabledICD             = scopedEnvironment.getEnabledICD();
 
     // Gather global layer properties.
     uint32_t instanceLayerCount = 0;
@@ -1810,6 +1828,24 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     instanceInfo.enabledLayerCount   = static_cast<uint32_t>(enabledInstanceLayerNames.size());
     instanceInfo.ppEnabledLayerNames = enabledInstanceLayerNames.data();
+
+    // Direct Driver Loading
+    VkDirectDriverLoadingInfoLUNARG appProvidedDriver   = {};
+    VkDirectDriverLoadingListLUNARG directDriverLoading = {};
+
+    if (getInstanceProcAddr && isSwiftShader)
+    {
+        appProvidedDriver.sType = VK_STRUCTURE_TYPE_DIRECT_DRIVER_LOADING_INFO_LUNARG;
+        appProvidedDriver.pfnGetInstanceProcAddr = getInstanceProcAddr;
+
+        directDriverLoading.sType = VK_STRUCTURE_TYPE_DIRECT_DRIVER_LOADING_LIST_LUNARG;
+        directDriverLoading.mode =
+            VK_DIRECT_DRIVER_LOADING_MODE_EXCLUSIVE_LUNARG;  // Do not load any other drivers
+        directDriverLoading.driverCount = 1;
+        directDriverLoading.pDrivers    = &appProvidedDriver;
+
+        vk::AddToPNextChain(&instanceInfo, &directDriverLoading);
+    }
 
     // http://anglebug.com/7050 - Shader validation caching is broken on Android
     VkValidationFeaturesEXT validationFeatures       = {};

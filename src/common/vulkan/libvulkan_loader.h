@@ -17,7 +17,8 @@ namespace angle
 namespace vk
 {
 void *OpenLibVulkan();
-}
+void *OpenLibSwiftShaderVulkan();
+}  // namespace vk
 }  // namespace angle
 
 #endif  // LIBANGLE_COMMON_VULKAN_LIBVULKAN_LOADER_H_

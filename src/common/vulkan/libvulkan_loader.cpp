@@ -53,5 +53,36 @@ void *OpenLibVulkan()
 
     return nullptr;
 }
+
+void *OpenLibSwiftShaderVulkan()
+{
+    constexpr const char *kLibVulkanNames[] = {
+#if defined(ANGLE_PLATFORM_WINDOWS)
+        "vk_swiftshader.dll",
+#elif defined(ANGLE_PLATFORM_APPLE)
+        "libvk_swiftshader.dylib",
+#else
+        "libvk_swiftshader.so",
+#endif
+    };
+
+    constexpr SearchType kSearchTypes[] = {
+        SearchType::ModuleDir,
+    };
+
+    for (angle::SearchType searchType : kSearchTypes)
+    {
+        for (const char *libraryName : kLibVulkanNames)
+        {
+            void *library = OpenSystemLibraryWithExtension(libraryName, searchType);
+            if (library)
+            {
+                return library;
+            }
+        }
+    }
+
+    return nullptr;
+}
 }  // namespace vk
 }  // namespace angle
