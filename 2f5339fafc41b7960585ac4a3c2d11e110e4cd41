@@ -86,6 +86,24 @@
       "message": "@yuxinhu@google.com,\n\nSorry. The results are different from standalone build and depencency check.\nAnyway, I think reveting below 3 CLs is reasonable because now the other CLs are piling up.\n\u003e 4113745: Fix link error with dma_buf_util_sources | https://chromium-review.googlesource.com/c/angle/angle/+/4113745\n\u003e 4111968: Fix defines redifintion in angle_common. | https://chromium-review.googlesource.com/c/angle/angle/+/4111968\n\u003e 4022963: Vulkan: Make available GLInternalFormatToGbmFourCCFormat | https://chromium-review.googlesource.com/c/angle/angle/+/4022963\n\nI can make revert changes after about 6 hours later because I\u0027m not in office now.",
       "revId": "2f5339fafc41b7960585ac4a3c2d11e110e4cd41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c533772_341be69f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-20T00:29:24Z",
+      "side": 1,
+      "message": "No worries. Revert sounds good. Thank you Sungyong.",
+      "parentUuid": "9db2524d_5d6adff5",
+      "revId": "2f5339fafc41b7960585ac4a3c2d11e110e4cd41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
