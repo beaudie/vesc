@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ca78c5_8312bf8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002745
+      },
+      "writtenOn": "2022-12-20T22:28:45Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is the correct/intended way of using this extension, but this sort of works.",
+      "revId": "704b2ea439489934e6e4c4775ac7d8866314c7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
