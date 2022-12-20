@@ -22,6 +22,30 @@
       },
       "revId": "8668cac1a97fff7c965a006a2677c65ec8aea0f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ea8e15_1c078aac",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-20T17:40:33Z",
+      "side": 0,
+      "message": "Yes that\u0027s right. Thank you. Would you mind uploading a new patch with this fix you proposed?\n\nMeanwhile would you minding landing the reverts of these three CLs?\nhttps://crrev.com/c/4113575\nhttps://crrev.com/c/4113576\nhttps://crrev.com/c/4113577",
+      "parentUuid": "a234ad06_fecedc8a",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 65
+      },
+      "revId": "8668cac1a97fff7c965a006a2677c65ec8aea0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
