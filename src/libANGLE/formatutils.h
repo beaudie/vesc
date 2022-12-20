@@ -24,7 +24,7 @@
 #include "libANGLE/angletypes.h"
 
 #if defined(ANGLE_PLATFORM_LINUX) && defined(ANGLE_USE_GBM)
-#    include "common/dma_buf_utils.h"
+#    include "common/linux/dma_buf_utils.h"
 #endif
 
 namespace gl

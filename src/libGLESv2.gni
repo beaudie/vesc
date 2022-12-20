@@ -81,6 +81,13 @@ libangle_common_sources = [
   "src/common/vector_utils.h",
 ]
 
+if (is_linux) {
+  libangle_common_sources += [
+    "src/common/linux/dma_buf_utils.cpp",
+    "src/common/linux/dma_buf_utils.h",
+  ]
+}
+
 libangle_common_cl_sources = [
   "src/common/PackedCLEnums_autogen.cpp",
   "src/common/PackedCLEnums_autogen.h",
@@ -191,11 +198,6 @@ libangle_gpu_info_util_mac_sources = [
 libangle_gpu_info_util_ios_sources = [
   "src/gpu_info_util/SystemInfo_apple.mm",
   "src/gpu_info_util/SystemInfo_ios.cpp",
-]
-
-libangle_dma_buf_util_sources = [
-  "src/common/dma_buf_utils.cpp",
-  "src/common/dma_buf_utils.h",
 ]
 
 libangle_includes = [
