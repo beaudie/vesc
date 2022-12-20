@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a234ad06_fecedc8a",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-20T06:49:50Z",
+      "side": 0,
+      "message": "I think just moving this out of the if condition would remove the dependency check error. Because dependecny checks all the \u0027include\u0027 lines regardless of \u0027conditions\u0027.",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 65
+      },
+      "revId": "8668cac1a97fff7c965a006a2677c65ec8aea0f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

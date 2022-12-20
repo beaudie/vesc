@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df1a565_37fa9c2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-20T06:49:50Z",
+      "side": 1,
+      "message": "@yuxinhu@google.com\n\nActually, I have no vote permission. 1 comment.\nI\u0027ll prepare the bug report and reverting patch too while you\u0027re reading this.. \n\nThank you!! 😂",
+      "revId": "4f94275cdb35eefee8dc71bcc214d75bcc480c58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
