@@ -51,6 +51,29 @@
       "message": "This change broke `git cl presubmit` on macOS with:\n\u003e `export_targets.py` failed:\n\u003e ...\n\u003e Warning in `//:libANGLE_headers: src/libANGLE/formatutils.h:` Included file must be listed in the GN target or its public dependency: `b\u0027common/dma_buf_utils.h\u0027`",
       "revId": "e265b318d9fb987b81ca6d3c7cbaf50049f133a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e77871_9ab46a13",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2022-12-20T06:56:50Z",
+      "side": 1,
+      "message": "Thank you for saying so. But I can\u0027t vote because don\u0027t have a vote permission.\n\nI think just moving this out of the if condition would remove the dependency check error. Because dependecny checks all the \u0027include\u0027 lines regardless of \u0027conditions\u0027.\n\nBut according to Alexey Knyazev, he said there is mac error too. Maybe next time, I have to build from chromium with all the environment.\n\nSorry again! 😂",
+      "range": {
+        "startLine": 502,
+        "startChar": 6,
+        "endLine": 502,
+        "endChar": 65
+      },
+      "revId": "e265b318d9fb987b81ca6d3c7cbaf50049f133a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
