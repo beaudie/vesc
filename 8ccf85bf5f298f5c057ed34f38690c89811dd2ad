@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d008d15e_03656b8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-20T01:10:44Z",
+      "side": 1,
+      "message": "shabi - PS8 is ideal in that the shader state struct is moved to `common/`, both the header and the implementation but causes errors\n\nPS9 is where the header is in `common/` but the implementation is in `compiler/` which kinda makes sense and sorta mirrors how ShaderVars header and implementation is in different locations. i am fine with this workaround or am open to ideas you have on how to fix PS8",
+      "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
