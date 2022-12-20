@@ -287,7 +287,9 @@ def has_all_includes(target_name: str, descs: dict) -> bool:
 
     ret = True
     desc = descs[target_name]
+    print("Yuxin Debug, target_name: " + target_name)
     for cur_file in desc.get('sources', []):
+        print("Yuxin Debug, cur_file: " + cur_file)
         assert cur_file.startswith('/'), cur_file
         if not cur_file.startswith('//'):
             continue
