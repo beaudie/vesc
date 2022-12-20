@@ -16,6 +16,23 @@
       "message": "Gregg, Dan: could you please review this change?\n\nAny comments welcome - please tell me if it looks like the lifetime handling of the Objective C objects is wrong. Confirmed this fix locally on affected hardware.",
       "revId": "6adccdb0f356648f22cf2627ae8dc086ba34ef9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f6a196d_a9bd4961",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2022-12-20T00:45:56Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "6adccdb0f356648f22cf2627ae8dc086ba34ef9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
