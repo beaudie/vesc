@@ -64,6 +64,8 @@ libangle_common_sources = [
   "src/common/event_tracer.cpp",
   "src/common/event_tracer.h",
   "src/common/hash_utils.h",
+  "src/common/linux/dma_buf_utils.cpp",
+  "src/common/linux/dma_buf_utils.h",
   "src/common/mathutil.cpp",
   "src/common/mathutil.h",
   "src/common/matrix_utils.cpp",
@@ -191,11 +193,6 @@ libangle_gpu_info_util_mac_sources = [
 libangle_gpu_info_util_ios_sources = [
   "src/gpu_info_util/SystemInfo_apple.mm",
   "src/gpu_info_util/SystemInfo_ios.cpp",
-]
-
-libangle_dma_buf_util_sources = [
-  "src/common/dma_buf_utils.cpp",
-  "src/common/dma_buf_utils.h",
 ]
 
 libangle_includes = [
