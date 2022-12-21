@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb113496_6ac1fcc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T01:39:50Z",
+      "side": 1,
+      "message": "Split from the next CL to reduce the noise from all the renaming. Also includes the new layouts, but they are not used.",
+      "revId": "8e4f40a5c1da99c8c12aa01baac59d1eeae2b884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
