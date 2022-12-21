@@ -13,6 +13,8 @@ namespace
 {
 const char EXTPragma[] = "#extension GL_EXT_clip_cull_distance : require\n";
 
+const char ANGLEPragma[] = "#extension GL_ANGLE_clip_cull_distance : require\n";
+
 // Shader using gl_ClipDistance and gl_CullDistance
 const char VertexShaderCompileSucceeds1[] =
     R"(
@@ -273,11 +275,14 @@ class EXTClipCullDistanceTest : public sh::ShaderExtensionTest
 
     void SetExtensionEnable(bool enable)
     {
-        // GL_APPLE_clip_distance is implicitly enabled when GL_EXT_clip_cull_distance is enabled
+        // GL_APPLE_clip_distance is implicitly enabled when GL_EXT_clip_cull_distance or
+        // GL_ANGLE_clip_cull_distance are enabled
 #if defined(ANGLE_ENABLE_VULKAN)
         mResources.APPLE_clip_distance = enable;
 #endif
         mResources.EXT_clip_cull_distance = enable;
+
+        mResources.ANGLE_clip_cull_distance = enable;
     }
 };
 
@@ -308,6 +313,8 @@ TEST_P(EXTClipCullDistanceForVertexShaderTest, CompileFailsWithoutExtension)
     SetExtensionEnable(false);
     InitializeCompiler();
     EXPECT_FALSE(TestShaderCompile(EXTPragma));
+    InitializeCompiler();
+    EXPECT_FALSE(TestShaderCompile(ANGLEPragma));
 }
 
 // Extension directive is required to compile properly. Expect failure when
@@ -333,6 +340,10 @@ TEST_P(EXTClipCullDistanceForVertexShaderTest, CompileSucceedsVulkan)
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
     EXPECT_FALSE(TestShaderCompile(""));
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
+    InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
+    EXPECT_TRUE(TestShaderCompile(ANGLEPragma));
+    EXPECT_FALSE(TestShaderCompile(""));
+    EXPECT_TRUE(TestShaderCompile(ANGLEPragma));
 }
 #endif
 
@@ -343,6 +354,8 @@ TEST_P(EXTClipCullDistanceForFragmentShaderTest, CompileFailsWithoutExtension)
     SetExtensionEnable(false);
     InitializeCompiler();
     EXPECT_FALSE(TestShaderCompile(EXTPragma));
+    InitializeCompiler();
+    EXPECT_FALSE(TestShaderCompile(ANGLEPragma));
 }
 
 // Extension directive is required to compile properly. Expect failure when
@@ -370,6 +383,10 @@ TEST_P(EXTClipCullDistanceForFragmentShaderTest, DISABLED_CompileSucceedsVulkan)
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
     EXPECT_FALSE(TestShaderCompile(""));
     EXPECT_TRUE(TestShaderCompile(EXTPragma));
+    InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
+    EXPECT_TRUE(TestShaderCompile(ANGLEPragma));
+    EXPECT_FALSE(TestShaderCompile(""));
+    EXPECT_TRUE(TestShaderCompile(ANGLEPragma));
 }
 
 class EXTClipCullDistanceForVertexShaderCompileFailureTest
@@ -390,6 +407,8 @@ TEST_P(EXTClipCullDistanceForVertexShaderCompileFailureTest, CompileFails)
 
     InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
     EXPECT_FALSE(TestShaderCompile(EXTPragma));
+    InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
+    EXPECT_FALSE(TestShaderCompile(ANGLEPragma));
 }
 
 TEST_P(EXTClipCullDistanceForFragmentShaderCompileFailureTest, CompileFails)
@@ -402,6 +421,8 @@ TEST_P(EXTClipCullDistanceForFragmentShaderCompileFailureTest, CompileFails)
 
     InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
     EXPECT_FALSE(TestShaderCompile(EXTPragma));
+    InitializeCompiler(SH_SPIRV_VULKAN_OUTPUT);
+    EXPECT_FALSE(TestShaderCompile(ANGLEPragma));
 }
 #endif
 
