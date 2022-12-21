@@ -69,6 +69,24 @@
       "parentUuid": "2c5772d4_7c8ec0b2",
       "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bae8916_146fd060",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2022-12-21T18:27:32Z",
+      "side": 1,
+      "message": "\u003e I put CompiledShaderState into its own lib\n\nLGTM\n\n\u003e currently only libANGLE\n\ncorrect\n\n\u003e presume later you\u0027d want to add this as a dependency of angle_shader_translator\n\nexactly\n\nchecking this internally and running through our unit tests and if it checks out can move ahead with this refactor?",
+      "parentUuid": "668becc9_8f493b89",
+      "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
