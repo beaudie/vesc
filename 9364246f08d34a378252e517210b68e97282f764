@@ -33,6 +33,23 @@
       "message": "Let\u0027s revert this.\nFor reland, please test on ios-angle-try-intel trybot.\nAlso broke the CI:\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/ios-angle-builder/102785/overview",
       "revId": "9364246f08d34a378252e517210b68e97282f764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "026267e0_dea57cf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-21T16:00:30Z",
+      "side": 1,
+      "message": "Also breaks Metal WebGL CTS on our Mac AMD fleet (not sure if intentionally):\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/mac-angle-chromium-amd/24500/overview\nTo test there, I suggest to create a Chromium CL updating DEPS to use ANGLE from a reland CL and test the Chromium CL on gpu-fyi-try-mac-amd-retina-rel.",
+      "revId": "9364246f08d34a378252e517210b68e97282f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
