@@ -417,7 +417,11 @@ class CommandQueue final : public CommandQueueInterface
 
     VkQueue getQueue(egl::ContextPriority priority) { return mQueueMap[priority]; }
 
-    const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
+    const angle::VulkanPerfCounters &getPerfCounters() const
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return mPerfCounters;
+    }
     void resetPerFramePerfCounters();
 
     // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
@@ -427,10 +431,6 @@ class CommandQueue final : public CommandQueueInterface
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
   private:
-    void releaseToCommandBatch(bool hasProtectedContent,
-                               PrimaryCommandBuffer &&commandBuffer,
-                               SecondaryCommandPools *commandPools,
-                               CommandBatch *batch);
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
@@ -468,6 +468,7 @@ class CommandQueue final : public CommandQueueInterface
 
     GarbageQueue mGarbageQueue;
 
+    mutable std::mutex mMutex;
     std::vector<CommandBatch> mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
@@ -584,9 +585,14 @@ class CommandProcessor final : public Context, public CommandQueueInterface
     // but currently only the counters in the member command queue are of interest.
     const angle::VulkanPerfCounters &getPerfCounters() const
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         return mCommandQueue.getPerfCounters();
     }
-    void resetPerFramePerfCounters() { mCommandQueue.resetPerFramePerfCounters(); }
+    void resetPerFramePerfCounters()
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mCommandQueue.resetPerFramePerfCounters();
+    }
 
     ANGLE_INLINE bool hasUnfinishedUse(const ResourceUse &use) const
     {
@@ -650,6 +656,8 @@ class CommandProcessor final : public Context, public CommandQueueInterface
 
     // Command queue worker thread.
     std::thread mTaskThread;
+
+    mutable std::mutex mMutex;
 };
 
 }  // namespace vk
