@@ -1381,6 +1381,35 @@ TEST_P(BufferDataTestES3, BufferDataWithNullFollowedByMap)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test glFenceSync call breaks renderPass followed by glCopyBufferSubData that read access the same
+// buffer that renderPass reads. There was a bug that this triggers assertion angleproject.com/7903.
+TEST_P(BufferDataTestES3, bufferReadFromRenderPassAndOutsideRenderPassWithFenceSyncInBetween)
+{
+    auto quadVertices = GetQuadVertices();
+
+    glUseProgram(mProgram);
+    glBindBuffer(GL_ARRAY_BUFFER, mBuffer);
+    GLsizei bufferSize = sizeof(GLfloat) * quadVertices.size() * 3;
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, quadVertices.data(), GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(mAttribLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(mAttribLocation);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+
+    GLsync sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    EXPECT_GL_NO_ERROR();
+
+    GLBuffer dstBuffer;
+    glBindBuffer(GL_COPY_WRITE_BUFFER, dstBuffer);
+    glBufferData(GL_COPY_WRITE_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+    glCopyBufferSubData(GL_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, bufferSize);
+
+    glBindBuffer(GL_ARRAY_BUFFER, dstBuffer);
+    drawQuad(mProgram, "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+}
+
 class BufferStorageTestES3 : public BufferDataTest
 {};
 
