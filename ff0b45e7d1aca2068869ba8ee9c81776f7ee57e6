@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a10e3c2a_b6f52ce1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T01:38:53Z",
+      "side": 1,
+      "message": "Split from the last CL in this chain to reduce the noise. The change looks pointless now, but will have a purpose in the end 😊",
+      "revId": "ff0b45e7d1aca2068869ba8ee9c81776f7ee57e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
