@@ -1472,7 +1472,6 @@ void RendererVk::onDestroy(vk::Context *context)
     mOrphanedBufferBlocks.clear();
 
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             mCommandProcessor.destroy(context);
@@ -4667,8 +4666,6 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
 
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     // Allocate a oneoff submitQueueSerial and generate a serial and then use it and release the
     // index.
     SerialIndex queueIndex;
@@ -5016,8 +5013,6 @@ angle::Result RendererVk::submitCommands(
     vk::SecondaryCommandPools *commandPools,
     const QueueSerial &submitQueueSerial)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     vk::SecondaryCommandBufferList commandBuffersToReset = {
         std::move(mOutsideRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
         std::move(mRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
@@ -5049,7 +5044,6 @@ angle::Result RendererVk::submitCommands(
 
 void RendererVk::handleDeviceLost()
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         mCommandProcessor.handleDeviceLost(this);
@@ -5062,8 +5056,6 @@ void RendererVk::handleDeviceLost()
 
 angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::ResourceUse &use)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.finishResourceUse(context, use, getMaxFenceWaitTimeNs()));
@@ -5079,7 +5071,6 @@ angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::Reso
 angle::Result RendererVk::finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial)
 {
     ASSERT(queueSerial.valid());
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(
@@ -5100,8 +5091,6 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForResourceUseToFinishWithUserTimeout");
 
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitForResourceUseToFinishWithUserTimeout(context, use, timeout,
@@ -5118,8 +5107,6 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
 
 angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitIdle(context, getMaxFenceWaitTimeNs()));
@@ -5134,7 +5121,6 @@ angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     // TODO: https://issuetracker.google.com/169788986 - would be better if we could just wait
     // for the work we need but that requires QueryHelper to use the actual serial for the
     // query.
@@ -5158,7 +5144,6 @@ angle::Result RendererVk::flushRenderPassCommands(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
 
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent,
@@ -5180,7 +5165,6 @@ angle::Result RendererVk::flushOutsideRPCommands(
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
 
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent,
@@ -5199,8 +5183,6 @@ VkResult RendererVk::queuePresent(vk::Context *context,
                                   egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     VkResult result = VK_SUCCESS;
     if (isAsyncCommandQueueEnabled())
     {
