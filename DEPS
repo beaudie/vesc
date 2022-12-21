@@ -173,7 +173,7 @@ deps = {
   },
 
   'buildtools/third_party/libc++/trunk': {
-    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@7b20455cbdf0891a6e5e2b66609b08c4f407ae5f',
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@18e086ee960ef4f3b60137f062a44a2c443fdd98',
     'condition': 'not build_with_chromium',
   },
 
