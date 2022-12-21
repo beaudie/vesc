@@ -443,7 +443,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
     if (image.hasRenderPassUsageFlag(vk::RenderPassUsage::RenderTargetAttachment))
     {
         // Right now we set the *TextureSampler flag only when RenderTargetAttachment is set since
-        // we do not track all textures in the renderpass.
+        // we do not track all textures in the render pass.
 
         if (image.isDepthOrStencil())
         {
@@ -497,7 +497,7 @@ angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
     // Special handling for deferred clears.
     ANGLE_TRY(drawFramebuffer->flushDeferredClears(contextVk));
 
-    if (contextVk->hasStartedRenderPass())
+    if (contextVk->hasActiveRenderPass())
     {
         const vk::RenderPassUsage readOnlyAttachmentUsage =
             isStencilTexture ? vk::RenderPassUsage::StencilReadOnlyAttachment
@@ -824,10 +824,10 @@ void ContextVk::flushDescriptorSetUpdates()
 
 ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason)
 {
-    pauseRenderPassQueriesIfActive();
-
     if (mRenderPassCommandBuffer != nullptr)
     {
+        pauseRenderPassQueriesIfActive();
+
         // If reason is specified, add it to the command buffer right before ending the render pass,
         // so it will show up in GPU debuggers.
         const char *reasonText = kRenderPassClosureReason[reason];
@@ -835,9 +835,10 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
         {
             insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         }
+
+        mRenderPassCommandBuffer = nullptr;
     }
 
-    mRenderPassCommandBuffer = nullptr;
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
@@ -1377,7 +1378,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
     const bool isAndroidHardwareBuffer = drawFramebufferVk->attachmentHasAHB();
 
-    if (!mHasAnyCommandsPendingSubmission && !hasStartedRenderPass() &&
+    if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
         mOutsideRenderPassCommands->empty() &&
         !(isSingleBuffer && mCurrentWindowSurface->hasStagedUpdates()))
     {
@@ -1391,7 +1392,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     // we don't know when the app is going to read from AHB, if we defer flush it is possible that
     // when app is reading from AHB, the draw commands have not been flushed and executed yet,
     // causing app to read unexpected data from AHB.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass() &&
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
         !isSingleBuffer && !isAndroidHardwareBuffer)
     {
         mHasDeferredFlush = true;
@@ -1474,7 +1475,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     if (dirtyBits.none())
     {
-        ASSERT(mRenderPassCommandBuffer);
+        ASSERT(hasActiveRenderPass());
         return angle::Result::Continue;
     }
 
@@ -1489,7 +1490,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     mGraphicsDirtyBits &= ~dirtyBitMask;
 
     // Render pass must be always available at this point.
-    ASSERT(mRenderPassCommandBuffer);
+    ASSERT(hasActiveRenderPass());
 
     return angle::Result::Continue;
 }
@@ -1739,7 +1740,7 @@ bool ContextVk::renderPassUsesStorageResources() const
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
-    if (!hasStartedRenderPass())
+    if (!hasActiveRenderPass())
     {
         return false;
     }
@@ -2173,7 +2174,7 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
     UpdateDepthFeedbackLoopReason stencilReason)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-    if (!hasStartedRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
+    if (!hasActiveRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
     {
         return angle::Result::Continue;
     }
@@ -2188,7 +2189,7 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
          drawFramebufferVk->isReadOnlyStencilFeedbackLoopMode()))
     {
         // If we are switching out of read only mode and we are in feedback loop, we must end
-        // renderpass here. Otherwise, updating it to writeable layout will produce a writable
+        // render pass here. Otherwise, updating it to writeable layout will produce a writable
         // feedback loop that is illegal in vulkan and will trigger validation errors that depth
         // texture is using the writable layout.
         if (dirtyBitsIterator)
@@ -3120,7 +3121,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
             return angle::Result::Stop;
     }
 
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
     mRenderPassCommandBuffer->setFragmentShadingRate(&fragmentSize, shadingRateCombinerOp);
 
     return angle::Result::Continue;
@@ -4352,7 +4353,7 @@ void ContextVk::insertEventMarkerImpl(GLenum source, const char *marker)
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, marker, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->insertDebugUtilsLabelEXT(label);
     }
@@ -4395,7 +4396,7 @@ angle::Result ContextVk::pushDebugGroupImpl(GLenum source, GLuint id, const char
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->beginDebugUtilsLabelEXT(label);
     }
@@ -4414,7 +4415,7 @@ angle::Result ContextVk::popDebugGroupImpl()
         return angle::Result::Continue;
     }
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->endDebugUtilsLabelEXT();
     }
@@ -6050,7 +6051,7 @@ angle::Result ContextVk::onBeginTransformFeedback(
 
     bool shouldEndRenderPass = false;
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         // If any of the buffers were previously used in the render pass, break the render pass as a
         // barrier is needed.
@@ -7164,32 +7165,12 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::startNextSubpass()
 {
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
 
     // The graphics pipelines are bound to a subpass, so update the subpass as well.
     mGraphicsPipelineDesc->nextSubpass(&mGraphicsPipelineTransition);
 
     return mRenderPassCommands->nextSubpass(this, &mRenderPassCommandBuffer);
-}
-
-void ContextVk::restoreFinishedRenderPass(const QueueSerial &queueSerial)
-{
-    if (mRenderPassCommandBuffer != nullptr)
-    {
-        // The render pass isn't finished yet, so nothing to restore.
-        return;
-    }
-
-    if (mRenderPassCommands->started() && mRenderPassCommands->getQueueSerial() == queueSerial)
-    {
-        // There is already a render pass open for this framebuffer, so just restore the
-        // pointer rather than starting a whole new render pass. One possible path here
-        // is if the draw framebuffer binding has changed from FBO A -> B -> A, without
-        // any commands that started a new render pass for FBO B (such as a clear being
-        // issued that was deferred).
-        mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
-        ASSERT(hasStartedRenderPass());
-    }
 }
 
 uint32_t ContextVk::getCurrentSubpassIndex() const
@@ -7279,7 +7260,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
 angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason reason)
 {
-    // The main reason we have mHasDeferredFlush is not to break renderpass just because we want
+    // The main reason we have mHasDeferredFlush is not to break render pass just because we want
     // to issue a flush. So there must be a started RP if it is true. Otherwise we should just
     // issue a flushImpl immediately instead of set mHasDeferredFlush to true.
     ASSERT(!mHasDeferredFlush || mRenderPassCommands->started());
@@ -7288,7 +7269,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPass(RenderPassClosureReason r
 
     if (mHasDeferredFlush)
     {
-        // If we have deferred glFlush call in the middle of renderpass, flush them now.
+        // If we have deferred glFlush call in the middle of render pass, flush them now.
         ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
     return angle::Result::Continue;
@@ -7352,8 +7333,8 @@ angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper, bool isEGL
         return angle::Result::Continue;
     }
 
-    // Otherwise we must have a started renderpass. The sync object will track the completion of
-    // this renderpass.
+    // Otherwise we must have a started render pass. The sync object will track the completion of
+    // this render pass.
     mRenderPassCommands->retainResource(syncHelper);
 
     onRenderPassFinished(RenderPassClosureReason::SyncObjectInit);
@@ -7376,7 +7357,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassIfDeferredSyncInit(
         return angle::Result::Continue;
     }
 
-    // If we have deferred glFlush call in the middle of renderpass, flush them now.
+    // If we have deferred glFlush call in the middle of render pass, flush them now.
     return flushCommandsAndEndRenderPass(reason);
 }
 
@@ -7498,7 +7479,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
             this, GL_DEBUG_SEVERITY_HIGH,
             "Running out of reserved outsideRenderPass queueSerial. ending renderPass now.");
         // We used up all reserved serials. In order to maintain serial order (outsideRenderPass
-        // must be smaller than renderpass), we also endRenderPass here as well. This is not
+        // must be smaller than render pass), we also endRenderPass here as well. This is not
         // expected to happen often in real world usage.
         return flushCommandsAndEndRenderPass(
             RenderPassClosureReason::OutOfReservedQueueSerialForOutsideCommands);
@@ -7588,11 +7569,7 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 
 void ContextVk::pauseRenderPassQueriesIfActive()
 {
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        return;
-    }
-
+    ASSERT(hasActiveRenderPass());
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
         if (activeQuery)
@@ -7607,8 +7584,7 @@ void ContextVk::pauseRenderPassQueriesIfActive()
 
 angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 {
-    ASSERT(mRenderPassCommandBuffer);
-
+    ASSERT(hasActiveRenderPass());
     // Note: these queries should be processed in order.  See comment in QueryVk::onRenderPassStart.
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
@@ -7635,8 +7611,7 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 
 angle::Result ContextVk::resumeXfbRenderPassQueriesIfActive()
 {
-    ASSERT(mRenderPassCommandBuffer);
-
+    ASSERT(hasActiveRenderPass());
     // All other queries are handled separately.
     QueryVk *xfbQuery = mActiveRenderPassQueries[gl::QueryType::TransformFeedbackPrimitivesWritten];
     if (xfbQuery && mState.isTransformFeedbackActiveUnpaused())
@@ -7915,7 +7890,7 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
 }
 
 // When textures/images bound/used by current compute program and have been accessed
-// as sampled texture in current renderpass, need to take care the implicit layout
+// as sampled texture in current render pass, need to take care the implicit layout
 // transition of these textures/images in the render pass.
 angle::Result ContextVk::endRenderPassIfComputeAccessAfterGraphicsImageAccess()
 {
@@ -7940,7 +7915,7 @@ angle::Result ContextVk::endRenderPassIfComputeAccessAfterGraphicsImageAccess()
         {
             vk::ImageHelper &image = textureVk->getImage();
 
-            // This is to handle the implicit layout transition in renderpass of this image,
+            // This is to handle the implicit layout transition in render pass of this image,
             // while it currently be bound and used by current compute program.
             if (mRenderPassCommands->startedAndUsesImageWithBarrier(image))
             {
