@@ -24,7 +24,9 @@ of a front-end OpenGL Context. ContextVk processes state changes and handles act
 
 ## Command recording
 
-The back-end records commands into command buffers via the following `ContextVk` APIs:
+A render pass has three states: `unstarted`, started and active (we call it `active` in short), started
+but inactive (we call it `inactive` in short). The back-end records commands
+into command buffers via the following `ContextVk` APIs:
 
  * `beginNewRenderPass`: Writes out (aka flushes) prior pending commands into a primary command
    buffer, then starts a new render pass. Returns a secondary command buffer *inside* a render pass
@@ -34,6 +36,9 @@ The back-end records commands into command buffers via the following `ContextVk`
    *outside* a render pass instance.
  * `getStartedRenderPassCommands`: Returns a reference to the currently open render pass' commands
    buffer.
+ * `onRenderPassFinished`: Puts render pass into inactive state where you can not record more commands into secondary command buffer,
+except in some special cases where ANGLE does some optimization internally.
+ * `flushCommandsAndEndRenderPassWithoutSubmit`: Marks the end of render pass. It flushes secondary command buffer into vulkan's primary command buffer, puts secondary command buffer back to unstarted state and then goes into recycler for reuse. 
 
 The back-end (mostly) records Image and Buffer barriers through additional `CommandBufferAccess`
 APIs, the result of which is passed to `getOutsideRenderPassCommandBuffer`.  Note that the
