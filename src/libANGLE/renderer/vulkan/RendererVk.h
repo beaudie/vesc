@@ -421,7 +421,6 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.isBusy();
@@ -446,7 +445,6 @@ class RendererVk : angle::NonCopyable
 
     angle::VulkanPerfCounters getCommandQueuePerfCounters()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.getPerfCounters();
@@ -458,7 +456,6 @@ class RendererVk : angle::NonCopyable
     }
     void resetCommandQueuePerFrameCounters()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             mCommandProcessor.resetPerFramePerfCounters();
@@ -892,7 +889,6 @@ class RendererVk : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
     // Synchronous Command Queue
-    std::mutex mCommandQueueMutex;
     vk::CommandQueue mCommandQueue;
 
     // Async Command Queue
