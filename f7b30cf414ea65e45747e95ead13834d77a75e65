@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebe07743_97a7d33c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-21T21:59:53Z",
+      "side": 1,
+      "message": "Is there any documentation on how we pick the values in `ImageMemoryBarrierData` struct?",
+      "revId": "f7b30cf414ea65e45747e95ead13834d77a75e65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
