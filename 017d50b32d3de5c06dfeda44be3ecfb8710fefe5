@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "65b680e0_406830d2",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T19:06:09Z",
+      "side": 1,
+      "message": "\u003eThere are negative tests for trying to use the EXT extension with ESSL 1.00; should they be expanded to the ANGLE version?\n\nThat would be a bonus, but I was asking for negative tests for **fragment** and **compute** shaders.",
+      "parentUuid": "fb1ec6a7_1490ac4a",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb2a6cc_60c6b8cb",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "This extension (like EXT) is defined only for ESSL 3.00 and newer.",
       "parentUuid": "cbb2a6cc_60c6b8cb",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb47c7f_6e40a94c",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T19:06:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9c469179_661dbfdc",
       "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
