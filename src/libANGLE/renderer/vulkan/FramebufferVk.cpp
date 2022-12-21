@@ -504,14 +504,10 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     bool clearDepthWithDraw   = clearDepth && scissoredClear;
     bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
 
-    const bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
-
+    const bool isMidRenderPassClear =
+        contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial);
     if (isMidRenderPassClear)
     {
-        // If a render pass is open with commands, it must be for this framebuffer.  Otherwise,
-        // either FramebufferVk::syncState() or ContextVk::syncState() would have closed it.
-        ASSERT(contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial));
-
         // Emit debug-util markers for this mid-render-pass clear
         ANGLE_TRY(
             contextVk->handleGraphicsEventLog(rx::GraphicsEventCmdBuf::InRenderPassCmdBufQueryCmd));
@@ -1295,11 +1291,6 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             // TODO(https://anglebug.com/7553): Look into optimization below in order to remove the
             //  check of whether the current framebuffer is valid.
             bool isCurrentFramebufferValid = srcFramebufferVk->mCurrentFramebuffer.valid();
-            if (isCurrentFramebufferValid)
-            {
-                contextVk->restoreFinishedRenderPass(
-                    srcFramebufferVk->getLastRenderPassQueueSerial());
-            }
 
             // glBlitFramebuffer() needs to copy the read color attachment to all enabled
             // attachments in the draw framebuffer, but Vulkan requires a 1:1 relationship for
