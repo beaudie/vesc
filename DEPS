@@ -173,7 +173,7 @@ deps = {
   },
 
   'buildtools/third_party/libc++/trunk': {
-    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@7b20455cbdf0891a6e5e2b66609b08c4f407ae5f',
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@18e086ee960ef4f3b60137f062a44a2c443fdd98',
     'condition': 'not build_with_chromium',
   },
 
@@ -569,7 +569,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/r8',
-              'version': 'vM6tt73p9rPzADct47R7euffv0M9LNSWw6zTyrPtGYgC',
+              'version': 'rDSbVtBAk4xjMfXeP01jnGyQlgxNpJJoAs8NmFeMvnAC',
           },
       ],
       'condition': 'checkout_android and not build_with_chromium',
@@ -650,7 +650,7 @@ deps = {
   },
 
   'tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@cab032b11ddc12804bf4ae8d71a6e0f88bc51ddb',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@a41f79ff519b5d86567c1acdb51ede3aa7901aed',
     'condition': 'not build_with_chromium',
   },
 
