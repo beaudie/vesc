@@ -56,6 +56,30 @@
       },
       "revId": "ff0b45e7d1aca2068869ba8ee9c81776f7ee57e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9fda171_cf41b812",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T03:40:37Z",
+      "side": 1,
+      "message": "Sort of. With VK_KHR_maintenance2, you can set layouts like depth-read-and-stencil-write. With VK_KHR_separate_depth_stencil_layout you can actually set the layout of one aspect without mentioning the other.\n\nIt ended up simpler to go with one layout that always references both aspects.",
+      "parentUuid": "66f023f8_3cb19cf0",
+      "range": {
+        "startLine": 1099,
+        "startChar": 96,
+        "endLine": 1099,
+        "endChar": 115
+      },
+      "revId": "ff0b45e7d1aca2068869ba8ee9c81776f7ee57e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
