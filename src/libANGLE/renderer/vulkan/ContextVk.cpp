@@ -725,10 +725,10 @@ void ContextVk::flushDescriptorSetUpdates()
 
 ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason)
 {
-    pauseRenderPassQueriesIfActive();
-
     if (mRenderPassCommandBuffer != nullptr)
     {
+        pauseRenderPassQueriesIfActive();
+
         // If reason is specified, add it to the command buffer right before ending the render pass,
         // so it will show up in GPU debuggers.
         const char *reasonText = kRenderPassClosureReason[reason];
@@ -736,9 +736,10 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
         {
             insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         }
+
+        mRenderPassCommandBuffer = nullptr;
     }
 
-    mRenderPassCommandBuffer = nullptr;
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
@@ -7082,7 +7083,7 @@ void ContextVk::restoreFinishedRenderPass(const QueueSerial &queueSerial)
         return;
     }
 
-    if (mRenderPassCommands->started() && mRenderPassCommands->getQueueSerial() == queueSerial)
+    if (hasStartedRenderPassWithQueueSerial(queueSerial))
     {
         // There is already a render pass open for this framebuffer, so just restore the
         // pointer rather than starting a whole new render pass. One possible path here
@@ -7490,11 +7491,7 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 
 void ContextVk::pauseRenderPassQueriesIfActive()
 {
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        return;
-    }
-
+    ASSERT(mRenderPassCommandBuffer);
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
         if (activeQuery)
@@ -7510,7 +7507,6 @@ void ContextVk::pauseRenderPassQueriesIfActive()
 angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 {
     ASSERT(mRenderPassCommandBuffer);
-
     // Note: these queries should be processed in order.  See comment in QueryVk::onRenderPassStart.
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
@@ -7538,7 +7534,6 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 angle::Result ContextVk::resumeXfbRenderPassQueriesIfActive()
 {
     ASSERT(mRenderPassCommandBuffer);
-
     // All other queries are handled separately.
     QueryVk *xfbQuery = mActiveRenderPassQueries[gl::QueryType::TransformFeedbackPrimitivesWritten];
     if (xfbQuery && mState.isTransformFeedbackActiveUnpaused())

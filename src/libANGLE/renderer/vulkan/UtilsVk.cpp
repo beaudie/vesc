@@ -2311,12 +2311,17 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         }
     }
 
-    // Make sure this draw call doesn't count towards occlusion query results.
-    contextVk->pauseRenderPassQueriesIfActive();
-
-    commandBuffer->draw(3, 0);
-    ANGLE_TRY(contextVk->resumeRenderPassQueriesIfActive());
-
+    if (contextVk->hasStartedRenderPass())
+    {
+        // Make sure this draw call doesn't count towards occlusion query results.
+        contextVk->pauseRenderPassQueriesIfActive();
+        commandBuffer->draw(3, 0);
+        ANGLE_TRY(contextVk->resumeRenderPassQueriesIfActive());
+    }
+    else
+    {
+        commandBuffer->draw(3, 0);
+    }
     // If transform feedback was active, we can't pause and resume it in the same render pass
     // because we can't insert a memory barrier for the counter buffers.  In that case, break the
     // render pass.
