@@ -597,7 +597,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool hasStartedRenderPassWithQueueSerial(const QueueSerial &queueSerial) const
     {
-        return hasStartedRenderPass() && mRenderPassCommands->getQueueSerial() == queueSerial;
+        return mRenderPassCommands->started() &&
+               mRenderPassCommands->getQueueSerial() == queueSerial;
     }
 
     bool isRenderPassStartedAndUsesBuffer(const vk::BufferHelper &buffer) const
@@ -612,7 +613,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool hasStartedRenderPassWithCommands() const
     {
-        return hasStartedRenderPass() && !mRenderPassCommands->getCommandBuffer().empty();
+        return mRenderPassCommands->started() && !mRenderPassCommands->getCommandBuffer().empty();
     }
 
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()

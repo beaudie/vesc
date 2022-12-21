@@ -7082,7 +7082,7 @@ void ContextVk::restoreFinishedRenderPass(const QueueSerial &queueSerial)
         return;
     }
 
-    if (mRenderPassCommands->started() && mRenderPassCommands->getQueueSerial() == queueSerial)
+    if (hasStartedRenderPassWithQueueSerial(queueSerial))
     {
         // There is already a render pass open for this framebuffer, so just restore the
         // pointer rather than starting a whole new render pass. One possible path here
