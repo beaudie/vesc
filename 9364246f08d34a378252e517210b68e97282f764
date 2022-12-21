@@ -16,6 +16,23 @@
       "message": "This CL is causing a compilation error on ios-simulator bot: https://crrev.com/c/4118974?tab\u003dchecks\n\n```\nFAILED: obj/third_party/angle/angle_common/apple_platform_utils.o\npython3 ../../build/toolchain/clang_code_coverage_wrapper.py --files-to-instrument\u003d../../.code-cover...(too long)\n../../third_party/angle/src/common/apple_platform_utils.mm:31:41: error: \u0027MTLCopyAllDevices\u0027 is unavailable: not available on iOS\nauto devices         \u003d [MTLCopyAllDevices() ANGLE_APPLE_AUTORELEASE];\n```",
       "revId": "9364246f08d34a378252e517210b68e97282f764",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84eea3a_df1ae3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-21T15:51:26Z",
+      "side": 1,
+      "message": "Let\u0027s revert this.\nFor reland, please test on ios-angle-try-intel trybot.\nAlso broke the CI:\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/ios-angle-builder/102785/overview",
+      "revId": "9364246f08d34a378252e517210b68e97282f764",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
