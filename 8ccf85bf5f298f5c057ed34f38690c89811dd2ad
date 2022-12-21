@@ -51,6 +51,24 @@
       "parentUuid": "d008d15e_03656b8a",
       "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "668becc9_8f493b89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:52:22Z",
+      "side": 1,
+      "message": "There you go, take a look at PS12. I put CompiledShaderState into its own lib (`angle_common_shader_state`), so `angle_common` stays what it is (and used by many targets), and `angle_common_shader_state` can be used by whoever needs it (currently only libANGLE. I presume later you\u0027d want to add this as a dependency of `angle_shader_translator`",
+      "parentUuid": "2c5772d4_7c8ec0b2",
+      "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
