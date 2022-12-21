@@ -46,6 +46,30 @@
       },
       "revId": "9b842c9d6b765a157546c59f63c1f0901563d456",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc9948ec_914111be",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T01:45:06Z",
+      "side": 1,
+      "message": "Right, you\u0027d know better at this point. I didn\u0027t mean to turn everything into a resource though, just that they could be associated with `mLastFlushedSerial` on release right away.",
+      "parentUuid": "36429ced_2069d39e",
+      "range": {
+        "startLine": 3283,
+        "startChar": 49,
+        "endLine": 3283,
+        "endChar": 64
+      },
+      "revId": "9b842c9d6b765a157546c59f63c1f0901563d456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
