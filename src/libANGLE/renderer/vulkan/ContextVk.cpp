@@ -725,10 +725,10 @@ void ContextVk::flushDescriptorSetUpdates()
 
 ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason)
 {
-    pauseRenderPassQueriesIfActive();
-
     if (mRenderPassCommandBuffer != nullptr)
     {
+        pauseRenderPassQueriesIfActive();
+
         // If reason is specified, add it to the command buffer right before ending the render pass,
         // so it will show up in GPU debuggers.
         const char *reasonText = kRenderPassClosureReason[reason];
@@ -736,9 +736,10 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
         {
             insertEventMarkerImpl(GL_DEBUG_SOURCE_API, reasonText);
         }
+
+        mRenderPassCommandBuffer = nullptr;
     }
 
-    mRenderPassCommandBuffer = nullptr;
     mGraphicsDirtyBits.set(DIRTY_BIT_RENDER_PASS);
 }
 
@@ -1273,7 +1274,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     const bool isSingleBuffer =
         mCurrentWindowSurface != nullptr && mCurrentWindowSurface->isSharedPresentMode();
 
-    if (!mHasAnyCommandsPendingSubmission && !hasStartedRenderPass() &&
+    if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
         mOutsideRenderPassCommands->empty() &&
         !(isSingleBuffer && mCurrentWindowSurface->hasStagedUpdates()))
     {
@@ -1282,7 +1283,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
     // Don't defer flushes in single-buffer mode.  In this mode, the application is not required to
     // call eglSwapBuffers(), and glFlush() is expected to ensure that work is submitted.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass() &&
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
         !isSingleBuffer)
     {
         mHasDeferredFlush = true;
@@ -1630,7 +1631,7 @@ bool ContextVk::renderPassUsesStorageResources() const
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
-    if (!hasStartedRenderPass())
+    if (!hasActiveRenderPass())
     {
         return false;
     }
@@ -2064,7 +2065,7 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
     UpdateDepthFeedbackLoopReason stencilReason)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-    if (!hasStartedRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
+    if (!hasActiveRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
     {
         return angle::Result::Continue;
     }
@@ -3007,7 +3008,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
             return angle::Result::Stop;
     }
 
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
     mRenderPassCommandBuffer->setFragmentShadingRate(&fragmentSize, shadingRateCombinerOp);
 
     return angle::Result::Continue;
@@ -4239,7 +4240,7 @@ void ContextVk::insertEventMarkerImpl(GLenum source, const char *marker)
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, marker, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->insertDebugUtilsLabelEXT(label);
     }
@@ -4282,7 +4283,7 @@ angle::Result ContextVk::pushDebugGroupImpl(GLenum source, GLuint id, const char
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->beginDebugUtilsLabelEXT(label);
     }
@@ -4301,7 +4302,7 @@ angle::Result ContextVk::popDebugGroupImpl()
         return angle::Result::Continue;
     }
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->endDebugUtilsLabelEXT();
     }
@@ -5936,7 +5937,7 @@ angle::Result ContextVk::onBeginTransformFeedback(
 
     bool shouldEndRenderPass = false;
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         // If any of the buffers were previously used in the render pass, break the render pass as a
         // barrier is needed.
@@ -6580,7 +6581,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
             // Special handling for deferred clears.
             ANGLE_TRY(drawFramebufferVk->flushDeferredClears(this));
 
-            if (hasStartedRenderPass())
+            if (hasActiveRenderPass())
             {
                 if (!textureVk->getImage().hasRenderPassUsageFlag(
                         vk::RenderPassUsage::ReadOnlyAttachment))
@@ -7065,32 +7066,12 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::startNextSubpass()
 {
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
 
     // The graphics pipelines are bound to a subpass, so update the subpass as well.
     mGraphicsPipelineDesc->nextSubpass(&mGraphicsPipelineTransition);
 
     return mRenderPassCommands->nextSubpass(this, &mRenderPassCommandBuffer);
-}
-
-void ContextVk::restoreFinishedRenderPass(const QueueSerial &queueSerial)
-{
-    if (mRenderPassCommandBuffer != nullptr)
-    {
-        // The render pass isn't finished yet, so nothing to restore.
-        return;
-    }
-
-    if (mRenderPassCommands->started() && mRenderPassCommands->getQueueSerial() == queueSerial)
-    {
-        // There is already a render pass open for this framebuffer, so just restore the
-        // pointer rather than starting a whole new render pass. One possible path here
-        // is if the draw framebuffer binding has changed from FBO A -> B -> A, without
-        // any commands that started a new render pass for FBO B (such as a clear being
-        // issued that was deferred).
-        mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
-        ASSERT(hasStartedRenderPass());
-    }
 }
 
 uint32_t ContextVk::getCurrentSubpassIndex() const
@@ -7489,11 +7470,7 @@ angle::Result ContextVk::endRenderPassQuery(QueryVk *queryVk)
 
 void ContextVk::pauseRenderPassQueriesIfActive()
 {
-    if (mRenderPassCommandBuffer == nullptr)
-    {
-        return;
-    }
-
+    ASSERT(mRenderPassCommandBuffer);
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
         if (activeQuery)
@@ -7509,7 +7486,6 @@ void ContextVk::pauseRenderPassQueriesIfActive()
 angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 {
     ASSERT(mRenderPassCommandBuffer);
-
     // Note: these queries should be processed in order.  See comment in QueryVk::onRenderPassStart.
     for (QueryVk *activeQuery : mActiveRenderPassQueries)
     {
@@ -7537,7 +7513,6 @@ angle::Result ContextVk::resumeRenderPassQueriesIfActive()
 angle::Result ContextVk::resumeXfbRenderPassQueriesIfActive()
 {
     ASSERT(mRenderPassCommandBuffer);
-
     // All other queries are handled separately.
     QueryVk *xfbQuery = mActiveRenderPassQueries[gl::QueryType::TransformFeedbackPrimitivesWritten];
     if (xfbQuery && mState.isTransformFeedbackActiveUnpaused())
