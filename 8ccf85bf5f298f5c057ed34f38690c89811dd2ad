@@ -33,6 +33,24 @@
       "message": "shabi - if PS9 is directionally correct, will go ahead with further work",
       "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c5772d4_7c8ec0b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:35:35Z",
+      "side": 1,
+      "message": "PS8 is ideal, I agree. I just built with that (+ the diff from PS9..11) and I see the issue. A lot of executables link with common, but only a few link with the translator. That can be fixed, give me a bit and I\u0027ll upload a new PS over this.",
+      "parentUuid": "d008d15e_03656b8a",
+      "revId": "8ccf85bf5f298f5c057ed34f38690c89811dd2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
