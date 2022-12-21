@@ -1295,11 +1295,6 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             // TODO(https://anglebug.com/7553): Look into optimization below in order to remove the
             //  check of whether the current framebuffer is valid.
             bool isCurrentFramebufferValid = srcFramebufferVk->mCurrentFramebuffer.valid();
-            if (isCurrentFramebufferValid)
-            {
-                contextVk->restoreFinishedRenderPass(
-                    srcFramebufferVk->getLastRenderPassQueueSerial());
-            }
 
             // glBlitFramebuffer() needs to copy the read color attachment to all enabled
             // attachments in the draw framebuffer, but Vulkan requires a 1:1 relationship for
