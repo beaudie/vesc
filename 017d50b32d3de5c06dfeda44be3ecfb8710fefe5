@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc532ba_0ab6ac1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-21T18:06:44Z",
+      "side": 1,
+      "message": "- This extension is supposed to be exposed to WebGL 2.0 / ESSL 3.00.\n- Clip and cull distances for ESSL 1.00 on Android / OpenGL ES are not possible.\n- The EXT extension requires supporting at least 8 cull distances, the APPLE extension is not implementable on Android.",
+      "parentUuid": "b49b2c83_a096d677",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0eca728d_1ba5be37",
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb1ec6a7_1490ac4a",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-21T18:06:44Z",
+      "side": 1,
+      "message": "The EXT extension is defined for VS, FS, GS, and TS. Only VS and FS support is currently implemented (Issue 5466).\n\nThere are negative tests for trying to use the EXT extension with ESSL 1.00; should they be expanded to the ANGLE version?",
+      "parentUuid": "143b4b95_f6df7906",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb2a6cc_60c6b8cb",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
@@ -65,6 +101,24 @@
       "writtenOn": "2022-12-21T17:24:14Z",
       "side": 1,
       "message": "Issue 7904 talks about ES 100 shaders, could you please make sure those shaders are tested?",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c469179_661dbfdc",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2488,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-21T18:06:44Z",
+      "side": 1,
+      "message": "This extension (like EXT) is defined only for ESSL 3.00 and newer.",
+      "parentUuid": "cbb2a6cc_60c6b8cb",
       "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
