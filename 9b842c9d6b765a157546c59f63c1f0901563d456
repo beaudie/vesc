@@ -22,6 +22,30 @@
       },
       "revId": "9b842c9d6b765a157546c59f63c1f0901563d456",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36429ced_2069d39e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3283,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-21T01:37:47Z",
+      "side": 1,
+      "message": "I had thought so too. But after looking at it more, I think mCurrentGarbage still has some value. It was mostly used for things that aren\u0027t a Resource tracked object. It is a bit tedious to convert all of them to Resource based object. The other thing is that mCurrentGarbage allows you to batch multiple garbages into one mUse tracked list, compare to each one has its own mUse. I don\u0027t dismiss the idea of get rid of mCurrentGarbage, something we should come back to it at some point.\n\nWill add a comment in next update.",
+      "parentUuid": "828868cc_86935b5e",
+      "range": {
+        "startLine": 3283,
+        "startChar": 49,
+        "endLine": 3283,
+        "endChar": 64
+      },
+      "revId": "9b842c9d6b765a157546c59f63c1f0901563d456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
