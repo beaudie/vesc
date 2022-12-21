@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b49b2c83_a096d677",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:24:14Z",
+      "side": 1,
+      "message": "What is the big picture here?\n\n- Is the goal to have one common extension to be exposed to WebGL?\n- How does this solve ESSL100 for Android?\n- If users have to adapt to cull distances \u003d\u003d 0 or not, can they not adapt to EXT or APPLE extension being available instead?",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eca728d_1ba5be37",
+        "filename": "extensions/ANGLE_clip_cull_distance.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:24:14Z",
+      "side": 1,
+      "message": "Please add your own name too 😊",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "143b4b95_f6df7906",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:24:14Z",
+      "side": 1,
+      "message": "Is this actually correct? Could you please add some `compiler_tests/` tests to make sure we don\u0027t accept clip/cull extension and symbols in fragment and compute shaders?",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb2a6cc_60c6b8cb",
+        "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-21T17:24:14Z",
+      "side": 1,
+      "message": "Issue 7904 talks about ES 100 shaders, could you please make sure those shaders are tested?",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
