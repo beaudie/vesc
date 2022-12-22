@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9342162_b2a8ac23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-22T19:33:00Z",
+      "side": 1,
+      "message": "There was bot failure here: https://chromium-swarm.appspot.com/task?id\u003d5f5406a77ac81610\nWe think it is due to this change. A CL to re-disable async pileine will be submitted bellow:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4120245",
+      "revId": "1a8bcbdae81c93a77fdf6848a4a26453cb9989f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
