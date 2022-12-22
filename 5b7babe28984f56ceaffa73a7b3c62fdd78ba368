@@ -22,6 +22,30 @@
       },
       "revId": "5b7babe28984f56ceaffa73a7b3c62fdd78ba368",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3476e1e_44340414",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-22T20:47:45Z",
+      "side": 1,
+      "message": "What I am seeing is that previously invalidate call after FBO blit does not apply stopOp optimization, due to the blit renderPass is inactive (hasStartedRenderPass returns false). After this CL, it now applies the storeOp optimization since the optimization applies as long as mReenderPassCommands.started() returns true, even if mRendePassCommandBuffer is null. Does that covers your bug? If not, lets leave your bug open and you can do more fix later.",
+      "parentUuid": "cfeb5c69_157247e6",
+      "range": {
+        "startLine": 19,
+        "startChar": 33,
+        "endLine": 19,
+        "endChar": 58
+      },
+      "revId": "5b7babe28984f56ceaffa73a7b3c62fdd78ba368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
