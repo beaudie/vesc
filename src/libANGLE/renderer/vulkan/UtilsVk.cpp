@@ -2311,7 +2311,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         }
     }
 
-    if (contextVk->hasStartedRenderPass())
+    if (contextVk->hasActiveRenderPass())
     {
         // Make sure this draw call doesn't count towards occlusion query results.
         contextVk->pauseRenderPassQueriesIfActive();
@@ -2444,7 +2444,7 @@ angle::Result UtilsVk::colorBlitResolve(ContextVk *contextVk,
     //
     // Note that depth/stencil views for blit are not derived from a ResourceVk object and are
     // retained differently.
-    ASSERT(!contextVk->hasStartedRenderPass());
+    ASSERT(!contextVk->hasActiveRenderPass());
 
     return blitResolveImpl(contextVk, framebuffer, src, srcView, nullptr, nullptr, params);
 }
@@ -2914,7 +2914,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     // open.  Otherwise, this function closes the render pass, which may incur a vkQueueSubmit and
     // then the views are used in a new command buffer without having been retained for it.
     // http://crbug.com/1272266#c22
-    ASSERT(!contextVk->hasStartedRenderPass());
+    ASSERT(!contextVk->hasActiveRenderPass());
 
     ANGLE_TRY(ensureImageCopyResourcesInitialized(contextVk));
 
