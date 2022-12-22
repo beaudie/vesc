@@ -33,6 +33,24 @@
       "message": "I didn\u0027t notice in my earlier review: When is this freed?",
       "revId": "34dc9d8e21ffe7d5a9df36fd3b2a13697b745cd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e396fe73_6566904a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T18:18:55Z",
+      "side": 1,
+      "message": "When the recycler is destroyed (done at surface destruction)",
+      "parentUuid": "eb4be987_f5477089",
+      "revId": "34dc9d8e21ffe7d5a9df36fd3b2a13697b745cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
