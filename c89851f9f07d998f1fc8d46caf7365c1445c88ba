@@ -33,6 +33,24 @@
       "message": "I have yet to write these tests, but with holidays coming up, I\u0027d appreciate the review happening in parallel.",
       "revId": "c89851f9f07d998f1fc8d46caf7365c1445c88ba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1545327a_46d53a15",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T21:08:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69666ff8_f434191f",
+      "revId": "c89851f9f07d998f1fc8d46caf7365c1445c88ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
