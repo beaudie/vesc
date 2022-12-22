@@ -1274,7 +1274,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     const bool isSingleBuffer =
         mCurrentWindowSurface != nullptr && mCurrentWindowSurface->isSharedPresentMode();
 
-    if (!mHasAnyCommandsPendingSubmission && !hasStartedRenderPass() &&
+    if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
         mOutsideRenderPassCommands->empty() &&
         !(isSingleBuffer && mCurrentWindowSurface->hasStagedUpdates()))
     {
@@ -1283,7 +1283,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
     // Don't defer flushes in single-buffer mode.  In this mode, the application is not required to
     // call eglSwapBuffers(), and glFlush() is expected to ensure that work is submitted.
-    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasStartedRenderPass() &&
+    if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
         !isSingleBuffer)
     {
         mHasDeferredFlush = true;
@@ -1631,7 +1631,7 @@ bool ContextVk::renderPassUsesStorageResources() const
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
-    if (!hasStartedRenderPass())
+    if (!hasActiveRenderPass())
     {
         return false;
     }
@@ -2065,7 +2065,7 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
     UpdateDepthFeedbackLoopReason stencilReason)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
-    if (!hasStartedRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
+    if (!hasActiveRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
     {
         return angle::Result::Continue;
     }
@@ -3008,7 +3008,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
             return angle::Result::Stop;
     }
 
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
     mRenderPassCommandBuffer->setFragmentShadingRate(&fragmentSize, shadingRateCombinerOp);
 
     return angle::Result::Continue;
@@ -4240,7 +4240,7 @@ void ContextVk::insertEventMarkerImpl(GLenum source, const char *marker)
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, marker, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->insertDebugUtilsLabelEXT(label);
     }
@@ -4283,7 +4283,7 @@ angle::Result ContextVk::pushDebugGroupImpl(GLenum source, GLuint id, const char
     VkDebugUtilsLabelEXT label;
     vk::MakeDebugUtilsLabel(source, message, &label);
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->beginDebugUtilsLabelEXT(label);
     }
@@ -4302,7 +4302,7 @@ angle::Result ContextVk::popDebugGroupImpl()
         return angle::Result::Continue;
     }
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         mRenderPassCommandBuffer->endDebugUtilsLabelEXT();
     }
@@ -5937,7 +5937,7 @@ angle::Result ContextVk::onBeginTransformFeedback(
 
     bool shouldEndRenderPass = false;
 
-    if (hasStartedRenderPass())
+    if (hasActiveRenderPass())
     {
         // If any of the buffers were previously used in the render pass, break the render pass as a
         // barrier is needed.
@@ -6581,7 +6581,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
             // Special handling for deferred clears.
             ANGLE_TRY(drawFramebufferVk->flushDeferredClears(this));
 
-            if (hasStartedRenderPass())
+            if (hasActiveRenderPass())
             {
                 if (!textureVk->getImage().hasRenderPassUsageFlag(
                         vk::RenderPassUsage::ReadOnlyAttachment))
@@ -7066,7 +7066,7 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
 
 angle::Result ContextVk::startNextSubpass()
 {
-    ASSERT(hasStartedRenderPass());
+    ASSERT(hasActiveRenderPass());
 
     // The graphics pipelines are bound to a subpass, so update the subpass as well.
     mGraphicsPipelineDesc->nextSubpass(&mGraphicsPipelineTransition);
