@@ -409,7 +409,7 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
     // glCopyTex[Sub]Image, shader storage image, etc).
     redeferClears(contextVk);
 
-    if (contextVk->hasStartedRenderPass() &&
+    if (contextVk->hasActiveRenderPass() &&
         rotatedInvalidateArea.encloses(contextVk->getStartedRenderPassCommands().getRenderArea()))
     {
         // Because the render pass's render area is within the invalidated area, it is fine for
@@ -592,7 +592,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         }
         else
         {
-            if (contextVk->hasStartedRenderPass())
+            if (contextVk->hasActiveRenderPass())
             {
                 // Typically, clears are deferred such that it's impossible to have a render pass
                 // opened without any additional commands recorded on it.  This is not true for some
@@ -652,7 +652,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
          clearDepthWithDraw || (clearStencilWithDraw && !maskedClearStencil)) &&
         !preferDrawOverClearAttachments)
     {
-        if (!contextVk->hasStartedRenderPass())
+        if (!contextVk->hasActiveRenderPass())
         {
             // Start a new render pass if necessary to record the commands.
             vk::RenderPassCommandBuffer *commandBuffer;
@@ -2594,7 +2594,7 @@ void FramebufferVk::redeferClears(ContextVk *contextVk)
     // exceptional occasion in blit where the read framebuffer accumulates deferred clears, it can
     // be deferred while this assumption doesn't hold (and redeferClearsForReadFramebuffer should be
     // used instead).
-    ASSERT(!contextVk->hasStartedRenderPass() || !mDeferredClears.any());
+    ASSERT(!contextVk->hasActiveRenderPass() || !mDeferredClears.any());
     redeferClearsImpl(contextVk);
 }
 
