@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baced4e1_20e811ff",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-22T23:02:45Z",
+      "side": 1,
+      "message": "I think I offered bad advice here. In the Metal sync-up meeting with Apple that we just had, Kyle from Apple said they were fixing a bug:\n\n\"Never create a RenderCommandEncoder for a draw call that will produce no operations.\"\n\nI have a feeling that creating and submitting an empty command buffer just for the purpose of calling waitUntilScheduled on it may cause additional problems.\n\nCould you try retaining the last submitted command buffer, and also keep track of whether waitUntilScheduled has been called against it?",
+      "revId": "2ac79575fdae05308e9e464614a036dd13c72452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
