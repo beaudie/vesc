@@ -1288,22 +1288,12 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
 
             // TODO(https://anglebug.com/4968): Support multiple open render passes so we can remove
             //  this hack to 'restore' the finished render pass.
-            // TODO(https://anglebug.com/7553): Look into optimization below in order to remove the
-            //  check of whether the current framebuffer is valid.
-            bool isCurrentFramebufferValid = srcFramebufferVk->mCurrentFramebuffer.valid();
-            if (isCurrentFramebufferValid)
-            {
-                contextVk->restoreFinishedRenderPass(
-                    srcFramebufferVk->getLastRenderPassQueueSerial());
-            }
-
             // glBlitFramebuffer() needs to copy the read color attachment to all enabled
             // attachments in the draw framebuffer, but Vulkan requires a 1:1 relationship for
             // multisample attachments to resolve attachments in the render pass subpass.  Due to
             // this, we currently only support using resolve attachments when there is a single draw
             // attachment enabled.
-            bool canResolveWithSubpass = isCurrentFramebufferValid &&
-                                         mState.getEnabledDrawBuffers().count() == 1 &&
+            bool canResolveWithSubpass = mState.getEnabledDrawBuffers().count() == 1 &&
                                          mCurrentFramebufferDesc.getLayerCount() == 1 &&
                                          contextVk->hasStartedRenderPassWithQueueSerial(
                                              srcFramebufferVk->getLastRenderPassQueueSerial());
