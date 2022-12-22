@@ -34,6 +34,24 @@
       "parentUuid": "c18be493_aa1fec52",
       "revId": "9ff34425fccc7a65106fde7974793fcecae53f7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d568a821_8831d4b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-22T20:12:03Z",
+      "side": 1,
+      "message": "I\u0027ve stopped https://chromium-swarm.appspot.com/bot?id\u003dluci-angle-try-bionic-8-10-d94d where your and mine failures happened. Hopefully only these 2 were bad. Feel free to stop the GCEs if you see this again. I think they\u0027ve got a bad cache or something.",
+      "parentUuid": "43cedf95_43c8d543",
+      "revId": "9ff34425fccc7a65106fde7974793fcecae53f7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
