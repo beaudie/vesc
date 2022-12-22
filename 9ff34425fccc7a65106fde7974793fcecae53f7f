@@ -16,6 +16,24 @@
       "message": "Strange, https://chromium-swarm.appspot.com/bot?id\u003dluci-angle-try-bionic-8-10-d94d seems to be bad, too.\nBut my local build succeeded on Linux.",
       "revId": "9ff34425fccc7a65106fde7974793fcecae53f7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43cedf95_43c8d543",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2022-12-22T19:56:26Z",
+      "side": 1,
+      "message": "I saw this Linux build failure yesterday on a swiftshader-to-ANGLE roll: https://crrev.com/c/4120234. However, the previous roll of the same 3 swiftshader CLs https://crrev.com/c/4118118 passed the Linux-Build compilation step (Linux-test failed on trace image comparison but the compilation step passed.)",
+      "parentUuid": "c18be493_aa1fec52",
+      "revId": "9ff34425fccc7a65106fde7974793fcecae53f7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
