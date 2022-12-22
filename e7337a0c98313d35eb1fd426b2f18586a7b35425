@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53ba976c_8246fa0b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T19:51:04Z",
+      "side": 1,
+      "message": "Oops, you\u0027re right, it should be PRESENT_MODE_INFO",
+      "parentUuid": "df7579f2_2301c24c",
+      "revId": "e7337a0c98313d35eb1fd426b2f18586a7b35425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0f5d5c8_60598f66",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
@@ -65,6 +83,24 @@
       "writtenOn": "2022-12-22T19:31:22Z",
       "side": 1,
       "message": "I don\u0027t see surfacePresentMode.pNext being set to nullptr.  Is this relying on `{}` setting it to nullptr?\n\nSame for compatibleModes.pNext below.",
+      "revId": "e7337a0c98313d35eb1fd426b2f18586a7b35425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf12e8a5_930d3267",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T19:51:04Z",
+      "side": 1,
+      "message": "Yes `{}` takes care of that.",
+      "parentUuid": "e0f5d5c8_60598f66",
       "revId": "e7337a0c98313d35eb1fd426b2f18586a7b35425",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -82,6 +118,30 @@
       "writtenOn": "2022-12-22T19:31:22Z",
       "side": 1,
       "message": "Why isn\u0027t this `mCompatiblePresentModes.size()`?",
+      "range": {
+        "startLine": 1457,
+        "startChar": 51,
+        "endLine": 1457,
+        "endChar": 83
+      },
+      "revId": "e7337a0c98313d35eb1fd426b2f18586a7b35425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16a7884_c8196b7a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T19:51:04Z",
+      "side": 1,
+      "message": "Just avoids a cast.",
+      "parentUuid": "764b9eea_2a8bbdf0",
       "range": {
         "startLine": 1457,
         "startChar": 51,
