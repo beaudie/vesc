@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae14c9d5_30c0a47f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-22T17:37:24Z",
+      "side": 1,
+      "message": "This is specifically the bug in OutsideRenderPassCommandBufferHelper::bufferRead() where I detect if a buffer is already read access in the RP and now try to read from outsideRPCommands. (See vk_helpers.cpp line 1465 on the right). The root cause is that if a RP is already called onRenderPassFinish, we will not detect that it has been readAccessed by RP. Image does not have the problem because we always endRP due to layout switch. bufferWrite does not have problem because read/write hazard detetcion will endRP and flush immediately. It is only a problem with buffer read from both RP and outsideRP.",
+      "parentUuid": "7be9316b_e7a9bbf4",
+      "revId": "d2ee1fd22add85d7c8a5457dcd51ebd50ab25872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89b34473_066f26db",
