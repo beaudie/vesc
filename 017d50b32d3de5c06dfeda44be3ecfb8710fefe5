@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fce0b466_a2562c0c",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-22T17:12:52Z",
+      "side": 1,
+      "message": "Just to confirm: new tests called like `IncorrectESSL310Shaders.EXTClipCullDistanceForComputeShaderCompileFailureTest/*` that try to read, write, or redeclare `gl_ClipDistance` and/or `gl_CullDistance`, right?",
+      "parentUuid": "27e9eda1_d752f1cd",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb2a6cc_60c6b8cb",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
