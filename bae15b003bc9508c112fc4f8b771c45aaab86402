@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a02bf94_e25d6df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-22T18:41:33Z",
+      "side": 1,
+      "message": "lgtm+2\n\nCC\u0027ing GPU and ANGLE wranglers, Jamie and Yuly as a heads up in case Chromium\u0027s bots break, or the ANGLE-\u003eChromium roll breaks.",
+      "revId": "bae15b003bc9508c112fc4f8b771c45aaab86402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
