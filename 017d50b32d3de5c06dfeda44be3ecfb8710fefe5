@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27e9eda1_d752f1cd",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-22T17:00:44Z",
+      "side": 1,
+      "message": "Thanks. For CS, perhaps something similar to `EXTClipCullDistanceForFragmentShaderCompileFailureTest` but for CS?",
+      "parentUuid": "bcfb040b_d5df362e",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cbb2a6cc_60c6b8cb",
         "filename": "src/tests/gl_tests/ClipDistanceTest.cpp",
         "patchSetId": 1
