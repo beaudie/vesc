@@ -5704,6 +5704,12 @@ void ImageHelper::destroy(RendererVk *renderer)
     setEntireContentUndefined();
 }
 
+void ImageHelper::updateAttributesForImageSiblingImage(VkImageCreateInfo &imageInfo)
+{
+    mUsage = imageInfo.usage;
+    deriveImageViewFormatFromCreateInfoPNext(imageInfo, mViewFormats);
+}
+
 void ImageHelper::init2DWeakReference(Context *context,
                                       VkImage handle,
                                       const gl::Extents &glExtents,

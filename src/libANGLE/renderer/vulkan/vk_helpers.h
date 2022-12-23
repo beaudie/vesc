@@ -1835,6 +1835,9 @@ class ImageHelper final : public Resource, public angle::Subject
                              angle::FormatID actualFormatID,
                              GLint samples,
                              bool isRobustResourceInitEnabled);
+
+    void updateAttributesForImageSiblingImage(VkImageCreateInfo &imageInfo);
+
     void resetImageWeakReference();
 
     const Image &getImage() const { return mImage; }
