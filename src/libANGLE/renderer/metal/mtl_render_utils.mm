@@ -501,7 +501,7 @@ int GetPixelTypeIndex(const angle::Format &angleFormat)
         return static_cast<int>(PixelType::Float);
     }
 }
-
+/*
 int GetBlitRenderPipelineCacheIndex(uint32_t nOutputIndex,
                                     int textureType,
                                     bool multiplyAlpha,
@@ -510,10 +510,9 @@ int GetBlitRenderPipelineCacheIndex(uint32_t nOutputIndex,
 {
     int index = 0;
 
-    index *= kMaxRenderTargets;
     index += nOutputIndex;
 
-    index *= mtl_shader::kTextureTypeCount;
+    index *= (mtl_shader::kTextureTypeCount+1);
     index += textureType;
 
     index *= 2;
@@ -527,7 +526,7 @@ int GetBlitRenderPipelineCacheIndex(uint32_t nOutputIndex,
 
     return index;
 }
-
+*/
 ANGLE_INLINE
 void EnsureComputePipelineInitialized(ContextMtl *context,
                                       NSString *functionName,
@@ -1428,7 +1427,7 @@ void ColorBlitUtils::onDestroy()
 
 void ColorBlitUtils::ensureRenderPipelineStateCacheInitialized(ContextMtl *ctx,
                                                                uint32_t numOutputs,
-                                                               bool multiplyAlpha,
+                                                               bool premultiplyAlpha,
                                                                bool unmultiplyAlpha,
                                                                bool xformLinearToSrgb,
                                                                int textureType,
@@ -1451,7 +1450,11 @@ void ColorBlitUtils::ensureRenderPipelineStateCacheInitialized(ContextMtl *ctx,
             [[[MTLFunctionConstantValues alloc] init] ANGLE_MTL_AUTORELEASE];
 
         // Set alpha multiply flags
-        [funcConstants setConstantValue:&multiplyAlpha
+        if (premultiplyAlpha == unmultiplyAlpha && !xformLinearToSrgb)
+        {
+            premultiplyAlpha = unmultiplyAlpha = false;
+        }
+        [funcConstants setConstantValue:&premultiplyAlpha
                                    type:MTLDataTypeBool
                                withName:PREMULTIPLY_ALPHA_CONSTANT_NAME];
         [funcConstants setConstantValue:&unmultiplyAlpha
@@ -1505,10 +1508,21 @@ id<MTLRenderPipelineState> ColorBlitUtils::getColorBlitRenderPipelineState(
     RenderPipelineCache *pipelineCache;
     uint32_t nOutputIndex = renderPassDesc.numColorAttachments - 1;
     int textureType       = GetShaderTextureType(params.src);
-    const int cacheIndex =
-        GetBlitRenderPipelineCacheIndex(nOutputIndex, textureType, params.unpackPremultiplyAlpha,
-                                        params.unpackUnmultiplyAlpha, params.xformLinearToSrgb);
-    pipelineCache = &mBlitRenderPipelineCache[cacheIndex];
+
+    // Compute the cache index from the parameters.
+    {
+        int index = 0;
+        index += nOutputIndex;
+        index *= (mtl_shader::kTextureTypeCount + 1);
+        index += textureType;
+        pipelineCache = &mBlitRenderPipelineCache[index];
+        index *= 2;
+        index += params.unpackPremultiplyAlpha;
+        index *= 2;
+        index += params.unpackUnmultiplyAlpha;
+        index *= 2;
+        index += params.xformLinearToSrgb;
+    }
 
     ensureRenderPipelineStateCacheInitialized(
         contextMtl, renderPassDesc.numColorAttachments, params.unpackPremultiplyAlpha,
