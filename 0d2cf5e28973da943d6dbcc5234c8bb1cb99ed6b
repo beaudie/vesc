@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6f08a6c_241d1990",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T18:25:03Z",
+      "side": 1,
+      "message": "Did you `gclient sync`? And if you are developing from within Chromium, make sure to add this to `gclient`:\n\n```\n    \"custom_deps\": {\n      \"src/third_party/angle\": None,\n    },\n```",
+      "parentUuid": "689d4c05_d5a4849b",
+      "revId": "0d2cf5e28973da943d6dbcc5234c8bb1cb99ed6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f6c4fc6_09bee054",
