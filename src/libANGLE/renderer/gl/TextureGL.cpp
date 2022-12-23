@@ -1006,6 +1006,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
 
     const gl::InternalFormat &sourceFormatInfo = *sourceImageDesc.format.info;
     GLenum sourceFormat                        = sourceFormatInfo.format;
+    bool sourceSRGB                            = sourceFormatInfo.colorEncoding == GL_SRGB;
     bool sourceFormatContainSupersetOfDestFormat =
         (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
         (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
@@ -1040,7 +1041,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
             context, sourceGL, sourceLevel, sourceComponentType, mTextureID, target, level,
             destComponentType, sourceImageDesc.size, sourceArea, destOffset, needsLumaWorkaround,
             sourceLevelInfo.sourceFormat, unpackFlipY, unpackPremultiplyAlpha,
-            unpackUnmultiplyAlpha, &copySucceeded));
+            unpackUnmultiplyAlpha, sourceSRGB, &copySucceeded));
         if (copySucceeded)
         {
             return angle::Result::Continue;
