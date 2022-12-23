@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689d4c05_d5a4849b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2022-12-23T14:27:48Z",
+      "side": 1,
+      "message": "PTAL. My local build somehow can\u0027t get the shader auto-generation code to satisfy presubmit, so I may as someone from Angle to take this over.\n\n(Also, once all backends handle this, we can add an sRGB source to CopyTextureVariationsTest).",
+      "revId": "0d2cf5e28973da943d6dbcc5234c8bb1cb99ed6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f6c4fc6_09bee054",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2022-12-23T14:27:48Z",
+      "side": 1,
+      "message": "Time will come that this should become a map.\n\nChrome\u0027s GLRenderer went down a similar path of a bunch-o-arrays. This is how far that got before an intervention was needed (look at the bottom of the diff)\nhttps://codereview.chromium.org/2613903002/diff/60001/cc/output/gl_renderer.h",
+      "revId": "0d2cf5e28973da943d6dbcc5234c8bb1cb99ed6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
