@@ -5407,6 +5407,12 @@ const void *ImageHelper::DeriveCreateInfoPNext(
     return pNext;
 }
 
+void ImageHelper::setImageFormatsFromActualFormat(VkFormat actualFormat,
+                                                  ImageFormats &imageFormatsOut)
+{
+    imageFormatsOut[0] = actualFormat;
+}
+
 void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &imageInfo,
                                                            ImageFormats &formatOut)
 {
@@ -5430,7 +5436,7 @@ void ImageHelper::deriveImageViewFormatFromCreateInfoPNext(VkImageCreateInfo &im
     }
     else
     {
-        formatOut[0] = imageInfo.format;
+        setImageFormatsFromActualFormat(imageInfo.format, formatOut);
     }
 }
 
@@ -5857,6 +5863,7 @@ void ImageHelper::init2DWeakReference(Context *context,
                                       bool rotatedAspectRatio,
                                       angle::FormatID intendedFormatID,
                                       angle::FormatID actualFormatID,
+                                      VkImageUsageFlags usage,
                                       GLint samples,
                                       bool isRobustResourceInitEnabled)
 {
@@ -5868,12 +5875,18 @@ void ImageHelper::init2DWeakReference(Context *context,
     mRotatedAspectRatio = rotatedAspectRatio;
     mIntendedFormatID   = intendedFormatID;
     mActualFormatID     = actualFormatID;
+    mUsage              = usage;
     mSamples            = std::max(samples, 1);
     mImageSerial        = context->getRenderer()->getResourceSerialFactory().generateImageSerial();
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
     mCurrentLayout           = ImageLayout::Undefined;
     mLayerCount              = 1;
     mLevelCount              = 1;
+
+    // The view formats and usage flags are used for imageless framebuffers. Here, the former is set
+    // similar to deriveImageViewFormatFromCreateInfoPNext() when there is no pNext from a
+    // VkImageCreateInfo object.
+    setImageFormatsFromActualFormat(GetVkFormatFromFormatID(actualFormatID), mViewFormats);
 
     mImage.setHandle(handle);
 
