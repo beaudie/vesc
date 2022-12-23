@@ -214,6 +214,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe0f004_8b29500c",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:37:17Z",
+      "side": 1,
+      "message": "Yeap, thanks for adding the tests.",
+      "parentUuid": "167581d4_a349aeae",
+      "revId": "017d50b32d3de5c06dfeda44be3ecfb8710fefe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbb2a6cc_60c6b8cb",
