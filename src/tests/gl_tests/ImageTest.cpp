@@ -43,9 +43,9 @@ constexpr char kEGLImageArrayExt[]               = "GL_EXT_EGL_image_array";
 constexpr char kEGLAndroidImageNativeBufferExt[] = "EGL_ANDROID_image_native_buffer";
 constexpr char kEGLImageStorageExt[]             = "GL_EXT_EGL_image_storage";
 constexpr EGLint kDefaultAttribs[]               = {
-                  EGL_IMAGE_PRESERVED,
-                  EGL_TRUE,
-                  EGL_NONE,
+    EGL_IMAGE_PRESERVED,
+    EGL_TRUE,
+    EGL_NONE,
 };
 constexpr EGLint kColorspaceAttribs[] = {
     EGL_IMAGE_PRESERVED, EGL_TRUE, EGL_GL_COLORSPACE, EGL_GL_COLORSPACE_SRGB_KHR, EGL_NONE,
@@ -3022,7 +3022,7 @@ TEST_P(ImageTest, SourceYUVAHBTargetExternalRGBSampleInitData)
     ANGLE_SKIP_TEST_IF(IsPixel2() || IsPixel2XL());
 
     // 3 planes of data
-    GLubyte dataY[4] = {7, 51, 197, 231};
+    GLubyte dataY[4]  = {7, 51, 197, 231};
     GLubyte dataCb[1] = {
         128,
     };
@@ -3106,7 +3106,7 @@ TEST_P(ImageTestES3, SourceYUVAHBTargetExternalYUVSample)
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
     // 3 planes of data
-    GLubyte dataY[4] = {7, 51, 197, 231};
+    GLubyte dataY[4]  = {7, 51, 197, 231};
     GLubyte dataCb[1] = {
         128,
     };
@@ -3221,7 +3221,7 @@ TEST_P(ImageTestES3, RenderToYUVAHB)
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
     // 3 planes of data, initialize to all zeroes
-    GLubyte dataY[4] = {0, 0, 0, 0};
+    GLubyte dataY[4]  = {0, 0, 0, 0};
     GLubyte dataCb[1] = {
         0,
     };
@@ -3262,7 +3262,7 @@ TEST_P(ImageTestES3, RenderToYUVAHB)
     // Finish before reading back AHB data
     glFinish();
 
-    GLubyte expectedDataY[4] = {drawColor[0], drawColor[0], drawColor[0], drawColor[0]};
+    GLubyte expectedDataY[4]  = {drawColor[0], drawColor[0], drawColor[0], drawColor[0]};
     GLubyte expectedDataCb[1] = {
         drawColor[1],
     };
@@ -3321,6 +3321,53 @@ TEST_P(ImageTestES3, ClearYUVAHB)
 }
 
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+// Test glDraw + glFlush on FBO with AHB attachment is applied to the AHB image before we read back
+TEST_P(ImageTestES3, AHBDrawFlushAppliedBeforeReadBack)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // Create a GLTexture backed by the AHB.
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+    const GLubyte kBlack[] = {0, 0, 0, 0};
+    const GLubyte kRed[]   = {255, 0, 0, 255};
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                              kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
+                                              &ahb, &ahbImage);
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    // Create one framebuffer backed by the AHB-based GLTexture
+    GLFramebuffer ahbFbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, ahbFbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ahbTexture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Clear the FBO to black
+    glClearColor(kBlack[0], kBlack[1], kBlack[2], kBlack[3]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFinish();
+
+    // Draw to the FBO
+    ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+    glUseProgram(drawColor);
+    GLint colorUniformLocation =
+        glGetUniformLocation(drawColor, angle::essl1_shaders::ColorUniform());
+    ASSERT_NE(colorUniformLocation, -1);
+
+    glUniform4f(colorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
+    drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.5f);
+
+    glFlush();
+
+    // Verify the result
+    verifyResults2D(ahbTexture, kRed);
+    verifyResultAHB(ahb, {{kRed, 4}});
+
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
 
 // Test glClear on FBO with AHB attachment is applied to the AHB image before we read back
 TEST_P(ImageTestES3, AHBClearAppliedBeforeReadBack)
