@@ -692,7 +692,8 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
                                                     unpackPremultiplyAlpha));
         ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation,
                                                     unpackUnmultiplyAlpha));
-        ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->xformLinearToSrgbLocation, xformLinearToSrgb));
+        ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->xformLinearToSrgbLocation,
+                                                    xformLinearToSrgb));
     }
 
     ANGLE_TRY(setVAOState(context));
@@ -1548,7 +1549,6 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             // Sampling code depends on the input data type
             fsSourceStream << "    " << samplerResultType << " color = " << sampleFunction
                            << "(u_source_texture, v_texcoord);\n";
-
 
             // Perform unmultiply-alpha if requested.
             fsSourceStream << "    if (u_unmultiply_alpha && color.a != 0.0)\n";
