@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c63f8b3_f6c1fc25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-23T18:12:27Z",
+      "side": 1,
+      "message": "PTAL, broken here:\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/ios-angle-intel/17624/overview",
+      "revId": "a91960406ff1d455fe91242084648830adcd5bdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
