@@ -46,6 +46,30 @@
       },
       "revId": "5b7babe28984f56ceaffa73a7b3c62fdd78ba368",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9faabb81_68187e41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "It\u0027s a bit more complicated than that. Your change helps `FramebufferVk::invalidateImpl` modify the RP of the inactive render pass, but there is `Framebuffer::resolveColorWithSubpass` that forcefully flushes the render pass which needs to be removed (and then ensured there\u0027s no re-resolve possible). So yeah, this CL is not enough, just wanted to point out there\u0027s a real missed opportunity here that your CL is helping towards.\n\nYou may just want to tag the issue in your commit message.",
+      "parentUuid": "d3476e1e_44340414",
+      "range": {
+        "startLine": 19,
+        "startChar": 33,
+        "endLine": 19,
+        "endChar": 58
+      },
+      "revId": "5b7babe28984f56ceaffa73a7b3c62fdd78ba368",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

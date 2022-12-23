@@ -3,6 +3,109 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd8e7b9e_070176c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "Could you please add this definition to vulkan/README.md under `## Command recording`?",
+      "range": {
+        "startLine": 17,
+        "startChar": 27,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a62a069a_6a4b3008",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "nit: suggest `hasActiveRenderPass()` in these ASSERTs to make it clearer (by using the active terminology)",
+      "range": {
+        "startLine": 7488,
+        "startChar": 11,
+        "endLine": 7488,
+        "endChar": 35
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d201ce89_f5da4cc3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "nit: render pass, not renderpass",
+      "range": {
+        "startLine": 595,
+        "startChar": 28,
+        "endLine": 595,
+        "endChar": 38
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c542fc4a_13845f79",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "This looks like a bug. If we reach here with an open render pass with commands in it, and that render pass is _not_ for this framebuffer, it\u0027s a big problem.",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "560c7785_32b154ae",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-23T04:35:49Z",
+      "side": 1,
+      "message": "This is always true at this point, you can ASSERT it. After all, we _are_ drawing into a render pass right here.",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a57b3de_665696fa",
         "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
         "patchSetId": 9
