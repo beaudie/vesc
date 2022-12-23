@@ -259,5 +259,5 @@ enum
 
 }
 
-}  // namespace mtl_shader
-}  // namespace rx
+}
+}
