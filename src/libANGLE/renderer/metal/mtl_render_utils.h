@@ -96,6 +96,7 @@ struct ColorBlitParams : public BlitParams
     bool unpackPremultiplyAlpha = false;
     bool unpackUnmultiplyAlpha  = false;
     bool dstLuminance           = false;
+    bool xformLinearToSrgb      = false;
 };
 
 struct DepthStencilBlitParams : public BlitParams
@@ -240,7 +241,9 @@ class ColorBlitUtils final : angle::NonCopyable
   private:
     void ensureRenderPipelineStateCacheInitialized(ContextMtl *ctx,
                                                    uint32_t numColorAttachments,
-                                                   int alphaPremultiplyType,
+                                                   bool premultiplyAlpha,
+                                                   bool unmultiplyAlpha,
+                                                   bool xformLinearToSrgb,
                                                    int sourceTextureType,
                                                    RenderPipelineCache *cacheOut);
 
@@ -254,15 +257,16 @@ class ColorBlitUtils final : angle::NonCopyable
 
     const std::string mFragmentShaderName;
 
-    // Blit with draw pipeline caches:
+    // Blit with draw pipeline caches. Index is a flattening of the following array.
     // First array dimension: number of outputs.
     // Second array dimension: source texture type (2d, ms, array, 3d, etc)
+    // Third array dimension: premultiply alpha
+    // Fourth array dimension: unmultiply alpha
+    // Fifth array dimension: unmultiply alpha
     using ColorBlitRenderPipelineCacheArray =
-        std::array<std::array<RenderPipelineCache, mtl_shader::kTextureTypeCount>,
-                   kMaxRenderTargets>;
+        std::array<RenderPipelineCache,
+                   (mtl_shader::kTextureTypeCount + 1) * (kMaxRenderTargets + 1) * 2 * 2 * 2>;
     ColorBlitRenderPipelineCacheArray mBlitRenderPipelineCache;
-    ColorBlitRenderPipelineCacheArray mBlitPremultiplyAlphaRenderPipelineCache;
-    ColorBlitRenderPipelineCacheArray mBlitUnmultiplyAlphaRenderPipelineCache;
 };
 
 class DepthStencilBlitUtils final : angle::NonCopyable
