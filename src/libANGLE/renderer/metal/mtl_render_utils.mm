@@ -36,6 +36,7 @@ namespace
 #define UNMULTIPLY_ALPHA_CONSTANT_NAME @"kUnmultiplyAlpha"
 #define SOURCE_TEXTURE_TYPE_CONSTANT_NAME @"kSourceTextureType"
 #define SOURCE_TEXTURE2_TYPE_CONSTANT_NAME @"kSourceTexture2Type"
+#define LINEAR_TO_SRGB_XFORM_CONSTANT_NAME @"kLinearToSrgbXform"
 #define COPY_FORMAT_TYPE_CONSTANT_NAME @"kCopyFormatType"
 #define PIXEL_COPY_TEXTURE_TYPE_CONSTANT_NAME @"kCopyTextureType"
 #define VISIBILITY_RESULT_KEEP_OLD_VAL_CONSTANT_NAME @"kCombineWithExistingResult"
@@ -500,7 +501,32 @@ int GetPixelTypeIndex(const angle::Format &angleFormat)
         return static_cast<int>(PixelType::Float);
     }
 }
+/*
+int GetBlitRenderPipelineCacheIndex(uint32_t nOutputIndex,
+                                    int textureType,
+                                    bool multiplyAlpha,
+                                    bool unmultiplyAlpha,
+                                    bool xformLinearToSRGB)
+{
+    int index = 0;
 
+    index += nOutputIndex;
+
+    index *= (mtl_shader::kTextureTypeCount+1);
+    index += textureType;
+
+    index *= 2;
+    index += multiplyAlpha;
+
+    index *= 2;
+    index += unmultiplyAlpha;
+
+    index *= 2;
+    index += xformLinearToSRGB;
+
+    return index;
+}
+*/
 ANGLE_INLINE
 void EnsureComputePipelineInitialized(ContextMtl *context,
                                       NSString *functionName,
@@ -1396,14 +1422,14 @@ ColorBlitUtils::ColorBlitUtils(const ColorBlitUtils &src) : ColorBlitUtils(src.m
 
 void ColorBlitUtils::onDestroy()
 {
-    ClearRenderPipelineCache2DArray(&mBlitRenderPipelineCache);
-    ClearRenderPipelineCache2DArray(&mBlitPremultiplyAlphaRenderPipelineCache);
-    ClearRenderPipelineCache2DArray(&mBlitUnmultiplyAlphaRenderPipelineCache);
+    ClearRenderPipelineCacheArray(&mBlitRenderPipelineCache);
 }
 
 void ColorBlitUtils::ensureRenderPipelineStateCacheInitialized(ContextMtl *ctx,
                                                                uint32_t numOutputs,
-                                                               int alphaPremultiplyType,
+                                                               bool premultiplyAlpha,
+                                                               bool unmultiplyAlpha,
+                                                               bool xformLinearToSrgb,
                                                                int textureType,
                                                                RenderPipelineCache *cacheOut)
 {
@@ -1423,22 +1449,22 @@ void ColorBlitUtils::ensureRenderPipelineStateCacheInitialized(ContextMtl *ctx,
         MTLFunctionConstantValues *funcConstants =
             [[[MTLFunctionConstantValues alloc] init] ANGLE_MTL_AUTORELEASE];
 
-        constexpr BOOL multiplyAlphaFlags[][2] = {// premultiply, unmultiply
-
-                                                  // Normal blit
-                                                  {NO, NO},
-                                                  // Blit premultiply-alpha
-                                                  {YES, NO},
-                                                  // Blit unmultiply alpha
-                                                  {NO, YES}};
-
         // Set alpha multiply flags
-        [funcConstants setConstantValue:&multiplyAlphaFlags[alphaPremultiplyType][0]
+        if (premultiplyAlpha == unmultiplyAlpha && !xformLinearToSrgb)
+        {
+            premultiplyAlpha = unmultiplyAlpha = false;
+        }
+        [funcConstants setConstantValue:&premultiplyAlpha
                                    type:MTLDataTypeBool
                                withName:PREMULTIPLY_ALPHA_CONSTANT_NAME];
-        [funcConstants setConstantValue:&multiplyAlphaFlags[alphaPremultiplyType][1]
+        [funcConstants setConstantValue:&unmultiplyAlpha
                                    type:MTLDataTypeBool
                                withName:UNMULTIPLY_ALPHA_CONSTANT_NAME];
+
+        // Set sRGB to linear transform
+        [funcConstants setConstantValue:&xformLinearToSrgb
+                                   type:MTLDataTypeBool
+                               withName:LINEAR_TO_SRGB_XFORM_CONSTANT_NAME];
 
         // We create blit shader pipeline cache for each number of color outputs.
         // So blit k color outputs will use mBlitRenderPipelineCache[k-1] for example:
@@ -1480,27 +1506,27 @@ id<MTLRenderPipelineState> ColorBlitUtils::getColorBlitRenderPipelineState(
     pipelineDesc.inputPrimitiveTopology = kPrimitiveTopologyClassTriangle;
 
     RenderPipelineCache *pipelineCache;
-    int alphaPremultiplyType;
     uint32_t nOutputIndex = renderPassDesc.numColorAttachments - 1;
     int textureType       = GetShaderTextureType(params.src);
-    if (params.unpackPremultiplyAlpha == params.unpackUnmultiplyAlpha)
+
+    // Compute the cache index from the parameters.
     {
-        alphaPremultiplyType = 0;
-        pipelineCache        = &mBlitRenderPipelineCache[nOutputIndex][textureType];
-    }
-    else if (params.unpackPremultiplyAlpha)
-    {
-        alphaPremultiplyType = 1;
-        pipelineCache        = &mBlitPremultiplyAlphaRenderPipelineCache[nOutputIndex][textureType];
-    }
-    else
-    {
-        alphaPremultiplyType = 2;
-        pipelineCache        = &mBlitUnmultiplyAlphaRenderPipelineCache[nOutputIndex][textureType];
+        int index = 0;
+        index += nOutputIndex;
+        index *= (mtl_shader::kTextureTypeCount + 1);
+        index += textureType;
+        pipelineCache = &mBlitRenderPipelineCache[index];
+        index *= 2;
+        index += params.unpackPremultiplyAlpha;
+        index *= 2;
+        index += params.unpackUnmultiplyAlpha;
+        index *= 2;
+        index += params.xformLinearToSrgb;
     }
 
-    ensureRenderPipelineStateCacheInitialized(contextMtl, renderPassDesc.numColorAttachments,
-                                              alphaPremultiplyType, textureType, pipelineCache);
+    ensureRenderPipelineStateCacheInitialized(
+        contextMtl, renderPassDesc.numColorAttachments, params.unpackPremultiplyAlpha,
+        params.unpackUnmultiplyAlpha, params.xformLinearToSrgb, textureType, pipelineCache);
 
     return pipelineCache->getRenderPipelineState(contextMtl, pipelineDesc);
 }
