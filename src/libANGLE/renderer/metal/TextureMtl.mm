@@ -2361,6 +2361,7 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
     blitParams.unpackFlipY            = unpackFlipY;
     blitParams.unpackPremultiplyAlpha = unpackPremultiplyAlpha;
     blitParams.unpackUnmultiplyAlpha  = unpackUnmultiplyAlpha;
+    blitParams.xformLinearToSrgb      = sourceAngleFormat.isSRGB;
 
     return displayMtl->getUtils().copyTextureWithDraw(context, cmdEncoder, sourceAngleFormat,
                                                       mFormat.actualAngleFormat(), blitParams);
