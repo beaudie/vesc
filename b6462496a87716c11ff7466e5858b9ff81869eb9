@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5d74ce_3dcfd59a",
+        "filename": "src/common/apple_platform_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2022-12-23T05:27:28Z",
+      "side": 1,
+      "message": "The presubmission check wanted the code formatted like this, even though I\u0027d prefer the _Pragma\u0027s to be aligned.",
+      "range": {
+        "startLine": 87,
+        "startChar": 1,
+        "endLine": 88,
+        "endChar": 75
+      },
+      "revId": "b6462496a87716c11ff7466e5858b9ff81869eb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
