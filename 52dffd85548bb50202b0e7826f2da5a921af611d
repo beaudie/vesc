@@ -34,6 +34,41 @@
       "parentUuid": "0d03de4a_59598698",
       "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4aa9284_dd29ffd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-12-24T16:17:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b347dafd_9b5cde1f",
+      "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e36a74_274120bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-12-24T16:17:13Z",
+      "side": 1,
+      "message": "Awesome, Thanks Alexey!",
+      "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
