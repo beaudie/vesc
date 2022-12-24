@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d03de4a_59598698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2022-12-24T15:51:56Z",
+      "side": 1,
+      "message": "A few questions for you:\n1) What happens to unused clip distance varyings? Are they removed before the final pass?\n2) Does that allow skipping? I.e. using clip planes 0, 4, 6 without exporting varyings for all of them?\n---\nI\u0027m a little concerned about the total number of exported varyings. Can we still export up to MAX_VARYING_VECTORS when using clip distance? If not, how limited are we?",
+      "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
