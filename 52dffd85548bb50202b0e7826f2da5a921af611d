@@ -16,6 +16,24 @@
       "message": "A few questions for you:\n1) What happens to unused clip distance varyings? Are they removed before the final pass?\n2) Does that allow skipping? I.e. using clip planes 0, 4, 6 without exporting varyings for all of them?\n---\nI\u0027m a little concerned about the total number of exported varyings. Can we still export up to MAX_VARYING_VECTORS when using clip distance? If not, how limited are we?",
       "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b347dafd_9b5cde1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2022-12-24T16:04:22Z",
+      "side": 1,
+      "message": "The GL specs for this feature cover these questions:\n\n\u003e The `gl_ClipDistance` array is predeclared as unsized and must be explicitly sized by the shader either redeclaring it with a size or implicitly sized by indexing it only with constant integral expressions.\n\n\u003e The number of varying components (see `gl_MaxVaryingComponents`) consumed by `gl_ClipDistance` will match the size of the array, no matter how many planes are enabled.\n\nThe number of varyings added by the translator will match the array size. An application that uses planes `[0, 4, 6]` should expect that 7 varying slots will be taken.",
+      "parentUuid": "0d03de4a_59598698",
+      "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
