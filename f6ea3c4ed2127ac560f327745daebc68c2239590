@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9af74d6_9a88a0cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-24T01:43:00Z",
+      "side": 1,
+      "message": "Thanks for the fixes.\n\nDo these fix tests? If so, please unsuppress. Otherwise, please add tests to `src/tests/gl_tests/CopyTextureTest.cpp`",
+      "revId": "f6ea3c4ed2127ac560f327745daebc68c2239590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b158025_c7a908af",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-24T01:43:00Z",
+      "side": 1,
+      "message": "nit: `transform`. The few letters saved is not worth the sacrifice in readability.",
+      "range": {
+        "startLine": 111,
+        "startChar": 38,
+        "endLine": 111,
+        "endChar": 43
+      },
+      "revId": "f6ea3c4ed2127ac560f327745daebc68c2239590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cda67ac_c2f33b16",
+        "filename": "src/libANGLE/renderer/metal/shaders/blit.metal",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2022-12-24T01:43:00Z",
+      "side": 1,
+      "message": "!",
+      "range": {
+        "startLine": 149,
+        "startChar": 42,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "f6ea3c4ed2127ac560f327745daebc68c2239590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
