@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ab3eab6_f1dd78fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2022-12-27T19:06:12Z",
+      "side": 1,
+      "message": "PTAL, fails properly now.\nhttps://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/84/overview\nvs\nhttps://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/83/overview",
+      "revId": "9357d5e72d800ee2d4a87cba62837972346afcfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
