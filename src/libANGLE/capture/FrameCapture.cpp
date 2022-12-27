@@ -4366,6 +4366,7 @@ void CaptureShareGroupMidExecutionSetup(
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
         replayState.setUnpackAlignment(savedUnpackAlignment);
+        context->pixelStorei(GL_UNPACK_ALIGNMENT, savedUnpackAlignment);
     }
 }
 
