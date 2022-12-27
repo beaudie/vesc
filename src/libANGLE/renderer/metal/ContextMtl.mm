@@ -1528,6 +1528,7 @@ angle::Result ContextMtl::dispatchComputeIndirect(const gl::Context *context, GL
 
 angle::Result ContextMtl::memoryBarrier(const gl::Context *context, GLbitfield barriers)
 {
+#if defined(__MAC_10_14) && (TARGET_OS_OSX || TARGET_OS_MACCATALYST)
     if (barriers == 0)
     {
         return angle::Result::Continue;
@@ -1576,6 +1577,10 @@ angle::Result ContextMtl::memoryBarrier(const gl::Context *context, GLbitfield b
     }
     mRenderEncoder.memoryBarrier(scope, stages, stages);
     return angle::Result::Continue;
+#else
+    UNIMPLEMENTED();
+    return angle::Result::Stop;
+#endif
 }
 
 angle::Result ContextMtl::memoryBarrierByRegion(const gl::Context *context, GLbitfield barriers)
