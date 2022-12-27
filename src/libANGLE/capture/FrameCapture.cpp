@@ -4366,10 +4366,11 @@ void CaptureShareGroupMidExecutionSetup(
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
         replayState.setUnpackAlignment(savedUnpackAlignment);
+        context->pixelStorei(GL_UNPACK_ALIGNMENT, savedUnpackAlignment);
     }
 }
 
-void CaptureMidExecutionSetup(const gl::Context *context,
+void CaptureMidExecutionSetup(gl::Context *context,
                               std::vector<CallCapture> *setupCalls,
                               CallResetMap &resetCalls,
                               std::vector<CallCapture> *shareGroupSetupCalls,
@@ -5275,6 +5276,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, savedUnpackAlignment));
         replayState.setUnpackAlignment(savedUnpackAlignment);
+        context->pixelStorei(GL_UNPACK_ALIGNMENT, savedUnpackAlignment);
     }
 
     if (validationEnabled)
