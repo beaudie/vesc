@@ -16,6 +16,24 @@
       "message": "I suspect there\u0027s a more direct fix, and this fix is working indirectly. Will look more closely after the break.",
       "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6607ba1b_8311ed05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2022-12-28T09:44:52Z",
+      "side": 1,
+      "message": "I think the problem is that the context captured for validation when doing the upgrade is recording the values in `context`, and since we inject a call to `glPixelStorei` to reset the unpack alignment, we also have top make sure `context` gets this state, and not only `replayState`. (I also noted that this is needed for all contexts that are captured during MEC, so I\u0027ve updated the patch.",
+      "parentUuid": "a83bcbfd_13a1dc16",
+      "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
