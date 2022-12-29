@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23f95584_d85743b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-29T00:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd8e7b9e_070176c0",
+      "range": {
+        "startLine": 17,
+        "startChar": 27,
+        "endLine": 17,
+        "endChar": 35
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a62a069a_6a4b3008",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-12-23T04:35:49Z",
       "side": 1,
       "message": "nit: suggest `hasActiveRenderPass()` in these ASSERTs to make it clearer (by using the active terminology)",
+      "range": {
+        "startLine": 7488,
+        "startChar": 11,
+        "endLine": 7488,
+        "endChar": 35
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e92c92_08e611f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7488,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-29T00:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a62a069a_6a4b3008",
       "range": {
         "startLine": 7488,
         "startChar": 11,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7f6b38_4c30fb3b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-29T00:56:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d201ce89_f5da4cc3",
+      "range": {
+        "startLine": 595,
+        "startChar": 28,
+        "endLine": 595,
+        "endChar": 38
+      },
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c542fc4a_13845f79",
@@ -89,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e5e2b16_b5c82cd1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-29T00:56:46Z",
+      "side": 1,
+      "message": "If you reach here with active render pass but FB is different, that is a bug.\n\nBut I think one of the test you can get here with inactive renderpass (I think it is MultisampleResolveTest.ResolveD32FSamples, if I remember correctly). The change here is previously it was checking hasActiveRenderPass \u0026\u0026 hasStartedRenderPassWithCommands(), I have changed it to hasStartedRenderPassWithCommands() \u0026\u0026 hasStartedRenderPassWithQueueSerial(), which both explicitly ensures the renderpass matches framebuffer to get into midRPClear.",
+      "parentUuid": "c542fc4a_13845f79",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "560c7785_32b154ae",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 9
@@ -100,6 +190,24 @@
       "writtenOn": "2022-12-23T04:35:49Z",
       "side": 1,
       "message": "This is always true at this point, you can ASSERT it. After all, we _are_ drawing into a render pass right here.",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a889cfa_93b4480d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2022-12-29T00:56:46Z",
+      "side": 1,
+      "message": "This can be inactive renderpass, i.e, onRenderPassFinished has been called. See the other comment (I think also related to blit/resolve).",
+      "parentUuid": "560c7785_32b154ae",
       "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
