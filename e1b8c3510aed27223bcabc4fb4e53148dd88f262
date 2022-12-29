@@ -102,6 +102,24 @@
       "message": "I don\u0027t think we need to call `UNIMPLEMENTED()` here. My understanding of Apple Silicon is that we don\u0027t need `MTLBarrierScopeRenderTargets` because render targets are *already* synchronized implicitly, so it should work to just not use it. Does that sound right @kpiddington@apple.com?\n\nWe do run PLS tests with read_write textures on Apple Silicon, so this might cause an issue there. (And there might not be M1 machines on the waterfall running angle_end2end_tests yet.) @kbr@chromium.org, do you know if angle_end2end_tests is running on M1 yet?",
       "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c155757_1ecf61a5",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T03:00:15Z",
+      "side": 1,
+      "message": "Actually, after thinking this through more:\n\nI think we could allow Apple Silicon to execute the above code still. It will just fail the `getDisplay()-\u003ehasFragmentMemoryBarriers()` test and not do anything. (Which I understand is valid.)\n\nNon-Apple Silicon, pre 10.14 should still assert or something, to make sure nobody is trying to call `memoryBarrier`, which will be unsupported on that configuration.",
+      "parentUuid": "0d648400_85e3bcbd",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
