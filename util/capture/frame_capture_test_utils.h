@@ -212,6 +212,178 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
 template <typename T>
 struct AssertFalse : std::false_type
 {};
+
+template <typename T>
+T GetParamValue(const ParamValue &value);
+
+template <>
+inline GLuint GetParamValue<GLuint>(const ParamValue &value)
+{
+    return value.GLuintVal;
+}
+
+template <>
+inline GLint GetParamValue<GLint>(const ParamValue &value)
+{
+    return value.GLintVal;
+}
+
+template <>
+inline const void *GetParamValue<const void *>(const ParamValue &value)
+{
+    return value.voidConstPointerVal;
+}
+
+template <>
+inline GLuint64 GetParamValue<GLuint64>(const ParamValue &value)
+{
+    return value.GLuint64Val;
+}
+
+template <>
+inline GLint64 GetParamValue<GLint64>(const ParamValue &value)
+{
+    return value.GLint64Val;
+}
+
+template <>
+inline const char *GetParamValue<const char *>(const ParamValue &value)
+{
+    return value.GLcharConstPointerVal;
+}
+
+template <>
+inline void *GetParamValue<void *>(const ParamValue &value)
+{
+    return value.voidPointerVal;
+}
+
+template <>
+inline const EGLAttrib *GetParamValue<const EGLAttrib *>(const ParamValue &value)
+{
+    // TODO
+    return nullptr;
+}
+
+template <>
+inline const EGLint *GetParamValue<const EGLint *>(const ParamValue &value)
+{
+    // TODO
+    return nullptr;
+}
+
+template <>
+inline const GLchar *const *GetParamValue<const GLchar *const *>(const ParamValue &value)
+{
+    // TODO
+    return nullptr;
+}
+
+#if defined(ANGLE_PLATFORM_APPLE)
+template <>
+inline unsigned long GetParamValue<unsigned long>(const ParamValue &value)
+{
+    return static_cast<unsigned long>(value.GLuint64Val);
+}
+#endif  // defined(ANGLE_PLATFORM_APPLE)
+
+template <typename T>
+T GetParamValue(const ParamValue &value)
+{
+    static_assert(AssertFalse<T>::value, "No specialization for type.");
+}
+
+template <typename T>
+struct Traits;
+
+template <typename... Args>
+struct Traits<void(Args...)>
+{
+    static constexpr size_t NArgs = sizeof...(Args);
+    template <size_t Idx>
+    struct Arg
+    {
+        typedef typename std::tuple_element<Idx, std::tuple<Args...>>::type Type;
+    };
+};
+
+template <typename Fn, size_t Idx>
+using FnArg = typename Traits<Fn>::template Arg<Idx>::Type;
+
+template <typename Fn, size_t NArgs>
+using EnableIfNArgs = typename std::enable_if_t<Traits<Fn>::NArgs == NArgs, int>;
+
+template <typename Fn, size_t Idx>
+FnArg<Fn, Idx> Arg(const Captures &cap)
+{
+    ASSERT(Idx < cap.size());
+    return GetParamValue<FnArg<Fn, Idx>>(cap[Idx].value);
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 1> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 2> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 3> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 4> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 5> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 6> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
+          Arg<Fn, 5>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 16> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
+          Arg<Fn, 5>(cap), Arg<Fn, 6>(cap), Arg<Fn, 7>(cap), Arg<Fn, 8>(cap), Arg<Fn, 9>(cap),
+          Arg<Fn, 10>(cap), Arg<Fn, 11>(cap), Arg<Fn, 12>(cap), Arg<Fn, 13>(cap), Arg<Fn, 14>(cap),
+          Arg<Fn, 15>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 20> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
+          Arg<Fn, 5>(cap), Arg<Fn, 6>(cap), Arg<Fn, 7>(cap), Arg<Fn, 8>(cap), Arg<Fn, 9>(cap),
+          Arg<Fn, 10>(cap), Arg<Fn, 11>(cap), Arg<Fn, 12>(cap), Arg<Fn, 13>(cap), Arg<Fn, 14>(cap),
+          Arg<Fn, 15>(cap), Arg<Fn, 16>(cap), Arg<Fn, 17>(cap), Arg<Fn, 18>(cap), Arg<Fn, 19>(cap));
+}
+
+template <typename Fn, EnableIfNArgs<Fn, 21> = 0>
+void DispatchCallCapture(Fn *fn, const Captures &cap)
+{
+    (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
+          Arg<Fn, 5>(cap), Arg<Fn, 6>(cap), Arg<Fn, 7>(cap), Arg<Fn, 8>(cap), Arg<Fn, 9>(cap),
+          Arg<Fn, 10>(cap), Arg<Fn, 11>(cap), Arg<Fn, 12>(cap), Arg<Fn, 13>(cap), Arg<Fn, 14>(cap),
+          Arg<Fn, 15>(cap), Arg<Fn, 16>(cap), Arg<Fn, 17>(cap), Arg<Fn, 18>(cap), Arg<Fn, 19>(cap),
+          Arg<Fn, 20>(cap));
+}
 }  // namespace angle
 
 #endif  // UTIL_CAPTURE_FRAME_CAPTURE_TEST_UTILS_H_
