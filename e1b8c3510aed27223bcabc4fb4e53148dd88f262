@@ -55,6 +55,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69598790_246d1d47",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-29T18:16:17Z",
+      "side": 1,
+      "message": "One more thing: this is a compile-time check. Chromium builds ANGLE on one particular macOS SDK version and runs the binary on multiple OS versions. I think this needs to be changed into a run-time check. See for example IsMetalRendererAvailable() in src/common/apple_platform_utils.mm.",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "507c7e31_86e5577e",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 2
@@ -118,6 +135,24 @@
       "side": 1,
       "message": "Actually, after thinking this through more:\n\nI think we could allow Apple Silicon to execute the above code still. It will just fail the `getDisplay()-\u003ehasFragmentMemoryBarriers()` test and not do anything. (Which I understand is valid.)\n\nNon-Apple Silicon, pre 10.14 should still assert or something, to make sure nobody is trying to call `memoryBarrier`, which will be unsupported on that configuration.",
       "parentUuid": "0d648400_85e3bcbd",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ac3c876_d94c1b4c",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2022-12-29T18:16:17Z",
+      "side": 1,
+      "message": "angle_end2end_tests aren\u0027t running on Apple Silicon on ANGLE\u0027s waterfall yet. I pushed a bit more on http://anglebug.com/7743 .",
+      "parentUuid": "6c155757_1ecf61a5",
       "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
