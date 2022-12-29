@@ -16,6 +16,92 @@
       "message": "What consequence will this have for the pixel local storage implementation in the Metal backend? Would like to understand this before reviewing.",
       "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0adc6a2d_e41ab927",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T02:55:29Z",
+      "side": 1,
+      "message": "Thank you for catching this @tvignatti@igalia.com!",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e0e04ea_ccd25f54",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T02:55:29Z",
+      "side": 1,
+      "message": "In the real world, just macOS \u003c10.14 or Mac Catalyst \u003c13.0, running on non-Apple Silicon. Is that a supported configuration? If so, we will have to update `DisplayMtl.mm` to not support pixel local storage before macOS 10.14 or Mac Catalyst 13.0.\n\nFor iOS and other Apple Silicon, any device will use the programmable blending feature to implement PLS, which is superior to read_write textures and does not require barriers.",
+      "parentUuid": "ddceeeb4_98972677",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "507c7e31_86e5577e",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T02:55:29Z",
+      "side": 1,
+      "message": "Can you just surround this branch in your `#if`?",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57415684_fdfc1a33",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T02:55:29Z",
+      "side": 1,
+      "message": "And this branch in the same `#if`?",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d648400_85e3bcbd",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2022-12-29T02:55:29Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to call `UNIMPLEMENTED()` here. My understanding of Apple Silicon is that we don\u0027t need `MTLBarrierScopeRenderTargets` because render targets are *already* synchronized implicitly, so it should work to just not use it. Does that sound right @kpiddington@apple.com?\n\nWe do run PLS tests with read_write textures on Apple Silicon, so this might cause an issue there. (And there might not be M1 machines on the waterfall running angle_end2end_tests yet.) @kbr@chromium.org, do you know if angle_end2end_tests is running on M1 yet?",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
