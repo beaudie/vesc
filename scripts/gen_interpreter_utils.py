@@ -37,18 +37,54 @@ namespace angle
 {{
 CallCapture ParseCallCapture(const Token &nameToken, size_t numParamTokens, const Token *paramTokens, const TraceShaderMap &shaders)
 {{
-{cases}
-    ASSERT(numParamTokens == 0);
+{parse_cases}
+    if (numParamTokens > 0)
+    {{
+        printf("Expected zero parameter tokens for %s\\n", nameToken);
+        UNREACHABLE();
+    }}
     return CallCapture(nameToken, ParamBuffer());
+}}
+
+void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &customFunctions)
+{{
+    ASSERT(call.entryPoint == EntryPoint::Invalid);
+    const Captures &captures = call.params.getParamCaptures();
+
+{custom_dispatch_cases}
+
+    auto iter = customFunctions.find(call.customFunctionName);
+    if (iter == customFunctions.end())
+    {{
+        printf("Unknown custom function: %s\\n", call.customFunctionName.c_str());
+        UNREACHABLE();
+    }}
+    else
+    {{
+        ASSERT(call.params.empty());
+        const TraceFunction &customFunc = iter->second;
+        for (const CallCapture &customCall : customFunc)
+        {{
+            ReplayTraceFunctionCall(customCall, customFunctions);
+        }}
+    }}
 }}
 }}  // namespace angle
 """
 
-CASE = """\
+PARSE_CASE = """\
     if (strcmp(nameToken, "{ep}") == 0)
     {{
         ParamBuffer params = ParseParameters<{pfn}>(paramTokens, shaders);
         return CallCapture({call}, std::move(params));
+    }}
+"""
+
+CUSTOM_DISPATCH_CASE = """\
+    if (call.customFunctionName == "{fn}")
+    {{
+        DispatchCallCapture({fn}, captures);
+        return;
     }}
 """
 
@@ -74,21 +110,26 @@ def main(cpp_output_path):
     def fn(ep):
         return 'std::remove_pointer<PFN%sPROC>::type' % ep.upper()
 
+    fixture_functions = GetFunctionsFromFixture()
+
     eps_and_enums = sorted(list(set(gles.GetEnums() + egl.GetEnums())))
-    cases = [
-        CASE.format(ep=ep, pfn=fn(ep), call='EntryPoint::%s' % enum)
+    parse_cases = [
+        PARSE_CASE.format(ep=ep, pfn=fn(ep), call='EntryPoint::%s' % enum)
         for (enum, ep) in eps_and_enums
     ]
-    cases += [
-        CASE.format(ep=func, pfn='decltype(%s)' % func, call='"%s"' % func)
-        for func in GetFunctionsFromFixture()
+    parse_cases += [
+        PARSE_CASE.format(ep=fn, pfn='decltype(%s)' % fn, call='"%s"' % fn)
+        for fn in fixture_functions
     ]
+
+    custom_dispatch_cases = [CUSTOM_DISPATCH_CASE.format(fn=fn) for fn in fixture_functions]
 
     format_args = {
         'script_name': os.path.basename(sys.argv[0]),
         'data_source_name': 'gl.xml and gl_angle_ext.xml',
         'file_name': os.path.basename(BASE_PATH),
-        'cases': ''.join(cases),
+        'parse_cases': ''.join(parse_cases),
+        'custom_dispatch_cases': ''.join(custom_dispatch_cases),
     }
 
     cpp_content = CPP_TEMPLATE.format(**format_args)
