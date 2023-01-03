@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba1ff7fe_db9e40f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-03T16:24:03Z",
+      "side": 1,
+      "message": "Nice refactor!",
+      "revId": "33d467bdaf352a58be855c9ad02d81924b159f3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b92e65b1_ed3f5e46",
+        "filename": "util/capture/frame_capture_test_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-03T16:24:03Z",
+      "side": 1,
+      "message": "Why is this 64-bit only?",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 32
+      },
+      "revId": "33d467bdaf352a58be855c9ad02d81924b159f3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
