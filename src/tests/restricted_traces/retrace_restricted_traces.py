@@ -193,7 +193,7 @@ def run_test_suite(args, trace_binary, trace, max_steps, additional_args, additi
         logging.info('Test stdout:\n%s' % p.stdout.decode())
 
 
-def upgrade_single_trace(args, trace_binary, trace, out_path, no_overwrite, c_sources):
+def upgrade_single_trace(args, trace_binary, trace, out_path, no_overwrite, c_sources, validation):
     logging.debug('Tracing %s' % trace)
 
     trace_path = os.path.abspath(os.path.join(out_path, trace))
@@ -217,7 +217,7 @@ def upgrade_single_trace(args, trace_binary, trace, out_path, no_overwrite, c_so
         'ANGLE_CAPTURE_FRAME_START': '2',
         'ANGLE_CAPTURE_FRAME_END': str(max_steps + 1),
     }
-    if args.validation:
+    if validation:
         additional_env['ANGLE_CAPTURE_VALIDATION'] = '1'
         # Also turn on shader output init to ensure we have no undefined values.
         # This feature is also enabled in replay when using --validation.
@@ -261,7 +261,7 @@ def upgrade_traces(args, traces):
 
     for trace in angle_test_util.FilterTests(traces, args.traces):
         if not upgrade_single_trace(args, trace_binary, trace, args.out_path, args.no_overwrite,
-                                    args.c_sources):
+                                    args.c_sources, args.validation):
             failures += [trace]
 
     if failures:
@@ -340,7 +340,7 @@ def interpret_traces(args, traces):
                     if upgrade_single_trace(args, trace_binary, trace, out_path, False, True):
                         if restore_single_trace(trace, out_path):
                             if validate_single_trace(args, trace_binary, trace,
-                                                     ['--trace-interpreter'], {}):
+                                                     ['--trace-interpreter', '--validation'], {}):
                                 logging.info('%s passed!' % trace)
                                 result = PASS
             finally:
