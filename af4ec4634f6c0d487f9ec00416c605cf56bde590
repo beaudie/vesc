@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd25d1e7_79054957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-03T21:23:18Z",
+      "side": 1,
+      "message": "Great work refactoring this. Still LGTM. One small comment.",
+      "revId": "af4ec4634f6c0d487f9ec00416c605cf56bde590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8295d674_1d7a8009",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-03T21:23:18Z",
+      "side": 1,
+      "message": "Remove commented-out code?",
+      "revId": "af4ec4634f6c0d487f9ec00416c605cf56bde590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
