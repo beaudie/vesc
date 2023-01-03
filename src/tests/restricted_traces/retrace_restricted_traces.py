@@ -131,6 +131,13 @@ def touch_trace_folder(trace_path):
         (Path(trace_path) / file).touch()
 
 
+def filter_traces(traces, trace_filter):
+    matches = []
+    for single_filter in trace_filter.split(':'):
+        matches += fnmatch.filter(traces, single_filter)
+    return sorted(list(set(matches)))
+
+
 def backup_single_trace(trace, backup_path):
     trace_path = src_trace_path(trace)
     trace_backup_path = os.path.join(backup_path, trace)
@@ -138,7 +145,7 @@ def backup_single_trace(trace, backup_path):
 
 
 def backup_traces(args, traces):
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         backup_single_trace(trace, args.out_path)
 
 
@@ -155,7 +162,7 @@ def restore_single_trace(trace, backup_path):
 
 
 def restore_traces(args, traces):
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         restore_single_trace(trace, args.out_path)
 
 
@@ -259,7 +266,7 @@ def upgrade_traces(args, traces):
 
     failures = []
 
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         if not upgrade_single_trace(args, trace_binary, trace, args.out_path, args.no_overwrite,
                                     args.c_sources):
             failures += [trace]
@@ -296,7 +303,7 @@ def validate_traces(args, traces):
     failures = []
     trace_binary = os.path.join(args.gn_path, args.test_suite)
 
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         if not validate_single_trace(args, trace_binary, trace, additional_args, additional_env):
             failures += [trace]
 
@@ -330,7 +337,7 @@ def interpret_traces(args, traces):
     else:
         trace_binary = args.test_suite
 
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         with tempfile.TemporaryDirectory() as backup_path:
             backup_single_trace(trace, backup_path)
             result = FAIL
@@ -391,7 +398,7 @@ def get_min_reqs(args, traces):
     skipped_traces = []
     trace_binary = os.path.join(args.gn_path, args.test_suite)
 
-    for trace in fnmatch.filter(traces, args.traces):
+    for trace in filter_traces(traces, args.traces):
         print(f"Finding requirements for {trace}")
         extensions = []
         json_data = load_trace_json(trace)
