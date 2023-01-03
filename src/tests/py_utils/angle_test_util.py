@@ -195,3 +195,10 @@ def GetTestsFromOutput(output):
     start = out_lines.index('Tests list:')
     end = out_lines.index('End tests list.')
     return out_lines[start + 1:end]
+
+
+def FilterTraces(traces, trace_filter):
+    matches = set()
+    for single_filter in trace_filter.split(':'):
+        matches.update(fnmatch.filter(traces, single_filter))
+    return sorted(matches)
