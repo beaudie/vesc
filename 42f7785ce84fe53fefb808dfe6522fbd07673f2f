@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1954d70_501f155c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-03T16:19:53Z",
+      "side": 1,
+      "message": "Would you mind moving this utility to angle_test_util.py and replacing other occurrences of `fnmatch.filter` that we have in other scripts, so that we have this working consistently across all of them? IIRC there\u0027s only a couple of places.",
+      "revId": "42f7785ce84fe53fefb808dfe6522fbd07673f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e047e44_5fb7e3da",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-03T16:19:53Z",
+      "side": 1,
+      "message": "A little simpler like this?\n\n```\nmatches \u003d set()\n\nfor single_filter in trace_filter.split(\u0027:\u0027):\n    matches.update(fnmatch.filter(traces, single_filter))\n\nreturn sorted(matches)\n```",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 16
+      },
+      "revId": "42f7785ce84fe53fefb808dfe6522fbd07673f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
