@@ -33,6 +33,23 @@
       "message": "ComputeShaderTest.AtomicFunctionsReturnWithUnsigned/ES3_1_D3D11 is failing with this extension:\n\nWarning: Debug.cpp:186 (insertMessage): GL error: HIGH: Error: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\d3d\\d3d11\\ResourceManager11.cpp, allocate:404. Internal D3D11 error: HRESULT: 0x80070057: Error allocating RenderTargetView\n\n```\nHRESULT: 0x80070057 (2147942487)\nName: E_INVALIDARG\nDescription: An invalid parameter was passed to the returning function\nSeverity code: Failed\nFacility Code: FACILITY_WIN32 (7)\nError Code: 0x0057 (87)\n```\n\nIs it sometimes invalid to create a texture with both `D3D11_BIND_UNORDERED_ACCESS` and `D3D11_BIND_RENDER_TARGET`?",
       "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae884428_3df691f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2023-01-03T21:40:24Z",
+      "side": 1,
+      "message": "Adding Geoff to the review.  The CL LGTM also. \n\n@Chris, is there a test we can add to ensure bind flags are not dropped on the floor?",
+      "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
