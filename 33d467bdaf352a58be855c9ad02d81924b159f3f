@@ -39,6 +39,30 @@
       },
       "revId": "33d467bdaf352a58be855c9ad02d81924b159f3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6b6fa07_87b3315c",
+        "filename": "util/capture/frame_capture_test_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-03T16:39:29Z",
+      "side": 1,
+      "message": "In 32-bit, `std::is_same\u003cEGLAttrib, EGLInt\u003e` is true.",
+      "parentUuid": "b92e65b1_ed3f5e46",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 32
+      },
+      "revId": "33d467bdaf352a58be855c9ad02d81924b159f3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
