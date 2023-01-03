@@ -6293,6 +6293,15 @@ CallCapture ParseCallCapture(const Token &nameToken,
         return CallCapture("ValidateSerializedState", std::move(params));
     }
 
+    if (strcmp(nameToken, "VALIDATE_CHECKPOINT") == 0)
+    {
+        ParamBuffer params;
+        PackParameter<const char *>(params, paramTokens[0], strings);
+        params.addUnnamedParam<const char *>(ParamType::TcharConstPointer, "placeholder");
+        params.addUnnamedParam<uint32_t>(ParamType::TGLuint, 0);
+        return CallCapture("ValidateSerializedState", std::move(params));
+    }
+
     if (numParamTokens > 0)
     {
         printf("Expected zero parameter tokens for %s\n", nameToken);
