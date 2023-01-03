@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b642ccd5_d9aa82c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-03T20:54:26Z",
+      "side": 1,
+      "message": "Thank you!\n\n`run_perf_tests.py` uses it too, I don\u0027t see it in this CL?.. I know because I actually had a local patch in that file that does what your CL does :\u003e",
+      "parentUuid": "f989593d_8864bc45",
+      "revId": "42f7785ce84fe53fefb808dfe6522fbd07673f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6e047e44_5fb7e3da",
         "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
         "patchSetId": 2
