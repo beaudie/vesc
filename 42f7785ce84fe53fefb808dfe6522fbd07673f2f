@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f989593d_8864bc45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-03T20:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1954d70_501f155c",
+      "revId": "42f7785ce84fe53fefb808dfe6522fbd07673f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e047e44_5fb7e3da",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-01-03T16:19:53Z",
       "side": 1,
       "message": "A little simpler like this?\n\n```\nmatches \u003d set()\n\nfor single_filter in trace_filter.split(\u0027:\u0027):\n    matches.update(fnmatch.filter(traces, single_filter))\n\nreturn sorted(matches)\n```",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 16
+      },
+      "revId": "42f7785ce84fe53fefb808dfe6522fbd07673f2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c522ecf_d810f98c",
+        "filename": "src/tests/restricted_traces/retrace_restricted_traces.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-03T20:21:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e047e44_5fb7e3da",
       "range": {
         "startLine": 135,
         "startChar": 4,
