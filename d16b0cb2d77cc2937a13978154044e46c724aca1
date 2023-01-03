@@ -34,6 +34,24 @@
       "parentUuid": "a83bcbfd_13a1dc16",
       "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a974a401_f1d6fe77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-03T16:36:30Z",
+      "side": 1,
+      "message": "\u003e I think the problem is that the context captured for validation when doing the upgrade is recording the values in context\n\nIf we start mutating the context in frame capture we\u0027ll lead ourselves into a situation where the capture tool messes with the behaviour of the application, and maybe we can get an incorrect capture. Except in circumstances where we have no other option we never mess with the context.\n\nThe fix here is to compare the context\u0027s value of the unpack instead of this \"saved\" value. It\u0027s a bit confusing because there are three unpack alignment candidates:\n\n1. the default value of the unpack alignment in GL (always 4)\n2. the value of the unpack alignment after running fresh Setup during a replay (1)\n3. the context\u0027s value of the unpack alignment when we call MEC (1)\n\nThe bug is that we\u0027re comparing 1 and 2 instead of 2 and 3. in `CaptureMidExecutionSetup`. `CaptureShareGroupMidExecutionSetup` is a bit confusing when we have multiple contexts. Maybe we should use 3. in both places.\n\nI tried this out locally and it fixes the bug.",
+      "parentUuid": "6607ba1b_8311ed05",
+      "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
