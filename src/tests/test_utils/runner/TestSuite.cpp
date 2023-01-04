@@ -1804,7 +1804,11 @@ std::string TestSuite::reserveTestArtifactPath(const std::string &artifactName)
 
     if (mTestArtifactDirectory.empty())
     {
-        return artifactName;
+        mTestArtifactDirectory = GetEnvironmentVar("ISOLATED_OUTDIR");
+        if (mTestArtifactDirectory.empty())
+        {
+            return artifactName;
+        }
     }
 
     std::stringstream pathStream;
