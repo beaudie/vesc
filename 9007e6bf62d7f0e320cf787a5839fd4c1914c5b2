@@ -63,6 +63,30 @@
       },
       "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e60ee8e7_8a90a9c2",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T19:32:30Z",
+      "side": 1,
+      "message": "Since this is a struct, we treat it like a plain old data type with no member functions.\n\nWe are inspired by the Google c++ style guide although we don\u0027t follow it exactly.\n\nSee https://google.github.io/styleguide/cppguide.html#Structs_vs._Classes",
+      "parentUuid": "da23ea90_dbf81603",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 50
+      },
+      "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
