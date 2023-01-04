@@ -15,40 +15,6 @@
 
 namespace sh
 {
-bool operator==(const SpirvType &a, const SpirvType &b)
-{
-    if (a.block != b.block)
-    {
-        return false;
-    }
-
-    if (a.arraySizes != b.arraySizes)
-    {
-        return false;
-    }
-
-    // If structure or interface block, they should match by pointer (i.e. be the same block).  The
-    // AST transformations are expected to keep the AST consistent by using the same structure and
-    // interface block pointer between declarations and usages.  This is validated by
-    // ValidateASTOptions::validateVariableReferences.
-    if (a.block != nullptr)
-    {
-        return a.typeSpec.blockStorage == b.typeSpec.blockStorage &&
-               a.typeSpec.isInvariantBlock == b.typeSpec.isInvariantBlock &&
-               a.typeSpec.isRowMajorQualifiedBlock == b.typeSpec.isRowMajorQualifiedBlock &&
-               a.typeSpec.isPatchIOBlock == b.typeSpec.isPatchIOBlock &&
-               a.typeSpec.isOrHasBoolInInterfaceBlock == b.typeSpec.isOrHasBoolInInterfaceBlock;
-    }
-
-    // Otherwise, match by the type contents.  The AST transformations sometimes recreate types that
-    // are already defined, so we can't rely on pointers being unique.
-    return a.type == b.type && a.primarySize == b.primarySize &&
-           a.secondarySize == b.secondarySize && a.imageInternalFormat == b.imageInternalFormat &&
-           a.isSamplerBaseImage == b.isSamplerBaseImage &&
-           a.typeSpec.blockStorage == b.typeSpec.blockStorage &&
-           a.typeSpec.isRowMajorQualifiedArray == b.typeSpec.isRowMajorQualifiedArray &&
-           a.typeSpec.isOrHasBoolInInterfaceBlock == b.typeSpec.isOrHasBoolInInterfaceBlock;
-}
 
 namespace
 {
@@ -476,6 +442,42 @@ void SpirvTypeSpec::onVectorComponentSelection()
     // similarly differentiated.
     ASSERT(!isInvariantBlock && !isRowMajorQualifiedBlock && !isRowMajorQualifiedArray &&
            blockStorage == EbsUnspecified);
+}
+
+bool SpirvType::operator==(const SpirvType &other) const
+{
+    if (block != other.block)
+    {
+        return false;
+    }
+
+    if (arraySizes != other.arraySizes)
+    {
+        return false;
+    }
+
+    // If structure or interface block, they should match by pointer (i.e. be the same block).  The
+    // AST transformations are expected to keep the AST consistent by using the same structure and
+    // interface block pointer between declarations and usages.  This is validated by
+    // ValidateASTOptions::validateVariableReferences.
+    if (block != nullptr)
+    {
+        return typeSpec.blockStorage == other.typeSpec.blockStorage &&
+               typeSpec.isInvariantBlock == other.typeSpec.isInvariantBlock &&
+               typeSpec.isRowMajorQualifiedBlock == other.typeSpec.isRowMajorQualifiedBlock &&
+               typeSpec.isPatchIOBlock == other.typeSpec.isPatchIOBlock &&
+               typeSpec.isOrHasBoolInInterfaceBlock == other.typeSpec.isOrHasBoolInInterfaceBlock;
+    }
+
+    // Otherwise, match by the type contents.  The AST transformations sometimes recreate types that
+    // are already defined, so we can't rely on pointers being unique.
+    return type == other.type && primarySize == other.primarySize &&
+           secondarySize == other.secondarySize &&
+           imageInternalFormat == other.imageInternalFormat &&
+           isSamplerBaseImage == other.isSamplerBaseImage &&
+           typeSpec.blockStorage == other.typeSpec.blockStorage &&
+           typeSpec.isRowMajorQualifiedArray == other.typeSpec.isRowMajorQualifiedArray &&
+           typeSpec.isOrHasBoolInInterfaceBlock == other.typeSpec.isOrHasBoolInInterfaceBlock;
 }
 
 SPIRVBuilder::SPIRVBuilder(TCompiler *compiler,
