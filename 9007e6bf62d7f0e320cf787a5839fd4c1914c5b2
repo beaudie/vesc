@@ -39,6 +39,30 @@
       },
       "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da23ea90_dbf81603",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1556137
+      },
+      "writtenOn": "2023-01-04T18:54:42Z",
+      "side": 1,
+      "message": "Yup that also solves the build error. What would be the benefits of that approach? Stylistically I prefer a member function, but I\u0027m happy to defer to y\u0027all\u0027s preference 😊",
+      "parentUuid": "b0253600_3ad6f22c",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 50
+      },
+      "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
