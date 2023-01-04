@@ -108,9 +108,9 @@ struct SpirvType
 
     // Anything that can cause the same GLSL type to produce different SPIR-V types.
     SpirvTypeSpec typeSpec;
-
-    bool operator==(const SpirvType &other) const;
 };
+
+bool operator==(const SpirvType &a, const SpirvType &b);
 
 struct SpirvIdAndIdList
 {
