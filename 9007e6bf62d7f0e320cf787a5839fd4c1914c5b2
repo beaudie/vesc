@@ -16,6 +16,29 @@
       "message": "Adding folks who wrote/reviewed https://chromium-review.googlesource.com/c/angle/angle/+/2889603",
       "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0253600_3ad6f22c",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T18:37:34Z",
+      "side": 1,
+      "message": "what happens if you define the function in the header without being a member function? does that solve the compilation error?",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 50
+      },
+      "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
