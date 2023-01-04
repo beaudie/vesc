@@ -16,6 +16,23 @@
       "message": "(ianelliott@ friendly post holiday bump)",
       "revId": "4e286b763883ca0415fb1c4dc9c2e8b693341b9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "785c8ea2_3ee33b97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-01-04T01:44:35Z",
+      "side": 1,
+      "message": "LGTM too.",
+      "revId": "4e286b763883ca0415fb1c4dc9c2e8b693341b9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
