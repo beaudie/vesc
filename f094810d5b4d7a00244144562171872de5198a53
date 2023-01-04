@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0198a81_1c1fae71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-01-04T15:14:43Z",
+      "side": 1,
+      "message": "LGTM but I suspect there is an underlying issue somewhere in the driver. We\u0027ve seen one or two failures on non-sanitizer bots. Not frequent enough that I\u0027m concerned about disabling the test though.\n\nex: https://ci.chromium.org/ui/p/angle/builders/ci/linux-test/3137/overview\n\nOn the sanitizer bots we get the message: `1 deadlock:libGLX.so*`. Sounds like a potential bug in SwiftShader\u0027s WSI.",
+      "revId": "f094810d5b4d7a00244144562171872de5198a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
