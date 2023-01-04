@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8fb9bd0_4b166190",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T16:26:58Z",
+      "side": 1,
+      "message": "Kinda confused as to the point of this - don\u0027t these values already show up in the test output? Maybe you could clarify the context around this CL in the description.",
+      "revId": "ffa6ead8f531105272021a7b2e3eb80a9a7c34b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea578638_f62eb2ef",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T16:26:58Z",
+      "side": 1,
+      "message": "nit: can you avoid overloading? aside.. we should add a note to avoid overloading to the ANGLE style guide",
+      "range": {
+        "startLine": 115,
+        "startChar": 9,
+        "endLine": 115,
+        "endChar": 21
+      },
+      "revId": "ffa6ead8f531105272021a7b2e3eb80a9a7c34b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38d20e63_547809d4",
+        "filename": "src/tests/test_utils/runner/TestSuite.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T16:26:58Z",
+      "side": 1,
+      "message": "nit: same",
+      "range": {
+        "startLine": 139,
+        "startChar": 9,
+        "endLine": 139,
+        "endChar": 19
+      },
+      "revId": "ffa6ead8f531105272021a7b2e3eb80a9a7c34b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
