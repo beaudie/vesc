@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed8e56ba_b9df4811",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-04T02:47:38Z",
+      "side": 1,
+      "message": "Nice finding and LGTM!\nIs there any VVL error skip needs to be removed, or we never added skip in the first place?",
+      "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
