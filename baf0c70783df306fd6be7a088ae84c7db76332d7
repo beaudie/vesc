@@ -16,6 +16,23 @@
       "message": "https://cas-viewer.appspot.com/projects/chromium-swarm/instances/default_instance/blobs/f77fb4f42fcf5568602b012dd4c5fa5d0c15a49138042e6478624671f9823878/402/tree",
       "revId": "baf0c70783df306fd6be7a088ae84c7db76332d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a6d3df_491dbc50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-04T19:53:13Z",
+      "side": 1,
+      "message": "Ah, it\u0027s because we\u0027ve removed the custom script.",
+      "revId": "baf0c70783df306fd6be7a088ae84c7db76332d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
