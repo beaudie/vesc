@@ -34,6 +34,29 @@
       "parentUuid": "ed8e56ba_b9df4811",
       "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e9584b_1c57b39f",
+        "filename": "src/libANGLE/renderer/vulkan/VkImageImageSiblingVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-04T17:29:34Z",
+      "side": 1,
+      "message": "nit: Since this information really is part of initialization, not actually to update an existing functional object, my suggestion is to figure out viewFormats here and then pass mVkImageInfo.usage and viewFormats into init2DWeakReference call. That way it is clear that they are part of initialization and also be consistent with other parameters like size/intendedFormatID/actualFormatID",
+      "range": {
+        "startLine": 75,
+        "startChar": 12,
+        "endLine": 75,
+        "endChar": 48
+      },
+      "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
