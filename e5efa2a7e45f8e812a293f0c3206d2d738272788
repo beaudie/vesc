@@ -16,6 +16,24 @@
       "message": "This one seems flaky\n\nflaked on my CL: https://ci.chromium.org/ui/p/angle/builders/try/win-test/10569/overview\n\nand ci: https://ci.chromium.org/ui/p/angle/builders/ci/win-test/3119/overview",
       "revId": "e5efa2a7e45f8e812a293f0c3206d2d738272788",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd214b6_8b908278",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-04T16:02:31Z",
+      "side": 1,
+      "message": "device lost :/\n\n```\nAPI, Error, High: Error: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, queueSubmit:1387. Internal Vulkan error (-4): The logical or physical device has been lost.\n..\\..\\src\\tests\\perf_tests\\ANGLEPerfTest.h(131): error: Failed\nFailing test because of unexpected error:\nError: 0x00000502, in ..\\..\\src\\libANGLE\\renderer\\vulkan\\CommandProcessor.cpp, queueSubmit:1387. Internal Vulkan error (-4): The logical or physical device has been lost.\n```",
+      "parentUuid": "dbf06b9f_31ffd868",
+      "revId": "e5efa2a7e45f8e812a293f0c3206d2d738272788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
