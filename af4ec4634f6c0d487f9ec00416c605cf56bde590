@@ -33,6 +33,24 @@
       "message": "Remove commented-out code?",
       "revId": "af4ec4634f6c0d487f9ec00416c605cf56bde590",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a75fd86_3a198958",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-01-04T19:07:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8295d674_1d7a8009",
+      "revId": "af4ec4634f6c0d487f9ec00416c605cf56bde590",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
