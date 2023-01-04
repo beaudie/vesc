@@ -22,6 +22,30 @@
       },
       "revId": "a63cebdcca765a2bc9f737e69a5a3e3ea5147109",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5a454c_3a783dbf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-04T19:10:11Z",
+      "side": 1,
+      "message": "Ah I see, yes, that\u0027s right. Updated the description once again. This CL basically implements the last option you suggested in https://anglebug.com/7299#c3 (assuming I got the idea right)",
+      "parentUuid": "5d22c31f_7fd690d7",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "a63cebdcca765a2bc9f737e69a5a3e3ea5147109",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
