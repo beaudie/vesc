@@ -1027,7 +1027,7 @@ inline uint32_t BitfieldReverse(uint32_t value)
 }
 
 // Count the 1 bits.
-#if defined(_MSC_VER) && !defined(__clang__)
+#if defined(ANGLE_PLATFORM_WINDOWS) && !defined(__clang__)
 #    if defined(_M_IX86) || defined(_M_X64)
 namespace priv
 {
@@ -1104,7 +1104,7 @@ inline int BitCount(uint64_t bits)
     return static_cast<int>(vget_lane_u64(vpaddl_u32(vpaddl_u16(vpaddl_u8(vsum))), 0));
 }
 #    endif  // defined(_M_IX86) || defined(_M_X64)
-#endif      // defined(_MSC_VER) && !defined(__clang__)
+#endif      // defined(ANGLE_PLATFORM_WINDOWS) && !defined(__clang__)
 
 #if defined(ANGLE_PLATFORM_POSIX) || defined(__clang__)
 inline int BitCount(uint32_t bits)
