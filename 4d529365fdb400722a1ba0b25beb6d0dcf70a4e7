@@ -16,6 +16,23 @@
       "message": "Thanks, since we had a copy of these enums anyway, this is strictly an improvement.",
       "revId": "4d529365fdb400722a1ba0b25beb6d0dcf70a4e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08ec6c24_17e016e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-01-04T00:14:15Z",
+      "side": 1,
+      "message": "(ianelliott@ friendly post holiday bump)",
+      "revId": "4d529365fdb400722a1ba0b25beb6d0dcf70a4e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
