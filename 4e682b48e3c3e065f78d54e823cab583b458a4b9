@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d15b56_337efde1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-04T19:33:46Z",
+      "side": 1,
+      "message": "LGTM, thanks for updating the description. I recall the earlier conversation.",
+      "revId": "4e682b48e3c3e065f78d54e823cab583b458a4b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
