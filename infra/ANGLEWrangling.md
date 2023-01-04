@@ -111,6 +111,14 @@ the ANGLE project.
 
 ## <a name="the-auto-rollers"></a>Task: The Auto-Rollers
 
+```dot {layout_engine=neato}
+digraph {
+  a -> b -> c -> d -> a
+  a -> f -> d
+  e -> b
+}
+```
+
 The [ANGLE into Chrome auto-roller](https://autoroll.skia.org/r/angle-chromium-autoroll) automatically updates
 Chrome with the latest ANGLE changes.
 
