@@ -16,6 +16,24 @@
       "message": "Nice finding and LGTM!\nIs there any VVL error skip needs to be removed, or we never added skip in the first place?",
       "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5c3763f_5d847882",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-04T03:00:28Z",
+      "side": 1,
+      "message": "Thanks! I don\u0027t think we skipped any VVL errors related to this bug.",
+      "parentUuid": "ed8e56ba_b9df4811",
+      "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
