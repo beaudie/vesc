@@ -87,6 +87,30 @@
       },
       "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc851dbf_431bc288",
+        "filename": "src/compiler/translator/BuildSPIRV.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1556137
+      },
+      "writtenOn": "2023-01-04T19:43:18Z",
+      "side": 1,
+      "message": "Gotcha, updated! FYI, there are several other `struct`s in this file that have equality overloads.",
+      "parentUuid": "e60ee8e7_8a90a9c2",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 50
+      },
+      "revId": "9007e6bf62d7f0e320cf787a5839fd4c1914c5b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
