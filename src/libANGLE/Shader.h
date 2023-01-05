@@ -269,8 +269,12 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     // Writes a shader's binary to the output memory buffer.
     angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
-    angle::Result deserialize(const Context *context, BinaryInputStream &stream);
+    angle::Result deserialize(BinaryInputStream &stream);
+
+    // Load a binary from shader cache.
     angle::Result loadBinary(const Context *context, const void *binary, GLsizei length);
+    // Load a binary from a glShaderBinary call.
+    angle::Result loadShaderBinary(const void *binary, GLsizei length);
 
   private:
     struct CompilingState;
@@ -280,6 +284,9 @@ class Shader final : angle::NonCopyable, public LabeledObject
                               GLsizei bufSize,
                               GLsizei *length,
                               char *buffer);
+    angle::Result loadBinaryImpl(const void *binary,
+                                 GLsizei length,
+                                 bool generatedWithOfflineCompiler);
 
     ShaderState mState;
     std::unique_ptr<rx::ShaderImpl> mImplementation;

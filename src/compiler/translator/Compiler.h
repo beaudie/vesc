@@ -14,6 +14,8 @@
 // This should not be included by driver code.
 //
 
+#include <vector>
+
 #include <GLSLANG/ShaderVars.h>
 
 #include "common/PackedEnums.h"
@@ -194,6 +196,9 @@ class TCompiler : public TShHandleBase
     unsigned int getSharedMemorySize() const;
 
     sh::GLenum getShaderType() const { return mShaderType; }
+
+    // Generate a self-contained binary representation of the shader.
+    const ShaderBinaryBlob getShaderBinary(const ShHandle compilerHandle);
 
     // Validate the AST and produce errors if it is inconsistent.
     bool validateAST(TIntermNode *root);
