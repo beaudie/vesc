@@ -33,6 +33,47 @@
       "message": "Just curious, why we don\u0027t need to call below functions for compute shader program to use the texture:\n```\nGLint uTextureLocation \u003d glGetUniformLocation(computeProgram, \"u_tex2D\");\nglUniform1i(uTextureLocation, 0);\n```",
       "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bfa38fe_b97b3ef3",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3987,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-05T02:17:05Z",
+      "side": 1,
+      "message": "I have the same question.",
+      "parentUuid": "6eda2bd6_cf76737a",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "731e5dfe_79b41695",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3995,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-05T02:17:05Z",
+      "side": 1,
+      "message": "I was wondering why we initialize 16 `GLfloat` elements here.",
+      "range": {
+        "startLine": 3995,
+        "startChar": 43,
+        "endLine": 3995,
+        "endChar": 45
+      },
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
