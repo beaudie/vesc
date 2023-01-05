@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b7ef876_c269af05",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3987,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-05T21:44:31Z",
+      "side": 1,
+      "message": "I see, thank you Charlie for the explanation.",
+      "parentUuid": "85ba9f6c_2384d210",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "731e5dfe_79b41695",
