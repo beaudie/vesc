@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f12b03d_32e71978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-05T05:09:06Z",
+      "side": 1,
+      "message": "Thanks Dan for addressing Alexey\u0027s feedback. Do you need help sending this to the commit queue?",
+      "revId": "e9e7977a0dced36434ae51a779b28c89ccb3235f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
