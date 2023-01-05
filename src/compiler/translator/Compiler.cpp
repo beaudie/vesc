@@ -9,7 +9,12 @@
 #include <sstream>
 
 #include "angle_gl.h"
-#include "common/utilities.h"
+
+#include "common/BinaryStream.h"
+#include "common/CompiledShaderState.h"
+#include "common/PackedEnums.h"
+#include "common/angle_version_info.h"
+
 #include "compiler/translator/CallDAG.h"
 #include "compiler/translator/CollectVariables.h"
 #include "compiler/translator/Initialize.h"
@@ -623,6 +628,21 @@ unsigned int TCompiler::getSharedMemorySize() const
     }
 
     return sharedMemSize;
+}
+
+const BinaryShaderBlob TCompiler::getShaderBinary(const ShHandle compilerHandle)
+{
+    gl::BinaryOutputStream stream;
+    gl::ShaderType shaderType = gl::FromGLenum<gl::ShaderType>(mShaderType);
+    gl::CompiledShaderState state(shaderType);
+    state.buildCompiledShaderState(compilerHandle, IsOutputVulkan(mOutputType));
+
+    stream.writeBytes(reinterpret_cast<const unsigned char *>(angle::GetANGLECommitHash()),
+                      angle::GetANGLECommitHashSize());
+    stream.writeEnum(shaderType);
+    state.serialize(stream);
+
+    return std::move(stream.getData());
 }
 
 bool TCompiler::validateAST(TIntermNode *root)

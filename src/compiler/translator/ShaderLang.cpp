@@ -463,6 +463,14 @@ const BinaryBlob &GetObjectBinaryBlob(const ShHandle handle)
     return infoSink.obj.getBinary();
 }
 
+const BinaryShaderBlob GetShaderBinary(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    ASSERT(compiler);
+
+    return compiler->getShaderBinary(handle);
+}
+
 const std::map<std::string, std::string> *GetNameHashingMap(const ShHandle handle)
 {
     TCompiler *compiler = GetCompilerFromHandle(handle);
