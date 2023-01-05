@@ -554,6 +554,53 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, read_barriers: ",
      "VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT, command: vkCmdDraw"},
+    // From: FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, "
+        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
+        "command: vkCmdBeginRenderPass, seq_no: 3,",
+    },
+    // From: ProgramPipelineTest31.DifferentTextureTypes/ES3_1_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ|SYNC_VERTEX_SHADER_SHADER_STORAGE_READ|SYNC_VERTEX_"
+        "SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 3,",
+    },
+    // From: VulkanPerformanceCounterTest_ES31.TextureSampleByDrawDispatchDraw/ES3_1_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: "
+        "SYNC_COMPUTE_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_"
+        "FRAGMENT_SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 3,",
+    },
+    // Sync hazard warnings with sampled images, seen in many trace tests and end2end tests.
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+        "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, write_barriers: 0, command: "
+        "vkCmdEndRenderPass",
+    },
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+        "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, command: "
+        "vkCmdBeginRenderPass",
+    },
+    {
+        "SYNC-HAZARD-WRITE-AFTER-READ",
+        "Access info (usage: SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, read_barriers: VK_PIPELINE_STAGE_2_NONE, "
+        "command: vkCmdDrawIndexed",
+    },
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
