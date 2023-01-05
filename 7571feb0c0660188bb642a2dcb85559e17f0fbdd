@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "847c7a7d_9841d3a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-05T01:51:38Z",
+      "side": 1,
+      "message": "Is this change separate from the `Improve RPCommandHelper::isImageWithLayoutTransition()`? \n\nMaybe it is helper to add it in the CL description: this change also replaces the `retainResource(image)` with `image-\u003esetQueueSerial(mQueueSerial)`.",
+      "revId": "7571feb0c0660188bb642a2dcb85559e17f0fbdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
