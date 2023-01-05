@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f483c55_5bae52a5",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-05T17:52:48Z",
+      "side": 1,
+      "message": "I believe so.",
+      "parentUuid": "6c67d2de_910886fd",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6eda2bd6_cf76737a",
@@ -53,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ba9f6c_2384d210",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3987,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-05T17:52:48Z",
+      "side": 1,
+      "message": "Good catch! The default value for uniform is always 0, so there is no correctness bug here. But I do want to explicitly set to 0. Fixed now.",
+      "parentUuid": "8bfa38fe_b97b3ef3",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "731e5dfe_79b41695",
@@ -66,6 +102,30 @@
       "writtenOn": "2023-01-05T02:17:05Z",
       "side": 1,
       "message": "I was wondering why we initialize 16 `GLfloat` elements here.",
+      "range": {
+        "startLine": 3995,
+        "startChar": 43,
+        "endLine": 3995,
+        "endChar": 45
+      },
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2941026b_e4bf316b",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3995,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-05T17:52:48Z",
+      "side": 1,
+      "message": "I copied form another test. You only need 4.",
+      "parentUuid": "731e5dfe_79b41695",
       "range": {
         "startLine": 3995,
         "startChar": 43,
