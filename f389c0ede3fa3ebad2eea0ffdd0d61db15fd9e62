@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c67d2de_910886fd",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-05T01:07:25Z",
+      "side": 1,
+      "message": "Does this newly added test expose a bug on Pixel4 Native GLES driver?",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6eda2bd6_cf76737a",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3987,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-05T01:07:25Z",
+      "side": 1,
+      "message": "Just curious, why we don\u0027t need to call below functions for compute shader program to use the texture:\n```\nGLint uTextureLocation \u003d glGetUniformLocation(computeProgram, \"u_tex2D\");\nglUniform1i(uTextureLocation, 0);\n```",
+      "revId": "f389c0ede3fa3ebad2eea0ffdd0d61db15fd9e62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
