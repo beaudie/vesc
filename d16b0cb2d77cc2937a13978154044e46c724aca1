@@ -52,6 +52,24 @@
       "parentUuid": "6607ba1b_8311ed05",
       "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c83ac90_7abea189",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2023-01-05T10:38:52Z",
+      "side": 1,
+      "message": "Do you have a CL for your version of the fix?",
+      "parentUuid": "a974a401_f1d6fe77",
+      "revId": "d16b0cb2d77cc2937a13978154044e46c724aca1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
