@@ -69,6 +69,23 @@
       "message": "Awesome, Thanks Alexey!",
       "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f76da52_b2a92271",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-01-05T18:45:18Z",
+      "side": 1,
+      "message": "LGTM too",
+      "revId": "52dffd85548bb50202b0e7826f2da5a921af611d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
