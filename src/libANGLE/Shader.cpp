@@ -14,6 +14,7 @@
 #include <sstream>
 
 #include "GLSLANG/ShaderLang.h"
+#include "common/angle_version_info.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
@@ -747,25 +748,60 @@ angle::Result Shader::serialize(const Context *context, angle::MemoryBuffer *bin
     return angle::Result::Continue;
 }
 
-angle::Result Shader::deserialize(const Context *context, BinaryInputStream &stream)
+angle::Result Shader::deserialize(BinaryInputStream &stream)
 {
-    if (stream.readInt<uint32_t>() != kShaderCacheIdentifier)
+    mState.mCompiledShaderState.deserialize(stream);
+
+    if (stream.error())
     {
+        // Error while deserializing binary stream
         return angle::Result::Stop;
     }
-    stream.readString(&mCompilerResourcesString);
-    mState.mCompiledShaderState.deserialize(stream);
 
     return angle::Result::Continue;
 }
 
 angle::Result Shader::loadBinary(const Context *context, const void *binary, GLsizei length)
 {
-    BinaryInputStream stream(binary, length);
-    ANGLE_TRY(deserialize(context, stream));
+    return loadBinaryImpl(binary, length, false);
+}
 
-    // Only successfully-compiled shaders are serialized. If deserialization is successful,
-    // we can assume the CompileStatus.
+angle::Result Shader::loadShaderBinary(const void *binary, GLsizei length)
+{
+    return loadBinaryImpl(binary, length, true);
+}
+
+angle::Result Shader::loadBinaryImpl(const void *binary, GLsizei length, bool isShaderBinary)
+{
+    BinaryInputStream stream(binary, length);
+
+    if (isShaderBinary)
+    {
+        // Load binary from a glShaderBinary call.
+        // Validation layer should have already verified that the commit string and shader type
+        // match
+        std::vector<uint8_t> commitString(angle::GetANGLECommitHashSize(), 0);
+        stream.readBytes(commitString.data(), commitString.size());
+        ASSERT(memcmp(commitString.data(), angle::GetANGLECommitHash(), commitString.size()) == 0);
+
+        gl::ShaderType shaderType;
+        stream.readEnum(&shaderType);
+        ASSERT(mType == shaderType);
+    }
+    else
+    {
+        // Load binary from shader cache.
+        if (stream.readInt<uint32_t>() != kShaderCacheIdentifier)
+        {
+            return angle::Result::Stop;
+        }
+        stream.readString(&mCompilerResourcesString);
+    }
+
+    ANGLE_TRY(deserialize(stream));
+
+    // Only successfully-compiled shaders are serialized. If deserialization is successful, we can
+    // assume the CompileStatus.
     mState.mCompileStatus = CompileStatus::COMPILED;
 
     return angle::Result::Continue;
