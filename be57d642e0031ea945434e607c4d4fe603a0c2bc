@@ -16,6 +16,46 @@
       "message": "LGTM",
       "revId": "be57d642e0031ea945434e607c4d4fe603a0c2bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa06b9be_cdfc13c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-05T00:01:01Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "be57d642e0031ea945434e607c4d4fe603a0c2bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03fac72e_4b3cea3b",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3664,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-05T00:01:01Z",
+      "side": 1,
+      "message": "I guess this combination is exactly try to demonstrate glFlush bug. Change to glFinish or any other sync primitive will make the bug goes away. What app really needs to do here is inserting some sync primtive (or glFinish) to ensure the rendering is finished before read out from AHB, instead of use sleep. That makes me think that we actually do not have a bug here: The sync primitive should flush out the deferred flush.\n\nBut, aside from that, I also think disable deferred flush for AHB still might be a good idea just so it is more robust and simple.",
+      "range": {
+        "startLine": 3660,
+        "startChar": 4,
+        "endLine": 3664,
+        "endChar": 0
+      },
+      "revId": "be57d642e0031ea945434e607c4d4fe603a0c2bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
