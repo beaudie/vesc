@@ -3107,15 +3107,16 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
-    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
-                                   &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                   &deviceMemory.get(), &sizeOut));
+    uint32_t memoryTypeIndex;
+    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, &memoryTypeIndex,
+                                   memoryPropertyFlags, &memoryPropertyFlagsOut, nullptr,
+                                   &buffer.get(), &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= mSize);
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
-    ANGLE_TRY(block->init(context, buffer.get(), mVirtualBlockCreateFlags, deviceMemory.get(),
-                          memoryPropertyFlagsOut, mSize));
+    ANGLE_TRY(block->init(context, buffer.get(), memoryTypeIndex, mVirtualBlockCreateFlags,
+                          deviceMemory.get(), memoryPropertyFlagsOut, mSize));
 
     if (mHostVisible)
     {
@@ -3168,14 +3169,15 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         DeviceScoped<DeviceMemory> deviceMemory(context->getDevice());
         VkMemoryPropertyFlags memoryPropertyFlagsOut;
         VkDeviceSize sizeOut;
-        ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
-                                       &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                       &deviceMemory.get(), &sizeOut));
+        uint32_t memoryTypeIndex;
+        ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, &memoryTypeIndex,
+                                       memoryPropertyFlags, &memoryPropertyFlagsOut, nullptr,
+                                       &buffer.get(), &deviceMemory.get(), &sizeOut));
         ASSERT(sizeOut >= alignedSize);
 
         suballocation->initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
-                                            deviceMemory.get(), memoryPropertyFlagsOut, alignedSize,
-                                            sizeOut);
+                                            memoryTypeIndex, deviceMemory.get(),
+                                            memoryPropertyFlagsOut, alignedSize, sizeOut);
         if (mHostVisible)
         {
             ANGLE_VK_TRY(context, suballocation->map(context));
@@ -4499,14 +4501,15 @@ angle::Result BufferHelper::init(Context *context,
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
-    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, requiredFlags,
-                                   &memoryPropertyFlagsOut, nullptr, &buffer.get(),
+    uint32_t bufferMemoryTypeIndex;
+    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, &bufferMemoryTypeIndex,
+                                   requiredFlags, &memoryPropertyFlagsOut, nullptr, &buffer.get(),
                                    &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= createInfo->size);
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
-                                        deviceMemory.get(), memoryPropertyFlagsOut,
-                                        requestedCreateInfo.size, sizeOut);
+                                        bufferMemoryTypeIndex, deviceMemory.get(),
+                                        memoryPropertyFlagsOut, requestedCreateInfo.size, sizeOut);
     if (isHostVisible())
     {
         uint8_t *ptrOut;
@@ -4546,13 +4549,14 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize allocatedSize = 0;
-    ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &buffer.get(),
-                                        &memoryPropertyFlagsOut, &deviceMemory.get(),
+    uint32_t memoryTypeIndex;
+    ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, &memoryTypeIndex, memoryProperties,
+                                        &buffer.get(), &memoryPropertyFlagsOut, &deviceMemory.get(),
                                         &allocatedSize));
 
     mSuballocation.initWithEntireBuffer(
-        contextVk, buffer.get(), MemoryAllocationType::BufferExternal, deviceMemory.get(),
-        memoryPropertyFlagsOut, requestedCreateInfo.size, allocatedSize);
+        contextVk, buffer.get(), MemoryAllocationType::BufferExternal, memoryTypeIndex,
+        deviceMemory.get(), memoryPropertyFlagsOut, requestedCreateInfo.size, allocatedSize);
     if (isHostVisible())
     {
         uint8_t *ptrOut;
@@ -5051,7 +5055,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mContentDefined(std::move(other.mContentDefined)),
       mStencilContentDefined(std::move(other.mStencilContentDefined)),
       mAllocationSize(std::move(other.mAllocationSize)),
-      mMemoryAllocationType(std::move(other.mMemoryAllocationType))
+      mMemoryAllocationType(std::move(other.mMemoryAllocationType)),
+      mMemoryTypeIndex(std::move(other.mMemoryTypeIndex))
 {
     ASSERT(this != &other);
     other.resetCachedProperties();
@@ -5084,6 +5089,7 @@ void ImageHelper::resetCachedProperties()
     mTotalStagedBufferUpdateSize = 0;
     mAllocationSize              = 0;
     mMemoryAllocationType        = MemoryAllocationType::InvalidEnum;
+    mMemoryTypeIndex             = std::numeric_limits<uint32_t>::max();
     std::fill(mViewFormats.begin(), mViewFormats.begin() + mViewFormats.max_size(),
               VK_FORMAT_UNDEFINED);
     mYcbcrConversionDesc.reset();
@@ -5119,6 +5125,7 @@ void ImageHelper::setEntireContentUndefined()
     // Allocated memory size and type should be reset at init and after release.
     mAllocationSize       = 0;
     mMemoryAllocationType = MemoryAllocationType::InvalidEnum;
+    mMemoryTypeIndex      = std::numeric_limits<uint32_t>::max();
 
     // Note: this function is only called during init/release, so unlike
     // invalidateSubresourceContentImpl, it doesn't attempt to make sure emulated formats have a
@@ -5454,7 +5461,7 @@ void ImageHelper::releaseImage(RendererVk *renderer)
 {
     if (mMemoryAllocationType != MemoryAllocationType::InvalidEnum && mAllocationSize != 0)
     {
-        renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize,
+        renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mDeviceMemory.getHandle());
     }
 
@@ -5630,8 +5637,8 @@ angle::Result ImageHelper::initMemory(Context *context,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
     mMemoryAllocationType = MemoryAllocationType::Image;
-    ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr, &mImage,
-                                  &mDeviceMemory, &mAllocationSize));
+    ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, &mMemoryTypeIndex, flags, &flags,
+                                  nullptr, &mImage, &mDeviceMemory, &mAllocationSize));
     mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
     RendererVk *renderer = context->getRenderer();
@@ -5679,7 +5686,7 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
-            context, mMemoryAllocationType, flags, memoryRequirements,
+            context, mMemoryAllocationType, &mMemoryTypeIndex, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
             &mDeviceMemory));
     }
@@ -5837,7 +5844,7 @@ void ImageHelper::destroy(RendererVk *renderer)
 
     if (mImage.valid())
     {
-        renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize,
+        renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mDeviceMemory.getHandle());
     }
 
@@ -7872,6 +7879,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     prevImage->get().mImageSerial                 = mImageSerial;
     prevImage->get().mAllocationSize              = mAllocationSize;
     prevImage->get().mMemoryAllocationType        = mMemoryAllocationType;
+    prevImage->get().mMemoryTypeIndex             = mMemoryTypeIndex;
 
     // Reset information for current (invalid) image.
     mCurrentLayout               = ImageLayout::Undefined;

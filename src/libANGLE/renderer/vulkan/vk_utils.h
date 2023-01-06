@@ -443,6 +443,15 @@ class MemoryProperties final : angle::NonCopyable
                                             uint32_t *indexOut) const;
     void destroy();
 
+    uint32_t getHeapIndexForMemoryType(uint32_t memoryType) const
+    {
+        if (memoryType < getMemoryTypeCount())
+        {
+            return mMemoryProperties.memoryTypes[memoryType].heapIndex;
+        }
+        return std::numeric_limits<uint32_t>::max();
+    }
+
     VkDeviceSize getHeapSizeForMemoryType(uint32_t memoryType) const
     {
         uint32_t heapIndex = mMemoryProperties.memoryTypes[memoryType].heapIndex;
@@ -451,6 +460,7 @@ class MemoryProperties final : angle::NonCopyable
 
     const VkMemoryType &getMemoryType(uint32_t i) const { return mMemoryProperties.memoryTypes[i]; }
 
+    uint32_t getMemoryHeapCount() const { return mMemoryProperties.memoryHeapCount; }
     uint32_t getMemoryTypeCount() const { return mMemoryProperties.memoryTypeCount; }
 
   private:
@@ -493,6 +503,7 @@ angle::Result InitMappableDeviceMemory(Context *context,
 
 angle::Result AllocateBufferMemory(Context *context,
                                    MemoryAllocationType memoryAllocationType,
+                                   uint32_t *memoryTypeIndexOut,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                    const void *extraAllocationInfo,
@@ -502,6 +513,7 @@ angle::Result AllocateBufferMemory(Context *context,
 
 angle::Result AllocateImageMemory(Context *context,
                                   MemoryAllocationType memoryAllocationType,
+                                  uint32_t *memoryTypeIndexOut,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                   const void *extraAllocationInfo,
@@ -512,6 +524,7 @@ angle::Result AllocateImageMemory(Context *context,
 angle::Result AllocateImageMemoryWithRequirements(
     Context *context,
     MemoryAllocationType memoryAllocationType,
+    uint32_t *memoryTypeIndexOut,
     VkMemoryPropertyFlags memoryPropertyFlags,
     const VkMemoryRequirements &memoryRequirements,
     const void *extraAllocationInfo,
@@ -521,6 +534,7 @@ angle::Result AllocateImageMemoryWithRequirements(
 
 angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    MemoryAllocationType memoryAllocationType,
+                                                   uint32_t *memoryTypeIndexOut,
                                                    VkMemoryPropertyFlags memoryPropertyFlags,
                                                    const VkMemoryRequirements &memoryRequirements,
                                                    const void *extraAllocationInfo,
@@ -910,38 +924,36 @@ class ClearValuesArray final
     X(ImageOrBufferView)      \
     X(Sampler)
 
-#define ANGLE_DEFINE_VK_SERIAL_TYPE(Type)                                  \
-    class Type##Serial                                                     \
-    {                                                                      \
-      public:                                                              \
-        constexpr Type##Serial() : mSerial(kInvalid)                       \
-        {}                                                                 \
-        constexpr explicit Type##Serial(uint32_t serial) : mSerial(serial) \
-        {}                                                                 \
-                                                                           \
-        constexpr bool operator==(const Type##Serial &other) const         \
-        {                                                                  \
-            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);      \
-            return mSerial == other.mSerial;                               \
-        }                                                                  \
-        constexpr bool operator!=(const Type##Serial &other) const         \
-        {                                                                  \
-            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);      \
-            return mSerial != other.mSerial;                               \
-        }                                                                  \
-        constexpr uint32_t getValue() const                                \
-        {                                                                  \
-            return mSerial;                                                \
-        }                                                                  \
-        constexpr bool valid() const                                       \
-        {                                                                  \
-            return mSerial != kInvalid;                                    \
-        }                                                                  \
-                                                                           \
-      private:                                                             \
-        uint32_t mSerial;                                                  \
-        static constexpr uint32_t kInvalid = 0;                            \
-    };                                                                     \
+#define ANGLE_DEFINE_VK_SERIAL_TYPE(Type)                                     \
+    class Type##Serial                                                        \
+    {                                                                         \
+      public:                                                                 \
+        constexpr Type##Serial() : mSerial(kInvalid) {}                       \
+        constexpr explicit Type##Serial(uint32_t serial) : mSerial(serial) {} \
+                                                                              \
+        constexpr bool operator==(const Type##Serial &other) const            \
+        {                                                                     \
+            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);         \
+            return mSerial == other.mSerial;                                  \
+        }                                                                     \
+        constexpr bool operator!=(const Type##Serial &other) const            \
+        {                                                                     \
+            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);         \
+            return mSerial != other.mSerial;                                  \
+        }                                                                     \
+        constexpr uint32_t getValue() const                                   \
+        {                                                                     \
+            return mSerial;                                                   \
+        }                                                                     \
+        constexpr bool valid() const                                          \
+        {                                                                     \
+            return mSerial != kInvalid;                                       \
+        }                                                                     \
+                                                                              \
+      private:                                                                \
+        uint32_t mSerial;                                                     \
+        static constexpr uint32_t kInvalid = 0;                               \
+    };                                                                        \
     static constexpr Type##Serial kInvalid##Type##Serial = Type##Serial();
 
 ANGLE_VK_SERIAL_OP(ANGLE_DEFINE_VK_SERIAL_TYPE)
@@ -1031,6 +1043,7 @@ struct MemoryAllocationInfo
     MemoryAllocationInfo() = default;
     uint64_t id;
     MemoryAllocationType allocType;
+    uint32_t memoryHeapIndex;
     void *handle;
     VkDeviceSize size;
 };

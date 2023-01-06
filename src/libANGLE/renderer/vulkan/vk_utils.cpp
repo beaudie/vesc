@@ -81,6 +81,7 @@ bool FindCompatibleMemory(const VkPhysicalDeviceMemoryProperties &memoryProperti
 
 angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                                               vk::MemoryAllocationType memoryAllocationType,
+                                              uint32_t *memoryTypeIndexOut,
                                               const vk::MemoryProperties &memoryProperties,
                                               VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                               VkMemoryPropertyFlags *memoryPropertyFlagsOut,
@@ -90,24 +91,23 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 {
     VkDevice device = context->getDevice();
 
-    uint32_t memoryTypeIndex = 0;
     ANGLE_TRY(memoryProperties.findCompatibleMemoryIndex(
         context, memoryRequirements, requestedMemoryPropertyFlags, (extraAllocationInfo != nullptr),
-        memoryPropertyFlagsOut, &memoryTypeIndex));
+        memoryPropertyFlagsOut, memoryTypeIndexOut));
 
     VkMemoryAllocateInfo allocInfo = {};
     allocInfo.sType                = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.pNext                = extraAllocationInfo;
-    allocInfo.memoryTypeIndex      = memoryTypeIndex;
+    allocInfo.memoryTypeIndex      = *memoryTypeIndexOut;
     allocInfo.allocationSize       = memoryRequirements.size;
 
     // Add the new allocation for tracking.
     RendererVk *renderer = context->getRenderer();
-    renderer->setPendingMemoryAlloc(memoryAllocationType, allocInfo.allocationSize);
-
+    renderer->setPendingMemoryAlloc(memoryAllocationType, allocInfo.allocationSize,
+                                    *memoryTypeIndexOut);
     ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
 
-    renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize,
+    renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut,
                             deviceMemoryOut->getHandle());
 
     // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
@@ -129,6 +129,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 template <typename T>
 angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::MemoryAllocationType memoryAllocationType,
+                                                 uint32_t *memoryTypeIndexOut,
                                                  VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                                  VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                  const VkMemoryRequirements &memoryRequirements,
@@ -140,6 +141,7 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
 template <>
 angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::MemoryAllocationType memoryAllocationType,
+                                                 uint32_t *memoryTypeIndexOut,
                                                  VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                                  VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                  const VkMemoryRequirements &memoryRequirements,
@@ -150,9 +152,10 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
 {
     const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
 
-    ANGLE_TRY(FindAndAllocateCompatibleMemory(
-        context, memoryAllocationType, memoryProperties, requestedMemoryPropertyFlags,
-        memoryPropertyFlagsOut, memoryRequirements, extraAllocationInfo, deviceMemoryOut));
+    ANGLE_TRY(FindAndAllocateCompatibleMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                              memoryProperties, requestedMemoryPropertyFlags,
+                                              memoryPropertyFlagsOut, memoryRequirements,
+                                              extraAllocationInfo, deviceMemoryOut));
 
     if (extraBindInfo)
     {
@@ -176,6 +179,7 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
 template <>
 angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
                                                  vk::MemoryAllocationType memoryAllocationType,
+                                                 uint32_t *memoryTypeIndexOut,
                                                  VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                                  VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                  const VkMemoryRequirements &memoryRequirements,
@@ -188,9 +192,10 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
 
     const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
 
-    ANGLE_TRY(FindAndAllocateCompatibleMemory(
-        context, memoryAllocationType, memoryProperties, requestedMemoryPropertyFlags,
-        memoryPropertyFlagsOut, memoryRequirements, extraAllocationInfo, deviceMemoryOut));
+    ANGLE_TRY(FindAndAllocateCompatibleMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                              memoryProperties, requestedMemoryPropertyFlags,
+                                              memoryPropertyFlagsOut, memoryRequirements,
+                                              extraAllocationInfo, deviceMemoryOut));
     ANGLE_VK_TRY(context, buffer->bindMemory(context->getDevice(), *deviceMemoryOut, 0));
     return angle::Result::Continue;
 }
@@ -198,6 +203,7 @@ angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
 template <typename T>
 angle::Result AllocateBufferOrImageMemory(vk::Context *context,
                                           vk::MemoryAllocationType memoryAllocationType,
+                                          uint32_t *memoryTypeIndexOut,
                                           VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                           VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                           const void *extraAllocationInfo,
@@ -210,8 +216,9 @@ angle::Result AllocateBufferOrImageMemory(vk::Context *context,
     bufferOrImage->getMemoryRequirements(context->getDevice(), &memoryRequirements);
 
     ANGLE_TRY(AllocateAndBindBufferOrImageMemory(
-        context, memoryAllocationType, requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
-        memoryRequirements, extraAllocationInfo, nullptr, bufferOrImage, deviceMemoryOut));
+        context, memoryAllocationType, memoryTypeIndexOut, requestedMemoryPropertyFlags,
+        memoryPropertyFlagsOut, memoryRequirements, extraAllocationInfo, nullptr, bufferOrImage,
+        deviceMemoryOut));
 
     *sizeOut = memoryRequirements.size;
 
@@ -606,6 +613,7 @@ angle::Result InitMappableDeviceMemory(Context *context,
 
 angle::Result AllocateBufferMemory(Context *context,
                                    vk::MemoryAllocationType memoryAllocationType,
+                                   uint32_t *memoryTypeIndexOut,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                    const void *extraAllocationInfo,
@@ -613,13 +621,14 @@ angle::Result AllocateBufferMemory(Context *context,
                                    DeviceMemory *deviceMemoryOut,
                                    VkDeviceSize *sizeOut)
 {
-    return AllocateBufferOrImageMemory(context, memoryAllocationType, requestedMemoryPropertyFlags,
-                                       memoryPropertyFlagsOut, extraAllocationInfo, buffer,
-                                       deviceMemoryOut, sizeOut);
+    return AllocateBufferOrImageMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                       requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
+                                       extraAllocationInfo, buffer, deviceMemoryOut, sizeOut);
 }
 
 angle::Result AllocateImageMemory(Context *context,
                                   vk::MemoryAllocationType memoryAllocationType,
+                                  uint32_t *memoryTypeIndexOut,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                   const void *extraAllocationInfo,
@@ -627,14 +636,15 @@ angle::Result AllocateImageMemory(Context *context,
                                   DeviceMemory *deviceMemoryOut,
                                   VkDeviceSize *sizeOut)
 {
-    return AllocateBufferOrImageMemory(context, memoryAllocationType, memoryPropertyFlags,
-                                       memoryPropertyFlagsOut, extraAllocationInfo, image,
-                                       deviceMemoryOut, sizeOut);
+    return AllocateBufferOrImageMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                       memoryPropertyFlags, memoryPropertyFlagsOut,
+                                       extraAllocationInfo, image, deviceMemoryOut, sizeOut);
 }
 
 angle::Result AllocateImageMemoryWithRequirements(
     Context *context,
     vk::MemoryAllocationType memoryAllocationType,
+    uint32_t *memoryTypeIndexOut,
     VkMemoryPropertyFlags memoryPropertyFlags,
     const VkMemoryRequirements &memoryRequirements,
     const void *extraAllocationInfo,
@@ -643,13 +653,15 @@ angle::Result AllocateImageMemoryWithRequirements(
     DeviceMemory *deviceMemoryOut)
 {
     VkMemoryPropertyFlags memoryPropertyFlagsOut = 0;
-    return AllocateAndBindBufferOrImageMemory(
-        context, memoryAllocationType, memoryPropertyFlags, &memoryPropertyFlagsOut,
-        memoryRequirements, extraAllocationInfo, extraBindInfo, image, deviceMemoryOut);
+    return AllocateAndBindBufferOrImageMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                              memoryPropertyFlags, &memoryPropertyFlagsOut,
+                                              memoryRequirements, extraAllocationInfo,
+                                              extraBindInfo, image, deviceMemoryOut);
 }
 
 angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    MemoryAllocationType memoryAllocationType,
+                                                   uint32_t *memoryTypeIndexOut,
                                                    VkMemoryPropertyFlags memoryPropertyFlags,
                                                    const VkMemoryRequirements &memoryRequirements,
                                                    const void *extraAllocationInfo,
@@ -657,9 +669,10 @@ angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                    DeviceMemory *deviceMemoryOut)
 {
-    return AllocateAndBindBufferOrImageMemory(
-        context, memoryAllocationType, memoryPropertyFlags, memoryPropertyFlagsOut,
-        memoryRequirements, extraAllocationInfo, nullptr, buffer, deviceMemoryOut);
+    return AllocateAndBindBufferOrImageMemory(context, memoryAllocationType, memoryTypeIndexOut,
+                                              memoryPropertyFlags, memoryPropertyFlagsOut,
+                                              memoryRequirements, extraAllocationInfo, nullptr,
+                                              buffer, deviceMemoryOut);
 }
 
 angle::Result InitShaderModule(Context *context,
