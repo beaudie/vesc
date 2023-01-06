@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9119d06_2388adfd",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-06T14:12:22Z",
+      "side": 1,
+      "message": "Is there something that needs to be configured dashboard-side as well for the results to be uploaded?",
+      "range": {
+        "startLine": 435,
+        "startChar": 15,
+        "endLine": 435,
+        "endChar": 34
+      },
+      "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
