@@ -27,6 +27,7 @@ namespace vk
 {
 angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
                                         EGLClientBuffer clientBuffer,
+                                        uint32_t *memoryTypeIndexOut,
                                         VkMemoryPropertyFlags memoryProperties,
                                         Buffer *buffer,
                                         VkMemoryPropertyFlags *memoryPropertyFlagsOut,
