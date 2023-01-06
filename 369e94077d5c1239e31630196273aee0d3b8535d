@@ -39,6 +39,30 @@
       },
       "revId": "369e94077d5c1239e31630196273aee0d3b8535d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cd9c347_bd40fd82",
+        "filename": "scripts/process_angle_perf_results.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-06T17:38:15Z",
+      "side": 1,
+      "message": "yeah it\u0027s confusing (and others pointed it out too on https://stackoverflow.com/a/952952 for example) but apparently is pythonic\n\nI\u0027ll replace this with something else soon anyways, just a temporary sanity check.",
+      "parentUuid": "9653ab3d_ec258150",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 89
+      },
+      "revId": "369e94077d5c1239e31630196273aee0d3b8535d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
