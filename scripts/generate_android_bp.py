@@ -462,6 +462,27 @@ def action_target_to_blueprint(abi, target, build_info):
             input for input in gn_inputs
             if not is_input_in_tool_files(target_info['script'], input)
         ]
+    # special handling the {{response_file_name}} args in GN:
+    # see https://gn.googlesource.com/gn/+/main/docs/reference.md#var_response_file_contents
+    handle_response_file_name = False
+    response_file_name = 'gn_response_file'
+    for index, arg in enumerate(target_info['args']):
+        if (arg == '{{response_file_name}}'):
+            handle_response_file_name = True
+            # output the response_file_contents into a temp file:
+            # step 1: open the temp file, if it does not exist, create the temp file
+            temp_file = open(response_file_name, 'w+')
+            # step 2: write the response_file_contents to the temp_file
+            for angle_code_file in target_info['response_file_contents']:
+                angle_code_file_remap_path = angle_code_file.replace('../../', '')
+                temp_file.write("%s\n" % angle_code_file_remap_path)
+            temp_file.close()
+            # step 3: replace the '{{response_file_name}}' with newly created file name
+            target_info['args'][index] = response_file_name
+            # step 4: add the response_file_name to bp_srcs so that gn_action_args_to_blueprint_args
+            # will map response_file_name with the correct $location label
+            gn_inputs.append(response_file_name)
+
     bp_srcs = gn_paths_to_blueprint_paths(gn_inputs)
 
     bp['srcs'] = bp_srcs
@@ -482,6 +503,10 @@ def action_target_to_blueprint(abi, target, build_info):
     # Generate the full command, $(location) refers to tool_files[0], the script
     cmd = ['$(location)'] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs,
                                                              target_info['args'])
+    if (handle_response_file_name):
+        cmd += ['--response_file_name'] + [response_file_name]
+        cmd += ['--add_relative_path_to_build_dir True']
+
     bp['cmd'] = ' '.join(cmd)
 
     bp['sdk_version'] = SDK_VERSION
