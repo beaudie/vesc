@@ -46,6 +46,53 @@
       },
       "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a111ca85_29ab2456",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-06T15:08:50Z",
+      "side": 1,
+      "message": "No, not to my knowledge, they should just show up.",
+      "parentUuid": "1f67394a_8e270199",
+      "range": {
+        "startLine": 435,
+        "startChar": 15,
+        "endLine": 435,
+        "endChar": 34
+      },
+      "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a6f4f6f_b6cebab6",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-06T15:08:50Z",
+      "side": 1,
+      "message": "why exp? wouldn\u0027t that mean we just have to do an inconvenient rename?",
+      "range": {
+        "startLine": 22,
+        "startChar": 9,
+        "endLine": 22,
+        "endChar": 29
+      },
+      "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
