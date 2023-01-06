@@ -16,6 +16,24 @@
       "message": "Uploading perf results is broken after this.\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win10-nvidia-gtx1660-perf/672/overview\nhttps://logs.chromium.org/logs/angle/buildbucket/cr-buildbucket/8792708260157398033/+/u/angle_trace_perf_vulkan_tests_on_NVIDIA_GPU_on_Windows_on_Windows-10-18363/raw_io.output_Merge_script_log_\nTraceback (most recent call last):\n  File \"C:\\b\\s\\w\\ir\\cache\\builder\\angle\\scripts\\process_angle_perf_results.py\", line 711, in \u003cmodule\u003e\n    sys.exit(main())\n  File \"C:\\b\\s\\w\\ir\\cache\\builder\\angle\\scripts\\process_angle_perf_results.py\", line 701, in main\n    return_code, _ \u003d process_perf_results(args.output_json, args.configuration_name,\n  File \"C:\\b\\s\\w\\ir\\cache\\builder\\angle\\scripts\\process_angle_perf_results.py\", line 303, in process_perf_results\n    metric_names \u003d list(set(d[\u0027metric\u0027] for d in group for group in metrics))\nNameError: name \u0027group\u0027 is not defined",
       "revId": "056f80448f92d1e675565915c16ccd696f83df36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20084569_f6bca7da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-06T17:25:41Z",
+      "side": 1,
+      "message": "oops sorry. I was sure I tested this but apparently I didn\u0027t :/\n\nhttps://crrev.com/c/4143440",
+      "parentUuid": "e9ae2f62_c2babd49",
+      "revId": "056f80448f92d1e675565915c16ccd696f83df36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
