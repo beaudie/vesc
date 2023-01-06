@@ -22,6 +22,30 @@
       },
       "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f67394a_8e270199",
+        "filename": "infra/config/main.star",
+        "patchSetId": 2
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-06T14:54:27Z",
+      "side": 1,
+      "message": "probably No but unsure",
+      "parentUuid": "a9119d06_2388adfd",
+      "range": {
+        "startLine": 435,
+        "startChar": 15,
+        "endLine": 435,
+        "endChar": 34
+      },
+      "revId": "88d97dcdafd3afbb5465385004aec5cac7328c43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
