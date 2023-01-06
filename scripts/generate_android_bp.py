@@ -462,6 +462,17 @@ def action_target_to_blueprint(abi, target, build_info):
             input for input in gn_inputs
             if not is_input_in_tool_files(target_info['script'], input)
         ]
+
+    # special handling the {{response_file_name}} args in GN:
+    # see https://gn.googlesource.com/gn/+/main/docs/reference.md#var_response_file_contents
+    handle_response_file_name = False
+    response_file_name = 'gn_response_file'
+    for index, arg in enumerate(target_info['args']):
+        if (arg == '{{response_file_name}}'):
+            handle_response_file_name = True
+            # replace the arg {{response_file_name}}
+            target_info['args'][index] = response_file_name
+
     bp_srcs = gn_paths_to_blueprint_paths(gn_inputs)
 
     bp['srcs'] = bp_srcs
@@ -479,9 +490,22 @@ def action_target_to_blueprint(abi, target, build_info):
 
     bp['tool_files'] = [gn_path_to_blueprint_path(target_info['script'])]
 
+    # special handling the {{response_file_name}} args in GN:
+    # see https://gn.googlesource.com/gn/+/main/docs/reference.md#var_response_file_contents
+    cmd_handle_response_file_content = ''
+    if (handle_response_file_name):
+        # add the command to write src filelist into a temp response_file_name
+        cmd_handle_response_file_content = 'echo $(in) > ' + response_file_name
+
     # Generate the full command, $(location) refers to tool_files[0], the script
-    cmd = ['$(location)'] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs,
-                                                             target_info['args'])
+    if (handle_response_file_name):
+        cmd = [cmd_handle_response_file_content
+              ] + ['&&'] + ['$(location)'] + gn_action_args_to_blueprint_args(
+                  bp_srcs, bp_outputs, target_info['args'])
+    else:
+        cmd = ['$(location)'] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs,
+                                                                 target_info['args'])
+
     bp['cmd'] = ' '.join(cmd)
 
     bp['sdk_version'] = SDK_VERSION
