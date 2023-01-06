@@ -16,6 +16,24 @@
       "message": "Thanks! Could you also add b/262815739? Seems to fix it http://b/262815739#comment10",
       "revId": "81ee0c2cafa07257cdee46407834be0c4879469c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8df838_b4d1121a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-06T19:57:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae279d6_d90017e6",
+      "revId": "81ee0c2cafa07257cdee46407834be0c4879469c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
