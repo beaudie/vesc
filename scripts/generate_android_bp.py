@@ -442,6 +442,36 @@ def is_input_in_tool_files(tool_files, input):
     return input in tool_files
 
 
+# special handling the {{response_file_name}} args in GN:
+# see https://gn.googlesource.com/gn/+/main/docs/reference.md#var_response_file_contents
+# in GN, if we use response_file_contents, the GN build system will automatically
+# write contents specified in response_file_contents arg into a temporary file
+# identified by {{response_file_name}}. However, Android blueprint does not have
+# the matching machanism: see http://yaqs/6379047605984296960. Android blueprint
+# does automatically generate the temporary file and does not recognize
+# '{{response_file_name}}'. To solve the problem:
+# 1) replace the '{{response_file_name}}' in command argument with the new
+# temporary file name.
+# 2) write the content specified in 'response_file_contents' to the new temporary
+# file
+# This function completes step 1) above. It checks if there are
+# '{{response_file_name}}' used in the command arguments. If there are,
+# the function replaces the '{{response_file_name}}' with the new temp file
+# named 'gn_response_file', and returns the new temp file to indicate
+# we need to complete step 2)
+def handle_gn_build_arg_response_file_name(command_arg_list):
+    response_file_name_used_in_command_args = False
+    new_temp_file_name = 'gn_response_file'
+    for index, arg in enumerate(command_arg_list):
+        if arg == '{{response_file_name}}':
+            response_file_name_used_in_command_args = True
+            command_arg_list[index] = new_temp_file_name
+    if response_file_name_used_in_command_args:
+        return new_temp_file_name
+    else:
+        return None
+
+
 def action_target_to_blueprint(abi, target, build_info):
     target_info = build_info[abi][target]
     blueprint_type = blueprint_gen_types[target_info['type']]
@@ -462,6 +492,7 @@ def action_target_to_blueprint(abi, target, build_info):
             input for input in gn_inputs
             if not is_input_in_tool_files(target_info['script'], input)
         ]
+
     bp_srcs = gn_paths_to_blueprint_paths(gn_inputs)
 
     bp['srcs'] = bp_srcs
@@ -479,9 +510,17 @@ def action_target_to_blueprint(abi, target, build_info):
 
     bp['tool_files'] = [gn_path_to_blueprint_path(target_info['script'])]
 
-    # Generate the full command, $(location) refers to tool_files[0], the script
-    cmd = ['$(location)'] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs,
-                                                             target_info['args'])
+    new_temporary_gn_response_file = handle_gn_build_arg_response_file_name(target_info['args'])
+
+    if new_temporary_gn_response_file:
+        # add the command 'echo $(in) > gn_response_file' to
+        # write $response_file_contents into the new_temporary_gn_response_file.
+        cmd = ['echo $(in) >', new_temporary_gn_response_file, '&&', '$(location)'
+              ] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs, target_info['args'])
+    else:
+        cmd = ['$(location)'] + gn_action_args_to_blueprint_args(bp_srcs, bp_outputs,
+                                                                 target_info['args'])
+
     bp['cmd'] = ' '.join(cmd)
 
     bp['sdk_version'] = SDK_VERSION
