@@ -16,6 +16,29 @@
       "message": "(want lgtm \u003d any)",
       "revId": "369e94077d5c1239e31630196273aee0d3b8535d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9653ab3d_ec258150",
+        "filename": "scripts/process_angle_perf_results.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-06T17:32:06Z",
+      "side": 1,
+      "message": "Is it possible to make this more readable by adding () or splitting into several statements?",
+      "range": {
+        "startLine": 303,
+        "startChar": 0,
+        "endLine": 303,
+        "endChar": 89
+      },
+      "revId": "369e94077d5c1239e31630196273aee0d3b8535d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
