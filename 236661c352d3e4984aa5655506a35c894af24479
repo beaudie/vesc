@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c187d7fe_58b8b1a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2023-01-07T01:18:50Z",
+      "side": 1,
+      "message": "Sorry, I can\u0027t seem to get this CL to work. The bots keep coughing up new SYNC-HAZARD warnings that I can\u0027t reproduce locally (and AFAICT I didn\u0027t see on previous runs, possibly due to previous errors?). Hopefully someone on ANGLE can take this over.",
+      "revId": "236661c352d3e4984aa5655506a35c894af24479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
