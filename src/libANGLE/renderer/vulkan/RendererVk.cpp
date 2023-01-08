@@ -231,6 +231,15 @@ constexpr const char *kNoListRestartSkippedMessages[] = {
 // those, ANGLE makes no further attempt to resolve them and expects vendor support for the
 // extensions instead.  The list of skipped messages is split based on this support.
 constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
+    // http://anglebug.com/7931
+    {
+        "SYNC-HAZARD-WRITE-AFTER-READ",
+        "Access info () (usage: SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, "
+        "prior_usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, "
+        "read_barriers: VK_PIPELINE_STAGE_2_NONE, command: vkCmdDraw",
+    },
+
     // http://anglebug.com/6416
     // http://anglebug.com/6421
     {
@@ -248,53 +257,53 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 6",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 6",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 7",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 7",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdDraw",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdDraw",
     },
     // From: FramebufferTest_ES3.FramebufferBindToNewLevelAfterMaxIncreaseShouldntCrash/ES3_Vulkan
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 10,",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 2,",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 2,",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 9,",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 9,",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 10,",
     },
     // From: FramebufferTest_ES3.SampleFromAttachedTextureWithDifferentLOD/ES3_Vulkan
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
         "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
-        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
-        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
-        "command: vkCmdBeginRenderPass, seq_no: 8,",
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_",
+        "_READ, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 8,",
     },
     // With Vulkan secondary command buffers:
     {
@@ -311,6 +320,69 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
         "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, "
         "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
         "command: vkCmdBeginRenderPass, seq_no: 11",
+    },
+    // From: TraceTest.aztec_ruins_high
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, "
+        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: "
+        "0, command: vkCmdBeginRenderPass, seq_no: 2",
+    },
+    // From: TraceTest.aztec_ruins,aztec_ruins_high,black_desert_mobile
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL, binding #",
+        ", index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: "
+        "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, write_barriers: 0, command: "
+        "vkCmdEndRenderPass, seq_no:",
+    },
+    // From: TraceTest.aztec_ruins,aztec_ruins_high,manhattan_10,manhatta_31
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "vkCmdEndRenderPass: Hazard WRITE_AFTER_READ in subpass 0 for attachment ",
+        " depth aspect during store with storeOp VK_ATTACHMENT_STORE_OP_STORE. Access info (usage: "
+        "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, read_barriers: VK_PIPELINE_STAGE_2_NONE, "
+        "command: vkCmdDrawIndexed, seq_no:",
+    },
+    // From: TraceTest.dota_underlords
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #1, index 0. Access info (usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ|SYNC_VERTEX_SHADER_SHADER_STORAGE_READ|SYNC_VERTEX_"
+        "SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 18,",
+    },
+    // From: TraceTest.lego_legends
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #1, index 0. Access info (usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ|SYNC_VERTEX_SHADER_SHADER_STORAGE_READ|SYNC_VERTEX_"
+        "SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 1,",
+    },
+    // From: TraceTest.life_is_strange
+    {
+        "SYNC-HAZARD-WRITE-AFTER-READ",
+        "vkCmdEndRenderPass: Hazard WRITE_AFTER_READ in subpass 0 for attachment 1 depth aspect "
+        "during store with storeOp VK_ATTACHMENT_STORE_OP_DONT_CARE. Access info (usage: "
+        "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, read_barriers: VK_PIPELINE_STAGE_2_NONE, "
+        "command: vkCmdDrawIndexed, seq_no: 309,",
+    },
+    {
+        "SYNC-HAZARD-WRITE-AFTER-READ",
+        "vkCmdEndRenderPass: Hazard WRITE_AFTER_READ in subpass 0 for attachment 1 depth aspect "
+        "during store with storeOp VK_ATTACHMENT_STORE_OP_DONT_CARE. Access info (usage: "
+        "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, read_barriers: VK_PIPELINE_STAGE_2_NONE, "
+        "command: vkCmdDrawIndexed, seq_no: 2",
     },
     // http://anglebug.com/6551
     {
@@ -554,6 +626,44 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ, read_barriers: ",
      "VK_PIPELINE_STAGE_2_BOTTOM_OF_PIPE_BIT, command: vkCmdDraw"},
+    // From: FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: VK_IMAGE_LAYOUT_GENERAL, "
+        "binding #0, index 0. Access info (usage: SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, "
+        "prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, "
+        "command: vkCmdBeginRenderPass, seq_no: 3,",
+    },
+    // From: ProgramPipelineTest31.DifferentTextureTypes/ES3_1_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_VERTEX_SHADER_SHADER_SAMPLED_READ|SYNC_VERTEX_SHADER_SHADER_STORAGE_READ|SYNC_VERTEX_"
+        "SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 3,",
+    },
+    // From: VulkanPerformanceCounterTest_ES31.TextureSampleByDrawDispatchDraw/ES3_1_Vulkan
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: "
+        "SYNC_COMPUTE_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_"
+        "FRAGMENT_SHADER_UNIFORM_READ, command: vkCmdPipelineBarrier, seq_no: 3,",
+    },
+    {
+        "SYNC-HAZARD-READ-AFTER-WRITE",
+        "type: VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageLayout: "
+        "VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, binding #0, index 0. Access info (usage: "
+        "SYNC_COMPUTE_SHADER_SHADER_SAMPLED_READ, prior_usage: SYNC_IMAGE_LAYOUT_TRANSITION, "
+        "write_barriers: "
+        "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ|SYNC_FRAGMENT_SHADER_SHADER_SAMPLED_"
+        "READ|SYNC_FRAGMENT_SHADER_SHADER_STORAGE_READ|SYNC_FRAGMENT_SHADER_UNIFORM_READ, command: "
+        "vkCmdPipelineBarrier, seq_no: 4,",
+    },
 };
 
 // Messages that shouldn't be generated if storeOp=NONE is supported, otherwise they are expected.
