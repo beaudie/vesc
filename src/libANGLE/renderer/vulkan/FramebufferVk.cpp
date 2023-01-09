@@ -524,8 +524,9 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
 
     const bool isMidRenderPassClear =
-        contextVk->hasStartedRenderPassWithCommands() &&
-        contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial);
+        contextVk->hasStartedRenderPassWithCommands() /*&&
+        contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial)*/
+        ;
 
     if (isMidRenderPassClear)
     {
