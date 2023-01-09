@@ -17,6 +17,7 @@ import logging
 import multiprocessing
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import time
@@ -303,6 +304,10 @@ def process_perf_results(output_json,
                 metric_names = list(set(d['metric'] for group in metrics for d in group))
                 logging.info('angle_metrics: len=%d metrics=%s (directory=%s)' %
                              (len(metrics), '|'.join(metric_names), directory))
+
+    print(
+        subprocess.check_output(
+            ['gsutil', 'cat', 'gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json']))
 
     if not smoke_test_mode and handle_perf:
         build_properties_map = json.loads(build_properties)
