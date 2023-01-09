@@ -28,6 +28,7 @@ PY_UTILS = str(pathlib.Path(SCRIPT_DIR) / 'py_utils')
 if PY_UTILS not in sys.path:
     os.stat(PY_UTILS) and sys.path.insert(0, PY_UTILS)
 import android_helper
+import angle_metrics
 import angle_path_util
 import angle_test_util
 
@@ -135,8 +136,12 @@ def _save_extra_output_files(args, results, histograms, metrics):
     with open(perf_output_path, 'w') as out_file:
         out_file.write(json.dumps(histograms.AsDicts(), indent=2))
 
-    with open(os.path.join(benchmark_path, 'angle_metrics.json'), 'w') as f:
+    angle_metrics_path = os.path.join(benchmark_path, 'angle_metrics.json')
+    with open(angle_metrics_path, 'w') as f:
         f.write(json.dumps(metrics, indent=2))
+
+    # Calling here to catch errors earlier (fail shard instead of merge script)
+    assert angle_metrics.ConvertToSkiaPerf([angle_metrics_path])
 
 
 class Results:
@@ -648,10 +653,10 @@ def main():
         assert results.has_result(test)
 
     if args.isolated_script_test_output:
-        results.save_to_output_file(args.test_suite, args.isolated_script_test_output)
-
         # Uses special output files to match the merge script.
         _save_extra_output_files(args, results, histograms, metrics)
+
+        results.save_to_output_file(args.test_suite, args.isolated_script_test_output)
 
     if args.isolated_script_test_perf_output:
         with open(args.isolated_script_test_perf_output, 'w') as out_file:
