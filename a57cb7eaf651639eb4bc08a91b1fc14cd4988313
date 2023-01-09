@@ -230,6 +230,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3077f3a3_f3e09d64",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2313,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-09T20:48:04Z",
+      "side": 1,
+      "message": "Looks like the case comes from FramebufferVk::clearImpl. Now clearImpl has changed back to hasActiveRenderPasss, this is now changed to assertion.",
+      "parentUuid": "9a889cfa_93b4480d",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a57b3de_665696fa",
@@ -261,6 +279,24 @@
       "side": 1,
       "message": "Doesn\u0027t looks like related though.",
       "parentUuid": "0a57b3de_665696fa",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4871fd6c_799cdf7d",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-09T20:48:04Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b99d8d3e_d7fba0f8",
       "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
