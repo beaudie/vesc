@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "176af2a8_8e3e358c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-09T18:06:04Z",
+      "side": 1,
+      "message": "LGTM. One general comment here is that for this extension to be useful, we will need some kind of backward compatibility support. Otherwise the binary generated is always going to mismatch ANGLE commit hash and fail to load whenever there is a change in ANGLE. But that is not your CL try to solve.",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
