@@ -12,11 +12,14 @@ from __future__ import print_function
 
 import argparse
 import collections
+import datetime
 import json
 import logging
 import multiprocessing
 import os
 import shutil
+import statistics
+import subprocess
 import sys
 import tempfile
 import time
@@ -293,6 +296,8 @@ def process_perf_results(output_json,
     benchmark_enabled_map = _handle_perf_json_test_results(benchmark_directory_map,
                                                            test_results_list)
 
+    grouped_results = collections.defaultdict(list)
+
     for benchmark_name, directories in benchmark_directory_map.items():
         if not benchmark_enabled_map.get(benchmark_name, False):
             continue
@@ -300,9 +305,56 @@ def process_perf_results(output_json,
         for directory in directories:
             with open(os.path.join(directory, 'angle_metrics.json')) as f:
                 metrics = json.load(f)
+                for group in metrics:
+                    for d in group:
+                        k = (('suite', d['name']), ('renderer', d['backend'].lstrip('_')),
+                             ('test', d['story']), ('metric', d['metric'].lstrip('.')),
+                             ('units', d['units']))
+                        v = int(d['value']) if d['units'] == 'sizeInBytes' else float(d['value'])
+                        grouped_results[k].append(v)
                 metric_names = list(set(d['metric'] for group in metrics for d in group))
                 logging.info('angle_metrics: len=%d metrics=%s (directory=%s)' %
                              (len(metrics), '|'.join(metric_names), directory))
+
+    # print(
+    #     subprocess.check_output(
+    #         ['gsutil', 'cat', 'gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json']))
+
+    myd_results = []
+    for k, v in grouped_results.items():
+        myd_results.append({
+            'key': dict(k),
+            'measurements': {
+                'stat': [{
+                    'value': 'mean',
+                    'measurement': statistics.mean(v),
+                },],
+            },
+        })
+
+    build_properties_map = json.loads(build_properties)
+    buildername = build_properties_map['buildername']  # e.g. win10-nvidia-gtx1660-perf
+    myd = {
+        'version': 1,
+        'git_hash': build_properties_map['got_angle_revision'],
+        'key': {
+            'buildername': buildername,
+        },
+        'results': myd_results,
+    }
+
+    skia_perf_dir = tempfile.mkdtemp('skia_perf')
+    try:
+        local_file = os.path.join(skia_perf_dir, '%s.%s.json' % (buildername, time.time()))
+        with open(local_file, 'w') as f:
+            json.dump(myd, f, indent=2)
+        gs_dir = 'gs://angle-perf-skia/angle_perftests/%s/' % (
+            datetime.datetime.now().strftime('%Y/%m/%d/%H'))
+        upload_cmd = ['gsutil', 'cp', local_file, gs_dir]
+        logging.info('Skia upload: %s', ' '.join(upload_cmd))
+        subprocess.check_call(upload_cmd)
+    finally:
+        shutil.rmtree(skia_perf_dir)
 
     if not smoke_test_mode and handle_perf:
         build_properties_map = json.loads(build_properties)
