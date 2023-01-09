@@ -16,6 +16,24 @@
       "message": "Don\u0027t know what happened here, but this CL is passing on pixel 6 now, both locally and on bots. I am not seeing any new skips for deqp tests for pixel 6 as well (unless I missed). One possibility is that either mali driver have fixed some bugs, or ANGLE\u0027s other change fixed original issue.\n\nNo diff other than re-land the original CL.",
       "revId": "93a7d14e6726bdcec6f726703699583cfd590dd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d34609ee_c0c27db1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-09T17:59:16Z",
+      "side": 1,
+      "message": "The original failure was a crash in libc++_chrome.cr.so\nhttps://luci-logdog.appspot.com/logs/angle/android/swarming/logcats/5e9161158a8df811/+/logcat_logcat_1075406892734932415_shard0_20221115T001043-UTC_17261FDF6000FG\nMaybe libc++ was fixed.",
+      "parentUuid": "c6cba2a3_e33c7c7a",
+      "revId": "93a7d14e6726bdcec6f726703699583cfd590dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
