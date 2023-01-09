@@ -74,6 +74,9 @@ def Initialize(suite_name):
         _GetAdbRoot()
         assert _FindPackageName(apk_path) == TEST_PACKAGE_NAME
 
+        if logging.getLogger().isEnabledFor(logging.DEBUG):
+            logging.debug(_AdbShell('df -h').decode())
+
     _Global.initialized = True
 
 
