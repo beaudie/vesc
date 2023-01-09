@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bc03b72_c03fdb85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-09T16:24:02Z",
+      "side": 1,
+      "message": "Though I\u0027m not sure what \"df -h\" reports.\nIt was inconsistent with \"du\".\nAnd it looks like same space is reported in multiple mount points.\nMy impression was that this is some kind of virtual filesystem which isn\u0027t integrated well with POSIX commands.",
+      "revId": "0066a3c7b406b29206015a3ae1c606f90147de6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
