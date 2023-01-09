@@ -16,6 +16,24 @@
       "message": "LGTM. One general comment here is that for this extension to be useful, we will need some kind of backward compatibility support. Otherwise the binary generated is always going to mismatch ANGLE commit hash and fail to load whenever there is a change in ANGLE. But that is not your CL try to solve.",
       "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2ee6da3_1053d4b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-09T22:59:55Z",
+      "side": 1,
+      "message": "\u003e we will need some kind of backward compatibility support\n\nwhile backwards compatibility is desirable any change that modified angle \u003c-\u003e compiler interface is a breaking change that will prevent compatibility\n\ni believe @yuxinhu@google.com added a change where the commit match requirement has been confined to only those files that changed\n\n@yuxinhu@google.com could you comment on how we can tie your restricted hash check into this change?",
+      "parentUuid": "176af2a8_8e3e358c",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
