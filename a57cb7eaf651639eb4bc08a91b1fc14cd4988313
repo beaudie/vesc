@@ -177,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f87066_14d967a0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-09T19:26:44Z",
+      "side": 1,
+      "message": "See the debug CL https://chromium-review.googlesource.com/c/angle/angle/+/4119698\nAnd one failed test I looked at is ClearTestES3.RepeatedClear/ES3_Vulkan\nhttps://chromium-swarm.appspot.com/task?id\u003d5fb0ac1ac0d80210\n\nWhat happened is that you have an active renderpass on system framebuffer, then you bind fbo and call glClear. The renderpass is for system framebuffer and is still started but inactive. Previously it is checking if the renderpass is active or not. Now in this CL I have switched to check if renderpass is started and for this framebuffer or not. Both works. The new way is moreexplict and consistent with the hasStartedRenderPassWithCommands name. The other way is to change the hasStartedRenderPassWithCommands to hasActiveRenderPassWithCommands. I changed it to hasActiveRenderPassWithCommands now.",
+      "parentUuid": "0e5e2b16_b5c82cd1",
+      "revId": "a57cb7eaf651639eb4bc08a91b1fc14cd4988313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "560c7785_32b154ae",
