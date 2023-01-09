@@ -2308,6 +2308,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         }
     }
 
+    ASSERT(contextVk->hasActiveRenderPass());
     if (contextVk->hasActiveRenderPass())
     {
         // Make sure this draw call doesn't count towards occlusion query results.
