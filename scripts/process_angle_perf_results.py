@@ -304,6 +304,8 @@ def process_perf_results(output_json,
                 logging.info('angle_metrics: len=%d metrics=%s (directory=%s)' %
                              (len(metrics), '|'.join(metric_names), directory))
 
+    raise Exception('test')
+
     if not smoke_test_mode and handle_perf:
         build_properties_map = json.loads(build_properties)
         if not configuration_name:
