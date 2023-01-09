@@ -17,6 +17,8 @@ import logging
 import multiprocessing
 import os
 import shutil
+import statistics
+import subprocess
 import sys
 import tempfile
 import time
@@ -293,6 +295,8 @@ def process_perf_results(output_json,
     benchmark_enabled_map = _handle_perf_json_test_results(benchmark_directory_map,
                                                            test_results_list)
 
+    grouped_results = collections.defaultdict(list)
+
     for benchmark_name, directories in benchmark_directory_map.items():
         if not benchmark_enabled_map.get(benchmark_name, False):
             continue
@@ -300,9 +304,42 @@ def process_perf_results(output_json,
         for directory in directories:
             with open(os.path.join(directory, 'angle_metrics.json')) as f:
                 metrics = json.load(f)
+                for group in metrics:
+                    for d in group:
+                        k = (('suite', d['name']), ('renderer', d['backend'].lstrip('_')),
+                             ('test', d['story']), ('metric', d['metric'].lstrip('.')),
+                             ('units', d['units']))
+                        v = int(d['value']) if d['units'] == 'sizeInBytes' else float(d['value'])
+                        grouped_results[k].append(v)
                 metric_names = list(set(d['metric'] for group in metrics for d in group))
                 logging.info('angle_metrics: len=%d metrics=%s (directory=%s)' %
                              (len(metrics), '|'.join(metric_names), directory))
+
+    # print(
+    #     subprocess.check_output(
+    #         ['gsutil', 'cat', 'gs://angle-perf-skia/angle_perftests/2022/05/12/01/skia.json']))
+
+    myd_results = []
+    for k, v in grouped_results.items():
+        myd_results.append({
+            'key:': dict(k),
+            'measurements': {
+                'stat': [{
+                    'value': 'mean',
+                    'measurement': statistics.mean(v),
+                },],
+            },
+        })
+
+    myd = {
+        'version': 1,
+        'git_hash': build_properties['got_angle_revision'],
+        'key': {
+            'buildername': build_properties['buildername'],  # e.g. win10-nvidia-gtx1660-perf
+        },
+        'results': myd_results,
+    }
+    print(json.dumps(myd, indent=2))
 
     if not smoke_test_mode and handle_perf:
         build_properties_map = json.loads(build_properties)
