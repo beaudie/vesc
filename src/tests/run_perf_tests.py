@@ -671,4 +671,5 @@ def main():
 
 
 if __name__ == '__main__':
+    raise Exception('test')
     sys.exit(main())
