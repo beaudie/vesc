@@ -77,6 +77,9 @@ TEST_P(ErrorMessagesTest, ErrorMessages)
 
     glEnable(GL_DEBUG_OUTPUT);
 
+    // Enable all messages in the default debug group.
+    glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+
     std::vector<Message> messages;
     glDebugMessageCallbackKHR(Callback, &messages);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);

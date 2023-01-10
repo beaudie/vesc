@@ -245,6 +245,9 @@ TEST_P(DebugTestES3, InsertMessage)
 {
     ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
 
+    // Enable all messages in the default debug group.
+    glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+
     const GLenum source       = GL_DEBUG_SOURCE_APPLICATION;
     const GLenum type         = GL_DEBUG_TYPE_OTHER;
     const GLuint id           = 1;
@@ -288,6 +291,9 @@ TEST_P(DebugTestES3, InsertMessage)
 TEST_P(DebugTestES3, InsertMessageMultiple)
 {
     ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
+
+    // Enable all messages in the default debug group.
+    glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 
     const GLenum source          = GL_DEBUG_SOURCE_APPLICATION;
     const GLenum type            = GL_DEBUG_TYPE_OTHER;
@@ -346,6 +352,9 @@ TEST_P(DebugTestES3, InsertMessageMultiple)
 TEST_P(DebugTestES3, DebugCallback)
 {
     ANGLE_SKIP_TEST_IF(!mDebugExtensionAvailable);
+
+    // Enable all messages in the default debug group.
+    glDebugMessageControlKHR(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
 
     std::vector<Message> messages;
 
