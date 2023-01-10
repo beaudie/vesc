@@ -46,6 +46,11 @@ using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> 
 using DeleteCallback                  = void (*)(uint8_t *);
 using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
 
+extern std::string gBinaryDataDir;
+extern std::string gTraceName;
+extern uint32_t gWindowSurfaceContextID;
+extern std::vector<std::string> gTraceFiles;
+
 // Exported trace functions.
 extern "C" {
 
@@ -58,9 +63,9 @@ ANGLE_REPLAY_EXPORT void ResetReplay();
 ANGLE_REPLAY_EXPORT void FinishReplay();
 ANGLE_REPLAY_EXPORT void SetValidateSerializedStateCallback(
     ValidateSerializedStateCallback callback);
-
-// Only defined if serialization is enabled.
-ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
+ANGLE_REPLAY_EXPORT void SetTraceInfo(const char *traceName,
+                                      uint32_t windowSurfaceContextID,
+                                      const std::vector<std::string> &traceFiles);
 
 #endif  // defined(__cplusplus)
 

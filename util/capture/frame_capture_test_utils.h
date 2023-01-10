@@ -58,114 +58,6 @@ inline void DeleteBinaryData(uint8_t *uncompressedData)
     delete[] uncompressedData;
 }
 
-using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> &);
-using DeleteCallback                  = void (*)(uint8_t *);
-using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
-
-using SetBinaryDataDecompressCallbackFunc    = void (*)(DecompressCallback, DeleteCallback);
-using SetBinaryDataDirFunc                   = void (*)(const char *);
-using SetupReplayFunc                        = void (*)();
-using ReplayFrameFunc                        = void (*)(uint32_t);
-using ResetReplayFunc                        = void (*)();
-using FinishReplayFunc                       = void (*)();
-using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
-using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
-
-class TraceReplayInterface : angle::NonCopyable
-{
-  public:
-    virtual ~TraceReplayInterface() {}
-
-    virtual bool valid() const                                                                = 0;
-    virtual void setBinaryDataDir(const char *dataDir)                                        = 0;
-    virtual void setBinaryDataDecompressCallback(DecompressCallback decompressCallback,
-                                                 DeleteCallback deleteCallback)               = 0;
-    virtual void replayFrame(uint32_t frameIndex)                                             = 0;
-    virtual void setupReplay()                                                                = 0;
-    virtual void resetReplay()                                                                = 0;
-    virtual void finishReplay()                                                               = 0;
-    virtual const char *getSerializedContextState(uint32_t frameIndex)                        = 0;
-    virtual void setValidateSerializedStateCallback(ValidateSerializedStateCallback callback) = 0;
-
-  protected:
-    TraceReplayInterface() {}
-};
-
-class TraceLibrary : public TraceReplayInterface
-{
-  public:
-    TraceLibrary(const char *traceNameIn)
-    {
-        std::stringstream traceNameStr;
-#if !defined(ANGLE_PLATFORM_WINDOWS)
-        traceNameStr << "lib";
-#endif  // !defined(ANGLE_PLATFORM_WINDOWS)
-        traceNameStr << traceNameIn;
-#if defined(ANGLE_PLATFORM_ANDROID) && defined(COMPONENT_BUILD)
-        // Added to shared library names in Android component builds in
-        // https://chromium.googlesource.com/chromium/src/+/9bacc8c4868cc802f69e1e858eea6757217a508f/build/toolchain/toolchain.gni#56
-        traceNameStr << ".cr";
-#endif  // defined(ANGLE_PLATFORM_ANDROID) && defined(COMPONENT_BUILD)
-        std::string traceName = traceNameStr.str();
-        mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::ModuleDir));
-    }
-
-    bool valid() const override
-    {
-        return (mTraceLibrary != nullptr) && (mTraceLibrary->getNative() != nullptr);
-    }
-
-    void setBinaryDataDir(const char *dataDir) override
-    {
-        callFunc<SetBinaryDataDirFunc>("SetBinaryDataDir", dataDir);
-    }
-
-    void setBinaryDataDecompressCallback(DecompressCallback decompressCallback,
-                                         DeleteCallback deleteCallback) override
-    {
-        callFunc<SetBinaryDataDecompressCallbackFunc>("SetBinaryDataDecompressCallback",
-                                                      decompressCallback, deleteCallback);
-    }
-
-    void replayFrame(uint32_t frameIndex) override
-    {
-        callFunc<ReplayFrameFunc>("ReplayFrame", frameIndex);
-    }
-
-    void setupReplay() override { callFunc<SetupReplayFunc>("SetupReplay"); }
-
-    void resetReplay() override { callFunc<ResetReplayFunc>("ResetReplay"); }
-
-    void finishReplay() override { callFunc<FinishReplayFunc>("FinishReplay"); }
-
-    const char *getSerializedContextState(uint32_t frameIndex) override
-    {
-        return callFunc<GetSerializedContextStateFunc>("GetSerializedContextState", frameIndex);
-    }
-
-    void setValidateSerializedStateCallback(ValidateSerializedStateCallback callback) override
-    {
-        return callFunc<SetValidateSerializedStateCallbackFunc>(
-            "SetValidateSerializedStateCallback", callback);
-    }
-
-  private:
-    template <typename FuncT, typename... ArgsT>
-    typename std::invoke_result<FuncT, ArgsT...>::type callFunc(const char *funcName, ArgsT... args)
-    {
-        void *untypedFunc = mTraceLibrary->getSymbol(funcName);
-        if (!untypedFunc)
-        {
-            fprintf(stderr, "Error loading function: %s\n", funcName);
-            ASSERT(untypedFunc);
-        }
-        auto typedFunc = reinterpret_cast<FuncT>(untypedFunc);
-        return typedFunc(args...);
-    }
-
-    std::unique_ptr<Library> mTraceLibrary;
-};
-
 static constexpr size_t kTraceInfoMaxNameLen = 128;
 
 struct TraceInfo
@@ -197,6 +89,91 @@ struct TraceInfo
     std::vector<std::string> requiredExtensions;
 };
 
+using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> &);
+using DeleteCallback                  = void (*)(uint8_t *);
+using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
+
+using SetBinaryDataDecompressCallbackFunc    = void (*)(DecompressCallback, DeleteCallback);
+using SetBinaryDataDirFunc                   = void (*)(const char *);
+using SetupReplayFunc                        = void (*)();
+using ReplayFrameFunc                        = void (*)(uint32_t);
+using ResetReplayFunc                        = void (*)();
+using FinishReplayFunc                       = void (*)();
+using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
+using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
+using SetTraceInfoFunc = void (*)(const char *, uint32_t, const std::vector<std::string> &);
+
+std::string GetCompiledTraceLibraryName(const std::string &traceNameIn);
+
+class TraceLibrary : angle::NonCopyable
+{
+  public:
+    TraceLibrary(const std::string &traceName, const TraceInfo &traceInfo)
+    {
+        std::string traceLibraryName = angle::GetCompiledTraceLibraryName(traceName);
+        mTraceLibrary.reset(OpenSharedLibrary(traceLibraryName.c_str(), SearchType::ModuleDir));
+        setTraceInfo(traceInfo);
+    }
+
+    bool valid() const
+    {
+        return (mTraceLibrary != nullptr) && (mTraceLibrary->getNative() != nullptr);
+    }
+
+    void setBinaryDataDir(const char *dataDir)
+    {
+        callFunc<SetBinaryDataDirFunc>("SetBinaryDataDir", dataDir);
+    }
+
+    void setBinaryDataDecompressCallback(DecompressCallback decompressCallback,
+                                         DeleteCallback deleteCallback)
+    {
+        callFunc<SetBinaryDataDecompressCallbackFunc>("SetBinaryDataDecompressCallback",
+                                                      decompressCallback, deleteCallback);
+    }
+
+    void replayFrame(uint32_t frameIndex) { callFunc<ReplayFrameFunc>("ReplayFrame", frameIndex); }
+
+    void setupReplay() { callFunc<SetupReplayFunc>("SetupReplay"); }
+
+    void resetReplay() { callFunc<ResetReplayFunc>("ResetReplay"); }
+
+    void finishReplay() { callFunc<FinishReplayFunc>("FinishReplay"); }
+
+    const char *getSerializedContextState(uint32_t frameIndex)
+    {
+        return callFunc<GetSerializedContextStateFunc>("GetSerializedContextState", frameIndex);
+    }
+
+    void setValidateSerializedStateCallback(ValidateSerializedStateCallback callback)
+    {
+        callFunc<SetValidateSerializedStateCallbackFunc>("SetValidateSerializedStateCallback",
+                                                         callback);
+    }
+
+    void setTraceInfo(const TraceInfo &traceInfo)
+    {
+        callFunc<SetTraceInfoFunc>("SetTraceInfo", traceInfo.name, traceInfo.windowSurfaceContextId,
+                                   traceInfo.traceFiles);
+    }
+
+  private:
+    template <typename FuncT, typename... ArgsT>
+    typename std::invoke_result<FuncT, ArgsT...>::type callFunc(const char *funcName, ArgsT... args)
+    {
+        void *untypedFunc = mTraceLibrary->getSymbol(funcName);
+        if (!untypedFunc)
+        {
+            fprintf(stderr, "Error loading function: %s\n", funcName);
+            ASSERT(untypedFunc);
+        }
+        auto typedFunc = reinterpret_cast<FuncT>(untypedFunc);
+        return typedFunc(args...);
+    }
+
+    std::unique_ptr<Library> mTraceLibrary;
+};
+
 bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut);
 bool LoadTraceInfoFromJSON(const std::string &traceName,
                            const std::string &traceJsonPath,
@@ -213,7 +190,8 @@ template <typename T>
 struct AssertFalse : std::false_type
 {};
 
-GLuint GetResourceIDMapValue(ResourceIDType resourceIDType, GLuint key);
+GLuint GetUIntResourceIDMapValue(ResourceIDType resourceIDType, GLuint key);
+void *GetPointerResourceIDMapValue(ResourceIDType resourceIDType, void *key);
 
 template <typename T>
 T GetParamValue(ParamType type, const ParamValue &value);
@@ -228,7 +206,7 @@ inline GLuint GetParamValue<GLuint>(ParamType type, const ParamValue &value)
     }
     else
     {
-        return GetResourceIDMapValue(resourceIDType, value.GLuintVal);
+        return GetUIntResourceIDMapValue(resourceIDType, value.GLuintVal);
     }
 }
 
@@ -265,7 +243,16 @@ inline const char *GetParamValue<const char *>(ParamType type, const ParamValue 
 template <>
 inline void *GetParamValue<void *>(ParamType type, const ParamValue &value)
 {
-    return value.voidPointerVal;
+    printf("Pointer type %s\n", ParamTypeToString(type));
+    ResourceIDType resourceIDType = GetResourceIDTypeFromParamType(type);
+    if (resourceIDType == ResourceIDType::InvalidEnum)
+    {
+        return value.voidPointerVal;
+    }
+    else
+    {
+        return GetPointerResourceIDMapValue(resourceIDType, value.voidPointerVal);
+    }
 }
 
 #if defined(ANGLE_IS_64_BIT_CPU)

@@ -24,7 +24,6 @@ void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
 
 DecompressCallback gDecompressCallback;
 DeleteCallback gDeleteCallback;
-std::string gBinaryDataDir = ".";
 
 void DeleteBinaryData()
 {
@@ -165,6 +164,7 @@ void UpdateCurrentProgram(GLuint program)
     gCurrentProgram = program;
 }
 
+std::string gBinaryDataDir = ".";
 uint8_t *gBinaryData;
 uint8_t *gReadBuffer;
 uint8_t *gClientArrays[kMaxClientArrays];
@@ -196,6 +196,10 @@ GLeglImageOES *gEGLImageMap2;
 EGLSurface *gSurfaceMap2;
 EGLContext *gContextMap2;
 GLsync *gSyncMap2;
+
+std::string gTraceName;
+uint32_t gWindowSurfaceContextID;
+std::vector<std::string> gTraceFiles;
 
 void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
                                      DeleteCallback deleteCallback)
@@ -585,6 +589,19 @@ void CreateContext(GLuint contextID)
     EGLContext shareContext = gContextMap2[gShareContextId];
     EGLContext context      = eglCreateContext(nullptr, nullptr, shareContext, nullptr);
     gContextMap2[contextID] = context;
+}
+
+void SetTraceInfo(const char *traceName,
+                  uint32_t windowSurfaceContextID,
+                  const std::vector<std::string> &traceFiles)
+{
+    gTraceName              = traceName;
+    gWindowSurfaceContextID = windowSurfaceContextID;
+
+    for (const std::string &traceFile : traceFiles)
+    {
+        gTraceFiles.push_back(traceFile.c_str());
+    }
 }
 
 ANGLE_REPLAY_EXPORT PFNEGLCREATEIMAGEPROC r_eglCreateImage;
