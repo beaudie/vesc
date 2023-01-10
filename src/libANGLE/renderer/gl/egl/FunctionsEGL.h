@@ -31,7 +31,7 @@ class FunctionsEGL
     int majorVersion;
     int minorVersion;
 
-    egl::Error initialize(EGLNativeDisplayType nativeDisplay);
+    egl::Error initialize(EGLAttrib platformType, EGLNativeDisplayType nativeDisplay);
     egl::Error terminate();
 
     virtual void *getProcAddress(const char *name) const = 0;

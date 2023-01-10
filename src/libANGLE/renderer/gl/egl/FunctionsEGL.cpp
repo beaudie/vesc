@@ -92,7 +92,9 @@ struct FunctionsEGL::EGLDispatchTable
 
           queryDeviceAttribEXTPtr(nullptr),
           queryDeviceStringEXTPtr(nullptr),
-          queryDisplayAttribEXTPtr(nullptr)
+          queryDisplayAttribEXTPtr(nullptr),
+
+          getPlatformDisplayEXTPtr(nullptr)
     {}
 
     // 1.0
@@ -164,6 +166,9 @@ struct FunctionsEGL::EGLDispatchTable
     PFNEGLQUERYDEVICEATTRIBEXTPROC queryDeviceAttribEXTPtr;
     PFNEGLQUERYDEVICESTRINGEXTPROC queryDeviceStringEXTPtr;
     PFNEGLQUERYDISPLAYATTRIBEXTPROC queryDisplayAttribEXTPtr;
+
+    // EGL_EXT_platform_base
+    PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplayEXTPtr;
 };
 
 FunctionsEGL::FunctionsEGL()
@@ -175,7 +180,7 @@ FunctionsEGL::~FunctionsEGL()
     SafeDelete(mFnPtrs);
 }
 
-egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
+egl::Error FunctionsEGL::initialize(EGLAttrib platformType, EGLNativeDisplayType nativeDisplay)
 {
 #define ANGLE_GET_PROC_OR_ERROR(MEMBER, NAME)                                           \
     do                                                                                  \
@@ -210,7 +215,17 @@ egl::Error FunctionsEGL::initialize(EGLNativeDisplayType nativeDisplay)
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->surfaceAttribPtr, eglSurfaceAttrib);
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->swapIntervalPtr, eglSwapInterval);
 
-    mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
+    if (platformType != 0 &&
+        SetPtr(&mFnPtrs->getPlatformDisplayEXTPtr, getProcAddress("eglGetPlatformDisplayEXT")))
+    {
+        mEGLDisplay = mFnPtrs->getPlatformDisplayEXTPtr(
+            static_cast<EGLenum>(platformType), reinterpret_cast<void *>(nativeDisplay), nullptr);
+    }
+    else
+    {
+        mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
+    }
+
     if (mEGLDisplay != EGL_NO_DISPLAY)
     {
         if (mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
