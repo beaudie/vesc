@@ -3861,7 +3861,8 @@ void ReplayTraceFunctionCall(const CallCapture &call, const TraceFunctionMap &cu
                 captures[2].value.EGLNativeWindowTypeVal, captures[3].value.EGLintConstPointerVal);
             break;
         case angle::EntryPoint::EGLDestroyContext:
-            eglDestroyContext(captures[0].value.voidPointerVal, captures[1].value.voidPointerVal);
+            eglDestroyContext(captures[0].value.voidPointerVal,
+                              gContextMap2[captures[1].value.GLuintVal]);
             break;
         case angle::EntryPoint::EGLDestroyImage:
             eglDestroyImage(captures[0].value.voidPointerVal, captures[1].value.voidPointerVal);
@@ -3912,14 +3913,16 @@ void ReplayTraceFunctionCall(const CallCapture &call, const TraceFunctionMap &cu
             break;
         case angle::EntryPoint::EGLMakeCurrent:
             eglMakeCurrent(captures[0].value.voidPointerVal, captures[1].value.voidPointerVal,
-                           captures[2].value.voidPointerVal, captures[3].value.voidPointerVal);
+                           captures[2].value.voidPointerVal,
+                           gContextMap2[captures[3].value.GLuintVal]);
             break;
         case angle::EntryPoint::EGLQueryAPI:
             eglQueryAPI();
             break;
         case angle::EntryPoint::EGLQueryContext:
-            eglQueryContext(captures[0].value.voidPointerVal, captures[1].value.voidPointerVal,
-                            captures[2].value.EGLintVal, captures[3].value.EGLintPointerVal);
+            eglQueryContext(captures[0].value.voidPointerVal,
+                            gContextMap2[captures[1].value.GLuintVal], captures[2].value.EGLintVal,
+                            captures[3].value.EGLintPointerVal);
             break;
         case angle::EntryPoint::EGLQueryString:
             eglQueryString(captures[0].value.voidPointerVal, captures[1].value.EGLintVal);

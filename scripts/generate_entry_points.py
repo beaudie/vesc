@@ -1767,7 +1767,8 @@ def format_capture_method(api, command, cmd_name, proto, params, all_param_types
         # For specific methods we can't easily parse their types. Work around this by omitting
         # parameter captures, but keeping the capture method as a mostly empty stub.
         if cmd_name not in CAPTURE_BLOCKLIST:
-            all_param_types.add(capture_param_type)
+            if capture_param_type not in all_param_types:
+                all_param_types.add(capture_param_type)
             parameter_captures += [capture]
 
     return_type = proto[:-len(cmd_name)].strip()
@@ -2480,10 +2481,11 @@ def format_replay_params(api, command_name, param_text_list, packed_enums, resou
     param_access_strs = list()
     for i, param_text in enumerate(param_text_list):
         param_type = just_the_type(param_text)
-        if param_type in EGL_PACKED_TYPES:
-            param_type = 'void *'
         param_name = just_the_name(param_text)
-        capture_type = get_capture_param_type_name(param_type)
+        if param_type in EGL_PACKED_TYPES:
+            capture_type = get_capture_param_type_name("void *")
+        else:
+            capture_type = get_capture_param_type_name(param_type)
         union_name = get_param_type_union_name(capture_type)
         param_access = 'captures[%d].value.%s' % (i, union_name)
         # Workaround for https://github.com/KhronosGroup/OpenGL-Registry/issues/545
@@ -2493,14 +2495,21 @@ def format_replay_params(api, command_name, param_text_list, packed_enums, resou
             cmd_no_suffix = strip_suffix(api, command_name)
             if cmd_no_suffix in packed_enums and param_name in packed_enums[cmd_no_suffix]:
                 packed_type = remove_id_suffix(packed_enums[cmd_no_suffix][param_name])
-                if packed_type == 'Sync':
-                    param_access = 'gSyncMap2[captures[%d].value.GLuintVal]' % i
-                elif packed_type in resource_id_types:
-                    param_access = 'g%sMap[%s]' % (packed_type, param_access)
-                elif packed_type == 'UniformLocation':
-                    param_access = 'gUniformLocations[gCurrentProgram][%s]' % param_access
-                elif packed_type == 'egl::Image':
-                    param_access = 'gEGLImageMap2[captures[%d].value.GLuintVal]' % i
+            elif param_type in EGL_PACKED_TYPES:
+                packed_type = EGL_PACKED_TYPES[param_type]
+            else:
+                packed_type = param_type
+
+            if packed_type == 'Sync':
+                param_access = 'gSyncMap2[captures[%d].value.GLuintVal]' % i
+            elif packed_type in resource_id_types:
+                param_access = 'g%sMap[%s]' % (packed_type, param_access)
+            elif packed_type == 'UniformLocation':
+                param_access = 'gUniformLocations[gCurrentProgram][%s]' % param_access
+            elif packed_type == 'egl::Image':
+                param_access = 'gEGLImageMap2[captures[%d].value.GLuintVal]' % i
+            elif packed_type == 'gl::ContextID':
+                param_access = 'gContextMap2[captures[%d].value.GLuintVal]' % i
         param_access_strs.append(param_access)
     return ', '.join(param_access_strs)
 
