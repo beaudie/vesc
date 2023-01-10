@@ -736,6 +736,19 @@ def main():
 
     args = parser.parse_args()
 
+    print(os.listdir(str(pathlib.Path(__file__).resolve().parents[1])))
+    print(os.listdir(str(pathlib.Path(__file__).resolve().parents[1] / 'third_party')))
+    print(
+        os.listdir(
+            str(pathlib.Path(__file__).resolve().parents[1] / 'third_party' / 'depot_tools')))
+
+    gsutil_path = str(
+        pathlib.Path(__file__).resolve().parents[1] / 'third_party' / 'depot_tools' /
+        'gsutil.py.bat')
+    print('gsutil_path:', gsutil_path)
+    subprocess.check_call(
+        [gsutil_path, 'ls', 'gs://angle-perf-skia/angle_perftests/2023/01/10/11/'])
+
     output_results_dir = tempfile.mkdtemp('outputresults')
     try:
         return_code, _ = process_perf_results(args.output_json, args.configuration_name,
