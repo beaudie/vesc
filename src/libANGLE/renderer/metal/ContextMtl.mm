@@ -1538,20 +1538,24 @@ angle::Result ContextMtl::memoryBarrier(const gl::Context *context, GLbitfield b
         UNIMPLEMENTED();
         return angle::Result::Stop;
     }
-    mtl::BarrierScope scope;
+    mtl::BarrierScope scope = 0;
     switch (barriers)
     {
         case GL_ALL_BARRIER_BITS:
-            scope = MTLBarrierScopeTextures | MTLBarrierScopeBuffers;
+
             if (getDisplay()->hasFragmentMemoryBarriers())
             {
+#if defined(__MAC_10_14) && (TARGET_OS_OSX || TARGET_OS_MACCATALYST)
+                scope = MTLBarrierScopeTextures | MTLBarrierScopeBuffers;
                 scope |= MTLBarrierScopeRenderTargets;
+#endif
             }
             break;
         case GL_SHADER_IMAGE_ACCESS_BARRIER_BIT:
-            scope = MTLBarrierScopeTextures;
             if (getDisplay()->hasFragmentMemoryBarriers())
             {
+#if defined(__MAC_10_14) && (TARGET_OS_OSX || TARGET_OS_MACCATALYST)
+                scope = MTLBarrierScopeTextures;
                 // SHADER_IMAGE_ACCESS_BARRIER_BIT (and SHADER_STORAGE_BARRIER_BIT) require that all
                 // prior types of accesses are finished before writes to the resource. Since this is
                 // the case, we also have to include render targets in our barrier to ensure any
@@ -1561,6 +1565,7 @@ angle::Result ContextMtl::memoryBarrier(const gl::Context *context, GLbitfield b
                 // work anyway though, and on that hardware we use programmable blending for pixel
                 // local storage instead of read_write textures anyway.
                 scope |= MTLBarrierScopeRenderTargets;
+#endif
             }
             break;
         default:
