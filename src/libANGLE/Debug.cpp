@@ -164,8 +164,13 @@ void Debug::insertMessage(GLenum source,
                           gl::LogSeverity logSeverity,
                           angle::EntryPoint entryPoint) const
 {
+    if (!isMessageEnabled(source, type, id, severity))
     {
-        // output all messages to the debug log
+        return;
+    }
+
+    {
+        // output all enabled messages to the debug log
         const char *messageTypeString = GLMessageTypeToString(type);
         const char *severityString    = GLSeverityToString(severity);
         std::ostringstream messageStream;
@@ -192,11 +197,6 @@ void Debug::insertMessage(GLenum source,
                 ANGLE_LOG(EVENT) << messageStream.str();
                 break;
         }
-    }
-
-    if (!isMessageEnabled(source, type, id, severity))
-    {
-        return;
     }
 
     if (mCallbackFunction != nullptr)
@@ -411,7 +411,7 @@ bool Debug::isMessageEnabled(GLenum source, GLenum type, GLuint id, GLenum sever
         }
     }
 
-    return true;
+    return false;
 }
 
 void Debug::pushDefaultGroup()
@@ -421,19 +421,11 @@ void Debug::pushDefaultGroup()
     g.id      = 0;
     g.message = "";
 
-    Control c0;
-    c0.source   = GL_DONT_CARE;
-    c0.type     = GL_DONT_CARE;
-    c0.severity = GL_DONT_CARE;
-    c0.enabled  = true;
-    g.controls.push_back(std::move(c0));
-
-    Control c1;
-    c1.source   = GL_DONT_CARE;
-    c1.type     = GL_DONT_CARE;
-    c1.severity = GL_DEBUG_SEVERITY_LOW;
-    c1.enabled  = false;
-    g.controls.push_back(std::move(c1));
+    // No controls are installed for the default group. If the application
+    // wishes, it can add controls which enable OpenGL-level callbacks, but if a
+    // control is added here which is universally enabled and uses GL_DONT_CARE
+    // for the source, type and severity, there is no way to disable it at the
+    // application level.
 
     mGroups.push_back(std::move(g));
 }
@@ -488,8 +480,13 @@ void Debug::insertMessage(EGLenum error,
                           EGLLabelKHR objectLabel,
                           const std::string &message) const
 {
+    if (!isMessageTypeEnabled(messageType))
     {
-        // output all messages to the debug log
+        return;
+    }
+
+    {
+        // output all enabled messages to the debug log
         const char *messageTypeString = EGLMessageTypeToString(messageType);
         std::ostringstream messageStream;
         messageStream << "EGL " << messageTypeString << ": " << command << ": " << message;
@@ -497,7 +494,7 @@ void Debug::insertMessage(EGLenum error,
     }
 
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
-    if (mCallback && isMessageTypeEnabled(messageType))
+    if (mCallback)
     {
         mCallback(error, command, egl::ToEGLenum(messageType), threadLabel, objectLabel,
                   message.c_str());
