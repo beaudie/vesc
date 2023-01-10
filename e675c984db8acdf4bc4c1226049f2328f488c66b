@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad082e50_50ca43e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2023-01-10T02:22:05Z",
+      "side": 1,
+      "message": "Looks fine to me, but an owner will need to decide if these suppressions are acceptably specific",
+      "revId": "e675c984db8acdf4bc4c1226049f2328f488c66b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
