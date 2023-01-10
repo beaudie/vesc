@@ -1213,7 +1213,7 @@ Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensi
 namespace egl
 {
 
-Caps::Caps() = default;
+Caps::Caps() : textureNPOT(false), stencil8(false) {}
 
 DisplayExtensions::DisplayExtensions() = default;
 
