@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28be5da7_d4ee33d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-10T22:47:56Z",
+      "side": 1,
+      "message": "Jamie, Geoff: PTAL. This silences unwanted performance warnings in Blink\u0027s web tests.\n\nRoman: FYI. This will have an effect in ANGLE-for-Android; GL errors and performance warnings will no longer go to logcat by default. It\u0027s trivial to reenable these with one API call to glDebugMessageControl - it\u0027s not necessary to set up a debug callback - so I\u0027d like to move forward with this change.",
+      "revId": "b023485f4e5556ca69b9b5792e80b44bbb8e9229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
