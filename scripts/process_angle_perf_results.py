@@ -735,6 +735,11 @@ def main():
 
     args = parser.parse_args()
 
+    gsutil_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '..', 'third_party', 'depot_tools', 'gsutil.py'))
+    subprocess.check_call(
+        [gsutil_path, 'ls', 'gs://angle-perf-skia/angle_perftests/2023/01/10/11/'])
+
     output_results_dir = tempfile.mkdtemp('outputresults')
     try:
         return_code, _ = process_perf_results(args.output_json, args.configuration_name,
