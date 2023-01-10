@@ -406,6 +406,105 @@ void CommandBatch::resetSecondaryCommandBuffers(VkDevice device)
                                  &commandBuffersToReset.renderPassCommandBuffers);
 }
 
+// CommandBatchList implementation.
+void CommandBatchList::destroy(RendererVk *renderer)
+{
+    VkDevice device = renderer->getDevice();
+
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (CommandBatch &batch : mCommandBatches)
+    {
+        // On device loss we need to wait for fence to be signaled before destroying it
+        if (batch.fence.isReferenced())
+        {
+            VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
+            // If the wait times out, it is probably not possible to recover from lost device
+            ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
+
+            batch.fence.reset(device);
+        }
+
+        // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
+        // by CommandPool::destroy
+        if (batch.primaryCommands.valid())
+        {
+            batch.primaryCommands.destroy(device);
+        }
+
+        mLastCompletedSerials.setQueueSerial(batch.queueSerial);
+        batch.resetSecondaryCommandBuffers(device);
+    }
+    mCommandBatches.clear();
+}
+
+void CommandBatchList::assertAllCommandsAreAfterSerials(const Serials &serials)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (const CommandBatch &batch : mCommandBatches)
+    {
+        if (batch.queueSerial.getIndex() < serials.size())
+        {
+            ASSERT(serials[batch.queueSerial.getIndex()] == kZeroSerial ||
+                   batch.queueSerial.getSerial() > serials[batch.queueSerial.getIndex()]);
+        }
+    }
+}
+
+size_t CommandBatchList::getBatchCountUpToSerials(
+    RendererVk *renderer,
+    const AtomicQueueSerialFixedArray &lastSubmittedSerials,
+    const AtomicQueueSerialFixedArray &lastCompletedSerials,
+    const Serials &serials,
+    Shared<Fence> **fenceToWaitOnOut)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    if (renderer->getLargestQueueSerialIndexEverAllocated() < 64)
+    {
+        return GetBatchCountUpToSerials<angle::BitSet64<64>>(
+            mCommandBatches, lastSubmittedSerials, lastCompletedSerials, serials, fenceToWaitOnOut);
+    }
+    else
+    {
+        return GetBatchCountUpToSerials<angle::BitSetArray<kMaxQueueSerialIndexCount>>(
+            mCommandBatches, lastSubmittedSerials, lastCompletedSerials, serials, fenceToWaitOnOut);
+    }
+}
+
+angle::Result CommandBatchList::collectCompletedCommands(
+    Context *context,
+    std::vector<CommandBatch> &completedCommandBatchesOut)
+{
+    RendererVk *renderer = context->getRenderer();
+    VkDevice device      = renderer->getDevice();
+
+    ASSERT(completedCommandBatchesOut.empty());
+    std::unique_lock<std::mutex> lock(mMutex);
+    int finishedCount = 0;
+    VkResult result   = VK_SUCCESS;
+    for (CommandBatch &batch : mCommandBatches)
+    {
+        // For empty submissions, fence is not set but there may be garbage to be collected.  In
+        // such a case, the empty submission is "completed" at the same time as the last submission
+        // that actually happened.
+        if (batch.fence.isReferenced())
+        {
+            result = batch.fence.get().getStatus(device);
+            if (result == VK_NOT_READY)
+            {
+                break;
+            }
+            ANGLE_VK_TRY(context, result);
+        }
+        completedCommandBatchesOut.emplace_back(std::move(batch));
+        ++finishedCount;
+    }
+
+    auto beginIter = mCommandBatches.begin();
+    mCommandBatches.erase(beginIter, beginIter + finishedCount);
+
+    return angle::Result::Continue;
+}
+
 // CommandProcessor implementation.
 void CommandProcessor::handleError(VkResult errorCode,
                                    const char *file,
@@ -957,46 +1056,28 @@ angle::Result CommandQueue::checkCompletedCommands(Context *context)
     VkDevice device      = renderer->getDevice();
     std::unique_lock<std::mutex> lock(mMutex);
 
-    int finishedCount = 0;
-
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        // For empty submissions, fence is not set but there may be garbage to be collected.  In
-        // such a case, the empty submission is "completed" at the same time as the last submission
-        // that actually happened.
-        if (batch.fence.isReferenced())
-        {
-            VkResult result = batch.fence.get().getStatus(device);
-            if (result == VK_NOT_READY)
-            {
-                break;
-            }
-            ANGLE_VK_TRY(context, result);
-        }
-        ++finishedCount;
-    }
-
-    if (finishedCount == 0)
+    std::vector<CommandBatch> completedCommandBatches;
+    ANGLE_TRY(mInFlightCommands.collectCompletedCommands(context, completedCommandBatches));
+    if (completedCommandBatches.empty())
     {
         return angle::Result::Continue;
     }
 
-    return retireFinishedCommandsAndCleanupGarbage(context, finishedCount);
+    return retireFinishedCommandsAndCleanupGarbage(context, completedCommandBatches);
 }
 
-angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t finishedCount)
+angle::Result CommandQueue::retireFinishedCommands(Context *context,
+                                                   std::vector<CommandBatch> &commandBatches)
 {
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
     // First store the last completed queue serial value into a local variable and then update
     // mLastCompletedQueueSerial once in the end.
-    angle::FastMap<Serial, kMaxFastQueueSerials> lastCompletedQueueSerials;
-    for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
+    for (CommandBatch &batch : commandBatches)
     {
-        CommandBatch &batch = mInFlightCommands[commandIndex];
-
-        lastCompletedQueueSerials[batch.queueSerial.getIndex()] = batch.queueSerial.getSerial();
+        mLastCompletedSerials.setQueueSerial(batch.queueSerial.getIndex(),
+                                             batch.queueSerial.getSerial());
 
         if (batch.fence.isReferenced())
         {
@@ -1015,29 +1096,19 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
             batch.resetSecondaryCommandBuffers(device);
         }
     }
-
-    for (SerialIndex index = 0; index < lastCompletedQueueSerials.size(); index++)
-    {
-        // Set mLastCompletedSerials only if there is a lastCompletedQueueSerials in the index.
-        if (lastCompletedQueueSerials[index] != kZeroSerial)
-        {
-            mLastCompletedSerials.setQueueSerial(index, lastCompletedQueueSerials[index]);
-        }
-    }
-
-    auto beginIter = mInFlightCommands.begin();
-    mInFlightCommands.erase(beginIter, beginIter + finishedCount);
+    commandBatches.clear();
 
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *context,
-                                                                    size_t finishedCount)
+angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(
+    Context *context,
+    std::vector<CommandBatch> &commandBatches)
 {
-    ASSERT(finishedCount > 0);
+    ASSERT(!commandBatches.empty());
     RendererVk *renderer = context->getRenderer();
 
-    ANGLE_TRY(retireFinishedCommands(context, finishedCount));
+    ANGLE_TRY(retireFinishedCommands(context, commandBatches));
 
     // Now clean up RendererVk garbage
     renderer->cleanupGarbage();
@@ -1048,48 +1119,8 @@ angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *con
 void CommandQueue::handleDeviceLost(RendererVk *renderer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::handleDeviceLost");
-    std::unique_lock<std::mutex> lock(mMutex);
-
-    VkDevice device = renderer->getDevice();
-
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        // On device loss we need to wait for fence to be signaled before destroying it
-        if (batch.fence.isReferenced())
-        {
-            VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
-            // If the wait times out, it is probably not possible to recover from lost device
-            ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
-
-            batch.fence.reset(device);
-        }
-
-        // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
-        // by CommandPool::destroy
-        if (batch.primaryCommands.valid())
-        {
-            batch.primaryCommands.destroy(device);
-        }
-
-        batch.resetSecondaryCommandBuffers(device);
-
-        mLastCompletedSerials.setQueueSerial(batch.queueSerial);
-    }
-    mInFlightCommands.clear();
-}
-
-bool CommandQueue::allInFlightCommandsAreAfterSerials(const Serials &serials)
-{
-    for (const CommandBatch &batch : mInFlightCommands)
-    {
-        if (batch.queueSerial.getIndex() < serials.size() &&
-            serials[batch.queueSerial.getIndex()] != kZeroSerial &&
-            batch.queueSerial.getSerial() <= serials[batch.queueSerial.getIndex()])
-        {
-            return false;
-        }
-    }
-    return true;
+    mInFlightCommands.destroy(renderer);
+    mLastCompletedSerials.setQueueSerial(batch.queueSerial);
 }
 
 angle::Result CommandQueue::finishQueueSerial(Context *context,
@@ -1104,8 +1135,6 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
                                               const ResourceUse &use,
                                               uint64_t timeout)
 {
-    std::unique_lock<std::mutex> lock(mMutex);
-
     if (mInFlightCommands.empty())
     {
         return angle::Result::Continue;
@@ -1134,7 +1163,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
 
     // Clean up finished batches.
     ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context, finishCount));
-    ASSERT(allInFlightCommandsAreAfterSerials(use.getSerials()));
+    mInFlightCommands.assertAllCommandsAreAfterSerials(use.getSerials());
 
     return angle::Result::Continue;
 }
@@ -1461,18 +1490,8 @@ size_t CommandQueue::getBatchCountUpToSerials(RendererVk *renderer,
                                               const Serials &serials,
                                               Shared<Fence> **fenceToWaitOnOut)
 {
-    if (renderer->getLargestQueueSerialIndexEverAllocated() < 64)
-    {
-        return GetBatchCountUpToSerials<angle::BitSet64<64>>(
-            mInFlightCommands, mLastSubmittedSerials, mLastCompletedSerials, serials,
-            fenceToWaitOnOut);
-    }
-    else
-    {
-        return GetBatchCountUpToSerials<angle::BitSetArray<kMaxQueueSerialIndexCount>>(
-            mInFlightCommands, mLastSubmittedSerials, mLastCompletedSerials, serials,
-            fenceToWaitOnOut);
-    }
+    return mInFlightCommands.getBatchCountUpToSerials(
+        renderer, mLastSubmittedSerials, mLastCompletedSerials, serials, fenceToWaitOnOut);
 }
 
 // QueuePriorities:

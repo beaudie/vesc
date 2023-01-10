@@ -205,6 +205,35 @@ struct CommandBatch final : angle::NonCopyable
     bool hasProtectedContent;
 };
 
+class CommandBatchList final : angle::NonCopyable
+{
+  public:
+    void destroy(RendererVk *renderer);
+    void assertAllCommandsAreAfterSerials(const Serials &serials);
+    bool empty() const
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return mCommandBatches.empty();
+    }
+    size_t getBatchCountUpToSerials(RendererVk *renderer,
+                                    const AtomicQueueSerialFixedArray &lastSubmittedSerials,
+                                    const AtomicQueueSerialFixedArray &lastCompletedSerials,
+                                    const Serials &serials,
+                                    Shared<Fence> **fenceToWaitOnOut);
+    void emplace_back(CommandBatch &&batch)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mCommandBatches.emplace_back(std::move(batch));
+    }
+    angle::Result collectCompletedCommands(Context *context,
+                                           std::vector<CommandBatch> &completedCommandBatchesOut);
+
+  private:
+    // Protect multi-thread access to mInFlightCommands
+    mutable std::mutex mMutex;
+    std::vector<CommandBatch> mCommandBatches;
+};
+
 class DeviceQueueMap;
 
 class QueueFamily final : angle::NonCopyable
@@ -425,16 +454,16 @@ class CommandQueue final : public CommandQueueInterface
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
   private:
-    angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
-    angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
+    angle::Result retireFinishedCommands(Context *context,
+                                         std::vector<CommandBatch> &commandBatches);
+    angle::Result retireFinishedCommandsAndCleanupGarbage(
+        Context *context,
+        std::vector<CommandBatch> &commandBatches);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
     size_t getBatchCountUpToSerials(RendererVk *renderer,
                                     const Serials &serials,
                                     Shared<Fence> **fenceToWaitOnOut);
-
-    // For validation only. Should only be called with ASSERT macro.
-    bool allInFlightCommandsAreAfterSerials(const Serials &serials);
 
     PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
     {
@@ -460,10 +489,8 @@ class CommandQueue final : public CommandQueueInterface
         }
     }
 
-    // Protect multi-thread access to data member of this class
-    mutable std::mutex mMutex;
     GarbageQueue mGarbageQueue;
-    std::vector<CommandBatch> mInFlightCommands;
+    CommandBatchList mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
