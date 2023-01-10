@@ -60,6 +60,9 @@ JSON_CONTENT_TYPE = 'application/json'
 MACHINE_GROUP = 'ANGLE'
 BUILD_URL = 'https://ci.chromium.org/ui/p/angle/builders/ci/%s/%d'
 
+GSUTIL_PY_PATH = str(
+    pathlib.Path(__file__).resolve().parents[1] / 'third_party' / 'depot_tools' / 'gsutil.py')
+
 
 def _upload_perf_results(json_to_upload, name, configuration_name, build_properties,
                          output_json_file):
@@ -733,6 +736,14 @@ def main():
         action='store_true',
         help='This test should be run in smoke test mode'
         ' meaning it does not upload to the perf dashboard')
+
+    print('gsutil_path:', GSUTIL_PY_PATH)
+    try:
+        subprocess.check_call([
+            'vpython3', GSUTIL_PY_PATH, 'ls', 'gs://angle-perf-skia/angle_perftests/2023/01/10/11/'
+        ])
+    except Exception as e:
+        print(e)
 
     args = parser.parse_args()
 
