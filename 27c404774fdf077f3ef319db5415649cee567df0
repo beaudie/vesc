@@ -56,6 +56,30 @@
       },
       "revId": "27c404774fdf077f3ef319db5415649cee567df0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccf92cde_8d5064a7",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-10T20:58:37Z",
+      "side": 1,
+      "message": "Definitely - for some reason I thought the alternative was preferred in ANGLE. Done.",
+      "parentUuid": "6bea706f_d4c49b21",
+      "range": {
+        "startLine": 1216,
+        "startChar": 0,
+        "endLine": 1216,
+        "endChar": 53
+      },
+      "revId": "27c404774fdf077f3ef319db5415649cee567df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
