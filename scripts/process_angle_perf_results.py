@@ -714,7 +714,7 @@ def main():
     # away tools/perf/core/chromium.perf.fyi.extras.json
     parser.add_argument('--configuration-name', help=argparse.SUPPRESS)
     parser.add_argument('--build-properties', help=argparse.SUPPRESS)
-    parser.add_argument('--summary-json', help=argparse.SUPPRESS)
+    parser.add_argument('--summary-json', required=True, help=argparse.SUPPRESS)
     parser.add_argument('--task-output-dir', required=True, help=argparse.SUPPRESS)
     parser.add_argument('-o', '--output-json', required=True, help=argparse.SUPPRESS)
     parser.add_argument(
@@ -735,6 +735,13 @@ def main():
         ' meaning it does not upload to the perf dashboard')
 
     args = parser.parse_args()
+
+    with open(args.summary_json) as f:
+        shard_summary = json.load(f)
+
+    if any(int(shard['exit_code']) != 0 for shard in shard_summary['shards']):
+        logging.warning('One or more shards failed, skipping perf result processing')
+        return 0  # Return success so that the failed build info is rendered normally
 
     output_results_dir = tempfile.mkdtemp('outputresults')
     try:
