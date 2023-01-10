@@ -77,7 +77,7 @@ size_t GetBatchCountUpToSerials(std::vector<CommandBatch> &inFlightCommands,
                                 const AtomicQueueSerialFixedArray &lastSubmittedSerials,
                                 const AtomicQueueSerialFixedArray &lastCompletedSerials,
                                 const Serials &serials,
-                                Shared<Fence> **fenceToWaitOnOut)
+                                SharedFence **fenceToWaitOnOut)
 {
     // First calculate the bitmask of which index we should wait
     BitSetArrayT serialBitMaskToFinish;
@@ -127,7 +127,7 @@ size_t GetBatchCountUpToSerials(std::vector<CommandBatch> &inFlightCommands,
     // Now search for the nearest fence to wait on.
     for (int i = static_cast<int>(batchCountToFinish) - 1; i >= 0; i--)
     {
-        if (inFlightCommands[i].fence.isReferenced())
+        if (inFlightCommands[i].fence.valid())
         {
             *fenceToWaitOnOut = &inFlightCommands[i].fence;
             break;
@@ -149,39 +149,95 @@ void ReleaseToCommandBatch(bool hasProtectedContent,
 }
 }  // namespace
 
-angle::Result FenceRecycler::newSharedFence(Context *context, Shared<Fence> *sharedFenceOut)
+// SharedFence implementation
+VkResult SharedFence::init(VkDevice device, FenceRecycler *recycler)
 {
-    bool gotRecycledFence = false;
     Fence fence;
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-        if (!mRecyler.empty())
-        {
-            mRecyler.fetch(&fence);
-            gotRecycledFence = true;
-        }
-    }
 
-    VkDevice device(context->getDevice());
-    if (gotRecycledFence)
-    {
-        ANGLE_VK_TRY(context, fence.reset(device));
-    }
-    else
+    // First try to fetch from recycler. If that failed, try to create a new VkFence
+    recycler->fetch(device, &fence);
+    if (!fence.valid())
     {
         VkFenceCreateInfo fenceCreateInfo = {};
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
-        ANGLE_VK_TRY(context, fence.init(device, fenceCreateInfo));
+        VkResult result                   = fence.init(device, fenceCreateInfo);
+        if (result != VK_SUCCESS)
+        {
+            return result;
+        }
     }
-    sharedFenceOut->assign(device, std::move(fence));
-    return angle::Result::Continue;
+
+    RefCounted<Fence> refCountedFence(std::move(fence));
+    mRefCountedFence = std::move(refCountedFence);
+    mRefCountedFence.addRef();
+
+    return VK_SUCCESS;
 }
 
+void SharedFence::destroy(VkDevice device)
+{
+    if (valid())
+    {
+        mRefCountedFence.releaseRef();
+        if (!mRefCountedFence.isReferenced())
+        {
+            mRefCountedFence.get().destroy(device);
+        }
+    }
+}
+
+void SharedFence::release(FenceRecycler *recycler)
+{
+    mRefCountedFence.releaseRef();
+    if (!mRefCountedFence.isReferenced())
+    {
+        ASSERT(mRefCountedFence.get().valid());
+        recycler->recycle(std::move(mRefCountedFence.get()));
+        ASSERT(!mRefCountedFence.get().valid());
+    }
+}
+
+VkResult SharedFence::getStatus(VkDevice device) const
+{
+    if (mRefCountedFence.isReferenced())
+    {
+        return mRefCountedFence.get().getStatus(device);
+    }
+    return VK_SUCCESS;
+}
+
+VkResult SharedFence::wait(VkDevice device, uint64_t timeout) const
+{
+    if (mRefCountedFence.isReferenced())
+    {
+        return mRefCountedFence.get().wait(device, timeout);
+    }
+    return VK_SUCCESS;
+}
+
+// FenceRecycler implementation
 void FenceRecycler::destroy(Context *context)
 {
     std::lock_guard<std::mutex> lock(mMutex);
     mRecyler.destroy(context->getDevice());
+}
+
+void FenceRecycler::fetch(VkDevice device, Fence *fenceOut)
+{
+    ASSERT(fenceOut != nullptr && !fenceOut->valid());
+    std::lock_guard<std::mutex> lock(mMutex);
+    if (!mRecyler.empty())
+    {
+        mRecyler.fetch(fenceOut);
+        fenceOut->reset(device);
+    }
+}
+
+void FenceRecycler::recycle(Fence &&fence)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    mRecyler.recycle(std::move(fence));
 }
 
 // CommandProcessorTask implementation
@@ -394,7 +450,7 @@ CommandBatch &CommandBatch::operator=(CommandBatch &&other)
 void CommandBatch::destroy(VkDevice device)
 {
     primaryCommands.destroy(device);
-    fence.reset(device);
+    fence.destroy(device);
     hasProtectedContent = false;
 }
 
@@ -963,15 +1019,12 @@ angle::Result CommandQueue::checkCompletedCommands(Context *context)
         // For empty submissions, fence is not set but there may be garbage to be collected.  In
         // such a case, the empty submission is "completed" at the same time as the last submission
         // that actually happened.
-        if (batch.fence.isReferenced())
+        VkResult result = batch.fence.getStatus(device);
+        if (result == VK_NOT_READY)
         {
-            VkResult result = batch.fence.get().getStatus(device);
-            if (result == VK_NOT_READY)
-            {
-                break;
-            }
-            ANGLE_VK_TRY(context, result);
+            break;
         }
+        ANGLE_VK_TRY(context, result);
         ++finishedCount;
     }
 
@@ -997,9 +1050,9 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
 
         lastCompletedQueueSerials[batch.queueSerial.getIndex()] = batch.queueSerial.getSerial();
 
-        if (batch.fence.isReferenced())
+        if (batch.fence.valid())
         {
-            mFenceRecycler.resetSharedFence(&batch.fence);
+            batch.fence.release(&mFenceRecycler);
         }
         if (batch.primaryCommands.valid())
         {
@@ -1054,14 +1107,10 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
     for (CommandBatch &batch : mInFlightCommands)
     {
         // On device loss we need to wait for fence to be signaled before destroying it
-        if (batch.fence.isReferenced())
-        {
-            VkResult status = batch.fence.get().wait(device, renderer->getMaxFenceWaitTimeNs());
-            // If the wait times out, it is probably not possible to recover from lost device
-            ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
-
-            batch.fence.reset(device);
-        }
+        VkResult status = batch.fence.wait(device, renderer->getMaxFenceWaitTimeNs());
+        // If the wait times out, it is probably not possible to recover from lost device
+        ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
+        batch.fence.destroy(device);
 
         // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
         // by CommandPool::destroy
@@ -1112,7 +1161,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
 
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::finishResourceUse");
 
-    Shared<Fence> *fenceToWaitOn = nullptr;
+    SharedFence *fenceToWaitOn = nullptr;
     size_t finishCount =
         getBatchCountUpToSerials(context->getRenderer(), use.getSerials(), &fenceToWaitOn);
 
@@ -1126,7 +1175,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     if (fenceToWaitOn != nullptr)
     {
         VkDevice device = context->getDevice();
-        VkResult status = fenceToWaitOn->get().wait(device, timeout);
+        VkResult status = fenceToWaitOn->wait(device, timeout);
 
         ANGLE_VK_TRY(context, status);
     }
@@ -1201,9 +1250,8 @@ angle::Result CommandQueue::submitCommands(
 
         ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitCommands");
 
-        ANGLE_TRY(mFenceRecycler.newSharedFence(context, &batch.fence));
-        ANGLE_TRY(
-            queueSubmit(context, priority, submitInfo, &batch.fence.get(), batch.queueSerial));
+        ANGLE_VK_TRY(context, batch.fence.init(device, &mFenceRecycler));
+        ANGLE_TRY(queueSubmit(context, priority, submitInfo, batch.fence.get(), batch.queueSerial));
     }
     else
     {
@@ -1258,7 +1306,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
 {
     std::unique_lock<std::recursive_mutex> lock(mMutex);
 
-    Shared<Fence> *fenceToWaitOn = nullptr;
+    SharedFence *fenceToWaitOn = nullptr;
     size_t finishCount =
         getBatchCountUpToSerials(context->getRenderer(), use.getSerials(), &fenceToWaitOn);
 
@@ -1357,7 +1405,7 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     // go through normal waitForQueueSerial code path to wait for it to finish.
     if (fence == nullptr)
     {
-        ANGLE_TRY(mFenceRecycler.newSharedFence(context, &batch.fence));
+        ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
         fence = &batch.fence.get();
     }
 
@@ -1386,7 +1434,7 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
         submitInfo.pWaitDstStageMask  = &waitSemaphoreStageMask;
     }
 
-    ANGLE_TRY(queueSubmit(context, contextPriority, submitInfo, fence, submitQueueSerial));
+    ANGLE_TRY(queueSubmit(context, contextPriority, submitInfo, *fence, submitQueueSerial));
 
     mInFlightCommands.emplace_back(scopedBatch.release());
     return angle::Result::Continue;
@@ -1395,7 +1443,7 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
 angle::Result CommandQueue::queueSubmit(Context *context,
                                         egl::ContextPriority contextPriority,
                                         const VkSubmitInfo &submitInfo,
-                                        const Fence *fence,
+                                        const Fence &fence,
                                         const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::queueSubmit");
@@ -1407,7 +1455,7 @@ angle::Result CommandQueue::queueSubmit(Context *context,
         renderer->outputVmaStatString();
     }
 
-    VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+    VkFence fenceHandle = fence.getHandle();
     VkQueue queue       = getQueue(contextPriority);
     ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
 
@@ -1458,7 +1506,7 @@ bool CommandQueue::hasUnsubmittedUse(const vk::ResourceUse &use) const
 
 size_t CommandQueue::getBatchCountUpToSerials(RendererVk *renderer,
                                               const Serials &serials,
-                                              Shared<Fence> **fenceToWaitOnOut)
+                                              SharedFence **fenceToWaitOnOut)
 {
     if (renderer->getLargestQueueSerialIndexEverAllocated() < 64)
     {

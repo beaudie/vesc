@@ -33,6 +33,48 @@ enum class SubmitPolicy
     EnsureSubmitted,
 };
 
+class FenceRecycler;
+class SharedFence final : angle::NonCopyable
+{
+  public:
+    SharedFence()  = default;
+    ~SharedFence() = default;
+
+    SharedFence(SharedFence &&other) { *this = std::move(other); }
+    SharedFence &operator=(SharedFence &&other)
+    {
+        ASSERT(this != &other);
+        mRefCountedFence = std::move(other.mRefCountedFence);
+        return *this;
+    }
+
+    VkResult init(VkDevice device, FenceRecycler *recycler);
+    void destroy(VkDevice device);
+    void release(FenceRecycler *recycler);
+
+    bool valid() const
+    {
+        // If reference is zero, the object should have been deleted. Otherwise the object must be
+        // valid.
+        ASSERT((mRefCountedFence.isReferenced() && mRefCountedFence.get().valid()) ||
+               (!mRefCountedFence.isReferenced() && !mRefCountedFence.get().valid()));
+        return mRefCountedFence.isReferenced();
+    }
+
+    const Fence &get() const
+    {
+        ASSERT(mRefCountedFence.isReferenced());
+        return mRefCountedFence.get();
+    }
+
+    VkResult getStatus(VkDevice device) const;
+    VkResult wait(VkDevice device, uint64_t timeout) const;
+
+  private:
+    friend class FenceRecycler;
+    RefCounted<Fence> mRefCountedFence;
+};
+
 class FenceRecycler
 {
   public:
@@ -40,12 +82,8 @@ class FenceRecycler
     ~FenceRecycler() {}
     void destroy(Context *context);
 
-    angle::Result newSharedFence(Context *context, Shared<Fence> *sharedFenceOut);
-    inline void resetSharedFence(Shared<Fence> *sharedFenceIn)
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-        sharedFenceIn->resetAndRecycle(&mRecyler);
-    }
+    void fetch(VkDevice device, Fence *fenceOut);
+    void recycle(Fence &&fence);
 
   private:
     std::mutex mMutex;
@@ -200,7 +238,7 @@ struct CommandBatch final : angle::NonCopyable
     // commandPools is for secondary CommandBuffer allocation
     SecondaryCommandPools *commandPools;
     SecondaryCommandBufferList commandBuffersToReset;
-    Shared<Fence> fence;
+    SharedFence fence;
     QueueSerial queueSerial;
     bool hasProtectedContent;
 };
@@ -400,7 +438,7 @@ class CommandQueue final : public CommandQueueInterface
     angle::Result queueSubmit(Context *context,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
-                              const Fence *fence,
+                              const Fence &fence,
                               const QueueSerial &submitQueueSerial);
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
@@ -431,7 +469,7 @@ class CommandQueue final : public CommandQueueInterface
 
     size_t getBatchCountUpToSerials(RendererVk *renderer,
                                     const Serials &serials,
-                                    Shared<Fence> **fenceToWaitOnOut);
+                                    SharedFence **fenceToWaitOnOut);
 
     // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
