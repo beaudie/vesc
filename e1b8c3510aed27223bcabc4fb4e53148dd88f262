@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8f0668f_9547f26c",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-10T18:45:41Z",
+      "side": 1,
+      "message": "This still needs to be resolved in some way - not sure what would be the best way. Please see kBlitOptionRowLinearPVRTC in src/libANGLE/renderer/metal/mtl_common.h. Maybe if the code\u0027s compiled with the appropriate SDK then there\u0027s a run-time check which will conditionally OR it in.",
+      "parentUuid": "69598790_246d1d47",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "507c7e31_86e5577e",
         "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
         "patchSetId": 2
