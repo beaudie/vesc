@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f97e302_83613ed1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 976,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "Another clean up idea, Instead of adding these into RendererVk, you create a new class for all these loggings and RendererVk will just call that class\u0027s method. That way it is cleaner and this mMemoryAllocationMutex will also owned and managed by that class. You can see if it make sense just expanding MemoryReport class or add a new class. And this can be a separate follow up CL if you prefer.",
+      "range": {
+        "startLine": 971,
+        "startChar": 4,
+        "endLine": 976,
+        "endChar": 0
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df332c2b_667b1e01",
+        "filename": "src/libANGLE/renderer/vulkan/Suballocation.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "kInvalidMemoryTypeIndex",
+      "range": {
+        "startLine": 27,
+        "startChar": 26,
+        "endLine": 27,
+        "endChar": 60
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0440c8e_e96dffc3",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "nit: move the out parameters to the end of call to be consistent with other parameters. (Same thing with other APIs if you added this new out parameter)",
+      "range": {
+        "startLine": 62,
+        "startChar": 40,
+        "endLine": 62,
+        "endChar": 68
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ac1c11e_7a39bd10",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "nit: move the out parameters to the end of call to be consistent with other parameters.",
+      "range": {
+        "startLine": 30,
+        "startChar": 40,
+        "endLine": 30,
+        "endChar": 69
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe56a2d3_fa75e049",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5092,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "kInvalidMemoryTypeIndex",
+      "range": {
+        "startLine": 5092,
+        "startChar": 35,
+        "endLine": 5092,
+        "endChar": 72
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3f1d29_30c758a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-10T19:54:02Z",
+      "side": 1,
+      "message": "kInvalidMemoryTypeIndex",
+      "range": {
+        "startLine": 5128,
+        "startChar": 28,
+        "endLine": 5128,
+        "endChar": 65
+      },
+      "revId": "24f8f7749103f2d4372e7728005fdffb6fc33ffa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
