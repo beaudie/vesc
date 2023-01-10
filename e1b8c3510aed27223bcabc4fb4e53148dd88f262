@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4e6dfab_db08003c",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1547,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-10T18:08:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "507c7e31_86e5577e",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57415684_fdfc1a33",
@@ -100,6 +118,24 @@
       "writtenOn": "2022-12-29T02:55:29Z",
       "side": 1,
       "message": "And this branch in the same `#if`?",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "199c09f0_a0285f2a",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1554,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-10T18:08:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57415684_fdfc1a33",
       "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -153,6 +189,24 @@
       "side": 1,
       "message": "angle_end2end_tests aren\u0027t running on Apple Silicon on ANGLE\u0027s waterfall yet. I pushed a bit more on http://anglebug.com/7743 .",
       "parentUuid": "6c155757_1ecf61a5",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74153870_f04baffd",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-10T18:08:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ac3c876_d94c1b4c",
       "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

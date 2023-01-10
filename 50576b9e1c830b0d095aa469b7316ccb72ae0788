@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed52ffe6_e7703827",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-10T18:08:58Z",
+      "side": 1,
+      "message": "Coming back here… Thank you all for the review!\n\nI did upload a new patchset now, where I\u0027ve changed to capture Chris\u0027 idea to let Apple Silicon execute most of the function and fail in getDisplay()-\u003ehasFragmentMemoryBarriers() test. PTAL.",
+      "revId": "50576b9e1c830b0d095aa469b7316ccb72ae0788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
