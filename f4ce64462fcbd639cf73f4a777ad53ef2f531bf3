@@ -16,6 +16,24 @@
       "message": "Could you show the example output after the change?",
       "revId": "f4ce64462fcbd639cf73f4a777ad53ef2f531bf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0348947f_4d33c2a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-10T21:01:10Z",
+      "side": 1,
+      "message": "Sample output from OOM (Linux/NVIDIA):\n```\nINFO: Currently allocated size for memory allocation type (Image): 16,384\nINFO: Currently allocated size for memory allocation type (Buffer): 3,758,096,640\nWARN: RendererVk.cpp:1324 (logPendingMemoryAllocation): Pending allocation size for memory allocation type (Buffer): 268,435,456\nWARN: RendererVk.cpp:1342 (outputMemoryLogStream): Memory heap info\n\n* Available memory heaps:\n0 | Heap size: 4,294,967,296 | Flags: 0x1\n1 | Heap size: 50,259,434,496 | Flags: 0x0\n2 | Heap size: 257,949,696 | Flags: 0x1\n\n* Available memory budget and usage per heap:\n0 | Heap budget: 3,945,136,128 | Heap usage: 3,759,079,424\n1 | Heap budget: 50,259,434,496 | Heap usage: 12,140,544\n2 | Heap budget: 248,643,584 | Heap usage: 9,306,112\n\n* Available memory types:\n0 | Heap index: 1 | Property flags: 0x0\n1 | Heap index: 1 | Property flags: 0x0\n2 | Heap index: 1 | Property flags: 0x0\n3 | Heap index: 1 | Property flags: 0x0\n4 | Heap index: 1 | Property flags: 0x0\n5 | Heap index: 1 | Property flags: 0x0\n6 | Heap index: 1 | Property flags: 0x0\n7 | Heap index: 0 | Property flags: 0x1\n8 | Heap index: 1 | Property flags: 0x6\n9 | Heap index: 1 | Property flags: 0xe\n10 | Heap index: 2 | Property flags: 0x7\n```",
+      "parentUuid": "17a06bb4_edbdd3fc",
+      "revId": "f4ce64462fcbd639cf73f4a777ad53ef2f531bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
