@@ -52,6 +52,24 @@
       "parentUuid": "e2ee6da3_1053d4b0",
       "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4242e261_5a93d083",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-10T21:17:58Z",
+      "side": 1,
+      "message": "Hi Mohan, thank you for your work. To tie the restricted hash check into this change, we can replace `angle::GetANGLECommitHash()` and `angle::GetANGLECommitHashSize()` with `angle::GetANGLEShaderProgramVersion()`, which is going to be introduced in an upcoming change similar to this one: https://chromium-review.googlesource.com/c/angle/angle/+/4113445. I will let you know once the change is landed.",
+      "parentUuid": "9b39d9a4_f5999872",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
