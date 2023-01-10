@@ -736,6 +736,12 @@ def main():
 
     args = parser.parse_args()
 
+    print(os.listdir(str(pathlib.Path(__file__).resolve().parents[1])))
+    print(os.listdir(str(pathlib.Path(__file__).resolve().parents[1] / 'third_party')))
+    print(
+        os.listdir(
+            str(pathlib.Path(__file__).resolve().parents[1] / 'third_party' / 'depot_tools')))
+
     output_results_dir = tempfile.mkdtemp('outputresults')
     try:
         return_code, _ = process_perf_results(args.output_json, args.configuration_name,
