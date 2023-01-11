@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dae555df_4434d002",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1531,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-11T12:38:12Z",
+      "side": 1,
+      "message": "In Patchset 4 I have made the changes that I believe reflect your comment, Kenneth.\n\nIf ANGLE is built in a system that the SDK doesn\u0027t support `MTLBarrierScopeRenderTargets`, it will set that flag to none (`MTLBarrierScope(0)`). Otherwise if the SDK supports `MTLBarrierScopeRenderTargets ` then `getDisplay()-\u003ehasFragmentMemoryBarriers()` will check in run-time whether the OS supports it and run accordingly.\n\nCould you PTAL again? Thank you very much.",
+      "parentUuid": "d8f0668f_9547f26c",
+      "revId": "e1b8c3510aed27223bcabc4fb4e53148dd88f262",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "507c7e31_86e5577e",
