@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f08e39b6_511ff14e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-11T14:03:43Z",
+      "side": 1,
+      "message": "Hey Ken, this will take some contemplation to understand, in particular effects it might have on other projects like Android, whose results are not visible here.\n\nMy preferred solution is described in go/angle-logging-cleanup . I think Chrome should use a side channel for logging.",
+      "revId": "8471cea6921f71012d79991343700997eeb885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f978884c_9faaed20",
