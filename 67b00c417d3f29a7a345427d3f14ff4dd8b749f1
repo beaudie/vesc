@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db892768_c76152db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T05:36:26Z",
+      "side": 1,
+      "message": "I had this for clear(), but was missing from destroy() :-S",
+      "revId": "67b00c417d3f29a7a345427d3f14ff4dd8b749f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
