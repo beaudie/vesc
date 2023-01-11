@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f8d6d1_bd9bd94f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-11T14:00:23Z",
+      "side": 1,
+      "message": "Do you have an example of a merge script failure because of a shard failure? I think uploading results to the dashboard even when there\u0027s one or two tests failing is valuable.",
+      "revId": "9b7c753fe2a43a160ae5fa0da2a7245bce1d5b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
