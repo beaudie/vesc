@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba8af538_1e01fbe3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2023-01-11T22:09:05Z",
+      "side": 1,
+      "message": "I tried for like, most of a day to tighten the suppressions. It was really hard to figure out what the suppressions should be without being able to repro many of them locally for unknown reasons.\n\nHonestly, I\u0027d be inclined to say yes, we\u0027re completely broken. Or, more like, this VVL error is really broad (probably necessarily) and it doesn\u0027t seem very practical to be precise here. It\u0027s been possible for the STORAGE usages, but the SAMPLED usages are just so much more common that they crop up everywhere.",
+      "parentUuid": "e6a14468_447c4b79",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 6
+      },
+      "revId": "e675c984db8acdf4bc4c1226049f2328f488c66b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6623daa_f63ba1d7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
