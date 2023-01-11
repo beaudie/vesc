@@ -421,7 +421,6 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE bool isCommandQueueBusy()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.isBusy();
@@ -446,7 +445,6 @@ class RendererVk : angle::NonCopyable
 
     angle::VulkanPerfCounters getCommandQueuePerfCounters()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             return mCommandProcessor.getPerfCounters();
@@ -458,7 +456,6 @@ class RendererVk : angle::NonCopyable
     }
     void resetCommandQueuePerFrameCounters()
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
         if (isAsyncCommandQueueEnabled())
         {
             mCommandProcessor.resetPerFramePerfCounters();
@@ -882,8 +879,8 @@ class RendererVk : angle::NonCopyable
     uint32_t mGarbageCollectionFlushThreshold;
 
     // Only used for "one off" command buffers.
+    std::mutex mOneOffCommandMutex;
     vk::CommandPool mOneOffCommandPool;
-
     struct PendingOneOffCommands
     {
         vk::ResourceUse use;
@@ -892,11 +889,10 @@ class RendererVk : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingOneOffCommands;
 
     // Synchronous Command Queue
-    std::mutex mCommandQueueMutex;
-    vk::CommandQueue mCommandQueue;
+    vk::ThreadSafeCommandQueue mCommandQueue;
 
     // Async Command Queue
-    vk::CommandProcessor mCommandProcessor;
+    vk::ThreadSafeCommandProcessor mCommandProcessor;
 
     // Command buffer pool management.
     std::mutex mCommandBufferRecyclerMutex;
