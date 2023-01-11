@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfdedc11_939de9f0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T16:50:27Z",
+      "side": 1,
+      "message": "Definitely looks like a bug. Could you please add a test for this? It\u0027s obviously not tested otherwise",
+      "revId": "26e28089c8bd043f1df5905e604cb1ecde74c2b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
