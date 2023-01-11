@@ -52,6 +52,24 @@
       "parentUuid": "d4e8879b_4e7c6123",
       "revId": "1e0b2faf8507bce25fbcb551d90e03683b1c9096",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e4cfca8_2e58a74a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-11T23:22:16Z",
+      "side": 1,
+      "message": "Thanks. Added a condition for `kInvalidMemoryTypeIndex`. The tests in question are no longer failing.",
+      "parentUuid": "fc275de9_1cf0354b",
+      "revId": "1e0b2faf8507bce25fbcb551d90e03683b1c9096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
