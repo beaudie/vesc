@@ -34,6 +34,24 @@
       "parentUuid": "c3f8d6d1_bd9bd94f",
       "revId": "9b7c753fe2a43a160ae5fa0da2a7245bce1d5b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca54da01_09fe4da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-11T14:24:55Z",
+      "side": 1,
+      "message": "Sorry, wrong link. What I had in mind was when angle_metrics.py raises both in a shard and in a merge script, we get this view but shard failure is more useful.",
+      "parentUuid": "bc5a0414_f9af4c4a",
+      "revId": "9b7c753fe2a43a160ae5fa0da2a7245bce1d5b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
