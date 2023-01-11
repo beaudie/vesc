@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6a14468_447c4b79",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-11T05:36:48Z",
+      "side": 1,
+      "message": "Strangely I wasn\u0027t able to reproduce the test failure locally.\n\ne.g. https://chromium-swarm.appspot.com/task?id\u003d5fa2992a576ed911 reported that this test `ReadOnlyFeedbackLoopTest.ReadOnlyDepthFeedbackLoopSupported/ES3_Vulkan` failed with the VVL error. However, I\u0027ve ran the test by itself, and ran the test with batch filter: https://paste.googleplex.com/5841263084437504, both passed.",
+      "parentUuid": "a32652e1_11867c10",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 259,
+        "endChar": 6
+      },
+      "revId": "e675c984db8acdf4bc4c1226049f2328f488c66b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6623daa_f63ba1d7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
