@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f57f05ce_2008a4f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T17:35:53Z",
+      "side": 1,
+      "message": "Thanks for the fix. FYI, crbug.com/1406249 is another instance of this.",
+      "revId": "20417d9ec77df5f0131ce9e067425ecaf6ebed5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
