@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ee42ad9_93436a05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-01-11T22:38:28Z",
+      "side": 1,
+      "message": "I have a similar patch, just added a row for for GLES 1.0 and a row for GLES 1.1 all columns marked \"complete\"\nThis patch adds a bit more detail in the added paragraph.\nI have bug 7948 which can now be closed.",
+      "revId": "c84cb5c5b6f3d091535ef07bc3eb07aa666d894a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
