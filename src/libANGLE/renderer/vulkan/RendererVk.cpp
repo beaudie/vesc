@@ -1327,6 +1327,66 @@ void logMemoryHeapStats(RendererVk *renderer, vk::MemoryLogSeverity severity)
 }
 }  // namespace
 
+// OneOffCommandPool implementation.
+void OneOffCommandPool::destroy(VkDevice device)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (PendingOneOffCommands &pending : mPendingCommands)
+    {
+        pending.commandBuffer.releaseHandle();
+    }
+    mCommandPool.destroy(device);
+}
+
+angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
+                                                  bool hasProtectedContent,
+                                                  vk::PrimaryCommandBuffer *commandBufferOut)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+
+    if (!mPendingCommands.empty() &&
+        !context->getRenderer()->hasUnfinishedUse(mPendingCommands.front().use))
+    {
+        *commandBufferOut = std::move(mPendingCommands.front().commandBuffer);
+        mPendingCommands.pop_front();
+        ANGLE_VK_TRY(context, commandBufferOut->reset());
+    }
+    else
+    {
+        if (!mCommandPool.valid())
+        {
+            VkCommandPoolCreateInfo createInfo = {};
+            createInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            createInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT |
+                               (hasProtectedContent ? VK_COMMAND_POOL_CREATE_PROTECTED_BIT : 0);
+            ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), createInfo));
+        }
+
+        VkCommandBufferAllocateInfo allocInfo = {};
+        allocInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        allocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocInfo.commandBufferCount          = 1;
+        allocInfo.commandPool                 = mCommandPool.getHandle();
+
+        ANGLE_VK_TRY(context, commandBufferOut->init(context->getDevice(), allocInfo));
+    }
+
+    VkCommandBufferBeginInfo beginInfo = {};
+    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo         = nullptr;
+    ANGLE_VK_TRY(context, commandBufferOut->begin(beginInfo));
+
+    return angle::Result::Continue;
+}
+
+void OneOffCommandPool::releaseCommandBuffer(const QueueSerial &submitQueueSerial,
+                                             vk::PrimaryCommandBuffer &&primary)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    mPendingCommands.push_back({vk::ResourceUse(submitQueueSerial), std::move(primary)});
+}
+
 // RendererVk implementation.
 RendererVk::RendererVk()
     : mDisplay(nullptr),
@@ -1417,26 +1477,18 @@ void RendererVk::onDestroy(vk::Context *context)
     }
     mOrphanedBufferBlocks.clear();
 
+    if (isAsyncCommandQueueEnabled())
     {
-        std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-        if (isAsyncCommandQueueEnabled())
-        {
-            mCommandProcessor.destroy(context);
-        }
-        else
-        {
-            mCommandQueue.destroy(context);
-        }
+        mCommandProcessor.destroy(context);
+    }
+    else
+    {
+        mCommandQueue.destroy(context);
     }
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
     cleanupGarbage();
     ASSERT(!hasSharedGarbage());
-
-    for (PendingOneOffCommands &pending : mPendingOneOffCommands)
-    {
-        pending.commandBuffer.releaseHandle();
-    }
 
     mOneOffCommandPool.destroy(mDevice);
 
@@ -4597,9 +4649,6 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                             QueueSerial *queueSerialOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queueSubmitOneOff");
-
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     // Allocate a oneoff submitQueueSerial and generate a serial and then use it and release the
     // index.
     SerialIndex queueIndex;
@@ -4626,7 +4675,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     *queueSerialOut = submitQueueSerial;
     if (primary.valid())
     {
-        mPendingOneOffCommands.push_back({vk::ResourceUse(submitQueueSerial), std::move(primary)});
+        mOneOffCommandPool.releaseCommandBuffer(submitQueueSerial, std::move(primary));
     }
 
     return angle::Result::Continue;
@@ -4892,45 +4941,6 @@ void RendererVk::reloadVolkIfNeeded() const
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 }
 
-angle::Result RendererVk::getCommandBufferOneOff(vk::Context *context,
-                                                 bool hasProtectedContent,
-                                                 vk::PrimaryCommandBuffer *commandBufferOut)
-{
-    if (!mOneOffCommandPool.valid())
-    {
-        VkCommandPoolCreateInfo createInfo = {};
-        createInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        createInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT |
-                           (hasProtectedContent ? VK_COMMAND_POOL_CREATE_PROTECTED_BIT : 0);
-        ANGLE_VK_TRY(context, mOneOffCommandPool.init(mDevice, createInfo));
-    }
-
-    if (!mPendingOneOffCommands.empty() && !hasUnfinishedUse(mPendingOneOffCommands.front().use))
-    {
-        *commandBufferOut = std::move(mPendingOneOffCommands.front().commandBuffer);
-        mPendingOneOffCommands.pop_front();
-        ANGLE_VK_TRY(context, commandBufferOut->reset());
-    }
-    else
-    {
-        VkCommandBufferAllocateInfo allocInfo = {};
-        allocInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandBufferCount          = 1;
-        allocInfo.commandPool                 = mOneOffCommandPool.getHandle();
-
-        ANGLE_VK_TRY(context, commandBufferOut->init(context->getDevice(), allocInfo));
-    }
-
-    VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    beginInfo.pInheritanceInfo         = nullptr;
-    ANGLE_VK_TRY(context, commandBufferOut->begin(beginInfo));
-
-    return angle::Result::Continue;
-}
-
 angle::Result RendererVk::submitCommands(
     vk::Context *context,
     bool hasProtectedContent,
@@ -4941,12 +4951,11 @@ angle::Result RendererVk::submitCommands(
     vk::SecondaryCommandPools *commandPools,
     const QueueSerial &submitQueueSerial)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
-    vk::SecondaryCommandBufferList commandBuffersToReset = {
-        std::move(mOutsideRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
-        std::move(mRenderPassCommandBufferRecycler.releaseCommandBuffersToReset()),
-    };
+    vk::SecondaryCommandBufferList commandBuffersToReset;
+    mOutsideRenderPassCommandBufferRecycler.releaseCommandBuffersToReset(
+        &commandBuffersToReset.outsideRenderPassCommandBuffers);
+    mRenderPassCommandBufferRecycler.releaseCommandBuffersToReset(
+        &commandBuffersToReset.renderPassCommandBuffers);
 
     const VkSemaphore signalVkSemaphore =
         signalSemaphore ? signalSemaphore->getHandle() : VK_NULL_HANDLE;
@@ -4972,7 +4981,6 @@ angle::Result RendererVk::submitCommands(
 
 void RendererVk::handleDeviceLost()
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         mCommandProcessor.handleDeviceLost(this);
@@ -4985,8 +4993,6 @@ void RendererVk::handleDeviceLost()
 
 angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::ResourceUse &use)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.finishResourceUse(context, use, getMaxFenceWaitTimeNs()));
@@ -5002,7 +5008,6 @@ angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::Reso
 angle::Result RendererVk::finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial)
 {
     ASSERT(queueSerial.valid());
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(
@@ -5022,9 +5027,6 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
                                                                     VkResult *result)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForResourceUseToFinishWithUserTimeout");
-
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitForResourceUseToFinishWithUserTimeout(context, use, timeout,
@@ -5041,8 +5043,6 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
 
 angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitIdle(context, getMaxFenceWaitTimeNs()));
@@ -5057,7 +5057,6 @@ angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
 
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     // TODO: https://issuetracker.google.com/169788986 - would be better if we could just wait
     // for the work we need but that requires QueryHelper to use the actual serial for the
     // query.
@@ -5080,8 +5079,6 @@ angle::Result RendererVk::flushRenderPassCommands(
     vk::RenderPassCommandBufferHelper **renderPassCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
-
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent,
@@ -5102,8 +5099,6 @@ angle::Result RendererVk::flushOutsideRPCommands(
     vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
-
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent,
@@ -5122,8 +5117,6 @@ VkResult RendererVk::queuePresent(vk::Context *context,
                                   egl::ContextPriority priority,
                                   const VkPresentInfoKHR &presentInfo)
 {
-    std::unique_lock<std::mutex> lock(mCommandQueueMutex);
-
     VkResult result = VK_SUCCESS;
     if (isAsyncCommandQueueEnabled())
     {
@@ -5150,7 +5143,6 @@ angle::Result RendererVk::getCommandBufferImpl(
     RecyclerT *recycler,
     CommandBufferHelperT **commandBufferHelperOut)
 {
-    std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
     return recycler->getCommandBufferHelper(context, commandPool, commandsAllocator,
                                             commandBufferHelperOut);
 }
@@ -5182,7 +5174,6 @@ void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
     vk::OutsideRenderPassCommandBufferHelper **commandBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleOutsideRenderPassCommandBufferHelper");
-    std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
     mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
 }
 
@@ -5191,7 +5182,6 @@ void RendererVk::recycleRenderPassCommandBufferHelper(
     vk::RenderPassCommandBufferHelper **commandBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleRenderPassCommandBufferHelper");
-    std::unique_lock<std::mutex> lock(mCommandBufferRecyclerMutex);
     mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
 }
 
