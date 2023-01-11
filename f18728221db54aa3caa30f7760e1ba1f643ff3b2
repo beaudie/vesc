@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70892a14_9ed30b29",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T21:29:05Z",
+      "side": 0,
+      "message": "nit: lost comment",
+      "revId": "f18728221db54aa3caa30f7760e1ba1f643ff3b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
