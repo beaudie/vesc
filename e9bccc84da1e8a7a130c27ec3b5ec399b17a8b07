@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2be46b6_5f39644b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-11T19:44:23Z",
+      "side": 1,
+      "message": "Alexey points out this is needed to unblock ANGLE-to-WebKit rolls. How can we help make progress on this?\n\nStructurally this seems OK to me, though it feels like a workaround for a situation we don\u0027t fully understand. A regression test would be ideal.",
+      "revId": "e9bccc84da1e8a7a130c27ec3b5ec399b17a8b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a5aff18_421cb57f",
