@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a5aff18_421cb57f",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-11T19:30:13Z",
+      "side": 1,
+      "message": "Could there be a valid end2end test that triggers this path? If not, should this be an assertion instead of a custom error?",
+      "revId": "e9bccc84da1e8a7a130c27ec3b5ec399b17a8b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
