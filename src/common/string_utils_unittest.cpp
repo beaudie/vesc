@@ -55,6 +55,11 @@ TEST(StringUtilsTest, SplitString_Basics)
     EXPECT_EQ("", r[0]);  // Before the first space.
     EXPECT_EQ("red", r[1]);
     EXPECT_EQ("", r[2]);  // After the last space.
+
+    // Ensure CRLF can be treated as a single newline by passing multiple delimiters but
+    // dropping empty pieces
+    r = SplitString("test;\r\ntest2;", "\r\n", KEEP_WHITESPACE, SPLIT_WANT_NONEMPTY);
+    ASSERT_EQ(2u, r.size());
 }
 
 // Check different whitespace and result types for SplitString
