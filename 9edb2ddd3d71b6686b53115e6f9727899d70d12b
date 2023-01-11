@@ -16,6 +16,24 @@
       "message": "153f3c226c5b79a7c817f4bac18984f90de13d78 uses _MSC_VER because __popcnt is an MSVC builtin. It doesn\u0027t make sense to change this check to windows.",
       "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bb766c5_56b467e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1566947
+      },
+      "writtenOn": "2023-01-11T18:01:18Z",
+      "side": 1,
+      "message": "But __popcnt related builtin is available in toolchain targeting Windows platform like mingw-w64. The implementation can be found here https://github.com/mingw-w64/mingw-w64/search?q\u003dpopcnt",
+      "parentUuid": "63a6d4e7_3e1ba36a",
+      "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
