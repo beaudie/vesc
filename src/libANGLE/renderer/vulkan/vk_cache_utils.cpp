@@ -6466,6 +6466,9 @@ void RenderPassCache::destroy(RendererVk *rendererVk)
 
     VkDevice device = rendererVk->getDevice();
 
+    // Make sure there are no jobs referencing the render pass cache.
+    contextVk->getShareGroup()->waitForCurrentMonolithicPipelineCreationTask();
+
     for (auto &outerIt : mPayload)
     {
         for (auto &innerIt : outerIt.second)
