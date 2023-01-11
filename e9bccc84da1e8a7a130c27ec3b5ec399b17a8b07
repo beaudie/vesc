@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31413d01_86700dd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-01-11T20:15:39Z",
+      "side": 1,
+      "message": "I think this is a progression even without the test case. However, adding a test with the fix would be a nice workflow.",
+      "revId": "e9bccc84da1e8a7a130c27ec3b5ec399b17a8b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a5aff18_421cb57f",
