@@ -1170,6 +1170,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Flush and complete current outstanding work before destruction.
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
+    // Make sure there are no pending pipeline creation jobs before destroying resources that might
+    // be used by it.
+    mShareGroupVk->waitForCurrentMonolithicPipelineCreationTask();
+
     VkDevice device = getDevice();
 
     mDefaultUniformStorage.release(mRenderer);
@@ -8070,6 +8074,9 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
     // ones.
     if (getFeatures().permanentlySwitchToFramebufferFetchMode.enabled)
     {
+        // Pipeline creation references the render pass, so no jobs should be pending before
+        // clearing the cache.
+        mShareGroupVk->waitForCurrentMonolithicPipelineCreationTask();
         mRenderPassCache.clear(this);
     }
 
