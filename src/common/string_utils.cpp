@@ -63,6 +63,12 @@ std::vector<std::string> SplitString(const std::string &input,
         {
             piece = input.substr(start, end - start);
             start = end + 1;
+
+            if (input[end] == '\r' && input[start] == '\n')
+            {
+                // Treat CRLF as a single newline
+                start++;
+            }
         }
 
         if (whitespace == TRIM_WHITESPACE)

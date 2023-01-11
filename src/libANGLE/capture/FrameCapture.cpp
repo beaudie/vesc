@@ -538,7 +538,7 @@ struct FmtMultiLineString
 {
     FmtMultiLineString(const std::string &str)
         : strings(angle::SplitString(str,
-                                     "\n",
+                                     "\r\n",
                                      WhitespaceHandling::KEEP_WHITESPACE,
                                      SplitResult::SPLIT_WANT_ALL))
     {}
