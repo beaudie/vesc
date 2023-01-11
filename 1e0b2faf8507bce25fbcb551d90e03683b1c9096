@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e38bde3_328c15e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T17:45:22Z",
+      "side": 1,
+      "message": "Could be ASSERT instead? Who would use a bad memory type index?",
+      "revId": "1e0b2faf8507bce25fbcb551d90e03683b1c9096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
