@@ -16,6 +16,24 @@
       "message": "Do you have an example of a merge script failure because of a shard failure? I think uploading results to the dashboard even when there\u0027s one or two tests failing is valuable.",
       "revId": "9b7c753fe2a43a160ae5fa0da2a7245bce1d5b2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc5a0414_f9af4c4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-11T14:23:14Z",
+      "side": 1,
+      "message": "Not specifically because of the shard failure but here shard failures would be more useful than the script failure: https://ci.chromium.org/ui/p/angle/builders/ci/win10-nvidia-gtx1660-perf/708/overview\n\nI updated to upload results anyways but suppress the merge script failure instead, PTAL",
+      "parentUuid": "c3f8d6d1_bd9bd94f",
+      "revId": "9b7c753fe2a43a160ae5fa0da2a7245bce1d5b2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
