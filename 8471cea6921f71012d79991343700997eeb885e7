@@ -16,6 +16,40 @@
       "message": "Please advise if I should implement this some other way. Right now the implementation of glDebugMessageControl only appends to the internal list, so it\u0027s not possible to override the behavior of the built-in control objects. Perhaps it should search the list by source, type, and severity, and manage the list of IDs and their enabled state differently.",
       "revId": "8471cea6921f71012d79991343700997eeb885e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40eb0d66_0f192bdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T05:56:14Z",
+      "side": 1,
+      "message": "Driving by",
+      "revId": "8471cea6921f71012d79991343700997eeb885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f978884c_9faaed20",
+        "filename": "src/tests/gl_tests/DebugTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T05:56:14Z",
+      "side": 1,
+      "message": "That\u0027s interesting, ideally we would want to do this in our test fixture so we get it on by default. This is especially useful for our traces because we can get immediate feedback on where inefficiencies might be happening.",
+      "revId": "8471cea6921f71012d79991343700997eeb885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
