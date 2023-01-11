@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07f22606_438d357b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-11T00:43:29Z",
+      "side": 1,
+      "message": "Please advise if I should implement this some other way. Right now the implementation of glDebugMessageControl only appends to the internal list, so it\u0027s not possible to override the behavior of the built-in control objects. Perhaps it should search the list by source, type, and severity, and manage the list of IDs and their enabled state differently.",
+      "revId": "8471cea6921f71012d79991343700997eeb885e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
