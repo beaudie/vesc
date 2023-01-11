@@ -199,6 +199,13 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-None-06538",
     // http://anglebug.com/7325
     "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
+<<<<<<< PATCH SET (98d501 Revert "Suppress VUID-VkGraphicsPipelineCreateInfo-pStages-0)
+    // http://anglebug.com/7338
+    "VUID-VkGraphicsPipelineCreateInfo-renderPass-06040",
+    "VUID-VkGraphicsPipelineCreateInfo-renderPass-06039",
+    // http://anglebug.com/7470
+    "UNASSIGNED-BestPractices-vkCmdBeginRenderPass-ClearValueWithoutLoadOpClear",
+=======
     // http://anglebug.com/7513
     "VUID-VkGraphicsPipelineCreateInfo-pStages-06896",
     // http://anglebug.com/7685
@@ -225,6 +232,7 @@ constexpr const char *kSkippedMessages[] = {
 constexpr const char *kNoListRestartSkippedMessages[] = {
     // http://anglebug.com/3832
     "VUID-VkPipelineInputAssemblyStateCreateInfo-topology-00428",
+>>>>>>> BASE      (eab594 Suppress merge script failure due to missing gsutil on Windo)
 };
 
 // Some syncval errors are resolved in the presence of the NONE load or store render pass ops.  For
