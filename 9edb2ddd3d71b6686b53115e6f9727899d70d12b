@@ -34,6 +34,24 @@
       "parentUuid": "63a6d4e7_3e1ba36a",
       "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22fb3f32_75b4ec2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T21:14:15Z",
+      "side": 1,
+      "message": "But they also have `__builtin_popcount`, no?\n\n```\nunsigned short __popcnt16(unsigned short value)\n{\n    return __builtin_popcount(value);\n}\n```\n\nPerhaps what you really need is to change line 1109 to add `|| gcc`?",
+      "parentUuid": "4bb766c5_56b467e7",
+      "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
