@@ -556,7 +556,11 @@ std::string EscapeString(const std::string &string)
         {
             strstr << "\\";
         }
-        strstr << c;
+        // Skip any exra new lines that crept in
+        if (c != '\n' && c != '\r')
+        {
+            strstr << c;
+        }
     }
 
     return strstr.str();
