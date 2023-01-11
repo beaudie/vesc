@@ -34,6 +34,24 @@
       "parentUuid": "5e38bde3_328c15e3",
       "revId": "1e0b2faf8507bce25fbcb551d90e03683b1c9096",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc275de9_1cf0354b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-11T21:56:40Z",
+      "side": 1,
+      "message": "What did debugging show? If `memoryType` is simply something like a default invalid value, it\u0027ll be fine to specifically check for that value in the `if`.",
+      "parentUuid": "d4e8879b_4e7c6123",
+      "revId": "1e0b2faf8507bce25fbcb551d90e03683b1c9096",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
