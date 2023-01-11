@@ -57,6 +57,30 @@
       },
       "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a772a71_dc7563ab",
+        "filename": "src/libANGLE/renderer/vulkan/VkImageImageSiblingVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-11T00:19:05Z",
+      "side": 1,
+      "message": "I added the usage flags to the `init2DWeakReference()` args. For `viewFormats`, I set it similar to `deriveImageViewFormatFromCreateInfoPNext()` when there is no `pNext` set for `imageInfo`.",
+      "parentUuid": "c9e9584b_1c57b39f",
+      "range": {
+        "startLine": 75,
+        "startChar": 12,
+        "endLine": 75,
+        "endChar": 48
+      },
+      "revId": "df7aea9352dfad7c5f1314cf84f91b2cacd8918c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
