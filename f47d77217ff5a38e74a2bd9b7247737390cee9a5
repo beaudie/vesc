@@ -118,6 +118,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14bba4a0_699a7f57",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-12T18:08:52Z",
+      "side": 1,
+      "message": "Shabi, I think for handling the debug adapter protocol, you\u0027re better off writing a custom handler than using angle::SplitString. Can we proceed with my suggestion without getting too afar field?",
+      "parentUuid": "73af9f7b_e0802525",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
