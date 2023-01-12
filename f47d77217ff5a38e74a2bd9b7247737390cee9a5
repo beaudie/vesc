@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "308186e5_2f8d9ddd",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-12T17:10:09Z",
+      "side": 1,
+      "message": "there\u0027s a bogosity of handling \\r and \\n specially in splitstring. I\u0027d recommend you just alter the algorithm to skip groups of delimiters instead of reporting empty values between each pair of delimiters.",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
