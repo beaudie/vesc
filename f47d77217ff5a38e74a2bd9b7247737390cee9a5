@@ -142,6 +142,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f417283_578970e4",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T18:32:52Z",
+      "side": 1,
+      "message": "I was just mentioning that as an example. I don\u0027t really mind either way, but removing `\\r` from the source seems simpler, doesn\u0027t it?",
+      "parentUuid": "14bba4a0_699a7f57",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
