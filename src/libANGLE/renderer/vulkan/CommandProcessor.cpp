@@ -77,7 +77,7 @@ size_t GetBatchCountUpToSerials(std::vector<CommandBatch> &inFlightCommands,
                                 const AtomicQueueSerialFixedArray &lastSubmittedSerials,
                                 const AtomicQueueSerialFixedArray &lastCompletedSerials,
                                 const Serials &serials,
-                                Shared<Fence> **fenceToWaitOnOut)
+                                Shared<Fence> *fenceToWaitOnOut)
 {
     // First calculate the bitmask of which index we should wait
     BitSetArrayT serialBitMaskToFinish;
@@ -129,7 +129,7 @@ size_t GetBatchCountUpToSerials(std::vector<CommandBatch> &inFlightCommands,
     {
         if (inFlightCommands[i].fence.isReferenced())
         {
-            *fenceToWaitOnOut = &inFlightCommands[i].fence;
+            *fenceToWaitOnOut = inFlightCommands[i].fence;
             break;
         }
     }
@@ -651,10 +651,10 @@ void CommandProcessor::destroy(Context *context)
     }
 }
 
-bool CommandProcessor::isBusy() const
+bool CommandProcessor::isBusy(RendererVk *renderer) const
 {
     std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-    return !mTasks.empty() || mCommandQueue.isBusy();
+    return !mTasks.empty() || mCommandQueue.isBusy(renderer);
 }
 
 // Wait until all commands up to and including serial have been processed
@@ -1094,9 +1094,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
         return angle::Result::Continue;
     }
 
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::finishResourceUse");
-
-    Shared<Fence> *fenceToWaitOn = nullptr;
+    Shared<Fence> fenceToWaitOn;
     size_t finishCount =
         getBatchCountUpToSerials(context->getRenderer(), use.getSerials(), &fenceToWaitOn);
 
@@ -1107,11 +1105,11 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
 
     // Wait for it finish.  If no fence, the serial is already finished, it might just have garbage
     // to clean up.
-    if (fenceToWaitOn != nullptr)
+    if (fenceToWaitOn.isReferenced())
     {
         VkDevice device = context->getDevice();
-        VkResult status = fenceToWaitOn->get().wait(device, timeout);
-
+        ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::finishResourceUse");
+        VkResult status = fenceToWaitOn.get().wait(device, timeout);
         ANGLE_VK_TRY(context, status);
     }
 
@@ -1236,7 +1234,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
                                                                       uint64_t timeout,
                                                                       VkResult *result)
 {
-    Shared<Fence> *fenceToWaitOn = nullptr;
+    Shared<Fence> fenceToWaitOn;
     size_t finishCount =
         getBatchCountUpToSerials(context->getRenderer(), use.getSerials(), &fenceToWaitOn);
 
@@ -1246,7 +1244,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
     // - The given serial is smaller than the smallest serial, or
     // - Every batch up to this serial is a garbage-clean-up-only batch (i.e. empty submission
     //   that's optimized out)
-    if (finishCount == 0 || fenceToWaitOn == nullptr)
+    if (finishCount == 0 || !fenceToWaitOn.isReferenced())
     {
         *result = VK_SUCCESS;
         return angle::Result::Continue;
@@ -1260,7 +1258,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
         return angle::Result::Continue;
     }
 
-    *result = fenceToWaitOn->get().wait(context->getDevice(), timeout);
+    *result = fenceToWaitOn.get().wait(context->getDevice(), timeout);
 
     // Don't trigger an error on timeout.
     if (*result != VK_TIMEOUT)
@@ -1406,7 +1404,7 @@ VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
     return vkQueuePresentKHR(queue, &presentInfo);
 }
 
-bool CommandQueue::isBusy() const
+bool CommandQueue::isBusy(RendererVk *renderer) const
 {
     for (SerialIndex i = 0; i < mLastSubmittedSerials.size(); ++i)
     {
@@ -1430,8 +1428,15 @@ bool CommandQueue::hasUnsubmittedUse(const vk::ResourceUse &use) const
 
 size_t CommandQueue::getBatchCountUpToSerials(RendererVk *renderer,
                                               const Serials &serials,
-                                              Shared<Fence> **fenceToWaitOnOut)
+                                              Shared<Fence> *fenceToWaitOnOut)
 {
+    ASSERT(fenceToWaitOnOut != nullptr);
+    ASSERT(!fenceToWaitOnOut->isReferenced());
+    if (mInFlightCommands.empty())
+    {
+        return 0;
+    }
+
     if (renderer->getLargestQueueSerialIndexEverAllocated() < 64)
     {
         return GetBatchCountUpToSerials<angle::BitSet64<64>>(
@@ -1444,6 +1449,125 @@ size_t CommandQueue::getBatchCountUpToSerials(RendererVk *renderer,
             mInFlightCommands, mLastSubmittedSerials, mLastCompletedSerials, serials,
             fenceToWaitOnOut);
     }
+}
+
+// ThreadSafeCommandQueue implementation
+angle::Result ThreadSafeCommandQueue::finishResourceUse(Context *context,
+                                                        const ResourceUse &use,
+                                                        uint64_t timeout)
+{
+    RendererVk *renderer = context->getRenderer();
+
+    // First have local variable retain the fence that we try to wait on
+    Shared<Fence> fenceToWaitOn;
+    size_t finishCount;
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        finishCount = getBatchCountUpToSerials(renderer, use.getSerials(), &fenceToWaitOn);
+        if (finishCount == 0)
+        {
+            return angle::Result::Continue;
+        }
+    }
+
+    // Wait for it finish without lock.  If no fence, the serial is already finished, it might just
+    // have garbage to clean up.
+    if (fenceToWaitOn.isReferenced())
+    {
+        VkDevice device = context->getDevice();
+        ANGLE_TRACE_EVENT0("gpu.angle", "ThreadSafeCommandQueue::finishResourceUse");
+        VkResult status = fenceToWaitOn.get().wait(device, timeout);
+        ANGLE_VK_TRY(context, status);
+    }
+
+    // Clean up finished batches.
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        ANGLE_TRY(CommandQueue::retireFinishedCommandsAndCleanupGarbage(context, finishCount));
+        ASSERT(CommandQueue::allInFlightCommandsAreAfterSerials(use.getSerials()));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ThreadSafeCommandQueue::finishQueueSerial(Context *context,
+                                                        const QueueSerial &queueSerial,
+                                                        uint64_t timeout)
+{
+    vk::ResourceUse use(queueSerial);
+    return finishResourceUse(context, use, timeout);
+}
+
+angle::Result ThreadSafeCommandQueue::waitIdle(Context *context, uint64_t timeout)
+{
+    // Fill the local variable with lock
+    vk::ResourceUse use;
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        if (mInFlightCommands.empty())
+        {
+            return angle::Result::Continue;
+        }
+        use.setQueueSerial(mInFlightCommands.back().queueSerial);
+    }
+
+    return finishResourceUse(context, use, timeout);
+}
+
+angle::Result ThreadSafeCommandQueue::waitForResourceUseToFinishWithUserTimeout(
+    Context *context,
+    const ResourceUse &use,
+    uint64_t timeout,
+    VkResult *result)
+{
+    Shared<Fence> fenceToWaitOn;
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        size_t finishCount =
+            getBatchCountUpToSerials(context->getRenderer(), use.getSerials(), &fenceToWaitOn);
+        // The serial is already complete if:
+        //
+        // - There is no in-flight work (i.e. mInFlightCommands is empty), or
+        // - The given serial is smaller than the smallest serial, or
+        // - Every batch up to this serial is a garbage-clean-up-only batch (i.e. empty submission
+        //   that's optimized out)
+        if (finishCount == 0 || !fenceToWaitOn.isReferenced())
+        {
+            *result = VK_SUCCESS;
+            return angle::Result::Continue;
+        }
+    }
+
+    // Serial is not yet submitted. This is undefined behaviour, so we can do anything.
+    if (hasUnsubmittedUse(use))
+    {
+        WARN() << "Waiting on an unsubmitted serial.";
+        *result = VK_TIMEOUT;
+        return angle::Result::Continue;
+    }
+
+    *result = fenceToWaitOn.get().wait(context->getDevice(), timeout);
+
+    // Don't trigger an error on timeout.
+    if (*result != VK_TIMEOUT)
+    {
+        ANGLE_VK_TRY(context, *result);
+    }
+
+    return angle::Result::Continue;
+}
+
+bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer)
+{
+    size_t maxIndex = renderer->getLargestQueueSerialIndexEverAllocated();
+    for (SerialIndex i = 0; i <= maxIndex; ++i)
+    {
+        if (mLastSubmittedSerials[i] > mLastCompletedSerials[i])
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 // QueuePriorities:
