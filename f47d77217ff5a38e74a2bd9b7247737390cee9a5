@@ -166,6 +166,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b11cb3a5_bd512e6a",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-12T19:36:08Z",
+      "side": 1,
+      "message": "YMMV. I find pre-parsing the strings to avoid working around an inconsistency in how strtok is implemented (what I would expect) vs our SplitString implementation works (how I copied it directly from Chromium) more confusing than just fixing the parsing.",
+      "parentUuid": "1f417283_578970e4",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
