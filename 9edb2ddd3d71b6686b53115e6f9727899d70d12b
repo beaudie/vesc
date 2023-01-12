@@ -70,6 +70,24 @@
       "parentUuid": "22fb3f32_75b4ec2e",
       "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5884d4f3_176f0356",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T15:37:21Z",
+      "side": 1,
+      "message": "I realize that. But doesn\u0027t clang on mingw hit the #if in line 1109? So it would use the clang builtins directly instead of using the mingw wrapped ones. I figured your issue is that gcc on mingw builds are not using builtins.\n\nI guess it\u0027s not clear what problem you are trying to solve, do you mind opening an issue at anglebug.com/new and describe the problem? You\u0027d need that anyway to pass presubmit (because the change description is missing a `Bug:` tag like `Bug: angleproject:NNNN`)",
+      "parentUuid": "50d8423c_300f8341",
+      "revId": "9edb2ddd3d71b6686b53115e6f9727899d70d12b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
