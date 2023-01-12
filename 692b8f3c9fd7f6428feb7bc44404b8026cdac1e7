@@ -177,6 +177,57 @@
       "parentUuid": "f3c9ff24_f8c491e1",
       "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fde865a_f5e2b6fe",
+        "filename": "include/GLES2/gl2ext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T17:17:26Z",
+      "side": 1,
+      "message": "Reserved this for you",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "991bff08_b111766a",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T17:17:26Z",
+      "side": 1,
+      "message": "What\u0027s stopping the cache and offline binaries from being made identical so we don\u0027t have to have this if/else?",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e981ae4_4e7dde5a",
+        "filename": "src/tests/gl_tests/ShaderBinaryTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T17:17:26Z",
+      "side": 1,
+      "message": "Thanks for the test! A few more tests to make sure this doesn\u0027t regress would be appreciated:\n\n- Compute shader, GS and T*S as bonus\n- Complex shaders for example with multiple attributes, varyings and builtins (gl_InstanceID for example) in VS, storage buffer, sampled image etc in FS",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
