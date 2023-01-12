@@ -3973,7 +3973,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(
         &mFeatures, enableMultisampledRenderToTexture,
         mFeatures.supportsMultisampledRenderToSingleSampled.enabled ||
-            mFeatures.supportsMultisampledRenderToSingleSampledGOOGLEX.enabled ||
+            mFeatures.supportsMultisampledRenderToSingleSampledGOOGLEX.enabled || isARM ||
             (supportsIndependentDepthStencilResolve && (isTileBasedRenderer || isSamsung)));
 
     // Currently we enable cube map arrays based on the imageCubeArray Vk feature.
