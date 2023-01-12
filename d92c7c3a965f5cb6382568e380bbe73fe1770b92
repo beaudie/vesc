@@ -140,6 +140,24 @@
       "parentUuid": "fe7782b9_3ba04863",
       "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44901176_d3ca4902",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1227,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-12T17:40:23Z",
+      "side": 1,
+      "message": "That\u0027s correct. A sequence that could work for renderless passes could be to generate a temporary texture target.",
+      "parentUuid": "fa151929_ff89dc6b",
+      "revId": "d92c7c3a965f5cb6382568e380bbe73fe1770b92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
