@@ -447,11 +447,11 @@ class RendererVk : angle::NonCopyable
     {
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.isBusy();
+            return mCommandProcessor.isBusy(this);
         }
         else
         {
-            return mCommandQueue.isBusy();
+            return mCommandQueue.isBusy(this);
         }
     }
 
