@@ -88,6 +88,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f1c933_1740e932",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-12T17:55:47Z",
+      "side": 1,
+      "message": "It appears that I can click +2. I\u0027ll try it, but I\u0027m not sure if that is enough to approve since I am also external.",
+      "revId": "8a212f7977d9d7bb8c521e5a51340ed61cc6b7da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b17fea55_913d0d8d",
