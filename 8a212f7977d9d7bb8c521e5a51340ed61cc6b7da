@@ -69,6 +69,40 @@
       "parentUuid": "b9e09e9f_d97ea21c",
       "revId": "8a212f7977d9d7bb8c521e5a51340ed61cc6b7da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "530e4bf6_bdc188d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-12T17:54:21Z",
+      "side": 1,
+      "message": "Thank you for fixing this!",
+      "revId": "8a212f7977d9d7bb8c521e5a51340ed61cc6b7da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17fea55_913d0d8d",
+        "filename": "src/libANGLE/renderer/metal/mtl_common.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-12T17:54:21Z",
+      "side": 1,
+      "message": "Oh! Now I understand the purpose of this file. This looks perfect.",
+      "revId": "8a212f7977d9d7bb8c521e5a51340ed61cc6b7da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
