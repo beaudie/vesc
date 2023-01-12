@@ -152,7 +152,6 @@ GLint TextureImpl::getNativeID() const
 
 GLenum TextureImpl::getColorReadFormat(const gl::Context *context)
 {
-    UNREACHABLE();
     return GL_NONE;
 }
 
