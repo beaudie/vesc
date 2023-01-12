@@ -16,6 +16,23 @@
       "message": "Yuly PTAL",
       "revId": "2aa22d6d2cc3095183c4154b2f5f9fb24ad5afb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18ab1a1a_97fd155c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-12T18:03:35Z",
+      "side": 1,
+      "message": "Are the failures on CI https://ci.chromium.org/p/angle/builders/ci/linux-tsan-test suppressed now?",
+      "revId": "2aa22d6d2cc3095183c4154b2f5f9fb24ad5afb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
