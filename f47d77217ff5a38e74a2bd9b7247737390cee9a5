@@ -70,6 +70,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f70b611d_e3633cf0",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T18:04:32Z",
+      "side": 1,
+      "message": "\u003e Since both the last header field and the overall header itself are each terminated with \\r\\n, and since the header is mandatory, the content part of a message is always preceded (and uniquely identified) by two \\r\\n sequences.",
+      "parentUuid": "e2c5b008_5103856f",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
