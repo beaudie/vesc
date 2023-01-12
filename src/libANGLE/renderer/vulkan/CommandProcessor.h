@@ -33,6 +33,39 @@ enum class SubmitPolicy
     EnsureSubmitted,
 };
 
+class FenceRecycler;
+class SharedFence final
+{
+  public:
+    SharedFence();
+    SharedFence(const SharedFence &other);
+    ~SharedFence();
+    // Copy assignment will add reference count to the underline object
+    SharedFence &operator=(const SharedFence &other);
+
+    // initialize it with a new vkFence either from recycler or create a new one.
+    VkResult init(VkDevice device, FenceRecycler *recycler);
+    // Destroy it immediately (will not recycle).
+    void destroy(VkDevice device);
+    // Release the vkFence (to recycler)
+    void release();
+    const Fence &get() const
+    {
+        ASSERT(mRefCountedFence != nullptr && mRefCountedFence->isReferenced());
+        return mRefCountedFence->get();
+    }
+
+    // The following three APIs can call without lock. Since fence is refcounted and this object has
+    // a refcount to VkFence, No one is able to come in and destroy the VkFence.
+    operator bool() const;
+    VkResult getStatus(VkDevice device) const;
+    VkResult wait(VkDevice device, uint64_t timeout) const;
+
+  private:
+    RefCounted<Fence> *mRefCountedFence;
+    FenceRecycler *mRecycler;
+};
+
 class FenceRecycler
 {
   public:
@@ -40,12 +73,8 @@ class FenceRecycler
     ~FenceRecycler() {}
     void destroy(Context *context);
 
-    angle::Result newSharedFence(Context *context, Shared<Fence> *sharedFenceOut);
-    inline void resetSharedFence(Shared<Fence> *sharedFenceIn)
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-        sharedFenceIn->resetAndRecycle(&mRecyler);
-    }
+    void fetch(VkDevice device, Fence *fenceOut);
+    void recycle(Fence &&fence);
 
   private:
     std::mutex mMutex;
@@ -200,7 +229,7 @@ struct CommandBatch final : angle::NonCopyable
     // commandPools is for secondary CommandBuffer allocation
     SecondaryCommandPools *commandPools;
     SecondaryCommandBufferList commandBuffersToReset;
-    Shared<Fence> fence;
+    SharedFence fence;
     QueueSerial queueSerial;
     bool hasProtectedContent;
 };
@@ -327,7 +356,7 @@ class CommandQueue : angle::NonCopyable
 
     angle::Result ensureNoPendingWork(Context *context) { return angle::Result::Continue; }
 
-    bool isBusy() const;
+    bool isBusy(RendererVk *renderer) const;
 
     angle::Result queueSubmit(Context *context,
                               egl::ContextPriority contextPriority,
@@ -352,7 +381,7 @@ class CommandQueue : angle::NonCopyable
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
-  private:
+  protected:
     void releaseToCommandBatch(bool hasProtectedContent,
                                PrimaryCommandBuffer &&commandBuffer,
                                SecondaryCommandPools *commandPools,
@@ -361,9 +390,8 @@ class CommandQueue : angle::NonCopyable
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
 
-    size_t getBatchCountUpToSerials(RendererVk *renderer,
-                                    const Serials &serials,
-                                    Shared<Fence> **fenceToWaitOnOut);
+    size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
+    const SharedFence &getSharedFenceToWait(size_t finishCount);
 
     // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
@@ -414,6 +442,7 @@ class CommandQueue : angle::NonCopyable
 
     angle::VulkanPerfCounters mPerfCounters;
 };
+
 class ThreadSafeCommandQueue : public CommandQueue
 {
   public:
@@ -435,23 +464,16 @@ class ThreadSafeCommandQueue : public CommandQueue
     }
 
     // Wait until the desired serial has been completed.
-    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::finishResourceUse(context, use, timeout);
-    }
+    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
     angle::Result finishQueueSerial(Context *context,
                                     const QueueSerial &queueSerial,
-                                    uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::finishQueueSerial(context, queueSerial, timeout);
-    }
-    angle::Result waitIdle(Context *context, uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::waitIdle(context, timeout);
-    }
+                                    uint64_t timeout);
+    angle::Result waitIdle(Context *context, uint64_t timeout);
+    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
+                                                            const ResourceUse &use,
+                                                            uint64_t timeout,
+                                                            VkResult *result);
+    bool isBusy(RendererVk *renderer);
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -488,15 +510,6 @@ class ThreadSafeCommandQueue : public CommandQueue
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandQueue::queuePresent(contextPriority, presentInfo);
     }
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::waitForResourceUseToFinishWithUserTimeout(context, use, timeout,
-                                                                       result);
-    }
 
     // Check to see which batches have finished completion (forward progress for
     // the last completed serial, for example for when the application busy waits on a query
@@ -522,12 +535,6 @@ class ThreadSafeCommandQueue : public CommandQueue
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandQueue::flushRenderPassCommands(context, hasProtectedContent, renderPass,
                                                      renderPassCommands);
-    }
-
-    bool isBusy()
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::isBusy();
     }
 
     const angle::VulkanPerfCounters getPerfCounters() const
@@ -619,7 +626,7 @@ class CommandProcessor : public Context
 
     angle::Result ensureNoPendingWork(Context *context);
 
-    bool isBusy() const;
+    bool isBusy(RendererVk *renderer) const;
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
@@ -812,10 +819,10 @@ class ThreadSafeCommandProcessor : public CommandProcessor
                                                          renderPassCommands);
     }
 
-    bool isBusy()
+    bool isBusy(RendererVk *renderer)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::isBusy();
+        return CommandProcessor::isBusy(renderer);
     }
 
     const angle::VulkanPerfCounters getPerfCounters() const

@@ -910,38 +910,36 @@ class ClearValuesArray final
     X(ImageOrBufferView)      \
     X(Sampler)
 
-#define ANGLE_DEFINE_VK_SERIAL_TYPE(Type)                                  \
-    class Type##Serial                                                     \
-    {                                                                      \
-      public:                                                              \
-        constexpr Type##Serial() : mSerial(kInvalid)                       \
-        {}                                                                 \
-        constexpr explicit Type##Serial(uint32_t serial) : mSerial(serial) \
-        {}                                                                 \
-                                                                           \
-        constexpr bool operator==(const Type##Serial &other) const         \
-        {                                                                  \
-            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);      \
-            return mSerial == other.mSerial;                               \
-        }                                                                  \
-        constexpr bool operator!=(const Type##Serial &other) const         \
-        {                                                                  \
-            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);      \
-            return mSerial != other.mSerial;                               \
-        }                                                                  \
-        constexpr uint32_t getValue() const                                \
-        {                                                                  \
-            return mSerial;                                                \
-        }                                                                  \
-        constexpr bool valid() const                                       \
-        {                                                                  \
-            return mSerial != kInvalid;                                    \
-        }                                                                  \
-                                                                           \
-      private:                                                             \
-        uint32_t mSerial;                                                  \
-        static constexpr uint32_t kInvalid = 0;                            \
-    };                                                                     \
+#define ANGLE_DEFINE_VK_SERIAL_TYPE(Type)                                     \
+    class Type##Serial                                                        \
+    {                                                                         \
+      public:                                                                 \
+        constexpr Type##Serial() : mSerial(kInvalid) {}                       \
+        constexpr explicit Type##Serial(uint32_t serial) : mSerial(serial) {} \
+                                                                              \
+        constexpr bool operator==(const Type##Serial &other) const            \
+        {                                                                     \
+            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);         \
+            return mSerial == other.mSerial;                                  \
+        }                                                                     \
+        constexpr bool operator!=(const Type##Serial &other) const            \
+        {                                                                     \
+            ASSERT(mSerial != kInvalid || other.mSerial != kInvalid);         \
+            return mSerial != other.mSerial;                                  \
+        }                                                                     \
+        constexpr uint32_t getValue() const                                   \
+        {                                                                     \
+            return mSerial;                                                   \
+        }                                                                     \
+        constexpr bool valid() const                                          \
+        {                                                                     \
+            return mSerial != kInvalid;                                       \
+        }                                                                     \
+                                                                              \
+      private:                                                                \
+        uint32_t mSerial;                                                     \
+        static constexpr uint32_t kInvalid = 0;                               \
+    };                                                                        \
     static constexpr Type##Serial kInvalid##Type##Serial = Type##Serial();
 
 ANGLE_VK_SERIAL_OP(ANGLE_DEFINE_VK_SERIAL_TYPE)
