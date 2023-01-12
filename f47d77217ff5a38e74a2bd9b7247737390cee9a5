@@ -22,6 +22,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19500a7d_59b3a77d",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-12T18:00:03Z",
+      "side": 1,
+      "message": "That is also problematic, if for whatever reason something wants to notice the empty lines (like this stupid protocol: https://microsoft.github.io/debug-adapter-protocol/overview)\n\nMy suggestion is to just `s/\\r//` on the input on the caller side.",
+      "parentUuid": "308186e5_2f8d9ddd",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
