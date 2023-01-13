@@ -191,6 +191,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "957cb54b_304ab146",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T21:21:58Z",
+      "side": 1,
+      "message": "Yes, helper makes it cleaner! Seems like you could simplify this to replace the additional var with returning None (very common in python)\n\n```\nnew_temp_file_name \u003d handle_gn_build_arg_response_file_name(target_info[\u0027args\u0027])\nif new_temp_file_name:  # return None from function above if no file\n  ...\n```",
+      "parentUuid": "0ffd19c4_7c5ddd81",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 79
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06e4ffa5_28c13f2f",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
@@ -226,6 +250,30 @@
       "side": 1,
       "message": "Thank you Roman!\n\nI tried  ` cmd \u003d [cmd_handle_response_file_content, \u0027\u0026\u0026\u0027, \u0027$(location)\u0027, gn_action_args_to_blueprint_args(bp_srcs, bp_outputs, target_info[\u0027args\u0027])`, but it throws an error: `Sequence item 0: expected str instance, list found (Python)`. Because `gn_action_args_to_blueprint_args` returns a list, and we need to do nested `join` if we want to use this format `[a, b, c]`: https://bobbyhadz.com/blog/python-typeerror-sequence-item-0-expected-str-instance-list-found#conclusion.",
       "parentUuid": "06e4ffa5_28c13f2f",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a38eab7d_9c96711f",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T21:21:58Z",
+      "side": 1,
+      "message": "That\u0027s right, it should be `[a, b, c] + d` (instead of `[a] + [b] + [c] + d`)",
+      "parentUuid": "026bcef3_05f10b58",
       "range": {
         "startLine": 502,
         "startChar": 0,
