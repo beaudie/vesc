@@ -739,7 +739,7 @@ void CommandProcessor::destroy(Context *context)
 bool CommandProcessor::isBusy(RendererVk *renderer) const
 {
     std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-    return !mTasks.empty() || mCommandQueue.isBusy();
+    return !mTasks.empty() || mCommandQueue.isBusy(renderer);
 }
 
 // Wait until all commands up to and including serial have been processed
@@ -1657,7 +1657,7 @@ angle::Result ThreadSafeCommandQueue::waitForResourceUseToFinishWithUserTimeout(
     return angle::Result::Continue;
 }
 
-bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer)
+bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer) const
 {
     size_t maxIndex = renderer->getLargestQueueSerialIndexEverAllocated();
     for (SerialIndex i = 0; i <= maxIndex; ++i)
