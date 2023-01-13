@@ -739,7 +739,7 @@ void CommandProcessor::destroy(Context *context)
 bool CommandProcessor::isBusy(RendererVk *renderer) const
 {
     std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-    return !mTasks.empty() || mCommandQueue.isBusy();
+    return !mTasks.empty() || mCommandQueue.isBusy(renderer);
 }
 
 // Wait until all commands up to and including serial have been processed
@@ -1201,16 +1201,6 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::waitIdle(Context *context, uint64_t timeout)
-{
-    if (mInFlightCommands.empty())
-    {
-        return angle::Result::Continue;
-    }
-
-    return finishQueueSerial(context, mInFlightCommands.back().queueSerial, timeout);
-}
-
 angle::Result CommandQueue::submitCommands(
     Context *context,
     bool hasProtectedContent,
@@ -1305,51 +1295,6 @@ angle::Result CommandQueue::submitCommands(
         const QueueSerial &finishSerial = mInFlightCommands.back().queueSerial;
         ANGLE_TRY(finishQueueSerial(context, finishSerial, renderer->getMaxFenceWaitTimeNs()));
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
-    }
-
-    return angle::Result::Continue;
-}
-
-angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                                      const ResourceUse &use,
-                                                                      uint64_t timeout,
-                                                                      VkResult *result)
-{
-    size_t finishCount = getBatchCountUpToSerials(context->getRenderer(), use.getSerials());
-
-    // The serial is already complete if:
-    //
-    // - There is no in-flight work (i.e. mInFlightCommands is empty), or
-    // - The given serial is smaller than the smallest serial, or
-    // - Every batch up to this serial is a garbage-clean-up-only batch (i.e. empty submission
-    //   that's optimized out)
-    if (finishCount == 0)
-    {
-        *result = VK_SUCCESS;
-        return angle::Result::Continue;
-    }
-
-    const SharedFence &sharedFence = getSharedFenceToWait(finishCount);
-    if (!sharedFence)
-    {
-        *result = VK_SUCCESS;
-        return angle::Result::Continue;
-    }
-
-    // Serial is not yet submitted. This is undefined behaviour, so we can do anything.
-    if (hasUnsubmittedUse(use))
-    {
-        WARN() << "Waiting on an unsubmitted serial.";
-        *result = VK_TIMEOUT;
-        return angle::Result::Continue;
-    }
-
-    *result = sharedFence.wait(context->getDevice(), timeout);
-
-    // Don't trigger an error on timeout.
-    if (*result != VK_TIMEOUT)
-    {
-        ANGLE_VK_TRY(context, *result);
     }
 
     return angle::Result::Continue;
@@ -1488,18 +1433,6 @@ VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
 {
     VkQueue queue = getQueue(contextPriority);
     return vkQueuePresentKHR(queue, &presentInfo);
-}
-
-bool CommandQueue::isBusy() const
-{
-    for (SerialIndex i = 0; i < mLastSubmittedSerials.size(); ++i)
-    {
-        if (mLastSubmittedSerials[i] > mLastCompletedSerials[i])
-        {
-            return true;
-        }
-    }
-    return false;
 }
 
 bool CommandQueue::hasUnfinishedUse(const vk::ResourceUse &use) const
@@ -1657,7 +1590,7 @@ angle::Result ThreadSafeCommandQueue::waitForResourceUseToFinishWithUserTimeout(
     return angle::Result::Continue;
 }
 
-bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer)
+bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer) const
 {
     size_t maxIndex = renderer->getLargestQueueSerialIndexEverAllocated();
     for (SerialIndex i = 0; i <= maxIndex; ++i)
