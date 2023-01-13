@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5ebfdcc_d31129f9",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "Please inline a comment here explaining what is going on (temp file etc) as it\u0027s not obvious from the code.\n\nAlso, maybe move this to a helper function?",
+      "range": {
+        "startLine": 469,
+        "startChar": 26,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc0d872_0c1ebc33",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "no parentheses after `if` in python, here and below",
+      "range": {
+        "startLine": 471,
+        "startChar": 11,
+        "endLine": 471,
+        "endChar": 12
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "081741f3_14ceb578",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "No need to \"define\" vars in python if you\u0027re not going to be using them. This kind of structure is common:\n\n```\nif cond:\n  x \u003d {something}\n\n...\n\nif cond:\n  use(x)\nelse:\n  use(y)\n```",
+      "range": {
+        "startLine": 495,
+        "startChar": 4,
+        "endLine": 495,
+        "endChar": 41
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb6d7eb8_3505bfc1",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "Does this block have to be here, can\u0027t we do this as part of the block above and avoid duplicate comments?",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 79
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06e4ffa5_28c13f2f",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "`[a] + [b] + [c]` \u003d\u003e `[a, b, c]`",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a5206fd_60df8dd3",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "Just `assert file` but maybe even remove it and let `open` raise:\n```\nTraceback (most recent call last):\n  File \"\u003cstdin\u003e\", line 1, in \u003cmodule\u003e\nFileNotFoundError: [Errno 2] No such file or directory: \u0027\u0027\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 27
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deedc25d_746aeb67",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "Would it make sense to also include file names in the hash?",
+      "range": {
+        "startLine": 20,
+        "startChar": 16,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc4d81a2_09fb7cf3",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T15:38:48Z",
+      "side": 1,
+      "message": "`digest, digest_size \u003d GenerateHashOfAffectedFiles(angle_code_files)`",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 88
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
