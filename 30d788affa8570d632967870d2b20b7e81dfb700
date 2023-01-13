@@ -22,6 +22,30 @@
       },
       "revId": "30d788affa8570d632967870d2b20b7e81dfb700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1985e38e_ac61919f",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:39:13Z",
+      "side": 1,
+      "message": "I see. Thank you!",
+      "parentUuid": "fe286104_1c742564",
+      "range": {
+        "startLine": 464,
+        "startChar": 19,
+        "endLine": 464,
+        "endChar": 35
+      },
+      "revId": "30d788affa8570d632967870d2b20b7e81dfb700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
