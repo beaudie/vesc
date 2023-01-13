@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe286104_1c742564",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T23:18:56Z",
+      "side": 1,
+      "message": "You\u0027ll need `command_arg_list[:]` to copy the list here, you can think of python variables as pointers so `updated_args \u003d command_arg_list` makes `updated_args` point to the same list as `command_arg_list` and then you\u0027re still mutating the original list below.\n\n```\n\u003e\u003e\u003e x \u003d [\u0027a\u0027, \u0027b\u0027, \u0027c\u0027]\n\u003e\u003e\u003e y \u003d x\n\u003e\u003e\u003e y[1] \u003d \u0027hi\u0027\n\u003e\u003e\u003e y\n[\u0027a\u0027, \u0027hi\u0027, \u0027c\u0027]\n\u003e\u003e\u003e x\n[\u0027a\u0027, \u0027hi\u0027, \u0027c\u0027]\n\u003e\u003e\u003e y2 \u003d x[:]\n\u003e\u003e\u003e y2[1] \u003d \u0027bye\u0027\n\u003e\u003e\u003e x\n[\u0027a\u0027, \u0027hi\u0027, \u0027c\u0027]\n\u003e\u003e\u003e y2\n[\u0027a\u0027, \u0027bye\u0027, \u0027c\u0027]\n```",
+      "range": {
+        "startLine": 464,
+        "startChar": 19,
+        "endLine": 464,
+        "endChar": 35
+      },
+      "revId": "30d788affa8570d632967870d2b20b7e81dfb700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
