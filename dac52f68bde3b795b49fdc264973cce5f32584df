@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54788b9f_90532934",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:02:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b119fad_469d1dd1",
+      "range": {
+        "startLine": 14,
+        "startChar": 16,
+        "endLine": 14,
+        "endChar": 24
+      },
+      "revId": "dac52f68bde3b795b49fdc264973cce5f32584df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17d7bb94_23932170",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9db7db84_1d43a3ba",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:02:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d7bb94_23932170",
+      "range": {
+        "startLine": 20,
+        "startChar": 1,
+        "endLine": 20,
+        "endChar": 10
+      },
+      "revId": "dac52f68bde3b795b49fdc264973cce5f32584df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1afdb26_82b634e0",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-01-13T22:15:32Z",
       "side": 1,
       "message": "This isn\u0027t publicly available, probably best to leave it out.",
+      "range": {
+        "startLine": 450,
+        "startChar": 30,
+        "endLine": 450,
+        "endChar": 61
+      },
+      "revId": "dac52f68bde3b795b49fdc264973cce5f32584df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eee496c7_b55993fb",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:02:33Z",
+      "side": 1,
+      "message": "That\u0027s a good point!\n\nI removed it from the comment.",
+      "parentUuid": "d1afdb26_82b634e0",
       "range": {
         "startLine": 450,
         "startChar": 30,

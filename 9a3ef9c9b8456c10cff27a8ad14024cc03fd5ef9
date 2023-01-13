@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce46fefe_ef04d8da",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:02:33Z",
+      "side": 1,
+      "message": "Thank you for the suggestions!\n\nI made the change you suggested.",
+      "parentUuid": "006b4125_11867d74",
+      "range": {
+        "startLine": 463,
+        "startChar": 0,
+        "endLine": 472,
+        "endChar": 19
+      },
+      "revId": "9a3ef9c9b8456c10cff27a8ad14024cc03fd5ef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f59de689_e0e9d9e9",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-01-13T22:34:38Z",
       "side": 1,
       "message": "One thing I just noticed and this is not obvious when looking at this call is that it mutates the argument.\n\nI had assumed that `build_info` wouldn\u0027t be mutated (caching makes the script run much faster as we go through the same nodes many times) and this might backfire\nhttps://crsrc.org/c/third_party/angle/scripts/generate_android_bp.py;drc\u003dbdb127da76fdf23d4876c1d0a1499d2147432344;l\u003d43\n\nInstead of mutating `target_info[\u0027args\u0027]`, can we use a copy of the list like\n```\nnew_temporary_gn_response_file, updated_args \u003d handle_gn_build_arg_response_file_name(target_info[\u0027args\u0027])\n\nif new_temporary_gn_response_file:\n  ... gn_action_args_to_blueprint_args(bp_srcs, bp_outputs, updated_args)\n```\n?\n\n(where we would `updated_args \u003d target_info[\u0027args\u0027][:]` to copy and then update `updated_args[index]`)",
+      "range": {
+        "startLine": 513,
+        "startChar": 76,
+        "endLine": 513,
+        "endChar": 95
+      },
+      "revId": "9a3ef9c9b8456c10cff27a8ad14024cc03fd5ef9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad4baa4d_61675df2",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T23:02:33Z",
+      "side": 1,
+      "message": "That\u0027s a good catch! Thank you Roman!",
+      "parentUuid": "f59de689_e0e9d9e9",
       "range": {
         "startLine": 513,
         "startChar": 76,
