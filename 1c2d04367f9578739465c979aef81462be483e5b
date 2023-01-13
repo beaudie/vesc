@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee9d1d7b_87da0e46",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Thank you Roman. I have added a comment and extract the code to another function `handle_gn_build_arg_response_file_name`",
+      "parentUuid": "c5ebfdcc_d31129f9",
+      "range": {
+        "startLine": 469,
+        "startChar": 26,
+        "endLine": 469,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5bc0d872_0c1ebc33",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05bb26e5_3c503386",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Thank you for pointing it out!",
+      "parentUuid": "5bc0d872_0c1ebc33",
+      "range": {
+        "startLine": 471,
+        "startChar": 11,
+        "endLine": 471,
+        "endChar": 12
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "081741f3_14ceb578",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-01-13T15:38:48Z",
       "side": 1,
       "message": "No need to \"define\" vars in python if you\u0027re not going to be using them. This kind of structure is common:\n\n```\nif cond:\n  x \u003d {something}\n\n...\n\nif cond:\n  use(x)\nelse:\n  use(y)\n```",
+      "range": {
+        "startLine": 495,
+        "startChar": 4,
+        "endLine": 495,
+        "endChar": 41
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e1af009_0284f852",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "081741f3_14ceb578",
       "range": {
         "startLine": 495,
         "startChar": 4,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0ffd19c4_7c5ddd81",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "I added some comments at https://chromium-review.googlesource.com/c/angle/angle/+/4144078/6..8/scripts/generate_android_bp.py#445.\n\nI think it is clearer if I separate the special handling in cmd, because\n1) That way the function `handle_gn_build_arg_response_file_name` is doing a single job: replace the {{response_file_name}} in command arguments. \n\n2) We only need to add `echo $(in) \u003e` to the command, when we use {{response_file_name}} in the arguments. If we don\u0027t use {{response_file_name}} in the arguments there is no need to generate this temp file. I think it is clear to present this logic if I separate the two steps into different functions: only when the function `handle_gn_build_arg_response_file_name` returns true, we want to add the extra command to generate the temp file.",
+      "parentUuid": "fb6d7eb8_3505bfc1",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 79
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06e4ffa5_28c13f2f",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
@@ -106,6 +202,30 @@
       "writtenOn": "2023-01-13T15:38:48Z",
       "side": 1,
       "message": "`[a] + [b] + [c]` \u003d\u003e `[a, b, c]`",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "026bcef3_05f10b58",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Thank you Roman!\n\nI tried  ` cmd \u003d [cmd_handle_response_file_content, \u0027\u0026\u0026\u0027, \u0027$(location)\u0027, gn_action_args_to_blueprint_args(bp_srcs, bp_outputs, target_info[\u0027args\u0027])`, but it throws an error: `Sequence item 0: expected str instance, list found (Python)`. Because `gn_action_args_to_blueprint_args` returns a list, and we need to do nested `join` if we want to use this format `[a, b, c]`: https://bobbyhadz.com/blog/python-typeerror-sequence-item-0-expected-str-instance-list-found#conclusion.",
+      "parentUuid": "06e4ffa5_28c13f2f",
       "range": {
         "startLine": 502,
         "startChar": 0,
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4f5cf72_c67c66dc",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a5206fd_60df8dd3",
+      "range": {
+        "startLine": 17,
+        "startChar": 8,
+        "endLine": 17,
+        "endChar": 27
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "deedc25d_746aeb67",
@@ -162,6 +306,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc10a8f7_a42531e6",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Yes absolutely. Although I can\u0027t think of a case where people rename a code file that we reference when compiling the shader programs, but don\u0027t change the code in shader compilation.\n\ne.g. if previously shader compilation depends on file called `codeA.h`. Now we rename the file to `codeB.h`, in the header inclusion we will change `#include \u003ccodeA.h\u003e` to `#include \u003ccodeB.h\u003e` which \"should\" be detected by the current hash.\n\nBut I think it is no harm add extra info to hash just to make sure we invalidate the cache as stringent as possible.",
+      "parentUuid": "deedc25d_746aeb67",
+      "range": {
+        "startLine": 20,
+        "startChar": 16,
+        "endLine": 20,
+        "endChar": 47
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc4d81a2_09fb7cf3",
@@ -175,6 +343,30 @@
       "writtenOn": "2023-01-13T15:38:48Z",
       "side": 1,
       "message": "`digest, digest_size \u003d GenerateHashOfAffectedFiles(angle_code_files)`",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 88
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9968956_e68461c9",
+        "filename": "src/program_serialize_data_version.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T20:50:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc4d81a2_09fb7cf3",
       "range": {
         "startLine": 46,
         "startChar": 0,
