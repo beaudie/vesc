@@ -67,6 +67,23 @@
       "message": "This CL causes the \"ClearResource\" call to fail when we allocate the texture. This happens because the texture is a render target, but is also a UAV, and being a UAV it has a typeless format. The error message is:\n\nD3D11 ERROR: ID3D11Device::CreateRenderTargetView: A View cannot be created using a NULL Desc, when the Resource was created with a typeless Format. Default Desc parameters cannot be used, as a fully qualified Format must be supplied. [ STATE_CREATION ERROR #135: CREATERENDERTARGETVIEW_INVALIDDESC]\n\nWhat would be the preferred way to resolve this in ANGLE? The code currently creates a temporary render target view to clear by calling `allocateResourceNoDesc`. Should we just replace that with a call that allocates a resource with a desc, and if the format is typeless, we pick a format for it?",
       "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75016f43_567c3773",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-13T01:30:52Z",
+      "side": 1,
+      "message": "And I don\u0027t think this would have cleared any layers or levels besides 0?",
+      "revId": "03641b53a397e3f2541a2e547e43fcc1b06af358",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

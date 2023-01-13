@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77414704_063d0829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-13T01:30:52Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4112763/2..3/src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp is my best guess at fixing the failures. Does this look correct? I added a couple questions inline.",
+      "revId": "7b0ac363ba10f9c739a8ce6ca95ce5f29882e76a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "045d306a_b9955069",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-13T01:30:52Z",
+      "side": 1,
+      "message": "Was this a bug before? I don\u0027t think it would have cleared any mip levels besides 0.",
+      "revId": "7b0ac363ba10f9c739a8ce6ca95ce5f29882e76a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
