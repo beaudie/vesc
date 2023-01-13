@@ -181,6 +181,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c821d3c1_0052f433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-13T18:40:03Z",
+      "side": 1,
+      "message": "Feel free to land whenever the other comment is resolved",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4fde865a_f5e2b6fe",
         "filename": "include/GLES2/gl2ext_angle.h",
         "patchSetId": 3
@@ -227,6 +244,24 @@
       "side": 1,
       "message": "`ShBuiltInResources` is packed into the blob generated for offline compile while `CompilerResourcesString` is packed into the blob generated for online compile. note that `CompilerResourcesString` is poorly maintained and is already missing fields newly introduced to `ShBuiltInResources`\n\nstreamlining the 2, if needed, will require reconciliation of the 2 types and can be done in a follow up change. Do you want that done now instead?",
       "parentUuid": "991bff08_b111766a",
+      "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae6cd42_457c07c1",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 802,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-13T18:40:03Z",
+      "side": 1,
+      "message": "Yeah, it\u0027d be better if the online compiler used the binary data instead of a string.\n\nAgreed it would be good as a separate change. Either before or after this CL is fine with me.",
+      "parentUuid": "35146746_b589b291",
       "revId": "692b8f3c9fd7f6428feb7bc44404b8026cdac1e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
