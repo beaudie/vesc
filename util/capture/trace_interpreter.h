@@ -38,6 +38,7 @@ class TraceInterpreter : public TraceReplayInterface
     void finishReplay() override;
     const char *getSerializedContextState(uint32_t frameIndex) override;
     void setValidateSerializedStateCallback(ValidateSerializedStateCallback callback) override;
+    void setIdx(int idx) override {}
 
   private:
     void runTraceFunction(const char *name) const;

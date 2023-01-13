@@ -15,6 +15,7 @@
 #include "tests/perf_tests/ANGLEPerfTestArgs.h"
 #include "tests/perf_tests/DrawCallPerfParams.h"
 #include "util/capture/frame_capture_test_utils.h"
+#include "util/capture/trace_fixture.h"
 #include "util/capture/trace_interpreter.h"
 #include "util/capture/traces_export.h"
 #include "util/egl_loader_autogen.h"
@@ -1583,6 +1584,7 @@ void TracePerfTest::initializeBenchmark()
     mTraceReplay->setBinaryDataDecompressCallback(DecompressBinaryData, DeleteBinaryData);
     mTraceReplay->setValidateSerializedStateCallback(ValidateSerializedState);
     mTraceReplay->setBinaryDataDir(testDataDir);
+    mTraceReplay->setIdx(gMyIdx);
 
     if (gMinimizeGPUWork)
     {

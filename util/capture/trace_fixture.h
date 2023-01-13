@@ -61,6 +61,8 @@ ANGLE_REPLAY_EXPORT void SetValidateSerializedStateCallback(
 // Only defined if serialization is enabled.
 ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
 
+ANGLE_REPLAY_EXPORT void SetIdx(int idx);
+
 #endif  // defined(__cplusplus)
 
 // Exported trace functions.
@@ -78,6 +80,7 @@ void DeleteUniformLocations(GLuint program);
 void UpdateUniformBlockIndex(GLuint program, const char *name, GLuint index);
 void UniformBlockBinding(GLuint program, GLuint uniformblockIndex, GLuint binding);
 void UpdateCurrentProgram(GLuint program);
+bool CheckIdx(int idx);
 
 // Global state
 

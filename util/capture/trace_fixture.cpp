@@ -185,6 +185,7 @@ GLuint *gShaderProgramMap;
 GLuint *gTextureMap;
 GLuint *gTransformFeedbackMap;
 GLuint *gVertexArrayMap;
+int gIdx = -1;
 
 // TODO(jmadill): Consolidate. http://anglebug.com/7753
 ClientBufferMap gClientBufferMap;
@@ -205,6 +206,18 @@ void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
 void SetBinaryDataDir(const char *dataDir)
 {
     gBinaryDataDir = dataDir;
+}
+
+void SetIdx(int idx)
+{
+    gIdx = idx;
+}
+
+bool CheckIdx(int idx)
+{
+    if (gIdx < 0)
+        return false;
+    return idx > gIdx;
 }
 
 template <typename T>

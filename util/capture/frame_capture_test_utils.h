@@ -70,6 +70,7 @@ using ResetReplayFunc                        = void (*)();
 using FinishReplayFunc                       = void (*)();
 using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
 using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
+using SetIdxFunc                             = void (*)(int);
 
 class TraceReplayInterface : angle::NonCopyable
 {
@@ -86,6 +87,7 @@ class TraceReplayInterface : angle::NonCopyable
     virtual void finishReplay()                                                               = 0;
     virtual const char *getSerializedContextState(uint32_t frameIndex)                        = 0;
     virtual void setValidateSerializedStateCallback(ValidateSerializedStateCallback callback) = 0;
+    virtual void setIdx(int idx)                                                              = 0;
 
   protected:
     TraceReplayInterface() {}
@@ -126,6 +128,8 @@ class TraceLibrary : public TraceReplayInterface
         callFunc<SetBinaryDataDecompressCallbackFunc>("SetBinaryDataDecompressCallback",
                                                       decompressCallback, deleteCallback);
     }
+
+    void setIdx(int idx) override { callFunc<SetIdxFunc>("SetIdx", idx); }
 
     void replayFrame(uint32_t frameIndex) override
     {
