@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37fe9dea_03031431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-13T21:34:42Z",
+      "side": 1,
+      "message": "Can someone take a look at my new changes to ResourceManager11.cpp?\n\nThe untriaged golds look pretty benign, and may be expected from being more thorough about initializing mipmap levels and 3d textures. Does that sound reasonable?\n\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3D1945_air_force%26source_type%3Dangle\u0026digest\u003dbcba1f849cba267721680ad37a2bb8a8\u0026changelist_id\u003d4112763\u0026crs\u003dgerrit\n\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3D20_minutes_till_dawn%26source_type%3Dangle\u0026digest\u003d29497e4c0bd91604dfafcd0e3b8705eb\u0026changelist_id\u003d4112763\u0026crs\u003dgerrit\n\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3Dagent_a%26source_type%3Dangle\u0026digest\u003ddf8f85508dad3915a57384ea6d9bbe3f\u0026changelist_id\u003d4112763\u0026crs\u003dgerrit\n\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3Daliexpress%26source_type%3Dangle\u0026digest\u003d92bbc1ef1ab02ce5cb58b6100f989064\u0026changelist_id\u003d4112763\u0026crs\u003dgerrit",
+      "revId": "54993d78315326dd58ec0503d9d36aa6ac12fdcd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
