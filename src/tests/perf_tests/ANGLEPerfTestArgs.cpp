@@ -58,6 +58,7 @@ constexpr int kDefaultWarmupSteps  = 0;
 
 int gWarmupTrials = kDefaultWarmupTrials;
 int gWarmupSteps  = kDefaultWarmupSteps;
+int gMyIdx        = -1;
 
 namespace
 {
@@ -83,7 +84,8 @@ bool PerfTestArg(int *argc, char **argv, int argIndex)
            ParseIntArg("--calibration-time", argc, argv, argIndex, &gCalibrationTimeSeconds) ||
            ParseIntArg("--trial-time", argc, argv, argIndex, &gTrialTimeSeconds) ||
            ParseIntArg("--max-trial-time", argc, argv, argIndex, &gTrialTimeSeconds) ||
-           ParseIntArg("--trials", argc, argv, argIndex, &gTestTrials);
+           ParseIntArg("--trials", argc, argv, argIndex, &gTestTrials) ||
+           ParseIntArg("--my-idx", argc, argv, argIndex, &gMyIdx);
 }
 
 bool TraceTestArg(int *argc, char **argv, int argIndex)

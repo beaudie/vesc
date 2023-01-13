@@ -42,6 +42,7 @@ extern bool gOffscreen;
 extern bool gVsync;
 extern const char *gPrintExtensionsToFile;
 extern const char *gRequestedExtensions;
+extern int gMyIdx;
 
 // Use this flag as an indicator that a trace's frame count should be used for warmup steps
 constexpr int kAllFrames = -1;
