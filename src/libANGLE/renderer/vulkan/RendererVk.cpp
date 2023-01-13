@@ -1289,7 +1289,13 @@ void outputMemoryLogStream(std::stringstream &outStream, vk::MemoryLogSeverity s
     }
 }
 
-// Log memory heap stats, including budget and usage.
+// This class can be included in the custom memory allocation info class. Groups by three digits.
+class MemoryLogNumberFormat : public std::numpunct<char>
+{
+  protected:
+    virtual std::string do_grouping() const override { return "\3"; }
+};
+
 void logMemoryHeapStats(RendererVk *renderer, vk::MemoryLogSeverity severity)
 {
     if (!kTrackMemoryAllocation)
@@ -1299,7 +1305,8 @@ void logMemoryHeapStats(RendererVk *renderer, vk::MemoryLogSeverity severity)
 
     // Log stream for the heap information.
     std::stringstream outStream;
-    outStream.imbue(std::locale(""));
+    std::locale memLocale = std::locale(std::locale(), new MemoryLogNumberFormat());
+    outStream.imbue(std::locale(memLocale));
 
     // VkPhysicalDeviceMemoryProperties2 enables the use of memory budget properties if supported.
     VkPhysicalDeviceMemoryProperties2KHR memoryProperties;

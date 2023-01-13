@@ -964,6 +964,7 @@ class RendererVk : angle::NonCopyable
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
 
+    // TODO: Move all below to new class (MemoryAllocationTracker?)
     // For memory allocation tracking.
     std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
         mActiveMemoryAllocationsSize;
