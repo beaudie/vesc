@@ -1656,7 +1656,7 @@ angle::Result ThreadSafeCommandQueue::waitForResourceUseToFinishWithUserTimeout(
     return angle::Result::Continue;
 }
 
-bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer)
+bool ThreadSafeCommandQueue::isBusy(RendererVk *renderer) const
 {
     size_t maxIndex = renderer->getLargestQueueSerialIndexEverAllocated();
     for (SerialIndex i = 0; i <= maxIndex; ++i)

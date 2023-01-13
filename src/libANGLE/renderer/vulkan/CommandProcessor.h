@@ -473,7 +473,7 @@ class ThreadSafeCommandQueue : public CommandQueue
                                                             const ResourceUse &use,
                                                             uint64_t timeout,
                                                             VkResult *result);
-    bool isBusy(RendererVk *renderer);
+    bool isBusy(RendererVk *renderer) const;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -688,7 +688,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    CommandQueue mCommandQueue;
+    ThreadSafeCommandQueue mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
@@ -819,7 +819,7 @@ class ThreadSafeCommandProcessor : public CommandProcessor
                                                          renderPassCommands);
     }
 
-    bool isBusy(RendererVk *renderer)
+    bool isBusy(RendererVk *renderer) const
     {
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandProcessor::isBusy(renderer);
