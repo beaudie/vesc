@@ -237,6 +237,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fd9223f_9cab8a58",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-13T22:34:38Z",
+      "side": 1,
+      "message": "np, we\u0027re getting close :)",
+      "parentUuid": "23f2e7be_3f16f31d",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 79
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06e4ffa5_28c13f2f",
