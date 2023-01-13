@@ -24,6 +24,10 @@
 #    endif
 #endif
 
+#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 33
+#    define ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT
+#endif
+
 namespace angle
 {
 namespace
@@ -107,6 +111,8 @@ constexpr int AHARDWAREBUFFER_FORMAT_D24_UNORM       = 0x31;
 constexpr int AHARDWAREBUFFER_FORMAT_Y8Cr8Cb8_420_SP = 0x11;
 constexpr int AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420    = 0x23;
 constexpr int AHARDWAREBUFFER_FORMAT_YV12            = 0x32315659;
+
+[[maybe_unused]] constexpr uint64_t ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER = (1ULL << 32);
 
 }  // anonymous namespace
 
@@ -691,6 +697,7 @@ void main()
         kAHBUsageGPUFramebuffer    = 1 << 1,
         kAHBUsageGPUCubeMap        = 1 << 2,
         kAHBUsageGPUMipMapComplete = 1 << 3,
+        kAHBUsageFrontBuffer       = 1 << 4,
     };
 
     constexpr static uint32_t kDefaultAHBUsage = kAHBUsageGPUSampledImage | kAHBUsageGPUFramebuffer;
@@ -726,6 +733,10 @@ void main()
         if ((usage & kAHBUsageGPUMipMapComplete) != 0)
         {
             aHardwareBufferDescription.usage |= AHARDWAREBUFFER_USAGE_GPU_MIPMAP_COMPLETE;
+        }
+        if ((usage & kAHBUsageFrontBuffer) != 0)
+        {
+            aHardwareBufferDescription.usage |= ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER;
         }
         aHardwareBufferDescription.stride = 0;
         aHardwareBufferDescription.rfu0   = 0;
@@ -3580,6 +3591,10 @@ TEST_P(ImageTestES3, AHBClearWithGLClientWaitSyncBeforeReadBack)
 // Test glDraw + glFlush on FBO with AHB attachment are applied to the AHB image before we read back
 TEST_P(ImageTestES3, AHBDrawFlushAppliedBeforeReadBack)
 {
+#    ifndef ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT
+    std::cout << "Test skipped: !ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT." << std::endl;
+    return;
+#    else
     EGLWindow *window = getEGLWindow();
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
@@ -3589,8 +3604,8 @@ TEST_P(ImageTestES3, AHBDrawFlushAppliedBeforeReadBack)
     const GLubyte kBlack[] = {0, 0, 0, 0};
     const GLubyte kRed[]   = {255, 0, 0, 255};
     createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
-                                              kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
-                                              &ahb, &ahbImage);
+                                              kDefaultAHBUsage | kAHBUsageFrontBuffer,
+                                              kDefaultAttribs, {{kBlack, 4}}, &ahb, &ahbImage);
     GLTexture ahbTexture;
     createEGLImageTargetTexture2D(ahbImage, ahbTexture);
 
@@ -3620,12 +3635,17 @@ TEST_P(ImageTestES3, AHBDrawFlushAppliedBeforeReadBack)
 
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+#    endif
 }
 
 // Test that glDraw + glFlush on FBO with AHB attachment are applied to the AHB
 // image before detaching the AHB image from FBO
 TEST_P(ImageTestES3, AHBDrawFlushAndDetachBeforeReadBack)
 {
+#    ifndef ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT
+    std::cout << "Test skipped: !ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT." << std::endl;
+    return;
+#    else
     EGLWindow *window = getEGLWindow();
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
@@ -3635,8 +3655,8 @@ TEST_P(ImageTestES3, AHBDrawFlushAndDetachBeforeReadBack)
     const GLubyte kBlack[] = {0, 0, 0, 0};
     const GLubyte kRed[]   = {255, 0, 0, 255};
     createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
-                                              kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
-                                              &ahb, &ahbImage);
+                                              kDefaultAHBUsage | kAHBUsageFrontBuffer,
+                                              kDefaultAttribs, {{kBlack, 4}}, &ahb, &ahbImage);
     GLTexture ahbTexture;
     createEGLImageTargetTexture2D(ahbImage, ahbTexture);
 
@@ -3670,12 +3690,17 @@ TEST_P(ImageTestES3, AHBDrawFlushAndDetachBeforeReadBack)
 
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+#    endif
 }
 
 // Test that glDraw + glFlush on FBO with AHB attachment are applied to the AHB
 // image before implicitly unbinding the AHB image from FBO
 TEST_P(ImageTestES3, AHBDrawFlushAndAttachAnotherTextureBeforeReadBack)
 {
+#    ifndef ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT
+    std::cout << "Test skipped: !ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT." << std::endl;
+    return;
+#    else
     EGLWindow *window = getEGLWindow();
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
@@ -3685,8 +3710,8 @@ TEST_P(ImageTestES3, AHBDrawFlushAndAttachAnotherTextureBeforeReadBack)
     const GLubyte kBlack[] = {0, 0, 0, 0};
     const GLubyte kRed[]   = {255, 0, 0, 255};
     createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
-                                              kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
-                                              &ahb, &ahbImage);
+                                              kDefaultAHBUsage | kAHBUsageFrontBuffer,
+                                              kDefaultAttribs, {{kBlack, 4}}, &ahb, &ahbImage);
     GLTexture ahbTexture;
     createEGLImageTargetTexture2D(ahbImage, ahbTexture);
 
@@ -3724,12 +3749,17 @@ TEST_P(ImageTestES3, AHBDrawFlushAndAttachAnotherTextureBeforeReadBack)
 
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+#    endif
 }
 
 // Test that glDraw + glFlush on FBO with AHB attachment are applied to the AHB
 // image before switching to the default FBO
 TEST_P(ImageTestES3, AHBDrawFlushAndSwitchToDefaultFBOBeforeReadBack)
 {
+#    ifndef ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT
+    std::cout << "Test skipped: !ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT." << std::endl;
+    return;
+#    else
     EGLWindow *window = getEGLWindow();
     ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
 
@@ -3739,8 +3769,8 @@ TEST_P(ImageTestES3, AHBDrawFlushAndSwitchToDefaultFBOBeforeReadBack)
     const GLubyte kBlack[] = {0, 0, 0, 0};
     const GLubyte kRed[]   = {255, 0, 0, 255};
     createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
-                                              kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
-                                              &ahb, &ahbImage);
+                                              kDefaultAHBUsage | kAHBUsageFrontBuffer,
+                                              kDefaultAttribs, {{kBlack, 4}}, &ahb, &ahbImage);
     GLTexture ahbTexture;
     createEGLImageTargetTexture2D(ahbImage, ahbTexture);
 
@@ -3774,6 +3804,7 @@ TEST_P(ImageTestES3, AHBDrawFlushAndSwitchToDefaultFBOBeforeReadBack)
 
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+#    endif
 }
 
 // Test that RGBX data are preserved when importing from AHB.  Regression test for a bug in the
