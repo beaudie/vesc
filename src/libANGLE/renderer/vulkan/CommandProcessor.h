@@ -307,6 +307,26 @@ class DeviceQueueMap : public angle::PackedEnumMap<egl::ContextPriority, VkQueue
 class CommandQueue : angle::NonCopyable
 {
   public:
+    // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
+    // that are only accessed via ThreadSafeCommandQueue API.
+    angle::Result ensureNoPendingWork(Context *context) const { return angle::Result::Continue; }
+
+    egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
+    {
+        return mQueueMap.getDevicePriority(priority);
+    }
+    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
+
+    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
+
+    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
+    bool hasUnfinishedUse(const ResourceUse &use) const;
+    // The ResourceUse still have queue serial not yet submitted to vulkan.
+    bool hasUnsubmittedUse(const ResourceUse &use) const;
+    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+
+  protected:
+    // These are accessed by ThreadSafeCommandQueue only
     CommandQueue();
     ~CommandQueue();
 
@@ -314,12 +334,6 @@ class CommandQueue : angle::NonCopyable
     void destroy(Context *context);
 
     void handleDeviceLost(RendererVk *renderer);
-
-    angle::Result finishQueueSerial(Context *context,
-                                    const QueueSerial &queueSerial,
-                                    uint64_t timeout);
-    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
-    angle::Result waitIdle(Context *context, uint64_t timeout);
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -344,11 +358,6 @@ class CommandQueue : angle::NonCopyable
     VkResult queuePresent(egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo);
 
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result);
-
     angle::Result checkCompletedCommands(Context *context);
 
     angle::Result flushOutsideRPCommands(Context *context,
@@ -359,34 +368,15 @@ class CommandQueue : angle::NonCopyable
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
-    angle::Result ensureNoPendingWork(Context *context) { return angle::Result::Continue; }
-
-    bool isBusy() const;
-
     angle::Result queueSubmit(Context *context,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
                               const Fence *fence,
                               const QueueSerial &submitQueueSerial);
 
-    egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
-    {
-        return mQueueMap.getDevicePriority(priority);
-    }
-    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
-
-    VkQueue getQueue(egl::ContextPriority priority) { return mQueueMap[priority]; }
-
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     void resetPerFramePerfCounters();
 
-    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
-    bool hasUnfinishedUse(const ResourceUse &use) const;
-    // The ResourceUse still have queue serial not yet submitted to vulkan.
-    bool hasUnsubmittedUse(const ResourceUse &use) const;
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
-
-  protected:
     void releaseToCommandBatch(bool hasProtectedContent,
                                PrimaryCommandBuffer &&commandBuffer,
                                SecondaryCommandPools *commandPools,
@@ -447,6 +437,12 @@ class CommandQueue : angle::NonCopyable
     FenceRecycler mFenceRecycler;
 
     angle::VulkanPerfCounters mPerfCounters;
+
+  private:
+    angle::Result finishQueueSerial(Context *context,
+                                    const QueueSerial &queueSerial,
+                                    uint64_t timeout);
+    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
 };
 
 class ThreadSafeCommandQueue : public CommandQueue
@@ -479,7 +475,7 @@ class ThreadSafeCommandQueue : public CommandQueue
                                                             const ResourceUse &use,
                                                             uint64_t timeout,
                                                             VkResult *result);
-    bool isBusy(RendererVk *renderer);
+    bool isBusy(RendererVk *renderer) const;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -586,13 +582,6 @@ class CommandProcessor : public Context
 
     void handleDeviceLost(RendererVk *renderer);
 
-    angle::Result finishQueueSerial(Context *context,
-                                    const QueueSerial &queueSerial,
-                                    uint64_t timeout);
-    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
-
-    angle::Result waitIdle(Context *context, uint64_t timeout);
-
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
@@ -615,11 +604,6 @@ class CommandProcessor : public Context
     VkResult queuePresent(egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo);
 
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result);
-
     angle::Result checkCompletedCommands(Context *context);
 
     angle::Result flushOutsideRPCommands(Context *context,
@@ -632,8 +616,6 @@ class CommandProcessor : public Context
 
     angle::Result ensureNoPendingWork(Context *context);
 
-    bool isBusy(RendererVk *renderer) const;
-
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
         return mCommandQueue.getDriverPriority(priority);
@@ -643,7 +625,7 @@ class CommandProcessor : public Context
 
     // Note that due to inheritance from Context, this class has a set of perf counters as well,
     // but currently only the counters in the member command queue are of interest.
-    const angle::VulkanPerfCounters &getPerfCounters() const
+    const angle::VulkanPerfCounters getPerfCounters() const
     {
         return mCommandQueue.getPerfCounters();
     }
@@ -657,7 +639,7 @@ class CommandProcessor : public Context
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
-  private:
+  protected:
     bool hasPendingError() const
     {
         std::lock_guard<std::mutex> queueLock(mErrorMutex);
@@ -694,7 +676,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    CommandQueue mCommandQueue;
+    ThreadSafeCommandQueue mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
@@ -736,23 +718,16 @@ class ThreadSafeCommandProcessor : public CommandProcessor
     }
 
     // Wait until the desired serial has been completed.
-    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::finishResourceUse(context, use, timeout);
-    }
+    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
     angle::Result finishQueueSerial(Context *context,
                                     const QueueSerial &queueSerial,
-                                    uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::finishQueueSerial(context, queueSerial, timeout);
-    }
-    angle::Result waitIdle(Context *context, uint64_t timeout)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::waitIdle(context, timeout);
-    }
+                                    uint64_t timeout);
+    angle::Result waitIdle(Context *context, uint64_t timeout);
+    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
+                                                            const ResourceUse &use,
+                                                            uint64_t timeout,
+                                                            VkResult *result);
+    bool isBusy(RendererVk *renderer) const;
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -789,15 +764,6 @@ class ThreadSafeCommandProcessor : public CommandProcessor
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandProcessor::queuePresent(contextPriority, presentInfo);
     }
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::waitForResourceUseToFinishWithUserTimeout(context, use, timeout,
-                                                                           result);
-    }
 
     // Check to see which batches have finished completion (forward progress for
     // the last completed serial, for example for when the application busy waits on a query
@@ -823,12 +789,6 @@ class ThreadSafeCommandProcessor : public CommandProcessor
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandProcessor::flushRenderPassCommands(context, hasProtectedContent, renderPass,
                                                          renderPassCommands);
-    }
-
-    bool isBusy(RendererVk *renderer)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::isBusy(renderer);
     }
 
     const angle::VulkanPerfCounters getPerfCounters() const
