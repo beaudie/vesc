@@ -926,7 +926,7 @@ class RendererVk : angle::NonCopyable
     vk::ThreadSafeCommandQueue mCommandQueue;
 
     // Async Command Queue
-    vk::ThreadSafeCommandProcessor mCommandProcessor;
+    vk::CommandProcessor mCommandProcessor;
 
     // Command buffer pool management.
     vk::CommandBufferRecycler<vk::OutsideRenderPassCommandBuffer,
