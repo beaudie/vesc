@@ -215,6 +215,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23f2e7be_3f16f31d",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T22:11:22Z",
+      "side": 1,
+      "message": "Thank you Roman for the Python Crash Course. Would you please take a look at the latest patch: https://chromium-review.googlesource.com/c/angle/angle/+/4144078/9/scripts/generate_android_bp.py see if this is executing a good python practice?",
+      "parentUuid": "957cb54b_304ab146",
+      "range": {
+        "startLine": 493,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 79
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06e4ffa5_28c13f2f",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 6
@@ -274,6 +298,30 @@
       "side": 1,
       "message": "That\u0027s right, it should be `[a, b, c] + d` (instead of `[a] + [b] + [c] + d`)",
       "parentUuid": "026bcef3_05f10b58",
+      "range": {
+        "startLine": 502,
+        "startChar": 0,
+        "endLine": 503,
+        "endChar": 42
+      },
+      "revId": "1c2d04367f9578739465c979aef81462be483e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8087ba4c_e3124792",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-13T22:11:22Z",
+      "side": 1,
+      "message": "I see, thank you!",
+      "parentUuid": "a38eab7d_9c96711f",
       "range": {
         "startLine": 502,
         "startChar": 0,
