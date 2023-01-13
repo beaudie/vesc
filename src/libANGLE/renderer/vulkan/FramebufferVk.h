@@ -182,6 +182,8 @@ class FramebufferVk : public FramebufferImpl
         vk::FramebufferAttachmentsVector<VkImageView> *attachments,
         vk::FramebufferAttachmentsVector<RenderTargetInfo> *renderTargetsInfoOut);
 
+    bool hasFrontBufferUsage() const;
+
   private:
     enum class ClearWithCommand
     {

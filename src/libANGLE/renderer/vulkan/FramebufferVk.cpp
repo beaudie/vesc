@@ -1812,6 +1812,21 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+bool FramebufferVk::hasFrontBufferUsage() const
+{
+    const gl::DrawBuffersVector<gl::FramebufferAttachment> &colorAttachments =
+        mState.getColorAttachments();
+    const gl::DrawBufferMask colorAttachmentMask = mState.getColorAttachmentsMask();
+    for (size_t colorIndexGL : colorAttachmentMask)
+    {
+        if (colorAttachments[colorIndexGL].hasFrontBufferUsage())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
                                                    uint32_t colorIndexGL)
 {
