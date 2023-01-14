@@ -16,6 +16,24 @@
       "message": "PTAL - all android bot failures are tests from Yuxin\u0027s patch which i think need to be disabled until we can add the FRONT_BUFFER usage flag to the AHB",
       "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb03e12_a43a1d87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-14T01:19:08Z",
+      "side": 1,
+      "message": "Thank you Mohan for the work.\n\nCan I ask a few questions:\n\n1. Are the values in [AHardwareBuffer_UsageFlags]( https://source.chromium.org/chromium/chromium/src/+/main:third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/android/hardware_buffer.h;l\u003d166?) comes from [BufferUsage](https://cs.android.com/android/platform/superproject/+/master:out/soong/.intermediates/hardware/interfaces/graphics/common/aidl/android.hardware.graphics.common-V4-ndk-source/gen/include/aidl/android/hardware/graphics/common/BufferUsage.h;l\u003d19;drc\u003d97f313746fda8cb15680a212080179be619f665e)?\n\n2. Do you think we can modify the test to create the AHB with the temp flag you added? \n\ne.g. in this function [createAndroidHardwareBuffer](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/ImageTest.cpp;l\u003d699), do something like this:\n```\nif ((usage \u0026 ahbFrontBufferUsageBit) !\u003d 0)\n{\n    aHardwareBufferDescription.usage |\u003d kAhardwareBufferUsageFrontBuffer;\n}\n```",
+      "parentUuid": "ee73d935_32efaf81",
+      "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
