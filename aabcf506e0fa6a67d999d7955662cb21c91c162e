@@ -34,6 +34,24 @@
       "parentUuid": "ee73d935_32efaf81",
       "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53dc728e_2c045d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-14T01:30:22Z",
+      "side": 1,
+      "message": "1. im not exactly sure who is responsible to maintain parity between `BufferUsage` and `AHardwareBuffer_UsageFlags` but the `BufferUsage` flags im using as reference comes from here -\u003e https://cs.android.com/android/platform/superproject/+/master:hardware/interfaces/graphics/common/aidl/android/hardware/graphics/common/BufferUsage.aidl\n\n2. unfortunately no. if we add a flag that AHardwareBuffer module doesn\u0027t know it will fail validation and refuse to allocate the buffer, at least that has been my experience. what we can do is check if Android API level \u003e 33 (which is when the new flag was introduced) then add the flag to the test itself before allocating the AHB and then enable the test",
+      "parentUuid": "ceb03e12_a43a1d87",
+      "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
