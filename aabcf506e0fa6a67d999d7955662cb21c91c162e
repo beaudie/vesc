@@ -52,6 +52,24 @@
       "parentUuid": "ceb03e12_a43a1d87",
       "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b25336b_863f76e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-14T01:53:25Z",
+      "side": 1,
+      "message": "Got it. Thank you!\n\nIn that case I think it is fine to skip the failed `ImageTests.AHBDrawFlushApplied*`. I don\u0027t know if we have an existing function to check Android API level. Maybe we can do something similar to [ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/ImageTest.cpp;l\u003d23), and skip the test similar to [this test skip code](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/ImageTest.cpp;l\u003d3014)\n\n\n\nOne more question, why the [original test](https://cs.android.com/android/platform/superproject/+/master:hardware/interfaces/graphics/allocator/aidl/vts/VtsHalGraphicsAllocatorAidl_TargetTest.cpp;l\u003d370) that triggered the bug did not run into the AHardwareBuffer validation error? Is it because the test is allocating the AHB with a different API? Different from this [API](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/ImageTest.cpp;l\u003d736)",
+      "parentUuid": "53dc728e_2c045d26",
+      "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
