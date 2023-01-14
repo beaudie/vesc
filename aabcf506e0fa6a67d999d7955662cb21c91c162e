@@ -70,6 +70,24 @@
       "parentUuid": "53dc728e_2c045d26",
       "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46da2590_1be11b3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-14T05:44:06Z",
+      "side": 1,
+      "message": "\u003e Maybe we can do something similar to ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT, and skip the test similar to this test skip code\n\nyes, that seems doable\n\n\u003e why the original test that triggered the bug did not run into the AHardwareBuffer validation error? Is it because the test is allocating the AHB with a different API? Different from this API\n\ni am unable to run those tests on my device with Android T, i had to request team member to run the test on an environment with Android U. So i suspect the device you used to run the original test has its system image updated to latest version which supports the new flag",
+      "parentUuid": "0b25336b_863f76e8",
+      "revId": "aabcf506e0fa6a67d999d7955662cb21c91c162e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
