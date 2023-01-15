@@ -190,6 +190,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f6893fa_c2df7e84",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-15T03:43:04Z",
+      "side": 1,
+      "message": "The problem with searching for multicharacter delimiters is we have to handle both combinations, \"\\n\" and \"\\r\\n\".  So if I do a split on \"\\r\\n\" as a group, it won\u0027t split the \"\\n\" case.  You\u0027d have to call SplitString twice.\n\nI could scan the shaders to see what they are using, but I\u0027m seeing shaders that use a mix!\n\nI\u0027m not too keen on stripping the \"\\r\" on the way in because these are const strings.  So I\u0027d have to make a copy, then call SplitString which makes another copy.\n\nMaybe a new mode to pass in: \"CRLF_is_newline\" and I\u0027ll leave all the other callers alone?\n\nFWIW, if I just pass in \"\\r\\n\" as the collection of delimiters without changing the helper, the shaders compile, they just have extra newlines.",
+      "parentUuid": "b11cb3a5_bd512e6a",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
