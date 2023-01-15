@@ -214,6 +214,30 @@
       },
       "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb7b222a_8a666ba2",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-15T04:04:56Z",
+      "side": 1,
+      "message": "I think what Jamie meant was to simply do something like:\n\n```\nwhile delimiters.has(input[start]) ++start;\n``\n\nSo if the string is like `\"hello\\n\\n\\r\\n\\r\\r\\r\\nworld\"`, it would just split it into `hello` and `world`.\n\nAlternatively, you could strip empty tokens as you encounter them ... which is actually already implemented! If you don\u0027t pass `SPLIT_WANT_ALL`, empty tokens are already skipped. Perhaps that\u0027s all you need?",
+      "parentUuid": "9f6893fa_c2df7e84",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 13
+      },
+      "revId": "f47d77217ff5a38e74a2bd9b7247737390cee9a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
