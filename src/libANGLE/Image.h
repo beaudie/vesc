@@ -146,7 +146,6 @@ struct ImageState : private angle::NonCopyable
     gl::Extents size;
     size_t samples;
     GLuint levelCount;
-    EGLenum sourceType;
     EGLenum colorspace;
     bool hasProtectedContent;
 
