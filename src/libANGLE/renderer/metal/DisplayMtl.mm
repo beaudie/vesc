@@ -925,6 +925,7 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.framebufferBlitANGLE          = true;
     mNativeExtensions.framebufferBlitNV             = true;
     mNativeExtensions.framebufferMultisampleANGLE   = true;
+    mNativeExtensions.polygonOffsetClampEXT         = true;
     mNativeExtensions.copyTextureCHROMIUM           = true;
     mNativeExtensions.copyCompressedTextureCHROMIUM = false;
 
