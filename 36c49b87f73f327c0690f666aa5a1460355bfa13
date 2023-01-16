@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db21ff9_a50a230f",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-16T20:04:19Z",
+      "side": 1,
+      "message": "@zzyiwei@chromium.org do dmabufs have a concept of front-buffer usage?\n\n@Mohan, how about calling `externalSibling-\u003ehasFrontBufferUsage()` on every `ExternalImageSibling`, and non-AHB images would just return false?",
+      "revId": "36c49b87f73f327c0690f666aa5a1460355bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f8d6c0a_9db2ea07",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1827,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-16T20:04:19Z",
+      "side": 1,
+      "message": "Can we cache this similarly to `mIsAHBColorAttachments`? That is done through `FramebufferVk::syncState`, that should be a good place to cache a `mHasFrontBufferAttachments`.",
+      "revId": "36c49b87f73f327c0690f666aa5a1460355bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "367ca265_002ec043",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-16T20:04:19Z",
+      "side": 1,
+      "message": "Super nit: capital `H`",
+      "range": {
+        "startLine": 135,
+        "startChar": 21,
+        "endLine": 135,
+        "endChar": 22
+      },
+      "revId": "36c49b87f73f327c0690f666aa5a1460355bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f80298_8dffbf23",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3597,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-16T20:04:19Z",
+      "side": 1,
+      "message": "Please don\u0027t `#ifdef` the code out. Just something like this would do:\n\nAbove:\n\n```\n #if defined(ANGLE_PLATFORM_ANDROID) \u0026\u0026 __ANDROID_API__ \u003e\u003d 33\n-#    define ANGLE_AHARDWAREBUFFER_USAGE_FRONT_BUFFER_SUPPORT\n+constexpr bool kHasAHBFrontBufferUsageSupport \u003d 1;\n+#else\n+constexpr bool kHasAHBFrontBufferUsageSupport \u003d 0;\n #endif\n```\n\nand then here:\n\n```\nANGLE_SKIP_TEST_IF(!kHasAHBFrontBufferUsageSupport);\n```",
+      "revId": "36c49b87f73f327c0690f666aa5a1460355bfa13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
