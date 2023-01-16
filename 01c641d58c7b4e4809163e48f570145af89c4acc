@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afeee8ac_5502e407",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-01-16T20:31:48Z",
+      "side": 1,
+      "message": "This has caused some of our ChromeOS bots to fail to initialize ANGLE. Unfortunately I don\u0027t have a link to the bot, it appears to be an internal bot with the Kevin hardware (so probably triggerable with a trybot).",
+      "revId": "01c641d58c7b4e4809163e48f570145af89c4acc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
