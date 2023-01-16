@@ -138,9 +138,9 @@ bool ImageSibling::isYUV() const
     return mTargetOf.get() && mTargetOf->isYUV();
 }
 
-bool ImageSibling::isCreatedWithAHB() const
+bool ImageSibling::isExternalImage() const
 {
-    return mTargetOf.get() && mTargetOf->isCreatedWithAHB();
+    return mTargetOf.get() && mTargetOf->isExternalImage();
 }
 
 bool ImageSibling::hasProtectedContent() const
@@ -442,9 +442,9 @@ bool Image::isYUV() const
     return mState.yuv;
 }
 
-bool Image::isCreatedWithAHB() const
+bool Image::isExternalImage() const
 {
-    return mState.target == EGL_NATIVE_BUFFER_ANDROID;
+    return IsExternalImageTarget(mState.sourceType);
 }
 
 bool Image::isCubeMap() const
