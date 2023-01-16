@@ -1376,7 +1376,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
     ASSERT(drawFramebufferVk == vk::GetImpl(mState.getDrawFramebuffer()));
 
-    const bool isAndroidHardwareBuffer = drawFramebufferVk->attachmentHasAHB();
+    const bool hasAnyExternalAttachments = drawFramebufferVk->hasAnyExternalAttachments();
 
     if (!mHasAnyCommandsPendingSubmission && !hasActiveRenderPass() &&
         mOutsideRenderPassCommands->empty() &&
@@ -1393,7 +1393,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
     // when app is reading from AHB, the draw commands have not been flushed and executed yet,
     // causing app to read unexpected data from AHB.
     if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
-        !isSingleBuffer && !isAndroidHardwareBuffer)
+        !isSingleBuffer && !hasAnyExternalAttachments)
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;

@@ -622,7 +622,7 @@ bool Surface::isYUV() const
     return false;
 }
 
-bool Surface::isCreatedWithAHB() const
+bool Surface::isExternalImage() const
 {
     return false;
 }
