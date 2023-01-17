@@ -306,8 +306,6 @@ class CommandQueue : angle::NonCopyable
   public:
     // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
     // that are only accessed via ThreadSafeCommandQueue API.
-    angle::Result ensureNoPendingWork(Context *context) const { return angle::Result::Continue; }
-
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
     {
         return mQueueMap.getDevicePriority(priority);
@@ -320,6 +318,10 @@ class CommandQueue : angle::NonCopyable
     bool hasUnfinishedUse(const ResourceUse &use) const;
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const ResourceUse &use) const;
+    bool isQueueSerialSubmitted(const QueueSerial &queueSerial) const
+    {
+        return queueSerial.getSerial() <= mLastSubmittedSerials[queueSerial.getIndex()];
+    }
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
   protected:
@@ -623,8 +625,6 @@ class CommandProcessor : public Context
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
-    angle::Result ensureNoPendingWork(Context *context);
-
     bool isBusy(RendererVk *renderer) const;
 
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
@@ -649,6 +649,9 @@ class CommandProcessor : public Context
 
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+
+    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
+                                                  const QueueSerial &queueSerial);
 
   private:
     bool hasPendingError() const
