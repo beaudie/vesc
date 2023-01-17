@@ -141,6 +141,13 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 
         mMetalDeviceVendorId = mtl::GetDeviceVendorId(mMetalDevice);
 
+        // GPUs that don't support Mac GPU family 2 or greater are unsupported by the Metal backend.
+        if (!supportsMacGPUFamily(2))
+        {
+            ANGLE_MTL_LOG("Could not initialize: Metal device does not support GPU family 2.");
+            return angle::Result::Stop;
+        }
+
         mCmdQueue.set([[mMetalDevice newCommandQueue] ANGLE_MTL_AUTORELEASE]);
 
         mCapsInitialized = false;
