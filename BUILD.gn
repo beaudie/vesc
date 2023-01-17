@@ -77,6 +77,8 @@ declare_args() {
 
   angle_enable_global_mutex_recursion = is_android && angle_enable_vulkan
   angle_enable_global_mutex_load_time_allocate = is_android
+
+  angle_enable_shared_context_mutex = true
 }
 
 if (angle_build_all) {
@@ -170,6 +172,11 @@ config("internal_config") {
 
   if (angle_enable_global_mutex_load_time_allocate) {
     defines += [ "ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE=1" ]
+  }
+
+  if (angle_enable_shared_context_mutex && angle_enable_share_context_lock &&
+      !angle_force_context_check_every_call) {
+    defines += [ "ANGLE_ENABLE_SHARED_CONTEXT_MUTEX=1" ]
   }
 
   # Enables debug/trace-related functionality, including logging every GLES/EGL API command to the
