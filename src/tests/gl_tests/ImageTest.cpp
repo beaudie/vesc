@@ -6418,6 +6418,126 @@ TEST_P(ImageTest, MultithreadedAHBImportAndUseAsRenderbuffer)
     ASSERT_NE(currentStep, Step::Abort);
 }
 
+// Testing target 2D texture destroyed while still used in the RenderPass.
+TEST_P(ImageTest, TargetTexture2DDeletedWhileInUse)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+
+    // Create the Image
+    GLTexture source;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs, kLinearColor,
+                                  source, &image);
+
+    // Create the target
+    GLTexture target;
+    createEGLImageTargetTexture2D(image, target);
+
+    // Set up a framebuffer to render into the source
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, target, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Draw into the framebuffer
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+
+    // Delete "source" texture that may break RenderPass beause it uses same Image as "target"
+    source.reset();
+
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_BLEND);
+
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, kLinearColor[2], 255);
+
+    // Draw again to open new RenderPass
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
+
+    // Unbind resources
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Delete resources
+    fbo.reset();
+    target.reset();
+    ASSERT_GL_NO_ERROR();
+
+    // Destroy Iamge
+    eglDestroyImageKHR(window->getDisplay(), image);
+
+    // Finish work
+    glFinish();
+    ASSERT_GL_NO_ERROR();
+}
+
+// Testing target 2D texture destroyed while still used in the RenderPass.
+TEST_P(ImageTest, TargetRenderbufferDeletedWhileInUse)
+{
+    EGLWindow *window = getEGLWindow();
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !hasRenderbufferExt());
+
+    // Create the Image
+    GLTexture source;
+    EGLImageKHR image;
+    createEGLImage2DTextureSource(1, 1, GL_RGBA, GL_UNSIGNED_BYTE, kDefaultAttribs, kLinearColor,
+                                  source, &image);
+
+    // Create the target
+    GLRenderbuffer target;
+    createEGLImageTargetRenderbuffer(image, target);
+
+    // Set up a framebuffer to render into the source
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, target);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    // Draw into the framebuffer
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+    ANGLE_GL_PROGRAM(drawRed, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+
+    // Delete "source" texture that may break RenderPass beause it uses same Image as "target"
+    source.reset();
+
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(drawGreen, essl1_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+    glDisable(GL_BLEND);
+
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, kLinearColor[2], 255);
+
+    // Draw again to open new RenderPass
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0.0f);
+
+    // Unbind resources
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    ASSERT_GL_NO_ERROR();
+
+    // Delete resources
+    fbo.reset();
+    target.reset();
+    ASSERT_GL_NO_ERROR();
+
+    // Destroy Iamge
+    eglDestroyImageKHR(window->getDisplay(), image);
+
+    // Finish work
+    glFinish();
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ImageTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ImageTestES3);
