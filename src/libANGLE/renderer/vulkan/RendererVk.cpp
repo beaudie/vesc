@@ -4841,15 +4841,12 @@ void RendererVk::reloadVolkIfNeeded() const
 #endif  // defined(ANGLE_SHARED_LIBVULKAN)
 }
 
-angle::Result RendererVk::submitCommands(
-    vk::Context *context,
-    bool hasProtectedContent,
-    egl::ContextPriority contextPriority,
-    std::vector<VkSemaphore> &&waitSemaphores,
-    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
-    const vk::Semaphore *signalSemaphore,
-    vk::SecondaryCommandPools *commandPools,
-    const QueueSerial &submitQueueSerial)
+angle::Result RendererVk::submitCommands(vk::Context *context,
+                                         bool hasProtectedContent,
+                                         egl::ContextPriority contextPriority,
+                                         const vk::Semaphore *signalSemaphore,
+                                         vk::SecondaryCommandPools *commandPools,
+                                         const QueueSerial &submitQueueSerial)
 {
     vk::SecondaryCommandBufferList commandBuffersToReset;
     mOutsideRenderPassCommandBufferRecycler.releaseCommandBuffersToReset(
@@ -4863,18 +4860,15 @@ angle::Result RendererVk::submitCommands(
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.submitCommands(
-            context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalVkSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial));
+            context, hasProtectedContent, contextPriority, signalVkSemaphore,
+            std::move(commandBuffersToReset), commandPools, submitQueueSerial));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.submitCommands(
-            context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
-            signalVkSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial));
+        ANGLE_TRY(mCommandQueue.submitCommands(context, hasProtectedContent, contextPriority,
+                                               signalVkSemaphore, std::move(commandBuffersToReset),
+                                               commandPools, submitQueueSerial));
     }
-
-    waitSemaphores.clear();
-    waitSemaphoreStageMasks.clear();
 
     return angle::Result::Continue;
 }

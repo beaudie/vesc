@@ -416,8 +416,6 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(
-    const std::vector<VkSemaphore> &waitSemaphores,
-    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
     const VkSemaphore semaphore,
     bool hasProtectedContent,
     egl::ContextPriority priority,
@@ -425,15 +423,13 @@ void CommandProcessorTask::initFlushAndQueueSubmit(
     SecondaryCommandBufferList &&commandBuffersToReset,
     const QueueSerial &submitQueueSerial)
 {
-    mTask                    = CustomTask::FlushAndQueueSubmit;
-    mWaitSemaphores          = waitSemaphores;
-    mWaitSemaphoreStageMasks = waitSemaphoreStageMasks;
-    mSemaphore               = semaphore;
-    mCommandPools            = commandPools;
-    mCommandBuffersToReset   = std::move(commandBuffersToReset);
-    mPriority                = priority;
-    mHasProtectedContent     = hasProtectedContent;
-    mSubmitQueueSerial       = submitQueueSerial;
+    mTask                  = CustomTask::FlushAndQueueSubmit;
+    mSemaphore             = semaphore;
+    mCommandPools          = commandPools;
+    mCommandBuffersToReset = std::move(commandBuffersToReset);
+    mPriority              = priority;
+    mHasProtectedContent   = hasProtectedContent;
+    mSubmitQueueSerial     = submitQueueSerial;
 }
 
 void CommandProcessorTask::initOneOffQueueSubmit(VkCommandBuffer commandBufferHandle,
@@ -465,8 +461,6 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mOutsideRenderPassCommandBuffer, rhs.mOutsideRenderPassCommandBuffer);
     std::swap(mRenderPassCommandBuffer, rhs.mRenderPassCommandBuffer);
     std::swap(mTask, rhs.mTask);
-    std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
-    std::swap(mWaitSemaphoreStageMasks, rhs.mWaitSemaphoreStageMasks);
     std::swap(mSemaphore, rhs.mSemaphore);
     std::swap(mOneOffWaitSemaphore, rhs.mOneOffWaitSemaphore);
     std::swap(mOneOffWaitSemaphoreStageMask, rhs.mOneOffWaitSemaphoreStageMask);
@@ -655,8 +649,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 
             // Call submitCommands()
             ANGLE_TRY(mCommandQueue->submitCommands(
-                this, task->hasProtectedContent(), task->getPriority(), task->getWaitSemaphores(),
-                task->getWaitSemaphoreStageMasks(), task->getSemaphore(),
+                this, task->hasProtectedContent(), task->getPriority(), task->getSemaphore(),
                 std::move(task->getCommandBuffersToReset()), task->getCommandPools(),
                 task->getSubmitQueueSerial()));
             break;
@@ -800,22 +793,18 @@ VkResult CommandProcessor::present(egl::ContextPriority priority,
     return result;
 }
 
-angle::Result CommandProcessor::submitCommands(
-    Context *context,
-    bool hasProtectedContent,
-    egl::ContextPriority priority,
-    const std::vector<VkSemaphore> &waitSemaphores,
-    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-    const VkSemaphore signalSemaphore,
-    SecondaryCommandBufferList &&commandBuffersToReset,
-    SecondaryCommandPools *commandPools,
-    const QueueSerial &submitQueueSerial)
+angle::Result CommandProcessor::submitCommands(Context *context,
+                                               bool hasProtectedContent,
+                                               egl::ContextPriority priority,
+                                               const VkSemaphore signalSemaphore,
+                                               SecondaryCommandBufferList &&commandBuffersToReset,
+                                               SecondaryCommandPools *commandPools,
+                                               const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
 
     CommandProcessorTask task;
-    task.initFlushAndQueueSubmit(waitSemaphores, waitSemaphoreStageMasks, signalSemaphore,
-                                 hasProtectedContent, priority, commandPools,
+    task.initFlushAndQueueSubmit(signalSemaphore, hasProtectedContent, priority, commandPools,
                                  std::move(commandBuffersToReset), submitQueueSerial);
 
     queueCommand(std::move(task));
@@ -980,13 +969,12 @@ void CommandQueue::destroy(Context *context)
     // Assigns an infinite "last completed" serial to force garbage to delete.
     mLastCompletedSerials.fill(Serial::Infinite());
 
-    mPrimaryCommands.destroy(renderer->getDevice());
-    mPrimaryCommandPool.destroy(renderer->getDevice());
-
-    if (mProtectedPrimaryCommandPool.valid())
+    for (CmdsState &state : mCmdsStateMap)
     {
-        mProtectedPrimaryCommands.destroy(renderer->getDevice());
-        mProtectedPrimaryCommandPool.destroy(renderer->getDevice());
+        state.commandBuffer.destroy(renderer->getDevice());
+        state.waitSemaphores.clear();
+        state.waitSemaphoreStageMasks.clear();
+        state.commandPool.destroy(renderer->getDevice());
     }
 
     mFenceRecycler.destroy(context);
@@ -1002,12 +990,12 @@ angle::Result CommandQueue::init(Context *context, const DeviceQueueMap &queueMa
     mLastCompletedSerials.fill(kZeroSerial);
 
     // Initialize the command pool now that we know the queue family index.
-    ANGLE_TRY(mPrimaryCommandPool.init(context, false, queueMap.getIndex()));
+    ANGLE_TRY(mCmdsStateMap[0].commandPool.init(context, false, queueMap.getIndex()));
     mQueueMap = queueMap;
 
     if (queueMap.isProtected())
     {
-        ANGLE_TRY(mProtectedPrimaryCommandPool.init(context, true, queueMap.getIndex()));
+        ANGLE_TRY(mCmdsStateMap[1].commandPool.init(context, true, queueMap.getIndex()));
     }
 
     return angle::Result::Continue;
@@ -1204,16 +1192,13 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::submitCommands(
-    Context *context,
-    bool hasProtectedContent,
-    egl::ContextPriority priority,
-    const std::vector<VkSemaphore> &waitSemaphores,
-    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-    const VkSemaphore signalSemaphore,
-    SecondaryCommandBufferList &&commandBuffersToReset,
-    SecondaryCommandPools *commandPools,
-    const QueueSerial &submitQueueSerial)
+angle::Result CommandQueue::submitCommands(Context *context,
+                                           bool hasProtectedContent,
+                                           egl::ContextPriority priority,
+                                           const VkSemaphore signalSemaphore,
+                                           SecondaryCommandBufferList &&commandBuffersToReset,
+                                           SecondaryCommandPools *commandPools,
+                                           const QueueSerial &submitQueueSerial)
 {
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
@@ -1228,10 +1213,12 @@ angle::Result CommandQueue::submitCommands(
     batch.hasProtectedContent   = hasProtectedContent;
     batch.commandBuffersToReset = std::move(commandBuffersToReset);
 
+    CmdsState &state = mCmdsStateMap[hasProtectedContent];
+
     // Don't make a submission if there is nothing to submit.
     PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
     const bool hasAnyPendingCommands    = commandBuffer.valid();
-    if (hasAnyPendingCommands || signalSemaphore != VK_NULL_HANDLE || !waitSemaphores.empty())
+    if (hasAnyPendingCommands || signalSemaphore != VK_NULL_HANDLE || !state.waitSemaphores.empty())
     {
         if (commandBuffer.valid())
         {
@@ -1239,8 +1226,8 @@ angle::Result CommandQueue::submitCommands(
         }
 
         VkSubmitInfo submitInfo = {};
-        InitializeSubmitInfo(&submitInfo, commandBuffer, waitSemaphores, waitSemaphoreStageMasks,
-                             signalSemaphore);
+        InitializeSubmitInfo(&submitInfo, commandBuffer, state.waitSemaphores,
+                             state.waitSemaphoreStageMasks, signalSemaphore);
 
         VkProtectedSubmitInfo protectedSubmitInfo = {};
         if (hasProtectedContent)
@@ -1264,16 +1251,8 @@ angle::Result CommandQueue::submitCommands(
 
     // Store the primary CommandBuffer and command pool used for secondary CommandBuffers
     // in the in-flight list.
-    if (hasProtectedContent)
-    {
-        releaseToCommandBatch(hasProtectedContent, std::move(mProtectedPrimaryCommands),
-                              commandPools, &batch);
-    }
-    else
-    {
-        releaseToCommandBatch(hasProtectedContent, std::move(mPrimaryCommands), commandPools,
-                              &batch);
-    }
+    releaseToCommandBatch(hasProtectedContent, std::move(state.commandBuffer), commandPools,
+                          &batch);
     mInFlightCommands.emplace_back(scopedBatch.release());
 
     ANGLE_TRY(checkCompletedCommands(context));
@@ -1300,6 +1279,9 @@ angle::Result CommandQueue::submitCommands(
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
     }
 
+    state.waitSemaphores.clear();
+    state.waitSemaphoreStageMasks.clear();
+
     return angle::Result::Continue;
 }
 
@@ -1322,6 +1304,25 @@ angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
     ANGLE_VK_TRY(context, commandBuffer.begin(beginInfo));
 
     return angle::Result::Continue;
+}
+
+void CommandQueue::flushWaitSemaphores(bool hasProtectedContent,
+                                       std::vector<VkSemaphore> &&waitSemaphores,
+                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+{
+    ASSERT(!waitSemaphores.empty());
+    ASSERT(waitSemaphores.size() == waitSemaphoreStageMasks.size());
+
+    CmdsState &state = mCmdsStateMap[hasProtectedContent];
+
+    state.waitSemaphores.insert(state.waitSemaphores.end(), waitSemaphores.begin(),
+                                waitSemaphores.end());
+    state.waitSemaphoreStageMasks.insert(state.waitSemaphoreStageMasks.end(),
+                                         waitSemaphoreStageMasks.begin(),
+                                         waitSemaphoreStageMasks.end());
+
+    waitSemaphores.clear();
+    waitSemaphoreStageMasks.clear();
 }
 
 angle::Result CommandQueue::flushOutsideRPCommands(

@@ -121,9 +121,7 @@ class CommandProcessorTask
 
     void initPresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
-    void initFlushAndQueueSubmit(const std::vector<VkSemaphore> &waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
-                                 const VkSemaphore semaphore,
+    void initFlushAndQueueSubmit(const VkSemaphore semaphore,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
                                  SecondaryCommandPools *commandPools,
@@ -147,11 +145,6 @@ class CommandProcessorTask
 
     const QueueSerial &getSubmitQueueSerial() const { return mSubmitQueueSerial; }
     CustomTask getTaskCommand() { return mTask; }
-    std::vector<VkSemaphore> &getWaitSemaphores() { return mWaitSemaphores; }
-    std::vector<VkPipelineStageFlags> &getWaitSemaphoreStageMasks()
-    {
-        return mWaitSemaphoreStageMasks;
-    }
     VkSemaphore getSemaphore() { return mSemaphore; }
     SecondaryCommandBufferList &&getCommandBuffersToReset()
     {
@@ -186,8 +179,6 @@ class CommandProcessorTask
     const RenderPass *mRenderPass;
 
     // Flush data
-    std::vector<VkSemaphore> mWaitSemaphores;
-    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
     VkSemaphore mSemaphore;
     SecondaryCommandPools *mCommandPools;
     SecondaryCommandBufferList mCommandBuffersToReset;
@@ -335,8 +326,6 @@ class CommandQueue : angle::NonCopyable
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
-                                 const std::vector<VkSemaphore> &waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
                                  SecondaryCommandPools *commandPools,
@@ -357,6 +346,9 @@ class CommandQueue : angle::NonCopyable
 
     angle::Result checkCompletedCommands(Context *context);
 
+    void flushWaitSemaphores(bool hasProtectedContent,
+                             std::vector<VkSemaphore> &&waitSemaphores,
+                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
@@ -391,35 +383,26 @@ class CommandQueue : angle::NonCopyable
 
     PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
     {
-        if (hasProtectedContent)
-        {
-            return mProtectedPrimaryCommands;
-        }
-        else
-        {
-            return mPrimaryCommands;
-        }
+        return mCmdsStateMap[hasProtectedContent].commandBuffer;
     }
 
     PersistentCommandPool &getCommandPool(bool hasProtectedContent)
     {
-        if (hasProtectedContent)
-        {
-            return mProtectedPrimaryCommandPool;
-        }
-        else
-        {
-            return mPrimaryCommandPool;
-        }
+        return mCmdsStateMap[hasProtectedContent].commandPool;
     }
 
     std::vector<CommandBatch> mInFlightCommands;
 
-    // Keeps a free list of reusable primary command buffers.
-    PrimaryCommandBuffer mPrimaryCommands;
-    PersistentCommandPool mPrimaryCommandPool;
-    PrimaryCommandBuffer mProtectedPrimaryCommands;
-    PersistentCommandPool mProtectedPrimaryCommandPool;
+    struct CmdsState
+    {
+        PrimaryCommandBuffer commandBuffer;
+        std::vector<VkSemaphore> waitSemaphores;
+        std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+        // Keeps a free list of reusable primary command buffers.
+        PersistentCommandPool commandPool;
+    };
+    // Array index: 0 - normal Contexts; 1 - hasProtectedContent
+    CmdsState mCmdsStateMap[2];
 
     // Queue serial management.
     AtomicQueueSerialFixedArray mLastSubmittedSerials;
@@ -477,17 +460,15 @@ class ThreadSafeCommandQueue : public CommandQueue
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
-                                 const std::vector<VkSemaphore> &waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
                                  SecondaryCommandPools *commandPools,
                                  const QueueSerial &submitQueueSerial)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::submitCommands(
-            context, hasProtectedContent, priority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial);
+        return CommandQueue::submitCommands(context, hasProtectedContent, priority, signalSemaphore,
+                                            std::move(commandBuffersToReset), commandPools,
+                                            submitQueueSerial);
     }
     angle::Result queueSubmitOneOff(Context *context,
                                     bool hasProtectedContent,
@@ -517,6 +498,14 @@ class ThreadSafeCommandQueue : public CommandQueue
     {
         std::unique_lock<std::mutex> lock(mMutex);
         return CommandQueue::checkCompletedCommands(context);
+    }
+    void flushWaitSemaphores(bool hasProtectedContent,
+                             std::vector<VkSemaphore> &&waitSemaphores,
+                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return CommandQueue::flushWaitSemaphores(hasProtectedContent, std::move(waitSemaphores),
+                                                 std::move(waitSemaphoreStageMasks));
     }
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
@@ -582,8 +571,6 @@ class CommandProcessor : public Context
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
-                                 const std::vector<VkSemaphore> &waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
                                  SecondaryCommandPools *commandPools,
@@ -703,17 +690,15 @@ class ThreadSafeCommandProcessor : public CommandProcessor
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority priority,
-                                 const std::vector<VkSemaphore> &waitSemaphores,
-                                 const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
                                  SecondaryCommandPools *commandPools,
                                  const QueueSerial &submitQueueSerial)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::submitCommands(
-            context, hasProtectedContent, priority, waitSemaphores, waitSemaphoreStageMasks,
-            signalSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial);
+        return CommandProcessor::submitCommands(context, hasProtectedContent, priority,
+                                                signalSemaphore, std::move(commandBuffersToReset),
+                                                commandPools, submitQueueSerial);
     }
     angle::Result queueSubmitOneOff(Context *context,
                                     bool hasProtectedContent,
