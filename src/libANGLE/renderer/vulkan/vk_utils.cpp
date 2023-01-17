@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 #include "libANGLE/Context.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
@@ -398,7 +399,9 @@ VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format)
 }
 
 // Context implementation.
-Context::Context(RendererVk *renderer) : mRenderer(renderer), mPerfCounters{} {}
+Context::Context(RendererVk *renderer, ContextType type)
+    : mType(type), mRenderer(renderer), mPerfCounters{}
+{}
 
 Context::~Context() {}
 
@@ -953,6 +956,49 @@ size_t MemoryAllocInfoMapKey::hash() const
 {
     return angle::ComputeGenericHash(*this);
 }
+
+namespace priv
+{
+// ScopedContextUnlock implementation.
+ScopedContextUnlock::ContextUnlock::ContextUnlock(egl::ContextMutex *contextMutex)
+    : mContextMutex(contextMutex)
+{
+    if (contextMutex != nullptr)
+    {
+        contextMutex->unlock();
+    }
+}
+
+ScopedContextUnlock::ContextUnlock::~ContextUnlock()
+{
+    if (mContextMutex != nullptr)
+    {
+        mContextMutex->lock();
+    }
+}
+
+ScopedContextUnlock::ScopedContextUnlock(Context *context)
+    : ScopedContextUnlock(context,
+                          context->getType() == ContextType::kContextVk
+                              ? static_cast<ContextVk *>(context)
+                              : nullptr)
+{}
+
+ScopedContextUnlock::ScopedContextUnlock(ContextVk *contextVk)
+    : ScopedContextUnlock(contextVk, contextVk)
+{}
+
+ScopedContextUnlock::ScopedContextUnlock(Context *context, ContextVk *contextVk)
+    : mContextUnlock(contextVk != nullptr && !contextVk->getState().isSingleContextMutexLocked()
+                         ? contextVk->getState().getContextMutex()
+                         : nullptr),
+      mEglUnlock(contextVk != nullptr ? egl::GlobalMutexUnlockType::IfOwned
+                                      : egl::GlobalMutexUnlockType::Always)
+{
+    ASSERT(context != nullptr);
+    ASSERT(context == contextVk || context->getType() == ContextType::kDisplayVk);
+}
+}  // namespace priv
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)

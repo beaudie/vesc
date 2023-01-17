@@ -116,7 +116,7 @@ constexpr double kTimeElapsedForPruneDefaultBufferPool = 0.25;
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
     : DisplayImpl(state),
-      vk::Context(new RendererVk()),
+      vk::Context(new RendererVk(), vk::ContextType::kDisplayVk),
       mScratchBuffer(1000u),
       mSavedError({VK_SUCCESS, "", "", 0}),
       mSupportedColorspaceFormatsMap{}
