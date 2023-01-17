@@ -970,6 +970,10 @@ class PackedClearValuesArray final
     gl::AttachmentArray<VkClearValue> mValues;
 };
 
+class ImageHelper;
+class ImageHelperSource : angle::NonCopyable
+{};
+
 // Reference to a render pass attachment (color or depth/stencil) alongside render-pass-related
 // tracking such as when the attachment is last written to or invalidated.  This is used to
 // determine loadOp and storeOp of the attachment, and enables optimizations that need to know
@@ -980,7 +984,8 @@ class RenderPassAttachment final
     RenderPassAttachment();
     ~RenderPassAttachment() = default;
 
-    void init(ImageHelper *image,
+    void init(const ImageHelperSource *source,
+              ImageHelper *image,
               gl::LevelIndex levelIndex,
               uint32_t layerIndex,
               uint32_t layerCount,
@@ -1004,11 +1009,18 @@ class RenderPassAttachment final
 
     ImageHelper *getImage() { return mImage; }
 
+    bool hasImageFromSource(const ImageHelperSource *source, const ImageHelper *image) const
+    {
+        return source == mSource && image == mImage;
+    }
+
   private:
     bool hasWriteAfterInvalidate(uint32_t currentCmdCount) const;
     bool isInvalidated(uint32_t currentCmdCount) const;
     bool onAccessImpl(ResourceAccess access, uint32_t currentCmdCount);
 
+    // Object from which image was originated
+    const ImageHelperSource *mSource;
     // The attachment image itself
     ImageHelper *mImage;
     // The subresource used in the render pass
@@ -1328,12 +1340,14 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     void colorImagesDraw(gl::LevelIndex level,
                          uint32_t layerStart,
                          uint32_t layerCount,
+                         const ImageHelperSource *source,
                          ImageHelper *image,
                          ImageHelper *resolveImage,
                          PackedAttachmentIndex packedAttachmentIndex);
     void depthStencilImagesDraw(gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
+                                const ImageHelperSource *source,
                                 ImageHelper *image,
                                 ImageHelper *resolveImage);
 
@@ -1347,7 +1361,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool started() const { return mRenderPassStarted; }
 
     // Finalize the layout if image has any deferred layout transition.
-    void finalizeImageLayout(Context *context, const ImageHelper *image);
+    void finalizeImageLayout(Context *context,
+                             const ImageHelperSource *source,
+                             const ImageHelper *image);
 
     angle::Result beginRenderPass(ContextVk *contextVk,
                                   MaybeImagelessFramebuffer &framebuffer,
@@ -1857,7 +1873,12 @@ class ImageHelper final : public Resource, public angle::Subject
     void releaseImage(RendererVk *renderer);
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
-    void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
+    void releaseImageFromShareContexts(RendererVk *renderer,
+                                       ContextVk *contextVk,
+                                       const ImageHelperSource *source);
+    void finalizeImageLayoutInShareContexts(RendererVk *renderer,
+                                            ContextVk *contextVk,
+                                            const ImageHelperSource *source);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2092,6 +2113,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // - Mipmap generation, where levelCount is 1 so only the base level is retained
     // - Image respecification, where every level (other than those explicitly skipped) is staged
     void stageSelfAsSubresourceUpdates(ContextVk *contextVk,
+                                       const ImageHelperSource *source,
                                        uint32_t levelCount,
                                        gl::TexLevelMask skipLevelsMask);
 

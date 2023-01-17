@@ -34,7 +34,7 @@ enum class TextureUpdateResult
     ImageRespecified,
 };
 
-class TextureVk : public TextureImpl, public angle::ObserverInterface
+class TextureVk : public TextureImpl, public angle::ObserverInterface, vk::ImageHelperSource
 {
   public:
     TextureVk(const gl::TextureState &state, RendererVk *renderer);

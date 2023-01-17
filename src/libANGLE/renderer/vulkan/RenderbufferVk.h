@@ -17,7 +17,9 @@
 namespace rx
 {
 
-class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
+class RenderbufferVk : public RenderbufferImpl,
+                       public angle::ObserverInterface,
+                       vk::ImageHelperSource
 {
   public:
     RenderbufferVk(const gl::RenderbufferState &state);

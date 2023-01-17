@@ -105,6 +105,7 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
 }
 
 angle::Result OverlayVk::onPresent(ContextVk *contextVk,
+                                   const vk::ImageHelperSource *imageToPresentSource,
                                    vk::ImageHelper *imageToPresent,
                                    const vk::ImageView *imageToPresentView,
                                    bool is90DegreeRotation)
@@ -162,9 +163,9 @@ angle::Result OverlayVk::onPresent(ContextVk *contextVk,
     params.graphWidgetCount = graphWidgetCount;
     params.rotateXY         = is90DegreeRotation;
 
-    return contextVk->getUtils().drawOverlay(contextVk, &textDataBuffer.get(),
-                                             &graphDataBuffer.get(), &mFontImage, &mFontImageView,
-                                             imageToPresent, imageToPresentView, params);
+    return contextVk->getUtils().drawOverlay(
+        contextVk, &textDataBuffer.get(), &graphDataBuffer.get(), &mFontImage, &mFontImageView,
+        imageToPresentSource, imageToPresent, imageToPresentView, params);
 }
 
 }  // namespace rx

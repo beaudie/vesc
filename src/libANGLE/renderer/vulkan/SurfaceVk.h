@@ -21,7 +21,9 @@ namespace rx
 {
 class RendererVk;
 
-class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
+class SurfaceVk : public SurfaceImpl,
+                  public angle::ObserverInterface,
+                  protected vk::ImageHelperSource
 {
   public:
     angle::Result getAttachmentRenderTarget(const gl::Context *context,

@@ -541,9 +541,9 @@ OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState, Re
       mColorAttachment(this),
       mDepthStencilAttachment(this)
 {
-    mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr, nullptr,
-                            gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
-    mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image,
+    mColorRenderTarget.init(this, &mColorAttachment.image, &mColorAttachment.imageViews, nullptr,
+                            nullptr, gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
+    mDepthStencilRenderTarget.init(this, &mDepthStencilAttachment.image,
                                    &mDepthStencilAttachment.imageViews, nullptr, nullptr,
                                    gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
 }
@@ -574,8 +574,9 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
         ANGLE_TRY(mColorAttachment.initialize(displayVk, mWidth, mHeight,
                                               renderer->getFormat(config->renderTargetFormat),
                                               samples, robustInit, mState.hasProtectedContent()));
-        mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageViews, nullptr,
-                                nullptr, gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
+        mColorRenderTarget.init(this, &mColorAttachment.image, &mColorAttachment.imageViews,
+                                nullptr, nullptr, gl::LevelIndex(0), 0, 1,
+                                RenderTargetTransience::Default);
     }
 
     if (config->depthStencilFormat != GL_NONE)
@@ -583,7 +584,7 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
         ANGLE_TRY(mDepthStencilAttachment.initialize(
             displayVk, mWidth, mHeight, renderer->getFormat(config->depthStencilFormat), samples,
             robustInit, mState.hasProtectedContent()));
-        mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image,
+        mDepthStencilRenderTarget.init(this, &mDepthStencilAttachment.image,
                                        &mDepthStencilAttachment.imageViews, nullptr, nullptr,
                                        gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     }
@@ -872,10 +873,11 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
-    mColorRenderTarget.init(&mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
+    mColorRenderTarget.init(this, &mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
                             gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
-    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr, nullptr,
-                                   gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
+    mDepthStencilRenderTarget.init(this, &mDepthStencilImage, &mDepthStencilImageViews, nullptr,
+                                   nullptr, gl::LevelIndex(0), 0, 1,
+                                   RenderTargetTransience::Default);
     mDepthStencilImageBinding.bind(&mDepthStencilImage);
     mColorImageMSBinding.bind(&mColorImageMS);
     mSwapchainStatus.isPending = false;
@@ -1560,7 +1562,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
         // Initialize the color render target with the multisampled targets.  If not multisampled,
         // the render target will be updated to refer to a swapchain image on every acquire.
-        mColorRenderTarget.init(&mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
+        mColorRenderTarget.init(this, &mColorImageMS, &mColorImageMSViews, nullptr, nullptr,
                                 gl::LevelIndex(0), 0, 1, RenderTargetTransience::Default);
     }
 
@@ -1592,7 +1594,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             vk::MemoryAllocationType::SwapchainDepthStencilImage));
 
-        mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr,
+        mDepthStencilRenderTarget.init(this, &mDepthStencilImage, &mDepthStencilImageViews, nullptr,
                                        nullptr, gl::LevelIndex(0), 0, 1,
                                        RenderTargetTransience::Default);
 
@@ -1688,14 +1690,14 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
     if (mDepthStencilImage.valid())
     {
         mDepthStencilImageViews.release(renderer, mDepthStencilImage.getResourceUse());
-        mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk);
+        mDepthStencilImage.releaseImageFromShareContexts(renderer, contextVk, this);
         mDepthStencilImage.releaseStagedUpdates(renderer);
     }
 
     if (mColorImageMS.valid())
     {
         mColorImageMSViews.release(renderer, mColorImageMS.getResourceUse());
-        mColorImageMS.releaseImageFromShareContexts(renderer, contextVk);
+        mColorImageMS.releaseImageFromShareContexts(renderer, contextVk, this);
         mColorImageMS.releaseStagedUpdates(renderer);
         contextVk->addGarbage(&mFramebufferMS);
     }
@@ -1866,8 +1868,8 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     // Because the color attachment defers layout changes until endRenderPass time, we must call
     // finalize the layout transition in the renderpass before we insert layout change to
     // ImageLayout::Present bellow.
-    contextVk->finalizeImageLayout(&image.image);
-    contextVk->finalizeImageLayout(&mColorImageMS);
+    contextVk->finalizeImageLayout(this, &image.image);
+    contextVk->finalizeImageLayout(this, &mColorImageMS);
 
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
@@ -2744,7 +2746,7 @@ angle::Result WindowSurfaceVk::drawOverlay(ContextVk *contextVk, SwapchainImage 
     ANGLE_TRY(image->imageViews.getLevelLayerDrawImageView(
         contextVk, image->image, vk::LevelIndex(0), 0, gl::SrgbWriteControlMode::Default,
         &imageView));
-    ANGLE_TRY(overlayVk->onPresent(contextVk, &image->image, imageView,
+    ANGLE_TRY(overlayVk->onPresent(contextVk, this, &image->image, imageView,
                                    Is90DegreeRotation(getPreTransform())));
 
     return angle::Result::Continue;
