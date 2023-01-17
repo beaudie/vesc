@@ -673,26 +673,10 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                                                             &originalCommandBuffer);
             break;
         }
-        case CustomTask::CheckCompletedCommands:
-        {
-            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
-            break;
-        }
         default:
             UNREACHABLE();
             break;
     }
-
-    return angle::Result::Continue;
-}
-
-angle::Result CommandProcessor::checkCompletedCommands(Context *context)
-{
-    ANGLE_TRY(checkAndPopPendingError(context));
-
-    CommandProcessorTask checkCompletedTask;
-    checkCompletedTask.initTask(CustomTask::CheckCompletedCommands);
-    queueCommand(std::move(checkCompletedTask));
 
     return angle::Result::Continue;
 }
