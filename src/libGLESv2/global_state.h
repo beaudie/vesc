@@ -11,6 +11,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
 
@@ -192,24 +193,52 @@ static ANGLE_INLINE void DirtyContextIfNeeded(Context *context)
 
 #if !defined(ANGLE_ENABLE_SHARE_CONTEXT_LOCK)
 #    define SCOPED_SHARE_CONTEXT_LOCK(context)
-#else
-ANGLE_INLINE std::unique_lock<angle::GlobalMutex> GetContextLock(Context *context)
-{
-#    if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
-    auto lock = std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex());
 
-    DirtyContextIfNeeded(context);
-    return lock;
-#    else
-    return context->isShared() ? std::unique_lock<angle::GlobalMutex>(egl::GetGlobalMutex())
-                               : std::unique_lock<angle::GlobalMutex>();
-#    endif
+#    define ANGLE_EGL_CONTEXT_LOCK(EP, THREAD, ...) egl::ContextMutex *const contextMutex = nullptr
+#    define ANGLE_EGL_CONTEXT_UNLOCK()
+#else
+ANGLE_INLINE egl::ContextMutex &GetContextMutex(const Context *context)
+{
+    return *context->getContextMutex();
+}
+
+ANGLE_INLINE egl::ContextMutex *TryGetContextMutex(const Context *context)
+{
+    return context != nullptr ? context->getContextMutex() : nullptr;
+}
+
+ANGLE_INLINE egl::ContextMutex *TryGetActiveSharedContextMutex(Context *context)
+{
+    if (context != nullptr)
+    {
+        context->ensureSharedMutexActive();
+        return context->getContextMutex();
+    }
+    return nullptr;
 }
 
 #    define SCOPED_SHARE_CONTEXT_LOCK(context) \
-        std::unique_lock<angle::GlobalMutex> shareContextLock = GetContextLock(context)
+        std::lock_guard<egl::ContextMutex> shareContextLock(GetContextMutex(context))
+
+#    define ANGLE_EGL_CONTEXT_LOCK(EP, THREAD, ...)                                          \
+        egl::ContextMutex *const contextMutex = GetContextMutex_##EP(THREAD, ##__VA_ARGS__); \
+        if (ANGLE_UNLIKELY(contextMutex))                                                    \
+        contextMutex->lock()
+#    define ANGLE_EGL_CONTEXT_UNLOCK()    \
+        if (ANGLE_UNLIKELY(contextMutex)) \
+        contextMutex->unlock()
 #endif
 
 }  // namespace gl
+
+#if defined(ANGLE_ENABLE_SHARE_CONTEXT_LOCK)
+namespace egl
+{
+ANGLE_INLINE ContextMutex *TryGetContextMutex(const Thread *thread)
+{
+    return TryGetContextMutex(thread->getContext());
+}
+}  // namespace egl
+#endif
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_

@@ -9,6 +9,7 @@ libangle_common_headers = [
   "src/common/Color.h",
   "src/common/Color.inc",
   "src/common/CompiledShaderState.h",
+  "src/common/FastMutex.h",
   "src/common/FastVector.h",
   "src/common/FixedQueue.h",
   "src/common/FixedVector.h",
@@ -63,6 +64,7 @@ libangle_common_headers = [
 ]
 
 libangle_common_sources = libangle_common_headers + [
+                            "src/common/FastMutex.cpp",
                             "src/common/Float16ToFloat32.cpp",
                             "src/common/MemoryBuffer.cpp",
                             "src/common/PackedEGLEnums_autogen.cpp",
@@ -293,6 +295,7 @@ libangle_headers = [
   "src/libANGLE/Sampler.h",
   "src/libANGLE/Semaphore.h",
   "src/libANGLE/Shader.h",
+  "src/libANGLE/SharedContextMutex.h",
   "src/libANGLE/SizedMRUCache.h",
   "src/libANGLE/State.h",
   "src/libANGLE/Stream.h",
@@ -424,6 +427,7 @@ libangle_sources = [
   "src/libANGLE/Sampler.cpp",
   "src/libANGLE/Semaphore.cpp",
   "src/libANGLE/Shader.cpp",
+  "src/libANGLE/SharedContextMutex.cpp",
   "src/libANGLE/State.cpp",
   "src/libANGLE/Stream.cpp",
   "src/libANGLE/Surface.cpp",
@@ -613,6 +617,8 @@ libangle_capture_sources = [
 ]
 
 libglesv2_sources = [
+  "src/libGLESv2/egl_context_mutex_autogen.h",
+  "src/libGLESv2/egl_context_mutex_impl.h",
   "src/libGLESv2/egl_ext_stubs.cpp",
   "src/libGLESv2/egl_ext_stubs_autogen.h",
   "src/libGLESv2/egl_stubs.cpp",
