@@ -77,7 +77,7 @@ declare_args() {
 
   angle_enable_global_mutex_recursion = is_android && angle_enable_vulkan
   angle_enable_global_mutex_load_time_allocate = is_android
-  angle_enable_global_mutex_unlock = false
+  angle_enable_global_mutex_unlock = angle_enable_vulkan
 
   angle_enable_shared_context_mutex = true
 }
