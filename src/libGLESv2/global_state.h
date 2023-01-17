@@ -11,6 +11,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/GlobalMutex.h"
 #include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
@@ -23,8 +24,6 @@
 
 namespace angle
 {
-using GlobalMutex = std::recursive_mutex;
-
 //  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
 //    itself, but allow the graphics code to access TLS directly rather than
 //    using the pthread API.
@@ -108,7 +107,6 @@ extern void SetCurrentThreadTLS(Thread *thread);
 extern thread_local Thread *gCurrentThread;
 #endif
 
-angle::GlobalMutex &GetGlobalMutex();
 gl::Context *GetGlobalLastContext();
 void SetGlobalLastContext(gl::Context *context);
 Thread *GetCurrentThread();
@@ -127,8 +125,7 @@ class [[nodiscard]] ScopedSyncCurrentContextFromThread
 
 }  // namespace egl
 
-#define ANGLE_SCOPED_GLOBAL_LOCK() \
-    std::lock_guard<angle::GlobalMutex> globalMutexLock(egl::GetGlobalMutex())
+#define ANGLE_SCOPED_GLOBAL_LOCK() egl::ScopedGlobalMutexLock globalMutexLock
 
 namespace gl
 {
