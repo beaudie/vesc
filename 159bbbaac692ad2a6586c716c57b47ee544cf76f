@@ -16,6 +16,24 @@
       "message": "For some reason this makes the FenceSyncTest tests switch to crash instead of fail. I can\u0027t reproduce this, or get any kind of crash stack. I don\u0027t have a local Windows setup to try messing with it. The error goes away under ASAN. I\u0027m going to land this, Cody keep an eye out for anything suspicious.",
       "revId": "159bbbaac692ad2a6586c716c57b47ee544cf76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cac4c6c_ef3ef601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-17T21:29:39Z",
+      "side": 1,
+      "message": "The crash also goes away when run as Debug instead of Release.",
+      "parentUuid": "5bab86c6_a448b21b",
+      "revId": "159bbbaac692ad2a6586c716c57b47ee544cf76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
