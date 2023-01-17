@@ -22,6 +22,7 @@
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Query.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -333,6 +334,8 @@ State::State(const State *shareContextState,
              egl::ShareGroup *shareGroup,
              TextureManager *shareTextures,
              SemaphoreManager *shareSemaphores,
+             egl::ContextMutex *sharedContextMutex,
+             egl::DummyContextMutex *dummyContextMutex,
              const OverlayType *overlay,
              const EGLenum clientType,
              const Version &clientVersion,
@@ -354,6 +357,10 @@ State::State(const State *shareContextState,
       mIsDebugContext(debug),
       mClientVersion(clientVersion),
       mShareGroup(shareGroup),
+      mSharedContextMutex(sharedContextMutex),
+      mDummyContextMutex(dummyContextMutex),
+      mContextMutex(dummyContextMutex == nullptr ? sharedContextMutex : dummyContextMutex),
+      mIsSharedContextMutexActive(dummyContextMutex == nullptr),
       mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),
       mShaderProgramManager(
           AllocateOrGetSharedResourceManager(shareContextState, &State::mShaderProgramManager)),
@@ -662,6 +669,11 @@ void State::reset(const Context *context)
     mClipDistancesEnabled.reset();
 
     setAllDirtyBits();
+}
+
+bool State::isDummyContextMutexLocked() const
+{
+    return (mDummyContextMutex != nullptr && mDummyContextMutex->getState() != 0);
 }
 
 ANGLE_INLINE void State::unsetActiveTextures(const ActiveTextureMask &textureMask)
