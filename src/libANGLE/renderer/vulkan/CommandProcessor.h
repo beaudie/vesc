@@ -306,8 +306,6 @@ class CommandQueue : angle::NonCopyable
   public:
     // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
     // that are only accessed via ThreadSafeCommandQueue API.
-    angle::Result ensureNoPendingWork(Context *context) const { return angle::Result::Continue; }
-
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
     {
         return mQueueMap.getDevicePriority(priority);
@@ -623,7 +621,9 @@ class CommandProcessor : public Context
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
-    angle::Result ensureNoPendingWork(Context *context);
+    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
+                                                  const QueueSerial &queueSerial);
+    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const ResourceUse &use);
 
     bool isBusy(RendererVk *renderer) const;
 
