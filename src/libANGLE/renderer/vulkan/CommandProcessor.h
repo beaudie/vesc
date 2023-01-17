@@ -310,8 +310,6 @@ class CommandQueue : angle::NonCopyable
   public:
     // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
     // that are only accessed via ThreadSafeCommandQueue API.
-    angle::Result ensureNoPendingWork(Context *context) const { return angle::Result::Continue; }
-
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
     {
         return mQueueMap.getDevicePriority(priority);
@@ -615,8 +613,6 @@ class CommandProcessor : public Context
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
-    angle::Result ensureNoPendingWork(Context *context);
-
     egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
         return mCommandQueue.getDriverPriority(priority);
@@ -717,6 +713,11 @@ class ThreadSafeCommandProcessor : public CommandProcessor
         std::unique_lock<std::mutex> lock(mMutex);
         CommandProcessor::handleDeviceLost(renderer);
     }
+
+    // Wait until the desired serial has been submitted.
+    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
+                                                  const QueueSerial &queueSerial);
+    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const ResourceUse &use);
 
     // Wait until the desired serial has been completed.
     angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
