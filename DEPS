@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '7b7e5ac4ae5d7205b8abc32fdc5832aca9ce5891',
+  'chromium_revision': '064c87a2def6a5ac4cfa9d5f90c5f2d1d6c7ca50',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -130,13 +130,13 @@ vars = {
 
   # ninja CIPD package version.
   # https://chrome-infra-packages.appspot.com/p/infra/3pp/tools/ninja
-  'ninja_version': 'version:2@1.8.2.chromium.3',
+  'ninja_version': 'version:2@1.11.1.chromium.6',
 }
 
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@396e12289d599701b56773025d37195280af15a2',
+    'url': '{chromium_git}/chromium/src/build.git@d3fd4d4c38d7968b810006caf35a4c93614195a7',
     'condition': 'not build_with_chromium',
   },
 
@@ -199,7 +199,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@469dcf72cec3e49b7f6cffae3a500e0ee9931e3b',
+    'url': '{chromium_git}/chromium/src/testing@3784596c23afffab1d3367c81defbefb16b0d1db',
     'condition': 'not build_with_chromium',
   },
 
@@ -613,7 +613,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/turbine',
-              'version': 'tkDRS82bARx4x6zEAw-ZmPcOBVY2WnTvK2Gai3TqPSsC',
+              'version': 'uQFvRkwygckj0pmxUx9_4WqWm-VdcDxs2o1t3xyEDjYC',
           },
       ],
       'condition': 'checkout_android and not build_with_chromium',
@@ -650,7 +650,7 @@ deps = {
   },
 
   'tools/clang': {
-    'url': '{chromium_git}/chromium/src/tools/clang.git@9f2d7801df4c3c0241f3ddfcf1d52195074a4886',
+    'url': '{chromium_git}/chromium/src/tools/clang.git@c042194eaa0ec0874b062f404ba80c7a935a8625',
     'condition': 'not build_with_chromium',
   },
 
@@ -696,7 +696,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@80cd690b34e02b469aab45970510feb8dfe6fc02',
+    'url': '{chromium_git}/chromium/src/tools/perf@946d9d6a48a51b5ff4ad2b0bbadae4ecd0d7a991',
     'condition': 'not build_with_chromium',
   },
 
