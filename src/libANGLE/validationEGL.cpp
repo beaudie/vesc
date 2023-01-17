@@ -6216,13 +6216,6 @@ bool ValidateSwapBuffersWithFrameTokenANGLE(const ValidationContext *val,
     return true;
 }
 
-bool ValidatePrepareSwapBuffersANGLE(const ValidationContext *val,
-                                     const Display *display,
-                                     SurfaceID surfaceID)
-{
-    return ValidateSwapBuffers(val, display, surfaceID);
-}
-
 bool ValidateSignalSyncKHR(const ValidationContext *val,
                            const Display *display,
                            SyncID sync,
