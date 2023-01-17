@@ -30,6 +30,7 @@
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/FramebufferAttachment.h"
+#include "libANGLE/GlobalMutex.h"
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/PixelLocalStorage.h"
 #include "libANGLE/Program.h"
@@ -9551,6 +9552,13 @@ void Context::ensureSharedMutexActive(uint32_t activationDelayMicro)
         return;
     }
     ASSERT(mState.mSingleContextMutex != nullptr);
+
+    // Unlock GlobalMutex for two reasons:
+    // - avoid long bloking while waiting.
+    // - avoid infinite waiting. If this Context is in the middle of temporary unlock in other
+    //   thread, it will not be able to lock GlobalMutex again and therefore unlock the
+    //   "SingleContextMutex" later.
+    egl::ScopedGlobalMutexUnlock eglUnlock(egl::GlobalMutexUnlockType::IfOwned);
 
     // First, start using "SharedContextMutex"
     mState.useSharedContextMutex();
