@@ -165,6 +165,8 @@ typename std::remove_reference<PackedT>::type PackParam(FromT from)
         auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__));                       \
         if (!ANGLE_LOCAL_VAR)                                                              \
         {                                                                                  \
+            if (ANGLE_UNLIKELY(contextMutex))                                              \
+                contextMutex->unlock();                                                    \
             return GetDefaultReturnValue<angle::EntryPoint::EGL##EP, RETURN_TYPE>(THREAD); \
         }                                                                                  \
     } while (0)
@@ -177,6 +179,8 @@ typename std::remove_reference<PackedT>::type PackParam(FromT from)
         auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__)); \
         if (!ANGLE_LOCAL_VAR)                                        \
         {                                                            \
+            if (ANGLE_UNLIKELY(contextMutex))                        \
+                contextMutex->unlock();                              \
             return;                                                  \
         }                                                            \
     } while (0)
