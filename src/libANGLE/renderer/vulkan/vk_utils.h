@@ -1225,6 +1225,7 @@ enum class RenderPassClosureReason
     GLFinish,
     EGLSwapBuffers,
     EGLWaitClient,
+    SurfaceUnMakeCurrent,
 
     // Closure due to switching rendering to another framebuffer.
     FramebufferBindingChange,
