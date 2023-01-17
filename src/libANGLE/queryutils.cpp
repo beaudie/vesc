@@ -25,6 +25,7 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/Shader.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Uniform.h"
@@ -4438,8 +4439,11 @@ egl::Error QuerySurfaceAttrib(const Display *display,
             *value = surface->isTimestampsEnabled();
             break;
         case EGL_BUFFER_AGE_EXT:
+        {
+            std::lock_guard<egl::ContextMutex> shareContextLock(*context->getContextMutex());
             ANGLE_TRY(surface->getBufferAge(context, value));
             break;
+        }
         case EGL_BITMAP_PITCH_KHR:
             *value = surface->getBitmapPitch();
             break;

@@ -651,6 +651,7 @@ EGLBoolean PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
         EGL_EVENT(PrepareSwapBuffersANGLE, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
                   (uintptr_t)dpy, (uintptr_t)surface);
 
+        egl::ContextMutex *const contextMutex = nullptr;
         ANGLE_EGL_VALIDATE(thread, PrepareSwapBuffersANGLE, GetDisplayIfValid(dpyPacked),
                            EGLBoolean, dpyPacked, surfacePacked);
 
