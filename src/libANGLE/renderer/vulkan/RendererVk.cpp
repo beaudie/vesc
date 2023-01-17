@@ -197,6 +197,8 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/7685
     "UNASSIGNED-input-attachment-descriptor-not-in-subpass",
     "VUID-vkCmdDraw-None-02686",
+<<<<<<< PATCH SET (0a16eb Revert "Suppress more VVL errors about vkCmdDraw*-None")
+=======
     "VUID-vkCmdDrawIndexed-None-02686",
     "VUID-vkCmdDrawIndirect-None-02686",
     "VUID-vkCmdDrawIndirectCount-None-02686",
@@ -211,6 +213,7 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-None-06887",
     // http://anglebug.com/7865
     "VUID-VkDescriptorImageInfo-imageView-06711",
+>>>>>>> BASE      (45d315 Roll vulkan-deps from 3ff606af6dec to cd80e810d579 (18 revis)
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
