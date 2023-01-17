@@ -562,6 +562,11 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result updateTextureLabel(ContextVk *contextVk);
 
+    vk::ImageSourceID getImageSourceID() const
+    {
+        return static_cast<uint64_t>(reinterpret_cast<uintptr_t>(this));
+    }
+
     bool mOwnsImage;
     bool mRequiresMutableStorage;
     vk::ImageAccess mRequiredImageAccess;

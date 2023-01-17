@@ -2593,8 +2593,8 @@ void TextureVk::initSingleLayerRenderTargets(ContextVk *contextVk,
             }
         }
 
-        renderTargets[layerIndex].init(drawImage, drawImageViews, resolveImage, resolveImageViews,
-                                       getNativeImageLevel(levelIndex),
+        renderTargets[layerIndex].init(getImageSourceID(), drawImage, drawImageViews, resolveImage,
+                                       resolveImageViews, getNativeImageLevel(levelIndex),
                                        getNativeImageLayer(layerIndex), 1, transience);
     }
 }
@@ -2622,8 +2622,9 @@ RenderTargetVk *TextureVk::getMultiLayerRenderTarget(ContextVk *contextVk,
         rt = std::make_unique<RenderTargetVk>();
     }
 
-    rt->init(mImage, &getImageViews(), nullptr, nullptr, getNativeImageLevel(level),
-             getNativeImageLayer(layerIndex), layerCount, RenderTargetTransience::Default);
+    rt->init(getImageSourceID(), mImage, &getImageViews(), nullptr, nullptr,
+             getNativeImageLevel(level), getNativeImageLayer(layerIndex), layerCount,
+             RenderTargetTransience::Default);
 
     return rt.get();
 }
@@ -3260,10 +3261,11 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (mOwnsImage)
         {
-            mImage->releaseImageFromShareContexts(renderer, contextVk);
+            mImage->releaseImageFromShareContexts(renderer, contextVk, getImageSourceID());
         }
         else
         {
+            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, getImageSourceID());
             mImageObserverBinding.bind(nullptr);
             mImage = nullptr;
         }
@@ -3273,7 +3275,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (image.valid())
         {
-            image.releaseImageFromShareContexts(renderer, contextVk);
+            image.releaseImageFromShareContexts(renderer, contextVk, getImageSourceID());
         }
     }
 
@@ -3744,7 +3746,8 @@ void TextureVk::stageSelfAsSubresourceUpdates(ContextVk *contextVk)
     // lifetime.
     releaseImageViews(contextVk);
     // Make the image stage itself as updates to its levels.
-    mImage->stageSelfAsSubresourceUpdates(contextVk, mImage->getLevelCount(), mRedefinedLevels);
+    mImage->stageSelfAsSubresourceUpdates(contextVk, getImageSourceID(), mImage->getLevelCount(),
+                                          mRedefinedLevels);
 }
 
 void TextureVk::updateCachedImageViewSerials()
