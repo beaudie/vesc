@@ -5048,6 +5048,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mImage(std::move(other.mImage)),
       mDeviceMemory(std::move(other.mDeviceMemory)),
       mVmaAllocation(std::move(other.mVmaAllocation)),
+      mVkImageCreateInfo(other.mVkImageCreateInfo),
       mImageType(other.mImageType),
       mTilingMode(other.mTilingMode),
       mCreateFlags(other.mCreateFlags),
@@ -5062,6 +5063,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
       mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
+      mRenderPassUsageFlags(other.mRenderPassUsageFlags),
+      mBarrierQueueSerial(other.mBarrierQueueSerial),
       mYcbcrConversionDesc(other.mYcbcrConversionDesc),
       mFirstAllocatedLevel(other.mFirstAllocatedLevel),
       mLayerCount(other.mLayerCount),
@@ -5077,6 +5080,9 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mMemoryTypeIndex(std::move(other.mMemoryTypeIndex))
 {
     ASSERT(this != &other);
+    // angle::Subject doesn't support move or copy. Ensure "other" Subject does not have observers
+    // attached. Otherwise, observers will point to the invalid "other" object.
+    ASSERT(!other.hasObservers());
     other.resetCachedProperties();
 }
 
