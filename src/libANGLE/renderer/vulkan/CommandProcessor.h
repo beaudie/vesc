@@ -561,7 +561,7 @@ class ThreadSafeCommandQueue : public CommandQueue
 class CommandProcessor : public Context
 {
   public:
-    CommandProcessor(RendererVk *renderer);
+    CommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue);
     ~CommandProcessor() override;
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
@@ -575,7 +575,7 @@ class CommandProcessor : public Context
                      const char *function,
                      unsigned int line) override;
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
+    angle::Result init();
 
     void destroy(Context *context);
 
@@ -627,26 +627,6 @@ class CommandProcessor : public Context
 
     bool isBusy(RendererVk *renderer) const;
 
-    egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
-    {
-        return mCommandQueue.getDriverPriority(priority);
-    }
-    uint32_t getDeviceQueueIndex() const { return mCommandQueue.getDeviceQueueIndex(); }
-    VkQueue getQueue(egl::ContextPriority priority) { return mCommandQueue.getQueue(priority); }
-
-    // Note that due to inheritance from Context, this class has a set of perf counters as well,
-    // but currently only the counters in the member command queue are of interest.
-    const angle::VulkanPerfCounters getPerfCounters() const
-    {
-        return mCommandQueue.getPerfCounters();
-    }
-    void resetPerFramePerfCounters() { mCommandQueue.resetPerFramePerfCounters(); }
-
-    ANGLE_INLINE bool hasUnfinishedUse(const ResourceUse &use) const
-    {
-        return mCommandQueue.hasUnfinishedUse(use);
-    }
-
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
@@ -690,7 +670,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    ThreadSafeCommandQueue mCommandQueue;
+    ThreadSafeCommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
