@@ -12,6 +12,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Renderbuffer.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
@@ -315,6 +316,19 @@ Image::Image(rx::EGLImplFactory *factory,
     ASSERT(mImplementation != nullptr);
     ASSERT(buffer != nullptr);
 
+#if defined(ANGLE_ENABLE_SHARE_CONTEXT_LOCK) && !defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
+    if (context != nullptr)
+    {
+        ASSERT(context->getState().isUsingSharedContextMutex());
+        mSharedContextMutex = context->getContextMutex();
+        mSharedContextMutex->addRef();
+    }
+    else
+#endif
+    {
+        mSharedContextMutex = nullptr;
+    }
+
     mState.source->addImageSource(this);
 }
 
@@ -350,6 +364,12 @@ void Image::onDestroy(const Display *display)
 Image::~Image()
 {
     SafeDelete(mImplementation);
+
+    if (mSharedContextMutex != nullptr)
+    {
+        mSharedContextMutex->release();
+        mSharedContextMutex = nullptr;
+    }
 }
 
 void Image::setLabel(EGLLabelKHR label)
