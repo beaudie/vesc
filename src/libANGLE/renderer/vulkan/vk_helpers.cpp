@@ -999,6 +999,15 @@ angle::Result InitDynamicDescriptorPool(Context *context,
 
     return angle::Result::Continue;
 }
+
+bool CheckSubpassCommandBufferCount(uint32_t count)
+{
+    // When using angle::SharedRingBufferAllocator we must ensure that allocator is attached and
+    // detached from the same priv::SecondaryCommandBuffer instance.
+    // Custom command buffer (priv::SecondaryCommandBuffer) may contain commands for multiple
+    // subpasses, therefore we do not need multiple buffers.
+    return (count == 0 || !RenderPassCommandBuffer::ExecutesInline());
+}
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -1719,8 +1728,10 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mImageOptimizeForPresent           = nullptr;
 
+    ASSERT(CheckSubpassCommandBufferCount(getCommandBufferCount()));
+
     // Reset and re-initialize the command buffers
-    for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
+    for (uint32_t subpass = 0; subpass < getCommandBufferCount(); ++subpass)
     {
         context->getRenderer()->resetRenderPassCommandBuffer(std::move(mCommandBuffers[subpass]));
     }
@@ -2428,7 +2439,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                   : VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 
     primary->beginRenderPass(beginInfo, kSubpassContents);
-    for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
+    for (uint32_t subpass = 0; subpass < getCommandBufferCount(); ++subpass)
     {
         if (subpass > 0)
         {
@@ -2519,12 +2530,14 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
 
 void RenderPassCommandBufferHelper::attachAllocator(SecondaryCommandMemoryAllocator *allocator)
 {
+    ASSERT(CheckSubpassCommandBufferCount(getCommandBufferCount()));
     mCommandAllocator.attachAllocator(allocator);
     getCommandBuffer().attachAllocator(mCommandAllocator.getAllocator());
 }
 
 SecondaryCommandMemoryAllocator *RenderPassCommandBufferHelper::detachAllocator()
 {
+    ASSERT(CheckSubpassCommandBufferCount(getCommandBufferCount()));
     getCommandBuffer().detachAllocator(mCommandAllocator.getAllocator());
     return mCommandAllocator.detachAllocator(getCommandBuffer().empty());
 }
@@ -2580,7 +2593,7 @@ void RenderPassCommandBufferHelper::addCommandDiagnostics(ContextVk *contextVk)
         out << "StoreOp: " << storeOps << "\\l";
     }
 
-    for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
+    for (uint32_t subpass = 0; subpass < getCommandBufferCount(); ++subpass)
     {
         if (subpass > 0)
         {
@@ -2657,7 +2670,7 @@ void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::recycleCommand
     CommandBufferHelperT **commandBuffer)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->getAllocator()->hasAllocatorLinks());
+    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->hasAllocatorLinks());
     (*commandBuffer)->markOpen();
 
     RecycleCommandBufferHelper(device, &mCommandBufferHelperFreeList, commandBuffer,
