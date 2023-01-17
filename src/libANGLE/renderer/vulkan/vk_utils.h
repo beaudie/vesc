@@ -21,6 +21,7 @@
 #include "common/backtrace_utils.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
+#include "libANGLE/GlobalMutex.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
@@ -54,6 +55,7 @@ namespace egl
 class Display;
 class Image;
 class ShareGroup;
+class ContextMutex;
 }  // namespace egl
 
 namespace gl
@@ -276,12 +278,21 @@ class [[nodiscard]] ScopedQueueSerialIndex final : angle::NonCopyable
     QueueSerialIndexAllocator *mIndexAllocator;
 };
 
+enum class ContextType
+{
+    kOther,
+    kContextVk,
+    kDisplayVk,
+};
+
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
 class Context : angle::NonCopyable
 {
   public:
-    Context(RendererVk *renderer);
+    Context(RendererVk *renderer, ContextType type = ContextType::kOther);
     virtual ~Context();
+
+    ContextType getType() const { return mType; }
 
     virtual void handleError(VkResult result,
                              const char *file,
@@ -295,6 +306,7 @@ class Context : angle::NonCopyable
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
   protected:
+    const ContextType mType;
     RendererVk *const mRenderer;
     angle::VulkanPerfCounters mPerfCounters;
 };
@@ -1065,6 +1077,46 @@ angle::Result SetDebugUtilsObjectName(ContextVk *contextVk,
                                       uint64_t handle,
                                       const std::string &label);
 
+namespace priv
+{
+class [[nodiscard]] ScopedContextUnlock final : angle::NonCopyable
+{
+  public:
+    explicit ScopedContextUnlock(Context *context);
+    explicit ScopedContextUnlock(ContextVk *contextVk);
+    // When "contextVk" is nullptr, "context" must be "ContextType::kDisplayVk".
+    // Otherwise, "context" may be either "contextVk" or "ContextType::kDisplayVk".
+    ScopedContextUnlock(Context *context, ContextVk *contextVk);
+
+  private:
+    class [[nodiscard]] ContextUnlock final : angle::NonCopyable
+    {
+      public:
+        ContextUnlock(egl::ContextMutex *contextMutex);
+        ~ContextUnlock();
+
+      private:
+        egl::ContextMutex *mContextMutex;
+    };
+
+    // List in unlock order (destructors will lock in reverse order)
+    ContextUnlock mContextUnlock;
+    egl::ScopedGlobalMutexUnlock mEglUnlock;
+};
+
+// Dummy implementation to avoid conditional compilation.
+class [[nodiscard]] DummyScopedContextUnlock final : angle::NonCopyable
+{
+  public:
+    explicit DummyScopedContextUnlock(Context *context, ContextVk *contextVk = nullptr) {}
+};
+}  // namespace priv
+
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_UNLOCK)
+using ScopedContextUnlock = priv::ScopedContextUnlock;
+#else
+using ScopedContextUnlock                    = priv::DummyScopedContextUnlock;
+#endif
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
