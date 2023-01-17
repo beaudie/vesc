@@ -48,9 +48,18 @@ angle::Result VulkanSecondaryCommandBuffer::initialize(Context *context,
                                                        bool isRenderPassCommandBuffer,
                                                        SecondaryCommandMemoryAllocator *allocator)
 {
+    ASSERT(!valid());
+
+    // Allow "empty()" to return valid result even when buffer is invalid (to simplify assertions).
+    mAnyCommand = false;
+
+    if (pool == nullptr)
+    {
+        return angle::Result::Continue;
+    }
+
     mCommandPool = pool;
     mCommandTracker.reset();
-    mAnyCommand = false;
 
     ANGLE_TRY(pool->allocate(context, this));
 

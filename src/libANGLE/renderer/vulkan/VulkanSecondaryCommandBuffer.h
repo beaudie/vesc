@@ -51,6 +51,7 @@ class VulkanSecondaryCommandBuffer : public priv::CommandBuffer
         const RenderPassDesc &renderPassDesc,
         VkCommandBufferInheritanceInfo *inheritanceInfoOut);
 
+    // The "pool" may be "nullptr" when initialization performed in a Pool-detached state.
     angle::Result initialize(Context *context,
                              SecondaryCommandPool *pool,
                              bool isRenderPassCommandBuffer,
