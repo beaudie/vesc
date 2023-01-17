@@ -33,6 +33,8 @@
 namespace egl
 {
 class ShareGroup;
+class ContextMutex;
+class SingleContextMutex;
 }  // namespace egl
 
 namespace gl
@@ -91,6 +93,8 @@ class State : angle::NonCopyable
           egl::ShareGroup *shareGroup,
           TextureManager *shareTextures,
           SemaphoreManager *shareSemaphores,
+          egl::ContextMutex *sharedContextMutex,
+          egl::SingleContextMutex *singleContextMutex,
           const OverlayType *overlay,
           const EGLenum clientType,
           const Version &clientVersion,
@@ -124,6 +128,17 @@ class State : angle::NonCopyable
     const Extensions &getExtensions() const { return mExtensions; }
     const Limitations &getLimitations() const { return mLimitations; }
     egl::ShareGroup *getShareGroup() const { return mShareGroup; }
+
+    egl::ContextMutex *getContextMutex() const
+    {
+        return mContextMutex.load(std::memory_order_relaxed);
+    }
+
+    // "ContextMutex" MUST be locked during this call.
+    bool isSingleContextMutexLocked() const;
+
+    // For debugging purposes
+    bool isUsingSharedContextMutex() const { return getContextMutex() == mSharedContextMutex; }
 
     bool isWebGL() const { return mExtensions.webglCompatibilityANGLE; }
 
@@ -990,6 +1005,19 @@ class State : angle::NonCopyable
     angle::Result syncProgram(const Context *context, Command command);
     angle::Result syncProgramPipelineObject(const Context *context, Command command);
 
+    void useSharedContextMutex() { mContextMutex.store(mSharedContextMutex); }
+
+    void activateSharedContextMutex()
+    {
+        ASSERT(isUsingSharedContextMutex());
+        mIsSharedContextMutexActive.store(1, std::memory_order_release);
+    }
+
+    bool isSharedContextMutexActive() const
+    {
+        return (mIsSharedContextMutexActive.load(std::memory_order_acquire) != 0);
+    }
+
     using DirtyObjectHandler = angle::Result (State::*)(const Context *context, Command command);
 
     static constexpr DirtyObjectHandler kDirtyObjectHandlers[DIRTY_OBJECT_MAX] = {
@@ -1049,6 +1077,10 @@ class State : angle::NonCopyable
     Limitations mLimitations;
 
     egl::ShareGroup *mShareGroup;
+    egl::ContextMutex *const mSharedContextMutex;
+    egl::SingleContextMutex *const mSingleContextMutex;
+    std::atomic<egl::ContextMutex *> mContextMutex;  // Simple pointer without reference counting
+    std::atomic_int mIsSharedContextMutexActive;
 
     // Resource managers.
     BufferManager *mBufferManager;
