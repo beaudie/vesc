@@ -2090,6 +2090,34 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilResolveImageLayout(Conte
     depthStencilResolveImage->resetRenderPassUsageFlags();
 }
 
+bool RenderPassCommandBufferHelper::isImageAttached(const ImageHelper *image) const
+{
+    if (!usesImage(*image))
+    {
+        return false;
+    }
+
+    if (image->hasRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment))
+    {
+        for (PackedAttachmentIndex index = kAttachmentIndexZero; index < mColorAttachmentsCount;
+             ++index)
+        {
+            if (mColorAttachments[index].getImage() == image ||
+                mColorResolveAttachments[index].getImage() == image)
+            {
+                return true;
+            }
+        }
+    }
+
+    if (mDepthAttachment.getImage() == image || mDepthResolveAttachment.getImage() == image)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void RenderPassCommandBufferHelper::finalizeImageLayout(Context *context, const ImageHelper *image)
 {
     if (image->hasRenderPassUsageFlag(RenderPassUsage::RenderTargetAttachment))
@@ -5510,6 +5538,20 @@ void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk 
     }
 
     releaseImage(renderer);
+}
+
+angle::Result ImageHelper::flushImageFromShareContexts(ContextVk *contextVk)
+{
+    ASSERT(contextVk != nullptr);
+    if (mImageSerial.valid())
+    {
+        const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
+        for (ContextVk *ctx : shareContextSet)
+        {
+            ANGLE_TRY(ctx->flushRenderPassAttachment(this));
+        }
+    }
+    return angle::Result::Continue;
 }
 
 void ImageHelper::releaseStagedUpdates(RendererVk *renderer)

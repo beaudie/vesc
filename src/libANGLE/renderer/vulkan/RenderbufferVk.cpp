@@ -320,6 +320,10 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     }
     else
     {
+        if (mImage)
+        {
+            (void)mImage->flushImageFromShareContexts(contextVk);
+        }
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
     }

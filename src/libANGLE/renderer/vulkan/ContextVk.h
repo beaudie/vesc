@@ -547,6 +547,16 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         }
     }
 
+    angle::Result flushRenderPassAttachment(const vk::ImageHelper *image)
+    {
+        if (mRenderPassCommands->started() && mRenderPassCommands->isImageAttached(image))
+        {
+            ANGLE_TRY(
+                flushCommandsAndEndRenderPass(RenderPassClosureReason::FlushRenderPassAttachment));
+        }
+        return angle::Result::Continue;
+    }
+
     angle::Result getOutsideRenderPassCommandBuffer(
         const vk::CommandBufferAccess &access,
         vk::OutsideRenderPassCommandBuffer **commandBufferOut)

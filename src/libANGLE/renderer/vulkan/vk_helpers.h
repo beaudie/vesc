@@ -998,6 +998,7 @@ class RenderPassAttachment final
     bool hasWriteAccess() const { return mAccess == ResourceAccess::Write; }
 
     ImageHelper *getImage() { return mImage; }
+    const ImageHelper *getImage() const { return mImage; }
 
   private:
     bool hasWriteAfterInvalidate(uint32_t currentCmdCount) const;
@@ -1031,6 +1032,10 @@ class PackedRenderPassAttachmentArray final
     PackedRenderPassAttachmentArray() : mAttachments{} {}
     ~PackedRenderPassAttachmentArray() = default;
     RenderPassAttachment &operator[](PackedAttachmentIndex index)
+    {
+        return mAttachments[index.get()];
+    }
+    const RenderPassAttachment &operator[](PackedAttachmentIndex index) const
     {
         return mAttachments[index.get()];
     }
@@ -1340,6 +1345,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                  const RenderPass *renderPass);
 
     bool started() const { return mRenderPassStarted; }
+
+    bool isImageAttached(const ImageHelper *image) const;
 
     // Finalize the layout if image has any deferred layout transition.
     void finalizeImageLayout(Context *context, const ImageHelper *image);
@@ -1854,6 +1861,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // accessing to it.
     void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
+
+    angle::Result flushImageFromShareContexts(ContextVk *contextVk);
 
     bool valid() const { return mImage.valid(); }
 
