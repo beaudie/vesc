@@ -550,8 +550,6 @@ class RendererVk : angle::NonCopyable
     angle::Result submitCommands(vk::Context *context,
                                  bool hasProtectedContent,
                                  egl::ContextPriority contextPriority,
-                                 std::vector<VkSemaphore> &&waitSemaphores,
-                                 std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks,
                                  const vk::Semaphore *signalSemaphore,
                                  vk::SecondaryCommandPools *commandPools,
                                  const QueueSerial &submitSerialOut);
@@ -565,6 +563,14 @@ class RendererVk : angle::NonCopyable
                                                             VkResult *result);
     angle::Result finish(vk::Context *context, bool hasProtectedContent);
     angle::Result checkCompletedCommands(vk::Context *context);
+
+    void flushWaitSemaphores(bool hasProtectedContent,
+                             std::vector<VkSemaphore> &&waitSemaphores,
+                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+    {
+        mCommandQueue.flushWaitSemaphores(hasProtectedContent, std::move(waitSemaphores),
+                                          std::move(waitSemaphoreStageMasks));
+    }
 
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,

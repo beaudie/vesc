@@ -3372,6 +3372,13 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
         }
     }
 
+    if (!mWaitSemaphores.empty())
+    {
+        mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
+                                       std::move(mWaitSemaphoreStageMasks));
+    }
+    ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
+
     if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
     {
         dumpCommandStreamDiagnostics();
@@ -3387,10 +3394,9 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
 
     ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
 
-    ANGLE_TRY(mRenderer->submitCommands(
-        this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
-        std::move(mWaitSemaphoreStageMasks), signalSemaphore, &mCommandPools,
-        QueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial)));
+    ANGLE_TRY(mRenderer->submitCommands(this, hasProtectedContent(), mContextPriority,
+                                        signalSemaphore, &mCommandPools,
+                                        QueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial)));
 
     ASSERT(mLastSubmittedSerial < mLastFlushedSerial);
     mLastSubmittedSerial = mLastFlushedSerial;
