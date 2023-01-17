@@ -362,14 +362,6 @@ ContextMutex *GetContextMutex_ForceGPUSwitchANGLE(Thread *thread, egl::Display *
     return nullptr;
 }
 
-// EGL_ANGLE_prepare_swap_buffers
-ContextMutex *GetContextMutex_PrepareSwapBuffersANGLE(Thread *thread, egl::Display *dpyPacked)
-{
-    // Custom API, implemented in PrepareSwapBuffersANGLE().
-    UNREACHABLE();
-    return nullptr;
-}
-
 // EGL_ANGLE_program_cache_control
 ContextMutex *GetContextMutex_ProgramCacheGetAttribANGLE(Thread *thread, egl::Display *dpyPacked)
 {
