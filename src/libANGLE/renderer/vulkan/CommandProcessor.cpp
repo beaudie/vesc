@@ -252,23 +252,40 @@ void CommandProcessorTask::initTask()
     mProtectionType                 = ProtectionType::InvalidEnum;
 }
 
+void CommandProcessorTask::initFlushWaitSemaphores(
+    ProtectionType protectionType,
+    egl::ContextPriority priority,
+    std::vector<VkSemaphore> &&waitSemaphores,
+    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+{
+    mTask                    = CustomTask::FlushWaitSemaphores;
+    mPriority                = priority;
+    mProtectionType          = protectionType;
+    mWaitSemaphores          = std::move(waitSemaphores);
+    mWaitSemaphoreStageMasks = std::move(waitSemaphoreStageMasks);
+}
+
 void CommandProcessorTask::initOutsideRenderPassProcessCommands(
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper *commandBuffer)
 {
     mTask                           = CustomTask::ProcessOutsideRenderPassCommands;
     mOutsideRenderPassCommandBuffer = commandBuffer;
+    mPriority                       = priority;
     mProtectionType                 = protectionType;
 }
 
 void CommandProcessorTask::initRenderPassProcessCommands(
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     RenderPassCommandBufferHelper *commandBuffer,
     const RenderPass *renderPass)
 {
     mTask                    = CustomTask::ProcessRenderPassCommands;
     mRenderPassCommandBuffer = commandBuffer;
     mRenderPass              = renderPass;
+    mPriority                = priority;
     mProtectionType          = protectionType;
 }
 
@@ -374,17 +391,6 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
     mPriority        = priority;
     mSwapchainStatus = swapchainStatus;
     copyPresentInfo(presentInfo);
-}
-
-void CommandProcessorTask::initFlushWaitSemaphores(
-    ProtectionType protectionType,
-    std::vector<VkSemaphore> &&waitSemaphores,
-    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
-{
-    mTask                    = CustomTask::FlushWaitSemaphores;
-    mProtectionType          = protectionType;
-    mWaitSemaphores          = std::move(waitSemaphores);
-    mWaitSemaphoreStageMasks = std::move(waitSemaphoreStageMasks);
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(
@@ -665,13 +671,6 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 {
     switch (task->getTaskCommand())
     {
-        case CustomTask::FlushWaitSemaphores:
-        {
-            mCommandQueue->flushWaitSemaphores(task->getProtectionType(),
-                                               std::move(task->getWaitSemaphores()),
-                                               std::move(task->getWaitSemaphoreStageMasks()));
-            break;
-        }
         case CustomTask::FlushAndQueueSubmit:
         {
             ANGLE_TRACE_EVENT0("gpu.angle", "processTask::FlushAndQueueSubmit");
@@ -714,12 +713,19 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             }
             break;
         }
+        case CustomTask::FlushWaitSemaphores:
+        {
+            mCommandQueue->flushWaitSemaphores(task->getProtectionType(), task->getPriority(),
+                                               std::move(task->getWaitSemaphores()),
+                                               std::move(task->getWaitSemaphoreStageMasks()));
+            break;
+        }
         case CustomTask::ProcessOutsideRenderPassCommands:
         {
             OutsideRenderPassCommandBufferHelper *commandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
             ANGLE_TRY(mCommandQueue->flushOutsideRPCommands(this, task->getProtectionType(),
-                                                            &commandBuffer));
+                                                            task->getPriority(), &commandBuffer));
 
             OutsideRenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
@@ -731,7 +737,8 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         {
             RenderPassCommandBufferHelper *commandBuffer = task->getRenderPassCommandBuffer();
             ANGLE_TRY(mCommandQueue->flushRenderPassCommands(
-                this, task->getProtectionType(), *task->getRenderPass(), &commandBuffer));
+                this, task->getProtectionType(), task->getPriority(), *task->getRenderPass(),
+                &commandBuffer));
 
             RenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getRenderPassCommandBuffer();
@@ -892,11 +899,12 @@ void CommandProcessor::enqueuePresent(egl::ContextPriority contextPriority,
 
 angle::Result CommandProcessor::enqueueFlushWaitSemaphores(
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     std::vector<VkSemaphore> &&waitSemaphores,
     std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
 {
     CommandProcessorTask task;
-    task.initFlushWaitSemaphores(protectionType, std::move(waitSemaphores),
+    task.initFlushWaitSemaphores(protectionType, priority, std::move(waitSemaphores),
                                  std::move(waitSemaphoreStageMasks));
     ANGLE_TRY(queueCommand(std::move(task)));
 
@@ -906,6 +914,7 @@ angle::Result CommandProcessor::enqueueFlushWaitSemaphores(
 angle::Result CommandProcessor::enqueueFlushOutsideRPCommands(
     Context *context,
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
@@ -916,7 +925,7 @@ angle::Result CommandProcessor::enqueueFlushOutsideRPCommands(
     SecondaryCommandMemoryAllocator *allocator = (*outsideRPCommands)->detachAllocator();
 
     CommandProcessorTask task;
-    task.initOutsideRenderPassProcessCommands(protectionType, *outsideRPCommands);
+    task.initOutsideRenderPassProcessCommands(protectionType, priority, *outsideRPCommands);
     ANGLE_TRY(queueCommand(std::move(task)));
 
     ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
@@ -928,6 +937,7 @@ angle::Result CommandProcessor::enqueueFlushOutsideRPCommands(
 angle::Result CommandProcessor::enqueueFlushRenderPassCommands(
     Context *context,
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     const RenderPass &renderPass,
     RenderPassCommandBufferHelper **renderPassCommands)
 {
@@ -939,7 +949,7 @@ angle::Result CommandProcessor::enqueueFlushRenderPassCommands(
     SecondaryCommandMemoryAllocator *allocator = (*renderPassCommands)->detachAllocator();
 
     CommandProcessorTask task;
-    task.initRenderPassProcessCommands(protectionType, *renderPassCommands, &renderPass);
+    task.initRenderPassProcessCommands(protectionType, priority, *renderPassCommands, &renderPass);
     ANGLE_TRY(queueCommand(std::move(task)));
 
     ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(
@@ -1024,9 +1034,12 @@ void CommandQueue::destroy(Context *context)
 
     for (CommandsState &state : mCommandsStateMap)
     {
-        state.waitSemaphores.clear();
-        state.waitSemaphoreStageMasks.clear();
-        state.primaryCommands.destroy(renderer->getDevice());
+        for (CommandsState::QueueState &queueState : state.queueStates)
+        {
+            queueState.waitSemaphores.clear();
+            queueState.waitSemaphoreStageMasks.clear();
+            queueState.primaryCommands.destroy(renderer->getDevice());
+        }
         state.primaryCommandPool.destroy(renderer->getDevice());
     }
 
@@ -1262,6 +1275,7 @@ bool CommandQueue::isBusy(RendererVk *renderer) const
 }
 
 void CommandQueue::flushWaitSemaphores(ProtectionType protectionType,
+                                       egl::ContextPriority priority,
                                        std::vector<VkSemaphore> &&waitSemaphores,
                                        std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
 {
@@ -1269,7 +1283,7 @@ void CommandQueue::flushWaitSemaphores(ProtectionType protectionType,
     ASSERT(waitSemaphores.size() == waitSemaphoreStageMasks.size());
     std::lock_guard<std::mutex> lock(mMutex);
 
-    CommandsState &state = mCommandsStateMap[protectionType];
+    CommandsState::QueueState &state = mCommandsStateMap[protectionType].queueStates[priority];
 
     state.waitSemaphores.insert(state.waitSemaphores.end(), waitSemaphores.begin(),
                                 waitSemaphores.end());
@@ -1284,24 +1298,26 @@ void CommandQueue::flushWaitSemaphores(ProtectionType protectionType,
 angle::Result CommandQueue::flushOutsideRPCommands(
     Context *context,
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     std::lock_guard<std::mutex> lock(mMutex);
-    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType));
-    PrimaryCommandBuffer &commandBuffer = mCommandsStateMap[protectionType].primaryCommands;
-    return (*outsideRPCommands)->flushToPrimary(context, &commandBuffer);
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType, priority));
+    CommandsState::QueueState &state = mCommandsStateMap[protectionType].queueStates[priority];
+    return (*outsideRPCommands)->flushToPrimary(context, &state.primaryCommands);
 }
 
 angle::Result CommandQueue::flushRenderPassCommands(
     Context *context,
     ProtectionType protectionType,
+    egl::ContextPriority priority,
     const RenderPass &renderPass,
     RenderPassCommandBufferHelper **renderPassCommands)
 {
     std::lock_guard<std::mutex> lock(mMutex);
-    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType));
-    PrimaryCommandBuffer &commandBuffer = mCommandsStateMap[protectionType].primaryCommands;
-    return (*renderPassCommands)->flushToPrimary(context, &commandBuffer, &renderPass);
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, protectionType, priority));
+    CommandsState::QueueState &state = mCommandsStateMap[protectionType].queueStates[priority];
+    return (*renderPassCommands)->flushToPrimary(context, &state.primaryCommands, &renderPass);
 }
 
 angle::Result CommandQueue::submitCommands(Context *context,
@@ -1328,7 +1344,7 @@ angle::Result CommandQueue::submitCommands(Context *context,
     batch.commandPools          = commandPools;
     batch.commandBuffersToReset = std::move(commandBuffersToReset);
 
-    CommandsState &state = mCommandsStateMap[protectionType];
+    CommandsState::QueueState &state = mCommandsStateMap[protectionType].queueStates[priority];
     // Store the primary CommandBuffer in the in-flight list.
     batch.primaryCommands = std::move(state.primaryCommands);
 
@@ -1640,21 +1656,23 @@ bool CommandQueue::allInFlightCommandsAreAfterSerials(const Serials &serials)
 }
 
 angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
-                                                            ProtectionType protectionType)
+                                                            ProtectionType protectionType,
+                                                            egl::ContextPriority priority)
 {
-    CommandsState &state = mCommandsStateMap[protectionType];
+    CommandsState &state                  = mCommandsStateMap[protectionType];
+    CommandsState::QueueState &queueState = state.queueStates[priority];
 
-    if (state.primaryCommands.valid())
+    if (queueState.primaryCommands.valid())
     {
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(state.primaryCommandPool.allocate(context, &state.primaryCommands));
+    ANGLE_TRY(state.primaryCommandPool.allocate(context, &queueState.primaryCommands));
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     beginInfo.pInheritanceInfo         = nullptr;
-    ANGLE_VK_TRY(context, state.primaryCommands.begin(beginInfo));
+    ANGLE_VK_TRY(context, queueState.primaryCommands.begin(beginInfo));
 
     return angle::Result::Continue;
 }
