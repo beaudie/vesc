@@ -4973,19 +4973,20 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 angle::Result RendererVk::flushRenderPassCommands(
     vk::Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     const vk::RenderPass &renderPass,
     vk::RenderPassCommandBufferHelper **renderPassCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent,
+        ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, hasProtectedContent, priority,
                                                             renderPass, renderPassCommands));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, hasProtectedContent, renderPass,
-                                                        renderPassCommands));
+        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, hasProtectedContent, priority,
+                                                        renderPass, renderPassCommands));
     }
 
     return angle::Result::Continue;
@@ -4994,18 +4995,19 @@ angle::Result RendererVk::flushRenderPassCommands(
 angle::Result RendererVk::flushOutsideRPCommands(
     vk::Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent,
+        ANGLE_TRY(mCommandProcessor.flushOutsideRPCommands(context, hasProtectedContent, priority,
                                                            outsideRPCommands));
     }
     else
     {
-        ANGLE_TRY(
-            mCommandQueue.flushOutsideRPCommands(context, hasProtectedContent, outsideRPCommands));
+        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, hasProtectedContent, priority,
+                                                       outsideRPCommands));
     }
 
     return angle::Result::Continue;

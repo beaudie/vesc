@@ -614,28 +614,33 @@ class RendererVk : angle::NonCopyable
     angle::Result checkCompletedCommands(vk::Context *context);
 
     void flushWaitSemaphores(bool hasProtectedContent,
+                             egl::ContextPriority priority,
                              std::vector<VkSemaphore> &&waitSemaphores,
                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
     {
         if (isAsyncCommandQueueEnabled())
         {
-            mCommandProcessor.flushWaitSemaphores(hasProtectedContent, std::move(waitSemaphores),
+            mCommandProcessor.flushWaitSemaphores(hasProtectedContent, priority,
+                                                  std::move(waitSemaphores),
                                                   std::move(waitSemaphoreStageMasks));
         }
         else
         {
-            mCommandQueue.flushWaitSemaphores(hasProtectedContent, std::move(waitSemaphores),
+            mCommandQueue.flushWaitSemaphores(hasProtectedContent, priority,
+                                              std::move(waitSemaphores),
                                               std::move(waitSemaphoreStageMasks));
         }
     }
 
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,
+                                          egl::ContextPriority priority,
                                           const vk::RenderPass &renderPass,
                                           vk::RenderPassCommandBufferHelper **renderPassCommands);
     angle::Result flushOutsideRPCommands(
         vk::Context *context,
         bool hasProtectedContent,
+        egl::ContextPriority priority,
         vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands);
 
     VkResult queuePresent(vk::Context *context,

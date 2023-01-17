@@ -7222,8 +7222,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     ASSERT(mLastFlushedSerial < mRenderPassCommands->getQueueSerial().getSerial());
     mLastFlushedSerial = mRenderPassCommands->getQueueSerial().getSerial();
 
-    ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), *renderPass,
-                                                 &mRenderPassCommands));
+    ANGLE_TRY(mRenderer->flushRenderPassCommands(this, hasProtectedContent(), mContextPriority,
+                                                 *renderPass, &mRenderPassCommands));
 
     // We just flushed outSideRenderPassCommands above, and any future use of
     // outsideRenderPassCommands must have a queueSerial bigger than renderPassCommands. To ensure
@@ -7440,7 +7440,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (!mWaitSemaphores.empty())
     {
-        mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
+        mRenderer->flushWaitSemaphores(hasProtectedContent(), mContextPriority,
+                                       std::move(mWaitSemaphores),
                                        std::move(mWaitSemaphoreStageMasks));
     }
     ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
@@ -7464,7 +7465,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     ASSERT(mLastFlushedSerial <= mOutsideRenderPassCommands->getQueueSerial().getSerial());
     mLastFlushedSerial = mOutsideRenderPassCommands->getQueueSerial().getSerial();
 
-    ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(),
+    ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, hasProtectedContent(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
 
     if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
