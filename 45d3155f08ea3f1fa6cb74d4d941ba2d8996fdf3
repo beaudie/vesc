@@ -46,6 +46,30 @@
       },
       "revId": "45d3155f08ea3f1fa6cb74d4d941ba2d8996fdf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7de94ab_b99b7d1c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-17T17:17:18Z",
+      "side": 0,
+      "message": "Yeap, that can be removed too, thanks!",
+      "parentUuid": "75581f48_d4c83b5d",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 198,
+        "endChar": 60
+      },
+      "revId": "45d3155f08ea3f1fa6cb74d4d941ba2d8996fdf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
