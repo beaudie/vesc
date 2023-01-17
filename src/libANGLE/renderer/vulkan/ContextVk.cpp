@@ -884,7 +884,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mCurrentQueueSerialIndex(kInvalidQueueSerialIndex)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -6849,12 +6850,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
         ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
     }
-    else if (signalSemaphore != nullptr)
-    {
-        // We have to do empty submission to get the signalSemaphore.
-        mLastFlushedSerial = mOutsideRenderPassCommands->getQueueSerial().getSerial();
-    }
-    else
+    else if (signalSemaphore == nullptr)
     {
         // We have nothing to submit.
         return angle::Result::Continue;
@@ -6896,6 +6892,14 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     }
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
+    if (mLastFlushedSerial == mLastSubmittedSerial)
+    {
+        // We have to do empty submission...
+        ASSERT(allCommandsEmpty);
+        mLastFlushedSerial = mOutsideRenderPassCommands->getQueueSerial().getSerial();
+        generateOutsideRenderPassCommandsQueueSerial();
+    }
+
     // We must add the per context dynamic buffers into resourceUseList before submission so that
     // they get retained properly until GPU completes. We do not add current buffer into
     // resourceUseList since they never get reused or freed until context gets destroyed, at which
@@ -6915,7 +6919,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
 
     ANGLE_TRY(submitCommands(signalSemaphore, Submit::AllCommands));
 
-    generateOutsideRenderPassCommandsQueueSerial();
+    ASSERT(mOutsideRenderPassCommands->getQueueSerial().getSerial() > mLastSubmittedSerial);
 
     mHasAnyCommandsPendingSubmission = false;
     onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
