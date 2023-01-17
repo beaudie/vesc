@@ -86,6 +86,15 @@ class FenceRecycler
     Recycler<Fence> mRecyler;
 };
 
+struct SwapchainStatus
+{
+    mutable std::mutex mutex;
+    mutable CondVarHelper condVar;
+    bool isPending = false;
+
+    VkResult lastPresentResult = VK_NOT_READY;
+};
+
 enum class CustomTask
 {
     Invalid = 0,
@@ -121,7 +130,9 @@ class CommandProcessorTask
                                        RenderPassCommandBufferHelper *commandBuffer,
                                        const RenderPass *renderPass);
 
-    void initPresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    void initPresent(egl::ContextPriority priority,
+                     const VkPresentInfoKHR &presentInfo,
+                     SwapchainStatus *swapchainStatus);
 
     void initFlushAndQueueSubmit(const VkSemaphore semaphore,
                                  bool hasProtectedContent,
@@ -159,6 +170,7 @@ class CommandProcessorTask
     VkPipelineStageFlags getOneOffWaitSemaphoreStageMask() { return mOneOffWaitSemaphoreStageMask; }
     const Fence *getOneOffFence() { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
+    SwapchainStatus *getSwapchainStatus() const { return mSwapchainStatus; }
     const RenderPass *getRenderPass() const { return mRenderPass; }
     OutsideRenderPassCommandBufferHelper *getOutsideRenderPassCommandBuffer() const
     {
@@ -200,6 +212,8 @@ class CommandProcessorTask
 
     VkSwapchainPresentFenceInfoEXT mPresentFenceInfo;
     VkFence mPresentFence;
+
+    SwapchainStatus *mSwapchainStatus;
 
     // Used by OneOffQueueSubmit
     VkCommandBuffer mOneOffCommandBufferVk;
@@ -344,7 +358,8 @@ class CommandQueue : angle::NonCopyable
                                     const QueueSerial &submitQueueSerial);
 
     VkResult queuePresent(egl::ContextPriority contextPriority,
-                          const VkPresentInfoKHR &presentInfo);
+                          const VkPresentInfoKHR &presentInfo,
+                          SwapchainStatus *swapchainStatus);
 
     angle::Result checkCompletedCommands(Context *context);
 
@@ -496,10 +511,12 @@ class ThreadSafeCommandQueue : public CommandQueue
             context, hasProtectedContent, contextPriority, commandBufferHandle, waitSemaphore,
             waitSemaphoreStageMask, fence, submitPolicy, submitQueueSerial);
     }
-    VkResult queuePresent(egl::ContextPriority contextPriority, const VkPresentInfoKHR &presentInfo)
+    VkResult queuePresent(egl::ContextPriority contextPriority,
+                          const VkPresentInfoKHR &presentInfo,
+                          SwapchainStatus *swapchainStatus)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::queuePresent(contextPriority, presentInfo);
+        return CommandQueue::queuePresent(contextPriority, presentInfo, swapchainStatus);
     }
 
     // Check to see which batches have finished completion (forward progress for
@@ -566,11 +583,6 @@ class CommandProcessor : public Context
     CommandProcessor(RendererVk *renderer);
     ~CommandProcessor() override;
 
-    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
-    {
-        return getLastAndClearPresentResult(swapchain);
-    }
-
     // Context
     void handleError(VkResult result,
                      const char *file,
@@ -601,7 +613,8 @@ class CommandProcessor : public Context
                                     SubmitPolicy submitPolicy,
                                     const QueueSerial &submitQueueSerial);
     VkResult queuePresent(egl::ContextPriority contextPriority,
-                          const VkPresentInfoKHR &presentInfo);
+                          const VkPresentInfoKHR &presentInfo,
+                          SwapchainStatus *swapchainStatus);
 
     angle::Result checkCompletedCommands(Context *context);
 
@@ -670,8 +683,10 @@ class CommandProcessor : public Context
     // Command processor thread, process a task
     angle::Result processTask(CommandProcessorTask *task);
 
-    VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
-    VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+    VkResult present(egl::ContextPriority priority,
+                     const VkPresentInfoKHR &presentInfo,
+                     SwapchainStatus *swapchainStatus);
+    void updateSwapchainStatus(SwapchainStatus *swapchainStatus, VkResult presentResult);
 
     // Used by main thread to wait for worker thread to complete all outstanding work.
     angle::Result waitForWorkComplete(Context *context);
@@ -693,11 +708,6 @@ class CommandProcessor : public Context
 
     mutable std::mutex mErrorMutex;
     std::queue<Error> mErrors;
-
-    // Track present info
-    std::mutex mSwapchainStatusMutex;
-    std::condition_variable mSwapchainStatusCondition;
-    std::map<VkSwapchainKHR, VkResult> mSwapchainStatus;
 
     // Command queue worker thread.
     std::thread mTaskThread;
@@ -770,10 +780,12 @@ class ThreadSafeCommandProcessor : public CommandProcessor
             context, hasProtectedContent, contextPriority, commandBufferHandle, waitSemaphore,
             waitSemaphoreStageMask, fence, submitPolicy, submitQueueSerial);
     }
-    VkResult queuePresent(egl::ContextPriority contextPriority, const VkPresentInfoKHR &presentInfo)
+    VkResult queuePresent(egl::ContextPriority contextPriority,
+                          const VkPresentInfoKHR &presentInfo,
+                          SwapchainStatus *swapchainStatus)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::queuePresent(contextPriority, presentInfo);
+        return CommandProcessor::queuePresent(contextPriority, presentInfo, swapchainStatus);
     }
 
     // Check to see which batches have finished completion (forward progress for
