@@ -26,6 +26,15 @@ class SimpleGlobalMutex : angle::NonCopyable
     ANGLE_INLINE void lock() { mMutex.lock(); }
     ANGLE_INLINE void unlock() { mMutex.unlock(); }
 
+    void tempUnlock(int *lockLevelOut) { UNREACHABLE(); }
+    void restoreLock(angle::ThreadId id, int lockLevel) { UNREACHABLE(); }
+
+    angle::ThreadId getOwnerThreadId() const
+    {
+        UNREACHABLE();
+        return angle::InvalidThreadId();
+    }
+
   protected:
     GlobalMutexType mMutex;
 };
@@ -33,9 +42,8 @@ class SimpleGlobalMutex : angle::NonCopyable
 class ThreadIdGlobalMutex : public SimpleGlobalMutex
 {
   public:
-    ANGLE_INLINE void lock()
+    ANGLE_INLINE void lock(angle::ThreadId id = angle::GetCurrentThreadId())
     {
-        const angle::ThreadId id = angle::GetCurrentThreadId();
         mMutex.lock();
         setLocked(id);
     }
@@ -46,12 +54,15 @@ class ThreadIdGlobalMutex : public SimpleGlobalMutex
         doUnlock();
     }
 
-  protected:
+    ANGLE_INLINE void tempUnlock(int *lockLevelOut) { unlock(); }
+    ANGLE_INLINE void restoreLock(angle::ThreadId id, int lockLevel) { lock(id); }
+
     ANGLE_INLINE angle::ThreadId getOwnerThreadId() const
     {
         return mOwnerThreadId.load(std::memory_order_relaxed);
     }
 
+  protected:
     ANGLE_INLINE void setLocked(angle::ThreadId id)
     {
         ASSERT(id == angle::GetCurrentThreadId());
@@ -97,6 +108,21 @@ class RecursiveGlobalMutex : public ThreadIdGlobalMutex
         }
     }
 
+    ANGLE_INLINE void tempUnlock(int *lockLevelOut)
+    {
+        ASSERT(getOwnerThreadId() == angle::GetCurrentThreadId());
+        ASSERT(mLockLevel > 0);
+        *lockLevelOut = mLockLevel;
+        mLockLevel    = 0;
+        doUnlock();
+    }
+
+    ANGLE_INLINE void restoreLock(angle::ThreadId id, int lockLevel)
+    {
+        mMutex.lock();
+        setLocked(id, lockLevel);
+    }
+
   protected:
     ANGLE_INLINE void setLocked(angle::ThreadId id, int lockLevel)
     {
@@ -119,7 +145,7 @@ class RecursiveGlobalMutex : public ThreadIdGlobalMutex
 #if defined(ANGLE_ENABLE_GLOBAL_MUTEX_RECURSION)
 class GlobalMutex final : public RecursiveGlobalMutex
 {};
-#elif defined(ANGLE_ENABLE_ASSERTS)
+#elif defined(ANGLE_ENABLE_ASSERTS) || defined(ANGLE_ENABLE_GLOBAL_MUTEX_UNLOCK)
 class GlobalMutex final : public ThreadIdGlobalMutex
 {};
 #else
@@ -222,6 +248,50 @@ ScopedOptionalGlobalMutexLock::~ScopedOptionalGlobalMutexLock()
         mMutex->unlock();
     }
 }
+
+namespace priv
+{
+// ScopedGlobalMutexUnlock implementation.
+ScopedGlobalMutexUnlock::ScopedGlobalMutexUnlock(GlobalMutexUnlockType type)
+    :
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+      mMutex(*GetGlobalMutex()),
+#endif
+      mLockLevel(0)
+{
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+    const angle::ThreadId ownerThreadId = g_MutexPtr->getOwnerThreadId();
+#else
+    const angle::ThreadId ownerThreadId = mMutex.getOwnerThreadId();
+#endif
+
+    if ((type == GlobalMutexUnlockType::Always) || (ownerThreadId == angle::GetCurrentThreadId()))
+    {
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+        g_MutexPtr->tempUnlock(&mLockLevel);
+#else
+        mMutex.tempUnlock(&mLockLevel);
+#endif
+        mLockThreadId = ownerThreadId;
+    }
+    else
+    {
+        mLockThreadId = angle::InvalidThreadId();
+    }
+}
+
+ScopedGlobalMutexUnlock::~ScopedGlobalMutexUnlock()
+{
+    if (mLockThreadId != angle::InvalidThreadId())
+    {
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+        g_MutexPtr->restoreLock(mLockThreadId, mLockLevel);
+#else
+        mMutex.restoreLock(mLockThreadId, mLockLevel);
+#endif
+    }
+}
+}  // namespace priv
 
 // Global functions.
 #if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_STATIC)
