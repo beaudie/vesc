@@ -559,14 +559,9 @@ class ThreadSafeCommandQueue : public CommandQueue
 
 class CommandProcessor : public Context
 {
-  public:
-    CommandProcessor(RendererVk *renderer);
+  protected:
+    CommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue);
     ~CommandProcessor() override;
-
-    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
-    {
-        return getLastAndClearPresentResult(swapchain);
-    }
 
     // Context
     void handleError(VkResult result,
@@ -574,7 +569,7 @@ class CommandProcessor : public Context
                      const char *function,
                      unsigned int line) override;
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
+    angle::Result init();
 
     void destroy(Context *context);
 
@@ -612,28 +607,10 @@ class CommandProcessor : public Context
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
-    egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
-    {
-        return mCommandQueue.getDriverPriority(priority);
-    }
-    uint32_t getDeviceQueueIndex() const { return mCommandQueue.getDeviceQueueIndex(); }
-    VkQueue getQueue(egl::ContextPriority priority) { return mCommandQueue.getQueue(priority); }
+    // Used by main thread to wait for worker thread to submit outstanding work.
+    angle::Result waitForAllWorkToBeSubmitted(Context *context);
 
-    // Note that due to inheritance from Context, this class has a set of perf counters as well,
-    // but currently only the counters in the member command queue are of interest.
-    const angle::VulkanPerfCounters getPerfCounters() const
-    {
-        return mCommandQueue.getPerfCounters();
-    }
-    void resetPerFramePerfCounters() { mCommandQueue.resetPerFramePerfCounters(); }
-
-    ANGLE_INLINE bool hasUnfinishedUse(const ResourceUse &use) const
-    {
-        return mCommandQueue.hasUnfinishedUse(use);
-    }
-
-    bool hasUnsubmittedUse(const ResourceUse &use) const;
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+    bool isBusy(RendererVk *renderer) const;
 
   protected:
     bool hasPendingError() const
@@ -661,9 +638,6 @@ class CommandProcessor : public Context
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
-    // Used by main thread to wait for worker thread to complete all outstanding work.
-    angle::Result waitForWorkComplete(Context *context);
-
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
@@ -672,7 +646,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    ThreadSafeCommandQueue mCommandQueue;
+    ThreadSafeCommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
@@ -694,12 +668,14 @@ class CommandProcessor : public Context
 class ThreadSafeCommandProcessor : public CommandProcessor
 {
   public:
-    ThreadSafeCommandProcessor(RendererVk *renderer) : CommandProcessor(renderer) {}
+    ThreadSafeCommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue)
+        : CommandProcessor(renderer, commandQueue)
+    {}
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap)
+    angle::Result init()
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::init(context, queueMap);
+        return CommandProcessor::init();
     }
     void destroy(Context *context)
     {
@@ -717,6 +693,7 @@ class ThreadSafeCommandProcessor : public CommandProcessor
     angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
                                                   const QueueSerial &queueSerial);
     angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const ResourceUse &use);
+    angle::Result waitForAllWorkToBeSubmitted(Context *context);
 
     // Wait until the desired serial has been completed.
     angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
@@ -724,10 +701,6 @@ class ThreadSafeCommandProcessor : public CommandProcessor
                                     const QueueSerial &queueSerial,
                                     uint64_t timeout);
     angle::Result waitIdle(Context *context, uint64_t timeout);
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result);
     bool isBusy(RendererVk *renderer) const;
 
     angle::Result submitCommands(Context *context,
@@ -792,16 +765,13 @@ class ThreadSafeCommandProcessor : public CommandProcessor
                                                          renderPassCommands);
     }
 
-    const angle::VulkanPerfCounters getPerfCounters() const
+    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
     {
-        std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::getPerfCounters();
+        return getLastAndClearPresentResult(swapchain);
     }
-    void resetPerFramePerfCounters()
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        CommandProcessor::resetPerFramePerfCounters();
-    }
+
+    bool hasUnsubmittedUse(const ResourceUse &use) const;
+    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
   private:
     mutable std::mutex mMutex;
