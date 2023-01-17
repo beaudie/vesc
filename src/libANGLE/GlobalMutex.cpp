@@ -197,32 +197,6 @@ ScopedGlobalMutexLock::~ScopedGlobalMutexLock()
 }
 #endif
 
-// ScopedOptionalGlobalMutexLock implementation.
-ScopedOptionalGlobalMutexLock::ScopedOptionalGlobalMutexLock(bool enabled)
-{
-    if (enabled)
-    {
-#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
-        mMutex = g_MutexPtr;
-#else
-        mMutex = GetGlobalMutex();
-#endif
-        mMutex->lock();
-    }
-    else
-    {
-        mMutex = nullptr;
-    }
-}
-
-ScopedOptionalGlobalMutexLock::~ScopedOptionalGlobalMutexLock()
-{
-    if (mMutex != nullptr)
-    {
-        mMutex->unlock();
-    }
-}
-
 // Global functions.
 #if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_STATIC)
 #    if defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
