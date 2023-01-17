@@ -1119,7 +1119,7 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
-    SecondaryCommandBlockAllocator *getAllocator() { return &mCommandAllocator; }
+    bool hasAllocatorLinks() const { return mCommandAllocator.hasAllocatorLinks(); }
 
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;

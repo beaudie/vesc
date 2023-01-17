@@ -1719,6 +1719,8 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mImageOptimizeForPresent           = nullptr;
 
+    ASSERT(mCurrentSubpass == 0 || !RenderPassCommandBuffer::ExecutesInline());
+
     // Reset and re-initialize the command buffers
     for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
     {
@@ -2519,12 +2521,14 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
 
 void RenderPassCommandBufferHelper::attachAllocator(SecondaryCommandMemoryAllocator *allocator)
 {
+    ASSERT(mCurrentSubpass == 0 || !RenderPassCommandBuffer::ExecutesInline());
     mCommandAllocator.attachAllocator(allocator);
     getCommandBuffer().attachAllocator(mCommandAllocator.getAllocator());
 }
 
 SecondaryCommandMemoryAllocator *RenderPassCommandBufferHelper::detachAllocator()
 {
+    ASSERT(mCurrentSubpass == 0 || !RenderPassCommandBuffer::ExecutesInline());
     getCommandBuffer().detachAllocator(mCommandAllocator.getAllocator());
     return mCommandAllocator.detachAllocator(getCommandBuffer().empty());
 }
@@ -2657,7 +2661,7 @@ void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::recycleCommand
     CommandBufferHelperT **commandBuffer)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->getAllocator()->hasAllocatorLinks());
+    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->hasAllocatorLinks());
     (*commandBuffer)->markOpen();
 
     RecycleCommandBufferHelper(device, &mCommandBufferHelperFreeList, commandBuffer,
