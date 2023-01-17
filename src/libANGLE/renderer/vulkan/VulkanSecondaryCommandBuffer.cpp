@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h"
 
 #include "common/debug.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -26,6 +27,11 @@ angle::Result VulkanSecondaryCommandBuffer::InitializeCommandPool(Context *conte
     poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     poolInfo.queueFamilyIndex        = queueFamilyIndex;
+    // Some ARM drivers may not free memory in "vkFreeCommandBuffers()" without this flag...
+    if (IsARM(context->getRenderer()->getPhysicalDeviceProperties().vendorID))
+    {
+        poolInfo.flags |= VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    }
     ASSERT(protectionType == ProtectionType::Unprotected ||
            protectionType == ProtectionType::Protected);
     if (protectionType == ProtectionType::Protected)
@@ -60,6 +66,7 @@ angle::Result VulkanSecondaryCommandBuffer::initialize(Context *context,
 {
     VkDevice device = context->getDevice();
 
+    mCommandPool = pool;
     mCommandTracker.reset();
     mAnyCommand = false;
 
@@ -81,6 +88,15 @@ angle::Result VulkanSecondaryCommandBuffer::initialize(Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+void VulkanSecondaryCommandBuffer::free(VkDevice device)
+{
+    if (mHandle != VK_NULL_HANDLE)
+    {
+        mCommandPool->freeCommandBuffers(device, 1, &mHandle);
+        mHandle = VK_NULL_HANDLE;
+    }
 }
 
 angle::Result VulkanSecondaryCommandBuffer::begin(
