@@ -178,6 +178,7 @@ struct ImagePresentOperation : angle::NonCopyable
     // Used to associate an acquire fence with the previous present operation of the image.
     // Only relevant when VK_EXT_swapchain_maintenance1 is not supported; otherwise a fence is
     // always associated with the present operation.
+    // If there is no fence, invalid imageIndex indicates discared item (used in SharedPresentMode).
     uint32_t imageIndex;
 };
 
