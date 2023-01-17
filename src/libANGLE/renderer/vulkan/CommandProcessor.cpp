@@ -748,9 +748,7 @@ angle::Result CommandProcessor::finishQueueSerial(Context *context,
                                                   uint64_t timeout)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishQueueSerial");
-    // TODO: Only call waitForWorkComplete if mUse still have inflight commands in processor that
-    // references this queueSerial. https://issuetracker.google.com/261098465
-    ANGLE_TRY(waitForWorkComplete(context));
+    ANGLE_TRY(waitForQueueSerialToBeSubmitted(context, queueSerial));
     return mCommandQueue.finishQueueSerial(context, queueSerial, timeout);
 }
 
@@ -759,9 +757,7 @@ angle::Result CommandProcessor::finishResourceUse(Context *context,
                                                   uint64_t timeout)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishResourceUse");
-    // TODO: Only call waitForWorkComplete if mUse still have inflight commands in processor that
-    // references this queueSerial. https://issuetracker.google.com/261098465
-    ANGLE_TRY(waitForWorkComplete(context));
+    ANGLE_TRY(waitForResourceUseToBeSubmitted(context, use));
     return mCommandQueue.finishResourceUse(context, use, timeout);
 }
 
@@ -938,9 +934,20 @@ angle::Result CommandProcessor::flushRenderPassCommands(
     return angle::Result::Continue;
 }
 
-angle::Result CommandProcessor::ensureNoPendingWork(Context *context)
+angle::Result CommandProcessor::waitForQueueSerialToBeSubmitted(vk::Context *context,
+                                                                const QueueSerial &queueSerial)
 {
-    return waitForWorkComplete(context);
+    return waitForResourceUseToBeSubmitted(context, ResourceUse(queueSerial));
+}
+
+angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
+                                                                const ResourceUse &use)
+{
+    if (mCommandQueue.hasUnsubmittedUse(use))
+    {
+        ANGLE_TRY(waitForWorkComplete(context));
+    }
+    return angle::Result::Continue;
 }
 
 bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
