@@ -1199,6 +1199,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     mOutsideRenderPassCommands->detachAllocator();
     mRenderPassCommands->detachAllocator();
 
+    mOutsideRenderPassCommands->releaseCommandPool();
+    mRenderPassCommands->releaseCommandPool();
+
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(&mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(&mRenderPassCommands);
 
@@ -3167,7 +3170,7 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferHelperT *com
 {
     // When using Vulkan secondary command buffers, the descriptor sets need to be updated before
     // they are bound.
-    if (!commandBufferHelper->getCommandBuffer().ExecutesInline())
+    if (!CommandBufferHelperT::ExecutesInline())
     {
         flushDescriptorSetUpdates();
     }
