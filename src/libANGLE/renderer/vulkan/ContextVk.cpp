@@ -1179,6 +1179,14 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Everything must be finished
     ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
 
+    // Must retire all VulkanSecondaryCommandBuffer(s) before destroying the pools.
+    if ((!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+         !vk::RenderPassCommandBuffer::ExecutesInline()) &&
+        mRenderer->isAsyncCommandBufferResetEnabled())
+    {
+        (void)mRenderer->retireFinishedCommands(this);
+    }
+
     VkDevice device = getDevice();
 
     mDefaultUniformStorage.release(mRenderer);
@@ -1198,6 +1206,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Detach functions are only used for ring buffer allocators.
     mOutsideRenderPassCommands->detachAllocator();
     mRenderPassCommands->detachAllocator();
+
+    mOutsideRenderPassCommands->releaseCommandPool();
+    mRenderPassCommands->releaseCommandPool();
 
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(&mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(&mRenderPassCommands);
