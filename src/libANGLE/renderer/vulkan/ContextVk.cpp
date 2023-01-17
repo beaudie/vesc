@@ -882,6 +882,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mHasAnyCommandsPendingSubmission(false),
       mIsInFramebufferFetchMode(false),
       mTotalBufferToImageCopySize(0),
+      mHasWaitSemaphoresPendingSubmission(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0),
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
@@ -3365,16 +3366,7 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 
 angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Submit submission)
 {
-    if (mCurrentWindowSurface)
-    {
-        const vk::Semaphore *waitSemaphore =
-            mCurrentWindowSurface->getAndResetAcquireImageSemaphore();
-        if (waitSemaphore != nullptr)
-        {
-            addWaitSemaphore(waitSemaphore->getHandle(),
-                             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-        }
-    }
+    ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
 
     if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
     {
@@ -3391,9 +3383,7 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
     ASSERT(mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
 
     ANGLE_TRY(mRenderer->submitCommands(this, hasProtectedContent(), mContextPriority,
-                                        std::move(mWaitSemaphores),
-                                        std::move(mWaitSemaphoreStageMasks), signalSemaphore,
-                                        &mCommandPools, mLastFlushedQueueSerial));
+                                        signalSemaphore, &mCommandPools, mLastFlushedQueueSerial));
 
     ASSERT(mLastSubmittedQueueSerial < mLastFlushedQueueSerial);
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
@@ -6852,7 +6842,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
         ASSERT(mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
     }
-    else if (signalSemaphore == nullptr && mWaitSemaphores.empty())
+    else if (signalSemaphore == nullptr && !mHasWaitSemaphoresPendingSubmission)
     {
         // We have nothing to submit.
         return angle::Result::Continue;
@@ -6892,6 +6882,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         ANGLE_TRY(traceGpuEvent(&mOutsideRenderPassCommands->getCommandBuffer(),
                                 TRACE_EVENT_PHASE_END, eventName));
     }
+
+    // This will handle any commands that might be recorded above as well as flush any wait
+    // semaphores.
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
     if (mLastFlushedQueueSerial == mLastSubmittedQueueSerial)
@@ -6923,7 +6916,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
 
     ASSERT(mOutsideRenderPassCommands->getQueueSerial() > mLastSubmittedQueueSerial);
 
-    mHasAnyCommandsPendingSubmission = false;
+    mHasAnyCommandsPendingSubmission    = false;
+    mHasWaitSemaphoresPendingSubmission = false;
     onRenderPassFinished(RenderPassClosureReason::AlreadySpecifiedElsewhere);
 
     ASSERT(mWaitSemaphores.empty());
@@ -7459,6 +7453,14 @@ angle::Result ContextVk::flushAndSubmitOutsideRenderPassCommands()
 
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
+    if (!mWaitSemaphores.empty())
+    {
+        mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
+                                       std::move(mWaitSemaphoreStageMasks));
+        mHasWaitSemaphoresPendingSubmission = true;
+    }
+    ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
+
     if (mOutsideRenderPassCommands->empty())
     {
         return angle::Result::Continue;
