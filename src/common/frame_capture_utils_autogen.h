@@ -35,6 +35,7 @@ enum class ParamType
     TEGLBoolean,
     TEGLBooleanPointer,
     TEGLClientBuffer,
+    TEGLConfig,
     TEGLConfigPointer,
     TEGLContext,
     TEGLDEBUGPROCKHR,
@@ -86,6 +87,7 @@ enum class ParamType
     TGLdoubleConstPointer,
     TGLdoublePointer,
     TGLeglClientBufferEXT,
+    TGLeglImageOES,
     TGLenum,
     TGLenumConstPointer,
     TGLenumPointer,
@@ -96,7 +98,6 @@ enum class ParamType
     TGLfloatConstPointer,
     TGLfloatPointer,
     TGLint,
-    TGLint64,
     TGLint64Pointer,
     TGLintConstPointer,
     TGLintPointer,
@@ -135,6 +136,7 @@ enum class ParamType
     TMemoryObjectIDConstPointer,
     TMemoryObjectIDPointer,
     TObjectType,
+    TPathID,
     TPointParameter,
     TPrimitiveMode,
     TProgramPipelineID,
@@ -190,7 +192,7 @@ enum class ParamType
     TvoidPointerPointer,
 };
 
-constexpr uint32_t kParamTypeCount = 171;
+constexpr uint32_t kParamTypeCount = 173;
 
 union ParamValue
 {
@@ -212,6 +214,7 @@ union ParamValue
     EGLBoolean EGLBooleanVal;
     EGLBoolean *EGLBooleanPointerVal;
     EGLClientBuffer EGLClientBufferVal;
+    EGLConfig EGLConfigVal;
     EGLConfig *EGLConfigPointerVal;
     EGLContext EGLContextVal;
     EGLDEBUGPROCKHR EGLDEBUGPROCKHRVal;
@@ -263,6 +266,7 @@ union ParamValue
     const GLdouble *GLdoubleConstPointerVal;
     GLdouble *GLdoublePointerVal;
     GLeglClientBufferEXT GLeglClientBufferEXTVal;
+    GLeglImageOES GLeglImageOESVal;
     GLenum GLenumVal;
     const GLenum *GLenumConstPointerVal;
     GLenum *GLenumPointerVal;
@@ -273,7 +277,6 @@ union ParamValue
     const GLfloat *GLfloatConstPointerVal;
     GLfloat *GLfloatPointerVal;
     GLint GLintVal;
-    GLint64 GLint64Val;
     GLint64 *GLint64PointerVal;
     const GLint *GLintConstPointerVal;
     GLint *GLintPointerVal;
@@ -312,6 +315,7 @@ union ParamValue
     const gl::MemoryObjectID *MemoryObjectIDConstPointerVal;
     gl::MemoryObjectID *MemoryObjectIDPointerVal;
     egl::ObjectType ObjectTypeVal;
+    gl::PathID PathIDVal;
     gl::PointParameter PointParameterVal;
     gl::PrimitiveMode PrimitiveModeVal;
     gl::ProgramPipelineID ProgramPipelineIDVal;
@@ -489,6 +493,12 @@ inline EGLClientBuffer GetParamVal<ParamType::TEGLClientBuffer, EGLClientBuffer>
     const ParamValue &value)
 {
     return value.EGLClientBufferVal;
+}
+
+template <>
+inline EGLConfig GetParamVal<ParamType::TEGLConfig, EGLConfig>(const ParamValue &value)
+{
+    return value.EGLConfigVal;
 }
 
 template <>
@@ -821,6 +831,12 @@ inline GLeglClientBufferEXT GetParamVal<ParamType::TGLeglClientBufferEXT, GLeglC
 }
 
 template <>
+inline GLeglImageOES GetParamVal<ParamType::TGLeglImageOES, GLeglImageOES>(const ParamValue &value)
+{
+    return value.GLeglImageOESVal;
+}
+
+template <>
 inline GLenum GetParamVal<ParamType::TGLenum, GLenum>(const ParamValue &value)
 {
     return value.GLenumVal;
@@ -881,12 +897,6 @@ template <>
 inline GLint GetParamVal<ParamType::TGLint, GLint>(const ParamValue &value)
 {
     return value.GLintVal;
-}
-
-template <>
-inline GLint64 GetParamVal<ParamType::TGLint64, GLint64>(const ParamValue &value)
-{
-    return value.GLint64Val;
 }
 
 template <>
@@ -1133,6 +1143,12 @@ template <>
 inline egl::ObjectType GetParamVal<ParamType::TObjectType, egl::ObjectType>(const ParamValue &value)
 {
     return value.ObjectTypeVal;
+}
+
+template <>
+inline gl::PathID GetParamVal<ParamType::TPathID, gl::PathID>(const ParamValue &value)
+{
+    return value.PathIDVal;
 }
 
 template <>
@@ -1543,6 +1559,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TEGLBooleanPointer, T>(value);
         case ParamType::TEGLClientBuffer:
             return GetParamVal<ParamType::TEGLClientBuffer, T>(value);
+        case ParamType::TEGLConfig:
+            return GetParamVal<ParamType::TEGLConfig, T>(value);
         case ParamType::TEGLConfigPointer:
             return GetParamVal<ParamType::TEGLConfigPointer, T>(value);
         case ParamType::TEGLContext:
@@ -1645,6 +1663,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TGLdoublePointer, T>(value);
         case ParamType::TGLeglClientBufferEXT:
             return GetParamVal<ParamType::TGLeglClientBufferEXT, T>(value);
+        case ParamType::TGLeglImageOES:
+            return GetParamVal<ParamType::TGLeglImageOES, T>(value);
         case ParamType::TGLenum:
             return GetParamVal<ParamType::TGLenum, T>(value);
         case ParamType::TGLenumConstPointer:
@@ -1665,8 +1685,6 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TGLfloatPointer, T>(value);
         case ParamType::TGLint:
             return GetParamVal<ParamType::TGLint, T>(value);
-        case ParamType::TGLint64:
-            return GetParamVal<ParamType::TGLint64, T>(value);
         case ParamType::TGLint64Pointer:
             return GetParamVal<ParamType::TGLint64Pointer, T>(value);
         case ParamType::TGLintConstPointer:
@@ -1743,6 +1761,8 @@ T AccessParamValue(ParamType paramType, const ParamValue &value)
             return GetParamVal<ParamType::TMemoryObjectIDPointer, T>(value);
         case ParamType::TObjectType:
             return GetParamVal<ParamType::TObjectType, T>(value);
+        case ParamType::TPathID:
+            return GetParamVal<ParamType::TPathID, T>(value);
         case ParamType::TPointParameter:
             return GetParamVal<ParamType::TPointParameter, T>(value);
         case ParamType::TPrimitiveMode:
@@ -1970,6 +1990,12 @@ template <>
 inline void SetParamVal<ParamType::TEGLClientBuffer>(EGLClientBuffer valueIn, ParamValue *valueOut)
 {
     valueOut->EGLClientBufferVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TEGLConfig>(EGLConfig valueIn, ParamValue *valueOut)
+{
+    valueOut->EGLConfigVal = valueIn;
 }
 
 template <>
@@ -2294,6 +2320,12 @@ inline void SetParamVal<ParamType::TGLeglClientBufferEXT>(GLeglClientBufferEXT v
 }
 
 template <>
+inline void SetParamVal<ParamType::TGLeglImageOES>(GLeglImageOES valueIn, ParamValue *valueOut)
+{
+    valueOut->GLeglImageOESVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TGLenum>(GLenum valueIn, ParamValue *valueOut)
 {
     valueOut->GLenumVal = valueIn;
@@ -2353,12 +2385,6 @@ template <>
 inline void SetParamVal<ParamType::TGLint>(GLint valueIn, ParamValue *valueOut)
 {
     valueOut->GLintVal = valueIn;
-}
-
-template <>
-inline void SetParamVal<ParamType::TGLint64>(GLint64 valueIn, ParamValue *valueOut)
-{
-    valueOut->GLint64Val = valueIn;
 }
 
 template <>
@@ -2602,6 +2628,12 @@ template <>
 inline void SetParamVal<ParamType::TObjectType>(egl::ObjectType valueIn, ParamValue *valueOut)
 {
     valueOut->ObjectTypeVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TPathID>(gl::PathID valueIn, ParamValue *valueOut)
+{
+    valueOut->PathIDVal = valueIn;
 }
 
 template <>
@@ -3017,6 +3049,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TEGLClientBuffer:
             SetParamVal<ParamType::TEGLClientBuffer>(valueIn, valueOut);
             break;
+        case ParamType::TEGLConfig:
+            SetParamVal<ParamType::TEGLConfig>(valueIn, valueOut);
+            break;
         case ParamType::TEGLConfigPointer:
             SetParamVal<ParamType::TEGLConfigPointer>(valueIn, valueOut);
             break;
@@ -3170,6 +3205,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TGLeglClientBufferEXT:
             SetParamVal<ParamType::TGLeglClientBufferEXT>(valueIn, valueOut);
             break;
+        case ParamType::TGLeglImageOES:
+            SetParamVal<ParamType::TGLeglImageOES>(valueIn, valueOut);
+            break;
         case ParamType::TGLenum:
             SetParamVal<ParamType::TGLenum>(valueIn, valueOut);
             break;
@@ -3199,9 +3237,6 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TGLint:
             SetParamVal<ParamType::TGLint>(valueIn, valueOut);
-            break;
-        case ParamType::TGLint64:
-            SetParamVal<ParamType::TGLint64>(valueIn, valueOut);
             break;
         case ParamType::TGLint64Pointer:
             SetParamVal<ParamType::TGLint64Pointer>(valueIn, valueOut);
@@ -3316,6 +3351,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TObjectType:
             SetParamVal<ParamType::TObjectType>(valueIn, valueOut);
+            break;
+        case ParamType::TPathID:
+            SetParamVal<ParamType::TPathID>(valueIn, valueOut);
             break;
         case ParamType::TPointParameter:
             SetParamVal<ParamType::TPointParameter>(valueIn, valueOut);
@@ -3493,6 +3531,7 @@ enum class ResourceIDType
     Framebuffer,
     Image,
     MemoryObject,
+    Path,
     ProgramPipeline,
     Query,
     Renderbuffer,
@@ -3548,6 +3587,12 @@ template <>
 struct GetResourceIDTypeFromType<gl::MemoryObjectID>
 {
     static constexpr ResourceIDType IDType = ResourceIDType::MemoryObject;
+};
+
+template <>
+struct GetResourceIDTypeFromType<gl::PathID>
+{
+    static constexpr ResourceIDType IDType = ResourceIDType::Path;
 };
 
 template <>

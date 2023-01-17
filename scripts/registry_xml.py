@@ -414,6 +414,8 @@ WGL_VERSIONS = [(1, 0)]
 GLX_VERSIONS = [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4)]
 CL_VERSIONS = [(1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2), (3, 0)]
 
+CAPTURE_BLOCKLIST = ['eglGetProcAddress']
+
 
 # API types
 class apis:
@@ -488,6 +490,7 @@ class RegistryXML:
         self.all_commands = self.root.findall('commands/command')
         self.all_cmd_names = CommandNames()
         self.commands = {}
+        self.param_types = set()
 
     def _AppendANGLEExts(self, ext_file):
         angle_ext_tree = etree.parse(script_relative(ext_file))
@@ -595,6 +598,84 @@ class RegistryXML:
             cmd_names.append(
                 ('%s%s' % (prefix.upper(), stripped), '%s%s' % (prefix.lower(), stripped)))
         return cmd_names
+
+    def _GetParamTypeName(self, param_type):
+        pointer_count = param_type.count("*")
+        is_const = "const" in param_type.split()
+
+        param_type = param_type.replace("*", "")
+        param_type = param_type.replace("&", "")
+        param_type = param_type.replace("const", "")
+        param_type = param_type.replace("struct", "")
+        param_type = param_type.replace("egl::", "egl_" if pointer_count else "")
+        param_type = param_type.replace("gl::", "")
+        param_type = param_type.strip()
+
+        if is_const and param_type != 'AttributeMap':
+            param_type += "Const"
+        for x in range(pointer_count):
+            param_type += "Pointer"
+
+        return param_type
+
+    # Returns index range of identifier in function parameter
+    def _FindCommandNameRange(self, param):
+
+        def is_allowed_in_identifier(char):
+            return char.isalpha() or char.isdigit() or char == "_"
+
+        # If type is a function declaration, only search in first parentheses
+        left_paren = param.find("(")
+        if left_paren >= 0:
+            min = left_paren + 1
+            end = param.index(")")
+        else:
+            min = 0
+            end = len(param)
+
+        # Find last identifier in search range
+        while end > min and not is_allowed_in_identifier(param[end - 1]):
+            end -= 1
+        if end == min:
+            raise ValueError
+        start = end - 1
+        while start > min and is_allowed_in_identifier(param[start - 1]):
+            start -= 1
+        return start, end
+
+    def _GetParamTypeFromText(self, param):
+        start, end = self._FindCommandNameRange(param)
+        return param[:start].strip() + param[end:].strip()
+
+    def GetParamTypes(self, cmd_packed_enums, generic_packed_types):
+        param_types = set()
+        cmd_names = self.all_cmd_names.get_all_commands()
+        for command_node in self.all_commands:
+            cmd_name = get_cmd_name(command_node)
+            if cmd_name in cmd_names and cmd_name not in CAPTURE_BLOCKLIST:
+                param_text = ["".join(param.itertext()) for param in command_node.findall('param')]
+                proto = command_node.find('proto')
+                proto_text = "".join(proto.itertext())
+                for param in param_text:
+                    param_type = self._GetParamTypeFromText(param).strip()
+                    param_types.add(param_type)
+                return_type = proto_text[:-len(cmd_name)].strip()
+                param_types.add(return_type)
+
+        for value in cmd_packed_enums.values():
+            if isinstance(value, dict):
+                for packed_type in value.values():
+                    param_types.add(packed_type)
+
+        for packed_type in generic_packed_types.values():
+            param_types.add(packed_type)
+
+        param_types = [self._GetParamTypeName(ptype) for ptype in param_types]
+        if 'AttributeMap' in param_types:
+            param_types.remove('AttributeMap')
+        if 'void' in param_types:
+            param_types.remove('void')
+        return sorted(list(param_types))
 
 
 class EntryPoints:

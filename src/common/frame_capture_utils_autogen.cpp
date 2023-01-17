@@ -85,6 +85,9 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             WriteParamValueReplay<ParamType::TEGLClientBuffer>(os, call,
                                                                param.value.EGLClientBufferVal);
             break;
+        case ParamType::TEGLConfig:
+            WriteParamValueReplay<ParamType::TEGLConfig>(os, call, param.value.EGLConfigVal);
+            break;
         case ParamType::TEGLConfigPointer:
             WriteParamValueReplay<ParamType::TEGLConfigPointer>(os, call,
                                                                 param.value.EGLConfigPointerVal);
@@ -266,6 +269,10 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             WriteParamValueReplay<ParamType::TGLeglClientBufferEXT>(
                 os, call, param.value.GLeglClientBufferEXTVal);
             break;
+        case ParamType::TGLeglImageOES:
+            WriteParamValueReplay<ParamType::TGLeglImageOES>(os, call,
+                                                             param.value.GLeglImageOESVal);
+            break;
         case ParamType::TGLenum:
             WriteParamValueReplay<ParamType::TGLenum>(os, call, param.value.GLenumVal);
             break;
@@ -301,9 +308,6 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             break;
         case ParamType::TGLint:
             WriteParamValueReplay<ParamType::TGLint>(os, call, param.value.GLintVal);
-            break;
-        case ParamType::TGLint64:
-            WriteParamValueReplay<ParamType::TGLint64>(os, call, param.value.GLint64Val);
             break;
         case ParamType::TGLint64Pointer:
             WriteParamValueReplay<ParamType::TGLint64Pointer>(os, call,
@@ -442,6 +446,9 @@ void WriteParamCaptureReplay(std::ostream &os, const CallCapture &call, const Pa
             break;
         case ParamType::TObjectType:
             WriteParamValueReplay<ParamType::TObjectType>(os, call, param.value.ObjectTypeVal);
+            break;
+        case ParamType::TPathID:
+            WriteParamValueReplay<ParamType::TPathID>(os, call, param.value.PathIDVal);
             break;
         case ParamType::TPointParameter:
             WriteParamValueReplay<ParamType::TPointParameter>(os, call,
@@ -689,6 +696,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "EGLBoolean *";
         case ParamType::TEGLClientBuffer:
             return "EGLClientBuffer";
+        case ParamType::TEGLConfig:
+            return "EGLConfig";
         case ParamType::TEGLConfigPointer:
             return "EGLConfig *";
         case ParamType::TEGLContext:
@@ -791,6 +800,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLdouble *";
         case ParamType::TGLeglClientBufferEXT:
             return "GLeglClientBufferEXT";
+        case ParamType::TGLeglImageOES:
+            return "GLeglImageOES";
         case ParamType::TGLenum:
             return "GLenum";
         case ParamType::TGLenumConstPointer:
@@ -811,8 +822,6 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLfloat *";
         case ParamType::TGLint:
             return "GLint";
-        case ParamType::TGLint64:
-            return "GLint64";
         case ParamType::TGLint64Pointer:
             return "GLint64 *";
         case ParamType::TGLintConstPointer:
@@ -889,6 +898,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLuint *";
         case ParamType::TObjectType:
             return "GLenum";
+        case ParamType::TPathID:
+            return "GLuint";
         case ParamType::TPointParameter:
             return "GLenum";
         case ParamType::TPrimitiveMode:
@@ -1033,6 +1044,8 @@ ResourceIDType GetResourceIDTypeFromParamType(ParamType paramType)
             return ResourceIDType::MemoryObject;
         case ParamType::TMemoryObjectIDPointer:
             return ResourceIDType::MemoryObject;
+        case ParamType::TPathID:
+            return ResourceIDType::Path;
         case ParamType::TProgramPipelineID:
             return ResourceIDType::ProgramPipeline;
         case ParamType::TProgramPipelineIDConstPointer:
@@ -1112,6 +1125,8 @@ const char *GetResourceIDTypeName(ResourceIDType resourceIDType)
             return "Image";
         case ResourceIDType::MemoryObject:
             return "MemoryObject";
+        case ResourceIDType::Path:
+            return "Path";
         case ResourceIDType::ProgramPipeline:
             return "ProgramPipeline";
         case ResourceIDType::Query:

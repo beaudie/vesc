@@ -1326,8 +1326,6 @@ EGL_PACKED_TYPES = {
     "EGLSyncKHR": "egl::Sync *",
 }
 
-CAPTURE_BLOCKLIST = ['eglGetProcAddress']
-
 
 def is_aliasing_excepted(api, cmd_name):
     return api == apis.GLES and cmd_name in ALIASING_EXCEPTIONS
@@ -1766,14 +1764,14 @@ def format_capture_method(api, command, cmd_name, proto, params, all_param_types
 
         # For specific methods we can't easily parse their types. Work around this by omitting
         # parameter captures, but keeping the capture method as a mostly empty stub.
-        if cmd_name not in CAPTURE_BLOCKLIST:
+        if cmd_name not in registry_xml.CAPTURE_BLOCKLIST:
             all_param_types.add(capture_param_type)
             parameter_captures += [capture]
 
     return_type = proto[:-len(cmd_name)].strip()
     capture_return_type = get_capture_param_type_name(return_type)
     if capture_return_type != 'void':
-        if cmd_name in CAPTURE_BLOCKLIST:
+        if cmd_name in registry_xml.CAPTURE_BLOCKLIST:
             params_with_type += ", %s returnValue" % capture_return_type
         else:
             all_param_types.add(capture_return_type)
@@ -1789,7 +1787,7 @@ def format_capture_method(api, command, cmd_name, proto, params, all_param_types
         "return_value_type_custom": capture_return_type,
     }
 
-    if return_type == "void" or cmd_name in CAPTURE_BLOCKLIST:
+    if return_type == "void" or cmd_name in registry_xml.CAPTURE_BLOCKLIST:
         return TEMPLATE_CAPTURE_METHOD_NO_RETURN_VALUE.format(**format_args)
     else:
         return TEMPLATE_CAPTURE_METHOD_WITH_RETURN_VALUE.format(**format_args)
@@ -3399,11 +3397,14 @@ def main():
         write_windows_def_file("egl.xml and egl_angle_ext.xml", lib, lib, "libEGL",
                                libegl_windows_def_exports)
 
-    all_gles_param_types = sorted(GLEntryPoints.all_param_types)
-    all_egl_param_types = sorted(EGLEntryPoints.all_param_types)
+    all_gles_param_types = xml.GetParamTypes(GLEntryPoints.get_packed_enums(), {})
+    all_biggl_param_types = glxml.GetParamTypes(GLEntryPoints.get_packed_enums(), {})
+    all_egl_param_types = eglxml.GetParamTypes(EGLEntryPoints.get_packed_enums(), EGL_PACKED_TYPES)
+
     resource_id_types = get_resource_id_types(GLEntryPoints.all_param_types)
     # Get a sorted list of param types without duplicates
-    all_param_types = sorted(list(set(all_gles_param_types + all_egl_param_types)))
+    all_param_types = sorted(
+        list(set(all_gles_param_types + all_biggl_param_types + all_egl_param_types)))
     write_capture_helper_header(all_param_types)
     write_capture_helper_source(all_param_types)
     write_capture_replay_source(xml.all_commands, all_commands_with_suffix,
