@@ -29,6 +29,42 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 #endif
 };
 
+enum class GlobalMutexUnlockType
+{
+    IfOwned,
+    Always,
+};
+
+namespace priv
+{
+class [[nodiscard]] ScopedGlobalMutexUnlock final : angle::NonCopyable
+{
+  public:
+    explicit ScopedGlobalMutexUnlock(GlobalMutexUnlockType type);
+    ~ScopedGlobalMutexUnlock();
+
+  private:
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
+    priv::GlobalMutex &mMutex;
+#endif
+    angle::ThreadId mLockThreadId;
+    int mLockLevel;
+};
+
+// NoOp implementation to avoid conditional compilation.
+class [[nodiscard]] NoOpScopedGlobalMutexUnlock final : angle::NonCopyable
+{
+  public:
+    explicit NoOpScopedGlobalMutexUnlock(GlobalMutexUnlockType) {}
+};
+}  // namespace priv
+
+#if defined(ANGLE_ENABLE_GLOBAL_MUTEX_UNLOCK)
+using ScopedGlobalMutexUnlock = priv::ScopedGlobalMutexUnlock;
+#else
+using ScopedGlobalMutexUnlock = priv::NoOpScopedGlobalMutexUnlock;
+#endif
+
 #if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_STATIC)
 void AllocateGlobalMutex();
 void DeallocateGlobalMutex();
