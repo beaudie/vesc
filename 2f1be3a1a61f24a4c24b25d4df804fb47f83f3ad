@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e50b3e1_3e360780",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-17T15:26:50Z",
+      "side": 1,
+      "message": "The only issue this has now is that this kind of pattern will delete blank lines.\n\n \"one\\r\\n\"\n \"\\r\\n\"\n \"two\\r\\n\"\n \"\\r\\n\"\n \"three\\r\\n\"\n \nwill become\n\n \"one\"\n \"two\"\n \"three\"",
+      "revId": "2f1be3a1a61f24a4c24b25d4df804fb47f83f3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
