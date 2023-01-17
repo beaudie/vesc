@@ -1192,6 +1192,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
     QueueSerial mQueueSerial;
 };
 
+class CommandBufferCollector;
+
 class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 {
   public:
@@ -1200,7 +1202,7 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
 
     angle::Result initialize(Context *context, SecondaryCommandPool *commandPool);
 
-    angle::Result reset(Context *context);
+    angle::Result reset(Context *context, CommandBufferCollector *commandBufferCollector);
 
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
@@ -1231,7 +1233,9 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
                     ImageLayout imageLayout,
                     ImageHelper *image);
 
-    angle::Result flushToPrimary(Context *context, PrimaryCommandBuffer *primary);
+    angle::Result flushToPrimary(Context *context,
+                                 PrimaryCommandBuffer *primary,
+                                 CommandBufferCollector *commandBufferCollector);
 
     void setGLMemoryBarrierIssued()
     {
@@ -1303,7 +1307,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result initialize(Context *context, SecondaryCommandPool *commandPool);
 
-    angle::Result reset(Context *context);
+    angle::Result reset(Context *context, CommandBufferCollector *commandBufferCollector);
 
     RenderPassCommandBuffer &getCommandBuffer()
     {
@@ -1356,7 +1360,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     angle::Result flushToPrimary(Context *context,
                                  PrimaryCommandBuffer *primary,
-                                 const RenderPass *renderPass);
+                                 const RenderPass *renderPass,
+                                 CommandBufferCollector *commandBufferCollector);
 
     bool started() const { return mRenderPassStarted; }
 
@@ -1553,7 +1558,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
 // The following class helps support both Vulkan and ANGLE secondary command buffers by
 // encapsulating their differences.
-template <typename CommandBufferT, typename CommandBufferHelperT>
+template <typename CommandBufferHelperT>
 class CommandBufferRecycler
 {
   public:
@@ -1569,18 +1574,28 @@ class CommandBufferRecycler
 
     void recycleCommandBufferHelper(CommandBufferHelperT **commandBuffer);
 
-    void resetCommandBuffer(CommandBufferT &&commandBuffer);
-
-    void releaseCommandBuffersToReset(std::vector<CommandBufferT> *vectorOut)
-    {
-        std::unique_lock<std::mutex> lock(mMutex);
-        (*vectorOut) = std::move(mSecondaryCommandBuffersToReset);
-    }
-
   private:
     std::mutex mMutex;
     std::vector<CommandBufferHelperT *> mCommandBufferHelperFreeList;
-    std::vector<CommandBufferT> mSecondaryCommandBuffersToReset;
+};
+
+class CommandBufferCollector final : angle::NonCopyable
+{
+  public:
+    ~CommandBufferCollector();
+
+    void collectCommandBuffer(priv::SecondaryCommandBuffer &&commandBuffer);
+    void collectCommandBuffer(VulkanSecondaryCommandBuffer &&commandBuffer);
+    void releaseCommandBuffers();
+
+    void releaseCommandBuffersToEmptyList(VulkanSecondaryCommandBufferList *emptyList)
+    {
+        ASSERT(emptyList->empty());
+        std::swap(mCollectedCommandBuffers, *emptyList);
+    }
+
+  private:
+    VulkanSecondaryCommandBufferList mCollectedCommandBuffers;
 };
 
 // Imagine an image going through a few layout transitions:
