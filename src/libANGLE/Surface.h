@@ -81,7 +81,6 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     Error initialize(const Display *display);
     Error makeCurrent(const gl::Context *context);
     Error unMakeCurrent(const gl::Context *context);
-    Error prepareSwap(const gl::Context *context);
     Error swap(gl::Context *context);
     Error swapWithDamage(gl::Context *context, const EGLint *rects, EGLint n_rects);
     Error swapWithFrameToken(gl::Context *context, EGLFrameTokenANGLE frameToken);
