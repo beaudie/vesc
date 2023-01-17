@@ -1121,6 +1121,40 @@ struct CondVarHelper final
     }
 };
 
+template <class MutexType>
+class MutexUnlock final : angle::NonCopyable
+{
+  public:
+    MutexUnlock() = default;
+    explicit MutexUnlock(MutexType *mutex) { unlock(mutex); }
+    ~MutexUnlock() { lockIfUnlocked(); }
+
+    void unlock(MutexType *mutex)
+    {
+        ASSERT(!mMutex && mutex);
+        mMutex = mutex;
+        mMutex->unlock();
+    }
+
+    void lock()
+    {
+        ASSERT(mMutex);
+        mMutex->lock();
+        mMutex = nullptr;
+    }
+
+    void lockIfUnlocked()
+    {
+        if (mMutex)
+        {
+            lock();
+        }
+    }
+
+  private:
+    MutexType *mMutex = nullptr;
+};
+
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
