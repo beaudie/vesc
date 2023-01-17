@@ -8077,7 +8077,7 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
 
     const gl::State &contextState = mainContext->getState();
     gl::State mainContextReplayState(
-        nullptr, nullptr, nullptr, nullptr, nullptr, contextState.getClientType(),
+        nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, contextState.getClientType(),
         contextState.getClientVersion(), contextState.getProfileMask(), false, true, true, true,
         false, EGL_CONTEXT_PRIORITY_MEDIUM_IMG, contextState.hasRobustAccess(),
         contextState.hasProtectedContent());
@@ -8124,10 +8124,11 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
         {
             const gl::State &shareContextState = shareContext->getState();
             gl::State auxContextReplayState(
-                nullptr, nullptr, nullptr, nullptr, nullptr, shareContextState.getClientType(),
-                shareContextState.getClientVersion(), shareContextState.getProfileMask(), false,
-                true, true, true, false, EGL_CONTEXT_PRIORITY_MEDIUM_IMG,
-                shareContextState.hasRobustAccess(), shareContextState.hasProtectedContent());
+                nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
+                shareContextState.getClientType(), shareContextState.getClientVersion(),
+                shareContextState.getProfileMask(), false, true, true, true, false,
+                EGL_CONTEXT_PRIORITY_MEDIUM_IMG, shareContextState.hasRobustAccess(),
+                shareContextState.hasProtectedContent());
             auxContextReplayState.initializeForCapture(shareContext);
 
             egl::Error error = shareContext->makeCurrent(display, draw, read);

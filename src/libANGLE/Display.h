@@ -58,6 +58,8 @@ class Stream;
 class Surface;
 class Sync;
 class Thread;
+class ContextMutex;
+class ContextMutexManager;
 
 using ContextSet = angle::HashSet<gl::Context *>;
 using SurfaceSet = angle::HashSet<Surface *>;
@@ -154,6 +156,8 @@ class Display final : public LabeledObject,
     // Helpers to maintain active thread set to assist with freeing invalid EGL objects.
     void addActiveThread(Thread *thread);
     void threadCleanup(Thread *thread);
+
+    ContextMutexManager *getSharedContextMutexManager() const { return mSharedContextMutexManager; }
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
@@ -415,6 +419,9 @@ class Display final : public LabeledObject,
     Surface *mSurface;
     EGLenum mPlatform;
     angle::LoggingAnnotator mAnnotator;
+
+    ContextMutexManager *mSharedContextMutexManager;
+    ContextMutex *mManagersMutex;
 
     gl::TextureManager *mTextureManager;
     gl::SemaphoreManager *mSemaphoreManager;
