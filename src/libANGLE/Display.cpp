@@ -19,6 +19,7 @@
 #include <platform/PlatformMethods.h>
 
 #include "anglebase/no_destructor.h"
+#include "common/FastMutex.h"
 #include "common/android_util.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -99,8 +100,7 @@ namespace egl
 
 namespace
 {
-// Use standard mutex for now.
-using ContextMutexType = std::mutex;
+using ContextMutexType = angle::FastMutex1;
 
 constexpr angle::SubjectIndex kGPUSwitchedSubjectIndex = 0;
 
