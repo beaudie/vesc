@@ -527,13 +527,6 @@ void EGLAPIENTRY eglForceGPUSwitchANGLE(EGLDisplay dpy, EGLint gpuIDHigh, EGLint
     return EGL_ForceGPUSwitchANGLE(dpy, gpuIDHigh, gpuIDLow);
 }
 
-// EGL_ANGLE_prepare_swap_buffers
-EGLBoolean EGLAPIENTRY eglPrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
-{
-    EnsureEGLLoaded();
-    return EGL_PrepareSwapBuffersANGLE(dpy, surface);
-}
-
 // EGL_ANGLE_program_cache_control
 EGLint EGLAPIENTRY eglProgramCacheGetAttribANGLE(EGLDisplay dpy, EGLenum attrib)
 {
