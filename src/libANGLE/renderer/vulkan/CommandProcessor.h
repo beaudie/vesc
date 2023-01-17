@@ -561,7 +561,7 @@ class ThreadSafeCommandQueue : public CommandQueue
 class CommandProcessor : public Context
 {
   public:
-    CommandProcessor(RendererVk *renderer);
+    CommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue);
     ~CommandProcessor() override;
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
@@ -575,18 +575,11 @@ class CommandProcessor : public Context
                      const char *function,
                      unsigned int line) override;
 
-    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
+    angle::Result init();
 
     void destroy(Context *context);
 
     void handleDeviceLost(RendererVk *renderer);
-
-    angle::Result finishQueueSerial(Context *context,
-                                    const QueueSerial &queueSerial,
-                                    uint64_t timeout);
-    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
-
-    angle::Result waitIdle(Context *context, uint64_t timeout);
 
     angle::Result submitCommands(Context *context,
                                  bool hasProtectedContent,
@@ -610,11 +603,6 @@ class CommandProcessor : public Context
     VkResult queuePresent(egl::ContextPriority contextPriority,
                           const VkPresentInfoKHR &presentInfo);
 
-    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
-                                                            const ResourceUse &use,
-                                                            uint64_t timeout,
-                                                            VkResult *result);
-
     angle::Result checkCompletedCommands(Context *context);
 
     angle::Result flushOutsideRPCommands(Context *context,
@@ -627,31 +615,15 @@ class CommandProcessor : public Context
 
     bool isBusy(RendererVk *renderer) const;
 
-    egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
-    {
-        return mCommandQueue.getDriverPriority(priority);
-    }
-    uint32_t getDeviceQueueIndex() const { return mCommandQueue.getDeviceQueueIndex(); }
-    VkQueue getQueue(egl::ContextPriority priority) { return mCommandQueue.getQueue(priority); }
-
-    // Note that due to inheritance from Context, this class has a set of perf counters as well,
-    // but currently only the counters in the member command queue are of interest.
-    const angle::VulkanPerfCounters getPerfCounters() const
-    {
-        return mCommandQueue.getPerfCounters();
-    }
-    void resetPerFramePerfCounters() { mCommandQueue.resetPerFramePerfCounters(); }
-
-    ANGLE_INLINE bool hasUnfinishedUse(const ResourceUse &use) const
-    {
-        return mCommandQueue.hasUnfinishedUse(use);
-    }
-
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
     angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
                                                   const QueueSerial &queueSerial);
+    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const ResourceUse &use);
+
+    // Used by main thread to wait for worker thread to complete all outstanding work.
+    angle::Result waitForWorkComplete(Context *context);
 
   private:
     bool hasPendingError() const
@@ -679,9 +651,6 @@ class CommandProcessor : public Context
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
-    // Used by main thread to wait for worker thread to complete all outstanding work.
-    angle::Result waitForWorkComplete(Context *context);
-
     std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
@@ -690,7 +659,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    ThreadSafeCommandQueue mCommandQueue;
+    ThreadSafeCommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to

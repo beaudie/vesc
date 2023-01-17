@@ -296,38 +296,11 @@ class RendererVk : angle::NonCopyable
 
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
-        if (isAsyncCommandQueueEnabled())
-        {
-            return mCommandProcessor.getDriverPriority(priority);
-        }
-        else
-        {
-            return mCommandQueue.getDriverPriority(priority);
-        }
+        return mCommandQueue.getDriverPriority(priority);
     }
-    ANGLE_INLINE uint32_t getDeviceQueueIndex()
-    {
-        if (isAsyncCommandQueueEnabled())
-        {
-            return mCommandProcessor.getDeviceQueueIndex();
-        }
-        else
-        {
-            return mCommandQueue.getDeviceQueueIndex();
-        }
-    }
+    ANGLE_INLINE uint32_t getDeviceQueueIndex() { return mCommandQueue.getDeviceQueueIndex(); }
 
-    VkQueue getQueue(egl::ContextPriority priority)
-    {
-        if (isAsyncCommandQueueEnabled())
-        {
-            return mCommandProcessor.getQueue(priority);
-        }
-        else
-        {
-            return mCommandQueue.getQueue(priority);
-        }
-    }
+    VkQueue getQueue(egl::ContextPriority priority) { return mCommandQueue.getQueue(priority); }
 
     // This command buffer should be submitted immediately via queueSubmitOneOff.
     angle::Result getCommandBufferOneOff(vk::Context *context,
@@ -471,26 +444,9 @@ class RendererVk : angle::NonCopyable
 
     angle::VulkanPerfCounters getCommandQueuePerfCounters()
     {
-        if (isAsyncCommandQueueEnabled())
-        {
-            return mCommandProcessor.getPerfCounters();
-        }
-        else
-        {
-            return mCommandQueue.getPerfCounters();
-        }
+        return mCommandQueue.getPerfCounters();
     }
-    void resetCommandQueuePerFrameCounters()
-    {
-        if (isAsyncCommandQueueEnabled())
-        {
-            mCommandProcessor.resetPerFramePerfCounters();
-        }
-        else
-        {
-            mCommandQueue.resetPerFramePerfCounters();
-        }
-    }
+    void resetCommandQueuePerFrameCounters() { mCommandQueue.resetPerFramePerfCounters(); }
 
     egl::Display *getDisplay() const { return mDisplay; }
 
@@ -995,14 +951,7 @@ ANGLE_INLINE void RendererVk::reserveQueueSerials(SerialIndex index,
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
 {
-    if (isAsyncCommandQueueEnabled())
-    {
-        return mCommandProcessor.hasUnfinishedUse(use);
-    }
-    else
-    {
-        return mCommandQueue.hasUnfinishedUse(use);
-    }
+    return mCommandQueue.hasUnfinishedUse(use);
 }
 
 ANGLE_INLINE bool RendererVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
