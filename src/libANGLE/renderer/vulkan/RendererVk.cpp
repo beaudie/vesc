@@ -5028,23 +5028,6 @@ angle::Result RendererVk::finish(vk::Context *context, bool hasProtectedContent)
     return mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs());
 }
 
-angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
-{
-    // TODO: https://issuetracker.google.com/169788986 - would be better if we could just wait
-    // for the work we need but that requires QueryHelper to use the actual serial for the
-    // query.
-    if (isAsyncCommandQueueEnabled())
-    {
-        ANGLE_TRY(mCommandProcessor.checkCompletedCommands(context));
-    }
-    else
-    {
-        ANGLE_TRY(mCommandQueue.checkCompletedCommands(context));
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result RendererVk::flushRenderPassCommands(
     vk::Context *context,
     bool hasProtectedContent,
