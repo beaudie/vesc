@@ -768,6 +768,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::ImageLoadContext getImageLoadContext() const;
 
+    SerialIndex getCurrentQueueSerialIndex() const { return mCurrentQueueSerialIndex; }
+    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
+
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
     bool hasUnsubmittedUse(const vk::Resource &resource) const
     {
@@ -1570,6 +1573,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // A graph built from pipeline descs and their transitions.
     std::ostringstream mPipelineCacheGraph;
 
+    // Per context queue serial
+    SerialIndex mCurrentQueueSerialIndex;
+    Serial mLastFlushedSerial;
+    Serial mLastSubmittedSerial;
     RangedSerialFactory mOutsideRenderPassSerialFactory;
 };
 
