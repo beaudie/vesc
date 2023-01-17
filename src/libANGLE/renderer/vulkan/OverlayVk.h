@@ -28,6 +28,7 @@ class OverlayVk : public OverlayImpl
     void onDestroy(const gl::Context *context) override;
 
     angle::Result onPresent(ContextVk *contextVk,
+                            const vk::ImageHelperSource *imageToPresentSource,
                             vk::ImageHelper *imageToPresent,
                             const vk::ImageView *imageToPresentView,
                             bool is90DegreeRotation);

@@ -140,12 +140,13 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
             contextVk, false, renderer->getMemoryProperties(), gl::TextureType::_2D, samples,
             *mImage, robustInit));
 
-        mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
-                           gl::LevelIndex(0), 0, 1, RenderTargetTransience::MultisampledTransient);
+        mRenderTarget.init(this, &mMultisampledImage, &mMultisampledImageViews, mImage,
+                           &mImageViews, gl::LevelIndex(0), 0, 1,
+                           RenderTargetTransience::MultisampledTransient);
     }
     else
     {
-        mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0, 1,
+        mRenderTarget.init(this, mImage, &mImageViews, nullptr, nullptr, gl::LevelIndex(0), 0, 1,
                            RenderTargetTransience::Default);
     }
 
@@ -206,7 +207,7 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
         ANGLE_TRY(contextVk->onEGLImageQueueChange());
     }
 
-    mRenderTarget.init(mImage, &mImageViews, nullptr, nullptr, imageVk->getImageLevel(),
+    mRenderTarget.init(this, mImage, &mImageViews, nullptr, nullptr, imageVk->getImageLevel(),
                        imageVk->getImageLayer(), 1, RenderTargetTransience::Default);
 
     return angle::Result::Continue;
@@ -315,18 +316,22 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 
     if (mImage && mOwnsImage)
     {
-        mImage->releaseImageFromShareContexts(renderer, contextVk);
+        mImage->releaseImageFromShareContexts(renderer, contextVk, this);
         mImage->releaseStagedUpdates(renderer);
     }
     else
     {
+        if (mImage)
+        {
+            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, this);
+        }
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
     }
 
     if (mMultisampledImage.valid())
     {
-        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
+        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk, this);
     }
 }
 

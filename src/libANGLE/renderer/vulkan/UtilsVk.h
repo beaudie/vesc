@@ -285,6 +285,7 @@ class UtilsVk : angle::NonCopyable
                               vk::BufferHelper *graphWidgetsBuffer,
                               vk::ImageHelper *font,
                               const vk::ImageView *fontView,
+                              const vk::ImageHelperSource *dstSource,
                               vk::ImageHelper *dst,
                               const vk::ImageView *dstView,
                               const OverlayDrawParameters &params);
