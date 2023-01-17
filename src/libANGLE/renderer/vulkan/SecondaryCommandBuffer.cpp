@@ -220,6 +220,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const VkDeviceSize *counterBufferOffsets =
                         reinterpret_cast<const VkDeviceSize *>(counterBuffers +
                                                                params->bufferCount);
+                    ASSERT(vkCmdBeginTransformFeedbackEXT);
                     vkCmdBeginTransformFeedbackEXT(cmdBuffer, 0, params->bufferCount,
                                                    counterBuffers, counterBufferOffsets);
                     break;
@@ -270,6 +271,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         Offset<VkDeviceSize>(buffers, sizeof(VkBuffer) * params->bindingCount);
                     const VkDeviceSize *sizes =
                         Offset<VkDeviceSize>(offsets, sizeof(VkDeviceSize) * params->bindingCount);
+                    ASSERT(vkCmdBindTransformFeedbackBuffersEXT);
                     vkCmdBindTransformFeedbackBuffersEXT(cmdBuffer, 0, params->bindingCount,
                                                          buffers, offsets, sizes);
                     break;
@@ -295,6 +297,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                         Offset<VkDeviceSize>(buffers, sizeof(VkBuffer) * params->bindingCount);
                     const VkDeviceSize *strides =
                         Offset<VkDeviceSize>(offsets, sizeof(VkDeviceSize) * params->bindingCount);
+                    ASSERT(vkCmdBindVertexBuffers2EXT);
                     vkCmdBindVertexBuffers2EXT(cmdBuffer, 0, params->bindingCount, buffers, offsets,
                                                nullptr, strides);
                     break;
@@ -486,6 +489,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const VkDeviceSize *counterBufferOffsets =
                         reinterpret_cast<const VkDeviceSize *>(counterBuffers +
                                                                params->bufferCount);
+                    ASSERT(vkCmdEndTransformFeedbackEXT);
                     vkCmdEndTransformFeedbackEXT(cmdBuffer, 0, params->bufferCount, counterBuffers,
                                                  counterBufferOffsets);
                     break;
@@ -596,6 +600,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetCullModeParams *params =
                         getParamPtr<SetCullModeParams>(currentCommand);
+                    ASSERT(vkCmdSetCullModeEXT);
                     vkCmdSetCullModeEXT(cmdBuffer, params->cullMode);
                     break;
                 }
@@ -611,6 +616,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetDepthBiasEnableParams *params =
                         getParamPtr<SetDepthBiasEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetDepthBiasEnableEXT);
                     vkCmdSetDepthBiasEnableEXT(cmdBuffer, params->depthBiasEnable);
                     break;
                 }
@@ -618,6 +624,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetDepthCompareOpParams *params =
                         getParamPtr<SetDepthCompareOpParams>(currentCommand);
+                    ASSERT(vkCmdSetDepthCompareOpEXT);
                     vkCmdSetDepthCompareOpEXT(cmdBuffer, params->depthCompareOp);
                     break;
                 }
@@ -625,6 +632,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetDepthTestEnableParams *params =
                         getParamPtr<SetDepthTestEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetDepthTestEnableEXT);
                     vkCmdSetDepthTestEnableEXT(cmdBuffer, params->depthTestEnable);
                     break;
                 }
@@ -632,6 +640,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetDepthWriteEnableParams *params =
                         getParamPtr<SetDepthWriteEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetDepthWriteEnableEXT);
                     vkCmdSetDepthWriteEnableEXT(cmdBuffer, params->depthWriteEnable);
                     break;
                 }
@@ -649,6 +658,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const VkFragmentShadingRateCombinerOpKHR ops[2] = {
                         VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR,
                         VK_FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR};
+                    ASSERT(vkCmdSetFragmentShadingRateKHR);
                     vkCmdSetFragmentShadingRateKHR(cmdBuffer, &fragmentSize, ops);
                     break;
                 }
@@ -656,6 +666,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetFrontFaceParams *params =
                         getParamPtr<SetFrontFaceParams>(currentCommand);
+                    ASSERT(vkCmdSetFrontFaceEXT);
                     vkCmdSetFrontFaceEXT(cmdBuffer, params->frontFace);
                     break;
                 }
@@ -669,6 +680,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 case CommandID::SetLogicOp:
                 {
                     const SetLogicOpParams *params = getParamPtr<SetLogicOpParams>(currentCommand);
+                    ASSERT(vkCmdSetLogicOpEXT);
                     vkCmdSetLogicOpEXT(cmdBuffer, params->logicOp);
                     break;
                 }
@@ -676,6 +688,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetPrimitiveRestartEnableParams *params =
                         getParamPtr<SetPrimitiveRestartEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetPrimitiveRestartEnableEXT);
                     vkCmdSetPrimitiveRestartEnableEXT(cmdBuffer, params->primitiveRestartEnable);
                     break;
                 }
@@ -683,6 +696,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetRasterizerDiscardEnableParams *params =
                         getParamPtr<SetRasterizerDiscardEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetRasterizerDiscardEnableEXT);
                     vkCmdSetRasterizerDiscardEnableEXT(cmdBuffer, params->rasterizerDiscardEnable);
                     break;
                 }
@@ -706,6 +720,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetStencilOpParams *params =
                         getParamPtr<SetStencilOpParams>(currentCommand);
+                    ASSERT(vkCmdSetStencilOpEXT);
                     vkCmdSetStencilOpEXT(cmdBuffer,
                                          static_cast<VkStencilFaceFlags>(params->faceMask),
                                          static_cast<VkStencilOp>(params->failOp),
@@ -728,6 +743,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 {
                     const SetStencilTestEnableParams *params =
                         getParamPtr<SetStencilTestEnableParams>(currentCommand);
+                    ASSERT(vkCmdSetStencilTestEnableEXT);
                     vkCmdSetStencilTestEnableEXT(cmdBuffer, params->stencilTestEnable);
                     break;
                 }
