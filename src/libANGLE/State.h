@@ -33,6 +33,8 @@
 namespace egl
 {
 class ShareGroup;
+class ContextMutex;
+class SingleContextMutex;
 }  // namespace egl
 
 namespace gl
@@ -66,6 +68,13 @@ using TextureBindingVector = std::vector<BindingPointer<Texture>>;
 using TextureBindingMap    = angle::PackedEnumMap<TextureType, TextureBindingVector>;
 using ActiveQueryMap       = angle::PackedEnumMap<QueryType, BindingPointer<Query>>;
 
+enum class SharedContextMutexActivation
+{
+    kNone,
+    kTemporary,
+    kPermanent,
+};
+
 class ActiveTexturesCache final : angle::NonCopyable
 {
   public:
@@ -91,6 +100,8 @@ class State : angle::NonCopyable
           egl::ShareGroup *shareGroup,
           TextureManager *shareTextures,
           SemaphoreManager *shareSemaphores,
+          egl::ContextMutex *sharedContextMutex,
+          egl::SingleContextMutex *singleContextMutex,
           const OverlayType *overlay,
           const EGLenum clientType,
           const Version &clientVersion,
@@ -1060,6 +1071,10 @@ class State : angle::NonCopyable
     Limitations mLimitations;
 
     egl::ShareGroup *mShareGroup;
+    egl::ContextMutex *const mSharedContextMutex;
+    egl::SingleContextMutex *const mSingleContextMutex;
+    std::atomic<egl::ContextMutex *> mContextMutex;  // Simple pointer without reference counting
+    SharedContextMutexActivation mSharedContextMutexActivation;
 
     // Resource managers.
     BufferManager *mBufferManager;
