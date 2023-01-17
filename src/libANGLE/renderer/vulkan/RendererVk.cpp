@@ -4880,6 +4880,18 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
     return angle::Result::Continue;
 }
 
+void RendererVk::cleanupAllCompletedGarbage(vk::Context *context)
+{
+    if (isAsyncCommandQueueEnabled())
+    {
+        mCommandProcessor.cleanupAllCompletedGarbage(context);
+    }
+    else
+    {
+        mCommandQueue.cleanupAllCompletedGarbage(context);
+    }
+}
+
 void RendererVk::handleDeviceLost()
 {
     if (isAsyncCommandQueueEnabled())
@@ -5028,7 +5040,7 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     }
     else
     {
-        result = mCommandQueue.queuePresent(priority, presentInfo, swapchainStatus);
+        result = mCommandQueue.queuePresent(context, priority, presentInfo, swapchainStatus);
     }
 
     if (getFeatures().logMemoryReportStats.enabled)

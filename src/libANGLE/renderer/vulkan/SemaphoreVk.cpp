@@ -203,7 +203,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
     // > - A binary semaphore must be signaled, or have an associated semaphore signal operation
     // >   that is pending execution.
     //
-    return renderer->waitForQueueSerialToBeSubmitted(
+    return renderer->waitForQueueSerialActuallySubmitted(
         contextVk,
         QueueSerial(contextVk->getCurrentQueueSerialIndex(), contextVk->getLastSubmittedSerial()));
 }

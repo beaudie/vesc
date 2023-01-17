@@ -3731,7 +3731,7 @@ void ContextVk::clearAllGarbage()
     // The VMA virtual allocator code has assertion to ensure all sub-ranges are freed before
     // virtual block gets freed. We need to ensure all completed garbage objects are actually freed
     // to avoid hitting that assertion.
-    mRenderer->cleanupGarbage();
+    mRenderer->cleanupAllCompletedGarbage(this);
 
     for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
@@ -6367,7 +6367,7 @@ angle::Result ContextVk::releaseTextures(const gl::Context *context,
     }
 
     ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));
-    return mRenderer->waitForQueueSerialToBeSubmitted(
+    return mRenderer->waitForQueueSerialActuallySubmitted(
         this, QueueSerial(mCurrentQueueSerialIndex, mLastSubmittedSerial));
 }
 

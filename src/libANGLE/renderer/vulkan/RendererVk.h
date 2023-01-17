@@ -522,22 +522,22 @@ class RendererVk : angle::NonCopyable
     {
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.isBusy(this);
+            return mCommandProcessor.isBusy();
         }
         else
         {
-            return mCommandQueue.isBusy(this);
+            return mCommandQueue.isBusy();
         }
     }
 
-    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
-                                                  const QueueSerial &queueSerial)
+    angle::Result waitForQueueSerialActuallySubmitted(vk::Context *context,
+                                                      const QueueSerial &queueSerial)
     {
         // This is only needed for async submission code path. For immediate submission, it is a nop
         // since everything is submitted immediately.
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.waitForQueueSerialToBeSubmitted(context, queueSerial);
+            return mCommandProcessor.waitForQueueSerialActuallySubmitted(context, queueSerial);
         }
         // This queueSerial must have been submitted.
         ASSERT(!mCommandQueue.hasUnsubmittedUse(vk::ResourceUse(queueSerial)));
@@ -598,6 +598,7 @@ class RendererVk : angle::NonCopyable
                                  vk::SecondaryCommandPools *commandPools,
                                  const QueueSerial &submitSerialOut);
 
+    void cleanupAllCompletedGarbage(vk::Context *context);
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
     angle::Result finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial);
