@@ -3842,6 +3842,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Currently disabled by default: http://anglebug.com/4324
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
 
+    // Need to check impact on performance/memory.
+    ANGLE_FEATURE_CONDITION(&mFeatures, useSubmitThread, true);
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
 

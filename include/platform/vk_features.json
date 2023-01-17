@@ -407,6 +407,14 @@
             "issue": "http://anglebug.com/4324"
         },
         {
+            "name": "use_submit_thread",
+            "category": "Features",
+            "description": [
+                "Use additional thread for GPU Submit/Present ",
+                "when 'asyncCommandQueue' is enabled."
+            ]
+        },
+        {
             "name": "supports_shader_float16",
             "category": "Features",
             "description": [

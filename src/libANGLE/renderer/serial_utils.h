@@ -108,6 +108,7 @@ class Serial final
     constexpr uint64_t getValue() const { return mValue; }
 
   private:
+    friend class SerialFactory;
     friend class AtomicSerialFactory;
     friend class RangedSerialFactory;
     friend class AtomicQueueSerial;
@@ -126,6 +127,16 @@ class AtomicQueueSerial final
         return *this;
     }
     Serial getSerial() const { return Serial(mValue.load(std::memory_order_consume)); }
+    Serial acquireSerial() const { return Serial(mValue.load(std::memory_order_acquire)); }
+    void updateIfIncrease(Serial candidate)
+    {
+        uint64_t current = mValue.load(std::memory_order_relaxed);
+        while (candidate.mValue > current &&
+               !mValue.compare_exchange_weak(current, candidate.mValue, std::memory_order_release,
+                                             std::memory_order_relaxed))
+        {
+        }
+    }
 
   private:
     std::atomic<uint64_t> mValue;
@@ -165,6 +176,22 @@ class RangedSerialFactory final : angle::NonCopyable
     }
     uint64_t mSerial;
     size_t mCount;
+};
+
+class SerialFactory final : angle::NonCopyable
+{
+  public:
+    SerialFactory() : mSerial(1) {}
+
+    Serial generate()
+    {
+        uint64_t current = mSerial++;
+        ASSERT(mSerial > current);  // Integer overflow
+        return Serial(current);
+    }
+
+  private:
+    uint64_t mSerial;
 };
 
 class AtomicSerialFactory final : angle::NonCopyable
@@ -209,6 +236,8 @@ class AtomicQueueSerialFixedArray final
 
     void setQueueSerial(SerialIndex index, Serial serial);
     void setQueueSerial(const QueueSerial &queueSerial);
+    void trySetQueueSerial(SerialIndex index, Serial serial);
+    void trySetQueueSerial(const QueueSerial &queueSerial);
     void fill(Serial serial) { std::fill(mSerials.begin(), mSerials.end(), serial); }
     Serial operator[](SerialIndex index) const { return mSerials[index].getSerial(); }
     size_t size() const { return mSerials.size(); }
@@ -268,6 +297,18 @@ ANGLE_INLINE void AtomicQueueSerialFixedArray::setQueueSerial(SerialIndex index,
 ANGLE_INLINE void AtomicQueueSerialFixedArray::setQueueSerial(const QueueSerial &queueSerial)
 {
     setQueueSerial(queueSerial.getIndex(), queueSerial.getSerial());
+}
+
+ANGLE_INLINE void AtomicQueueSerialFixedArray::trySetQueueSerial(SerialIndex index, Serial serial)
+{
+    ASSERT(index != kInvalidQueueSerialIndex);
+    ASSERT(index < mSerials.size());
+    mSerials[index].updateIfIncrease(serial);
+}
+
+ANGLE_INLINE void AtomicQueueSerialFixedArray::trySetQueueSerial(const QueueSerial &queueSerial)
+{
+    trySetQueueSerial(queueSerial.getIndex(), queueSerial.getSerial());
 }
 }  // namespace rx
 

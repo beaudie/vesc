@@ -312,6 +312,7 @@ enum class Feature
     UseMultipleDescriptorsForExternalFormats,
     UseNonZeroStencilWriteMaskStaticState,
     UseShadowBuffersWhenAppropriate,
+    UseSubmitThread,
     UseSystemMemoryForConstantBuffers,
     UseUnusedBlocksWithStandardOrSharedLayout,
     VaryingsRequireMatchingPrecisionInSpirv,

@@ -451,6 +451,511 @@ class CommandQueue : angle::NonCopyable
     angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
 };
 
+// Replacement for the CommandQueue
+// Main differences:
+// - Supports concurrent checking/waiting for commands from Context thread, while
+//   flushing/submitting in async thread (does not require a mutex).
+// - Allows concurrent waiting for QueueSerial submission/completion, while still allows
+//   flushing/submitting from other Context threads (unlocks mutex).
+// - Implemented additional submitting thread. Helps process command buffers when driver blocks.
+// - Removed forced Garbage Cleanup from checking/waiting functions (better wait timings).
+// - Garbage Cleanup performed only as part of submit operations or explicitly.
+// - Added explicit cleanupAllCompletedGarbage() function to use in glFinish() to release resources.
+// - Fixed "Finish to Serial" logic in cases, when multiple VkQueues used at the same time
+//   (need to wait for a VkFence from each VkQueue).
+// - Fixed bug when "OneOff" submits can not be explicitly waited (with external fence).
+// - Fixed race-condition with "VulkanPerfCounters" when using async thread.
+// - Better "kInFlightCommandsLimit" handling when using async thread.
+// - Better "kMaxBufferSuballocationGarbageSize" handling when using async thread.
+//
+// Each thread may run in parallel (no mutex):
+// - Context thread   - any thread from which GL/EGL API is called (Some client application thread)
+// - Execution thread - additional thread or "Context thread" (CommandProcessor thread)
+// - Submit thread    - additional thread or "Execution thread" (mSubmitThreadTaskQueue)
+class CommandQueue2 : angle::NonCopyable
+{
+  public:
+    using QueueItemIndex = uint32_t;
+
+  public:
+    CommandQueue2(std::mutex &mutex);
+
+    angle::Result init(Context *context, const DeviceQueueMap &queueMap);
+    void destroy(Context *context);
+
+    // Multiple threads
+
+    egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
+    {
+        return mQueueMap.getDevicePriority(priority);
+    }
+    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
+    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
+
+    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
+    bool hasUnfinishedUse(const ResourceUse &use) const { return use > mLastCompletedSerials; }
+    // The ResourceUse still have queue serial not yet submitted to vulkan.
+    bool hasUnsubmittedUse(const ResourceUse &use) const { return use > mLastSubmittedSerials; }
+    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+
+    void waitSubmitThreadIdle();  // Safe to call after destroy()
+
+    // Exclusively single thread (other threads must be suspended)
+
+    void cleanupAllCompletedGarbage(Context *context);
+    void handleDeviceLost(RendererVk *renderer);
+
+    // Single Context thread
+
+    angle::Result checkCompletedCommands(Context *context);
+    angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
+    angle::Result finishQueueSerial(Context *context,
+                                    const QueueSerial &queueSerial,
+                                    uint64_t timeout);
+    angle::Result waitIdle(Context *context, uint64_t timeout);
+    angle::Result waitForResourceUseToFinishWithUserTimeout(Context *context,
+                                                            const ResourceUse &use,
+                                                            uint64_t timeout,
+                                                            VkResult *result);
+    bool isBusy() const;
+
+    const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
+    void resetPerFramePerfCounters();
+
+    void flushWaitSemaphores(bool hasProtectedContent,
+                             egl::ContextPriority priority,
+                             std::vector<VkSemaphore> &&waitSemaphores,
+                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+
+    // Single Context thread (asyncCommandQueue = true)
+
+    void onCommandsFlush(bool hasProtectedContent, egl::ContextPriority priority);
+
+    angle::Result prepareNextSubmit(Context *context,
+                                    bool hasProtectedContent,
+                                    egl::ContextPriority priority,
+                                    const VkSemaphore signalSemaphore,
+                                    const QueueSerial &submitQueueSerial,
+                                    QueueItemIndex *itemIndexOut);
+
+    angle::Result prepareNextSubmitOneOff(Context *context,
+                                          bool hasProtectedContent,
+                                          egl::ContextPriority priority,
+                                          VkCommandBuffer commandBufferHandle,
+                                          const Semaphore *waitSemaphore,
+                                          VkPipelineStageFlags waitSemaphoreStageMask,
+                                          const Fence *fence,
+                                          const QueueSerial &submitQueueSerial,
+                                          QueueItemIndex *itemIndexOut);
+
+    angle::Result waitForQueueSerialActuallySubmitted(RendererVk *renderer,
+                                                      const QueueSerial &queueSerial);
+
+    // Single Execution thread (asyncCommandQueue = true)
+
+    angle::Result doFlushOutsideRPCommands(
+        Context *context,
+        bool hasProtectedContent,
+        egl::ContextPriority priority,
+        OutsideRenderPassCommandBufferHelper **outsideRPCommands);
+    angle::Result doFlushRenderPassCommands(Context *context,
+                                            bool hasProtectedContent,
+                                            egl::ContextPriority priority,
+                                            const RenderPass &renderPass,
+                                            RenderPassCommandBufferHelper **renderPassCommands);
+
+    angle::Result doSubmitCommands(Context *context,
+                                   SecondaryCommandBufferList &&commandBuffersToReset,
+                                   SecondaryCommandPools *commandPools,
+                                   QueueItemIndex itemIndex);
+
+    angle::Result doQueueSubmitOneOff(Context *context, QueueItemIndex itemIndex);
+
+    template <class OnPresentResult>
+    void doQueuePresent(Context *context,
+                        egl::ContextPriority priority,
+                        const VkPresentInfoKHR &presentInfo,
+                        OnPresentResult &&onPresentResult);
+
+  protected:
+    // Single Execution (Context) thread (asyncCommandQueue = false)
+
+    angle::Result flushOutsideRPCommands(Context *context,
+                                         bool hasProtectedContent,
+                                         egl::ContextPriority priority,
+                                         OutsideRenderPassCommandBufferHelper **outsideRPCommands);
+    angle::Result flushRenderPassCommands(Context *context,
+                                          bool hasProtectedContent,
+                                          egl::ContextPriority priority,
+                                          const RenderPass &renderPass,
+                                          RenderPassCommandBufferHelper **renderPassCommands);
+
+    angle::Result submitCommands(Context *context,
+                                 bool hasProtectedContent,
+                                 egl::ContextPriority priority,
+                                 const VkSemaphore signalSemaphore,
+                                 SecondaryCommandBufferList &&commandBuffersToReset,
+                                 SecondaryCommandPools *commandPools,
+                                 const QueueSerial &submitQueueSerial);
+
+    angle::Result queueSubmitOneOff(Context *context,
+                                    bool hasProtectedContent,
+                                    egl::ContextPriority priority,
+                                    VkCommandBuffer commandBufferHandle,
+                                    const Semaphore *waitSemaphore,
+                                    VkPipelineStageFlags waitSemaphoreStageMask,
+                                    const Fence *fence,
+                                    SubmitPolicy submitPolicy,
+                                    const QueueSerial &submitQueueSerial);
+
+    VkResult queuePresent(Context *context,
+                          egl::ContextPriority priority,
+                          const VkPresentInfoKHR &presentInfo,
+                          SwapchainStatus *swapchainStatus);
+
+  private:
+    using QueueSize = QueueItemIndex;
+
+    static constexpr uint32_t kVkQueueCount = QueueFamily::kQueueCount;
+
+    static constexpr QueueSize kQueueCapacity = 64;
+    static constexpr QueueSize kQueueSlack    = 2;  // Important value!
+
+    static constexpr QueueItemIndex kInvalidQueueItemIndex = -1;
+
+    static_assert((kQueueCapacity & (kQueueCapacity - 1)) == 0,
+                  "kQueueCapacity MUST be the Power of 2");
+    static_assert(kQueueSlack >= 2 && kQueueSlack < kQueueCapacity, "BAD kQueueSlack");
+    static constexpr QueueSize kMaxQueueSize = kQueueCapacity - kQueueSlack;
+
+    struct VkSemaphores final
+    {
+        VkSemaphores(std::nullptr_t) {}
+        VkSemaphores(const Semaphore *s)
+        {
+            if (s)
+            {
+                count = 1;
+                items = s->ptr();
+            }
+        }
+        VkSemaphores(const VkSemaphore &s) : count(1), items(&s) {}
+        VkSemaphores(const std::vector<VkSemaphore> &v) : count(v.size()), items(v.data()) {}
+        size_t count             = 0;
+        const VkSemaphore *items = nullptr;
+    };
+
+    struct CmdsState
+    {
+        PersistentCommandPool pool;
+        struct QueueState
+        {
+            // Single Execution thread
+            PrimaryCommandBuffer currentBuffer;
+            // Single Context thread
+            std::vector<VkSemaphore> waitSemaphores;
+            std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+            bool needSubmit = false;
+        };
+        angle::PackedEnumMap<egl::ContextPriority, QueueState> queueStates;
+        std::vector<vk::PrimaryCommandBuffer> completedBuffersPush;
+        std::vector<vk::PrimaryCommandBuffer> completedBuffersPop;
+    };
+
+    class DynamicTimeout final : angle::NonCopyable
+    {
+      public:
+        explicit DynamicTimeout(uint64_t original);
+        uint64_t getRemaining();
+
+      private:
+        const uint64_t mOriginal;
+        double mStartTime;
+    };
+
+    class QueueItem final : angle::NonCopyable
+    {
+      public:
+        enum class State
+        {
+            Idle      = 0,
+            Submitted = 1,
+            Error     = 2,
+            Finished  = 3,
+        };
+
+        class SubmitScope final : angle::NonCopyable
+        {
+          public:
+            SubmitScope(Context *context, CommandQueue2 *owner, QueueItemIndex itemIndex);
+            SubmitScope(SubmitScope &&other);
+            ~SubmitScope();
+
+            QueueItem &getItem() const
+            {
+                ASSERT(mItem != nullptr);
+                return *mItem;
+            }
+
+            void setInSubmitThread();
+            void finish();
+
+          private:
+            Context *const mContext;
+            CommandQueue2 *mOwner;
+            const QueueItemIndex mItemIndex;
+            QueueItem *mItem;
+            bool mIsInSubmitThread = false;
+        };
+
+      public:
+        Serial serial;
+        QueueSerial queueSerial;
+        VkQueue queue                     = VK_NULL_HANDLE;
+        CmdsState::QueueState *queueState = nullptr;
+        bool hasProtectedContent          = false;
+        bool hasSubmit                    = false;
+
+        VkSubmitInfo submitInfo = {};
+        std::vector<VkSemaphore> waitSemaphores;
+        std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+        VkSemaphore signalSemaphore = VK_NULL_HANDLE;
+
+        VkCommandBuffer oneOffCommandBuffer = VK_NULL_HANDLE;
+        VkFence oneOffFence                 = VK_NULL_HANDLE;
+
+        SharedFence fence;
+        PrimaryCommandBuffer commandBuffer;
+
+        // commandPools is for secondary CommandBuffer allocation
+        SecondaryCommandPools *commandPools = nullptr;
+        SecondaryCommandBufferList commandBuffersToReset;
+
+      public:
+        void resetState(State s = State::Idle) { mState.store(s, std::memory_order_relaxed); }
+        State getState() const { return mState.load(std::memory_order_relaxed); }
+        State acquireState() const { return mState.load(std::memory_order_acquire); }
+
+        // Single Context thread
+        angle::Result waitIdle(uint64_t timeout) const;
+        void resetPendingState(VkDevice device);
+        void resetSecondaryCommands(VkDevice device);
+
+        void acquireLock();     // Call inside "mCommandQueueMutex"
+        void releaseLock();     // Call outside "mCommandQueueMutex"
+        bool isLocked() const;  // Call inside "mCommandQueueMutex"
+
+        bool hasFence() const { return fence; }
+        VkResult getPendingFenceStatus(VkDevice device, VkResult errorStateResult) const;
+        VkResult getFenceStatus(VkDevice device, VkResult noFenceResult) const;
+        VkResult waitPendingFence(VkDevice device,
+                                  DynamicTimeout &timeout,
+                                  VkResult errorStateResult) const;
+        State waitSubmitted(DynamicTimeout &timeout) const;
+        VkResult waitFence(VkDevice device, DynamicTimeout &timeout) const;
+
+        // Single Submit thread
+        void collectCommandBuffer(Context *context, CommandQueue2 *owner);
+        void resetSubmittedState();
+
+      private:
+        void resetFence();
+
+        void setState(State newState);
+        void setStateAndNotify(State newState);
+        template <class IsTargetState>
+        State waitState(DynamicTimeout &timeout, IsTargetState &&isTargetState) const;
+
+      private:
+        std::atomic<State> mState{State::Idle};
+        std::atomic<int> mLockCounter{0};
+        mutable std::mutex mMutex;
+        mutable CondVarHelper mCondVar;
+    };
+
+    class QueueTask final
+    {
+      public:
+        QueueTask() = default;
+
+        template <class F>
+        explicit QueueTask(F &&functor)
+        {
+            mPtr.reset(new Wrapper<std::remove_reference_t<F>>(std::forward<F>(functor)));
+        }
+
+        angle::Result execute() { return mPtr->execute(); }
+
+      private:
+        class Interface
+        {
+          public:
+            virtual ~Interface()            = default;
+            virtual angle::Result execute() = 0;
+        };
+
+        template <class T>
+        class Wrapper final : public Interface
+        {
+          public:
+            template <class F>
+            Wrapper(F &&functor) : mFunctor(std::forward<F>(functor))
+            {}
+            virtual angle::Result execute() final override { return mFunctor(); }
+
+          private:
+            T mFunctor;
+        };
+
+      private:
+        std::unique_ptr<Interface> mPtr;
+    };
+
+    class SubmitThreadTaskQueue final : angle::NonCopyable
+    {
+      public:
+        ~SubmitThreadTaskQueue();
+
+        void init();
+        void destroy();
+
+        template <class F>
+        void enqueue(F &&functor);
+        void waitIdle();
+
+        // Only for ASSERT()
+        bool isIdle() const { return !mIsBusy; }
+
+      private:
+        void processTaskQueue();
+        bool tryPopNextTask(QueueTask *taskOut);
+
+      private:
+        std::deque<QueueTask> mTaskQueue;
+        std::thread mSubmitThread;
+        std::mutex mMutex;
+        CondVarHelper mCondVar;
+        bool mIsBusy   = false;
+        bool mNeedExit = false;
+    };
+
+  private:
+    static QueueItemIndex IncIndex(QueueItemIndex index, QueueSize value = 1);
+    static QueueItemIndex DecIndex(QueueItemIndex index, QueueSize value = 1);
+
+    template <class GetFenceStatus>
+    angle::Result checkCompletedItems(Context *context,
+                                      QueueItemIndex beginIndex,
+                                      QueueItemIndex endIndex,
+                                      GetFenceStatus &&getFenceStatus,
+                                      Serial *completedSerialOut);
+
+    template <class TryResetItem>
+    void resetCompletedItems(QueueItemIndex *beginIndex,
+                             QueueItemIndex endIndex,
+                             Serial completedSerial,
+                             TryResetItem &&tryResetItem);
+
+    // Single Context thread
+
+    angle::Result prepareNextSubmit(Context *context,
+                                    bool hasProtectedContent,
+                                    VkQueue queue,
+                                    CmdsState::QueueState *queueState,
+                                    VkSemaphores waitSemaphores,
+                                    const VkPipelineStageFlags *waitSemaphoreStageMasks,
+                                    const VkSemaphore signalSemaphore,
+                                    VkCommandBuffer oneOffCommandBuffer,
+                                    const Fence *oneOffFence,
+                                    const QueueSerial &submitQueueSerial,
+                                    QueueItemIndex *itemIndexOut);
+
+    angle::Result throttlePendingItemQueue(Context *context);  // Call before enqueue
+    QueueSize getNumPendingItems() const;
+
+    template <class OnEachItem>
+    bool forEachUncompletedItem(Serial completedSerial,
+                                const Serials &serials,
+                                OnEachItem &&onEachItem,
+                                QueueItemIndex *waitIndexOut);
+    angle::Result waitAndResetPendingItems(Context *context,
+                                           const QueueItem &waitItem,
+                                           uint64_t timeout,
+                                           bool mayUnlock = false);
+    angle::Result waitAndResetPendingItems(Context *context,
+                                           const ResourceUse &use,
+                                           Serial waitSerial,
+                                           uint64_t timeout,
+                                           bool mayUnlock = false);
+    angle::Result waitPendingItems(Context *context,
+                                   Serial completedSerial,
+                                   QueueItemIndex waitIndex,
+                                   uint64_t timeout,
+                                   bool mayUnlock = false);
+    void resetPendingItems(VkDevice device, Serial completedSerial, bool maySkip = false);
+
+    // Single Execution thread
+
+    angle::Result ensurePrimaryCommandBufferValid(Context *context,
+                                                  bool hasProtectedContent,
+                                                  PrimaryCommandBuffer *primaryCommandBufferInOut);
+    void resetCompletedBuffers(Context *context);
+
+    // Single Submit thread
+
+    angle::Result doSubmitCommandsJob(Context *context, QueueItem::SubmitScope &itemSubmitScope);
+    angle::Result queueSubmit(Context *context, QueueItem::SubmitScope &itemSubmitScope);
+
+    template <class OnPresentResult>
+    void doQueuePresentJob(Context *context,
+                           egl::ContextPriority priority,
+                           const VkPresentInfoKHR &presentInfo,
+                           OnPresentResult &&onPresentResult);
+
+    void advanceSubmitIndex(QueueItemIndex submitItemIndex);
+    void checkAndCollectCommandBuffers(Context *context);
+    void collectCommandBuffers(Context *context, Serial completedSerial);
+    void resetSubmittedItems();
+
+    // Multiple threads
+
+    void cleanupGarbage(RendererVk *renderer, Serial completedSerial);
+
+    void updateLastCompletedSerials(const angle::FastMap<Serial, kMaxFastQueueSerials> &serials,
+                                    Serial serial);
+
+  private:
+    std::mutex &mMutex;
+
+    DeviceQueueMap mQueueMap;
+    CmdsState mCmdsStateMap[2];  // 0 - normal; 1 - hasProtectedContent
+
+    FenceRecycler mFenceRecycler;  // Multiple threads
+
+    QueueItem mItemQueue[kQueueCapacity];
+    // Single Context thread
+    QueueItemIndex mNextPrepareIndex       = 0;
+    QueueItemIndex mPendingStateResetIndex = 0;
+    // Single Submit thread
+    QueueItemIndex mNextSubmitIndex          = 0;
+    QueueItemIndex mCommandBufferResetIndex  = 0;
+    QueueItemIndex mSubmittedStateResetIndex = 0;
+
+    // Multiple threads
+    AtomicQueueSerial mLastCleanupGarbageSerial;
+
+    SerialFactory mSerialFactory;  // Single Context thread
+    AtomicQueueSerialFixedArray mLastSubmittedSerials;
+    AtomicQueueSerialFixedArray mLastCompletedSerials;
+    AtomicQueueSerial mLastCompletedSerial;
+
+    angle::VulkanPerfCounters mPerfCounters = {};  // Single Submit thread
+
+    SubmitThreadTaskQueue mSubmitThreadTaskQueue;
+    std::mutex mCompletedBuffersMutex;
+    bool mUseSubmitThread = false;
+};
+
 class ThreadSafeCommandQueue : public CommandQueue
 {
   public:

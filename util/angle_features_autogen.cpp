@@ -337,6 +337,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::UseMultipleDescriptorsForExternalFormats, "useMultipleDescriptorsForExternalFormats"},
     {Feature::UseNonZeroStencilWriteMaskStaticState, "useNonZeroStencilWriteMaskStaticState"},
     {Feature::UseShadowBuffersWhenAppropriate, "useShadowBuffersWhenAppropriate"},
+    {Feature::UseSubmitThread, "useSubmitThread"},
     {Feature::UseSystemMemoryForConstantBuffers, "useSystemMemoryForConstantBuffers"},
     {Feature::UseUnusedBlocksWithStandardOrSharedLayout,
      "useUnusedBlocksWithStandardOrSharedLayout"},

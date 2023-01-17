@@ -320,6 +320,14 @@ struct FeaturesVk : FeatureSetBase
                                      "Use CommandQueue worker thread to dispatch work to GPU.",
                                      &members, "http://anglebug.com/4324"};
 
+    FeatureInfo useSubmitThread = {
+        "useSubmitThread",
+        FeatureCategory::VulkanFeatures,
+        "Use additional thread for GPU Submit/Present "
+        "when 'asyncCommandQueue' is enabled.",
+        &members,
+    };
+
     FeatureInfo supportsShaderFloat16 = {
         "supportsShaderFloat16", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_shader_float16_int8 extension "
