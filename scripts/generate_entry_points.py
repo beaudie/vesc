@@ -282,8 +282,7 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
 TEMPLATE_EGL_ENTRY_POINT_NO_RETURN = """\
 void EGLAPIENTRY EGL_{name}({params})
 {{
-    {preamble}
-    {entry_point_locks}
+    ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
     Thread *thread = egl::GetCurrentThread();
@@ -297,18 +296,10 @@ void EGLAPIENTRY EGL_{name}({params})
 }}
 """
 
-TEMPLATE_EGL_ENTRY_POINT_NO_RETURN_CUSTOM = """\
-void EGLAPIENTRY EGL_{name}({params})
-{{
-    {name}({internal_params});
-}}
-"""
-
 TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 {return_type} EGLAPIENTRY EGL_{name}({params})
 {{
-    {preamble}
-    {entry_point_locks}
+    ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
     Thread *thread = egl::GetCurrentThread();
@@ -320,13 +311,6 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
     {return_type} returnValue = {name}(thread{comma_if_needed}{internal_params});
     ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params}, returnValue);
     return returnValue;
-}}
-"""
-
-TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_CUSTOM = """\
-{return_type} EGLAPIENTRY EGL_{name}({params})
-{{
-    return {name}({internal_params});
 }}
 """
 
@@ -948,7 +932,6 @@ EGL_SOURCE_INCLUDES = """\
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/egl_stubs_autogen.h"
-#include "libGLESv2/egl_ext_stubs_autogen.h"
 #include "libGLESv2/global_state.h"
 
 using namespace egl;
@@ -1578,14 +1561,9 @@ def get_packed_enums(api, cmd_packed_gl_enums, cmd_name, packed_param_types, par
     return result
 
 
-CUSTOM_EGL_ENTRY_POINTS = ["eglPrepareSwapBuffersANGLE"]
-
-
-def get_def_template(api, cmd_name, return_type, has_errcode_ret):
+def get_def_template(api, return_type, has_errcode_ret):
     if return_type == "void":
         if api == apis.EGL:
-            if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-                return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN_CUSTOM
             return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN
         elif api == apis.CL:
             return TEMPLATE_CL_ENTRY_POINT_NO_RETURN
@@ -1595,8 +1573,6 @@ def get_def_template(api, cmd_name, return_type, has_errcode_ret):
         return TEMPLATE_CL_ENTRY_POINT_WITH_RETURN_ERROR
     else:
         if api == apis.EGL:
-            if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-                return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_CUSTOM
             return TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN
         elif api == apis.CL:
             if has_errcode_ret:
@@ -1610,21 +1586,15 @@ def get_def_template(api, cmd_name, return_type, has_errcode_ret):
 def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packed_enums,
                            packed_param_types, ep_to_object):
     packed_enums = get_packed_enums(api, cmd_packed_enums, cmd_name, packed_param_types, params)
-    if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-        internal_params = [just_the_name(param) for param in params]
-    else:
-        internal_params = [just_the_name_packed(param, packed_enums) for param in params]
+    internal_params = [just_the_name_packed(param, packed_enums) for param in params]
     if internal_params and internal_params[-1] == "errcode_ret":
         internal_params.pop()
         has_errcode_ret = True
     else:
         has_errcode_ret = False
-
     packed_gl_enum_conversions = []
-
     for param in params:
         name = just_the_name(param)
-
         if name in packed_enums:
             internal_name = name + "Packed"
             internal_type = packed_enums[name]
@@ -1678,15 +1648,11 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             event_comment,
         "labeled_object":
             get_egl_entry_point_labeled_object(ep_to_object, cmd_name, params, packed_enums),
-        "entry_point_locks":
-            get_locks(api, cmd_name, params),
         "optional_gl_entry_point_locks":
-            get_optional_gl_locks(api, cmd_name, params),
-        "preamble":
-            get_preamble(api, cmd_name, params)
+            get_optional_gl_locks(api, cmd_name, params)
     }
 
-    template = get_def_template(api, cmd_name, return_type, has_errcode_ret)
+    template = get_def_template(api, return_type, has_errcode_ret)
     return template.format(**format_params)
 
 
@@ -2660,37 +2626,6 @@ def get_egl_entry_point_labeled_object(ep_to_object, cmd_stripped, params, packe
     return "Get%sIfValid(%s, %s)" % (category, display_param, found_param)
 
 
-LOCK_GLOBAL_SURFACE = "ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();"
-LOCK_GLOBAL = "ANGLE_SCOPED_GLOBAL_LOCK();"
-
-LOCK_ORDERING = {
-    LOCK_GLOBAL_SURFACE: 0,
-    LOCK_GLOBAL: 1,
-}
-
-
-def ordered_lock_statements(*locks):
-    return "".join(sorted(locks, key=lambda lock: LOCK_ORDERING[lock]))
-
-
-def get_locks(api, cmd_name, params):
-
-    if api != apis.EGL:
-        return ordered_lock_statements(LOCK_GLOBAL)
-
-    has_surface = False
-
-    for param in params:
-        param_type = just_the_type(param)
-        if param_type == "EGLSurface":
-            has_surface = True
-
-    if has_surface:
-        return ordered_lock_statements(LOCK_GLOBAL_SURFACE, LOCK_GLOBAL)
-
-    return ordered_lock_statements(LOCK_GLOBAL)
-
-
 def get_optional_gl_locks(api, cmd_name, params):
     if api != apis.GLES:
         return ""
@@ -2700,33 +2635,7 @@ def get_optional_gl_locks(api, cmd_name, params):
     if not cmd_name.startswith("glEGLImage"):
         return ""
 
-    return ordered_lock_statements(LOCK_GLOBAL)
-
-
-def get_prepare_swap_buffers_call(api, cmd_name, params):
-    if cmd_name not in [
-            "eglSwapBuffers", "eglSwapBuffersWithDamageKHR", "eglSwapBuffersWithFrameTokenANGLE"
-    ]:
-        return ""
-
-    passed_params = [None, None]
-
-    for param in params:
-        param_type = just_the_type(param)
-        if param_type == "EGLDisplay":
-            passed_params[0] = param
-        if param_type == "EGLSurface":
-            passed_params[1] = param
-
-    return "ANGLE_EGLBOOLEAN_TRY(PrepareSwapBuffersANGLE(%s));" % (", ".join(
-        [just_the_name(param) for param in passed_params]))
-
-
-def get_preamble(api, cmd_name, params):
-    preamble = ""
-    preamble += get_prepare_swap_buffers_call(api, cmd_name, params)
-    # TODO: others?
-    return preamble
+    return "ANGLE_SCOPED_GLOBAL_LOCK();"
 
 
 def write_stubs_header(api, annotation, title, data_source, out_file, all_commands, commands,
@@ -2742,24 +2651,16 @@ def write_stubs_header(api, annotation, title, data_source, out_file, all_comman
             continue
 
         proto_text = "".join(proto.itertext())
-
-        if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-            params = []
-        else:
-            params = [] if api == apis.CL else ["Thread *thread"]
-
+        params = [] if api == apis.CL else ["Thread *thread"]
         params += ["".join(param.itertext()) for param in command.findall('param')]
         if params and just_the_name(params[-1]) == "errcode_ret":
             params[-1] = "cl_int &errorCode"
         return_type = proto_text[:-len(cmd_name)].strip()
 
-        if cmd_name in CUSTOM_EGL_ENTRY_POINTS:
-            stubs.append("%s %s(%s);" %
-                         (return_type, strip_api_prefix(cmd_name), ", ".join(params)))
-        else:
-            internal_params = get_internal_params(api, cmd_name, params, cmd_packed_egl_enums,
-                                                  packed_param_types)
-            stubs.append("%s %s(%s);" % (return_type, strip_api_prefix(cmd_name), internal_params))
+        internal_params = get_internal_params(api, cmd_name, params, cmd_packed_egl_enums,
+                                              packed_param_types)
+
+        stubs.append("%s %s(%s);" % (return_type, strip_api_prefix(cmd_name), internal_params))
 
     args = {
         "annotation_lower": annotation.lower(),
