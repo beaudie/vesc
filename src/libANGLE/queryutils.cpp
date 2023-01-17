@@ -25,6 +25,7 @@
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
 #include "libANGLE/Shader.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/Uniform.h"
