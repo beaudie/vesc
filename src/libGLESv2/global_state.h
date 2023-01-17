@@ -12,6 +12,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/GlobalMutex.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/features.h"
 
@@ -110,13 +111,61 @@ static ANGLE_INLINE void DirtyContextIfNeeded(Context *context)
             egl::ScopedGlobalMutexLock shareContextLock; \
             DirtyContextIfNeeded(context)
 #        define SCOPED_GLOBAL_AND_SHARE_CONTEXT_LOCK(context) SCOPED_SHARE_CONTEXT_LOCK(context)
-#    else
+#    elif !defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX)
 #        define SCOPED_SHARE_CONTEXT_LOCK(context) \
             egl::ScopedOptionalGlobalMutexLock shareContextLock(context->isShared())
 #        define SCOPED_GLOBAL_AND_SHARE_CONTEXT_LOCK(context) ANGLE_SCOPED_GLOBAL_LOCK()
+#    else
+#        define SCOPED_SHARE_CONTEXT_LOCK(context) \
+            std::lock_guard<egl::ContextMutex> shareContextLock(*context->getContextMutex())
+#        define SCOPED_GLOBAL_AND_SHARE_CONTEXT_LOCK(context) \
+            ANGLE_SCOPED_GLOBAL_LOCK();                       \
+            SCOPED_SHARE_CONTEXT_LOCK(context)
 #    endif
 #endif
 
+#if !defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX)
+#    define ANGLE_EGL_SCOPED_CONTEXT_LOCK(EP, THREAD, ...)
+#else
+#    define ANGLE_EGL_SCOPED_CONTEXT_LOCK(EP, THREAD, ...) \
+        egl::ScopedOptionalContextMutexLock lock(GetContextMutex_##EP(THREAD, ##__VA_ARGS__))
+
+// If current Context is not "context", then this function will activate SharedCOntextMutex.
+ANGLE_INLINE egl::ContextMutex *TryGetContextMutex(Context *context, const egl::Thread *thread)
+{
+    if (context != nullptr)
+    {
+        if (context != thread->getContext())
+        {
+            context->ensureSharedMutexActive();
+        }
+        return context->getContextMutex();
+    }
+    return nullptr;
+}
+
+ANGLE_INLINE egl::ContextMutex *TryGetActiveSharedContextMutex(Context *context)
+{
+    if (context != nullptr)
+    {
+        context->ensureSharedMutexActive();
+        return context->getContextMutex();
+    }
+    return nullptr;
+}
+#endif
+
 }  // namespace gl
+
+#if defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX)
+namespace egl
+{
+ANGLE_INLINE ContextMutex *TryGetContextMutex(const Thread *thread)
+{
+    const gl::Context *context = thread->getContext();
+    return context != nullptr ? context->getContextMutex() : nullptr;
+}
+}  // namespace egl
+#endif
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_
