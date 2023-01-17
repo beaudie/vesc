@@ -257,6 +257,93 @@ TEST(FastVector, NonCopyable)
     EXPECT_EQ(3, copy[0].x);
 }
 
+// Tests reusing capacity for the new items
+TEST(FastVector, ReuseCapacity)
+{
+    constexpr int kMagicValue = 123454321;
+    struct s
+    {
+        // Initialize in the constructor because of MSVC compiler bug:
+        // error C2065: 'kMagicValue': undeclared identifier
+        s() : value(kMagicValue) {}
+        int value;
+    };
+
+    FastVector<s, 3> vec;
+    vec.resize(3);
+    EXPECT_EQ(kMagicValue, vec[0].value);
+    EXPECT_EQ(kMagicValue, vec[1].value);
+    EXPECT_EQ(kMagicValue, vec[2].value);
+
+    vec[2].value = 0;
+    vec.resize(4);
+    EXPECT_EQ(0, vec[2].value);
+    EXPECT_EQ(kMagicValue, vec[3].value);
+
+    vec[3].value = 0;
+    EXPECT_EQ(0, vec[3].value);
+
+    vec.pop_back();
+    vec.resize(2);
+    vec.resize(4);
+    EXPECT_EQ(kMagicValue, vec[2].value);
+    EXPECT_EQ(kMagicValue, vec[3].value);
+}
+
+// Tests destroying old items after resize to a lesser size
+TEST(FastVector, DestroyOldItems)
+{
+    int counter = 0;
+
+    struct s : angle::NonCopyable
+    {
+        ~s()
+        {
+            if (counter)
+            {
+                --(*counter);
+            }
+        }
+        s &operator=(s &&other)
+        {
+            std::swap(counter, other.counter);
+            return *this;
+        }
+        void init(int *c)
+        {
+            counter = c;
+            if (counter)
+            {
+                ++(*counter);
+            }
+        }
+        int *counter = nullptr;
+    };
+
+    FastVector<s, 3> vec;
+
+    vec.resize(3);
+    vec[0].init(&counter);
+    vec[1].init(&counter);
+    vec[2].init(&counter);
+    EXPECT_EQ(3, counter);
+
+    vec.resize(6);
+    vec[3].init(&counter);
+    vec[4].init(&counter);
+    vec[5].init(&counter);
+    EXPECT_EQ(6, counter);
+
+    vec.resize(3);
+    EXPECT_EQ(3, counter);
+
+    vec.pop_back();
+    EXPECT_EQ(2, counter);
+
+    vec.clear();
+    EXPECT_EQ(0, counter);
+}
+
 // Basic functionality for FlatUnorderedMap
 TEST(FlatUnorderedMap, BasicUsage)
 {
