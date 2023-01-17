@@ -23,10 +23,6 @@ namespace egl
 {
 namespace
 {
-ANGLE_REQUIRE_CONSTANT_INIT std::atomic<angle::GlobalMutex *> g_Mutex(nullptr);
-static_assert(std::is_trivially_destructible<decltype(g_Mutex)>::value,
-              "global mutex is not trivially destructible");
-
 ANGLE_REQUIRE_CONSTANT_INIT gl::Context *g_LastContext(nullptr);
 static_assert(std::is_trivially_destructible<decltype(g_LastContext)>::value,
               "global last context is not trivially destructible");
@@ -90,19 +86,6 @@ Thread *AllocateCurrentThread()
     return thread;
 }
 
-void AllocateMutex()
-{
-    if (g_Mutex == nullptr)
-    {
-        std::unique_ptr<angle::GlobalMutex> newMutex(new angle::GlobalMutex());
-        angle::GlobalMutex *expected = nullptr;
-        if (g_Mutex.compare_exchange_strong(expected, newMutex.get()))
-        {
-            newMutex.release();
-        }
-    }
-}
-
 }  // anonymous namespace
 
 #if defined(ANGLE_PLATFORM_APPLE)
@@ -136,12 +119,6 @@ void SetCurrentThreadTLS(Thread *thread)
 #else
 thread_local Thread *gCurrentThread = nullptr;
 #endif
-
-angle::GlobalMutex &GetGlobalMutex()
-{
-    AllocateMutex();
-    return *g_Mutex;
-}
 
 gl::Context *GetGlobalLastContext()
 {
@@ -232,27 +209,17 @@ void DeallocateCurrentThread()
     SafeDelete(gCurrentThread);
 }
 
-void DeallocateMutex()
-{
-    angle::GlobalMutex *mutex = g_Mutex.exchange(nullptr);
-    {
-        // Wait for the mutex to become released by other threads before deleting.
-        std::lock_guard<angle::GlobalMutex> lock(*mutex);
-    }
-    SafeDelete(mutex);
-}
-
 bool InitializeProcess()
 {
     EnsureDebugAllocated();
-    AllocateMutex();
+    AllocateGlobalMutex();
     return AllocateCurrentThread() != nullptr;
 }
 
 void TerminateProcess()
 {
     DeallocateDebug();
-    DeallocateMutex();
+    DeallocateGlobalMutex();
     DeallocateCurrentThread();
 }
 
