@@ -1421,7 +1421,7 @@ RendererVk::RendererVk()
       mPipelineCacheSizeAtLastSync(0),
       mPipelineCacheInitialized(false),
       mValidationMessageCount(0),
-      mCommandProcessor(this),
+      mCommandProcessor(this, &mCommandQueue),
       mSupportedVulkanPipelineStageMask(0),
       mSupportedVulkanShaderStageMask(0),
       mMemoryAllocationID(0)
@@ -1481,10 +1481,8 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         mCommandProcessor.destroy(context);
     }
-    else
-    {
-        mCommandQueue.destroy(context);
-    }
+
+    mCommandQueue.destroy(context);
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
     cleanupGarbage();
@@ -3109,13 +3107,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     vk::DeviceQueueMap graphicsQueueMap =
         queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
 
+    ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
+
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.init(displayVk, graphicsQueueMap));
-    }
-    else
-    {
-        ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
+        ANGLE_TRY(mCommandProcessor.init());
     }
 
 #if defined(ANGLE_SHARED_LIBVULKAN)
