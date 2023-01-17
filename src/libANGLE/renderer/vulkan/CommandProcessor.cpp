@@ -519,8 +519,8 @@ void CommandProcessor::handleError(VkResult errorCode,
     mErrors.emplace(error);
 }
 
-CommandProcessor::CommandProcessor(RendererVk *renderer)
-    : Context(renderer), mWorkerThreadIdle(false)
+CommandProcessor::CommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue)
+    : Context(renderer), mWorkerThreadIdle(false), mCommandQueue(commandQueue)
 {
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
     while (!mErrors.empty())
@@ -619,9 +619,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
     {
         case CustomTask::Exit:
         {
-            ANGLE_TRY(mCommandQueue.waitIdle(this, mRenderer->getMaxFenceWaitTimeNs()));
-            // Shutting down so cleanup
-            mCommandQueue.destroy(this);
+            ANGLE_TRY(mCommandQueue->waitIdle(this, mRenderer->getMaxFenceWaitTimeNs()));
             break;
         }
         case CustomTask::FlushAndQueueSubmit:
@@ -630,7 +628,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             // End command buffer
 
             // Call submitCommands()
-            ANGLE_TRY(mCommandQueue.submitCommands(
+            ANGLE_TRY(mCommandQueue->submitCommands(
                 this, task->hasProtectedContent(), task->getPriority(), task->getWaitSemaphores(),
                 task->getWaitSemaphoreStageMasks(), task->getSemaphore(),
                 std::move(task->getCommandBuffersToReset()), task->getCommandPools(),
@@ -641,12 +639,12 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         {
             ANGLE_TRACE_EVENT0("gpu.angle", "processTask::OneOffQueueSubmit");
 
-            ANGLE_TRY(mCommandQueue.queueSubmitOneOff(
+            ANGLE_TRY(mCommandQueue->queueSubmitOneOff(
                 this, task->hasProtectedContent(), task->getPriority(),
                 task->getOneOffCommandBufferVk(), task->getOneOffWaitSemaphore(),
                 task->getOneOffWaitSemaphoreStageMask(), task->getOneOffFence(),
                 SubmitPolicy::EnsureSubmitted, task->getSubmitQueueSerial()));
-            ANGLE_TRY(mCommandQueue.checkCompletedCommands(this));
+            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
             break;
         }
         case CustomTask::Present:
@@ -670,8 +668,8 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         {
             OutsideRenderPassCommandBufferHelper *commandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
-            ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(this, task->hasProtectedContent(),
-                                                           &commandBuffer));
+            ANGLE_TRY(mCommandQueue->flushOutsideRPCommands(this, task->hasProtectedContent(),
+                                                            &commandBuffer));
 
             OutsideRenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
@@ -682,7 +680,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         case CustomTask::ProcessRenderPassCommands:
         {
             RenderPassCommandBufferHelper *commandBuffer = task->getRenderPassCommandBuffer();
-            ANGLE_TRY(mCommandQueue.flushRenderPassCommands(
+            ANGLE_TRY(mCommandQueue->flushRenderPassCommands(
                 this, task->hasProtectedContent(), *task->getRenderPass(), &commandBuffer));
 
             RenderPassCommandBufferHelper *originalCommandBuffer =
@@ -693,7 +691,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         }
         case CustomTask::CheckCompletedCommands:
         {
-            ANGLE_TRY(mCommandQueue.checkCompletedCommands(this));
+            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
             break;
         }
         default:
@@ -715,9 +713,9 @@ angle::Result CommandProcessor::checkCompletedCommands(Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result CommandProcessor::waitForWorkComplete(Context *context)
+angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForWorkComplete");
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForAllWorkToBeSubmitted");
     std::unique_lock<std::mutex> lock(mWorkerMutex);
     mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
     // Worker thread is idle and command queue is empty so good to continue
@@ -731,10 +729,8 @@ angle::Result CommandProcessor::waitForWorkComplete(Context *context)
     return shouldStop ? angle::Result::Stop : angle::Result::Continue;
 }
 
-angle::Result CommandProcessor::init(Context *context, const DeviceQueueMap &queueMap)
+angle::Result CommandProcessor::init()
 {
-    ANGLE_TRY(mCommandQueue.init(context, queueMap));
-
     mTaskThread = std::thread(&CommandProcessor::processTasks, this);
 
     return angle::Result::Continue;
@@ -745,14 +741,13 @@ void CommandProcessor::destroy(Context *context)
     CommandProcessorTask endTask;
     endTask.initTask(CustomTask::Exit);
     queueCommand(std::move(endTask));
-    (void)waitForWorkComplete(context);
+    (void)waitForAllWorkToBeSubmitted(context);
     if (mTaskThread.joinable())
     {
         mTaskThread.join();
     }
 }
 
-// Wait until all commands up to and including serial have been processed
 void CommandProcessor::handleDeviceLost(RendererVk *renderer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::handleDeviceLost");
@@ -760,7 +755,7 @@ void CommandProcessor::handleDeviceLost(RendererVk *renderer)
     mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
 
     // Worker thread is idle and command queue is empty so good to continue
-    mCommandQueue.handleDeviceLost(renderer);
+    mCommandQueue->handleDeviceLost(renderer);
 }
 
 VkResult CommandProcessor::getLastAndClearPresentResult(VkSwapchainKHR swapchain)
@@ -783,7 +778,7 @@ VkResult CommandProcessor::present(egl::ContextPriority priority,
 {
     std::lock_guard<std::mutex> lock(mSwapchainStatusMutex);
     ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
-    VkResult result = mCommandQueue.queuePresent(priority, presentInfo);
+    VkResult result = mCommandQueue->queuePresent(priority, presentInfo);
 
     // Verify that we are presenting one and only one swapchain
     ASSERT(presentInfo.swapchainCount == 1);
@@ -843,7 +838,7 @@ angle::Result CommandProcessor::queueSubmitOneOff(Context *context,
     {
         // Caller has synchronization requirement to have work in GPU pipe when returning from this
         // function.
-        ANGLE_TRY(waitForWorkComplete(context));
+        ANGLE_TRY(waitForAllWorkToBeSubmitted(context));
     }
 
     return angle::Result::Continue;
@@ -909,7 +904,8 @@ angle::Result CommandProcessor::flushRenderPassCommands(
     return angle::Result::Continue;
 }
 
-bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
+// ThreadSafeCommandProcessor implementation.
+bool ThreadSafeCommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
 {
     const Serials &serials = use.getSerials();
     for (SerialIndex i = 0; i < serials.size(); ++i)
@@ -922,7 +918,6 @@ bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
     return false;
 }
 
-// ThreadSafeCommandProcessor implementation.
 angle::Result ThreadSafeCommandProcessor::waitForQueueSerialToBeSubmitted(
     vk::Context *context,
     const QueueSerial &queueSerial)
@@ -934,12 +929,18 @@ angle::Result ThreadSafeCommandProcessor::waitForQueueSerialToBeSubmitted(
 angle::Result ThreadSafeCommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
                                                                           const ResourceUse &use)
 {
-    if (mCommandQueue.hasUnsubmittedUse(use))
+    if (mCommandQueue->hasUnsubmittedUse(use))
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        ANGLE_TRY(waitForWorkComplete(context));
+        ANGLE_TRY(CommandProcessor::waitForAllWorkToBeSubmitted(context));
     }
     return angle::Result::Continue;
+}
+
+angle::Result ThreadSafeCommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    return CommandProcessor::waitForAllWorkToBeSubmitted(context);
 }
 
 angle::Result ThreadSafeCommandProcessor::finishResourceUse(Context *context,
@@ -948,7 +949,7 @@ angle::Result ThreadSafeCommandProcessor::finishResourceUse(Context *context,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishResourceUse");
     ANGLE_TRY(waitForResourceUseToBeSubmitted(context, use));
-    return mCommandQueue.finishResourceUse(context, use, timeout);
+    return mCommandQueue->finishResourceUse(context, use, timeout);
 }
 
 angle::Result ThreadSafeCommandProcessor::finishQueueSerial(Context *context,
@@ -964,26 +965,15 @@ angle::Result ThreadSafeCommandProcessor::waitIdle(Context *context, uint64_t ti
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitIdle");
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        ANGLE_TRY(waitForWorkComplete(context));
+        ANGLE_TRY(waitForAllWorkToBeSubmitted(context));
     }
-    return mCommandQueue.waitIdle(this, mRenderer->getMaxFenceWaitTimeNs());
-}
-
-angle::Result ThreadSafeCommandProcessor::waitForResourceUseToFinishWithUserTimeout(
-    Context *context,
-    const ResourceUse &use,
-    uint64_t timeout,
-    VkResult *result)
-{
-    // If finishResourceUse times out we generate an error. Therefore we a large timeout.
-    // TODO: https://issuetracker.google.com/170312581 - Wait with timeout.
-    return finishResourceUse(context, use, mRenderer->getMaxFenceWaitTimeNs());
+    return mCommandQueue->waitIdle(this, mRenderer->getMaxFenceWaitTimeNs());
 }
 
 bool ThreadSafeCommandProcessor::isBusy(RendererVk *renderer) const
 {
     std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-    return !mTasks.empty() || mCommandQueue.isBusy(renderer);
+    return !mTasks.empty() || mCommandQueue->isBusy(renderer);
 }
 
 // CommandQueue implementation.
