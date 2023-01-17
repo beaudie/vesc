@@ -999,6 +999,15 @@ angle::Result InitDynamicDescriptorPool(Context *context,
 
     return angle::Result::Continue;
 }
+
+bool CheckCommandBufferIndexIsZeroWithCustomVulkanCmdBuffers(uint32_t commandBufferIndex)
+{
+    // When using angle::SharedRingBufferAllocator we must ensure that allocator is attached and
+    // detached from the same priv::SecondaryCommandBuffer instance.
+    // Custom command buffers (priv::SecondaryCommandBuffer) may contain commands for multiple
+    // render passes, therefore we do need multiple buffers.
+    return (commandBufferIndex == 0 || !RenderPassCommandBuffer::ExecutesInline());
+}
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -1718,6 +1727,8 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
     mColorAttachmentsCount             = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mImageOptimizeForPresent           = nullptr;
+
+    ASSERT(CheckCommandBufferIndexIsZeroWithCustomVulkanCmdBuffers(mCurrentSubpass));
 
     // Reset and re-initialize the command buffers
     for (uint32_t subpass = 0; subpass <= mCurrentSubpass; ++subpass)
@@ -2519,12 +2530,14 @@ void RenderPassCommandBufferHelper::growRenderArea(ContextVk *contextVk,
 
 void RenderPassCommandBufferHelper::attachAllocator(SecondaryCommandMemoryAllocator *allocator)
 {
+    ASSERT(CheckCommandBufferIndexIsZeroWithCustomVulkanCmdBuffers(mCurrentSubpass));
     mCommandAllocator.attachAllocator(allocator);
     getCommandBuffer().attachAllocator(mCommandAllocator.getAllocator());
 }
 
 SecondaryCommandMemoryAllocator *RenderPassCommandBufferHelper::detachAllocator()
 {
+    ASSERT(CheckCommandBufferIndexIsZeroWithCustomVulkanCmdBuffers(mCurrentSubpass));
     getCommandBuffer().detachAllocator(mCommandAllocator.getAllocator());
     return mCommandAllocator.detachAllocator(getCommandBuffer().empty());
 }
@@ -2657,7 +2670,7 @@ void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::recycleCommand
     CommandBufferHelperT **commandBuffer)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->getAllocator()->hasAllocatorLinks());
+    ASSERT((*commandBuffer)->empty() && !(*commandBuffer)->hasAllocatorLinks());
     (*commandBuffer)->markOpen();
 
     RecycleCommandBufferHelper(device, &mCommandBufferHelperFreeList, commandBuffer,
