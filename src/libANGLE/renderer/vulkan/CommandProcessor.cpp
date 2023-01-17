@@ -748,9 +748,10 @@ angle::Result CommandProcessor::finishQueueSerial(Context *context,
                                                   uint64_t timeout)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishQueueSerial");
-    // TODO: Only call waitForWorkComplete if mUse still have inflight commands in processor that
-    // references this queueSerial. https://issuetracker.google.com/261098465
-    ANGLE_TRY(waitForWorkComplete(context));
+    if (mCommandQueue.hasUnsubmittedUse(queueSerial))
+    {
+        ANGLE_TRY(waitForWorkComplete(context));
+    }
     return mCommandQueue.finishQueueSerial(context, queueSerial, timeout);
 }
 
@@ -759,9 +760,10 @@ angle::Result CommandProcessor::finishResourceUse(Context *context,
                                                   uint64_t timeout)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::finishResourceUse");
-    // TODO: Only call waitForWorkComplete if mUse still have inflight commands in processor that
-    // references this queueSerial. https://issuetracker.google.com/261098465
-    ANGLE_TRY(waitForWorkComplete(context));
+    if (mCommandQueue.hasUnsubmittedUse(use))
+    {
+        ANGLE_TRY(waitForWorkComplete(context));
+    }
     return mCommandQueue.finishResourceUse(context, use, timeout);
 }
 
