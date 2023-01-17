@@ -8318,6 +8318,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
                 // Update total staging buffer size
                 mTotalStagedBufferUpdateSize -= bufferUpdate.bufferHelper->getSize();
+
+                // Refresh the command buffer because onCopyUpdate may have flushed it.
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
             }
             else
             {
