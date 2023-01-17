@@ -242,6 +242,31 @@ std::string StripFilenameFromPath(const std::string &path)
     return (lastPathSepLoc != std::string::npos) ? path.substr(0, lastPathSepLoc) : "";
 }
 
+void WaitFor(uint32_t durationMicro)
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    constexpr uint32_t kSleepOverheadMicro = 99;
+#elif defined(ANGLE_PLATFORM_WINDOWS)
+    constexpr uint32_t kSleepOverheadMicro = 1999;
+#else
+    // Use high values by default to minimize possible sleep overhead.
+    constexpr uint32_t kSleepOverheadMicro = 4999;
+#endif
+
+    const double beginTime = angle::GetCurrentSystemTime();
+    const double endTime   = beginTime + durationMicro / 1000'000.0;
+
+    if (durationMicro > kSleepOverheadMicro)
+    {
+        std::this_thread::sleep_for(std::chrono::microseconds(durationMicro - kSleepOverheadMicro));
+    }
+
+    while (angle::GetCurrentSystemTime() < endTime)
+    {
+        std::this_thread::yield();
+    }
+}
+
 #if defined(ANGLE_PLATFORM_APPLE)
 // https://anglebug.com/6479, similar to egl::GetCurrentThread() in libGLESv2/global_state.cpp
 uint64_t GetCurrentThreadUniqueId()

@@ -58,6 +58,10 @@ double GetCurrentSystemTime();
 // Get CPU time for current process in seconds.
 double GetCurrentProcessCpuTime();
 
+// Uses combination of sleep() and busy wait to achieve better accuracy then sleep() but still save
+// power. Added primarily for Android platform.
+void WaitFor(uint32_t durationMicro);
+
 // Unique thread id (std::this_thread::get_id() gets recycled!)
 uint64_t GetCurrentThreadUniqueId();
 // Fast function to get thread id when performance is critical (may be recycled).
