@@ -34,6 +34,7 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/ResourceManager.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Stream.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
@@ -98,6 +99,7 @@ namespace egl
 
 namespace
 {
+using ContextMutexType = angle::FastMutex1;
 
 constexpr angle::SubjectIndex kGPUSwitchedSubjectIndex = 0;
 
@@ -878,6 +880,8 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mDevice(eglDevice),
       mSurface(nullptr),
       mPlatform(platform),
+      mSharedContextMutexManager(nullptr),
+      mManagersMutex(nullptr),
       mTextureManager(nullptr),
       mSemaphoreManager(nullptr),
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
@@ -1088,6 +1092,9 @@ Error Display::initialize()
     mSingleThreadPool = angle::WorkerThreadPool::Create(1, ANGLEPlatformCurrent());
     mMultiThreadPool  = angle::WorkerThreadPool::Create(0, ANGLEPlatformCurrent());
 
+    ASSERT(mSharedContextMutexManager == nullptr);
+    mSharedContextMutexManager = new SharedContextMutexManager<ContextMutexType>();
+
     mInitialized = true;
 
     return NoError();
@@ -1214,6 +1221,9 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     // it.
     ASSERT(mGlobalTextureShareGroupUsers == 0 && mTextureManager == nullptr);
     ASSERT(mGlobalSemaphoreShareGroupUsers == 0 && mSemaphoreManager == nullptr);
+
+    SafeDelete(mSharedContextMutexManager);
+    ASSERT(mManagersMutex == nullptr);
 
     // Clean up all invalid objects
     ANGLE_TRY(destroyInvalidEglObjects());
@@ -1526,6 +1536,27 @@ Error Display::createContext(const Config *configuration,
         shareSemaphores = mSemaphoreManager;
     }
 
+    ContextMutex *sharedContextMutex = nullptr;
+#if defined(ANGLE_ENABLE_SHARE_CONTEXT_LOCK)
+    if (shareTextures != nullptr || shareSemaphores != nullptr)
+    {
+        if (mManagersMutex == nullptr)
+        {
+            ASSERT(mSharedContextMutexManager != nullptr);
+            mManagersMutex = mSharedContextMutexManager->create();
+            mManagersMutex->addRef();
+        }
+        sharedContextMutex = mManagersMutex;
+    }
+    if (shareContext != nullptr)
+    {
+        ASSERT(shareContext->getState().isUsingSharedContextMutex());
+        ASSERT(sharedContextMutex == nullptr ||
+               sharedContextMutex == shareContext->getContextMutex());
+        sharedContextMutex = shareContext->getContextMutex();
+    }
+#endif
+
     gl::MemoryProgramCache *programCachePointer = &mMemoryProgramCache;
     // Check context creation attributes to see if we are using EGL_ANGLE_program_cache_control.
     // If not, keep caching enabled for EGL_ANDROID_blob_cache, which can have its callbacks set
@@ -1549,19 +1580,15 @@ Error Display::createContext(const Config *configuration,
         shaderCachePointer = nullptr;
     }
 
-    gl::Context *context = new gl::Context(
-        this, configuration, shareContext, shareTextures, shareSemaphores, programCachePointer,
-        shaderCachePointer, clientType, attribs, mDisplayExtensions, GetClientExtensions());
+    gl::Context *context =
+        new gl::Context(this, configuration, shareContext, shareTextures, shareSemaphores,
+                        sharedContextMutex, programCachePointer, shaderCachePointer, clientType,
+                        attribs, mDisplayExtensions, GetClientExtensions());
     Error error = context->initialize();
     if (error.isError())
     {
         delete context;
         return error;
-    }
-
-    if (shareContext != nullptr)
-    {
-        shareContext->setShared();
     }
 
     ASSERT(context != nullptr);
@@ -1614,6 +1641,9 @@ Error Display::makeCurrent(Thread *thread,
     bool contextChanged = context != previousContext;
     if (previousContext != nullptr && contextChanged)
     {
+        // Need AddRefLock because there may be Context destruction
+        ContextMutex::AddRefLock lock(previousContext->getContextMutex());
+
         previousContext->release();
         thread->setCurrent(nullptr);
 
@@ -1627,6 +1657,12 @@ Error Display::makeCurrent(Thread *thread,
         ANGLE_TRY(error);
     }
 
+    std::unique_lock<ContextMutex> contextLock;
+    if (context != nullptr)
+    {
+        contextLock = std::unique_lock<ContextMutex>(*context->getContextMutex());
+    }
+
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1638,6 +1674,8 @@ Error Display::makeCurrent(Thread *thread,
         {
             context->addRef();
         }
+        // Early unlock
+        contextLock.unlock();
     }
 
     // Tick all the scratch buffers to make sure they get cleaned up eventually if they stop being
@@ -1709,6 +1747,12 @@ void Display::destroyImageImpl(Image *image, ImageSet *images)
     auto iter = images->find(image);
     ASSERT(iter != images->end());
     mImageHandleAllocator.release(image->id().value);
+    // Need AddRefLock because release() may do Mutex destruction
+    ContextMutex::AddRefLock lock;
+    if (ContextMutex *imageContextMutex = image->getSharedContextMutex())
+    {
+        lock.lock(imageContextMutex);
+    }
     (*iter)->release(this);
     images->erase(iter);
 }
@@ -1765,6 +1809,12 @@ Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts)
         mGlobalSemaphoreShareGroupUsers--;
     }
 
+    if (mManagersMutex != nullptr && mTextureManager == nullptr && mSemaphoreManager == nullptr)
+    {
+        mManagersMutex->release();
+        mManagersMutex = nullptr;
+    }
+
     ANGLE_TRY(context->onDestroy(this));
 
     return NoError();
@@ -1789,6 +1839,8 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
     // make sure the native context is current.
     if (context->isExternal())
     {
+        // Need AddRefLock because there will be Context destruction
+        ContextMutex::AddRefLock lock(context->getContextMutex());
         ANGLE_TRY(releaseContext(context, thread));
     }
     else
