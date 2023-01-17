@@ -52,7 +52,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // Used in std::vector initialization.
     RenderTargetVk(RenderTargetVk &&other);
 
-    void init(vk::ImageHelper *image,
+    void init(const vk::ImageHelperSource *source,
+              vk::ImageHelper *image,
               vk::ImageViewHelper *imageViews,
               vk::ImageHelper *resolveImage,
               vk::ImageViewHelper *resolveImageViews,
@@ -156,6 +157,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     bool isResolveImageOwnerOfData() const;
     vk::ImageHelper *getOwnerOfData() const;
+
+    const vk::ImageHelperSource *mSource;
 
     // The color or depth/stencil attachment of the framebuffer and its view.
     vk::ImageHelper *mImage;

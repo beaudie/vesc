@@ -29,7 +29,8 @@ RenderTargetVk::~RenderTargetVk()
 }
 
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
-    : mImage(other.mImage),
+    : mSource(other.mSource),
+      mImage(other.mImage),
       mImageViews(other.mImageViews),
       mResolveImage(other.mResolveImage),
       mResolveImageViews(other.mResolveImageViews),
@@ -41,7 +42,8 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     other.reset();
 }
 
-void RenderTargetVk::init(vk::ImageHelper *image,
+void RenderTargetVk::init(const vk::ImageHelperSource *source,
+                          vk::ImageHelper *image,
                           vk::ImageViewHelper *imageViews,
                           vk::ImageHelper *resolveImage,
                           vk::ImageViewHelper *resolveImageViews,
@@ -50,6 +52,7 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           uint32_t layerCount,
                           RenderTargetTransience transience)
 {
+    mSource            = source;
     mImage             = image;
     mImageViews        = imageViews;
     mResolveImage      = resolveImage;
@@ -63,6 +66,7 @@ void RenderTargetVk::init(vk::ImageHelper *image,
 
 void RenderTargetVk::reset()
 {
+    mSource            = nullptr;
     mImage             = nullptr;
     mImageViews        = nullptr;
     mResolveImage      = nullptr;
@@ -102,8 +106,8 @@ void RenderTargetVk::onColorDraw(ContextVk *contextVk,
     ASSERT(!mImage->getActualFormat().hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
-    contextVk->onColorDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage, mResolveImage,
-                           packedAttachmentIndex);
+    contextVk->onColorDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mSource, mImage,
+                           mResolveImage, packedAttachmentIndex);
 
     // Multisampled render to texture framebuffers cannot be layered.
     ASSERT(mResolveImage == nullptr || framebufferLayerCount == 1);
@@ -126,8 +130,8 @@ void RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk, uint32_t framebuff
     ASSERT(format.hasDepthOrStencilBits());
     ASSERT(framebufferLayerCount <= mLayerCount);
 
-    contextVk->onDepthStencilDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mImage,
-                                  mResolveImage);
+    contextVk->onDepthStencilDraw(mLevelIndexGL, mLayerIndex, framebufferLayerCount, mSource,
+                                  mImage, mResolveImage);
 }
 
 vk::ImageHelper &RenderTargetVk::getImageForRenderPass()
