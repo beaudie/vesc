@@ -484,6 +484,8 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    bool mReentrancyLock;
 };
 
 }  // namespace rx
