@@ -524,7 +524,7 @@ class TestBatch():
         gn_args = [('angle_build_capture_replay_tests', 'true'),
                    ('angle_capture_replay_test_trace_dir', '"%s"' % self.trace_dir),
                    ('angle_capture_replay_composite_file_id', str(composite_file_id))]
-        returncode, output = child_processes_manager.RunGNGen(replay_build_dir, True, gn_args)
+        returncode, output = child_processes_manager.RunGNGen(replay_build_dir, False, gn_args)
         if returncode != 0:
             self.logger.warning('GN failure output: %s' % output)
             self.results.append(
