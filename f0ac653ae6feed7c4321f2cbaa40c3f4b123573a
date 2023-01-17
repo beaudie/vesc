@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "393ee53f_c8fc795d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "Nice work Sean!\n\nI confirmed this is working for the target app.\n\nSome questions and nits, but this generally looks good.\n\n+Shabi for review",
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a170217_40bfb6a8",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 993,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "Can you add a comment explaining why this needs to be separated?",
+      "range": {
+        "startLine": 993,
+        "startChar": 0,
+        "endLine": 993,
+        "endChar": 58
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3640d7b0_9f3ef33a",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "The spec says \"ESSL 1.00 or higher is required.\" Why does this need to be bumped?\nhttps://registry.khronos.org/OpenGL/extensions/ARM/ARM_shader_framebuffer_fetch.txt",
+      "range": {
+        "startLine": 893,
+        "startChar": 38,
+        "endLine": 893,
+        "endChar": 52
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f37512_e18a600b",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "Can you add a comment explaining why this needs to happen?",
+      "range": {
+        "startLine": 196,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 54
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f567de4_69ccc408",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "Is there anything different here compared to ReplaceGlLastFragDataUtils?  If not, maybe we could just reuse it with a comment, i.e. \"use ReplaceGlLastFragDataUtils even though we\u0027re replacing color\".  We can rename it if that\u0027s confusing.  Just want to avoid duplicating code if we can.",
+      "range": {
+        "startLine": 688,
+        "startChar": 6,
+        "endLine": 688,
+        "endChar": 33
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "757fa2ef_e7aeef5f",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "Is this by design that we reuse `ANGLELastFragData` for frag color?",
+      "range": {
+        "startLine": 871,
+        "startChar": 33,
+        "endLine": 871,
+        "endChar": 50
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f488fa_b6668e33",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "gl_LastFragColor",
+      "range": {
+        "startLine": 887,
+        "startChar": 18,
+        "endLine": 887,
+        "endChar": 33
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40175d69_f9b13fdf",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-17T22:12:46Z",
+      "side": 1,
+      "message": "I believe these should go earlier in an extension specific block since they never enter core, i.e.:\n```\n    if (extensions.shaderFramebufferFetchARM)\n    {\n        switch (pname)\n        {\n            case GL_FETCH_PER_SAMPLE_ARM:\n            case GL_FRAGMENT_SHADER_FRAMEBUFFER_FETCH_MRT_ARM:\n                *type      \u003d GL_BOOL;\n                *numParams \u003d 1;\n                return true;\n        }\n    }\n```",
+      "range": {
+        "startLine": 3742,
+        "startChar": 0,
+        "endLine": 3746,
+        "endChar": 28
+      },
+      "revId": "f0ac653ae6feed7c4321f2cbaa40c3f4b123573a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
