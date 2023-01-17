@@ -284,16 +284,6 @@ class RendererVk : angle::NonCopyable
         return mOneOffCommandPoolMap[protectionType].getCommandBuffer(context, commandBufferOut);
     }
 
-    void resetOutsideRenderPassCommandBuffer(vk::OutsideRenderPassCommandBuffer &&commandBuffer)
-    {
-        mOutsideRenderPassCommandBufferRecycler.resetCommandBuffer(std::move(commandBuffer));
-    }
-
-    void resetRenderPassCommandBuffer(vk::RenderPassCommandBuffer &&commandBuffer)
-    {
-        mRenderPassCommandBufferRecycler.resetCommandBuffer(std::move(commandBuffer));
-    }
-
     // Fire off a single command buffer immediately with default priority.
     // Command buffer must be allocated with getCommandBufferOneOff and is reclaimed.
     angle::Result queueSubmitOneOff(vk::Context *context,

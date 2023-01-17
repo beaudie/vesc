@@ -947,20 +947,6 @@ void RecycleCommandBufferHelper(std::vector<CommandBufferHelperT *> *freeList,
     SafeDelete(*commandBufferHelper);
 }
 
-[[maybe_unused]] void ResetSecondaryCommandBuffer(
-    std::vector<priv::SecondaryCommandBuffer> *resetList,
-    priv::SecondaryCommandBuffer &&commandBuffer)
-{
-    commandBuffer.reset();
-}
-
-[[maybe_unused]] void ResetSecondaryCommandBuffer(
-    std::vector<VulkanSecondaryCommandBuffer> *resetList,
-    VulkanSecondaryCommandBuffer &&commandBuffer)
-{
-    resetList->push_back(std::move(commandBuffer));
-}
-
 bool IsClear(UpdateSource updateSource)
 {
     return updateSource == UpdateSource::Clear ||
@@ -1571,12 +1557,14 @@ angle::Result OutsideRenderPassCommandBufferHelper::initializeCommandBuffer(Cont
                                      mCommandAllocator.getAllocator());
 }
 
-angle::Result OutsideRenderPassCommandBufferHelper::reset(Context *context)
+angle::Result OutsideRenderPassCommandBufferHelper::reset(
+    Context *context,
+    CommandBufferCollector *commandBufferCollector)
 {
     resetImpl();
 
-    // Reset and re-initialize the command buffer
-    context->getRenderer()->resetOutsideRenderPassCommandBuffer(std::move(mCommandBuffer));
+    // Collect/Reset the command buffer
+    commandBufferCollector->collectCommandBuffer(std::move(mCommandBuffer));
 
     // Invalidate the queue serial here. We will get a new queue serial after commands flush.
     mQueueSerial = QueueSerial();
@@ -1640,8 +1628,10 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     image->setQueueSerial(mQueueSerial);
 }
 
-angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
-                                                                   PrimaryCommandBuffer *primary)
+angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
+    Context *context,
+    PrimaryCommandBuffer *primary,
+    CommandBufferCollector *commandBufferCollector)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "OutsideRenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
@@ -1653,7 +1643,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *cont
     mCommandBuffer.executeCommands(primary);
 
     // Restart the command buffer.
-    return reset(context);
+    return reset(context, commandBufferCollector);
 }
 
 void OutsideRenderPassCommandBufferHelper::attachAllocator(
@@ -1712,7 +1702,8 @@ angle::Result RenderPassCommandBufferHelper::initializeCommandBuffer(Context *co
                                          mCommandAllocator.getAllocator());
 }
 
-angle::Result RenderPassCommandBufferHelper::reset(Context *context)
+angle::Result RenderPassCommandBufferHelper::reset(Context *context,
+                                                   CommandBufferCollector *commandBufferCollector)
 {
     resetImpl();
 
@@ -1740,10 +1731,10 @@ angle::Result RenderPassCommandBufferHelper::reset(Context *context)
 
     ASSERT(CheckSubpassCommandBufferCount(getSubpassCommandBufferCount()));
 
-    // Reset and re-initialize the command buffers
+    // Collect/Reset the command buffers
     for (uint32_t subpass = 0; subpass < getSubpassCommandBufferCount(); ++subpass)
     {
-        context->getRenderer()->resetRenderPassCommandBuffer(std::move(mCommandBuffers[subpass]));
+        commandBufferCollector->collectCommandBuffer(std::move(mCommandBuffers[subpass]));
     }
 
     mCurrentSubpassCommandBufferIndex = 0;
@@ -2416,9 +2407,11 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
-angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
-                                                            PrimaryCommandBuffer *primary,
-                                                            const RenderPass *renderPass)
+angle::Result RenderPassCommandBufferHelper::flushToPrimary(
+    Context *context,
+    PrimaryCommandBuffer *primary,
+    const RenderPass *renderPass,
+    CommandBufferCollector *commandBufferCollector)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
@@ -2467,7 +2460,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     primary->endRenderPass();
 
     // Restart the command buffer.
-    return reset(context);
+    return reset(context, commandBufferCollector);
 }
 
 void RenderPassCommandBufferHelper::updateRenderPassForResolve(
@@ -2632,8 +2625,6 @@ void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::onDestroy()
         SafeDelete(commandBufferHelper);
     }
     mCommandBufferHelperFreeList.clear();
-
-    ASSERT(mSecondaryCommandBuffersToReset.empty());
 }
 
 template void CommandBufferRecycler<OutsideRenderPassCommandBuffer,
@@ -2699,12 +2690,30 @@ CommandBufferRecycler<OutsideRenderPassCommandBuffer, OutsideRenderPassCommandBu
 template void CommandBufferRecycler<RenderPassCommandBuffer, RenderPassCommandBufferHelper>::
     recycleCommandBufferHelper(RenderPassCommandBufferHelper **);
 
-template <typename CommandBufferT, typename CommandBufferHelperT>
-void CommandBufferRecycler<CommandBufferT, CommandBufferHelperT>::resetCommandBuffer(
-    CommandBufferT &&commandBuffer)
+// CommandBufferCollector implementation.
+CommandBufferCollector::~CommandBufferCollector()
 {
-    std::unique_lock<std::mutex> lock(mMutex);
-    ResetSecondaryCommandBuffer(&mSecondaryCommandBuffersToReset, std::move(commandBuffer));
+    ASSERT(mCollectedCommandBuffers.empty());
+}
+
+void CommandBufferCollector::collectCommandBuffer(priv::SecondaryCommandBuffer &&commandBuffer)
+{
+    commandBuffer.reset();
+}
+
+void CommandBufferCollector::collectCommandBuffer(VulkanSecondaryCommandBuffer &&commandBuffer)
+{
+    ASSERT(commandBuffer.valid());
+    mCollectedCommandBuffers.emplace_back(std::move(commandBuffer));
+}
+
+void CommandBufferCollector::releaseCommandBuffers()
+{
+    for (VulkanSecondaryCommandBuffer &commandBuffer : mCollectedCommandBuffers)
+    {
+        (void)commandBuffer.releaseHandle();
+    }
+    mCollectedCommandBuffers.clear();
 }
 
 // DynamicBuffer implementation.
