@@ -1075,6 +1075,52 @@ class MemoryAllocationLogNumberFormat : public std::numpunct<char>
     virtual std::string do_grouping() const override { return "\3"; }
 };
 
+struct CondVarHelper final
+{
+    std::condition_variable cv;
+    bool isWaiting = false;
+
+    void wait(std::unique_lock<std::mutex> &lock)
+    {
+        isWaiting = true;
+        cv.wait(lock);
+    }
+
+    template <class Rep, class Period>
+    std::cv_status waitFor(std::unique_lock<std::mutex> &lock,
+                           const std::chrono::duration<Rep, Period> &duration)
+    {
+        isWaiting = true;
+        return cv.wait_for(lock, duration);
+    }
+
+    void unlockAndNotifyAll(std::unique_lock<std::mutex> &lock)
+    {
+        ASSERT(lock.owns_lock());
+        // Optimization. Avoid calling expensive "notify_all()" if not required.
+        if (ANGLE_UNLIKELY(isWaiting))
+        {
+            isWaiting = false;
+            lock.unlock();
+            cv.notify_all();
+        }
+        else
+        {
+            lock.unlock();
+        }
+    }
+
+    void notifyAll(std::unique_lock<std::mutex> &lock)
+    {
+        ASSERT(lock.owns_lock());
+        if (ANGLE_UNLIKELY(isWaiting))
+        {
+            isWaiting = false;
+            cv.notify_all();
+        }
+    }
+};
+
 }  // namespace vk
 
 #if !defined(ANGLE_SHARED_LIBVULKAN)
