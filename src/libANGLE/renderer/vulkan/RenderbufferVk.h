@@ -106,6 +106,11 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
     // We monitor the staging buffer for changes. This handles staged data from outside this class.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    vk::ImageSourceID getImageSourceID() const
+    {
+        return static_cast<uint64_t>(reinterpret_cast<uintptr_t>(this));
+    }
+
     bool mOwnsImage;
 
     // |mOwnsImage| indicates that |RenderbufferVk| owns the image.  Otherwise, this is a weak
