@@ -894,6 +894,9 @@ angle::Result CommandProcessor::enqueueFlushOutsideRPCommands(
 
     (*outsideRPCommands)->markClosed();
 
+    SecondaryCommandPool *commandPool = nullptr;
+    ANGLE_TRY((*outsideRPCommands)->detachCommandPool(context, &commandPool));
+
     // Detach functions are only used for ring buffer allocators.
     SecondaryCommandMemoryAllocator *allocator = (*outsideRPCommands)->detachAllocator();
 
@@ -901,8 +904,8 @@ angle::Result CommandProcessor::enqueueFlushOutsideRPCommands(
     task.initOutsideRenderPassProcessCommands(protectionType, priority, *outsideRPCommands);
     ANGLE_TRY(queueCommand(std::move(task)));
 
-    ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
-        context, (*outsideRPCommands)->getCommandPool(), allocator, outsideRPCommands));
+    ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(context, commandPool, allocator,
+                                                                 outsideRPCommands));
 
     return angle::Result::Continue;
 }
@@ -918,6 +921,9 @@ angle::Result CommandProcessor::enqueueFlushRenderPassCommands(
 
     (*renderPassCommands)->markClosed();
 
+    SecondaryCommandPool *commandPool = nullptr;
+    (*renderPassCommands)->detachCommandPool(&commandPool);
+
     // Detach functions are only used for ring buffer allocators.
     SecondaryCommandMemoryAllocator *allocator = (*renderPassCommands)->detachAllocator();
 
@@ -925,8 +931,8 @@ angle::Result CommandProcessor::enqueueFlushRenderPassCommands(
     task.initRenderPassProcessCommands(protectionType, priority, *renderPassCommands, &renderPass);
     ANGLE_TRY(queueCommand(std::move(task)));
 
-    ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(
-        context, (*renderPassCommands)->getCommandPool(), allocator, renderPassCommands));
+    ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(context, commandPool, allocator,
+                                                          renderPassCommands));
 
     return angle::Result::Continue;
 }
