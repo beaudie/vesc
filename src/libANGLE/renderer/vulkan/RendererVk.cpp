@@ -2071,7 +2071,12 @@ void RendererVk::appendDeviceExtensionFeaturesNotPromoted(
 
     if (ExtensionFound(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME, deviceExtensionNames))
     {
+        INFO() << "ExtensionFound(" << VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME << ")";
         vk::AddToPNextChain(deviceFeatures, &mFragmentShadingRateFeatures);
+    }
+    else
+    {
+        INFO() << "!ExtensionFound(" << VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME << ")";
     }
 
     if (ExtensionFound(VK_EXT_FRAGMENT_SHADER_INTERLOCK_EXTENSION_NAME, deviceExtensionNames))
@@ -2667,6 +2672,8 @@ void RendererVk::enableDeviceExtensionsNotPromoted(
         mEnabledDeviceExtensions.push_back(VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mFragmentShadingRateFeatures);
     }
+    INFO() << "mFeatures.supportsFragmentShadingRate.enabled: "
+           << mFeatures.supportsFragmentShadingRate.enabled;
 
     if (mFeatures.supportsFragmentShaderPixelInterlock.enabled)
     {
@@ -4303,6 +4310,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
                             canSupportFragmentShadingRate(deviceExtensionNames));
+    INFO() << "mFeatures.supportsFragmentShadingRate.enabled: "
+           << mFeatures.supportsFragmentShadingRate.enabled;
 
     // We can use the interlock to support GL_ANGLE_shader_pixel_local_storage_coherent.
     ANGLE_FEATURE_CONDITION(
