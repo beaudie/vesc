@@ -3361,16 +3361,7 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 
 angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Submit submission)
 {
-    if (mCurrentWindowSurface)
-    {
-        const vk::Semaphore *waitSemaphore =
-            mCurrentWindowSurface->getAndResetAcquireImageSemaphore();
-        if (waitSemaphore != nullptr)
-        {
-            addWaitSemaphore(waitSemaphore->getHandle(),
-                             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
-        }
-    }
+    ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
 
     if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
     {
@@ -3387,10 +3378,9 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
 
     ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
 
-    ANGLE_TRY(mRenderer->submitCommands(
-        this, hasProtectedContent(), mContextPriority, std::move(mWaitSemaphores),
-        std::move(mWaitSemaphoreStageMasks), signalSemaphore, &mCommandPools,
-        QueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial)));
+    ANGLE_TRY(mRenderer->submitCommands(this, hasProtectedContent(), mContextPriority,
+                                        signalSemaphore, &mCommandPools,
+                                        QueueSerial(mCurrentQueueSerialIndex, mLastFlushedSerial)));
 
     ASSERT(mLastSubmittedSerial < mLastFlushedSerial);
     mLastSubmittedSerial = mLastFlushedSerial;
@@ -7449,6 +7439,13 @@ angle::Result ContextVk::flushAndSubmitOutsideRenderPassCommands()
 
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
+    if (!mWaitSemaphores.empty())
+    {
+        mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
+                                       std::move(mWaitSemaphoreStageMasks));
+    }
+    ASSERT(mWaitSemaphores.empty() && mWaitSemaphoreStageMasks.empty());
+
     if (mOutsideRenderPassCommands->empty())
     {
         return angle::Result::Continue;
