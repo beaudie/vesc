@@ -870,7 +870,8 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
       mFrameCount(1),
-      mBufferAgeQueryFrameNumber(0)
+      mBufferAgeQueryFrameNumber(0),
+      mReentrancyLock(false)
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
@@ -2182,6 +2183,12 @@ void WindowSurfaceVk::deferAcquireNextImage()
 angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *context,
                                                           bool presentOutOfDate)
 {
+    if (mReentrancyLock)
+    {
+        UNREACHABLE();
+        return angle::Result::Stop;
+    }
+
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -2296,9 +2303,17 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
         }
     }
 
-    VkResult result =
-        vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore->getHandle(),
-                              presentFence.getHandle(), &mCurrentSwapchainImageIndex);
+    // Must not happen - for debugging
+    ASSERT(!mReentrancyLock);
+    mReentrancyLock = true;
+    VkResult result = VK_ERROR_DEVICE_LOST;
+    {
+        vk::ScopedContextUnlock unlock(context);
+        result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                       acquireImageSemaphore->getHandle(), presentFence.getHandle(),
+                                       &mCurrentSwapchainImageIndex);
+    }
+    mReentrancyLock = false;
 
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR))
