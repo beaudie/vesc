@@ -7,6 +7,8 @@
 
 #include "libANGLE/SharedContextMutex.h"
 
+#include "common/FastMutex.h"
+
 #if defined(ANGLE_ENABLE_ASSERTS)
 #    include "common/system_utils.h"
 #endif
@@ -307,6 +309,9 @@ void SharedContextMutex<Mutex>::onDestroy(bool needUnlock)
 }
 
 template class SharedContextMutex<std::mutex>;
+template class SharedContextMutex<angle::FastMutex1>;
+template class SharedContextMutex<angle::FastMutex2>;
+template class SharedContextMutex<angle::FastMutex3>;
 
 // SharedContextMutexManager
 template <class Mutex>
@@ -329,5 +334,8 @@ ContextMutex *SharedContextMutexManager<Mutex>::getRootMutex(ContextMutex *mutex
 }
 
 template class SharedContextMutexManager<std::mutex>;
+template class SharedContextMutexManager<angle::FastMutex1>;
+template class SharedContextMutexManager<angle::FastMutex2>;
+template class SharedContextMutexManager<angle::FastMutex3>;
 
 }  // namespace egl
