@@ -144,10 +144,6 @@ ANGLE_INLINE ContextMutex *GetContextMutex_HandleGPUSwitchANGLE(Thread *thread,
 ANGLE_INLINE ContextMutex *GetContextMutex_ForceGPUSwitchANGLE(Thread *thread,
                                                                egl::Display *dpyPacked);
 
-// EGL_ANGLE_prepare_swap_buffers
-ANGLE_INLINE ContextMutex *GetContextMutex_PrepareSwapBuffersANGLE(Thread *thread,
-                                                                   egl::Display *dpyPacked);
-
 // EGL_ANGLE_program_cache_control
 ANGLE_INLINE ContextMutex *GetContextMutex_ProgramCacheGetAttribANGLE(Thread *thread,
                                                                       egl::Display *dpyPacked);
