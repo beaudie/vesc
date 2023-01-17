@@ -538,7 +538,10 @@ class RendererVk : angle::NonCopyable
                                                             uint64_t timeout,
                                                             VkResult *result);
     angle::Result finish(vk::Context *context, bool hasProtectedContent);
-    angle::Result checkCompletedCommands(vk::Context *context);
+    angle::Result checkCompletedCommands(vk::Context *context)
+    {
+        return mCommandQueue.checkCompletedCommands(context);
+    }
 
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           bool hasProtectedContent,
