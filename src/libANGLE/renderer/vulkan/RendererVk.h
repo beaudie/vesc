@@ -552,11 +552,6 @@ class RendererVk : angle::NonCopyable
 
     egl::Display *getDisplay() const { return mDisplay; }
 
-    VkResult getLastPresentResult(VkSwapchainKHR swapchain)
-    {
-        return mCommandProcessor.getLastPresentResult(swapchain);
-    }
-
     bool enableDebugUtils() const { return mEnableDebugUtils; }
     bool angleDebuggerMode() const { return mAngleDebuggerMode; }
 
@@ -615,7 +610,8 @@ class RendererVk : angle::NonCopyable
 
     VkResult queuePresent(vk::Context *context,
                           egl::ContextPriority priority,
-                          const VkPresentInfoKHR &presentInfo);
+                          const VkPresentInfoKHR &presentInfo,
+                          vk::SwapchainStatus *swapchainStatus);
 
     angle::Result getOutsideRenderPassCommandBufferHelper(
         vk::Context *context,
