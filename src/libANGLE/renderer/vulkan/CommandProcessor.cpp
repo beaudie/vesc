@@ -310,15 +310,18 @@ void CommandProcessorTask::initTask()
 
 void CommandProcessorTask::initOutsideRenderPassProcessCommands(
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper *commandBuffer)
 {
     mTask                           = CustomTask::ProcessOutsideRenderPassCommands;
     mOutsideRenderPassCommandBuffer = commandBuffer;
     mHasProtectedContent            = hasProtectedContent;
+    mPriority                       = priority;
 }
 
 void CommandProcessorTask::initRenderPassProcessCommands(
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     RenderPassCommandBufferHelper *commandBuffer,
     const RenderPass *renderPass)
 {
@@ -326,6 +329,7 @@ void CommandProcessorTask::initRenderPassProcessCommands(
     mRenderPassCommandBuffer = commandBuffer;
     mRenderPass              = renderPass;
     mHasProtectedContent     = hasProtectedContent;
+    mPriority                = priority;
 }
 
 void CommandProcessorTask::copyPresentInfo(const VkPresentInfoKHR &other)
@@ -688,7 +692,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
             OutsideRenderPassCommandBufferHelper *commandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
             ANGLE_TRY(mCommandQueue->flushOutsideRPCommands(this, task->hasProtectedContent(),
-                                                            &commandBuffer));
+                                                            task->getPriority(), &commandBuffer));
 
             OutsideRenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
@@ -700,7 +704,8 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
         {
             RenderPassCommandBufferHelper *commandBuffer = task->getRenderPassCommandBuffer();
             ANGLE_TRY(mCommandQueue->flushRenderPassCommands(
-                this, task->hasProtectedContent(), *task->getRenderPass(), &commandBuffer));
+                this, task->hasProtectedContent(), task->getPriority(), *task->getRenderPass(),
+                &commandBuffer));
 
             RenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getRenderPassCommandBuffer();
@@ -861,6 +866,7 @@ VkResult CommandProcessor::queuePresent(egl::ContextPriority contextPriority,
 angle::Result CommandProcessor::flushOutsideRPCommands(
     Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
@@ -871,7 +877,7 @@ angle::Result CommandProcessor::flushOutsideRPCommands(
     SecondaryCommandMemoryAllocator *allocator = (*outsideRPCommands)->detachAllocator();
 
     CommandProcessorTask task;
-    task.initOutsideRenderPassProcessCommands(hasProtectedContent, *outsideRPCommands);
+    task.initOutsideRenderPassProcessCommands(hasProtectedContent, priority, *outsideRPCommands);
     queueCommand(std::move(task));
 
     ANGLE_TRY(mRenderer->getOutsideRenderPassCommandBufferHelper(
@@ -883,6 +889,7 @@ angle::Result CommandProcessor::flushOutsideRPCommands(
 angle::Result CommandProcessor::flushRenderPassCommands(
     Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     const RenderPass &renderPass,
     RenderPassCommandBufferHelper **renderPassCommands)
 {
@@ -894,7 +901,8 @@ angle::Result CommandProcessor::flushRenderPassCommands(
     SecondaryCommandMemoryAllocator *allocator = (*renderPassCommands)->detachAllocator();
 
     CommandProcessorTask task;
-    task.initRenderPassProcessCommands(hasProtectedContent, *renderPassCommands, &renderPass);
+    task.initRenderPassProcessCommands(hasProtectedContent, priority, *renderPassCommands,
+                                       &renderPass);
     queueCommand(std::move(task));
 
     ANGLE_TRY(mRenderer->getRenderPassCommandBufferHelper(
@@ -971,9 +979,12 @@ void CommandQueue::destroy(Context *context)
 
     for (CmdsState &state : mCmdsStateMap)
     {
-        state.commandBuffer.destroy(renderer->getDevice());
-        state.waitSemaphores.clear();
-        state.waitSemaphoreStageMasks.clear();
+        for (CmdsState::QueueState &queueState : state.queueStates)
+        {
+            queueState.commandBuffer.destroy(renderer->getDevice());
+            queueState.waitSemaphores.clear();
+            queueState.waitSemaphoreStageMasks.clear();
+        }
         state.commandPool.destroy(renderer->getDevice());
     }
 
@@ -1213,10 +1224,10 @@ angle::Result CommandQueue::submitCommands(Context *context,
     batch.hasProtectedContent   = hasProtectedContent;
     batch.commandBuffersToReset = std::move(commandBuffersToReset);
 
-    CmdsState &state = mCmdsStateMap[hasProtectedContent];
+    CmdsState::QueueState &state = mCmdsStateMap[hasProtectedContent].queueStates[priority];
 
     // Don't make a submission if there is nothing to submit.
-    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
+    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent, priority);
     const bool hasAnyPendingCommands    = commandBuffer.valid();
     if (hasAnyPendingCommands || signalSemaphore != VK_NULL_HANDLE || !state.waitSemaphores.empty())
     {
@@ -1286,10 +1297,11 @@ angle::Result CommandQueue::submitCommands(Context *context,
 }
 
 angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
-                                                            bool hasProtectedContent)
+                                                            bool hasProtectedContent,
+                                                            egl::ContextPriority priority)
 {
     PersistentCommandPool &commandPool  = getCommandPool(hasProtectedContent);
-    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
+    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent, priority);
 
     if (commandBuffer.valid())
     {
@@ -1307,13 +1319,14 @@ angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
 }
 
 void CommandQueue::flushWaitSemaphores(bool hasProtectedContent,
+                                       egl::ContextPriority priority,
                                        std::vector<VkSemaphore> &&waitSemaphores,
                                        std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
 {
     ASSERT(!waitSemaphores.empty());
     ASSERT(waitSemaphores.size() == waitSemaphoreStageMasks.size());
 
-    CmdsState &state = mCmdsStateMap[hasProtectedContent];
+    CmdsState::QueueState &state = mCmdsStateMap[hasProtectedContent].queueStates[priority];
 
     state.waitSemaphores.insert(state.waitSemaphores.end(), waitSemaphores.begin(),
                                 waitSemaphores.end());
@@ -1328,21 +1341,23 @@ void CommandQueue::flushWaitSemaphores(bool hasProtectedContent,
 angle::Result CommandQueue::flushOutsideRPCommands(
     Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
-    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, hasProtectedContent));
-    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, hasProtectedContent, priority));
+    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent, priority);
     return (*outsideRPCommands)->flushToPrimary(context, &commandBuffer);
 }
 
 angle::Result CommandQueue::flushRenderPassCommands(
     Context *context,
     bool hasProtectedContent,
+    egl::ContextPriority priority,
     const RenderPass &renderPass,
     RenderPassCommandBufferHelper **renderPassCommands)
 {
-    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, hasProtectedContent));
-    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
+    ANGLE_TRY(ensurePrimaryCommandBufferValid(context, hasProtectedContent, priority));
+    PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent, priority);
     return (*renderPassCommands)->flushToPrimary(context, &commandBuffer, &renderPass);
 }
 

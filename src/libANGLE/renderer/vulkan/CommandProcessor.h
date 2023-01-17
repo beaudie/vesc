@@ -113,9 +113,11 @@ class CommandProcessorTask
     void initTask(CustomTask command) { mTask = command; }
 
     void initOutsideRenderPassProcessCommands(bool hasProtectedContent,
+                                              egl::ContextPriority priority,
                                               OutsideRenderPassCommandBufferHelper *commandBuffer);
 
     void initRenderPassProcessCommands(bool hasProtectedContent,
+                                       egl::ContextPriority priority,
                                        RenderPassCommandBufferHelper *commandBuffer,
                                        const RenderPass *renderPass);
 
@@ -347,13 +349,16 @@ class CommandQueue : angle::NonCopyable
     angle::Result checkCompletedCommands(Context *context);
 
     void flushWaitSemaphores(bool hasProtectedContent,
+                             egl::ContextPriority priority,
                              std::vector<VkSemaphore> &&waitSemaphores,
                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         egl::ContextPriority priority,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
+                                          egl::ContextPriority priority,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
@@ -372,7 +377,9 @@ class CommandQueue : angle::NonCopyable
                                CommandBatch *batch);
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
-    angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
+    angle::Result ensurePrimaryCommandBufferValid(Context *context,
+                                                  bool hasProtectedContent,
+                                                  egl::ContextPriority priority);
     // Returns number of CommandBatchs that are smaller than serials
     size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
     // Returns the last valid SharedFence of the first "count" CommandBatchs in mInflightCommands.
@@ -381,9 +388,9 @@ class CommandQueue : angle::NonCopyable
     // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
 
-    PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
+    PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent, egl::ContextPriority priority)
     {
-        return mCmdsStateMap[hasProtectedContent].commandBuffer;
+        return mCmdsStateMap[hasProtectedContent].queueStates[priority].commandBuffer;
     }
 
     PersistentCommandPool &getCommandPool(bool hasProtectedContent)
@@ -395,9 +402,13 @@ class CommandQueue : angle::NonCopyable
 
     struct CmdsState
     {
-        PrimaryCommandBuffer commandBuffer;
-        std::vector<VkSemaphore> waitSemaphores;
-        std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+        struct QueueState
+        {
+            PrimaryCommandBuffer commandBuffer;
+            std::vector<VkSemaphore> waitSemaphores;
+            std::vector<VkPipelineStageFlags> waitSemaphoreStageMasks;
+        };
+        angle::PackedEnumMap<egl::ContextPriority, QueueState> queueStates;
         // Keeps a free list of reusable primary command buffers.
         PersistentCommandPool commandPool;
     };
@@ -500,29 +511,33 @@ class ThreadSafeCommandQueue : public CommandQueue
         return CommandQueue::checkCompletedCommands(context);
     }
     void flushWaitSemaphores(bool hasProtectedContent,
+                             egl::ContextPriority priority,
                              std::vector<VkSemaphore> &&waitSemaphores,
                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::flushWaitSemaphores(hasProtectedContent, std::move(waitSemaphores),
+        return CommandQueue::flushWaitSemaphores(hasProtectedContent, priority,
+                                                 std::move(waitSemaphores),
                                                  std::move(waitSemaphoreStageMasks));
     }
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         egl::ContextPriority priority,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::flushOutsideRPCommands(context, hasProtectedContent,
+        return CommandQueue::flushOutsideRPCommands(context, hasProtectedContent, priority,
                                                     outsideRPCommands);
     }
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
+                                          egl::ContextPriority priority,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::flushRenderPassCommands(context, hasProtectedContent, renderPass,
-                                                     renderPassCommands);
+        return CommandQueue::flushRenderPassCommands(context, hasProtectedContent, priority,
+                                                     renderPass, renderPassCommands);
     }
 
     const angle::VulkanPerfCounters getPerfCounters() const
@@ -590,9 +605,11 @@ class CommandProcessor : public Context
 
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         egl::ContextPriority priority,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
+                                          egl::ContextPriority priority,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
@@ -723,20 +740,22 @@ class ThreadSafeCommandProcessor : public CommandProcessor
 
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
+                                         egl::ContextPriority priority,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::flushOutsideRPCommands(context, hasProtectedContent,
+        return CommandProcessor::flushOutsideRPCommands(context, hasProtectedContent, priority,
                                                         outsideRPCommands);
     }
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
+                                          egl::ContextPriority priority,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandProcessor::flushRenderPassCommands(context, hasProtectedContent, renderPass,
-                                                         renderPassCommands);
+        return CommandProcessor::flushRenderPassCommands(context, hasProtectedContent, priority,
+                                                         renderPass, renderPassCommands);
     }
 
   private:
