@@ -70,6 +70,7 @@ const Surface *GetSurfaceIfValid(const Display *display, SurfaceID surfaceID);
 const Image *GetImageIfValid(const Display *display, ImageID imageID);
 const Stream *GetStreamIfValid(const Display *display, const Stream *stream);
 const gl::Context *GetContextIfValid(const Display *display, gl::ContextID contextID);
+gl::Context *GetContextIfValid(Display *display, gl::ContextID contextID);
 const Device *GetDeviceIfValid(const Device *device);
 const Sync *GetSyncIfValid(const Display *display, SyncID sync);
 const LabeledObject *GetLabeledObjectIfValid(Thread *thread,
@@ -165,6 +166,8 @@ typename std::remove_reference<PackedT>::type PackParam(FromT from)
         auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__));                       \
         if (!ANGLE_LOCAL_VAR)                                                              \
         {                                                                                  \
+            if (ANGLE_UNLIKELY(contextMutex))                                              \
+                contextMutex->unlock();                                                    \
             return GetDefaultReturnValue<angle::EntryPoint::EGL##EP, RETURN_TYPE>(THREAD); \
         }                                                                                  \
     } while (0)
@@ -177,6 +180,8 @@ typename std::remove_reference<PackedT>::type PackParam(FromT from)
         auto ANGLE_LOCAL_VAR = (Validate##EP(&vctx, ##__VA_ARGS__)); \
         if (!ANGLE_LOCAL_VAR)                                        \
         {                                                            \
+            if (ANGLE_UNLIKELY(contextMutex))                        \
+                contextMutex->unlock();                              \
             return;                                                  \
         }                                                            \
     } while (0)

@@ -373,6 +373,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             const Context *shareContext,
             TextureManager *shareTextures,
             SemaphoreManager *shareSemaphores,
+            egl::ContextMutex *sharedContextMutex,
             MemoryProgramCache *memoryProgramCache,
             MemoryShaderCache *memoryShaderCache,
             const EGLenum clientType,
@@ -545,10 +546,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
         return mState.isCurrentVertexArray(va);
     }
 
-    ANGLE_INLINE bool isShared() const { return mShared; }
-    // Once a context is setShared() it cannot be undone
-    void setShared() { mShared = true; }
-
     const State &getState() const { return mState; }
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     GLint getClientMinorVersion() const { return mState.getClientMinorVersion(); }
@@ -662,6 +659,18 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     egl::ShareGroup *getShareGroup() const { return mState.getShareGroup(); }
 
+    egl::ContextMutex *getContextMutex() const { return mState.getContextMutex(); }
+
+    // "ContextMutex" MUST NOT be locked during this call.
+    // Important note:
+    //   Theoretically it is possible that this Context will continue to use "SingleContextMutex" in
+    //   its current thread after this call. Probability of that is controlled by the
+    //   "activationDelayMicro" parameter. Default value of "100" microseconds did not cause this
+    //   problem during deliberate stress testing. However, if problem happens or extra safety is
+    //   critical - increase the "activationDelayMicro".
+    //   For absolute 100% safety "SingleContextMutex" should not be used.
+    void ensureSharedMutexActive(uint32_t activationDelayMicro = 100);
+
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
 
@@ -750,8 +759,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                             GLsizei height,
                                             MultisamplingMode mode);
 
+    // "ContextMutex" MUST be locked during this call.
+    // Merges "SharedContextMutex" of the Context with other "ShareContextMutex".
+    // Does nothing if "otherMutex" is NULL.
+    // If "SingleContextMutex" is locked - start using, activates, and
+    //                                     returns lock to the "SharedContextMutex".
+    std::unique_lock<egl::ContextMutex> mergeSharedMutexes(egl::ContextMutex *otherMutex);
+
     State mState;
-    bool mShared;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
     bool mDisplaySemaphoreShareGroup;
