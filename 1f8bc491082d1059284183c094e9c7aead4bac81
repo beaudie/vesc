@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea20a248_fa548333",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2023-01-18T00:56:05Z",
+      "side": 1,
+      "message": "@Chris, apologies for not reviewing this earlier before merging.  \n\nBCX textures cannot be rendered to or cleared. They can only be sampled from.  \n\nThese cases should be go in the \"UNREACHABLE\" section down below.",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 304,
+        "endChar": 41
+      },
+      "revId": "1f8bc491082d1059284183c094e9c7aead4bac81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
