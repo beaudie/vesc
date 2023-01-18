@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "308fdd8f_16e2a5cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5416,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-18T21:40:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8036fae5_a96fdce0",
+      "range": {
+        "startLine": 5416,
+        "startChar": 9,
+        "endLine": 5416,
+        "endChar": 31
+      },
+      "revId": "02131f4dbd6b98505ef14b3e1e11c2471211a991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4efdf63_2ad047a3",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eb4a0af_a2b32431",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5437,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-18T21:40:49Z",
+      "side": 1,
+      "message": "Renamed to `kTrackMemoryAllocationDebug`, since it is used for debug-mode features, including counts and logging.",
+      "parentUuid": "e4efdf63_2ad047a3",
+      "range": {
+        "startLine": 5437,
+        "startChar": 9,
+        "endLine": 5437,
+        "endChar": 35
+      },
+      "revId": "02131f4dbd6b98505ef14b3e1e11c2471211a991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "afb6a16a_69925093",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-01-18T06:44:56Z",
       "side": 1,
       "message": "nit: Could all (or some) of these be made const methods?",
+      "range": {
+        "startLine": 693,
+        "startChar": 0,
+        "endLine": 697,
+        "endChar": 0
+      },
+      "revId": "02131f4dbd6b98505ef14b3e1e11c2471211a991",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "695afda2_14cb8061",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-18T21:40:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afb6a16a_69925093",
       "range": {
         "startLine": 693,
         "startChar": 0,
