@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f45088_51a8256a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-18T19:19:04Z",
+      "side": 1,
+      "message": "No further comments from me, but I\u0027m not a reviewer. Charlie would +2.",
+      "parentUuid": "532a28cc_94a3428b",
+      "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2f002ba_f96094e0",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "the getter `hasFrontBufferUsage()` masks `mAttachmentHasFrontBufferUsage` using `mState.getColorAttachmentsMask()` which should always contain only valid/enabled `colorIndexGL`\n\n`mIsAHBColorAttachments` doesn\u0027t do that for some reason, not sure why",
       "parentUuid": "f2f002ba_f96094e0",
+      "range": {
+        "startLine": 1846,
+        "startChar": 8,
+        "endLine": 1846,
+        "endChar": 38
+      },
+      "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2efc005_0538b256",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-18T19:19:04Z",
+      "side": 1,
+      "message": "bitset\u0027s `set(b, v)` is implemented as `if (v) set(b); else clear(b);`",
+      "parentUuid": "de420460_f4902979",
       "range": {
         "startLine": 1846,
         "startChar": 8,
