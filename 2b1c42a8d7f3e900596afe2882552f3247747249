@@ -39,6 +39,30 @@
       },
       "revId": "2b1c42a8d7f3e900596afe2882552f3247747249",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc3d695_fde7a0fa",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-18T22:30:05Z",
+      "side": 1,
+      "message": "Fixed this by refactoring the code into a helper function, so only one point of possible failure.",
+      "parentUuid": "d57c73a9_0d47ba5f",
+      "range": {
+        "startLine": 1343,
+        "startChar": 64,
+        "endLine": 1343,
+        "endChar": 69
+      },
+      "revId": "2b1c42a8d7f3e900596afe2882552f3247747249",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
