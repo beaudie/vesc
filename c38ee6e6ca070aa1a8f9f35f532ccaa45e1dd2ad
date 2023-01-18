@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4230f855_c3d7dbf3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-18T02:11:22Z",
+      "side": 1,
+      "message": "This should be renamed to waitForAllWorkToBeSubmitted.",
+      "range": {
+        "startLine": 626,
+        "startChar": 18,
+        "endLine": 626,
+        "endChar": 37
+      },
+      "revId": "c38ee6e6ca070aa1a8f9f35f532ccaa45e1dd2ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
