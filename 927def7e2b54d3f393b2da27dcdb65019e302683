@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b861dd8_7f5c1526",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-01-18T20:11:09Z",
+      "side": 1,
+      "message": "Ken had a different way of doing this: https://chromium-review.googlesource.com/c/angle/angle/+/4117716\nI\u0027m wondering which is preferred?",
+      "revId": "927def7e2b54d3f393b2da27dcdb65019e302683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
