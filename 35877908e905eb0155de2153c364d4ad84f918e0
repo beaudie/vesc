@@ -39,6 +39,30 @@
       },
       "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de420460_f4902979",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-18T19:00:50Z",
+      "side": 1,
+      "message": "the getter `hasFrontBufferUsage()` masks `mAttachmentHasFrontBufferUsage` using `mState.getColorAttachmentsMask()` which should always contain only valid/enabled `colorIndexGL`\n\n`mIsAHBColorAttachments` doesn\u0027t do that for some reason, not sure why",
+      "parentUuid": "f2f002ba_f96094e0",
+      "range": {
+        "startLine": 1846,
+        "startChar": 8,
+        "endLine": 1846,
+        "endChar": 38
+      },
+      "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
