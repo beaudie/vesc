@@ -297,29 +297,12 @@ class DeviceQueueMap : public angle::PackedEnumMap<egl::ContextPriority, VkQueue
     angle::PackedEnumMap<egl::ContextPriority, egl::ContextPriority> mPriorities;
 };
 
-class CommandQueue : angle::NonCopyable
+// This is internal class used by CommandQueue only
+class CommandQueueImpl : angle::NonCopyable
 {
-  public:
-    // These public APIs are inherently thread safe. Thread unsafe methods must be protected methods
-    // that are only accessed via ThreadSafeCommandQueue API.
-    egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
-    {
-        return mQueueMap.getDevicePriority(priority);
-    }
-    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
-
-    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
-
-    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
-    bool hasUnfinishedUse(const ResourceUse &use) const;
-    // The ResourceUse still have queue serial not yet submitted to vulkan.
-    bool hasUnsubmittedUse(const ResourceUse &use) const;
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
-
   protected:
-    // These are accessed by ThreadSafeCommandQueue only
-    CommandQueue();
-    ~CommandQueue();
+    CommandQueueImpl();
+    ~CommandQueueImpl();
 
     angle::Result init(Context *context, const DeviceQueueMap &queueMap);
     void destroy(Context *context);
@@ -436,24 +419,41 @@ class CommandQueue : angle::NonCopyable
     angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
 };
 
-class ThreadSafeCommandQueue : public CommandQueue
+// This class provides thread safe public API access.
+class CommandQueue : private CommandQueueImpl
 {
   public:
     angle::Result init(Context *context, const DeviceQueueMap &queueMap)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::init(context, queueMap);
+        return CommandQueueImpl::init(context, queueMap);
     }
     void destroy(Context *context)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        CommandQueue::destroy(context);
+        CommandQueueImpl::destroy(context);
     }
+
+    angle::Result ensureNoPendingWork(Context *context) const { return angle::Result::Continue; }
+
+    egl::ContextPriority getDriverPriority(egl::ContextPriority priority) const
+    {
+        return mQueueMap.getDevicePriority(priority);
+    }
+    uint32_t getDeviceQueueIndex() const { return mQueueMap.getIndex(); }
+
+    VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
+
+    // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
+    bool hasUnfinishedUse(const ResourceUse &use) const;
+    // The ResourceUse still have queue serial not yet submitted to vulkan.
+    bool hasUnsubmittedUse(const ResourceUse &use) const;
+    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
 
     void handleDeviceLost(RendererVk *renderer)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        CommandQueue::handleDeviceLost(renderer);
+        CommandQueueImpl::handleDeviceLost(renderer);
     }
 
     // Wait until the desired serial has been completed.
@@ -479,7 +479,7 @@ class ThreadSafeCommandQueue : public CommandQueue
                                  const QueueSerial &submitQueueSerial)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::submitCommands(
+        return CommandQueueImpl::submitCommands(
             context, hasProtectedContent, priority, waitSemaphores, waitSemaphoreStageMasks,
             signalSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial);
     }
@@ -494,14 +494,14 @@ class ThreadSafeCommandQueue : public CommandQueue
                                     const QueueSerial &submitQueueSerial)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::queueSubmitOneOff(
+        return CommandQueueImpl::queueSubmitOneOff(
             context, hasProtectedContent, contextPriority, commandBufferHandle, waitSemaphore,
             waitSemaphoreStageMask, fence, submitPolicy, submitQueueSerial);
     }
     VkResult queuePresent(egl::ContextPriority contextPriority, const VkPresentInfoKHR &presentInfo)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::queuePresent(contextPriority, presentInfo);
+        return CommandQueueImpl::queuePresent(contextPriority, presentInfo);
     }
 
     // Check to see which batches have finished completion (forward progress for
@@ -510,15 +510,15 @@ class ThreadSafeCommandQueue : public CommandQueue
     angle::Result checkCompletedCommands(Context *context)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::checkCompletedCommands(context);
+        return CommandQueueImpl::checkCompletedCommands(context);
     }
     angle::Result flushOutsideRPCommands(Context *context,
                                          bool hasProtectedContent,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::flushOutsideRPCommands(context, hasProtectedContent,
-                                                    outsideRPCommands);
+        return CommandQueueImpl::flushOutsideRPCommands(context, hasProtectedContent,
+                                                        outsideRPCommands);
     }
     angle::Result flushRenderPassCommands(Context *context,
                                           bool hasProtectedContent,
@@ -526,19 +526,19 @@ class ThreadSafeCommandQueue : public CommandQueue
                                           RenderPassCommandBufferHelper **renderPassCommands)
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::flushRenderPassCommands(context, hasProtectedContent, renderPass,
-                                                     renderPassCommands);
+        return CommandQueueImpl::flushRenderPassCommands(context, hasProtectedContent, renderPass,
+                                                         renderPassCommands);
     }
 
     const angle::VulkanPerfCounters getPerfCounters() const
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        return CommandQueue::getPerfCounters();
+        return CommandQueueImpl::getPerfCounters();
     }
     void resetPerFramePerfCounters()
     {
         std::unique_lock<std::mutex> lock(mMutex);
-        CommandQueue::resetPerFramePerfCounters();
+        CommandQueueImpl::resetPerFramePerfCounters();
     }
 
   private:
@@ -553,7 +553,7 @@ class ThreadSafeCommandQueue : public CommandQueue
 class CommandProcessor : public Context
 {
   public:
-    CommandProcessor(RendererVk *renderer, ThreadSafeCommandQueue *commandQueue);
+    CommandProcessor(RendererVk *renderer, CommandQueue *commandQueue);
     ~CommandProcessor() override;
 
     VkResult getLastPresentResult(VkSwapchainKHR swapchain)
@@ -648,7 +648,7 @@ class CommandProcessor : public Context
     mutable std::condition_variable mWorkerIdleCondition;
     // Track worker thread Idle state for assertion purposes
     bool mWorkerThreadIdle;
-    ThreadSafeCommandQueue *const mCommandQueue;
+    CommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
     // mLastSubmittedQueueSerial in CommandQueue since submission from CommandProcessor to
