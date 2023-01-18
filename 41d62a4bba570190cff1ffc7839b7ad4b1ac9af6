@@ -22,6 +22,30 @@
       },
       "revId": "41d62a4bba570190cff1ffc7839b7ad4b1ac9af6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f8efa33_c983ca4e",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 863,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-18T20:18:47Z",
+      "side": 1,
+      "message": "We can\u0027t be put these into little global helpers because it\u0027s a property of mParams.\n\nmParams-\u003eisVulkan is true always when mParams-\u003eisANGLE is true for these tests. if we run other back-ends, we can update this code at that point.",
+      "parentUuid": "70e75941_5b43c9f4",
+      "range": {
+        "startLine": 841,
+        "startChar": 0,
+        "endLine": 863,
+        "endChar": 66
+      },
+      "revId": "41d62a4bba570190cff1ffc7839b7ad4b1ac9af6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
