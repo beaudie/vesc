@@ -148,22 +148,27 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     return angle::Result::Continue;
 }
 
-angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool *signaled)
+angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool *signaledOut)
 {
-    RendererVk *renderer = context->getRenderer();
-
     // Submit commands if it was deferred on the context that issued the sync object
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
+    return getStatusFromUse(context, signaledOut);
+}
+
+angle::Result SyncHelper::getStatusFromUse(Context *context, bool *signaledOut)
+{
+    ASSERT(mUse.valid());
+    RendererVk *renderer = context->getRenderer();
     if (renderer->hasResourceUseFinished(mUse))
     {
-        *signaled = true;
+        *signaledOut = true;
     }
     else
     {
         // Do immediate check in case it actually already finished.
         ANGLE_TRY(renderer->checkCompletedCommands(context));
-        *signaled = renderer->hasResourceUseFinished(mUse);
+        *signaledOut = renderer->hasResourceUseFinished(mUse);
     }
     return angle::Result::Continue;
 }
@@ -279,6 +284,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // signal it is in the graphics pipeline at the time we export the fd. Providing externalFence
     // in the flushImpl() above will ensure the fence is submitted.
 
+    mUse.setQueueSerial(contextVk->getLastSubmittedQueueSerial());
+
     VkFenceGetFdInfoKHR fenceGetFdInfo = {};
     fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
     fenceGetFdInfo.fence               = fence.get().getHandle();
@@ -369,13 +376,12 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
 
 angle::Result SyncHelperNativeFence::getStatus(Context *context,
                                                ContextVk *contextVk,
-                                               bool *signaled)
+                                               bool *signaledOut)
 {
     // We've got a serial, check if the serial is still in use
     if (mUse.valid())
     {
-        *signaled = context->getRenderer()->hasResourceUseFinished(mUse);
-        return angle::Result::Continue;
+        return getStatusFromUse(context, signaledOut);
     }
 
     // We don't have a serial, check status of the file descriptor
@@ -384,7 +390,7 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
     {
         ANGLE_VK_TRY(context, result);
     }
-    *signaled = (result == VK_SUCCESS);
+    *signaledOut = (result == VK_SUCCESS);
     return angle::Result::Continue;
 }
 
