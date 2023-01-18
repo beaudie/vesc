@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7c6925_620e5038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2023-01-18T21:21:12Z",
+      "side": 1,
+      "message": "PTAL https://chromium-review.googlesource.com/c/angle/angle/+/4178012/1..3",
+      "revId": "71d931cb0aa94ffc4a0f7487a643ee171233173c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
