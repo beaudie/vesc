@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a2397f3_ef9480fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-18T22:06:34Z",
+      "side": 1,
+      "message": "One small bug fix, otherwise LGTM\n\n+2\u0027ing for time zone friendly reviews.",
+      "revId": "2b1c42a8d7f3e900596afe2882552f3247747249",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d57c73a9_0d47ba5f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-18T22:06:34Z",
+      "side": 1,
+      "message": "These need to be count++.\n\nMight be better to move the increment inside the helper, although that would be a bit slower.",
+      "range": {
+        "startLine": 1343,
+        "startChar": 64,
+        "endLine": 1343,
+        "endChar": 69
+      },
+      "revId": "2b1c42a8d7f3e900596afe2882552f3247747249",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
