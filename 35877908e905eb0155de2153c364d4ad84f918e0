@@ -16,6 +16,29 @@
       "message": "anything else shabi?",
       "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2f002ba_f96094e0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1846,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-18T18:54:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t you remove the bit at the else part at line 1847?",
+      "range": {
+        "startLine": 1846,
+        "startChar": 8,
+        "endLine": 1846,
+        "endChar": 38
+      },
+      "revId": "35877908e905eb0155de2153c364d4ad84f918e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
