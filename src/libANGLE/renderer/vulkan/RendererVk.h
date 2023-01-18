@@ -867,7 +867,7 @@ class RendererVk : angle::NonCopyable
     OneOffCommandPool mOneOffCommandPool;
 
     // Synchronous Command Queue
-    vk::ThreadSafeCommandQueue mCommandQueue;
+    vk::CommandQueue mCommandQueue;
 
     // Async Command Queue
     vk::CommandProcessor mCommandProcessor;
