@@ -270,18 +270,14 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
       into the command stream of the bound client API's current context and associates it
       with the newly created sync object.
     */
-    // Flush first because the fence comes after current pending set of commands.
-    ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::SyncObjectWithFdInit));
+    // Flush current pending set of commands providing the fence...
+    ANGLE_TRY(
+        contextVk->flushImpl(nullptr, &fence.get(), RenderPassClosureReason::SyncObjectWithFdInit));
 
-    QueueSerial queueSerialOut;
     // exportFd is exporting VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR type handle which
     // obeys copy semantics. This means that the fence must already be signaled or the work to
-    // signal it is in the graphics pipeline at the time we export the fd. Thus we need to
-    // EnsureSubmitted here.
-    ANGLE_TRY(renderer->queueSubmitOneOff(contextVk, vk::PrimaryCommandBuffer(),
-                                          contextVk->getProtectionType(), contextVk->getPriority(),
-                                          nullptr, 0, &fence.get(),
-                                          vk::SubmitPolicy::EnsureSubmitted, &queueSerialOut));
+    // signal it is in the graphics pipeline at the time we export the fd. Providing externalFence
+    // in the flushImpl() above will ensure the fence is submitted.
 
     VkFenceGetFdInfoKHR fenceGetFdInfo = {};
     fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
@@ -320,7 +316,8 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
 
     if (flushCommands && contextVk)
     {
-        ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::SyncObjectClientWait));
+        ANGLE_TRY(
+            contextVk->flushImpl(nullptr, nullptr, RenderPassClosureReason::SyncObjectClientWait));
     }
 
     VkResult status = VK_SUCCESS;
