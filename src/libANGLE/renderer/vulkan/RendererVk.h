@@ -56,6 +56,8 @@ namespace vk
 {
 class Format;
 
+class ExternalFence;
+
 static constexpr size_t kMaxExtensionNames = 400;
 using ExtensionNameList                    = angle::FixedVector<const char *, kMaxExtensionNames>;
 
@@ -481,7 +483,7 @@ class RendererVk : angle::NonCopyable
                                  vk::ProtectionType protectionType,
                                  egl::ContextPriority contextPriority,
                                  const vk::Semaphore *signalSemaphore,
-                                 const vk::Fence *externalFence,
+                                 vk::ExternalFence *externalFence,
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result submitPriorityDependency(vk::Context *context,
