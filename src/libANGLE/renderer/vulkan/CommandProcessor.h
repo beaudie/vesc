@@ -28,6 +28,9 @@ class CommandProcessor;
 
 namespace vk
 {
+class ExternalFence;
+using SharedExternalFence = Shared<ExternalFence, std::atomic<uint32_t>>;
+
 constexpr size_t kMaxCommandProcessorTasksLimit = 16u;
 constexpr size_t kInFlightCommandsLimit         = 50u;
 constexpr size_t kMaxFinishedCommandsLimit      = 64u;
@@ -140,7 +143,7 @@ class CommandProcessorTask
                      SwapchainStatus *swapchainStatus);
 
     void initFlushAndQueueSubmit(VkSemaphore semaphore,
-                                 VkFence externalFence,
+                                 SharedExternalFence &&externalFence,
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
                                  const QueueSerial &submitQueueSerial);
@@ -167,7 +170,7 @@ class CommandProcessorTask
         return mWaitSemaphoreStageMasks;
     }
     VkSemaphore getSemaphore() const { return mSemaphore; }
-    VkFence getExternalFence() const { return mExternalFence; }
+    SharedExternalFence &getExternalFence() { return mExternalFence; }
     egl::ContextPriority getPriority() const { return mPriority; }
     ProtectionType getProtectionType() const { return mProtectionType; }
     VkCommandBuffer getOneOffCommandBuffer() const { return mOneOffCommandBuffer; }
@@ -204,7 +207,7 @@ class CommandProcessorTask
 
     // Flush data
     VkSemaphore mSemaphore;
-    VkFence mExternalFence;
+    SharedExternalFence mExternalFence;
 
     // Flush command data
     QueueSerial mSubmitQueueSerial;
@@ -248,9 +251,20 @@ struct CommandBatch final : angle::NonCopyable
 
     void destroy(VkDevice device);
 
+    bool hasFence() const;
+    void releaseFence(VkDevice device);
+    void destroyFence(VkDevice device);
+    VkFence getFenceHandle() const;
+    VkResult getFenceStatus(VkDevice device) const;
+    VkResult waitFence(VkDevice device, uint64_t timeout) const;
+    VkResult waitFenceUnlocked(VkDevice device,
+                               uint64_t timeout,
+                               std::unique_lock<std::mutex> *lock) const;
+
     PrimaryCommandBuffer primaryCommands;
     SecondaryCommandBufferCollector secondaryCommands;
     SharedFence fence;
+    SharedExternalFence externalFence;
     QueueSerial queueSerial;
     ProtectionType protectionType;
 };
@@ -380,7 +394,7 @@ class CommandQueue : angle::NonCopyable
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
                                  VkSemaphore signalSemaphore,
-                                 VkFence externalFence,
+                                 SharedExternalFence &&externalFence,
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result queueSubmitOneOff(Context *context,
@@ -461,7 +475,6 @@ class CommandQueue : angle::NonCopyable
                               std::unique_lock<std::mutex> &&dequeueLock,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
-                              VkFence externalFence,
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
 
@@ -536,7 +549,7 @@ class CommandProcessor : public Context
                                         ProtectionType protectionType,
                                         egl::ContextPriority priority,
                                         VkSemaphore signalSemaphore,
-                                        VkFence externalFence,
+                                        SharedExternalFence &&externalFence,
                                         const QueueSerial &submitQueueSerial);
 
     void requestCommandsAndGarbageCleanup();

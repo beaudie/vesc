@@ -490,7 +490,7 @@ class RendererVk : angle::NonCopyable
                                  vk::ProtectionType protectionType,
                                  egl::ContextPriority contextPriority,
                                  const vk::Semaphore *signalSemaphore,
-                                 const vk::Fence *externalFence,
+                                 const vk::SharedExternalFence *externalFence,
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result submitPriorityDependency(vk::Context *context,
