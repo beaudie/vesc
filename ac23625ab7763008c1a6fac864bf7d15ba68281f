@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b9ad1d1_8894abc1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1517582
+      },
+      "writtenOn": "2023-01-19T22:14:35Z",
+      "side": 1,
+      "message": "One small suggestion: It would be cleaner, if possible, to move this to a separate header to avoid bloating RendererVk.h. Other than the RendererVk pointer, I don\u0027t see other dependencies, though I may have missed them.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 66
+      },
+      "revId": "ac23625ab7763008c1a6fac864bf7d15ba68281f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
