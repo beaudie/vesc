@@ -520,7 +520,7 @@ void CommandProcessor::handleError(VkResult errorCode,
 }
 
 CommandProcessor::CommandProcessor(RendererVk *renderer, CommandQueue *commandQueue)
-    : Context(renderer), mWorkerThreadIdle(false), mCommandQueue(commandQueue)
+    : Context(renderer), mWorkerThreadExit(false), mCommandQueue(commandQueue)
 {
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
     while (!mErrors.empty())
@@ -560,15 +560,9 @@ void CommandProcessor::queueCommand(CommandProcessorTask &&task)
 
 void CommandProcessor::processTasks()
 {
-    while (true)
+    while (!mWorkerThreadExit)
     {
-        bool exitThread      = false;
-        angle::Result result = processTasksImpl(&exitThread);
-        if (exitThread)
-        {
-            // We are doing a controlled exit of the thread, break out of the while loop.
-            break;
-        }
+        angle::Result result = processTasksImpl();
         if (result != angle::Result::Continue)
         {
             // TODO: https://issuetracker.google.com/issues/170311829 - follow-up on error handling
@@ -580,37 +574,31 @@ void CommandProcessor::processTasks()
     }
 }
 
-angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
+angle::Result CommandProcessor::processTasksImpl()
 {
-    while (true)
+    while (!mWorkerThreadExit)
     {
         std::unique_lock<std::mutex> lock(mWorkerMutex);
         if (mTasks.empty())
         {
-            mWorkerThreadIdle = true;
-            mWorkerIdleCondition.notify_all();
             // Only wake if notified and command queue is not empty
-            mWorkAvailableCondition.wait(lock, [this] { return !mTasks.empty(); });
+            mWorkAvailableCondition.wait(lock,
+                                         [this] { return !mTasks.empty() || mWorkerThreadExit; });
         }
-        mWorkerThreadIdle = false;
-        CommandProcessorTask task(std::move(mTasks.front()));
-        mTasks.pop();
-        lock.unlock();
 
-        ANGLE_TRY(processTask(&task));
-        if (task.getTaskCommand() == CustomTask::Exit)
+        if (!mTasks.empty())
         {
+            CommandProcessorTask task(std::move(mTasks.front()));
+            mTasks.pop();
 
-            *exitThread = true;
+            lock.unlock();
+            // intentionally slow down the work processing to expose timing related bugs
+            usleep(10 * 1000);
+            ANGLE_TRY(processTask(&task));
             lock.lock();
-            mWorkerThreadIdle = true;
-            mWorkerIdleCondition.notify_one();
-            return angle::Result::Continue;
         }
     }
-
-    UNREACHABLE();
-    return angle::Result::Stop;
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
@@ -715,16 +703,24 @@ angle::Result CommandProcessor::checkCompletedCommands(Context *context)
 
 angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForAllWorkToBeSubmitted");
+    // Grab the lock and immediately finish all work items in this thread.
     std::unique_lock<std::mutex> lock(mWorkerMutex);
-    mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
-    // Worker thread is idle and command queue is empty so good to continue
-
-    // Sync any errors to the context
-    bool shouldStop = hasPendingError();
-    while (hasPendingError())
+    while (!mTasks.empty())
     {
-        (void)checkAndPopPendingError(context);
+        CommandProcessorTask task(std::move(mTasks.front()));
+        mTasks.pop();
+        ANGLE_TRY(processTask(&task));
+    }
+
+    bool shouldStop = false;
+    if (context)
+    {
+        // Sync any errors to the context
+        shouldStop = hasPendingError();
+        while (hasPendingError())
+        {
+            (void)checkAndPopPendingError(context);
+        }
     }
     return shouldStop ? angle::Result::Stop : angle::Result::Continue;
 }
@@ -732,20 +728,17 @@ angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
 angle::Result CommandProcessor::init()
 {
     mTaskThread = std::thread(&CommandProcessor::processTasks, this);
-
+    mLastSubmittedSerials.fill(kZeroSerial);
     return angle::Result::Continue;
 }
 
 void CommandProcessor::destroy(Context *context)
 {
-    CommandProcessorTask endTask;
-    endTask.initTask(CustomTask::Exit);
-    queueCommand(std::move(endTask));
     (void)waitForAllWorkToBeSubmitted(context);
-    if (mTaskThread.joinable())
-    {
-        mTaskThread.join();
-    }
+
+    mWorkerThreadExit = true;
+    mWorkAvailableCondition.notify_one();
+    mTaskThread.join();
 }
 
 bool CommandProcessor::isBusy(RendererVk *renderer) const
@@ -757,9 +750,8 @@ bool CommandProcessor::isBusy(RendererVk *renderer) const
 void CommandProcessor::handleDeviceLost(RendererVk *renderer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::handleDeviceLost");
-    std::unique_lock<std::mutex> lock(mWorkerMutex);
-    mWorkerIdleCondition.wait(lock, [this] { return (mTasks.empty() && mWorkerThreadIdle); });
-
+    // Force flush everything to mCommandQueue
+    (void)waitForAllWorkToBeSubmitted(nullptr);
     // Worker thread is idle and command queue is empty so good to continue
     mCommandQueue->handleDeviceLost(renderer);
 }
@@ -928,19 +920,27 @@ angle::Result ThreadSafeCommandProcessor::waitForQueueSerialToBeSubmitted(
     vk::Context *context,
     const QueueSerial &queueSerial)
 {
-    const ResourceUse use(queueSerial);
-    return waitForResourceUseToBeSubmitted(context, use);
+    return waitForResourceUseToBeSubmitted(context, ResourceUse(queueSerial));
 }
 
 angle::Result ThreadSafeCommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
                                                                           const ResourceUse &use)
 {
-    if (mCommandQueue->hasUnsubmittedUse(use))
+    std::unique_lock<std::mutex> lock(mWorkerMutex);
+    while (mCommandQueue->hasUnsubmittedUse(use) && !mTasks.empty())
     {
-        std::unique_lock<std::mutex> lock(mMutex);
-        ANGLE_TRY(waitForAllWorkToBeSubmitted(context));
+        CommandProcessorTask task(std::move(mTasks.front()));
+        mTasks.pop();
+        ANGLE_TRY(processTask(&task));
     }
-    return angle::Result::Continue;
+
+    // Sync any errors to the context
+    bool shouldStop = hasPendingError();
+    while (hasPendingError())
+    {
+        (void)checkAndPopPendingError(context);
+    }
+    return shouldStop ? angle::Result::Stop : angle::Result::Continue;
 }
 
 angle::Result ThreadSafeCommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
