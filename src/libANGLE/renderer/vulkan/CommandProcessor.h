@@ -641,7 +641,7 @@ class CommandProcessor : public Context
 
     // Command processor thread, called by processTasks. The loop waits for work to
     // be submitted from a separate thread.
-    angle::Result processTasksImpl(bool *exitThread);
+    angle::Result processTasksImpl();
 
     // Command processor thread, process a task
     angle::Result processTask(CommandProcessorTask *task);
@@ -649,14 +649,12 @@ class CommandProcessor : public Context
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
-    std::queue<CommandProcessorTask> mTasks;
     mutable std::mutex mWorkerMutex;
+    std::queue<CommandProcessorTask> mTasks;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
-    // Signal main thread when all work completed
-    mutable std::condition_variable mWorkerIdleCondition;
-    // Track worker thread Idle state for assertion purposes
-    bool mWorkerThreadIdle;
+    std::atomic<bool> mWorkerThreadExit;
+
     CommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
