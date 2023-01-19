@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c880c8b4_c3bd4826",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-19T15:17:02Z",
+      "side": 1,
+      "message": "Thank you for being thorough with all the backends",
+      "revId": "c89ecdc0e3a8ec90299f933fa3cb1400193aec0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f278efdc_05d4cfea",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-19T15:17:02Z",
+      "side": 1,
+      "message": "nit: please turn into a link. ANGLE is open source, so it would not occur to most people to check with (or even know about) gitlab",
+      "range": {
+        "startLine": 259,
+        "startChar": 13,
+        "endLine": 259,
+        "endChar": 28
+      },
+      "revId": "c89ecdc0e3a8ec90299f933fa3cb1400193aec0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3d41948_78008581",
+        "filename": "src/tests/gl_tests/PolygonOffsetClampTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-19T15:17:02Z",
+      "side": 1,
+      "message": "Thanks for the tests. Please add one in `StateChangeTestES3` too, similar to `PolygonOffset` which tests changing the state without breaking the render pass. That makes sure dirty bits work as expected.",
+      "revId": "c89ecdc0e3a8ec90299f933fa3cb1400193aec0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
