@@ -333,8 +333,6 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // signal it is in the graphics pipeline at the time we export the fd. Providing externalFence
     // in the flushImpl() above will ensure the fence is submitted.
 
-    mUse.setQueueSerial(contextVk->getLastSubmittedQueueSerial());
-
     ANGLE_VK_TRY(contextVk, mExternalFence->getFenceFdStatus());
 
     return angle::Result::Continue;
@@ -370,22 +368,10 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
             contextVk->flushImpl(nullptr, nullptr, RenderPassClosureReason::SyncObjectClientWait));
     }
 
-    VkResult status = VK_SUCCESS;
-    if (mUse.valid())
+    VkResult status = mExternalFence->wait(renderer->getDevice(), timeout);
+    if (status != VK_TIMEOUT)
     {
-        // We have a valid serial to wait on
-        ANGLE_TRY(
-            renderer->waitForResourceUseToFinishWithUserTimeout(context, mUse, timeout, &status));
-    }
-    else
-    {
-        // We need to wait on the file descriptor
-
-        status = mExternalFence->wait(renderer->getDevice(), timeout);
-        if (status != VK_TIMEOUT)
-        {
-            ANGLE_VK_TRY(contextVk, status);
-        }
+        ANGLE_VK_TRY(contextVk, status);
     }
 
     *outResult = status;
@@ -421,13 +407,6 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
                                                ContextVk *contextVk,
                                                bool *signaledOut)
 {
-    // We've got a serial, check if the serial is still in use
-    if (mUse.valid())
-    {
-        return getStatusFromUse(context, signaledOut);
-    }
-
-    // We don't have a serial, check status of the file descriptor
     VkResult result = mExternalFence->getStatus(context->getDevice());
     if (result != VK_TIMEOUT)
     {
