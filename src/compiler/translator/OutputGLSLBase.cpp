@@ -215,6 +215,7 @@ std::string TOutputGLSLBase::getCommonLayoutQualifiers(TIntermSymbol *variable)
 // arguments.
 std::string TOutputGLSLBase::getMemoryQualifiers(const TType &type)
 {
+    INFO() << "Yuxin Debug getMemoryQualifiers is called";  // This is not called
     std::ostringstream out;
 
     const TMemoryQualifier &memoryQualifier = type.getMemoryQualifier();
@@ -230,6 +231,7 @@ std::string TOutputGLSLBase::getMemoryQualifiers(const TType &type)
 
     if (memoryQualifier.coherent)
     {
+        INFO() << "Yuxin Debug coherent";  // This is not called
         out << "coherent ";
     }
 
@@ -961,6 +963,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
 
 bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
 {
+    INFO() << "Yuxin Debug TOutputGLSLBase::visitDeclaration is called";  // This is not called
     TInfoSinkBase &out = objSink();
 
     // Variable declaration.

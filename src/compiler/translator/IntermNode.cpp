@@ -1008,6 +1008,25 @@ void TIntermBlock::insertStatement(size_t insertPosition, TIntermNode *statement
 
 void TIntermDeclaration::appendDeclarator(TIntermTyped *declarator)
 {
+    INFO() << "Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: "
+           << this;
+    TIntermSymbol *blockSymbol = declarator->getAsSymbolNode();
+    if (blockSymbol != nullptr)
+    {
+        const TInterfaceBlock *interFaceBlockInIIntermSymbol =
+            blockSymbol->getType().getInterfaceBlock();
+        ASSERT(interFaceBlockInIIntermSymbol != nullptr);
+        const TFieldList &fieldsInIIntermSymbol = interFaceBlockInIIntermSymbol->fields();
+        for (size_t index = 0; index < fieldsInIIntermSymbol.size(); ++index)
+        {
+            INFO() << "Yuxin Debug TIntermDeclaration::appendDeclarator: ";
+            TField *field                  = fieldsInIIntermSymbol[index];
+            TType *fieldType               = field->type();
+            bool memoryQualifierIsCoherent = fieldType->getMemoryQualifier().coherent;
+            INFO() << "Yuxin Debug: " << memoryQualifierIsCoherent;
+        }
+    }
+
     ASSERT(declarator != nullptr);
     ASSERT(declarator->getAsSymbolNode() != nullptr ||
            (declarator->getAsBinaryNode() != nullptr &&

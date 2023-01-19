@@ -536,6 +536,7 @@ bool JoinMemoryQualifier(TMemoryQualifier *joinedMemoryQualifier, TQualifier mem
             joinedMemoryQualifier->writeonly = true;
             break;
         case EvqCoherent:
+            INFO() << "Yuxin Debug JoinMemoryQualifiers EvqCoherent coherent";
             joinedMemoryQualifier->coherent = true;
             break;
         case EvqRestrict:
@@ -545,7 +546,8 @@ bool JoinMemoryQualifier(TMemoryQualifier *joinedMemoryQualifier, TQualifier mem
             // Variables having the volatile qualifier are automatcally treated as coherent as well.
             // GLSL ES 3.10, Revision 4, 4.9 Memory Access Qualifiers
             joinedMemoryQualifier->volatileQualifier = true;
-            joinedMemoryQualifier->coherent          = true;
+            INFO() << "Yuxin Debug JoinMemoryQualifiers EvqVolatile coherent";
+            joinedMemoryQualifier->coherent = true;
             break;
         default:
             UNREACHABLE();
