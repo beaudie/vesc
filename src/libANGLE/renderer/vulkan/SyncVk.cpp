@@ -25,7 +25,7 @@
 namespace
 {
 // Wait for file descriptor to be signaled
-VkResult SyncWaitFd(int fd, uint64_t timeoutNs)
+VkResult SyncWaitFd(int fd, uint64_t timeoutNs, VkResult timeoutResult = VK_TIMEOUT)
 {
 #if !defined(ANGLE_PLATFORM_WINDOWS)
     struct pollfd fds;
@@ -57,7 +57,7 @@ VkResult SyncWaitFd(int fd, uint64_t timeoutNs)
         }
         else if (ret == 0)
         {
-            return VK_TIMEOUT;
+            return timeoutResult;
         }
     } while (ret == -1 && (errno == EINTR || errno == EAGAIN));
 
@@ -211,26 +211,74 @@ angle::Result SyncHelper::submitSyncIfDeferred(ContextVk *contextVk, RenderPassC
     return angle::Result::Continue;
 }
 
-SyncHelperNativeFence::SyncHelperNativeFence() : mNativeFenceFd(kInvalidFenceFd) {}
+ExternalFence::ExternalFence() : mFenceFdStatus(VK_INCOMPLETE), mFenceFd(kInvalidFenceFd) {}
 
-SyncHelperNativeFence::~SyncHelperNativeFence()
+ExternalFence::~ExternalFence()
 {
-    if (mNativeFenceFd != kInvalidFenceFd)
+    ASSERT(mFenceFd == kInvalidFenceFd);
+}
+
+VkResult ExternalFence::init(VkDevice device, const VkFenceCreateInfo &createInfo)
+{
+    ASSERT(mFenceFdStatus == VK_INCOMPLETE && mFenceFd == kInvalidFenceFd);
+    return mFence.init(device, createInfo);
+}
+
+void ExternalFence::init(int fenceFd)
+{
+    ASSERT(fenceFd != kInvalidFenceFd);
+    ASSERT(mFenceFdStatus == VK_INCOMPLETE && mFenceFd == kInvalidFenceFd);
+    mFenceFdStatus = VK_SUCCESS;
+    mFenceFd       = fenceFd;
+}
+
+void ExternalFence::destroy(VkDevice device)
+{
+    mFence.destroy(device);
+    if (mFenceFd != kInvalidFenceFd)
     {
-        close(mNativeFenceFd);
+        close(mFenceFd);
+        mFenceFd = kInvalidFenceFd;
     }
 }
 
-void SyncHelperNativeFence::releaseToRenderer(RendererVk *renderer)
+VkResult ExternalFence::getStatus(VkDevice device) const
 {
-    renderer->collectGarbage(mUse, &mFenceWithFd);
-    mUse.reset();
+    if (mFenceFdStatus == VK_SUCCESS)
+    {
+        return SyncWaitFd(mFenceFd, 0, VK_NOT_READY);
+    }
+    return mFence.getStatus(device);
 }
 
-// Note: We have mFenceWithFd hold the FD, so that ownership is with ICD. Meanwhile we store a dup
-// of FD in SyncHelperNativeFence for further reference, i.e. dup of FD. Any call to clientWait
-// or serverWait will ensure the FD or dup of FD goes to application or ICD. At release, above
-// it's Garbage collected/destroyed. Otherwise we can't time when to close(fd);
+VkResult ExternalFence::wait(VkDevice device, uint64_t timeout) const
+{
+    if (mFenceFdStatus == VK_SUCCESS)
+    {
+        return SyncWaitFd(mFenceFd, timeout);
+    }
+    return mFence.wait(device, timeout);
+}
+
+void ExternalFence::exportFd(VkDevice device, const VkFenceGetFdInfoKHR &fenceGetFdInfo)
+{
+    ASSERT(mFenceFdStatus == VK_INCOMPLETE && mFenceFd == kInvalidFenceFd);
+    mFenceFdStatus = mFence.exportFd(device, fenceGetFdInfo, &mFenceFd);
+    ASSERT(mFenceFdStatus != VK_INCOMPLETE);
+}
+
+SyncHelperNativeFence::SyncHelperNativeFence()
+{
+    mExternalFence.setUnreferenced(new SharedExternalFence::RefCountedT());
+}
+
+SyncHelperNativeFence::~SyncHelperNativeFence() {}
+
+void SyncHelperNativeFence::releaseToRenderer(RendererVk *renderer)
+{
+    mExternalFence.reset(renderer->getDevice());
+}
+
 angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int inFd)
 {
     ASSERT(inFd >= kInvalidFenceFd);
@@ -244,14 +292,12 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
         // transferred. The recipient of the file descriptor must close it when it is
         // no longer needed, and the provider of the file descriptor must dup it
         // before providing it if they require continued use of the native fence.
-        mNativeFenceFd = inFd;
+        mExternalFence.get().init(inFd);
         return angle::Result::Continue;
     }
 
     RendererVk *renderer = contextVk->getRenderer();
     VkDevice device      = renderer->getDevice();
-
-    DeviceScoped<vk::Fence> fence(device);
 
     VkExportFenceCreateInfo exportCreateInfo = {};
     exportCreateInfo.sType                   = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO;
@@ -265,7 +311,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     fenceCreateInfo.pNext             = &exportCreateInfo;
 
     // Initialize/create a VkFence handle
-    ANGLE_VK_TRY(contextVk, fence.get().init(device, fenceCreateInfo));
+    ANGLE_VK_TRY(contextVk, mExternalFence.get().init(device, fenceCreateInfo));
 
     // invalid FD provided by application - create one with fence.
     /*
@@ -276,8 +322,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
       with the newly created sync object.
     */
     // Flush current pending set of commands providing the fence...
-    ANGLE_TRY(
-        contextVk->flushImpl(nullptr, &fence.get(), RenderPassClosureReason::SyncObjectWithFdInit));
+    ANGLE_TRY(contextVk->flushImpl(nullptr, &mExternalFence,
+                                   RenderPassClosureReason::SyncObjectWithFdInit));
     QueueSerial submitSerial = contextVk->getLastSubmittedQueueSerial();
 
     mUse.setQueueSerial(submitSerial);
@@ -288,13 +334,7 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     // call waitForQueueSerialToBeSubmittedToDevice() here.
     ANGLE_TRY(renderer->waitForQueueSerialToBeSubmittedToDevice(contextVk, submitSerial));
 
-    VkFenceGetFdInfoKHR fenceGetFdInfo = {};
-    fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
-    fenceGetFdInfo.fence               = fence.get().getHandle();
-    fenceGetFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-    ANGLE_VK_TRY(contextVk, fence.get().exportFd(device, fenceGetFdInfo, &mNativeFenceFd));
-
-    mFenceWithFd = fence.release();
+    ANGLE_VK_TRY(contextVk, mExternalFence.get().getFenceFdStatus());
 
     return angle::Result::Continue;
 }
@@ -340,7 +380,7 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
     {
         // We need to wait on the file descriptor
 
-        status = SyncWaitFd(mNativeFenceFd, timeout);
+        status = mExternalFence.get().wait(renderer->getDevice(), timeout);
         if (status != VK_TIMEOUT)
         {
             ANGLE_VK_TRY(contextVk, status);
@@ -366,7 +406,7 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     importFdInfo.semaphore                  = waitSemaphore.get().getHandle();
     importFdInfo.flags                      = VK_SEMAPHORE_IMPORT_TEMPORARY_BIT_KHR;
     importFdInfo.handleType                 = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
-    importFdInfo.fd                         = dup(mNativeFenceFd);
+    importFdInfo.fd                         = dup(mExternalFence.get().getFenceFd());
     ANGLE_VK_TRY(contextVk, waitSemaphore.get().importFd(device, importFdInfo));
 
     // Add semaphore to next submit job.
@@ -387,8 +427,8 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
     }
 
     // We don't have a serial, check status of the file descriptor
-    VkResult result = SyncWaitFd(mNativeFenceFd, 0);
-    if (result != VK_TIMEOUT)
+    VkResult result = mExternalFence.get().getStatus(context->getDevice());
+    if (result != VK_NOT_READY)
     {
         ANGLE_VK_TRY(context, result);
     }
@@ -398,12 +438,12 @@ angle::Result SyncHelperNativeFence::getStatus(Context *context,
 
 angle::Result SyncHelperNativeFence::dupNativeFenceFD(Context *context, int *fdOut) const
 {
-    if (!mFenceWithFd.valid() || mNativeFenceFd == kInvalidFenceFd)
+    if (mExternalFence.get().getFenceFd() == kInvalidFenceFd)
     {
         return angle::Result::Stop;
     }
 
-    *fdOut = dup(mNativeFenceFd);
+    *fdOut = dup(mExternalFence.get().getFenceFd());
 
     return angle::Result::Continue;
 }
