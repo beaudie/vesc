@@ -22,6 +22,30 @@
       },
       "revId": "ac23625ab7763008c1a6fac864bf7d15ba68281f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ace8c8c_bb8234a0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-19T23:05:05Z",
+      "side": 1,
+      "message": "Moved the class to `vk_utils.h`",
+      "parentUuid": "7b9ad1d1_8894abc1",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 66
+      },
+      "revId": "ac23625ab7763008c1a6fac864bf7d15ba68281f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
