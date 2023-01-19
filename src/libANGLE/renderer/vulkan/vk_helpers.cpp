@@ -4918,7 +4918,7 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
         QueueSerial queueSerial;
         ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
                                               ProtectionType::Unprotected,
-                                              egl::ContextPriority::Medium, nullptr, 0, nullptr,
+                                              egl::ContextPriority::Medium, nullptr, 0,
                                               vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
         stagingBuffer.collectGarbage(renderer, queueSerial);
@@ -5817,7 +5817,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
 
     QueueSerial queueSerial;
     ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), protectionType,
-                                          egl::ContextPriority::Medium, nullptr, 0, nullptr,
+                                          egl::ContextPriority::Medium, nullptr, 0,
                                           vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
     if (isCompressedFormat)
@@ -8963,7 +8963,7 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
     QueueSerial submitQueueSerial;
     ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(primaryCommandBuffer),
                                             ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
+                                            egl::ContextPriority::Medium, nullptr, 0,
                                             vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
@@ -9009,7 +9009,7 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
     QueueSerial submitQueueSerial;
     ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(commandBuffer),
                                             ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
+                                            egl::ContextPriority::Medium, nullptr, 0,
                                             vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
