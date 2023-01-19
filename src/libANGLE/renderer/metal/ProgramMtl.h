@@ -263,8 +263,8 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
     // - Vertex shader: One with emulated rasterization discard, one with true rasterization
     // discard, one without.
     mtl::RenderPipelineRasterStateMap<ProgramShaderObjVariantMtl> mVertexShaderVariants;
-    // - Fragment shader: One with sample coverage mask enabled, one with it disabled.
-    std::array<ProgramShaderObjVariantMtl, 2> mFragmentShaderVariants;
+    // - Fragment shader: Combinations of sample coverage mask and depth write enabled states.
+    std::array<ProgramShaderObjVariantMtl, 4> mFragmentShaderVariants;
 
     // Cached references of current shader variants.
     gl::ShaderMap<ProgramShaderObjVariantMtl *> mCurrentShaderVariants;
