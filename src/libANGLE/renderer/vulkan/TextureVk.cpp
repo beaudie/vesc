@@ -3236,10 +3236,12 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk, uint32_t levelCoun
     // Use this as a proxy for the SRGB override & skip decode settings.
     bool createExtraSRGBViews = mRequiresMutableStorage;
 
+    const VkImageUsageFlags kDisallowedSwizzledUsage =
+        VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
     ANGLE_TRY(getImageViews().initReadViews(contextVk, mState.getType(), *mImage, formatSwizzle,
                                             readSwizzle, baseLevelVk, levelCount, baseLayer,
                                             getImageViewLayerCount(), createExtraSRGBViews,
-                                            getImage().getUsage() & ~VK_IMAGE_USAGE_STORAGE_BIT));
+                                            getImage().getUsage() & ~kDisallowedSwizzledUsage));
 
     updateCachedImageViewSerials();
 
