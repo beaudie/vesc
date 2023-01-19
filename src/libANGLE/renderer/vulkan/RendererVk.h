@@ -292,7 +292,6 @@ class RendererVk : angle::NonCopyable
                                     egl::ContextPriority priority,
                                     const vk::Semaphore *waitSemaphore,
                                     VkPipelineStageFlags waitSemaphoreStageMasks,
-                                    const vk::Fence *fence,
                                     vk::SubmitPolicy submitPolicy,
                                     QueueSerial *queueSerialOut);
 
@@ -482,6 +481,7 @@ class RendererVk : angle::NonCopyable
                                  vk::ProtectionType protectionType,
                                  egl::ContextPriority contextPriority,
                                  const vk::Semaphore *signalSemaphore,
+                                 const vk::Fence *externalFence,
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result submitPriorityDependency(vk::Context *context,
