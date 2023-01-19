@@ -5235,6 +5235,8 @@ angle::Result SpvTransformSpirvCode(const SpvTransformOptions &options,
         return angle::Result::Continue;
     }
 
+    //    spirv::Print(initialSpirvBlob);
+
     // Transform the SPIR-V code by assigning location/set/binding values.
     SpirvTransformer transformer(initialSpirvBlob, options, variableInfoMap, spirvBlobOut);
     transformer.transform();
@@ -5255,6 +5257,9 @@ angle::Result SpvTransformSpirvCode(const SpvTransformOptions &options,
     {
         ASSERT(spirv::Validate(*spirvBlobOut));
     }
+
+    INFO() << "Yuxin Debug transformed SpirV: ";
+    spirv::Print(*spirvBlobOut);
 
     return angle::Result::Continue;
 }

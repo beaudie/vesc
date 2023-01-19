@@ -476,6 +476,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
     ASSERT(mSymbolTable.atGlobalLevel());
 
     // Parse shader.
+    INFO() << "Yuxin Debug GLSL shaderStrings is: " << *shaderStrings;
     if (PaParseStrings(numStrings - firstSource, &shaderStrings[firstSource], nullptr,
                        &parseContext) != 0)
     {

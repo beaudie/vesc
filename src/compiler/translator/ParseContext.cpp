@@ -3057,6 +3057,7 @@ void TParseContext::checkMemoryQualifierIsNotSpecified(const TMemoryQualifier &m
     }
     if (memoryQualifier.coherent)
     {
+        INFO() << "Yuxin Debug TParseContext::checkMemoryQualifierIsNotSpecified coherent";
         error(location, reason.c_str(), "coherent");
     }
     if (memoryQualifier.restrictQualifier)
@@ -4839,6 +4840,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     checkInternalFormatIsNotSpecified(nameLine, blockLayoutQualifier.imageInternalFormat);
 
     // check for sampler types and apply layout qualifiers
+    bool memberHasCoherent = false;
     for (size_t memberIndex = 0; memberIndex < fieldList->size(); ++memberIndex)
     {
         TField *field    = (*fieldList)[memberIndex];
@@ -4954,7 +4956,13 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             TMemoryQualifier fieldMemoryQualifier        = fieldType->getMemoryQualifier();
             fieldMemoryQualifier.readonly |= blockMemoryQualifier.readonly;
             fieldMemoryQualifier.writeonly |= blockMemoryQualifier.writeonly;
+            INFO() << "Yuxin Debug TParseContext::addInterfaceBlock: coherent: "
+                   << blockMemoryQualifier.coherent;
             fieldMemoryQualifier.coherent |= blockMemoryQualifier.coherent;
+            if (blockMemoryQualifier.coherent)
+            {
+                memberHasCoherent = true;
+            }
             fieldMemoryQualifier.restrictQualifier |= blockMemoryQualifier.restrictQualifier;
             fieldMemoryQualifier.volatileQualifier |= blockMemoryQualifier.volatileQualifier;
             // TODO(jiajia.qin@intel.com): Decide whether if readonly and writeonly buffer variable
@@ -4977,6 +4985,13 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
 
     TType *interfaceBlockType =
         new TType(interfaceBlock, typeQualifier.qualifier, blockLayoutQualifier);
+
+    if (memberHasCoherent)
+    {
+        TMemoryQualifier hack = interfaceBlockType->getMemoryQualifier();
+        hack.coherent         = true;
+        interfaceBlockType->setMemoryQualifier(hack);
+    }
     if (arraySizes)
     {
         interfaceBlockType->makeArrays(*arraySizes);
@@ -5040,6 +5055,19 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     }
 
     TIntermSymbol *blockSymbol = new TIntermSymbol(instanceVariable);
+    //    INFO() << "Yuxin Debug learn blockSymbol: ";
+    //    const TInterfaceBlock* interFaceBlockInIIntermSymbol =
+    //    blockSymbol->getType().getInterfaceBlock(); const TFieldList &fieldsInIIntermSymbol =
+    //    interFaceBlockInIIntermSymbol->fields(); for (size_t index = 0; index <
+    //    fieldsInIIntermSymbol.size(); ++index)
+    //    {
+    //        INFO() << "Yuxin Debug: ";
+    //        TField *field = fieldsInIIntermSymbol[index];
+    //        TType *fieldType = field->type();
+    //        bool memoryQualifierIsCoherent = fieldType->getMemoryQualifier().coherent;
+    //        INFO() << "Yuxin Debug: " << memoryQualifierIsCoherent;
+    //    }
+
     blockSymbol->setLine(typeQualifier.line);
     TIntermDeclaration *declaration = new TIntermDeclaration();
     declaration->appendDeclarator(blockSymbol);

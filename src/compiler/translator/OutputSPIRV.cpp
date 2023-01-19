@@ -671,7 +671,7 @@ spirv::IdRef OutputSPIRVTraverser::getSymbolIdAndStorageClass(const TSymbol *sym
 
     const spirv::IdRef typeId = mBuilder.getTypeData(type, {}).id;
     const spirv::IdRef varId  = mBuilder.declareVariable(
-         typeId, *storageClass, mBuilder.getDecorations(type), nullptr, name);
+        typeId, *storageClass, mBuilder.getDecorations(type), nullptr, name);
 
     mBuilder.addEntryPointInterfaceVariableId(varId);
     spirv::WriteDecorate(mBuilder.getSpirvDecorations(), varId, spv::DecorationBuiltIn,
@@ -5846,6 +5846,8 @@ bool OutputSPIRVTraverser::visitAggregate(Visit visit, TIntermAggregate *node)
 
 bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *node)
 {
+    INFO() << "Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: "
+           << node;
     const TIntermSequence &sequence = *node->getSequence();
 
     // Enforced by ValidateASTOptions::validateMultiDeclarations.
@@ -5887,6 +5889,25 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     TIntermSymbol *symbol = sequence.front()->getAsSymbolNode();
     spirv::IdRef initializerId;
     bool initializeWithDeclaration = false;
+
+    // Debug Code
+    if (symbol != nullptr)
+    {
+        INFO() << "Yuxin Debug symbol->getType().getMemoryQualifier(): "
+               << symbol->getType().getMemoryQualifier().coherent;
+        const TInterfaceBlock *interFaceBlockInIIntermSymbol =
+            symbol->getType().getInterfaceBlock();
+        ASSERT(interFaceBlockInIIntermSymbol != nullptr);
+        const TFieldList &fieldsInIIntermSymbol = interFaceBlockInIIntermSymbol->fields();
+        for (size_t index = 0; index < fieldsInIIntermSymbol.size(); ++index)
+        {
+            INFO() << "Yuxin Debug OutputSPIRV::visitDeclaration: ";
+            TField *field                  = fieldsInIIntermSymbol[index];
+            TType *fieldType               = field->type();
+            bool memoryQualifierIsCoherent = fieldType->getMemoryQualifier().coherent;
+            INFO() << "Yuxin Debug: " << memoryQualifierIsCoherent;
+        }
+    }
 
     // Handle declarations with initializer.
     if (symbol == nullptr)
@@ -5967,6 +5988,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     TMemoryQualifier memoryQualifier = type.getMemoryQualifier();
     if (memoryQualifier.coherent)
     {
+        INFO() << "Yuxin Debug memoryQualifier.coherent is called";
         decorations.push_back(spv::DecorationCoherent);
     }
     if (memoryQualifier.volatileQualifier)
