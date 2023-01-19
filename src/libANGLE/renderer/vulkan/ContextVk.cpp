@@ -3433,7 +3433,7 @@ void ContextVk::addOverlayUsedBuffersCount(vk::CommandBufferHelperCommon *comman
 }
 
 angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
-                                        const vk::Fence *externalFence,
+                                        vk::ExternalFence *externalFence,
                                         Submit submission)
 {
     if (vk::CommandBufferHelperCommon::kEnableCommandStreamDiagnostics)
@@ -6973,7 +6973,7 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
 }
 
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
-                                   const vk::Fence *externalFence,
+                                   vk::ExternalFence *externalFence,
                                    RenderPassClosureReason renderPassClosureReason)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
