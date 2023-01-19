@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1ba8829_2d5efdd9",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-19T07:20:11Z",
+      "side": 1,
+      "message": "Please add a TODO referencing an ANGLE bug about investigating why this is broken and trying to fix it. There are several calls to \"supportsMacGPUFamily(1)\" in the code base, so the broken rendering looks like a regression we should probably aim to fix.",
+      "revId": "637c3b7996eb6c4b54802320613f928213bc43db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3fbfa24_23e561cb",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-19T07:20:11Z",
+      "side": 1,
+      "message": "This logic must be adjusted to take into account non-Mac devices, or this will break the Metal backend on iOS. Something like \"if (!supportsEitherGPUFamily(1, 2)) { ... }\".",
+      "revId": "637c3b7996eb6c4b54802320613f928213bc43db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
