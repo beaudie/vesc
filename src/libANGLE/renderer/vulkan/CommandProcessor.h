@@ -140,6 +140,7 @@ class CommandProcessorTask
                      SwapchainStatus *swapchainStatus);
 
     void initFlushAndQueueSubmit(VkSemaphore semaphore,
+                                 VkFence externalFence,
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
                                  const QueueSerial &submitQueueSerial);
@@ -149,7 +150,6 @@ class CommandProcessorTask
                                egl::ContextPriority priority,
                                VkSemaphore waitSemaphore,
                                VkPipelineStageFlags waitSemaphoreStageMask,
-                               VkFence fence,
                                const QueueSerial &submitQueueSerial);
 
     CommandProcessorTask &operator=(CommandProcessorTask &&rhs);
@@ -167,6 +167,7 @@ class CommandProcessorTask
         return mWaitSemaphoreStageMasks;
     }
     VkSemaphore getSemaphore() const { return mSemaphore; }
+    VkFence getExternalFence() const { return mExternalFence; }
     egl::ContextPriority getPriority() const { return mPriority; }
     ProtectionType getProtectionType() const { return mProtectionType; }
     VkCommandBuffer getOneOffCommandBuffer() const { return mOneOffCommandBuffer; }
@@ -175,7 +176,6 @@ class CommandProcessorTask
     {
         return mOneOffWaitSemaphoreStageMask;
     }
-    VkFence getOneOffFence() const { return mOneOffFence; }
     const VkPresentInfoKHR &getPresentInfo() const { return mPresentInfo; }
     SwapchainStatus *getSwapchainStatus() const { return mSwapchainStatus; }
     const RenderPass *getRenderPass() const { return mRenderPass; }
@@ -204,6 +204,7 @@ class CommandProcessorTask
 
     // Flush data
     VkSemaphore mSemaphore;
+    VkFence mExternalFence;
 
     // Flush command data
     QueueSerial mSubmitQueueSerial;
@@ -230,7 +231,6 @@ class CommandProcessorTask
     VkCommandBuffer mOneOffCommandBuffer;
     VkSemaphore mOneOffWaitSemaphore;
     VkPipelineStageFlags mOneOffWaitSemaphoreStageMask;
-    VkFence mOneOffFence;
 
     // Flush, Present & QueueWaitIdle data
     egl::ContextPriority mPriority;
@@ -380,6 +380,7 @@ class CommandQueue : angle::NonCopyable
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
                                  VkSemaphore signalSemaphore,
+                                 VkFence externalFence,
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result queueSubmitOneOff(Context *context,
@@ -388,7 +389,6 @@ class CommandQueue : angle::NonCopyable
                                     VkCommandBuffer commandBufferHandle,
                                     VkSemaphore waitSemaphore,
                                     VkPipelineStageFlags waitSemaphoreStageMask,
-                                    VkFence fence,
                                     SubmitPolicy submitPolicy,
                                     const QueueSerial &submitQueueSerial);
 
@@ -461,7 +461,7 @@ class CommandQueue : angle::NonCopyable
                               std::unique_lock<std::mutex> &&dequeueLock,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
-                              VkFence fence,
+                              VkFence externalFence,
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
 
@@ -536,6 +536,7 @@ class CommandProcessor : public Context
                                         ProtectionType protectionType,
                                         egl::ContextPriority priority,
                                         VkSemaphore signalSemaphore,
+                                        VkFence externalFence,
                                         const QueueSerial &submitQueueSerial);
 
     void requestCommandsAndGarbageCleanup();
@@ -546,7 +547,6 @@ class CommandProcessor : public Context
                                               VkCommandBuffer commandBufferHandle,
                                               VkSemaphore waitSemaphore,
                                               VkPipelineStageFlags waitSemaphoreStageMask,
-                                              VkFence fence,
                                               SubmitPolicy submitPolicy,
                                               const QueueSerial &submitQueueSerial);
     void enqueuePresent(egl::ContextPriority contextPriority,
