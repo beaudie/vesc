@@ -33,6 +33,24 @@
       "message": "Much nicer :)",
       "revId": "2f1be3a1a61f24a4c24b25d4df804fb47f83f3ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a05eb32_c8052957",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-19T06:48:38Z",
+      "side": 1,
+      "message": "Interesting: win-trace does *not* like the idea of removing extra newlines:\n```\n-                    \"Source\": \"precision mediump float;\\n\\nvoid main()\\n{\\n    gl_FragColor \u003d vec4(1.0, 0.0, 0.0, 1.0);\\n}\",\n+                    \"Source\": \"precision mediump float;\\nvoid main()\\n{\\n    gl_FragColor \u003d vec4(1.0, 0.0, 0.0, 1.0);\\n}\",\n```",
+      "parentUuid": "2e50b3e1_3e360780",
+      "revId": "2f1be3a1a61f24a4c24b25d4df804fb47f83f3ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
