@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/SyncVk.h"
 
 namespace rx
 {
@@ -211,7 +212,7 @@ void CommandProcessorTask::initTask()
     mRenderPassCommandBuffer        = nullptr;
     mRenderPass                     = nullptr;
     mSemaphore                      = VK_NULL_HANDLE;
-    mExternalFence                  = VK_NULL_HANDLE;
+    mExternalFence                  = nullptr;
     mOneOffWaitSemaphore            = VK_NULL_HANDLE;
     mOneOffWaitSemaphoreStageMask   = 0;
     mPresentInfo                    = {};
@@ -369,7 +370,7 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(VkSemaphore semaphore,
-                                                   VkFence externalFence,
+                                                   ExternalFence *externalFence,
                                                    ProtectionType protectionType,
                                                    egl::ContextPriority priority,
                                                    const QueueSerial &submitQueueSerial)
@@ -430,7 +431,8 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
 }
 
 // CommandBatch implementation.
-CommandBatch::CommandBatch() : protectionType(ProtectionType::InvalidEnum) {}
+CommandBatch::CommandBatch() : externalFence(nullptr), protectionType(ProtectionType::InvalidEnum)
+{}
 
 CommandBatch::~CommandBatch() = default;
 
@@ -444,6 +446,7 @@ CommandBatch &CommandBatch::operator=(CommandBatch &&other)
     std::swap(primaryCommands, other.primaryCommands);
     std::swap(secondaryCommands, other.secondaryCommands);
     std::swap(fence, other.fence);
+    std::swap(externalFence, other.externalFence);
     std::swap(queueSerial, other.queueSerial);
     std::swap(protectionType, other.protectionType);
     return *this;
@@ -454,7 +457,62 @@ void CommandBatch::destroy(VkDevice device)
     primaryCommands.destroy(device);
     secondaryCommands.retireCommandBuffers();
     fence.destroy(device);
+    if (externalFence != nullptr)
+    {
+        externalFence->release(device);
+    }
     protectionType = ProtectionType::InvalidEnum;
+}
+
+bool CommandBatch::hasFence() const
+{
+    ASSERT(externalFence == nullptr || !fence);
+    return fence || externalFence != nullptr;
+}
+
+VkFence CommandBatch::getFenceHandle() const
+{
+    ASSERT(hasFence());
+    return fence ? fence.get().getHandle() : externalFence->getHandle();
+}
+
+VkResult CommandBatch::getFenceStatus(VkDevice device)
+{
+    ASSERT(hasFence());
+    return fence ? fence.getStatus(device) : externalFence->getStatus(device);
+}
+
+VkResult CommandBatch::waitFence(VkDevice device, uint64_t timeout)
+{
+    ASSERT(hasFence());
+    return fence ? fence.wait(device, timeout) : externalFence->wait(device, timeout);
+}
+
+VkResult CommandBatch::waitFenceUnlocked(VkDevice device,
+                                         uint64_t timeout,
+                                         std::unique_lock<std::mutex> *lock)
+{
+    ASSERT(hasFence());
+    VkResult status;
+    // You can only use the local copy of the fence without lock.
+    // Do not access "this" after unlock() because object might be deleted from other thread.
+    if (fence)
+    {
+        const SharedFence localSharedFenceToWaitOn = fence;
+        lock->unlock();
+        status = localSharedFenceToWaitOn.wait(device, timeout);
+        lock->lock();
+    }
+    else
+    {
+        ExternalFence *const localExternalFenceToWaitOn = externalFence;
+        localExternalFenceToWaitOn->addRef();
+        lock->unlock();
+        status = localExternalFenceToWaitOn->wait(device, timeout);
+        localExternalFenceToWaitOn->release(device);
+        lock->lock();
+    }
+    return status;
 }
 
 // CommandProcessor implementation.
@@ -794,7 +852,7 @@ angle::Result CommandProcessor::enqueueSubmitCommands(Context *context,
                                                       ProtectionType protectionType,
                                                       egl::ContextPriority priority,
                                                       VkSemaphore signalSemaphore,
-                                                      VkFence externalFence,
+                                                      ExternalFence *externalFence,
                                                       const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
@@ -807,7 +865,7 @@ angle::Result CommandProcessor::enqueueSubmitCommands(Context *context,
 
     mLastEnqueuedSerials.setQueueSerial(submitQueueSerial);
 
-    if (externalFence != VK_NULL_HANDLE)
+    if (externalFence != nullptr)
     {
         ANGLE_TRY(waitForQueueSerialToBeSubmitted(context, submitQueueSerial));
     }
@@ -1056,13 +1114,21 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
     {
         CommandBatch &batch = mInFlightCommands.front();
         // On device loss we need to wait for fence to be signaled before destroying it
-        if (batch.fence)
+        if (batch.hasFence())
         {
-            VkResult status = batch.fence.wait(device, renderer->getMaxFenceWaitTimeNs());
+            VkResult status = batch.waitFence(device, renderer->getMaxFenceWaitTimeNs());
             // If the wait times out, it is probably not possible to recover from lost device
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
 
-            batch.fence.destroy(device);
+            if (batch.fence)
+            {
+                batch.fence.destroy(device);
+            }
+            else
+            {
+                batch.externalFence->release(device);
+                batch.externalFence = nullptr;
+            }
         }
 
         // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
@@ -1124,13 +1190,8 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
             ANGLE_TRY(checkOneCommandBatch(context, &finished));
             if (!finished)
             {
-                // You can only use the local copy of the sharedFence without lock;
-                const SharedFence localSharedFenceToWaitOn = mInFlightCommands.front().fence;
-                lock.unlock();
-                VkResult status = localSharedFenceToWaitOn.wait(device, timeout);
-                lock.lock();
-
-                ANGLE_VK_TRY(context, status);
+                ANGLE_VK_TRY(context,
+                             mInFlightCommands.front().waitFenceUnlocked(device, timeout, &lock));
             }
         }
         // Check the rest of the commands in case they are also finished.
@@ -1193,13 +1254,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
             ANGLE_TRY(checkOneCommandBatch(context, &finished));
             if (!finished)
             {
-                // You can only use the local copy of the sharedFence without lock;
-                const SharedFence localSharedFenceToWaitOn = mInFlightCommands.front().fence;
-                lock.unlock();
-                VkResult status = localSharedFenceToWaitOn.wait(device, timeout);
-                lock.lock();
-
-                *result = status;
+                *result = mInFlightCommands.front().waitFenceUnlocked(device, timeout, &lock);
                 // Don't trigger an error on timeout.
                 if (*result == VK_TIMEOUT)
                 {
@@ -1288,7 +1343,7 @@ angle::Result CommandQueue::submitCommands(Context *context,
                                            ProtectionType protectionType,
                                            egl::ContextPriority priority,
                                            VkSemaphore signalSemaphore,
-                                           VkFence externalFence,
+                                           ExternalFence *externalFence,
                                            const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitCommands");
@@ -1322,8 +1377,8 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
     // Don't make a submission if there is nothing to submit.
     const bool needsQueueSubmit = batch.primaryCommands.valid() ||
-                                  signalSemaphore != VK_NULL_HANDLE ||
-                                  externalFence != VK_NULL_HANDLE || !waitSemaphores.empty();
+                                  signalSemaphore != VK_NULL_HANDLE || externalFence != nullptr ||
+                                  !waitSemaphores.empty();
     VkSubmitInfo submitInfo                   = {};
     VkProtectedSubmitInfo protectedSubmitInfo = {};
 
@@ -1346,15 +1401,33 @@ angle::Result CommandQueue::submitCommands(Context *context,
             submitInfo.pNext                    = &protectedSubmitInfo;
         }
 
-        ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
+        if (externalFence == nullptr)
+        {
+            ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
+        }
+        else
+        {
+            batch.externalFence = externalFence;
+            batch.externalFence->addRef();
+        }
 
         ++mPerfCounters.vkQueueSubmitCallsTotal;
         ++mPerfCounters.vkQueueSubmitCallsPerFrame;
     }
 
     // Note queueSubmit will release the lock.
-    ANGLE_TRY(queueSubmit(context, std::move(lock), priority, submitInfo, externalFence,
-                          scopedBatch, submitQueueSerial));
+    ANGLE_TRY(queueSubmit(context, std::move(lock), priority, submitInfo, scopedBatch,
+                          submitQueueSerial));
+
+    if (externalFence != nullptr)
+    {
+        ASSERT(needsQueueSubmit);
+        VkFenceGetFdInfoKHR fenceGetFdInfo = {};
+        fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
+        fenceGetFdInfo.fence               = externalFence->getHandle();
+        fenceGetFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+        externalFence->exportFd(device, fenceGetFdInfo);
+    }
 
     // Clear local vector without lock.
     waitSemaphores.clear();
@@ -1411,15 +1484,14 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     ++mPerfCounters.vkQueueSubmitCallsPerFrame;
 
     // Note queueSubmit will release the lock.
-    return queueSubmit(context, std::move(lock), contextPriority, submitInfo, VK_NULL_HANDLE,
-                       scopedBatch, submitQueueSerial);
+    return queueSubmit(context, std::move(lock), contextPriority, submitInfo, scopedBatch,
+                       submitQueueSerial);
 }
 
 angle::Result CommandQueue::queueSubmit(Context *context,
                                         std::unique_lock<std::mutex> &&dequeueLock,
                                         egl::ContextPriority contextPriority,
                                         const VkSubmitInfo &submitInfo,
-                                        VkFence externalFence,
                                         DeviceScoped<CommandBatch> &commandBatch,
                                         const QueueSerial &submitQueueSerial)
 {
@@ -1444,24 +1516,9 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     if (submitInfo.sType == VK_STRUCTURE_TYPE_SUBMIT_INFO)
     {
         VkQueue queue = getQueue(contextPriority);
-        VkFence fence = commandBatch.get().fence.get().getHandle();
+        VkFence fence = commandBatch.get().getFenceHandle();
         ASSERT(fence != VK_NULL_HANDLE);
-        if (externalFence == VK_NULL_HANDLE)
-        {
-            // Submit as usual if no externalFence provided.
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
-        }
-        else
-        {
-            // Submit the batch using the provided externalFence.
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, externalFence));
-            // Submit fence alone to be able to wait for completion using QueueSerial.
-            VkSubmitInfo fenceSubmitInfo = {};
-            fenceSubmitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &fenceSubmitInfo, fence));
-            // Possible problem with double submissions: externalFence may be already in signaled
-            // state, while QueueSerial (based on fence) will still be not finished.
-        }
+        ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
     }
 
     mInFlightCommands.push(commandBatch.release());
@@ -1511,14 +1568,13 @@ angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *con
 // CommandQueue private API implementation. These are called by public API, so lock already held.
 angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finished)
 {
-    VkDevice device = context->getDevice();
     ASSERT(!mInFlightCommands.empty());
 
     CommandBatch &batch = mInFlightCommands.front();
     *finished           = false;
-    if (batch.fence)
+    if (batch.hasFence())
     {
-        VkResult status = batch.fence.getStatus(device);
+        VkResult status = batch.getFenceStatus(context->getDevice());
         if (status == VK_NOT_READY)
         {
             return angle::Result::Continue;
@@ -1545,9 +1601,9 @@ angle::Result CommandQueue::finishOneCommandBatchAndCleanup(Context *context, ui
 {
     ASSERT(!mInFlightCommands.empty());
     CommandBatch &batch = mInFlightCommands.front();
-    if (batch.fence)
+    if (batch.hasFence())
     {
-        VkResult status = batch.fence.wait(context->getDevice(), timeout);
+        VkResult status = batch.waitFence(context->getDevice(), timeout);
         ANGLE_VK_TRY(context, status);
     }
 
@@ -1578,7 +1634,12 @@ angle::Result CommandQueue::retireFinishedCommandsLocked(Context *context)
 
         if (batch.fence)
         {
+            ASSERT(batch.externalFence == nullptr);
             batch.fence.release();
+        }
+        else if (batch.externalFence != nullptr)
+        {
+            batch.externalFence->release(context->getDevice());
         }
         if (batch.primaryCommands.valid())
         {
