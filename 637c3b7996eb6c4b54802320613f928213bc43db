@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d19efce3_89618f8a",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-01-19T15:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1ba8829_2d5efdd9",
+      "revId": "637c3b7996eb6c4b54802320613f928213bc43db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3fbfa24_23e561cb",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-19T07:20:11Z",
       "side": 1,
       "message": "This logic must be adjusted to take into account non-Mac devices, or this will break the Metal backend on iOS. Something like \"if (!supportsEitherGPUFamily(1, 2)) { ... }\".",
+      "revId": "637c3b7996eb6c4b54802320613f928213bc43db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1113c6f4_cac1c8e9",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-01-19T15:59:55Z",
+      "side": 1,
+      "message": "Right, thanks!",
+      "parentUuid": "c3fbfa24_23e561cb",
       "revId": "637c3b7996eb6c4b54802320613f928213bc43db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
