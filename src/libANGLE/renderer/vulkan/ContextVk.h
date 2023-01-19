@@ -456,6 +456,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result onIndexBufferChange(const vk::BufferHelper *currentIndexBuffer);
 
     angle::Result flushImpl(const vk::Semaphore *semaphore,
+                            const vk::Fence *externalFence,
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
 
@@ -1222,7 +1223,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         AllCommands,
     };
 
-    angle::Result submitCommands(const vk::Semaphore *signalSemaphore, Submit submission);
+    angle::Result submitCommands(const vk::Semaphore *signalSemaphore,
+                                 const vk::Fence *externalFence,
+                                 Submit submission);
 
     angle::Result synchronizeCpuGpuTime();
     angle::Result traceGpuEventImpl(vk::OutsideRenderPassCommandBuffer *commandBuffer,
