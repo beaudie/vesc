@@ -5036,25 +5036,23 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
                                          vk::ProtectionType protectionType,
                                          egl::ContextPriority contextPriority,
                                          const vk::Semaphore *signalSemaphore,
-                                         const vk::Fence *externalFence,
+                                         vk::ExternalFence *externalFence,
                                          const QueueSerial &submitQueueSerial)
 {
     ASSERT(signalSemaphore == nullptr || signalSemaphore->valid());
-    ASSERT(externalFence == nullptr || externalFence->valid());
     const VkSemaphore signalVkSemaphore =
         signalSemaphore ? signalSemaphore->getHandle() : VK_NULL_HANDLE;
-    const VkFence externalVkFence = externalFence ? externalFence->getHandle() : VK_NULL_HANDLE;
 
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.enqueueSubmitCommands(context, protectionType, contextPriority,
-                                                          signalVkSemaphore, externalVkFence,
+                                                          signalVkSemaphore, externalFence,
                                                           submitQueueSerial));
     }
     else
     {
         ANGLE_TRY(mCommandQueue.submitCommands(context, protectionType, contextPriority,
-                                               signalVkSemaphore, externalVkFence,
+                                               signalVkSemaphore, externalFence,
                                                submitQueueSerial));
     }
 
