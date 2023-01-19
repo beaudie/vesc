@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16b0fa22_3ee837ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-19T17:31:45Z",
+      "side": 1,
+      "message": "lgtm\n\nApple folks: FYI. Needed to make the Metal backend render correctly on 2015 MacBook Pros. The Intel GPU supports only Mac GPU Family 1 but the AMD one supports Mac GPU Family 2.",
+      "revId": "cd3d12ba4edaaf37e8c4e2ffd5d7aa4585a174b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1af9a93d_8c05240c",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-19T17:31:45Z",
+      "side": 1,
+      "message": "Nit: mention \"Mac GPU family 2\".",
+      "revId": "cd3d12ba4edaaf37e8c4e2ffd5d7aa4585a174b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
