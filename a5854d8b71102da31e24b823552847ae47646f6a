@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2ec7ae8_8387b0fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1568298
+      },
+      "writtenOn": "2023-01-19T09:24:57Z",
+      "side": 1,
+      "message": "So this is failing in Validation Layers (UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout) when Vulkan 1.3 is used (because it enables `synchronization2`)\n\nThe following is the reduced API dump of the failing test (VulkanExternalImageTest.ShouldClearOpaqueFdWithSemaphores/ES2_Vulkan_SwiftShader)\n\nThe issue seems that VkImage 0x1b000000001b never go from `VK_IMAGE_LAYOUT_UNDEFINED` to `VK_IMAGE_LAYOUT_GENERAL` and when Sync2 was enabled, it was exposed\n\n--------\n\nvkCreateImage() - makes `0x1b000000001b`\n    pCreateInfo:                    const VkImageCreateInfo* \u003d 0x7ffd65191970:\n        imageType:                      VkImageType \u003d VK_IMAGE_TYPE_2D (1)\n        format:                         VkFormat \u003d VK_FORMAT_R8G8B8A8_UNORM (37)\n        usage:                          VkImageUsageFlags \u003d 159 (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT)\n        `initialLayout`:                  VkImageLayout \u003d `VK_IMAGE_LAYOUT_UNDEFINED` (0)\n        pNext:                          VkExternalMemoryImageCreateInfo \u003d 0x7ffd65191bf0:\n            handleTypes:                    VkExternalMemoryHandleTypeFlags \u003d 1 (VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT)\n\tpImage:                         VkImage* \u003d `0x1b000000001b`\n\nvkCmdPipelineBarrier() - uses VkImage `0x190000000019`\n\tpImageMemoryBarriers[0]:        const VkImageMemoryBarrier \u003d 0x7ffd651920f0:\n\t\tsrcAccessMask:                  VkAccessFlags \u003d 65536 (VK_ACCESS_MEMORY_WRITE_BIT)\n\t\tdstAccessMask:                  VkAccessFlags \u003d 98304 (VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT)\n\t\t`oldLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_UNDEFINED` (0)\n\t\t`newLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_GENERAL` (1)\n\t\tsrcQueueFamilyIndex:            uint32_t \u003d 0\n\t\tdstQueueFamilyIndex:            uint32_t \u003d 4294967294\n\t\timage:                          VkImage \u003d `0x190000000019`\n\nvkCmdPipelineBarrier() - uses VkImage `0x1b000000001b` (ignored if Sync2 is enabled)\n\tpImageMemoryBarriers[0]:        const VkImageMemoryBarrier \u003d 0x563930ef3890:\n\t\tsrcAccessMask:                  VkAccessFlags \u003d 64 (VK_ACCESS_SHADER_WRITE_BIT)\n\t\tdstAccessMask:                  VkAccessFlags \u003d 96 (VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT)\n\t\t`oldLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_GENERAL` (1)\n\t\t`newLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_GENERAL` (1)\n\t\tsrcQueueFamilyIndex:            uint32_t \u003d 4294967294\n\t\tdstQueueFamilyIndex:            uint32_t \u003d 0\n\t\timage:                          VkImage \u003d `0x1b000000001b`\n\nvkCmdPipelineBarrier() - uses VkImage `0x1b000000001b` (INVALID if Sync2 is enabled)\n\tpImageMemoryBarriers[0]:        const VkImageMemoryBarrier \u003d 0x563930ef386c:\n\t\tsrcAccessMask:                  VkAccessFlags \u003d 64 (VK_ACCESS_SHADER_WRITE_BIT)\n\t\tdstAccessMask:                  VkAccessFlags \u003d 4096 (VK_ACCESS_TRANSFER_WRITE_BIT)\n\t\t`oldLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_GENERAL` (1)\n\t\t`newLayout`:                      VkImageLayout \u003d `VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL` (7)\n\t\tsrcQueueFamilyIndex:            uint32_t \u003d 0\n\t\tdstQueueFamilyIndex:            uint32_t \u003d 0\n\t\timage:                          VkImage \u003d `0x1b000000001b`",
+      "revId": "a5854d8b71102da31e24b823552847ae47646f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
