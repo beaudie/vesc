@@ -562,10 +562,13 @@ angle::Result ProgramMtl::getSpecializedShader(ContextMtl *context,
     }  // if (shaderType == gl::ShaderType::Vertex)
     else if (shaderType == gl::ShaderType::Fragment)
     {
-        // For fragment shader, we need to create 2 variants, one with sample coverage mask
-        // disabled, one with the mask enabled.
-        BOOL emulateCoverageMask = renderPipelineDesc.emulateCoverageMask;
-        shaderVariant            = &mFragmentShaderVariants[emulateCoverageMask];
+        // For fragment shader, we need to create 4 variants,
+        // combining sample coverage mask and depth write enabled states.
+        const bool emulateCoverageMask = renderPipelineDesc.emulateCoverageMask;
+        const bool fragDepthWriteEnabled =
+            renderPipelineDesc.outputDescriptor.depthAttachmentPixelFormat != 0;
+        shaderVariant =
+            &mFragmentShaderVariants[(fragDepthWriteEnabled << 1) | emulateCoverageMask];
         if (shaderVariant->metalShader)
         {
             // Already created.
@@ -585,10 +588,6 @@ angle::Result ProgramMtl::getSpecializedShader(ContextMtl *context,
             [funcConstants setConstantValue:&emulateCoverageMask
                                        type:MTLDataTypeBool
                                    withName:coverageMaskEnabledStr];
-
-            MTLPixelFormat depthPixelFormat =
-                (MTLPixelFormat)renderPipelineDesc.outputDescriptor.depthAttachmentPixelFormat;
-            BOOL fragDepthWriteEnabled = depthPixelFormat != MTLPixelFormatInvalid;
             [funcConstants setConstantValue:&fragDepthWriteEnabled
                                        type:MTLDataTypeBool
                                    withName:depthWriteEnabledStr];
@@ -1140,9 +1139,13 @@ angle::Result ProgramMtl::setupDraw(const gl::Context *glContext,
         // Cache current shader variant references for easier querying.
         mCurrentShaderVariants[gl::ShaderType::Vertex] =
             &mVertexShaderVariants[pipelineDesc.rasterizationType];
+
+        const bool emulateCoverageMask = pipelineDesc.emulateCoverageMask;
+        const bool fragDepthWriteEnabled =
+            pipelineDesc.outputDescriptor.depthAttachmentPixelFormat != 0;
         mCurrentShaderVariants[gl::ShaderType::Fragment] =
             pipelineDesc.rasterizationEnabled()
-                ? &mFragmentShaderVariants[pipelineDesc.emulateCoverageMask]
+                ? &mFragmentShaderVariants[(fragDepthWriteEnabled << 1) | emulateCoverageMask]
                 : nullptr;
     }
 
