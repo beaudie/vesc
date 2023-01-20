@@ -155,8 +155,15 @@ angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool
     // Submit commands if it was deferred on the context that issued the sync object
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
-    ANGLE_TRY(renderer->checkCompletedCommands(context));
-    *signaled = !renderer->hasUnfinishedUse(getResourceUse());
+    if (!renderer->hasUnfinishedUse(mUse))
+    {
+        *signaled = true;
+    }
+    else
+    {
+        ANGLE_TRY(renderer->checkCompletedCommands(context));
+        *signaled = !renderer->hasUnfinishedUse(mUse);
+    }
     return angle::Result::Continue;
 }
 
