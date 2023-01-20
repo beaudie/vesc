@@ -175,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0781a8e_bd6a56a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520127
+      },
+      "writtenOn": "2023-01-20T13:14:22Z",
+      "side": 1,
+      "message": "sorry about that. Could you PTAL now? Maybe it will kick in automatically via auto-submit.",
+      "parentUuid": "78b3bf4c_957c0733",
+      "revId": "8a212f7977d9d7bb8c521e5a51340ed61cc6b7da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b17fea55_913d0d8d",
