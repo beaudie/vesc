@@ -70,9 +70,12 @@ MTLResourceOptions resourceOptionsForStorageMode(MTLStorageMode storageMode)
     {
         case MTLStorageModeShared:
             return MTLResourceStorageModeShared;
-#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
         case MTLStorageModeManaged:
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
             return MTLResourceStorageModeManaged;
+#else
+            // MTLResourceStorageModeManaged is not available on iOS or tvOS.
+            return MTLResourceStorageModeShared;
 #endif
         case MTLStorageModePrivate:
             return MTLResourceStorageModePrivate;
