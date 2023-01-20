@@ -180,6 +180,12 @@
             "BC7_RGBA_UNORM_BLOCK": "MTLPixelFormatBC7_RGBAUnorm",
             "BC7_RGBA_UNORM_SRGB_BLOCK": "MTLPixelFormatBC7_RGBAUnorm_sRGB"
         },
+        "map_apple_vs_non_apple_gpus": {
+            "D16_UNORM": {
+                "apple": ["D16_UNORM", "MTLPixelFormatDepth16Unorm"],
+                "non_apple": ["D32_FLOAT", "MTLPixelFormatDepth32Float"]
+            }
+        },
         "override": {
             "L8_UNORM": "R8G8B8A8_UNORM",
             "L8A8_UNORM": "R8G8B8A8_UNORM",
@@ -206,18 +212,15 @@
             "D32_UNORM": "D32_FLOAT"
         },
         "override_mac": {
-            "D16_UNORM": "D32_FLOAT"
         },
         "override_ios": {
-            "D24_UNORM_S8_UINT": "D32_FLOAT_S8X24_UINT",
-            "D16_UNORM": "D32_FLOAT"
+            "D24_UNORM_S8_UINT": "D32_FLOAT_S8X24_UINT"
         },
          "override_sim": {
             "R5G6B5_UNORM": "R8G8B8A8_UNORM",
             "R5G5B5A1_UNORM": "R8G8B8A8_UNORM",
             "D24_UNORM_S8_UINT": "D32_FLOAT_S8X24_UINT",
-            "R4G4B4A4_UNORM": "R8G8B8A8_UNORM",
-            "D16_UNORM": "D32_FLOAT"
+            "R4G4B4A4_UNORM": "R8G8B8A8_UNORM"
         },
         "override_mac_bc1": {
             "BC1_RGB_UNORM_BLOCK": {

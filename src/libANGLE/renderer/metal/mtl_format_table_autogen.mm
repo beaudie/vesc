@@ -764,6 +764,20 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
             this->initFunction   = Initialize4ComponentData<GLubyte, 0x00, 0x00, 0x00, 0xFF>;
             break;
 
+        case angle::FormatID::D16_UNORM:
+
+            if (display->supportsAppleGPUFamily(1))
+            {
+                this->metalFormat    = MTLPixelFormatDepth16Unorm;
+                this->actualFormatId = angle::FormatID::D16_UNORM;
+            }
+            else
+            {
+                this->metalFormat    = MTLPixelFormatDepth32Float;
+                this->actualFormatId = angle::FormatID::D32_FLOAT;
+            }
+            break;
+
 #if TARGET_OS_OSX || TARGET_OS_MACCATALYST
         case angle::FormatID::BC1_RGBA_UNORM_BLOCK:
 
@@ -862,12 +876,6 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
                 this->metalFormat    = MTLPixelFormatDepth32Float_Stencil8;
                 this->actualFormatId = angle::FormatID::D32_FLOAT_S8X24_UINT;
             }
-            break;
-
-        case angle::FormatID::D16_UNORM:
-
-            this->metalFormat    = MTLPixelFormatDepth32Float;
-            this->actualFormatId = angle::FormatID::D32_FLOAT;
             break;
 
         case angle::FormatID::BC1_RGB_UNORM_BLOCK:
@@ -1150,12 +1158,6 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
 
             this->metalFormat    = MTLPixelFormatETC2_RGB8;
             this->actualFormatId = angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
-            break;
-
-        case angle::FormatID::D16_UNORM:
-
-            this->metalFormat    = MTLPixelFormatDepth32Float;
-            this->actualFormatId = angle::FormatID::D32_FLOAT;
             break;
 
         case angle::FormatID::D24_UNORM_S8_UINT:
@@ -1693,12 +1695,6 @@ void Format::init(const DisplayMtl *display, angle::FormatID intendedFormatId_)
 
             this->metalFormat    = MTLPixelFormatR8Unorm_sRGB;
             this->actualFormatId = angle::FormatID::R8_UNORM_SRGB;
-            break;
-
-        case angle::FormatID::D16_UNORM:
-
-            this->metalFormat    = MTLPixelFormatDepth32Float;
-            this->actualFormatId = angle::FormatID::D32_FLOAT;
             break;
 
         case angle::FormatID::D24_UNORM_S8_UINT:
