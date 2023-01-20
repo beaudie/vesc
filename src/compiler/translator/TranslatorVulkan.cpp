@@ -159,8 +159,8 @@ bool DeclareDefaultUniforms(TCompiler *compiler,
     TLayoutQualifier layoutQualifier = TLayoutQualifier::Create();
     layoutQualifier.blockStorage     = EbsStd140;
     const TVariable *uniformBlock    = DeclareInterfaceBlock(
-           root, symbolTable, uniformList, EvqUniform, layoutQualifier, TMemoryQualifier::Create(), 0,
-           ImmutableString(kDefaultUniformNames[shaderType]), ImmutableString(""));
+        root, symbolTable, uniformList, EvqUniform, layoutQualifier, TMemoryQualifier::Create(), 0,
+        ImmutableString(kDefaultUniformNames[shaderType]), ImmutableString(""));
 
     // Create a map from the uniform variables to new variables that reference the fields of the
     // block.
@@ -633,7 +633,6 @@ bool HasFramebufferFetch(const TExtensionBehavior &extBehavior,
 {
     return IsExtensionEnabled(extBehavior, TExtension::EXT_shader_framebuffer_fetch) ||
            IsExtensionEnabled(extBehavior, TExtension::EXT_shader_framebuffer_fetch_non_coherent) ||
-           IsExtensionEnabled(extBehavior, TExtension::ARM_shader_framebuffer_fetch) ||
            IsExtensionEnabled(extBehavior, TExtension::NV_shader_framebuffer_fetch) ||
            (compileOptions.pls.type == ShPixelLocalStorageType::FramebufferFetch &&
             IsExtensionEnabled(extBehavior, TExtension::ANGLE_shader_pixel_local_storage));
@@ -988,6 +987,15 @@ bool TranslatorVulkan::translateImpl(TIntermBlock *root,
                     {
                         return false;
                     }
+                }
+            }
+
+            if (IsExtensionEnabled(getExtensionBehavior(),
+                                   TExtension::ARM_shader_framebuffer_fetch))
+            {
+                if (!ReplaceLastFragColor(this, root, &getSymbolTable(), &mUniforms))
+                {
+                    return false;
                 }
             }
 
