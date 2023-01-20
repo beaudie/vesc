@@ -1675,6 +1675,8 @@ void GenerateCaps(const FunctionsGL *functions,
         extensions->shaderFramebufferFetchEXT = true;
     }
 
+    // TODO(http://anglebug.com/7882): Support ARM_shader_framebuffer_fetch
+
     // EXT_shader_framebuffer_fetch_non_coherent.
     if (features.supportsShaderFramebufferFetchNonCoherentEXT.enabled)
     {
