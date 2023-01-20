@@ -1,0 +1,1134 @@
+1 GPUs:
+  0 - NVIDIA device id: 0x1CB1, revision id: 0xA1, system device id: 0x0
+       Driver Vendor: Nvidia
+       Driver Version: 510.85.02
+
+Active GPU: 0
+
+Optimus: false
+AMD Switchable: false
+Mac Switchable: false
+Needs EAGL on Mac: false
+
+
+Skipping tests using configuration ES2_OpenGLES_NoFixture because it is not available.
+Skipping tests using configuration ES2_OpenGLES because it is not available.
+Skipping tests using configuration ES3_OpenGLES because it is not available.
+Skipping tests using configuration ES3_OpenGLES_NoFixture because it is not available.
+Skipping tests using configuration ES3_1_OpenGLES because it is not available.
+Skipping tests using configuration ES2_OpenGLES_EmulateCopyTexImage2D because it is not available.
+Skipping tests using configuration ES2_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers because it is not available.
+Skipping tests using configuration ES3_OpenGLES_EmulateCopyTexImage2D because it is not available.
+Skipping tests using configuration ES3_OpenGLES_EmulateCopyTexImage2DFromRenderbuffers because it is not available.
+Skipping tests using configuration ES1_OpenGLES because it is not available.
+Skipping tests using configuration GL3_2_Core_Vulkan because it is not available.
+Skipping tests using configuration GL3_2_Core_Vulkan_SwiftShader because it is not available.
+Skipping tests using configuration ES3_OpenGLES_EmulatePixelLocalStorage because it is not available.
+Skipping tests using configuration ES3_OpenGLES_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetchEXT_NoSupportsShaderPixelLocalStorageEXT because it is not available.
+Skipping tests using configuration ES3_OpenGLES_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetchEXT_NoSupportsShaderFramebufferFetchNonCoherentEXT_NoSupportsShaderPixelLocalStorageEXT because it is not available.
+Skipping tests using configuration ES3_1_OpenGLES_EmulatePixelLocalStorage because it is not available.
+Skipping tests using configuration ES3_1_OpenGLES_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetchEXT_NoSupportsShaderPixelLocalStorageEXT because it is not available.
+Skipping tests using configuration ES3_1_OpenGLES_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetchEXT_NoSupportsShaderFramebufferFetchNonCoherentEXT_NoSupportsShaderPixelLocalStorageEXT because it is not available.
+Skipping tests using configuration ES2_OpenGLES_SyncVertexArraysToDefault because it is not available.
+Skipping tests using configuration ES3_OpenGLES_SyncVertexArraysToDefault because it is not available.
+Note: Google Test filter = ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ComputeShaderTest
+[ RUN      ] ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan
+INFO: Yuxin Debug GLSL shaderStrings is: #version 310 es
+    layout (local_size_x=16, local_size_y=8) in;
+    layout(binding=0, std430) buffer Output {
+        highp int values[];
+    } sb_result;
+    layout(binding=1, std430) coherent buffer Storage0
+    {
+        highp int values[];
+    } sb_store0;
+    layout(binding=2, std430) coherent buffer Storage1
+    {
+        highp int values[];
+    } sb_store1;
+
+    highp int getIndex(in highp uvec2 localID, in highp int element)
+    {
+        highp uint groupNdx = gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x;
+        return int((localID.y * gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupSize.x) + (groupNdx * gl_WorkGroupSize.x) + localID.x) * 8 + element;
+    }
+
+    void main (void)
+    {
+        int resultNdx = int(gl_GlobalInvocationID.y * gl_NumWorkGroups.x * gl_WorkGroupSize.x + gl_GlobalInvocationID.x);
+        int groupNdx = int(gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x);
+        bool allOk = true;
+
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 0)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 1)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 2)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 3)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 4)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 5)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 6)] = 456;
+        sb_store0.values[getIndex(gl_LocalInvocationID.xy, 7)] = 456;
+
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 0)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 1)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 2)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 3)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 4)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 5)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 6)] = groupNdx;
+        sb_store1.values[getIndex(gl_LocalInvocationID.xy, 7)] = groupNdx;
+
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 0)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 1)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 2)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 3)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 4)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 5)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 6)] == groupNdx);
+        allOk = allOk && (sb_store0.values[getIndex(gl_LocalInvocationID.xy, 7)] == groupNdx);
+
+        sb_result.values[resultNdx] = allOk ? (1) : (2);
+
+    }
+INFO: Yuxin Debug TParseContext::addInterfaceBlock: coherent: 0
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb0f2338
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator: 
+INFO: Yuxin Debug: 0
+INFO: Yuxin Debug JoinMemoryQualifiers EvqCoherent coherent
+INFO: Yuxin Debug TParseContext::addInterfaceBlock: coherent: 1
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb0f2908
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator: 
+INFO: Yuxin Debug: 1
+INFO: Yuxin Debug JoinMemoryQualifiers EvqCoherent coherent
+INFO: Yuxin Debug TParseContext::addInterfaceBlock: coherent: 1
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb0f2f10
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator: 
+INFO: Yuxin Debug: 1
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb0ff718
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb1021c0
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb102cb8
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb103030
+INFO: Yuxin Debug TranslatorVulkan::translate() is called
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator is called, node address is: 0x55f1cb118d88
+INFO: Yuxin Debug TIntermDeclaration::appendDeclarator: 
+INFO: Yuxin Debug: 0
+INFO: Yuxin Debug OutputSPIRV() is called
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2338
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2338
+INFO: Yuxin Debug symbol->getType().getMemoryQualifier(): 0
+INFO: Yuxin Debug OutputSPIRV::visitDeclaration: 
+INFO: Yuxin Debug: 0
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2908
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2908
+INFO: Yuxin Debug symbol->getType().getMemoryQualifier(): 0
+INFO: Yuxin Debug OutputSPIRV::visitDeclaration: 
+INFO: Yuxin Debug: 1
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2f10
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0f2f10
+INFO: Yuxin Debug symbol->getType().getMemoryQualifier(): 0
+INFO: Yuxin Debug OutputSPIRV::visitDeclaration: 
+INFO: Yuxin Debug: 1
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb118d88
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb118d88
+INFO: Yuxin Debug symbol->getType().getMemoryQualifier(): 0
+INFO: Yuxin Debug OutputSPIRV::visitDeclaration: 
+INFO: Yuxin Debug: 0
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0ff718
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb0ff718
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb1021c0
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb1021c0
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb102cb8
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb102cb8
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb103030
+INFO: Yuxin Debug OutputSPIRVTraverser visitDeclaration is called, node address is: 0x55f1cb103030
+INFO: Yuxin Debug transformed SpirV: 
+INFO: Dissembly SPIRV: ; SPIR-V
+; Version: 1.0
+; Generator: Google ANGLE Shader Compiler; 1
+; Bound: 319
+; Schema: 0
+OpCapability Shader
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %66 "main" %28 %29 %68 %94
+OpExecutionMode %66 LocalSize 16 8 1
+OpSource GLSL 450
+OpDecorate %3 ArrayStride 4
+OpMemberDecorate %4 0 Offset 0
+OpDecorate %4 BufferBlock
+OpDecorate %6 DescriptorSet 2
+OpDecorate %6 Binding 0
+OpMemberDecorate %7 0 Offset 0
+OpMemberDecorate %7 0 Coherent
+OpDecorate %7 BufferBlock
+OpDecorate %9 DescriptorSet 2
+OpDecorate %9 Binding 1
+OpMemberDecorate %10 0 Offset 0
+OpMemberDecorate %10 0 Coherent
+OpDecorate %10 BufferBlock
+OpDecorate %12 DescriptorSet 2
+OpDecorate %12 Binding 2
+OpMemberDecorate %15 0 Offset 0
+OpDecorate %15 Block
+OpDecorate %28 BuiltIn NumWorkgroups
+OpDecorate %29 BuiltIn WorkgroupId
+OpDecorate %68 BuiltIn GlobalInvocationId
+OpDecorate %94 BuiltIn LocalInvocationId
+%2 = OpTypeInt 32 1
+%3 = OpTypeRuntimeArray %2
+%4 = OpTypeStruct %3
+%7 = OpTypeStruct %3
+%10 = OpTypeStruct %3
+%13 = OpTypeInt 32 0
+%14 = OpTypeVector %13 4
+%15 = OpTypeStruct %14
+%18 = OpTypeVector %13 2
+%26 = OpTypeVector %13 3
+%30 = OpConstant %13 0
+%34 = OpConstant %13 1
+%51 = OpConstant %13 16
+%60 = OpConstant %2 8
+%64 = OpTypeVoid
+%90 = OpTypeBool
+%91 = OpConstantTrue %90
+%95 = OpConstant %2 0
+%101 = OpConstant %2 456
+%104 = OpConstant %2 1
+%111 = OpConstant %2 2
+%118 = OpConstant %2 3
+%125 = OpConstant %2 4
+%132 = OpConstant %2 5
+%139 = OpConstant %2 6
+%146 = OpConstant %2 7
+%5 = OpTypePointer Uniform %4
+%8 = OpTypePointer Uniform %7
+%11 = OpTypePointer Uniform %10
+%16 = OpTypePointer PushConstant %15
+%19 = OpTypePointer Function %18
+%20 = OpTypePointer Function %2
+%317 = OpTypePointer Private %26
+%27 = OpTypePointer Input %26
+%318 = OpTypePointer Private %13
+%31 = OpTypePointer Input %13
+%41 = OpTypePointer Function %13
+%92 = OpTypePointer Function %90
+%102 = OpTypePointer Uniform %2
+%21 = OpTypeFunction %2 %19 %20
+%65 = OpTypeFunction %64
+%6 = OpVariable %5 Uniform
+%9 = OpVariable %8 Uniform
+%12 = OpVariable %11 Uniform
+%17 = OpVariable %16 PushConstant
+%28 = OpVariable %27 Input
+%29 = OpVariable %27 Input
+%68 = OpVariable %27 Input
+%94 = OpVariable %27 Input
+%22 = OpFunction %2 None %21
+%23 = OpFunctionParameter %19
+%24 = OpFunctionParameter %20
+%25 = OpLabel
+%42 = OpVariable %41 Function
+%32 = OpAccessChain %31 %28 %30
+%33 = OpLoad %13 %32
+%35 = OpAccessChain %31 %29 %34
+%36 = OpLoad %13 %35
+%37 = OpIMul %13 %33 %36
+%38 = OpAccessChain %31 %29 %30
+%39 = OpLoad %13 %38
+%40 = OpIAdd %13 %37 %39
+OpStore %42 %40
+%43 = OpAccessChain %41 %23 %34
+%44 = OpLoad %13 %43
+%45 = OpAccessChain %31 %28 %30
+%46 = OpLoad %13 %45
+%47 = OpIMul %13 %44 %46
+%48 = OpAccessChain %31 %28 %34
+%49 = OpLoad %13 %48
+%50 = OpIMul %13 %47 %49
+%52 = OpIMul %13 %50 %51
+%53 = OpLoad %13 %42
+%54 = OpIMul %13 %53 %51
+%55 = OpIAdd %13 %52 %54
+%56 = OpAccessChain %41 %23 %30
+%57 = OpLoad %13 %56
+%58 = OpIAdd %13 %55 %57
+%59 = OpBitcast %2 %58
+%61 = OpIMul %2 %59 %60
+%62 = OpLoad %2 %24
+%63 = OpIAdd %2 %61 %62
+OpReturnValue %63
+OpFunctionEnd
+%66 = OpFunction %64 None %65
+%67 = OpLabel
+%79 = OpVariable %20 Function
+%89 = OpVariable %20 Function
+%93 = OpVariable %92 Function %91
+%96 = OpVariable %19 Function
+%99 = OpVariable %20 Function
+%105 = OpVariable %19 Function
+%108 = OpVariable %20 Function
+%112 = OpVariable %19 Function
+%115 = OpVariable %20 Function
+%119 = OpVariable %19 Function
+%122 = OpVariable %20 Function
+%126 = OpVariable %19 Function
+%129 = OpVariable %20 Function
+%133 = OpVariable %19 Function
+%136 = OpVariable %20 Function
+%140 = OpVariable %19 Function
+%143 = OpVariable %20 Function
+%147 = OpVariable %19 Function
+%150 = OpVariable %20 Function
+%153 = OpVariable %19 Function
+%156 = OpVariable %20 Function
+%160 = OpVariable %19 Function
+%163 = OpVariable %20 Function
+%167 = OpVariable %19 Function
+%170 = OpVariable %20 Function
+%174 = OpVariable %19 Function
+%177 = OpVariable %20 Function
+%181 = OpVariable %19 Function
+%184 = OpVariable %20 Function
+%188 = OpVariable %19 Function
+%191 = OpVariable %20 Function
+%195 = OpVariable %19 Function
+%198 = OpVariable %20 Function
+%202 = OpVariable %19 Function
+%205 = OpVariable %20 Function
+%212 = OpVariable %19 Function
+%215 = OpVariable %20 Function
+%225 = OpVariable %19 Function
+%228 = OpVariable %20 Function
+%238 = OpVariable %19 Function
+%241 = OpVariable %20 Function
+%251 = OpVariable %19 Function
+%254 = OpVariable %20 Function
+%264 = OpVariable %19 Function
+%267 = OpVariable %20 Function
+%277 = OpVariable %19 Function
+%280 = OpVariable %20 Function
+%290 = OpVariable %19 Function
+%293 = OpVariable %20 Function
+%303 = OpVariable %19 Function
+%306 = OpVariable %20 Function
+%69 = OpAccessChain %31 %68 %34
+%70 = OpLoad %13 %69
+%71 = OpAccessChain %31 %28 %30
+%72 = OpLoad %13 %71
+%73 = OpIMul %13 %70 %72
+%74 = OpIMul %13 %73 %51
+%75 = OpAccessChain %31 %68 %30
+%76 = OpLoad %13 %75
+%77 = OpIAdd %13 %74 %76
+%78 = OpBitcast %2 %77
+OpStore %79 %78
+%80 = OpAccessChain %31 %28 %30
+%81 = OpLoad %13 %80
+%82 = OpAccessChain %31 %29 %34
+%83 = OpLoad %13 %82
+%84 = OpIMul %13 %81 %83
+%85 = OpAccessChain %31 %29 %30
+%86 = OpLoad %13 %85
+%87 = OpIAdd %13 %84 %86
+%88 = OpBitcast %2 %87
+OpStore %89 %88
+%97 = OpLoad %26 %94
+%98 = OpVectorShuffle %18 %97 %97 0 1
+OpStore %96 %98
+OpStore %99 %95
+%100 = OpFunctionCall %2 %22 %96 %99
+%103 = OpAccessChain %102 %9 %30 %100
+OpStore %103 %101
+%106 = OpLoad %26 %94
+%107 = OpVectorShuffle %18 %106 %106 0 1
+OpStore %105 %107
+OpStore %108 %104
+%109 = OpFunctionCall %2 %22 %105 %108
+%110 = OpAccessChain %102 %9 %30 %109
+OpStore %110 %101
+%113 = OpLoad %26 %94
+%114 = OpVectorShuffle %18 %113 %113 0 1
+OpStore %112 %114
+OpStore %115 %111
+%116 = OpFunctionCall %2 %22 %112 %115
+%117 = OpAccessChain %102 %9 %30 %116
+OpStore %117 %101
+%120 = OpLoad %26 %94
+%121 = OpVectorShuffle %18 %120 %120 0 1
+OpStore %119 %121
+OpStore %122 %118
+%123 = OpFunctionCall %2 %22 %119 %122
+%124 = OpAccessChain %102 %9 %30 %123
+OpStore %124 %101
+%127 = OpLoad %26 %94
+%128 = OpVectorShuffle %18 %127 %127 0 1
+OpStore %126 %128
+OpStore %129 %125
+%130 = OpFunctionCall %2 %22 %126 %129
+%131 = OpAccessChain %102 %9 %30 %130
+OpStore %131 %101
+%134 = OpLoad %26 %94
+%135 = OpVectorShuffle %18 %134 %134 0 1
+OpStore %133 %135
+OpStore %136 %132
+%137 = OpFunctionCall %2 %22 %133 %136
+%138 = OpAccessChain %102 %9 %30 %137
+OpStore %138 %101
+%141 = OpLoad %26 %94
+%142 = OpVectorShuffle %18 %141 %141 0 1
+OpStore %140 %142
+OpStore %143 %139
+%144 = OpFunctionCall %2 %22 %140 %143
+%145 = OpAccessChain %102 %9 %30 %144
+OpStore %145 %101
+%148 = OpLoad %26 %94
+%149 = OpVectorShuffle %18 %148 %148 0 1
+OpStore %147 %149
+OpStore %150 %146
+%151 = OpFunctionCall %2 %22 %147 %150
+%152 = OpAccessChain %102 %9 %30 %151
+OpStore %152 %101
+%154 = OpLoad %26 %94
+%155 = OpVectorShuffle %18 %154 %154 0 1
+OpStore %153 %155
+OpStore %156 %95
+%157 = OpFunctionCall %2 %22 %153 %156
+%158 = OpLoad %2 %89
+%159 = OpAccessChain %102 %12 %30 %157
+OpStore %159 %158
+%161 = OpLoad %26 %94
+%162 = OpVectorShuffle %18 %161 %161 0 1
+OpStore %160 %162
+OpStore %163 %104
+%164 = OpFunctionCall %2 %22 %160 %163
+%165 = OpLoad %2 %89
+%166 = OpAccessChain %102 %12 %30 %164
+OpStore %166 %165
+%168 = OpLoad %26 %94
+%169 = OpVectorShuffle %18 %168 %168 0 1
+OpStore %167 %169
+OpStore %170 %111
+%171 = OpFunctionCall %2 %22 %167 %170
+%172 = OpLoad %2 %89
+%173 = OpAccessChain %102 %12 %30 %171
+OpStore %173 %172
+%175 = OpLoad %26 %94
+%176 = OpVectorShuffle %18 %175 %175 0 1
+OpStore %174 %176
+OpStore %177 %118
+%178 = OpFunctionCall %2 %22 %174 %177
+%179 = OpLoad %2 %89
+%180 = OpAccessChain %102 %12 %30 %178
+OpStore %180 %179
+%182 = OpLoad %26 %94
+%183 = OpVectorShuffle %18 %182 %182 0 1
+OpStore %181 %183
+OpStore %184 %125
+%185 = OpFunctionCall %2 %22 %181 %184
+%186 = OpLoad %2 %89
+%187 = OpAccessChain %102 %12 %30 %185
+OpStore %187 %186
+%189 = OpLoad %26 %94
+%190 = OpVectorShuffle %18 %189 %189 0 1
+OpStore %188 %190
+OpStore %191 %132
+%192 = OpFunctionCall %2 %22 %188 %191
+%193 = OpLoad %2 %89
+%194 = OpAccessChain %102 %12 %30 %192
+OpStore %194 %193
+%196 = OpLoad %26 %94
+%197 = OpVectorShuffle %18 %196 %196 0 1
+OpStore %195 %197
+OpStore %198 %139
+%199 = OpFunctionCall %2 %22 %195 %198
+%200 = OpLoad %2 %89
+%201 = OpAccessChain %102 %12 %30 %199
+OpStore %201 %200
+%203 = OpLoad %26 %94
+%204 = OpVectorShuffle %18 %203 %203 0 1
+OpStore %202 %204
+OpStore %205 %146
+%206 = OpFunctionCall %2 %22 %202 %205
+%207 = OpLoad %2 %89
+%208 = OpAccessChain %102 %12 %30 %206
+OpStore %208 %207
+%209 = OpLoad %90 %93
+OpSelectionMerge %211 None
+OpBranchConditional %209 %210 %211
+%210 = OpLabel
+%213 = OpLoad %26 %94
+%214 = OpVectorShuffle %18 %213 %213 0 1
+OpStore %212 %214
+OpStore %215 %95
+%216 = OpFunctionCall %2 %22 %212 %215
+%217 = OpAccessChain %102 %9 %30 %216
+%218 = OpLoad %2 %217
+%219 = OpLoad %2 %89
+%220 = OpIEqual %90 %218 %219
+OpBranch %211
+%211 = OpLabel
+%221 = OpPhi %90 %209 %67 %220 %210
+OpStore %93 %221
+%222 = OpLoad %90 %93
+OpSelectionMerge %224 None
+OpBranchConditional %222 %223 %224
+%223 = OpLabel
+%226 = OpLoad %26 %94
+%227 = OpVectorShuffle %18 %226 %226 0 1
+OpStore %225 %227
+OpStore %228 %104
+%229 = OpFunctionCall %2 %22 %225 %228
+%230 = OpAccessChain %102 %9 %30 %229
+%231 = OpLoad %2 %230
+%232 = OpLoad %2 %89
+%233 = OpIEqual %90 %231 %232
+OpBranch %224
+%224 = OpLabel
+%234 = OpPhi %90 %222 %211 %233 %223
+OpStore %93 %234
+%235 = OpLoad %90 %93
+OpSelectionMerge %237 None
+OpBranchConditional %235 %236 %237
+%236 = OpLabel
+%239 = OpLoad %26 %94
+%240 = OpVectorShuffle %18 %239 %239 0 1
+OpStore %238 %240
+OpStore %241 %111
+%242 = OpFunctionCall %2 %22 %238 %241
+%243 = OpAccessChain %102 %9 %30 %242
+%244 = OpLoad %2 %243
+%245 = OpLoad %2 %89
+%246 = OpIEqual %90 %244 %245
+OpBranch %237
+%237 = OpLabel
+%247 = OpPhi %90 %235 %224 %246 %236
+OpStore %93 %247
+%248 = OpLoad %90 %93
+OpSelectionMerge %250 None
+OpBranchConditional %248 %249 %250
+%249 = OpLabel
+%252 = OpLoad %26 %94
+%253 = OpVectorShuffle %18 %252 %252 0 1
+OpStore %251 %253
+OpStore %254 %118
+%255 = OpFunctionCall %2 %22 %251 %254
+%256 = OpAccessChain %102 %9 %30 %255
+%257 = OpLoad %2 %256
+%258 = OpLoad %2 %89
+%259 = OpIEqual %90 %257 %258
+OpBranch %250
+%250 = OpLabel
+%260 = OpPhi %90 %248 %237 %259 %249
+OpStore %93 %260
+%261 = OpLoad %90 %93
+OpSelectionMerge %263 None
+OpBranchConditional %261 %262 %263
+%262 = OpLabel
+%265 = OpLoad %26 %94
+%266 = OpVectorShuffle %18 %265 %265 0 1
+OpStore %264 %266
+OpStore %267 %125
+%268 = OpFunctionCall %2 %22 %264 %267
+%269 = OpAccessChain %102 %9 %30 %268
+%270 = OpLoad %2 %269
+%271 = OpLoad %2 %89
+%272 = OpIEqual %90 %270 %271
+OpBranch %263
+%263 = OpLabel
+%273 = OpPhi %90 %261 %250 %272 %262
+OpStore %93 %273
+%274 = OpLoad %90 %93
+OpSelectionMerge %276 None
+OpBranchConditional %274 %275 %276
+%275 = OpLabel
+%278 = OpLoad %26 %94
+%279 = OpVectorShuffle %18 %278 %278 0 1
+OpStore %277 %279
+OpStore %280 %132
+%281 = OpFunctionCall %2 %22 %277 %280
+%282 = OpAccessChain %102 %9 %30 %281
+%283 = OpLoad %2 %282
+%284 = OpLoad %2 %89
+%285 = OpIEqual %90 %283 %284
+OpBranch %276
+%276 = OpLabel
+%286 = OpPhi %90 %274 %263 %285 %275
+OpStore %93 %286
+%287 = OpLoad %90 %93
+OpSelectionMerge %289 None
+OpBranchConditional %287 %288 %289
+%288 = OpLabel
+%291 = OpLoad %26 %94
+%292 = OpVectorShuffle %18 %291 %291 0 1
+OpStore %290 %292
+OpStore %293 %139
+%294 = OpFunctionCall %2 %22 %290 %293
+%295 = OpAccessChain %102 %9 %30 %294
+%296 = OpLoad %2 %295
+%297 = OpLoad %2 %89
+%298 = OpIEqual %90 %296 %297
+OpBranch %289
+%289 = OpLabel
+%299 = OpPhi %90 %287 %276 %298 %288
+OpStore %93 %299
+%300 = OpLoad %90 %93
+OpSelectionMerge %302 None
+OpBranchConditional %300 %301 %302
+%301 = OpLabel
+%304 = OpLoad %26 %94
+%305 = OpVectorShuffle %18 %304 %304 0 1
+OpStore %303 %305
+OpStore %306 %146
+%307 = OpFunctionCall %2 %22 %303 %306
+%308 = OpAccessChain %102 %9 %30 %307
+%309 = OpLoad %2 %308
+%310 = OpLoad %2 %89
+%311 = OpIEqual %90 %309 %310
+OpBranch %302
+%302 = OpLabel
+%312 = OpPhi %90 %300 %289 %311 %301
+OpStore %93 %312
+%313 = OpLoad %2 %79
+%314 = OpLoad %90 %93
+%315 = OpSelect %2 %314 %104 %111
+%316 = OpAccessChain %102 %6 %30 %313
+OpStore %316 %315
+OpReturn
+OpFunctionEnd
+
+INFO: Yuxin Debug transformed SpirV: 
+INFO: Dissembly SPIRV: ; SPIR-V
+; Version: 1.0
+; Generator: Google ANGLE Shader Compiler; 1
+; Bound: 319
+; Schema: 0
+OpCapability Shader
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %66 "main" %28 %29 %68 %94
+OpExecutionMode %66 LocalSize 16 8 1
+OpSource GLSL 450
+OpName %4 "_uOutput"
+OpMemberName %4 0 "_uvalues"
+OpName %6 "_usb_result"
+OpName %7 "_uStorage0"
+OpMemberName %7 0 "_uvalues"
+OpName %9 "_usb_store0"
+OpName %10 "_uStorage1"
+OpMemberName %10 0 "_uvalues"
+OpName %12 "_usb_store1"
+OpName %15 "ANGLEUniformBlock"
+OpMemberName %15 0 "acbBufferOffsets"
+OpName %17 "ANGLEUniforms"
+OpName %23 "_ulocalID"
+OpName %24 "_uelement"
+OpName %22 "_ugetIndex"
+OpName %28 "gl_NumWorkGroups"
+OpName %29 "gl_WorkGroupID"
+OpName %42 "_ugroupNdx"
+OpName %66 "main"
+OpName %68 "gl_GlobalInvocationID"
+OpName %79 "_uresultNdx"
+OpName %89 "_ugroupNdx"
+OpName %93 "_uallOk"
+OpName %94 "gl_LocalInvocationID"
+OpName %96 "param"
+OpName %99 "param"
+OpName %105 "param"
+OpName %108 "param"
+OpName %112 "param"
+OpName %115 "param"
+OpName %119 "param"
+OpName %122 "param"
+OpName %126 "param"
+OpName %129 "param"
+OpName %133 "param"
+OpName %136 "param"
+OpName %140 "param"
+OpName %143 "param"
+OpName %147 "param"
+OpName %150 "param"
+OpName %153 "param"
+OpName %156 "param"
+OpName %160 "param"
+OpName %163 "param"
+OpName %167 "param"
+OpName %170 "param"
+OpName %174 "param"
+OpName %177 "param"
+OpName %181 "param"
+OpName %184 "param"
+OpName %188 "param"
+OpName %191 "param"
+OpName %195 "param"
+OpName %198 "param"
+OpName %202 "param"
+OpName %205 "param"
+OpName %212 "param"
+OpName %215 "param"
+OpName %225 "param"
+OpName %228 "param"
+OpName %238 "param"
+OpName %241 "param"
+OpName %251 "param"
+OpName %254 "param"
+OpName %264 "param"
+OpName %267 "param"
+OpName %277 "param"
+OpName %280 "param"
+OpName %290 "param"
+OpName %293 "param"
+OpName %303 "param"
+OpName %306 "param"
+OpDecorate %3 ArrayStride 4
+OpMemberDecorate %4 0 Offset 0
+OpDecorate %4 BufferBlock
+OpDecorate %6 DescriptorSet 2
+OpDecorate %6 Binding 0
+OpMemberDecorate %7 0 Offset 0
+OpMemberDecorate %7 0 Coherent
+OpDecorate %7 BufferBlock
+OpDecorate %9 DescriptorSet 2
+OpDecorate %9 Binding 1
+OpMemberDecorate %10 0 Offset 0
+OpMemberDecorate %10 0 Coherent
+OpDecorate %10 BufferBlock
+OpDecorate %12 DescriptorSet 2
+OpDecorate %12 Binding 2
+OpMemberDecorate %15 0 Offset 0
+OpDecorate %15 Block
+OpDecorate %28 BuiltIn NumWorkgroups
+OpDecorate %29 BuiltIn WorkgroupId
+OpDecorate %68 BuiltIn GlobalInvocationId
+OpDecorate %94 BuiltIn LocalInvocationId
+%2 = OpTypeInt 32 1
+%3 = OpTypeRuntimeArray %2
+%4 = OpTypeStruct %3
+%7 = OpTypeStruct %3
+%10 = OpTypeStruct %3
+%13 = OpTypeInt 32 0
+%14 = OpTypeVector %13 4
+%15 = OpTypeStruct %14
+%18 = OpTypeVector %13 2
+%26 = OpTypeVector %13 3
+%30 = OpConstant %13 0
+%34 = OpConstant %13 1
+%51 = OpConstant %13 16
+%60 = OpConstant %2 8
+%64 = OpTypeVoid
+%90 = OpTypeBool
+%91 = OpConstantTrue %90
+%95 = OpConstant %2 0
+%101 = OpConstant %2 456
+%104 = OpConstant %2 1
+%111 = OpConstant %2 2
+%118 = OpConstant %2 3
+%125 = OpConstant %2 4
+%132 = OpConstant %2 5
+%139 = OpConstant %2 6
+%146 = OpConstant %2 7
+%5 = OpTypePointer Uniform %4
+%8 = OpTypePointer Uniform %7
+%11 = OpTypePointer Uniform %10
+%16 = OpTypePointer PushConstant %15
+%19 = OpTypePointer Function %18
+%20 = OpTypePointer Function %2
+%317 = OpTypePointer Private %26
+%27 = OpTypePointer Input %26
+%318 = OpTypePointer Private %13
+%31 = OpTypePointer Input %13
+%41 = OpTypePointer Function %13
+%92 = OpTypePointer Function %90
+%102 = OpTypePointer Uniform %2
+%21 = OpTypeFunction %2 %19 %20
+%65 = OpTypeFunction %64
+%6 = OpVariable %5 Uniform
+%9 = OpVariable %8 Uniform
+%12 = OpVariable %11 Uniform
+%17 = OpVariable %16 PushConstant
+%28 = OpVariable %27 Input
+%29 = OpVariable %27 Input
+%68 = OpVariable %27 Input
+%94 = OpVariable %27 Input
+%22 = OpFunction %2 None %21
+%23 = OpFunctionParameter %19
+%24 = OpFunctionParameter %20
+%25 = OpLabel
+%42 = OpVariable %41 Function
+%32 = OpAccessChain %31 %28 %30
+%33 = OpLoad %13 %32
+%35 = OpAccessChain %31 %29 %34
+%36 = OpLoad %13 %35
+%37 = OpIMul %13 %33 %36
+%38 = OpAccessChain %31 %29 %30
+%39 = OpLoad %13 %38
+%40 = OpIAdd %13 %37 %39
+OpStore %42 %40
+%43 = OpAccessChain %41 %23 %34
+%44 = OpLoad %13 %43
+%45 = OpAccessChain %31 %28 %30
+%46 = OpLoad %13 %45
+%47 = OpIMul %13 %44 %46
+%48 = OpAccessChain %31 %28 %34
+%49 = OpLoad %13 %48
+%50 = OpIMul %13 %47 %49
+%52 = OpIMul %13 %50 %51
+%53 = OpLoad %13 %42
+%54 = OpIMul %13 %53 %51
+%55 = OpIAdd %13 %52 %54
+%56 = OpAccessChain %41 %23 %30
+%57 = OpLoad %13 %56
+%58 = OpIAdd %13 %55 %57
+%59 = OpBitcast %2 %58
+%61 = OpIMul %2 %59 %60
+%62 = OpLoad %2 %24
+%63 = OpIAdd %2 %61 %62
+OpReturnValue %63
+OpFunctionEnd
+%66 = OpFunction %64 None %65
+%67 = OpLabel
+%79 = OpVariable %20 Function
+%89 = OpVariable %20 Function
+%93 = OpVariable %92 Function %91
+%96 = OpVariable %19 Function
+%99 = OpVariable %20 Function
+%105 = OpVariable %19 Function
+%108 = OpVariable %20 Function
+%112 = OpVariable %19 Function
+%115 = OpVariable %20 Function
+%119 = OpVariable %19 Function
+%122 = OpVariable %20 Function
+%126 = OpVariable %19 Function
+%129 = OpVariable %20 Function
+%133 = OpVariable %19 Function
+%136 = OpVariable %20 Function
+%140 = OpVariable %19 Function
+%143 = OpVariable %20 Function
+%147 = OpVariable %19 Function
+%150 = OpVariable %20 Function
+%153 = OpVariable %19 Function
+%156 = OpVariable %20 Function
+%160 = OpVariable %19 Function
+%163 = OpVariable %20 Function
+%167 = OpVariable %19 Function
+%170 = OpVariable %20 Function
+%174 = OpVariable %19 Function
+%177 = OpVariable %20 Function
+%181 = OpVariable %19 Function
+%184 = OpVariable %20 Function
+%188 = OpVariable %19 Function
+%191 = OpVariable %20 Function
+%195 = OpVariable %19 Function
+%198 = OpVariable %20 Function
+%202 = OpVariable %19 Function
+%205 = OpVariable %20 Function
+%212 = OpVariable %19 Function
+%215 = OpVariable %20 Function
+%225 = OpVariable %19 Function
+%228 = OpVariable %20 Function
+%238 = OpVariable %19 Function
+%241 = OpVariable %20 Function
+%251 = OpVariable %19 Function
+%254 = OpVariable %20 Function
+%264 = OpVariable %19 Function
+%267 = OpVariable %20 Function
+%277 = OpVariable %19 Function
+%280 = OpVariable %20 Function
+%290 = OpVariable %19 Function
+%293 = OpVariable %20 Function
+%303 = OpVariable %19 Function
+%306 = OpVariable %20 Function
+%69 = OpAccessChain %31 %68 %34
+%70 = OpLoad %13 %69
+%71 = OpAccessChain %31 %28 %30
+%72 = OpLoad %13 %71
+%73 = OpIMul %13 %70 %72
+%74 = OpIMul %13 %73 %51
+%75 = OpAccessChain %31 %68 %30
+%76 = OpLoad %13 %75
+%77 = OpIAdd %13 %74 %76
+%78 = OpBitcast %2 %77
+OpStore %79 %78
+%80 = OpAccessChain %31 %28 %30
+%81 = OpLoad %13 %80
+%82 = OpAccessChain %31 %29 %34
+%83 = OpLoad %13 %82
+%84 = OpIMul %13 %81 %83
+%85 = OpAccessChain %31 %29 %30
+%86 = OpLoad %13 %85
+%87 = OpIAdd %13 %84 %86
+%88 = OpBitcast %2 %87
+OpStore %89 %88
+%97 = OpLoad %26 %94
+%98 = OpVectorShuffle %18 %97 %97 0 1
+OpStore %96 %98
+OpStore %99 %95
+%100 = OpFunctionCall %2 %22 %96 %99
+%103 = OpAccessChain %102 %9 %30 %100
+OpStore %103 %101
+%106 = OpLoad %26 %94
+%107 = OpVectorShuffle %18 %106 %106 0 1
+OpStore %105 %107
+OpStore %108 %104
+%109 = OpFunctionCall %2 %22 %105 %108
+%110 = OpAccessChain %102 %9 %30 %109
+OpStore %110 %101
+%113 = OpLoad %26 %94
+%114 = OpVectorShuffle %18 %113 %113 0 1
+OpStore %112 %114
+OpStore %115 %111
+%116 = OpFunctionCall %2 %22 %112 %115
+%117 = OpAccessChain %102 %9 %30 %116
+OpStore %117 %101
+%120 = OpLoad %26 %94
+%121 = OpVectorShuffle %18 %120 %120 0 1
+OpStore %119 %121
+OpStore %122 %118
+%123 = OpFunctionCall %2 %22 %119 %122
+%124 = OpAccessChain %102 %9 %30 %123
+OpStore %124 %101
+%127 = OpLoad %26 %94
+%128 = OpVectorShuffle %18 %127 %127 0 1
+OpStore %126 %128
+OpStore %129 %125
+%130 = OpFunctionCall %2 %22 %126 %129
+%131 = OpAccessChain %102 %9 %30 %130
+OpStore %131 %101
+%134 = OpLoad %26 %94
+%135 = OpVectorShuffle %18 %134 %134 0 1
+OpStore %133 %135
+OpStore %136 %132
+%137 = OpFunctionCall %2 %22 %133 %136
+%138 = OpAccessChain %102 %9 %30 %137
+OpStore %138 %101
+%141 = OpLoad %26 %94
+%142 = OpVectorShuffle %18 %141 %141 0 1
+OpStore %140 %142
+OpStore %143 %139
+%144 = OpFunctionCall %2 %22 %140 %143
+%145 = OpAccessChain %102 %9 %30 %144
+OpStore %145 %101
+%148 = OpLoad %26 %94
+%149 = OpVectorShuffle %18 %148 %148 0 1
+OpStore %147 %149
+OpStore %150 %146
+%151 = OpFunctionCall %2 %22 %147 %150
+%152 = OpAccessChain %102 %9 %30 %151
+OpStore %152 %101
+%154 = OpLoad %26 %94
+%155 = OpVectorShuffle %18 %154 %154 0 1
+OpStore %153 %155
+OpStore %156 %95
+%157 = OpFunctionCall %2 %22 %153 %156
+%158 = OpLoad %2 %89
+%159 = OpAccessChain %102 %12 %30 %157
+OpStore %159 %158
+%161 = OpLoad %26 %94
+%162 = OpVectorShuffle %18 %161 %161 0 1
+OpStore %160 %162
+OpStore %163 %104
+%164 = OpFunctionCall %2 %22 %160 %163
+%165 = OpLoad %2 %89
+%166 = OpAccessChain %102 %12 %30 %164
+OpStore %166 %165
+%168 = OpLoad %26 %94
+%169 = OpVectorShuffle %18 %168 %168 0 1
+OpStore %167 %169
+OpStore %170 %111
+%171 = OpFunctionCall %2 %22 %167 %170
+%172 = OpLoad %2 %89
+%173 = OpAccessChain %102 %12 %30 %171
+OpStore %173 %172
+%175 = OpLoad %26 %94
+%176 = OpVectorShuffle %18 %175 %175 0 1
+OpStore %174 %176
+OpStore %177 %118
+%178 = OpFunctionCall %2 %22 %174 %177
+%179 = OpLoad %2 %89
+%180 = OpAccessChain %102 %12 %30 %178
+OpStore %180 %179
+%182 = OpLoad %26 %94
+%183 = OpVectorShuffle %18 %182 %182 0 1
+OpStore %181 %183
+OpStore %184 %125
+%185 = OpFunctionCall %2 %22 %181 %184
+%186 = OpLoad %2 %89
+%187 = OpAccessChain %102 %12 %30 %185
+OpStore %187 %186
+%189 = OpLoad %26 %94
+%190 = OpVectorShuffle %18 %189 %189 0 1
+OpStore %188 %190
+OpStore %191 %132
+%192 = OpFunctionCall %2 %22 %188 %191
+%193 = OpLoad %2 %89
+%194 = OpAccessChain %102 %12 %30 %192
+OpStore %194 %193
+%196 = OpLoad %26 %94
+%197 = OpVectorShuffle %18 %196 %196 0 1
+OpStore %195 %197
+OpStore %198 %139
+%199 = OpFunctionCall %2 %22 %195 %198
+%200 = OpLoad %2 %89
+%201 = OpAccessChain %102 %12 %30 %199
+OpStore %201 %200
+%203 = OpLoad %26 %94
+%204 = OpVectorShuffle %18 %203 %203 0 1
+OpStore %202 %204
+OpStore %205 %146
+%206 = OpFunctionCall %2 %22 %202 %205
+%207 = OpLoad %2 %89
+%208 = OpAccessChain %102 %12 %30 %206
+OpStore %208 %207
+%209 = OpLoad %90 %93
+OpSelectionMerge %211 None
+OpBranchConditional %209 %210 %211
+%210 = OpLabel
+%213 = OpLoad %26 %94
+%214 = OpVectorShuffle %18 %213 %213 0 1
+OpStore %212 %214
+OpStore %215 %95
+%216 = OpFunctionCall %2 %22 %212 %215
+%217 = OpAccessChain %102 %9 %30 %216
+%218 = OpLoad %2 %217
+%219 = OpLoad %2 %89
+%220 = OpIEqual %90 %218 %219
+OpBranch %211
+%211 = OpLabel
+%221 = OpPhi %90 %209 %67 %220 %210
+OpStore %93 %221
+%222 = OpLoad %90 %93
+OpSelectionMerge %224 None
+OpBranchConditional %222 %223 %224
+%223 = OpLabel
+%226 = OpLoad %26 %94
+%227 = OpVectorShuffle %18 %226 %226 0 1
+OpStore %225 %227
+OpStore %228 %104
+%229 = OpFunctionCall %2 %22 %225 %228
+%230 = OpAccessChain %102 %9 %30 %229
+%231 = OpLoad %2 %230
+%232 = OpLoad %2 %89
+%233 = OpIEqual %90 %231 %232
+OpBranch %224
+%224 = OpLabel
+%234 = OpPhi %90 %222 %211 %233 %223
+OpStore %93 %234
+%235 = OpLoad %90 %93
+OpSelectionMerge %237 None
+OpBranchConditional %235 %236 %237
+%236 = OpLabel
+%239 = OpLoad %26 %94
+%240 = OpVectorShuffle %18 %239 %239 0 1
+OpStore %238 %240
+OpStore %241 %111
+%242 = OpFunctionCall %2 %22 %238 %241
+%243 = OpAccessChain %102 %9 %30 %242
+%244 = OpLoad %2 %243
+%245 = OpLoad %2 %89
+%246 = OpIEqual %90 %244 %245
+OpBranch %237
+%237 = OpLabel
+%247 = OpPhi %90 %235 %224 %246 %236
+OpStore %93 %247
+%248 = OpLoad %90 %93
+OpSelectionMerge %250 None
+OpBranchConditional %248 %249 %250
+%249 = OpLabel
+%252 = OpLoad %26 %94
+%253 = OpVectorShuffle %18 %252 %252 0 1
+OpStore %251 %253
+OpStore %254 %118
+%255 = OpFunctionCall %2 %22 %251 %254
+%256 = OpAccessChain %102 %9 %30 %255
+%257 = OpLoad %2 %256
+%258 = OpLoad %2 %89
+%259 = OpIEqual %90 %257 %258
+OpBranch %250
+%250 = OpLabel
+%260 = OpPhi %90 %248 %237 %259 %249
+OpStore %93 %260
+%261 = OpLoad %90 %93
+OpSelectionMerge %263 None
+OpBranchConditional %261 %262 %263
+%262 = OpLabel
+%265 = OpLoad %26 %94
+%266 = OpVectorShuffle %18 %265 %265 0 1
+OpStore %264 %266
+OpStore %267 %125
+%268 = OpFunctionCall %2 %22 %264 %267
+%269 = OpAccessChain %102 %9 %30 %268
+%270 = OpLoad %2 %269
+%271 = OpLoad %2 %89
+%272 = OpIEqual %90 %270 %271
+OpBranch %263
+%263 = OpLabel
+%273 = OpPhi %90 %261 %250 %272 %262
+OpStore %93 %273
+%274 = OpLoad %90 %93
+OpSelectionMerge %276 None
+OpBranchConditional %274 %275 %276
+%275 = OpLabel
+%278 = OpLoad %26 %94
+%279 = OpVectorShuffle %18 %278 %278 0 1
+OpStore %277 %279
+OpStore %280 %132
+%281 = OpFunctionCall %2 %22 %277 %280
+%282 = OpAccessChain %102 %9 %30 %281
+%283 = OpLoad %2 %282
+%284 = OpLoad %2 %89
+%285 = OpIEqual %90 %283 %284
+OpBranch %276
+%276 = OpLabel
+%286 = OpPhi %90 %274 %263 %285 %275
+OpStore %93 %286
+%287 = OpLoad %90 %93
+OpSelectionMerge %289 None
+OpBranchConditional %287 %288 %289
+%288 = OpLabel
+%291 = OpLoad %26 %94
+%292 = OpVectorShuffle %18 %291 %291 0 1
+OpStore %290 %292
+OpStore %293 %139
+%294 = OpFunctionCall %2 %22 %290 %293
+%295 = OpAccessChain %102 %9 %30 %294
+%296 = OpLoad %2 %295
+%297 = OpLoad %2 %89
+%298 = OpIEqual %90 %296 %297
+OpBranch %289
+%289 = OpLabel
+%299 = OpPhi %90 %287 %276 %298 %288
+OpStore %93 %299
+%300 = OpLoad %90 %93
+OpSelectionMerge %302 None
+OpBranchConditional %300 %301 %302
+%301 = OpLabel
+%304 = OpLoad %26 %94
+%305 = OpVectorShuffle %18 %304 %304 0 1
+OpStore %303 %305
+OpStore %306 %146
+%307 = OpFunctionCall %2 %22 %303 %306
+%308 = OpAccessChain %102 %9 %30 %307
+%309 = OpLoad %2 %308
+%310 = OpLoad %2 %89
+%311 = OpIEqual %90 %309 %310
+OpBranch %302
+%302 = OpLabel
+%312 = OpPhi %90 %300 %289 %311 %301
+OpStore %93 %312
+%313 = OpLoad %2 %79
+%314 = OpLoad %90 %93
+%315 = OpSelect %2 %314 %104 %111
+%316 = OpAccessChain %102 %6 %30 %313
+OpStore %316 %315
+OpReturn
+OpFunctionEnd
+
+INFO: GL performance: HIGH: GPU stall due to mapping device local buffer
+[       OK ] ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan (496 ms)
+[----------] 1 test from ComputeShaderTest (496 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (519 ms total)
+[  PASSED  ] 1 test.
