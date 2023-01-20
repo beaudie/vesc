@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9d902be_4481e715",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1978,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-20T18:40:09Z",
+      "side": 1,
+      "message": "Please do this for all the memory qualifiers, not just coherent",
+      "revId": "27e6b1f992c870b3fc8ece17994056a959029b85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
