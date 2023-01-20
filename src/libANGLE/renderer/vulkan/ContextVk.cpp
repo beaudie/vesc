@@ -6979,11 +6979,6 @@ void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags sta
     mWaitSemaphoreStageMasks.push_back(stageMask);
 }
 
-angle::Result ContextVk::checkCompletedCommands()
-{
-    return mRenderer->checkCompletedCommands(this);
-}
-
 angle::Result ContextVk::getCompatibleRenderPass(const vk::RenderPassDesc &desc,
                                                  const vk::RenderPass **renderPassOut)
 {
