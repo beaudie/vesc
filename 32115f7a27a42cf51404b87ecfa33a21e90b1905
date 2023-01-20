@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d823462_8e7ff8d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-01-20T19:18:40Z",
+      "side": 1,
+      "message": "Quick followup from https://chromium-review.googlesource.com/c/angle/angle/+/4112763/7/src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp#304",
+      "revId": "32115f7a27a42cf51404b87ecfa33a21e90b1905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
