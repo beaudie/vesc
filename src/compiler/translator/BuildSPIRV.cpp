@@ -1969,6 +1969,14 @@ void SPIRVBuilder::writeMemberDecorations(const SpirvType &type, spirv::IdRef ty
                                        {});
         }
 
+        // Add coherent memory qualifier decoration to buffer members
+        if (fieldType.getMemoryQualifier().coherent)
+        {
+            spirv::WriteMemberDecorate(&mSpirvDecorations, typeId,
+                                       spirv::LiteralInteger(fieldIndex), spv::DecorationCoherent,
+                                       {});
+        }
+
         // Add matrix decorations if any.
         if (fieldType.isMatrix())
         {
