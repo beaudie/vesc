@@ -254,12 +254,14 @@ class MemoryAllocationTracker : angle::NonCopyable
     // Memory allocation data per memory heap. To update the data, a mutex is used.
     std::mutex mMemoryAllocationMutex;
 
-    using PerHeapMemoryAllocationSizeVector  = std::vector<VkDeviceSize>;
-    using PerHeapMemoryAllocationCountVector = std::vector<uint64_t>;
+    using PerHeapMemoryAllocationSizeArray =
+        std::array<std::atomic<VkDeviceSize>, VK_MAX_MEMORY_HEAPS>;
+    using PerHeapMemoryAllocationCountArray =
+        std::array<std::atomic<uint64_t>, VK_MAX_MEMORY_HEAPS>;
 
-    std::array<PerHeapMemoryAllocationSizeVector, vk::kMemoryAllocationTypeCount>
+    std::array<PerHeapMemoryAllocationSizeArray, vk::kMemoryAllocationTypeCount>
         mActivePerHeapMemoryAllocationsSize;
-    std::array<PerHeapMemoryAllocationCountVector, vk::kMemoryAllocationTypeCount>
+    std::array<PerHeapMemoryAllocationCountArray, vk::kMemoryAllocationTypeCount>
         mActivePerHeapMemoryAllocationsCount;
 
     // Pending memory allocation information is used for logging in case of an allocation error.
