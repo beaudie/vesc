@@ -409,6 +409,28 @@ def gen_image_map_switch_astc_case_tv_watchos(angle_format, angle_to_gl, angle_t
                                      gen_format_assign_code)
 
 
+def gen_image_map_switch_apple_vs_non_apple_case(angle_format, angle_to_gl, angle_to_mtl_map,
+                                                 alternatives_map):
+    gl_format = angle_to_gl[angle_format]
+
+    def gen_format_assign_code(actual_angle_format, angle_to_mtl_map):
+        return image_format_assign_template2.format(
+            actual_angle_format=alternatives_map["apple"][0],
+            mtl_format=alternatives_map["apple"][1],
+            init_function=wrap_init_function(
+                angle_format_utils.get_internal_format_initializer(gl_format,
+                                                                   actual_angle_format)),
+            actual_angle_format_fallback=alternatives_map["non_apple"][0],
+            mtl_format_fallback=alternatives_map["non_apple"][1],
+            init_function_fallback=wrap_init_function(
+                angle_format_utils.get_internal_format_initializer(gl_format,
+                                                                   actual_angle_format)),
+            fallback_condition="display->supportsAppleGPUFamily(1)")
+
+    return gen_image_map_switch_case(angle_format, angle_format, angle_to_mtl_map,
+                                     gen_format_assign_code)
+
+
 def gen_image_map_switch_string(image_table, angle_to_gl):
     angle_override = image_table["override"]
     mac_override = image_table["override_mac"]
@@ -422,6 +444,7 @@ def gen_image_map_switch_string(image_table, angle_to_gl):
     astc_tpl_map = image_table["map_astc_tpl"]
     sim_specific_map = image_table["map_sim"]
     sim_override = image_table["override_sim"]
+    apple_vs_non_apple_map = image_table["map_apple_vs_non_apple_gpus"]
 
     # mac_specific_map + angle_to_mtl:
     mac_angle_to_mtl = mac_specific_map.copy()
@@ -443,6 +466,9 @@ def gen_image_map_switch_string(image_table, angle_to_gl):
         switch_data += gen_image_map_switch_common_case(angle_format, angle_format)
     for angle_format in sorted(angle_override.keys()):
         switch_data += gen_image_map_switch_common_case(angle_format, angle_override[angle_format])
+    for angle_format in sorted(apple_vs_non_apple_map.keys()):
+        switch_data += gen_image_map_switch_apple_vs_non_apple_case(
+            angle_format, angle_to_gl, angle_to_mtl, apple_vs_non_apple_map[angle_format])
 
     # Mac GPU case: macOS + Catalyst targets
     switch_data += "#if TARGET_OS_OSX || TARGET_OS_MACCATALYST\n"
