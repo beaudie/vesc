@@ -1673,6 +1673,7 @@ void GenerateCaps(const FunctionsGL *functions,
     if (features.supportsShaderFramebufferFetchEXT.enabled)
     {
         extensions->shaderFramebufferFetchEXT = true;
+        extensions->shaderFramebufferFetchARM = true;
     }
 
     // EXT_shader_framebuffer_fetch_non_coherent.
