@@ -50,6 +50,29 @@
       "message": "I don\u0027t remember the exact reason why we overrode `D16_UNORM` to `D32_FLOAT` on Mac. Based on the features set table https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf, `Depth16Unorm` is actually supported on all GPU family. So we should be fine removing the override entirely?\n\nIf I remember correctly, probably the override was added by Apple to work-around some dEQP test failures?",
       "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7abb161b_5f7e5df4",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-21T10:21:27Z",
+      "side": 1,
+      "message": "Consider adding D16 to per-platform maps, consolidating the D32F fallback with the existing `d24s8_fallbacks_mac` map, and moving fallback conditions to JSON to have all depth-related substitutions defined in one place.\n\nSomething like\n```\n\"depth_fallbacks_mac\": {\n    \"D24_UNORM_S8_UINT\": {\n        \"format\": \"D32_FLOAT_S8X24_UINT\",\n        \"condition\": \"metalDevice.depth24Stencil8PixelFormatSupported \u0026\u0026 !display-\u003egetFeatures().forceD24S8AsUnsupported.enabled\"\n    },\n    \"D16_UNORM\": {\n        \"format\": \"D32_FLOAT\",\n        \"condition\": \"display-\u003esupportsAppleGPUFamily(1)\"\n    }\n}\n```",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 10
+      },
+      "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
