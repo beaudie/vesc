@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd2e557_2da63b05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-21T00:37:05Z",
+      "side": 1,
+      "message": "Gregg and Quyen: could you please review this change? I\u0027ve verified on an M1 Mac that MTLPixelFormatDepth16Unorm is used and that the test passes, and on an Intel Mac that MTLPixelFormatDepth32Float is used and that the test still passes. Also verified that on the Intel Mac (even using the AMD GPU) that forcing D16_UNORM makes the test fail.\n\nI can\u0027t test on iOS and don\u0027t know how to do so with the simulator. The Metal Feature Set table indicates that MTLPixelFormatDepth16Unorm should work everywhere. The iOS Simulator docs\u0027 only relevant restriction is that only combined depth+stencil attachments are supported. Since MTLPixelFormatDepth16Unorm is not being used with a stencil buffer I assume it should work.\n\nAlexey, thanks for the hint that this approach might work.\n\nApple folks: heads up. This might change the behavior of WebGL\u0027s default back buffer on iOS.\n\nAny feedback welcome. Thanks.",
+      "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
