@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43f23f32_e9433f72",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-21T03:30:47Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 751,
+        "startChar": 0,
+        "endLine": 755,
+        "endChar": 1
+      },
+      "revId": "78296928c085ba3a642d29bae280f10fda6ab791",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
