@@ -33,6 +33,23 @@
       "message": "Those flakes are definitely unrelated. Trying again.",
       "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "279269a2_5dbc2800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-01-21T07:17:23Z",
+      "side": 1,
+      "message": "I don\u0027t remember the exact reason why we overrode `D16_UNORM` to `D32_FLOAT` on Mac. Based on the features set table https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf, `Depth16Unorm` is actually supported on all GPU family. So we should be fine removing the override entirely?\n\nIf I remember correctly, probably the override was added by Apple to work-around some dEQP test failures?",
+      "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
