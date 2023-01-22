@@ -142,7 +142,6 @@ class TCompiler : public TShHandleBase
     ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     ShShaderOutput getOutputType() const { return mOutputType; }
     ShBuiltInResources getBuiltInResources() const { return mResources; }
-    const std::string &getBuiltInResourcesString() const { return mBuiltInResourcesString; }
 
     bool isHighPrecisionSupported() const;
 
@@ -260,8 +259,6 @@ class TCompiler : public TShHandleBase
   private:
     // Initialize symbol-table with built-in symbols.
     bool initBuiltInSymbolTable(const ShBuiltInResources &resources);
-    // Compute the string representation of the built-in resources
-    void setResourceString();
     // Return false if the call depth is exceeded.
     bool checkCallDepth();
     // Insert statements to reference all members in unused uniform blocks with standard and shared
@@ -321,7 +318,6 @@ class TCompiler : public TShHandleBase
     std::vector<TFunctionMetadata> mFunctionMetadata;
 
     ShBuiltInResources mResources;
-    std::string mBuiltInResourcesString;
 
     // Built-in symbol table for the given language, spec, and resources.
     // It is preserved from compile-to-compile.

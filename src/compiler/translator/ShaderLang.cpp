@@ -381,13 +381,6 @@ ShBuiltInResources GetBuiltInResources(const ShHandle handle)
     return compiler->getBuiltInResources();
 }
 
-const std::string &GetBuiltInResourcesString(const ShHandle handle)
-{
-    TCompiler *compiler = GetCompilerFromHandle(handle);
-    ASSERT(compiler);
-    return compiler->getBuiltInResourcesString();
-}
-
 //
 // Do an actual compile on the given strings.  The result is left
 // in the given compile object.
