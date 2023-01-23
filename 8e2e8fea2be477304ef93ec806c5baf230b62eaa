@@ -33,6 +33,40 @@
       "message": "looks like an external module (chromium browser) is relying on the interface, will add workaround to get past build error",
       "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02a39453_fac42c82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T18:02:13Z",
+      "side": 1,
+      "message": "LGTM generally, but we\u0027d need a CL in Chromium\u0027s validating command decoder to remove usage of this API first. Let me find someone to do that first.\n\nIn the meantime, feel free to split the change in two; one that changes ANGLE and one that removes the now-unused function. We\u0027ll land the latter after the Chromium CL.",
+      "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb27465_fbb1e1f8",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T18:02:13Z",
+      "side": 1,
+      "message": "nit: Please call a version of `getShaderKey` that takes a `BinaryOutputStream` and fills in the relevant bits. It\u0027s weird to have the shader make a key, then have it copied over. Especially also as the program is no longer able to verify that the there is no shader key collision.",
+      "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
