@@ -16,6 +16,23 @@
       "message": "Alexey, since you previously reviewed this and since Quyen\u0027s OOO, could you officially review? Thanks.",
       "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b39cfd4a_c34290d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-01-23T21:18:10Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
