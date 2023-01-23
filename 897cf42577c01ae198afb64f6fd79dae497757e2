@@ -73,6 +73,30 @@
       },
       "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6987f1b6_e8227ce8",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-23T20:47:26Z",
+      "side": 1,
+      "message": "Thanks for the good suggestion. Done. The result is much cleaner. I double-checked the generated code and think all the cases are in the correct place. Re-verified that the test continues to pass on Intel-based and M1 Macs.",
+      "parentUuid": "7abb161b_5f7e5df4",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 10
+      },
+      "revId": "897cf42577c01ae198afb64f6fd79dae497757e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
