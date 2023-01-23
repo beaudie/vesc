@@ -16,6 +16,24 @@
       "message": "nit: move to vk_utils.h if possible",
       "revId": "255f6c48cdeccd49e7650a6e009d590237a9f3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b811673f_45e17edc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-23T18:09:40Z",
+      "side": 1,
+      "message": "Or, to its own dedicated files, since these are a standalone functionality. And that can be a separate CL for mechanical change.",
+      "parentUuid": "353dcab5_311309da",
+      "revId": "255f6c48cdeccd49e7650a6e009d590237a9f3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
