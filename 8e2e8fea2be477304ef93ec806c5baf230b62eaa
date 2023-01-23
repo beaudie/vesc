@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "911810b4_e95bf3af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-23T19:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c18e3397_8af21d99",
+      "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bb27465_fbb1e1f8",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-01-23T18:02:13Z",
       "side": 1,
       "message": "nit: Please call a version of `getShaderKey` that takes a `BinaryOutputStream` and fills in the relevant bits. It\u0027s weird to have the shader make a key, then have it copied over. Especially also as the program is no longer able to verify that the there is no shader key collision.",
+      "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca80280e_c7742799",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-23T19:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bb27465_fbb1e1f8",
       "revId": "8e2e8fea2be477304ef93ec806c5baf230b62eaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
