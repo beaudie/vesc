@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74855164_7828df39",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1501,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:25:03Z",
+      "side": 1,
+      "message": "Move to header?",
+      "range": {
+        "startLine": 1493,
+        "startChar": 0,
+        "endLine": 1501,
+        "endChar": 1
+      },
+      "revId": "8ec47ffe0bba31881d534a4f82b780ef7d5220bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a6dc23d_990361f0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:25:03Z",
+      "side": 1,
+      "message": "Please place this in `namespace priv`",
+      "revId": "8ec47ffe0bba31881d534a4f82b780ef7d5220bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae4a5a5a_b0ca7b4b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:25:03Z",
+      "side": 1,
+      "message": "Per our discussion, here or in follow up please turn this inheritance into composition",
+      "revId": "8ec47ffe0bba31881d534a4f82b780ef7d5220bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
