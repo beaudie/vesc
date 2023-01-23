@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c09ab2dd_d08d0376",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:20:58Z",
+      "side": 1,
+      "message": "nit: comment that this could be optimized to only do the work up to `use`",
+      "revId": "290351c1a3a7ddd93b6d96088f79ae7853b659b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
