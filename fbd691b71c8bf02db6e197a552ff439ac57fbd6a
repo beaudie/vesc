@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30fad97d_992a9603",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "nit: angle::Result and ANGLE_VK_TRY",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 8
+      },
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2c05ad1_81012459",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "nit: angle::Result and ANGLE_VK_TRY\n\nFor getStatus too. You can return VK_TIMEOUT/VK_NOT_READY through a bool* or VkResult* output",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 8
+      },
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a162c68_45153be7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "I think fenceOut should be reset first no matter what. It\u0027s obviously one the caller didn\u0027t care about.\n\nAnd I\u0027d also suggest moving fence allocation here, so fetch never fails.",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c6e891a_55e3af5c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1580,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "But garbage is not being cleaned up?",
+      "range": {
+        "startLine": 1579,
+        "startChar": 73,
+        "endLine": 1580,
+        "endChar": 19
+      },
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9592573b_5179002d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "Please implement move constructor assignment. CommandBatch is moved, so can this be. Is this ever copied? You could try `angle::NonCopyable` and keep it if everything still compiles (and nothing more could be turned to std::move)!",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd634caf_5435e003",
+        "filename": "src/tests/egl_tests/EGLMultiContextTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:14:59Z",
+      "side": 1,
+      "message": "This means that the wait is over, so threadB is not actually making any use of command queue while threadAs are waiting.\n\nHow about this: threadA (which can be only one not three) signals `ThreadABeforeMap` and threadB waits for it. Then `threadB` starts a loop of draw/readback until `threadA` signals `ThreadAAfterMap`.\n\nSo basically `threadB` limits its work for the duration of `glMapBufferRange`.",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
