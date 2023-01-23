@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 320
+#define ANGLE_SH_VERSION 321
 
 enum ShShaderSpec
 {
@@ -710,13 +710,6 @@ void InitBuiltInResources(ShBuiltInResources *resources);
 // Parameters:
 // handle: Specifies the handle of the compiler to be used.
 ShBuiltInResources GetBuiltInResources(const ShHandle handle);
-
-//
-// Returns the a concatenated list of the items in ShBuiltInResources as a null-terminated string.
-// This function must be updated whenever ShBuiltInResources is changed.
-// Parameters:
-// handle: Specifies the handle of the compiler to be used.
-const std::string &GetBuiltInResourcesString(const ShHandle handle);
 
 //
 // Driver calls these to create and destroy compiler objects.
