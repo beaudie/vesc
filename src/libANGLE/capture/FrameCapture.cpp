@@ -5074,20 +5074,14 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         currentBlendState.sourceBlendAlpha != defaultBlendState.sourceBlendAlpha ||
         currentBlendState.destBlendAlpha != defaultBlendState.destBlendAlpha)
     {
-        if (currentBlendState.sourceBlendRGB == currentBlendState.sourceBlendAlpha &&
-            currentBlendState.destBlendRGB == currentBlendState.destBlendAlpha)
-        {
-            // Color and alpha are equal
-            cap(CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
-                                 currentBlendState.destBlendRGB));
-        }
-        else
-        {
-            // Color and alpha are separate
-            cap(CaptureBlendFuncSeparate(
-                replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
-                currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
-        }
+        cap(CaptureBlendFuncSeparate(
+            replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
+            currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
+        Capture(&resetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                CaptureBlendFuncSeparate(replayState, true, currentBlendState.sourceBlendRGB,
+                                         currentBlendState.destBlendRGB,
+                                         currentBlendState.sourceBlendAlpha,
+                                         currentBlendState.destBlendAlpha));
     }
 
     if (currentBlendState.blendEquationRGB != defaultBlendState.blendEquationRGB ||
@@ -5095,6 +5089,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CaptureBlendEquationSeparate(replayState, true, currentBlendState.blendEquationRGB,
                                          currentBlendState.blendEquationAlpha));
+        Capture(&resetCalls[angle::EntryPoint::GLBlendEquationSeparate],
+                CaptureBlendEquationSeparate(replayState, true, currentBlendState.blendEquationRGB,
+                                             currentBlendState.blendEquationAlpha));
     }
 
     if (currentBlendState.colorMaskRed != defaultBlendState.colorMaskRed ||
@@ -5107,6 +5104,12 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                              gl::ConvertToGLBoolean(currentBlendState.colorMaskGreen),
                              gl::ConvertToGLBoolean(currentBlendState.colorMaskBlue),
                              gl::ConvertToGLBoolean(currentBlendState.colorMaskAlpha)));
+        Capture(&resetCalls[angle::EntryPoint::GLColorMask],
+                CaptureColorMask(replayState, true,
+                                 gl::ConvertToGLBoolean(currentBlendState.colorMaskRed),
+                                 gl::ConvertToGLBoolean(currentBlendState.colorMaskGreen),
+                                 gl::ConvertToGLBoolean(currentBlendState.colorMaskBlue),
+                                 gl::ConvertToGLBoolean(currentBlendState.colorMaskAlpha)));
     }
 
     const gl::ColorF &currentBlendColor = apiState.getBlendColor();
@@ -5114,6 +5117,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CaptureBlendColor(replayState, true, currentBlendColor.red, currentBlendColor.green,
                               currentBlendColor.blue, currentBlendColor.alpha));
+        Capture(&resetCalls[angle::EntryPoint::GLBlendColor],
+                CaptureBlendColor(replayState, true, currentBlendColor.red, currentBlendColor.green,
+                                  currentBlendColor.blue, currentBlendColor.alpha));
     }
 
     // Pixel storage states.
@@ -7258,6 +7264,28 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLBlendFunc:
+        case EntryPoint::GLBlendFuncSeparate:
+        {
+            if (isCaptureActive())
+            {
+                context->getFrameCapture()->getStateResetHelper().setEntryPointDirty(
+                    EntryPoint::GLBlendFuncSeparate);
+            }
+            break;
+        }
+        case EntryPoint::GLBlendEquationSeparate:
+        case EntryPoint::GLColorMask:
+        case EntryPoint::GLBlendColor:
+        {
+            if (isCaptureActive())
+            {
+                context->getFrameCapture()->getStateResetHelper().setEntryPointDirty(
+                    call.entryPoint);
+            }
+            break;
+        }
+
         case EntryPoint::GLEGLImageTargetTexture2DOES:
         {
             gl::TextureType target =
@@ -8091,6 +8119,8 @@ StateResetHelper::~StateResetHelper() = default;
 void StateResetHelper::setDefaultResetCalls(const gl::Context *context,
                                             angle::EntryPoint entryPoint)
 {
+    static const gl::BlendState kDefaultBlendState;
+
     // Populate default reset calls for entrypoints to support looping to beginning
     switch (entryPoint)
     {
@@ -8112,6 +8142,48 @@ void StateResetHelper::setDefaultResetCalls(const gl::Context *context,
                 Capture(&mResetCalls[angle::EntryPoint::GLBindVertexArray],
                         vertexArrayFuncs.bindVertexArray(context->getState(), true, {0}));
             }
+            break;
+        }
+        case angle::EntryPoint::GLBlendFunc:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendFunc],
+                    CaptureBlendFuncSeparate(
+                        context->getState(), true, kDefaultBlendState.sourceBlendRGB,
+                        kDefaultBlendState.sourceBlendRGB, kDefaultBlendState.destBlendRGB,
+                        kDefaultBlendState.destBlendRGB));
+            break;
+        }
+        case angle::EntryPoint::GLBlendFuncSeparate:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                    CaptureBlendFuncSeparate(
+                        context->getState(), true, kDefaultBlendState.sourceBlendRGB,
+                        kDefaultBlendState.destBlendRGB, kDefaultBlendState.sourceBlendAlpha,
+                        kDefaultBlendState.destBlendAlpha));
+            break;
+        }
+        case angle::EntryPoint::GLBlendEquationSeparate:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendEquationSeparate],
+                    CaptureBlendEquationSeparate(context->getState(), true,
+                                                 kDefaultBlendState.blendEquationRGB,
+                                                 kDefaultBlendState.blendEquationAlpha));
+            break;
+        }
+        case angle::EntryPoint::GLColorMask:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLColorMask],
+                    CaptureColorMask(context->getState(), true,
+                                     gl::ConvertToGLBoolean(kDefaultBlendState.colorMaskRed),
+                                     gl::ConvertToGLBoolean(kDefaultBlendState.colorMaskGreen),
+                                     gl::ConvertToGLBoolean(kDefaultBlendState.colorMaskBlue),
+                                     gl::ConvertToGLBoolean(kDefaultBlendState.colorMaskAlpha)));
+            break;
+        }
+        case angle::EntryPoint::GLBlendColor:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendColor],
+                    CaptureBlendColor(context->getState(), true, 0, 0, 0, 0));
             break;
         }
         default:
