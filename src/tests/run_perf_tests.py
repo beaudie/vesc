@@ -671,4 +671,6 @@ def main():
 
 
 if __name__ == '__main__':
+    print(subprocess.check_output(['vulkaninfo', '--json']))
+    raise Exception('test')
     sys.exit(main())
