@@ -88,13 +88,23 @@ class BlendIntegerTest : public ANGLETest<>
                                                GL_COLOR_ATTACHMENT0);
         }
 
-        glEnable(GL_BLEND);
-        glBlendEquation(GL_FUNC_ADD);
-        glBlendFunc(GL_ONE, GL_ONE);
+        for (int i = 0; i < 3; i++)
+        {
+            if (i == 0)
+            {
+                glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+                glBlendFunc(GL_ONE, GL_ONE);
+            }
+            if (i == 1)
+            {
+                glBlendEquationSeparate(GL_FUNC_REVERSE_SUBTRACT, GL_MIN);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            }
 
-        drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
-
-        ASSERT_GL_NO_ERROR();
+            drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f);
+            swapBuffers();
+            ASSERT_GL_NO_ERROR();
+        }
 
         // Enabled blending must be ignored for integer color attachment.
         if (isSigned)
