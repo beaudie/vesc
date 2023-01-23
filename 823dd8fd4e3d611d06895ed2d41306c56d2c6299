@@ -33,6 +33,23 @@
       "message": "lgtm",
       "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61f62a1c_c6240db0",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-23T22:09:54Z",
+      "side": 1,
+      "message": "We should confirm iOS and Simulator mapping updates with Apple to avoid potential reverts after this change gets rolled into WebKit.",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
