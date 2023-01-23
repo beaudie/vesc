@@ -109,6 +109,8 @@ class BlendIntegerTest : public ANGLETest<>
             compareValue<uint32_t, components>(colorValueUnsigned, "colorValueUnsigned",
                                                GL_COLOR_ATTACHMENT0);
         }
+
+        swapBuffers();
     }
 
     template <bool isSigned>

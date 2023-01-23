@@ -4417,6 +4417,12 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     // Track the calls necessary to bind the vertex array back to initial state
     Capture(&resetCalls[angle::EntryPoint::GLBindVertexArray],
             vertexArrayFuncs.bindVertexArray(replayState, true, currentVertexArray->id()));
+    {
+        const gl::BlendState &currentBlendState = apiState.getBlendState();
+        Capture(&resetCalls[angle::EntryPoint::GLBlendFunc],
+                CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
+                                 currentBlendState.destBlendRGB));
+    }
 
     // Capture indexed buffer bindings.
     const gl::BufferVector &uniformIndexedBuffers =
@@ -7258,6 +7264,13 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             break;
         }
 
+        case EntryPoint::GLBlendFunc:
+        {
+            context->getFrameCapture()->getStateResetHelper().setEntryPointDirty(
+                EntryPoint::GLBlendFunc);
+            break;
+        }
+
         case EntryPoint::GLEGLImageTargetTexture2DOES:
         {
             gl::TextureType target =
@@ -8112,6 +8125,12 @@ void StateResetHelper::setDefaultResetCalls(const gl::Context *context,
                 Capture(&mResetCalls[angle::EntryPoint::GLBindVertexArray],
                         vertexArrayFuncs.bindVertexArray(context->getState(), true, {0}));
             }
+            break;
+        }
+        case angle::EntryPoint::GLBlendFunc:
+        {
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendFunc],
+                    CaptureBlendFunc(context->getState(), true, 0, 0));
             break;
         }
         default:
