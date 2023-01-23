@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2453e941_2fde5c2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:49:31Z",
+      "side": 1,
+      "message": "Thanks. There are some syncval failures which may or may not be real. Could you please verify they are bogus before suppressing? The ones I noticed look like one of the suppressions in kSkippedSyncvalMessagesWithoutStoreOpNone (for compute instead of fragment), so if it\u0027s truly because of lack of STORE_OP_NONE, please just suppress it.",
+      "revId": "02941348d06759d7c2ba49dbd322ac408ed1ba54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
