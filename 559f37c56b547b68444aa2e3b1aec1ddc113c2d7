@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4adb19_72c9528a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-23T22:27:40Z",
+      "side": 1,
+      "message": "I\u0027m not sure how far forward the Apple/WebKit folks wanted to carry this supporting code. Let\u0027s let them review.",
+      "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
