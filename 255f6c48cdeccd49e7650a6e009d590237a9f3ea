@@ -34,6 +34,24 @@
       "parentUuid": "353dcab5_311309da",
       "revId": "255f6c48cdeccd49e7650a6e009d590237a9f3ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "460b7519_5f23e4f9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-23T18:37:47Z",
+      "side": 1,
+      "message": "Let\u0027s move this class in a follow-up CL.",
+      "parentUuid": "b811673f_45e17edc",
+      "revId": "255f6c48cdeccd49e7650a6e009d590237a9f3ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
