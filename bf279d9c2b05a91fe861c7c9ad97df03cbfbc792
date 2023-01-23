@@ -33,6 +33,23 @@
       "message": "Ready to merge.\nThere was a failure in the first dry-run. But since this change just removes a test case, it doesn\u0027t change ANGLE code, I re-ran the failing test. And passes.\n\nFor history, here is failure:\n[5487/9891] VertexAttributeTestES3.UnsignedIntNormalized/ES3_OpenGL (FAIL)\n\n[ RUN      ] VertexAttributeTestES3.UnsignedIntNormalized/ES3_OpenGL\n../../src/tests/gl_tests/VertexAttributeTest.cpp:227: Failure\nExpected equality of these values:\n  angle::MakeGLColor(255, 255, 255, 255)\n    Which is: White\n  angle::ReadColor((midPixelX + viewportSize[0]) / 2, midPixelY)\n    Which is: Transparent Black\n../../src/tests/gl_tests/VertexAttributeTest.cpp:228: Failure",
       "revId": "bf279d9c2b05a91fe861c7c9ad97df03cbfbc792",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1c4687_600112ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-23T17:23:27Z",
+      "side": 1,
+      "message": "this is trivial but still would like a +1 from shabi before i land this",
+      "revId": "bf279d9c2b05a91fe861c7c9ad97df03cbfbc792",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
