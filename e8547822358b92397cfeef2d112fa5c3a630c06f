@@ -16,6 +16,40 @@
       "message": "This actually has dependency with making CommandQueue thread safe. Without that serial of CLs to make CommandQueue thread safe, we have to insert the token. I am going to keep this until the other serial of CLs landed and then rebase this CL.",
       "revId": "e8547822358b92397cfeef2d112fa5c3a630c06f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8210a0e0_53e3709c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:41:45Z",
+      "side": 1,
+      "message": "Please ping when bots are green",
+      "revId": "e8547822358b92397cfeef2d112fa5c3a630c06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb4840be_907a469e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-23T16:41:45Z",
+      "side": 1,
+      "message": "Is this an optimization to avoid calling checkCompletedCommands? If so, suggest making it a separate change for the sake of bisect/reverts",
+      "revId": "e8547822358b92397cfeef2d112fa5c3a630c06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
