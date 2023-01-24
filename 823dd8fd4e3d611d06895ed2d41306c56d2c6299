@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb4c89c4_4fdf5ecd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-24T19:24:45Z",
+      "side": 1,
+      "message": "The code looks fine, but I\u0027m marking this as a +1 until we get some simulator test results back from an X86 sim running this test, or keep this workaround for Sim. We already do some simulator-specific code, this might be one we need to add.",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61f62a1c_c6240db0",
@@ -48,6 +65,41 @@
       "writtenOn": "2023-01-23T22:09:54Z",
       "side": 1,
       "message": "We should confirm iOS and Simulator mapping updates with Apple to avoid potential reverts after this change gets rolled into WebKit.",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a49ba3_5153d5b0",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-24T19:24:45Z",
+      "side": 1,
+      "message": "iOS and Simulator map with \"Apple 2\" for feature queries. However, the underlying device isn\u0027t exposed, so we can\u0027t tell if we\u0027re on an AMD/Intel config or an Apple Silicon configuration. We can check device capabilities, however, for stuff like D24S8.\n\nhttps://developer.apple.com/documentation/metal/developing_metal_apps_that_run_in_simulator",
+      "parentUuid": "61f62a1c_c6240db0",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e8fe1f_2c9fa49b",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-24T19:24:45Z",
+      "side": 1,
+      "message": "This will work on iOS and M1, but we need to make sure it also works for x86 sim.",
       "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
