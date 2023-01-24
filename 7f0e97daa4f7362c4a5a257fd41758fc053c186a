@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1be1f113_c93e68f8",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-24T16:53:51Z",
+      "side": 1,
+      "message": "This could potentially be reduced further, merging ReplaceLastFragData and ReplaceLastFragColor, but I\u0027ll leave that to Shabi.  The only differences are:\n```\nglLastFragDataUsageMap \u003d\u003e glLastFragColorUsageMap\n\"gl_LastFragData\" \u003d\u003e \"gl_LastFragColorARM\"\nshaderVersion 100 \u003d\u003e shaderVersion 200 (is that intentional?)\n```",
+      "range": {
+        "startLine": 762,
+        "startChar": 19,
+        "endLine": 762,
+        "endChar": 39
+      },
+      "revId": "7f0e97daa4f7362c4a5a257fd41758fc053c186a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
