@@ -15,6 +15,8 @@
 
 #include "GLSLANG/ShaderLang.h"
 #include "common/angle_version_info.h"
+#include "common/string_utils.h"
+#include "common/system_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
@@ -34,6 +36,22 @@ namespace gl
 namespace
 {
 constexpr uint32_t kShaderCacheIdentifier = 0x12345678;
+
+std::string GetShaderDumpFilePath(ShaderType type, const std::string &mergedSource)
+{
+    size_t sourceHash = std::hash<std::string>{}(mergedSource);
+
+    std::stringstream path;
+
+    Optional<std::string> tempDir = angle::GetTempDirectory();
+    if (tempDir.valid())
+    {
+        path << tempDir.value() << "/";
+    }
+    path << type << "_" << sourceHash << ".essl";
+
+    return path.str();
+}
 }  // anonymous namespace
 
 const char *GetShaderTypeString(ShaderType type)
@@ -140,7 +158,10 @@ ShaderProgramID Shader::getHandle() const
     return mHandle;
 }
 
-void Shader::setSource(GLsizei count, const char *const *string, const GLint *length)
+void Shader::setSource(const Context *context,
+                       GLsizei count,
+                       const char *const *string,
+                       const GLint *length)
 {
     std::ostringstream stream;
 
@@ -156,7 +177,35 @@ void Shader::setSource(GLsizei count, const char *const *string, const GLint *le
         }
     }
 
-    mState.mSource = stream.str();
+    std::string source = stream.str();
+
+    const angle::FrontendFeatures &frontendFeatures = context->getFrontendFeatures();
+
+    bool substituedShader = false;
+    if (frontendFeatures.enableShaderSubstitution.enabled)
+    {
+        std::string subsitutionShaderPath = GetShaderDumpFilePath(mState.getShaderType(), source);
+
+        std::string substituteShader;
+        if (angle::ReadFileToString(subsitutionShaderPath, &substituteShader))
+        {
+            source           = std::move(substituteShader);
+            substituedShader = true;
+            INFO() << "Shader substitute found, loading from " << subsitutionShaderPath;
+        }
+    }
+
+    // Only dump shaders that have not been previously substituted. It would write the same data
+    // back to the file.
+    if (frontendFeatures.dumpShaderSource.enabled && !substituedShader)
+    {
+        std::string dumpFile = GetShaderDumpFilePath(mState.getShaderType(), source);
+
+        writeFile(dumpFile.c_str(), source.c_str(), source.length());
+        INFO() << "Dumped shader source: " << dumpFile;
+    }
+
+    mState.mSource = std::move(source);
 }
 
 int Shader::getInfoLogLength(const Context *context)
