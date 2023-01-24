@@ -738,10 +738,8 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(DepthStencilTestES3);
-ANGLE_INSTANTIATE_TEST_ES3_AND(
-    DepthStencilTestES3,
-    ES3_VULKAN().enable(Feature::ForceFallbackFormat),
-    ES3_VULKAN().enable(Feature::DisallowMixedDepthStencilLoadOpNoneAndLoad),
-    ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat));
+ANGLE_INSTANTIATE_TEST_ES3_AND(DepthStencilTestES3,
+                               ES3_VULKAN().enable(Feature::ForceFallbackFormat),
+                               ES3_VULKAN_SWIFTSHADER().enable(Feature::ForceFallbackFormat));
 
 }  // anonymous namespace
