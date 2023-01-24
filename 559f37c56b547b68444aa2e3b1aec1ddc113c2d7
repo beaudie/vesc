@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure how far forward the Apple/WebKit folks wanted to carry this supporting code. Let\u0027s let them review.",
       "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2fcb0b_537d4e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555157
+      },
+      "writtenOn": "2023-01-24T14:38:19Z",
+      "side": 1,
+      "message": "They aren\u0027t providing webkit updates to anything that isn\u0027t A11 and up, aside from security patches. So this is definitely safe.",
+      "parentUuid": "ff4adb19_72c9528a",
+      "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
