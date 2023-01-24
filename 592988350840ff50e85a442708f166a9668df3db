@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24814d1_aa2a1bb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-24T23:54:37Z",
+      "side": 1,
+      "message": "Discussed with Yuxin offline, suggested maybe we should revert the original https://crrev.com/c/3615014 that Yuxin says introduced this case, as it has additional context and other places had to be modified.",
+      "revId": "592988350840ff50e85a442708f166a9668df3db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
