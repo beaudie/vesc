@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "945613b8_29551395",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-24T22:19:59Z",
+      "side": 1,
+      "message": "Can you preface this with `FrameCapture:`?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "f95e5e04a90eb8500cc414f422ede248eeb5aafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e07a9d_9f44f58f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-24T22:19:59Z",
+      "side": 1,
+      "message": "Can you add:\n`Test: Bubble Shooter with Friends MEC`",
+      "revId": "f95e5e04a90eb8500cc414f422ede248eeb5aafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e025b074_e61cb072",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-24T22:19:59Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "f95e5e04a90eb8500cc414f422ede248eeb5aafd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
