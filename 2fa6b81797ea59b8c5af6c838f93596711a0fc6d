@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b326867e_3119897a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-24T00:58:05Z",
+      "side": 1,
+      "message": "Since this is now always enabled, could you make it mActivePerHeapMemoryAllocationsCount and mActivePerHeapMemoryAllocationsSize array of std::atomic and then get rid of lock at line 5318? I think atomic should still work, right?",
+      "range": {
+        "startLine": 5322,
+        "startChar": 0,
+        "endLine": 5322,
+        "endChar": 84
+      },
+      "revId": "2fa6b81797ea59b8c5af6c838f93596711a0fc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
