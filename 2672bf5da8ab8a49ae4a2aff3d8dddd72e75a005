@@ -16,6 +16,24 @@
       "message": "Shabi: do you think you could co-review this with me?",
       "revId": "2672bf5da8ab8a49ae4a2aff3d8dddd72e75a005",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a01549bb_a5b2d810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-24T16:48:26Z",
+      "side": 1,
+      "message": "Sure, non-metal/ parts LGTM",
+      "parentUuid": "bbf75cb3_b86131c2",
+      "revId": "2672bf5da8ab8a49ae4a2aff3d8dddd72e75a005",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
