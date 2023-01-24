@@ -368,10 +368,6 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
     {
         return isFeatureEnabled(Feature::PreferSubmitAtFBOBoundary);
     }
-    bool hasDisallowMixedDepthStencilLoadOpNoneAndLoad() const
-    {
-        return isFeatureEnabled(Feature::DisallowMixedDepthStencilLoadOpNoneAndLoad);
-    }
     bool hasSupportsImagelessFramebuffer() const
     {
         return isFeatureEnabled(Feature::SupportsImagelessFramebuffer);
@@ -2860,16 +2856,8 @@ TEST_P(VulkanPerformanceCounterTest, DepthFuncALWAYSWithDepthMaskDisabledShouldN
 
     // Expect rpCount+1, depth(Clears+0, Loads+0, LoadNones+0, Stores+1, StoreNones+0),
     setExpectedCountersForDepthOps(getPerfCounters(), 1, 0, 0, 0, 1, 0, &expected);
-    if (hasDisallowMixedDepthStencilLoadOpNoneAndLoad())
-    {
-        // stencil(Clears+0, Loads+1, LoadNones+0, Stores+0, StoreNones+1)
-        setExpectedCountersForStencilOps(getPerfCounters(), 0, 1, 0, 0, 1, &expected);
-    }
-    else
-    {
-        // stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
-        setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
-    }
+    // stencil(Clears+0, Loads+0, LoadNones+1, Stores+0, StoreNones+1)
+    setExpectedCountersForStencilOps(getPerfCounters(), 0, 0, 1, 0, 1, &expected);
     // Initialize the buffers with known value
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
