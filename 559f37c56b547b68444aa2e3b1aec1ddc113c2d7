@@ -34,6 +34,23 @@
       "parentUuid": "ff4adb19_72c9528a",
       "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee7ebe5_de48a5b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-24T16:09:47Z",
+      "side": 1,
+      "message": "Thanks for the additional info. Sounds fine to move forward. Thanks Dan for reviewing and confirming.\n\nCould you please add yourself to the AUTHORS file at the top level of the ANGLE repository before I +2 this? Thanks.",
+      "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
