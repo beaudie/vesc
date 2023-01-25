@@ -988,7 +988,8 @@ TEST_P(MipmapTest, TextureCubeGeneralLevelZero)
     // http://anglebug.com/2822
     ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
     // http://issuetracker.google.com/159666631
-    ANGLE_SKIP_TEST_IF(isSwiftshader());
+    // Test: Remove the skipping
+    //    ANGLE_SKIP_TEST_IF(isSwiftshader());
     // http://anglebug.com/5725
     ANGLE_SKIP_TEST_IF(IsOzone());
 
