@@ -5025,6 +5025,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     : Resource(std::move(other)),
       mImage(std::move(other.mImage)),
       mDeviceMemory(std::move(other.mDeviceMemory)),
+      mVmaAllocation(std::move(other.mVmaAllocation)),
       mImageType(other.mImageType),
       mTilingMode(other.mTilingMode),
       mCreateFlags(other.mCreateFlags),
@@ -5467,6 +5468,8 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory);
+    renderer->collectAllocationGarbage(mUse, mVmaAllocation);
+    mVmaAllocation.destroy(renderer->getAllocator());
     mUse.reset();
     mImageSerial = kInvalidImageSerial;
     setEntireContentUndefined();
@@ -5638,11 +5641,34 @@ angle::Result ImageHelper::initMemory(Context *context,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
     mMemoryAllocationType = MemoryAllocationType::Image;
-    ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr, &mImage,
-                                  &mMemoryTypeIndex, &mDeviceMemory, &mAllocationSize));
-    mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
     RendererVk *renderer = context->getRenderer();
+
+    // Replacement
+    // Initalize image allocator.
+    ImageMemorySuballocator &imageMemoryAllocator = renderer->getImageMemorySuballocator();
+    ANGLE_VK_TRY(context,
+                 imageMemoryAllocator.findMemoryTypeIndexForImageInfo(
+                     renderer, mVkImageCreateInfo, flags, flags, false, &mMemoryTypeIndex));
+
+    //    if (mVmaAllocation.valid())
+    //    {
+    //        WARN() << "vmaAllocation valid: " << mVmaAllocation.getHandle();
+    //    }
+
+    ANGLE_VK_TRY(context,
+                 imageMemoryAllocator.allocateAndBindMemory(renderer, &mImage, flags, flags, false,
+                                                            &mMemoryTypeIndex, &mVmaAllocation));
+
+    //    WARN() << "Image: " << mImage.getHandle() << " Allocation: " <<
+    //    mVmaAllocation.getHandle();
+
+    // Original
+    // ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr,
+    // &mImage,
+    //                              &mMemoryTypeIndex, &mDeviceMemory, &mAllocationSize));
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
         // Can't map the memory. Use a staging resource.
@@ -5684,12 +5710,25 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
 
     for (uint32_t memoryPlane = 0; memoryPlane < extraAllocationInfoCount; ++memoryPlane)
     {
+        // Original
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, mMemoryAllocationType, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
             &mMemoryTypeIndex, &mDeviceMemory));
+
+        // Replace
+        // ImageMemorySuballocator &imageMemoryAllocator =
+        // context->getRenderer()->getImageMemorySuballocator(); ANGLE_VK_TRY(context,
+        // imageMemoryAllocator.findMemoryTypeIndexForImageInfo(
+        //                            context->getRenderer(), mVkImageCreateInfo, flags, flags,
+        //                            false, &mMemoryTypeIndex));
+        // ANGLE_VK_TRY(context, imageMemoryAllocator.allocateAndBindMemory(context->getRenderer(),
+        // mVkImageCreateInfo, flags,
+        //                                                            flags, false,
+        //                                                            &mMemoryTypeIndex, &mImage,
+        //                                                            &mVmaAllocation));
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
@@ -5843,7 +5882,7 @@ void ImageHelper::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
 
-    if (mImage.valid())
+    if (mImage.valid() && mDeviceMemory.valid())
     {
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mDeviceMemory.getHandle());
@@ -5851,6 +5890,7 @@ void ImageHelper::destroy(RendererVk *renderer)
 
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
+    mVmaAllocation.destroy(renderer->getAllocator());
     mCurrentLayout = ImageLayout::Undefined;
     mImageType     = VK_IMAGE_TYPE_2D;
     mLayerCount    = 0;
@@ -7882,8 +7922,9 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
     prevImage->get().Resource::operator=(std::move(*this));
 
     // Vulkan objects
-    prevImage->get().mImage        = std::move(mImage);
-    prevImage->get().mDeviceMemory = std::move(mDeviceMemory);
+    prevImage->get().mImage         = std::move(mImage);
+    prevImage->get().mDeviceMemory  = std::move(mDeviceMemory);
+    prevImage->get().mVmaAllocation = std::move(mVmaAllocation);
 
     // Barrier information.  Note: mLevelCount is set to levelCount so that only the necessary
     // levels are transitioned when flushing the update.
