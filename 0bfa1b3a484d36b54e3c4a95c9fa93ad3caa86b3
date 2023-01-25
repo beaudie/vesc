@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "0bfa1b3a484d36b54e3c4a95c9fa93ad3caa86b3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "972952ed_1059cccd",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T19:56:31Z",
+      "side": 1,
+      "message": "`s/\\s\\+$//`",
+      "range": {
+        "startLine": 133,
+        "startChar": 9,
+        "endLine": 133,
+        "endChar": 10
+      },
+      "revId": "0bfa1b3a484d36b54e3c4a95c9fa93ad3caa86b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ce9455_01644a95",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T19:56:31Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 40,
+        "startChar": 58,
+        "endLine": 40,
+        "endChar": 61
+      },
+      "revId": "0bfa1b3a484d36b54e3c4a95c9fa93ad3caa86b3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
