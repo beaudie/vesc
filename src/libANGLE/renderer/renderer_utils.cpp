@@ -1580,4 +1580,21 @@ bool IsOverridableLinearFormat(angle::FormatID formatID)
 {
     return ConvertToSRGB(formatID) != angle::FormatID::NONE;
 }
+
+std::ostream &operator<<(std::ostream &os, const AtomicQueueSerialFixedArray &serials)
+{
+    // Search for last non-zero index (or 0 if all zeros).
+    SerialIndex lastIndex = serials.size() == 0 ? 0 : static_cast<SerialIndex>(serials.size() - 1);
+    while (lastIndex > 0 && serials[lastIndex].getValue() == 0)
+    {
+        lastIndex--;
+    }
+    os << '{';
+    for (SerialIndex i = 0; i < lastIndex; i++)
+    {
+        os << serials[i].getValue() << ",";
+    }
+    os << serials[lastIndex].getValue() << '}';
+    return os;
+}
 }  // namespace rx

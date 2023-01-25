@@ -455,6 +455,14 @@ class CommandQueue : private CommandQueueImpl
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+    const AtomicQueueSerialFixedArray &getLastSubmittedSerials() const
+    {
+        return mLastSubmittedSerials;
+    }
+    const AtomicQueueSerialFixedArray &getLastCompletedSerials() const
+    {
+        return mLastCompletedSerials;
+    }
 
     void handleDeviceLost(RendererVk *renderer)
     {
@@ -761,6 +769,10 @@ class ThreadSafeCommandProcessor : public CommandProcessor
 
     bool hasUnsubmittedUse(const ResourceUse &use) const;
     Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
+    const AtomicQueueSerialFixedArray &getLastSubmittedSerials() const
+    {
+        return mLastSubmittedSerials;
+    }
 
   private:
     mutable std::mutex mMutex;
