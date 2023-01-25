@@ -17,6 +17,8 @@ VK_DEFINE_HANDLE(VmaAllocation)
 VK_DEFINE_HANDLE(VmaPool)
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VmaVirtualAllocation)
 VK_DEFINE_HANDLE(VmaVirtualBlock)
+// TODO: Needed?
+VK_DEFINE_HANDLE(VmaImage)
 
 namespace vma
 {
@@ -73,12 +75,28 @@ VkResult CreateBuffer(VmaAllocator allocator,
                       VkBuffer *pBuffer,
                       VmaAllocation *pAllocation);
 
+VkResult CreateImage(VmaAllocator allocator,
+                     const VkImageCreateInfo *pImageCreateInfo,
+                     VkMemoryPropertyFlags requiredFlags,
+                     VkMemoryPropertyFlags preferredFlags,
+                     bool persistentlyMappedBuffers,
+                     uint32_t *pMemoryTypeIndexOut,
+                     VkImage *pImage,
+                     VmaAllocation *pAllocation);
+
 VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
                                           const VkBufferCreateInfo *pBufferCreateInfo,
                                           VkMemoryPropertyFlags requiredFlags,
                                           VkMemoryPropertyFlags preferredFlags,
                                           bool persistentlyMappedBuffers,
                                           uint32_t *pMemoryTypeIndexOut);
+
+VkResult FindMemoryTypeIndexForImageInfo(VmaAllocator allocator,
+                                         const VkImageCreateInfo *pImageCreateInfo,
+                                         VkMemoryPropertyFlags requiredFlags,
+                                         VkMemoryPropertyFlags preferredFlags,
+                                         bool persistentlyMappedBuffers,
+                                         uint32_t *pMemoryTypeIndexOut);
 
 void GetMemoryTypeProperties(VmaAllocator allocator,
                              uint32_t memoryTypeIndex,

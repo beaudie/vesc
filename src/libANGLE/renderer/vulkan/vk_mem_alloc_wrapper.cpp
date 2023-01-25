@@ -117,7 +117,7 @@ VkResult CreateBuffer(VmaAllocator allocator,
                       const VkBufferCreateInfo *pBufferCreateInfo,
                       VkMemoryPropertyFlags requiredFlags,
                       VkMemoryPropertyFlags preferredFlags,
-                      bool persistentlyMapped,
+                      bool persistentlyMapped,  // TODO: Match the names between .h and .cpp
                       uint32_t *pMemoryTypeIndexOut,
                       VkBuffer *pBuffer,
                       VmaAllocation *pAllocation)
@@ -131,6 +131,29 @@ VkResult CreateBuffer(VmaAllocator allocator,
 
     result = vmaCreateBuffer(allocator, pBufferCreateInfo, &allocationCreateInfo, pBuffer,
                              pAllocation, &allocationInfo);
+    *pMemoryTypeIndexOut = allocationInfo.memoryType;
+
+    return result;
+}
+
+VkResult CreateImage(VmaAllocator allocator,
+                     const VkImageCreateInfo *pImageCreateInfo,
+                     VkMemoryPropertyFlags requiredFlags,
+                     VkMemoryPropertyFlags preferredFlags,
+                     bool persistentlyMapped,
+                     uint32_t *pMemoryTypeIndexOut,
+                     VkImage *pImage,
+                     VmaAllocation *pAllocation)
+{
+    VkResult result;
+    VmaAllocationCreateInfo allocationCreateInfo = {};
+    allocationCreateInfo.requiredFlags           = requiredFlags;
+    allocationCreateInfo.preferredFlags          = preferredFlags;
+    allocationCreateInfo.flags       = (persistentlyMapped) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+    VmaAllocationInfo allocationInfo = {};
+
+    result = vmaCreateImage(allocator, pImageCreateInfo, &allocationCreateInfo, pImage, pAllocation,
+                            &allocationInfo);
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
 
     return result;
@@ -150,6 +173,22 @@ VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
 
     return vmaFindMemoryTypeIndexForBufferInfo(allocator, pBufferCreateInfo, &allocationCreateInfo,
                                                pMemoryTypeIndexOut);
+}
+
+VkResult FindMemoryTypeIndexForImageInfo(VmaAllocator allocator,
+                                         const VkImageCreateInfo *pImageCreateInfo,
+                                         VkMemoryPropertyFlags requiredFlags,
+                                         VkMemoryPropertyFlags preferredFlags,
+                                         bool persistentlyMappedBuffers,  // TODO: Needed?
+                                         uint32_t *pMemoryTypeIndexOut)
+{
+    VmaAllocationCreateInfo allocationCreateInfo = {};
+    allocationCreateInfo.requiredFlags           = requiredFlags;
+    allocationCreateInfo.preferredFlags          = preferredFlags;
+    allocationCreateInfo.flags = (persistentlyMappedBuffers) ? VMA_ALLOCATION_CREATE_MAPPED_BIT : 0;
+
+    return vmaFindMemoryTypeIndexForImageInfo(allocator, pImageCreateInfo, &allocationCreateInfo,
+                                              pMemoryTypeIndexOut);
 }
 
 void GetMemoryTypeProperties(VmaAllocator allocator,

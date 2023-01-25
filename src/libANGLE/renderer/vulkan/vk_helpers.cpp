@@ -5638,11 +5638,26 @@ angle::Result ImageHelper::initMemory(Context *context,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
     mMemoryAllocationType = MemoryAllocationType::Image;
-    ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr, &mImage,
-                                  &mMemoryTypeIndex, &mDeviceMemory, &mAllocationSize));
-    mCurrentQueueFamilyIndex = context->getRenderer()->getQueueFamilyIndex();
 
     RendererVk *renderer = context->getRenderer();
+
+    // Replacement
+    // Initalize image allocator.
+    ImageMemoryAllocator &imageMemoryAllocator = renderer->getImageMemoryAllocator();
+    ANGLE_VK_TRY(context,
+                 imageMemoryAllocator.findMemoryTypeIndexForImageInfo(
+                     renderer, mVkImageCreateInfo, flags, flags, false, &mMemoryTypeIndex));
+
+    ANGLE_VK_TRY(context,
+                 imageMemoryAllocator.createImage(renderer, mVkImageCreateInfo, flags, flags, false,
+                                                  &mMemoryTypeIndex, &mImage, &mVmaAllocation));
+
+    // Original
+    // ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr,
+    // &mImage,
+    //                              &mMemoryTypeIndex, &mDeviceMemory, &mAllocationSize));
+    mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
+
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
         // Can't map the memory. Use a staging resource.
@@ -5684,12 +5699,25 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
 
     for (uint32_t memoryPlane = 0; memoryPlane < extraAllocationInfoCount; ++memoryPlane)
     {
+        // Original
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, mMemoryAllocationType, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
             &mMemoryTypeIndex, &mDeviceMemory));
+
+        // Replace
+        // ImageMemoryAllocator &imageMemoryAllocator =
+        // context->getRenderer()->getImageMemoryAllocator(); ANGLE_VK_TRY(context,
+        // imageMemoryAllocator.findMemoryTypeIndexForImageInfo(
+        //                            context->getRenderer(), mVkImageCreateInfo, flags, flags,
+        //                            false, &mMemoryTypeIndex));
+        // ANGLE_VK_TRY(context, imageMemoryAllocator.createImage(context->getRenderer(),
+        // mVkImageCreateInfo, flags,
+        //                                                            flags, false,
+        //                                                            &mMemoryTypeIndex, &mImage,
+        //                                                            &mVmaAllocation));
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
@@ -5843,14 +5871,17 @@ void ImageHelper::destroy(RendererVk *renderer)
 {
     VkDevice device = renderer->getDevice();
 
-    if (mImage.valid())
+    if (mImage.valid() && mDeviceMemory.valid())
     {
         renderer->onMemoryDealloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
                                   mDeviceMemory.getHandle());
     }
 
+    // Destroy image based on allocator?
+
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
+    vma::FreeMemory(renderer->getAllocator().getHandle(), mVmaAllocation.getHandle());
     mCurrentLayout = ImageLayout::Undefined;
     mImageType     = VK_IMAGE_TYPE_2D;
     mLayerCount    = 0;

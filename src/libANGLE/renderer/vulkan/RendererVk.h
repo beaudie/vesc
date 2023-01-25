@@ -117,6 +117,39 @@ enum class MemoryLogSeverity
     INFO,
     WARN,
 };
+
+class ImageMemoryAllocator : angle::NonCopyable
+{
+  public:
+    ImageMemoryAllocator();
+    ~ImageMemoryAllocator();
+
+    VkResult initialize(RendererVk *renderer, VkDeviceSize preferredLargeHeapBlockSize);
+    void destroy(RendererVk *renderer);
+
+    // Initializes the image handle and memory allocation.
+    VkResult createImage(RendererVk *renderer,
+                         const VkImageCreateInfo &imageCreateInfo,
+                         VkMemoryPropertyFlags requiredFlags,
+                         VkMemoryPropertyFlags preferredFlags,
+                         bool persistentlyMappedBuffers,  // TODO: Needed?
+                         uint32_t *memoryTypeIndexOut,
+                         Image *imageOut,
+                         Allocation *allocationOut);
+
+    void getMemoryTypeProperties(RendererVk *renderer,
+                                 uint32_t memoryTypeIndex,
+                                 VkMemoryPropertyFlags *flagsOut) const;
+    VkResult findMemoryTypeIndexForImageInfo(RendererVk *renderer,
+                                             const VkImageCreateInfo &imageCreateInfo,
+                                             VkMemoryPropertyFlags requiredFlags,
+                                             VkMemoryPropertyFlags preferredFlags,
+                                             bool persistentlyMappedBuffers,  // TODO: Needed?
+                                             uint32_t *memoryTypeIndexOut) const;
+
+  private:
+};
+
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -309,6 +342,7 @@ class RendererVk : angle::NonCopyable
     VkDevice getDevice() const { return mDevice; }
 
     const vk::Allocator &getAllocator() const { return mAllocator; }
+    vk::ImageMemoryAllocator &getImageMemoryAllocator() { return mImageMemoryAllocator; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
                                                VkSurfaceKHR surface,
@@ -929,6 +963,10 @@ class RendererVk : angle::NonCopyable
     mutable angle::FormatMap<VkFormatProperties> mFormatProperties;
 
     vk::Allocator mAllocator;
+
+    // Image allocator
+    vk::ImageMemoryAllocator mImageMemoryAllocator;
+
     vk::MemoryProperties mMemoryProperties;
     VkDeviceSize mPreferredLargeHeapBlockSize;
 

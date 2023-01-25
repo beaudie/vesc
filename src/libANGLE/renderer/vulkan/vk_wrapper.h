@@ -425,6 +425,9 @@ class Image final : public WrappedObject<Image, VkImage>
                               uint32_t mipLevel,
                               uint32_t arrayLayer,
                               VkSubresourceLayout *outSubresourceLayout) const;
+
+  private:
+    friend class ImageMemoryAllocator;
 };
 
 class ImageView final : public WrappedObject<ImageView, VkImageView>
@@ -520,6 +523,7 @@ class Allocation final : public WrappedObject<Allocation, VmaAllocation>
 
   private:
     friend class Allocator;
+    friend class ImageMemoryAllocator;
 };
 
 class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
