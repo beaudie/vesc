@@ -1576,6 +1576,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
                                                                       uint64_t timeout,
                                                                       VkResult *result)
 {
+    ASSERT(!hasUnsubmittedUse(use));
     std::unique_lock<std::mutex> lock(mMutex);
     size_t finishCount = getBatchCountUpToSerials(context->getRenderer(), use.getSerials());
     // The serial is already complete if there is no in-flight work (i.e. mInFlightCommands is

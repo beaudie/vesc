@@ -739,6 +739,18 @@ class RendererVk : angle::NonCopyable
     void logMemoryStatsOnError();
 
     MemoryAllocationTracker *getMemoryAllocationTracker() { return &mMemoryAllocationTracker; }
+    const AtomicQueueSerialFixedArray &getLastSubmittedQueueSerials() const
+    {
+        return mCommandQueue.getLastSubmittedSerials();
+    }
+    const AtomicQueueSerialFixedArray &getLastCompletedQueueSerials() const
+    {
+        return mCommandQueue.getLastCompletedSerials();
+    }
+    const AtomicQueueSerialFixedArray &getLastCommandProcessorSubmittedQueueSerials() const
+    {
+        return mCommandProcessor.getLastSubmittedSerials();
+    }
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
