@@ -1546,12 +1546,14 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
                                                                       uint64_t timeout,
                                                                       VkResult *result)
 {
+    ASSERT(!hasUnsubmittedUse(use));
     std::unique_lock<std::mutex> lock(mMutex);
     size_t finishCount = getBatchCountUpToSerials(context->getRenderer(), use.getSerials());
     // The serial is already complete if there is no in-flight work (i.e. mInFlightCommands is
     // empty), or the given serial is smaller than the smallest serial, or
     if (finishCount == 0)
     {
+        ASSERT(!hasUnfinishedUse(use));
         *result = VK_SUCCESS;
         return angle::Result::Continue;
     }
@@ -1560,6 +1562,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
     const SharedFence &sharedFence = getSharedFenceToWait(finishCount);
     if (!sharedFence)
     {
+        ASSERT(!hasUnfinishedUse(use));
         *result = VK_SUCCESS;
         return angle::Result::Continue;
     }
@@ -1582,8 +1585,10 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
     // Don't trigger an error on timeout.
     if (*result != VK_TIMEOUT)
     {
+        ASSERT(!hasUnfinishedUse(use));
         ANGLE_VK_TRY(context, *result);
     }
+    ASSERT(!hasUnfinishedUse(use));
 
     return angle::Result::Continue;
 }

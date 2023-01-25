@@ -161,6 +161,14 @@ angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool
     }
     else
     {
+        WARN() << "SyncHelper::getStatus:"
+               << " hasUnfinishedUse:" << renderer->hasUnfinishedUse(mUse) << " mUse:" << mUse
+               << " context:{[" << context->getCurrentQueueSerialIndex()
+               << "]=" << context->getLastSubmittedSerial().getValue() << "}"
+               << " renderer: lastSubmitted:" << renderer->getLastSubmittedQueueSerials()
+               << " lastCompleted:" << renderer->getLastCompletedQueueSerials()
+               << " lastCommandProcessorSubmitted:"
+               << renderer->getLastCommandProcessorSubmittedQueueSerials();
         // Do immediate check in case it actually already finished.
         ANGLE_TRY(renderer->checkCompletedCommands(context));
         *signaled = !renderer->hasUnfinishedUse(mUse);
