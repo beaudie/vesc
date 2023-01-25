@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f44df43_4a0bcb10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-01-25T17:19:28Z",
+      "side": 1,
+      "message": "Could you also enable this for the GL backend? I suspect it\u0027s just a matter of adding the extension check around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/renderergl_utils.cpp;l\u003d1672;drc\u003d067ace47d080bdf06fbcdc644b59dab5e321a366\n\nOtherwise, looks good!",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
