@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9dd920_e8c81d98",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5077,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-25T22:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6da43351_ee11927d",
+      "range": {
+        "startLine": 5077,
+        "startChar": 8,
+        "endLine": 5077,
+        "endChar": 37
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6ea63be_61acec9b",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31a80f10_24356778",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7277,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-25T22:13:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6ea63be_61acec9b",
+      "range": {
+        "startLine": 7277,
+        "startChar": 27,
+        "endLine": 7277,
+        "endChar": 40
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26b6c23e_d36614d7",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-01-25T19:58:08Z",
       "side": 1,
       "message": "This can go away I believe.",
+      "range": {
+        "startLine": 8147,
+        "startChar": 0,
+        "endLine": 8155,
+        "endChar": 9
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73f48e14_59e36cc1",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8155,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-25T22:13:50Z",
+      "side": 1,
+      "message": "Right, this should never be called as we\u0027re using GLBlendFuncSeparate instead. Marked GLBlendFunc and GLBlendEquation UNREACHABLE here.",
+      "parentUuid": "26b6c23e_d36614d7",
       "range": {
         "startLine": 8147,
         "startChar": 0,
