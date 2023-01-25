@@ -16,6 +16,24 @@
       "message": "shabi is there a known issue with \"dEQP-GLES31.functional.image_load_store.buffer.atomic.comp_swap_r32i_return_value\" on NVIDIA bots?",
       "revId": "475f59948f4d991ac9c78ac0fb38a6faa91ff809",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b761651e_64a45656",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:56:32Z",
+      "side": 1,
+      "message": "Yes, new dEQP test is flakey. It\u0027s being suppressed",
+      "parentUuid": "77f7f09f_1ef9417a",
+      "revId": "475f59948f4d991ac9c78ac0fb38a6faa91ff809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
