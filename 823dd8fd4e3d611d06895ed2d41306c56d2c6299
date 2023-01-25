@@ -87,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6913eefe_fd1d8ee1",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-25T01:57:31Z",
+      "side": 1,
+      "message": "The Simulator change has been reverted for safety; since it runs on Intel and AMD GPUs it\u0027s probably affected by the underlying bug. I suspect that iOS, and the Apple GPUs there, handle these formats correctly, so it seems best to try to make the change there rather than hold on to a workaround it\u0027s unclear is needed.",
+      "parentUuid": "b1a49ba3_5153d5b0",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9e8fe1f_2c9fa49b",
@@ -100,6 +118,24 @@
       "writtenOn": "2023-01-24T19:24:45Z",
       "side": 1,
       "message": "This will work on iOS and M1, but we need to make sure it also works for x86 sim.",
+      "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd0ed895_bb6a66b9",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-25T01:57:31Z",
+      "side": 1,
+      "message": "Have undone the changes to the simulator configuration for safety.",
+      "parentUuid": "c9e8fe1f_2c9fa49b",
       "revId": "823dd8fd4e3d611d06895ed2d41306c56d2c6299",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
