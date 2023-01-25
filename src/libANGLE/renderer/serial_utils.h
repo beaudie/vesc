@@ -216,6 +216,7 @@ class AtomicQueueSerialFixedArray final
   private:
     std::array<AtomicQueueSerial, kMaxQueueSerialIndexCount> mSerials;
 };
+std::ostream &operator<<(std::ostream &os, const AtomicQueueSerialFixedArray &serials);
 
 class QueueSerial final
 {
