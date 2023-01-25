@@ -9947,6 +9947,22 @@ TEST_P(Texture2DTestES3, NonZeroBaseEmulatedClear)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 }
 
+// Test that we can allocate 4096 images, which is the maximum allocation count on some platforms.
+// Image suballocation should enable us to allocate more than this limit.
+TEST_P(Texture2DTestES3, Allocate4096Textures)
+{
+    constexpr size_t kTextureCount = 4096;
+    setUpProgram();
+
+    GLTexture texture[kTextureCount];
+    for (size_t i = 0; i < kTextureCount; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, texture[i]);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+    }
+    EXPECT_GL_NO_ERROR();
+}
+
 // Test that uploading data to buffer that's in use then using it as PBO to update a texture works.
 TEST_P(Texture2DTestES3, UseAsUBOThenUpdateThenAsPBO)
 {
