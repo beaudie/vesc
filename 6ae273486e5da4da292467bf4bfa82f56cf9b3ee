@@ -16,6 +16,63 @@
       "message": "Could you also enable this for the GL backend? I suspect it\u0027s just a matter of adding the extension check around here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/gl/renderergl_utils.cpp;l\u003d1672;drc\u003d067ace47d080bdf06fbcdc644b59dab5e321a366\n\nOtherwise, looks good!",
       "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16c323b6_4c871e3f",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:34:15Z",
+      "side": 1,
+      "message": "Could you please move it back up so the diff is clearer?",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d008da5_6da9b064",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:34:15Z",
+      "side": 1,
+      "message": "Nit: make this an enum class",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f03600b1_3ca2d835",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:34:15Z",
+      "side": 1,
+      "message": "nit: feel free to set this equal to `mNativeExtensions.shaderFramebufferFetchEXT` to deduplicate the logic",
+      "range": {
+        "startLine": 940,
+        "startChar": 12,
+        "endLine": 940,
+        "endChar": 78
+      },
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
