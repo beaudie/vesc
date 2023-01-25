@@ -117,6 +117,24 @@ enum class MemoryLogSeverity
     INFO,
     WARN,
 };
+
+class ImageMemorySuballocator : angle::NonCopyable
+{
+  public:
+    ImageMemorySuballocator();
+    ~ImageMemorySuballocator();
+
+    void destroy(RendererVk *renderer);
+
+    // Allocates memory for the image and binds it.
+    VkResult allocateAndBindMemory(RendererVk *renderer,
+                                   Image *image,
+                                   VkMemoryPropertyFlags requiredFlags,
+                                   VkMemoryPropertyFlags preferredFlags,
+                                   uint32_t *memoryTypeIndexOut,
+                                   Allocation *allocationOut,
+                                   VkDeviceSize *sizeOut);
+};
 }  // namespace vk
 
 // Supports one semaphore from current surface, and one semaphore passed to
@@ -304,6 +322,7 @@ class RendererVk : angle::NonCopyable
     VkDevice getDevice() const { return mDevice; }
 
     const vk::Allocator &getAllocator() const { return mAllocator; }
+    vk::ImageMemorySuballocator &getImageMemorySuballocator() { return mImageMemorySuballocator; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
                                                VkSurfaceKHR surface,
@@ -417,6 +436,24 @@ class RendererVk : angle::NonCopyable
         else
         {
             DestroyGarbage(mDevice, garbageIn...);
+        }
+    }
+
+    void collectAllocationGarbage(const vk::ResourceUse &use, vk::Allocation &allocationGarbageIn)
+    {
+        if (hasUnfinishedUse(use))
+        {
+            std::vector<vk::GarbageObject> sharedGarbage;
+            CollectGarbage(&sharedGarbage, &allocationGarbageIn);
+            if (!sharedGarbage.empty())
+            {
+                collectGarbage(use, std::move(sharedGarbage));
+            }
+        }
+        else if (allocationGarbageIn.valid())
+        {
+            allocationGarbageIn.destroy(getAllocator());
+            return;
         }
     }
 
@@ -882,6 +919,10 @@ class RendererVk : angle::NonCopyable
     mutable angle::FormatMap<VkFormatProperties> mFormatProperties;
 
     vk::Allocator mAllocator;
+
+    // Used to allocate memory for images using VMA, utilizing suballocation.
+    vk::ImageMemorySuballocator mImageMemorySuballocator;
+
     vk::MemoryProperties mMemoryProperties;
     VkDeviceSize mPreferredLargeHeapBlockSize;
 
