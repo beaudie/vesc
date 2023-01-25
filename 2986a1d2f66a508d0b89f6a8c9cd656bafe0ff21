@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "117a14bf_d034c4a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-25T20:37:53Z",
+      "side": 1,
+      "message": "Thanks for following up here, this slipped (way) off my plate.\n\nOne small nit.",
+      "revId": "2986a1d2f66a508d0b89f6a8c9cd656bafe0ff21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0fc7544_b723830a",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-25T20:37:53Z",
+      "side": 1,
+      "message": "typo: substitutedShader",
+      "range": {
+        "startLine": 196,
+        "startChar": 9,
+        "endLine": 196,
+        "endChar": 25
+      },
+      "revId": "2986a1d2f66a508d0b89f6a8c9cd656bafe0ff21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
