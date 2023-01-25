@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c13b0e_b0ae0e0c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:39:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "82d2122c_6f32a027",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 147,
+        "endChar": 8
+      },
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2c05ad1_81012459",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "SharedFence is still mostly a wrapper class, it does not process the result come out of VkFence::wait call. If I make it return angle::Result, all caller code has to change which makes unnecessary code diffs. Especially this wait function called from handleDeviceLost which should not return angle::Result::Stop(). But if we return angle::result, then decision has to be made here which is awkward. Same thing with getStatus, the current form API is simpler.",
       "parentUuid": "e2c05ad1_81012459",
+      "range": {
+        "startLine": 228,
+        "startChar": 0,
+        "endLine": 228,
+        "endChar": 8
+      },
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8c9a98c_8d9ba89a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:39:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ccd06c42_13818c16",
       "range": {
         "startLine": 228,
         "startChar": 0,
@@ -162,6 +210,24 @@
       "side": 1,
       "message": "Oops, closed on wrong comment.",
       "parentUuid": "e5f582d8_85ad0565",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b745dd21_ade7d57a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:39:42Z",
+      "side": 1,
+      "message": "Ack, that\u0027s fine. I just realized I\u0027ve been doing the same elsewhere too (like `NewFence()` in SurfaceVk.cpp)",
+      "parentUuid": "33ccc6d1_f3bff8ea",
       "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -244,6 +310,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "9592573b_5179002d",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "129b2564_ee9f188a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-25T18:39:42Z",
+      "side": 1,
+      "message": "Please remove the copy constructor/assignment then!",
+      "parentUuid": "d07e5905_f25a3a52",
       "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
