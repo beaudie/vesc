@@ -16,6 +16,24 @@
       "message": "Is it still worth caching this in a member variable?",
       "revId": "4ae21e5607b7af76be1735ce0900f9ac398d467d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6abedee_94df79ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-01-25T21:53:12Z",
+      "side": 1,
+      "message": "I don\u0027t think so. The getter is simple if the shader is already compiled.",
+      "parentUuid": "57dac23a_e2f3916f",
+      "revId": "4ae21e5607b7af76be1735ce0900f9ac398d467d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
