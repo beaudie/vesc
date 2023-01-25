@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6da43351_ee11927d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5077,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-25T19:58:08Z",
+      "side": 1,
+      "message": "Can you include a comment here that says something like \"We could check for like RGB and ALPHA and use BlendFunc, but there\u0027s no advantage and it makes Reset more difficult\"",
+      "range": {
+        "startLine": 5077,
+        "startChar": 8,
+        "endLine": 5077,
+        "endChar": 37
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6ea63be_61acec9b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7277,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-25T19:58:08Z",
+      "side": 1,
+      "message": "Should probably have this grouped with BlendEquation",
+      "range": {
+        "startLine": 7277,
+        "startChar": 27,
+        "endLine": 7277,
+        "endChar": 40
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26b6c23e_d36614d7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 8155,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-01-25T19:58:08Z",
+      "side": 1,
+      "message": "This can go away I believe.",
+      "range": {
+        "startLine": 8147,
+        "startChar": 0,
+        "endLine": 8155,
+        "endChar": 9
+      },
+      "revId": "113a8fe425ef69fff9d757884505de82352d57d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
