@@ -368,6 +368,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80211316_f7d89cc5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-25T19:33:12Z",
+      "side": 1,
+      "message": "Right. Removed.",
+      "parentUuid": "06c8957f_aa4a15ad",
+      "revId": "fbd691b71c8bf02db6e197a552ff439ac57fbd6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd634caf_5435e003",
