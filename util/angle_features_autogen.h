@@ -315,6 +315,7 @@ enum class Feature
     UseShadowBuffersWhenAppropriate,
     UseSystemMemoryForConstantBuffers,
     UseUnusedBlocksWithStandardOrSharedLayout,
+    UseVmaForImageSuballocation,
     VaryingsRequireMatchingPrecisionInSpirv,
     VertexIDDoesNotIncludeBaseVertex,
     WaitIdleBeforeSwapchainRecreation,
