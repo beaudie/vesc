@@ -2650,6 +2650,8 @@ class ImageHelper final : public Resource, public angle::Subject
     MemoryAllocationType mMemoryAllocationType;
     // Memory type index used for the allocation. It can be used to determine the heap index.
     uint32_t mMemoryTypeIndex;
+
+    Allocation mVmaAllocation;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

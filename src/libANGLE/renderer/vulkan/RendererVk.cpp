@@ -1395,6 +1395,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mRenderPassCommandBufferRecycler.onDestroy();
 
     mAllocator.destroy();
+    mImageMemoryAllocator.destroy(this);
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
     // throughout the execution has been freed.
@@ -1843,6 +1844,9 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     ANGLE_VK_TRY(displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
                                  mPreferredLargeHeapBlockSize));
+
+    // Create image memory allocator
+    ANGLE_VK_TRY(displayVk, mImageMemoryAllocator.initialize(this, mPreferredLargeHeapBlockSize));
 
     // Figure out the alignment for default buffer allocations
     VkBufferCreateInfo createInfo    = {};
@@ -5559,5 +5563,58 @@ void MemoryReport::logMemoryReportStats() const
                << " (max=" << std::setw(10) << importedMemoryMax << ")";
     }
 }
+
+ImageMemoryAllocator::ImageMemoryAllocator() {}
+ImageMemoryAllocator::~ImageMemoryAllocator() {}
+
+VkResult ImageMemoryAllocator::initialize(RendererVk *renderer,
+                                          VkDeviceSize preferredLargeHeapBlockSize)
+{
+    ASSERT(renderer->getAllocator().valid());
+    return VK_SUCCESS;
+}
+
+void ImageMemoryAllocator::destroy(RendererVk *renderer) {}
+
+VkResult ImageMemoryAllocator::createImage(
+    RendererVk *renderer,
+    const VkImageCreateInfo &imageCreateInfo,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMappedBuffers,  // TODO: Needed?
+    uint32_t *memoryTypeIndexOut,
+    Image *imageOut,  // TODO: Should be image, since it is valid.
+    Allocation *allocationOut)
+{
+    ASSERT(imageOut && imageOut->valid());
+    ASSERT(allocationOut && !allocationOut->valid());
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::CreateImage(allocator.getHandle(), &imageCreateInfo, requiredFlags, preferredFlags,
+                            persistentlyMappedBuffers, memoryTypeIndexOut, &imageOut->mHandle,
+                            &allocationOut->mHandle);
+}
+
+void ImageMemoryAllocator::getMemoryTypeProperties(RendererVk *renderer,
+                                                   uint32_t memoryTypeIndex,
+                                                   VkMemoryPropertyFlags *flagsOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    vma::GetMemoryTypeProperties(allocator.getHandle(), memoryTypeIndex, flagsOut);
+}
+
+VkResult ImageMemoryAllocator::findMemoryTypeIndexForImageInfo(
+    RendererVk *renderer,
+    const VkImageCreateInfo &imageCreateInfo,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    bool persistentlyMappedBuffers,  // TODO: Needed?
+    uint32_t *memoryTypeIndexOut) const
+{
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::FindMemoryTypeIndexForImageInfo(allocator.getHandle(), &imageCreateInfo,
+                                                requiredFlags, preferredFlags,
+                                                persistentlyMappedBuffers, memoryTypeIndexOut);
+}
+
 }  // namespace vk
 }  // namespace rx
