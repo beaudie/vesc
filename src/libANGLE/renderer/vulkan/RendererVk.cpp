@@ -1392,6 +1392,7 @@ void RendererVk::onDestroy(vk::Context *context)
     mOutsideRenderPassCommandBufferRecycler.onDestroy();
     mRenderPassCommandBufferRecycler.onDestroy();
 
+    mImageMemorySuballocator.destroy(this);
     mAllocator.destroy();
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
@@ -4061,6 +4062,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // textures.
     ANGLE_FEATURE_CONDITION(&mFeatures, mutableMipmapTextureUpload, false);
 
+    // http://b/267811497
+    // [Investigating] VMA image suballocation causes capture/replay errors when tests are run in a
+    // batch, most notably on Windows.
+    ANGLE_FEATURE_CONDITION(&mFeatures, useVmaForImageSuballocation, true);
+
     // Retain debug info in SPIR-V blob.
     ANGLE_FEATURE_CONDITION(&mFeatures, retainSPIRVDebugInfo, getEnableValidationLayers());
 
@@ -5526,5 +5532,29 @@ void MemoryReport::logMemoryReportStats() const
                << " (max=" << std::setw(10) << importedMemoryMax << ")";
     }
 }
+
+ImageMemorySuballocator::ImageMemorySuballocator() {}
+ImageMemorySuballocator::~ImageMemorySuballocator() {}
+
+void ImageMemorySuballocator::destroy(RendererVk *renderer) {}
+
+VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
+                                                        Image *image,
+                                                        VkMemoryPropertyFlags requiredFlags,
+                                                        VkMemoryPropertyFlags preferredFlags,
+                                                        Allocation *allocationOut,
+                                                        uint32_t *memoryTypeIndexOut,
+                                                        VkDeviceMemory *deviceMemoryOut,
+                                                        VkDeviceSize *offsetOut,
+                                                        VkDeviceSize *sizeOut)
+{
+    ASSERT(image && image->valid());
+    ASSERT(allocationOut && !allocationOut->valid());
+    const Allocator &allocator = renderer->getAllocator();
+    return vma::AllocateAndBindMemoryForImage(
+        allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+        &allocationOut->mHandle, memoryTypeIndexOut, deviceMemoryOut, offsetOut, sizeOut);
+}
+
 }  // namespace vk
 }  // namespace rx
