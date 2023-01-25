@@ -10027,6 +10027,25 @@ TEST_P(Texture2DTestES3, UpdateRenderTargetCacheOnDestroyTexStorage)
     EXPECT_PIXEL_RECT_EQ(0, 0, 100, 1, GLColor::red);
 }
 
+// Test that we can allocate 4096 images, which is the maximum allocation count on some platforms.
+// Image suballocation should enable us to allocate more than this limit.
+TEST_P(Texture2DTestES3, Allocate4096Textures)
+{
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
+
+    // The test is skipped when AllocateNonZeroMemory is enabled due to risk of timeout.
+    ANGLE_SKIP_TEST_IF(getEGLWindow()->isFeatureEnabled(Feature::AllocateNonZeroMemory));
+
+    constexpr size_t kTextureCount = 4096;
+    std::vector<GLTexture> textures(kTextureCount);
+    for (auto &texture : textures)
+    {
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+    }
+    EXPECT_GL_NO_ERROR();
+}
+
 // Draw a quad with an integer texture with a non-zero base level, and test that the color of the
 // texture is output.
 TEST_P(Texture2DIntegerTestES3, IntegerTextureNonZeroBaseLevel)
