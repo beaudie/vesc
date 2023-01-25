@@ -2591,6 +2591,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Vulkan objects.
     Image mImage;
     DeviceMemory mDeviceMemory;
+    Allocation mVmaAllocation;
 
     // Image properties.
     VkImageCreateInfo mVkImageCreateInfo;
@@ -2652,6 +2653,7 @@ class ImageHelper final : public Resource, public angle::Subject
     // Used for memory allocation tracking.
     // Memory size allocated for the image in the memory during the initialization.
     VkDeviceSize mAllocationSize;
+
     // Type of the memory allocation for the image (Image or ImageExternal).
     MemoryAllocationType mMemoryAllocationType;
     // Memory type index used for the allocation. It can be used to determine the heap index.
