@@ -269,6 +269,21 @@ ANGLE_INLINE void AtomicQueueSerialFixedArray::setQueueSerial(const QueueSerial 
 {
     setQueueSerial(queueSerial.getIndex(), queueSerial.getSerial());
 }
+
+ANGLE_INLINE std::ostream &operator<<(std::ostream &os, const AtomicQueueSerialFixedArray &serials)
+{
+    os << '{';
+    for (SerialIndex i = 0; i < serials.size(); i++)
+    {
+        os << serials[i].getValue();
+        if (i < serials.size() - 1)
+        {
+            os << ",";
+        }
+    }
+    os << '}';
+    return os;
+}
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_SERIAL_UTILS_H_
