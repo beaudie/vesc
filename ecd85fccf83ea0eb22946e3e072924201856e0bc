@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f6aba31_79943a6c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-25T02:53:12Z",
+      "side": 1,
+      "message": "calling out a change in function prototype. now that we need shader source to generate key we need to serialize that into the blob as well",
+      "range": {
+        "startLine": 781,
+        "startChar": 0,
+        "endLine": 785,
+        "endChar": 56
+      },
+      "revId": "ecd85fccf83ea0eb22946e3e072924201856e0bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
