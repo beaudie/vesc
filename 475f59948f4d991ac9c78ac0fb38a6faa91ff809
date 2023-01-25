@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77f7f09f_1ef9417a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-25T18:27:00Z",
+      "side": 1,
+      "message": "shabi is there a known issue with \"dEQP-GLES31.functional.image_load_store.buffer.atomic.comp_swap_r32i_return_value\" on NVIDIA bots?",
+      "revId": "475f59948f4d991ac9c78ac0fb38a6faa91ff809",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
