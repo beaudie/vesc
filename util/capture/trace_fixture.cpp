@@ -222,10 +222,41 @@ GLuint *AllocateZeroedUints(size_t count)
     return AllocateZeroedValues<GLuint>(count);
 }
 
-void InitializeReplay3(const char *binaryDataFileName,
+void InitializeReplay4(const char *binaryDataFileName,
                        size_t maxClientArraySize,
                        size_t readBufferSize,
                        size_t resourceIDBufferSize,
+                       GLuint contextId,
+                       uint32_t maxBuffer,
+                       uint32_t maxContext,
+                       uint32_t maxFenceNV,
+                       uint32_t maxFramebuffer,
+                       uint32_t maxImage,
+                       uint32_t maxMemoryObject,
+                       uint32_t maxProgramPipeline,
+                       uint32_t maxQuery,
+                       uint32_t maxRenderbuffer,
+                       uint32_t maxSampler,
+                       uint32_t maxSemaphore,
+                       uint32_t maxShaderProgram,
+                       uint32_t maxSurface,
+                       uint32_t maxSync,
+                       uint32_t maxTexture,
+                       uint32_t maxTransformFeedback,
+                       uint32_t maxVertexArray)
+{
+    InitializeReplay3(binaryDataFileName, maxClientArraySize, readBufferSize, contextId, maxBuffer,
+                      maxContext, maxFenceNV, maxFramebuffer, maxImage, maxMemoryObject,
+                      maxProgramPipeline, maxQuery, maxRenderbuffer, maxSampler, maxSemaphore,
+                      maxShaderProgram, maxSurface, maxSync, maxTexture, maxTransformFeedback,
+                      maxVertexArray);
+
+    gResourceIDBuffer = AllocateZeroedUints(resourceIDBufferSize);
+}
+
+void InitializeReplay3(const char *binaryDataFileName,
+                       size_t maxClientArraySize,
+                       size_t readBufferSize,
                        GLuint contextId,
                        uint32_t maxBuffer,
                        uint32_t maxContext,
@@ -251,8 +282,7 @@ void InitializeReplay3(const char *binaryDataFileName,
                       maxShaderProgram, maxSurface, maxTexture, maxTransformFeedback,
                       maxVertexArray);
 
-    gSyncMap2         = AllocateZeroedValues<GLsync>(maxSync);
-    gResourceIDBuffer = AllocateZeroedUints(resourceIDBufferSize);
+    gSyncMap2 = AllocateZeroedValues<GLsync>(maxSync);
 }
 
 void InitializeReplay2(const char *binaryDataFileName,
