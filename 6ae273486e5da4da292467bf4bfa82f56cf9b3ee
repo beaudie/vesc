@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8f37291_88bc4fd5",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2023-01-25T21:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16c323b6_4c871e3f",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d008da5_6da9b064",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a680ac6a_150de716",
+        "filename": "src/compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2023-01-25T21:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d008da5_6da9b064",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f03600b1_3ca2d835",
@@ -65,6 +101,30 @@
       "writtenOn": "2023-01-25T18:34:15Z",
       "side": 1,
       "message": "nit: feel free to set this equal to `mNativeExtensions.shaderFramebufferFetchEXT` to deduplicate the logic",
+      "range": {
+        "startLine": 940,
+        "startChar": 12,
+        "endLine": 940,
+        "endChar": 78
+      },
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c802e7b_a8b19761",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2023-01-25T21:25:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f03600b1_3ca2d835",
       "range": {
         "startLine": 940,
         "startChar": 12,
