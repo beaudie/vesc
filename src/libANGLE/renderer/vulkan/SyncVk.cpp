@@ -156,6 +156,17 @@ angle::Result SyncHelper::getStatus(Context *context, ContextVk *contextVk, bool
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
     ANGLE_TRY(renderer->checkCompletedCommands(context));
+    if (renderer->hasUnfinishedUse(mUse))
+    {
+        WARN() << "SyncHelper::getStatus:"
+               << " hasUnfinishedUse:" << renderer->hasUnfinishedUse(mUse) << " mUse:" << mUse
+               << " context:{[" << context->getCurrentQueueSerialIndex()
+               << "]=" << context->getLastSubmittedSerial().getValue() << "}"
+               << " renderer: lastSubmitted:" << renderer->getLastSubmittedQueueSerials()
+               << " lastCompleted:" << renderer->getLastCompletedQueueSerials()
+               << " lastCommandProcessorSubmitted:"
+               << renderer->getLastCommandProcessorSubmittedQueueSerials();
+    }
     *signaled = !renderer->hasUnfinishedUse(mUse);
     return angle::Result::Continue;
 }

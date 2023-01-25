@@ -13,6 +13,7 @@
 #include "libANGLE/HandleAllocator.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <iostream>
 #include <queue>
 
 namespace rx
@@ -132,6 +133,22 @@ class ResourceUse final
     // The most recent time of use in a VkQueue.
     Serials mSerials;
 };
+
+ANGLE_INLINE std::ostream &operator<<(std::ostream &os, const ResourceUse &use)
+{
+    const Serials &serials = use.getSerials();
+    os << '{';
+    for (size_t i = 0; i < serials.size(); i++)
+    {
+        os << serials[i].getValue();
+        if (i < serials.size() - 1)
+        {
+            os << ",";
+        }
+    }
+    os << '}';
+    return os;
+}
 
 class SharedGarbage
 {
