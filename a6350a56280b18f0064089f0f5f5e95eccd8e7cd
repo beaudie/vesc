@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "090609df_57151a86",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Typo: introduces",
+      "revId": "a6350a56280b18f0064089f0f5f5e95eccd8e7cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eff3e971_e4071239",
         "filename": "src/libANGLE/renderer/metal/renderermtl_utils.h",
         "patchSetId": 8
@@ -14,6 +31,24 @@
       "writtenOn": "2023-01-26T06:16:40Z",
       "side": 1,
       "message": "Looks like this needs an\n\n#include \"common/utilities.h\"\n\nin order to pick up the OpenGL typedefs like GLsizei.",
+      "revId": "a6350a56280b18f0064089f0f5f5e95eccd8e7cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76156539_f2fcf767",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Already handled.",
+      "parentUuid": "eff3e971_e4071239",
       "revId": "a6350a56280b18f0064089f0f5f5e95eccd8e7cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

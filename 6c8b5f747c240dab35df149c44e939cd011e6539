@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "866aedaa_aa2c12d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Amazing work Kyle! Thank you for doing this. I\u0027ll need a bit more time to go through all the code, but here are some initial comments.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8f3dd28_92a3ce55",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Please either remove commented out code or enable the assert.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "040d391b_f787c47d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Could you explain what this math does, maybe in a comment? Still reading through the calling code, but I don\u0027t understand what \"blocks\" means in this context.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9fb6bf1_751c75c5",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Could you file a new anglebug about upgrading this code to use compute shaders, and reference it here via \"TODO(anglebug.com/XYZW): convert to use compute shaders\"?",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df6fac14_79d38a21",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "encoder is leaked. Need to use SafeDelete on it at the end, as is done in src/libANGLE/ProgramLinkedResources.cpp. IMO it would be better to use std::unique_ptr or similar.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31c900fc_e01031e1",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "entries",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88e0ed6c_d674e5fb",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "entries",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4720979_34924177",
+        "filename": "src/libANGLE/renderer/metal/blocklayoutMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Possible to add a comment with a spec reference, like a URL and chapter/section number describing these type sizes?",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceca1517_326e9595",
+        "filename": "src/libANGLE/renderer/metal/blocklayoutMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T06:51:43Z",
+      "side": 1,
+      "message": "Most other Chromium code uses ValueOrDie() so that crash stacks are generated in the unlikely event of overflow - I note that the common blocklayout code uses ValueOrDefault, but wonder if it\u0027s worth changing the new instances to ValueOrDie.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
