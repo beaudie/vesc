@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c05ba68f_7b9daca8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Fixed a major bug where transposed matrices were not being rewritten, and reintroduced the legacy method for BlockLayoutInfo constructors.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8f3dd28_92a3ce55",
@@ -48,6 +65,24 @@
       "writtenOn": "2023-01-26T06:51:43Z",
       "side": 1,
       "message": "Please either remove commented out code or enable the assert.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c547147_1750c71d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8f3dd28_92a3ce55",
       "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +104,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbaa0aff_5c84a6a4",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "040d391b_f787c47d",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9fb6bf1_751c75c5",
@@ -82,6 +135,24 @@
       "writtenOn": "2023-01-26T06:51:43Z",
       "side": 1,
       "message": "Could you file a new anglebug about upgrading this code to use compute shaders, and reference it here via \"TODO(anglebug.com/XYZW): convert to use compute shaders\"?",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db233b18_f94885f8",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9fb6bf1_751c75c5",
       "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +174,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa7de6d0_4f44a5a4",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df6fac14_79d38a21",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31c900fc_e01031e1",
@@ -116,6 +205,24 @@
       "writtenOn": "2023-01-26T06:51:43Z",
       "side": 1,
       "message": "entries",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2bde5aa_5ef2b68c",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31c900fc_e01031e1",
       "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +244,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccd5fbcd_39b90b81",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 9
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88e0ed6c_d674e5fb",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4720979_34924177",
@@ -154,6 +279,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb754666_3b68b4f8",
+        "filename": "src/libANGLE/renderer/metal/blocklayoutMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4720979_34924177",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceca1517_326e9595",
@@ -167,6 +310,24 @@
       "writtenOn": "2023-01-26T06:51:43Z",
       "side": 1,
       "message": "Most other Chromium code uses ValueOrDie() so that crash stacks are generated in the unlikely event of overflow - I note that the common blocklayout code uses ValueOrDefault, but wonder if it\u0027s worth changing the new instances to ValueOrDie.",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d03e9e_9a926b12",
+        "filename": "src/libANGLE/renderer/metal/blocklayoutMetal.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T20:45:35Z",
+      "side": 1,
+      "message": "Setting offsets of Max will be an issue anyway, updated to ValueOrDie()",
+      "parentUuid": "ceca1517_326e9595",
       "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
