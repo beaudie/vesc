@@ -69,6 +69,24 @@
       "parentUuid": "aee7ebe5_de48a5b9",
       "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ccc9fc4_6a714827",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T20:49:34Z",
+      "side": 1,
+      "message": "OK, if your earlier patch was approved without adding yourself to AUTHORS, sounds fine.",
+      "parentUuid": "f1dc9403_e5479ac1",
+      "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

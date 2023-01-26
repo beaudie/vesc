@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6914860_852af82c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T20:49:34Z",
+      "side": 1,
+      "message": "lgtm+2 and CQ\u0027ing for you.",
+      "revId": "f8c7a3cea68aea1e53a73afdf5850b8489e7be6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
