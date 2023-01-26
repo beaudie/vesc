@@ -240,6 +240,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb7a4b2_af2fe1e3",
+        "filename": "src/compiler/translator/blocklayoutMetal.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-26T03:04:19Z",
+      "side": 1,
+      "message": "Yes, that\u0027s probably legacy leftover from the time ANGLE only did gles-\u003ed3d. Unless the translator makes use of it somehow, the HLSL would should also move away.",
+      "parentUuid": "1937f516_ace08d99",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b021347_ffc9c3c7",
