@@ -548,7 +548,14 @@ void WriteParamValueReplay<ParamType::Tegl_SyncPointer>(std::ostream &os,
                                                         const CallCapture &call,
                                                         egl::Sync *value)
 {
-    os << "EGL_NO_SYNC_KHR";
+    if (value)
+    {
+        os << "gEGLSyncMap[" << reinterpret_cast<size_t>(value) << "]";
+    }
+    else
+    {
+        os << "EGL_NO_SYNC_KHR";
+    }
 }
 
 template <>
