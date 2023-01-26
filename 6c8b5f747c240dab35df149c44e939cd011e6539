@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0947f5a_438db698",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-26T15:05:12Z",
+      "side": 1,
+      "message": "A question by the way, how will this deal with UBOs? If the app sets up a buffer with the GL layout and binds it as UBO, do you use a compute shader to reformat it before binding?",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8f3dd28_92a3ce55",
