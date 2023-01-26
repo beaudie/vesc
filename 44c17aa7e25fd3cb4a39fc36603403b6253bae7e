@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6194d102_5f880b45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T21:20:04Z",
+      "side": 1,
+      "message": "Dry run\u0027s going to fail, I messed up the delete on the encoder.",
+      "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da27a64c_8bac5c27",
@@ -48,6 +65,24 @@
       "writtenOn": "2023-01-26T21:07:18Z",
       "side": 1,
       "message": "If I understand correctly, the specific case this handles is uniform blocks declared as arrays, like this example from the ES 3.0 spec:\n\n  uniform Transform {  // API uses “Transform[2]” to refer to instance 2\n    mat4           ModelViewMatrix;\n    mat4           ModelViewProjectionMatrix;\n    float          Deformation;\n  } transforms[4];\n\nIs my understanding correct?\n\nIf so, could we explain this a bit differently, perhaps:\n\n\"\"\"\nHandle uniform blocks declared as arrays. In this case, sizeToCopy covers the\nentire range of the array, and blockConversionInfo.stdSize() is the size of\neach individual element.\n\"\"\"\n?",
+      "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b77ec5de_e19d0c42",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T21:20:04Z",
+      "side": 1,
+      "message": "Not quite, this is the case where the buffer bound to the UBO is larger than the actual UBO. The idea is that you could upload multiple uniform buffers, and access each one by offset. I use offset%blocksize as an hash into the conversion buffers, so we can pre-convert everything instead of converting on the fly every time. \n\nAt least, that was the intent, I don\u0027t think my code is right there. Taking a look...",
+      "parentUuid": "da27a64c_8bac5c27",
       "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
