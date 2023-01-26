@@ -1367,12 +1367,15 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
+
+    INFO() << "Yuxin Debug ContextVk::flush() is called";
     // Skip the flush if there's nothing recorded.
     //
     // Don't skip flushes for single-buffered windows with staged updates. It is expected that a
     // flush call on a single-buffered window ensures any pending updates reach the screen.
     const bool isSingleBufferedWindow =
         mCurrentWindowSurface != nullptr && mCurrentWindowSurface->isSharedPresentMode();
+    INFO() << "Yuxin Debug isSingleBufferedWindow: " << isSingleBufferedWindow;
     const bool isSingleBufferedWindowWithStagedUpdates =
         isSingleBufferedWindow && mCurrentWindowSurface->hasStagedUpdates();
 
