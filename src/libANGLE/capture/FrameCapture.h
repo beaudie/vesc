@@ -10,6 +10,8 @@
 #ifndef LIBANGLE_FRAME_CAPTURE_H_
 #define LIBANGLE_FRAME_CAPTURE_H_
 
+#include <unordered_map>
+
 #include "common/PackedEnums.h"
 #include "common/frame_capture_utils.h"
 #include "common/system_utils.h"
@@ -683,6 +685,8 @@ class FrameCaptureShared final : angle::NonCopyable
     void *maybeGetShadowMemoryPointer(gl::Buffer *buffer, GLsizeiptr length, GLbitfield access);
     void determineMemoryProtectionSupport(gl::Context *context);
 
+    using EGLSyncMapType = std::unordered_map<EGLSync, GLuint>;
+
   private:
     void writeJSON(const gl::Context *context);
     void writeCppReplayIndexFiles(const gl::Context *context, bool writeResetContextCall);
@@ -783,6 +787,8 @@ class FrameCaptureShared final : angle::NonCopyable
     // Track which Contexts were created and made current at least once before MEC,
     // requiring setup for replay
     std::unordered_set<GLuint> mActiveSecondaryContexts;
+
+    EGLSyncMapType mEGLSyncMap;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>

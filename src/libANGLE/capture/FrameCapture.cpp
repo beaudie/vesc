@@ -959,16 +959,17 @@ void WriteInitReplayCall(bool compression,
                          size_t maxClientArraySize,
                          size_t readBufferSize,
                          size_t resourceIDBufferSize,
-                         const PackedEnumMap<ResourceIDType, uint32_t> &maxIDs)
+                         const PackedEnumMap<ResourceIDType, uint32_t> &maxIDs,
+                         size_t maxEGLSyncID)
 {
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
 
     out << "    // binaryDataFileName = " << binaryDataFileName << "\n";
     out << "    // maxClientArraySize = " << maxClientArraySize << "\n";
-    out << "    // maxClientArraySize = " << maxClientArraySize << "\n";
     out << "    // readBufferSize = " << readBufferSize << "\n";
     out << "    // resourceIDBufferSize = " << resourceIDBufferSize << "\n";
     out << "    // contextID = " << contextID << "\n";
+    out << "    // maxEGLSync = " << maxEGLSyncID << "\n";
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
     {
@@ -976,8 +977,9 @@ void WriteInitReplayCall(bool compression,
         out << "    // max" << name << " = " << maxIDs[resourceID] << "\n";
     }
 
-    out << "    InitializeReplay3(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
-        << readBufferSize << ", " << resourceIDBufferSize << ", " << contextID;
+    out << "    InitializeReplay4(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+        << readBufferSize << ", " << resourceIDBufferSize << ", " << contextID << ", "
+        << maxEGLSyncID;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
     {
@@ -3260,7 +3262,46 @@ void CaptureCustomCreateEGLImage(const char *name,
     EGLImage returnVal   = params.getReturnValue().value.EGLImageVal;
     egl::ImageID imageID = egl::PackParam<egl::ImageID>(returnVal);
     params.addValueParam("image", ParamType::TGLuint, imageID.value);
+
     call.customFunctionName = name;
+    callsOut.emplace_back(std::move(call));
+}
+
+void CaptureCustomCreateEGLSync(CallCapture &call,
+                                std::vector<CallCapture> &callsOut,
+                                FrameCaptureShared::EGLSyncMapType &EGLSyncMap)
+{
+    ParamBuffer &&params = std::move(call.params);
+    EGLSync returnVal    = params.getReturnValue().value.EGLSyncVal;
+    size_t id            = EGLSyncMap.size();
+    EGLSyncMap.insert(std::make_pair(returnVal, id));
+    params.addValueParam("sync", ParamType::TGLuint64, id);
+    call.customFunctionName = "CreateEGLSync";
+    callsOut.emplace_back(std::move(call));
+}
+
+void CaptureCustomCreateEGLSyncKHR(CallCapture &call,
+                                   std::vector<CallCapture> &callsOut,
+                                   FrameCaptureShared::EGLSyncMapType &EGLSyncMap)
+{
+    ParamBuffer &&params = std::move(call.params);
+    EGLSyncKHR returnVal = params.getReturnValue().value.EGLSyncKHRVal;
+    size_t id            = EGLSyncMap.size();
+    EGLSyncMap.insert(std::make_pair(returnVal, id));
+    params.addValueParam("sync", ParamType::TGLuint64, id);
+    call.customFunctionName = "CreateEGLSyncKHR";
+    callsOut.emplace_back(std::move(call));
+}
+
+void ConvertEGLSyncToId(CallCapture &call,
+                        std::vector<CallCapture> &callsOut,
+                        FrameCaptureShared::EGLSyncMapType &EGLSyncMap)
+{
+    ParamCapture &capture = call.params.getParam("syncPacked", ParamType::Tegl_SyncPointer, 1);
+    auto map              = EGLSyncMap.find(capture.value.egl_SyncPointerVal);
+    size_t id             = map == EGLSyncMap.end() ? 0 : map->second;
+    call.params.setValueParamAtIndex("syncPacked", ParamType::Tegl_SyncPointer,
+                                     reinterpret_cast<egl::Sync *>(id), 1);
     callsOut.emplace_back(std::move(call));
 }
 
@@ -6592,6 +6633,29 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
             CaptureCustomCreateEGLImage("CreateEGLImageKHR", inCall, outCalls);
             break;
         }
+        case EntryPoint::EGLCreateSync:
+        {
+            CaptureCustomCreateEGLSync(inCall, outCalls, mEGLSyncMap);
+            break;
+        }
+        case EntryPoint::EGLCreateSyncKHR:
+        {
+            CaptureCustomCreateEGLSyncKHR(inCall, outCalls, mEGLSyncMap);
+            break;
+        }
+        case EntryPoint::EGLDestroySync:
+        case EntryPoint::EGLDestroySyncKHR:
+        case EntryPoint::EGLWaitSync:
+        case EntryPoint::EGLWaitSyncKHR:
+        case EntryPoint::EGLClientWaitSync:
+        case EntryPoint::EGLClientWaitSyncKHR:
+        case EntryPoint::EGLGetSyncAttrib:
+        case EntryPoint::EGLGetSyncAttribKHR:
+        {
+            ConvertEGLSyncToId(inCall, outCalls, mEGLSyncMap);
+            break;
+        }
+
         case EntryPoint::EGLCreatePbufferSurface:
         {
             CaptureCustomCreatePbufferSurface(inCall, outCalls);
@@ -8420,7 +8484,7 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
         source << "{\n";
         WriteInitReplayCall(mCompression, source, context->id(), mCaptureLabel,
                             MaxClientArraySize(mClientArraySizes), mReadBufferSize,
-                            mResourceIDBufferSize, mMaxAccessedResourceIDs);
+                            mResourceIDBufferSize, mMaxAccessedResourceIDs, mEGLSyncMap.size());
         source << "}\n";
 
         mReplayWriter.addPrivateFunction(proto, std::stringstream(), source);
@@ -8802,6 +8866,8 @@ void FrameCaptureShared::reset()
 {
     mFrameCalls.clear();
     mClientVertexArrayMap.fill(-1);
+    mEGLSyncMap.clear();
+    mEGLSyncMap[0] = 0;
 
     // Do not reset replay-specific settings like the maximum read buffer size, client array sizes,
     // or the 'has seen' type map. We could refine this into per-frame and per-capture maximums if
