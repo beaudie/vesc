@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c3e2c08_97d080a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T21:25:57Z",
+      "side": 1,
+      "message": "It\u0027s a CPU readback in this case, including a pipeline synchronization. Ideally, once it\u0027s bound and on the GPU, any transform feedback shouldn\u0027t dirty the buffer and we could keep re-using it.",
+      "parentUuid": "9a56a06d_c5e94ef3",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8f3dd28_92a3ce55",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 9
