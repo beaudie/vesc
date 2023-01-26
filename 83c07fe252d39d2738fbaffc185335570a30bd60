@@ -16,6 +16,23 @@
       "message": "Charlie also concerned about performance and said he\u0027ll have a look.\n\nAlso I added the simpler variation of the test (SamplerSwap) which does what I had originally in my test but using Shabi\u0027s setup.",
       "revId": "83c07fe252d39d2738fbaffc185335570a30bd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ee44ce3_45b85fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-26T19:32:00Z",
+      "side": 1,
+      "message": "LGTM. The texture descriptorset cache code needs to improved, but lets track that separately.",
+      "revId": "83c07fe252d39d2738fbaffc185335570a30bd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
