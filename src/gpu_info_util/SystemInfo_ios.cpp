@@ -11,19 +11,26 @@
 #if defined(ANGLE_PLATFORM_IOS) || (defined(ANGLE_PLATFORM_MACCATALYST) && defined(ANGLE_CPU_ARM64))
 
 #    include "gpu_info_util/SystemInfo_internal.h"
+#    include <sys/types.h>
+#    include <sys/sysctl.h>
 
 namespace angle
 {
 
 bool GetSystemInfo_ios(SystemInfo *info)
 {
-    {
-        // TODO(anglebug.com/4275): Get the actual system version and GPU info.
-        info->machineModelVersion = "0.0";
-        GPUDeviceInfo deviceInfo;
-        deviceInfo.vendorId = kVendorID_Apple;
-        info->gpus.push_back(deviceInfo);
-    }
+    size_t len = 0;
+    sysctlbyname("hw.model", NULL, &len, NULL, 0);
+
+    char *model = malloc(len*sizeof(char));
+    sysctlbyname("hw.model", model, &len, NULL, 0);
+
+    info->machineModelVersion = std::to_string(model);
+    free(model);
+
+    GPUDeviceInfo deviceInfo;
+    deviceInfo.vendorId = kVendorID_Apple;
+    info->gpus.push_back(deviceInfo);
 
     return true;
 }
