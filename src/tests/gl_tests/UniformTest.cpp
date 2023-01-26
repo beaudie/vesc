@@ -1514,7 +1514,12 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-TEST_P(UniformTest, Vec4Vec2Alignment)
+// chromium:4210448 : Ensure programs properly
+// compiles and renders where the uniforms form
+// a struct with an alignment not matched with
+// the actual size of the individual members.
+// (Metal)
+TEST_P(UniformTest, Vec4Vec2SizeAlignment)
 {
     constexpr char kVS[] = R"(precision highp float;
 attribute vec4 position;
