@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "184ab1b6_6d698a7d",
+        "filename": "scripts/update_chrome_angle.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47acdfcd_95673d25",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07046d56_66cc024b",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-01-24T16:48:26Z",
       "side": 1,
       "message": "Please address this before submitting.\n\nEither:\n\n- Uncomment this if still needed, or\n- Remove this and the transformation altogether",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "360d9fa0_f681641e",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07046d56_66cc024b",
       "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b18e867_ff087495",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82af4eb9_137b2310",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1db1069e_d4ec9edb",
@@ -86,6 +140,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8454d7d3_219add33",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewritePipelines.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1db1069e_d4ec9edb",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b256e97_67cbae80",
@@ -99,6 +171,24 @@
       "writtenOn": "2023-01-24T16:48:26Z",
       "side": 1,
       "message": "Please move this to the metal/ backend. See how ProgramVk.cpp does a (simpler but) similar thing for Vulkan.",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6955f7c2_f0e86633",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b256e97_67cbae80",
       "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -126,6 +216,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1937f516_ace08d99",
+        "filename": "src/compiler/translator/blocklayoutMetal.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Was thinking this might be useful alongside blockLayoutHLSL, but sounds like we want to move away from that convention?",
+      "parentUuid": "876dbec1_2cda74b9",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b021347_ffc9c3c7",
@@ -139,6 +253,24 @@
       "writtenOn": "2023-01-24T16:48:26Z",
       "side": 1,
       "message": "I know HLSL is here, but that should actually be moved to the d3d backend. Please move this to the metal/ backend at least.",
+      "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28e168d7_4c862fb9",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-26T02:51:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2b021347_ffc9c3c7",
       "revId": "2c0541b66c3e816cce73d9d1b51351fe748e3c41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
