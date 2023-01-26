@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "339283ca_6503466d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T21:07:18Z",
+      "side": 1,
+      "message": "Thanks for the updates so far - will fully re-review later, but one question in advance of that.",
+      "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da27a64c_8bac5c27",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T21:07:18Z",
+      "side": 1,
+      "message": "If I understand correctly, the specific case this handles is uniform blocks declared as arrays, like this example from the ES 3.0 spec:\n\n  uniform Transform {  // API uses “Transform[2]” to refer to instance 2\n    mat4           ModelViewMatrix;\n    mat4           ModelViewProjectionMatrix;\n    float          Deformation;\n  } transforms[4];\n\nIs my understanding correct?\n\nIf so, could we explain this a bit differently, perhaps:\n\n\"\"\"\nHandle uniform blocks declared as arrays. In this case, sizeToCopy covers the\nentire range of the array, and blockConversionInfo.stdSize() is the size of\neach individual element.\n\"\"\"\n?",
+      "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
