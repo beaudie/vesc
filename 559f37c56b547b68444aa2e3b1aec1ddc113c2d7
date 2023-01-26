@@ -51,6 +51,24 @@
       "message": "Thanks for the additional info. Sounds fine to move forward. Thanks Dan for reviewing and confirming.\n\nCould you please add yourself to the AUTHORS file at the top level of the ANGLE repository before I +2 this? Thanks.",
       "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1dc9403_e5479ac1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1555157
+      },
+      "writtenOn": "2023-01-26T17:05:34Z",
+      "side": 1,
+      "message": "I think this is overkill considering I only did a patch with a couple of line changes, and I did not need to do this when I submitted a patch 3 months prior that was also trivial.",
+      "parentUuid": "aee7ebe5_de48a5b9",
+      "revId": "559f37c56b547b68444aa2e3b1aec1ddc113c2d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
