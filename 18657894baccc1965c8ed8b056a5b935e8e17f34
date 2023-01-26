@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d970752_b59cb63d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-26T22:05:47Z",
+      "side": 1,
+      "message": "Thank you for adding this feature! Would it be possible to document it in doc/, maybe ShaderSubstitution.md?\n\nA while back I\u0027d been thinking about adding a feature where we could replace the backend-translated shaders, e.g. to try manipulating MSL directly on macOS.",
+      "revId": "18657894baccc1965c8ed8b056a5b935e8e17f34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
