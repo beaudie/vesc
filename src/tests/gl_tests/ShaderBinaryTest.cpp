@@ -657,4 +657,6 @@ void main()
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31(ShaderBinaryTest);
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ShaderBinaryTestES31);
 ANGLE_INSTANTIATE_TEST_ES31(ShaderBinaryTestES31);
