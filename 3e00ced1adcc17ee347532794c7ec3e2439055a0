@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ba37fee_9b4c9de6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-01-26T17:43:36Z",
+      "side": 1,
+      "message": "Sorry about the bugs. The clean up looks great!",
+      "revId": "3e00ced1adcc17ee347532794c7ec3e2439055a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba52e382_db887b68",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-01-26T17:43:36Z",
+      "side": 1,
+      "message": "Could this check (and the one in getBuffer) be documented/written to be more clear? It appears this is really checkng if a buffer is shared or managed vs private or memoryless. In the first 2 cases buffers are added to free buckets, else they\u0027re not. but it took me a while to figure that out.",
+      "revId": "3e00ced1adcc17ee347532794c7ec3e2439055a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
