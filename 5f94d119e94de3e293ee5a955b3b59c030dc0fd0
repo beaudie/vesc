@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b477a37_6a0c2483",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-26T23:15:51Z",
+      "side": 1,
+      "message": "looks fine so far?",
+      "parentUuid": "5817d0ea_1782bd49",
+      "revId": "5f94d119e94de3e293ee5a955b3b59c030dc0fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e683ee4c_e49abf01",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-01-26T22:30:13Z",
       "side": 1,
       "message": "This one is actually not needed.\nThe other one wasn\u0027t instantiated on iOS since it doesn\u0027t support ES31.",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 659,
+        "endChar": 64
+      },
+      "revId": "5f94d119e94de3e293ee5a955b3b59c030dc0fd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf458fbb_a2eff544",
+        "filename": "src/tests/gl_tests/ShaderBinaryTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-01-26T23:15:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e683ee4c_e49abf01",
       "range": {
         "startLine": 659,
         "startChar": 0,
