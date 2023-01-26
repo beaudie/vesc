@@ -69,9 +69,13 @@ size_t memUnitValue(size_t powerOf2)
 }
 #endif  // ANGLE_MTL_TRACK_BUFFER_MEM
 
-int sharedMemToIndex(bool useSharedMem)
+int storageModeToIndex(MTLStorageMode storageMode)
 {
-    return useSharedMem ? 1 : 0;
+    static_assert(MTLStorageModeShared == 0);
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+    static_assert(MTLStorageModeManaged == 1);
+#endif
+    return static_cast<int>(storageMode);
 }
 
 }  // namespace
@@ -99,10 +103,13 @@ void BufferManager::freeUnusedBuffers(ContextMtl *contextMtl)
 
 void BufferManager::addBufferRefToFreeLists(mtl::BufferRef &bufferRef)
 {
-    const size_t bucketNdx = Log2Ceil(bufferRef->size());
-    ASSERT(bucketNdx < kMaxSizePowerOf2);
-    int sharedNdx = sharedMemToIndex(bufferRef->get().storageMode == MTLStorageModeShared);
-    mFreeBuffers[sharedNdx][bucketNdx].push_back(bufferRef);
+    int sharedNdx = storageModeToIndex(bufferRef->storageMode());
+    if (sharedNdx < kNumCachedStorageModes)
+    {
+        const size_t bucketNdx = Log2Ceil(bufferRef->size());
+        ASSERT(bucketNdx < kMaxSizePowerOf2);
+        mFreeBuffers[sharedNdx][bucketNdx].push_back(bufferRef);
+    }
 }
 
 void BufferManager::returnBuffer(ContextMtl *contextMtl, BufferRef &bufferRef)
@@ -118,22 +125,23 @@ void BufferManager::returnBuffer(ContextMtl *contextMtl, BufferRef &bufferRef)
 }
 
 angle::Result BufferManager::getBuffer(ContextMtl *contextMtl,
+                                       MTLStorageMode storageMode,
                                        size_t size,
-                                       bool useSharedMem,
                                        BufferRef &bufferRef)
 {
     freeUnusedBuffers(contextMtl);
 
-    const size_t bucketNdx  = Log2Ceil(size);
-    const int sharedNdx     = sharedMemToIndex(useSharedMem);
-    BufferList &freeBuffers = mFreeBuffers[sharedNdx][bucketNdx];
-
-    // If there are free buffers grab one
-    if (!freeBuffers.empty())
+    const size_t bucketNdx = Log2Ceil(size);
+    const int sharedNdx    = storageModeToIndex(storageMode);
+    if (sharedNdx < kNumCachedStorageModes)
     {
-        bufferRef = freeBuffers.back();
-        freeBuffers.pop_back();
-        return angle::Result::Continue;
+        BufferList &freeBuffers = mFreeBuffers[sharedNdx][bucketNdx];
+        if (!freeBuffers.empty())
+        {
+            bufferRef = freeBuffers.back();
+            freeBuffers.pop_back();
+            return angle::Result::Continue;
+        }
     }
 
     // Create a new one
@@ -141,8 +149,8 @@ angle::Result BufferManager::getBuffer(ContextMtl *contextMtl,
 
     size_t allocSize = size_t(1) << bucketNdx;
     ASSERT(allocSize >= size);
-    ANGLE_TRY(mtl::Buffer::MakeBufferWithSharedMemOpt(contextMtl, useSharedMem, allocSize, nullptr,
-                                                      &newBufferRef));
+    ANGLE_TRY(mtl::Buffer::MakeBufferWithStorageMode(contextMtl, storageMode, allocSize, nullptr,
+                                                     &newBufferRef));
 
 #ifdef ANGLE_MTL_TRACK_BUFFER_MEM
     {
@@ -174,15 +182,15 @@ angle::Result BufferManager::queueBlitCopyDataToBuffer(ContextMtl *contextMtl,
                                                        mtl::BufferRef &dstMetalBuffer)
 {
     const uint8_t *src = reinterpret_cast<const uint8_t *>(srcPtr);
-    bool useShared =
-        !contextMtl->getDisplay()->getFeatures().alwaysUseManagedStorageModeForBuffers.enabled;
 
     for (size_t srcOffset = 0; srcOffset < sizeToCopy; srcOffset += kMaxStagingBufferSize)
     {
         size_t subSizeToCopy = std::min(kMaxStagingBufferSize, sizeToCopy - srcOffset);
 
         mtl::BufferRef bufferRef;
-        ANGLE_TRY(getBuffer(contextMtl, subSizeToCopy, useShared, bufferRef));
+        auto storageMode =
+            Buffer::getStorageModeForAccessPattern(contextMtl, Buffer::AccessPattern::FrequentGPU);
+        ANGLE_TRY(getBuffer(contextMtl, storageMode, subSizeToCopy, bufferRef));
 
         // copy data to buffer
         uint8_t *ptr = bufferRef->mapWithOpt(contextMtl, false, true);
