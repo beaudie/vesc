@@ -16,6 +16,23 @@
       "message": "ptal",
       "revId": "29e866fa744632016fc48e36c3d8be73b939c843",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2584f4de_b7bb501d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-27T23:34:09Z",
+      "side": 1,
+      "message": "lgtm\n\nThanks for the fix. I think I can safely approve this myself.",
+      "revId": "29e866fa744632016fc48e36c3d8be73b939c843",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
