@@ -244,6 +244,24 @@
       "message": "The problem is not missing checkCompletedCommands call, but the checkCompletedCommands call is doing nothing useful in asynchronous command submission code path. https://chromium-review.googlesource.com/c/angle/angle/+/4174876 should fix this.",
       "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b67e044c_46c43b23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-27T17:22:34Z",
+      "side": 1,
+      "message": "crrev.com/c/4174876 has landed. The bug should be fixed now. Since this CL is no longer needed, I am removing +2 for now.",
+      "parentUuid": "5d46f4f5_5e3429f6",
+      "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
