@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aebe42f6_780db6de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340059
+      },
+      "writtenOn": "2023-01-27T21:02:16Z",
+      "side": 1,
+      "message": "Deferring this for another patch.",
+      "parentUuid": "1f44df43_4a0bcb10",
+      "revId": "6ae273486e5da4da292467bf4bfa82f56cf9b3ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16c323b6_4c871e3f",
