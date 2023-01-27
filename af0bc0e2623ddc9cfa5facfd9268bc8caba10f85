@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "141b5e60_3ce6f6ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T15:58:42Z",
+      "side": 1,
+      "message": "Thank you, the change is obviously good. Would you please add a regression test under `src/tests/gl_tests/` so we don\u0027t accidentally break this in the future?",
+      "revId": "af0bc0e2623ddc9cfa5facfd9268bc8caba10f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
