@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8ff945a_c35f00b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:38:54Z",
+      "side": 1,
+      "message": "Please either:\n\n- Squash this into the CL that uses it (otherwise it\u0027s just dead code until then)\n- Convert our current uses of condition variables to this so it gets testing",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95ff3df3_9fb196c5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:38:54Z",
+      "side": 1,
+      "message": "Please move this to `src/common/`, the front-end and any other backend could take advantage of this.",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47cd06b0_49efca6b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:38:54Z",
+      "side": 1,
+      "message": "How expensive is this call, any measurements you could share?\n\nDoesn\u0027t the implementation already practically do this (a la futex)?",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
