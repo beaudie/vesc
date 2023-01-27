@@ -243,7 +243,6 @@ int SampleApplication::run()
         mRunning = false;
         result   = -1;
     }
-
     mTimer.start();
     double prevTime = 0.0;
 
