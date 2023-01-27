@@ -16,6 +16,23 @@
       "message": "Shabi, PTAL.  +Roman as FYI on the tracer.",
       "revId": "78f7111db8f2a2b0779e76ef1a93146a208aa948",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3858ea40_ad3e5c2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T00:23:08Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "78f7111db8f2a2b0779e76ef1a93146a208aa948",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
