@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7fa35a1_7d9b0135",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-27T00:57:12Z",
+      "side": 1,
+      "message": "This doesn\u0027t produce the same information as the earlier code - it produces \"x86_64\" on Intel based Macs and \"arm64\" on Apple Silicon based Macs. Chrome includes the machine model in its crash reports so developers can have the best chance of reproducing crashes seen in the field, so it\u0027s not acceptable to lose this information.\n\nTest program tried:\n\n---\n#include \u003csys/utsname.h\u003e\n#include \u003cstdio.h\u003e\n\nint main(int argc, char** argv)\n{\n  struct utsname systemInfo;\n  uname(\u0026systemInfo);\n\n  fprintf(stdout, \"sysname:  \\\"%s\\\"\\n\", systemInfo.sysname);\n  fprintf(stdout, \"nodename: \\\"%s\\\"\\n\", systemInfo.nodename);\n  fprintf(stdout, \"release:  \\\"%s\\\"\\n\", systemInfo.release);\n  fprintf(stdout, \"version:  \\\"%s\\\"\\n\", systemInfo.version);\n  fprintf(stdout, \"machine:  \\\"%s\\\"\\n\", systemInfo.machine);\n}\n---\n\nOutput from M1 MBP:\n\nsysname:  \"Darwin\"\nnodename: [elided]\nrelease:  \"21.6.0\"\nversion:  \"Darwin Kernel Version 21.6.0: Sun Nov  6 23:31:13 PST 2022; root:xnu-8020.240.14~1/RELEASE_ARM64_T6000\"\nmachine:  \"arm64\"",
+      "revId": "d85e4a040ef7ae0db5c5354aa5dfeac5bad7707d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
