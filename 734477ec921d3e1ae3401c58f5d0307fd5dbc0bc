@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eda32827_32ed5089",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-27T21:10:19Z",
+      "side": 1,
+      "message": "LGTM. Since all these queueSubmitOneoff all followed by finishQueueSerial, it won\u0027t really help here. But I am not seeing reason that ensureSubmitted is needed (this might because we got rid of resource list helped here).",
+      "revId": "734477ec921d3e1ae3401c58f5d0307fd5dbc0bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
