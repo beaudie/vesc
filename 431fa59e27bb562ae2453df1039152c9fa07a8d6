@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eb4eebe_f03961f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:44:46Z",
+      "side": 1,
+      "message": "I would definitely squash this to the CL that uses it, we can evaluate there if this is the best option.\n\nAlso, similar to the condvar one, this can be moved to `src/common/`",
+      "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c3b89be_5976f06d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:44:46Z",
+      "side": 1,
+      "message": "Hard to tell without seeing the usage, but I presume you are looking for a class to temporarily unlock a mutex. In that case, I\u0027d call it `ScopedMutexUnlock`. Hopefully you could simplify it so that `lock` and `unlock` are `private`, and constructor/destructor do simple unlock/lock. Typically this means scoping the variable appropriately so you don\u0027t have to call `.lock()` manually.\n\nAlso, please put `[[nodiscard]]` after `class` to avoid accidental `ScopedMutexUnlock(mutex);` statements.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 6,
+        "endLine": 1125,
+        "endChar": 17
+      },
+      "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
