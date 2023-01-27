@@ -925,17 +925,8 @@ bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
     return false;
 }
 
-// ThreadSafeCommandProcessor implementation.
-angle::Result ThreadSafeCommandProcessor::waitForQueueSerialToBeSubmitted(
-    vk::Context *context,
-    const QueueSerial &queueSerial)
-{
-    const ResourceUse use(queueSerial);
-    return waitForResourceUseToBeSubmitted(context, use);
-}
-
-angle::Result ThreadSafeCommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
-                                                                          const ResourceUse &use)
+angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
+                                                                const ResourceUse &use)
 {
     if (mCommandQueue->hasUnsubmittedUse(use))
     {
@@ -943,18 +934,6 @@ angle::Result ThreadSafeCommandProcessor::waitForResourceUseToBeSubmitted(vk::Co
         ANGLE_TRY(waitForAllWorkToBeSubmitted(context));
     }
     return angle::Result::Continue;
-}
-
-angle::Result ThreadSafeCommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
-{
-    std::unique_lock<std::mutex> lock(mMutex);
-    return CommandProcessor::waitForAllWorkToBeSubmitted(context);
-}
-
-bool ThreadSafeCommandProcessor::isBusy(RendererVk *renderer) const
-{
-    std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-    return !mTasks.empty() || mCommandQueue->isBusy(renderer);
 }
 
 // CommandQueue public API implementation. These must be thread safe and never called from
