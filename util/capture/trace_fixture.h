@@ -106,6 +106,7 @@ extern GLeglImageOES *gEGLImageMap2;
 extern EGLSurface *gSurfaceMap2;
 extern EGLContext *gContextMap2;
 extern GLsync *gSyncMap2;
+extern EGLSync *gEGLSyncMap;
 
 void InitializeReplay3(const char *binaryDataFileName,
                        size_t maxClientArraySize,
@@ -227,6 +228,8 @@ void CreateEGLImageKHR(EGLDisplay dpy,
                        uintptr_t buffer,
                        const EGLint *attrib_list,
                        GLuint imageID);
+void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID);
+void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID);
 void CreatePbufferSurface(EGLDisplay dpy,
                           EGLConfig config,
                           const EGLint *attrib_list,
