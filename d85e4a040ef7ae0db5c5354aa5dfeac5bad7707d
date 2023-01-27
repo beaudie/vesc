@@ -34,6 +34,24 @@
       "parentUuid": "a7fa35a1_7d9b0135",
       "revId": "d85e4a040ef7ae0db5c5354aa5dfeac5bad7707d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94de7cdf_d180e18c",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1555157
+      },
+      "writtenOn": "2023-01-27T16:02:33Z",
+      "side": 1,
+      "message": "I think sysctlbyname works better in this case then. How about that?",
+      "parentUuid": "52d35c56_667bc58b",
+      "revId": "d85e4a040ef7ae0db5c5354aa5dfeac5bad7707d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
