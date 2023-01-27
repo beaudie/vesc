@@ -536,19 +536,19 @@ void WriteParamValueReplay<ParamType::TImageID>(std::ostream &os,
 }
 
 template <>
+void WriteParamValueReplay<ParamType::Tegl_SyncID>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   egl::SyncID value)
+{
+    os << "gEGLSyncMap[" << value.value << "]";
+}
+
+template <>
 void WriteParamValueReplay<ParamType::TEGLClientBuffer>(std::ostream &os,
                                                         const CallCapture &call,
                                                         EGLClientBuffer value)
 {
     os << value;
-}
-
-template <>
-void WriteParamValueReplay<ParamType::Tegl_SyncPointer>(std::ostream &os,
-                                                        const CallCapture &call,
-                                                        egl::Sync *value)
-{
-    os << "EGL_NO_SYNC_KHR";
 }
 
 template <>
