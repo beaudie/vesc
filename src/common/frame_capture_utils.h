@@ -361,11 +361,6 @@ void WriteParamValueReplay<ParamType::Tegl_ConfigPointer>(std::ostream &os,
                                                           egl::Config *value);
 
 template <>
-void WriteParamValueReplay<ParamType::Tegl_SyncPointer>(std::ostream &os,
-                                                        const CallCapture &call,
-                                                        egl::Sync *value);
-
-template <>
 void WriteParamValueReplay<ParamType::TEGLTime>(std::ostream &os,
                                                 const CallCapture &call,
                                                 EGLTime value);
@@ -374,6 +369,11 @@ template <>
 void WriteParamValueReplay<ParamType::TEGLTimeKHR>(std::ostream &os,
                                                    const CallCapture &call,
                                                    EGLTimeKHR value);
+
+template <>
+void WriteParamValueReplay<ParamType::Tegl_SyncID>(std::ostream &os,
+                                                   const CallCapture &call,
+                                                   egl::SyncID value);
 
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
