@@ -33,6 +33,24 @@
       "message": "LGTM. The texture descriptorset cache code needs to improved, but lets track that separately.",
       "revId": "83c07fe252d39d2738fbaffc185335570a30bd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cc614a4_348f8ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-01-27T15:01:41Z",
+      "side": 1,
+      "message": "Thanks for checking Charlie. https://anglebug.com/7974 for tracking potential improvement",
+      "parentUuid": "0ee44ce3_45b85fb0",
+      "revId": "83c07fe252d39d2738fbaffc185335570a30bd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
