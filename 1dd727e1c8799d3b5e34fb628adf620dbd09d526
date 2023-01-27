@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c4a34a_2c0730b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T15:57:04Z",
+      "side": 1,
+      "message": "LGTM, but FYI we\u0027ve moved away from requiring the git hash in ANGLE due to it lacking in some Android builds.\n\nThe change is harmless, but may be unnecessary at this point",
+      "revId": "1dd727e1c8799d3b5e34fb628adf620dbd09d526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
