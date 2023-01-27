@@ -6089,6 +6089,16 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(CreateEGLImageKHR)>(paramTokens, strings);
         return CallCapture("CreateEGLImageKHR", std::move(params));
     }
+    if (strcmp(nameToken, "CreateEGLSync") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(CreateEGLSync)>(paramTokens, strings);
+        return CallCapture("CreateEGLSync", std::move(params));
+    }
+    if (strcmp(nameToken, "CreateEGLSyncKHR") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(CreateEGLSyncKHR)>(paramTokens, strings);
+        return CallCapture("CreateEGLSyncKHR", std::move(params));
+    }
     if (strcmp(nameToken, "CreateNativeClientBufferANDROID") == 0)
     {
         ParamBuffer params =
@@ -6391,6 +6401,16 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "CreateEGLImageKHR")
     {
         DispatchCallCapture(CreateEGLImageKHR, captures);
+        return;
+    }
+    if (call.customFunctionName == "CreateEGLSync")
+    {
+        DispatchCallCapture(CreateEGLSync, captures);
+        return;
+    }
+    if (call.customFunctionName == "CreateEGLSyncKHR")
+    {
+        DispatchCallCapture(CreateEGLSyncKHR, captures);
         return;
     }
     if (call.customFunctionName == "CreateNativeClientBufferANDROID")

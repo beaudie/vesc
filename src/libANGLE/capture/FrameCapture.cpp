@@ -3274,6 +3274,18 @@ void CaptureCustomCreateEGLImage(const char *name,
     callsOut.emplace_back(std::move(call));
 }
 
+void CaptureCustomCreateEGLSync(const char *name,
+                                CallCapture &call,
+                                std::vector<CallCapture> &callsOut)
+{
+    ParamBuffer &&params = std::move(call.params);
+    EGLSync returnVal    = params.getReturnValue().value.EGLSyncVal;
+    egl::SyncID syncID   = egl::PackParam<egl::SyncID>(returnVal);
+    params.addValueParam("sync", ParamType::TGLuint, syncID.value);
+    call.customFunctionName = name;
+    callsOut.emplace_back(std::move(call));
+}
+
 void CaptureCustomCreatePbufferSurface(CallCapture &call, std::vector<CallCapture> &callsOut)
 {
     ParamBuffer &&params     = std::move(call.params);
@@ -6619,6 +6631,16 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
         case EntryPoint::EGLCreateImageKHR:
         {
             CaptureCustomCreateEGLImage("CreateEGLImageKHR", inCall, outCalls);
+            break;
+        }
+        case EntryPoint::EGLCreateSync:
+        {
+            CaptureCustomCreateEGLSync("CreateEGLSync", inCall, outCalls);
+            break;
+        }
+        case EntryPoint::EGLCreateSyncKHR:
+        {
+            CaptureCustomCreateEGLSync("CreateEGLSyncKHR", inCall, outCalls);
             break;
         }
         case EntryPoint::EGLCreatePbufferSurface:

@@ -424,6 +424,7 @@ class Display final : public LabeledObject,
 
     gl::HandleAllocator mImageHandleAllocator;
     gl::HandleAllocator mSurfaceHandleAllocator;
+    gl::HandleAllocator mSyncHandleAllocator;
 
     angle::FrontendFeatures mFrontendFeatures;
 

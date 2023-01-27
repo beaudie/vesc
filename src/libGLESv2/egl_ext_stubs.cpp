@@ -134,7 +134,7 @@ EGLSyncKHR CreateSyncKHR(Thread *thread,
                          "eglCreateSyncKHR", GetDisplayIfValid(display), EGL_NO_SYNC);
 
     thread->setSuccess();
-    return static_cast<EGLSync>(syncObject);
+    return reinterpret_cast<EGLSync>(static_cast<uintptr_t>(syncObject->id().value));
 }
 
 EGLint DebugMessageControlKHR(Thread *thread,

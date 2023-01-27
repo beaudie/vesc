@@ -259,7 +259,7 @@ EGLSync CreateSync(Thread *thread, Display *display, EGLenum type, const Attribu
                          "eglCreateSync", GetDisplayIfValid(display), EGL_NO_SYNC);
 
     thread->setSuccess();
-    return static_cast<EGLSync>(syncObject);
+    return reinterpret_cast<EGLSync>(static_cast<uintptr_t>(syncObject->id().value));
 }
 
 EGLSurface CreateWindowSurface(Thread *thread,

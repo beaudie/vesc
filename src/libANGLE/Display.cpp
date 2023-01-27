@@ -1574,13 +1574,15 @@ Error Display::createSync(const gl::Context *currentContext,
 {
     ASSERT(isInitialized());
 
+    SyncID id = {mSyncHandleAllocator.allocate()};
+
     if (mImplementation->testDeviceLost())
     {
         ANGLE_TRY(restoreLostDevice());
     }
 
-    angle::UniqueObjectPointer<egl::Sync, Display> syncPtr(new Sync(mImplementation, type, attribs),
-                                                           this);
+    angle::UniqueObjectPointer<egl::Sync, Display> syncPtr(
+        new Sync(mImplementation, id, type, attribs), this);
 
     ANGLE_TRY(syncPtr->initialize(this, currentContext));
 
@@ -1827,6 +1829,7 @@ void Display::destroySyncImpl(Sync *sync, SyncSet *syncs)
     auto iter = syncs->find(sync);
     ASSERT(iter != syncs->end());
     (*iter)->release(this);
+    mSyncHandleAllocator.release(sync->id().value);
     syncs->erase(iter);
 }
 

@@ -196,6 +196,7 @@ GLeglImageOES *gEGLImageMap2;
 EGLSurface *gSurfaceMap2;
 EGLContext *gContextMap2;
 GLsync *gSyncMap2;
+EGLSync *gEGLSyncMap;
 
 void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
                                      DeleteCallback deleteCallback)
@@ -565,6 +566,16 @@ void CreateEGLImageKHR(EGLDisplay dpy,
 {
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
     gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+}
+
+void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
+{
+    gEGLSyncMap[syncID] = eglCreateSyncKHR(dpy, type, attrib_list);
+}
+
+void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID)
+{
+    gEGLSyncMap[syncID] = eglCreateSync(dpy, type, attrib_list);
 }
 
 void CreatePbufferSurface(EGLDisplay dpy,
