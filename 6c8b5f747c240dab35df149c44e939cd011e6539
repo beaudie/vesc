@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4ab6fc_7289d32a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-27T18:02:12Z",
+      "side": 1,
+      "message": "However, I don\u0027t think that\u0027s how it works today: Transform feedback -\u003e UBO might have an extra sync step.",
+      "parentUuid": "4c3e2c08_97d080a6",
+      "revId": "6c8b5f747c240dab35df149c44e939cd011e6539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8f3dd28_92a3ce55",

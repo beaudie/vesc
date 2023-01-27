@@ -85,6 +85,24 @@
       "parentUuid": "da27a64c_8bac5c27",
       "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e4c6dd_b00962ce",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-27T18:02:12Z",
+      "side": 1,
+      "message": "Double checked my code and fixed the UBO reuse indexing, added more clarifying comments.",
+      "parentUuid": "b77ec5de_e19d0c42",
+      "revId": "44c17aa7e25fd3cb4a39fc36603403b6253bae7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
