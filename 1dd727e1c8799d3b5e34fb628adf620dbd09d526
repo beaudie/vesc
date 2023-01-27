@@ -33,6 +33,23 @@
       "message": "I will leave to Yuxin to +2 on this one.",
       "revId": "1dd727e1c8799d3b5e34fb628adf620dbd09d526",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73da3d9c_6aadfc6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-01-27T18:24:48Z",
+      "side": 1,
+      "message": "Hi Igor, thank you so much for your work!\n\nAs Shabi mentioned, we have removed the dependency of program binary cache key to the ANGLE git hash, the change is in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/4144078.\n\n`commit_id.py` script is still executed during build, however, we are not using its\u0027 results in shader program [serialize](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3493) and [deserialize](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d3595) any more.\n\nYour change is great, but it might not be used by ANGLE shader program cache, due to lack of access to git on Android build infrastructure.",
+      "revId": "1dd727e1c8799d3b5e34fb628adf620dbd09d526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
