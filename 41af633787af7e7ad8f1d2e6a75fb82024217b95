@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06f14450_6e176345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-27T19:00:30Z",
+      "side": 1,
+      "message": "I am thinking to abandon this CL and land the other CL instead. See\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4118856",
+      "revId": "41af633787af7e7ad8f1d2e6a75fb82024217b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
