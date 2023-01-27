@@ -16,6 +16,29 @@
       "message": "This is the other version of CommandQueue/ThreadafeCommandQueue class clean up. This verson merged then back into one CommandQueue class. Comparing this against https://chromium-review.googlesource.com/c/angle/angle/+/4179051, Now I like this version better. 1) It has one class, just easier to read. 2) the difference between CommandProcessor and ThreadSafeCommandProcessor are too small to have two classes. In next CL, I am going to merge ThreadSafeCommandProcessor back to CommandProcessor as well. It makes more sense to have COmmandQueue be consistent with CommandProcessor. 3) It also gives us flexibility if we ever want to fine tune locks in future. The two class version has the benefit of robustness, that in some way is compensated by comments and grouping.",
       "revId": "65622f08987b284648182bb810798fe635ca0ddd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06063886_4e88cc55",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-27T20:45:28Z",
+      "side": 1,
+      "message": "nit: Extra?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 70,
+        "endLine": 1224,
+        "endChar": 74
+      },
+      "revId": "65622f08987b284648182bb810798fe635ca0ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
