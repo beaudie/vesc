@@ -39,6 +39,23 @@
       },
       "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "282f8d24_10fa1ead",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-27T16:46:30Z",
+      "side": 1,
+      "message": "Style nit: We explicitly cast to bool; i.e. `mMutex \u003d\u003d nullptr`. Also it\u0027d be better to split into two ASSERTs, so it\u0027s clear which failed if it fires:\n\n```\nASSERT(mMutex \u003d\u003d nullptr);\nASSERT(mutex !\u003d nullptr);\n```",
+      "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
