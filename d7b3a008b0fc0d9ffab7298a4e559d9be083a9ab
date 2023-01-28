@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96f01d7_e4e56096",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "This is just fantastic Kyle! I patched this in locally and ran a few WebGL apps like Earth and the Aquarium (having some trouble with Maps, not ANGLE/Metal related) and they\u0027re looking good.\n\nlgtm - only one significant question at the bottom.\n\nSending latest patch set for a dry run.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "231c5104_5ff9e021",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Would be good to reference TODO(angleproject:7979) here too.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd55d0e6_a7d63bd9",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Read the name...",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4f10245_6688dbc0",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Read the number...",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91a8b125_802db6d6",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Typo: Decompress\n\nCould you mention here something like:\n\n// Decompress bool from one byte to four bytes because bool values in GLSL\n// are uint-sized: ES 3.0 Section 2.12.6.3 \"Uniform Buffer Object Storage\".\n\nThanks.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c12cb314_2640a039",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Please use static_cast\u003cT\u003e(data) unless that doesn\u0027t compile, in which case let\u0027s try reinterpret_cast\u003cT\u003e(data).",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93b5ab8d_39f18ba0",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "are has -\u003e have the",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b34a51ab_7274bc6f",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "are has -\u003e have the",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b6e97d5_319f62c9",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T02:43:13Z",
+      "side": 1,
+      "message": "Is the first expression supposed to be:\n  ((row * cols) + col)\n? If so - wonder if there are any tests which cover this.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
