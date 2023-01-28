@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00e97ef1_7e245e40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T00:26:21Z",
+      "side": 1,
+      "message": "lgtm too\n\nLet\u0027s integrate this change ASAP since it sounds like there\u0027s a significant resource leak. One question.",
+      "revId": "97de798b9a53f003fd55f45bdaa775c59ccd617e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad47847f_43b6e9a5",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T00:26:21Z",
+      "side": 1,
+      "message": "As Gregg mentioned in chat, some of these don\u0027t really match this access pattern - for example, STATIC_DRAW is supposed to be written once on the CPU and read frequently on the GPU. DYNAMIC_DRAW, on the other hand, is expected to be written frequently on the CPU. Is it known that this change hasn\u0027t accidentally inverted the previous heuristics?",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 12
+      },
+      "revId": "97de798b9a53f003fd55f45bdaa775c59ccd617e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
