@@ -39,6 +39,30 @@
       },
       "revId": "97de798b9a53f003fd55f45bdaa775c59ccd617e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fffb0c3_fc8695dc",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-28T00:28:13Z",
+      "side": 1,
+      "message": "Resolving this comment and CQ\u0027ing because of the urgency of this fix. We can follow up regarding this later.",
+      "parentUuid": "ad47847f_43b6e9a5",
+      "range": {
+        "startLine": 512,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 12
+      },
+      "revId": "97de798b9a53f003fd55f45bdaa775c59ccd617e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
