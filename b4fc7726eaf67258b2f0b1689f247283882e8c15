@@ -141,6 +141,24 @@
       "parentUuid": "9a140c70_afb6f81f",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d69c9eca_e730f5bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T19:44:11Z",
+      "side": 1,
+      "message": "You may be right, let me dig deeper. I did in fact have this chaining of submissions with semaphores done in the past: https://chromium-review.googlesource.com/c/angle/angle/+/1276805 but that was (rightfully) removed as we didn\u0027t actually need that with single-queue submissions.\n\nChaining the submissions between queues with semaphores is not really hard with the above flush-on-priority-change method. The harder part is detecting when the chaining is necessary; we wouldn\u0027t really want to make A wait for B if not using the same resources, otherwise it\u0027s basically priority inversion all over the place 😄",
+      "parentUuid": "5e5d6910_01eb884c",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
