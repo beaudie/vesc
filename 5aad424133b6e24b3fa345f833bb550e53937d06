@@ -199,6 +199,24 @@
       "parentUuid": "120d4192_c2ad09f8",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c0fa47c_48a63a00",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T20:12:05Z",
+      "side": 1,
+      "message": "\u003e Actually is it possible?\n\n```\nangle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)\n{\n    ANGLE_TRACE_EVENT0(\"gpu.angle\", \"WindowSurfaceVk::prepareSwap\");\n    if (mNeedToAcquireNextSwapchainImage)\n    {\n        // Acquire the next image (previously deferred). The image may not have been already\n        // acquired if there was no rendering done at all to the default framebuffer in this frame,\n        // for example if all rendering was done to FBOs.\n        ANGLE_TRACE_EVENT0(\"gpu.angle\", \"Acquire Swap Image Before Swap\");\n        ANGLE_TRY(doDeferredAcquireNextImage(context, false));\n    }\n    if (mAcquireImageSemaphore)\n    {\n        flushAcquireImageSemaphore(context);\n    }\n    return angle::Result::Continue;\n}\n```\n\nThe comment above suggest it is possible.\nHowever, there should be commands recorded in the `prePresentSubmit()`.\nAnd even if there is no commands, `signalSemaphore` in the `flushImpl()` will enforce `flushOutsideRenderPassCommands()`.\n\n\u003e Or why not do it at the time VkAcuqireNextImage is called? i.e.\n\nBecause it takes `vk::Context *context` and not `ContextVk`.\nInitial images is acquired using `DisplayVk`. Also there is `lockSurface()`.",
+      "parentUuid": "6a5bc653_e092fcd0",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
