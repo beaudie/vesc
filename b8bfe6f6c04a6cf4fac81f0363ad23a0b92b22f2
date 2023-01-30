@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea41e20_6afeff75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-30T23:44:31Z",
+      "side": 1,
+      "message": "Kyle, great work again - one question after the fact.",
+      "revId": "b8bfe6f6c04a6cf4fac81f0363ad23a0b92b22f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2eba3cd_0128b142",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-30T23:44:31Z",
+      "side": 1,
+      "message": "The expression on this line:\n  ((row * col) + col)\nfor computing the transposed index looks incorrect. Should it not be:\n  ((row * columns) + col)\n?",
+      "revId": "b8bfe6f6c04a6cf4fac81f0363ad23a0b92b22f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
