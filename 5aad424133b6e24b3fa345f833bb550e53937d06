@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "61cab957_a6b4b4a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T19:37:05Z",
+      "side": 1,
+      "message": "Ok. I will prepare the tests.",
+      "parentUuid": "4d644ccd_a4c33d35",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e07e22b8_a3fba1dc",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
