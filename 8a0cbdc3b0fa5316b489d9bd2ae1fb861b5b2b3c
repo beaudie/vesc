@@ -262,6 +262,24 @@
       "parentUuid": "5d46f4f5_5e3429f6",
       "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd1f320_575092ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2023-01-30T00:08:32Z",
+      "side": 1,
+      "message": "Thank you. Then can we enable `EGL_ANDROID_native_fence_sync` for linux environment? Actually this CL was upladed to fix below CL\u0027s failure.\n\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4027707\nCan you give a dry-run for this?",
+      "parentUuid": "b67e044c_46c43b23",
+      "revId": "8a0cbdc3b0fa5316b489d9bd2ae1fb861b5b2b3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
