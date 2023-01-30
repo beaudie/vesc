@@ -16,6 +16,23 @@
       "message": "Need to revert because of correctness issues uncovered by WebGL 2.0 conformance tests.",
       "revId": "2af5a6ddca339bca25a63fd2cc2b00a21be210e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed500acb_280258a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-30T20:52:30Z",
+      "side": 1,
+      "message": "Our presubmit is finicky, since it does full file comparison.\nI\u0027ll abandon this and do a new revert, bypassing presubmit.",
+      "revId": "2af5a6ddca339bca25a63fd2cc2b00a21be210e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
