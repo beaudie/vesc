@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eb996f3_fe21c00f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T18:25:40Z",
+      "side": 1,
+      "message": "ImageMemorySubAllocator makes more sense, since it is a suballocator.",
+      "range": {
+        "startLine": 121,
+        "startChar": 6,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9873ead9_16d83545",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5471,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T18:25:40Z",
+      "side": 1,
+      "message": "You should also go through garbage collector. I think this is why you are seeing VVL error. Something like this:\nrenderer-\u003ecollectGarbage(mUse, \u0026mImage, \u0026mDeviceMemory, \u0026mAllocation);",
+      "range": {
+        "startLine": 5471,
+        "startChar": 0,
+        "endLine": 5471,
+        "endChar": 53
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0258a287_3ac99b62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T18:25:40Z",
+      "side": 1,
+      "message": "Could you move it next to mDeviceMemory?",
+      "range": {
+        "startLine": 2654,
+        "startChar": 4,
+        "endLine": 2654,
+        "endChar": 30
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c43097bc_ebfbb8ec",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T18:25:40Z",
+      "side": 1,
+      "message": "Since this is just allocating memory, not create image, suggest to rename to allocateAndBindMemory and remove unneeded parameters.",
+      "range": {
+        "startLine": 139,
+        "startChar": 9,
+        "endLine": 139,
+        "endChar": 20
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
