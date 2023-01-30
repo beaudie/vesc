@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a998d897_196cb273",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T19:32:09Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "d7ba25b9_5c366fb4",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb21587c_8a00e030",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "\u003e * Context A (prio1) records and flushes commands and wait semaphore from Acquire\n\u003e * Context B (prio2) flushes commands -\u003e enforced submission.\n\u003e * Commands of Context A and Acquire semaphore in the \"prio2\" VkQueue.\n\nNo actually the point was to have commands of Context A be submitted to prio1 queue. That can be done by recording the \"current priority of the PCB\", and when a new SCB flush comes with a different priority, _first_ submit the old PCB to its respective queue, _then_ record SCB into a new PCB and update the current priority.\n\nWould that not solve the issue?\n\nWe don\u0027t need a semaphore by the way because all the queues are from the same family, and pipeline barriers are taking care of synchronization.",
       "parentUuid": "b29bd753_4bb1d465",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e5d6910_01eb884c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T19:32:09Z",
+      "side": 1,
+      "message": "\u003e No actually the point was to have commands of Context A be submitted to prio1 queue.\n\nSorry, I misunderstood that.\n\n\u003e Would that not solve the issue?\n\nI guess so. I need to check this.\n\n\u003e We don\u0027t need a semaphore by the way because all the queues are from the same family, and pipeline barriers are taking care of synchronization.\n\nCould you point in the Vulkan spec where such guarantee is made?\n\nFrom what I found:\n\u003e Semaphores can be used to control resource access across multiple queues.\n\nSo \"multiple queues\" not queue families.\n\n\u003e Layout transitions that are performed via image memory barriers execute in their entirety in submission order, relative to other image layout transitions submitted to the same queue, including those performed by render passes.\n\nKey parts are \"submission order\" and \"same queue\".",
+      "parentUuid": "9a140c70_afb6f81f",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
