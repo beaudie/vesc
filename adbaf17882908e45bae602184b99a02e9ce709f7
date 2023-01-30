@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf64771d_fc487b9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T21:04:36Z",
+      "side": 1,
+      "message": "Very small fix to use the correct release method for this data type (dispatch_release, instead of ANGLE_AUTORELEASE)",
+      "revId": "adbaf17882908e45bae602184b99a02e9ce709f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
