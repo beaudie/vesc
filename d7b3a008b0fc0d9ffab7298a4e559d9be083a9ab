@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "130f95fb_1d435c64",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "231c5104_5ff9e021",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd55d0e6_a7d63bd9",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-01-28T02:43:13Z",
       "side": 1,
       "message": "Read the name...",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1a70b9_af695677",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd55d0e6_a7d63bd9",
       "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fcf1ea1_ed9f2c94",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4f10245_6688dbc0",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91a8b125_802db6d6",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-01-28T02:43:13Z",
       "side": 1,
       "message": "Typo: Decompress\n\nCould you mention here something like:\n\n// Decompress bool from one byte to four bytes because bool values in GLSL\n// are uint-sized: ES 3.0 Section 2.12.6.3 \"Uniform Buffer Object Storage\".\n\nThanks.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1dabeb3_51d40bb7",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91a8b125_802db6d6",
       "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "631c66d7_94070f54",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 16
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c12cb314_2640a039",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93b5ab8d_39f18ba0",
@@ -116,6 +206,24 @@
       "writtenOn": "2023-01-28T02:43:13Z",
       "side": 1,
       "message": "are has -\u003e have the",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3008654e_08469f95",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93b5ab8d_39f18ba0",
       "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34a0665a_94cb57bf",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b34a51ab_7274bc6f",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2b6e97d5_319f62c9",
@@ -150,6 +276,24 @@
       "writtenOn": "2023-01-28T02:43:13Z",
       "side": 1,
       "message": "Is the first expression supposed to be:\n  ((row * cols) + col)\n? If so - wonder if there are any tests which cover this.",
+      "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "534768fa_3f87740c",
+        "filename": "src/libANGLE/renderer/metal/renderermtl_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T18:41:10Z",
+      "side": 1,
+      "message": "No, in this case they aren\u0027t. matrices are read out column-major (col*rows + row) instead of row major.\n\nHowever, I think the transpose code never runs, I haven\u0027t found a single instance in the testing where we can directly read out a uniform and expect it to be row major format. I don\u0027t think the glUniform* calls work on UBO\u0027s, so there\u0027s really no way to read out a row-major matrix. I\u0027ve updated ProgramMTL.mm to only pass false, instead of looking up the block layout, as it\u0027ll always be false.",
+      "parentUuid": "2b6e97d5_319f62c9",
       "revId": "d7b3a008b0fc0d9ffab7298a4e559d9be083a9ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
