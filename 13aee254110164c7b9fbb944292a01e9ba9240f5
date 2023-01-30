@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a08bd4_d8cd1f0c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5200,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-01-30T14:57:28Z",
+      "side": 1,
+      "message": "This is crashing chromium in runtime with libstdc++, if it is built with rtti (as in Ubuntu at least). The problem is because it will internally use dynamic_cast. \n\nEven if it has a guard for only going through dynamic cast if libstdc++ is built rtti, chrome angle is built without rtti and that will still crash as even though libstdc++ is built with rtti, the inherited class MemoryAllocationLogNumberFormaat is not built with rtti.\n\nhttps://stackoverflow.com/questions/49939459/c-locale-without-rtti comments about the problem.\n\nQuestion is how to workaround this. Not sure if it is possible to only add RTTI to the types inheriting from std::locale RTTI, or build full ANGLE with rtti.",
+      "revId": "13aee254110164c7b9fbb944292a01e9ba9240f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
