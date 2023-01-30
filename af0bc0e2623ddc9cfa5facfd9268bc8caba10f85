@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da076e7_c3d65a4e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T13:35:04Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "82843bc4_3a52ba2c",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "af0bc0e2623ddc9cfa5facfd9268bc8caba10f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "141b5e60_3ce6f6ee",
@@ -54,6 +78,42 @@
       "writtenOn": "2023-01-27T17:32:05Z",
       "side": 1,
       "message": "I actually was intentionally left out mRecycler pointer clear since it is weak pointer. But I agree that if you do init/release/init, you will hit assertion. So the change is good. \n\nI am not sure if you are able to write a test to reproduce this without a white box test, since angle will probably never get into init/release/init sequence?",
+      "revId": "af0bc0e2623ddc9cfa5facfd9268bc8caba10f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "049fc0ac_d6eea621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T13:35:04Z",
+      "side": 1,
+      "message": "I think you are right. It is not possible in CommandQueue.\n\nThe init/release/init sequence happens in my CommandQueue2 code. It has ring buffer of QueueItem(s) instead of dynamically allocating CommandBatch instances.",
+      "parentUuid": "2c8e0c60_22b38e21",
+      "revId": "af0bc0e2623ddc9cfa5facfd9268bc8caba10f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4cc89d1_4c5cdb4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T13:35:04Z",
+      "side": 1,
+      "message": "I will try.",
+      "parentUuid": "141b5e60_3ce6f6ee",
       "revId": "af0bc0e2623ddc9cfa5facfd9268bc8caba10f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
