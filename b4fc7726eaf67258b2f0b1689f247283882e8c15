@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7ba25b9_5c366fb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T19:01:12Z",
+      "side": 1,
+      "message": "Take a look at `UnsynchronizedTextureReads*` tests for example, EGL allows multiple threads to read from the texture without synchronization, while internally ANGLE would have to sequence them correctly due to image layout transitions.",
+      "parentUuid": "2bc46895_8931692e",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb21587c_8a00e030",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "This problem is not theoretical and causes artifacts in Samsung Notes app.\n\nI think I understand the \"priority inheritance system/mechanism\".\n\nI do not understand how \"enforce a submission when SCB-\u003ePCB flush\" will help?\nFor example:\n- Context A (prio1) records and flushes commands and wait semaphore from Acquire\n- Context B (prio2) flushes commands -\u003e enforced submission.\n- Commands of Context A and Acquire semaphore in the \"prio2\" VkQueue.\n- Context A (prio1) continues to render into the same framebuffer.\n- Context A (prio1) calls eglSwapBuffers()\n- Rest of Context A commands (without Acquire semaphore) in the \"prio1\" VkQueue.\n- Blinking/artifacts may appear on screen, because there is no synchronization between commands from \"prio2\" VkQueue and \"prio1\" VkQueue, also no dependency chain with Acquire semaphore and Present semaphore.\n\nThe above situation is implicit command shuffle of a single Context.\nANGLE must detect such cases and use VkSemaphore when commands of a Context switches VkQueue like that.\nProposed solution simply avoid this shuffling.\n\nHowever, VkSemaphore may still be required to synchronize resource between multiple Contexts (Shared or via EGLImage).\nWe may call this problem - explicit command shuffle.",
       "parentUuid": "bb21587c_8a00e030",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a140c70_afb6f81f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T19:01:12Z",
+      "side": 1,
+      "message": "\u003e * Context A (prio1) records and flushes commands and wait semaphore from Acquire\n\u003e * Context B (prio2) flushes commands -\u003e enforced submission.\n\u003e * Commands of Context A and Acquire semaphore in the \"prio2\" VkQueue.\n\nNo actually the point was to have commands of Context A be submitted to prio1 queue. That can be done by recording the \"current priority of the PCB\", and when a new SCB flush comes with a different priority, _first_ submit the old PCB to its respective queue, _then_ record SCB into a new PCB and update the current priority.\n\nWould that not solve the issue?\n\nWe don\u0027t need a semaphore by the way because all the queues are from the same family, and pipeline barriers are taking care of synchronization.",
+      "parentUuid": "b29bd753_4bb1d465",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
