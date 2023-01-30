@@ -50,6 +50,24 @@
       "message": "How expensive is this call, any measurements you could share?\n\nDoesn\u0027t the implementation already practically do this (a la futex)?",
       "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38f216fd_b936ee97",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T18:51:43Z",
+      "side": 1,
+      "message": "How expensive depends if there is/are waiter(s).\n\nThis is very old numbers from 2019:\nnotify_all()  - 0 waiters --  1.8 micro-sec\nnotify_all()  - 1 waiter  -- 11.2 micro-sec\nnotify_all()  - 3 waiters -- 22.3 micro-sec\nnotify_one()  - 0 waiter  --  1.8 micro-sec\nnotify_one()  - 1 waiter  -- 11.4 micro-sec\nnotify_one()  - 3 waiters -- 11.3 micro-sec\n\nThis optimization will avoid 1.8 micro-sec of overhead.\n\nI may do new tests.",
+      "parentUuid": "47cd06b0_49efca6b",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
