@@ -181,6 +181,24 @@
       "parentUuid": "d2910af6_c736ee93",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a5bc653_e092fcd0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T19:47:18Z",
+      "side": 1,
+      "message": "Actually is it possible? I can\u0027t think out what will prevent it, even though no real usage may do it this way.\n\nOr why not do it at the time VkAcuqireNextImage is called? i.e.\n\nWindowSurfaceVk::acquireNextSwapchainImage()\n{\n...\n   vkAcquireNextImageKHR();\n   contextVk-\u003eaddWaitSemaphore()               \n...\n}\n\nThis way it seems more robust: if you acquire the image, you should wait for the semaphore.",
+      "parentUuid": "120d4192_c2ad09f8",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
