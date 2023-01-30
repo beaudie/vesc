@@ -16,6 +16,24 @@
       "message": "nit: Please create and reference an issue",
       "revId": "e98bb0e238e4a443c1a83c2cab0e815603fa9a4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dc0d7cb_5a1dc508",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T20:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "124969e8_5f73d3a8",
+      "revId": "e98bb0e238e4a443c1a83c2cab0e815603fa9a4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
