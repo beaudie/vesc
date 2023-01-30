@@ -34,6 +34,24 @@
       "parentUuid": "71a08bd4_d8cd1f0c",
       "revId": "13aee254110164c7b9fbb944292a01e9ba9240f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec09214c_7c06d3cc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5200,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-01-30T16:33:14Z",
+      "side": 1,
+      "message": "Would it be OK then to just remove locale usage at all? At least this way we would get all the numbers with same default format instead of using any dependent locale format?\n\nLater, if anybody wants to add formatting for clarity, then it will still be possible to do that adding a helper",
+      "parentUuid": "c4a9a6fb_58d05a41",
+      "revId": "13aee254110164c7b9fbb944292a01e9ba9240f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
