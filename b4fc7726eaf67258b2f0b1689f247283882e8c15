@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bc46895_8931692e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T18:12:03Z",
+      "side": 1,
+      "message": "Not apps. ANGLE should use VkSemaphore automatically between submissions of commands, that accesses same resource into different VkQueue(s).\nHow to implement this - is another question. This may be simple or may be not. I did not have time to investigate this problem.\n\nAbout Context 1/2 scenario and test.\nI think that the app must use either glFinish() or glFenceSync() to synchronize access to the texture from Context 1 (copy) to Context 2 (blend); and Context 2 (blend) to Context 1 (read). Or how else we can ensure (from GLES stand point) this synchronization?\nIn case of glFinish() - no need to do enything.\nIn case of glFenceSync() - need to insert VkSemaphore() in the glWaitSync().",
+      "parentUuid": "b64a5ec5_e78a69f2",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb21587c_8a00e030",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2023-01-30T17:11:31Z",
       "side": 1,
       "message": "I understand the problem, and sympathize with the desire to fix it. I don\u0027t believe this is the right approach though.\n\nIn a sense, what we have _now_ is a priority inheritance system, except we can also downgrade priority depending on who actually submits the commands.\n\nI think a better solution is an actual priority inheritance mechanism. It should actually be fairly trivial to do; when we flush a secondary CB, get the priority and record the max, then on submission use the max priority instead of current context\u0027s priority.\n\nThis would actually mean that if A (high prio) depends on B (low prio), we\u0027d automatically run B at high prio for the sake of A.\n\nAlternatively, if that\u0027s not what we want to support (or there\u0027s a risk of unrelated low prio work getting submitted at high prio), we can always enforce a submission when SCB-\u003ePCB flush is done with a different priority.\n\nWhat do you think?",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29bd753_4bb1d465",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T18:12:03Z",
+      "side": 1,
+      "message": "This problem is not theoretical and causes artifacts in Samsung Notes app.\n\nI think I understand the \"priority inheritance system/mechanism\".\n\nI do not understand how \"enforce a submission when SCB-\u003ePCB flush\" will help?\nFor example:\n- Context A (prio1) records and flushes commands and wait semaphore from Acquire\n- Context B (prio2) flushes commands -\u003e enforced submission.\n- Commands of Context A and Acquire semaphore in the \"prio2\" VkQueue.\n- Context A (prio1) continues to render into the same framebuffer.\n- Context A (prio1) calls eglSwapBuffers()\n- Rest of Context A commands (without Acquire semaphore) in the \"prio1\" VkQueue.\n- Blinking/artifacts may appear on screen, because there is no synchronization between commands from \"prio2\" VkQueue and \"prio1\" VkQueue, also no dependency chain with Acquire semaphore and Present semaphore.\n\nThe above situation is implicit command shuffle of a single Context.\nANGLE must detect such cases and use VkSemaphore when commands of a Context switches VkQueue like that.\nProposed solution simply avoid this shuffling.\n\nHowever, VkSemaphore may still be required to synchronize resource between multiple Contexts (Shared or via EGLImage).\nWe may call this problem - explicit command shuffle.",
+      "parentUuid": "bb21587c_8a00e030",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
