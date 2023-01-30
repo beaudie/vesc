@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e07e22b8_a3fba1dc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T16:44:51Z",
+      "side": 1,
+      "message": "nit: Bug tag",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7eb8b85c_8ffe5e05",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 2
