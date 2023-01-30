@@ -159,6 +159,24 @@
       "parentUuid": "5e5d6910_01eb884c",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328d5556_99e28fb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T19:59:50Z",
+      "side": 1,
+      "message": "\u003e The harder part is detecting when the chaining is necessary.\n\nI was really hoping that GLES spec requires some sort of explicit synchronization... (Still need to look at the `UnsynchronizedTextureReads*`).\n\nMean while we can fix current problem by enforcing submit on flush when priority changes.",
+      "parentUuid": "d69c9eca_e730f5bb",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
