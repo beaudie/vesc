@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64a5ec5_e78a69f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T17:11:31Z",
+      "side": 1,
+      "message": "Indeed I was going to point this out. Are you saying _apps_ should use semaphores? Unfortunately we can\u0027t require apps to do something the spec doesn\u0027t require.\n\nOne possible solution is to submit command buffers from all priorities of the contexts in the share group, but there\u0027s another bug here:\n\nWhen the resource usage is intermixed between render passes, the ordering won\u0027t be right if the contexts are separately recording to primary command buffers:\n\n- Context 1 (low priority) copies to texture (created with glTexStorage, so ANGLE flushes the work)\n- Context 2 (high priority) blends to image A and breaks the render pass (e.g. by copy into temp texture) (should read context1\u0027s write as blend dst)\n- Context 1 reads back from the texture (should read context2\u0027s result)\n\nWe rely on the fact these are recorded in order in the primary command buffer. If context2\u0027s commands are written separately to another primary command buffer, there\u0027s no way to order the two CBs to get correct rendering.\n\nCould you please add a test based on this? Take a look at MultithreadingTest.cpp and how tests use `RunLockStepThreads` to make sure the threads do the tasks in the desired order.",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb21587c_8a00e030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T17:11:31Z",
+      "side": 1,
+      "message": "I understand the problem, and sympathize with the desire to fix it. I don\u0027t believe this is the right approach though.\n\nIn a sense, what we have _now_ is a priority inheritance system, except we can also downgrade priority depending on who actually submits the commands.\n\nI think a better solution is an actual priority inheritance mechanism. It should actually be fairly trivial to do; when we flush a secondary CB, get the priority and record the max, then on submission use the max priority instead of current context\u0027s priority.\n\nThis would actually mean that if A (high prio) depends on B (low prio), we\u0027d automatically run B at high prio for the sake of A.\n\nAlternatively, if that\u0027s not what we want to support (or there\u0027s a risk of unrelated low prio work getting submitted at high prio), we can always enforce a submission when SCB-\u003ePCB flush is done with a different priority.\n\nWhat do you think?",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
