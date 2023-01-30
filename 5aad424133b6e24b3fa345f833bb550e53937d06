@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bbc93b9_fd974ffc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T16:44:37Z",
+      "side": 1,
+      "message": "Thank you for detailing these. Please turn these into tests under `src/tests/egl_tests` so the fix can be verified by the bots, and we can be sure we won\u0027t regress these patterns.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb8b85c_8ffe5e05",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T16:44:37Z",
+      "side": 1,
+      "message": "This looks like an unrelated refactor, please split into its own CL.\n\nUltimately (one day) we should be using an enum class instead of bool, and use angle::PackedEnumMap (which would also let us expand this if necessary)",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2910af6_c736ee93",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T16:44:37Z",
+      "side": 1,
+      "message": "What do you think about getting the semaphore out of the window _here_ and add it to `mWaitSemaphores`? Then you would avoid the multiple calls to `flushAcquireImageSemaphore` in SurfaceVk.cpp (and risk missing a case in the future)",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
