@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d644ccd_a4c33d35",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-30T19:07:02Z",
+      "side": 1,
+      "message": "Understood. We do have a few tests like this, they still help verify things visually when necessary.\n\nIn this particular case, VVL would probably complain about the lack of synchronization so the test _can_ fail.",
+      "parentUuid": "1297f379_4f19166d",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e07e22b8_a3fba1dc",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
