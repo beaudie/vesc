@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1297f379_4f19166d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T17:30:38Z",
+      "side": 1,
+      "message": "I do not know how to write such test.\nProblem is that result is only can be seen by a human on the screen, and it will also depend on device.\nIf I write the tests like described in the comment, they will probably just pass even without this fix.",
+      "parentUuid": "4bbc93b9_fd974ffc",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e07e22b8_a3fba1dc",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b295c70_cd71b095",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 405,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T17:30:38Z",
+      "side": 1,
+      "message": "Did not like it either. Will make additional CL.",
+      "parentUuid": "7eb8b85c_8ffe5e05",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2910af6_c736ee93",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -71,6 +113,24 @@
       "writtenOn": "2023-01-30T16:44:37Z",
       "side": 1,
       "message": "What do you think about getting the semaphore out of the window _here_ and add it to `mWaitSemaphores`? Then you would avoid the multiple calls to `flushAcquireImageSemaphore` in SurfaceVk.cpp (and risk missing a case in the future)",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "120d4192_c2ad09f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-30T17:30:38Z",
+      "side": 1,
+      "message": "I do not see problems. I think I just did not think about this. Thank you)\n\nThe only theoretical problem may be if there are repeated eglSwapBuffers() and no commands is recorded. But it should not be possible. Additionally there will be signalSemaphore that will force flushOutsideRenderPassCommands().",
+      "parentUuid": "d2910af6_c736ee93",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
