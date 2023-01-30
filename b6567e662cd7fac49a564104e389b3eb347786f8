@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22cfb118_e496ee4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T03:40:24Z",
+      "side": 1,
+      "message": "Code still has merge operator,",
+      "revId": "b6567e662cd7fac49a564104e389b3eb347786f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5dc5d38_371d0c89",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-01-30T03:40:24Z",
+      "side": 1,
+      "message": "Code still has revert arrows (\u003c\u003c\u003c\u003c\u003c\u003c\u003c)",
+      "revId": "b6567e662cd7fac49a564104e389b3eb347786f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
