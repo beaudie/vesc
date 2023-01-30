@@ -35,6 +35,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ef25b2_86fdabce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T17:47:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fa94c07d_c6fc0189",
+      "revId": "65622f08987b284648182bb810798fe635ca0ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "783efeaf_3a46e366",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T17:47:29Z",
+      "side": 1,
+      "message": "That is right, no functional change is expected here.",
+      "parentUuid": "1d15075f_b0a7090c",
+      "revId": "65622f08987b284648182bb810798fe635ca0ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06063886_4e88cc55",
@@ -48,6 +84,30 @@
       "writtenOn": "2023-01-27T20:45:28Z",
       "side": 1,
       "message": "nit: Extra?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 70,
+        "endLine": 1224,
+        "endChar": 74
+      },
+      "revId": "65622f08987b284648182bb810798fe635ca0ddd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fb0a9cc_d42cb29b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-30T17:47:29Z",
+      "side": 1,
+      "message": "Removed. It was from old code that I copied from.",
+      "parentUuid": "06063886_4e88cc55",
       "range": {
         "startLine": 1224,
         "startChar": 70,
