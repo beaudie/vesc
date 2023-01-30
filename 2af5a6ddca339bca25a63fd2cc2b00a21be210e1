@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5db6d4b_5ae2150d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-30T20:43:47Z",
+      "side": 1,
+      "message": "Need to revert because of correctness issues uncovered by WebGL 2.0 conformance tests.",
+      "revId": "2af5a6ddca339bca25a63fd2cc2b00a21be210e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
