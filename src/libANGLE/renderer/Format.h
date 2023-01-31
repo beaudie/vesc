@@ -56,6 +56,7 @@ struct Format final : private angle::NonCopyable
     constexpr bool isLUMA() const;
     constexpr bool isBGRA() const;
 
+    constexpr bool isRGB() const;
     constexpr bool isSint() const;
     constexpr bool isUint() const;
     constexpr bool isSnorm() const;
@@ -204,6 +205,11 @@ constexpr bool Format::isBGRA() const
 {
     return id == FormatID::B8G8R8A8_UNORM || id == FormatID::B8G8R8A8_UNORM_SRGB ||
            id == FormatID::B8G8R8A8_TYPELESS || id == FormatID::B8G8R8A8_TYPELESS_SRGB;
+}
+
+constexpr bool Format::isRGB() const
+{
+    return id == FormatID::R8G8B8_UNORM;
 }
 
 constexpr bool Format::isSint() const

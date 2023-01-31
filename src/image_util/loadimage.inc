@@ -67,6 +67,20 @@ inline void LoadToNative(const ImageLoadContext &context, size_t width, size_t h
 }
 
 template <typename type, uint32_t fourthComponentBits>
+inline void SpecialLoad3ToNative(const ImageLoadContext &context, size_t width, size_t height, size_t depth,
+                         const uint8_t *input, size_t inputRowPitch, size_t inputDepthPitch,
+                         uint8_t *output, size_t outputRowPitch, size_t outputDepthPitch)
+{
+    const size_t rowSize = width * sizeof(type) * 3;
+    const size_t layerSize = rowSize * height;
+    const size_t imageSize = layerSize * depth;
+
+    // TODO: Generalize.
+    memcpy(output, input, imageSize);
+}
+
+// Note: RGB8
+template <typename type, uint32_t fourthComponentBits>
 inline void LoadToNative3To4(const ImageLoadContext &context, size_t width, size_t height,
                              size_t depth, const uint8_t *input, size_t inputRowPitch,
                              size_t inputDepthPitch, uint8_t *output, size_t outputRowPitch,

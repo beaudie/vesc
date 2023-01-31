@@ -7489,10 +7489,42 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                 MemoryCoherency::NonCoherent, storageFormat.id,
                                                 &stagingOffset, &stagingPointer));
 
-    loadFunctionInfo.loadFunction(
-        contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
-        source, inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    const angle::Format &intendedStorageFormat = vkFormat.getIntendedFormat();
+    if (intendedStorageFormat.isRGB() && !storageFormat.isRGB())  // For RGB
+    {
+        uint8_t *tempPointer;
+        VkDeviceSize tempOffset;
+        std::unique_ptr<RefCounted<BufferHelper>> tempBufferPtr =
+            std::make_unique<RefCounted<BufferHelper>>();
+        BufferHelper *tempBuffer = &tempBufferPtr->get();
 
+        // Allocate another buffer, copy the data over, and destroy it.
+        // TODO: initBufferForImageCopy?
+        size_t intendedAllocationSize = (allocationSize / 4) * 3;
+        ANGLE_TRY(contextVk->initBufferForBufferCopy(tempBuffer, intendedAllocationSize,
+                                                     MemoryCoherency::NonCoherent));
+        tempOffset =
+            roundUp(tempBuffer->getOffset(),
+                    static_cast<VkDeviceSize>(vk::GetImageCopyBufferAlignment(storageFormat.id)));
+        tempPointer = tempBuffer->getMappedMemory() + tempOffset - tempBuffer->getOffset();
+
+        loadFunctionInfo.loadFunction(
+            contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
+            source, inputRowPitch, inputDepthPitch, tempPointer, outputRowPitch, outputDepthPitch);
+
+        ANGLE_TRY(contextVk->getUtils().convertRGBToRGBA(
+            contextVk, tempBuffer, currentBuffer, static_cast<uint32_t>(allocationSize / 4)));
+        // TODO: Temp buffer is not deallocated after the copy? (The perf test crashes.)
+        ANGLE_TRY(contextVk->flushAndSubmitOutsideRenderPassCommands());
+        tempBufferPtr.release();
+    }
+    else
+    {
+        loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), glExtents.width,
+                                      glExtents.height, glExtents.depth, source, inputRowPitch,
+                                      inputDepthPitch, stagingPointer, outputRowPitch,
+                                      outputDepthPitch);
+    }
     // YUV formats need special handling.
     if (storageFormat.isYUV)
     {

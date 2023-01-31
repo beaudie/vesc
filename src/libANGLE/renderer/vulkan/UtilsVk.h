@@ -214,6 +214,11 @@ class UtilsVk : angle::NonCopyable
                                              vk::BufferHelper *dstIndexBuf,
                                              const ConvertIndexIndirectParameters &params);
 
+    angle::Result convertRGBToRGBA(ContextVk *contextVk,
+                                   vk::BufferHelper *src,
+                                   vk::BufferHelper *dst,
+                                   uint32_t size);
+
     angle::Result convertLineLoopIndexIndirectBuffer(
         ContextVk *contextVk,
         vk::BufferHelper *srcIndirectBuffer,
@@ -315,6 +320,14 @@ class UtilsVk : angle::NonCopyable
 
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+
+    struct ConvertRGBToRGBAShaderParams
+    {
+        uint32_t srcOffset = 0;
+        uint32_t dstOffset = 0;
+        uint32_t size      = 0;
+        uint32_t _padding  = 0;
+    };
 
     struct ConvertIndexShaderParams
     {
@@ -509,6 +522,7 @@ class UtilsVk : angle::NonCopyable
         ComputeStartIndex,  // Special value to separate draw and dispatch functions.
         ConvertIndexBuffer = ComputeStartIndex,
         ConvertVertexBuffer,
+        ConvertRGBToRGBA,
         BlitResolveStencilNoExport,
         ConvertIndexIndirectBuffer,
         ConvertIndexIndirectLineLoopBuffer,
@@ -579,6 +593,7 @@ class UtilsVk : angle::NonCopyable
     // Initializers corresponding to functions, calling into ensureResourcesInitialized with the
     // appropriate parameters.
     angle::Result ensureConvertIndexResourcesInitialized(ContextVk *contextVk);
+    angle::Result ensureConvertRGBToRGBAResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertIndexIndirectResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertIndexIndirectLineLoopResourcesInitialized(ContextVk *contextVk);
     angle::Result ensureConvertIndirectLineLoopResourcesInitialized(ContextVk *contextVk);
@@ -659,6 +674,8 @@ class UtilsVk : angle::NonCopyable
 
     ComputeShaderProgramAndPipelines
         mConvertIndex[vk::InternalShader::ConvertIndex_comp::kArrayLen];
+    ComputeShaderProgramAndPipelines
+        mConvertRGBToRGBA[vk::InternalShader::ConvertRGBToRGBA_comp::kArrayLen];
     ComputeShaderProgramAndPipelines mConvertIndexIndirectLineLoop
         [vk::InternalShader::ConvertIndexIndirectLineLoop_comp::kArrayLen];
     ComputeShaderProgramAndPipelines
