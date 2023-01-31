@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec000e7a_5d55a84d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-31T17:51:00Z",
+      "side": 1,
+      "message": "Looks only mac is failing, not sure if it it is swiftshader bug or angle.",
+      "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
