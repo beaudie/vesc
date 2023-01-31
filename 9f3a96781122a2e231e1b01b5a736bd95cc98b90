@@ -16,6 +16,24 @@
       "message": "Looks only mac is failing, not sure if it it is swiftshader bug or angle.",
       "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f06d355b_ec4dbaef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-01-31T18:05:52Z",
+      "side": 1,
+      "message": "Sungyong is busy with other issues, and we don\u0027t have anything in the way of testing on MAC. Any Google assistance is appreciated.",
+      "parentUuid": "ec000e7a_5d55a84d",
+      "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
