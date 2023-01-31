@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e87a17fd_ee29808c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-31T20:15:45Z",
+      "side": 1,
+      "message": "\u003e your new test seems to duplicate one of those tests, but not the other\n\nThose two unskipped tests cover `DEPTH24_STENCIL8` and `STENCIL_INDEX8`, both of which are also covered by the new test with direct uploads. What is missing?\n\n---\n\nI reviewed the functional updates of this CL one more time.\n\nFixed and tested:\n- D24S8 to S8D24\n- S8 to S8D24\n- D32FS8 to D32FS8\n\nFixed and untested:\n- D32 uploads to D32F are more accurate now, not truncating last 8 bits of the input value.\n- D32FS8 to D24S8 had incorrect stencil values. It\u0027s a Vulkan fallback path that is unlikely to be encountered.\n\nSpecial:\n- D24S8 uploads to D32FS8 had incorrect both depth and stencil values. It\u0027s a fallback path on Vulkan when D24S8 is not supported. Further investigation showed that Metal backend also needs it and overrides this incorrect `angle::` conversion with a correct `mtl::` one. I\u0027ll update the Metal backend to use the fixed conversion instead.",
+      "parentUuid": "a1f97000_8a3c8690",
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a6ff757_adb99a8d",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
