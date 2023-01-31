@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6075979_bfc0d8cf",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-31T14:28:22Z",
+      "side": 1,
+      "message": "Drive by: Just include it without #ifdef, it\u0027s harmless",
+      "revId": "f56588fe8dce71fa37cf5363c714eb7190c0b1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
