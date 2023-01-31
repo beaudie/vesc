@@ -13,9 +13,7 @@
 #include "angleutils.h"
 #include "common/debug.h"
 
-#if defined(ANGLE_ENABLE_ASSERTS)
-#    include <atomic>
-#endif
+#include <atomic>
 
 namespace angle
 {
