@@ -271,6 +271,24 @@
       "parentUuid": "95c61a08_dad93316",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0c99c65_f5c49f43",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-31T22:48:04Z",
+      "side": 1,
+      "message": "sounds good to me. I think what you did actually is similar to what I suggested above (\"do it at the time VkAcuqireNextImage is called?\"). I don\u0027t know if there is a cleaner way to do it. Will leave to shabi for determination.",
+      "parentUuid": "e4fc1268_41d94090",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
