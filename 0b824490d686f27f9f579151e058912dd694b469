@@ -51,6 +51,23 @@
       "parentUuid": "402d692f_b4c06237",
       "revId": "0b824490d686f27f9f579151e058912dd694b469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "062a6dc5_145fec4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-31T21:48:20Z",
+      "side": 1,
+      "message": "Thanks for catching the failures Yuly. Yes, in fact the simulator does support Metal, but there are surely some restrictions (like ETC compressed textures being unsupported when running on Intel GPUs) and probably non-conformant limitations like RGB9E5 textures not being renderable.\n\nI\u0027ve filed anglebug.com/7994 about these failures. One way or another we will need to address them before this build change can land. It might be acceptable to add a bunch of ANGLE_SKIP_TEST_IFs to these tests, all only targeting the simulator, and then file a bunch of bugs and burn them down at a slower rate.",
+      "revId": "0b824490d686f27f9f579151e058912dd694b469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
