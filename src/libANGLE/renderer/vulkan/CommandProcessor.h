@@ -98,8 +98,6 @@ enum class CustomTask
     OneOffQueueSubmit,
     // Execute QueuePresent
     Present,
-    // Exit the command processor thread
-    Exit,
 };
 
 // CommandProcessorTask interface
@@ -570,10 +568,6 @@ class CommandProcessor : public Context
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
-    // Signal main thread when all work completed
-    mutable std::condition_variable mWorkerIdleCondition;
-    // Track worker thread Idle state for assertion purposes
-    bool mWorkerThreadIdle;
     CommandQueue *const mCommandQueue;
 
     // Tracks last serial that was submitted to command processor. Note: this maybe different from
@@ -591,6 +585,7 @@ class CommandProcessor : public Context
 
     // Command queue worker thread.
     std::thread mTaskThread;
+    bool mTaskThreadShouldExit;
 };
 }  // namespace vk
 
