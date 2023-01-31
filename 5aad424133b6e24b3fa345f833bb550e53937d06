@@ -253,6 +253,24 @@
       "parentUuid": "b4da8aa3_94e018a5",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4fc1268_41d94090",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-31T18:28:24Z",
+      "side": 1,
+      "message": "Not only a renderpass may use the image. It may be transfer command in the outside RP. We must ensure that we do not touch the image by any access before the semaphore signaled.\n\nI tested my original fix and it even works for `glReadPixels()`, when Windows Surface is used only as a *Read Buffer*. Also the does fix not require understanding how the rest of the code works, so less chance of breaking something (or the fix will be easier - all logic inside `WindowSurfaceVk`).",
+      "parentUuid": "95c61a08_dad93316",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
