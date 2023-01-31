@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16254cd8_3811f1cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-31T21:33:56Z",
+      "side": 1,
+      "message": "Thanks!\n\nOne test still fails on Linux/Intel.\nAlso, a new test has been added, but it seems to be timing out in some cases.",
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5eb996f3_fe21c00f",
@@ -14,6 +31,30 @@
       "writtenOn": "2023-01-30T18:25:40Z",
       "side": 1,
       "message": "ImageMemorySubAllocator makes more sense, since it is a suballocator.",
+      "range": {
+        "startLine": 121,
+        "startChar": 6,
+        "endLine": 121,
+        "endChar": 26
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c32887c_dc9e97d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-31T21:33:56Z",
+      "side": 1,
+      "message": "Renamed to `ImageMemorySuballocator`",
+      "parentUuid": "5eb996f3_fe21c00f",
       "range": {
         "startLine": 121,
         "startChar": 6,
@@ -49,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "231b23f9_a4f9dc95",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5471,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-31T21:33:56Z",
+      "side": 1,
+      "message": "Adding `Allocation` to `collectGarbage()` results in a compilation error due to the argument differences between `Allocation::destroy()` and others such as `Image::destroy()`. For now, I have added `collectAllocationGarbage()` to be used for `Allocation` garbages in the renderer.",
+      "parentUuid": "9873ead9_16d83545",
+      "range": {
+        "startLine": 5471,
+        "startChar": 0,
+        "endLine": 5471,
+        "endChar": 53
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0258a287_3ac99b62",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 2
@@ -60,6 +125,30 @@
       "writtenOn": "2023-01-30T18:25:40Z",
       "side": 1,
       "message": "Could you move it next to mDeviceMemory?",
+      "range": {
+        "startLine": 2654,
+        "startChar": 4,
+        "endLine": 2654,
+        "endChar": 30
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc4abd62_7b01f42d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2654,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-31T21:33:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0258a287_3ac99b62",
       "range": {
         "startLine": 2654,
         "startChar": 4,
@@ -83,6 +172,30 @@
       "writtenOn": "2023-01-30T18:25:40Z",
       "side": 1,
       "message": "Since this is just allocating memory, not create image, suggest to rename to allocateAndBindMemory and remove unneeded parameters.",
+      "range": {
+        "startLine": 139,
+        "startChar": 9,
+        "endLine": 139,
+        "endChar": 20
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40d8579e_e022ff91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-01-31T21:33:56Z",
+      "side": 1,
+      "message": "Renamed to `AllocateAndBindMemoryForImage()`",
+      "parentUuid": "c43097bc_ebfbb8ec",
       "range": {
         "startLine": 139,
         "startChar": 9,
