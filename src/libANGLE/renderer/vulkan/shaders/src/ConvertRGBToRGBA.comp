@@ -1,0 +1,53 @@
+//
+// Copyright 2023 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// ConvertRGBToRGBA.comp: Convert buffers with RGB data to RGBA using a compute shader.
+//
+
+#version 450 core
+
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+
+layout (set = 0, binding = 0) writeonly buffer dst {
+	uint dstData[];
+};
+
+layout (set = 0, binding = 1) readonly buffer src {
+	uint srcData[];
+};
+
+layout (push_constant) uniform PushConstants
+{
+    // Read offset in bytes into the srcIndexBuf array. (0 is used.)
+    uint srcIndexOffset;
+    // Write offset in bytes into the dstIndexBuf array, divided by four. (0 is used.)
+    uint dstIndexBufOffsetDiv4;
+    // Maximum size of the read buffer. The highest index value we will convert.
+    uint maxIndex;
+    // Not used in the shader. Kept to pad "PushConstants" to the size of a vec4. (0 is used.)
+    uint _padding;
+};
+
+void main()
+{
+    uint firstIndex = 0;
+    uint endIndex = firstIndex + maxIndex;
+
+    // Get thread ID.
+    uint index = gl_GlobalInvocationID.x;
+
+    // If the thread is not working, return.
+    if (index >= endIndex)
+        return;
+
+    // Copy the RGB components to dst. For the A component, set to 255.
+    uint pixelID = index / 3;
+    uint dstIndex = (pixelID * 4) + (index % 3);
+    dstData[dstIndex] = srcData[index];
+    if (index % 3 == 0)
+    {
+        dstData[dstIndex + 3] = 255;
+    }
+}

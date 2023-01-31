@@ -85,6 +85,11 @@ namespace ConvertIndirectLineLoop_comp
 constexpr size_t kArrayLen = 0x00000001;
 }  // namespace ConvertIndirectLineLoop_comp
 
+namespace ConvertRGBToRGBA_comp
+{
+constexpr size_t kArrayLen = 0x00000001;
+}  // namespace ConvertRGBToRGBA_comp
+
 namespace ConvertVertex_comp
 {
 enum Conversion
@@ -241,6 +246,9 @@ class ShaderLibrary final : angle::NonCopyable
     angle::Result getConvertIndirectLineLoop_comp(Context *context,
                                                   uint32_t shaderFlags,
                                                   RefCounted<ShaderModule> **shaderOut);
+    angle::Result getConvertRGBToRGBA_comp(Context *context,
+                                           uint32_t shaderFlags,
+                                           RefCounted<ShaderModule> **shaderOut);
     angle::Result getConvertVertex_comp(Context *context,
                                         uint32_t shaderFlags,
                                         RefCounted<ShaderModule> **shaderOut);
@@ -283,6 +291,8 @@ class ShaderLibrary final : angle::NonCopyable
         [InternalShader::ConvertIndexIndirectLineLoop_comp::kArrayLen];
     RefCounted<ShaderModule> mConvertIndirectLineLoop_comp_shaders
         [InternalShader::ConvertIndirectLineLoop_comp::kArrayLen];
+    RefCounted<ShaderModule>
+        mConvertRGBToRGBA_comp_shaders[InternalShader::ConvertRGBToRGBA_comp::kArrayLen];
     RefCounted<ShaderModule>
         mConvertVertex_comp_shaders[InternalShader::ConvertVertex_comp::kArrayLen];
     RefCounted<ShaderModule>

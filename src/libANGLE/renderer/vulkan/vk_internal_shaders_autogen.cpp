@@ -58,6 +58,7 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndexIndirectLineLoop.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndexIndirectLineLoop.comp.00000002.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertIndirectLineLoop.comp.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertRGBToRGBA.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000001.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000002.inc"
@@ -229,6 +230,9 @@ constexpr CompressedShaderBlob kConvertIndexIndirectLineLoop_comp_shaders[] = {
 };
 constexpr CompressedShaderBlob kConvertIndirectLineLoop_comp_shaders[] = {
     {kConvertIndirectLineLoop_comp_00000000, sizeof(kConvertIndirectLineLoop_comp_00000000)},
+};
+constexpr CompressedShaderBlob kConvertRGBToRGBA_comp_shaders[] = {
+    {kConvertRGBToRGBA_comp_00000000, sizeof(kConvertRGBToRGBA_comp_00000000)},
 };
 constexpr CompressedShaderBlob kConvertVertex_comp_shaders[] = {
     {kConvertVertex_comp_00000000, sizeof(kConvertVertex_comp_00000000)},
@@ -438,6 +442,10 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderModule> &shader : mConvertRGBToRGBA_comp_shaders)
+    {
+        shader.get().destroy(device);
+    }
     for (RefCounted<ShaderModule> &shader : mConvertVertex_comp_shaders)
     {
         shader.get().destroy(device);
@@ -531,6 +539,14 @@ angle::Result ShaderLibrary::getConvertIndirectLineLoop_comp(Context *context,
     return GetShader(context, mConvertIndirectLineLoop_comp_shaders,
                      kConvertIndirectLineLoop_comp_shaders,
                      ArraySize(kConvertIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getConvertRGBToRGBA_comp(Context *context,
+                                                      uint32_t shaderFlags,
+                                                      RefCounted<ShaderModule> **shaderOut)
+{
+    return GetShader(context, mConvertRGBToRGBA_comp_shaders, kConvertRGBToRGBA_comp_shaders,
+                     ArraySize(kConvertRGBToRGBA_comp_shaders), shaderFlags, shaderOut);
 }
 
 angle::Result ShaderLibrary::getConvertVertex_comp(Context *context,

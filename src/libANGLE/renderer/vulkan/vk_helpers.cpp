@@ -7489,10 +7489,51 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                 MemoryCoherency::NonCoherent, storageFormat.id,
                                                 &stagingOffset, &stagingPointer));
 
-    loadFunctionInfo.loadFunction(
-        contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
-        source, inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    const angle::Format &intendedStorageFormat = vkFormat.getIntendedFormat();
+    if (intendedStorageFormat.isRGB() && !storageFormat.isRGB())  // For RGB
+    {
+        uint8_t *tempPointer;
+        VkDeviceSize tempOffset;
+        std::unique_ptr<RefCounted<BufferHelper>> tempBufferPtr =
+            std::make_unique<RefCounted<BufferHelper>>();
+        BufferHelper *tempBuffer = &tempBufferPtr->get();
 
+        // Allocate another buffer, copy the data over, and destroy it.
+        // TODO: initBufferForImageCopy?
+        size_t intendedAllocationSize =
+            (glExtents.width * glExtents.height * intendedStorageFormat.pixelBytes);
+        ANGLE_TRY(contextVk->initBufferForBufferCopy(tempBuffer, intendedAllocationSize,
+                                                     MemoryCoherency::NonCoherent));
+        tempOffset =
+            roundUp(tempBuffer->getOffset(),
+                    static_cast<VkDeviceSize>(vk::GetImageCopyBufferAlignment(storageFormat.id)));
+        tempPointer = tempBuffer->getMappedMemory() + tempOffset - tempBuffer->getOffset();
+
+        loadFunctionInfo.loadFunction(
+            contextVk->getImageLoadContext(), glExtents.width, glExtents.height, glExtents.depth,
+            source, inputRowPitch, inputDepthPitch, tempPointer, outputRowPitch, outputDepthPitch);
+
+        UtilsVk::ConvertRGBToRGBAParameters params = {};
+        params.srcOffset                           = static_cast<uint32_t>(tempOffset);
+        params.dstOffset                           = static_cast<uint32_t>(stagingOffset);
+        // TODO: Device is lost in CommandQueue::finishResourceUse() later. maxIndex should be set
+        // properly. It looks like it is too large. It is possible that the shader access pattern is
+        // incorrect. For now, it is divided by 2.
+        params.maxIndex = static_cast<uint32_t>(glExtents.width * glExtents.height / 2);
+        ANGLE_TRY(
+            contextVk->getUtils().convertRGBToRGBA(contextVk, tempBuffer, currentBuffer, params));
+
+        ANGLE_TRY(contextVk->flushAndSubmitOutsideRenderPassCommands());
+        tempBuffer->release(contextVk->getRenderer());  // TODO: Needed?
+        tempBufferPtr.release();
+    }
+    else
+    {
+        loadFunctionInfo.loadFunction(contextVk->getImageLoadContext(), glExtents.width,
+                                      glExtents.height, glExtents.depth, source, inputRowPitch,
+                                      inputDepthPitch, stagingPointer, outputRowPitch,
+                                      outputDepthPitch);
+    }
     // YUV formats need special handling.
     if (storageFormat.isYUV)
     {

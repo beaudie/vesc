@@ -1285,6 +1285,14 @@ void UtilsVk::destroy(ContextVk *contextVk)
             pipeline.destroy(device);
         }
     }
+    for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertRGBToRGBA)
+    {
+        programAndPipelines.program.destroy(renderer);
+        for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
+        {
+            pipeline.destroy(device);
+        }
+    }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertIndirectLineLoop)
     {
         programAndPipelines.program.destroy(renderer);
@@ -1476,6 +1484,22 @@ angle::Result UtilsVk::ensureConvertIndexResourcesInitialized(ContextVk *context
 
     return ensureResourcesInitialized(contextVk, Function::ConvertIndexBuffer, setSizes,
                                       ArraySize(setSizes), sizeof(ConvertIndexShaderParams));
+}
+
+angle::Result UtilsVk::ensureConvertRGBToRGBAResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::ConvertRGBToRGBA].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[2] = {
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+    };
+
+    return ensureResourcesInitialized(contextVk, Function::ConvertRGBToRGBA, setSizes,
+                                      ArraySize(setSizes), sizeof(ConvertRGBToRGBAShaderParams));
 }
 
 angle::Result UtilsVk::ensureConvertIndexIndirectResourcesInitialized(ContextVk *contextVk)
@@ -1979,6 +2003,69 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
     constexpr uint32_t kInvocationsPerGroup = 64;
     constexpr uint32_t kInvocationsPerIndex = 2;
     const uint32_t kIndexCount              = params.maxIndex;
+    const uint32_t kGroupCount =
+        UnsignedCeilDivide(kIndexCount * kInvocationsPerIndex, kInvocationsPerGroup);
+    commandBuffer->dispatch(kGroupCount, 1, 1);
+
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::convertRGBToRGBA(ContextVk *contextVk,
+                                        vk::BufferHelper *src,
+                                        vk::BufferHelper *dst,
+                                        const ConvertRGBToRGBAParameters &params)
+{
+    // Ensure resources are initialized.
+    ANGLE_TRY(ensureConvertRGBToRGBAResourcesInitialized(contextVk));
+
+    vk::CommandBufferAccess access;
+    access.onBufferComputeShaderRead(src);
+    access.onBufferComputeShaderWrite(dst);
+
+    // Get command buffers.
+    vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
+    commandBuffer = &commandBufferHelper->getCommandBuffer();
+
+    // Allocate descriptor set.
+    VkDescriptorSet descriptorSet;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, commandBufferHelper, Function::ConvertRGBToRGBA,
+                                    &descriptorSet));
+
+    std::array<VkDescriptorBufferInfo, 2> buffers = {{
+        {dst->getBuffer().getHandle(), dst->getOffset(), dst->getSize()},
+        {src->getBuffer().getHandle(), src->getOffset(), src->getSize()},
+    }};
+
+    // Update the descriptor set.
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = kConvertVertexDestinationBinding;
+    writeInfo.descriptorCount      = 2;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeInfo.pBufferInfo          = buffers.data();
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    // Configure shader
+    ConvertRGBToRGBAShaderParams shaderParams = {params.srcOffset, params.dstOffset,
+                                                 params.maxIndex, 0};
+
+    uint32_t flags = 0;
+
+    vk::RefCounted<vk::ShaderModule> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getConvertRGBToRGBA_comp(contextVk, flags, &shader));
+
+    // Run compute program
+    ANGLE_TRY(setupComputeProgram(contextVk, Function::ConvertRGBToRGBA, shader,
+                                  &mConvertRGBToRGBA[flags], descriptorSet, &shaderParams,
+                                  sizeof(ConvertRGBToRGBAShaderParams), commandBufferHelper));
+
+    constexpr uint32_t kInvocationsPerGroup = 64;
+    constexpr uint32_t kInvocationsPerIndex = 2;
+    const uint32_t kIndexCount              = shaderParams.size;
     const uint32_t kGroupCount =
         UnsignedCeilDivide(kIndexCount * kInvocationsPerIndex, kInvocationsPerGroup);
     commandBuffer->dispatch(kGroupCount, 1, 1);
