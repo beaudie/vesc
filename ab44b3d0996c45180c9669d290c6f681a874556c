@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6082a556_58b152dc",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-31T13:20:12Z",
+      "side": 1,
+      "message": "I was told that ANGLE style is use `drawcount \u003d\u003d 0`.",
+      "range": {
+        "startLine": 90,
+        "startChar": 11,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "ab44b3d0996c45180c9669d290c6f681a874556c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
