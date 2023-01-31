@@ -104,6 +104,30 @@
       },
       "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "658a5266_2f0d6b42",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-31T18:18:56Z",
+      "side": 1,
+      "message": "I meant that if this function is called `LoadD24S8ToS8D24` and moves S8 to MSBs and D24 to LSBs, then for consistency:\n- `LoadD32FS8X24ToD24S8` should be called `LoadD32FS8X24ToS8D24`\n- `LoadD32ToD24X8` should be called `LoadD32ToX8D24`\n- `LoadS8ToX24S8` should be called `LoadS8ToS8X24`\n\nIf this looks fine, let\u0027s rename all four.",
+      "parentUuid": "9afee4ac_921ca4c6",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1351,
+        "endChar": 21
+      },
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
