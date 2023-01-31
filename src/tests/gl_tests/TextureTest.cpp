@@ -9947,6 +9947,24 @@ TEST_P(Texture2DTestES3, NonZeroBaseEmulatedClear)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
 }
 
+// Test that we can allocate more than 4096 images without triggering a failure.
+TEST_P(Texture2DTestES3, Allocate4096Textures)
+{
+    // Tests behavior of the Vulkan backend with emulated formats.
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    setUpProgram();
+
+    constexpr size_t kNumTextures = 4096;
+    GLTexture texture[kNumTextures];
+    for (size_t i = 0; i < kNumTextures; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, texture[i]);
+        glTexStorage2D(GL_TEXTURE_2D, 2, GL_RGBA8, 2, 2);
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
 // Test that uploading data to buffer that's in use then using it as PBO to update a texture works.
 TEST_P(Texture2DTestES3, UseAsUBOThenUpdateThenAsPBO)
 {
