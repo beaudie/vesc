@@ -3,6 +3,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "adad7436_4eb23b24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-31T18:56:52Z",
+      "side": 1,
+      "message": "Note that you can use the syntax:\n\nFixed: angleproject:7990\n\nto auto-close the bug if any given CL fixes it completely.",
+      "revId": "ab44b3d0996c45180c9669d290c6f681a874556c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "62b5178a_09fa1cbc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
