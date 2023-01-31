@@ -33,6 +33,24 @@
       "message": "+ynovikov also as FYI. This shouldn\u0027t affect the iOS Simulator bot.",
       "revId": "0b824490d686f27f9f579151e058912dd694b469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451a3de5_71916c5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-31T19:13:44Z",
+      "side": 1,
+      "message": "Because simulator doesn\u0027t support Metal?\nAdded https://ci.chromium.org/ui/p/chromium/builders/try/ios-angle-try-intel/88/overview just in case.\nThis might break the build, I think.",
+      "parentUuid": "402d692f_b4c06237",
+      "revId": "0b824490d686f27f9f579151e058912dd694b469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
