@@ -68,6 +68,24 @@
       "message": "Thanks for catching the failures Yuly. Yes, in fact the simulator does support Metal, but there are surely some restrictions (like ETC compressed textures being unsupported when running on Intel GPUs) and probably non-conformant limitations like RGB9E5 textures not being renderable.\n\nI\u0027ve filed anglebug.com/7994 about these failures. One way or another we will need to address them before this build change can land. It might be acceptable to add a bunch of ANGLE_SKIP_TEST_IFs to these tests, all only targeting the simulator, and then file a bunch of bugs and burn them down at a slower rate.",
       "revId": "0b824490d686f27f9f579151e058912dd694b469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d68ea952_af99c74b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-01-31T21:51:52Z",
+      "side": 1,
+      "message": "We have an expectation file now:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/angle_end2end_tests_expectations.txt;l\u003d636;drc\u003d7101b3747537604c2187ca65ad97b855e72968c0\nShould get rid of ANGLE_SKIP_TEST_IF at some point.",
+      "parentUuid": "062a6dc5_145fec4e",
+      "revId": "0b824490d686f27f9f579151e058912dd694b469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
