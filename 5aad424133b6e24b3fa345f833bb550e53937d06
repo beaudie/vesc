@@ -235,6 +235,24 @@
       "parentUuid": "4c0fa47c_48a63a00",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95c61a08_dad93316",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-01-31T17:45:00Z",
+      "side": 1,
+      "message": "My question is why we need it for outsideRPCommands? Can\u0027t we do it in \nContextVk::startRenderPass()\n{\n    ...\n    if(drawFramebufferVk-\u003egetBackbuffer()!\u003dnullptr)\n    {\n        addWaitSemaphore();\n    }\n    ...\n}\nIt is renderpass that uses image and this will reflect exact that. Is this not enough?",
+      "parentUuid": "b4da8aa3_94e018a5",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
