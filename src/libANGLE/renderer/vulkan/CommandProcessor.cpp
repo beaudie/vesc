@@ -578,9 +578,12 @@ void CommandProcessor::queueCommand(CommandProcessorTask &&task)
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::queueCommand");
     // Grab the worker mutex so that we put things on the queue in the same order as we give out
     // serials.
-    std::lock_guard<std::mutex> queueLock(mWorkerMutex);
-
-    mTasks.emplace(std::move(task));
+    std::unique_lock<std::mutex> queueLock(mWorkerMutex);
+    while (mTasks.full())
+    {
+        (void)waitForAllWorkToBeSubmitted(this);
+    }
+    mTasks.push(std::move(task));
     mWorkAvailableCondition.notify_one();
 }
 
@@ -610,22 +613,23 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
 {
     while (!mTaskThreadShouldExit)
     {
-        std::unique_lock<std::mutex> lock(mWorkerMutex);
+        std::unique_lock<std::mutex> queueLock(mWorkerMutex);
         if (mTasks.empty())
         {
             // Only wake if notified and command queue is not empty
             mWorkAvailableCondition.wait(
-                lock, [this] { return !mTasks.empty() || mTaskThreadShouldExit; });
+                queueLock, [this] { return !mTasks.empty() || mTaskThreadShouldExit; });
         }
 
+        // Take submission lock to ensure the submission is in the same order as we received.
+        std::lock_guard<std::mutex> submissionLock(mSubmissionMutex);
         if (!mTasks.empty())
         {
-            // Before we unlock the producer lock, take submission lock to ensure the submission are
-            // always in the same order as we received.
-            std::lock_guard<std::mutex> submissionLock(mSubmissionMutex);
+            // Do submission with mWorkerMutex unlocked so that we still allow enqueue while we
+            // process work.
+            queueLock.unlock();
             CommandProcessorTask task(std::move(mTasks.front()));
             mTasks.pop();
-            lock.unlock();
             ANGLE_TRY(processTask(&task));
         }
     }
@@ -715,7 +719,6 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForAllWorkToBeSubmitted");
-    std::lock_guard<std::mutex> enqueueLock(mWorkerMutex);
     std::lock_guard<std::mutex> submissionLock(mSubmissionMutex);
     while (!mTasks.empty())
     {
@@ -741,14 +744,12 @@ angle::Result CommandProcessor::init()
 
 void CommandProcessor::destroy(Context *context)
 {
-    {
-        std::lock_guard<std::mutex> lock(mWorkerMutex);
-        mTaskThreadShouldExit = true;
-        mWorkAvailableCondition.notify_one();
-    }
+    std::unique_lock<std::mutex> queueLock(mWorkerMutex);
+    mTaskThreadShouldExit = true;
+    mWorkAvailableCondition.notify_one();
+    queueLock.unlock();
 
     (void)waitForAllWorkToBeSubmitted(context);
-
     if (mTaskThread.joinable())
     {
         mTaskThread.join();
@@ -758,6 +759,7 @@ void CommandProcessor::destroy(Context *context)
 void CommandProcessor::handleDeviceLost(RendererVk *renderer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::handleDeviceLost");
+    std::lock_guard<std::mutex> lock(mWorkerMutex);
     (void)waitForAllWorkToBeSubmitted(this);
     // Worker thread is idle and command queue is empty so good to continue
     mCommandQueue->handleDeviceLost(renderer);
@@ -927,9 +929,11 @@ angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *con
 {
     if (mCommandQueue->hasUnsubmittedUse(use))
     {
-        // ToDo: Do not hold mWorkerMutex lock while dequeue.
-        std::lock_guard<std::mutex> enqueueLock(mWorkerMutex);
         std::lock_guard<std::mutex> submissionLock(mSubmissionMutex);
+        // Cache the maxTaskCount to wait first. Since we do not hold mWorkerMutex lock, while we
+        // are processing task and dequeue from mTasks, other contexts may still enqueue more work.
+        // It is guaranteed that mTask will have at least maxTaskCount items in it. But we do not
+        // need to wait for any of te future work that gets enqueued after this.
         size_t maxTaskCount = mTasks.size();
         size_t taskCount    = 0;
         while (taskCount < maxTaskCount && mCommandQueue->hasUnsubmittedUse(use))
