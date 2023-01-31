@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f97000_8a3c8690",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-31T15:06:56Z",
+      "side": 1,
+      "message": "Thanks a lot for the fixes! It looks like you\u0027ve fixed more than one bug, are more tests necessary? The d3d skip removals are for PBO tests, which can take a different path in the Vulkan backend, probably the equivalent non-PBO test would have failed on Vulkan too (your new test seems to duplicate one of those tests, but not the other)",
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a6ff757_adb99a8d",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-31T15:06:56Z",
+      "side": 1,
+      "message": "I\u0027d call it `LoadD24S8ToS8D24`, otherwise the name looks like identity",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1351,
+        "endChar": 21
+      },
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
