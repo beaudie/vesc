@@ -217,6 +217,24 @@
       "parentUuid": "6a5bc653_e092fcd0",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4da8aa3_94e018a5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-01-31T17:29:55Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\u003e What do you think about getting the semaphore out of the window here and add it to mWaitSemaphores? Then you would avoid the multiple calls to flushAcquireImageSemaphore in SurfaceVk.cpp (and risk missing a case in the future)\n\nI checked this in details and I prefer the original solution. Problem will be fixed, however why it will work is not obvious. And, there is also a chance that bug may still happen, or will happen in the future.\n\nFirst I think that the problem might be with empty `eglSwapBuffers()` calls. I checked this, and there no commands recorded, nor RP started between these calls. But `flushOutsideRenderPassCommands()` still will called. There are 2 reasons:\n1. We have `signalSemaphore` in the `flushImpl()` (so that call will not be skipped)\n2. There are unconditional `flushOutsideRenderPassCommands()` that was added here\n[2168114](https://chromium-review.googlesource.com/c/angle/angle/+/2168114) and has nothing to to with our problem.\n\nAbove is not the only \"problem\". The problem **(1)** described in the *commit message* still may happen.\nHowever, I was not able to reproduce the issue. This is because, ANGLE always calls `flushOutsideRenderPassCommands()` before starting RP or any other access to the Windows Surface. I tried: `glClear()`, `glClearBufferfv()`, `glBlitFramebuffer()`, `glDrawArrays()`, and `glReadPixels()`. But maybe there is or will be a possibility to render into Window Surface without this `flushOutsideRenderPassCommands()` call.\n\nIn other words, `flushOutsideRenderPassCommands()` **MUST** be called **before any access** to the Window Surface. This guarantee is not obvious.\n\nAdditionally (not realistic), Windows Surface may used only as a *Read Buffer*, so the `mCurrentWindowSurface` will be NULL. Maybe this is also a problem and need to also track `mCurrentReadWindowSurface` for example.\n\nAnother point, is that there will be extra \"if\" in the `flushOutsideRenderPassCommands()` that will almost always be false.\n\nSo I like the original solution more. It does not depend on many indirect factors. It is encapsulated in the `WindowSurfaceVk` class. And in case we miss `flushAcquireImageSemaphore()` in the future - it may be easily detected with existing assert. But if it is not missed - semaphore will be added before any possible access.",
+      "parentUuid": "4c0fa47c_48a63a00",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
