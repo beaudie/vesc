@@ -16,6 +16,7 @@
 #include <queue>
 #include <thread>
 
+#include "common/FixedQueue.h"
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -559,12 +560,12 @@ class CommandProcessor : public Context
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
-    // The mutex to block submission from context while we wait for mTask to drain. We always take
-    // this lock when we enqueue to mTasks. We will also take lock when we need to wait fort mTasks
-    // to be empty. But we do not take this lock for normal work processing.
+    // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that only
+    // one mTasks consumer at a time
     std::mutex mSubmissionMutex;
 
-    std::queue<CommandProcessorTask> mTasks;
+    static constexpr size_t kMaxTaskCount = 16u;
+    angle::FixedQueue<CommandProcessorTask, kMaxTaskCount> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
