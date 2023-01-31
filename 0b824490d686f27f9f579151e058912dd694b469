@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd6f59a_fc60f515",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-31T18:52:49Z",
+      "side": 1,
+      "message": "Nifty. lgtm\n\n+jonahr, geofflang as FYI",
+      "revId": "0b824490d686f27f9f579151e058912dd694b469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
