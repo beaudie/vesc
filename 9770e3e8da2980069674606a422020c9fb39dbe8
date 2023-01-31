@@ -16,6 +16,23 @@
       "message": "How does Webkit deal with all the other files in ANGLE that are not relevant? ifdefing cpp files does not really scale.\n\nIf webkit _really_ has to do it this way, I\u0027d suggest a downstream patch in the form of:\n\n```\n// AddAndTrueToLoopCondition_webkit.cpp:\n\n#ifdef ...\n#include \"AddAndTrueToLoopCondition.cpp\"\n#endif\n```\n\nThose files wouldn\u0027t belong in ANGLE, so won\u0027t interfere with ANGLE updates.",
       "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd46ef3c_6824e783",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-31T19:07:33Z",
+      "side": 1,
+      "message": "WebKit still uses hand-maintained Xcode projects to determine which files are compiled from ANGLE and other third-party libraries. There isn\u0027t a good interposition point in WebKit\u0027s Tools/Scripts/update-angle to filter out only certain .cpp files from directories like src/compiler/translator/tree_ops/gl/.\n\nThere likely won\u0027t be many additional changes in these directories, and since this will streamline collaboration with Apple, lgtm.\n\nKimmo, if Shabi\u0027s suggestion works for WebKit or you find another less-intrusive alternative in the future, I trust you\u0027ll revisit this.",
+      "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
