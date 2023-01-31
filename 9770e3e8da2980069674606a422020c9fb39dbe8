@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66ddef3c_2ab2a6f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-01-31T14:40:24Z",
+      "side": 1,
+      "message": "How does Webkit deal with all the other files in ANGLE that are not relevant? ifdefing cpp files does not really scale.\n\nIf webkit _really_ has to do it this way, I\u0027d suggest a downstream patch in the form of:\n\n```\n// AddAndTrueToLoopCondition_webkit.cpp:\n\n#ifdef ...\n#include \"AddAndTrueToLoopCondition.cpp\"\n#endif\n```\n\nThose files wouldn\u0027t belong in ANGLE, so won\u0027t interfere with ANGLE updates.",
+      "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
