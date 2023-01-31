@@ -759,6 +759,9 @@
 7833 IOS : ShaderBinaryTest.* = SKIP
 7853 IOS : FramebufferExtensionsTest.ColorBufferHalfFloat/ES2_OpenGL = SKIP
 
+// Metal tests fail on iOS Intel simulator
+7994 IOS METAL : * = SKIP
+
 // Test is disabled as it only pertains to desktop GLSL
 6197 : GLSLTest_ES31.InterpolateAtWithSwizzle/* = SKIP
 
