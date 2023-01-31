@@ -56,6 +56,30 @@
       },
       "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de60ac54_57aa04ae",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-01-31T15:29:19Z",
+      "side": 1,
+      "message": "The functions here are called `Load{A}To{B}`, where `{A}` is a GL-format and `{B}` is an ANGLE-format (historically derived from D3D?).\n\nSince the D24S8 _target_ format has the same layout in all cases, all instances of `*ToD24S8` would have to be renamed to `*ToS8D24` for consistency; that\u0027s why I didn\u0027t make it.",
+      "parentUuid": "0a6ff757_adb99a8d",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1351,
+        "endChar": 21
+      },
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
