@@ -62,6 +62,16 @@ angle::Result StreamUniformBufferData(ContextMtl *contextMtl,
     return angle::Result::Continue;
 }
 
+size_t GetAlignmentOfUniformGroup(sh::BlockLayoutMap *blockLayoutMap)
+{
+    size_t align = 1;
+    for(auto layoutIter= blockLayoutMap->begin(); layoutIter != blockLayoutMap->end(); ++layoutIter)
+    {
+        align = std::max(mtl::GetMetalAlignmentForGLType(layoutIter->second.type), align);
+    }
+    return align;
+}   
+
 void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
                              gl::Shader *shader,
                              sh::BlockLayoutMap *blockLayoutMapOut,
@@ -76,7 +86,11 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
     sh::Std140BlockEncoder blockEncoder;
     sh::GetActiveUniformBlockInfo(uniforms, "", &blockEncoder, blockLayoutMapOut);
 
-    size_t blockSize = blockEncoder.getCurrentOffset();
+    size_t blockAlign = GetAlignmentOfUniformGroup(blockLayoutMapOut);
+    size_t blockSize  = roundUp(blockEncoder.getCurrentOffset(), blockAlign);
+    //Get alignment for final pad size;
+
+    
 
     // TODO(jmadill): I think we still need a valid block for the pipeline even if zero sized.
     if (blockSize == 0)
