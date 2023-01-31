@@ -86,6 +86,24 @@
       "parentUuid": "062a6dc5_145fec4e",
       "revId": "0b824490d686f27f9f579151e058912dd694b469",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c0d4d50_9fe2eafd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-01-31T22:01:41Z",
+      "side": 1,
+      "message": "Could you please comment on https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7994 and describe how to add new conditions to the test expectations file? We\u0027ll need a new tag like IOSSIM, IOS_SIMULATOR or similar.",
+      "parentUuid": "d68ea952_af99c74b",
+      "revId": "0b824490d686f27f9f579151e058912dd694b469",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
