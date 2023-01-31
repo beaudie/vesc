@@ -16,6 +16,7 @@
 #include <queue>
 #include <thread>
 
+#include "common/FixedQueue.h"
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -564,7 +565,8 @@ class CommandProcessor : public Context
     // to be empty. But we do not take this lock for normal work processing.
     std::mutex mSubmissionMutex;
 
-    std::queue<CommandProcessorTask> mTasks;
+    static constexpr size_t kMaxTaskCount = 16u;
+    angle::FixedQueue<CommandProcessorTask, kMaxTaskCount> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
