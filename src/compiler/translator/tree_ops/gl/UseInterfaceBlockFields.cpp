@@ -17,6 +17,8 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/util.h"
 
+#ifdef ANGLE_ENABLE_GLSL
+
 namespace sh
 {
 
@@ -106,3 +108,5 @@ bool UseInterfaceBlockFields(TCompiler *compiler,
 }
 
 }  // namespace sh
+
+#endif

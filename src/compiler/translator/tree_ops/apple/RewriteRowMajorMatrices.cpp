@@ -16,6 +16,9 @@
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 
+#if (defined(ANGLE_ENABLE_GLSL) || defined(ANGLE_ENABLE_METAL)) && \
+    defined(ANGLE_ENABLE_APPLE_WORKAROUNDS)
+
 namespace sh
 {
 namespace
@@ -1593,3 +1596,5 @@ bool RewriteRowMajorMatrices(TCompiler *compiler, TIntermBlock *root, TSymbolTab
     return compiler->validateAST(root);
 }
 }  // namespace sh
+
+#endif

@@ -14,6 +14,8 @@
 
 #include <set>
 
+#if defined(ANGLE_ENABLE_GLSL)
+
 namespace sh
 {
 
@@ -117,3 +119,5 @@ bool RegenerateStructNames(TCompiler *compiler, TIntermBlock *root, TSymbolTable
 }
 
 }  // namespace sh
+
+#endif

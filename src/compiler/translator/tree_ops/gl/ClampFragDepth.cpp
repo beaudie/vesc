@@ -17,6 +17,8 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/RunAtTheEndOfShader.h"
 
+#ifdef ANGLE_ENABLE_GLSL
+
 namespace sh
 {
 
@@ -52,3 +54,5 @@ bool ClampFragDepth(TCompiler *compiler, TIntermBlock *root, TSymbolTable *symbo
 }
 
 }  // namespace sh
+
+#endif

@@ -18,6 +18,8 @@
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
+#ifdef ANGLE_ENABLE_GLSL
+
 namespace sh
 {
 
@@ -95,3 +97,5 @@ bool RewriteRepeatedAssignToSwizzled(TCompiler *compiler, TIntermBlock *root)
 }
 
 }  // namespace sh
+
+#endif
