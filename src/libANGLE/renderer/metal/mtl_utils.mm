@@ -785,7 +785,7 @@ static MTLLanguageVersion GetUserSetOrHighestMSLVersion(const MTLLanguageVersion
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(
     const mtl::ContextDevice &metalDevice,
     const std::string &source,
-    NSDictionary<NSString *, NSObject *> *substitutionMacros,
+    const std::map<std::string, std::string> &substitutionMacros,
     bool enableFastMath,
     AutoObjCPtr<NSError *> *error)
 {
@@ -797,14 +797,14 @@ AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(const mtl::ContextDevice &metalD
                                                 const std::string &source,
                                                 AutoObjCPtr<NSError *> *error)
 {
-    return CreateShaderLibrary(metalDevice, source.c_str(), source.size(), @{}, true, error);
+    return CreateShaderLibrary(metalDevice, source.c_str(), source.size(), {}, true, error);
 }
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(
     const mtl::ContextDevice &metalDevice,
     const char *source,
     size_t sourceLen,
-    NSDictionary<NSString *, NSObject *> *substitutionMacros,
+    const std::map<std::string, std::string> &substitutionMacros,
     bool enableFastMath,
     AutoObjCPtr<NSError *> *errorOut)
 {
@@ -826,9 +826,25 @@ AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(
         options.fastMathEnabled = false;
 #endif
         options.fastMathEnabled &= enableFastMath;
-        options.languageVersion    = GetUserSetOrHighestMSLVersion(options.languageVersion);
-        options.preprocessorMacros = substitutionMacros;
-        auto library               = metalDevice.newLibraryWithSource(nsSource, options, &nsError);
+        options.languageVersion = GetUserSetOrHighestMSLVersion(options.languageVersion);
+
+        if (!substitutionMacros.empty())
+        {
+            NSString *macroKeys[substitutionMacros.size()];
+            NSString *macroValues[substitutionMacros.size()];
+            size_t idx = 0;
+            for (const auto &macro : substitutionMacros)
+            {
+                macroKeys[idx]   = @(macro.first.c_str());
+                macroValues[idx] = @(macro.first.c_str());
+            }
+
+            options.preprocessorMacros = [NSDictionary dictionaryWithObjects:macroValues
+                                                                     forKeys:macroKeys
+                                                                       count:idx];
+        }
+
+        auto library = metalDevice.newLibraryWithSource(nsSource, options, &nsError);
         if (angle::GetEnvironmentVar(kANGLEPrintMSLEnv)[0] == '1')
         {
             NSLog(@"%@\n", nsSource);
