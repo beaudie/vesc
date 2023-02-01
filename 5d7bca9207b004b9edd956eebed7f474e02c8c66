@@ -16,6 +16,46 @@
       "message": "LGTM",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea988602_a094258d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T20:02:21Z",
+      "side": 1,
+      "message": "naming nit: `Comands*` everywhere, we prefer complete names over shorthand for clarity.",
+      "range": {
+        "startLine": 407,
+        "startChar": 15,
+        "endLine": 407,
+        "endChar": 19
+      },
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e84c99ee_8458942d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T20:02:21Z",
+      "side": 1,
+      "message": "Feel free to move this out of this class, and have it be used everywhere (including RendererVk, ContextVk etc) so we can avoid all the bools.",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
