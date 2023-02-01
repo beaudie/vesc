@@ -1078,6 +1078,36 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
 
 angle::Result Program::link(const Context *context)
 {
+    const angle::FrontendFeatures &frontendFeatures = context->getFrontendFeatures();
+    if (frontendFeatures.dumpShaderSource.enabled)
+    {
+        std::stringstream dumpStream;
+        for (ShaderType shaderType : angle::AllEnums<ShaderType>())
+        {
+            gl::Shader *shader = mState.mAttachedShaders[shaderType];
+            if (shader)
+            {
+                dumpStream << shader->getType() << ": "
+                           << GetShaderDumpFileName(shader->getSourceHash()) << std::endl;
+            }
+        }
+
+        std::string dump = dumpStream.str();
+        size_t dumpHash  = std::hash<std::string>{}(dump);
+
+        std::stringstream pathStream;
+        std::string shaderDumpDir = GetShaderDumpFileDirectory();
+        if (!shaderDumpDir.empty())
+        {
+            pathStream << shaderDumpDir << "/";
+        }
+        pathStream << dumpHash << ".program";
+        std::string path = pathStream.str();
+
+        writeFile(path.c_str(), dump.c_str(), dump.length());
+        INFO() << "Dumped program: " << path;
+    }
+
     angle::Result result = linkImpl(context);
 
     // Avoid having two ProgramExecutables if the link failed and the Program had successfully
