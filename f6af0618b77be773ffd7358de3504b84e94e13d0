@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0491323_16a17264",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5571,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "looks like you dont need initialize function, since it is empty.",
+      "range": {
+        "startLine": 5571,
+        "startChar": 34,
+        "endLine": 5571,
+        "endChar": 44
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b746ea7a_cbde1c5b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "I think this if should move to before line 477. if not valid, you even do not need to check hasUnfinishedUse.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be35ba2_3c8ce40d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5465,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "Could these possibly true if mDeviceMemory is valid?",
+      "range": {
+        "startLine": 5464,
+        "startChar": 33,
+        "endLine": 5465,
+        "endChar": 28
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9f7e8e8_419cfecd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5479,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "These can still collectGarbage together (there is advantage of ding that, since it uses one mUse to traco two garbage objects.)",
+      "range": {
+        "startLine": 5475,
+        "startChar": 3,
+        "endLine": 5479,
+        "endChar": 44
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e93512e0_25e27e14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5863,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "Maybe remove this since you only care about mDeviceMemory here?",
+      "range": {
+        "startLine": 5863,
+        "startChar": 8,
+        "endLine": 5863,
+        "endChar": 26
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "612d7956_3e1d2793",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "If this fail, you should free the allocation.",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -112,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d405e0be_d1bb842e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5471,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-01T19:42:24Z",
+      "side": 1,
+      "message": "Your current code is good.",
+      "parentUuid": "231b23f9_a4f9dc95",
+      "range": {
+        "startLine": 5471,
+        "startChar": 0,
+        "endLine": 5471,
+        "endChar": 53
+      },
+      "revId": "1b155b247dac98d658e382c142dfdc9407caab7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0258a287_3ac99b62",
