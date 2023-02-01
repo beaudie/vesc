@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c84626fa_79766a25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-01T19:39:45Z",
+      "side": 1,
+      "message": "\u003eOne high-level question: if any of the multiDrawElements variants are passed a \"counts\" array that contains all zeros, is any problem encountered?\n\nWith the naive implementation (which Metal uses, at least):\nWhen the implementation iterates over the buffer, each entry will be handled with the corresponding call.\nE.g. \nmultiDrawElementsInstanced is a for loop that invokes Context::drawElementsInstanced. This means that if there was an issue with zeros, it\u0027d be an issue for the non-multi draw case. I didn\u0027t see an issue here.\n\nNote:\nThis bug fix is not fixing anything related to draw count being zero.\nThis bug is fixing memory corruption when draw tries to use program state and there\u0027s no program state because there\u0027s no program.",
+      "parentUuid": "62b5178a_09fa1cbc",
+      "revId": "ab44b3d0996c45180c9669d290c6f681a874556c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6082a556_58b152dc",
