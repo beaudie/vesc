@@ -51,6 +51,24 @@
       "parentUuid": "86611e78_43977e27",
       "revId": "379c6fecf59c8f89a848355de13097a027807523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b412518_50c31085",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-01T17:31:12Z",
+      "side": 1,
+      "message": "It is configured like in Chromium.\nNamely, to land a change you need both:\n1. Code Review\n2. Owner approval\n\nRubber Stamper provides Code Review in both repos.\nWhich means, owners don\u0027t need an additional review, but non-owners still do.",
+      "parentUuid": "a3c210ca_74d12f84",
+      "revId": "379c6fecf59c8f89a848355de13097a027807523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
