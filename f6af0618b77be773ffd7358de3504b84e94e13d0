@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78ae7ec9_21c4b81b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5571,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "a0491323_16a17264",
+      "range": {
+        "startLine": 5571,
+        "startChar": 34,
+        "endLine": 5571,
+        "endChar": 44
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b746ea7a_cbde1c5b",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-02-01T19:42:24Z",
       "side": 1,
       "message": "I think this if should move to before line 477. if not valid, you even do not need to check hasUnfinishedUse.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b74343d4_14b07ff0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "Moved to before checking for unfinished use (PS #17). However, it resulted in multiple VVL errors in various tests:\n```\n[ SYNC-HAZARD-WRITE-AFTER-WRITE ] Validation Error: [ SYNC-HAZARD-WRITE-AFTER-WRITE ] Object 0: handle \u003d 0xc800000000c8, type \u003d VK_OBJECT_TYPE_IMAGE; | MessageID \u003d 0x5c0ec5d6 | vkCmdPipelineBarrier: Hazard WRITE_AFTER_WRITE for image barrier 0 VkImage 0xc800000000c8[]. Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers: 0, command: vkCmdEndRenderPass, seq_no: 4,renderpass: VkRenderPass 0xcc00000000cc[], reset_no: 17).\n                            Object: 0xc800000000c8 (type \u003d Image(10))\n                            \n[ VUID-VkImageMemoryBarrier-image-01932 ] Validation Error: [ VUID-VkImageMemoryBarrier-image-01932 ] Object 0: handle \u003d 0x1bc01de4400, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; Object 1: handle \u003d 0x1e000000001e0, type \u003d VK_OBJECT_TYPE_IMAGE; | MessageID \u003d 0x6ff34762 | vkCmdPipelineBarrier: VkImage 0x1e000000001e0[] used with no memory bound and previously bound memory was freed. Memory must not be freed prior to this operation. The Vulkan spec states: If image is non-sparse then it must be bound completely and contiguously to a single VkDeviceMemory object (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkImageMemoryBarrier-image-01932)\n                            Object: 0x1bc01de4400 (type \u003d Command Buffer(6))\n                            Object: 0x1e000000001e0 (type \u003d Image(10))\n                            \n[ VUID-vkCmdCopyImage-srcImage-01546 ] Validation Error: [ VUID-vkCmdCopyImage-srcImage-01546 ] Object 0: handle \u003d 0x1bc01de4400, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; Object 1: handle \u003d 0x1e000000001e0, type \u003d VK_OBJECT_TYPE_IMAGE; | MessageID \u003d 0xa74df576 | vkCmdCopyImage: VkImage 0x1e000000001e0[] used with no memory bound and previously bound memory was freed. Memory must not be freed prior to this operation. The Vulkan spec states: If srcImage is non-sparse then the image or disjoint plane to be copied must be bound completely and contiguously to a single VkDeviceMemory object (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkCmdCopyImage-srcImage-01546)\n                            Object: 0x1bc01de4400 (type \u003d Command Buffer(6))\n                            Object: 0x1e000000001e0 (type \u003d Image(10))\n```",
+      "parentUuid": "b746ea7a_cbde1c5b",
       "range": {
         "startLine": 486,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24938e06_756e6757",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5465,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "They shouldn\u0027t be. Removed.",
+      "parentUuid": "2be35ba2_3c8ce40d",
+      "range": {
+        "startLine": 5464,
+        "startChar": 33,
+        "endLine": 5465,
+        "endChar": 28
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9f7e8e8_419cfecd",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-02-01T19:42:24Z",
       "side": 1,
       "message": "These can still collectGarbage together (there is advantage of ding that, since it uses one mUse to traco two garbage objects.)",
+      "range": {
+        "startLine": 5475,
+        "startChar": 3,
+        "endLine": 5479,
+        "endChar": 44
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b64e8bf1_37a93aad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5479,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "I see. Restored to previous state.",
+      "parentUuid": "a9f7e8e8_419cfecd",
       "range": {
         "startLine": 5475,
         "startChar": 3,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0531b4b_16ad292b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5863,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "e93512e0_25e27e14",
+      "range": {
+        "startLine": 5863,
+        "startChar": 8,
+        "endLine": 5863,
+        "endChar": 26
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "612d7956_3e1d2793",
@@ -129,6 +249,30 @@
       "writtenOn": "2023-02-01T19:42:24Z",
       "side": 1,
       "message": "If this fail, you should free the allocation.",
+      "range": {
+        "startLine": 160,
+        "startChar": 8,
+        "endLine": 160,
+        "endChar": 14
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1fd9ea_5b47097c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-01T23:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "612d7956_3e1d2793",
       "range": {
         "startLine": 160,
         "startChar": 8,
