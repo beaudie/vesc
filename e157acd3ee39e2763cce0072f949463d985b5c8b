@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21c05439_787d5cbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T21:05:29Z",
+      "side": 1,
+      "message": "Thanks for the explanation. lgtm again and CQ+2\u0027ing.",
+      "revId": "e157acd3ee39e2763cce0072f949463d985b5c8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
