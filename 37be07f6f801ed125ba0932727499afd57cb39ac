@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ae8a87a_e9dd0e30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-01T23:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7842f70_05b485d0",
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0a6ff757_adb99a8d",
@@ -198,6 +216,30 @@
       "side": 1,
       "message": "Yes, that would be great actually (I haven\u0027t verified the names though, trusting you with that)",
       "parentUuid": "658a5266_2f0d6b42",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1351,
+        "endChar": 21
+      },
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ecb5408_9f9e9242",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-01T23:27:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afe82776_f7b385c1",
       "range": {
         "startLine": 1351,
         "startChar": 16,
