@@ -355,13 +355,20 @@ template("glmark2_exe") {
         "src/src/native-state-win32.h",
       ]
     }
-    if (is_linux || is_chromeos) {
+    if ((is_linux || is_chromeos) && angle_use_x11) {
       defines += [ "GLMARK2_USE_X11" ]
       sources += [
         "src/src/native-state-x11.cpp",
         "src/src/native-state-x11.h",
       ]
       libs = [ "X11" ]
+    }
+    if ((is_linux || is_chromeos) && angle_use_wayland) {
+      defines += [ "GLMARK2_USE_WAYLAND" ]
+      sources += [
+        "src/src/native-state-wayland.cpp",
+        "src/src/native-state-wayland.h",
+      ]
     }
   }
 }
