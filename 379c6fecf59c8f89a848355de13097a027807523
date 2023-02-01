@@ -33,6 +33,24 @@
       "message": "lgtm+2\n\nYuly: should the rubber stamper bot be configured to allow changes to these expectations files in the ANGLE workspace, as it is in Chromium?",
       "revId": "379c6fecf59c8f89a848355de13097a027807523",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f0dd1f_a245f983",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T16:27:38Z",
+      "side": 1,
+      "message": "I thought it was? We\u0027ve typically been fine with Bot-Commit+1 on these files.",
+      "parentUuid": "86611e78_43977e27",
+      "revId": "379c6fecf59c8f89a848355de13097a027807523",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
