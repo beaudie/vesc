@@ -87,6 +87,24 @@
       "parentUuid": "371bb29d_979461f0",
       "revId": "f56588fe8dce71fa37cf5363c714eb7190c0b1c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec90067c_6e019ba9",
+        "filename": "src/common/RingBufferAllocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-01T19:30:20Z",
+      "side": 1,
+      "message": "Retrying. Now it should be done.",
+      "parentUuid": "6cc53605_23956fec",
+      "revId": "f56588fe8dce71fa37cf5363c714eb7190c0b1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
