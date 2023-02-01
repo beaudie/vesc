@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "393e05a6_c27caae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T16:07:17Z",
+      "side": 1,
+      "message": "\u003e What is missing?\n\nThey are PBO copies which take a different path from CPU data uploads. I would have imagined the CPU upload paths are tested _somewhere_, but given how many bugs you just fixed and there are no deqp suppressions lifted, it looks like not much is tested.\n\n\u003e Fixed and untested\n\u003e Further investigation showed that Metal backend also needs it\n\nThanks for being thorough.\n\n\u003e It\u0027s a Vulkan fallback path that is unlikely to be encountered.\n\nFWIW, if you want to add tests that intentionally fallback to another format (even if the original format is supported), you can instantiate tests with something like this:\n\n```\nES3_VULKAN().enable(Feature::ForceFallbackFormat)\n```\n\n(Only supported for Vulkan at the moment)",
+      "parentUuid": "e87a17fd_ee29808c",
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a6ff757_adb99a8d",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
@@ -138,6 +156,30 @@
       "side": 1,
       "message": "I meant that if this function is called `LoadD24S8ToS8D24` and moves S8 to MSBs and D24 to LSBs, then for consistency:\n- `LoadD32FS8X24ToD24S8` should be called `LoadD32FS8X24ToS8D24`\n- `LoadD32ToD24X8` should be called `LoadD32ToX8D24`\n- `LoadS8ToX24S8` should be called `LoadS8ToS8X24`\n\nIf this looks fine, let\u0027s rename all four.",
       "parentUuid": "9afee4ac_921ca4c6",
+      "range": {
+        "startLine": 1351,
+        "startChar": 16,
+        "endLine": 1351,
+        "endChar": 21
+      },
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe82776_f7b385c1",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T16:07:17Z",
+      "side": 1,
+      "message": "Yes, that would be great actually (I haven\u0027t verified the names though, trusting you with that)",
+      "parentUuid": "658a5266_2f0d6b42",
       "range": {
         "startLine": 1351,
         "startChar": 16,
