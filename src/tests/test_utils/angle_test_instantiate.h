@@ -392,6 +392,23 @@ std::vector<ParamT> CombineWithValues(const std::vector<ParamT> &in,
     return CombineWithValues(in, std::begin(modifiers), std::end(modifiers), combine);
 }
 
+template <typename ParamT>
+std::vector<ParamT> CombineWithIndicies(const std::vector<ParamT> &in,
+                                        size_t begin,
+                                        size_t end,
+                                        ParamT combine(const ParamT &, size_t))
+{
+    std::vector<ParamT> out;
+    for (const ParamT &paramsIn : in)
+    {
+        for (size_t iter = begin; iter != end; ++iter)
+        {
+            out.push_back(combine(paramsIn, iter));
+        }
+    }
+    return out;
+}
+
 template <typename ParamT, typename FilterFunc>
 std::vector<ParamT> FilterWithFunc(const std::vector<ParamT> &in, FilterFunc filter)
 {
