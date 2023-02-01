@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeade5c4_da02b72f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T02:24:48Z",
+      "side": 1,
+      "message": "Could you add one more brief paragraph describing the changes in this reland compared to your original CL? Thanks much.",
+      "revId": "395d11c32d547dbe14e0ba170fd2bc6cd82759ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c4ae5f8_cf1824db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T02:24:48Z",
+      "side": 1,
+      "message": "Thanks Kyle for diagnosing and fixing the alignment issue! Will review tomorrow - one small comment in advance of that.",
+      "revId": "395d11c32d547dbe14e0ba170fd2bc6cd82759ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
