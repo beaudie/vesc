@@ -34,6 +34,24 @@
       "parentUuid": "ec000e7a_5d55a84d",
       "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "932fab22_f1b18ed2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-01T15:52:49Z",
+      "side": 1,
+      "message": "I highly suspect it has something to do with a nullptr function pointer, like `vkGetPhysicalDeviceExternalFencePropertiesKHR` or `vkGetPhysicalDeviceExternalSemaphorePropertiesKHR`. I\u0027d just add a `!mac` to the `if` condition that is now enabled outside Android.",
+      "parentUuid": "f06d355b_ec4dbaef",
+      "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
