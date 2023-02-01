@@ -1371,11 +1371,23 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       ]
     }
     if (is_linux) {
+      if (angle_use_wayland) {
+        sources += [
+          "$deqp_path/framework/platform/lnx/wayland/tcuLnxWayland.cpp",
+          "$deqp_path/framework/platform/lnx/wayland/tcuLnxWayland.hpp",
+          "$deqp_path/framework/platform/lnx/wayland/tcuLnxWaylandEglDisplayFactory.cpp",
+          "$deqp_path/framework/platform/lnx/wayland/tcuLnxWaylandEglDisplayFactory.hpp",
+        ]
+      }
+      if (angle_use_x11) {
+        sources += [
+          "$deqp_path/framework/platform/lnx/X11/tcuLnxX11.cpp",
+          "$deqp_path/framework/platform/lnx/X11/tcuLnxX11.hpp",
+          "$deqp_path/framework/platform/lnx/X11/tcuLnxX11EglDisplayFactory.cpp",
+          "$deqp_path/framework/platform/lnx/X11/tcuLnxX11EglDisplayFactory.hpp",
+        ]
+      }
       sources += [
-        "$deqp_path/framework/platform/lnx/X11/tcuLnxX11.cpp",
-        "$deqp_path/framework/platform/lnx/X11/tcuLnxX11.hpp",
-        "$deqp_path/framework/platform/lnx/X11/tcuLnxX11EglDisplayFactory.cpp",
-        "$deqp_path/framework/platform/lnx/X11/tcuLnxX11EglDisplayFactory.hpp",
         "$deqp_path/framework/platform/lnx/tcuLnx.cpp",
         "$deqp_path/framework/platform/lnx/tcuLnx.hpp",
         "$deqp_path/framework/platform/lnx/tcuLnxEglPlatform.cpp",
