@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7842f70_05b485d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-01T21:57:43Z",
+      "side": 1,
+      "message": "Tried enforcing fallback formats and found another bug in Vulkan uploads. Will update the CL.",
+      "parentUuid": "393e05a6_c27caae7",
+      "revId": "37be07f6f801ed125ba0932727499afd57cb39ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0a6ff757_adb99a8d",
         "filename": "src/image_util/loadimage.cpp",
         "patchSetId": 2
