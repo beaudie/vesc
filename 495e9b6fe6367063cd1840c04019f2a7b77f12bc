@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d2f75a5_2fd44249",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T19:38:44Z",
+      "side": 1,
+      "message": "Please mention that several failing tests were suppressed - maybe a brief summary about which ones.",
+      "revId": "495e9b6fe6367063cd1840c04019f2a7b77f12bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "051d4722_0ac40751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T19:38:44Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "495e9b6fe6367063cd1840c04019f2a7b77f12bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "124f9653_4f6ca581",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 5
@@ -38,6 +72,30 @@
       "side": 1,
       "message": "Ok the bot is passing now. kbr@ any preference here?",
       "parentUuid": "124f9653_4f6ca581",
+      "range": {
+        "startLine": 768,
+        "startChar": 0,
+        "endLine": 773,
+        "endChar": 96
+      },
+      "revId": "495e9b6fe6367063cd1840c04019f2a7b77f12bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "921c1b5e_dc7fabd7",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-01T19:38:44Z",
+      "side": 1,
+      "message": "I somewhat prefer to enumerate all the tests, because a wildcard will cause any tests added in the future to be silently skipped. However, your and Yuly\u0027s decision.",
+      "parentUuid": "920ba758_57c5075c",
       "range": {
         "startLine": 768,
         "startChar": 0,
