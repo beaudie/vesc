@@ -774,6 +774,11 @@ std::string RenderTestParams::story() const
         strstr << "_" << samples << "_samples";
     }
 
+    if (mtlBinaryArchiveCache)
+    {
+        strstr << "_mtlBinaryArchiveCache";
+    }
+
     return strstr.str();
 }
 
@@ -905,15 +910,16 @@ void ANGLERenderTest::SetUp()
     withMethods.platformMethods       = &mPlatformMethods;
 
     // Request a common framebuffer config
-    mConfigParams.redBits     = 8;
-    mConfigParams.greenBits   = 8;
-    mConfigParams.blueBits    = 8;
-    mConfigParams.alphaBits   = 8;
-    mConfigParams.depthBits   = 24;
-    mConfigParams.stencilBits = 8;
-    mConfigParams.colorSpace  = mTestParams.colorSpace;
-    mConfigParams.multisample = mTestParams.multisample;
-    mConfigParams.samples     = mTestParams.samples;
+    mConfigParams.redBits                             = 8;
+    mConfigParams.greenBits                           = 8;
+    mConfigParams.blueBits                            = 8;
+    mConfigParams.alphaBits                           = 8;
+    mConfigParams.depthBits                           = 24;
+    mConfigParams.stencilBits                         = 8;
+    mConfigParams.colorSpace                          = mTestParams.colorSpace;
+    mConfigParams.multisample                         = mTestParams.multisample;
+    mConfigParams.samples                             = mTestParams.samples;
+    mConfigParams.contextMtlBinaryArchiveCacheEnabled = mTestParams.mtlBinaryArchiveCache;
     if (mTestParams.surfaceType != SurfaceType::WindowWithVSync)
     {
         mConfigParams.swapInterval = 0;

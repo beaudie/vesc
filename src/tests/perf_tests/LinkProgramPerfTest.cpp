@@ -12,7 +12,10 @@
 #include <array>
 
 #include "common/vector_utils.h"
+#include "util/EGLWindow.h"
 #include "util/shader_utils.h"
+
+#include "LinkProgramPerfTest_shaders.h"
 
 using namespace angle;
 
@@ -23,6 +26,7 @@ enum class TaskOption
 {
     CompileOnly,
     CompileAndLink,
+    ProgramBinary,
 
     Unspecified
 };
@@ -35,18 +39,37 @@ enum class ThreadOption
     Unspecified
 };
 
+enum class ProgramCacheOption
+{
+    MetalBinaryArchive,
+
+    Unspecified
+};
+
 struct LinkProgramParams final : public RenderTestParams
 {
-    LinkProgramParams(TaskOption taskOptionIn, ThreadOption threadOptionIn)
+    LinkProgramParams(TaskOption taskOptionIn,
+                      ThreadOption threadOptionIn,
+                      ProgramCacheOption programCacheOptionIn = ProgramCacheOption::Unspecified)
     {
         iterationsPerStep = 1;
 
-        majorVersion = 2;
+        majorVersion = 3;
         minorVersion = 0;
         windowWidth  = 256;
         windowHeight = 256;
         taskOption   = taskOptionIn;
         threadOption = threadOptionIn;
+        programIndex = 0;
+
+        switch (programCacheOptionIn)
+        {
+            case ProgramCacheOption::MetalBinaryArchive:
+                mtlBinaryArchiveCache = true;
+                break;
+            default:
+                break;
+        }
     }
 
     std::string story() const override
@@ -62,6 +85,10 @@ struct LinkProgramParams final : public RenderTestParams
         {
             strstr << "_compile_and_link";
         }
+        else if (taskOption == TaskOption::ProgramBinary)
+        {
+            strstr << "_program_binary";
+        }
 
         if (threadOption == ThreadOption::SingleThread)
         {
@@ -71,6 +98,8 @@ struct LinkProgramParams final : public RenderTestParams
         {
             strstr << "_multi_thread";
         }
+
+        strstr << "_program_" << kPrograms[programIndex].name;
 
         if (eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
         {
@@ -82,6 +111,7 @@ struct LinkProgramParams final : public RenderTestParams
 
     TaskOption taskOption;
     ThreadOption threadOption;
+    size_t programIndex;
 };
 
 std::ostream &operator<<(std::ostream &os, const LinkProgramParams &params)
@@ -101,10 +131,37 @@ class LinkProgramBenchmark : public ANGLERenderTest,
     void drawBenchmark() override;
 
   protected:
+    GLuint compileAndLinkProgram();
+
     GLuint mVertexBuffer = 0;
+
+    GLenum mBinaryFormat = 0;
+    std::vector<uint8_t> mBinary;
 };
 
 LinkProgramBenchmark::LinkProgramBenchmark() : ANGLERenderTest("LinkProgram", GetParam()) {}
+
+GLuint LinkProgramBenchmark::compileAndLinkProgram()
+{
+    const ProgramInfo &programInfo = kPrograms[GetParam().programIndex];
+
+    GLuint program = glCreateProgram();
+    EXPECT_NE(0u, program);
+
+    for (const auto &shaderInfo : programInfo.shaders)
+    {
+        GLenum type        = shaderInfo.first;
+        const char *source = shaderInfo.second;
+        GLuint shader      = CompileShader(type, source);
+        EXPECT_NE(0u, shader);
+        glAttachShader(program, shader);
+        glDeleteShader(shader);
+    }
+
+    glLinkProgram(program);
+
+    return CheckLinkStatusAndReturnProgram(program, true);
+}
 
 void LinkProgramBenchmark::initializeBenchmark()
 {
@@ -121,6 +178,15 @@ void LinkProgramBenchmark::initializeBenchmark()
         glMaxShaderCompilerThreadsKHR(0);
     }
 
+    if (GetParam().driver == GLESDriverType::AngleEGL)
+    {
+        EGLDisplay display = static_cast<EGLWindow *>(getGLWindow())->getDisplay();
+        if (IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_metal_program_cache_control"))
+        {
+            eglProgramCacheResizeANGLE(display, 9000, EGL_METAL_BINARY_ARCHIVE_CACHE_RESIZE_ANGLE);
+        }
+    }
+
     std::array<Vector3, 6> vertices = {{Vector3(-1.0f, 1.0f, 0.5f), Vector3(-1.0f, -1.0f, 0.5f),
                                         Vector3(1.0f, -1.0f, 0.5f), Vector3(-1.0f, 1.0f, 0.5f),
                                         Vector3(1.0f, -1.0f, 0.5f), Vector3(1.0f, 1.0f, 0.5f)}};
@@ -129,6 +195,19 @@ void LinkProgramBenchmark::initializeBenchmark()
     glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector3), vertices.data(),
                  GL_STATIC_DRAW);
+
+    if (GetParam().taskOption == TaskOption::ProgramBinary)
+    {
+        GLuint program = compileAndLinkProgram();
+        ASSERT_NE(0u, program);
+
+        GLint binarySize = 0;
+        glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH, &binarySize);
+        mBinary.resize(binarySize, 0);
+        glGetProgramBinary(program, binarySize, nullptr, &mBinaryFormat, mBinary.data());
+
+        glDeleteProgram(program);
+    }
 }
 
 void LinkProgramBenchmark::destroyBenchmark()
@@ -138,46 +217,41 @@ void LinkProgramBenchmark::destroyBenchmark()
 
 void LinkProgramBenchmark::drawBenchmark()
 {
-    static const char *vertexShader =
-        "attribute vec2 position;\n"
-        "void main() {\n"
-        "    gl_Position = vec4(position, 0, 1);\n"
-        "}";
-    static const char *fragmentShader =
-        "precision mediump float;\n"
-        "void main() {\n"
-        "    gl_FragColor = vec4(1, 0, 0, 1);\n"
-        "}";
-    GLuint vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    ASSERT_NE(0u, vs);
-    ASSERT_NE(0u, fs);
     if (GetParam().taskOption == TaskOption::CompileOnly)
     {
-        glDeleteShader(vs);
-        glDeleteShader(fs);
-        return;
+        const ProgramInfo &programInfo = kPrograms[GetParam().programIndex];
+        for (const auto &shaderInfo : programInfo.shaders)
+        {
+            GLenum type        = shaderInfo.first;
+            const char *source = shaderInfo.second;
+            GLuint shader      = CompileShader(type, source);
+            glDeleteShader(shader);
+        }
     }
+    else if (GetParam().taskOption == TaskOption::CompileAndLink)
+    {
+        GLuint program = compileAndLinkProgram();
+        glUseProgram(program);
 
-    GLuint program = glCreateProgram();
-    ASSERT_NE(0u, program);
+        // Draw with the program to ensure the shader gets compiled and used.
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    glAttachShader(program, vs);
-    glDeleteShader(vs);
-    glAttachShader(program, fs);
-    glDeleteShader(fs);
-    glLinkProgram(program);
-    glUseProgram(program);
+        glDeleteProgram(program);
+    }
+    else if (GetParam().taskOption == TaskOption::ProgramBinary)
+    {
+        GLuint program = glCreateProgram();
+        ASSERT_NE(0u, program);
 
-    GLint positionLoc = glGetAttribLocation(program, "position");
-    glVertexAttribPointer(positionLoc, 2, GL_FLOAT, GL_FALSE, 8, nullptr);
-    glEnableVertexAttribArray(positionLoc);
+        glProgramBinary(program, mBinaryFormat, mBinary.data(), mBinary.size());
 
-    // Draw with the program to ensure the shader gets compiled and used.
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+        glUseProgram(program);
 
-    glDeleteProgram(program);
+        // Draw with the program to ensure the shader gets compiled and used.
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glDeleteProgram(program);
+    }
 }
 
 using namespace egl_platform;
@@ -189,9 +263,12 @@ LinkProgramParams LinkProgramD3D11Params(TaskOption taskOption, ThreadOption thr
     return params;
 }
 
-LinkProgramParams LinkProgramMetalParams(TaskOption taskOption, ThreadOption threadOption)
+LinkProgramParams LinkProgramMetalParams(
+    TaskOption taskOption,
+    ThreadOption threadOption,
+    ProgramCacheOption programCacheOption = ProgramCacheOption::Unspecified)
 {
-    LinkProgramParams params(taskOption, threadOption);
+    LinkProgramParams params(taskOption, threadOption, programCacheOption);
     params.eglParameters = METAL();
     return params;
 }
@@ -215,8 +292,14 @@ TEST_P(LinkProgramBenchmark, Run)
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(
-    LinkProgramBenchmark,
+LinkProgramParams CombineParamsWithProgram(const LinkProgramParams &in, size_t programIndex)
+{
+    LinkProgramParams out = in;
+    out.programIndex      = programIndex;
+    return out;
+}
+
+std::vector<LinkProgramParams> gConfigurations = {
     LinkProgramD3D11Params(TaskOption::CompileOnly, ThreadOption::MultiThread),
     LinkProgramMetalParams(TaskOption::CompileOnly, ThreadOption::MultiThread),
     LinkProgramOpenGLOrGLESParams(TaskOption::CompileOnly, ThreadOption::MultiThread),
@@ -231,7 +314,18 @@ ANGLE_INSTANTIATE_TEST(
     LinkProgramVulkanParams(TaskOption::CompileOnly, ThreadOption::SingleThread),
     LinkProgramD3D11Params(TaskOption::CompileAndLink, ThreadOption::SingleThread),
     LinkProgramMetalParams(TaskOption::CompileAndLink, ThreadOption::SingleThread),
+    LinkProgramMetalParams(TaskOption::ProgramBinary,
+                           ThreadOption::SingleThread,
+                           ProgramCacheOption::Unspecified),
+    LinkProgramMetalParams(TaskOption::ProgramBinary,
+                           ThreadOption::SingleThread,
+                           ProgramCacheOption::MetalBinaryArchive),
     LinkProgramOpenGLOrGLESParams(TaskOption::CompileAndLink, ThreadOption::SingleThread),
-    LinkProgramVulkanParams(TaskOption::CompileAndLink, ThreadOption::SingleThread));
+    LinkProgramVulkanParams(TaskOption::CompileAndLink, ThreadOption::SingleThread)};
+
+std::vector<LinkProgramParams> gConfigurationsWithEnumeratedPrograms =
+    CombineWithIndicies(gConfigurations, 0u, ArraySize(kPrograms), CombineParamsWithProgram);
+
+ANGLE_INSTANTIATE_TEST_ARRAY(LinkProgramBenchmark, gConfigurationsWithEnumeratedPrograms);
 
 }  // anonymous namespace

@@ -58,6 +58,7 @@ struct ANGLE_UTIL_EXPORT ConfigParameters
     bool mutableRenderBuffer;
     EGLint samples;
     Optional<bool> contextProgramCacheEnabled;
+    Optional<bool> contextMtlBinaryArchiveCacheEnabled;
     EGLenum resetStrategy;
     EGLenum colorSpace;
     EGLint swapInterval;

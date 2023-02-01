@@ -614,6 +614,13 @@ EGLContext EGLWindow::createContext(EGLContext share, EGLint *extraAttributes)
                 mConfigParams.contextProgramCacheEnabled.value() ? EGL_TRUE : EGL_FALSE);
         }
 
+        if (mConfigParams.contextMtlBinaryArchiveCacheEnabled.valid())
+        {
+            contextAttributes.push_back(EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE);
+            contextAttributes.push_back(
+                mConfigParams.contextMtlBinaryArchiveCacheEnabled.value() ? EGL_TRUE : EGL_FALSE);
+        }
+
         bool hasBackwardsCompatibleContextExtension =
             strstr(displayExtensions, "EGL_ANGLE_create_context_backwards_compatible") != nullptr;
         if (hasBackwardsCompatibleContextExtension)
