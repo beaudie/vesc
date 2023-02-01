@@ -50,6 +50,23 @@
       "message": "https://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/15732/overview doesn\u0027t have Metal debug layers enabled yet, since it ran with Chromium crrev.com/1099310.\nThat fix rolled into ANGLE with crrev.com/1099691.\nI\u0027ll see if rerunning this trybot will detect any problems.",
       "revId": "395d11c32d547dbe14e0ba170fd2bc6cd82759ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72b64c19_a2888b07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-01T19:30:03Z",
+      "side": 1,
+      "message": "Looks like deqp/functional/gles3/shaderoperator/unary_operator_02.html timed out with debug layers enabled.\nI didn\u0027t see it timing out on CI, but deqp/functional/gles3/shaderoperator/binary_operator_00.html did in https://luci-milo.appspot.com/ui/p/chromium/builders/ci/Mac%20FYI%20Release%20(Intel)/35509/overview.\n\nSeems to be finishing in acceptable time normally:\n[130/142] deqp/functional/gles3/shaderoperator/unary_operator_02.html passed 39.6977s\nfrom https://luci-milo.appspot.com/ui/p/chromium/builders/ci/Mac%20FYI%20Release%20(Intel)/35672/overview\n\nMaybe this is due to parallelization and deqp/functional/gles3/shaderoperator/* tests need to be serialized?",
+      "revId": "395d11c32d547dbe14e0ba170fd2bc6cd82759ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
