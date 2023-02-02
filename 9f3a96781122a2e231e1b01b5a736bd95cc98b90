@@ -52,6 +52,24 @@
       "parentUuid": "f06d355b_ec4dbaef",
       "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cebe2c2_7ccbc97d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1433074
+      },
+      "writtenOn": "2023-02-02T14:13:16Z",
+      "side": 1,
+      "message": "Hmm.. I\u0027m not sure I\u0027ve tested correctly, when I tested with my Mac M1 and latest CL, 45 tests were failed. I didn\u0027t included this change.\n\n* command:\n\u003e ./out/dbg/angle_end2end_tests --gtest_filter\u003d-\"*Vulkan_SwiftShader*\" --flaky-retries\u003d2\n\n* failed tests:\n[  FAILED  ] 45 tests, listed below:\n[  FAILED  ] PointSpritesTest.PointSizeAboveMaxIsClamped/ES2_Metal, where GetParam() \u003d ES2_Metal\n[  FAILED  ] RobustResourceInitTestES3.MaskedStencilClearBuffer/ES3_OpenGL, where GetParam() \u003d ES3_OpenGL\n[  FAILED  ] SimpleOperationTest.CullFaceEnabledState/ES3_ANGLE_Vulkan_Secondaries_SwiftShader, where GetParam() \u003d ES3_ANGLE_Vulkan_Secondaries_SwiftShader\n...\n[  FAILED  ] SimpleStateChangeTestES3.BindingSameBuffer/ES3_Metal, where GetParam() \u003d ES3_Metal\n\n45 FAILED TESTS\n  YOU HAVE 13 DISABLED TESTS",
+      "parentUuid": "932fab22_f1b18ed2",
+      "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
