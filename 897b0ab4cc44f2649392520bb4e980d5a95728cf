@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7bc6aed_609e7f20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T21:04:25Z",
+      "side": 1,
+      "message": "Suggest \"Fixed: angleproject:7999\" which will auto-close the bug.",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd9aef0_9350975a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T21:04:25Z",
+      "side": 1,
+      "message": "Good find and fix Quyen. Let me send this out for review and +1 it myself. lgtm\n\nCC\u0027ing a few others as FYI.",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40a041a3_f526d886",
         "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
         "patchSetId": 5
