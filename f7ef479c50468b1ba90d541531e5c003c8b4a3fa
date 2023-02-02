@@ -3,6 +3,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fbcd7972_f9a7756d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T07:21:11Z",
+      "side": 1,
+      "message": "Are these iterations of the test per unit time? Higher is better?",
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc306171_3bf32268",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T07:21:11Z",
+      "side": 1,
+      "message": "Fantastic analysis and work, and great absl wizardry. lgtm",
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "340d0562_1041ec51",
         "filename": "src/libANGLE/renderer/metal/mtl_library_cache.h",
         "patchSetId": 3
@@ -20,6 +54,23 @@
         "endLine": 54,
         "endChar": 31
       },
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aacff0b1_c4ef8210",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T07:21:11Z",
+      "side": 1,
+      "message": "Is this dictionary properly referenced and released? It looks like options.preprocessorMacros uses the \"copy\" @property, so it copies it - but not 100% clear to me that this is released properly after this block.",
       "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
