@@ -33,6 +33,23 @@
       "message": "WebKit still uses hand-maintained Xcode projects to determine which files are compiled from ANGLE and other third-party libraries. There isn\u0027t a good interposition point in WebKit\u0027s Tools/Scripts/update-angle to filter out only certain .cpp files from directories like src/compiler/translator/tree_ops/gl/.\n\nThere likely won\u0027t be many additional changes in these directories, and since this will streamline collaboration with Apple, lgtm.\n\nKimmo, if Shabi\u0027s suggestion works for WebKit or you find another less-intrusive alternative in the future, I trust you\u0027ll revisit this.",
       "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7b16bc_e7c0207f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T21:25:58Z",
+      "side": 1,
+      "message": "Kimmo, do you have any feedback regarding Shabi\u0027s suggestion? Would like to find some path forward to unblock you.",
+      "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
