@@ -116,6 +116,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     {
         if ((*memoryPropertyFlagsOut & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
         {
+            ASSERT(false);
             // Can map the memory.
             ANGLE_TRY(vk::InitMappableDeviceMemory(context, deviceMemoryOut,
                                                    memoryRequirements.size, kNonZeroInitValue,
