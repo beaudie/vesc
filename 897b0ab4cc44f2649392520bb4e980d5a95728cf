@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a041a3_f526d886",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-02-02T19:33:37Z",
+      "side": 1,
+      "message": "Side effects like this are tricky, can we introduce an actual flag / option to say \u0027this will be modified on the cpu\u0027 instead of just passing a pointer in that we don\u0027t read later?",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
