@@ -133,6 +133,24 @@
       "parentUuid": "aacff0b1_c4ef8210",
       "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f969016c_a7e79a06",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T22:20:48Z",
+      "side": 1,
+      "message": "For the record, I was wrong about this: [NSMutableDictionary dictionary] auto-releases the object before returning it. Your code was correct as written.",
+      "parentUuid": "8dbdc695_22c0b2fd",
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
