@@ -383,16 +383,19 @@ class CommandQueue : angle::NonCopyable
     const angle::VulkanPerfCounters getPerfCounters() const;
     void resetPerFramePerfCounters();
 
+    angle::Result postSubmitCheck(Context *context);
+
   private:
     // All these private APIs are called with mutex locked, so we must not take lock again.
     angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
     angle::Result finishOneCommandBatch(Context *context, uint64_t timeout);
 
     angle::Result queueSubmit(Context *context,
+                              std::unique_lock<std::mutex> &&lock,
                               egl::ContextPriority contextPriority,
                               const VkSubmitInfo &submitInfo,
-                              const Fence *fence,
-                              const QueueSerial &submitQueueSerial);
+                              CommandBatch &&commandBatch,
+                              bool doSubmit);
 
     void releaseToCommandBatch(bool hasProtectedContent,
                                PrimaryCommandBuffer &&commandBuffer,
@@ -432,6 +435,9 @@ class CommandQueue : angle::NonCopyable
             return mPrimaryCommandPool;
         }
     }
+
+    // Protect multi-thread access to mInFlightCommands.push
+    std::mutex mQueueSubmitMutex;
 
     // Protect multi-thread access to mInFlightCommands and other data memebers of this class.
     mutable std::mutex mMutex;
