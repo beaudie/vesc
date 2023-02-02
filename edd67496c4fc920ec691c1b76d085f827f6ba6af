@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1639097a_bdf7c431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T22:08:46Z",
+      "side": 1,
+      "message": "Do you think we should wait for Quyen\u0027s fix https://chromium-review.googlesource.com/c/angle/angle/+/4217055 to land first at this point? Will re-review later today.",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88203c83_a02a6936",
