@@ -1141,7 +1141,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_BGR10_A2_ANGLEX,   true, 10, 10, 10,  2, 0, GL_BGRA_EXT,     GL_UNSIGNED_INT_2_10_10_10_REV,    GL_UNSIGNED_NORMALIZED, false, NeverSupported,                                    NeverSupported,  NeverSupported,                                    NeverSupported,                                NeverSupported);
 
     // Special format to emulate RGB8 with RGBA8 within ANGLE.
-    AddRGBAFormat(&map, GL_RGBX8_ANGLE,      true,   8,  8,  8,  0, 0, GL_RGB,          GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, false, AlwaysSupported,                                   AlwaysSupported, AlwaysSupported,                                   AlwaysSupported,                               NeverSupported);
+    AddRGBAFormat(&map, GL_RGBX8_ANGLE,      true,   8,  8,  8,  8, 0, GL_RGB,          GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, false, AlwaysSupported,                                   AlwaysSupported, AlwaysSupported,                                   AlwaysSupported,                               NeverSupported);
 
     // Special format to emulate BGR8 with BGRA8 within ANGLE.
     AddRGBAFormat(&map, GL_BGRX8_ANGLEX,      true,  8,  8,  8,  0, 0, GL_BGRA_EXT,     GL_UNSIGNED_BYTE,                  GL_UNSIGNED_NORMALIZED, false, NeverSupported,                                    AlwaysSupported,  NeverSupported,                                    NeverSupported,                                NeverSupported);
