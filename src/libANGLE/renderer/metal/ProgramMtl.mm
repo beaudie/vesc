@@ -1481,14 +1481,12 @@ angle::Result ProgramMtl::encodeUniformBuffersInfoArgumentBuffer(
 
     mtl::BufferRef argumentBuffer;
     size_t argumentBufferOffset;
-    // We don't use this mapped pointer directly but need to pass it to BufferPool::allocate
-    // function to tell it that the buffer is being modified by CPU (indirectly via
-    // MTLArgumentEncoder)
     uint8_t* mappedPtr = nullptr;
+    (void)mappedPtr;
     bufferEncoder.bufferPool.releaseInFlightBuffers(context);
     ANGLE_TRY(bufferEncoder.bufferPool.allocate(
-        context, bufferEncoder.metalArgBufferEncoder.get().encodedLength, &mappedPtr,
-        &argumentBuffer, &argumentBufferOffset));
+        context, bufferEncoder.metalArgBufferEncoder.get().encodedLength, nullptr, &argumentBuffer,
+        &argumentBufferOffset));
 
     [bufferEncoder.metalArgBufferEncoder setArgumentBuffer:argumentBuffer->get()
                                                     offset:argumentBufferOffset];
