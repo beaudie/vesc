@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "627954a5_78562f54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-02T20:33:20Z",
+      "side": 1,
+      "message": "Ah, whoops. Yes, higher is better. It\u0027s number of steps per fixed time period.",
+      "parentUuid": "fbcd7972_f9a7756d",
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fc306171_3bf32268",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d95a89_30a3db66",
+        "filename": "src/libANGLE/renderer/metal/mtl_library_cache.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-02T20:33:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "340d0562_1041ec51",
+      "range": {
+        "startLine": 54,
+        "startChar": 21,
+        "endLine": 54,
+        "endChar": 31
+      },
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aacff0b1_c4ef8210",
@@ -71,6 +113,24 @@
       "writtenOn": "2023-02-02T07:21:11Z",
       "side": 1,
       "message": "Is this dictionary properly referenced and released? It looks like options.preprocessorMacros uses the \"copy\" @property, so it copies it - but not 100% clear to me that this is released properly after this block.",
+      "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbdc695_22c0b2fd",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-02T20:33:20Z",
+      "side": 1,
+      "message": "Ah, I dug in a little more because I really don\u0027t know how objective-c memory works. I *think* that because this is in a ANGLE_MTL_OBJC_SCOPE, the object will be released. I tried checking the retainCount (1) and calling release on it manually and got use-after-free errors so it does look like the dictionary was being cleaned up.",
+      "parentUuid": "aacff0b1_c4ef8210",
       "revId": "f7ef479c50468b1ba90d541531e5c003c8b4a3fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
