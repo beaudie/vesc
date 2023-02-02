@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c93871e_5d979540",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T07:02:36Z",
+      "side": 1,
+      "message": "Could you reflow to ~75 columns? It\u0027ll make the git history easier to read.",
+      "revId": "28a7e1d3d423c5699a08f1926b3263ec24bd474d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4a302be_9598564d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-02T07:02:36Z",
+      "side": 1,
+      "message": "The deqp/functional/gles3/shaderoperator/unary_operator_02.html failure looks like a flake and is certainly unrelated to this CL; it failed in webgl2_conformance_gl_passthrough_tests, i.e., the OpenGL backend and not even the Metal backend.\n\nlgtm; thank you Kyle for digging to the bottom of this.\n\nOne small request about the commit message, but please feel free to CQ+2 whenever you\u0027re ready.",
+      "revId": "28a7e1d3d423c5699a08f1926b3263ec24bd474d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
