@@ -3,6 +3,75 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62c96bc8_9eceeab6",
+        "filename": "src/common/FixedDQueue.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-02T01:17:02Z",
+      "side": 1,
+      "message": "nit: 2023",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "ba444b744df2b3b17067078476be2a95e1364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bfdce74_0c5eb31e",
+        "filename": "src/common/FixedDQueue.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-02T01:17:02Z",
+      "side": 1,
+      "message": "nit: Could `mSize` become greater than `N`? Should there be an assert for this case (or a test)?",
+      "range": {
+        "startLine": 82,
+        "startChar": 17,
+        "endLine": 82,
+        "endChar": 19
+      },
+      "revId": "ba444b744df2b3b17067078476be2a95e1364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "120ef788_e4f1b294",
+        "filename": "src/common/FixedDQueue_unittest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-02T01:17:02Z",
+      "side": 1,
+      "message": "nit: Same",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "ba444b744df2b3b17067078476be2a95e1364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d60bfbb5_1274c08f",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
         "patchSetId": 2
@@ -19,6 +88,29 @@
         "startChar": 7,
         "endLine": 565,
         "endChar": 75
+      },
+      "revId": "ba444b744df2b3b17067078476be2a95e1364fad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45665a3d_8afdc7fb",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-02T01:17:02Z",
+      "side": 1,
+      "message": "I wonder how the value of the limit will impact the performance.",
+      "range": {
+        "startLine": 568,
+        "startChar": 44,
+        "endLine": 568,
+        "endChar": 47
       },
       "revId": "ba444b744df2b3b17067078476be2a95e1364fad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
