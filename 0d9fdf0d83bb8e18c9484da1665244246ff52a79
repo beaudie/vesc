@@ -33,6 +33,24 @@
       "message": "This is a reland right? Could you please upload the original change once, and then the fixed version? Then we can use gerrit\u0027s diff functionality to see what\u0027s been changed for the reland.",
       "revId": "0d9fdf0d83bb8e18c9484da1665244246ff52a79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c612505_14f2d02c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1567582
+      },
+      "writtenOn": "2023-02-02T13:55:24Z",
+      "side": 1,
+      "message": "Patchset 2 is the original (and later reverted) commit, patchset 3 is the updated CL.",
+      "parentUuid": "413ae2e8_9025e04e",
+      "revId": "0d9fdf0d83bb8e18c9484da1665244246ff52a79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
