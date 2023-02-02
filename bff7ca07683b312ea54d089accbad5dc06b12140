@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b876acc6_f12e68f5",
+        "filename": "src/libANGLE/renderer/gl/egl/FunctionsEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-02T15:19:30Z",
+      "side": 1,
+      "message": "nit: This name is too generic, I don\u0027t imagine surfaceless mesa is the only \"valid platform type\" 😊",
+      "range": {
+        "startLine": 33,
+        "startChar": 5,
+        "endLine": 33,
+        "endChar": 24
+      },
+      "revId": "bff7ca07683b312ea54d089accbad5dc06b12140",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
