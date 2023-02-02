@@ -4870,6 +4870,7 @@ angle::Result RendererVk::submitCommands(
         ANGLE_TRY(mCommandQueue.submitCommands(
             context, hasProtectedContent, contextPriority, waitSemaphores, waitSemaphoreStageMasks,
             signalVkSemaphore, std::move(commandBuffersToReset), commandPools, submitQueueSerial));
+        ANGLE_TRY(mCommandQueue.postSubmitCheck(context));
     }
 
     waitSemaphores.clear();
