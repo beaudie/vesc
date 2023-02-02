@@ -224,8 +224,33 @@ def upload_test_result_to_skia_gold(args, gold_session_manager, gold_session, go
     if not os.path.isfile(png_file_name):
         raise Exception('Screenshot not found: ' + png_file_name)
 
+    # These arguments cause Gold to use the sample_area inexact matching
+    # algorithm. If the produced image is not identical to a known good image,
+    # Gold will get the most recently produced good image from the same
+    # hardware/software config. It will then compare both images in 4x4 areas
+    # and treat the new image as good if each area produces no more than 3
+    # pixels that differ by more than 10 on each channel. An image that passes
+    # due to this logic is auto-approved as a new good image.
+    #
+    # These values were chosen to try to replicate how a human sees differences,
+    # as small channel differences are not noticeable and large differences are
+    # only really noticeable if there is a group of them in a small area.
+    inexact_matching_args = [
+        '--add-test-optional-key',
+        'image_matching_algorithm:sample_area',
+        '--add-test-optional-key',
+        'sample_area_width:4',
+        '--add-test-optional-key',
+        'sample_area_max_different_pixels_per_area:3',
+        '--add-test-optional-key',
+        'sample_area_channel_delta_threshold:10',
+    ]
+
     status, error = gold_session.RunComparison(
-        name=image_name, png_file=png_file_name, use_luci=use_luci)
+        name=image_name,
+        png_file=png_file_name,
+        use_luci=use_luci,
+        inexact_matching_args=inexact_matching_args)
 
     artifact_name = os.path.basename(png_file_name)
     artifacts[artifact_name] = [artifact_name]
