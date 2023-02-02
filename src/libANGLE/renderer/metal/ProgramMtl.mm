@@ -168,11 +168,6 @@ void InitArgumentBufferEncoder(mtl::Context *context,
 {
     encoder->metalArgBufferEncoder =
         mtl::adoptObjCObj([function newArgumentEncoderWithBufferIndex:bufferIndex]);
-    if (encoder->metalArgBufferEncoder)
-    {
-        encoder->bufferPool.initialize(context, encoder->metalArgBufferEncoder.get().encodedLength,
-                                       mtl::kArgumentBufferOffsetAlignment, 0);
-    }
 }
 
 }  // namespace
@@ -181,7 +176,6 @@ void InitArgumentBufferEncoder(mtl::Context *context,
 void ProgramArgumentBufferEncoderMtl::reset(ContextMtl *contextMtl)
 {
     metalArgBufferEncoder = nil;
-    bufferPool.destroy(contextMtl);
 }
 
 // ProgramShaderObjVariantMtl implementation
@@ -1480,14 +1474,15 @@ angle::Result ProgramMtl::encodeUniformBuffersInfoArgumentBuffer(
         mCurrentShaderVariants[shaderType]->uboArgBufferEncoder;
 
     mtl::BufferRef argumentBuffer;
-    size_t argumentBufferOffset;
-    bufferEncoder.bufferPool.releaseInFlightBuffers(context);
-    ANGLE_TRY(bufferEncoder.bufferPool.allocate(
-        context, bufferEncoder.metalArgBufferEncoder.get().encodedLength, nullptr, &argumentBuffer,
-        &argumentBufferOffset));
+    ANGLE_TRY(context->getBufferManager().getBuffer(
+        context, bufferEncoder.metalArgBufferEncoder.get().encodedLength, /*useSharedMem=*/true,
+        argumentBuffer));
 
-    [bufferEncoder.metalArgBufferEncoder setArgumentBuffer:argumentBuffer->get()
-                                                    offset:argumentBufferOffset];
+    // MTLArgumentEncoder is modifying the buffer indirectly on CPU. We need to call map()
+    // so that the buffer's data changes could be flushed to the GPU side later.
+    ANGLE_UNUSED_VARIABLE(argumentBuffer->mapWithOpt(context, /*readonly=*/false, /*noSync=*/true));
+
+    [bufferEncoder.metalArgBufferEncoder setArgumentBuffer:argumentBuffer->get() offset:0];
 
     constexpr gl::ShaderMap<MTLRenderStages> kShaderStageMap = {
         {gl::ShaderType::Vertex, mtl::kRenderStageVertex},
@@ -1522,10 +1517,14 @@ angle::Result ProgramMtl::encodeUniformBuffersInfoArgumentBuffer(
                                                atIndex:actualBufferIdx];
     }
 
-    ANGLE_TRY(bufferEncoder.bufferPool.commit(context));
+    argumentBuffer->unmap(context);
 
-    cmdEncoder->setBuffer(shaderType, argumentBuffer, static_cast<uint32_t>(argumentBufferOffset),
-                          mtl::kUBOArgumentBufferBindingIndex);
+    cmdEncoder->setBuffer(shaderType, argumentBuffer, 0, mtl::kUBOArgumentBufferBindingIndex);
+
+    // Return the argument buffer to the buffer manager so that it can be reused
+    // once GPU done using it.
+    context->getBufferManager().returnBuffer(context, argumentBuffer);
+
     return angle::Result::Continue;
 }
 

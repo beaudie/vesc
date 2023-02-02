@@ -36,7 +36,6 @@ struct ProgramArgumentBufferEncoderMtl
     void reset(ContextMtl *contextMtl);
 
     mtl::AutoObjCPtr<id<MTLArgumentEncoder>> metalArgBufferEncoder;
-    mtl::BufferPool bufferPool;
 };
 
 // Represents a specialized shader variant. For example, a shader variant with fragment coverage
