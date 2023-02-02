@@ -16,6 +16,24 @@
       "message": "So here was the unintended change of behavior:\n\nPreviously, BufferPool would always create Shared buffers, unless test feature forceBufferGPUStorage was on.\n\nAfter, BufferPool would respect alwaysUseManagedStorageModeForBuffers and alwaysUseSharedStorageModeForBuffers, too.\n\nThis would run into bug angleproject:7997, as it would create the buffer as Managed, and they don\u0027t work.\n\n--\n\nWith the reland, the behavior is the same as previously: BufferPool always creates Shared buffers, unless test feature forceBufferGPUStorage is on.",
       "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82e3329_e732243b",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_pool.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-02T19:56:40Z",
+      "side": 1,
+      "message": "(resolved)",
+      "parentUuid": "88203c83_a02a6936",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
