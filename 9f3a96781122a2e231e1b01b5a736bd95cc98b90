@@ -70,6 +70,24 @@
       "parentUuid": "932fab22_f1b18ed2",
       "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94a96f97_f562945b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-02T14:27:26Z",
+      "side": 1,
+      "message": "It probably all really depends on the mac driver, the bots likely do not match your hardware.\n\nAgain, I\u0027d just make sure the `if` is not hit on mac",
+      "parentUuid": "2cebe2c2_7ccbc97d",
+      "revId": "9f3a96781122a2e231e1b01b5a736bd95cc98b90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
