@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "a31c4c78_f5aa6114",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-02T16:41:59Z",
+      "side": 1,
+      "message": "Understand.",
+      "parentUuid": "ea988602_a094258d",
+      "range": {
+        "startLine": 407,
+        "startChar": 15,
+        "endLine": 407,
+        "endChar": 19
+      },
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e84c99ee_8458942d",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-02-01T20:02:21Z",
       "side": 1,
       "message": "Feel free to move this out of this class, and have it be used everywhere (including RendererVk, ContextVk etc) so we can avoid all the bools.",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdcdd1da_1e24a574",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-02T16:41:59Z",
+      "side": 1,
+      "message": "Not sure if I will be able to do that.\n\n`hasProtectedContent()` originates from `gl::State` which is common layer.\nThere are also many other such functions in other classes and they are abstract.\n\nAdditionally, what the name of the enum should be? Because I do not understand what new items may appear in the future. And if there will be some additional items, splitting `CmdsState` structure for the new item may be incorrect. Because right now, there must be only 2 `CmdsState` instances - future is unknown.\n\nSo maybe just keep 2 separate `CommandsState` members (assuming renaming):\n```\nCommandsState \u0026getCmmandsState(bool hasProtectedContent)\n{\n    return hasProtectedContent ? mProtectedCommandsStateMap : mCommandsStateMap;\n}\n ```",
+      "parentUuid": "e84c99ee_8458942d",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
