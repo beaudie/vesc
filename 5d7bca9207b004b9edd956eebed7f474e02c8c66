@@ -98,6 +98,24 @@
       "parentUuid": "e84c99ee_8458942d",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "791dfaf5_259e2446",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-02T17:39:37Z",
+      "side": 1,
+      "message": "That\u0027s ok, let\u0027s defer that to another time. I was thinking of something that\u0027s internal to the Vulkan backend (so bool-\u003eenum happening somewhere in the backend). Regarding the name, it could simply be `CommandPriority` and we can change that if and when we need to extend it.\n\n(For future reference, I had marked this comment \"Resolved\", which implies you don\u0027t have to take action on it for this CL if you prefer not to 😊)",
+      "parentUuid": "fdcdd1da_1e24a574",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
