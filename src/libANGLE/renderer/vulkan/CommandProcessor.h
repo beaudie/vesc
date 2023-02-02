@@ -28,6 +28,9 @@ class CommandProcessor;
 
 namespace vk
 {
+constexpr size_t kMaxCommandProcessorTaskLimit = 16u;
+constexpr size_t kInFlightCommandsLimit        = 50u;
+
 enum class SubmitPolicy
 {
     AllowDeferred,
@@ -108,8 +111,6 @@ class CommandProcessorTask
     CommandProcessorTask() { initTask(); }
 
     void initTask();
-
-    void initTask(CustomTask command) { mTask = command; }
 
     void initOutsideRenderPassProcessCommands(bool hasProtectedContent,
                                               OutsideRenderPassCommandBufferHelper *commandBuffer);
@@ -236,6 +237,7 @@ struct CommandBatch final : angle::NonCopyable
     QueueSerial queueSerial;
     bool hasProtectedContent;
 };
+using CommandBatchQueue = angle::FixedQueue<CommandBatch, kInFlightCommandsLimit>;
 
 class DeviceQueueMap;
 
@@ -433,7 +435,7 @@ class CommandQueue : angle::NonCopyable
 
     // Protect multi-thread access to mInFlightCommands and other data memebers of this class.
     mutable std::mutex mMutex;
-    std::vector<CommandBatch> mInFlightCommands;
+    CommandBatchQueue mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
@@ -564,8 +566,7 @@ class CommandProcessor : public Context
     // one mTasks consumer at a time
     std::mutex mSubmissionMutex;
 
-    static constexpr size_t kMaxTaskCount = 16u;
-    angle::FixedQueue<CommandProcessorTask, kMaxTaskCount> mTasks;
+    angle::FixedQueue<CommandProcessorTask, kMaxCommandProcessorTaskLimit> mTasks;
     mutable std::mutex mWorkerMutex;
     // Signal worker thread when work is available
     std::condition_variable mWorkAvailableCondition;
