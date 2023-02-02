@@ -16,6 +16,29 @@
       "message": "I feel confident in reviewing this - lgtm.",
       "revId": "89853dc254c879796835aa62d37cd4eef0bc45c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40f9e42d_23ff93b8",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-02T19:06:57Z",
+      "side": 1,
+      "message": "Could you add a small helper function for this? Something like PipelineParametersToShaderVariantIndex? It\u0027s already duplicated in this file and will only get more complex over time.",
+      "range": {
+        "startLine": 571,
+        "startChar": 37,
+        "endLine": 571,
+        "endChar": 87
+      },
+      "revId": "89853dc254c879796835aa62d37cd4eef0bc45c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
