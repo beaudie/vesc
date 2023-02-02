@@ -685,11 +685,7 @@ class BindingPointer final : angle::NonCopyable
     BindingPointer() = default;
     ~BindingPointer() { reset(); }
 
-    BindingPointer(BindingPointer &&other)
-    {
-        set(other.mRefCounted);
-        other.reset();
-    }
+    BindingPointer(BindingPointer &&other) { other.mRefCounted = nullptr; }
 
     void set(RefCounted<T> *refCounted)
     {
