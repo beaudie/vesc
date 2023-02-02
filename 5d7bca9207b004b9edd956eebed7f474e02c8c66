@@ -116,6 +116,24 @@
       "parentUuid": "fdcdd1da_1e24a574",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48609a75_1019e552",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-02T18:04:11Z",
+      "side": 1,
+      "message": "Yeah. I know it is resolved, I really wanted to made changes, but than stumbled.\n\nRegarding name. For me `CommandPriority` is confusing with `egl::ContextPriority`. Maybe you wanted to write \u0027CommandContent\u0027?\n\n\u003e I was thinking of something that\u0027s internal to the Vulkan backend (so bool-\u003eenum happening somewhere in the backend)\n\nMost methods pure virtual and need to keep `bool`.\n\nAnd for the `ContextVk::hasProtectedContent()` I think it is better to add additional method with enum. Otherwise there will be conversion to `bool` in the `QueryContextAttrib()`.\n\nAnyway, I need to submit this refactoring. And for that I need at lest rename `Cmds*` to `Commands*`. Also move `CmdsContentType` out of the class, but with the different name. Refactoring in other classes add later with different CL.",
+      "parentUuid": "791dfaf5_259e2446",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
