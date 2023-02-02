@@ -28,6 +28,8 @@ class CommandProcessor;
 
 namespace vk
 {
+constexpr size_t kInFlightCommandsLimit = 50u;
+
 enum class SubmitPolicy
 {
     AllowDeferred,
@@ -108,8 +110,6 @@ class CommandProcessorTask
     CommandProcessorTask() { initTask(); }
 
     void initTask();
-
-    void initTask(CustomTask command) { mTask = command; }
 
     void initOutsideRenderPassProcessCommands(bool hasProtectedContent,
                                               OutsideRenderPassCommandBufferHelper *commandBuffer);
@@ -236,6 +236,7 @@ struct CommandBatch final : angle::NonCopyable
     QueueSerial queueSerial;
     bool hasProtectedContent;
 };
+using CommandBatchDQueue = angle::FixedDQueue<CommandBatch, kInFlightCommandsLimit>;
 
 class DeviceQueueMap;
 
@@ -433,7 +434,7 @@ class CommandQueue : angle::NonCopyable
 
     // Protect multi-thread access to mInFlightCommands and other data memebers of this class.
     mutable std::mutex mMutex;
-    std::vector<CommandBatch> mInFlightCommands;
+    CommandBatchDQueue mInFlightCommands;
 
     // Keeps a free list of reusable primary command buffers.
     PrimaryCommandBuffer mPrimaryCommands;
