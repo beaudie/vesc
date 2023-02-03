@@ -176,6 +176,24 @@
       "parentUuid": "48609a75_1019e552",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35671542_7d0eb3d4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-03T14:59:09Z",
+      "side": 1,
+      "message": "Thanks for detailed answer.\n\n\u003e Just to avoid confusion, ContextVk is a backend object, Context is a front-end object.\nI know this, just made a mistake. Happens some times)\n\n\u003e CommandPriority is better IMO, or QueuePriority, it is corresponding to the context priority after all! \"Content\" is maybe a little too generic. Anyway, bikeshedding, no big deal either way.\n\nI still do not understand. How is this related to context priority.\nIt is all abound protected/unprotected content.\nWe need different Command Pools ans well as Command Buffers.\n\nPriority is another level. We may use same Command Pool with different priorities.\nSo first split based on protected/unprotected, and the based on priority (optional).",
+      "parentUuid": "a7c724e7_10c6ef84",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
