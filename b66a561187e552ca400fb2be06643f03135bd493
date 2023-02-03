@@ -87,6 +87,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "328e7464_8d614186",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-03T18:34:05Z",
+      "side": 1,
+      "message": "I think we have similar goals. Mine is to save time for humans triaging Goldens, while producing a similar results to what a human would. That\u0027s the rationale behind \"replicate how a human sees differences\". While I agree, that if it\u0027s possible for the algorithm to produce better results than a human would, we should try to.\nHopefully, having less Goldens to triage would also lead to humans paying more attention to the ones they do need to triage, helping to catch more regressions.",
+      "parentUuid": "e5745c2d_e7d3510d",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
