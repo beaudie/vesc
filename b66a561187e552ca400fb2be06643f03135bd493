@@ -111,6 +111,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4371b878_0eb620e9",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-03T18:56:53Z",
+      "side": 1,
+      "message": "\u003e that if it\u0027s possible for the algorithm to produce better results than a human would, we should try to.\n\nBut human perception doesn\u0027t matter. If you ask a GPU to draw (0.5, 0.5, 0.5, 1.0), it **must** either produce 127 or 128 in the R, G and B channels. It cannot produce 125 or 130, even if the difference is not perceptible by a human.\n\nThat\u0027s why the tests typically have a tolerance of 1 bit difference, but nothing more. I agree with tolerating 1 bit of difference, but I disagree with tolerating anything more than that (because that means there\u0027s _very_ likely a bug in the CL).",
+      "parentUuid": "328e7464_8d614186",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
