@@ -16,6 +16,23 @@
       "message": "These tweaks missing from build files for Wayland, and to exclude X11 when needed.",
       "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e75f097_8d3ad13b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-03T19:36:11Z",
+      "side": 1,
+      "message": "So dEQP and glmark2 wayland files are including xdg-shell.h.\nIf this is required then it needs to be added to the environment, if not then, can it be removed or replaced?",
+      "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
