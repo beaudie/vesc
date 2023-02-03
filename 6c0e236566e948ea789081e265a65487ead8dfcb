@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e503b4b7_94b3389b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-03T21:18:06Z",
+      "side": 1,
+      "message": "Verifying if the revert fixes the ANGLE-\u003eChromium roll in https://ci.chromium.org/ui/p/chromium/builders/try/fuchsia-x64-cast-receiver-rel/114308/overview",
+      "revId": "6c0e236566e948ea789081e265a65487ead8dfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
