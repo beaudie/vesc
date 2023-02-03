@@ -71,6 +71,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31d099b_8e171bc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-03T06:58:41Z",
+      "side": 1,
+      "message": "As far as I can tell the code is a progression over status quo.\nIt would be great to have the test of \"draw a big buffer and update and draw again\" without the synthetic toggle, but it\u0027s better than no test.",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40a041a3_f526d886",
@@ -84,6 +101,24 @@
       "writtenOn": "2023-02-02T19:33:37Z",
       "side": 1,
       "message": "Side effects like this are tricky, can we introduce an actual flag / option to say \u0027this will be modified on the cpu\u0027 instead of just passing a pointer in that we don\u0027t read later?",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23a9f225_2d42eb9b",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-03T06:58:41Z",
+      "side": 1,
+      "message": "To me the clearest in that direction would be to submit a subsequent patch to change all 4 call sites of allocate + map as explicit:\n\n    ANGLE_TRY(pool.allocate(..., buffer, offset));\n    ptr \u003d buffer.mapWithOpt(offset, readonly\u003dfalse, sync\u003dfalse);\n  \nLater commit could modify mapWithOpt to return a scoped object..\nMaybe fixing this bug wouldn\u0027t need to block on that?",
+      "parentUuid": "40a041a3_f526d886",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
