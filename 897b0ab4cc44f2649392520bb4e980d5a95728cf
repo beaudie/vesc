@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c606992_795d1a79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-03T16:15:58Z",
+      "side": 1,
+      "message": "I think \"a big buffer draw then update then draw\" test is not useful for this particular bug. Size of uniform/vertex/index buffers don\u0027t matter to the UBO argument buffer\u0027s size. It is just for storing a table of bindings, so it\u0027s most likely 128 bytes (16 slots of buffers\u0027 pointers). Shared memory would still be used in this case for argument buffer by default.",
+      "parentUuid": "d31d099b_8e171bc4",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40a041a3_f526d886",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "To me the clearest in that direction would be to submit a subsequent patch to change all 4 call sites of allocate + map as explicit:\n\n    ANGLE_TRY(pool.allocate(..., buffer, offset));\n    ptr \u003d buffer.mapWithOpt(offset, readonly\u003dfalse, sync\u003dfalse);\n  \nLater commit could modify mapWithOpt to return a scoped object..\nMaybe fixing this bug wouldn\u0027t need to block on that?",
       "parentUuid": "40a041a3_f526d886",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88e497b_de740a86",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-03T16:15:58Z",
+      "side": 1,
+      "message": "Or we can just use the new `BufferManager` class for UBO argument buffers. The new `BufferManager` class doesn\u0027t do any mapping implicitly.",
+      "parentUuid": "23a9f225_2d42eb9b",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
