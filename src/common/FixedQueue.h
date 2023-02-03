@@ -53,6 +53,7 @@ class FixedQueue final : angle::NonCopyable
         friend class FixedQueue<T, N, Storage>;
         iterator(Storage &data, size_type index) : mData(data), mIndex(index) {}
     };
+
     class const_iterator
     {
       public:
@@ -77,81 +78,114 @@ class FixedQueue final : angle::NonCopyable
         const_iterator(const Storage &data, size_type index) : mData(data), mIndex(index) {}
     };
 
+    class Producer
+    {
+      public:
+        Producer() = default;
+
+        bool full() const;
+
+        reference back();
+        const_reference back() const;
+
+        void push(const value_type &value);
+        void push(value_type &&value);
+
+      private:
+        Storage &mData;
+        std::atomic<size_type> &mSize;
+        // Virtual index for next write.
+        size_type mBackIndex;
+        friend class FixedQueue<T, N, Storage>;
+        Producer(Storage &data, std::atomic<size_type> &size)
+            : mData(data), mSize(size), mBackIndex(0)
+        {}
+    };
+
+    class Consumer
+    {
+      public:
+        Consumer() = default;
+
+        bool empty() const;
+
+        reference front();
+        const_reference front() const;
+
+        void pop();
+        void clear();
+
+        reference operator[](size_type pos);
+        const_reference operator[](size_type pos) const;
+
+        iterator begin();
+        const_iterator begin() const;
+
+        iterator end();
+        const_iterator end() const;
+
+      private:
+        Storage &mData;
+        std::atomic<size_type> &mSize;
+        // Virtual index for next write.
+        size_type mFrontIndex;
+        friend class FixedQueue<T, N, Storage>;
+        Consumer(Storage &data, std::atomic<size_type> &size)
+            : mData(data), mSize(size), mFrontIndex(0)
+        {}
+    };
+
     FixedQueue();
     ~FixedQueue();
 
-    size_type size() const;
-    bool empty() const;
-    bool full() const;
-
-    reference operator[](size_type pos);
-    const_reference operator[](size_type pos) const;
-
-    reference front();
-    const_reference front() const;
-
-    void push(const value_type &value);
-    void push(value_type &&value);
-
-    reference back();
-    const_reference back() const;
-
-    void pop();
-    void clear();
-
-    iterator begin();
-    const_iterator begin() const;
-
-    iterator end();
-    const_iterator end() const;
+    // size_type size() const;
+    Producer &getProducer() { return mProducer; }
+    Consumer &getConsumer() { return mConsumer; }
 
   private:
     Storage mData;
-    // The front and back indices are virtual indices (think about queue sizd is infinite). They
-    // will never wrap around when hit N. The wrap around occur when element is referenced. Virtual
-    // index for current head
-    size_type mFrontIndex;
-    // Virtual index for next write.
-    size_type mBackIndex;
     // Atomic so that we can support concurrent push and pop.
     std::atomic<size_type> mSize;
+
+    Producer mProducer;
+    Consumer mConsumer;
 };
 
+// FixedQueue implementation
 template <class T, size_t N, class Storage>
-FixedQueue<T, N, Storage>::FixedQueue() : mFrontIndex(0), mBackIndex(0), mSize(0)
+FixedQueue<T, N, Storage>::FixedQueue() : mSize(0), mProducer(mData, mSize), mConsumer(mData, mSize)
 {}
 
 template <class T, size_t N, class Storage>
 FixedQueue<T, N, Storage>::~FixedQueue()
 {}
 
-template <class T, size_t N, class Storage>
+/*template <class T, size_t N, class Storage>
 ANGLE_INLINE typename FixedQueue<T, N, Storage>::size_type FixedQueue<T, N, Storage>::size() const
 {
     return mSize;
-}
+}*/
 
+// The front and back indices are virtual indices (think about queue sizd is infinite). They
+// will never wrap around when hit N. The wrap around occur when element is referenced. Virtual
+// index for current head
+// FixedQueue::Consumer implementation
 template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::empty() const
+ANGLE_INLINE bool FixedQueue<T, N, Storage>::Consumer::empty() const
 {
     return mSize == 0;
 }
 
 template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::full() const
-{
-    return mSize >= N;
-}
-
-template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::operator[](size_type pos)
+typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::Consumer::operator[](
+    size_type pos)
 {
     ASSERT(pos < mSize);
     return mData[(pos + mFrontIndex) % N];
 }
 
 template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::operator[](
+typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::Consumer::operator[](
     size_type pos) const
 {
     ASSERT(pos < mSize);
@@ -159,22 +193,75 @@ typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::o
 }
 
 template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::front()
+ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference
+FixedQueue<T, N, Storage>::Consumer::front()
 {
     ASSERT(mSize > 0);
     return mData[mFrontIndex % N];
 }
 
 template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::front()
+ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference
+FixedQueue<T, N, Storage>::Consumer::front() const
+{
+    ASSERT(mSize > 0);
+    return mData[mFrontIndex % N];
+}
+
+template <class T, size_t N, class Storage>
+void FixedQueue<T, N, Storage>::Consumer::pop()
+{
+    ASSERT(mSize > 0);
+    mData[mFrontIndex % N] = value_type();
+    mFrontIndex++;
+    // We must decrement size last, after we wrote data. That way if another thread is doing
+    // `if(!dq.full()){ dq.push; }`, it will only see not full until element is fully popped.
+    mSize--;
+}
+
+template <class T, size_t N, class Storage>
+void FixedQueue<T, N, Storage>::Consumer::Consumer::clear()
+{
+    for (size_type i = 0; i < mSize; i++)
+    {
+        pop();
+    }
+}
+
+template <class T, size_t N, class Storage>
+typename FixedQueue<T, N, Storage>::iterator FixedQueue<T, N, Storage>::Consumer::begin()
+{
+    return iterator(mData, mFrontIndex);
+}
+
+template <class T, size_t N, class Storage>
+typename FixedQueue<T, N, Storage>::const_iterator FixedQueue<T, N, Storage>::Consumer::begin()
     const
 {
-    ASSERT(mSize > 0);
-    return mData[mFrontIndex % N];
+    return const_iterator(mData, mFrontIndex);
 }
 
 template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(const value_type &value)
+typename FixedQueue<T, N, Storage>::iterator FixedQueue<T, N, Storage>::Consumer::end()
+{
+    return iterator(mData, mFrontIndex + mSize);
+}
+
+template <class T, size_t N, class Storage>
+typename FixedQueue<T, N, Storage>::const_iterator FixedQueue<T, N, Storage>::Consumer::end() const
+{
+    return const_iterator(mData, mFrontIndex + mSize);
+}
+
+// FixedQueue::Producer implementation
+template <class T, size_t N, class Storage>
+ANGLE_INLINE bool FixedQueue<T, N, Storage>::Producer::full() const
+{
+    return mSize >= N;
+}
+
+template <class T, size_t N, class Storage>
+void FixedQueue<T, N, Storage>::Producer::push(const value_type &value)
 {
     ASSERT(mSize < N);
     mData[mBackIndex % N] = value;
@@ -186,7 +273,7 @@ void FixedQueue<T, N, Storage>::push(const value_type &value)
 }
 
 template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(value_type &&value)
+void FixedQueue<T, N, Storage>::Producer::push(value_type &&value)
 {
     ASSERT(mSize < N);
     mData[mBackIndex % N] = std::move(value);
@@ -198,62 +285,19 @@ void FixedQueue<T, N, Storage>::push(value_type &&value)
 }
 
 template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::back()
+ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference
+FixedQueue<T, N, Storage>::Producer::back()
 {
     ASSERT(mSize > 0);
     return mData[(mBackIndex - 1) % N];
 }
 
 template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::back()
-    const
+ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference
+FixedQueue<T, N, Storage>::Producer::back() const
 {
     ASSERT(mSize > 0);
     return mData[(mBackIndex - 1) % N];
-}
-
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::pop()
-{
-    ASSERT(mSize > 0);
-    mData[mFrontIndex % N] = value_type();
-    mFrontIndex++;
-    // We must decrement size last, after we wrote data. That way if another thread is doing
-    // `if(!dq.full()){ dq.push; }`, it will only see not full until element is fully popped.
-    mSize--;
-}
-
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::clear()
-{
-    for (size_type i = 0; i < mSize; i++)
-    {
-        pop();
-    }
-}
-
-template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::iterator FixedQueue<T, N, Storage>::begin()
-{
-    return iterator(mData, mFrontIndex);
-}
-
-template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::const_iterator FixedQueue<T, N, Storage>::begin() const
-{
-    return const_iterator(mData, mFrontIndex);
-}
-
-template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::iterator FixedQueue<T, N, Storage>::end()
-{
-    return iterator(mData, mFrontIndex + mSize);
-}
-
-template <class T, size_t N, class Storage>
-typename FixedQueue<T, N, Storage>::const_iterator FixedQueue<T, N, Storage>::end() const
-{
-    return const_iterator(mData, mFrontIndex + mSize);
 }
 }  // namespace angle
 

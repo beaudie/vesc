@@ -529,7 +529,7 @@ class CommandProcessor : public Context
     bool isBusy(RendererVk *renderer) const
     {
         std::lock_guard<std::mutex> workerLock(mWorkerMutex);
-        return !mTasks.empty() || mCommandQueue->isBusy(renderer);
+        return !mTaskQueueConsumer.empty() || mCommandQueue->isBusy(renderer);
     }
 
     bool hasUnsubmittedUse(const ResourceUse &use) const;
@@ -560,6 +560,23 @@ class CommandProcessor : public Context
 
     VkResult getLastAndClearPresentResult(VkSwapchainKHR swapchain);
     VkResult present(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
+
+    class TaskQueueConsumer
+    {
+      public:
+        //    CommandProcessorTaskQueueConsumer(){}
+        TaskQueueConsumer(CommandProcessorTaskQueue &queue) : mConsumer(queue.getConsumer()) {}
+        bool empty() const { return mConsumer.empty(); }
+
+      private:
+        CommandProcessorTaskQueue::Consumer &mConsumer;
+        // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that
+        // only one mTasks consumer at a time
+        std::mutex mSubmissionMutex;
+    };
+    TaskQueueConsumer mTaskQueueConsumer;
+
+    CommandProcessorTaskQueue::Producer &mTaskQueueProducer;
 
     // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that only
     // one mTasks consumer at a time
