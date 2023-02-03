@@ -1623,8 +1623,7 @@ ANGLE_INLINE angle::Result ContextVk::onVertexAttributeChange(size_t attribIndex
 
 ANGLE_INLINE bool ContextVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
 {
-    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex &&
-           use > QueueSerial(mCurrentQueueSerialIndex, mLastSubmittedSerial);
+    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex && use > mLastSubmittedQueueSerial;
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)

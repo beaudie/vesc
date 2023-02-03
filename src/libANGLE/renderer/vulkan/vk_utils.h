@@ -256,8 +256,7 @@ class Context : angle::NonCopyable
     const angle::VulkanPerfCounters &getPerfCounters() const { return mPerfCounters; }
     angle::VulkanPerfCounters &getPerfCounters() { return mPerfCounters; }
 
-    SerialIndex getCurrentQueueSerialIndex() const { return mCurrentQueueSerialIndex; }
-    Serial getLastSubmittedSerial() const { return mLastSubmittedSerial; }
+    const QueueSerial &getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
 
   protected:
     RendererVk *const mRenderer;
@@ -265,8 +264,8 @@ class Context : angle::NonCopyable
 
     // Per context queue serial
     SerialIndex mCurrentQueueSerialIndex;
-    Serial mLastFlushedSerial;
-    Serial mLastSubmittedSerial;
+    QueueSerial mLastFlushedQueueSerial;
+    QueueSerial mLastSubmittedQueueSerial;
 };
 
 class RenderPassDesc;
