@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c369413f_111b713e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-03T19:08:23Z",
+      "side": 1,
+      "message": "I c",
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d75e0618_dff98c6f",
@@ -151,6 +168,30 @@
       "side": 1,
       "message": "To clarify, when we triage GOLD failures, we don\u0027t accept diffs just by a visual check. There are typically two kinds of changes:\n\n- Difference in precision affecting the fragment shader usually leads to a diff of 1 bit. This we can verify by looking at diff values (and would be nice to automate)\n- Difference in precision affecting the vertex shader usually leads to triangles slightly moving, and pixels that have changed between covered and not covered by the triangle would have wildly different values. That\u0027s where we do visual checks, and this sort of fuzzy check doesn\u0027t actually help at all with that.",
       "parentUuid": "4371b878_0eb620e9",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e43042f4_23fe9a54",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-03T19:08:23Z",
+      "side": 1,
+      "message": "I couldn\u0027t quickly find an example with huge differences (\u003e100 in some RGB channel), though they do exist.\nBut let\u0027s look at this SwiftShader roll for example:\nhttps://angle-gold.skia.org/triagelog?changelist_id\u003d4121510\u0026crs\u003dgerrit\nWhat do you think about this positively triaged image?\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3Daztec_ruins%26source_type%3Dangle\u0026digest\u003db7d19b55349f0fd4690764a17e742c03\u0026changelist_id\u003d4121510\u0026crs\u003dgerrit",
+      "parentUuid": "10e2179b_35327bc1",
       "range": {
         "startLine": 232,
         "startChar": 25,
