@@ -20,8 +20,16 @@ namespace angle
 TEST(FixedQueue, Constructors)
 {
     FixedQueue<int, 5> q;
-    EXPECT_EQ(0u, q.size());
-    EXPECT_EQ(true, q.empty());
+
+    EXPECT_EQ(true, q.getConsumer().empty());
+    EXPECT_EQ(false, q.getProducer().full());
+
+    for (int i = 0; i < 5; i++)
+    {
+        q.getProducer().push(i);
+    }
+    EXPECT_EQ(false, q.getConsumer().empty());
+    EXPECT_EQ(true, q.getProducer().full());
 }
 
 // Make sure the destructor destroys all elements.
@@ -49,7 +57,7 @@ TEST(FixedQueue, Destructor)
 
     {
         FixedQueue<s, 11> q;
-        q.push(s(&destructorCount));
+        q.getProducer().push(s(&destructorCount));
         // Destructor called once for the temporary above.
         EXPECT_EQ(1, destructorCount);
     }
@@ -91,10 +99,10 @@ TEST(FixedQueue, Pop)
     int destructorCount = 0;
 
     FixedQueue<s, 11> q;
-    q.push(s(&destructorCount));
+    q.getProducer().push(s(&destructorCount));
     // Destructor called once for the temporary above.
     EXPECT_EQ(1, destructorCount);
-    q.pop();
+    q.getConsumer().pop();
     // Copy assignment should be called for the element we popped.
     EXPECT_EQ(2, destructorCount);
 }
@@ -106,17 +114,17 @@ TEST(FixedQueue, WrapAround)
 
     for (int i = 0; i < 7; ++i)
     {
-        q.push(i);
+        q.getProducer().push(i);
     }
 
-    EXPECT_EQ(0, q.front());
-    q.pop();
+    EXPECT_EQ(0, q.getConsumer().front());
+    q.getConsumer().pop();
     // This should wrap around
-    q.push(7);
+    q.getProducer().push(7);
     for (int i = 0; i < 7; ++i)
     {
-        EXPECT_EQ(i + 1, q.front());
-        q.pop();
+        EXPECT_EQ(i + 1, q.getConsumer().front());
+        q.getConsumer().pop();
     }
 }
 
@@ -131,11 +139,11 @@ TEST(FixedQueue, ConcurrentPushPop)
         uint64_t value = 0;
         do
         {
-            while (q.full())
+            while (q.getProducer().full())
             {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
-            q.push(value);
+            q.getProducer().push(value);
             value++;
         } while (difftime(std::time(nullptr), t1) < timeOut && value < kMaxLoop);
         ASSERT(difftime(std::time(nullptr), t1) >= timeOut || value >= kMaxLoop);
@@ -146,7 +154,7 @@ TEST(FixedQueue, ConcurrentPushPop)
         uint64_t expectedValue = 0;
         do
         {
-            while (q.empty())
+            while (q.getConsumer().empty())
             {
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
@@ -162,6 +170,8 @@ TEST(FixedQueue, ConcurrentPushPop)
             // test pop
             q.pop();
 
+            // test pop
+            q.getConsumer().pop();
             expectedValue++;
         } while (difftime(std::time(nullptr), t1) < timeOut && expectedValue < kMaxLoop);
         ASSERT(difftime(std::time(nullptr), t1) >= timeOut || expectedValue >= kMaxLoop);
