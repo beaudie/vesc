@@ -325,6 +325,10 @@ class CommandQueue : angle::NonCopyable
 
     VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
 
+    bool hasQueueSerialFinished(const QueueSerial &queueSerial) const
+    {
+        return queueSerial <= mLastCompletedSerials;
+    }
     // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
     bool hasUnfinishedUse(const ResourceUse &use) const { return use > mLastCompletedSerials; }
     // The ResourceUse still have queue serial not yet submitted to vulkan.

@@ -498,6 +498,19 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const vk::ResourceUse &use)
+    {
+        // This is only needed for async submission code path. For immediate submission, it is a nop
+        // since everything is submitted immediately.
+        if (isAsyncCommandQueueEnabled())
+        {
+            return mCommandProcessor.waitForResourceUseToBeSubmitted(context, use);
+        }
+        // This ResourceUse must have been submitted.
+        ASSERT(!mCommandQueue.hasUnsubmittedUse(use));
+        return angle::Result::Continue;
+    }
+
     angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
                                                   const QueueSerial &queueSerial)
     {
@@ -708,6 +721,10 @@ class RendererVk : angle::NonCopyable
     bool hasUnfinishedUse(const vk::ResourceUse &use) const;
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
+    bool hasQueueSerialFinished(const QueueSerial &queueSerial) const
+    {
+        return mCommandQueue.hasQueueSerialFinished(queueSerial);
+    }
 
     // Memory statistics can be updated on allocation and deallocation.
     template <typename HandleT>
