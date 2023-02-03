@@ -50,6 +50,24 @@
       "message": "Kimmo, do you have any feedback regarding Shabi\u0027s suggestion? Would like to find some path forward to unblock you.",
       "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae640608_7608aa39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-03T06:42:05Z",
+      "side": 1,
+      "message": "\u003e How does Webkit deal with all the other files in ANGLE that are not relevant? ifdefing cpp files does not really scale.\n\nAll the relevant conditionally compiled .cpp/.mm files in ANGLE do already have WebKit-style include guards. \nFor example  git grep ANGLE_ENABLE_EAGL -- \"*.cpp\" \"*.mm\"",
+      "parentUuid": "66ddef3c_2ab2a6f8",
+      "revId": "9770e3e8da2980069674606a422020c9fb39dbe8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
