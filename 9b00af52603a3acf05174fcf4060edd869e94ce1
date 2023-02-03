@@ -16,6 +16,24 @@
       "message": "For some reason this is not building in Skia. It raises the following error:\n\n```\n[...]/skia/third_party/externals/angle2/src/libANGLE/renderer/metal/mtl_library_cache.mm:37:24: error: no matching member function for call to \u0027find\u0027\n    auto iter \u003d mCache.find(lValueKey);\n                ~~~~~~~^~~~\n[...]/unordered_map:1278:20: note: candidate function not viable: no known conversion from \u0027LibraryKey::LValueTuple\u0027 (aka \u0027tuple\u003cconst std::__1::basic_string\u003cchar\u003e \u0026, const std::__1::map\u003cstd::__1::basic_string\u003cchar\u003e, std::__1::basic_string\u003cchar\u003e, std::__1::less\u003cstd::__1::basic_string\u003cchar\u003e \u003e, std::__1::allocator\u003cstd::__1::pair\u003cconst std::__1::basic_string\u003cchar\u003e, std::__1::basic_string\u003cchar\u003e \u003e \u003e \u003e \u0026, const bool \u0026\u003e\u0027) to \u0027const std::__1::unordered_map\u003crx::mtl::LibraryCache::LibraryKey, rx::mtl::AutoObjCPtr\u003cid\u003cMTLLibrary\u003e \u003e, rx::mtl::LibraryCache::LibraryKeyCompare, rx::mtl::LibraryCache::LibraryKeyCompare, std::__1::allocator\u003cstd::__1::pair\u003cconst rx::mtl::LibraryCache::LibraryKey, rx::mtl::AutoObjCPtr\u003cid\u003cMTLLibrary\u003e \u003e \u003e \u003e \u003e::key_type\u0027 (aka \u0027const rx::mtl::LibraryCache::LibraryKey\u0027) for 1st argument\n    iterator       find(const key_type\u0026 __k)       {return __table_.find(__k);}\n                   ^\n[...]/unordered_map:1280:20: note: candidate function not viable: no known conversion from \u0027LibraryKey::LValueTuple\u0027 (aka \u0027tuple\u003cconst std::__1::basic_string\u003cchar\u003e \u0026, const std::__1::map\u003cstd::__1::basic_string\u003cchar\u003e, std::__1::basic_string\u003cchar\u003e, std::__1::less\u003cstd::__1::basic_string\u003cchar\u003e \u003e, std::__1::allocator\u003cstd::__1::pair\u003cconst std::__1::basic_string\u003cchar\u003e, std::__1::basic_string\u003cchar\u003e \u003e \u003e \u003e \u0026, const bool \u0026\u003e\u0027) to \u0027const std::__1::unordered_map\u003crx::mtl::LibraryCache::LibraryKey, rx::mtl::AutoObjCPtr\u003cid\u003cMTLLibrary\u003e \u003e, rx::mtl::LibraryCache::LibraryKeyCompare, rx::mtl::LibraryCache::LibraryKeyCompare, std::__1::allocator\u003cstd::__1::pair\u003cconst rx::mtl::LibraryCache::LibraryKey, rx::mtl::AutoObjCPtr\u003cid\u003cMTLLibrary\u003e \u003e \u003e \u003e \u003e::key_type\u0027 (aka \u0027const rx::mtl::LibraryCache::LibraryKey\u0027) for 1st argument\n    const_iterator find(const key_type\u0026 __k) const {return __table_.find(__k);}\n                   ^\n\n```",
       "revId": "9b00af52603a3acf05174fcf4060edd869e94ce1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b43a64fd_96808296",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-03T20:14:15Z",
+      "side": 1,
+      "message": "James - is there a bug filed about this? If not could you please file one so the analysis is captured somewhere?\n\nI\u0027d guess that there\u0027s a mismatch between the version of absl used by ANGLE/Chromium, and used by Skia.",
+      "parentUuid": "9d085ab0_d276fd8a",
+      "revId": "9b00af52603a3acf05174fcf4060edd869e94ce1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
