@@ -378,6 +378,9 @@ class WindowSurfaceVk : public SurfaceVk
     // not ahead of the frame being rendered by *one* frame.
     angle::Result throttleCPU(ContextVk *contextVk, const QueueSerial &currentSubmitSerial);
 
+    // Finish all GPU operations on the surface
+    angle::Result finish(vk::Context *context);
+
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
     angle::Result drawOverlay(ContextVk *contextVk, impl::SwapchainImage *image) const;

@@ -895,9 +895,8 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
-    (void)renderer->finish(displayVk);
-
     (void)renderer->waitForPresentToBeSubmitted(&mSwapchainStatus);
+    (void)finish(displayVk);
 
     if (mLockBufferHelper.valid())
     {
@@ -1295,7 +1294,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     static constexpr size_t kMaxOldSwapchains = 5;
     if (mOldSwapchains.size() > kMaxOldSwapchains)
     {
-        ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
+        ANGLE_TRY(finish(contextVk));
         for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
         {
             oldSwapchain.destroy(contextVk->getDevice(), &mPresentSemaphoreRecycler);
@@ -1499,7 +1498,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // that case as a workaround.
     if (lastSwapchain && renderer->getFeatures().waitIdleBeforeSwapchainRecreation.enabled)
     {
-        ANGLE_TRY(renderer->finish(context));
+        ANGLE_TRY(finish(context));
     }
 
     // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
@@ -1721,6 +1720,24 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
     }
 
     mSwapchainImages.clear();
+}
+
+angle::Result WindowSurfaceVk::finish(vk::Context *context)
+{
+    RendererVk *renderer = context->getRenderer();
+
+    vk::ResourceUse use;
+    use.merge(mDepthStencilImage.getResourceUse());
+    use.merge(mColorImageMS.getResourceUse());
+    for (SwapchainImage &swapchainImage : mSwapchainImages)
+    {
+        use.merge(swapchainImage.image.getResourceUse());
+    }
+
+    ANGLE_TRY(renderer->finishResourceUse(context, use));
+    ASSERT(renderer->hasResourceUseFinished(use));
+
+    return angle::Result::Continue;
 }
 
 void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
