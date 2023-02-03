@@ -194,6 +194,24 @@
       "parentUuid": "a7c724e7_10c6ef84",
       "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf7022d_2f38d066",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-03T15:15:51Z",
+      "side": 1,
+      "message": "\u003e I still do not understand. How is this related to context priority.\n\nAh lol, what a typo. s/priority/protected! I agree with you now, `CommandContent::Protected` and `CommandContent::Unprotected` sound perfectly fine.",
+      "parentUuid": "35671542_7d0eb3d4",
+      "revId": "5d7bca9207b004b9edd956eebed7f474e02c8c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
