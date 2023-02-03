@@ -16,6 +16,24 @@
       "message": "Verifying if the revert fixes the ANGLE-\u003eChromium roll in https://ci.chromium.org/ui/p/chromium/builders/try/fuchsia-x64-cast-receiver-rel/114308/overview",
       "revId": "6c0e236566e948ea789081e265a65487ead8dfcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d158cf25_f8e1804a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-03T21:38:47Z",
+      "side": 1,
+      "message": "You could alternatively make the condition that says `!IsMac()` to also include `\u0026\u0026 !IsFuchsia()`.\n\nNot sure what\u0027s a better way of doing this though, maybe check that `vkGetPhysicalDeviceExternalFencePropertiesKHR` is not nullptr?",
+      "parentUuid": "e503b4b7_94b3389b",
+      "revId": "6c0e236566e948ea789081e265a65487ead8dfcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
