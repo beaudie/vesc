@@ -708,6 +708,10 @@ class RendererVk : angle::NonCopyable
     bool hasUnfinishedUse(const vk::ResourceUse &use) const;
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
+    bool hasQueueSerialFinished(const QueueSerial &queueSerial) const
+    {
+        return mCommandQueue.hasQueueSerialFinished(queueSerial);
+    }
 
     // Memory statistics can be updated on allocation and deallocation.
     template <typename HandleT>
