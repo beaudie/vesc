@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500f7a51_b1910f7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-03T19:25:26Z",
+      "side": 1,
+      "message": "These tweaks missing from build files for Wayland, and to exclude X11 when needed.",
+      "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
