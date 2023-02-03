@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include <vulkan/vulkan.h>
 
+#include "RendererVk.h"
 #include "common/debug.h"
 #include "image_util/generatemip.inc"
 #include "libANGLE/Config.h"
@@ -3205,7 +3206,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     }
 
     ANGLE_TRY(mImage->initMemory(contextVk, mState.hasProtectedContent(),
-                                 renderer->getMemoryProperties(), flags));
+                                 renderer->getMemoryProperties(), flags,
+                                 vk::MemoryAllocationType::TextureImage));
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;
