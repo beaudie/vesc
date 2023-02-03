@@ -39,6 +39,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a49f8c68_35ccea63",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-03T17:31:48Z",
+      "side": 1,
+      "message": "\u003e as far as correctness goes, human eyes are irrelevant  \n\nAre you sure? I thought that Vulkan has a lot of freedom in the implementation. How would you define correctness, if not by human eyes? Are restricted_trace_gold_tests capable of testing this definition of correctness?  \nhttps://angle-gold.skia.org/diff?grouping\u003dname%3Ddead_cells%26source_type%3Dangle\u0026left\u003d13034a2f512cd13a51628c62cfacf247\u0026right\u003d37b6fc489a4edaee10e11e75da655d7e\u0026changelist_id\u003d4031489\u0026crs\u003dgerrit looks significantly different to me and would still be caught by this algorithm. Do you have other examples, that a human wouldn\u0027t triage as positive?\n\n\u003e How about making the diff be 1 (instead of 10)  \n\nI\u0027m afraid this would still leave many images to humans to triage, i.e. wouldn\u0027t be really helpful. Brian, I remember there was a way to calibrate arguments to fuzzy matching. Is it something we can do here? I\u0027d like to get some information about how the history of each test would be triaged by the new algorithm and compare the algorithm to what I would do.  \n\n\u003e if possible make sure that the total number of different pixels is less than 10% the size of the image?  \n\nSeems reasonable, I think we can add this condition. Again, would be nice to check with the history of images.",
+      "parentUuid": "d75e0618_dff98c6f",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
