@@ -63,6 +63,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5745c2d_e7d3510d",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-03T18:27:56Z",
+      "side": 1,
+      "message": "\u003e How would you define correctness\n\nMaybe we have different goals here. I don\u0027t care how we compare an image from two different devices, yes they could be very different (though still not as big as 10 values, the spec still has _some_ guarantees!).\n\nWhat I want to avoid is a new image on the same device regressing after a CL without it being flagged. Normally you wouldn\u0027t expect a CL to really change the output (hence a diff of 1 value, which is a typical precision thing).\n\nMake sure to get @cnorthrop@google.com\u0027s output here too.",
+      "parentUuid": "a49f8c68_35ccea63",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
