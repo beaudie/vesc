@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d75e0618_dff98c6f",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-03T03:07:27Z",
+      "side": 1,
+      "message": "I\u0027m worried this will end up letting huge diffs go through (as far as correctness goes, human eyes are irrelevant). Like a real bug was caught by this: https://angle-gold.skia.org/diff?grouping\u003dname%3Ddead_cells%26source_type%3Dangle\u0026left\u003d13034a2f512cd13a51628c62cfacf247\u0026right\u003d37b6fc489a4edaee10e11e75da655d7e\u0026changelist_id\u003d4031489\u0026crs\u003dgerrit (which has a diff of 100, but it might have as well got lucky with a diff of 5).\n\nAnother example is if for example we accidentally turn dithering off this would happily accept that.\n\nMy suggestion is instead to not base this on human perception, and try to reduce sensitivity to precision issues without giving it a chance to slip through a real change.\n\nHow about making the diff be 1 (instead of 10), and if possible make sure that the total number of different pixels is less than 10% the size of the image?",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
