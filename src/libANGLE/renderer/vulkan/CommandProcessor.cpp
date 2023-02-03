@@ -72,7 +72,7 @@ template <>
 // batch with a valid fence is returned for waiting purposes.  Note that due to empty submissions
 // being optimized out, there may not be a fence associated with every batch.
 template <typename BitSetArrayT>
-size_t GetBatchCountUpToSerials(CommandBatchQueue &inFlightCommands,
+size_t GetBatchCountUpToSerials(CommandProcessorTaskQueue::Consumer &inFlightCommands,
                                 const AtomicQueueSerialFixedArray &lastSubmittedSerials,
                                 const AtomicQueueSerialFixedArray &lastCompletedSerials,
                                 const Serials &serials)
