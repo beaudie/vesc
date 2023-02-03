@@ -1171,6 +1171,9 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Flush and complete current outstanding work before destruction.
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
+    // Everything must be finished
+    ASSERT(mRenderer->hasQueueSerialFinished(mLastSubmittedQueueSerial));
+
     VkDevice device = getDevice();
 
     mDefaultUniformStorage.release(mRenderer);
@@ -6948,7 +6951,7 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::finishImpl");
 
     ANGLE_TRY(flushImpl(nullptr, renderPassClosureReason));
-    ANGLE_TRY(mRenderer->finish(this, hasProtectedContent()));
+    ANGLE_TRY(mRenderer->finishQueueSerial(this, mLastSubmittedQueueSerial));
 
     clearAllGarbage();
 
