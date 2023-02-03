@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc97def9_25bb4802",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-03T06:31:19Z",
+      "side": 1,
+      "message": "No, the intention is that whatever bugs were before, would be also after this patch, except the bug being fixed here.\n\nThe bug change of behavior in bas version of this patch would exacerbate the bug that Quyen is fixing, but it is otherwise orthogonal.",
+      "parentUuid": "1639097a_bdf7c431",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88203c83_a02a6936",
