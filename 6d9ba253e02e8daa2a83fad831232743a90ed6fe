@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7f20dc5_be2209ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-03T13:08:21Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\nWant to clarify regarding CL submissions.\nIf CL have \"+2\" I may submit any time without explicit verbal approval, or just wait until approval or submission?\n\nRegarding this CL. It received \"+2\" on Patchset 1 with comments. I made changes and pushed Patchset 2, however \"+2\" still there. So I\u0027m not sure how this \"+2\" applies to the new unreviewed changes...",
+      "revId": "6d9ba253e02e8daa2a83fad831232743a90ed6fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
