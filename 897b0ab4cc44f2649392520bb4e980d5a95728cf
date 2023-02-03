@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "26041c83_61b3ac5b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-03T06:29:09Z",
+      "side": 1,
+      "message": "It\u0027s actually been there a while. Documentation:\nhttps://chromium.googlesource.com/chromium/src/+/main/docs/contributing.md#cl-footer-reference\n\nI think ANGLE\u0027s presubmit already supports it; https://chromium-review.googlesource.com/c/angle/angle/+/4203427 used just the \"Fixed\" syntax.",
+      "parentUuid": "028861f5_a73f38a6",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "0cd9aef0_9350975a",
