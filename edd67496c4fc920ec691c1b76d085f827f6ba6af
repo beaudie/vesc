@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e82598c4_8e76d52f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-03T22:00:22Z",
+      "side": 1,
+      "message": "Could you mention in a new paragraph:\n\nReland: continue to allocate buffers with shared rather than managed mode in BufferPool, as otherwise bug angleproject:7997 is encountered.",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1639097a_bdf7c431",
@@ -32,6 +49,40 @@
       "side": 1,
       "message": "No, the intention is that whatever bugs were before, would be also after this patch, except the bug being fixed here.\n\nThe bug change of behavior in bas version of this patch would exacerbate the bug that Quyen is fixing, but it is otherwise orthogonal.",
       "parentUuid": "1639097a_bdf7c431",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96e17356_b3bbaaa4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-03T22:00:22Z",
+      "side": 1,
+      "message": "lgtm to reland. A couple of questions.",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17735289_b34e3b40",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-03T22:00:22Z",
+      "side": 1,
+      "message": "Could you add a TODO stating that this mapping to FrequentCPU isn\u0027t really accurate based on these usages, but that this matches earlier behavior of this code which allocated buffers of these usages in shared memory?",
       "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
