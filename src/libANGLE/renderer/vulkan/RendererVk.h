@@ -498,6 +498,19 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const vk::ResourceUse &use)
+    {
+        // This is only needed for async submission code path. For immediate submission, it is a nop
+        // since everything is submitted immediately.
+        if (isAsyncCommandQueueEnabled())
+        {
+            return mCommandProcessor.waitForResourceUseToBeSubmitted(context, use);
+        }
+        // This ResourceUse must have been submitted.
+        ASSERT(!mCommandQueue.hasUnsubmittedUse(use));
+        return angle::Result::Continue;
+    }
+
     angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
                                                   const QueueSerial &queueSerial)
     {
@@ -704,6 +717,8 @@ class RendererVk : angle::NonCopyable
                              size_t count,
                              RangedSerialFactory *rangedSerialFactory);
 
+    // The QueueSerial still has not finished by vulkan.
+    bool hasUnfinishedQueueSerial(const QueueSerial &queueSerial) const;
     // The ResourceUse still have unfinished queue serial by vulkan.
     bool hasUnfinishedUse(const vk::ResourceUse &use) const;
     // The ResourceUse still have queue serial not yet submitted to vulkan.
@@ -1001,6 +1016,11 @@ ANGLE_INLINE void RendererVk::reserveQueueSerials(SerialIndex index,
                                                   RangedSerialFactory *rangedSerialFactory)
 {
     mQueueSerialFactory[index].reserve(rangedSerialFactory, count);
+}
+
+ANGLE_INLINE bool RendererVk::hasUnfinishedQueueSerial(const QueueSerial &queueSerial) const
+{
+    return mCommandQueue.hasUnfinishedQueueSerial(queueSerial);
 }
 
 ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
