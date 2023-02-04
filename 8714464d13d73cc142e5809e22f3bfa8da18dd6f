@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39cc48ac_7a65c5c5",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-04T04:37:25Z",
+      "side": 1,
+      "message": "This needs an update too",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 515,
+        "endChar": 80
+      },
+      "revId": "8714464d13d73cc142e5809e22f3bfa8da18dd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
