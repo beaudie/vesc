@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb66f598_9535fc0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-04T01:00:20Z",
+      "side": 1,
+      "message": "Thanks for refining this. I\u0027m afraid it can not land in its current form, though we\u0027re open to using sysctlbyname and simplifying that part of the Mac code.",
+      "revId": "09921c6d19f56a563be3ad20a12a9f85b686c776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e8cd968_ad60bf8f",
+        "filename": "src/gpu_info_util/SystemInfo_macos.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-04T01:00:20Z",
+      "side": 1,
+      "message": "This places for example \"MacBookPro18,2\" into info-\u003emachineModelVersion and leaves info-\u003emachineModelName empty.\n\nThis will break Chromium\u0027s consumption of this GPU information. Its driver bug blocklist depends on the machine model name being split off separately from the version, and the version being parseable into major and minor version. For example:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:gpu/config/gpu_driver_bug_list.json;l\u003d293?q\u003dgpu_driver_bug_list.json\n\nThis code needs to continue to maintain this contract, and the unit test needs to remain.",
+      "revId": "09921c6d19f56a563be3ad20a12a9f85b686c776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
