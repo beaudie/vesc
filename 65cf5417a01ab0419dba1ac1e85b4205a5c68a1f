@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a76f71d_a12efea9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-04T01:54:09Z",
+      "side": 1,
+      "message": "Nice, all green!\nLooks good to me with two minor nit.",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd77ce8_a3457dde",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 10104,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-04T01:54:09Z",
+      "side": 1,
+      "message": "Can you test with more, like 8000?",
+      "range": {
+        "startLine": 10104,
+        "startChar": 37,
+        "endLine": 10104,
+        "endChar": 41
+      },
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

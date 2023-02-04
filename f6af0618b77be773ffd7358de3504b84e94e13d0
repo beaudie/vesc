@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ada05c38_ae107e34",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-04T01:54:09Z",
+      "side": 1,
+      "message": "I mean this:\n```\nif (!allocationGarbageIn.valid())\n{\n    return;\n}\n\nif (hasUnfinishedUse(use))\n{\n    std::vector\u003cvk::GarbageObject\u003e sharedGarbage;\n    CollectGarbage(\u0026sharedGarbage, \u0026allocationGarbageIn);\n    if (!sharedGarbage.empty())\n    {\n          collectGarbage(use, std::move(sharedGarbage));\n    }\n}\nelse\n{\n    allocationGarbageIn.destroy(getAllocator());\n}\n```",
+      "parentUuid": "b74343d4_14b07ff0",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2be35ba2_3c8ce40d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
