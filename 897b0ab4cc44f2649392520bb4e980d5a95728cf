@@ -175,6 +175,24 @@
       "parentUuid": "23a9f225_2d42eb9b",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c66438c8_40740d6a",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-04T00:14:18Z",
+      "side": 1,
+      "message": "Would you make one of these two changes, whichever you feel is most appropriate? Thanks.",
+      "parentUuid": "a88e497b_de740a86",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
