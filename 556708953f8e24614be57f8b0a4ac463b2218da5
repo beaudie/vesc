@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e528f96_d1b71d25",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-02-04T00:16:23Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org i wanted to confirm before opening bug / uploading fix. this needs to be `mWriteDescriptorSets` instead, right?",
+      "range": {
+        "startLine": 806,
+        "startChar": 44,
+        "endLine": 806,
+        "endChar": 65
+      },
+      "revId": "556708953f8e24614be57f8b0a4ac463b2218da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
