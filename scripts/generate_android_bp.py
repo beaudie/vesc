@@ -464,7 +464,7 @@ def handle_gn_build_arg_response_file_name(command_arg_list):
     updated_args = command_arg_list[:]
     for index, arg in enumerate(updated_args):
         if arg == '{{response_file_name}}':
-            new_temp_file_name = 'gn_response_file'
+            new_temp_file_name = '$(genDir)/gn_response_file'
             updated_args[index] = new_temp_file_name
     return new_temp_file_name, updated_args
 
