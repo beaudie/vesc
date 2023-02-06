@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebdc37d0_048091c0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-06T21:59:08Z",
+      "side": 1,
+      "message": "Nop, both the if at line 621 and waitForAllWorkToBeSubmitted take mWorkerMutex lock. The race condition you worried here will not happen for this CL. \n\nIn next CL (crrev.com/c/4210653), your concern will be reasonable, since I removed mWorkerMutex lock from waitForAllWorkToBeSubmitted() function. But the use of FixedQueue made it so that we no longer need the lock.",
+      "parentUuid": "2132fd90_eb3acfb7",
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5c122ed_871d77f3",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2023-02-06T18:52:05Z",
       "side": 1,
       "message": "First, please move the bits after the `while` to before it. If there are errors in tasks that have already executed, we should fail before processing more tasks.\n\nThen use `ANGLE_TRY` here, we\u0027re in the main thread so we might as well fail right away.",
+      "range": {
+        "startLine": 722,
+        "startChar": 8,
+        "endLine": 722,
+        "endChar": 14
+      },
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a7fc31_b257d501",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-06T21:59:08Z",
+      "side": 1,
+      "message": "The whole error handling in COmmandProcessor is a bit wacky, I am even not sure if it is all handled correctly before my change. For example, if ctxA\u0027s command submission generates error, the error should propogate to ctxtA, not ctxB. From what I read here, right now the way we handle error is that it will propogate to whichever context first see the error, and it will becomes the victim, which is wrong behavior. I am not trying to change the error handling logic here, so this is intended to keep the existing behavior. But I do believe we should rework the error handling in CommandProcessor in future. How about I create a bug track this?",
+      "parentUuid": "d5c122ed_871d77f3",
       "range": {
         "startLine": 722,
         "startChar": 8,
