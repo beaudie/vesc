@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa13161f_8b29a66a",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorHelperRing.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T19:06:51Z",
+      "side": 1,
+      "message": "Implementation is different in `DedicatedCommandBlockPool` class.\n\nHowever, the only difference is extra check for every `kBlockSize`:\n```\n// variable size command can potentially exceed default cmd allocation blockSize\nif (requiredSize \u003c\u003d kBlockSize)\n```\n\nI guess this extra check should not affect the performance in any measurable way.",
+      "parentUuid": "be36c4f0_72aa24dc",
+      "range": {
+        "startLine": 107,
+        "startChar": 9,
+        "endLine": 107,
+        "endChar": 34
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "beb2d5e4_8ef26be2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
