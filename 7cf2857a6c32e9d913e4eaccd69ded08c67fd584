@@ -222,6 +222,30 @@
       },
       "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d72f19b7_fb27f3c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T19:30:54Z",
+      "side": 1,
+      "message": "I\u0027d trust your judgement, feel free. It\u0027d help to make `mCurrentSubpass` have a better name too (separate change perhaps) to fit with this. Like maybe `mCurrentSubpassCommandBufferIndex`",
+      "parentUuid": "bf31f1b9_f68515af",
+      "range": {
+        "startLine": 1008,
+        "startChar": 35,
+        "endLine": 1008,
+        "endChar": 37
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
