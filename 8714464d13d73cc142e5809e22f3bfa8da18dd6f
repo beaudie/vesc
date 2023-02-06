@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "298ce837_312926ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T18:54:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27a073b3_1fb177ad",
+      "range": {
+        "startLine": 7,
+        "startChar": 18,
+        "endLine": 7,
+        "endChar": 19
+      },
+      "revId": "8714464d13d73cc142e5809e22f3bfa8da18dd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2577cde_8c71f299",
@@ -71,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd43e0a4_579a5be6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T18:54:47Z",
+      "side": 1,
+      "message": "Thank you! I remembered the presubmit asked me to wrap the link because the line length was surpassing the limit. Maybe I wasn\u0027t starting the line with the url link. Good to know that url doesn\u0027t have to be wrapped.",
+      "parentUuid": "93a7ad32_ab25abd0",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "8714464d13d73cc142e5809e22f3bfa8da18dd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39cc48ac_7a65c5c5",
@@ -84,6 +132,30 @@
       "writtenOn": "2023-02-04T04:37:25Z",
       "side": 1,
       "message": "This needs an update too",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 515,
+        "endChar": 80
+      },
+      "revId": "8714464d13d73cc142e5809e22f3bfa8da18dd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb547c7a_b7d4947e",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T18:54:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39cc48ac_7a65c5c5",
       "range": {
         "startLine": 514,
         "startChar": 0,
