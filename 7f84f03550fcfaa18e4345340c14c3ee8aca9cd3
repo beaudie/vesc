@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd93fd48_b78127bc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T18:52:05Z",
+      "side": 1,
+      "message": "This is being accessed without holding mutex. A compiler optimization may very well decide to move it out of the loop and make this an infinite loop.\n\nYou could move it inside and `if (...) break` based on it.",
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2132fd90_eb3acfb7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T18:52:05Z",
+      "side": 1,
+      "message": "Need to move this before `if`. Otherwise there\u0027s a race condition with `waitForAllWorkToBeSubmitted`:\n\n- You could get inside the `if`, then before taking the lock...\n- `waitForAllWorkToBeSubmitted` could take the lock and drain `mTasks`\n- Back to thread, `mTasks.front()` is OOB",
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c122ed_871d77f3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T18:52:05Z",
+      "side": 1,
+      "message": "First, please move the bits after the `while` to before it. If there are errors in tasks that have already executed, we should fail before processing more tasks.\n\nThen use `ANGLE_TRY` here, we\u0027re in the main thread so we might as well fail right away.",
+      "range": {
+        "startLine": 722,
+        "startChar": 8,
+        "endLine": 722,
+        "endChar": 14
+      },
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34c16da_18b388c5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T18:52:05Z",
+      "side": 1,
+      "message": "nit: all caps (`TODO`) will get this highlighted in vim. Also, please don\u0027t leave TODOs without a bug tag in the code.",
+      "range": {
+        "startLine": 930,
+        "startChar": 11,
+        "endLine": 930,
+        "endChar": 15
+      },
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25164ff_ad9846be",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T18:52:05Z",
+      "side": 1,
+      "message": "Same comments regarding ordering of operations. Also, you could probably refactor some of this and the code in waitForAllWorkToBeSubmitted",
+      "revId": "7f84f03550fcfaa18e4345340c14c3ee8aca9cd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
