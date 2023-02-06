@@ -222,6 +222,37 @@ GLuint *AllocateZeroedUints(size_t count)
     return AllocateZeroedValues<GLuint>(count);
 }
 
+void InitializeReplay4(const char *binaryDataFileName,
+                       size_t maxClientArraySize,
+                       size_t readBufferSize,
+                       size_t resourceIDBufferSize,
+                       GLuint contextId,
+                       uint32_t maxBuffer,
+                       uint32_t maxContext,
+                       uint32_t maxFenceNV,
+                       uint32_t maxFramebuffer,
+                       uint32_t maxImage,
+                       uint32_t maxMemoryObject,
+                       uint32_t maxProgramPipeline,
+                       uint32_t maxQuery,
+                       uint32_t maxRenderbuffer,
+                       uint32_t maxSampler,
+                       uint32_t maxSemaphore,
+                       uint32_t maxShaderProgram,
+                       uint32_t maxSurface,
+                       uint32_t maxSync,
+                       uint32_t maxTexture,
+                       uint32_t maxTransformFeedback,
+                       uint32_t maxVertexArray,
+                       GLuint maxEGLSyncID)
+{
+    InitializeReplay3(binaryDataFileName, maxClientArraySize, readBufferSize, resourceIDBufferSize,
+                      contextId, maxBuffer, maxContext, maxFenceNV, maxFramebuffer, maxImage,
+                      maxMemoryObject, maxProgramPipeline, maxQuery, maxRenderbuffer, maxSampler,
+                      maxSemaphore, maxShaderProgram, maxSurface, maxSync, maxTexture,
+                      maxTransformFeedback, maxVertexArray);
+}
+
 void InitializeReplay3(const char *binaryDataFileName,
                        size_t maxClientArraySize,
                        size_t readBufferSize,
@@ -566,6 +597,10 @@ void CreateEGLImageKHR(EGLDisplay dpy,
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
     gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
 }
+
+void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID) {}
+
+void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID) {}
 
 void CreatePbufferSurface(EGLDisplay dpy,
                           EGLConfig config,
