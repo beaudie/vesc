@@ -34,6 +34,24 @@
       "parentUuid": "e446be6e_a1328837",
       "revId": "ba57e1124dc35d221f3dc934e41ae5ce576252a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da380e39_3ce63b99",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T23:47:38Z",
+      "side": 1,
+      "message": "Checked. No validation errors but has artifacts.",
+      "parentUuid": "962aa332_b9b814f6",
+      "revId": "ba57e1124dc35d221f3dc934e41ae5ce576252a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
