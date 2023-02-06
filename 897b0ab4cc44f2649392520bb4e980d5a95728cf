@@ -193,6 +193,24 @@
       "parentUuid": "a88e497b_de740a86",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "107f28c0_a5e66fba",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-06T17:18:34Z",
+      "side": 1,
+      "message": "Done. @gman@chromium.org could you take a look at the correctness of using BufferManager, thanks?",
+      "parentUuid": "c66438c8_40740d6a",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
