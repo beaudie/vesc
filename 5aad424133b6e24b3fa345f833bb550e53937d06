@@ -403,6 +403,24 @@
       "parentUuid": "db984e4d_14397481",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99ed41ef_d5a7d730",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T22:31:08Z",
+      "side": 1,
+      "message": "\u003e In WindowSurfaceVk::initializeImpl, call deferAcquireNextImage() instead of acquireNextSwapchainImage(). This could be a standalone change by the way which is good on its own. Hopefully nothing will break 😄\n\nIt should not. But some methods must be updated. For example: `WindowSurfaceVk::getWidth()`.\n\n\n\u003e lockSurface can deal with the semaphore separately since it\u0027s doing a one-off submission anyway.\n\nUntil this change, we still need to flush semaphore before present.\n\nSo what should be done with this CL?\nMaybe submit as is and then implement changes from your list.\n\nHowever I have strange problems with tests on this (and not only this) CL. All test seems just crushing without any reason.",
+      "parentUuid": "35070c21_67066820",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
