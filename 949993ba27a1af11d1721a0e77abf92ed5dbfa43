@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1809541b_98fd7495",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-06T19:00:06Z",
+      "side": 1,
+      "message": "(see discussion on your other CL) please unwrap links here and below to make them clickable",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a11df317_fc92beb5",
+        "filename": "src/commit_id.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-06T19:00:06Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem needed either",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 69
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a031fc3d_c356607c",
         "filename": "src/commit_id.py",
         "patchSetId": 2
@@ -43,6 +89,53 @@
         "startChar": 25,
         "endLine": 135,
         "endChar": 58
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d987e4b_0f7111aa",
+        "filename": "src/commit_id.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-06T19:00:06Z",
+      "side": 1,
+      "message": "Yes, we should keep an eye out for cleanups especially when reverting older CLs. All code that is no-op, known not to be needed soon, should be removed as part of this change.",
+      "parentUuid": "b3c3ad1f_0a092e33",
+      "range": {
+        "startLine": 135,
+        "startChar": 25,
+        "endLine": 135,
+        "endChar": 58
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f66e4c49_9a40729e",
+        "filename": "src/libANGLE/features.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-06T19:00:06Z",
+      "side": 1,
+      "message": "By the looks of it, this is never defined so we can drop all of the related code?..",
+      "range": {
+        "startLine": 33,
+        "startChar": 13,
+        "endLine": 33,
+        "endChar": 38
       },
       "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
