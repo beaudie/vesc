@@ -200,6 +200,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72e23d2e_dd47d2bc",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-06T16:33:27Z",
+      "side": 1,
+      "message": "I\u0027d like to keep the level of day to day triage we have now (not allowing diffs without a human approving the change).  It has been very effective .  Other than adding a new device or updating a bot driver (both of which are rare), we don\u0027t have to re-triage very often.\n\nThe exception is SwiftShader, as you mentioned.  Rolling it in all the time is causing all kinds of thrash.  Likely SwS should be running the traces upstream to maintain quality.  It would be quite cool if we could share the same project, so when they add a new golden, it would automatically reflect in our goldens and the roll would be clean.\n\nIf you do move forward with this, can you isolate it to SwiftShader?  Or perhaps isolate it to rolls?\n\nI would also treat a pixel diff of 1 negligible.  Anything else requires scrutiny.",
+      "parentUuid": "e43042f4_23fe9a54",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
