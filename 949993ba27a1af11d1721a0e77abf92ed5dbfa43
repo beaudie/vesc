@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8183b3d9_8c55f55c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T23:05:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1809541b_98fd7495",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a11df317_fc92beb5",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Yes, we should keep an eye out for cleanups especially when reverting older CLs. All code that is no-op, known not to be needed soon, should be removed as part of this change.",
       "parentUuid": "b3c3ad1f_0a092e33",
+      "range": {
+        "startLine": 135,
+        "startChar": 25,
+        "endLine": 135,
+        "endChar": 58
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25b62e1e_fc8fe03e",
+        "filename": "src/commit_id.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T23:05:05Z",
+      "side": 1,
+      "message": "Tracing the code history:\n\nThis is the first CL where we introduced this macro: https://chromium-review.googlesource.com/c/angle/angle/+/202048.\n\nLater on we replaced this macro with `ANGLE_PROGRAM_BINARY_LOAD`: https://chromium-review.googlesource.com/c/angle/angle/+/226304.\n\nI believe we no longer use the `ANGLE_DISABLE_PROGRAM_BINARY_LOAD`. Let\u0027s remove it.",
+      "parentUuid": "1d987e4b_0f7111aa",
       "range": {
         "startLine": 135,
         "startChar": 25,
