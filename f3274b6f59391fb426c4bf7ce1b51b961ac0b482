@@ -1,0 +1,329 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c12b62ff_87042afb",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "It\u0027s `deque`.\n\nBut it sounds to me like we really need a queue, not a deque (which is quite more complicated)",
+      "range": {
+        "startLine": 7,
+        "startChar": 64,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a9df095_22b99c7a",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "nit: FIXEDQUEUE",
+      "range": {
+        "startLine": 10,
+        "startChar": 20,
+        "endLine": 10,
+        "endChar": 26
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd2d044_5973f03b",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "It\u0027s a queue, do we really need iterators? Could we remove this to keep this as simple as possible?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 6
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad7b387f_068d6d3c",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Ditto, don\u0027t need random access",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "decfe4cb_a01f7277",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "nit: std::queue has `back()`, but I highly doubt we\u0027d ever need it. Feel free to remove this.",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b2f4193_a24128ff",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "With the iterators gone, you should be able to wrap this on insert/delete instead of reference.\n\nAs unlikely it is to overflow the index, if `N` doesn\u0027t divide 2^sizebits this is _technically_ wrong.",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad327cb2_f20765c2",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "nit: `(mBackIndex + (N - 1)) % N` to be on the safe side. Although I\u0027d prefer `back()` gone altogether.",
+      "range": {
+        "startLine": 204,
+        "startChar": 17,
+        "endLine": 204,
+        "endChar": 37
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57f0a5c2_dc304abb",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Suggest removing this function. We never want to just clear the queue. std::queue also doesn\u0027t have clear().",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e1b67d_0ff635a7",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Please ASSERT_FALSE that timeout occurred so the test fails on deadlock",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fee0e7a_da7ef50a",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3aba2de_229eb1dd",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Nice test. Could you please add multi-producer + single-consumer (and vice versa) tests? Just to make sure size tracking can handle such scenarios fine.\n\nAnother interesting test would be something similar to how the backend uses this; that is a producer can become the consumer if queue is full for example.",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0a71ebb_5e77c9cc",
+        "filename": "src/common/FixedVector_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "nit: revert",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d8be339_dd07a88a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "`ANGLE_TRY` + make the function return `angle::Result`.\n\nBut more importantly, there\u0027s a race condition here. Between the `if` and the `dequeueLock` someone may have already drained `mTasks`. So you\u0027d need another `if (mTasks.full())` check after taking the `dequeueLock`.",
+      "range": {
+        "startLine": 584,
+        "startChar": 8,
+        "endLine": 584,
+        "endChar": 14
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6926920_275af0dc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Could this be moved before `dequeueLock`? Because enqueue and dequeue are now decoupled.",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29aa48df_bfcc2443",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "nit: Revert; previous code marked the scope of the lock clearly",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b9d51a_211d0fa0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "Please add a comment. I presume you added this to make sure no tasks are added before handleDeviceLost()?",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3763ce8d_8a7e5263",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:22:55Z",
+      "side": 1,
+      "message": "In a follow up perhaps, I suggest renaming these mutexes. How about this?\n\n- `s/mWorkerMutex/mTaskEnqueueMutex`\n- `s/mSubmissionMutex/mTaskExecuteMutex`",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
