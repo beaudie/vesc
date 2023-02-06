@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31cbccde_fa593ce6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T15:40:35Z",
+      "side": 1,
+      "message": "Might not be enough to check current index only. In the very least, this interacts badly with `EGL_ANGLE_prepare_swap_buffers`, even if no one other than ANGLE itself uses it (currently). This could be a loop over all images.\n\nAs an aside, not sure if this is worth it. The only place where it might be helpful is with `waitIdleBeforeSwapchainRecreation`, but isn\u0027t that fixed now? Can we just limit that workaround to older Android? Context: anglebug.com/5061",
+      "revId": "2b3c2d9f4b4284d4a5d9604c6976be7fced12301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
