@@ -272,6 +272,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a257794_f370ccb8",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:33:14Z",
+      "side": 1,
+      "message": "Random noise _rarely_ occurs. Intel/windows I think had a few flaky traces but we just disabled those. Still, could be good to automatically deal with those.\n\nWith SwiftShader changes, basically it\u0027s the commit hash that changes frequently. But that doesn\u0027t change the properties as far as I can tell. Driver version simply returns the Vulkan 1.3 packed version value (0x1400000)",
+      "parentUuid": "01c9ef93_cd5963fa",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
