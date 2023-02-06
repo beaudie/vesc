@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f2577cde_8c71f299",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-06T15:37:17Z",
+      "side": 1,
+      "message": "Could you unwrap links in the description so that they\u0027re clickable in the tooling? (presubmit message tells you how to get around the line limit)",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "8714464d13d73cc142e5809e22f3bfa8da18dd6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "39cc48ac_7a65c5c5",
         "filename": "scripts/generate_android_bp.py",
         "patchSetId": 1
