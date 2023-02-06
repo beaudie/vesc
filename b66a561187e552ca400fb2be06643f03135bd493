@@ -248,6 +248,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01c9ef93_cd5963fa",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2023-02-06T19:51:40Z",
+      "side": 1,
+      "message": "Apparently I never sent the draft I typed up \u003e\u003c I\u0027ll include it below for posterity, but sounds like it\u0027s not particularly relevant anymore.\n\n\u003e Could we go with Shabi\u0027s suggestion of\n\nAck.\n\n\u003e  I wish it was possible to select a different algorithm for regular ANGLE CLs vs SwiftShader and Chromium (driver update) rolls\n\nI suspect we can\u0027t determine this automatically from the swarming task, but I suspect there would be a way to pass that information in, e.g. setting a property on the bots we want to use the different algorithm on and passing in the value of that property to the test. Not something we\u0027d want to handle in this CL, but it\u0027s something we could pursue.\n\nOriginal draft:\n\n\u003e Brian, I remember there was a way to calibrate arguments to fuzzy matching. Is it something we can do here?\n\nYes, but with some caveats:\n\n1. I haven\u0027t used the tool in a very long time, so it might not work right now.\n2. It should in theory work with ANGLE, but will probably require some work.\n3. I\u0027ll have to add support for running against this algorithm. It currently assumes only the fuzzy and sobel algorithms exist. Shouldn\u0027t be hard to get this added, although it might warrant a refactor since the current implementation makes various assumptions.\n\nHowever, reading through this thread made me realize I should have confirmed something before moving forward with inexact matching: what scenarios do you expect these sorts of changes to occur under?\n\nI ask because Gold\u0027s inexact matching only considers images within the same group, which is a unique set of keys that are reported. For ANGLE, that would be these https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/restricted_traces/restricted_trace_gold_tests.py;l\u003d168?q\u003drestricted_trace%20file:angle%20lang:python\n\n* vendor_id\n* device_id\n* model_name\n* manufacturer_name\n* os\n* os_version\n* driver_version\n* driver_vendor\n\nSo, if this is intended to reduce the amount of work necessary when say a driver gets upgraded, this won\u0027t currently help since the driver_version key will change, thus creating a different unique group. I believe there is a way to report a key as purely informational so that it won\u0027t be included when determining which group something belongs to, but I don\u0027t know if that\u0027s the right approach in this scenario.\n\nIf on the other hand this is meant to help deal with random noise that occurs on the same configuration, this should be fine, although it sounds like there\u0027s disagreement on whether that should be happening in the first place.",
+      "parentUuid": "10e2179b_35327bc1",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
