@@ -224,6 +224,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b986e3c_ce5d86d6",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-06T16:46:10Z",
+      "side": 1,
+      "message": "OK, I hear you, Cody and Shabi.\nBrian, sorry for drafting you for this effort without having discussed this with others first.\nCould we go with Shabi\u0027s suggestion of:\n\u003e making the diff be 1 (instead of 10), and if possible make sure that the total number of different pixels is less than 10% the size of the image\n\nI.e. fuzzy diff instead, then?\n\nHowever, I think that sample_area algorithm would still be useful for driver and SwiftShader upgrades. I wish it was possible to select a different algorithm for regular ANGLE CLs vs SwiftShader and Chromium (driver update) rolls. If not, maybe I can keep this CL as a reference to use in conjunction with the rolls to help with the triage.",
+      "parentUuid": "72e23d2e_dd47d2bc",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
