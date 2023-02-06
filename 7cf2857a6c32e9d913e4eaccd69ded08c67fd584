@@ -62,6 +62,54 @@
       },
       "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9c0ab9e_7e2d7345",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T18:56:57Z",
+      "side": 1,
+      "message": "Thanks. My mistake.",
+      "parentUuid": "1895a44e_9714843c",
+      "range": {
+        "startLine": 1008,
+        "startChar": 7,
+        "endLine": 1008,
+        "endChar": 20
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e8107c_2a6f666e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T18:56:57Z",
+      "side": 1,
+      "message": "Thanks again.\n\nI also do not like the name, because it is not clear that it is for **RenderPass** command buffers.\n\nCurrently I want to rename like this\n```\ntemplate \u003cclass SecondaryCommandBufferT\u003e\nbool CheckCommandBufferIndex(uint32_t commandBufferIndex)\n{\n```",
+      "parentUuid": "beb2d5e4_8ef26be2",
+      "range": {
+        "startLine": 1008,
+        "startChar": 35,
+        "endLine": 1008,
+        "endChar": 37
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
