@@ -986,7 +986,7 @@ void WriteInitReplayCall(bool compression,
         out << "    // max" << name << " = " << maxIDs[resourceID] << "\n";
     }
 
-    out << "    InitializeReplay3(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+    out << "    InitializeReplay4(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
         << readBufferSize << ", " << resourceIDBufferSize << ", " << contextID;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
@@ -2254,6 +2254,7 @@ bool IsSharedObjectResource(ResourceIDType type)
         case ResourceIDType::Context:
         case ResourceIDType::Image:
         case ResourceIDType::Surface:
+        case ResourceIDType::egl_Sync:
             // Return false for all EGL object types.
             return false;
 
