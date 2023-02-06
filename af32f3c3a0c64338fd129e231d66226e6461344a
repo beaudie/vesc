@@ -16,6 +16,92 @@
       "message": "LGTM",
       "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c0e5de3_55adefdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:46:52Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f890f7a3_8ee67dfe",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:46:52Z",
+      "side": 1,
+      "message": "\"libANGLE/renderer/vulkan/RendererVk.h\"?",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd60996_e464e95c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:46:52Z",
+      "side": 1,
+      "message": "\"libANGLE/renderer/vulkan/RendererVk.h\"?",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08bd2e3a_caaedbdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:46:52Z",
+      "side": 1,
+      "message": "Same",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
