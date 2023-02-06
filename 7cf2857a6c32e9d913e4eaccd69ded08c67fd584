@@ -18,6 +18,46 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d223128_c62057fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:01:57Z",
+      "side": 1,
+      "message": "Thanks for the CL",
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be36c4f0_72aa24dc",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorHelperRing.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-06T19:01:57Z",
+      "side": 1,
+      "message": "`onNewVariableSizedCommand()` is now identical to `onNewCommand()`. Should they be unified?",
+      "range": {
+        "startLine": 107,
+        "startChar": 9,
+        "endLine": 107,
+        "endChar": 34
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "beb2d5e4_8ef26be2",
