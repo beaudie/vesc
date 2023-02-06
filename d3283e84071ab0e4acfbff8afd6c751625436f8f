@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73475c1a_1fe44182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2023-02-06T21:42:08Z",
+      "side": 1,
+      "message": "Switched to a fuzzy diff with a max difference of 1.",
+      "revId": "d3283e84071ab0e4acfbff8afd6c751625436f8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
