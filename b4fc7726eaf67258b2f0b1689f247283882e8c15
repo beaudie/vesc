@@ -177,6 +177,24 @@
       "parentUuid": "d69c9eca_e730f5bb",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a05bb4_e776b8db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T21:43:10Z",
+      "side": 1,
+      "message": "\u003e I was really hoping that GLES spec requires some sort of explicit synchronization\n\nIt\u0027s _generally_ like that, except for parallel reads 🙄\n\n\u003e Mean while we can fix current problem by enforcing submit on flush when priority changes.\n\nSounds good. We _currently_ have the problem of missing semaphores, which this change can exacerbate, but that can be fixed separately.",
+      "parentUuid": "328d5556_99e28fb2",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
