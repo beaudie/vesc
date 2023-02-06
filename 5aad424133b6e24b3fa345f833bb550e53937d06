@@ -367,6 +367,24 @@
       "parentUuid": "a0c99c65_f5c49f43",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db984e4d_14397481",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T22:00:24Z",
+      "side": 1,
+      "message": "\u003e So if any access is to be done on anything, flushOutsideRenderPassCommands() must necessarily be called.\n\nI was talking not about how commands will be submitted, but about the order commands will be recorded on the CPU.\nSo we can record commands to the command buffers, unmake surface from current, and then flush.\n\nThere is a problem in the `mCurrentWindowSurface` member. It may be NULL when `flushOutsideRenderPassCommands()` is called.\n\nHowever, implementation calls `flushOutsideRenderPassCommands()` before recording commands to the RP so wait semaphore will be also flushed. And this part is not obvious.\n\nIn the future we may have optimization - do not flush RP if there is no RP opened when starting new RP. With such changes, outside RP will not be flushed, but RP commands will be recorded. Then we change surface (keeping the context) and flush both buffers without wait semaphore (`mCurrentWindowSurface \u003d\u003d NULL`).\n\n\u003e How about we flush the acquire semaphore immediately when the image is acquired?\n\nThat would be great, however we do not have access to the `ContextVk` in the `WindowSurfaceVk::acquireNextSwapchainImage()`.\n\nRegarding `WindowSurfaceVk::lockSurface`. It seems it does not wait for Semaphore at all. And I think this is a different problem and should be handled separately. This function also does not have access to the `ContextVk`, so can\u0027t flush semaphore.",
+      "parentUuid": "81a77193_c0e89a3c",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
