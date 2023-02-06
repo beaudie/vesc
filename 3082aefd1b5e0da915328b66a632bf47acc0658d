@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8b7fa03_f57f801d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T18:37:18Z",
+      "side": 1,
+      "message": "Thank you) Of course, I will wait for your changes.",
+      "parentUuid": "ee81810b_982554b8",
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bff4c3c_b15436b9",
@@ -75,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f53429c_54769165",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T18:37:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2bff4c3c_b15436b9",
+      "range": {
+        "startLine": 771,
+        "startChar": 5,
+        "endLine": 773,
+        "endChar": 0
+      },
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8c6a80b1_8b144367",
@@ -88,6 +130,30 @@
       "writtenOn": "2023-02-06T18:25:58Z",
       "side": 1,
       "message": "Also it is addressed in https://chromium-review.googlesource.com/c/angle/angle/+/4219944",
+      "range": {
+        "startLine": 1576,
+        "startChar": 4,
+        "endLine": 1579,
+        "endChar": 32
+      },
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6380ca7_fcb09ab6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T18:37:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8c6a80b1_8b144367",
       "range": {
         "startLine": 1576,
         "startChar": 4,
