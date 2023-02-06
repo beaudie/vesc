@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa6738ef_94b03cdf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T20:17:46Z",
+      "side": 1,
+      "message": "Thanks for restructuring the access patterns - lgtm+2. Couple small questions / comments.",
+      "revId": "1a36169dd753133ec650d5da6b9714b5dc306750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d97c313_bd1e7753",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T20:17:46Z",
+      "side": 1,
+      "message": "Could you reference:\n\nTODO(anglebug.com/7544):\n\nhere? We can then track and follow up on this there.",
+      "revId": "1a36169dd753133ec650d5da6b9714b5dc306750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74e78bb8_2c743ffc",
+        "filename": "src/libANGLE/renderer/metal/mtl_buffer_manager.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T20:17:46Z",
+      "side": 1,
+      "message": "\"would should\" -\u003e \"should\"",
+      "revId": "1a36169dd753133ec650d5da6b9714b5dc306750",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

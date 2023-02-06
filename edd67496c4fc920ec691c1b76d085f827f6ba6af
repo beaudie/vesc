@@ -123,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f039f6d_9d0bf396",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T20:17:46Z",
+      "side": 1,
+      "message": "Thanks for restructuring this - it looks better to me in this form.",
+      "parentUuid": "a2e77b6b_20705ef7",
+      "revId": "edd67496c4fc920ec691c1b76d085f827f6ba6af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88203c83_a02a6936",
