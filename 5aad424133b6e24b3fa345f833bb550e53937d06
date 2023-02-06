@@ -349,6 +349,24 @@
       "parentUuid": "e4fc1268_41d94090",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81a77193_c0e89a3c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T21:29:28Z",
+      "side": 1,
+      "message": "\u003e In other words, flushOutsideRenderPassCommands() MUST be called before any access to the Window Surface. This guarantee is not obvious.\n\nA small bit of explanation first (just FYI to understand the architecture better). Currently, the context records commands into two command buffers, outside and inside render pass commands. The outside RP commands **always** run before the RP commands. So if _any_ access is to be done on anything, `flushOutsideRenderPassCommands()` must necessarily be called.\n\n---\n\nThat said, it\u0027s perfectly fine with me to make SurfaceVk add the semaphore. However, I think the current code is missing a few places, for example `WindowSurfaceVk::lockSurface`. That was my original worry.\n\nHowever, I think we can systematically fix that and avoid having to find all the places `flushAcquireImageSemaphore()` is necessary. How about we flush the acquire semaphore _immediately_ when the image is acquired? That would be:\n\n```\nVkResult WindowSurfaceVk::acquireNextSwapchainImage(...)\n{\n    ...\n    // The semaphore will be waited on in the next flush.\n    mAcquireImageSemaphores.next();\n    mAcquireImageSemaphore \u003d acquireImageSemaphore;\n    // **HERE**\n}\n```\n\n`acquireNextSwapchainImage` is always called just before the image is about to be accessed, so we aren\u0027t really adding the semaphore too early. Also we can probably do away with `mAcquireImageSemaphore` altogether and forward `acquireImageSemaphore` to context right away.",
+      "parentUuid": "a0c99c65_f5c49f43",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
