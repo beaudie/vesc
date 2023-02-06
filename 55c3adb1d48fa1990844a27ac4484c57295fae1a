@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b4b7d69_7784a78d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T16:41:19Z",
+      "side": 1,
+      "message": "Thanks a lot, I\u0027m glad all this is being done upstream now 😊",
+      "revId": "55c3adb1d48fa1990844a27ac4484c57295fae1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0936d5ae_c587adcc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T16:41:19Z",
+      "side": 1,
+      "message": "A comment would be good. Why should subpass always be 0 with ANGLE secondary SCBs? We do use subpasses to emulate GL_EXT_multisampled_render_to_texture (most importantly on your platform actually)",
+      "revId": "55c3adb1d48fa1990844a27ac4484c57295fae1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d737fb0_f7c44dd4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T16:41:19Z",
+      "side": 1,
+      "message": "nit: (after other comment is resolved) You could add a small helper (in the anonymous namespace above) and `ASSERT(ASummaryOfTheReason(mCurrentSubpass))` to increase readability (and avoid duplicating the reasoning comment)",
+      "revId": "55c3adb1d48fa1990844a27ac4484c57295fae1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
