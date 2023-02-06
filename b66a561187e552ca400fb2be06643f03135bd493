@@ -296,6 +296,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc9f044f_12b556a5",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2023-02-06T21:48:47Z",
+      "side": 1,
+      "message": "Can someone from ANGLE who\u0027s familiar with the desired behavior update https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7985 with information on when we would want the broader/human-emulating inexact matching (with links to example bots where we would and would not want that behavior)? Once I have that, I can see if it would be feasible to apply that to only the bots where a larger difference is expected (sounds like SwiftShader bots, but would be good to have concrete information)",
+      "parentUuid": "1a257794_f370ccb8",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
