@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3dab5fa0_fad12090",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:42:09Z",
+      "side": 1,
+      "message": "Just saw the `mInflightCommands` change. Turning _that_ into `queue` could be interesting (because that one is also really a queue), but I guess making this stay as `deque` is simpler for the time being.",
+      "parentUuid": "c12b62ff_87042afb",
+      "range": {
+        "startLine": 7,
+        "startChar": 64,
+        "endLine": 7,
+        "endChar": 70
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a9df095_22b99c7a",
         "filename": "src/common/FixedQueue.h",
         "patchSetId": 7
@@ -70,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdfb5a9c_66a80d7f",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:42:09Z",
+      "side": 1,
+      "message": "Nack",
+      "parentUuid": "6bd2d044_5973f03b",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 6
+      },
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad7b387f_068d6d3c",
@@ -83,6 +131,24 @@
       "writtenOn": "2023-02-06T20:22:55Z",
       "side": 1,
       "message": "Ditto, don\u0027t need random access",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44e93e99_d1221a0b",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:42:09Z",
+      "side": 1,
+      "message": "Nack",
+      "parentUuid": "ad7b387f_068d6d3c",
       "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -123,6 +189,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9baa7a47_af9b6b89",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:42:09Z",
+      "side": 1,
+      "message": "Nack. Just `static_assert(ispow2(N))` would be fine",
+      "parentUuid": "0b2f4193_a24128ff",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad327cb2_f20765c2",
         "filename": "src/common/FixedQueue.h",
         "patchSetId": 7
@@ -157,6 +241,24 @@
       "writtenOn": "2023-02-06T20:22:55Z",
       "side": 1,
       "message": "Suggest removing this function. We never want to just clear the queue. std::queue also doesn\u0027t have clear().",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59bb3c5c_445e9a05",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T20:42:09Z",
+      "side": 1,
+      "message": "Nack",
+      "parentUuid": "57f0a5c2_dc304abb",
       "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
