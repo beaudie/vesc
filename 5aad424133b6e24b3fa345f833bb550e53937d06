@@ -385,6 +385,24 @@
       "parentUuid": "81a77193_c0e89a3c",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35070c21_67066820",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T22:14:48Z",
+      "side": 1,
+      "message": "\u003e That would be great, however we do not have access to the ContextVk in the WindowSurfaceVk::acquireNextSwapchainImage()\n\nYeesh, I was looking at `doDeferredAcquireNextImage` when I was checking. I\u0027ll have to look around to see what we can do about it.\n\nI guess we can\u0027t send it straight to RendererVk because we don\u0027t know which queue should wait for it. We could probably do:\n\n- In `WindowSurfaceVk::initializeImpl`, call `deferAcquireNextImage()` instead of `acquireNextSwapchainImage()`. This could be a standalone change by the way which is good on its own. Hopefully nothing will break 😄\n- To `acquireNextSwapchainImage()`, we could pass in the ContextVk in addition to vk::Context. The ContextVk pointer could be nullptr, but when it\u0027s not, semaphore is passed in directly from `acquireNextSwapchainImage()`. That covers basically everywhere except lockSurface AFAICT.\n- lockSurface can deal with the semaphore separately since it\u0027s doing a one-off submission anyway.",
+      "parentUuid": "db984e4d_14397481",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
