@@ -6850,7 +6850,7 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
         ASSERT(mLastFlushedSerial > mLastSubmittedSerial);
     }
-    else if (signalSemaphore == nullptr)
+    else if (signalSemaphore == nullptr && mWaitSemaphores.empty())
     {
         // We have nothing to submit.
         return angle::Result::Continue;
