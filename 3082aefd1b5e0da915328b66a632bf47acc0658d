@@ -16,6 +16,23 @@
       "message": "There\u0027s some overlap with this: https://chromium-review.googlesource.com/c/angle/angle/+/4219944\n\nI\u0027ll leave it to Charlie to sync with you about it.",
       "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b51078f_fe307701",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T16:28:12Z",
+      "side": 1,
+      "message": "Also leaving +2 to Charlie, I have no bearing on this code anymore, lol",
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
