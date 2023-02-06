@@ -33,6 +33,69 @@
       "message": "Also leaving +2 to Charlie, I have no bearing on this code anymore, lol",
       "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee81810b_982554b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-06T18:25:58Z",
+      "side": 1,
+      "message": "Nice fix! If possible, could you wait until https://chromium-review.googlesource.com/c/angle/angle/+/4219944 landed? Some of the diff in this CL would not needed once that lands.",
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bff4c3c_b15436b9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-06T18:25:58Z",
+      "side": 1,
+      "message": "This is addressed in https://chromium-review.googlesource.com/c/angle/angle/+/4219944",
+      "range": {
+        "startLine": 771,
+        "startChar": 5,
+        "endLine": 773,
+        "endChar": 0
+      },
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c6a80b1_8b144367",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1579,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-06T18:25:58Z",
+      "side": 1,
+      "message": "Also it is addressed in https://chromium-review.googlesource.com/c/angle/angle/+/4219944",
+      "range": {
+        "startLine": 1576,
+        "startChar": 4,
+        "endLine": 1579,
+        "endChar": 32
+      },
+      "revId": "3082aefd1b5e0da915328b66a632bf47acc0658d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
