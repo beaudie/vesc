@@ -16,6 +16,40 @@
       "message": "Excellent work, thank you",
       "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "626e3e03_f3fc17e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T19:29:23Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThank you so much Alexey for digging into these remaining bugs. One question.",
+      "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d79beb1_64aef074",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T19:29:23Z",
+      "side": 1,
+      "message": "If I\u0027m reading the test correctly, when this helper is called with a depth-only format and GL_STENCIL_INDEX mode, it sets up the GL_DEPTH_STENCIL_TEXTURE_MODE to sample the (nonexistent) stencil index, but the fragment shader to sample the depth aspect.\n\nAre there any other behaviors that should be tested by this test? For example, asserting that the stencil is always 0 when sampling these depth-only textures?",
+      "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
