@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c141849_6656b9a2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-06T17:33:58Z",
+      "side": 1,
+      "message": "Ah I see, sorry for the misnomer. `mCurrentCommandBufferIndex` is fine; the comment still says it\u0027s associated with the subpass, so the logic is still there",
+      "parentUuid": "589f0fb0_a168d862",
+      "revId": "55c3adb1d48fa1990844a27ac4484c57295fae1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d737fb0_f7c44dd4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
