@@ -196,6 +196,7 @@ GLeglImageOES *gEGLImageMap2;
 EGLSurface *gSurfaceMap2;
 EGLContext *gContextMap2;
 GLsync *gSyncMap2;
+EGLSync *gEGLSyncMap;
 
 void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
                                      DeleteCallback deleteCallback)
@@ -251,6 +252,7 @@ void InitializeReplay4(const char *binaryDataFileName,
                       maxMemoryObject, maxProgramPipeline, maxQuery, maxRenderbuffer, maxSampler,
                       maxSemaphore, maxShaderProgram, maxSurface, maxSync, maxTexture,
                       maxTransformFeedback, maxVertexArray);
+    gEGLSyncMap = AllocateZeroedValues<EGLSync>(maxEGLSyncID);
 }
 
 void InitializeReplay3(const char *binaryDataFileName,
@@ -598,9 +600,15 @@ void CreateEGLImageKHR(EGLDisplay dpy,
     gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
 }
 
-void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID) {}
+void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
+{
+    gEGLSyncMap[syncID] = eglCreateSyncKHR(dpy, type, attrib_list);
+}
 
-void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID) {}
+void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID)
+{
+    gEGLSyncMap[syncID] = eglCreateSync(dpy, type, attrib_list);
+}
 
 void CreatePbufferSurface(EGLDisplay dpy,
                           EGLConfig config,

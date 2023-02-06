@@ -548,7 +548,7 @@ void WriteParamValueReplay<ParamType::Tegl_SyncID>(std::ostream &os,
                                                    const CallCapture &call,
                                                    egl::SyncID value)
 {
-    os << "EGL_NO_SYNC_KHR";
+    os << "gEGLSyncMap[" << value.value << "]";
 }
 
 template <>
