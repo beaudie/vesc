@@ -270,6 +270,54 @@
       },
       "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b652e976_e369389f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T19:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9c0ab9e_7e2d7345",
+      "range": {
+        "startLine": 1008,
+        "startChar": 7,
+        "endLine": 1008,
+        "endChar": 20
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5abec750_73e9faad",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T19:48:02Z",
+      "side": 1,
+      "message": "Used `CheckSubpassCommandBufferCount` name and added `RenderPassCommandBufferHelper::getSubpassCommandBufferCount()` method.\n\nWill refactor `mCurrentSubpass` in the follow-up CL.",
+      "parentUuid": "d72f19b7_fb27f3c2",
+      "range": {
+        "startLine": 1008,
+        "startChar": 35,
+        "endLine": 1008,
+        "endChar": 37
+      },
+      "revId": "7cf2857a6c32e9d913e4eaccd69ded08c67fd584",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
