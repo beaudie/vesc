@@ -68,6 +68,24 @@
       "parentUuid": "6d79beb1_64aef074",
       "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e678f0ed_3d7b7378",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-06T21:08:37Z",
+      "side": 1,
+      "message": "Got it, thanks.",
+      "parentUuid": "48aab01e_7c744c4b",
+      "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
