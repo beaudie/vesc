@@ -22,6 +22,30 @@
       },
       "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3c3ad1f_0a092e33",
+        "filename": "src/commit_id.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-06T18:06:37Z",
+      "side": 1,
+      "message": "I don\u0027t think this is being used anywhere. The code was there before Doug\u0027s change: https://chromium-review.googlesource.com/c/angle/angle/+/3615014/5/src/commit_id.py#b113, that\u0027s why it shows up in this revert CL. \n\nShall we remove it?",
+      "parentUuid": "a031fc3d_c356607c",
+      "range": {
+        "startLine": 135,
+        "startChar": 25,
+        "endLine": 135,
+        "endChar": 58
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
