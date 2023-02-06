@@ -50,6 +50,24 @@
       "message": "If I\u0027m reading the test correctly, when this helper is called with a depth-only format and GL_STENCIL_INDEX mode, it sets up the GL_DEPTH_STENCIL_TEXTURE_MODE to sample the (nonexistent) stencil index, but the fragment shader to sample the depth aspect.\n\nAre there any other behaviors that should be tested by this test? For example, asserting that the stencil is always 0 when sampling these depth-only textures?",
       "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48aab01e_7c744c4b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1872,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-06T20:21:38Z",
+      "side": 1,
+      "message": "\u003e it sets up the GL_DEPTH_STENCIL_TEXTURE_MODE to sample the (nonexistent) stencil index\n\nYes. This mode must have no effect on depth sampling of depth textures, so the test asserts that.\n\n\u003e Are there any other behaviors that should be tested by this test?\n\nAn attempt to, e.g., sample a depth component with an uint sampler would lead to undefined behavior as with any other case of mismatching shader sampler and texture data type.",
+      "parentUuid": "6d79beb1_64aef074",
+      "revId": "55a12b6f4907dfdddde12940486148301ff16da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
