@@ -1000,8 +1000,9 @@ void RendererVk::ensureCapsInitialized() const
     if (mPhysicalDeviceFeatures.geometryShader)
     {
         // TODO: geometry shader support is incomplete.  http://anglebug.com/3571
-        bool geometryShader = mFeatures.supportsTransformFeedbackExtension.enabled &&
-                              mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
+        //        bool geometryShader = mFeatures.supportsTransformFeedbackExtension.enabled &&
+        //                              mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
+        bool geometryShader                 = mFeatures.supportsTransformFeedbackExtension.enabled;
         mNativeExtensions.geometryShaderEXT = geometryShader;
         mNativeExtensions.geometryShaderOES = geometryShader;
         mNativeCaps.maxFramebufferLayers    = LimitToInt(limitsVk.maxFramebufferLayers);
@@ -1033,9 +1034,11 @@ void RendererVk::ensureCapsInitialized() const
         constexpr uint32_t kReservedTessellationDefaultUniformBindingCount = 2;
 
         // TODO: tessellation shader support is incomplete.  http://anglebug.com/3572
+        //        mNativeExtensions.tessellationShaderEXT =
+        //            mFeatures.supportsTransformFeedbackExtension.enabled &&
+        //            mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
         mNativeExtensions.tessellationShaderEXT =
-            mFeatures.supportsTransformFeedbackExtension.enabled &&
-            mFeatures.exposeNonConformantExtensionsAndVersions.enabled;
+            mFeatures.supportsTransformFeedbackExtension.enabled;
         mNativeCaps.maxPatchVertices = LimitToInt(limitsVk.maxTessellationPatchSize);
         mNativeCaps.maxTessPatchComponents =
             LimitToInt(limitsVk.maxTessellationControlPerPatchOutputComponents);
