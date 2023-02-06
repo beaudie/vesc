@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "589f0fb0_a168d862",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-06T17:09:36Z",
+      "side": 1,
+      "message": "It is the `mCurrentSubpass` has confusing name. It corresponds to the command buffer index and also to a subpass when using Vulkan SCB (non custom).\n\nBut with custom SCBs, we do not need multiple buffers, so `mCurrentSubpass` is always 0. In this case, `mCurrentSubpass` corrsponds **only** to a command buffer index. There is no separate variable for a subpass.\n\nI suggest to made a refactoring and rename the member into `mCurrentBuffer` or `mCurrentBufferIndex`.",
+      "parentUuid": "0936d5ae_c587adcc",
+      "revId": "55c3adb1d48fa1990844a27ac4484c57295fae1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d737fb0_f7c44dd4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
