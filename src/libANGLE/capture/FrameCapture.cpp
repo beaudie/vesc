@@ -7553,11 +7553,6 @@ void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall,
             }
         }
     }
-    else
-    {
-        INFO() << "FrameCapture: Not capturing invalid call to "
-               << GetEntryPointName(inCall.entryPoint);
-    }
 }
 
 void FrameCaptureShared::maybeCapturePostCallUpdates(const gl::Context *context)
