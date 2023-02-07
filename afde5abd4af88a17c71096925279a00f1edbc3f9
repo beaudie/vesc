@@ -22,6 +22,30 @@
       },
       "revId": "afde5abd4af88a17c71096925279a00f1edbc3f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7849147_00d70ef8",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-07T17:00:32Z",
+      "side": 1,
+      "message": "Yes I tested this locally. I think you\u0027re right but we do see the message from FATAL in logcat so this is probably better than cerr (does that go anywhere on Android?). I added a comment to clarify.",
+      "parentUuid": "f28b93b3_68bb426b",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 15
+      },
+      "revId": "afde5abd4af88a17c71096925279a00f1edbc3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
