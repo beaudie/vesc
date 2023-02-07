@@ -496,6 +496,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "135c55c6_eab49e87",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-07T18:45:28Z",
+      "side": 1,
+      "message": "Right, my point is that from FixedQueue point of view, there is no different between multi-producer+mutex versus single producer. It did not add extra test coverage here.",
+      "parentUuid": "00c47be6_1db3baf8",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0a71ebb_5e77c9cc",
         "filename": "src/common/FixedVector_unittest.cpp",
         "patchSetId": 7
