@@ -1403,6 +1403,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     if (mDevice)
     {
+        WARN() << "INAZ: device: " << mDevice << "; - vkDestroyDevice()";
         vkDestroyDevice(mDevice, nullptr);
         mDevice = VK_NULL_HANDLE;
     }
@@ -2983,6 +2984,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     initializeValidationMessageSuppressions();
 
     ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    WARN() << "INAZ: device: " << mDevice << "; - vkCreateDevice()";
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
     volkLoadDevice(mDevice);
