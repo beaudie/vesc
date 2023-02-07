@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1626ceb6_573a7924",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-02-07T17:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f890f7a3_8ee67dfe",
+      "range": {
+        "startLine": 12,
+        "startChar": 9,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bd60996_e464e95c",
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a2cf686_2d24a7d6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-02-07T17:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bd60996_e464e95c",
+      "range": {
+        "startLine": 13,
+        "startChar": 9,
+        "endLine": 13,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08bd2e3a_caaedbdc",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-02-06T19:46:52Z",
       "side": 1,
       "message": "Same",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "af32f3c3a0c64338fd129e231d66226e6461344a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8a81a09_1c08a33f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-02-07T17:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08bd2e3a_caaedbdc",
       "range": {
         "startLine": 11,
         "startChar": 9,
