@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28b93b3_68bb426b",
+        "filename": "util/android/AndroidWindow.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-07T16:54:28Z",
+      "side": 1,
+      "message": "I see we use std::cerr in this file.\nI think logging might be not yet initialized at this point.\nHave you tried this with a locked screen and saw this message?",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 15
+      },
+      "revId": "afde5abd4af88a17c71096925279a00f1edbc3f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
