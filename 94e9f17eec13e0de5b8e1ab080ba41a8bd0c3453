@@ -16,6 +16,23 @@
       "message": "Geoff, Kyle: could you please review?\n\nAlexey, Jonah: FYI. Any comments welcome.",
       "revId": "94e9f17eec13e0de5b8e1ab080ba41a8bd0c3453",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b62aa5b_e1753634",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-02-07T18:05:33Z",
+      "side": 1,
+      "message": "Is passing lg enough for that, even if it\u0027s unused?",
+      "revId": "94e9f17eec13e0de5b8e1ab080ba41a8bd0c3453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
