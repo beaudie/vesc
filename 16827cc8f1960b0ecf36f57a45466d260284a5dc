@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ce192bdc_5fb0b74e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-02-07T04:08:51Z",
+      "side": 1,
+      "message": "I recall that `primitivesGeneratedQuery` feature from `VK_EXT_primitives_generated_query` is required to be cts conformant. Just double check ; )",
+      "parentUuid": "7de476fc_c07f5354",
+      "revId": "16827cc8f1960b0ecf36f57a45466d260284a5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45e9129d_3b0843b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 3
