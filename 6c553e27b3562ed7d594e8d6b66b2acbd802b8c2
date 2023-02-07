@@ -68,6 +68,23 @@
       "message": "Antonio, do you have any ideas about these failures?",
       "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6e916df_9b77d914",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-07T16:30:09Z",
+      "side": 1,
+      "message": "I suspect we just need to replace:\n#include \"xdg-shell.h\" with\n#include \"xdg-shell-client-protocol.h\"\nxdg-shell.xml is the extension for wayland protocol.",
+      "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
