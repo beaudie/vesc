@@ -33,6 +33,24 @@
       "message": "is it possible to write a test for this?",
       "revId": "3270059fa6a61f02bc5c68f84e2ad5f4226c086a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f318ed_4b5698b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-07T00:58:15Z",
+      "side": 1,
+      "message": "If it is end2end test - I guess it is impossible. All fixed size commands far less than `kBlockSize`. I made this change just because I noticed a bug. Even if not fix this bug, chances that we get command exactly `kBlockSize` is very low, more likely it will exceed this value. And even if it will be exactly equal (unlikely), we need to increase `kBlockSize` anyway.\n\nWriting test for Angle is new for me, and I do not know what kind of test required. This test should directly verify `DedicatedCommandBlockPool::onNewCommand()` method.",
+      "parentUuid": "9e70119e_476de774",
+      "revId": "3270059fa6a61f02bc5c68f84e2ad5f4226c086a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
