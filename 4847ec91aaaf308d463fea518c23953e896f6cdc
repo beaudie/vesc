@@ -70,6 +70,24 @@
       "parentUuid": "11234933_b09faca2",
       "revId": "4847ec91aaaf308d463fea518c23953e896f6cdc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b4886dd_09dedff5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-07T01:17:34Z",
+      "side": 1,
+      "message": "https://luci-logdog.appspot.com/logs/angle/android/swarming/logcats/6041f15c4e501611/+/logcat_logcat_-1112020102811684524_shard10_20230206T235000-UTC_17261FDF6000A0",
+      "parentUuid": "05477157_99155ada",
+      "revId": "4847ec91aaaf308d463fea518c23953e896f6cdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
