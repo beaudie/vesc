@@ -421,6 +421,24 @@
       "parentUuid": "35070c21_67066820",
       "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8e0f6c5_eca9ed78",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T03:17:09Z",
+      "side": 1,
+      "message": "\u003e Maybe submit as is and then implement changes from your list.\n\nOk I concede, there doesn\u0027t seem to be a straightforward way to deal with this right now.",
+      "parentUuid": "99ed41ef_d5a7d730",
+      "revId": "5aad424133b6e24b3fa345f833bb550e53937d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
