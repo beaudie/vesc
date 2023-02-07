@@ -385,6 +385,8 @@ class CommandQueue : angle::NonCopyable
     const angle::VulkanPerfCounters getPerfCounters() const;
     void resetPerFramePerfCounters();
 
+    angle::Result postSubmitCheck(Context *context);
+
   private:
     // All these private APIs are called with mutex locked, so we must not take lock again.
     angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
