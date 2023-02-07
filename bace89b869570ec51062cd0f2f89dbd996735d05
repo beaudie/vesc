@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf48dc9_25d2e787",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T19:10:44Z",
+      "side": 1,
+      "message": "This change is _mostly_ just moving things around.\n\nHowever, there are some fixes. For example, in some places we check for device version and make assumptions (pipeline creation feedback, host query reset) but aren\u0027t correctly actually enabling the core version.\n\nThe value of this change is mostly in the cleanup and organization of extensions. I have another change that lets ANGLE use core Vulkan 1.3, but it\u0027s not worth the trouble so won\u0027t be putting that up for review.",
+      "revId": "bace89b869570ec51062cd0f2f89dbd996735d05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
