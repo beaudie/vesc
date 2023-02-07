@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd0210b2_09705157",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T16:15:11Z",
+      "side": 1,
+      "message": "I had this lying around for what I previously thought was a bug (but wasn\u0027t). Could be good to have around now that so many multithreading-related changes are happening.",
+      "revId": "f11148e1a9150cb56cbf04873ee11697e7c0b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
