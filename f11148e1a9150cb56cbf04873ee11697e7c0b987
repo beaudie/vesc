@@ -39,6 +39,30 @@
       },
       "revId": "f11148e1a9150cb56cbf04873ee11697e7c0b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50f42d80_6d2e9178",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-07T18:17:04Z",
+      "side": 1,
+      "message": "Also suggest to move this to CommandProcessor::processTasksImpl() right before calling processTask. That way, it only affects the async submission thread, it does not affect synchronous wait for submission code path (which does not need delay).",
+      "parentUuid": "02721a62_8821e8c8",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 656,
+        "endChar": 0
+      },
+      "revId": "f11148e1a9150cb56cbf04873ee11697e7c0b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
