@@ -271,6 +271,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "138998ad_eefe9a70",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:20:26Z",
+      "side": 1,
+      "message": "50 was just an arbitrary safeguard, 64 should do just fine (or even 32 for that matter), but ack",
+      "parentUuid": "db3d2f23_ec0de14e",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad327cb2_f20765c2",
@@ -454,6 +472,24 @@
       "side": 1,
       "message": "This class does not support multi-producer. User will have to add there own mutex lock for that. It support single-producer and single consumer, but both producer and consumer can run concurrently.",
       "parentUuid": "b3aba2de_229eb1dd",
+      "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00c47be6_1db3baf8",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:20:26Z",
+      "side": 1,
+      "message": "Yes sure, the test could also use a mutex 😊",
+      "parentUuid": "cec4c25b_d18d8c48",
       "revId": "f3274b6f59391fb426c4bf7ce1b51b961ac0b482",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

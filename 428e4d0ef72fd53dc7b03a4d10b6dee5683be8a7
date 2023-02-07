@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796b4976_aecc75af",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:20:26Z",
+      "side": 1,
+      "message": "typo: missing +",
+      "range": {
+        "startLine": 204,
+        "startChar": 28,
+        "endLine": 204,
+        "endChar": 29
+      },
+      "revId": "428e4d0ef72fd53dc7b03a4d10b6dee5683be8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "483025ad_a88ede95",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:20:26Z",
+      "side": 1,
+      "message": "I haven\u0027t checked all users of this, but at this point `queuePresent` might as well return `angle::Result`. Potentially a follow-up change.",
+      "range": {
+        "startLine": 879,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 22
+      },
+      "revId": "428e4d0ef72fd53dc7b03a4d10b6dee5683be8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
