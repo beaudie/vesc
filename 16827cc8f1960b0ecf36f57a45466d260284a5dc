@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49f201de_336aa788",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-07T19:50:43Z",
+      "side": 1,
+      "message": "Can I ask why we still need `exposeNonConformantExtensionsAndVersions`?\n\nif `supportsPrimitivesGeneratedQuery` feature is not enabled, should we just not expose `gemoetryShader` and `tessellationShader` extensions, as some dEQP conformance tests http://b/238244188#comment14  will fail if the extensions are enabled.",
+      "parentUuid": "ca4db68f_74d4205d",
+      "revId": "16827cc8f1960b0ecf36f57a45466d260284a5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45e9129d_3b0843b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 3
