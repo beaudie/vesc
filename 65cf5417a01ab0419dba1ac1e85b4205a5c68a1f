@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f8f959f_054fd024",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-07T22:43:53Z",
+      "side": 1,
+      "message": "Sounds good. I will run trace tests to see the difference in memory usage.",
+      "parentUuid": "cef84d12_0245270c",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "93465ba0_830bb24d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 33
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4aa43824_f791ec84",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-07T22:43:53Z",
+      "side": 1,
+      "message": "I was able to reproduce the error on Windows (b/267811497). Each of the failing tests passes on its own. However, when run together, we see context comparison failures. Could it be a Swiftshader issue?",
+      "parentUuid": "93465ba0_830bb24d",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fd77ce8_a3457dde",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 33
@@ -65,6 +101,30 @@
       "writtenOn": "2023-02-04T01:54:09Z",
       "side": 1,
       "message": "Can you test with more, like 8000?",
+      "range": {
+        "startLine": 10104,
+        "startChar": 37,
+        "endLine": 10104,
+        "endChar": 41
+      },
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab706e28_67def8fb",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 10104,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-07T22:43:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fd77ce8_a3457dde",
       "range": {
         "startLine": 10104,
         "startChar": 37,

@@ -119,6 +119,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d38679d_b765bc9b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-07T22:43:53Z",
+      "side": 1,
+      "message": "Thanks for the clarification. Done.",
+      "parentUuid": "ada05c38_ae107e34",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 486,
+        "endChar": 45
+      },
+      "revId": "f6af0618b77be773ffd7358de3504b84e94e13d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2be35ba2_3c8ce40d",
