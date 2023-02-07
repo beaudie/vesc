@@ -51,6 +51,24 @@
       "parentUuid": "9e70119e_476de774",
       "revId": "3270059fa6a61f02bc5c68f84e2ad5f4226c086a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f6a524_702599f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T03:38:54Z",
+      "side": 1,
+      "message": "@cclao@google.com In contrast to `onNewVariableSizedCommand`, `onNewCommand` is always called with a fixed set of params + header. The maximum value reaching here is _way_ below the block size.\n\nIn other words, short of a unittest that artificially calls this with a large value, it\u0027s going to be impossible to test this.",
+      "parentUuid": "62f318ed_4b5698b4",
+      "revId": "3270059fa6a61f02bc5c68f84e2ad5f4226c086a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
