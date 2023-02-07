@@ -364,6 +364,9 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     ANGLE_VK_TRY(contextVk, waitSemaphore.get().importFd(device, importFdInfo));
 
     // Add semaphore to next submit job.
+    WARN() << "INAZ: device: " << contextVk->getDevice()
+           << "; handle: " << waitSemaphore.get().getHandle() << "; ContextVk: " << contextVk
+           << "; - addWaitSemaphore()";
     contextVk->addWaitSemaphore(waitSemaphore.get().getHandle(),
                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
     contextVk->addGarbage(&waitSemaphore.get());  // This releases the handle.
