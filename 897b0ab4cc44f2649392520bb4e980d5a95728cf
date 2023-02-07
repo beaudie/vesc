@@ -229,6 +229,24 @@
       "parentUuid": "107f28c0_a5e66fba",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c070239_9aa8ff19",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-07T13:36:12Z",
+      "side": 1,
+      "message": "I have changed the code back to using `mtl::BufferPool`. `nullptr` will still be passed to `mtl::BufferPool::allocate` as the original code did, so that there won\u0027t be any implicit mapping.\n\nThe call site will now do the explicit mapping and flushing instead.",
+      "parentUuid": "97eabf27_a3b035f8",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
