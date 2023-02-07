@@ -1144,6 +1144,12 @@ void InitExternalSemaphoreCapabilitiesFunctionsFromCore();
 void InitSamplerYcbcrKHRFunctionsFromCore();
 void InitGetMemoryRequirements2KHRFunctionsFromCore();
 void InitBindMemory2KHRFunctionsFromCore();
+// Promoted to Vulkan 1.2
+void InitHostQueryResetFunctionsFromCore();
+void InitRenderPass2KHRFunctionsFromCore();
+// Promoted to Vulkan 1.3
+void InitExtendedDynamicStateEXTFunctionsFromCore();
+void InitExtendedDynamicState2EXTFunctionsFromCore();
 
 GLenum CalculateGenerateMipmapFilter(ContextVk *contextVk, angle::FormatID formatID);
 size_t PackSampleCount(GLint sampleCount);

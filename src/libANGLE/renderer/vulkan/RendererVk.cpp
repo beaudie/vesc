@@ -77,17 +77,23 @@ constexpr uint32_t kPreferredDefaultUniformBufferSize = 64 * 1024u;
 constexpr uint32_t kPipelineCacheVkUpdatePeriod = 60;
 // Per the Vulkan specification, ANGLE must indicate the highest version of Vulkan functionality
 // that it uses.  The Vulkan validation layers will issue messages for any core functionality that
-// requires a higher version.
-//
-// ANGLE specifically limits its core version to Vulkan 1.1 and relies on availability of
-// extensions.  While implementations are not required to expose an extension that is promoted to
-// later versions, they always do so practice.  Avoiding later core versions helps keep the
-// initialization logic simpler.
-constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_1;
+// requires a higher version.  This value must be increased whenever ANGLE starts using
+// functionality from a newer core version of Vulkan.
+constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_3;
 
 bool IsVulkan11(uint32_t apiVersion)
 {
     return apiVersion >= VK_API_VERSION_1_1;
+}
+
+bool IsVulkan12(uint32_t apiVersion)
+{
+    return apiVersion >= VK_API_VERSION_1_2;
+}
+
+bool IsVulkan13(uint32_t apiVersion)
+{
+    return apiVersion >= VK_API_VERSION_1_3;
 }
 
 bool IsQualcommOpenSource(uint32_t vendorId, uint32_t driverId, const char *deviceName)
@@ -202,6 +208,10 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-vkCmdDrawIndexed-None-06538",
     // http://anglebug.com/7325
     "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
+    // VVL erroneously expects RenderPass to be provided to the linked pipeline (using
+    // VK_EXT_graphics_pipeline_library).
+    // https://gitlab.khronos.org/vulkan/vulkan/-/issues/3341
+    "VUID-VkGraphicsPipelineCreateInfo-renderPass-06061",
     // http://anglebug.com/7729
     "VUID-vkDestroySemaphore-semaphore-01137",
     // http://anglebug.com/7843
@@ -1463,6 +1473,16 @@ bool RendererVk::isVulkan11Device() const
     return IsVulkan11(mDeviceVersion);
 }
 
+bool RendererVk::isVulkan12Device() const
+{
+    return IsVulkan12(mDeviceVersion);
+}
+
+bool RendererVk::isVulkan13Device() const
+{
+    return IsVulkan13(mDeviceVersion);
+}
+
 angle::Result RendererVk::enableInstanceExtensions(
     DisplayVk *displayVk,
     const VulkanLayerVector &enabledInstanceLayerNames,
@@ -1713,6 +1733,14 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             // Vulkan spec, the application is allowed to specify a higher version than supported by
             // the instance.  ANGLE still respects the *device's* version.
             highestApiVersion = kPreferredVulkanAPIVersion;
+
+            // The Mock ICD claims support for the latest spec, but doesn't actually respect the
+            // required Vulkan 1.2 limits.  In that case, limit to Vulkan 1.1.
+            // https://github.com/KhronosGroup/Vulkan-Tools/issues/725
+            if (mEnabledICD == angle::vk::ICD::Mock)
+            {
+                highestApiVersion = VK_API_VERSION_1_1;
+            }
         }
     }
 
@@ -1830,7 +1858,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                          &mPhysicalDeviceProperties);
 
     // The device version that is assumed by ANGLE is the minimum of the actual device version and
-    // the highest it's allowed to use.
+    // the highest it's allowed to use.  With the mock ICD, ANGLE uses a smaller device version
+    // despite it advertising support for the latest version due to bugs.
     mDeviceVersion = std::min(mPhysicalDeviceProperties.apiVersion, highestApiVersion);
 
     mGarbageCollectionFlushThreshold =
@@ -2182,6 +2211,15 @@ void RendererVk::appendDeviceExtensionFeaturesPromotedTo11(
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
+    // Note that VkPhysicalDeviceVulkan11Features was introduced in Vulkan 1.2
+    if (isVulkan12Device())
+    {
+        vk::AddToPNextChain(deviceFeatures, &mPhysicalDevice11Features);
+        vk::AddToPNextChain(deviceProperties, &mPhysicalDevice11Properties);
+
+        return;
+    }
+
     if (isVulkan11Device())
     {
         vk::AddToPNextChain(deviceProperties, &mSubgroupProperties);
@@ -2220,6 +2258,14 @@ void RendererVk::appendDeviceExtensionFeaturesPromotedTo12(
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
+    if (isVulkan12Device())
+    {
+        vk::AddToPNextChain(deviceFeatures, &mPhysicalDevice12Features);
+        vk::AddToPNextChain(deviceProperties, &mPhysicalDevice12Properties);
+
+        return;
+    }
+
     if (ExtensionFound(VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(deviceFeatures, &mShaderFloat16Int8Features);
@@ -2258,15 +2304,27 @@ void RendererVk::appendDeviceExtensionFeaturesPromotedTo12(
 // - VK_EXT_extended_dynamic_state2:         extendedDynamicState2 (feature),
 //                                           extendedDynamicState2LogicOp (feature)
 //
-// Note that VK_EXT_extended_dynamic_state2 is partially promoted to Vulkan 1.3.  If ANGLE creates a
-// Vulkan 1.3 device, it would still need to enable this extension separately for
-// extendedDynamicState2LogicOp.
-//
 void RendererVk::appendDeviceExtensionFeaturesPromotedTo13(
     const vk::ExtensionNameList &deviceExtensionNames,
     VkPhysicalDeviceFeatures2KHR *deviceFeatures,
     VkPhysicalDeviceProperties2 *deviceProperties)
 {
+    // If VK_EXT_extended_dynamic_state2 is supported, always query it directly.  This is because of
+    // the extension is partially promoted to core, and extendedDynamicState2LogicOp is accessible
+    // only through the extension.
+    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicState2Features);
+    }
+
+    if (isVulkan13Device())
+    {
+        vk::AddToPNextChain(deviceFeatures, &mPhysicalDevice13Features);
+        vk::AddToPNextChain(deviceProperties, &mPhysicalDevice13Properties);
+
+        return;
+    }
+
     if (ExtensionFound(VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(deviceFeatures, &mPipelineCreationCacheControlFeatures);
@@ -2276,10 +2334,78 @@ void RendererVk::appendDeviceExtensionFeaturesPromotedTo13(
     {
         vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicStateFeatures);
     }
+}
 
-    if (ExtensionFound(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME, deviceExtensionNames))
+void RendererVk::propagateDeviceExtensionFeatures()
+{
+    // See comments above appendDeviceExtensionFeaturesPromotedTo*.  Features and properties that
+    // are promoted and queried through the aggregate structs are copied to their individual
+    // extension structs here to simplify feature/property queries elsewhere.
+    //
+    // Note that implementations that support newer Vulkan core versions don't necessarily have to
+    // report support for the extension, so it's not sufficient for ANGLE to just query for the
+    // extensions.  VK_EXT_extended_dynamic_state2 (core in Vulkan 1.3) on SwiftShader is an
+    // example.
+
+    if (isVulkan12Device())
     {
-        vk::AddToPNextChain(deviceFeatures, &mExtendedDynamicState2Features);
+        // Features and properties core in Vulkan 1.1:
+        mSubgroupProperties.supportedStages = mPhysicalDevice11Properties.subgroupSupportedStages;
+        mSubgroupProperties.supportedOperations =
+            mPhysicalDevice11Properties.subgroupSupportedOperations;
+        mSubgroupProperties.quadOperationsInAllStages =
+            mPhysicalDevice11Properties.subgroupQuadOperationsInAllStages;
+
+        mProtectedMemoryFeatures.protectedMemory = mPhysicalDevice11Features.protectedMemory;
+
+        mSamplerYcbcrConversionFeatures.samplerYcbcrConversion =
+            mPhysicalDevice11Features.samplerYcbcrConversion;
+
+        mMultiviewFeatures.multiview = mPhysicalDevice11Features.multiview;
+        mMultiviewProperties.maxMultiviewViewCount =
+            mPhysicalDevice11Properties.maxMultiviewViewCount;
+        mMultiviewProperties.maxMultiviewInstanceIndex =
+            mPhysicalDevice11Properties.maxMultiviewInstanceIndex;
+
+        // Features and properties core in Vulkan 1.2:
+        mShaderFloat16Int8Features.shaderFloat16 = mPhysicalDevice12Features.shaderFloat16;
+        mShaderFloat16Int8Features.shaderInt8    = mPhysicalDevice12Features.shaderInt8;
+
+        mDepthStencilResolveProperties.supportedDepthResolveModes =
+            mPhysicalDevice12Properties.supportedDepthResolveModes;
+        mDepthStencilResolveProperties.supportedStencilResolveModes =
+            mPhysicalDevice12Properties.supportedStencilResolveModes;
+        mDepthStencilResolveProperties.independentResolveNone =
+            mPhysicalDevice12Properties.independentResolveNone;
+        mDepthStencilResolveProperties.independentResolve =
+            mPhysicalDevice12Properties.independentResolve;
+
+        mDriverProperties.driverID           = mPhysicalDevice12Properties.driverID;
+        mDriverProperties.conformanceVersion = mPhysicalDevice12Properties.conformanceVersion;
+        memcpy(mDriverProperties.driverName, mPhysicalDevice12Properties.driverName,
+               sizeof(mDriverProperties.driverName));
+        memcpy(mDriverProperties.driverInfo, mPhysicalDevice12Properties.driverInfo,
+               sizeof(mDriverProperties.driverInfo));
+
+        mSubgroupExtendedTypesFeatures.shaderSubgroupExtendedTypes =
+            mPhysicalDevice12Features.shaderSubgroupExtendedTypes;
+
+        mHostQueryResetFeatures.hostQueryReset = mPhysicalDevice12Features.hostQueryReset;
+
+        mImagelessFramebufferFeatures.imagelessFramebuffer =
+            mPhysicalDevice12Features.imagelessFramebuffer;
+    }
+
+    if (isVulkan13Device())
+    {
+        // Features and properties core in Vulkan 1.3:
+        mPipelineCreationCacheControlFeatures.pipelineCreationCacheControl =
+            mPhysicalDevice13Features.pipelineCreationCacheControl;
+
+        // The feature structs for VK_EXT_extended_dynamic_state[2] are not promoted to core, and
+        // the extendedDynamicState[2] features are assumed.
+        mExtendedDynamicStateFeatures.extendedDynamicState   = true;
+        mExtendedDynamicState2Features.extendedDynamicState2 = true;
     }
 }
 
@@ -2289,8 +2415,20 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mPhysicalDevice11Properties       = {};
     mPhysicalDevice11Properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
 
+    mPhysicalDevice12Properties       = {};
+    mPhysicalDevice12Properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
+
+    mPhysicalDevice13Properties       = {};
+    mPhysicalDevice13Properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_PROPERTIES;
+
     mPhysicalDevice11Features       = {};
     mPhysicalDevice11Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
+
+    mPhysicalDevice12Features       = {};
+    mPhysicalDevice12Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+
+    mPhysicalDevice13Features       = {};
+    mPhysicalDevice13Features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
 
     mLineRasterizationFeatures = {};
     mLineRasterizationFeatures.sType =
@@ -2464,9 +2602,15 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     vkGetPhysicalDeviceFeatures2KHR(mPhysicalDevice, &deviceFeatures);
     vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
 
+    propagateDeviceExtensionFeatures();
+
     // Clean up pNext chains
     mPhysicalDevice11Properties.pNext                       = nullptr;
+    mPhysicalDevice12Properties.pNext                       = nullptr;
+    mPhysicalDevice13Properties.pNext                       = nullptr;
     mPhysicalDevice11Features.pNext                         = nullptr;
+    mPhysicalDevice12Features.pNext                         = nullptr;
+    mPhysicalDevice13Features.pNext                         = nullptr;
     mLineRasterizationFeatures.pNext                        = nullptr;
     mMemoryReportFeatures.pNext                             = nullptr;
     mProvokingVertexFeatures.pNext                          = nullptr;
@@ -2798,19 +2942,27 @@ void RendererVk::enableDeviceExtensionsPromotedTo11(
 
     if (isVulkan11Device())
     {
-        if (mFeatures.supportsMultiview.enabled)
+        // Note that VkPhysicalDeviceVulkan11Features was introduced in Vulkan 1.2
+        if (isVulkan12Device())
         {
-            vk::AddToPNextChain(&mEnabledFeatures, &mMultiviewFeatures);
+            vk::AddToPNextChain(&mEnabledFeatures, &mPhysicalDevice11Features);
         }
-
-        if (mFeatures.supportsYUVSamplerConversion.enabled)
+        else
         {
-            vk::AddToPNextChain(&mEnabledFeatures, &mSamplerYcbcrConversionFeatures);
-        }
+            if (mFeatures.supportsMultiview.enabled)
+            {
+                vk::AddToPNextChain(&mEnabledFeatures, &mMultiviewFeatures);
+            }
 
-        if (mFeatures.supportsProtectedMemory.enabled)
-        {
-            vk::AddToPNextChain(&mEnabledFeatures, &mProtectedMemoryFeatures);
+            if (mFeatures.supportsYUVSamplerConversion.enabled)
+            {
+                vk::AddToPNextChain(&mEnabledFeatures, &mSamplerYcbcrConversionFeatures);
+            }
+
+            if (mFeatures.supportsProtectedMemory.enabled)
+            {
+                vk::AddToPNextChain(&mEnabledFeatures, &mProtectedMemoryFeatures);
+            }
         }
 
         return;
@@ -2881,6 +3033,12 @@ void RendererVk::enableDeviceExtensionsPromotedTo11(
 void RendererVk::enableDeviceExtensionsPromotedTo12(
     const vk::ExtensionNameList &deviceExtensionNames)
 {
+    if (isVulkan12Device())
+    {
+        vk::AddToPNextChain(&mEnabledFeatures, &mPhysicalDevice12Features);
+        return;
+    }
+
     if (mFeatures.supportsRenderpass2.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
@@ -2925,6 +3083,21 @@ void RendererVk::enableDeviceExtensionsPromotedTo12(
 void RendererVk::enableDeviceExtensionsPromotedTo13(
     const vk::ExtensionNameList &deviceExtensionNames)
 {
+    if (isVulkan13Device())
+    {
+        vk::AddToPNextChain(&mEnabledFeatures, &mPhysicalDevice13Features);
+
+        // If using extendedDynamicState2LogicOp from VK_EXT_extended_dynamic_state2, enable the
+        // extension as that feature is not promoted to Vulkan 1.3.
+        if (mFeatures.supportsLogicOpDynamicState.enabled)
+        {
+            mEnabledDeviceExtensions.push_back(VK_EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME);
+            vk::AddToPNextChain(&mEnabledFeatures, &mExtendedDynamicState2Features);
+        }
+
+        return;
+    }
+
     if (mFeatures.supportsPipelineCreationCacheControl.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME);
@@ -3102,7 +3275,7 @@ void RendererVk::initExtensionEntryPoints()
             InitSamplerYcbcrKHRFunctions(mDevice);
         }
     }
-    // Extensions promoted to Vulkan 1.2
+    if (!isVulkan12Device())
     {
         if (mFeatures.supportsHostQueryReset.enabled)
         {
@@ -3113,7 +3286,7 @@ void RendererVk::initExtensionEntryPoints()
             InitRenderPass2KHRFunctions(mDevice);
         }
     }
-    // Extensions promoted to Vulkan 1.3
+    if (!isVulkan13Device())
     {
         if (mFeatures.supportsExtendedDynamicState.enabled)
         {
@@ -3151,6 +3324,28 @@ void RendererVk::initExtensionEntryPoints()
         if (mFeatures.supportsYUVSamplerConversion.enabled)
         {
             InitSamplerYcbcrKHRFunctionsFromCore();
+        }
+    }
+    if (isVulkan12Device())
+    {
+        if (mFeatures.supportsHostQueryReset.enabled)
+        {
+            InitHostQueryResetFunctionsFromCore();
+        }
+        if (mFeatures.supportsRenderpass2.enabled)
+        {
+            InitRenderPass2KHRFunctionsFromCore();
+        }
+    }
+    if (isVulkan13Device())
+    {
+        if (mFeatures.supportsExtendedDynamicState.enabled)
+        {
+            InitExtendedDynamicStateEXTFunctionsFromCore();
+        }
+        if (mFeatures.supportsExtendedDynamicState2.enabled)
+        {
+            InitExtendedDynamicState2EXTFunctionsFromCore();
         }
     }
 
@@ -3869,7 +4064,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // VK_EXT_pipeline_creation_feedback is promoted to core in Vulkan 1.3.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsPipelineCreationFeedback,
-        ExtensionFound(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME, deviceExtensionNames));
+        ExtensionFound(VK_EXT_PIPELINE_CREATION_FEEDBACK_EXTENSION_NAME, deviceExtensionNames) ||
+            isVulkan13Device());
 
     // Incomplete implementation on SwiftShader: http://issuetracker.google.com/234439593
     ANGLE_FEATURE_CONDITION(
@@ -3903,7 +4099,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsRenderpass2,
-        ExtensionFound(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME, deviceExtensionNames));
+        isVulkan12Device() ||
+            ExtensionFound(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsIncrementalPresent,
@@ -4188,7 +4385,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsImageFormatList,
-        ExtensionFound(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME, deviceExtensionNames));
+        isVulkan12Device() ||
+            ExtensionFound(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME, deviceExtensionNames));
 
     // Emulation of GL_EXT_multisampled_render_to_texture is only really useful on tiling hardware,
     // but is exposed on any configuration deployed on Android, such as Samsung's AMD-based GPU.

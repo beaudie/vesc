@@ -1281,6 +1281,41 @@ void InitBindMemory2KHRFunctionsFromCore()
     ASSIGN_FROM_CORE(vkBindImageMemory2, KHR);
 }
 
+void InitHostQueryResetFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkResetQueryPool, EXT);
+}
+
+void InitRenderPass2KHRFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCreateRenderPass2, KHR);
+}
+
+void InitExtendedDynamicStateEXTFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCmdBindVertexBuffers2, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetCullMode, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthBoundsTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthCompareOp, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetDepthWriteEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetFrontFace, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetPrimitiveTopology, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetScissorWithCount, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetStencilOp, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetStencilTestEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetViewportWithCount, EXT);
+}
+
+void InitExtendedDynamicState2EXTFunctionsFromCore()
+{
+    ASSIGN_FROM_CORE(vkCmdSetDepthBiasEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetPrimitiveRestartEnable, EXT);
+    ASSIGN_FROM_CORE(vkCmdSetRasterizerDiscardEnable, EXT);
+
+    // vkCmdSetLogicOpEXT and vkCmdSetPatchControlPointsEXT are not promoted to core.
+}
+
 #undef ASSIGN_FROM_CORE
 
 GLenum CalculateGenerateMipmapFilter(ContextVk *contextVk, angle::FormatID formatID)

@@ -305,6 +305,8 @@ class RendererVk : angle::NonCopyable
 
     bool isVulkan11Instance() const;
     bool isVulkan11Device() const;
+    bool isVulkan12Device() const;
+    bool isVulkan13Device() const;
 
     const vk::Allocator &getAllocator() const { return mAllocator; }
 
@@ -773,6 +775,12 @@ class RendererVk : angle::NonCopyable
         VkPhysicalDeviceFeatures2KHR *deviceFeatures,
         VkPhysicalDeviceProperties2 *deviceProperties);
 
+    // When features and properties are queried through VkPhysicalDeviceVulkan*Features/Properties,
+    // propagate the features and properties used by ANGLE into the specific extension structs.
+    // This is so that elsewhere we don't need to check which struct the feature or property is
+    // found in.
+    void propagateDeviceExtensionFeatures();
+
     angle::Result enableInstanceExtensions(DisplayVk *displayVk,
                                            const VulkanLayerVector &enabledInstanceLayerNames,
                                            const char *wsiExtension,
@@ -855,9 +863,13 @@ class RendererVk : angle::NonCopyable
 
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceVulkan11Properties mPhysicalDevice11Properties;
+    VkPhysicalDeviceVulkan12Properties mPhysicalDevice12Properties;
+    VkPhysicalDeviceVulkan13Properties mPhysicalDevice13Properties;
 
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     VkPhysicalDeviceVulkan11Features mPhysicalDevice11Features;
+    VkPhysicalDeviceVulkan12Features mPhysicalDevice12Features;
+    VkPhysicalDeviceVulkan13Features mPhysicalDevice13Features;
 
     VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
