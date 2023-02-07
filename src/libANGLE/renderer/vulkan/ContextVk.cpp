@@ -887,6 +887,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
+    INFO() << "INAZ: ContextVk::ContextVk() device: " << getDevice() << "; ContextVk: " << this
+           << "; LINE: " << __LINE__;
+
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -1155,6 +1158,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
 ContextVk::~ContextVk()
 {
+    INFO() << "INAZ: ContextVk::~ContextVk() device: " << getDevice() << "; ContextVk: " << this
+           << "; LINE: " << __LINE__;
+
     if (!mPipelineCacheGraph.str().empty())
     {
         DumpPipelineCacheGraph(this, mPipelineCacheGraph);
@@ -1163,6 +1169,10 @@ ContextVk::~ContextVk()
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    INFO() << "INAZ: ContextVk::onDestroy() device: " << getDevice() << "; ContextVk: " << this
+           << "; - BEGIN"
+           << "; LINE: " << __LINE__;
+
     // Remove context from the share group
     mShareGroupVk->removeContext(this);
 
@@ -1217,6 +1227,10 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         releaseQueueSerialIndex();
     }
+
+    INFO() << "INAZ: ContextVk::onDestroy() device: " << getDevice() << "; ContextVk: " << this
+           << "; - END"
+           << "; LINE: " << __LINE__;
 }
 
 VertexArrayVk *ContextVk::getVertexArray() const
@@ -1249,6 +1263,10 @@ angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
 
 angle::Result ContextVk::initialize()
 {
+    INFO() << "INAZ: ContextVk::initialize() device: " << getDevice() << "; ContextVk: " << this
+           << "; - BEGIN"
+           << "; LINE: " << __LINE__;
+
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
 
     ANGLE_TRY(mQueryPools[gl::QueryType::AnySamples].init(this, VK_QUERY_TYPE_OCCLUSION,
@@ -1365,6 +1383,10 @@ angle::Result ContextVk::initialize()
 
     // Allocate queueSerial index and generate queue serial for commands.
     ANGLE_TRY(allocateQueueSerialIndex());
+
+    INFO() << "INAZ: ContextVk::initialize() device: " << getDevice() << "; ContextVk: " << this
+           << "; - END"
+           << "; LINE: " << __LINE__;
 
     return angle::Result::Continue;
 }
@@ -6974,6 +6996,8 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
 
 void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask)
 {
+    INFO() << "INAZ: ContextVk::addWaitSemaphore() device: " << getDevice()
+           << "; handle: " << semaphore << "; ContextVk: " << this << "; LINE: " << __LINE__;
     mWaitSemaphores.push_back(semaphore);
     mWaitSemaphoreStageMasks.push_back(stageMask);
 }
@@ -7450,6 +7474,12 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (!mWaitSemaphores.empty())
     {
+        for (VkSemaphore semaphore : mWaitSemaphores)
+        {
+            INFO() << "INAZ: ContextVk::flushOutsideRenderPassCommands() device: " << getDevice()
+                   << "; handle: " << semaphore << "; ContextVk: " << this
+                   << "; LINE: " << __LINE__;
+        }
         mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
                                        std::move(mWaitSemaphoreStageMasks));
     }

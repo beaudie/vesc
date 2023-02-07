@@ -1421,6 +1421,8 @@ ANGLE_INLINE void Semaphore::destroy(VkDevice device)
 {
     if (valid())
     {
+        INFO() << "INAZ: Semaphore::destroy() device: " << device << "; handle: " << mHandle
+               << "; LINE: " << __LINE__;
         vkDestroySemaphore(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
@@ -1434,7 +1436,10 @@ ANGLE_INLINE VkResult Semaphore::init(VkDevice device)
     semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.flags                 = 0;
 
-    return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
+    const VkResult result = vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
+    INFO() << "INAZ:  Semaphore::init() device: " << device << "; handle: " << mHandle
+           << "; LINE: " << __LINE__;
+    return result;
 }
 
 ANGLE_INLINE VkResult Semaphore::importFd(VkDevice device,

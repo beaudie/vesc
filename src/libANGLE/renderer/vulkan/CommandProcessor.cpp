@@ -1044,6 +1044,12 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
     CommandsState &state = getCommandsState(hasProtectedContent);
 
+    for (VkSemaphore semaphore : state.waitSemaphores)
+    {
+        INFO() << "INAZ: CommandQueue::submitCommands() handle: " << semaphore << " (state)"
+               << "; LINE: " << __LINE__;
+    }
+
     // Don't make a submission if there is nothing to submit.
     PrimaryCommandBuffer &commandBuffer = state.primaryCommands;
     const bool hasAnyPendingCommands    = commandBuffer.valid();
@@ -1255,6 +1261,12 @@ void CommandQueue::flushWaitSemaphores(bool hasProtectedContent,
     state.waitSemaphoreStageMasks.insert(state.waitSemaphoreStageMasks.end(),
                                          waitSemaphoreStageMasks.begin(),
                                          waitSemaphoreStageMasks.end());
+
+    for (VkSemaphore semaphore : state.waitSemaphores)
+    {
+        INFO() << "INAZ: CommandQueue::flushWaitSemaphores() handle: " << semaphore << " (state)"
+               << "; LINE: " << __LINE__;
+    }
 
     waitSemaphores.clear();
     waitSemaphoreStageMasks.clear();

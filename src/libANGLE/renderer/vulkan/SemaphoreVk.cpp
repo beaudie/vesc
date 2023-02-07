@@ -24,6 +24,9 @@ SemaphoreVk::~SemaphoreVk() = default;
 void SemaphoreVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    INFO() << "INAZ: SemaphoreVk::onDestroy() device: " << contextVk->getDevice()
+           << "; handle: " << mSemaphore.getHandle() << "; ContextVk: " << contextVk
+           << "; LINE: " << __LINE__;
     contextVk->addGarbage(&mSemaphore);
 }
 
@@ -119,6 +122,10 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         }
     }
 
+    INFO() << "INAZ: SemaphoreVk::wait() device: " << contextVk->getDevice()
+           << "; handle: " << mSemaphore.getHandle() << "; ContextVk: " << contextVk
+           << "; - addWaitSemaphore()"
+           << "; LINE: " << __LINE__;
     contextVk->addWaitSemaphore(mSemaphore.getHandle(), VK_PIPELINE_STAGE_ALL_COMMANDS_BIT);
     return angle::Result::Continue;
 }
@@ -191,6 +198,10 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         ANGLE_TRY(contextVk->syncExternalMemory());
     }
 
+    INFO() << "INAZ: SemaphoreVk::signal() device: " << contextVk->getDevice()
+           << "; handle: " << mSemaphore.getHandle() << "; ContextVk: " << contextVk
+           << "; - flushImpl()"
+           << "; LINE: " << __LINE__;
     ANGLE_TRY(contextVk->flushImpl(&mSemaphore, RenderPassClosureReason::ExternalSemaphoreSignal));
 
     // The external has asked for the semaphore to be signaled.  It will wait on this semaphore and
@@ -214,6 +225,9 @@ angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)
     if (!mSemaphore.valid())
     {
         mSemaphore.init(renderer->getDevice());
+        INFO() << "INAZ: SemaphoreVk::importOpaqueFd() device: " << contextVk->getDevice()
+               << "; handle: " << mSemaphore.getHandle() << "; ContextVk: " << contextVk
+               << "; LINE: " << __LINE__;
     }
 
     ASSERT(mSemaphore.valid());
@@ -237,6 +251,9 @@ angle::Result SemaphoreVk::importZirconEvent(ContextVk *contextVk, GLuint handle
     if (!mSemaphore.valid())
     {
         mSemaphore.init(renderer->getDevice());
+        INFO() << "INAZ: SemaphoreVk::importZirconEvent() device: " << contextVk->getDevice()
+               << "; handle: " << mSemaphore.getHandle() << "; ContextVk: " << contextVk
+               << "; LINE: " << __LINE__;
     }
 
     ASSERT(mSemaphore.valid());

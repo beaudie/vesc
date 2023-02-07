@@ -458,6 +458,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         if (object->valid())
         {
             mCurrentGarbage.emplace_back(vk::GetGarbage(object));
+            if (mCurrentGarbage.back().mHandleType == vk::HandleType::Semaphore)
+            {
+                INFO() << "INAZ: ContextVk::addGarbage() device: " << getDevice()
+                       << "; handle: " << mCurrentGarbage.back().mHandle << " (VkSemaphore)"
+                       << "; ContextVk: " << this << "; LINE: " << __LINE__;
+            }
         }
     }
 
