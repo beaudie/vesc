@@ -16,6 +16,29 @@
       "message": "I had this lying around for what I previously thought was a bug (but wasn\u0027t). Could be good to have around now that so many multithreading-related changes are happening.",
       "revId": "f11148e1a9150cb56cbf04873ee11697e7c0b987",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02721a62_8821e8c8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-07T18:12:21Z",
+      "side": 1,
+      "message": "Thanks. That is exact what I was using locally testing with some of changes. you can use usleep(5), which is what I was using when do local test.",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 656,
+        "endChar": 0
+      },
+      "revId": "f11148e1a9150cb56cbf04873ee11697e7c0b987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
