@@ -16,6 +16,24 @@
       "message": "Charlie has modified CommandQueue a lot, and some of what\u0027s in the description of the change should already be addressed. I see others in the list that are interesting additions.\n\n@cclao@google.com could you please sync with Igor regarding how and when to move forward with these changes, who would own them etc?",
       "revId": "87c90d0e3785eb594b8fc3cc89a696d6e480004c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f1c046b_6ba4d0f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-07T15:06:11Z",
+      "side": 1,
+      "message": "\u003e Charlie has modified CommandQueue a lot, and some of what\u0027s in the description of the change should already be addressed. I see others in the list that are interesting additions.\n\nYes. This description accounts for the new `CommandQueue`. Differences in details.\nWhile `CommandQueue` uses mutex to allow access from contexts and the *asyncCommandQueue*, the `CommandQueue2` allow parallel access **without mutex**. For example: *asyncCommandQueue* may perform long submit operation (vkQueuePresentKHR(), for example), this would block context threads from performing any new tasks. `CommandQueue2` was designed initially to allow parallel execution of any job in the *asyncCommandQueue*, while allowing new tasks in the context threads. So the mutex is only used for context threads.\n\nOther difference, is that `CommandQueue2` supports simultaneously waiting for submission and completion on a GPU in a single operation. Mutex is unlocked once to wait for submission (if not submitted) and then wait for completion. `CommandQueue` on the other hand, supports only waiting for completion, waiting for submission is a responsibility for the `CommandProcessor`.\n\n`CommandQueue2` has wait for submission support because it also has additional submitting thread. I did not want back then to make a new infrastructure classes and make significant changes in the `CommandProcessor`. Everything should be in a single place, so it is easier to transfer to the new versions of Angle.",
+      "parentUuid": "f268cf4f_4c20f11c",
+      "revId": "87c90d0e3785eb594b8fc3cc89a696d6e480004c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
