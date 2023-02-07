@@ -211,6 +211,24 @@
       "parentUuid": "c66438c8_40740d6a",
       "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97eabf27_a3b035f8",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-07T08:06:50Z",
+      "side": 1,
+      "message": "Would it be still possible to not use the buffer manager buffers? \n1) They are never freed, and this causes potential massive increase in memory use\n2) They are never freed, and thus allocating arbitrary sizes causes even more potential of massive increase in memory use\n3) They are rounded up to next multiple of 2s power, potentially wasting memory\n4) They are individual buffers instead of previous contiguous areas of bigger buffers. This causes profileration of small buffers, the effects of which we do not know.\n\nProvided that:\ni) This is a bug fix\nii) BufferPool remains in use after this fix\n\nIt appears that there is nothing won in this bug fix by using the buffer manager buffers.\n\nGiven these facts, could the bug fix just be a bug fix, and then bigger architectural change would be a separate bigger architectural change?",
+      "parentUuid": "107f28c0_a5e66fba",
+      "revId": "897b0ab4cc44f2649392520bb4e980d5a95728cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
