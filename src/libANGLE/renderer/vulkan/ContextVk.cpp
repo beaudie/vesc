@@ -887,6 +887,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mShareGroupVk(vk::GetImpl(state.getShareGroup()))
 {
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this;
+
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
     memset(&mClearDepthStencilValue, 0, sizeof(mClearDepthStencilValue));
@@ -1155,6 +1157,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
 ContextVk::~ContextVk()
 {
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this;
+
     if (!mPipelineCacheGraph.str().empty())
     {
         DumpPipelineCacheGraph(this, mPipelineCacheGraph);
@@ -1163,6 +1167,8 @@ ContextVk::~ContextVk()
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this << "; - BEGIN";
+
     // Remove context from the share group
     mShareGroupVk->removeContext(this);
 
@@ -1217,6 +1223,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         releaseQueueSerialIndex();
     }
+
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this << "; - END";
 }
 
 VertexArrayVk *ContextVk::getVertexArray() const
@@ -1249,6 +1257,8 @@ angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
 
 angle::Result ContextVk::initialize()
 {
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this << "; - BEGIN";
+
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
 
     ANGLE_TRY(mQueryPools[gl::QueryType::AnySamples].init(this, VK_QUERY_TYPE_OCCLUSION,
@@ -1365,6 +1375,8 @@ angle::Result ContextVk::initialize()
 
     // Allocate queueSerial index and generate queue serial for commands.
     ANGLE_TRY(allocateQueueSerialIndex());
+
+    INFO() << "INAZ: device: " << getDevice() << "; ContextVk: " << this << "; - END";
 
     return angle::Result::Continue;
 }
@@ -6974,6 +6986,8 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
 
 void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask)
 {
+    INFO() << "INAZ: device: " << getDevice() << "; handle: " << semaphore
+           << "; ContextVk: " << this;
     mWaitSemaphores.push_back(semaphore);
     mWaitSemaphoreStageMasks.push_back(stageMask);
 }
@@ -7450,6 +7464,11 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
     if (!mWaitSemaphores.empty())
     {
+        for (VkSemaphore semaphore : mWaitSemaphores)
+        {
+            INFO() << "INAZ: device: " << getDevice() << "; handle: " << semaphore
+                   << "; ContextVk: " << this;
+        }
         mRenderer->flushWaitSemaphores(hasProtectedContent(), std::move(mWaitSemaphores),
                                        std::move(mWaitSemaphoreStageMasks));
     }

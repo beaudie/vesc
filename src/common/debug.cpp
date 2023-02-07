@@ -56,13 +56,13 @@ constexpr const char *LogSeverityName(int severity)
 
 bool ShouldCreateLogMessage(LogSeverity severity)
 {
-#if defined(ANGLE_TRACE_ENABLED)
+    // #if defined(ANGLE_TRACE_ENABLED)
     return true;
-#elif defined(ANGLE_ENABLE_ASSERTS)
-    return severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN;
-#else
-    return severity == LOG_FATAL || severity == LOG_ERR;
-#endif
+    // #elif defined(ANGLE_ENABLE_ASSERTS)
+    //     return severity == LOG_FATAL || severity == LOG_ERR || severity == LOG_WARN;
+    // #else
+    //     return severity == LOG_FATAL || severity == LOG_ERR;
+    // #endif
 }
 
 }  // namespace
@@ -171,7 +171,7 @@ LogMessage::LogMessage(const char *file, const char *function, int line, LogSeve
     : mFile(file), mFunction(function), mLine(line), mSeverity(severity)
 {
     // INFO() and EVENT() do not require additional function(line) info.
-    if (mSeverity > LOG_INFO)
+    // if (mSeverity > LOG_INFO)
     {
         const char *slash = std::max(strrchr(mFile, '/'), strrchr(mFile, '\\'));
         mStream << (slash ? (slash + 1) : mFile) << ":" << mLine << " (" << mFunction << "): ";

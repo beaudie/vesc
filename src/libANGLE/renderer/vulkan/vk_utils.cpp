@@ -743,6 +743,7 @@ void GarbageObject::destroy(RendererVk *renderer)
     {
         case HandleType::Semaphore:
             vkDestroySemaphore(device, (VkSemaphore)mHandle, nullptr);
+            INFO() << "INAZ: device: " << device << "; handle: " << mHandle << " (VkSemaphore)";
             break;
         case HandleType::CommandBuffer:
             // Command buffers are pool allocated.
