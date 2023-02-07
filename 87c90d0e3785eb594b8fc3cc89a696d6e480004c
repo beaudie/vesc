@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f268cf4f_4c20f11c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:38:48Z",
+      "side": 1,
+      "message": "Charlie has modified CommandQueue a lot, and some of what\u0027s in the description of the change should already be addressed. I see others in the list that are interesting additions.\n\n@cclao@google.com could you please sync with Igor regarding how and when to move forward with these changes, who would own them etc?",
+      "revId": "87c90d0e3785eb594b8fc3cc89a696d6e480004c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
