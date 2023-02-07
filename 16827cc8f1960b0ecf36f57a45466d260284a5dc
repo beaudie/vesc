@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2bd0ed81_0d742b45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-02-07T22:14:17Z",
+      "side": 1,
+      "message": "`transformFeedback` \u0026\u0026 (`primitivesGeneratedQuery || exposeNonConformantExtensionsAndVersions`) makes sense to me. Thanks!",
+      "parentUuid": "27e5520c_14f5fed8",
+      "revId": "16827cc8f1960b0ecf36f57a45466d260284a5dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45e9129d_3b0843b0",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 3
