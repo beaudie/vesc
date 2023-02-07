@@ -393,10 +393,11 @@ class CommandQueue : angle::NonCopyable
     angle::Result finishOneCommandBatch(Context *context, uint64_t timeout);
 
     angle::Result queueSubmit(Context *context,
-                              egl::ContextPriority contextPriority,
+                              std::unique_lock<std::mutex> &dequeueLock,
+                              VkQueue queue,
                               const VkSubmitInfo &submitInfo,
                               const Fence *fence,
-                              const QueueSerial &submitQueueSerial);
+                              CommandBatch &&commandBatch);
 
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
@@ -433,8 +434,12 @@ class CommandQueue : angle::NonCopyable
         return getCommandsState(hasProtectedContent).primaryCommandPool;
     }
 
-    // Protect multi-thread access to mInFlightCommands and other data memebers of this class.
+    // Protect multi-thread access to mInFlightCommands.pop and ensure ordering of submission.
     mutable std::mutex mMutex;
+    // Protect multi-thread access to mInFlightCommands.push as well as does lock relay for mMutex
+    // so that we can release mMutex while doing potential lengthy vkQueueSubmit and vkQueuePresent
+    // call.
+    std::mutex mQueueSubmitMutex;
     CommandBatchQueue mInFlightCommands;
 
     angle::PackedEnumMap<CommandContent, CommandsState> mCommandsStateMap;
