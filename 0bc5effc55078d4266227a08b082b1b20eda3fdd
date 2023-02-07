@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5d38188_1213601c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:29:47Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "0bc5effc55078d4266227a08b082b1b20eda3fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10232096_c2c1bf4a",
@@ -53,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54e8d133_540cdbe4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:29:47Z",
+      "side": 1,
+      "message": "Ack, missed that",
+      "parentUuid": "7ee0b64e_212042e3",
+      "revId": "0bc5effc55078d4266227a08b082b1b20eda3fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad0c0dce_2b9a2c36",
@@ -84,6 +119,24 @@
       "side": 1,
       "message": "And what about `CommandQueue`/`CommandProcessor`? Made them friends or add additional methods?\n\nI made this `struct` to avoid having complex interface and put implementation in separate classes.",
       "parentUuid": "ad0c0dce_2b9a2c36",
+      "revId": "0bc5effc55078d4266227a08b082b1b20eda3fdd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59688cdb_80640c32",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-07T14:29:47Z",
+      "side": 1,
+      "message": "Ok that\u0027s fair",
+      "parentUuid": "7445c98c_c639e6c7",
       "revId": "0bc5effc55078d4266227a08b082b1b20eda3fdd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
