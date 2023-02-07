@@ -664,6 +664,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                 task->getWaitSemaphoreStageMasks(), task->getSemaphore(),
                 std::move(task->getCommandBuffersToReset()), task->getCommandPools(),
                 task->getSubmitQueueSerial()));
+            ANGLE_TRY(mCommandQueue->postSubmitCheck(this));
             break;
         }
         case CustomTask::OneOffQueueSubmit:
@@ -1082,8 +1083,12 @@ angle::Result CommandQueue::submitCommands(
 
     // Don't make a submission if there is nothing to submit.
     PrimaryCommandBuffer &commandBuffer = getCommandBuffer(hasProtectedContent);
-    const bool hasAnyPendingCommands    = commandBuffer.valid();
-    if (hasAnyPendingCommands || signalSemaphore != VK_NULL_HANDLE || !waitSemaphores.empty())
+    // Store the primary CommandBuffer in the in-flight list.
+    batch.primaryCommands = std::move(commandBuffer);
+
+    const bool needsQueueSubmit =
+        commandBuffer.valid() || signalSemaphore != VK_NULL_HANDLE || !waitSemaphores.empty();
+    if (needsQueueSubmit)
     {
         if (commandBuffer.valid())
         {
@@ -1114,10 +1119,15 @@ angle::Result CommandQueue::submitCommands(
         mLastSubmittedSerials.setQueueSerial(submitQueueSerial);
     }
 
-    // Store the primary CommandBuffer in the in-flight list.
-    batch.primaryCommands = std::move(commandBuffer);
     mInFlightCommands.push(scopedBatch.release());
 
+    return angle::Result::Continue;
+}
+
+angle::Result CommandQueue::postSubmitCheck(Context *context)
+{
+    std::unique_lock<std::mutex> lock(mMutex);
+    RendererVk *renderer = context->getRenderer();
     int finishedCount;
     ANGLE_TRY(checkCompletedCommandCount(context, &finishedCount));
     if (finishedCount > 0)
@@ -1135,6 +1145,11 @@ angle::Result CommandQueue::submitCommands(
     {
         ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
+    }
+
+    if (kOutputVmaStatsString)
+    {
+        renderer->outputVmaStatString();
     }
 
     return angle::Result::Continue;
@@ -1344,6 +1359,25 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result CommandQueue::queueSubmit(Context *context,
+                                        egl::ContextPriority contextPriority,
+                                        const VkSubmitInfo &submitInfo,
+                                        const Fence *fence,
+                                        const QueueSerial &submitQueueSerial)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::queueSubmit");
+
+    VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
+    VkQueue queue       = getQueue(contextPriority);
+    ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
+
+    mLastSubmittedSerials.setQueueSerial(submitQueueSerial);
+
+    ++mPerfCounters.vkQueueSubmitCallsTotal;
+    ++mPerfCounters.vkQueueSubmitCallsPerFrame;
+    return angle::Result::Continue;
+}
+
 VkResult CommandQueue::queuePresent(egl::ContextPriority contextPriority,
                                     const VkPresentInfoKHR &presentInfo)
 {
@@ -1516,32 +1550,6 @@ angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
     beginInfo.pInheritanceInfo         = nullptr;
     ANGLE_VK_TRY(context, commandBuffer.begin(beginInfo));
 
-    return angle::Result::Continue;
-}
-
-angle::Result CommandQueue::queueSubmit(Context *context,
-                                        egl::ContextPriority contextPriority,
-                                        const VkSubmitInfo &submitInfo,
-                                        const Fence *fence,
-                                        const QueueSerial &submitQueueSerial)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::queueSubmit");
-
-    RendererVk *renderer = context->getRenderer();
-
-    if (kOutputVmaStatsString)
-    {
-        renderer->outputVmaStatString();
-    }
-
-    VkFence fenceHandle = fence ? fence->getHandle() : VK_NULL_HANDLE;
-    VkQueue queue       = getQueue(contextPriority);
-    ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fenceHandle));
-
-    mLastSubmittedSerials.setQueueSerial(submitQueueSerial);
-
-    ++mPerfCounters.vkQueueSubmitCallsTotal;
-    ++mPerfCounters.vkQueueSubmitCallsPerFrame;
     return angle::Result::Continue;
 }
 
