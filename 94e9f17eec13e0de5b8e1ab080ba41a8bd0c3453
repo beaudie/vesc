@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be3e2afa_1277b0fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-07T18:10:11Z",
+      "side": 1,
+      "message": "Thanks so much for your quick reviews!",
+      "revId": "94e9f17eec13e0de5b8e1ab080ba41a8bd0c3453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b62aa5b_e1753634",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-02-07T18:05:33Z",
       "side": 1,
       "message": "Is passing lg enough for that, even if it\u0027s unused?",
+      "revId": "94e9f17eec13e0de5b8e1ab080ba41a8bd0c3453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89c5c45a_d8bae9c0",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-07T18:10:11Z",
+      "side": 1,
+      "message": "I think so. WebKit uses this pattern. Passing the reference ensures statically that these functions are called while a lock guard is active higher up on the stack.",
+      "parentUuid": "9b62aa5b_e1753634",
       "revId": "94e9f17eec13e0de5b8e1ab080ba41a8bd0c3453",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
