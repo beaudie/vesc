@@ -378,7 +378,7 @@ class GarbageObject
                              (GarbageHandle)(object->release()));
     }
 
-  private:
+  public:
     VK_DEFINE_NON_DISPATCHABLE_HANDLE(GarbageHandle)
     GarbageObject(HandleType handleType, GarbageHandle handle);
 

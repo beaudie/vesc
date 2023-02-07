@@ -360,6 +360,9 @@ angle::Result NewSemaphore(vk::Context *context,
     if (semaphoreRecycler->empty())
     {
         ANGLE_VK_TRY(context, semaphoreOut->init(context->getDevice()));
+        ERR() << "INAZ: device: " << context->getDevice()
+              << "; handle: " << semaphoreOut->getHandle()
+              << "; ContextVk: " << (ContextVk *)context;
     }
     else
     {
@@ -767,6 +770,8 @@ void SwapchainCleanupData::destroy(VkDevice device, vk::Recycler<vk::Semaphore> 
 
     for (vk::Semaphore &semaphore : semaphores)
     {
+        ERR() << "INAZ: device: " << device << "; handle: " << semaphore.getHandle()
+              << "; - semaphoreRecycler->recycle()";
         semaphoreRecycler->recycle(std::move(semaphore));
     }
     semaphores.clear();
@@ -806,6 +811,8 @@ void ImagePresentOperation::destroy(VkDevice device,
     // up.  That fence is placed in the present history just for clean up purposes.
     if (semaphore.valid())
     {
+        ERR() << "INAZ: device: " << device << "; handle: " << semaphore.getHandle()
+              << "; - semaphoreRecycler->recycle()";
         semaphoreRecycler->recycle(std::move(semaphore));
     }
 
@@ -902,6 +909,8 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     for (vk::Semaphore &semaphore : mAcquireImageSemaphores)
     {
+        ERR() << "INAZ: device: " << device << "; handle: " << semaphore.getHandle()
+              << "; - semaphore.destroy(device)";
         semaphore.destroy(device);
     }
     for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
@@ -916,6 +925,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         mSurface = VK_NULL_HANDLE;
     }
 
+    ERR() << "INAZ: device: " << device << "; - mPresentSemaphoreRecycler.destroy()";
     mPresentSemaphoreRecycler.destroy(device);
     mPresentFenceRecycler.destroy(device);
 
@@ -1155,6 +1165,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     for (vk::Semaphore &semaphore : mAcquireImageSemaphores)
     {
         ANGLE_VK_TRY(displayVk, semaphore.init(displayVk->getDevice()));
+        ERR() << "INAZ: device: " << renderer->getDevice() << "; handle: " << semaphore.getHandle();
     }
 
     VkResult vkResult = acquireNextSwapchainImage(displayVk);
@@ -1820,6 +1831,10 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     // with other functionality, especially counters used to validate said functionality.
     const bool shouldDrawOverlay = overlayHasEnabledWidget(contextVk);
 
+    ERR() << "INAZ: device: " << renderer->getDevice()
+          << "; handle: " << presentSemaphore.getHandle() << "; ContextVk: " << contextVk
+          << "; - flushImpl()";
+
     ANGLE_TRY(contextVk->flushImpl(shouldDrawOverlay ? nullptr : &presentSemaphore,
                                    RenderPassClosureReason::EGLSwapBuffers));
 
@@ -1846,6 +1861,9 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // Get a new semaphore to use for present.
     vk::Semaphore presentSemaphore;
     ANGLE_TRY(NewSemaphore(contextVk, &mPresentSemaphoreRecycler, &presentSemaphore));
+    ERR() << "INAZ: device: " << renderer->getDevice()
+          << "; handle: " << presentSemaphore.getHandle() << "; ContextVk: " << contextVk
+          << " - NewSemaphore()";
 
     // Make a submission before present to flush whatever's pending.  In the very least, a
     // submission is necessary to make sure the present semaphore is signaled.
@@ -2153,6 +2171,9 @@ void WindowSurfaceVk::flushAcquireImageSemaphore(const gl::Context *context)
 {
     ASSERT(mAcquireImageSemaphore);
     ContextVk *contextVk = vk::GetImpl(context);
+    ERR() << "INAZ: device: " << contextVk->getDevice()
+          << "; handle: " << mAcquireImageSemaphore->getHandle() << "; ContextVk: " << contextVk
+          << "; - addWaitSemaphore()";
     contextVk->addWaitSemaphore(mAcquireImageSemaphore->getHandle(),
                                 VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT);
     mAcquireImageSemaphore = nullptr;
@@ -2177,6 +2198,8 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     }
 
     const vk::Semaphore *acquireImageSemaphore = &mAcquireImageSemaphores.front();
+    ERR() << "INAZ: device: " << context->getDevice()
+          << "; handle: " << acquireImageSemaphore->getHandle();
 
     // Associate a fence with this acquire.  It will be used to know when to recycle the semaphore
     // used to previously present the returned image.  Note that while this fence is provided to
