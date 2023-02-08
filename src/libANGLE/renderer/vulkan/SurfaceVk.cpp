@@ -2316,10 +2316,8 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
                 return VK_ERROR_OUT_OF_DATE_KHR;
             }
             QueueSerial queueSerial;
-            // TODO: Passing "vk::CommandContent::Unprotected" is a bug and will be fixed in the
-            // next CL.
             if (rendererVk->queueSubmitOneOff(
-                    context, std::move(primaryCommandBuffer), vk::CommandContent::Unprotected,
+                    context, std::move(primaryCommandBuffer), commandContent,
                     egl::ContextPriority::Medium, acquireImageSemaphore,
                     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, nullptr,
                     vk::SubmitPolicy::EnsureSubmitted, &queueSerial) != angle::Result::Continue)
