@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db096546_bc35881b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-08T23:18:15Z",
+      "side": 1,
+      "message": "I also ran the capture/replay tests for `*MipmapTest.*/ES2_Vulkan` (no `_SwiftShader`), and the same tests fail locally.\n\nMany elements in texel levels seem to have become 0s in the replay JSON file.\nExample:\n-*Capture*:\n```\n                \"Texels-Level0-Layer0-hash\": \"SHA1:193FAC92343EC4D0E582B21D8A60EE7BF06ED397\",\n                \"Texels-Level0-Layer0-raw[0-15]\": [\n                    255,\n                    255,\n                    0,\n                    255,\n                    255,\n                    0,\n                    255,\n                    255,\n                    0,\n                    255,\n                    255,\n                    0,\n                    255,\n                    255,\n                    0,\n                    255\n                ],\n                \"Texels-Level0-Layer1-hash\": \"SHA1:6EAA115D3259099E550A8E783FA8BD870A089345\",\n                \"Texels-Level0-Layer1-raw[0-15]\": [\n                    255,\n                    0,\n                    0,\n                    0,\n                    255,\n                    0,\n                    0,\n                    0,\n                    255,\n                    0,\n                    0,\n                    255,\n                    0,\n                    0,\n                    255,\n                    0\n                ],\n```\n-*Replay*:\n```\n                \"Texels-Level0-Layer0-hash\": \"SHA1:F6CE5D67C927E731B75708EAB381320BE66E9F9D\",\n                \"Texels-Level0-Layer0-raw[0-15]\": [\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0\n                ],\n                \"Texels-Level0-Layer1-hash\": \"SHA1:6C699B14FA1B7AF4686000E725E3E1517451C574\",\n                \"Texels-Level0-Layer1-raw[0-15]\": [\n                    255,\n                    0,\n                    0,\n                    0,\n                    255,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0,\n                    0\n                ],\n```\nI tried capturing the tests in RenderDoc. The images look the same.",
+      "parentUuid": "1e95cc58_8684eb56",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fd77ce8_a3457dde",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 33
