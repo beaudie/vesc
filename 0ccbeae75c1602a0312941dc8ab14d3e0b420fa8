@@ -34,6 +34,40 @@
       "parentUuid": "a2029001_165950bb",
       "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed0efe71_6d205224",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-08T18:52:41Z",
+      "side": 1,
+      "message": "Removing +1 for the moment.",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ddc6f38_f8791102",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-08T18:52:41Z",
+      "side": 1,
+      "message": "I\u0027m not sure whether this will build properly for real iOS hardware. Could you add another #if arm handling the simulator specifically?",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
