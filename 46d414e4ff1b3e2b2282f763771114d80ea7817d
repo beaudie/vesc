@@ -160,6 +160,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9617288_25bd05f4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T19:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8465bc7e_37dc89ec",
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c51c678a_50e57fc5",
@@ -197,6 +215,30 @@
       "side": 1,
       "message": "Ok.",
       "parentUuid": "c51c678a_50e57fc5",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 60
+      },
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f3a9927_2e9c3855",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T19:29:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2acfef64_6f018b0a",
       "range": {
         "startLine": 31,
         "startChar": 0,
