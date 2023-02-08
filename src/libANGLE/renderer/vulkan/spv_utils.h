@@ -50,7 +50,6 @@ SpvSourceOptions SpvCreateSourceOptions(const angle::FeaturesVk &features);
 struct SpvTransformOptions
 {
     gl::ShaderType shaderType           = gl::ShaderType::InvalidEnum;
-    bool negativeViewportSupported      = false;
     bool removeDebugInfo                = false;
     bool isLastPreFragmentStage         = false;
     bool isTransformFeedbackStage       = false;

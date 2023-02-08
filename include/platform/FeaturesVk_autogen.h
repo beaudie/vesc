@@ -482,13 +482,6 @@ struct FeaturesVk : FeatureSetBase
         "Emulate r32f images with r32ui to support imageAtomicExchange.", &members,
         "http://anglebug.com/5535"};
 
-    FeatureInfo supportsNegativeViewport = {
-        "supportsNegativeViewport",
-        FeatureCategory::VulkanFeatures,
-        "The driver supports inverting the viewport with a negative height.",
-        &members,
-    };
-
     FeatureInfo forceFragmentShaderPrecisionHighpToMediump = {
         "forceFragmentShaderPrecisionHighpToMediump", FeatureCategory::VulkanWorkarounds,
         "Forces highp precision in fragment shader to mediump.", &members,

@@ -271,7 +271,6 @@ enum class Feature
     SupportsMultisampledRenderToSingleSampled,
     SupportsMultisampledRenderToSingleSampledGOOGLEX,
     SupportsMultiview,
-    SupportsNegativeViewport,
     SupportsPipelineCreationCacheControl,
     SupportsPipelineCreationFeedback,
     SupportsPipelineProtectedAccess,
