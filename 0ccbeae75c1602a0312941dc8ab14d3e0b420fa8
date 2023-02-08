@@ -140,6 +140,24 @@
       "parentUuid": "394ab692_24653ce9",
       "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09289db8_0f3cca4f",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2023-02-08T20:45:32Z",
+      "side": 1,
+      "message": "Confirmed, this was due to the hacked SDK. After restoring to a clean version of XCode I cannot reproduce the failure. Sorry for the noise.",
+      "parentUuid": "702a54bb_ccd38497",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
