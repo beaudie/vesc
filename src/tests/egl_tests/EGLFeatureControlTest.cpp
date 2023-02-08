@@ -137,13 +137,11 @@ void EGLFeatureControlTest::testOverrideFeatures(FeatureNameModifier modifyName)
     std::vector<std::string> modifiedNameStorage = std::vector<std::string>();
     std::vector<bool> shouldBe                   = std::vector<bool>();
     std::vector<std::string> testedFeatures      = {
-             // Safe to toggle on GL
+        // Safe to toggle on GL
         angle::GetFeatureName(angle::Feature::AddAndTrueToLoopCondition),
         angle::GetFeatureName(angle::Feature::ClampFragDepth),
         // Safe to toggle on GL and Vulkan
         angle::GetFeatureName(angle::Feature::ClampPointSize),
-        // Safe to toggle on Vulkan
-        angle::GetFeatureName(angle::Feature::SupportsNegativeViewport),
         // Safe to toggle on D3D
         angle::GetFeatureName(angle::Feature::ZeroMaxLodWorkaround),
         angle::GetFeatureName(angle::Feature::ExpandIntegerPowExpressions),
