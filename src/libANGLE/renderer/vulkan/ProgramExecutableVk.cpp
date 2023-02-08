@@ -74,11 +74,10 @@ bool ValidateTransformedSpirV(const ContextVk *contextVk,
     for (gl::ShaderType shaderType : linkedShaderStages)
     {
         SpvTransformOptions options;
-        options.shaderType                = shaderType;
-        options.negativeViewportSupported = false;
-        options.removeDebugInfo           = true;
-        options.isLastPreFragmentStage    = shaderType == lastPreFragmentStage;
-        options.isTransformFeedbackStage  = shaderType == lastPreFragmentStage;
+        options.shaderType               = shaderType;
+        options.removeDebugInfo          = true;
+        options.isLastPreFragmentStage   = shaderType == lastPreFragmentStage;
+        options.isTransformFeedbackStage = shaderType == lastPreFragmentStage;
         options.useSpirvVaryingPrecisionFixer =
             contextVk->getFeatures().varyingsRequireMatchingPrecisionInSpirv.enabled;
 
@@ -344,7 +343,6 @@ angle::Result ProgramInfo::initProgram(ContextVk *contextVk,
     options.isTransformFeedbackStage = isLastPreFragmentStage && isTransformFeedbackProgram &&
                                        !optionBits.removeTransformFeedbackEmulation;
     options.isTransformFeedbackEmulated = contextVk->getFeatures().emulateTransformFeedback.enabled;
-    options.negativeViewportSupported   = contextVk->getFeatures().supportsNegativeViewport.enabled;
     options.isMultisampledFramebufferFetch =
         optionBits.multiSampleFramebufferFetch && shaderType == gl::ShaderType::Fragment;
 
