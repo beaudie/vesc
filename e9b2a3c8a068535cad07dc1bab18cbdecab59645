@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acd777fe_c9d96243",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T18:41:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96dc5be7_34fe1e64",
+      "range": {
+        "startLine": 84,
+        "startChar": 31,
+        "endLine": 84,
+        "endChar": 45
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0b3184a_4361a11b",
@@ -72,6 +96,30 @@
       "writtenOn": "2023-02-08T01:19:31Z",
       "side": 1,
       "message": "So ANGLE will continue to work with Vulkan 1.0 drivers?",
+      "range": {
+        "startLine": 1602,
+        "startChar": 4,
+        "endLine": 1602,
+        "endChar": 30
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b57337e1_848dc084",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1602,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T18:41:02Z",
+      "side": 1,
+      "message": "Per the other replay, yes in this change (as much as it did before the change). I\u0027ll follow up with a change that drops support for 1.0 and we can discuss whether we can accept that right now.",
+      "parentUuid": "d0b3184a_4361a11b",
       "range": {
         "startLine": 1602,
         "startChar": 4,
@@ -105,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c22716c3_a01b1d9d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T18:41:02Z",
+      "side": 1,
+      "message": "Ditto",
+      "parentUuid": "7110cca8_804ab2d9",
+      "range": {
+        "startLine": 1604,
+        "startChar": 7,
+        "endLine": 1604,
+        "endChar": 81
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fca377e1_9065f5c2",
@@ -118,6 +190,30 @@
       "writtenOn": "2023-02-08T01:19:31Z",
       "side": 1,
       "message": "nit: I didn\u0027t notice at first, but this feature bit is enabled for both 1.1 **and** if the extension is present.  A comment might be in order (or just go with requiring 1.1:-).",
+      "range": {
+        "startLine": 1611,
+        "startChar": 12,
+        "endLine": 1611,
+        "endChar": 63
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6b123a5_50cd5ed0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T18:41:02Z",
+      "side": 1,
+      "message": "Yeah, some features are like that. Let\u0027s just get rid of 1.0",
+      "parentUuid": "fca377e1_9065f5c2",
       "range": {
         "startLine": 1611,
         "startChar": 12,
