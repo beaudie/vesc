@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec0e75cf_4def0822",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T00:38:19Z",
+      "side": 1,
+      "message": "No need. Will abandon the change.",
+      "parentUuid": "95ff3df3_9fb196c5",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47cd06b0_49efca6b",
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "How expensive depends if there is/are waiter(s).\n\nThis is very old numbers from 2019:\nnotify_all()  - 0 waiters --  1.8 micro-sec\nnotify_all()  - 1 waiter  -- 11.2 micro-sec\nnotify_all()  - 3 waiters -- 22.3 micro-sec\nnotify_one()  - 0 waiter  --  1.8 micro-sec\nnotify_one()  - 1 waiter  -- 11.4 micro-sec\nnotify_one()  - 3 waiters -- 11.3 micro-sec\n\nThis optimization will avoid 1.8 micro-sec of overhead.\n\nI may do new tests.",
       "parentUuid": "47cd06b0_49efca6b",
+      "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "309fcef2_02c22e14",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T00:38:19Z",
+      "side": 1,
+      "message": "Performed new quick tests.\nDifference between `std::condition_variable::notify_all()` and `CondVarHelper::notifyAll()` is **3:1**.\n\nHowever, there is always a mutex lock/unlock pair + other code along side the notify.\n\nDifference in performance of sequence `lock/unlock/notify_all` and `lock/unlock/notifyAll` is **30:29** on one device, or **30:31** on another. Numbers also represent a relation to a single notify call.\n\nSo in the real-world there is no benefit and no worth extra code and complexity.",
+      "parentUuid": "38f216fd_b936ee97",
       "revId": "f0e6c1ac47a7a30921059cec642e04757341dbf2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
