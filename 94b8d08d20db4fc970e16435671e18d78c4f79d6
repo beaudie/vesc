@@ -34,6 +34,24 @@
       "parentUuid": "f39f82e3_c155f825",
       "revId": "94b8d08d20db4fc970e16435671e18d78c4f79d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed41a472_73045e50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-02-08T21:54:18Z",
+      "side": 1,
+      "message": "yeah. having no way to test that config the `#if !defined(ANGLE_SHARED_LIBVULKAN)` code path has tripped me up a few times",
+      "parentUuid": "9456d58c_4bff0063",
+      "revId": "94b8d08d20db4fc970e16435671e18d78c4f79d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
