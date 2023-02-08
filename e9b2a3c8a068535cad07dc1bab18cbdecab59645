@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bd26d91_dde6a1db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T02:45:48Z",
+      "side": 1,
+      "message": "I think I tried it back in December when I first did this, and ANGLE does work to some extent on Vulkan 1.0 devices. I _do_ want to drop support for Vulkan 1.0, but I was hoping to make that decision separately (especially considering impact on Chromium).\n\nThis change is just reorganizing stuff.",
+      "parentUuid": "047abc3e_83b27fae",
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96dc5be7_34fe1e64",
