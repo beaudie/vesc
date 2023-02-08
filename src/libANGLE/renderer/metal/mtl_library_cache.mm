@@ -18,6 +18,18 @@ namespace rx
 namespace mtl
 {
 
+AutoObjCPtr<id<MTLLibrary>> LibraryCache::get(const std::string &source,
+                                              const std::map<std::string, std::string> &macros,
+                                              bool enableFastMath)
+{
+    LibraryKey::LValueTuple key            = std::tie(source, macros, enableFastMath);
+    LibraryCache::LibraryCacheEntry &entry = getCacheEntry(key);
+
+    // Purposely do not lock this cache entry before returning the library. We don't want to block
+    // this thread on a cache check while other threads may be compiling
+    return entry.library;
+}
+
 AutoObjCPtr<id<MTLLibrary>> LibraryCache::getOrCompileShaderLibrary(
     ContextMtl *context,
     const std::string &source,
@@ -32,27 +44,39 @@ AutoObjCPtr<id<MTLLibrary>> LibraryCache::getOrCompileShaderLibrary(
                                    errorOut);
     }
 
-    LibraryKey::LValueTuple lValueKey = std::tie(source, macros, enableFastMath);
-#if ANGLE_HAS_HASH_MAP_GENERIC_LOOKUP
-    const LibraryKey::LValueTuple &key = lValueKey;
-#else
-    LibraryKey key(lValueKey);
-#endif  // ANGLE_HAS_HASH_MAP_GENERIC_LOOKUP
+    LibraryKey::LValueTuple key            = std::tie(source, macros, enableFastMath);
+    LibraryCache::LibraryCacheEntry &entry = getCacheEntry(key);
 
-    auto iter = mCache.find(key);
+    // Lock this cache entry while compiling the shader. This causes other threads calling this
+    // function to wait and not duplicate the compilation.
+    std::lock_guard<std::mutex> entryLockGuard(entry.lock);
+
+    if (!entry.library)
+    {
+        entry.library = CreateShaderLibrary(context->getMetalDevice(), source, macros,
+                                            enableFastMath, errorOut);
+    }
+
+    return entry.library;
+}
+
+LibraryCache::LibraryCacheEntry &LibraryCache::getCacheEntry(
+    const LibraryKey::LValueTuple &lValueKey)
+{
+    // Lock while searching or adding new items to the cache.
+    std::lock_guard<std::mutex> cacheLockGuard(mCacheLock);
+
+#if ANGLE_HAS_HASH_MAP_GENERIC_LOOKUP
+    // Fast-path that can search the cache with only lvalues instead of making a copy of the key
+    auto iter = mCache.find(lValueKey);
     if (iter != mCache.end())
     {
         return iter->second;
     }
+#endif
 
-    AutoObjCPtr<id<MTLLibrary>> library =
-        CreateShaderLibrary(context->getMetalDevice(), source, macros, enableFastMath, errorOut);
-    if (library)
-    {
-        mCache.insert_or_assign(LibraryKey(std::move(key)), library);
-    }
-
-    return library;
+    LibraryKey key(lValueKey);
+    return mCache[std::move(key)];
 }
 
 LibraryCache::LibraryKey::LibraryKey(const LValueTuple &fromTuple)

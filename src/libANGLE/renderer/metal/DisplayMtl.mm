@@ -1256,6 +1256,7 @@ void DisplayMtl::initializeFeatures()
                             supportsEitherGPUFamily(4, 2));
 
     ANGLE_FEATURE_CONDITION((&mFeatures), enableInMemoryMtlLibraryCache, true);
+    ANGLE_FEATURE_CONDITION((&mFeatures), enableParallelMtlLibraryCompilation, true);
 
     ApplyFeatureOverrides(&mFeatures, getState());
 }
