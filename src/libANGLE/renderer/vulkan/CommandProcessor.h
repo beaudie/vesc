@@ -102,6 +102,8 @@ struct SwapchainStatus
 enum class CustomTask
 {
     Invalid = 0,
+    // Flushes wait semaphores
+    FlushWaitSemaphores,
     // Process SecondaryCommandBuffer commands into the primary CommandBuffer.
     ProcessOutsideRenderPassCommands,
     ProcessRenderPassCommands,
@@ -132,6 +134,10 @@ class CommandProcessorTask
                      const VkPresentInfoKHR &presentInfo,
                      SwapchainStatus *swapchainStatus);
 
+    void initFlushWaitSemaphores(ProtectionType protectionType,
+                                 std::vector<VkSemaphore> &&waitSemaphores,
+                                 std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
+
     void initFlushAndQueueSubmit(const VkSemaphore semaphore,
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
@@ -156,6 +162,11 @@ class CommandProcessorTask
 
     const QueueSerial &getSubmitQueueSerial() const { return mSubmitQueueSerial; }
     CustomTask getTaskCommand() { return mTask; }
+    std::vector<VkSemaphore> &&getWaitSemaphores() { return std::move(mWaitSemaphores); }
+    std::vector<VkPipelineStageFlags> &&getWaitSemaphoreStageMasks()
+    {
+        return std::move(mWaitSemaphoreStageMasks);
+    }
     VkSemaphore getSemaphore() { return mSemaphore; }
     SecondaryCommandBufferList &&getCommandBuffersToReset()
     {
@@ -184,6 +195,10 @@ class CommandProcessorTask
     void copyPresentInfo(const VkPresentInfoKHR &other);
 
     CustomTask mTask;
+
+    // Wait semaphores
+    std::vector<VkSemaphore> mWaitSemaphores;
+    std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
 
     // ProcessCommands
     OutsideRenderPassCommandBufferHelper *mOutsideRenderPassCommandBuffer;
@@ -497,6 +512,9 @@ class CommandProcessor : public Context
                           const VkPresentInfoKHR &presentInfo,
                           SwapchainStatus *swapchainStatus);
 
+    angle::Result flushWaitSemaphores(ProtectionType protectionType,
+                                      std::vector<VkSemaphore> &&waitSemaphores,
+                                      std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushOutsideRPCommands(Context *context,
                                          ProtectionType protectionType,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
