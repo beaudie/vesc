@@ -22,6 +22,23 @@
       },
       "revId": "4d742c527b0ff3c838999f1964e44562535b21e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a50c79_9b3e20a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T17:26:27Z",
+      "side": 1,
+      "message": "A regression test would be great. There are tests for mutable surfaces in EGLSurfaceTest.cpp, and protected content in EGLProtectedContentTest.cpp. Should hopefully be simple to slap something together.",
+      "revId": "4d742c527b0ff3c838999f1964e44562535b21e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
