@@ -7957,6 +7957,22 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
                                      &mResourceTracker, mainContextReplayState,
                                      mValidateSerializedState);
             scanSetupCalls(frameCapture->getSetupCalls());
+
+            std::stringstream protoStream;
+            std::stringstream headerStream;
+            std::stringstream bodyStream;
+
+            protoStream << "void "
+                        << FmtSetupFunction(kNoPartId, mainContext->id(), FuncUsage::Prototype);
+            std::string proto = protoStream.str();
+
+            WriteCppReplayFunctionWithParts(mainContext->id(), ReplayFunc::Setup, mReplayWriter, 1,
+                                            &mBinaryData, frameCapture->getSetupCalls(),
+                                            headerStream, bodyStream, &mResourceIDBufferSize);
+
+            mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
+
+            mActiveSecondaryContexts.insert(mainContext->id().value);
         }
         else
         {
@@ -8024,8 +8040,6 @@ void FrameCaptureShared::onEndFrame(gl::Context *context)
         }
     }
 
-    // Assume that the context performing the swap is the "main" context.
-    ASSERT(mWindowSurfaceContextID.value == 0 || mWindowSurfaceContextID == context->id());
     mWindowSurfaceContextID = context->id();
 
     // On Android, we can trigger a capture during the run
@@ -8647,22 +8661,6 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
     if (frameIndex == 1)
     {
         {
-            std::stringstream protoStream;
-            std::stringstream headerStream;
-            std::stringstream bodyStream;
-
-            protoStream << "void "
-                        << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Prototype);
-            std::string proto = protoStream.str();
-
-            WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Setup, mReplayWriter,
-                                            frameIndex, &mBinaryData, setupCalls, headerStream,
-                                            bodyStream, &mResourceIDBufferSize);
-
-            mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
-        }
-
-        {
             std::string proto = "void SetupReplay(void)";
 
             std::stringstream out;
@@ -8676,11 +8674,9 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             {
                 out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
                     << ";\n";
+                // Make sure that the current context is mapped correctly
+                out << "    gContextMap2[" << context->id() << "] = eglGetCurrentContext();\n";
             }
-
-            // Setup the presentation (this) context first.
-            out << "    " << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Call) << ";\n";
-            out << "\n";
 
             // Setup each of the auxiliary contexts.
             egl::ShareGroup *shareGroup            = context->getShareGroup();
@@ -8691,6 +8687,14 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 // framework.
                 if (shareContext->id() == context->id())
                 {
+                    if (usesMidExecutionCapture())
+                    {
+                        // Setup the presentation (this) context first.
+                        out << "    " << FmtSetupFunction(kNoPartId, context->id(), FuncUsage::Call)
+                            << ";\n";
+                        out << "\n";
+                    }
+
                     continue;
                 }
 
