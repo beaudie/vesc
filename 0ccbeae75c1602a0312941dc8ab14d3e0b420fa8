@@ -68,6 +68,24 @@
       "message": "I\u0027m not sure whether this will build properly for real iOS hardware. Could you add another #if arm handling the simulator specifically?",
       "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48f91dc4_3fa17ac7",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-08T19:06:55Z",
+      "side": 1,
+      "message": "Real SDKs cannot mention MTLStorageModeManaged for iOS -- that is a compile error as that symbol is not available.\nHacked SDKs are maintained possibly in order to call non-permitted functions. If the hack is made in such away that removes availability information, this reveals the symbol for iOS builds and causes the error.\nYou could do \n    default:\n      UNREACHABLE();\n      return MTLResourceStorageModeShared;\n      \nThis way it compiles on real SDK and the hacked one.\nThe hack could possibly be made better -- We have the same issue in WebKit.",
+      "parentUuid": "0ddc6f38_f8791102",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
