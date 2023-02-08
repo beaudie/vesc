@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e95cc58_8684eb56",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T01:05:54Z",
+      "side": 1,
+      "message": "Maybe SwiftShader, maybe ANGLE; we are likely getting more reuse of memory (which one test alone is not enough to cause).\n\nHow does the repro look like, does the test itself pass during both capture and replay, but some image in the context is different? Does the captured test contain bad data? Or is replay the problem?",
+      "parentUuid": "4aa43824_f791ec84",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fd77ce8_a3457dde",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 33
