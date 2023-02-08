@@ -596,14 +596,9 @@ class RendererVk : angle::NonCopyable
     angle::Result finish(vk::Context *context);
     angle::Result checkCompletedCommands(vk::Context *context);
 
-    void flushWaitSemaphores(vk::CommandContent commandContent,
-                             std::vector<VkSemaphore> &&waitSemaphores,
-                             std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
-    {
-        mCommandQueue.flushWaitSemaphores(commandContent, std::move(waitSemaphores),
-                                          std::move(waitSemaphoreStageMasks));
-    }
-
+    angle::Result flushWaitSemaphores(vk::CommandContent commandContent,
+                                      std::vector<VkSemaphore> &&waitSemaphores,
+                                      std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           vk::CommandContent commandContent,
                                           const vk::RenderPass &renderPass,

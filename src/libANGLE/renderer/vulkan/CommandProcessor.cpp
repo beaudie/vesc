@@ -429,6 +429,17 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
     copyPresentInfo(presentInfo);
 }
 
+void CommandProcessorTask::initFlushWaitSemaphores(
+    CommandContent commandContent,
+    const std::vector<VkSemaphore> &waitSemaphores,
+    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks)
+{
+    mTask                    = CustomTask::FlushWaitSemaphores;
+    mCommandContent          = commandContent;
+    mWaitSemaphores          = waitSemaphores;
+    mWaitSemaphoreStageMasks = waitSemaphoreStageMasks;
+}
+
 void CommandProcessorTask::initFlushAndQueueSubmit(
     const VkSemaphore semaphore,
     CommandContent commandContent,
@@ -475,6 +486,8 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
     std::swap(mOutsideRenderPassCommandBuffer, rhs.mOutsideRenderPassCommandBuffer);
     std::swap(mRenderPassCommandBuffer, rhs.mRenderPassCommandBuffer);
     std::swap(mTask, rhs.mTask);
+    std::swap(mWaitSemaphores, rhs.mWaitSemaphores);
+    std::swap(mWaitSemaphoreStageMasks, rhs.mWaitSemaphoreStageMasks);
     std::swap(mSemaphore, rhs.mSemaphore);
     std::swap(mOneOffWaitSemaphore, rhs.mOneOffWaitSemaphore);
     std::swap(mOneOffWaitSemaphoreStageMask, rhs.mOneOffWaitSemaphoreStageMask);
@@ -676,6 +689,12 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 {
     switch (task->getTaskCommand())
     {
+        case CustomTask::FlushWaitSemaphores:
+        {
+            mCommandQueue->flushWaitSemaphores(task->getCommandContent(), task->getWaitSemaphores(),
+                                               task->getWaitSemaphoreStageMasks());
+            break;
+        }
         case CustomTask::FlushAndQueueSubmit:
         {
             ANGLE_TRACE_EVENT0("gpu.angle", "processTask::FlushAndQueueSubmit");
@@ -896,6 +915,18 @@ VkResult CommandProcessor::queuePresent(egl::ContextPriority contextPriority,
     // allows the app to continue working until we really need to know the return code from
     // present.
     return VK_SUCCESS;
+}
+
+angle::Result CommandProcessor::flushWaitSemaphores(
+    CommandContent commandContent,
+    const std::vector<VkSemaphore> &waitSemaphores,
+    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks)
+{
+    CommandProcessorTask task;
+    task.initFlushWaitSemaphores(commandContent, waitSemaphores, waitSemaphoreStageMasks);
+    ANGLE_TRY(queueCommand(std::move(task)));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CommandProcessor::flushOutsideRPCommands(
@@ -1289,9 +1320,10 @@ bool CommandQueue::isBusy(RendererVk *renderer) const
     return false;
 }
 
-void CommandQueue::flushWaitSemaphores(CommandContent commandContent,
-                                       std::vector<VkSemaphore> &&waitSemaphores,
-                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+void CommandQueue::flushWaitSemaphores(
+    CommandContent commandContent,
+    const std::vector<VkSemaphore> &waitSemaphores,
+    const std::vector<VkPipelineStageFlags> &waitSemaphoreStageMasks)
 {
     ASSERT(!waitSemaphores.empty());
     ASSERT(waitSemaphores.size() == waitSemaphoreStageMasks.size());
@@ -1304,9 +1336,6 @@ void CommandQueue::flushWaitSemaphores(CommandContent commandContent,
     state.waitSemaphoreStageMasks.insert(state.waitSemaphoreStageMasks.end(),
                                          waitSemaphoreStageMasks.begin(),
                                          waitSemaphoreStageMasks.end());
-
-    waitSemaphores.clear();
-    waitSemaphoreStageMasks.clear();
 }
 
 angle::Result CommandQueue::flushOutsideRPCommands(

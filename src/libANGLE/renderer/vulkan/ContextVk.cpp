@@ -7456,8 +7456,8 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     if (!mWaitSemaphores.empty())
     {
         ASSERT(mHasWaitSemaphoresPendingSubmission);
-        mRenderer->flushWaitSemaphores(getCommandContent(), std::move(mWaitSemaphores),
-                                       std::move(mWaitSemaphoreStageMasks));
+        ANGLE_TRY(mRenderer->flushWaitSemaphores(getCommandContent(), std::move(mWaitSemaphores),
+                                                 std::move(mWaitSemaphoreStageMasks)));
     }
     ASSERT(mWaitSemaphores.empty());
     ASSERT(mWaitSemaphoreStageMasks.empty());
