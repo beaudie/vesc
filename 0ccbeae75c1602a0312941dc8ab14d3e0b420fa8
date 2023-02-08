@@ -104,6 +104,24 @@
       "parentUuid": "0ddc6f38_f8791102",
       "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "394ab692_24653ce9",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-08T20:12:47Z",
+      "side": 1,
+      "message": "And to provide a thought:\nSince the hack makes the SDK internally inconsistent, it gradually makes the code very hard to reason about. So if we set precedent in supporting such a thing in the development sources, the internal inconsistency might be hard to remove.\n\nSo other option is to spend time on fixing the hack instead.",
+      "parentUuid": "48f91dc4_3fa17ac7",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
