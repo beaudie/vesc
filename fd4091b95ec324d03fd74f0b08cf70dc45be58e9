@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "510fca62_d9aa64b1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T14:38:27Z",
+      "side": 1,
+      "message": "No need for all the explanation and the details of the command buffer implementation are not the reason we need this.\n\nSubmitting to the queue without a lock means:\n\n1. we can\u0027t guarantee submissions are done in order\n2. Vulkan requires the `queue` parameter of `vkQueueSubmit` to be externally synchronized",
+      "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
