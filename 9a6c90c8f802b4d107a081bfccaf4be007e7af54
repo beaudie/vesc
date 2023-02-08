@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e6e24f_080ff74d",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2023-02-08T15:09:38Z",
+      "side": 1,
+      "message": "With this reland this is breaking a build on iOS with [-Werror,-Wswitch] enabled. See comment: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7975#c7",
+      "revId": "9a6c90c8f802b4d107a081bfccaf4be007e7af54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
