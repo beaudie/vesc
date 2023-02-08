@@ -16,6 +16,24 @@
       "message": "No need for all the explanation and the details of the command buffer implementation are not the reason we need this.\n\nSubmitting to the queue without a lock means:\n\n1. we can\u0027t guarantee submissions are done in order\n2. Vulkan requires the `queue` parameter of `vkQueueSubmit` to be externally synchronized",
       "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59c08ca8_a4e3286f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-08T18:16:47Z",
+      "side": 1,
+      "message": "Understood we need the lock. The problem here is that if we do this sequence, it still won\u0027t work (many bots failure):\n```\nsubmitCommands()\n{\n    mMutex.lock();\n    ...\n    mMutex.unlock()\n\n    // A gap here that no lock is held.\n\n    mQueueSubmitMutex.lock()\n    vkQueueSubmit()\n    mQueueSubmitMutex.unlock()\n}\n```\nIn this case vkQueueSubmit is still external synchronized. The problem is exactly what I described above. Because of mPrimraryCommandBuffer may contain commands from different context, if we leave gap between two locks, commandsa from the same context may end up in wrong order. I believe if we make mPrimaryCommandBuffer per context, then the above sequence will actually work.",
+      "parentUuid": "510fca62_d9aa64b1",
+      "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
