@@ -10,10 +10,28 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_COMMAND_BUFFER_UTILS_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_COMMAND_BUFFER_UTILS_H_
 
+#include "common/angleutils.h"
+
 namespace rx
 {
 namespace vk
 {
+
+enum class CommandContent
+{
+    Unprotected = 0,
+    Protected   = 1,
+
+    InvalidEnum = 2,
+    EnumCount   = 2,
+};
+
+ANGLE_INLINE CommandContent ConvertProtectedBitToCommandContent(bool hasProtectedContent)
+{
+    static_assert(static_cast<CommandContent>(false) == CommandContent::Unprotected, "");
+    static_assert(static_cast<CommandContent>(true) == CommandContent::Protected, "");
+    return static_cast<CommandContent>(hasProtectedContent);
+}
 
 // A helper class to track commands recorded to a command buffer.
 class CommandBufferCommandTracker
