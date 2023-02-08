@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "047abc3e_83b27fae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T01:19:31Z",
+      "side": 1,
+      "message": "Did a partial review.  I notice that the philosophy is Vulkan 1.1 + extensions, but this code still works with Vulkan 1.0 drivers.  Is that desired/needed at this time?",
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96dc5be7_34fe1e64",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T01:19:31Z",
+      "side": 1,
+      "message": "s/do so practice/do so in practice/\n\nMight also add that some extensions are only partially promoted to core in 1.2/1.3.  This is part of why ANGLE will rely on 1.1 + extensions.",
+      "range": {
+        "startLine": 84,
+        "startChar": 31,
+        "endLine": 84,
+        "endChar": 45
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b3184a_4361a11b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1602,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T01:19:31Z",
+      "side": 1,
+      "message": "So ANGLE will continue to work with Vulkan 1.0 drivers?",
+      "range": {
+        "startLine": 1602,
+        "startChar": 4,
+        "endLine": 1602,
+        "endChar": 30
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7110cca8_804ab2d9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T01:19:31Z",
+      "side": 1,
+      "message": "And ANGLE will continue to work with 1.0 drivers that don\u0027t support GPDP2?  Same with the next 2 extensions?  That doesn\u0027t seem right, but I\u0027m not sure how much ANGLE depends on that.  It does make the logic more complex.",
+      "range": {
+        "startLine": 1604,
+        "startChar": 7,
+        "endLine": 1604,
+        "endChar": 81
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fca377e1_9065f5c2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1611,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T01:19:31Z",
+      "side": 1,
+      "message": "nit: I didn\u0027t notice at first, but this feature bit is enabled for both 1.1 **and** if the extension is present.  A comment might be in order (or just go with requiring 1.1:-).",
+      "range": {
+        "startLine": 1611,
+        "startChar": 12,
+        "endLine": 1611,
+        "endChar": 63
+      },
+      "revId": "e9b2a3c8a068535cad07dc1bab18cbdecab59645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
