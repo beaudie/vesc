@@ -16,6 +16,24 @@
       "message": "yikes, copy-paste !FTW\n\nthanks shabi",
       "revId": "94b8d08d20db4fc970e16435671e18d78c4f79d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9456d58c_4bff0063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T19:53:25Z",
+      "side": 1,
+      "message": "FTL? 😄\n\nFWIW, it would have only affected SwiftShader over mac, which most definitely wasn\u0027t using this extension",
+      "parentUuid": "f39f82e3_c155f825",
+      "revId": "94b8d08d20db4fc970e16435671e18d78c4f79d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
