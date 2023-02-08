@@ -2436,43 +2436,58 @@ TEST_P(TransformFeedbackTest, EndWithDifferentProgramContextSwitch)
 // Test an out of memory event.
 TEST_P(TransformFeedbackTest, BufferOutOfMemory)
 {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     // The GL back-end throws an internal error that we can't deal with in this test.
     ANGLE_SKIP_TEST_IF(IsOpenGL());
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     // Set the program's transform feedback varyings (just gl_Position)
     std::vector<std::string> tfVaryings;
     tfVaryings.push_back("gl_Position");
     compileDefaultProgram(tfVaryings, GL_INTERLEAVED_ATTRIBS);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     GLint positionLocation   = glGetAttribLocation(mProgram, essl1_shaders::PositionAttrib());
     const GLfloat vertices[] = {-1.0f, -0.5f, 0.0f,  0.5f, 1.0f,  1.0f, -0.5f, 0.0f,
                                 0.5f,  1.0f,  -1.0f, 0.0f, -0.5f, 0.0f, 1.0f};
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, vertices);
     glEnableVertexAttribArray(positionLocation);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     // Draw normally.
     glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, mTransformFeedbackBuffer);
     glUseProgram(mProgram);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glBeginTransformFeedback(GL_POINTS);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glDrawArrays(GL_POINTS, 0, 5);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glEndTransformFeedback();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     ASSERT_GL_NO_ERROR();
 
     // Attempt to generate OOM and begin XFB.
     constexpr GLsizeiptr kLargeSize = std::numeric_limits<GLsizeiptr>::max();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, kLargeSize, nullptr, GL_STATIC_DRAW);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
     // It's not spec guaranteed to return OOM here.
     GLenum err = glGetError();
     EXPECT_TRUE(err == GL_NO_ERROR || err == GL_OUT_OF_MEMORY);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glBeginTransformFeedback(GL_POINTS);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glDrawArrays(GL_POINTS, 0, 5);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glEndTransformFeedback();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 }
 
 void TransformFeedbackTest::setupOverrunTest(const std::vector<GLfloat> &vertices)
