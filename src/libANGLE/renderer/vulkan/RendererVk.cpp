@@ -1232,6 +1232,14 @@ void logMemoryHeapStats(RendererVk *renderer, vk::MemoryLogSeverity severity)
 }  // namespace
 
 // OneOffCommandPool implementation.
+OneOffCommandPool::OneOffCommandPool() : mCommandContent(vk::CommandContent::InvalidEnum) {}
+
+void OneOffCommandPool::init(vk::CommandContent commandContent)
+{
+    ASSERT(!mCommandPool.valid());
+    mCommandContent = commandContent;
+}
+
 void OneOffCommandPool::destroy(VkDevice device)
 {
     std::unique_lock<std::mutex> lock(mMutex);
@@ -1240,10 +1248,10 @@ void OneOffCommandPool::destroy(VkDevice device)
         pending.commandBuffer.releaseHandle();
     }
     mCommandPool.destroy(device);
+    mCommandContent = vk::CommandContent::InvalidEnum;
 }
 
 angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
-                                                  vk::CommandContent commandContent,
                                                   vk::PrimaryCommandBuffer *commandBufferOut)
 {
     std::unique_lock<std::mutex> lock(mMutex);
@@ -1262,9 +1270,9 @@ angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
             VkCommandPoolCreateInfo createInfo = {};
             createInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
             createInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-            ASSERT(commandContent == vk::CommandContent::Unprotected ||
-                   commandContent == vk::CommandContent::Protected);
-            if (commandContent == vk::CommandContent::Protected)
+            ASSERT(mCommandContent == vk::CommandContent::Unprotected ||
+                   mCommandContent == vk::CommandContent::Protected);
+            if (mCommandContent == vk::CommandContent::Protected)
             {
                 createInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
             }
@@ -1387,7 +1395,10 @@ void RendererVk::onDestroy(vk::Context *context)
     cleanupGarbage();
     ASSERT(!hasSharedGarbage());
 
-    mOneOffCommandPool.destroy(mDevice);
+    for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
+    {
+        oneOffCommandPool.destroy(mDevice);
+    }
 
     mPipelineCache.destroy(mDevice);
     mSamplerCache.destroy(this);
@@ -1831,6 +1842,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     // Null terminate the extension list returned for EGL_VULKAN_INSTANCE_EXTENSIONS_ANGLE.
     mEnabledInstanceExtensions.push_back(nullptr);
+
+    for (vk::CommandContent commandContent : angle::AllEnums<vk::CommandContent>())
+    {
+        mOneOffCommandPoolMap[commandContent].init(commandContent);
+    }
 
     return angle::Result::Continue;
 }
@@ -4583,7 +4599,8 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     *queueSerialOut = submitQueueSerial;
     if (primary.valid())
     {
-        mOneOffCommandPool.releaseCommandBuffer(submitQueueSerial, std::move(primary));
+        mOneOffCommandPoolMap[commandContent].releaseCommandBuffer(submitQueueSerial,
+                                                                   std::move(primary));
     }
 
     return angle::Result::Continue;

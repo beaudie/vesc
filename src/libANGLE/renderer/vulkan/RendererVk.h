@@ -186,14 +186,16 @@ class WaitableCompressEvent
 class OneOffCommandPool : angle::NonCopyable
 {
   public:
+    OneOffCommandPool();
+    void init(vk::CommandContent commandContent);
     angle::Result getCommandBuffer(vk::Context *context,
-                                   vk::CommandContent commandContent,
                                    vk::PrimaryCommandBuffer *commandBufferOut);
     void releaseCommandBuffer(const QueueSerial &submitQueueSerial,
                               vk::PrimaryCommandBuffer &&primary);
     void destroy(VkDevice device);
 
   private:
+    vk::CommandContent mCommandContent;
     std::mutex mMutex;
     vk::CommandPool mCommandPool;
     struct PendingOneOffCommands
@@ -396,7 +398,7 @@ class RendererVk : angle::NonCopyable
                                          vk::CommandContent commandContent,
                                          vk::PrimaryCommandBuffer *commandBufferOut)
     {
-        return mOneOffCommandPool.getCommandBuffer(context, commandContent, commandBufferOut);
+        return mOneOffCommandPoolMap[commandContent].getCommandBuffer(context, commandBufferOut);
     }
 
     void resetOutsideRenderPassCommandBuffer(vk::OutsideRenderPassCommandBuffer &&commandBuffer)
@@ -966,7 +968,7 @@ class RendererVk : angle::NonCopyable
     uint32_t mGarbageCollectionFlushThreshold;
 
     // Only used for "one off" command buffers.
-    OneOffCommandPool mOneOffCommandPool;
+    angle::PackedEnumMap<vk::CommandContent, OneOffCommandPool> mOneOffCommandPoolMap;
 
     // Synchronous Command Queue
     vk::CommandQueue mCommandQueue;
