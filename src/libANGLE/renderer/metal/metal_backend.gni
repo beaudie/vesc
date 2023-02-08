@@ -15,6 +15,7 @@ metal_backend_sources = [
   "DeviceMtl.mm",
   "DisplayMtl.h",
   "DisplayMtl.mm",
+  "DisplayMtlExtraFeatureOverrides.cpp",
   "DisplayMtl_api.h",
   "FrameBufferMtl.h",
   "FrameBufferMtl.mm",

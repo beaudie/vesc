@@ -86,6 +86,10 @@ static EGLint GetStencilSize(GLint internalformat)
     }
 }
 
+// Downstream projects can have project specific extra feature overrides
+// by implementing this in a project specific compilation unit.
+void ApplyExtraFeatureOverrides(angle::FeaturesMtl *features, const egl::DisplayState &state);
+
 bool IsMetalDisplayAvailable()
 {
     return angle::IsMetalRendererAvailable();
@@ -1257,6 +1261,7 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), enableInMemoryMtlLibraryCache, true);
 
+    ApplyExtraFeatureOverrides(&mFeatures, getState());
     ApplyFeatureOverrides(&mFeatures, getState());
 }
 
