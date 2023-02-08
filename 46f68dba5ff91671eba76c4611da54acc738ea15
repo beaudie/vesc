@@ -16,6 +16,24 @@
       "message": "Is this define always defined?",
       "revId": "46f68dba5ff91671eba76c4611da54acc738ea15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90dcf5a2_98c6e2fe",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-08T20:16:10Z",
+      "side": 1,
+      "message": "Undefined preprocessor values are evaluated as 0 so we\u0027re good.",
+      "parentUuid": "5444cd40_05797096",
+      "revId": "46f68dba5ff91671eba76c4611da54acc738ea15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
