@@ -34,6 +34,24 @@
       "parentUuid": "510fca62_d9aa64b1",
       "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7afc06d5_82c052de",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T18:31:05Z",
+      "side": 1,
+      "message": "\u003e // A gap here that no lock is held.\n\nOh yes, but primarily because we can\u0027t guarantee submission order (even if we have one primary per context).",
+      "parentUuid": "59c08ca8_a4e3286f",
+      "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
