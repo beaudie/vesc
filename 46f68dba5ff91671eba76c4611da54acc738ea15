@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5444cd40_05797096",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-08T19:39:38Z",
+      "side": 1,
+      "message": "Is this define always defined?",
+      "revId": "46f68dba5ff91671eba76c4611da54acc738ea15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
