@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82aada76_3bd25ddd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T18:22:28Z",
+      "side": 1,
+      "message": "It was hard more me to choose a name. And doing refactoring into enumeration was not my initiative.\n\nHere is a long conversation that lead to this name...\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4215391/comment/e84c99ee_8458942d/\n\nPersonally I do not see how this enumeration could be extended in the future.\n\nRegarding naming. There are different protected entities in Vulkan:\n- memory/resource\n- command buffers\n- device queues\n- queues submissions/operations\n\nFor what group new enumeration should correspond? I is hard for me to answer.\nUniversal name: `ProtectionStatus`?\n\nSo context/resource/queue/commands instead of `hasProtectedContent` will have `protectionStatus`.",
+      "parentUuid": "37e14156_802a33bb",
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be8e28b0_cb756a33",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
