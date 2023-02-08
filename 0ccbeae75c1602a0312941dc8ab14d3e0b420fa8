@@ -16,6 +16,24 @@
       "message": "Does this build on iOS? I thought the reason for putting this label inside the ifdef is that the enum doesn\u0027t exist in the iOS SDK.\n\n+1 if it compiles; Kimmo, can you review and +2?",
       "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac1d6a5_1ffa612f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2023-02-08T18:47:05Z",
+      "side": 1,
+      "message": "Hmm...  I am running this with an Xcode SDK modified using Tools/Scripts/configure-xcode-for-embedded-development I wonder if that is causing the issue.",
+      "parentUuid": "a2029001_165950bb",
+      "revId": "0ccbeae75c1602a0312941dc8ab14d3e0b420fa8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
