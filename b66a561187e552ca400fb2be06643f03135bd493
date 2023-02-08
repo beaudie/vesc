@@ -344,6 +344,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37c60005_638b10e2",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-08T17:32:03Z",
+      "side": 1,
+      "message": "Shabi, Brian\u0027s suggestion is to use different arguments not on SwiftShader rolls, but on SwiftShader bots. But since this would happen on all CLs, I\u0027m not sure you\u0027d want it.\n\nAs for the offset triangles, the \"sample_area\" algorithm should accept that. It compares images in 4x4 blocks and declares blocks that differ only in 3 pixels as identical.\n\nI think Skia Gold does have an accept-all button, it\u0027s called BULK TRIAGE. But I was hesitant to use it for this.\n\nCan we please continue the discussion in the bug and not on the CL?",
+      "parentUuid": "0b174144_d17ae7ff",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
