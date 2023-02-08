@@ -320,6 +320,30 @@
       },
       "revId": "b66a561187e552ca400fb2be06643f03135bd493",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b174144_d17ae7ff",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T15:58:55Z",
+      "side": 1,
+      "message": "Any thoughts Yuly? Driver updates are not so frequent, but SwiftShader updates are (or rather I should say used to be), so I\u0027d say SwiftShader \"roll\" only would be a good start, but I don\u0027t know if it\u0027s possible to limit this to rolls.\n\nThat said, I\u0027m not convinced that would actually ease the burden by much. Unfortunately as soon as the precision issue hits the vertex shader you could get slightly offset triangles so pixels on the edge would very easily pass the threshold of 10 values as they change between foreground and background colors.\n\nNow that SwiftShader is dormant, perhaps we could divvy up the task of image reviews on the rare occasions that there are large scale changes?\n\nI would very much like to instead see a feature in Skia itself to let you review the image thumbnails and do a one-click accept-all (because what else can you do on a driver upgrade?)",
+      "parentUuid": "cc9f044f_12b556a5",
+      "range": {
+        "startLine": 232,
+        "startChar": 25,
+        "endLine": 232,
+        "endChar": 40
+      },
+      "revId": "b66a561187e552ca400fb2be06643f03135bd493",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
