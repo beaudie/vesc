@@ -16,6 +16,24 @@
       "message": "Can we turn `submitCommands` into `submitCommandsImpl` and have the new `submitCommands` call both `submitCommandsImpl` and `postSubmitCheck`? Not a fan of leaking this detail out of the class",
       "revId": "b955a919b6d98af2c063bd3b2e61bf0a5a569e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "988c3da0_7f01378e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4877,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-08T20:19:42Z",
+      "side": 1,
+      "message": "Done. (But this will be removed in future CL anyway)",
+      "parentUuid": "d255c072_7c49746b",
+      "revId": "b955a919b6d98af2c063bd3b2e61bf0a5a569e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
