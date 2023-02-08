@@ -4956,6 +4956,28 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     return mCommandQueue.checkCompletedCommands(context);
 }
 
+angle::Result RendererVk::flushWaitSemaphores(
+    vk::ProtectionType protectionType,
+    std::vector<VkSemaphore> &&waitSemaphores,
+    std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushWaitSemaphores");
+    if (isAsyncCommandQueueEnabled())
+    {
+        ANGLE_TRY(mCommandProcessor.flushWaitSemaphores(protectionType, waitSemaphores,
+                                                        waitSemaphoreStageMasks));
+    }
+    else
+    {
+        mCommandQueue.flushWaitSemaphores(protectionType, waitSemaphores, waitSemaphoreStageMasks);
+    }
+
+    waitSemaphores.clear();
+    waitSemaphoreStageMasks.clear();
+
+    return angle::Result::Continue;
+}
+
 angle::Result RendererVk::flushRenderPassCommands(
     vk::Context *context,
     vk::ProtectionType protectionType,
