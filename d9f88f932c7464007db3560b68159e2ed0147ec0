@@ -16,6 +16,23 @@
       "message": "Fixed in the previous CL: https://chromium-review.googlesource.com/c/angle/angle/+/4224582/3/src/libANGLE/renderer/vulkan/vk_utils.cpp#1147",
       "revId": "d9f88f932c7464007db3560b68159e2ed0147ec0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d26ac2b3_d36f27dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-08T00:17:37Z",
+      "side": 1,
+      "message": "LGTM, thanks!",
+      "revId": "d9f88f932c7464007db3560b68159e2ed0147ec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
