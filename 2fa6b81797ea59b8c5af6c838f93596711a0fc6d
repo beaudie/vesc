@@ -22,6 +22,30 @@
       },
       "revId": "2fa6b81797ea59b8c5af6c838f93596711a0fc6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a027d555_399f3ada",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5322,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-08T01:01:21Z",
+      "side": 1,
+      "message": "I tried defining `mActivePerHeapMemoryAllocationsSize` and `mActivePerHeapMemoryAllocationsCount` as arrays of *vector of atomic integers* in order to avoid the lock, but it failed compilation. To use an array of atomics, we would have to set the length at declaration. Should we use `kMemoryAllocationTypeCount * VK_MAX_MEMORY_HEAPS` elements?",
+      "parentUuid": "b326867e_3119897a",
+      "range": {
+        "startLine": 5322,
+        "startChar": 0,
+        "endLine": 5322,
+        "endChar": 84
+      },
+      "revId": "2fa6b81797ea59b8c5af6c838f93596711a0fc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
