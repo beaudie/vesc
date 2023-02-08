@@ -52,6 +52,24 @@
       "parentUuid": "59c08ca8_a4e3286f",
       "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff662132_63d8bf21",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-08T20:22:17Z",
+      "side": 1,
+      "message": "If we have one primary per context, then the order does not matter. I think in future we should move to one primary per context.",
+      "parentUuid": "7afc06d5_82c052de",
+      "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
