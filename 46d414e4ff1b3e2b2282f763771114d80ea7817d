@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11df94f3_ab03498d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T19:17:41Z",
+      "side": 1,
+      "message": "My vote for `ProtectionType`. Status is something that may change, type - is constant.",
+      "parentUuid": "58fc0a31_9ad1a67b",
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be8e28b0_cb756a33",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
