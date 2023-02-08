@@ -46,6 +46,30 @@
       },
       "revId": "2fa6b81797ea59b8c5af6c838f93596711a0fc6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdbf87a1_b23265f8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-08T17:49:00Z",
+      "side": 1,
+      "message": "VK_MAX_MEMORY_HEAPS is 16, kMemoryAllocationTypeCount is 5, total will be 80, 640bytes, should be okay, I think. (I don\u0027t know why vector of atomic will fail compile though)",
+      "parentUuid": "a027d555_399f3ada",
+      "range": {
+        "startLine": 5322,
+        "startChar": 0,
+        "endLine": 5322,
+        "endChar": 84
+      },
+      "revId": "2fa6b81797ea59b8c5af6c838f93596711a0fc6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
