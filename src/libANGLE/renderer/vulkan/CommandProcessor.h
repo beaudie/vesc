@@ -112,24 +112,24 @@ class CommandProcessorTask
 
     void initTask();
 
-    void initOutsideRenderPassProcessCommands(bool hasProtectedContent,
+    void initOutsideRenderPassProcessCommands(CommandContent commandContent,
                                               OutsideRenderPassCommandBufferHelper *commandBuffer);
 
-    void initRenderPassProcessCommands(bool hasProtectedContent,
+    void initRenderPassProcessCommands(CommandContent commandContent,
                                        RenderPassCommandBufferHelper *commandBuffer,
                                        const RenderPass *renderPass);
 
     void initPresent(egl::ContextPriority priority, const VkPresentInfoKHR &presentInfo);
 
     void initFlushAndQueueSubmit(const VkSemaphore semaphore,
-                                 bool hasProtectedContent,
+                                 CommandContent commandContent,
                                  egl::ContextPriority priority,
                                  SecondaryCommandPools *commandPools,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
                                  const QueueSerial &submitQueueSerial);
 
     void initOneOffQueueSubmit(VkCommandBuffer commandBufferHandle,
-                               bool hasProtectedContent,
+                               CommandContent commandContent,
                                egl::ContextPriority priority,
                                const Semaphore *waitSemaphore,
                                VkPipelineStageFlags waitSemaphoreStageMask,
@@ -151,7 +151,7 @@ class CommandProcessorTask
         return std::move(mCommandBuffersToReset);
     }
     egl::ContextPriority getPriority() const { return mPriority; }
-    bool hasProtectedContent() const { return mHasProtectedContent; }
+    CommandContent getCommandContent() const { return mCommandContent; }
     VkCommandBuffer getOneOffCommandBufferVk() const { return mOneOffCommandBufferVk; }
     const Semaphore *getOneOffWaitSemaphore() { return mOneOffWaitSemaphore; }
     VkPipelineStageFlags getOneOffWaitSemaphoreStageMask() { return mOneOffWaitSemaphoreStageMask; }
@@ -210,7 +210,7 @@ class CommandProcessorTask
 
     // Flush, Present & QueueWaitIdle data
     egl::ContextPriority mPriority;
-    bool mHasProtectedContent;
+    CommandContent mCommandContent;
 };
 using CommandProcessorTaskQueue =
     angle::FixedQueue<CommandProcessorTask, kMaxCommandProcessorTasksLimit>;
@@ -231,7 +231,7 @@ struct CommandBatch final : angle::NonCopyable
     SecondaryCommandBufferList commandBuffersToReset;
     SharedFence fence;
     QueueSerial queueSerial;
-    bool hasProtectedContent;
+    CommandContent commandContent;
 };
 using CommandBatchQueue = angle::FixedQueue<CommandBatch, kInFlightCommandsLimit>;
 
@@ -341,7 +341,7 @@ class CommandQueue : angle::NonCopyable
     bool isBusy(RendererVk *renderer) const;
 
     angle::Result submitCommands(Context *context,
-                                 bool hasProtectedContent,
+                                 CommandContent commandContent,
                                  egl::ContextPriority priority,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
@@ -349,7 +349,7 @@ class CommandQueue : angle::NonCopyable
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result queueSubmitOneOff(Context *context,
-                                    bool hasProtectedContent,
+                                    CommandContent commandContent,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Semaphore *waitSemaphore,
@@ -366,14 +366,14 @@ class CommandQueue : angle::NonCopyable
     // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
     angle::Result checkCompletedCommands(Context *context);
 
-    void flushWaitSemaphores(bool hasProtectedContent,
+    void flushWaitSemaphores(CommandContent commandContent,
                              std::vector<VkSemaphore> &&waitSemaphores,
                              std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushOutsideRPCommands(Context *context,
-                                         bool hasProtectedContent,
+                                         CommandContent commandContent,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result flushRenderPassCommands(Context *context,
-                                          bool hasProtectedContent,
+                                          CommandContent commandContent,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
@@ -393,7 +393,7 @@ class CommandQueue : angle::NonCopyable
 
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
-    angle::Result ensurePrimaryCommandBufferValid(Context *context, bool hasProtectedContent);
+    angle::Result ensurePrimaryCommandBufferValid(Context *context, CommandContent commandContent);
     // Returns number of CommandBatchs that are smaller than serials
     size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
     // Returns the last valid SharedFence of the first "count" CommandBatchs in mInflightCommands.
@@ -411,21 +411,10 @@ class CommandQueue : angle::NonCopyable
         PersistentCommandPool primaryCommandPool;
     };
 
-    CommandsState &getCommandsState(bool hasProtectedContent)
+    angle::Result initCommandPool(Context *context, CommandContent commandContent)
     {
-        static_assert(static_cast<CommandContent>(false) == CommandContent::Unprotected, "");
-        static_assert(static_cast<CommandContent>(true) == CommandContent::Protected, "");
-        return mCommandsStateMap[static_cast<CommandContent>(hasProtectedContent)];
-    }
-
-    PrimaryCommandBuffer &getCommandBuffer(bool hasProtectedContent)
-    {
-        return getCommandsState(hasProtectedContent).primaryCommands;
-    }
-
-    PersistentCommandPool &getCommandPool(bool hasProtectedContent)
-    {
-        return getCommandsState(hasProtectedContent).primaryCommandPool;
+        PersistentCommandPool &commandPool = mCommandsStateMap[commandContent].primaryCommandPool;
+        return commandPool.init(context, commandContent, mQueueMap.getIndex());
     }
 
     // Protect multi-thread access to mInFlightCommands and other data memebers of this class.
@@ -478,7 +467,7 @@ class CommandProcessor : public Context
     void handleDeviceLost(RendererVk *renderer);
 
     angle::Result submitCommands(Context *context,
-                                 bool hasProtectedContent,
+                                 CommandContent commandContent,
                                  egl::ContextPriority priority,
                                  const VkSemaphore signalSemaphore,
                                  SecondaryCommandBufferList &&commandBuffersToReset,
@@ -486,7 +475,7 @@ class CommandProcessor : public Context
                                  const QueueSerial &submitQueueSerial);
 
     angle::Result queueSubmitOneOff(Context *context,
-                                    bool hasProtectedContent,
+                                    CommandContent commandContent,
                                     egl::ContextPriority contextPriority,
                                     VkCommandBuffer commandBufferHandle,
                                     const Semaphore *waitSemaphore,
@@ -498,10 +487,10 @@ class CommandProcessor : public Context
                           const VkPresentInfoKHR &presentInfo);
 
     angle::Result flushOutsideRPCommands(Context *context,
-                                         bool hasProtectedContent,
+                                         CommandContent commandContent,
                                          OutsideRenderPassCommandBufferHelper **outsideRPCommands);
     angle::Result flushRenderPassCommands(Context *context,
-                                          bool hasProtectedContent,
+                                          CommandContent commandContent,
                                           const RenderPass &renderPass,
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
